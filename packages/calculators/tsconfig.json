@@ -11,6 +11,7 @@
     "types": [
       "node"
     ],
+    "strict": true,
     "resolveJsonModule": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
