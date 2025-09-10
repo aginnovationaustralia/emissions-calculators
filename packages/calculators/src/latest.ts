@@ -1,4 +1,4 @@
 export {
-    calculateEmissions,
-    loadConstants
+    calculateEmissions, constants, loadConstants
 } from './versions/3.0.0';
+
