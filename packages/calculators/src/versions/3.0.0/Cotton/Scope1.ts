@@ -1,0 +1,190 @@
+import { ExecutionContext } from '../executionContext';
+import { CottonCrop } from '../types/Cotton/cotton.input';
+import {
+  getFertiliserFractionRunoff,
+  getNitrogenFertiliser,
+} from './functions';
+
+export function calculateScope1N2O(
+  cotton: CottonCrop,
+  context: ExecutionContext,
+) {
+  const { constants } = context;
+
+  const nitrogenFertiliser = getNitrogenFertiliser(context, cotton);
+
+  // fertiliser N2O
+  // (Fertiliser was C13 now D24)
+  const totalMassFertiliser = cotton.areaSown * nitrogenFertiliser * 10 ** -6;
+
+  // (fertiliserC41)
+  const ef = cotton.rainfallAbove600
+    ? constants.PRODUCTIONSYSTEM_EF.RAINFALL_GT_600.Cotton
+    : constants.PRODUCTIONSYSTEM_EF.RAINFALL_LT_600.Cotton;
+
+  // (Fertiliser was C43 now C48)
+  const fertiliserN2O = totalMassFertiliser * ef * constants.GWP_FACTORSC15;
+  // Fertiliser C50
+  const fertiliserN2OG = fertiliserN2O * constants.GWP_FACTORSC6;
+  const fertiliserN2OTonnes = fertiliserN2OG * 1000;
+
+  // crop residue
+
+  // (Crop_ResiduesC6)
+  const annualProduction = (cotton.averageCottonYield * cotton.areaSown) / 1000;
+
+  // (Crop_ResiduesC7)
+  const { residueCropRatio } = constants.CROPRESIDUE.Cotton;
+
+  // (Crop_ResiduesC8)
+  const belowAboveRatio = constants.CROPRESIDUE.Cotton.belowAboveResidueRatio;
+
+  // (Crop_ResiduesC9)
+  const { dryMatterContent } = constants.CROPRESIDUE.Cotton;
+
+  // (Crop_ResiduesC10)
+  const { aboveGroundN } = constants.CROPRESIDUE.Cotton;
+
+  // (Crop_ResiduesC11)
+  const { belowGroundN } = constants.CROPRESIDUE.Cotton;
+
+  // always 0 for cotton
+  // (cropResiduesK56, Crop_ResiduesC12)
+  const fractionBurnt = cotton.fractionOfAnnualCropBurnt;
+
+  // always 0 for cotton
+  // (cropResiduesL56, Crop_ResiduesC13)
+  const { fractionRemoved } = constants.CROPRESIDUE.Cotton;
+
+  // ElectricityC2 is state
+
+  // (Crop_ResiduesC30)
+  const massOfNReturnedToSoil =
+    annualProduction *
+      residueCropRatio *
+      (1 - fractionBurnt - fractionRemoved) *
+      dryMatterContent *
+      aboveGroundN +
+    annualProduction *
+      residueCropRatio *
+      belowAboveRatio *
+      dryMatterContent *
+      belowGroundN;
+
+  // (Crop_ResiduesD33)
+  const residueN2OEF = constants.CROP_RESIDUE_N2O_EF;
+
+  // (Crop_ResiduesC36)
+  const residueGgN2O =
+    massOfNReturnedToSoil * residueN2OEF * constants.GWP_FACTORSC15;
+  // (Crop_ResiduesC38)
+  const residuesGgCO2 = residueGgN2O * constants.GWP_FACTORSC6;
+
+  // (Data_Summary_C13)
+  const residueN2OTotal = residuesGgCO2 * 1000;
+
+  // leeching
+
+  // (Leaching_And_RunoffC21)
+  const fractionOfNAvailableForRunoff = getFertiliserFractionRunoff(context);
+
+  // (Leaching_And_RunoffE11)
+  const fracLeach = constants.LEACHING.FERT_N_FRACLEACH;
+
+  // (Leaching_And_RunoffC20)
+  const leechingZoneMultiplier = cotton.rainfallAbove600 ? 1 : 0;
+
+  // (Leaching_And_RunoffC23)
+  const fertiliserLeechingGgN =
+    totalMassFertiliser *
+    fractionOfNAvailableForRunoff *
+    fracLeach *
+    leechingZoneMultiplier;
+
+  // (Leaching_And_RunoffE14)
+  const fracWet = constants.LEACHING.FRACWET;
+
+  // (Leaching_And_RunoffC24)
+  const leechingResidueNGgN =
+    massOfNReturnedToSoil * fracWet * fracLeach * leechingZoneMultiplier;
+
+  // (Leaching_And_RunoffE29)
+  const leechingN2OEF = constants.LEACHING.N2O_EF;
+
+  // (Leaching_And_RunoffC32)
+  const annualN2OLeeching =
+    (fertiliserLeechingGgN + leechingResidueNGgN) *
+    leechingN2OEF *
+    constants.GWP_FACTORSC15;
+
+  // (Leaching_And_RunoffC34)
+  const leechingGgCO2 = annualN2OLeeching * constants.GWP_FACTORSC6;
+
+  const leechingN2O = leechingGgCO2 * 1000;
+
+  // atmospheric deposition
+
+  // (Atmospheric_DepositionD10)
+  const fracGASF = constants.FRAC_GASF;
+
+  // (Atmospheric_DepositionC12)
+  const massOfFertiliserVolatilised = totalMassFertiliser * fracGASF;
+
+  // (Atmospheric_DepositionC20)
+  const annualN2OAtmospheric =
+    massOfFertiliserVolatilised * ef * constants.GWP_FACTORSC15;
+  // (Atmospheric_DepositionC25)
+  const atmosphericGgCO2 = annualN2OAtmospheric * constants.GWP_FACTORSC6;
+  const atmosphericN2O = atmosphericGgCO2 * 1000;
+
+  // field burning
+
+  // (Crop_ResiduesC14)
+  const fractionRemainingAtBurning =
+    constants.CROPRESIDUE.Cotton.fractionOfResidueAtBurning;
+
+  // (Field_BurningC10)
+  const burningEfficiencyForResidue = constants.BURNING_EFFICIENCY_RESIDUE;
+
+  // (Field_BurningC22)
+  const massOfFuelBurnt =
+    annualProduction *
+    residueCropRatio *
+    fractionRemainingAtBurning *
+    dryMatterContent *
+    burningEfficiencyForResidue *
+    cotton.fractionOfAnnualCropBurnt;
+
+  // (Field_BurningD36)
+  const burningN2OEF = constants.BURNING_N2O_EF;
+
+  // (Field_BurningC39)
+  const burningN2O =
+    massOfFuelBurnt * aboveGroundN * burningN2OEF * constants.GWP_FACTORSC15;
+
+  // (Field_BurningC41)
+  const burningGgCO2 = burningN2O * constants.GWP_FACTORSC6;
+  const burningN2OTonnes = burningGgCO2 * 1000;
+
+  // (Crop_ResiduesC15)
+  const { carbonMassFraction } = constants.CROPRESIDUE.Cotton;
+
+  // (Field_BurningE26)
+  const methaneEF = constants.BURNING_METHANE_EF;
+
+  // (Field_BurningC29)
+  const methaneTotal =
+    massOfFuelBurnt * carbonMassFraction * methaneEF * constants.GWP_FACTORSC14;
+  // (Field_BurningC31)
+  const methaneBurningGg = methaneTotal * constants.GWP_FACTORSC5;
+  const burningCH4 = methaneBurningGg * 1000;
+
+  return {
+    cropResiduesN2O: residueN2OTotal,
+    fertiliserN2O: fertiliserN2OTonnes,
+    leechingN2O,
+    atmosphericN2O,
+    burningN2O: burningN2OTonnes,
+    burningCH4,
+  };
+}
