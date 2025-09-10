@@ -1,11 +1,24 @@
 {
   "include": ["."],
-  "exclude": ["dist", "build", "node_modules", "src/_raw"],
+  "exclude": ["dist", "build", "node_modules", "src/_raw", "**/test"],
+  
   "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "es2019",
+      "DOM"
+    ],
+    "types": [
+      "node"
+    ],
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "declaration": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "outDir": "./dist"
   }
 }
