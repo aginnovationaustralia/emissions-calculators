@@ -1,5 +1,5 @@
 {
-  "name": "@aginnovationaustralia/onfarm-emissions",
+  "name": "@aginnovationaustralia/emissions-calculators",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aginnovationaustralia/onfarm-emissions.git"
+    "url": "git+https://github.com/aginnovationaustralia/emissions-calculators.git"
   },
   "author": "Agricultural Innovation Australia",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/aginnovationaustralia/onfarm-emissions/issues"
+    "url": "https://github.com/aginnovationaustralia/emissions-calculators/issues"
   },
-  "homepage": "https://github.com/aginnovationaustralia/onfarm-emissions#readme",
+  "homepage": "https://github.com/aginnovationaustralia/emissions-calculators#readme",
   "description": "",
   "packageManager": "pnpm@9.15.4",
   "devDependencies": {
