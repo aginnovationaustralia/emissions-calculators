@@ -1,0 +1,22 @@
+{
+  "name": "@aginnovationaustralia/emissions-calculators",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:tsup": "tsup --tsconfig tsconfig.json --format esm,cjs --dts --outDir dist",
+    "check:types": "tsc --noEmit"
+  },
+  "author": "Agricultural Innovation Australia",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "semver": "^7.7.2"
+  }
+}
