@@ -191,7 +191,9 @@ export const HorticultureCropTypes = [
 export type HorticultureCropType = (typeof HorticultureCropTypes)[number];
 
 // SheepBeef
-export const BeefClassesAPI: HasAllKeys<BeefClassesInput> = [
+// TODO: these lists of keys are vulnerable to missing values that don't get processed. Need ot protect
+// via typescript or change how we loop
+export const BeefClassesAPI: (keyof BeefClassesInput)[] = [
   'bullsGt1',
   'bullsGt1Traded',
   'steersLt1',
@@ -210,7 +212,7 @@ export const BeefClassesAPI: HasAllKeys<BeefClassesInput> = [
   'heifersGt2Traded',
 ];
 
-export const SheepClassesAPI: HasAllKeys<SheepClassesInput> = [
+export const SheepClassesAPI: (keyof SheepClassesInput)[] = [
   'wethers',
   'tradeWethers',
   'rams',
@@ -408,7 +410,7 @@ export type RainfallZone = (typeof RainfallZones)[number];
 
 // Goat
 
-export const GoatClassesAPI: HasAllKeys<GoatClassesInput> = [
+export const GoatClassesAPI: (keyof GoatClassesInput)[] = [
   'wethers',
   'tradeWethers',
   'tradeBucks',

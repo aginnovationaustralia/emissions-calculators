@@ -1,6 +1,6 @@
 {
   "include": ["."],
-  "exclude": ["dist", "build", "node_modules", "src/_raw", "**/test"],
+  "exclude": ["dist", "build", "node_modules", "src/_raw"],
   
   "compilerOptions": {
     "target": "es5",
@@ -21,6 +21,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "noEmit": false
   }
 }

@@ -1,4 +1,3 @@
-import { Version } from '../../../../version';
 import { loadConstants } from '../../constants/constantsLoader';
 import { ExecutionContext } from '../../executionContext';
 
@@ -11,7 +10,7 @@ export const testContext = (
   const constants = loadConstants();
   return {
     calculator,
-    version: new Version(version),
+    version,
     constants,
     timestamp: '2000-01-01T00:00:00Z',
   };

@@ -1,4 +1,3 @@
-import { Version } from '@/version';
 import { plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { InputValidationError } from '../../../..';
@@ -88,7 +87,7 @@ describe('validating SheepBeef test inputs for incorrect nested inputs', () => {
 
   const executionContext = {
     calculator: 'sheepbeef',
-    version: new Version(V2_0_0),
+    version: V2_0_0,
     constants,
     timestamp: '2021-08-17T00:00:00Z',
   };
