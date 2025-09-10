@@ -1,12 +1,10 @@
 import {
-  IsBoolean,
-  IsDefined,
-  IsEnum,
-  IsOptional,
-  ValidateNested,
+    IsBoolean,
+    IsDefined,
+    IsEnum,
+    IsOptional,
+    ValidateNested,
 } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import { TransformSingleOrArray } from '../../common/tools';
 import { BeefComplete } from '../Beef/beef.input';
 import { SavannahBurning } from '../Beef/savannah.input';
@@ -57,6 +55,4 @@ export class SheepBeefInput {
   vegetation: SheepBeefVegetation[] = [];
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
 
-export { schema };

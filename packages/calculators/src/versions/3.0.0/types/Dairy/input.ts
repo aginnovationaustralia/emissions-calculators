@@ -1,14 +1,12 @@
 import { IsBoolean, IsDefined, IsEnum, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import { TransformSingleOrArray } from '../../common/tools';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import {
-  DairyProductionSystem,
-  DairyProductionSystems,
-  State,
-  States,
+    DairyProductionSystem,
+    DairyProductionSystems,
+    State,
+    States,
 } from '../types';
 import { DairyComplete } from './dairy.input';
 import { DairyVegetation } from './vegetation.input';
@@ -42,6 +40,4 @@ export class DairyInput {
   vegetation!: DairyVegetation[];
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
 
-export { schema };

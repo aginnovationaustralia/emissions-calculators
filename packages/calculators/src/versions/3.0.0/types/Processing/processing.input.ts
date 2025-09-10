@@ -1,16 +1,14 @@
 import { Type } from 'class-transformer';
 import {
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Max,
-  Min,
-  ValidateNested,
+    IsDefined,
+    IsEnum,
+    IsNumber,
+    IsOptional,
+    IsString,
+    Max,
+    Min,
+    ValidateNested,
 } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import 'reflect-metadata';
 import { FluidWasteInput } from '../common/fluid-waste.input';
 import { SolidWasteInput } from '../common/solid-waste.input';
@@ -87,6 +85,4 @@ export class ProductProcessingInput {
   carbonOffsets?: number;
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
 
-export { schema };

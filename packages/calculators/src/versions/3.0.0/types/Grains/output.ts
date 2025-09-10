@@ -1,11 +1,9 @@
 import { Type } from 'class-transformer';
 import { IsDefined, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import {
-  IsNumberArray,
-  SchemaDescription,
-  TypeWithArraySchema,
+    IsNumberArray,
+    SchemaDescription,
+    TypeWithArraySchema,
 } from '../decorator.schema';
 import { Scope2Output } from '../scope2.output';
 import { SequestrationOutput } from '../sequestration.output';
@@ -63,6 +61,4 @@ export class GrainsOutput {
   intensities!: number[];
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
 
-export { schema };

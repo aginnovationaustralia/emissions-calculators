@@ -9,8 +9,6 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import 'reflect-metadata';
 import { FluidWasteInput } from '../common/fluid-waste.input';
 import { FreightInput } from '../common/freight.input';
@@ -139,7 +137,3 @@ export class WildCatchFisheryEnterpriseInput {
   @SchemaDescription(DESCRIPTIONS.CARBON_OFFSETS)
   carbonOffsets?: number;
 }
-
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
-
-export { schema };

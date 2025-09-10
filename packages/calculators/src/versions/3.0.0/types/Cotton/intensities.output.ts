@@ -1,6 +1,4 @@
 import { IsDefined, IsNumber } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import { SchemaDescription } from '../decorator.schema';
 
 @SchemaDescription('Cotton intensities output')
@@ -96,6 +94,4 @@ export class CottonIntensitiesOutput {
   seedEconomicAllocation!: number;
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
 
-export { schema };

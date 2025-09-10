@@ -1,6 +1,4 @@
 import { IsDefined, IsNumber } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import { SchemaDescription } from '../decorator.schema';
 
 export class VineyardIntensitiesOutput {
@@ -24,6 +22,4 @@ export class VineyardIntensitiesOutput {
   cropProducedKg!: number;
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
 
-export { schema };

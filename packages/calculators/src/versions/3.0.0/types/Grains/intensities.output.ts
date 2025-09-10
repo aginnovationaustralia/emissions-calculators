@@ -1,6 +1,4 @@
 import { IsDefined, IsNumber } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import { SchemaDescription } from '../decorator.schema';
 
 export class GrainsIntensitiesOutput {
@@ -20,6 +18,4 @@ export class GrainsIntensitiesOutput {
   grainsIncludingSequestration!: number;
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
 
-export { schema };

@@ -475,7 +475,7 @@ export type DairyProductionSystem = (typeof DairyProductionSystems)[number];
 
 // Deer
 
-export const DeerClassesAPI: HasAllKeys<DeerClassesInput> = [
+export const DeerClassesAPI: (keyof DeerClassesInput)[] = [
   'tradeBucks',
   'tradeDoes',
   'bucks',
@@ -489,7 +489,7 @@ export type DeerClassAPI = (typeof DeerClassesAPI)[number];
 
 // Buffalo
 
-export const BuffaloClassesAPI: HasAllKeys<BuffaloClassesInput> = [
+export const BuffaloClassesAPI: (keyof BuffaloClassesInput)[] = [
   'bulls',
   'tradeBulls',
   'cows',

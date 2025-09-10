@@ -23,9 +23,6 @@ importers:
       class-validator-jsonschema:
         specifier: ^5.1.0
         version: 5.1.0(class-transformer@0.5.1)(class-validator@0.14.2)
-      openapi3-ts:
-        specifier: ^3.1.0
-        version: 3.2.0
       semver:
         specifier: ^7.7.2
         version: 7.7.2

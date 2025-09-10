@@ -1,12 +1,10 @@
 import { IsBoolean, IsDefined, IsEnum, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import { TransformSingleOrArray } from '../../common/tools';
 import { AllocatedVegetation } from '../allocated-vegetation.input';
 import {
-  DeprecatedSchemaDescription,
-  SchemaDescription,
-  TypeWithArraySchema,
+    DeprecatedSchemaDescription,
+    SchemaDescription,
+    TypeWithArraySchema,
 } from '../decorator.schema';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { State, States } from '../types';
@@ -41,6 +39,4 @@ export class PorkInput {
   vegetation!: AllocatedVegetation[];
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
 
-export { schema };

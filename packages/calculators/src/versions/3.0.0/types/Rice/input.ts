@@ -1,13 +1,11 @@
 import {
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  Max,
-  Min,
-  ValidateNested,
+    IsDefined,
+    IsEnum,
+    IsNumber,
+    Max,
+    Min,
+    ValidateNested,
 } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import 'reflect-metadata';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { DESCRIPTIONS } from '../descriptions.schema';
@@ -45,6 +43,4 @@ export class RiceInput {
   vegetation!: RiceVegetation[];
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
 
-export { schema };

@@ -1,6 +1,4 @@
 import { IsBoolean, IsDefined, IsEnum, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import { TransformSingleOrArray } from '../../common/tools';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { DESCRIPTIONS } from '../descriptions.schema';
@@ -44,6 +42,4 @@ export class PoultryInput {
   vegetation!: PoultryVegetation[];
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
 
-export { schema };

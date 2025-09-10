@@ -1,6 +1,4 @@
 import { IsDefined, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import 'reflect-metadata';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { WildSeaFisheriesEnterprise } from './enterprise.input';
@@ -13,6 +11,3 @@ export class WildSeaFisheriesInput {
   enterprises!: WildSeaFisheriesEnterprise[];
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
-
-export { schema };

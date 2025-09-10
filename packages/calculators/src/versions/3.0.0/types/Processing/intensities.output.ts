@@ -1,6 +1,4 @@
 import { IsDefined, IsEnum, IsNumber } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import { SchemaDescription } from '../decorator.schema';
 import { ProductUnit } from './product.input';
 
@@ -32,6 +30,4 @@ export class ProcessingIntensitiesOutput {
   processingIncludingCarbonOffsets!: number;
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
 
-export { schema };

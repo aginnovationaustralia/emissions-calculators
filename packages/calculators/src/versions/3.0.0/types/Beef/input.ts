@@ -1,13 +1,11 @@
 import { plainToClass, Transform } from 'class-transformer';
 import {
-  IsBoolean,
-  IsDefined,
-  IsEnum,
-  IsOptional,
-  ValidateNested,
+    IsBoolean,
+    IsDefined,
+    IsEnum,
+    IsOptional,
+    ValidateNested,
 } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts';
 import { singleToArray, TransformSingleOrArray } from '../../common/tools';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { DESCRIPTIONS } from '../descriptions.schema';
@@ -78,6 +76,4 @@ export class BeefInput {
   vegetation: BeefVegetation[] = [];
 }
 
-const schema: Record<string, SchemaObject> = validationMetadatasToSchemas();
 
-export { schema };
