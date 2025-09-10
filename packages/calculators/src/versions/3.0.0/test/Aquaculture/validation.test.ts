@@ -10,7 +10,7 @@ describe('validating Aquaculture test inputs, all types of inputs', () => {
         validateCalculatorInput(AquacultureInput, aquacultureTestData);
 
       expect(t).not.toThrow();
-      expect(t).not.toThrowError(InputValidationError);
+      expect(t).not.toThrow(InputValidationError);
       expect(t()).toBeInstanceOf(AquacultureInput);
     });
 
@@ -32,7 +32,7 @@ describe('validating Aquaculture test inputs, all types of inputs', () => {
 
       const t = () => validateCalculatorInput(AquacultureInput, validTestData);
 
-      expect(t).not.toThrowError(InputValidationError);
+      expect(t).not.toThrow(InputValidationError);
     });
   });
 
@@ -54,7 +54,7 @@ describe('validating Aquaculture test inputs, all types of inputs', () => {
       };
       const t = () =>
         validateCalculatorInput(AquacultureInput, invalidTestData);
-      expect(t).toThrowError(InputValidationError);
+      expect(t).toThrow(InputValidationError);
     });
   });
 });

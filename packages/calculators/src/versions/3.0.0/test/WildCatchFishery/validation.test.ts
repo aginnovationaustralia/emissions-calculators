@@ -13,7 +13,7 @@ describe('validating WildCatchFishery test inputs, all types of inputs', () => {
         );
 
       expect(t).not.toThrow();
-      expect(t).not.toThrowError(InputValidationError);
+      expect(t).not.toThrow(InputValidationError);
       expect(t()).toBeInstanceOf(WildCatchFisheryInput);
     });
 
@@ -36,7 +36,7 @@ describe('validating WildCatchFishery test inputs, all types of inputs', () => {
       const t = () =>
         validateCalculatorInput(WildCatchFisheryInput, validTestData);
 
-      expect(t).not.toThrowError(InputValidationError);
+      expect(t).not.toThrow(InputValidationError);
     });
   });
 
@@ -58,7 +58,7 @@ describe('validating WildCatchFishery test inputs, all types of inputs', () => {
       };
       const t = () =>
         validateCalculatorInput(WildCatchFisheryInput, invalidTestData);
-      expect(t).toThrowError(InputValidationError);
+      expect(t).toThrow(InputValidationError);
     });
   });
 });

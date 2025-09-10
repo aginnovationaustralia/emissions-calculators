@@ -9,7 +9,8 @@
       "DOM"
     ],
     "types": [
-      "node"
+      "node",
+      "jest"
     ],
     "strict": true,
     "resolveJsonModule": true,

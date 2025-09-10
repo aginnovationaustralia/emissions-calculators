@@ -20,7 +20,7 @@ describe('validating SheepBeef test inputs, all types of inputs', () => {
 
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
-    expect(t).not.toThrowError(InputValidationError);
+    expect(t).not.toThrow(InputValidationError);
     expect(t()).toBeInstanceOf(SheepBeefInput);
   });
 });
@@ -131,7 +131,7 @@ describe('support for single sheep and beef instance', () => {
 
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
-    expect(t).not.toThrowError(InputValidationError);
+    expect(t).not.toThrow(InputValidationError);
     expect(t()).toBeInstanceOf(SheepBeefInput);
     expect(t().sheep).toEqual([sheepbeefTestData.sheep[0]]);
     expect(t().beef).toEqual([sheepbeefTestData.beef[0]]);
@@ -148,7 +148,7 @@ describe('accepts just one beef, no sheep', () => {
 
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
-    expect(t).not.toThrowError(InputValidationError);
+    expect(t).not.toThrow(InputValidationError);
     expect(t()).toBeInstanceOf(SheepBeefInput);
     expect(t().sheep).toEqual([]);
     expect(t().beef).toEqual([sheepbeefTestData.beef[0]]);

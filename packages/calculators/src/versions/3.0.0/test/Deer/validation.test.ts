@@ -8,7 +8,7 @@ describe('validating Deer test inputs, all types of inputs', () => {
 
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
-    expect(t).not.toThrowError(InputValidationError);
+    expect(t).not.toThrow(InputValidationError);
     expect(t()).toBeInstanceOf(DeerInput);
   });
 });
