@@ -29,14 +29,14 @@ export function calculateScope1FieldBurning(crop: SugarCrop, context: ExecutionC
       fractionOfResidueAtBurn *
       dryMatterContent *
       constants.BURNING_EFFICIENCY_RESIDUE *
-      crop.fractionOfAnnualCropBurnt ?? 0;
+      crop.fractionOfAnnualCropBurnt;
 
   // (fieldBurningC29)
   const annualMethaneFromBurning =
     massOfFuelBurnt *
       carbonMassFraction *
       constants.BURNING_METHANE_EF *
-      constants.GWP_FACTORSC14 ?? 0;
+      constants.GWP_FACTORSC14;
 
   // (fieldBurningC39)
   const annualN2OFromBurning =
