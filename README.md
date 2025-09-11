@@ -35,4 +35,6 @@ TODO
 
 # License
 
-TODO
+![Creative Commons Attribution No Deriviatives](./doc/assets/by-nd.png)
+
+This project is licensed under a [Creative Commons Attribution No Derivatives 4.0](https://creativecommons.org/licenses/by-nd/4.0/) license.
