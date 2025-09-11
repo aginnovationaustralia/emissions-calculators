@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "turbo test`",
+    "test": "turbo test",
     "build": "turbo build",
     "lint": "turbo lint",
     "clean": "turbo clean"
@@ -20,6 +20,9 @@
   "homepage": "https://github.com/aginnovationaustralia/emissions-calculators#readme",
   "description": "",
   "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=22.19.0"
+  },
   "devDependencies": {
     "turbo": "^2.5.6"
   }

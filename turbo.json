@@ -5,13 +5,7 @@
       "outputs": ["dist/**"],
       "dependsOn": ["^build"]
     },
-    "bundle": {
-      "outputs": ["bundle/**"],
-      "dependsOn": ["build"]
-    },
     "test": {
-      "outputs": ["coverage/**"],
-      "dependsOn": []
     },
     "lint": {},
     "check:types": {},
