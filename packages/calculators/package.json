@@ -73,6 +73,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "class-validator-jsonschema": "^5.1.0",
+    "mixpanel": "^0.18.1",
     "semver": "^7.7.2",
     "ts-deepmerge": "^7.0.3",
     "type-fest": "^4.41.0"

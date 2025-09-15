@@ -1,7 +1,13 @@
+import { readFileSync } from 'fs';
 import { defineConfig } from 'tsup';
 
+// Read package.json to get version
+const packageJson = JSON.parse(readFileSync('./package.json', 'utf8'));
+
 export default defineConfig({
-  entry: ['src/index.ts', 'src/latest.ts'],
+  entry: {
+    'versions/3.0.0/calculators': 'src/versions/3.0.0/calculators.ts'
+  },
   format: ['cjs', 'esm'],
   dts: false, // We'll generate types separately with tsc
   outDir: 'dist',
@@ -11,6 +17,10 @@ export default defineConfig({
   splitting: false,
   treeshake: true,
   target: 'es2020',
+  // Inject package version at build time
+  define: {
+    PACKAGE_VERSION: JSON.stringify(packageJson.version)
+  },
   // This will resolve the @/* path aliases
   esbuildOptions(options) {
     options.alias = {
