@@ -1,12 +1,15 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "index.js",
   "scripts": {
     "test": "turbo test",
     "build": "turbo build",
     "lint": "turbo lint",
-    "clean": "turbo clean"
+    "clean": "turbo clean",
+    "publish:dry": "pnpm build && pnpm -r publish --no-git-checks --access private --dry-run",
+		"publish:packages": "pnpm build && pnpm -r publish --no-git-checks --access private --force",
+		"version:bump": "pnpm -r version"
   },
   "repository": {
     "type": "git",
