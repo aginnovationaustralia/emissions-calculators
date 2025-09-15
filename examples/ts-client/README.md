@@ -6,9 +6,10 @@ This is a TypeScript client example that demonstrates how to consume the `@aginn
 
 This example shows how to:
 - Install and import the emissions calculators package
+- Use both versioned imports (`/versions/3.0.0/`) and top-level aliases (`/calculators`, `/types`)
 - Create input data for beef emissions calculations
-- Call the `calculateEmissions` function
-- Display the results in a structured format
+- Call the `calculateBeef` function from different import paths
+- Compare results from different import methods
 
 ## Prerequisites
 
@@ -26,7 +27,7 @@ npm install
 
 ### 2. Configure NPM Authentication
 
-Since this is a private package, you need to authenticate with npm:
+While this is a private package, you need to authenticate with npm:
 
 #### Option A: Using NPM Token (Recommended)
 
@@ -63,30 +64,51 @@ npm run dev
 
 ### Example Output
 
-The example will calculate beef emissions for a sample farm and display:
+The example will calculate beef emissions for a sample farm using both import methods:
 
-- Input data summary
-- Scope 1, 2, and 3 emissions
-- Carbon sequestration
-- Net emissions
-- Emission intensities
+1. **Top-level alias imports** (`/calculators`, `/types`) - demonstrates the simplified import paths
+2. **Versioned imports** (`/versions/3.0.0/`) - demonstrates the explicit version path
+
+Both methods should produce identical results, showing the flexibility of the package's export configuration.
 
 ## Project Structure
 
 ```
 ts-client/
 ├── src/
-│   └── index.ts          # Main example file
-├── dist/                 # Compiled JavaScript output
-├── package.json          # Project dependencies and scripts
-├── tsconfig.json         # TypeScript configuration
-├── .npmrc               # NPM configuration for private packages
-└── README.md            # This file
+│   ├── beef/                 # Beef calculator examples
+│   │   ├── input.ts          # Sample beef input data
+│   │   ├── latest.ts         # Example using top-level aliases
+│   │   └── v300.ts           # Example using versioned imports
+│   └── index.ts              # Main example file
+├── dist/                     # Compiled JavaScript output
+├── package.json              # Project dependencies and scripts
+├── tsconfig.json             # TypeScript configuration
+├── .npmrc                    # NPM configuration for private packages
+└── README.md                 # This file
 ```
 
 ## API Usage
 
-The main function to use is `calculateEmissions`:
+### Method 1: Top-level Aliases (Recommended)
+
+```typescript
+import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/calculators';
+import { BeefInput } from '@aginnovationaustralia/emissions-calculators/types/Beef/input';
+
+const result = calculateBeef(beefInputData);
+```
+
+### Method 2: Versioned Imports
+
+```typescript
+import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/versions/3.0.0/calculators';
+import { BeefInput } from '@aginnovationaustralia/emissions-calculators/versions/3.0.0/types/Beef/input';
+
+const result = calculateBeef(beefInputData);
+```
+
+### Legacy Method: Main Entry Point
 
 ```typescript
 import { calculateEmissions } from '@aginnovationaustralia/emissions-calculators';
@@ -100,6 +122,8 @@ const result = calculateEmissions(
 
 ### Available Calculators
 
+The package includes calculators for:
+
 - `beef` - Beef cattle emissions
 - `dairy` - Dairy cattle emissions
 - `sheep` - Sheep emissions
@@ -110,7 +134,15 @@ const result = calculateEmissions(
 - `sugar` - Sugar cane emissions
 - `rice` - Rice crop emissions
 - `horticulture` - Horticultural crop emissions
-- And many more...
+- `aquaculture` - Aquaculture emissions
+- `buffalo` - Buffalo emissions
+- `deer` - Deer emissions
+- `feedlot` - Feedlot operations
+- `goat` - Goat emissions
+- `processing` - Food processing
+- `vineyard` - Vineyard operations
+- `wildCatchFishery` - Wild catch fisheries
+- `wildSeaFisheries` - Wild sea fisheries
 
 ## Troubleshooting
 
@@ -143,11 +175,14 @@ If you encounter TypeScript errors:
 
 To add examples for other calculators:
 
-1. Create a new file in `src/` (e.g., `dairy-example.ts`)
-2. Import the necessary types and functions
-3. Create sample input data
-4. Call `calculateEmissions` with the appropriate parameters
-5. Add a script to `package.json` to run your example
+1. Create a new folder in `src/` (e.g., `src/dairy/`)
+2. Create an `input.ts` file with sample data
+3. Create example files using both import methods:
+   - `latest.ts` - using top-level aliases (`/calculators`, `/types`)
+   - `v300.ts` - using versioned imports (`/versions/3.0.0/`)
+4. Import the necessary types and functions
+5. Call the appropriate calculator function
+6. Update `src/index.ts` to run your examples
 
 ### Building
 
