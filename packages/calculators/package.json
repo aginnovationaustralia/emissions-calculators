@@ -5,9 +5,9 @@
   "types": "dist/latest.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/latest.d.ts",
       "import": "./dist/latest.js",
-      "require": "./dist/latest.js",
-      "types": "./dist/latest.d.ts"
+      "require": "./dist/latest.js"
     },
     "./types/*": {
       "types": "./dist/types/*"
