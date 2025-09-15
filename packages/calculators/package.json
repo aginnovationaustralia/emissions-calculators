@@ -3,6 +3,25 @@
   "version": "0.1.1",
   "main": "dist/latest.js",
   "types": "dist/latest.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/latest.js",
+      "require": "./dist/latest.js",
+      "types": "./dist/latest.d.ts"
+    },
+    "./types/*": {
+      "types": "./dist/types/*"
+    },
+    "./versions/*": {
+      "types": "./dist/versions/*"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "types/*": ["dist/types/*"],
+      "versions/*": ["dist/versions/*"]
+    }
+  },
   "files": [
     "dist/**/*"
   ],
