@@ -14,6 +14,16 @@
     },
     "./versions/*": {
       "types": "./dist/versions/*"
+    },
+    "./latest/*": {
+      "types": "./dist/versions/3.0.0/*",
+      "import": "./dist/versions/3.0.0/*",
+      "require": "./dist/versions/3.0.0/*"
+    },
+    "./latest/calculators": {
+      "types": "./dist/versions/3.0.0/calculators.d.ts",
+      "import": "./dist/versions/3.0.0/calculators.mjs",
+      "require": "./dist/versions/3.0.0/calculators.js"
     }
   },
   "typesVersions": {
@@ -23,6 +33,9 @@
       ],
       "versions/*": [
         "dist/versions/*"
+      ],
+      "latest/*": [
+        "dist/versions/3.0.0/*"
       ]
     }
   },
