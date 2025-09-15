@@ -1,7 +1,11 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
   "version": "0.1.1",
-  "main": "index.js",
+  "main": "dist/latest.js",
+  "types": "dist/latest.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "build": "tsc",
     "build:tsup": "tsup --tsconfig tsconfig.json --format esm,cjs --dts --outDir dist",
