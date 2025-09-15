@@ -1,6 +1,6 @@
 
 // Create a sample beef input (simplified for demonstration)
-export const beefInput = {
+export const beefInputData = {
   state: 'nsw' as const,
   northOfTropicOfCapricorn: true,
   rainfallAbove600: true,

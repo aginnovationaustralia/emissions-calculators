@@ -1,7 +1,7 @@
-import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/latest/calculators';
-import { BeefInput } from '@aginnovationaustralia/emissions-calculators/latest/types/Beef/input';
-import { beefInput } from './input';
+import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/calculators';
+import { BeefInput } from '@aginnovationaustralia/emissions-calculators/types/Beef/input';
+import { beefInputData } from './input';
 
-const beefInput300: BeefInput = beefInput
+const beefInputLatest: BeefInput = beefInputData
 
-export const calculateBeef300 = () => calculateBeef(beefInput300);
+export const calculateBeefLatest = () => calculateBeef(beefInputLatest);

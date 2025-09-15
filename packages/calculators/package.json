@@ -9,18 +9,22 @@
       "import": "./dist/latest.js",
       "require": "./dist/latest.js"
     },
-    "./types/*": {
-      "types": "./dist/types/*"
-    },
     "./versions/*": {
-      "types": "./dist/versions/*"
+      "types": "./dist/versions/*",
+      "import": "./dist/versions/*",
+      "require": "./dist/versions/*"
     },
-    "./latest/*": {
+    "./*": {
       "types": "./dist/versions/3.0.0/*",
       "import": "./dist/versions/3.0.0/*",
       "require": "./dist/versions/3.0.0/*"
     },
-    "./latest/calculators": {
+    "./calculators": {
+      "types": "./dist/versions/3.0.0/calculators.d.ts",
+      "import": "./dist/versions/3.0.0/calculators.mjs",
+      "require": "./dist/versions/3.0.0/calculators.js"
+    },
+    "./versions/3.0.0/calculators": {
       "types": "./dist/versions/3.0.0/calculators.d.ts",
       "import": "./dist/versions/3.0.0/calculators.mjs",
       "require": "./dist/versions/3.0.0/calculators.js"
@@ -28,13 +32,10 @@
   },
   "typesVersions": {
     "*": {
-      "types/*": [
-        "dist/types/*"
-      ],
       "versions/*": [
         "dist/versions/*"
       ],
-      "latest/*": [
+      "*": [
         "dist/versions/3.0.0/*"
       ]
     }
