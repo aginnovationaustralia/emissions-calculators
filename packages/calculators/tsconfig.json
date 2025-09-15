@@ -1,13 +1,15 @@
 {
-  "include": ["."],
-  "exclude": ["dist", "build", "node_modules", "src/_raw"],
+  "include": ["src/**/*"],
+  "exclude": ["dist", "build", "node_modules", "src/_raw", "tsup.config.ts"],
   
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2020",
     "lib": [
-      "es2019",
+      "es2020",
       "DOM"
     ],
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "types": [
       "node",
       "jest"
@@ -22,6 +24,9 @@
       "@/*": ["src/*"]
     },
     "outDir": "./dist",
-    "noEmit": false
+    "rootDir": "./src",
+    "noEmit": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   }
 }
