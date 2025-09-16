@@ -4,7 +4,7 @@
 
 The emissions-calculators project aims to make it easy to calculate carbon emissions using the [Greenhouse Accounting Framework (GAF) Tools for Australian Primary Industries](https://piccc.org.au/resources/Tools.html). It is developed and maintained by [Agricultural Innovation Australia](https://aginnovationaustralia.com.au).
 
-The project implements the GAF tools as a javascript package that can be readily imported and used for calculations. The calculators are also available as an API as part of the [Environmental Accounting Platform (EAP)](https://www.aiaeap.com/).
+The project implements the GAF tools as a javascript package that can be readily imported and used for calculations. The calculators are also available as an API as part of the [Environmental Accounting Platform (EAP)](https://www.aiaeap.com/). Implementation of these tools is a key aspect of delivering the [Improving Consistency of On-farm Emissions Estimates](https://www.agriculture.gov.au/agriculture-land/farm-food-drought/climatechange/greenhouse-gas-accounting/grant-program) grant program.
 
 # Installation
 
@@ -14,7 +14,7 @@ npm install @aginnovationaustralia/emissions-calculators
 
 # Usage
 
-You can find more details on using the NPM package in it's [README](./packages/calculators/README.md) file. It can be as simple as:
+You can find more details on using the NPM package in its [README](./packages/calculators/README.md) file. It can be as simple as:
 
 ```javascript
 import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/calculators';
@@ -45,6 +45,10 @@ export const beefInputData = {
 const beefResults = calculateBeef(beefInputLatest);
 ```
 
+# Data and metrics collection
+
+These tools includes functionality to collect anonymous metrics on how often features are being used. Understanding how the tools are being used is an important aspect of the [Improving Consistency of On-farm Emissions Estimates](https://www.agriculture.gov.au/agriculture-land/farm-food-drought/climatechange/greenhouse-gas-accounting/grant-program) grant program.
+
 # Contributing and support
 
 TODO
@@ -67,6 +71,6 @@ This will require you to authenticate, then will publish the new version to the 
 
 # License
 
-![Creative Commons Attribution No Deriviatives](./doc/assets/by-nd.png)
+![Creative Commons Attribution No Derivatives](./doc/assets/by-nd.png)
 
 This project is licensed under a [Creative Commons Attribution No Derivatives 4.0](https://creativecommons.org/licenses/by-nd/4.0/) license.

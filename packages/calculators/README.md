@@ -52,8 +52,22 @@ import { BeefInput } from '@aginnovationaustralia/emissions-calculators/versions
 ...
 ```
 
+# Data and metrics collection
+
+This package includes functionality to collect anonymous metrics on how often features are being used. The data collected is not associated with specific users or organisations, and includes no personally identifying information like email addresses. It is only to understand the runtime adoption and usage of each calculator. The tool used to collect the usage metrics is [MixPanel](https://mixpanel.com/home/). The specific details that are collected includes:
+
+- the calculator being used
+- the version of the calculator
+- the NPM package version in use
+- whether the calculator succeeded or failed
+- if you define it, the organisation using the package
+
+If you want to associate the execution of a calculator with your organisation, you can set a value for the environment variable `CALCULATOR_METRICS_ORGANISATION`. This is entirely optional. You might want to consider this to help with the process of getting support if you are having problems or seeing errors.
+
+If you don't want the library to report details of which calculators are being used, all reporting can be disabled by setting the environment variable `DISABLE_CALCULATOR_METRICS` to the value `true`.
+
 # License
 
-![Creative Commons Attribution No Deriviatives](./doc/assets/by-nd.png)
+![Creative Commons Attribution No Derivatives](./doc/assets/by-nd.png)
 
 This project is licensed under a [Creative Commons Attribution No Derivatives 4.0](https://creativecommons.org/licenses/by-nd/4.0/) license.

@@ -70,6 +70,7 @@ import { WildSeaFisheriesOutput } from './types/WildSeaFisheries/output';
 
 // Package version - injected at build time
 declare const PACKAGE_VERSION: string;
+const collectMetrics = process.env.DISABLE_CALCULATOR_METRICS !== 'true';
 
 const mixpanel = init('ed361d81702b467cfa90128d3969bb06');
 
@@ -108,13 +109,15 @@ function executeCalculator<Input extends object, Output extends object>(calculat
     failed = true;
     throw error;
   } finally {
-    mixpanel.track('Execute package calculation', {
-      calculator: calculatorName,
-      calculatorVersion,
-      packageVersion: typeof PACKAGE_VERSION !== 'undefined' ? PACKAGE_VERSION : 'unknown',
-      failed,
-      // organisation: 'a test org',
-    });
+    if (collectMetrics) {
+      mixpanel.track('Execute package calculation', {
+        calculator: calculatorName,
+        calculatorVersion,
+        packageVersion: typeof PACKAGE_VERSION !== 'undefined' ? PACKAGE_VERSION : 'unknown',
+        failed,
+        organisation: process.env.CALCULATOR_METRICS_ORGANISATION,
+      });
+    }
   }
 
   return result;
