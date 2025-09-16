@@ -23,6 +23,7 @@ import { calculateVineyard as calculateVineyardInternal } from './Vineyard/calcu
 import { calculateWildCatchFishery as calculateWildCatchFisheryInternal } from './WildCatchFishery/calculator';
 import { calculateWildSeaFisheries as calculateWildSeaFisheriesInternal } from './WildSeaFisheries/calculator';
 import { executeCalculator } from './execute';
+import { CalculatorName } from './strings';
 import { AquacultureInput } from './types/Aquaculture/input';
 import { AquacultureOutput } from './types/Aquaculture/output';
 import { BeefInput } from './types/Beef/input';
@@ -79,81 +80,81 @@ export function validateCalculatorInput<T extends object>(
 }
 
 export function calculateBeef(input: BeefInput): BeefOutput {
-  return executeCalculator(calculateBeefInternal, input, 'beef');
+  return executeCalculator(calculateBeefInternal, input, CalculatorName.Beef);
 }
 
 export function calculateAquaculture(input: AquacultureInput): AquacultureOutput {
-  return executeCalculator(calculateAquacultureInternal, input, 'aquaculture');
+  return executeCalculator(calculateAquacultureInternal, input, CalculatorName.Aquaculture);
 }
 
 export function calculateBuffalo(input: BuffaloInput): BuffaloOutput {
-  return executeCalculator(calculateBuffaloInternal, input, 'buffalo');
+  return executeCalculator(calculateBuffaloInternal, input, CalculatorName.Buffalo);
 }
 
 export function calculateCotton(input: CottonInput): CottonOutput {
-  return executeCalculator(calculateCottonInternal, input, 'cotton');
+  return executeCalculator(calculateCottonInternal, input, CalculatorName.Cotton);
 }
 
 export function calculateDairy(input: DairyInput): DairyOutput {
-  return executeCalculator(calculateDairyInternal, input, 'dairy');
+  return executeCalculator(calculateDairyInternal, input, CalculatorName.Dairy);
 }
 
 export function calculateDeer(input: DeerInput): DeerOutput {
-  return executeCalculator(calculateDeerInternal, input, 'deer');
+  return executeCalculator(calculateDeerInternal, input, CalculatorName.Deer);
 }
 
 export function calculateFeedlot(input: FeedlotInput): FeedlotOutput {
-  return executeCalculator(calculateFeedlotInternal, input, 'feedlot');
+  return executeCalculator(calculateFeedlotInternal, input, CalculatorName.Feedlot);
 }
 
 export function calculateGoat(input: GoatInput): GoatOutput {
-  return executeCalculator(calculateGoatInternal, input, 'goat');
+  return executeCalculator(calculateGoatInternal, input, CalculatorName.Goat);
 }
 
 export function calculateGrains(input: GrainsInput): GrainsOutput {
-  return executeCalculator(calculateGrainsInternal, input, 'grains');
+  return executeCalculator(calculateGrainsInternal, input, CalculatorName.Grains);
 }
 
 export function calculateHorticulture(input: HorticultureInput): HorticultureOutput {
-  return executeCalculator(calculateHorticultureInternal, input, 'horticulture');
+  return executeCalculator(calculateHorticultureInternal, input, CalculatorName.Horticulture);
 }
 
 export function calculatePork(input: PorkInput): PorkOutput {
-  return executeCalculator(calculatePorkInternal, input, 'pork');
+  return executeCalculator(calculatePorkInternal, input, CalculatorName.Pork);
 }
 
 export function calculatePoultry(input: PoultryInput): PoultryOutput {
-  return executeCalculator(calculatePoultryInternal, input, 'poultry');
+  return executeCalculator(calculatePoultryInternal, input, CalculatorName.Poultry);
 }
 
 export function calculateProcessing(input: ProcessingInput): ProcessingOutput {
-  return executeCalculator(calculateProcessingInternal, input, 'processing');
+  return executeCalculator(calculateProcessingInternal, input, CalculatorName.Processing);
 }
 
 export function calculateRice(input: RiceInput): RiceOutput {
-  return executeCalculator(calculateRiceInternal, input, 'rice');
+    return executeCalculator(calculateRiceInternal, input, CalculatorName.Rice);
 }
 
 export function calculateSheep(input: SheepInput): SheepOutput {
-  return executeCalculator(calculateSheepInternal, input, 'sheep');
+  return executeCalculator(calculateSheepInternal, input, CalculatorName.Sheep);
 }
 
 export function calculateSheepBeef(input: SheepBeefInput): SheepBeefOutput {
-  return executeCalculator(calculateSheepBeefInternal, input, 'sheepbeef');
+  return executeCalculator(calculateSheepBeefInternal, input, CalculatorName.SheepBeef);
 }
 
 export function calculateSugar(input: SugarInput): SugarOutput {
-  return executeCalculator(calculateSugarInternal, input, 'sugar');
+  return executeCalculator(calculateSugarInternal, input, CalculatorName.Sugar);
 }
 
 export function calculateVineyard(input: VineyardInput): VineyardOutput {
-  return executeCalculator(calculateVineyardInternal, input, 'vineyard');
+  return executeCalculator(calculateVineyardInternal, input, CalculatorName.Vineyard);
 }
 
 export function calculateWildCatchFishery(input: WildCatchFisheryInput): WildCatchFisheryOutput {
-  return executeCalculator(calculateWildCatchFisheryInternal, input, 'wildcatchfishery');
+  return executeCalculator(calculateWildCatchFisheryInternal, input, CalculatorName.WildCatchFishery);
 }
 
 export function calculateWildSeaFisheries(input: WildSeaFisheriesInput): WildSeaFisheriesOutput {
-  return executeCalculator(calculateWildSeaFisheriesInternal, input, 'wildseafisheries');
+  return executeCalculator(calculateWildSeaFisheriesInternal, input, CalculatorName.WildSeaFisheries);
 }

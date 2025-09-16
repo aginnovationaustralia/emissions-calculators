@@ -1,6 +1,7 @@
 import { loadConstants } from './constants/constantsLoader';
 import { executeCalculator } from './execute';
 import { trackCalculatorExecution } from './metrics';
+import { CalculatorName } from './strings';
 
 // Mock the dependencies
 jest.mock('./metrics', () => ({
@@ -25,7 +26,7 @@ describe('executeCalculator', () => {
       // Arrange
       const mockCalculator = jest.fn().mockReturnValue({ result: 'success' });
       const input = { test: 'input' };
-      const calculatorName = 'test-calculator';
+      const calculatorName = CalculatorName.Beef;
 
       // Act
       const result = executeCalculator(mockCalculator, input, calculatorName);
@@ -46,7 +47,7 @@ describe('executeCalculator', () => {
       // Arrange
       const mockCalculator = jest.fn().mockReturnValue({});
       const input = {};
-      const calculatorName = 'beef';
+      const calculatorName = CalculatorName.Beef;
 
       // Act
       executeCalculator(mockCalculator, input, calculatorName);
@@ -62,7 +63,7 @@ describe('executeCalculator', () => {
 
     it('should handle different calculator names', () => {
       // Arrange
-      const calculatorNames = ['beef', 'dairy', 'sheep', 'aquaculture', 'wildseafisheries'];
+      const calculatorNames = [CalculatorName.Beef, CalculatorName.Dairy, CalculatorName.Sheep, CalculatorName.Aquaculture, CalculatorName.WildSeaFisheries];
       const mockCalculator = jest.fn().mockReturnValue({});
 
       // Act & Assert
@@ -86,12 +87,12 @@ describe('executeCalculator', () => {
       });
 
       // Act
-      executeCalculator(mockCalculator, {}, 'test1');
+      executeCalculator(mockCalculator, {}, CalculatorName.Beef);
       
       // Small delay to ensure different timestamps
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      executeCalculator(mockCalculator, {}, 'test2');
+      executeCalculator(mockCalculator, {}, CalculatorName.Dairy);
 
       // Assert
       expect(timestamps).toHaveLength(2);
@@ -112,13 +113,13 @@ describe('executeCalculator', () => {
       const input: TestInput = { value: 10, name: 'test' };
 
       // Act
-      const result = executeCalculator(mockCalculator, input, 'test');
+      const result = executeCalculator(mockCalculator, input, CalculatorName.Beef);
 
       // Assert
       expect(result).toEqual({ result: 42, processed: true });
       expect(typeof result.result).toBe('number');
       expect(typeof result.processed).toBe('boolean');
-      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith('test', '3.0.0', false);
+      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith(CalculatorName.Beef, '3.0.0', false);
     });
 
     it('should preserve complex object structures', () => {
@@ -137,14 +138,14 @@ describe('executeCalculator', () => {
       const mockCalculator = jest.fn().mockReturnValue(complexOutput);
 
       // Act
-      const result = executeCalculator(mockCalculator, complexInput, 'test');
+      const result = executeCalculator(mockCalculator, complexInput, CalculatorName.Beef);
 
       // Assert
       expect(result).toEqual(complexOutput);
       expect(result.processed).toBe(complexInput);
       expect(result.processed.nested.deep.value).toBe('test');
       expect(result.processed.array).toEqual([1, 2, 3]);
-      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith('test', '3.0.0', false);
+      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith(CalculatorName.Beef, '3.0.0', false);
     });
 
     it('should handle null and undefined return values', () => {
@@ -153,12 +154,12 @@ describe('executeCalculator', () => {
       const mockCalculatorUndefined = jest.fn().mockReturnValue(undefined);
 
       // Act & Assert
-      expect(executeCalculator(mockCalculatorNull, {}, 'test')).toBeNull();
-      expect(executeCalculator(mockCalculatorUndefined, {}, 'test')).toBeUndefined();
+      expect(executeCalculator(mockCalculatorNull, {}, CalculatorName.Beef)).toBeNull();
+      expect(executeCalculator(mockCalculatorUndefined, {}, CalculatorName.Beef)).toBeUndefined();
       
       expect(mockTrackCalculatorExecution).toHaveBeenCalledTimes(2);
-      expect(mockTrackCalculatorExecution).toHaveBeenNthCalledWith(1, 'test', '3.0.0', false);
-      expect(mockTrackCalculatorExecution).toHaveBeenNthCalledWith(2, 'test', '3.0.0', false);
+      expect(mockTrackCalculatorExecution).toHaveBeenNthCalledWith(1, CalculatorName.Beef, '3.0.0', false);
+      expect(mockTrackCalculatorExecution).toHaveBeenNthCalledWith(2, CalculatorName.Beef, '3.0.0', false);
     });
   });
 
@@ -170,7 +171,7 @@ describe('executeCalculator', () => {
         throw error;
       });
       const input = { test: 'input' };
-      const calculatorName = 'test-calculator';
+      const calculatorName = CalculatorName.Beef;
 
       // Act & Assert
       expect(() => executeCalculator(mockCalculator, input, calculatorName)).toThrow('Test error');
@@ -191,7 +192,7 @@ describe('executeCalculator', () => {
         undefined,
       ];
 
-      const calculatorName = 'test-calculator';
+      const calculatorName = CalculatorName.Beef;
 
       // Act & Assert
       errors.forEach((error, index) => {
@@ -215,14 +216,14 @@ describe('executeCalculator', () => {
 
       // Act & Assert
       try {
-        executeCalculator(mockCalculator, {}, 'test');
+        executeCalculator(mockCalculator, {}, CalculatorName.Beef);
         fail('Expected function to throw');
       } catch (error: any) {
         expect(error).toBe(originalError);
         expect(error.message).toBe('Original error message');
       }
 
-      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith('test', '3.0.0', true);
+      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith(CalculatorName.Beef, '3.0.0', true);
     });
 
     it('should track metrics even when error occurs in context creation', () => {
@@ -234,7 +235,7 @@ describe('executeCalculator', () => {
       const mockCalculator = jest.fn().mockReturnValue({});
 
       // Act & Assert
-      expect(() => executeCalculator(mockCalculator, {}, 'test')).toThrow('Constants load failed');
+      expect(() => executeCalculator(mockCalculator, {}, CalculatorName.Beef)).toThrow('Constants load failed');
     });
 
     it('should handle async errors in calculator', async () => {
@@ -245,10 +246,10 @@ describe('executeCalculator', () => {
       });
 
       // Act & Assert
-      await expect(executeCalculator(mockCalculator, {}, 'test')).rejects.toThrow('Async error');
+      await expect(executeCalculator(mockCalculator, {}, CalculatorName.Beef)).rejects.toThrow('Async error');
       // Note: The executeCalculator function doesn't handle async errors differently
       // It will track as failed=false because the promise rejection happens after the function returns
-      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith('test', '3.0.0', false);
+      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith(CalculatorName.Beef, '3.0.0', false);
     });
   });
 
@@ -260,7 +261,7 @@ describe('executeCalculator', () => {
 
       // Act
       for (let i = 0; i < executions; i++) {
-        executeCalculator(mockCalculator, {}, `calculator-${i}`);
+        executeCalculator(mockCalculator, {}, CalculatorName.Beef);
       }
 
       // Assert
@@ -278,8 +279,8 @@ describe('executeCalculator', () => {
         .mockReturnValueOnce(constants2);
 
       // Act
-      executeCalculator(mockCalculator, {}, 'test1');
-      executeCalculator(mockCalculator, {}, 'test2');
+      executeCalculator(mockCalculator, {}, CalculatorName.Beef);
+      executeCalculator(mockCalculator, {}, CalculatorName.Dairy);
 
       // Assert
       expect(mockCalculator).toHaveBeenNthCalledWith(1, {}, expect.objectContaining({
@@ -302,12 +303,12 @@ describe('executeCalculator', () => {
       });
 
       // Act
-      executeCalculator(mockCalculator, {}, 'test1');
+      executeCalculator(mockCalculator, {}, CalculatorName.Beef);
       
       // Small delay to ensure different timestamps
       await new Promise(resolve => setTimeout(resolve, 1));
       
-      executeCalculator(mockCalculator, {}, 'test2');
+      executeCalculator(mockCalculator, {}, CalculatorName.Dairy);
 
       // Assert
       expect(timestamps).toHaveLength(2);
@@ -326,7 +327,7 @@ describe('executeCalculator', () => {
       });
 
       // Act
-      executeCalculator(mockCalculator, {}, 'test');
+      executeCalculator(mockCalculator, {}, CalculatorName.Beef);
 
       // Assert
       expect(capturedTimestamp!).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
@@ -341,11 +342,11 @@ describe('executeCalculator', () => {
       const emptyInput = {};
 
       // Act
-      executeCalculator(mockCalculator, emptyInput, 'test');
+      executeCalculator(mockCalculator, emptyInput, CalculatorName.Beef);
 
       // Assert
       expect(mockCalculator).toHaveBeenCalledWith(emptyInput, expect.any(Object));
-      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith('test', '3.0.0', false);
+      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith(CalculatorName.Beef, '3.0.0', false);
     });
 
     it('should handle null and undefined inputs gracefully', () => {
@@ -353,46 +354,10 @@ describe('executeCalculator', () => {
       const mockCalculator = jest.fn().mockReturnValue({});
 
       // Act & Assert
-      expect(() => executeCalculator(mockCalculator, null as any, 'test')).not.toThrow();
-      expect(() => executeCalculator(mockCalculator, undefined as any, 'test')).not.toThrow();
+      expect(() => executeCalculator(mockCalculator, null as any, CalculatorName.Beef)).not.toThrow();
+      expect(() => executeCalculator(mockCalculator, undefined as any, CalculatorName.Beef)).not.toThrow();
       
       expect(mockTrackCalculatorExecution).toHaveBeenCalledTimes(2);
-    });
-
-    it('should handle very long calculator names', () => {
-      // Arrange
-      const longName = 'a'.repeat(1000);
-      const mockCalculator = jest.fn().mockReturnValue({});
-
-      // Act
-      executeCalculator(mockCalculator, {}, longName);
-
-      // Assert
-      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith(longName, '3.0.0', false);
-    });
-
-    it('should handle special characters in calculator names', () => {
-      // Arrange
-      const specialNames = [
-        'calculator-with-dashes',
-        'calculator_with_underscores',
-        'calculator.with.dots',
-        'calculator with spaces',
-        'calculator@with#special$chars',
-      ];
-
-      const mockCalculator = jest.fn().mockReturnValue({});
-
-      // Act
-      specialNames.forEach(name => {
-        executeCalculator(mockCalculator, {}, name);
-      });
-
-      // Assert
-      expect(mockTrackCalculatorExecution).toHaveBeenCalledTimes(specialNames.length);
-      specialNames.forEach(name => {
-        expect(mockTrackCalculatorExecution).toHaveBeenCalledWith(name, '3.0.0', false);
-      });
     });
 
     it('should handle calculator that modifies input', () => {
@@ -404,12 +369,12 @@ describe('executeCalculator', () => {
       });
 
       // Act
-      const result = executeCalculator(mockCalculator, input, 'test');
+      const result = executeCalculator(mockCalculator, input, CalculatorName.Beef);
 
       // Assert
       expect(result).toEqual({ result: 2 });
       expect(input.value).toBe(2); // Input was modified
-      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith('test', '3.0.0', false);
+      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith(CalculatorName.Beef, '3.0.0', false);
     });
   });
 
@@ -422,11 +387,11 @@ describe('executeCalculator', () => {
       });
 
       // Act & Assert
-      executeCalculator(successCalculator, {}, 'success-test');
-      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith('success-test', '3.0.0', false);
+      executeCalculator(successCalculator, {}, CalculatorName.Beef);
+      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith(CalculatorName.Beef, '3.0.0', false);
 
-      expect(() => executeCalculator(failureCalculator, {}, 'failure-test')).toThrow();
-      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith('failure-test', '3.0.0', true);
+      expect(() => executeCalculator(failureCalculator, {}, CalculatorName.Beef)).toThrow();
+      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith(CalculatorName.Beef, '3.0.0', true);
 
       expect(mockTrackCalculatorExecution).toHaveBeenCalledTimes(2);
     });
@@ -440,10 +405,10 @@ describe('executeCalculator', () => {
       const mockCalculator = jest.fn().mockReturnValue({});
 
       // Act & Assert
-      expect(() => executeCalculator(mockCalculator, {}, 'test')).toThrow('Tracking failed');
+      expect(() => executeCalculator(mockCalculator, {}, CalculatorName.Beef)).toThrow('Tracking failed');
       
       // The function should still attempt to track metrics
-      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith('test', '3.0.0', false);
+      expect(mockTrackCalculatorExecution).toHaveBeenCalledWith(CalculatorName.Beef, '3.0.0', false);
     });
 
     it('should track metrics with correct parameters for all calculator types', () => {
@@ -451,12 +416,7 @@ describe('executeCalculator', () => {
       // Reset the mock to normal behavior
       mockTrackCalculatorExecution.mockImplementation(() => {});
       
-      const calculators = [
-        'beef', 'dairy', 'sheep', 'pork', 'poultry', 'grains', 'cotton',
-        'sugar', 'rice', 'horticulture', 'aquaculture', 'buffalo', 'deer',
-        'feedlot', 'goat', 'processing', 'vineyard', 'wildcatchfishery',
-        'wildseafisheries', 'sheepbeef'
-      ];
+      const calculators = Object.values(CalculatorName)
 
       const mockCalculator = jest.fn().mockReturnValue({});
 
