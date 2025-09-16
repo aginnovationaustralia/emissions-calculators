@@ -1,76 +1,70 @@
 import { InputValidationError } from '@/utils/io';
+import { parseValidationError } from '@/validators/errorConversion';
 import { ClassConstructor, plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
-import { parseValidationError } from '../../validators/errorConversion';
-import { calculateAquaculture } from './Aquaculture/calculator';
-import { calculateBeef } from './Beef/calculator';
-import { calculateBuffalo } from './Buffalo/calculator';
+import { calculateAquaculture as calculateAquacultureInternal } from './Aquaculture/calculator';
+import { calculateBeef as calculateBeefInternal } from './Beef/calculator';
+import { calculateBuffalo as calculateBuffaloInternal } from './Buffalo/calculator';
+import { calculateCotton as calculateCottonInternal } from './Cotton/calculator';
+import { calculateDairy as calculateDairyInternal } from './Dairy/calculator';
+import { calculateDeer as calculateDeerInternal } from './Deer/calculator';
+import { calculateEntireFeedlot as calculateFeedlotInternal } from './Feedlot/calculator';
+import { calculateGoat as calculateGoatInternal } from './Goat/calculator';
+import { calculateGrains as calculateGrainsInternal } from './Grains/calculator';
+import { calculateHorticulture as calculateHorticultureInternal } from './Horticulture/calculator';
+import { calculatePork as calculatePorkInternal } from './Pork/calculator';
+import { calculatePoultry as calculatePoultryInternal } from './Poultry/calculator';
+import { calculateProcessing as calculateProcessingInternal } from './Processing/calculator';
+import { calculateRice as calculateRiceInternal } from './Rice/calculator';
+import { calculateSheep as calculateSheepInternal } from './Sheep/calculator';
+import { calculateSheepBeef as calculateSheepBeefInternal } from './SheepBeef/calculator';
+import { calculateSugar as calculateSugarInternal } from './Sugar/calculator';
+import { calculateVineyard as calculateVineyardInternal } from './Vineyard/calculator';
+import { calculateWildCatchFishery as calculateWildCatchFisheryInternal } from './WildCatchFishery/calculator';
+import { calculateWildSeaFisheries as calculateWildSeaFisheriesInternal } from './WildSeaFisheries/calculator';
 import {
-  loadConstants,
-  loadOverrideConstants,
+  loadConstants
 } from './constants/constantsLoader';
-import { calculateEntireCotton } from './Cotton/calculator';
-import { calculateDairy } from './Dairy/calculator';
-import { calculateDeer } from './Deer/calculator';
-import { ExecutionContext } from './executionContext';
-import { calculateEntireFeedlot } from './Feedlot/calculator';
-import { calculateGoat } from './Goat/calculator';
-import { calculateEntireGrains } from './Grains/calculator';
-import { calculateHorticulture } from './Horticulture/calculator';
-import { calculatePork } from './Pork/calculator';
-import { calculatePoultry } from './Poultry/calculator';
-import { calculateProcessing } from './Processing/calculator';
-import { calculateRice } from './Rice/calculator';
-import { calculateSheep } from './Sheep/calculator';
-import { calculateSheepBeef } from './SheepBeef/calculator';
-import { calculateEntireSugar } from './Sugar/calculator';
 import { AquacultureInput } from './types/Aquaculture/input';
+import { AquacultureOutput } from './types/Aquaculture/output';
 import { BeefInput } from './types/Beef/input';
+import { BeefOutput } from './types/Beef/output';
 import { BuffaloInput } from './types/Buffalo/input';
+import { BuffaloOutput } from './types/Buffalo/output';
 import { CottonInput } from './types/Cotton/input';
+import { CottonOutput } from './types/Cotton/output';
 import { DairyInput } from './types/Dairy/input';
+import { DairyOutput } from './types/Dairy/output';
 import { DeerInput } from './types/Deer/input';
+import { DeerOutput } from './types/Deer/output';
 import { FeedlotInput } from './types/Feedlot/input';
+import { FeedlotOutput } from './types/Feedlot/output';
 import { GoatInput } from './types/Goat/input';
+import { GoatOutput } from './types/Goat/output';
 import { GrainsInput } from './types/Grains/input';
+import { GrainsOutput } from './types/Grains/output';
 import { HorticultureInput } from './types/Horticulture/input';
+import { HorticultureOutput } from './types/Horticulture/output';
 import { PorkInput } from './types/Pork/input';
+import { PorkOutput } from './types/Pork/output';
 import { PoultryInput } from './types/Poultry/input';
+import { PoultryOutput } from './types/Poultry/output';
 import { ProcessingInput } from './types/Processing/input';
+import { ProcessingOutput } from './types/Processing/output';
 import { RiceInput } from './types/Rice/input';
+import { RiceOutput } from './types/Rice/output';
 import { SheepInput } from './types/Sheep/input';
+import { SheepOutput } from './types/Sheep/output';
 import { SheepBeefInput } from './types/SheepBeef/input';
+import { SheepBeefOutput } from './types/SheepBeef/output';
 import { SugarInput } from './types/Sugar/input';
+import { SugarOutput } from './types/Sugar/output';
 import { VineyardInput } from './types/Vineyard/input';
+import { VineyardOutput } from './types/Vineyard/output';
 import { WildCatchFisheryInput } from './types/WildCatchFishery/input';
+import { WildCatchFisheryOutput } from './types/WildCatchFishery/output';
 import { WildSeaFisheriesInput } from './types/WildSeaFisheries/input';
-import { calculateVineyard } from './Vineyard/calculator';
-import { calculateWildCatchFishery } from './WildCatchFishery/calculator';
-import { calculateWildSeaFisheries } from './WildSeaFisheries/calculator';
-
-export enum Calculators {
-  Beef = 'beef',
-  Buffalo = 'buffalo',
-  Cotton = 'cotton',
-  Dairy = 'dairy',
-  Deer = 'deer',
-  FeedlotBeef = 'feedlot',
-  Goat = 'goat',
-  Grains = 'grains',
-  Grape = 'grape',
-  Horticulture = 'horticulture',
-  Pork = 'pork',
-  Poultry = 'poultry',
-  Rice = 'rice',
-  SheepBeef = 'sheepbeef',
-  Sugar = 'sugar',
-  Sheep = 'sheep',
-  WildSeaFisheries = 'wildseafisheries',
-  Processing = 'processing',
-  Aquaculture = 'aquaculture',
-  Vineyard = 'vineyard',
-  WildCatchFishery = 'wildcatchfishery',
-}
+import { WildSeaFisheriesOutput } from './types/WildSeaFisheries/output';
 
 export function validateCalculatorInput<T extends object>(
   cls: ClassConstructor<T>,
@@ -86,379 +80,91 @@ export function validateCalculatorInput<T extends object>(
   return classedInput;
 }
 
-/**
- * Validates input and calculates entire sheep and beef emissions.
- * @param input Object
- */
-export function calculateSheepBeefEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(SheepBeefInput, input);
-
-  return calculateSheepBeef(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire sheep  emissions.
- * @param input Object
- */
-export function calculateSheepEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(SheepInput, input);
-
-  return calculateSheep(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire sheep and beef emissions.
- * @param input Object
- */
-export function calculateBeefEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(BeefInput, input);
-
-  return calculateBeef(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire grains emissions.
- * @param input Object
- */
-export function calculateGrainsEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(GrainsInput, input);
-
-  return calculateEntireGrains(
-    classedInput.crops,
-    classedInput.electricityUse,
-    classedInput.electricityRenewable,
-    classedInput.state,
-    classedInput.vegetation,
-    context,
-  );
-}
-
-/**
- * Validates input and calculates entire feedlot emissions.
- * @param input Object
- */
-export function calculateFeedlotEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(FeedlotInput, input);
-
-  return calculateEntireFeedlot(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire goat emissions.
- * @param input Object
- */
-export function calculateGoatEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(GoatInput, input);
-
-  return calculateGoat(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire cotton emissions.
- * @param input Object
- */
-export function calculateCottonEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(CottonInput, input);
-
-  return calculateEntireCotton(
-    classedInput.crops,
-    classedInput.electricityUse,
-    classedInput.electricityRenewable,
-    classedInput.state,
-    classedInput.vegetation,
-    context,
-  );
-}
-
-/**
- * Validates input and calculates entire sugar emissions.
- * @param input Object
- */
-export function calculateSugarEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(SugarInput, input);
-
-  return calculateEntireSugar(
-    classedInput.crops,
-    classedInput.electricityUse,
-    classedInput.electricityRenewable,
-    classedInput.state,
-    classedInput.vegetation,
-    context,
-  );
-}
-
-/**
- * Validates input and calculates entire pork emissions.
- * @param input Object
- */
-export function calculatePorkEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(PorkInput, input);
-
-  return calculatePork(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire poultry emissions.
- * @param input Object
- */
-export function calculatePoultryEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(PoultryInput, input);
-
-  return calculatePoultry(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire dairy emissions.
- * @param input Object
- */
-export function calculateDairyEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(DairyInput, input);
-
-  return calculateDairy(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire deer emissions.
- * @param input Object
- */
-export function calculateDeerEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(DeerInput, input);
-
-  return calculateDeer(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire buffalo emissions.
- * @param input Object
- */
-export function calculateBuffaloEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(BuffaloInput, input);
-
-  return calculateBuffalo(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire wild sea fisheries emissions.
- * @param input Object
- */
-export function calculateWildSeaFisheriesEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(WildSeaFisheriesInput, input);
-
-  return calculateWildSeaFisheries(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire buffalo emissions.
- * @param input Object
- */
-export function calculateHorticultureEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(HorticultureInput, input);
-
-  return calculateHorticulture(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire rice emissions.
- * @param input Object
- */
-export function calculateRiceEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(RiceInput, input);
-
-  return calculateRice(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire processing emissions.
- * @param input Object
- */
-export function calculateProcessingEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(ProcessingInput, input);
-
-  return calculateProcessing(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire aquaculture emissions.
- * @param input Object
- */
-export function calculateAquacultureEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(AquacultureInput, input);
-
-  return calculateAquaculture(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire vineyard emissions.
- * @param input Object
- */
-export function calculateVineyardEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(VineyardInput, input);
-
-  return calculateVineyard(classedInput, context);
-}
-
-/**
- * Validates input and calculates entire wild catch fishery emissions.
- * @param input Object
- */
-export function calculateWildCatchFisheryEmissions(
-  input: unknown,
-  context: ExecutionContext,
-) {
-  const classedInput = validateCalculatorInput(WildCatchFisheryInput, input);
-
-  return calculateWildCatchFishery(classedInput, context);
-}
-
-function executeCalculation(
-  calculator: string,
-  input: unknown,
-  context: ExecutionContext,
-) {
-  switch (calculator.toLowerCase()) {
-    case Calculators.Dairy:
-      return calculateDairyEmissions(input, context);
-    case Calculators.SheepBeef:
-      return calculateSheepBeefEmissions(input, context);
-    case Calculators.Grains:
-      return calculateGrainsEmissions(input, context);
-    case 'feedlotbeef':
-      return calculateFeedlotEmissions(input, context);
-    case Calculators.FeedlotBeef:
-      return calculateFeedlotEmissions(input, context);
-    case Calculators.Goat:
-      return calculateGoatEmissions(input, context);
-    case Calculators.Cotton:
-      return calculateCottonEmissions(input, context);
-    case Calculators.Sugar:
-      return calculateSugarEmissions(input, context);
-    case Calculators.Pork:
-      return calculatePorkEmissions(input, context);
-    case Calculators.Poultry:
-      return calculatePoultryEmissions(input, context);
-    case Calculators.Beef:
-      return calculateBeefEmissions(input, context);
-    case Calculators.Sheep:
-      return calculateSheepEmissions(input, context);
-    case Calculators.Deer:
-      return calculateDeerEmissions(input, context);
-    case Calculators.Buffalo:
-      return calculateBuffaloEmissions(input, context);
-    case Calculators.WildSeaFisheries:
-      return calculateWildSeaFisheriesEmissions(input, context);
-    case Calculators.Horticulture:
-      return calculateHorticultureEmissions(input, context);
-    case Calculators.Rice:
-      return calculateRiceEmissions(input, context);
-    case Calculators.Processing:
-      return calculateProcessingEmissions(input, context);
-    case Calculators.Aquaculture:
-      return calculateAquacultureEmissions(input, context);
-    case Calculators.Vineyard:
-      return calculateVineyardEmissions(input, context);
-    case Calculators.WildCatchFishery:
-      return calculateWildCatchFisheryEmissions(input, context);
-    default:
-      throw new Error(`Calculator ${calculator} not found`);
-  }
-}
-
-/**
- * Primary entry point for performing emissions calculations. Takes a calculator
- * name and input object, performs validation specific for that calculator and
- * returns emissions. The latest version of the calculator is used by default.
- * @param calculator
- * @param input
- * @param version
- * @returns
- */
-export function calculateEmissions(
-  calculator: string,
-  version: string,
-  input: unknown,
-  allowOverrides = false,
-) {
-  const overrides = allowOverrides
-    ? (input as { overrides: object }).overrides
-    : undefined;
-  const constants = allowOverrides
-    ? loadOverrideConstants(overrides)
-    : loadConstants();
-
-  const executionContext = {
-    calculator,
-    version,
-    constants,
-    timestamp: new Date().toISOString(),
-    overrides,
-  };
-
-  const result = executeCalculation(calculator, input, executionContext);
-
+function contextFor(calculator: string) {
   return {
-    ...result,
-    metaData: {
-      calculator,
-      version,
-      timestamp: new Date().toISOString(),
-      overrides,
-    },
+    calculator,
+    version: '3.0.0',
+    constants: loadConstants(),
+    timestamp: new Date().toISOString(),
   };
+}
+
+export function calculateBeef(input: BeefInput): BeefOutput {
+  return calculateBeefInternal(input, contextFor('beef'));
+}
+
+export function calculateAquaculture(input: AquacultureInput): AquacultureOutput {
+  return calculateAquacultureInternal(input, contextFor('aquaculture'));
+}
+
+export function calculateBuffalo(input: BuffaloInput): BuffaloOutput {
+  return calculateBuffaloInternal(input, contextFor('buffalo'));
+}
+
+export function calculateCotton(input: CottonInput): CottonOutput {
+  return calculateCottonInternal(input, contextFor('cotton'));
+}
+
+export function calculateDairy(input: DairyInput): DairyOutput {
+  return calculateDairyInternal(input, contextFor('dairy'));
+}
+
+export function calculateDeer(input: DeerInput): DeerOutput {
+  return calculateDeerInternal(input, contextFor('deer'));
+}
+
+export function calculateFeedlot(input: FeedlotInput): FeedlotOutput {
+  return calculateFeedlotInternal(input, contextFor('feedlot'));
+}
+
+export function calculateGoat(input: GoatInput): GoatOutput {
+  return calculateGoatInternal(input, contextFor('goat'));
+}
+
+export function calculateGrains(input: GrainsInput): GrainsOutput {
+  return calculateGrainsInternal(input, contextFor('grains'));
+}
+
+export function calculateHorticulture(input: HorticultureInput): HorticultureOutput {
+  return calculateHorticultureInternal(input, contextFor('horticulture'));
+}
+
+export function calculatePork(input: PorkInput): PorkOutput {
+  return calculatePorkInternal(input, contextFor('pork'));
+}
+
+export function calculatePoultry(input: PoultryInput): PoultryOutput {
+  return calculatePoultryInternal(input, contextFor('poultry'));
+}
+
+export function calculateProcessing(input: ProcessingInput): ProcessingOutput {
+  return calculateProcessingInternal(input, contextFor('processing'));
+}
+
+export function calculateRice(input: RiceInput): RiceOutput {
+  return calculateRiceInternal(input, contextFor('rice'));
+}
+
+export function calculateSheep(input: SheepInput): SheepOutput {
+  return calculateSheepInternal(input, contextFor('sheep'));
+}
+
+export function calculateSheepBeef(input: SheepBeefInput): SheepBeefOutput {
+  return calculateSheepBeefInternal(input, contextFor('sheepbeef'));
+}
+
+export function calculateSugar(input: SugarInput): SugarOutput {
+  return calculateSugarInternal(input, contextFor('sugar'));
+}
+
+export function calculateVineyard(input: VineyardInput): VineyardOutput {
+  return calculateVineyardInternal(input, contextFor('vineyard'));
+}
+
+export function calculateWildCatchFishery(input: WildCatchFisheryInput): WildCatchFisheryOutput {
+  return calculateWildCatchFisheryInternal(input, contextFor('wildcatchfishery'));
+}
+
+export function calculateWildSeaFisheries(input: WildSeaFisheriesInput): WildSeaFisheriesOutput {
+  return calculateWildSeaFisheriesInternal(input, contextFor('wildseafisheries'));
 }

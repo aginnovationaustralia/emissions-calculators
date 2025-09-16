@@ -1,8 +1,8 @@
-import { calculateEmissions } from './calculators';
 import { constants } from './constants/constant_values';
 import { loadConstants } from './constants/constantsLoader';
+export * from './calculators';
 
 export {
-  calculateEmissions, constants, loadConstants
+  constants, loadConstants
 };
 

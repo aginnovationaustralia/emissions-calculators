@@ -1,0 +1,25 @@
+{
+  "name": "emissions-calculators-ts-client",
+  "version": "1.0.0",
+  "description": "TypeScript client example for @aginnovationaustralia/emissions-calculators",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@aginnovationaustralia/emissions-calculators": "file:../../packages/calculators"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "author": "Agricultural Innovation Australia",
+  "license": "MIT"
+}

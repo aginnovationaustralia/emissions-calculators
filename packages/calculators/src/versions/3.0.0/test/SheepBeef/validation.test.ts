@@ -2,15 +2,12 @@ import { plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { InputValidationError } from '../../../..';
 import {
-  calculateSheepBeefEmissions,
   validateCalculatorInput,
 } from '../../calculators';
-import { loadConstants } from '../../constants/constantsLoader';
 import { SheepBeefInput } from '../../types/SheepBeef/input';
 import { CustomisedFertiliser } from '../../types/types';
 import { beefTestInput } from '../Beef/beef.data';
 import { burnTestData } from '../Beef/burn.data';
-import { V2_0_0 } from '../common/context';
 import { sheepTestInput } from '../Sheep/sheep.data';
 import { sheepbeefTestData } from './sheepbeef.data';
 
@@ -80,44 +77,6 @@ describe('validating SheepBeef test inputs for incorrect nested inputs', () => {
   //     'state must be one of the following values: ',
   //   );
   // });
-});
-
-describe('validating SheepBeef test inputs for incorrect nested inputs', () => {
-  const constants = loadConstants();
-
-  const executionContext = {
-    calculator: 'sheepbeef',
-    version: V2_0_0,
-    constants,
-    timestamp: '2021-08-17T00:00:00Z',
-  };
-
-  const input = {
-    state: 'vic',
-    northOfTropicOfCapricorn: false,
-    rainfallAbove600: 'f',
-    beef: {
-      ...beefTestInput,
-      classes: {
-        ...beefTestInput.classes,
-        bullsGt1: {
-          ...beefTestInput.classes.bullsGt1,
-          headPurchased: 's3rwe',
-          autumn: 2,
-        },
-      },
-    },
-    sheep: sheepTestInput,
-    burning: burnTestData,
-  };
-
-  const t = () => {
-    calculateSheepBeefEmissions(input, executionContext);
-  };
-
-  test('validation should throw ValidationError', () => {
-    expect(t).toThrow(InputValidationError);
-  });
 });
 
 describe('support for single sheep and beef instance', () => {

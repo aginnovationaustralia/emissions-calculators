@@ -1,13 +1,58 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "0.1.0",
-  "main": "index.js",
+  "version": "0.1.3",
+  "main": "dist/latest.js",
+  "types": "dist/latest.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/latest.d.ts",
+      "import": "./dist/latest.js",
+      "require": "./dist/latest.js"
+    },
+    "./versions/*": {
+      "types": "./dist/versions/*",
+      "import": "./dist/versions/*",
+      "require": "./dist/versions/*"
+    },
+    "./*": {
+      "types": "./dist/versions/3.0.0/*",
+      "import": "./dist/versions/3.0.0/*",
+      "require": "./dist/versions/3.0.0/*"
+    },
+    "./calculators": {
+      "types": "./dist/versions/3.0.0/calculators.d.ts",
+      "import": "./dist/versions/3.0.0/calculators.mjs",
+      "require": "./dist/versions/3.0.0/calculators.js"
+    },
+    "./versions/3.0.0/calculators": {
+      "types": "./dist/versions/3.0.0/calculators.d.ts",
+      "import": "./dist/versions/3.0.0/calculators.mjs",
+      "require": "./dist/versions/3.0.0/calculators.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "versions/*": [
+        "dist/versions/*"
+      ],
+      "*": [
+        "dist/versions/3.0.0/*"
+      ]
+    }
+  },
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
-    "build": "tsc",
-    "build:tsup": "tsup --tsconfig tsconfig.json --format esm,cjs --dts --outDir dist",
+    "build": "npm run build:types && npm run build:js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "tsup",
+    "build:tsc": "tsc",
+    "build:tsup": "tsup",
     "check:types": "tsc --noEmit",
     "lint": "pnpm run check:types",
-    "test": "jest"
+    "test": "jest",
+    "version": "npm version --no-git-tag-version"
   },
   "author": "Agricultural Innovation Australia",
   "license": "ISC",

@@ -2,7 +2,7 @@
 
 🚧 This readme is a work in progress 🚧
 
-The emissions-calculators project aims to make it easy to calculate carbon emissions using the [Greenhouse Accounting Framework (GAF) Tools for Australian Primary Industries](https://piccc.org.au/resources/Tools.html). It is developed and maintained by [Agricultural Innovation Australia](https://aginnovationaustralia.com.au).
+The emissions-calculators package aims to make it easy to calculate carbon emissions using the [Greenhouse Accounting Framework (GAF) Tools for Australian Primary Industries](https://piccc.org.au/resources/Tools.html). It is developed and maintained by [Agricultural Innovation Australia](https://aginnovationaustralia.com.au).
 
 The project implements the GAF tools as a javascript package that can be readily imported and used for calculations. The calculators are also available as an API as part of the [Environmental Accounting Platform (EAP)](https://www.aiaeap.com/).
 
@@ -13,8 +13,6 @@ npm install @aginnovationaustralia/emissions-calculators
 ```
 
 # Usage
-
-You can find more details on using the NPM package in it's [README](./packages/calculators/README.md) file. It can be as simple as:
 
 ```javascript
 import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/calculators';
@@ -43,27 +41,16 @@ export const beefInputData = {
 }
 
 const beefResults = calculateBeef(beefInputLatest);
+
 ```
 
-# Contributing and support
+You can also choose specific versions with a longer, more specific path:
+```javascript
+import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/versions/3.0.0/calculators';
+import { BeefInput } from '@aginnovationaustralia/emissions-calculators/versions/3.0.0/types/Beef/input';
 
-TODO
-
-# Code of conduct
-
-TODO
-
-# Publishing packages to NPM
-
-The process to publish packages is wrapped up with a few top level commands:
-
-```bash
-pnpm run version:bump
-pnpm run publish:dry
-pnpm run publish:packages
+...
 ```
-
-This will require you to authenticate, then will publish the new version to the NPM registry.
 
 # License
 
