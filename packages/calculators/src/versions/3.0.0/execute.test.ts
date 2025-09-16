@@ -235,9 +235,6 @@ describe('executeCalculator', () => {
 
       // Act & Assert
       expect(() => executeCalculator(mockCalculator, {}, 'test')).toThrow('Constants load failed');
-      
-      // Note: trackCalculatorExecution might not be called if context creation fails
-      // This depends on the implementation - adjust assertion based on actual behavior
     });
 
     it('should handle async errors in calculator', async () => {
