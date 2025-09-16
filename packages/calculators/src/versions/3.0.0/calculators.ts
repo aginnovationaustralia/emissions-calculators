@@ -2,7 +2,6 @@ import { InputValidationError } from '@/utils/io';
 import { parseValidationError } from '@/validators/errorConversion';
 import { ClassConstructor, plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
-import { init } from 'mixpanel';
 import { calculateAquaculture as calculateAquacultureInternal } from './Aquaculture/calculator';
 import { calculateBeef as calculateBeefInternal } from './Beef/calculator';
 import { calculateBuffalo as calculateBuffaloInternal } from './Buffalo/calculator';
@@ -23,10 +22,7 @@ import { calculateSugar as calculateSugarInternal } from './Sugar/calculator';
 import { calculateVineyard as calculateVineyardInternal } from './Vineyard/calculator';
 import { calculateWildCatchFishery as calculateWildCatchFisheryInternal } from './WildCatchFishery/calculator';
 import { calculateWildSeaFisheries as calculateWildSeaFisheriesInternal } from './WildSeaFisheries/calculator';
-import {
-  loadConstants
-} from './constants/constantsLoader';
-import { ExecutionContext } from './executionContext';
+import { executeCalculator } from './execute';
 import { AquacultureInput } from './types/Aquaculture/input';
 import { AquacultureOutput } from './types/Aquaculture/output';
 import { BeefInput } from './types/Beef/input';
@@ -68,12 +64,6 @@ import { WildCatchFisheryOutput } from './types/WildCatchFishery/output';
 import { WildSeaFisheriesInput } from './types/WildSeaFisheries/input';
 import { WildSeaFisheriesOutput } from './types/WildSeaFisheries/output';
 
-// Package version - injected at build time
-declare const PACKAGE_VERSION: string;
-const collectMetrics = process.env.DISABLE_CALCULATOR_METRICS !== 'true';
-
-const mixpanel = init('ed361d81702b467cfa90128d3969bb06');
-
 export function validateCalculatorInput<T extends object>(
   cls: ClassConstructor<T>,
   input: unknown,
@@ -86,41 +76,6 @@ export function validateCalculatorInput<T extends object>(
   }
 
   return classedInput;
-}
-
-function contextFor(calculator: string, version: string) {
-  return {
-    calculator,
-    version,
-    constants: loadConstants(),
-    timestamp: new Date().toISOString(),
-  };
-}
-
-function executeCalculator<Input extends object, Output extends object>(calculator: (input: Input, context: ExecutionContext) => Output, input: Input, calculatorName: string): Output {
-  const calculatorVersion = '3.0.0';
-  const context = contextFor(calculatorName, calculatorVersion);
-  let result: Output;
-  let failed = false;
-  
-  try {
-    result = calculator(input, context);
-  } catch (error) {
-    failed = true;
-    throw error;
-  } finally {
-    if (collectMetrics) {
-      mixpanel.track('Execute package calculation', {
-        calculator: calculatorName,
-        calculatorVersion,
-        packageVersion: typeof PACKAGE_VERSION !== 'undefined' ? PACKAGE_VERSION : 'unknown',
-        failed,
-        organisation: process.env.CALCULATOR_METRICS_ORGANISATION,
-      });
-    }
-  }
-
-  return result;
 }
 
 export function calculateBeef(input: BeefInput): BeefOutput {
