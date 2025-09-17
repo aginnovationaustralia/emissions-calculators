@@ -19,6 +19,7 @@ function extractJSDocComments(tsNode: ts.Node): string[] {
 
 type ConstantValue = {
     name: string;
+    description: string;
     value: number | string | null | bigint | boolean | RegExp;
     path: string[]
 }
@@ -28,6 +29,7 @@ type DocSection = {
     values: ConstantValue[]
 }
 
+// TODO: Enum lookups should be p[assed in per version
 const enumLookups: Record<string, Record<string, string>> = {
     'STATES': {
         NSW: 'nsw',
@@ -75,15 +77,13 @@ const enumLookups: Record<string, Record<string, string>> = {
         SMALL_CONTAINER_SHIP: 'Small container ship',
         LARGE_CONTAINER_SHIP: 'Large container ship',
     }
-    // 'FreightTypes': {
-    //     '4 Deck Trailer': '4 Deck Trailer',
-    //     '6 Deck Trailer': '6 Deck Trailer',
-    //     'B-Double': 'B-Double',
-    // },
-    // 'SheepTypes': {
-    //     'Merino': 'merino',
-    //     'Crossbred': 'crossbred',
-    // },
+}
+
+function quoteString(value: string): string {
+    if (value?.includes(' ')) {
+        return `"${value}"`
+    }
+    return value
 }
 
 function nameOfKey(keyNode: TSESTree.Node): string {
@@ -118,6 +118,7 @@ function propertyToConstantValues(property: TSESTree.Property, parents: string[]
         return [{
             name,
             value: value.value,
+            description: 'TODO',
             path: [...parents, name]
         }];
     }
@@ -142,6 +143,14 @@ function literalToDocSection(literal: TSESTree.ObjectLiteralElement): DocSection
 
 function renderSectionValues(values: ConstantValue[]): string {
     const maxDepth = values.reduce((max, value) => Math.max(max, value.path.length), 0);
+
+    // Create a markdown table to render all value records.
+
+    const header = `| Path | Description | Value |\n| --- | --- | --- |\n`
+    const rows = values.map((value) => {
+        return `| ${quoteString(value.path.join('.'))} | ${value.description} | ${value.value} |\n`
+    })
+    return header + rows.join('')
 
     return maxDepth.toString()
 }
