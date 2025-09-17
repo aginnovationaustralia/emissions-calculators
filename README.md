@@ -47,7 +47,7 @@ const beefResults = calculateBeef(beefInputLatest);
 
 # Data and metrics collection
 
-These tools includes functionality to collect anonymous metrics on how often features are being used. Understanding how the tools are being used is an important requirement for the [Improving Consistency of On-farm Emissions Estimates](https://www.agriculture.gov.au/agriculture-land/farm-food-drought/climatechange/greenhouse-gas-accounting/grant-program) grant program, to ensure the tools are useful and accessible for all potential users.
+These tools include functionality to collect anonymous metrics on how often features are being used. Understanding how the tools are being used is an important requirement for the [Improving Consistency of On-farm Emissions Estimates](https://www.agriculture.gov.au/agriculture-land/farm-food-drought/climatechange/greenhouse-gas-accounting/grant-program) grant program, to ensure the tools are useful and accessible for all potential users.
 
 # Contributing and support
 
