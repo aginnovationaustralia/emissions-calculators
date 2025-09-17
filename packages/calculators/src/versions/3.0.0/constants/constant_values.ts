@@ -16,7 +16,14 @@ export const REGIONS = {
 };
 
 export const constants: Constants = {
-  // ('Dry input - Sheep'!D27:M30)
+    /** 
+   * @constant {Object} SHEEP_FEEDAVAILABILITY
+   * @description Feed availability factors for sheep
+   * @type {Object<string, Object<string, number>>}
+   * @example
+   * // Usage example:
+   * const springFeed = constants.SHEEP_FEEDAVAILABILITY.spring[STATES.NSW];
+   */
   SHEEP_FEEDAVAILABILITY: {
     spring: {
       [STATES.ACT]: 2.9,
