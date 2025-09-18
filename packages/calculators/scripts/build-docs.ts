@@ -180,7 +180,7 @@ function literalToDocSection(literal: TSESTree.ObjectLiteralElement,  commentsFr
     if (literal.type === 'Property') {
         if (literal.key.type === 'Identifier') {
             let values: ConstantValue[] = [];
-            if (literal.value.type === 'ObjectExpression') {
+            if (literal.value.type === 'ObjectExpression' || literal.value.type === 'Literal') {
                 values = propertyToConstantValues(literal, [], commentsFromNode);
             }
             return {
@@ -196,7 +196,7 @@ function literalToDocSection(literal: TSESTree.ObjectLiteralElement,  commentsFr
 function renderSectionValues(values: ConstantValue[]): string {
     // Create a markdown table to render all value records.
 
-    if (values.some(value => value.comments?.length > 0)) {
+    if (values.some(value => value.comments?.length > 0 && value.path.length > 1)) {
         const header = `| Path | Comments | Value |\n| --- | --- | --- |\n`
         const rows = values.map((value) => {
             return `| ${quoteString(value.path.join('.'))} | ${value.comments} | ${value.value} |\n`
