@@ -157,18 +157,37 @@ function nameOfKey(keyNode: TSESTree.Node): string {
     throw new Error(`Key of literal failed found for key node ${keyNode.type}`)
 }
 
+function expressionToString(expression: TSESTree.Expression | TSESTree.SpreadElement | null): string {
+    if (expression === null) {
+        return 'null';
+    }
+    switch(expression.type) {
+        case 'Literal':
+            return expression.value?.toString() ?? 'null';
+        case 'BinaryExpression':
+            if (expression.left.type === 'PrivateIdentifier') {
+                throw new Error(`Expression could not be parsed ${expression.type}`)
+            }
+            return `${expressionToString(expression.left)} ${expression.operator} ${expressionToString(expression.right)}`;
+        case 'ArrayExpression':
+            return expression.elements.map(e => expressionToString(e)).join(', ');
+        default:
+            throw new Error(`Expression could not be parsed ${expression.type}`)
+    }
+}
+
 function propertyToConstantValues(property: TSESTree.Property, parents: string[], commentsFromNode: (node: TSESTree.Node) => Comment[]): ConstantValue[] {
     const value = property.value;
 
     if (value.type === 'ObjectExpression') {
         return value.properties.filter(p => p.type === 'Property').flatMap(p => propertyToConstantValues(p, [...parents, nameOfKey(property.key)], commentsFromNode));
-    } else if (value.type === 'Literal') {
+    } else if (value.type === 'Literal' || value.type === 'BinaryExpression' || value.type === 'ArrayExpression') {
         const key = property.key
         const name = nameOfKey(key)
         const comments = commentsFromNode(property).map(c => `${renderCommentType(c.type)}: ${c.text}`).join(', ')
         return [{
             name,
-            value: value.value,
+            value: value.type === 'Literal' ? value.value : expressionToString(value),
             comments,
             path: [...parents, name]
         }];
@@ -180,7 +199,7 @@ function literalToDocSection(literal: TSESTree.ObjectLiteralElement,  commentsFr
     if (literal.type === 'Property') {
         if (literal.key.type === 'Identifier') {
             let values: ConstantValue[] = [];
-            if (literal.value.type === 'ObjectExpression' || literal.value.type === 'Literal') {
+            if (literal.value.type === 'ObjectExpression' || literal.value.type === 'Literal' || literal.value.type === 'BinaryExpression') {
                 values = propertyToConstantValues(literal, [], commentsFromNode);
             }
             return {

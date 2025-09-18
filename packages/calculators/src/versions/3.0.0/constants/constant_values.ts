@@ -484,10 +484,18 @@ export const constants: Constants = {
   },
 
   // Embedded emissions M7
+  /** 
+   * @description Relative amount of CO2, CH4, and N2O emitted by herbicides
+   * @type Proportion
+   */
   EMISSION_BREAKDOWN: {
     HERBICIDE: { CO2: 1.0, CH4: 0.0, N2O: 0.0 },
   },
 
+  /** 
+   * @description Amount of nitrogen excreted by beef cattle across class and state, in kilograms per year
+   * @units kg/year
+   */
   BEEF_NITROGENEXCRETEDNUMBER: {
     bullsGt1: {
       [STATES.ACT]: 700,
@@ -683,7 +691,11 @@ export const constants: Constants = {
     },
   },
 
-  // kg CO2-e/kWh
+  /** 
+   * @description Electricity emission factors for each state and Australia, in kg CO2-e/kWh
+   * @reference Primary data sources comprise National Greenhouse and Energy Reporting (Measurement) Determination 2008 (Schedule 1), Australian Energy Statistics, Clean Energy Regulator, and AEMO data and Department of Climate Change, Energy, the Environment and Water.
+   * @units kg CO2-e/kWh
+   */
   ELECTRICITY: {
     [STATES.NSW]: {
       SCOPE2_EF: 0.66,
@@ -727,36 +739,13 @@ export const constants: Constants = {
     },
   },
 
-  MATERIAL_BREAKDOWN: {
-    // (embeddedEmissions_M3)
-    GRAIN: {
-      CO2: 0.75,
-      CH4: 0.03,
-      N2O: 0.22,
-    },
-    COTTONSEED: {
-      CO2: 0.62,
-      CH4: 0.0,
-      N2O: 0.38,
-    },
-    HAY: {
-      CO2: 0.682,
-      CH4: 0.04401159205964854,
-      N2O: 0.2734147596439201,
-    },
-    UREA: {
-      CO2: 0.98,
-      CH4: 0.02,
-      N2O: 0.00456826192856515, // WARNING: should this be 0? (embeddedEmissions_O8)
-    },
-    SUPERPHOSPHATE: {
-      CO2: 0.933,
-      CH4: 0.057,
-      N2O: 0.011,
-    },
-  },
-
   // (embeddedEmissionsM15)
+  /** 
+   * @description Material breakdown for supplementation, in kg CO2-e/kg product
+   * @reference AusLCI Published Processes
+   * @link https://www.auslci.com.au/index.php/EmissionFactors
+   * @units kg CO2-e/kg product
+   */
   MATERIAL_BREAKDOWN_SUPPLEMENTATION: {
     // mineral block, 30% urea 3,6% P, at production
     mineralblock: {
@@ -785,35 +774,25 @@ export const constants: Constants = {
   },
 
   // embeddedEmissions_B61:E65
+  /**
+   * @description Customized fertilizer emission factors, in kg CO2-e/kg product
+   * @reference (Wood & Cowie, 2004; Davis & Haglund,1999) Table 5, Table 6, and Table 7.
+   * @units kg CO2-e/kg
+   */
   CUSTOMIZED_FERTILIZER: {
     'Monoammonium phosphate (MAP)': {
-      CO2: 0.978,
-      CH4: 0.0189,
-      N2O: 0.0031,
       TotalGHG: 703.2 / 1000,
     },
     'Diammonium Phosphate (DAP)': {
-      CO2: 0.978,
-      CH4: 0.019,
-      N2O: 0.003,
       TotalGHG: 866.2 / 1000,
     },
     'Urea-Ammonium Nitrate (UAN)': {
-      CO2: 0.975,
-      CH4: 0.023,
-      N2O: 0.002,
       TotalGHG: 1173.8 / 1000,
     },
     'Ammonium Nitrate (AN)': {
-      CO2: 0.396,
-      CH4: 0.009,
-      N2O: 0.595,
       TotalGHG: 2460.8 / 1000,
     },
     'Calcium Ammonium Nitrate (CAN)': {
-      CO2: 0.383,
-      CH4: 0.008,
-      N2O: 0.609,
       TotalGHG: 2336.9 / 1000,
     },
     'Triple Superphosphate (TSP)': {
@@ -845,6 +824,11 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Emission factors for purchased cattle by region, in kg CO2-e/kg liveweight
+   * @reference Wiedemann et al. (2016); Christie (2022)
+   * @units kg CO2-e/kg
+   */
   LIVESTOCK_SOURCE_EMISSIONFACTOR: {
     [LIVESTOCK_SOURCE_LOCATION['Dairy origin']]: 4.4,
     [LIVESTOCK_SOURCE_LOCATION['nth/sth/central QLD']]: 12.4,
@@ -856,32 +840,115 @@ export const constants: Constants = {
     [LIVESTOCK_SOURCE_LOCATION.NT]: 12.4,
   },
 
+  /**
+   * @description Emission factors for purchased sheep by breed, in kg CO2-e/kg liveweight
+   * @reference Wiedemann et al. (2016)
+   * @units kg CO2-e/kg
+   */
   SHEEP_EMISSIONFACTOR: {
     MERINO: 9.3,
     CROSSBRED: 6.9,
   },
 
-  // Goat
+  /**
+   * @description Enteric fermentation emission factor for goat, in kg CH4/head/year
+   * @reference IPCC (2006)
+   * @units kg CH4/head/year
+   */
   GOAT_EF: 5,
+
+  /**
+   * @description Manure production for goat, in kg DM/head/year
+   * @reference Expert working group assumption - equivalent to one sheep
+   * @units kg DM/head/year
+   */
   GOAT_MANUREPRODUCTION: 114,
 
   // Deer
+  /**
+   * @description Manure production for deer, in kg DM/head/year
+   * @reference Expert working group assumption - equivalent to one sheep
+   * @units kg DM/head/year
+   */
   DEER_MANUREPRODUCTION: 319,
+
+  /**
+   * @description Enteric fermentation emission factor for deer, in kg CH4/head/year
+   * @reference IPCC (2006)
+   * @units kg CH4/head/year
+   */
   DEER_ENTERIC_EF: 20,
+
+  /**
+   * @description Nitrogen excreted for deer, in kg N/head/year
+   * @reference Expert working group assumption - equivalent to one sheep
+   * @units kg N/head/year
+   */
   DEER_NITROGEN_EXCRETED_FACTOR: 13.2,
+
+
+  /**
+   * @description Faecal nitrogen proportion for deer, as a proportion
+   * @type Proportion
+   */
   DEER_FAECALN_PMF: 0.29,
 
   // Pork
+  /**
+   * @description Methane emission potential for pork, in m3 CH4/kg
+   * @inventory2018 Appendix 5.E.4
+   * @units m3 CH4/kg
+   */
   PORK_METHANE_EMISSION_POTENTIAL: 0.45,
+
+  /**
+   * @description Emission factor for bedding for pork, in kg CO2-e/kg
+   * @reference (Christie et al., 2012)
+   * @units kg CO2-e/kg
+   */
   PORK_EF_BEDDING: 0.225,
 
   // Buffalo
+  /**
+   * @description Nitrogen excreted for buffalo, in kg N/head/year
+   * @reference Expert working group assumption - equivalent to beef cattle - pasture
+   * @units kg N/head/year
+   */
   BUFFALO_NITROGEN_EXCRETED_FACTOR: 39.5,
+
+  /**
+   * @description Faecal nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
+   * @type Proportion
+   */
   BUFFALO_FAECALN_PMF: 0.29,
+
+
+  /**
+   * @description Seasonal urinary nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
+   * @inventory2018 3B.4_5
+   * @type Proportion
+   */
   BUFFALO_SEASONALURINE_PMU: 0.71,
+
+  /**
+   * @description Manure production for buffalo, in kg DM/head/year
+   * @reference Expert working group assumption - equivalent to beef cattle - pasture
+   * @units kg DM/head/year
+   */
   BUFFALO_MANUREPRODUCTION: 957,
+
+  /**
+   * @description Enteric fermentation emission factor for buffalo, in kg CH4/head/year
+   * @reference IPCC (2006)
+   * @units kg CH4/head/year
+   */
   BUFFALO_ENTERIC_EF: 76,
 
+  /**
+   * @description Emission factors for purchased livestock, in kg CO2-e/kg liveweight
+   * @reference Wiedemann et al. (2015b)
+   * @units kg CO2-e/kg
+   */
   PURCHASED_LIVESTOCK_EF: {
     BUFFALO: 12,
     DEER: 8.1,
@@ -891,44 +958,119 @@ export const constants: Constants = {
     POULTRY_FREE_RANGE: 1.8,
   },
 
+  /**
+   * @description Emissions factor for feed purchased, in kg CO2-e/kg
+   * @units kg CO2-e/kg
+   */
   FEED_PURCHASED: {
     // (embeddedEmissions_E3)
     grain: { TotalGHG: 0.3 },
     // (embeddedEmissions_E4)
     cottonseed: { TotalGHG: 1.1 },
     // (embeddedEmissions_E5)
-    hay: { TotalGHG: 0.225 }, // average(0.25, 0.2);
+    /** @description Average of 0.25 and 0.2 */
+    hay: { TotalGHG: 0.225 },
   },
 
   // Misc
+
+  // Manure management - sheep
+  /**
+   * @description Temperate emission factor, for sheep manure management
+   */
   EF_TEMPERATURE: 0.003, // (manureManagementSheepC10)
 
-  // Factor to convert elemental mass to molecular mass (N2O-N to N2O)
+  
+  /**
+   * @description Conversion factor for elemental to molecular N2O
+   */
   GWP_FACTORSC15: 44 / 28, // (agriculturalSoilsBeefO5)
+  
+  /**
+   * @description Conversion factor for elemental to molecular CO2 from lime
+   */
   GWP_FACTORSC18: 44 / 12,
+  
+  /**
+   * @description Conversion factor for elemental to molecular CO2
+   */
   GWP_FACTORSC13: 44 / 12,
+
+  /**
+   * @description Conversion factor for elemental to molecular CH4
+   */
   GWP_FACTORSC14: 16 / 12,
+
+  /**
+   * @description Conversion factor for elemental to molecular Nox
+   */
   GWP_FACTORSC16: 46 / 14,
 
+  /**
+   * @description Proportion of Urea in UAN
+   * @link http://sds.simplot.com/datasheets/12101.pdf?_gl=1*1j8hnbm*_ga*NDgxMDE2MzQ2LjE2ODUzMzY4ODk.*_ga_NVEQ5HDZCN*MTY4NTMzNjg5MC4xLjEuMTY4NTMzNzExOC4wLjAuMA..&_ga=2.215359572.234437473.1685336889-481016346.1685336889
+   * @type Proportion
+   */
   GWP_FACTORSC22: 0.35,
 
+  /**
+   * @description Conversion factor for the global warming potential of CH4, as CO2-e
+   */
   GWP_FACTORSC5: 28,
+
+  /**
+   * @description Conversion factor for the global warming potential of N2O, as CO2-e
+   */
   GWP_FACTORSC6: 265,
 
+  /**
+   * @description Default emission factor for Urea
+   * @reference IPCC (2006)
+   */
   CARBON_FRACTION_OF_UREA: 0.2, // (ureaApplicationD35)
 
+
+  /**
+   * @description Urine and dung deposited during grazing
+   */
   EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsSheepD32)
+    
+  /**
+   * @description Urine and dung deposited during grazing
+   */
   BEEF_EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsBeefD10)
 
+  /**
+   * @description Proportion of gas volatilised from fertiliser
+   * @inventory2018 3DB_1
+   */
   FRAC_GASF: 0.11, // FracGASF
+
+  /**
+   * @description Proportion of gas volatilised from manure
+   * @inventory2018 3DB_2
+  */
   FRAC_GASM: 0.21, // FracGASM
 
   // Atmospheric N deposition inorganic fertiliser
+  /**
+   * @description Atmospheric N deposition of inorganic fertiliser
+   * @inventory2018 3DB_1
+   */
   INOGRANICFERTILISER_ATMOSPHERIC_N: 0.11, // (agriculturalSoilsSheepN10)
+
+
+  /**
+   * @description Leaching and runoff of inorganic fertiliser
+   * @inventory2018 3B.5a_4
+   */
   LEECHING_AND_RUNOFF: 0.011, // (agriculturalSoilsSheepD11)
 
-  // (entericFermentationBeefD34)
-  // L/day
+  /**
+   * @description Milk intake of cows, in kg / day
+   * @inventory2018 5.B.5
+   * @units kg / day
+   */
   MILK_INTAKE: {
     NORTHOFTROPIC: {
       CALVING_SEASON: 4,
@@ -940,15 +1082,26 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Feed adjustment factor for cows
+   * @inventory2018 5.B.5
+   */
   FEED_ADJUSTMENT: {
     CALVING_SEASON: 1.3,
     SEASON_AFTER_CALVING: 1.1,
   },
 
+  /**
+   * @description Scope 1 and Scope 3 values relating to liming
+   * @inventory2018 3G_1
+   * @reference Mudahar, M.S., Hignett, T.P., 1982. Energy and Fertilizer— Policy Implications and Options for Developing Countries. International Fertilizer Development Center, Muscle Shoals, Alabama
+   */
   LIMING: {
     SCOPE1: {
+      /** @type Proportion */
       LIMESTONE_FRACTIONPURITY: 0.9,
       LIMESTONE_EF: 0.12,
+      /** @type Proportion */
       DOLOMITE_FRACTIONPURITY: 0.95,
       DOLOMITE_EF: 0.13,
     },
@@ -966,6 +1119,10 @@ export const constants: Constants = {
   },
 
   // (fuel_B23)
+  /**
+   * @description Scope 1 and Scope 3 factors relating to fuel
+   * @reference Table 6 and 7 (Dept of Industry, Science, Energy and Resources 2022)
+   */
   FUEL_ENERGYGJ: {
     STATIONARY: {
       DIESEL: {
@@ -1173,26 +1330,69 @@ export const constants: Constants = {
   },
 
   // (manureManagementBeefC26)
+  /**
+   * @description Methane emission factor for warm climate
+   */
   METHANE_WARM_EF: 0.012,
+  
   // (manureManagementBeefC29)
+  /**
+   * @description Methane emission factor for temperate climate
+   */
   METHANE_TEMPERATE_EF: 0.003,
 
+  /**
+   * @description Ash content as a proportion of faecal DM
+   * @inventory2018 3B.1a_1
+   * @type Proportion
+   */
   ASH_CONTENT: 0.08,
+
+  /**
+   * @description Methane emission potential, in m3 CH4/kg
+   * @inventory2018 3B.1a_2
+   * @units m3 CH4/kg
+   */
   METHANE_EMISSION_POTENTIAL: 0.24,
+
+  /**
+   * @description Methane density, in kg CH4/m3
+   * @inventory2018 3B.1a_2
+   * @units kg CH4/m3
+   */
   METHANE_DENSITY: 0.6784,
 
+  /**
+   * @description Total GHG (kg CO2-e/kg input)
+   * @units kg CO2-e/kg
+   */
   UREA_FERTILISER_GHG: 1.495, // Total GHG (kg CO2-e/kg input) (embeddedEmissionsE9)
+
+  /**
+   * @description Total GHG (kg CO2-e/kg input)
+   * @units kg CO2-e/kg
+   */
   SUPERPHOSPHATE_GHG: 0.1122, // (embeddedEmissions_E10)
 
   // Sugar
+  /**
+   * @description Emissions factor for annual N2O production from sugar cane
+   */
   SUGAR_ANNUAL_N2O_PRODUCTION_EF: 0.00503,
 
   /**
    * Grains
    */
+  /**
+   * @description Emissions factor for mass of Urea applied to soils
+   * @inventory2018 3H_1
+   */
   FERTILISER_EF: 0.2,
 
-  // (fertiliserC33)
+  /**
+   * @description NO2 emissions factors for synthetic fertilisers
+   * @inventory2018 Table 5.23
+   */
   PRODUCTIONSYSTEM_EF: {
     RAINFALL_LT_600: {
       'Non-irrigated crop': 0.0029,
@@ -1210,6 +1410,11 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Proportion of crop residue burnt by state
+   * @inventory2018 5.I.3
+   * @type Proportion
+   */
   CROPRESIDUE_PROPORTIONBURNT: {
     [STATES.NSW]: { burnt: 0.22, removed: 0.05 },
     [STATES.VIC]: { burnt: 0.21, removed: 0.07 },
@@ -1222,6 +1427,11 @@ export const constants: Constants = {
     [STATES.ACT]: { burnt: 0, removed: 0 },
   },
 
+  /**
+   * @description Proportion of sugar cane residue burnt by state
+   * @inventory2018 5.I.4
+   * @type Proportion
+   */
   CROPRESIDUE_FRACTIONSUGARCANEBURNT: {
     [STATES.NSW]: { burnt: 0.898, removed: 0 },
     [STATES.VIC]: { burnt: 0, removed: 0 },
@@ -1234,10 +1444,18 @@ export const constants: Constants = {
     [STATES.ACT]: { burnt: 0, removed: 0 },
   },
 
+  /**
+   * @description Emissions factor for annual N2O production from crop residue
+   * @units kg N2O-e/kg N
+   */
   CROP_RESIDUE_N2O_EF: 0.00503,
 
+  /**
+   * @description Fraction of N available for leaching and runoff from fertiliser
+   */
   FERTILISER_FRACTION_RUNOFF_STATIC: 1,
 
+  
   LEACHING: {
     FRACLEACH: 0.02,
     FRACLEACH_MMS: 0.24,
