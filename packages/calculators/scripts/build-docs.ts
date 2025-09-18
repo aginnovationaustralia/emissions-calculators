@@ -35,7 +35,7 @@ function extractJSDocComments(tsNode: ts.Node): Comment[] {
     return jsDocComments.flatMap(c => {
         if (isJsDoc(c)) {
             return c.tags
-                ?.filter(t => (t.kind === ts.SyntaxKind.JSDocTag && ['link', 'description', 'units', 'inventory2018'].includes(t.tagName.text)) || isJSDocTypeTag(t))
+                ?.filter(t => (t.kind === ts.SyntaxKind.JSDocTag && ['link', 'description', 'units', 'inventory2018', 'reference'].includes(t.tagName.text)) || isJSDocTypeTag(t))
                 .map(tagToComments).flat().filter(c => c !== undefined) ?? [];
         }
         return [];
@@ -49,7 +49,7 @@ type ConstantValue = {
     path: string[]
 }
 
-type CommentType = 'link' | 'description' | 'units' | 'inventory2018' | 'type'
+type CommentType = 'link' | 'description' | 'units' | 'inventory2018' | 'type' | 'reference'
 
 type Comment = {
     text: string;
@@ -74,6 +74,8 @@ const renderCommentType = (type: CommentType): string => {
             return 'GHG Inventory 2018';
         case 'type':
             return 'Type';
+        case 'reference':
+            return 'Reference';
     }
 }
 
@@ -155,18 +157,19 @@ function nameOfKey(keyNode: TSESTree.Node): string {
     throw new Error(`Key of literal failed found for key node ${keyNode.type}`)
 }
 
-function propertyToConstantValues(property: TSESTree.Property, parents: string[]): ConstantValue[] {
+function propertyToConstantValues(property: TSESTree.Property, parents: string[], commentsFromNode: (node: TSESTree.Node) => Comment[]): ConstantValue[] {
     const value = property.value;
 
     if (value.type === 'ObjectExpression') {
-        return value.properties.filter(p => p.type === 'Property').flatMap(p => propertyToConstantValues(p, [...parents, nameOfKey(property.key)]));
+        return value.properties.filter(p => p.type === 'Property').flatMap(p => propertyToConstantValues(p, [...parents, nameOfKey(property.key)], commentsFromNode));
     } else if (value.type === 'Literal') {
         const key = property.key
         const name = nameOfKey(key)
+        const comments = commentsFromNode(property).map(c => `${renderCommentType(c.type)}: ${c.text}`).join(', ')
         return [{
             name,
             value: value.value,
-            comments: '', // TODO: Are there any comments to add on leaf nodes?
+            comments,
             path: [...parents, name]
         }];
     }
@@ -178,7 +181,7 @@ function literalToDocSection(literal: TSESTree.ObjectLiteralElement,  commentsFr
         if (literal.key.type === 'Identifier') {
             let values: ConstantValue[] = [];
             if (literal.value.type === 'ObjectExpression') {
-                values = propertyToConstantValues(literal, []);
+                values = propertyToConstantValues(literal, [], commentsFromNode);
             }
             return {
                 name: literal.key.name,

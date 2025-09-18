@@ -280,8 +280,11 @@ export const constants: Constants = {
     },
   },
 
-  // in kg
-  // maps to 'Nitrous Oxide_MMS - Sheep'!S16:AB24
+  /** 
+   * @description Standard reference weight for sheep across seasons and states, in kilograms
+   * @inventory2018 Appendix 5.D.7
+   * @units kg
+   */
   SHEEP_STANDARDWEIGHT: {
     rams: {
       [STATES.ACT]: 78,
@@ -461,12 +464,22 @@ export const constants: Constants = {
     },
   },
 
+  /** 
+   * @description Energy required to manufacture herbicides and insecticides
+   * @reference O'Halloran, N., Fisher, P., Rab, A., & Victoria, D. P. I. (2008). Preliminary estimation of the carbon footprint of the Australian vegetable industry (pp. 1-39). Discussion paper 4. Vegetable Industry Carbon Footprint Scoping Study. 2008, Horticulture Australia Ltd. Table 7
+   */
   ENERGY_TO_MANUFACTURE: {
-    HERBICIDE_ENERGY: 550, // MJ/kg
+    /** @units MJ/kg */
+    HERBICIDE_ENERGY: 550,
+    /** @units MJ/kg */
     HERBICIDEGENERAL_ENERGY: 310,
+    /** @units MJ/kg */
     INSECTICIDE_ENERGY: 315,
-    HERBICIDE_EF: 0.06, // kg CO2-e/MJ
+    /** @units kg CO2-e/MJ */
+    HERBICIDE_EF: 0.06,
+    /** @units kg CO2-e/MJ */
     HERBICIDEGENERAL_EF: 0.06,
+    /** @units kg CO2-e/MJ */
     INSECTICIDE_EF: 0.06,
   },
 
