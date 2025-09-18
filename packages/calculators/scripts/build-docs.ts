@@ -166,7 +166,7 @@ function propertyToConstantValues(property: TSESTree.Property, parents: string[]
         return [{
             name,
             value: value.value,
-            comments: 'TODO',
+            comments: '', // TODO: Are there any comments to add on leaf nodes?
             path: [...parents, name]
         }];
     }
@@ -191,15 +191,21 @@ function literalToDocSection(literal: TSESTree.ObjectLiteralElement,  commentsFr
 }
 
 function renderSectionValues(values: ConstantValue[]): string {
-    const maxDepth = values.reduce((max, value) => Math.max(max, value.path.length), 0);
-
     // Create a markdown table to render all value records.
 
-    const header = `| Path | Comments | Value |\n| --- | --- | --- |\n`
-    const rows = values.map((value) => {
-        return `| ${quoteString(value.path.join('.'))} | ${value.comments} | ${value.value} |\n`
-    })
-    return header + rows.join('')
+    if (values.some(value => value.comments?.length > 0)) {
+        const header = `| Path | Comments | Value |\n| --- | --- | --- |\n`
+        const rows = values.map((value) => {
+            return `| ${quoteString(value.path.join('.'))} | ${value.comments} | ${value.value} |\n`
+        })
+        return header + rows.join('')
+    }
+
+    const header = `| Path | Value |\n| --- | --- |\n`
+        const rows = values.map((value) => {
+            return `| ${quoteString(value.path.join('.'))} | ${value.value} |\n`
+        })
+        return header + rows.join('')
 }
 
 const renderSectionComments = (comments: Comment[]): string => {
