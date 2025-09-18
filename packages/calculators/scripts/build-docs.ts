@@ -15,19 +15,28 @@ function isJsDoc(node: ts.Node): node is ts.JSDoc {
     return node.kind === ts.SyntaxKind.JSDoc;
 }
 
+function isJSDocTypeTag(tag: ts.JSDocTag): tag is ts.JSDocTypeTag {
+    return tag.kind === ts.SyntaxKind.JSDocTypeTag;
+}
+
+function tagToComments(tag: ts.JSDocTag): Comment[] {
+    const tagName = tag.tagName.text as CommentType
+    if (isJSDocTypeTag(tag)) {
+        return [{ text: tag.typeExpression.getText(), type: 'type' }]
+    }
+    const result = typeof tag.comment === 'string' ?
+        [{ text: tag.comment, type: tagName }] :
+        tag.comment?.map(c => ({ text: c.text, type: tagName })) ?? []
+    return result
+}
+
 function extractJSDocComments(tsNode: ts.Node): Comment[] {
     const jsDocComments = ts.getJSDocCommentsAndTags(tsNode);
     return jsDocComments.flatMap(c => {
         if (isJsDoc(c)) {
             return c.tags
-                ?.filter(t => t.kind === ts.SyntaxKind.JSDocTag && ['link', 'description'].includes(t.tagName.text))
-                .map(t => {
-                    const tagName = t.tagName.text as 'link' | 'description'
-                    const result = typeof t.comment === 'string' ?
-                        [{ text: t.comment, type: tagName }] :
-                        t.comment?.map(c => ({ text: c.text, type: tagName }))
-                    return result
-                }).flat().filter(c => c !== undefined) ?? [];
+                ?.filter(t => (t.kind === ts.SyntaxKind.JSDocTag && ['link', 'description', 'units', 'inventory2018'].includes(t.tagName.text)) || isJSDocTypeTag(t))
+                .map(tagToComments).flat().filter(c => c !== undefined) ?? [];
         }
         return [];
     });
@@ -40,9 +49,11 @@ type ConstantValue = {
     path: string[]
 }
 
+type CommentType = 'link' | 'description' | 'units' | 'inventory2018' | 'type'
+
 type Comment = {
     text: string;
-    type: 'link' | 'description';
+    type: CommentType;
 }
 
 type DocSection = {
@@ -51,12 +62,18 @@ type DocSection = {
     comments: Comment[];
 }
 
-const renderCommentType = (type: 'link' | 'description'): string => {
+const renderCommentType = (type: CommentType): string => {
     switch (type) {
         case 'link':
             return 'Link';
         case 'description':
             return 'Description';
+        case 'units':
+            return 'Units';
+        case 'inventory2018':
+            return 'GHG Inventory 2018';
+        case 'type':
+            return 'Type';
     }
 }
 
@@ -183,8 +200,6 @@ function renderSectionValues(values: ConstantValue[]): string {
         return `| ${quoteString(value.path.join('.'))} | ${value.comments} | ${value.value} |\n`
     })
     return header + rows.join('')
-
-    return maxDepth.toString()
 }
 
 const renderSectionComments = (comments: Comment[]): string => {

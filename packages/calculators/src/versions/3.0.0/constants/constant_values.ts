@@ -16,9 +16,10 @@ export const REGIONS = {
 };
 
 export const constants: Constants = {
-    /** 
-   * @description Feed availability factors for sheep across seasons and states
-   * @link https://github.com/Greenhouse-Gas-Accounting-Tool/calculators/blob/main/packages/calculators/src/versions/3.0.0/Sheep/Scope1Sheep.ts#L196
+  /** 
+   * @description Feed availability rate for sheep across seasons and states, in tonnes per hectare
+   * @inventory2018 Appendix 5.D.3
+   * @units t/ha
    */
   SHEEP_FEEDAVAILABILITY: {
     spring: {
@@ -67,7 +68,12 @@ export const constants: Constants = {
     },
   },
 
-  // ('Dry input - Sheep'!D73:M76)
+  /** 
+   * @description Crude protein content for sheep across seasons and states, as percentage
+   * @inventory2018 Appendix 5.D.4
+   * @units %
+   * @type Percentage
+   */
   SHEEP_CRUDEPROTEIN: {
     spring: {
       [STATES.ACT]: 20,
@@ -115,7 +121,12 @@ export const constants: Constants = {
     },
   },
 
-  // ('Dry input - Sheep'!D79:M82)
+  /** 
+   * @description Dry matter digestibility for sheep across seasons and states, as percentage
+   * @inventory2018 Appendix 5.D.2
+   * @units %
+   * @type Percentage
+   */
   SHEEP_DRYMATTERDIGESTIBILITY: {
     spring: {
       [STATES.ACT]: 75,
@@ -163,6 +174,12 @@ export const constants: Constants = {
     },
   },
 
+  /** 
+   * @description Dry matter digestibility for beef across seasons and states, as percentage
+   * @inventory2018 Appendix 5.B.3
+   * @units %
+   * @type Percentage
+   */
   BEEF_DRYMATTERDIGESTIBILITY: {
     spring: {
       [STATES.ACT]: 55,
@@ -210,6 +227,12 @@ export const constants: Constants = {
     },
   },
 
+  /** 
+   * @description Crude protein content for beef across seasons and states, as percentage
+   * @inventory2018 Appendix 5.B.4
+   * @units %
+   * @type Percentage
+   */
   BEEF_CRUDEPROTEIN: {
     spring: {
       [STATES.ACT]: 7,
