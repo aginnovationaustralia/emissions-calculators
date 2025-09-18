@@ -17,12 +17,8 @@ export const REGIONS = {
 
 export const constants: Constants = {
     /** 
-   * @constant {Object} SHEEP_FEEDAVAILABILITY
-   * @description Feed availability factors for sheep
-   * @type {Object<string, Object<string, number>>}
-   * @example
-   * // Usage example:
-   * const springFeed = constants.SHEEP_FEEDAVAILABILITY.spring[STATES.NSW];
+   * @description Feed availability factors for sheep across seasons and states
+   * @link https://github.com/Greenhouse-Gas-Accounting-Tool/calculators/blob/main/packages/calculators/src/versions/3.0.0/Sheep/Scope1Sheep.ts#L196
    */
   SHEEP_FEEDAVAILABILITY: {
     spring: {
@@ -1618,7 +1614,9 @@ export const constants: Constants = {
     N2O: 0.2,
   },
 
-  // (Gg N2O-N/GgN)
+  /** 
+   * A comment
+   * */
   AGRICULTURAL_SOILS: {
     EF_IRRIGATEDPASTURE: 0.0059,
     EF_IRRIGATEDCROP: 0.007,

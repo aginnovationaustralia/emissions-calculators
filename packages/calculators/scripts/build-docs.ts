@@ -11,22 +11,53 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const appRoot = path.resolve(__dirname, '..');
 
+function isJsDoc(node: ts.Node): node is ts.JSDoc {
+    return node.kind === ts.SyntaxKind.JSDoc;
+}
 
-function extractJSDocComments(tsNode: ts.Node): string[] {
+function extractJSDocComments(tsNode: ts.Node): Comment[] {
     const jsDocComments = ts.getJSDocCommentsAndTags(tsNode);
-    return jsDocComments.map(comment => comment.getFullText());
+    return jsDocComments.flatMap(c => {
+        if (isJsDoc(c)) {
+            return c.tags
+                ?.filter(t => t.kind === ts.SyntaxKind.JSDocTag && ['link', 'description'].includes(t.tagName.text))
+                .map(t => {
+                    const tagName = t.tagName.text as 'link' | 'description'
+                    const result = typeof t.comment === 'string' ?
+                        [{ text: t.comment, type: tagName }] :
+                        t.comment?.map(c => ({ text: c.text, type: tagName }))
+                    return result
+                }).flat().filter(c => c !== undefined) ?? [];
+        }
+        return [];
+    });
 }
 
 type ConstantValue = {
     name: string;
-    description: string;
+    comments: string;
     value: number | string | null | bigint | boolean | RegExp;
     path: string[]
 }
 
+type Comment = {
+    text: string;
+    type: 'link' | 'description';
+}
+
 type DocSection = {
     name: string;
-    values: ConstantValue[]
+    values: ConstantValue[];
+    comments: Comment[];
+}
+
+const renderCommentType = (type: 'link' | 'description'): string => {
+    switch (type) {
+        case 'link':
+            return 'Link';
+        case 'description':
+            return 'Description';
+    }
 }
 
 // TODO: Enum lookups should be p[assed in per version
@@ -118,14 +149,14 @@ function propertyToConstantValues(property: TSESTree.Property, parents: string[]
         return [{
             name,
             value: value.value,
-            description: 'TODO',
+            comments: 'TODO',
             path: [...parents, name]
         }];
     }
     return []
 }
 
-function literalToDocSection(literal: TSESTree.ObjectLiteralElement): DocSection | null {
+function literalToDocSection(literal: TSESTree.ObjectLiteralElement,  commentsFromNode: (node: TSESTree.Node) => Comment[]): DocSection | null {
     if (literal.type === 'Property') {
         if (literal.key.type === 'Identifier') {
             let values: ConstantValue[] = [];
@@ -134,7 +165,8 @@ function literalToDocSection(literal: TSESTree.ObjectLiteralElement): DocSection
             }
             return {
                 name: literal.key.name,
-                values
+                values,
+                comments: commentsFromNode(literal)
             }
         }
     }
@@ -146,13 +178,27 @@ function renderSectionValues(values: ConstantValue[]): string {
 
     // Create a markdown table to render all value records.
 
-    const header = `| Path | Description | Value |\n| --- | --- | --- |\n`
+    const header = `| Path | Comments | Value |\n| --- | --- | --- |\n`
     const rows = values.map((value) => {
-        return `| ${quoteString(value.path.join('.'))} | ${value.description} | ${value.value} |\n`
+        return `| ${quoteString(value.path.join('.'))} | ${value.comments} | ${value.value} |\n`
     })
     return header + rows.join('')
 
     return maxDepth.toString()
+}
+
+const renderSectionComments = (comments: Comment[]): string => {
+    if (comments.length === 0) {
+        return ''
+    }
+    return `| | |\n| --- | --- |\n${comments.map(comment => `| ${renderCommentType(comment.type)} | ${comment.text} |`).join('\n')}`
+}
+
+const renderSection = (section: DocSection): string => {
+    return `## ${section.name}\n
+${renderSectionComments(section.comments)}
+\n
+${renderSectionValues(section.values)}`
 }
   
 async function buildConstantsDocs(pathToVersion: string) {
@@ -163,7 +209,7 @@ async function buildConstantsDocs(pathToVersion: string) {
         // project: './tsconfig.json'
       });
 
-      function jsDocCommentsFromESNode(node: TSESTree.Node): string[] {
+      function jsDocCommentsFromESNode(node: TSESTree.Node): Comment[] {
         const tsNode = services.esTreeNodeToTSNodeMap.get(node);
         if (tsNode) {
             return extractJSDocComments(tsNode);
@@ -190,12 +236,11 @@ async function buildConstantsDocs(pathToVersion: string) {
 
     const nodesConstantsProperties = nodeConstantsVariable.init !== null && nodeConstantsVariable.init?.type === 'ObjectExpression' ? nodeConstantsVariable.init.properties : [];
 
-    const sections = nodesConstantsProperties.map(literalToDocSection).filter((section) => section !== null)
+    const sections = nodesConstantsProperties.map(property => literalToDocSection(property, jsDocCommentsFromESNode)).filter((section) => section !== null)
 
-    const lines = sections.sort((a, b) => a.name.localeCompare(b.name)).map((section) => {
-        return `## ${section.name}\n\n
-${renderSectionValues(section.values)}`
-    }).join('\n');
+    const lines = sections
+        // .sort((a, b) => a.name.localeCompare(b.name))
+        .map(renderSection).join('\n');
 
     const output = `
 # Constants
