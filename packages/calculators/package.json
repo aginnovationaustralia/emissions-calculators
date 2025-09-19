@@ -2,14 +2,24 @@
   "name": "@aginnovationaustralia/emissions-calculators",
   "version": "0.1.4",
   "type": "module",
-  "main": "dist/versions/3.0.0/calculators.cjs",
-  "module": "dist/versions/3.0.0/calculators.mjs",
-  "types": "dist/versions/3.0.0/calculators.d.ts",
+  "main": "dist/versions/3.0.0/index.cjs",
+  "module": "dist/versions/3.0.0/index.mjs",
+  "types": "dist/versions/3.0.0/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/versions/3.0.0/calculators.d.ts",
-      "import": "./dist/versions/3.0.0/calculators.mjs",
-      "require": "./dist/versions/3.0.0/calculators.cjs"
+      "types": "./dist/versions/3.0.0/index.d.ts",
+      "import": "./dist/versions/3.0.0/index.mjs",
+      "require": "./dist/versions/3.0.0/index.cjs"
+    },
+    "./versions/3.0.0": {
+      "types": "./dist/versions/3.0.0/index.d.ts",
+      "import": "./dist/versions/3.0.0/index.mjs",
+      "require": "./dist/versions/3.0.0/index.cjs"
+    },
+    "./versions/3.0.0/*": {
+      "types": "./dist/versions/3.0.0/*",
+      "import": "./dist/versions/3.0.0/*",
+      "require": "./dist/versions/3.0.0/*"
     },
     "./versions/*": {
       "types": "./dist/versions/*",
@@ -25,12 +35,8 @@
       "types": "./dist/versions/3.0.0/calculators.d.ts",
       "import": "./dist/versions/3.0.0/calculators.mjs",
       "require": "./dist/versions/3.0.0/calculators.cjs"
-    },
-    "./versions/3.0.0/calculators": {
-      "types": "./dist/versions/3.0.0/calculators.d.ts",
-      "import": "./dist/versions/3.0.0/calculators.mjs",
-      "require": "./dist/versions/3.0.0/calculators.cjs"
     }
+    
   },
   "typesVersions": {
     "*": {

@@ -42,7 +42,7 @@ export default defineConfig({
     dts({
       entryRoot: 'src',
       outDir: 'dist',
-      include: ['src/versions/3.0.0/calculators.ts'],
+      include: ['src/versions/3.0.0/calculators.ts', 'src/versions/3.0.0/index.ts'],
       exclude: ['**/*.test.ts', '**/test/**'],
       copyDtsFiles: true,
     }),
@@ -71,6 +71,7 @@ export default defineConfig({
     lib: {
       entry: {
         'versions/3.0.0/calculators': 'src/versions/3.0.0/calculators.ts',
+        'versions/3.0.0/index': 'src/versions/3.0.0/index.ts',
       },
       formats: ['cjs', 'es'],
       fileName: (format, entryName) => {
