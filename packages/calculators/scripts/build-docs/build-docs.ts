@@ -65,7 +65,15 @@ function expressionToString(expression: TSESTree.Expression | TSESTree.SpreadEle
 
   
 class BuildConstantsDocs {
-    constructor(private pathToVersion: string, private enumLookups: Record<string, Record<string, string>>) {
+    /**
+     * 
+     * @param pathToVersion The relative path to the root directory for the version to process
+     * @param enumLookups A lookup table with the enum values needed to satisfy constants with a path element that is an enum. For example, if a
+     * constant defines paths using STATES ie `[FreightTypes.RAIL]: 0.038,` then you need to supply the full FreightTypes enum definition
+     */
+    constructor(
+        private pathToVersion: string,
+        private enumLookups: Record<string, Record<string, string>>) {
     }
 
     async buildConstantsDocs() {
