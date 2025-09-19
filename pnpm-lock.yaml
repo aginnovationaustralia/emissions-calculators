@@ -36,9 +36,6 @@ importers:
         specifier: ^4.41.0
         version: 4.41.0
     devDependencies:
-      '@types/espree':
-        specifier: ^10.1.0
-        version: 10.1.0
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
@@ -775,9 +772,6 @@ packages:
 
   '@types/babel__traverse@7.28.0':
     resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
-
-  '@types/espree@10.1.0':
-    resolution: {integrity: sha512-uPQZdoUWWMuO6WS8/dwX1stZH/vOBa/wAniGnYEFI0IuU9RmLx6PLmo+VGfNOlbRc5I7hBsQc8H0zcdVI37kxg==}
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
@@ -3175,11 +3169,6 @@ snapshots:
   '@types/babel__traverse@7.28.0':
     dependencies:
       '@babel/types': 7.28.4
-
-  '@types/espree@10.1.0':
-    dependencies:
-      acorn: 8.15.0
-      eslint-visitor-keys: 4.2.1
 
   '@types/estree@1.0.8': {}
 
