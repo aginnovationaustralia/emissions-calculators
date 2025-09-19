@@ -1,5 +1,5 @@
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync } from 'fs';
-import { dirname, join } from 'path';
+import { dirname, join, resolve } from 'path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
@@ -70,7 +70,7 @@ export default defineConfig({
         if (format === 'es') {
           return `${entryName}.mjs`;
         }
-        return `${entryName}.js`;
+        return `${entryName}.cjs`;
       },
     },
     outDir: 'dist',
@@ -79,9 +79,8 @@ export default defineConfig({
     target: 'es2020',
     rollupOptions: {
       external: (id) => {
-        // console.log(id)
         // Don't bundle dependencies
-        return !id.startsWith('.') && !id.startsWith('/');
+        return !id.startsWith('.') && !id.startsWith('/') && !id.startsWith('@/');
       },
     },
   },
@@ -90,7 +89,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': '/src',
+      '@': resolve(__dirname, 'src'),
     },
   },
 });
