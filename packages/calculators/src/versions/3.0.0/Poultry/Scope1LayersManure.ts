@@ -39,6 +39,7 @@ function layerManure(
       // (Manure_Management_LayersC70)
       const iMCF = constants.POULTRY_MEATLAYER_EF_IMCF.layer_chickens[state];
 
+      // TODO: Needs extraction to a constant
       // (Manure_Management_LayersD24)
       const EP_LAYERS = 0.39;
 

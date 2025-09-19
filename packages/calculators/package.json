@@ -1,13 +1,15 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "0.1.3",
-  "main": "dist/latest.js",
-  "types": "dist/latest.d.ts",
+  "version": "0.1.4",
+  "type": "module",
+  "main": "dist/versions/3.0.0/calculators.cjs",
+  "module": "dist/versions/3.0.0/calculators.mjs",
+  "types": "dist/versions/3.0.0/calculators.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/latest.d.ts",
-      "import": "./dist/latest.js",
-      "require": "./dist/latest.js"
+      "types": "./dist/versions/3.0.0/calculators.d.ts",
+      "import": "./dist/versions/3.0.0/calculators.mjs",
+      "require": "./dist/versions/3.0.0/calculators.cjs"
     },
     "./versions/*": {
       "types": "./dist/versions/*",
@@ -22,12 +24,12 @@
     "./calculators": {
       "types": "./dist/versions/3.0.0/calculators.d.ts",
       "import": "./dist/versions/3.0.0/calculators.mjs",
-      "require": "./dist/versions/3.0.0/calculators.js"
+      "require": "./dist/versions/3.0.0/calculators.cjs"
     },
     "./versions/3.0.0/calculators": {
       "types": "./dist/versions/3.0.0/calculators.d.ts",
       "import": "./dist/versions/3.0.0/calculators.mjs",
-      "require": "./dist/versions/3.0.0/calculators.js"
+      "require": "./dist/versions/3.0.0/calculators.cjs"
     }
   },
   "typesVersions": {
@@ -44,15 +46,15 @@
     "dist/**/*"
   ],
   "scripts": {
-    "build": "npm run build:types && npm run build:js",
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "tsup",
-    "build:tsc": "tsc",
-    "build:tsup": "tsup",
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "preview": "vite preview",
+    "clean": "rm -rf dist",
     "check:types": "tsc --noEmit",
     "lint": "pnpm run check:types",
     "test": "jest",
-    "version": "npm version --no-git-tag-version"
+    "version": "npm version --no-git-tag-version",
+    "build:docs": "tsx scripts/build-docs/index.ts"
   },
   "author": "Agricultural Innovation Australia",
   "license": "ISC",
@@ -63,11 +65,14 @@
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^24.3.1",
+    "@typescript-eslint/parser": "^8.44.0",
     "jest": "^30.1.3",
     "nanoclone": "^1.0.2",
     "ts-jest": "^29.4.1",
-    "tsup": "^8.5.0",
-    "typescript": "^5.9.2"
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5",
+    "vite-plugin-dts": "^4.5.4"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",

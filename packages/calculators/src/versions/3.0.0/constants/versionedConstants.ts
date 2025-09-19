@@ -532,14 +532,6 @@ export type Constants = {
     };
   };
 
-  MATERIAL_BREAKDOWN: {
-    GRAIN: ByChemical;
-    COTTONSEED: ByChemical;
-    HAY: ByChemical;
-    UREA: ByChemical;
-    SUPERPHOSPHATE: ByChemical;
-  };
-
   UREA_FERTILISER_GHG: number;
   SUPERPHOSPHATE_GHG: number;
 
@@ -550,11 +542,11 @@ export type Constants = {
   };
 
   CUSTOMIZED_FERTILIZER: {
-    'Monoammonium phosphate (MAP)': ByChemical & { TotalGHG: number };
-    'Diammonium Phosphate (DAP)': ByChemical & { TotalGHG: number };
-    'Urea-Ammonium Nitrate (UAN)': ByChemical & { TotalGHG: number };
-    'Ammonium Nitrate (AN)': ByChemical & { TotalGHG: number };
-    'Calcium Ammonium Nitrate (CAN)': ByChemical & { TotalGHG: number };
+    'Monoammonium phosphate (MAP)': { TotalGHG: number };
+    'Diammonium Phosphate (DAP)': { TotalGHG: number };
+    'Urea-Ammonium Nitrate (UAN)': { TotalGHG: number };
+    'Ammonium Nitrate (AN)': { TotalGHG: number };
+    'Calcium Ammonium Nitrate (CAN)': { TotalGHG: number };
     'Triple Superphosphate (TSP)': { TotalGHG: number };
     'Super Potash 1:1': { TotalGHG: number };
     'Super Potash 2:1': { TotalGHG: number };
@@ -751,17 +743,6 @@ export type Constants = {
   };
 
   // Trees
-
-  TREE_STATE_REGIONS: {
-    'Western Australia': Array<string>;
-    'NSW / ACT': Array<string>;
-    Tasmania: Array<string>;
-    'South Australia': Array<string>;
-    Victoria: Array<string>;
-    Queensland: Array<string>;
-    'Northern Territory': Array<string>;
-  };
-
   TREE_REGIONS: {
     RegionNo: { [treeRegion in TreeRegions]: number };
     SoilType1: { [treeRegion in TreeRegions]: string };
