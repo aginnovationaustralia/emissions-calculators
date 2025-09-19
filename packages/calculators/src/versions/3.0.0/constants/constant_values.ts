@@ -1455,7 +1455,10 @@ export const constants: Constants = {
    */
   FERTILISER_FRACTION_RUNOFF_STATIC: 1,
 
-  
+  /**
+   * @description Leaching and runoff parameters
+   * @inventory2022 3.B.5
+   */
   LEACHING: {
     FRACLEACH: 0.02,
     FRACLEACH_MMS: 0.24,
@@ -1471,6 +1474,10 @@ export const constants: Constants = {
   },
 
   // (Agricultural_SoilsD163)
+  /**
+   * @description Urine and dung emission factor
+   * @inventory2022 3.D.A_6
+   */
   URINEDUNG_EF: 0.004,
 
   // (embeddedEMissions_C133)
@@ -1482,6 +1489,10 @@ export const constants: Constants = {
   },
 
   // (embeddedEmissions_C148)
+  /**
+   * @description Energy requirement to manufacture fertiliser components and associated CO2 emissions (EF)
+   * @reference (Wells 2001; cited by Saunders et al. 2006)
+   */
   AGROCHEMICAL_ENERGY_MANUFACTURE: {
     HERBICIDE_GLYPHOSATE: { TOTAL_ENERGY: 550, EF: 0.06 },
     HERBICIDE_GENERAL: { TOTAL_ENERGY: 310, EF: 0.06 },
@@ -1489,6 +1500,10 @@ export const constants: Constants = {
   },
 
   // (cropResiduesC116)
+  /**
+   * @description Attributes of major pasture types 
+   * @inventory2022 A5.5.9.2
+   */
   PASTURE_ATTRIBUTES: {
     'Annual grass': {
       FRACRENEWED_INTENSIVE: 0.1,
@@ -1537,6 +1552,10 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description N, P, K and S content in each fertiliser type
+   * @type Proportion
+   */
   FERTILISER_CONTENT: {
     MAP: { N: 0.11, P: 0.219, K: 0, S: 0 },
     DAP: { N: 0.18, P: 0.2, K: 0, S: 0 },
@@ -1557,6 +1576,10 @@ export const constants: Constants = {
   },
 
   // Crop residue
+  /**
+   * @description Crop residue parameters for major crop types
+   * @inventory2022 A5.5.9.1
+   */
   CROPRESIDUE: {
     Wheat: {
       residueCropRatio: 1.5,
@@ -1813,17 +1836,71 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Leaching and runoff mass for feedlot
+   * @inventory2022 3.D.A_3
+   */
   FEEDLOT_MN_LEACH: 0,
+
+  /**
+   * @description mass of urinary N excretion on pasture
+   * @inventory2022 3.D.B_2
+   */
   FEEDLOT_UN_SOIL: 0,
+
+  /**
+   * @description mass of faecal N excretion on pasture
+   * @inventory2022 3.D.B_2
+   */
   FEEDLOT_FN_SOIL: 0,
+
+  /**
+   * @description FracGASM value for feedlot
+   * @inventory2022 3.D.B_2
+   */
   FEEDLOT_AG_SOILS: 0.21,
+
+  /**
+   * @description Emissions factor for amount of N deposited on pasture, weighted average calculated from IPCC 2019
+   * @inventory2022 3.D.A_4
+   */
   FEEDLOT_ANNUAL_N2O_EF: 0.00503,
+
+  /**
+   * @description integrated N2O emission factor for each feedlot class and state
+   * @inventory2022 3.B.1c_7
+   */
   FEEDLOT_I_NOF: 0.01942,
+
+  /**
+   * @description integrated fraction of N volatilised from feedlot cattle
+   * @inventory2022 3.B.5c_1
+   */
   FEEDLOT_I_FRACGASM: 0.71116,
+
+  /**
+   * @description Inorganic fertiliser EF for non-irrigated cropping
+   * @inventory2022 3.B.5c_2
+   */
   FEEDLOT_INDIRECT_EF: 0.0041,
+
+  /**
+   * @description Ash content expressed as a fraction of manure
+   * @inventory2022 3.B.1 c_1
+   */
   FEEDLOT_ASH_CONTENT: 0.16,
+
+  /**
+   * @description Methane emissions potential for feedlot
+   * @inventory2022 3.B.1 c_1
+   * @units m3 CH4/kg
+   */
   FEEDLOT_EMISSION_POTENTIAL: 0.19,
 
+  /**
+   * @description Manure emission factors for each feedlot manure processing system
+   * @inventory2022 Table A5.5.3.6, A5.5.3.7
+   */
   FEEDLOT_MANURE_EF: {
     Drylot: {
       EF: 0.0054,
@@ -1843,6 +1920,10 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Integrated EF for feedlot by state
+   * @inventory2022 A5.5.3.3
+   */
   FEEDLOT_INTEGRATED_EF: {
     act: 0.0323,
     nsw: 0.0323,
@@ -1855,6 +1936,10 @@ export const constants: Constants = {
     wa_nw: 0,
   },
 
+  /**
+   * @description Fuel usage for each truck type, in litres / km
+   * @units litres / km
+   */
   TRANSPORT_FUEL_USAGE: {
     '4 Deck Trailer': 0.785,
     '6 Deck Trailer': 1.11,
@@ -1862,15 +1947,22 @@ export const constants: Constants = {
   },
 
   // (transportD20)
+  /**
+   * @description Emissions factor for each gas, in kg CO2-e / GJ
+   * @reference Department of Industry, Science, Energy and Resources 2021
+   * @units kg CO2-e / GJ
+   */
   TRANSPORT_ECF: {
     CO2: 69.9,
     CH4: 0.1,
     N2O: 0.2,
   },
 
-  /** 
-   * A comment
-   * */
+  /**
+   * @description Emissions factors for each agricultural soil type, in Gg N2O-N/Gg N
+   * @inventory2022 Table 5.21
+   * @units Gg N2O-N/Gg N
+   */
   AGRICULTURAL_SOILS: {
     EF_IRRIGATEDPASTURE: 0.0059,
     EF_IRRIGATEDCROP: 0.007,
@@ -1878,6 +1970,11 @@ export const constants: Constants = {
     EF_NONIRRIGATEDPASTURE: 0.0018,
   },
 
+  /**
+   * @description Emissions factors for purchased live stock, in kg CO2-e/kg liveweight
+   * @reference Wiedemann et al. (2015b)
+   * @units kg CO2-e/kg
+   */
   FEEDLOT_PURCHASELIVESTOCK_EF: {
     NT: 12.4,
     'nth QLD': 12.4,
@@ -1890,68 +1987,9 @@ export const constants: Constants = {
     TAS: 11.7,
   },
 
-  TREE_STATE_REGIONS: {
-    'Western Australia': [
-      'South West',
-      'Pilbara',
-      'Kimberley',
-      'Central West',
-      'South Coastal',
-      'Goldfields/Eucla',
-      'Gascoyne',
-      'Central Wheat Belt',
-      'Interior',
-    ],
-    'NSW / ACT': [
-      'North Coast',
-      'South Coast',
-      'Northern Tablelands',
-      'Southern Tablelands',
-      'Northern Wheat/Sheep',
-      'Southern Wheat/Sheep',
-      'Western',
-    ],
-    Tasmania: [
-      'North East',
-      'East Coast',
-      'Central North/Midlands/South East',
-      'Central Plateau/Derwent Valley',
-      'West/South Coast',
-      'North West',
-    ],
-    'South Australia': [
-      'South East',
-      'Murray',
-      'Mid-North/Flinders',
-      'Pastoral',
-      'West Coast/Eyre',
-    ],
-    Victoria: [
-      'Mallee',
-      'Wimmera',
-      'Northern Country',
-      'North East Vic',
-      'East Gippsland',
-      'West/South Gippsland',
-      'Central',
-      'South West Vic',
-    ],
-    Queensland: [
-      'Central Highlands/Northern',
-      'Central West/Flinders',
-      'Channel Country',
-      'Maranoa/Warrego',
-      'Darling Downs/Burnett',
-      'North West/Gulf',
-    ],
-    'Northern Territory': [
-      'Darwin-Daly',
-      'Arnhem-Roper',
-      'Victoria River-TennantCreek',
-      'Alice Springs',
-    ],
-  },
-
+  /**
+   * @description Static lookup tree values for soil type and species, by region
+   */
   TREE_REGIONS: {
     RegionNo: {
       'South West': 1,
@@ -2380,6 +2418,9 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Static lookup for savannah coarse fuel, by region
+   */
   SAVANNAH_FUELCOARSE: {
     'Combined Ref': {
       Qld1: '71',
@@ -2551,6 +2592,9 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Static lookup for savannah fine fuel, by region
+   */
   SAVANNAH_FUELFINE: {
     'Combined Ref': {
       Qld1: '71',
@@ -2765,6 +2809,9 @@ export const constants: Constants = {
   },
 
   // (savannahBurningX4)
+  /**
+   * @description State lookup values for using other savannah lookup constants
+   */
   FUEL_STATEREF: {
     // WARNING: wa_nw is not in original sheet
     wa_nw: 0,
@@ -2780,11 +2827,19 @@ export const constants: Constants = {
     pilbara: 10,
   },
 
+  /**
+   * @description Patchiness values for savannah burning by season
+   * @type Proportion
+   */
   BURN_PATCHINESS: {
     'early dry season': { high: 0.709, low: 0.79 },
     'late dry season': { high: 0.889, low: 0.97 },
   },
 
+  /**
+   * @description Completeness of combustion values for savannah burning by fuel and season
+   * @type Proportion
+   */
   BURN_COMPLETENESSOFCOMBUSTION: {
     low: {
       fine: { 'early dry season': 0.7992, 'late dry season': 0.8328 },
@@ -2796,10 +2851,29 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Efficiency of residue burning
+   */
   BURNING_EFFICIENCY_RESIDUE: 0.96,
+
+  /**
+   * @description N2O emissions factor for savannah burning
+   * @inventory2022 Table 5.31
+   * @units Gg element / Gg burnt
+   */
   BURNING_N2O_EF: 0.0076,
+
+  /**
+   * @description Methane emissions factor for savannah burning
+   * @inventory2022 Table 5.31
+   * @units Gg element / Gg burnt
+   */
   BURNING_METHANE_EF: 0.0035,
 
+  /**
+   * @description Carbon Mass Fraction Burnt in Fuel Burnt
+   * @units Proportion
+   */
   FUELBURNT_VEGETATION_CARBONFRACTION: {
     fine: {
       'Shrubland hummock': 0.46,
@@ -2827,6 +2901,10 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Methane emissions factor for savannah burning
+   * @units Gg CH$-C / Gg C
+   */
   FUELBURNT_VEGETATION_EF_CH4: {
     fine: {
       'Shrubland hummock': 0.0031,
@@ -2854,6 +2932,9 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Nitrogen to Carbon ratio in fuel burnt
+   */
   FUELBURNT_VEGETATION_NITROGENCARBONRATIO: {
     fine: {
       'Shrubland hummock': 0.0096,
@@ -2881,6 +2962,10 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description N2O emissions factor for savannah burning
+   * @units Gg N2O-N/Gg N
+   */
   FUELBURNT_VEGETATION_N2O: {
     fine: {
       'Shrubland hummock': 0.0075,
@@ -2908,6 +2993,11 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Nitrogen content of swine manure, by class
+   * @inventory2022 Table A5.5.5.4
+   * @units kg N/head/year
+   */
   SWINE_MANURE_NITROGEN: {
     boars: 16.93,
     sows: 17.91,
@@ -2916,6 +3006,11 @@ export const constants: Constants = {
   },
 
   // (manureManagementC37)
+  /**
+   * @description Volatile solids content of swine manure, by class
+   * @inventory2022 Table A5.5.5.4
+   * @units kg / head / day
+   */
   SWINE_MANURE_CHARACTERISTICS: {
     boars: 0.4,
     sows: 0.46,
@@ -2924,6 +3019,11 @@ export const constants: Constants = {
   },
 
   // (entericFermentation34)
+  /**
+   * @description Feed intake of swine, by class
+   * @inventory2022 Table A5.5.5.2
+   * @units kg / head / day
+   */
   SWINE_HERD_FEEDINTAKE: {
     boars: 2.3,
     sows: 2.62,
@@ -2932,6 +3032,10 @@ export const constants: Constants = {
   },
 
   // nitrousOxideMMS90
+  /**
+   * @description Integrated emissions factors for swine, by state
+   * @inventory2022 Table A5.5.5.5
+   */
   SWINE_INTEGRATED_EF: {
     // WARNING: what to do here? leave as 0?
     [STATES.ACT]: {
@@ -2982,6 +3086,11 @@ export const constants: Constants = {
   },
 
   // nitrousOxideC114
+  /**
+   * @description Fraction of animal waste available for leaching and runoff (FracWET)
+   * @inventory2022 Table A5.5.10.2
+   * @type Proportion
+   */
   SWINE_FRACWET: {
     [STATES.ACT]: 0.5,
     [STATES.NSW]: 0.5,
@@ -2995,6 +3104,11 @@ export const constants: Constants = {
   },
 
   // nitrousOxideC102
+  /**
+   * @description Allocation of waste to MMS
+   * @inventory2022 Table A5.5.5.6
+   * @type Proportion
+   */
   SWINE_WASTE_MMS: {
     [STATES.ACT]: 0.5,
     [STATES.NSW]: 0.06,
@@ -3009,6 +3123,11 @@ export const constants: Constants = {
 
   // WARNING: what about the others??? TODO: find default from vlookup func
   // Pig_FeedC28
+  /**
+   * @description Emissions factors for swine feed ingredients, by ingredient
+   * @reference (Wiedemann et al., 2021), (Reckmann et al., 2016)
+   * @units kg CO2-e / kg ingredient
+   */
   SWINE_FEED_INGREDIENT_EF: {
     wheat: 0.252,
     barley: 0.341,
@@ -3025,6 +3144,10 @@ export const constants: Constants = {
   },
 
   // (manureManagementBroilersC83)
+  /**
+   * @description Diet properties for poultry, by class
+   * @inventory2022 Table A5.5.6.1
+   */
   POULTRY_DIET_PROPERTIES: {
     layers: {
       dryMatterIntake: 0.086,
@@ -3057,7 +3180,11 @@ export const constants: Constants = {
     },
   },
 
-  // (manureManagementBroilersE91)
+  /**
+   * @description MCFs Pasture range and paddock
+   * @inventory2022 Table A5.5.6.5
+   * @type Proportion
+   */
   POULTRY_WASTE_MMS: {
     [STATES.ACT]: 0.01,
     [STATES.NSW]: 0.01,
@@ -3073,6 +3200,9 @@ export const constants: Constants = {
   // meat chickens are just broilers
   // (manureManagementBroilersC92)
   // (nitrousOxideI152)
+  /**
+   * @description Meat and layer chickens – Integrated MCFs, by state
+   */
   POULTRY_MEATLAYER_EF_IMCF: {
     meat_chickens: {
       [STATES.ACT]: 0.024414,
@@ -3098,6 +3228,9 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Meat and layer chickens – Integrated EFs, by state
+   */
   POULTRY_MEATLAYER_EF: {
     meat_chickens: {
       iFracGASM: 0.385924,
@@ -3110,8 +3243,17 @@ export const constants: Constants = {
   },
 
   // assumptions sheet
+  /**
+   * @description Default percent of sugar yield from total harvest, if no value is supplied in inputs
+   * @type Proportion
+   */
   SUGAR_YIELD: 0.1188625,
 
+  /**
+   * @description Emissions factors for poultry feed ingredients, by ingredient
+   * @reference (Christie et al., 2012), (Maraseni & Cockfield, 2011), (Castanheira & Freire, 2013), (O'Halloran et al., 2008)
+   * @units kg CO2-e / kg ingredient
+   */
   POULTRY_FEED_INGREDIENTS_GHG: {
     wheat: 0.3,
     barley: 0.11,
@@ -3120,6 +3262,11 @@ export const constants: Constants = {
     millrun: 0.3,
   },
 
+  /**
+   * @description Standard reference weights for dairy cattle, by class
+   * @inventory2022 Table A5.5.1.3
+   * @units kg
+   */
   DAIRY_CATTLE_STANDARD_REFERENCE_WEIGHTS: {
     milking_cows: 580.7142857143,
     heifers_lt_1: 580.7142857143,
@@ -3129,6 +3276,10 @@ export const constants: Constants = {
   },
 
   // (Agricultural_SoilsD101)
+  /**
+   * @description N2O oxide emission factors and fraction of N volatilised by manure management system
+   * @inventory2022 Table A5.5.1.9
+   */
   DAIRY_CATTLE_N2O_MMS: {
     void_at_pasture: { EF: 0, FracGASM: 0 },
     anaerobic_lagoon: { EF: 0, FracGASM: 0.35 },
@@ -3136,11 +3287,26 @@ export const constants: Constants = {
     solid_storage: { EF: 0.005, FracGASM: 0.3 },
   },
 
+  /**
+   * @description Mass of N volatilised from manure management system
+   * @inventory2022 Table 3.D.A_6
+   * @units Gg N2O-N / Gg N
+   */
   DAIRY_MASS_N_VOLATISED_EF: 0.004,
 
   // (Agricultural_SoilsD142)
+  /**
+   * @description Mass of N volatilised from manure applied to soils
+   * @inventory2022 Table 3.D.A_4
+   * @units Gg N2O-N / Gg N
+   */
   DAIRY_MMS_EF: 0.00503,
 
+  /**
+   * @description Methane production from pre weaned calves, by class
+   * @inventory2022 Table A5.5.1.5
+   * @units Gg CH4-C / Gg N
+   */
   DAIRY_METHANE_MPW: {
     milking_cows: 0,
     heifers_lt_1: 0.01825,
@@ -3149,6 +3315,11 @@ export const constants: Constants = {
     dairyBulls_gt_1: 0,
   },
 
+  /**
+   * @description Nitrous oxide EFs for inorganic fertiliser, based on rainfall and crop type
+   * @inventory2022 Table 5.21
+   * @units Gg N2O-N / Gg N
+   */
   DAIRY_PRODUCTIONSYSTEM_EF: {
     RAINFALL_LT_600: {
       'Non-irrigated Crop': 0.0029,
@@ -3164,6 +3335,10 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Dairy cattle - Nitrous oxide EFs and fraction of N volatilised by manure management system
+   * @inventory2022 Table A5.5.1.9
+   */
   DAIRY_MANURE_MANAGEMENT: {
     PASTURE_EF: 0,
     ANAEROBIC_EF: 0,
@@ -3177,6 +3352,10 @@ export const constants: Constants = {
     SOLID_FRACGASM: 0.3,
   },
 
+  /**
+   * @description Dairy Cattle - Methane Conversion Factors (MCF)
+   * @inventory2022 Table 5.A.7
+   */
   DAIRY_METHANE_CONVERSION_FACTOR: {
     [STATES.ACT]: {
       Pasture: 0.01,
@@ -3244,6 +3423,10 @@ export const constants: Constants = {
   },
 
   // other livestock Deer Manure management D42
+  /**
+   * @description Other livestock – Allocation of animals to climate regions
+   * @inventory2022 Table A5.5.7.3
+   */
   OTHERLIVESTOCK_ALLOCATION_CLIMATEREGIONS: {
     [STATES.ACT]: {
       warm: 0,
@@ -3283,6 +3466,11 @@ export const constants: Constants = {
     },
   },
 
+  /**
+   * @description Coefficients for Rural fuel consumption model (litres per 1 Km)
+   * @inventory2022 Table 56
+   * @units litres / Km
+   */
   FISHERIES_TRANSPORT_FUEL_USAGE: {
     None: 0,
     'Small Car': 0.06419556,
@@ -3298,6 +3486,11 @@ export const constants: Constants = {
 
   // (TransportB111)
   // TODO: Replace
+  /**
+   * @description Direct (Scope 1) and indirect (Scope 3) emissions factors for the consumptions of transport fuels in different transport equipment
+   * @inventory2022 Table 9
+   * @units kg CO2-e / GJ
+   */
   FISHERIES_TRANSPORT_FUEL_EF: {
     Gasoline: { CO2: 67.4, CH4: 0.02, N2O: 0.2, SCOPE3: 17.2 },
     'Diesel oil': { CO2: 69.9, CH4: 0.01, N2O: 0.5, SCOPE3: 17.3 },
@@ -3316,8 +3509,17 @@ export const constants: Constants = {
   },
 
   // (TransportD48)
+  /**
+   * @description Emissions factors for commercial flights
+   * @units kg CO2-e / PAX km
+   */
   FISHERIES_COMMERCIALFLIGHT_EF: 0.101,
 
+  /**
+   * @description Emissions factors for bait
+   * @reference FRDC - Data extracted/reverse-engineered by Blueshift/Dan from Seafish Calculator (UK/European numbers). 
+   * @units kg CO2-e / kg bait
+   */
   FISHERIES_BAIT_EF: {
     'Fish Frames': 0.098,
     'Fish Heads': 0.098,
@@ -3326,6 +3528,11 @@ export const constants: Constants = {
     'Whole Fish': 0.098,
   },
 
+  /**
+   * @description Global warming potentials for refrigerants
+   * @reference NGAF 2022 Table 23
+   * @units kg CO2-e / kg refrigerant
+   */
   REFRIGERANT_GWP: {
     'HFC-23': 12400,
     'HFC-32': 677,
@@ -3422,6 +3629,9 @@ export const constants: Constants = {
     'R-509A': 5700,
   },
 
+  /**
+   * @description Emissions factors for wastewater treatment
+   */
   WASTEWATER: {
     TREATMENT_EF: {
       [FluidWasteTreatmentType.MANAGED_AEROBIC]: 0,
@@ -3436,17 +3646,41 @@ export const constants: Constants = {
     FLARE_EF: (0.00581193271889401 / 25) * 34,
   },
 
+  /**
+   * @description Emissions factors for composting
+   * @reference NGA factors (2023)
+   * @units t/t
+   */
   COMPOSTING_EF: 0.046,
 
+  /**
+   * @description Emissions factors for municipal solid waste
+   * @units t CO2-e/t
+   */
   MUNICIPAL_SOLID_WASTE_EF: 1.6,
 
+  /**
+   * @description Intensity of economic allocation for cotton co-products, by type
+   * @reference https://www.sciencedirect.com/science/article/abs/pii/S0959652618335935
+   * @type Proportion
+   */
   COTTON_INTENSITY_ECONOMIC_ALLOCATION: {
     LINT: 0.86,
     SEED: 0.14,
   },
 
   // Rice
+  /**
+   * @description Emissions factor for permanently flooded fields
+   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
+   */
   EF_FLOODED_FIELDS: 1.19,
+
+
+  /**
+   * @description Default CH4 emissions scaling factors for water regimes during the cultivation period relative to continuously flooded fields
+   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
+   */
   SF_CULTIVATION_WATER_REGIME: {
     'Continuously flooded': 1,
     'Single drainage period': 0.71,
@@ -3457,6 +3691,11 @@ export const constants: Constants = {
     'Paddy rotation': 0,
     'Fallow without flooding in previous year': 0,
   },
+
+  /**
+   * @description Default CH4 emissions scaling factors for water regimes before the cultivation period
+   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
+   */
   SF_PRESEASON_WATER_REGIME: {
     'Non flooded pre-season < 180 days': 1,
     'Non flooded pre-season > 180 days': 0.89,
@@ -3464,6 +3703,11 @@ export const constants: Constants = {
     'Non-flooded pre-season > 365 days': 0.59,
   },
 
+  /**
+   * @description Emissions factors for aquaculture bait
+   * @reference Blueshift estimates
+   * @units kg CO2-e / kg feed
+   */
   AQUACULTURE_BAIT_EF: {
     [AquacultureBait.SARDINES]: 0.3,
     [AquacultureBait.LOW_ANIMAL_PROTEIN]: 1,
@@ -3473,6 +3717,11 @@ export const constants: Constants = {
     [AquacultureBait.FISH]: 0.3,
   },
 
+  /**
+   * @description Emissions factors for freight, in kg CO2-e / tonne-km
+   * @reference EUROPEAN CHEMICAL TRANSPORT ASSOCIATION, European Chemical Industry Council, CTA-CEFIC-GUIDELINE-FOR-MEASURING-AND-MANAGING-CO2.
+   * @units kg CO2-e / tonne-km
+   */
   FREIGHT_KG_TONNE_EF: {
     [FreightTypes.TRUCK]: 0.079875,
     [FreightTypes.RAIL]: 0.038,
@@ -3482,6 +3731,9 @@ export const constants: Constants = {
     [FreightTypes.LARGE_CONTAINER_SHIP]: 0.0115,
   },
 
+  /**
+   * @description Methane Conversion Factors (MCF) and Nitrous Oxide Fractions (NOF) for manure management systems
+   */
   MMS: {
     deepLitter: {
       MCF: 0.04,

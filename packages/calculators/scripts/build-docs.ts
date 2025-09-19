@@ -35,7 +35,7 @@ function extractJSDocComments(tsNode: ts.Node): Comment[] {
     return jsDocComments.flatMap(c => {
         if (isJsDoc(c)) {
             return c.tags
-                ?.filter(t => (t.kind === ts.SyntaxKind.JSDocTag && ['link', 'description', 'units', 'inventory2018', 'reference'].includes(t.tagName.text)) || isJSDocTypeTag(t))
+                ?.filter(t => (t.kind === ts.SyntaxKind.JSDocTag && ['link', 'description', 'units', 'inventory2018', 'inventory2022', 'reference'].includes(t.tagName.text)) || isJSDocTypeTag(t))
                 .map(tagToComments).flat().filter(c => c !== undefined) ?? [];
         }
         return [];
@@ -49,7 +49,7 @@ type ConstantValue = {
     path: string[]
 }
 
-type CommentType = 'link' | 'description' | 'units' | 'inventory2018' | 'type' | 'reference'
+type CommentType = 'link' | 'description' | 'units' | 'inventory2018' | 'inventory2022' | 'type' | 'reference'
 
 type Comment = {
     text: string;
@@ -72,6 +72,8 @@ const renderCommentType = (type: CommentType): string => {
             return 'Units';
         case 'inventory2018':
             return 'GHG Inventory 2018';
+        case 'inventory2022':
+            return 'GHG Inventory 2022';
         case 'type':
             return 'Type';
         case 'reference':
