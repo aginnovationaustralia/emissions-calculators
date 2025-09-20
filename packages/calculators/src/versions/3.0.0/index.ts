@@ -22,6 +22,7 @@ export {
   calculateWildCatchFishery,
   calculateWildSeaFisheries,
 } from './calculators';
+export type { Constants } from './constants/versionedConstants';
 export { CalculatorName } from './strings';
 
 export { constants, loadConstants };
