@@ -55,10 +55,11 @@ export default defineConfig([
       }),
       commonjs(),
       copy({
+        flatten: false,
         targets: [
           {
             src: 'src/versions/**/*.md',
-            dest: 'dist/versions',
+            dest: 'dist',
           },
         ],
         verbose: true,
