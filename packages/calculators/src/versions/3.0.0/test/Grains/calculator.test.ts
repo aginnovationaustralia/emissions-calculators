@@ -8,7 +8,7 @@ import { GrainsInput } from '../../types/Grains/input';
 import { GrainsIntermediateOutput } from '../../types/Grains/intermediate.output';
 import { GrainsOutput } from '../../types/Grains/output';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext, V3_0_0 } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { grainsTestData } from './grains.data';
 
@@ -73,7 +73,7 @@ const expectations_1_2_0 = {
 };
 
 describe('Grains calculator, NSW', () => {
-  const context = testContext(V2_0_0, 'Grains');
+  const context = testContext(V3_0_0, 'Grains');
   const emissions = calculateEntireGrains(
     grainsTestData.crops,
     grainsTestData.electricityUse,
@@ -83,7 +83,7 @@ describe('Grains calculator, NSW', () => {
     context,
   );
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(V3_0_0, emissions, expectations_1_2_0);
 });
 
 describe('Grains calculator (multi activity)', () => {

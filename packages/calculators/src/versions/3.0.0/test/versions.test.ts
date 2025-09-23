@@ -9,12 +9,12 @@ import { BeefPurchase } from '../types/Beef/beefpurchase.input';
 import { LivestockPurchase } from '../types/livestockPurchase.input';
 import { Vegetation } from '../types/vegetation.input';
 import { beefTestInput } from './Beef/beef.data';
-import { testContext, V2_0_0 } from './common/context';
+import { testContext, V3_0_0 } from './common/context';
 import { veg1 } from './SheepBeef/vegetation.data';
 
 const P = 7;
 
-const context = testContext(V2_0_0);
+const context = testContext(V3_0_0);
 
 describe('checking Scope3Fertiliser via mergeOtherFertilisers', () => {
   const beefInput = JSON.parse(JSON.stringify(beefTestInput));

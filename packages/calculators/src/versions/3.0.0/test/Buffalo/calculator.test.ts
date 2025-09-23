@@ -5,7 +5,7 @@ import { validateCalculatorInput } from '../../calculators';
 import { entriesFromObject } from '../../common/tools/object';
 import { BuffaloInput } from '../../types/Buffalo/input';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext, V3_0_0 } from '../common/context';
 import {
   ensureEveryKeyIsDefined,
   executeEmissionsSpec,
@@ -55,10 +55,10 @@ const expectations_1_2_0 = {
 };
 
 describe('Buffalo calculator, NSW', () => {
-  const context = testContext(V2_0_0, 'Beef');
+  const context = testContext(V3_0_0, 'Beef');
   const emissions = calculateBuffalo(buffaloTestData, context);
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(V3_0_0, emissions, expectations_1_2_0);
 });
 
 describe('Buffalo scenarios', () => {
@@ -76,7 +76,7 @@ describe('Buffalo scenarios', () => {
 
   expect(validatedInput).toBeDefined();
 
-  const context = testContext(V2_0_0, 'Buffalo');
+  const context = testContext(V3_0_0, 'Buffalo');
   const actualEmissions = calculateBuffalo(validatedInput, context);
 
   ensureEveryKeyIsDefined(actualEmissions as unknown as KeyValuePairs);

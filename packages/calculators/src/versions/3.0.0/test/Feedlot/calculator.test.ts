@@ -5,7 +5,7 @@ import { entriesFromObject } from '../../common/tools/object';
 import { calculateEntireFeedlot } from '../../Feedlot/calculator';
 import { FeedlotInput } from '../../types/Feedlot/input';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext, V3_0_0 } from '../common/context';
 import {
   ensureEveryKeyIsDefined,
   executeEmissionsSpec,
@@ -58,10 +58,10 @@ const expectations = {
 };
 
 describe('Feedlot calculator, VIC', () => {
-  const context = testContext(V2_0_0, 'Feedlot');
+  const context = testContext(V3_0_0, 'Feedlot');
   const emissions = calculateEntireFeedlot(feedlotTestData110, context);
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations);
+  executeEmissionsSpec(V3_0_0, emissions, expectations);
 });
 
 describe('Feedlot scenarios', () => {
@@ -75,7 +75,7 @@ describe('Feedlot scenarios', () => {
 
   expect(validatedInput).toBeDefined();
 
-  const context = testContext(V2_0_0, 'Beef');
+  const context = testContext(V3_0_0, 'Beef');
   const emissions = calculateEntireFeedlot(validatedInput, context);
 
   ensureEveryKeyIsDefined(emissions as unknown as KeyValuePairs);

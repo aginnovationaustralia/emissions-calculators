@@ -3,7 +3,7 @@ import clone from 'nanoclone';
 import { WildCatchFisheryOutput } from '../../types/WildCatchFishery/output';
 import { calculateWildCatchFishery } from '../../WildCatchFishery/calculator';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext, V3_0_0 } from '../common/context';
 import { executeEmissionsSpec, KeyValuePairs } from '../common/emissions';
 import { wildCatchFisheryTestData } from './input.data';
 
@@ -62,14 +62,14 @@ const expectations: WildCatchFisheryOutput = {
 };
 
 describe('Wild Catch Fishery calculator, SA', () => {
-  const context = testContext(V2_0_0, 'Wild Catch Fishery');
+  const context = testContext(V3_0_0, 'Wild Catch Fishery');
   const emissions = calculateWildCatchFishery(
     wildCatchFisheryTestData,
     context,
   );
 
   executeEmissionsSpec(
-    V2_0_0,
+    V3_0_0,
     emissions,
     expectations as unknown as KeyValuePairs,
   );

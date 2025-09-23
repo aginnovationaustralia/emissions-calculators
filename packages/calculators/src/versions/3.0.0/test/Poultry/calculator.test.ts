@@ -3,7 +3,7 @@ import clone from 'nanoclone';
 import { calculatePoultry } from '../../Poultry/calculator';
 import { PoultryInput } from '../../types/Poultry/input';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext, V3_0_0 } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { poultryTestData } from './poultry.data';
 
@@ -40,10 +40,10 @@ const expectations_1_2_0 = {
 };
 
 describe('Poultry calculator, QLD', () => {
-  const context = testContext(V2_0_0, 'Poultry');
+  const context = testContext(V3_0_0, 'Poultry');
   const emissions = calculatePoultry(poultryTestData, context);
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(V3_0_0, emissions, expectations_1_2_0);
 
   it('Generates IDs for intermediate activities', () => {
     expect(emissions.intermediateBroilers[0].id).toBe('broiler-0');

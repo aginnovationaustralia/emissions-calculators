@@ -6,7 +6,7 @@ import { ProcessingIntermediateOutput } from '../../types/Processing/intermediat
 import { ProcessingOutput } from '../../types/Processing/output';
 import { ProductUnit } from '../../types/Processing/product.input';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext, V3_0_0 } from '../common/context';
 import { executeEmissionsSpec, KeyValuePairs } from '../common/emissions';
 import { processingTestData } from './input.data';
 
@@ -61,11 +61,11 @@ const expectations_1_2_0: ProcessingOutput = {
 };
 
 describe('Processing calculator, SW WA', () => {
-  const context = testContext(V2_0_0, 'Processing');
+  const context = testContext(V3_0_0, 'Processing');
   const emissions = calculateProcessing(processingTestData, context);
 
   executeEmissionsSpec(
-    V2_0_0,
+    V3_0_0,
     emissions,
     expectations_1_2_0 as unknown as KeyValuePairs,
   );

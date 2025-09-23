@@ -8,7 +8,7 @@ import {
   compareEmissionsFrom2Inputs,
   transformCarbonSequestration,
 } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext, V3_0_0 } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { riceTestData } from './rice.data';
 
@@ -57,7 +57,7 @@ const expectations_1_2_0 = {
 };
 
 describe('Rice calculator, QLD', () => {
-  const context = testContext(V2_0_0, 'Rice');
+  const context = testContext(V3_0_0, 'Rice');
   const emissions = calculateEntireRice(
     riceTestData.crops,
     riceTestData.electricityUse,
@@ -67,7 +67,7 @@ describe('Rice calculator, QLD', () => {
     context,
   );
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(V3_0_0, emissions, expectations_1_2_0);
 });
 
 describe('Rice calculator (multi activity)', () => {
@@ -95,7 +95,7 @@ describe('Rice calculator (multi activity)', () => {
     'intermediate',
     RiceOutput
   >(
-    V2_0_0,
+    V3_0_0,
     calculateRice,
     riceTestData,
     riceDoubleYield,

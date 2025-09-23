@@ -10,7 +10,7 @@ import {
   compareEmissionsFrom2Inputs,
   transformCarbonSequestration,
 } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext, V3_0_0 } from '../common/context';
 import {
   ensureEveryKeyIsDefined,
   executeEmissionsSpec,
@@ -63,13 +63,13 @@ const expectations_1_2_0 = {
 };
 
 describe('Beef calculator, VIC', () => {
-  const context = testContext(V2_0_0, 'Beef');
+  const context = testContext(V3_0_0, 'Beef');
   const emissions = calculateBeef(
     validateCalculatorInput(BeefInput, beefTestData),
     context,
   );
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(V3_0_0, emissions, expectations_1_2_0);
 });
 
 describe('Beef input scenarios', () => {
@@ -88,7 +88,7 @@ describe('Beef input scenarios', () => {
 
     expect(validatedInput).toBeDefined();
 
-    const context = testContext(V2_0_0, 'Beef');
+    const context = testContext(V3_0_0, 'Beef');
     const emissions = calculateBeef(validatedInput, context);
 
     ensureEveryKeyIsDefined(emissions as unknown as KeyValuePairs);

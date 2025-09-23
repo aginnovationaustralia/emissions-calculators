@@ -10,7 +10,7 @@ import {
   compareEmissionsFrom2Inputs,
   transformCarbonSequestration,
 } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext, V3_0_0 } from '../common/context';
 import {
   ensureEveryKeyIsDefined,
   executeEmissionsSpec,
@@ -70,17 +70,17 @@ const lambingExpectations = {
 };
 
 describe('Sheep calculator, VIC', () => {
-  const context = testContext(V2_0_0, 'Sheep');
+  const context = testContext(V3_0_0, 'Sheep');
   const emissions = calculateSheep(sheepTestData, context);
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations);
+  executeEmissionsSpec(V3_0_0, emissions, expectations);
 });
 
 describe('Lambing scenario, VIC', () => {
-  const context = testContext(V2_0_0, 'Sheep');
+  const context = testContext(V3_0_0, 'Sheep');
   const emissions = calculateSheep(lambingRatesTestData, context);
 
-  executeEmissionsSpec(V2_0_0, emissions, lambingExpectations);
+  executeEmissionsSpec(V3_0_0, emissions, lambingExpectations);
 });
 
 describe('Sheep scenarios', () => {
@@ -102,7 +102,7 @@ describe('Sheep scenarios', () => {
 
   expect(validatedInput).toBeDefined();
 
-  const context = testContext(V2_0_0, 'Sheep');
+  const context = testContext(V3_0_0, 'Sheep');
   const emissions = calculateSheep(validatedInput, context);
 
   ensureEveryKeyIsDefined(emissions as unknown as KeyValuePairs);

@@ -1,5 +1,5 @@
 import { calculateScope1N2O } from '../../Cotton/Scope1';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext, V3_0_0 } from '../common/context';
 import { cotton1 } from './cotton.data';
 
 const cotton = {
@@ -40,7 +40,7 @@ const cottonSOA = {
 } as const;
 
 describe('checking new TSP fertiliser types', () => {
-  const context = testContext(V2_0_0, 'Cotton');
+  const context = testContext(V3_0_0, 'Cotton');
 
   test('is returning a value for TSP', () => {
     const n2o = calculateScope1N2O(cotton, context);
