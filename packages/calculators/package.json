@@ -1,8 +1,8 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
   "version": "0.1.4",
-  "main": "dist/versions/3.0.0/index.cjs",
-  "module": "dist/versions/3.0.0/index.mjs",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
   "types": "dist/versions/3.0.0/index.d.ts",
   "exports": {
     ".": {
@@ -94,6 +94,7 @@
     "class-validator": "^0.14.2",
     "class-validator-jsonschema": "^5.1.0",
     "mixpanel": "^0.18.1",
+    "openapi3-ts": "^4.5.0",
     "reflect-metadata": "^0.2.2",
     "semver": "^7.7.2",
     "ts-deepmerge": "^7.0.3",

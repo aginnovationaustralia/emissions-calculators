@@ -26,6 +26,9 @@ importers:
       mixpanel:
         specifier: ^0.18.1
         version: 0.18.1
+      openapi3-ts:
+        specifier: ^4.5.0
+        version: 4.5.0
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -1838,6 +1841,9 @@ packages:
 
   openapi3-ts@3.2.0:
     resolution: {integrity: sha512-/ykNWRV5Qs0Nwq7Pc0nJ78fgILvOT/60OxEmB3v7yQ8a8Bwcm43D4diaYazG/KBn6czA+52XYy931WFLMCUeSg==}
+
+  openapi3-ts@4.5.0:
+    resolution: {integrity: sha512-jaL+HgTq2Gj5jRcfdutgRGLosCy/hT8sQf6VOy+P+g36cZOjI1iukdPnijC+4CmeRzg/jEllJUboEic2FhxhtQ==}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -4228,6 +4234,10 @@ snapshots:
       mimic-fn: 2.1.0
 
   openapi3-ts@3.2.0:
+    dependencies:
+      yaml: 2.8.1
+
+  openapi3-ts@4.5.0:
     dependencies:
       yaml: 2.8.1
 
