@@ -1,5 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsDefined, ValidateNested } from 'class-validator';
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
+import { SchemaObject } from 'openapi3-ts/oas31';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { PurchasedOffsetsOutput } from '../purchasedOffsets.output';
 import { Scope2Output } from '../scope2.output';
@@ -51,3 +53,8 @@ export class WildSeaFisheriesOutput {
   @IsDefined()
   intensities!: WildSeaFisheriesIntensitiesOutput[];
 }
+
+const schema: SchemaObject = validationMetadatasToSchemas();
+
+export { schema };
+

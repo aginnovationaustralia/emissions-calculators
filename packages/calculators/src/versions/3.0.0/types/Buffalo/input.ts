@@ -6,6 +6,7 @@ import {
   IsOptional,
   ValidateNested,
 } from 'class-validator';
+import 'reflect-metadata';
 import { TransformSingleOrArray } from '../../common/tools';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { DESCRIPTIONS } from '../descriptions.schema';

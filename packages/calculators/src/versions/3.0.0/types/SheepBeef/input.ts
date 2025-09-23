@@ -5,6 +5,8 @@ import {
   IsOptional,
   ValidateNested,
 } from 'class-validator';
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
+import { SchemaObject } from 'openapi3-ts/oas31';
 import { TransformSingleOrArray } from '../../common/tools';
 import { BeefComplete } from '../Beef/beef.input';
 import { SavannahBurning } from '../Beef/savannah.input';
@@ -54,3 +56,7 @@ export class SheepBeefInput {
   @IsOptional()
   vegetation: SheepBeefVegetation[] = [];
 }
+
+const schema: SchemaObject = validationMetadatasToSchemas();
+
+export { schema };

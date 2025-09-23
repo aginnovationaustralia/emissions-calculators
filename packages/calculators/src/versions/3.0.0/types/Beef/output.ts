@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsDefined, ValidateNested } from 'class-validator';
+import 'reflect-metadata';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { Scope2Output } from '../scope2.output';
 import { SequestrationOutput } from '../sequestration.output';
