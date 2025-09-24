@@ -26,6 +26,4 @@ export class FeedlotInput {
   vegetation!: FeedlotVegetation[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaFeedlotInput: SchemaObject = validationMetadatasToSchemas();

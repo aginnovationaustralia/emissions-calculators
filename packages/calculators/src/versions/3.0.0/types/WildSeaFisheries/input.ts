@@ -13,6 +13,5 @@ export class WildSeaFisheriesInput {
   enterprises!: WildSeaFisheriesEnterprise[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaWildSeaFisheriesInput: SchemaObject =
+  validationMetadatasToSchemas();

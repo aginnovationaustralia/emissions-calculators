@@ -45,6 +45,5 @@ export class HorticultureInput {
   vegetation!: HorticultureVegetation[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaHorticultureInput: SchemaObject =
+  validationMetadatasToSchemas();

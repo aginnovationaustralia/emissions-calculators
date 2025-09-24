@@ -50,6 +50,4 @@ export class DeerOutput {
   intermediate!: DeerIntermediateOutput[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaDeerOutput: SchemaObject = validationMetadatasToSchemas();

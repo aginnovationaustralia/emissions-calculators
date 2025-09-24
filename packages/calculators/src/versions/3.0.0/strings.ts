@@ -1,4 +1,4 @@
-export enum CalculatorName {
+export enum CalculatorNames {
   Beef = 'beef',
   Aquaculture = 'aquaculture',
   Buffalo = 'buffalo',
@@ -6,6 +6,7 @@ export enum CalculatorName {
   Dairy = 'dairy',
   Deer = 'deer',
   Feedlot = 'feedlot',
+  FeedlotBeef = 'feedlotbeef',
   Goat = 'goat',
   Grains = 'grains',
   Horticulture = 'horticulture',

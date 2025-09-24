@@ -63,6 +63,5 @@ export class SheepBeefOutput {
   intensities!: SheepBeefEmissionsIntensities;
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaSheepBeefOutput: SchemaObject =
+  validationMetadatasToSchemas();

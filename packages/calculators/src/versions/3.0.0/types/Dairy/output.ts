@@ -50,6 +50,4 @@ export class DairyOutput {
   intermediate!: DairyIntermediateOutput[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaDairyOutput: SchemaObject = validationMetadatasToSchemas();

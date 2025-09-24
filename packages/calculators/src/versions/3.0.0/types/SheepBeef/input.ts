@@ -57,6 +57,5 @@ export class SheepBeefInput {
   vegetation: SheepBeefVegetation[] = [];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaSheepBeefInput: SchemaObject =
+  validationMetadatasToSchemas();

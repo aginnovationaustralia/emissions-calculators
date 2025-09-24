@@ -54,6 +54,5 @@ export class HorticultureOutput {
   intensities!: HorticultureIntensitiesOutput[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaHorticultureOutput: SchemaObject =
+  validationMetadatasToSchemas();

@@ -52,6 +52,4 @@ export class SugarOutput {
   intensities!: SugarIntensitiesOutput[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaSugarOutput: SchemaObject = validationMetadatasToSchemas();

@@ -15,6 +15,5 @@ export class WildCatchFisheryInput {
   enterprises!: WildCatchFisheryEnterpriseInput[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaWildCatchFisheryInput: SchemaObject =
+  validationMetadatasToSchemas();

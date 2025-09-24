@@ -22,6 +22,5 @@ export class ProcessingInput {
   products!: ProductProcessingInput[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaProcessingInput: SchemaObject =
+  validationMetadatasToSchemas();

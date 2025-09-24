@@ -58,7 +58,4 @@ export class WildCatchFisheryOutput {
   intermediate!: WildCatchFisheryIntermediateOutput[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
-
+export const schemaWildCatchFisheryOutput: SchemaObject = validationMetadatasToSchemas();

@@ -45,6 +45,4 @@ export class RiceInput {
   vegetation!: RiceVegetation[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaRiceInput: SchemaObject = validationMetadatasToSchemas();

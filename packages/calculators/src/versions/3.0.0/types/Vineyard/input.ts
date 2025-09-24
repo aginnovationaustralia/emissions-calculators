@@ -19,6 +19,4 @@ export class VineyardInput {
   vegetation!: VineyardVegetation[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaVineyardInput: SchemaObject = validationMetadatasToSchemas();

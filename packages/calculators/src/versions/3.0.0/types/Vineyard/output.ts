@@ -52,6 +52,5 @@ export class VineyardOutput {
   intensities!: VineyardIntensitiesOutput[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaVineyardOutput: SchemaObject =
+  validationMetadatasToSchemas();

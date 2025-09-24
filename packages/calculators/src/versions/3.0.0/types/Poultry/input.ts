@@ -44,6 +44,4 @@ export class PoultryInput {
   vegetation!: PoultryVegetation[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaPoultryInput: SchemaObject = validationMetadatasToSchemas();

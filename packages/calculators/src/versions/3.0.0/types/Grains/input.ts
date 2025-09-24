@@ -45,6 +45,4 @@ export class GrainsInput {
   vegetation!: CropVegetation[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaGrainsInput: SchemaObject = validationMetadatasToSchemas();

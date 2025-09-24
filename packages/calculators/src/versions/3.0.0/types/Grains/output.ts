@@ -1,5 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsDefined, ValidateNested } from 'class-validator';
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
+import { SchemaObject } from 'openapi3-ts/oas31';
 import {
   IsNumberArray,
   SchemaDescription,
@@ -60,3 +62,5 @@ export class GrainsOutput {
   @IsDefined()
   intensities!: number[];
 }
+
+export const schemaGrainsOutput: SchemaObject = validationMetadatasToSchemas();

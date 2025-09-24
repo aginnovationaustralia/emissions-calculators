@@ -49,6 +49,4 @@ export class FeedlotOutput {
   intensities!: FeedlotEmissionIntensities;
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaFeedlotOutput: SchemaObject = validationMetadatasToSchemas();

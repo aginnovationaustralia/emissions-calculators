@@ -57,6 +57,5 @@ export class ProcessingOutput {
   intermediate!: ProcessingIntermediateOutput[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaProcessingOutput: SchemaObject =
+  validationMetadatasToSchemas();

@@ -54,7 +54,4 @@ export class WildSeaFisheriesOutput {
   intensities!: WildSeaFisheriesIntensitiesOutput[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
-
+export const schemaWildSeaFisheriesOutput: SchemaObject = validationMetadatasToSchemas();

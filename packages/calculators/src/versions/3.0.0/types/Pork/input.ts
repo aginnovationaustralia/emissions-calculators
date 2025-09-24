@@ -41,6 +41,4 @@ export class PorkInput {
   vegetation!: AllocatedVegetation[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaPorkInput: SchemaObject = validationMetadatasToSchemas();

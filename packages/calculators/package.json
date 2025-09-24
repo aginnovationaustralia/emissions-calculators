@@ -3,59 +3,12 @@
   "version": "0.1.5",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
-  "types": "dist/versions/3.0.0/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/versions/3.0.0/index.d.ts",
-      "import": "./dist/versions/3.0.0/index.mjs",
-      "require": "./dist/versions/3.0.0/index.cjs"
-    },
-    "./versions/3.0.0": {
-      "types": "./dist/versions/3.0.0/index.d.ts",
-      "import": "./dist/versions/3.0.0/index.mjs",
-      "require": "./dist/versions/3.0.0/index.cjs"
-    },
-    "./versions/3.0.0/types": {
-      "types": "./dist/versions/3.0.0/types/index.d.ts",
-      "import": "./dist/versions/3.0.0/types/index.mjs",
-      "require": "./dist/versions/3.0.0/types/index.cjs"
-    },
-    "./versions/3.0.0/*": {
-      "types": "./dist/versions/3.0.0/*.d.ts",
-      "import": "./dist/versions/3.0.0/*.mjs",
-      "require": "./dist/versions/3.0.0/*.cjs"
-    },
-    "./versions/3.0.0/*/*": {
-      "types": "./dist/versions/3.0.0/*/*.d.ts",
-      "import": "./dist/versions/3.0.0/*/*.mjs",
-      "require": "./dist/versions/3.0.0/*/*.cjs"
-    },
-    "./versions/*": {
-      "types": "./dist/versions/*.d.ts",
-      "import": "./dist/versions/*.mjs",
-      "require": "./dist/versions/*.cjs"
-    },
-    "./*": {
-      "types": "./dist/versions/3.0.0/*.d.ts",
-      "import": "./dist/versions/3.0.0/*.mjs",
-      "require": "./dist/versions/3.0.0/*.cjs"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "versions/*": [
-        "dist/versions/*"
-      ],
-      "*": [
-        "dist/versions/3.0.0/*"
-      ]
-    }
-  },
+  "types": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],
   "scripts": {
-    "build": "npm run generate-types && rollup -c",
+    "build": "rollup -c",
     "generate-types": "node -e \"import('./scripts/generate-type-exports.js').then(m => m.generateTypeExports())\"",
     "dev": "rollup -c --watch",
     "clean": "rm -rf dist",

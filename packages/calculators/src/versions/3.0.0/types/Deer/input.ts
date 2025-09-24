@@ -59,6 +59,4 @@ export class DeerInput {
   vegetation: DeerVegetation[] = [];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaDeerInput: SchemaObject = validationMetadatasToSchemas();

@@ -45,6 +45,4 @@ export class SugarInput {
   vegetation!: SugarVegetation[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaSugarInput: SchemaObject = validationMetadatasToSchemas();

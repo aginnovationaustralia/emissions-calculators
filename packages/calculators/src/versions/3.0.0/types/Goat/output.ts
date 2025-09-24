@@ -49,6 +49,4 @@ export class GoatOutput {
   intermediate!: GoatIntermediateOutput[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaGoatOutput: SchemaObject = validationMetadatasToSchemas();

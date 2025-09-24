@@ -49,6 +49,4 @@ export class PorkOutput {
   intermediate!: PorkIntermediateOutput[];
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaPorkOutput: SchemaObject = validationMetadatasToSchemas();

@@ -50,6 +50,4 @@ export class RiceOutput {
   intensities!: RiceEmissionsIntensities;
 }
 
-const schema: SchemaObject = validationMetadatasToSchemas();
-
-export { schema };
+export const schemaRiceOutput: SchemaObject = validationMetadatasToSchemas();
