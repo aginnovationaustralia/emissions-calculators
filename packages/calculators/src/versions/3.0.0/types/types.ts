@@ -1,9 +1,7 @@
-import { HasAllKeys } from '@/utils/has-all-keys';
 import { BeefClasses as BeefClassesInput } from './Beef/beefclasses.input';
 import { BuffaloClasses as BuffaloClassesInput } from './Buffalo/buffaloclasses.input';
 import { DeerClasses as DeerClassesInput } from './Deer/deerclasses.input';
 import { GoatClasses as GoatClassesInput } from './Goat/goatclasses.input';
-import { PorkClasses as PorkClassesInput } from './Pork/porkclasses.input';
 import { SheepClasses as SheepClassesInput } from './Sheep/sheepclasses.input';
 
 export enum StationaryFuelTypes {
@@ -244,7 +242,8 @@ export const PorkClasses = [
 ] as const;
 export type PorkClass = (typeof PorkClasses)[number];
 
-export const PorkClassesAPI: HasAllKeys<PorkClassesInput> = [
+// TODO improve iteration of livestock classes to ensure none are missed
+export const PorkClassesAPI = [
   'sows',
   'boars',
   'gilts',
@@ -252,7 +251,7 @@ export const PorkClassesAPI: HasAllKeys<PorkClassesInput> = [
   'weaners',
   'growers',
   'slaughterPigs',
-];
+] as const;
 
 export const ManureManagementSystems = [
   'outdoorSystems',
