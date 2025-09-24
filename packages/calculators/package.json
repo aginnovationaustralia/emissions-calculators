@@ -1,6 +1,6 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/versions/3.0.0/index.d.ts",
