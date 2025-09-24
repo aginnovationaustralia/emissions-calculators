@@ -52,5 +52,3 @@ export class PoultryOutput {
   @IsDefined()
   intensities!: PoultryEmissionsIntensities;
 }
-
-

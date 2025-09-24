@@ -1,10 +1,10 @@
 import { plainToClass, Transform } from 'class-transformer';
 import {
-    IsBoolean,
-    IsDefined,
-    IsEnum,
-    IsOptional,
-    ValidateNested,
+  IsBoolean,
+  IsDefined,
+  IsEnum,
+  IsOptional,
+  ValidateNested,
 } from 'class-validator';
 import { singleToArray, TransformSingleOrArray } from '../../common/tools';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
@@ -75,5 +75,3 @@ export class BeefInput {
   @IsOptional()
   vegetation: BeefVegetation[] = [];
 }
-
-

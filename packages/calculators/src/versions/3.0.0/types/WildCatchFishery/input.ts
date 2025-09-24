@@ -12,5 +12,3 @@ export class WildCatchFisheryInput {
   @IsDefined()
   enterprises!: WildCatchFisheryEnterpriseInput[];
 }
-
-

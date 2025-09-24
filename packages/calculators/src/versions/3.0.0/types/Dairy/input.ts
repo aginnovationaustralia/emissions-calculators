@@ -3,10 +3,10 @@ import { TransformSingleOrArray } from '../../common/tools';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import {
-    DairyProductionSystem,
-    DairyProductionSystems,
-    State,
-    States,
+  DairyProductionSystem,
+  DairyProductionSystems,
+  State,
+  States,
 } from '../types';
 import { DairyComplete } from './dairy.input';
 import { DairyVegetation } from './vegetation.input';
@@ -39,5 +39,3 @@ export class DairyInput {
   @IsDefined()
   vegetation!: DairyVegetation[];
 }
-
-

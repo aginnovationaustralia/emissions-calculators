@@ -20,7 +20,10 @@ describe('Fuel Tests', () => {
   describe('Stationary Fuels (inc. Natural Gas)', () => {
     const stationaryFuel: StationaryFuelInput[] = Object.values(
       StationaryFuelTypes,
-    ).map((type) => ({ type, amountLitres: 1000000 }));
+    ).map((type) => ({
+      type,
+      amountLitres: 1000000,
+    }));
     const fuelInput = {
       stationaryFuel,
       transportFuel: [],
@@ -47,7 +50,10 @@ describe('Fuel Tests', () => {
   describe('Transport fuels', () => {
     const transportFuel: TransportFuelInput[] = Object.values(
       TransportFuelTypes,
-    ).map((type) => ({ type, amountLitres: 1000000 }));
+    ).map((type) => ({
+      type,
+      amountLitres: 1000000,
+    }));
     const fuelInput = {
       stationaryFuel: [],
       transportFuel,

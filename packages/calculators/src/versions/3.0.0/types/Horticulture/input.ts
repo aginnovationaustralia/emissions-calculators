@@ -1,10 +1,10 @@
 import {
-    IsDefined,
-    IsEnum,
-    IsNumber,
-    Max,
-    Min,
-    ValidateNested,
+  IsDefined,
+  IsEnum,
+  IsNumber,
+  Max,
+  Min,
+  ValidateNested,
 } from 'class-validator';
 import 'reflect-metadata';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
@@ -42,5 +42,3 @@ export class HorticultureInput {
   @IsDefined()
   vegetation!: HorticultureVegetation[];
 }
-
-

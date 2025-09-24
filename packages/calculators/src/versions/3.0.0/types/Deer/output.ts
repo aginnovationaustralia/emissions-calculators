@@ -46,5 +46,3 @@ export class DeerOutput {
   @IsDefined()
   intermediate!: DeerIntermediateOutput[];
 }
-
-

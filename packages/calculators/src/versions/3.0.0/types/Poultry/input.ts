@@ -41,5 +41,3 @@ export class PoultryInput {
   @IsDefined()
   vegetation!: PoultryVegetation[];
 }
-
-

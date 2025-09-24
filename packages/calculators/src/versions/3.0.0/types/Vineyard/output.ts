@@ -49,5 +49,3 @@ export class VineyardOutput {
   @IsDefined()
   intensities!: VineyardIntensitiesOutput[];
 }
-
-

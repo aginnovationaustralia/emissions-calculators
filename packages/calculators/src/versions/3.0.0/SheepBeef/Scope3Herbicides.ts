@@ -10,7 +10,8 @@ export function calculateScope3Herbicide(
   const { constants } = context;
 
   const herbicideEnergyProduction =
-    constants.ENERGY_TO_MANUFACTURE.HERBICIDE_ENERGY * constants.ENERGY_TO_MANUFACTURE.HERBICIDE_EF;
+    constants.ENERGY_TO_MANUFACTURE.HERBICIDE_ENERGY *
+    constants.ENERGY_TO_MANUFACTURE.HERBICIDE_EF;
   const herbicideOtherEnergyProduction =
     constants.ENERGY_TO_MANUFACTURE.HERBICIDEGENERAL_ENERGY *
     constants.ENERGY_TO_MANUFACTURE.HERBICIDEGENERAL_EF;

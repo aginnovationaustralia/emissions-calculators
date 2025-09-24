@@ -8,4 +8,4 @@ export const LivestockSourceLocations = [
   'TAS',
   'NT',
 ] as const;
-export type LivestockSourceLocation = typeof LivestockSourceLocations[number];
+export type LivestockSourceLocation = (typeof LivestockSourceLocations)[number];

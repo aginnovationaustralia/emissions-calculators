@@ -23,5 +23,3 @@ export class FeedlotInput {
   @IsDefined()
   vegetation!: FeedlotVegetation[];
 }
-
-

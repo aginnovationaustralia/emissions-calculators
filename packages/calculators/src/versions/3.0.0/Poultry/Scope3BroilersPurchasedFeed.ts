@@ -46,7 +46,8 @@ export function calculateScope3PurchasedFeed(
 }
 
 export function calculateScope3BroilersPurchasedFeed(
-  groups: BroilerGroup[], context: ExecutionContext,
+  groups: BroilerGroup[],
+  context: ExecutionContext,
 ) {
   return groups.reduce((acc, group) => {
     return (

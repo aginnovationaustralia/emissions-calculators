@@ -34,5 +34,3 @@ export class SheepInput {
   @IsDefined()
   vegetation!: SheepVegetation[];
 }
-
-

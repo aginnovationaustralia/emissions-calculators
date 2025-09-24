@@ -1,9 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { InputValidationError } from '../../../..';
-import {
-  validateCalculatorInput,
-} from '../../calculators';
+import { validateCalculatorInput } from '../../calculators';
 import { SheepBeefInput } from '../../types/SheepBeef/input';
 import { CustomisedFertiliser } from '../../types/types';
 import { beefTestInput } from '../Beef/beef.data';

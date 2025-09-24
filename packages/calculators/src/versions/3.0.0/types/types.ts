@@ -655,7 +655,7 @@ export enum AquacultureProductionSystem {
   OYSTER_FARMING = 'Oyster Farming',
   PEARL_FARMING = 'Pearl Farming',
   PRAWN_FARMING = 'Prawn Farming',
-  SEAWEED_MACROALGAE_FARMING = 'Seaweed and Macroalgae Farming'
+  SEAWEED_MACROALGAE_FARMING = 'Seaweed and Macroalgae Farming',
 }
 
 export enum AquacultureBait {

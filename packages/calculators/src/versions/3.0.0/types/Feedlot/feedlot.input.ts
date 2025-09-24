@@ -1,25 +1,25 @@
 import { Type } from 'class-transformer';
 import {
-    IsDefined,
-    IsEnum,
-    IsNumber,
-    IsOptional,
-    IsString,
-    Max,
-    Min,
-    ValidateNested,
+  IsDefined,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+  ValidateNested,
 } from 'class-validator';
 import 'reflect-metadata';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { Fertiliser } from '../fertiliser.input';
 import {
-    ElectricitySource,
-    ElectricitySources,
-    FeedlotSystem,
-    FeedlotSystems,
-    TruckType,
-    TruckTypes,
+  ElectricitySource,
+  ElectricitySources,
+  FeedlotSystem,
+  FeedlotSystems,
+  TruckType,
+  TruckTypes,
 } from '../types';
 import { FeedlotGroup } from './group.input';
 import { FeedlotPurchases } from './purchases.input';
@@ -138,5 +138,3 @@ export class FeedlotComplete {
   @IsDefined()
   limestoneFraction!: number;
 }
-
-

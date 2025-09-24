@@ -1,7 +1,10 @@
 import { ExecutionContext } from '../executionContext';
 import { SugarCrop } from '../types/Sugar/sugar.input';
 
-export function calculateScope1Urea(crop: SugarCrop, context: ExecutionContext) {
+export function calculateScope1Urea(
+  crop: SugarCrop,
+  context: ExecutionContext,
+) {
   const { constants } = context;
 
   // (ureaApplicationC8)
@@ -15,7 +18,10 @@ export function calculateScope1Urea(crop: SugarCrop, context: ExecutionContext) 
 
   // (ureaApplicationC19)
   const massFertiliserGg =
-    totalMassOfFertiliser * constants.FERTILISER_EF * constants.GWP_FACTORSC13 * 10 ** -3;
+    totalMassOfFertiliser *
+    constants.FERTILISER_EF *
+    constants.GWP_FACTORSC13 *
+    10 ** -3;
 
   // (dataSummary_B7)
   const total = massFertiliserGg * 1000;

@@ -17,5 +17,3 @@ export class GrainsIntensitiesOutput {
   @IsDefined()
   grainsIncludingSequestration!: number;
 }
-
-

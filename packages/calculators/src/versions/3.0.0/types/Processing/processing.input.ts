@@ -1,13 +1,13 @@
 import { Type } from 'class-transformer';
 import {
-    IsDefined,
-    IsEnum,
-    IsNumber,
-    IsOptional,
-    IsString,
-    Max,
-    Min,
-    ValidateNested,
+  IsDefined,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+  ValidateNested,
 } from 'class-validator';
 import 'reflect-metadata';
 import { FluidWasteInput } from '../common/fluid-waste.input';
@@ -84,5 +84,3 @@ export class ProductProcessingInput {
   @SchemaDescription(DESCRIPTIONS.CARBON_OFFSETS)
   carbonOffsets?: number;
 }
-
-

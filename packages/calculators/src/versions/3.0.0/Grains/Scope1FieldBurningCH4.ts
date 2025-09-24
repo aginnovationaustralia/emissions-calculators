@@ -1,7 +1,10 @@
 import { ExecutionContext } from '../executionContext';
 import { GrainsCrop } from '../types/Grains/crop.input';
 
-export function calculateScope1FieldBurning(crop: GrainsCrop, context: ExecutionContext) {
+export function calculateScope1FieldBurning(
+  crop: GrainsCrop,
+  context: ExecutionContext,
+) {
   const { constants } = context;
 
   // (cropResiduesC6)
@@ -25,22 +28,25 @@ export function calculateScope1FieldBurning(crop: GrainsCrop, context: Execution
   // (fieldBurningC22)
   const massOfFuelBurnt =
     annualProduction *
-      residueToCropRatio *
-      fractionOfResidueAtBurn *
-      dryMatterContent *
-      constants.BURNING_EFFICIENCY_RESIDUE *
-      crop.fractionOfAnnualCropBurnt;
+    residueToCropRatio *
+    fractionOfResidueAtBurn *
+    dryMatterContent *
+    constants.BURNING_EFFICIENCY_RESIDUE *
+    crop.fractionOfAnnualCropBurnt;
 
   // (fieldBurningC29)
   const annualMethaneFromBurning =
     massOfFuelBurnt *
-      carbonMassFraction *
-      constants.BURNING_METHANE_EF *
-      constants.GWP_FACTORSC14;
+    carbonMassFraction *
+    constants.BURNING_METHANE_EF *
+    constants.GWP_FACTORSC14;
 
   // (fieldBurningC39)
   const annualN2OFromBurning =
-    massOfFuelBurnt * nitrogenAboveGround * constants.BURNING_N2O_EF * constants.GWP_FACTORSC15;
+    massOfFuelBurnt *
+    nitrogenAboveGround *
+    constants.BURNING_N2O_EF *
+    constants.GWP_FACTORSC15;
 
   // (fieldBurningC31)
   const totalMethaneGgCO2 = annualMethaneFromBurning * constants.GWP_FACTORSC5;

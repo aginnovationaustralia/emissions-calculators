@@ -3,7 +3,4 @@ import { loadConstants } from './constants/constantsLoader';
 export * from './calculators';
 export { CalculatorName } from './strings';
 
-export {
-  constants, loadConstants
-};
-
+export { constants, loadConstants };

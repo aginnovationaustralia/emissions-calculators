@@ -54,5 +54,3 @@ export class ProcessingOutput {
   @IsDefined()
   intermediate!: ProcessingIntermediateOutput[];
 }
-
-

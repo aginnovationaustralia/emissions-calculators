@@ -1,7 +1,10 @@
 import { ExecutionContext } from '../executionContext';
 import { Fertiliser } from '../types/fertiliser.input';
 
-export function calculateScope1Urea(fertiliser: Fertiliser, context: ExecutionContext) {
+export function calculateScope1Urea(
+  fertiliser: Fertiliser,
+  context: ExecutionContext,
+) {
   const { constants } = context;
 
   // (ureaApplicationC29)
@@ -13,7 +16,10 @@ export function calculateScope1Urea(fertiliser: Fertiliser, context: ExecutionCo
 
   // (ureaApplicationC37)
   const carbon =
-    totalMassFertiliser * constants.CARBON_FRACTION_OF_UREA * constants.GWP_FACTORSC13 * 10 ** -3;
+    totalMassFertiliser *
+    constants.CARBON_FRACTION_OF_UREA *
+    constants.GWP_FACTORSC13 *
+    10 ** -3;
 
   return carbon;
 }

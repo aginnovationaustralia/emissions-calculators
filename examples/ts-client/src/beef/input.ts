@@ -1,4 +1,3 @@
-
 // Create a sample beef input (simplified for demonstration)
 export const beefInputData = {
   state: 'nsw' as const,
@@ -13,33 +12,33 @@ export const beefInputData = {
             liveweight: 600,
             liveweightGain: 50,
             crudeProtein: 12,
-            dryMatterDigestibility: 65
+            dryMatterDigestibility: 65,
           },
           winter: {
             head: 50,
             liveweight: 580,
             liveweightGain: 30,
             crudeProtein: 10,
-            dryMatterDigestibility: 60
+            dryMatterDigestibility: 60,
           },
           spring: {
             head: 50,
             liveweight: 620,
             liveweightGain: 80,
             crudeProtein: 14,
-            dryMatterDigestibility: 70
+            dryMatterDigestibility: 70,
           },
           summer: {
             head: 50,
             liveweight: 650,
             liveweightGain: 60,
             crudeProtein: 13,
-            dryMatterDigestibility: 68
+            dryMatterDigestibility: 68,
           },
           headSold: 10,
           saleWeight: 650,
-          purchases: []
-        }
+          purchases: [],
+        },
       },
       limestone: 0,
       limestoneFraction: 0,
@@ -48,7 +47,7 @@ export const beefInputData = {
         pastureDryland: 0,
         pastureIrrigated: 0,
         cropsDryland: 0,
-        cropsIrrigated: 0
+        cropsIrrigated: 0,
       },
       diesel: 0,
       petrol: 0,
@@ -59,7 +58,7 @@ export const beefInputData = {
         weanerBlock: 0,
         weanerBlockUrea: 0,
         drySeasonMix: 0,
-        drySeasonMixUrea: 0
+        drySeasonMixUrea: 0,
       },
       electricitySource: 'State Grid' as const,
       electricityRenewable: 0,
@@ -73,10 +72,10 @@ export const beefInputData = {
         autumn: 0,
         winter: 0,
         spring: 0,
-        summer: 0
-      }
-    }
+        summer: 0,
+      },
+    },
   ],
   burning: [],
-  vegetation: []
+  vegetation: [],
 };

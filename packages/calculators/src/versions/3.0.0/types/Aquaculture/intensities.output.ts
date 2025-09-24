@@ -21,5 +21,3 @@ export class AquacultureIntensitiesOutput {
   @IsDefined()
   aquacultureIncludingCarbonOffsets!: number;
 }
-
-

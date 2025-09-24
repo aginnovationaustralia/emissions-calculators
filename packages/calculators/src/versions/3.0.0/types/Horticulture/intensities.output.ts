@@ -22,5 +22,3 @@ export class HorticultureIntensitiesOutput {
   @IsDefined()
   tonnesCropIncludingSequestration!: number;
 }
-
-
