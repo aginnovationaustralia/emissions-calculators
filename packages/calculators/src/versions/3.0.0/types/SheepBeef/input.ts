@@ -1,9 +1,9 @@
 import {
-    IsBoolean,
-    IsDefined,
-    IsEnum,
-    IsOptional,
-    ValidateNested,
+  IsBoolean,
+  IsDefined,
+  IsEnum,
+  IsOptional,
+  ValidateNested,
 } from 'class-validator';
 import { TransformSingleOrArray } from '../../common/tools';
 import { BeefComplete } from '../Beef/beef.input';
@@ -54,5 +54,3 @@ export class SheepBeefInput {
   @IsOptional()
   vegetation: SheepBeefVegetation[] = [];
 }
-
-

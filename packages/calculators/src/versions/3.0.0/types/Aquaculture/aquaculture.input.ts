@@ -125,5 +125,3 @@ export class AquacultureEnterpriseInput {
   @SchemaDescription(DESCRIPTIONS.CARBON_OFFSETS)
   carbonOffsets?: number;
 }
-
-

@@ -2,9 +2,9 @@ import { IsBoolean, IsDefined, IsEnum, ValidateNested } from 'class-validator';
 import { TransformSingleOrArray } from '../../common/tools';
 import { AllocatedVegetation } from '../allocated-vegetation.input';
 import {
-    DeprecatedSchemaDescription,
-    SchemaDescription,
-    TypeWithArraySchema,
+  DeprecatedSchemaDescription,
+  SchemaDescription,
+  TypeWithArraySchema,
 } from '../decorator.schema';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { State, States } from '../types';
@@ -38,5 +38,3 @@ export class PorkInput {
   @IsDefined()
   vegetation!: AllocatedVegetation[];
 }
-
-

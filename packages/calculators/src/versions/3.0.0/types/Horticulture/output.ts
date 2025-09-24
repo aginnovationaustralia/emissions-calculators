@@ -51,5 +51,3 @@ export class HorticultureOutput {
   @IsDefined()
   intensities!: HorticultureIntensitiesOutput[];
 }
-
-

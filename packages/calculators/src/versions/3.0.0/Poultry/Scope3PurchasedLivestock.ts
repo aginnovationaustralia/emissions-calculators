@@ -18,7 +18,8 @@ export function calculateScope3PurchasedLivestock(
 
   // (Purchased_Poultry_EmissionsF3)
   const conventionalEmissions =
-    conventionalLiveweight * constants.PURCHASED_LIVESTOCK_EF.POULTRY_CONVENTIONAL;
+    conventionalLiveweight *
+    constants.PURCHASED_LIVESTOCK_EF.POULTRY_CONVENTIONAL;
 
   // (Purchased_Poultry_EmissionsG3)
   const conventionalTonnes = conventionalEmissions / 1000;

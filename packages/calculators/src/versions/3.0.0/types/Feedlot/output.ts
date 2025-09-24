@@ -46,5 +46,3 @@ export class FeedlotOutput {
   @IsDefined()
   intensities!: FeedlotEmissionIntensities;
 }
-
-

@@ -93,5 +93,3 @@ export class CottonIntensitiesOutput {
   @IsDefined()
   seedEconomicAllocation!: number;
 }
-
-

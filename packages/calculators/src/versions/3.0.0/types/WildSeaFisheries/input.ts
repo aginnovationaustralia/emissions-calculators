@@ -10,4 +10,3 @@ export class WildSeaFisheriesInput {
   @IsDefined()
   enterprises!: WildSeaFisheriesEnterprise[];
 }
-

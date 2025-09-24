@@ -6,6 +6,5 @@ export function calculateScope3Fertiliser(
   cotton: CottonCrop,
   context: ExecutionContext,
 ) {
-    return calculateScope3FertiliserGrains(cotton, context).total;
-  }
-
+  return calculateScope3FertiliserGrains(cotton, context).total;
+}

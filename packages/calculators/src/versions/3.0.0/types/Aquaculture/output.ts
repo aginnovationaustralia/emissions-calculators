@@ -55,5 +55,3 @@ export class AquacultureOutput {
   @IsDefined()
   intermediate!: AquacultureIntermediateOutput[];
 }
-
-

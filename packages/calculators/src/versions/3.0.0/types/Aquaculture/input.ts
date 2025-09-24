@@ -12,5 +12,3 @@ export class AquacultureInput {
   @IsDefined()
   enterprises!: AquacultureEnterpriseInput[];
 }
-
-

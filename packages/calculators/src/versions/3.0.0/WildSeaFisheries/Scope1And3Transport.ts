@@ -13,7 +13,8 @@ export function calculateScope1And3Transport(
     (acc, segment) => {
       // (TransportD41)
       const fuelUsedLitres =
-        segment.distance * constants.FISHERIES_TRANSPORT_FUEL_USAGE[segment.type];
+        segment.distance *
+        constants.FISHERIES_TRANSPORT_FUEL_USAGE[segment.type];
 
       // (TransportE41)
       const fuelUsedKL = fuelUsedLitres / 1000;

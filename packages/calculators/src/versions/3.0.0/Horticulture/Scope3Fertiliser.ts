@@ -1,14 +1,18 @@
 import { ExecutionContext } from '../executionContext';
 import { HorticultureCrop } from '../types/Horticulture/horticulture.input';
 
-export function calculateScope3Fertiliser(crop: HorticultureCrop, context: ExecutionContext) {
+export function calculateScope3Fertiliser(
+  crop: HorticultureCrop,
+  context: ExecutionContext,
+) {
   const { constants } = context;
   // (embeddedEmissions_C4)
   const ureaTonnes = (crop.ureaApplication * crop.areaSown) / 1000;
 
   // (embeddedEmissions_E133)
   const elementNEF =
-    constants.COMPONENTS_ENERGY_EF.N.TOTAL_ENERGY * constants.COMPONENTS_ENERGY_EF.N.EF;
+    constants.COMPONENTS_ENERGY_EF.N.TOTAL_ENERGY *
+    constants.COMPONENTS_ENERGY_EF.N.EF;
 
   // (embeddedEmissions_C125)
   const ureaTotalEnergy = elementNEF * constants.FERTILISER_CONTENT.UREA.N;
@@ -25,7 +29,8 @@ export function calculateScope3Fertiliser(crop: HorticultureCrop, context: Execu
   // (embeddedEmissions_C124)
   const mapTotalEnergy = elementNEF * constants.FERTILISER_CONTENT.MAP.N;
   // (embeddedEmissions_C126)
-  const soaTotalEnergy = elementNEF * constants.FERTILISER_CONTENT.SULPHATE_OF_AMMONIA.N;
+  const soaTotalEnergy =
+    elementNEF * constants.FERTILISER_CONTENT.SULPHATE_OF_AMMONIA.N;
 
   // (embeddedEmissions_E122, embeddedEmissions_E5)
   const averageDAPMAPSOA =
@@ -37,7 +42,8 @@ export function calculateScope3Fertiliser(crop: HorticultureCrop, context: Execu
   const phosphorusTonnes = (crop.phosphorusApplication * crop.areaSown) / 1000;
   // (embeddedEmissions_E134)
   const elementPEF =
-    constants.COMPONENTS_ENERGY_EF.P.TOTAL_ENERGY * constants.COMPONENTS_ENERGY_EF.P.EF;
+    constants.COMPONENTS_ENERGY_EF.P.TOTAL_ENERGY *
+    constants.COMPONENTS_ENERGY_EF.P.EF;
   // (embeddedEmissions_F6)
   const phosphorusTotalGHG = phosphorusTonnes * elementPEF;
 
@@ -45,7 +51,8 @@ export function calculateScope3Fertiliser(crop: HorticultureCrop, context: Execu
   const potassiumTonnes = (crop.potassiumApplication * crop.areaSown) / 1000;
   // (embeddedEmissions_E135)
   const elementKEF =
-    constants.COMPONENTS_ENERGY_EF.K.TOTAL_ENERGY * constants.COMPONENTS_ENERGY_EF.K.EF;
+    constants.COMPONENTS_ENERGY_EF.K.TOTAL_ENERGY *
+    constants.COMPONENTS_ENERGY_EF.K.EF;
   // (embeddedEmissions_F7)
   const potassiumTotalGHG = potassiumTonnes * elementKEF;
 
@@ -53,7 +60,8 @@ export function calculateScope3Fertiliser(crop: HorticultureCrop, context: Execu
   const sulfurTonnes = (crop.sulfurApplication * crop.areaSown) / 1000;
   // (embeddedEmissions_E136)
   const elementSEF =
-    constants.COMPONENTS_ENERGY_EF.S.TOTAL_ENERGY * constants.COMPONENTS_ENERGY_EF.S.EF;
+    constants.COMPONENTS_ENERGY_EF.S.TOTAL_ENERGY *
+    constants.COMPONENTS_ENERGY_EF.S.EF;
   // (embeddedEmissions_F8)
   const sulfurTotalGHG = sulfurTonnes * elementSEF;
 

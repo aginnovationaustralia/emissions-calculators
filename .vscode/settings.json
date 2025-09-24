@@ -2,5 +2,6 @@
     "cSpell.words": [
         "aginnovationaustralia",
         "TSES"
-    ]
+    ],
+    "editor.formatOnSave": true
 }

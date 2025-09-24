@@ -46,5 +46,3 @@ export class DairyOutput {
   @IsDefined()
   intermediate!: DairyIntermediateOutput[];
 }
-
-

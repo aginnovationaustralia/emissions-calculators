@@ -46,5 +46,3 @@ export class PorkOutput {
   @IsDefined()
   intermediate!: PorkIntermediateOutput[];
 }
-
-

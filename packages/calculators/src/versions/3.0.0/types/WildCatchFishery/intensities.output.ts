@@ -21,5 +21,3 @@ export class WildCatchFisheryIntensitiesOutput {
   @IsDefined()
   wildCatchFisheryIncludingCarbonOffsets!: number;
 }
-
-

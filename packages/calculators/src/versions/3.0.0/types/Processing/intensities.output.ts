@@ -29,5 +29,3 @@ export class ProcessingIntensitiesOutput {
   @IsDefined()
   processingIncludingCarbonOffsets!: number;
 }
-
-

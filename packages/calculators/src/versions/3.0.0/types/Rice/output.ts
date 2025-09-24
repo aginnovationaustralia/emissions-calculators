@@ -47,5 +47,3 @@ export class RiceOutput {
   @IsDefined()
   intensities!: RiceEmissionsIntensities;
 }
-
-

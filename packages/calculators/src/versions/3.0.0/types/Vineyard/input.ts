@@ -16,5 +16,3 @@ export class VineyardInput {
   @IsDefined()
   vegetation!: VineyardVegetation[];
 }
-
-

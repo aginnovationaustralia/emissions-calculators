@@ -46,5 +46,3 @@ export class BeefOutput {
   @IsDefined()
   intensities!: BeefEmissionsIntensities;
 }
-
-

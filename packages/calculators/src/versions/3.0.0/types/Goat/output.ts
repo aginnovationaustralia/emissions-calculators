@@ -46,5 +46,3 @@ export class GoatOutput {
   @IsDefined()
   intermediate!: GoatIntermediateOutput[];
 }
-
-

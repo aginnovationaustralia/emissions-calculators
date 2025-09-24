@@ -16,7 +16,7 @@ export const REGIONS = {
 };
 
 export const constants: Constants = {
-  /** 
+  /**
    * @description Feed availability rate for sheep across seasons and states, in tonnes per hectare
    * @inventory2018 Appendix 5.D.3
    * @units t/ha
@@ -68,7 +68,7 @@ export const constants: Constants = {
     },
   },
 
-  /** 
+  /**
    * @description Crude protein content for sheep across seasons and states, as percentage
    * @inventory2018 Appendix 5.D.4
    * @units %
@@ -121,7 +121,7 @@ export const constants: Constants = {
     },
   },
 
-  /** 
+  /**
    * @description Dry matter digestibility for sheep across seasons and states, as percentage
    * @inventory2018 Appendix 5.D.2
    * @units %
@@ -174,7 +174,7 @@ export const constants: Constants = {
     },
   },
 
-  /** 
+  /**
    * @description Dry matter digestibility for beef across seasons and states, as percentage
    * @inventory2018 Appendix 5.B.3
    * @units %
@@ -227,7 +227,7 @@ export const constants: Constants = {
     },
   },
 
-  /** 
+  /**
    * @description Crude protein content for beef across seasons and states, as percentage
    * @inventory2018 Appendix 5.B.4
    * @units %
@@ -280,7 +280,7 @@ export const constants: Constants = {
     },
   },
 
-  /** 
+  /**
    * @description Standard reference weight for sheep across seasons and states, in kilograms
    * @inventory2018 Appendix 5.D.7
    * @units kg
@@ -464,7 +464,7 @@ export const constants: Constants = {
     },
   },
 
-  /** 
+  /**
    * @description Energy required to manufacture herbicides and insecticides
    * @reference O'Halloran, N., Fisher, P., Rab, A., & Victoria, D. P. I. (2008). Preliminary estimation of the carbon footprint of the Australian vegetable industry (pp. 1-39). Discussion paper 4. Vegetable Industry Carbon Footprint Scoping Study. 2008, Horticulture Australia Ltd. Table 7
    */
@@ -484,7 +484,7 @@ export const constants: Constants = {
   },
 
   // Embedded emissions M7
-  /** 
+  /**
    * @description Relative amount of CO2, CH4, and N2O emitted by herbicides
    * @type Proportion
    */
@@ -492,7 +492,7 @@ export const constants: Constants = {
     HERBICIDE: { CO2: 1.0, CH4: 0.0, N2O: 0.0 },
   },
 
-  /** 
+  /**
    * @description Amount of nitrogen excreted by beef cattle across class and state, in kilograms per year
    * @units kg/year
    */
@@ -691,7 +691,7 @@ export const constants: Constants = {
     },
   },
 
-  /** 
+  /**
    * @description Electricity emission factors for each state and Australia, in kg CO2-e/kWh
    * @reference Primary data sources comprise National Greenhouse and Energy Reporting (Measurement) Determination 2008 (Schedule 1), Australian Energy Statistics, Clean Energy Regulator, and AEMO data and Department of Climate Change, Energy, the Environment and Water.
    * @units kg CO2-e/kWh
@@ -740,7 +740,7 @@ export const constants: Constants = {
   },
 
   // (embeddedEmissionsM15)
-  /** 
+  /**
    * @description Material breakdown for supplementation, in kg CO2-e/kg product
    * @reference AusLCI Published Processes
    * @link https://www.auslci.com.au/index.php/EmissionFactors
@@ -886,7 +886,6 @@ export const constants: Constants = {
    */
   DEER_NITROGEN_EXCRETED_FACTOR: 13.2,
 
-
   /**
    * @description Faecal nitrogen proportion for deer, as a proportion
    * @type Proportion
@@ -921,7 +920,6 @@ export const constants: Constants = {
    * @type Proportion
    */
   BUFFALO_FAECALN_PMF: 0.29,
-
 
   /**
    * @description Seasonal urinary nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
@@ -980,17 +978,16 @@ export const constants: Constants = {
    */
   EF_TEMPERATURE: 0.003, // (manureManagementSheepC10)
 
-  
   /**
    * @description Conversion factor for elemental to molecular N2O
    */
   GWP_FACTORSC15: 44 / 28, // (agriculturalSoilsBeefO5)
-  
+
   /**
    * @description Conversion factor for elemental to molecular CO2 from lime
    */
   GWP_FACTORSC18: 44 / 12,
-  
+
   /**
    * @description Conversion factor for elemental to molecular CO2
    */
@@ -1029,12 +1026,11 @@ export const constants: Constants = {
    */
   CARBON_FRACTION_OF_UREA: 0.2, // (ureaApplicationD35)
 
-
   /**
    * @description Urine and dung deposited during grazing
    */
   EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsSheepD32)
-    
+
   /**
    * @description Urine and dung deposited during grazing
    */
@@ -1049,7 +1045,7 @@ export const constants: Constants = {
   /**
    * @description Proportion of gas volatilised from manure
    * @inventory2018 3DB_2
-  */
+   */
   FRAC_GASM: 0.21, // FracGASM
 
   // Atmospheric N deposition inorganic fertiliser
@@ -1058,7 +1054,6 @@ export const constants: Constants = {
    * @inventory2018 3DB_1
    */
   INOGRANICFERTILISER_ATMOSPHERIC_N: 0.11, // (agriculturalSoilsSheepN10)
-
 
   /**
    * @description Leaching and runoff of inorganic fertiliser
@@ -1334,7 +1329,7 @@ export const constants: Constants = {
    * @description Methane emission factor for warm climate
    */
   METHANE_WARM_EF: 0.012,
-  
+
   // (manureManagementBeefC29)
   /**
    * @description Methane emission factor for temperate climate
@@ -1501,7 +1496,7 @@ export const constants: Constants = {
 
   // (cropResiduesC116)
   /**
-   * @description Attributes of major pasture types 
+   * @description Attributes of major pasture types
    * @inventory2022 A5.5.9.2
    */
   PASTURE_ATTRIBUTES: {
@@ -3517,7 +3512,7 @@ export const constants: Constants = {
 
   /**
    * @description Emissions factors for bait
-   * @reference FRDC - Data extracted/reverse-engineered by Blueshift/Dan from Seafish Calculator (UK/European numbers). 
+   * @reference FRDC - Data extracted/reverse-engineered by Blueshift/Dan from Seafish Calculator (UK/European numbers).
    * @units kg CO2-e / kg bait
    */
   FISHERIES_BAIT_EF: {
@@ -3675,7 +3670,6 @@ export const constants: Constants = {
    * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
    */
   EF_FLOODED_FIELDS: 1.19,
-
 
   /**
    * @description Default CH4 emissions scaling factors for water regimes during the cultivation period relative to continuously flooded fields

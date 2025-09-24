@@ -28,7 +28,10 @@ export function calculateScope1Urea(
     fertiliser.cropsIrrigated;
 
   // (ureaApplicationC37)
-  const carbon = totalMassFertiliser * constants.CARBON_FRACTION_OF_UREA * constants.GWP_FACTORSC13;
+  const carbon =
+    totalMassFertiliser *
+    constants.CARBON_FRACTION_OF_UREA *
+    constants.GWP_FACTORSC13;
 
   return carbon;
 }

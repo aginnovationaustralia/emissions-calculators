@@ -1,7 +1,10 @@
 import { ExecutionContext } from '../executionContext';
 import { Feed } from '../types/Pork/feed.input';
 
-export function calculateScope3PurchasedFeed(feeds: Feed[], context: ExecutionContext) {
+export function calculateScope3PurchasedFeed(
+  feeds: Feed[],
+  context: ExecutionContext,
+) {
   const { constants } = context;
 
   const totalGHG = feeds.reduce((accTotal, feed) => {

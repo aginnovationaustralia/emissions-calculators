@@ -49,5 +49,3 @@ export class SugarOutput {
   @IsDefined()
   intensities!: SugarIntensitiesOutput[];
 }
-
-

@@ -49,5 +49,3 @@ export class CottonOutput {
   @IsDefined()
   intensities!: CottonIntensitiesOutput[];
 }
-
-

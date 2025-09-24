@@ -46,5 +46,3 @@ export class SheepOutput {
   @IsDefined()
   intensities!: SheepEmissionsIntensities;
 }
-
-

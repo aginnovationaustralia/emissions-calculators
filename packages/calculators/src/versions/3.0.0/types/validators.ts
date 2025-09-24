@@ -24,9 +24,7 @@ export function MustSumTo(
       propertyName,
       constraints: properties || [],
       options: {
-        message: `${[propertyName, ...(properties || [])].join(
-          '+',
-        )} must sum to ${sum.toFixed(2)}`,
+        message: `${[propertyName, ...(properties || [])].join('+')} must sum to ${sum.toFixed(2)}`,
         ...validationOptions,
       },
       validator: {
@@ -43,8 +41,10 @@ export function MustSumTo(
             [
               ...valueAsArray,
               ...relatedPropertyNames.map((x) => (args.object as never)[x]),
-            ].filter((x) => typeof x === 'number' || Array.isArray(x)) as
-            | (number[] | unknown[])[]
+            ].filter((x) => typeof x === 'number' || Array.isArray(x)) as (
+              | number[]
+              | unknown[]
+            )[]
           )
             .flat()
             .filter((x) => typeof x === 'number') as number[];

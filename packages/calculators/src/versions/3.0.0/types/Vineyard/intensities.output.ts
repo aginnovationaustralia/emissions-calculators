@@ -21,5 +21,3 @@ export class VineyardIntensitiesOutput {
   @IsDefined()
   cropProducedKg!: number;
 }
-
-

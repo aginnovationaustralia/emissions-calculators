@@ -36,12 +36,12 @@ function purchasedBeefLivestock(
 // done once for each ram, wethers, etc
 export function calculatePurchasedBeefEmissions(
   beef: {
-    [type in typeof BeefClassesAPI[number]]: BeefPurchase[];
+    [type in (typeof BeefClassesAPI)[number]]: BeefPurchase[];
   },
   context: ExecutionContext,
 ) {
   const beefScope3Total = Object.keys(beef).reduce((acc, type) => {
-    const b = beef[type as typeof BeefClassesAPI[number]];
+    const b = beef[type as (typeof BeefClassesAPI)[number]];
 
     const totalPurchasedEmissions = b.reduce((accB, p) => {
       return (
@@ -64,7 +64,7 @@ export function calculatePurchasedBeefEmissions(
 // done once for each ram, wethers, etc
 export function calculatePurchasedSheepEmissions(
   sheep: {
-    [type in typeof SheepClassesAPI[number]]: {
+    [type in (typeof SheepClassesAPI)[number]]: {
       head: number;
       purchaseWeight: number;
     }[];
@@ -75,36 +75,45 @@ export function calculatePurchasedSheepEmissions(
   const sheepCrossBredPercent = 100 - sheepMerinoPercent; // (dataInputSheepE39)
 
   const sheepLiveweight: {
-    [type in typeof SheepClassesAPI[number]]: number;
-  } = SheepClassesAPI.reduce((acc, type) => {
-    const cls = sheep[type];
+    [type in (typeof SheepClassesAPI)[number]]: number;
+  } = SheepClassesAPI.reduce(
+    (acc, type) => {
+      const cls = sheep[type];
 
-    const totalLiveweight = cls.reduce((accC, curC) => {
-      return accC + curC.head * curC.purchaseWeight;
-    }, 0);
+      const totalLiveweight = cls.reduce((accC, curC) => {
+        return accC + curC.head * curC.purchaseWeight;
+      }, 0);
 
-    return {
-      ...acc,
-      [type]: totalLiveweight,
-    };
-  }, {} as { [type in typeof SheepClassesAPI[number]]: number });
+      return {
+        ...acc,
+        [type]: totalLiveweight,
+      };
+    },
+    {} as { [type in (typeof SheepClassesAPI)[number]]: number },
+  );
 
   // (dataInputSheepN36)
   const purchasedBreedingHerd = Object.keys(sheepLiveweight)
     .filter((sc) =>
-      SHEEP_CLASSES_BREEDING_API.includes(sc as typeof SheepClassesAPI[number]),
+      SHEEP_CLASSES_BREEDING_API.includes(
+        sc as (typeof SheepClassesAPI)[number],
+      ),
     )
     .reduce(
-      (acc, sc) => acc + sheepLiveweight[sc as typeof SheepClassesAPI[number]],
+      (acc, sc) =>
+        acc + sheepLiveweight[sc as (typeof SheepClassesAPI)[number]],
       0,
     );
 
   const purchasedTradeSheep = Object.keys(sheepLiveweight)
     .filter((sc) =>
-      SHEEP_CLASSES_TRADING_API.includes(sc as typeof SheepClassesAPI[number]),
+      SHEEP_CLASSES_TRADING_API.includes(
+        sc as (typeof SheepClassesAPI)[number],
+      ),
     )
     .reduce(
-      (acc, sc) => acc + sheepLiveweight[sc as typeof SheepClassesAPI[number]],
+      (acc, sc) =>
+        acc + sheepLiveweight[sc as (typeof SheepClassesAPI)[number]],
       0,
     );
 
