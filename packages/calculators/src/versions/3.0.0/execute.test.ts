@@ -90,7 +90,7 @@ describe('executeCalculator', () => {
       executeCalculator(mockCalculator, {}, CalculatorName.Beef);
       
       // Small delay to ensure different timestamps
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       executeCalculator(mockCalculator, {}, CalculatorName.Dairy);
 
@@ -306,7 +306,7 @@ describe('executeCalculator', () => {
       executeCalculator(mockCalculator, {}, CalculatorName.Beef);
       
       // Small delay to ensure different timestamps
-      await new Promise(resolve => setTimeout(resolve, 1));
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       executeCalculator(mockCalculator, {}, CalculatorName.Dairy);
 
