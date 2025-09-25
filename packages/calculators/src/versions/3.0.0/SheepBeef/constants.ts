@@ -1,12 +1,18 @@
-import { constants, sheepConstants } from '../constants/constant_values';
-import { Constants, SheepConstants } from '../constants/versionedConstants';
+import { ConstantsForBeefCalculator } from '../Beef/constants';
+import {
+  beefConstants,
+  constants,
+  savannaConstants,
+  sheepConstants,
+} from '../constants/constant_values';
+import { ConstantsForSheepCalculator } from '../Sheep/constants';
 
-export type SheepBeefConstants = {
-  SHEEP: SheepConstants;
-  COMMON: Constants;
-};
+export type ConstantsForSheepBeefCalculator = ConstantsForSheepCalculator &
+  ConstantsForBeefCalculator;
 
-export const sheepBeefConstants: SheepBeefConstants = {
+export const sheepBeefConstants: ConstantsForSheepBeefCalculator = {
   SHEEP: sheepConstants,
+  BEEF: beefConstants,
+  SAVANNA: savannaConstants,
   COMMON: constants,
 };

@@ -4,10 +4,10 @@ import {
   SHEEP_CLASSES_TRADING_API,
 } from '../constants/constants';
 import { ExecutionContext } from '../executionContext';
+import { ConstantsForSheepCalculator } from '../Sheep/constants';
 import { BeefPurchase } from '../types/Beef/beefpurchase.input';
 import { LivestockSourceLocation } from '../types/livestock';
 import { BeefClassesAPI, SheepClassesAPI } from '../types/types';
-import { SheepBeefConstants } from './constants';
 
 /**
  *
@@ -72,7 +72,7 @@ export function calculatePurchasedSheepEmissions(
     }[];
   },
   sheepMerinoPercent: number,
-  context: ExecutionContext<SheepBeefConstants>,
+  context: ExecutionContext<ConstantsForSheepCalculator>,
 ) {
   const sheepCrossBredPercent = 100 - sheepMerinoPercent; // (dataInputSheepE39)
 
