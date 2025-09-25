@@ -6,6 +6,7 @@ import {
 import {
   Constants,
   LIVESTOCK_SOURCE_LOCATION,
+  SheepConstants,
   STATES,
 } from './versionedConstants';
 
@@ -15,13 +16,13 @@ export const REGIONS = {
   KIMBERLEY: 'kmberley',
 };
 
-export const constants: Constants = {
+export const sheepConstants: SheepConstants = {
   /**
    * @description Feed availability rate for sheep across seasons and states, in tonnes per hectare
    * @inventory2018 Appendix 5.D.3
    * @units t/ha
    */
-  SHEEP_FEEDAVAILABILITY: {
+  FEEDAVAILABILITY: {
     spring: {
       [STATES.ACT]: 2.9,
       [STATES.NSW]: 2.9,
@@ -74,7 +75,7 @@ export const constants: Constants = {
    * @units %
    * @type Percentage
    */
-  SHEEP_CRUDEPROTEIN: {
+  CRUDEPROTEIN: {
     spring: {
       [STATES.ACT]: 20,
       [STATES.NSW]: 20,
@@ -127,7 +128,7 @@ export const constants: Constants = {
    * @units %
    * @type Percentage
    */
-  SHEEP_DRYMATTERDIGESTIBILITY: {
+  DRYMATTERDIGESTIBILITY: {
     spring: {
       [STATES.ACT]: 75,
       [STATES.NSW]: 75,
@@ -175,117 +176,11 @@ export const constants: Constants = {
   },
 
   /**
-   * @description Dry matter digestibility for beef across seasons and states, as percentage
-   * @inventory2018 Appendix 5.B.3
-   * @units %
-   * @type Percentage
-   */
-  BEEF_DRYMATTERDIGESTIBILITY: {
-    spring: {
-      [STATES.ACT]: 55,
-      [STATES.NSW]: 55,
-      [STATES.NT]: 55,
-      [STATES.QLD]: 53,
-      [STATES.SA]: 70,
-      [STATES.TAS]: 75,
-      [STATES.VIC]: 80,
-      [STATES.WA_SW]: 80,
-      [STATES.WA_NW]: 40,
-    },
-    summer: {
-      [STATES.ACT]: 65,
-      [STATES.NSW]: 65,
-      [STATES.NT]: 61,
-      [STATES.QLD]: 57,
-      [STATES.SA]: 55,
-      [STATES.TAS]: 60,
-      [STATES.VIC]: 55,
-      [STATES.WA_SW]: 58,
-      [STATES.WA_NW]: 65,
-    },
-    autumn: {
-      [STATES.ACT]: 60,
-      [STATES.NSW]: 60,
-      [STATES.NT]: 57,
-      [STATES.QLD]: 55,
-      [STATES.SA]: 55,
-      [STATES.TAS]: 70,
-      [STATES.VIC]: 60,
-      [STATES.WA_SW]: 50,
-      [STATES.WA_NW]: 55,
-    },
-    winter: {
-      [STATES.ACT]: 50,
-      [STATES.NSW]: 50,
-      [STATES.NT]: 54,
-      [STATES.QLD]: 51,
-      [STATES.SA]: 75,
-      [STATES.TAS]: 75,
-      [STATES.VIC]: 76,
-      [STATES.WA_SW]: 75,
-      [STATES.WA_NW]: 45,
-    },
-  },
-
-  /**
-   * @description Crude protein content for beef across seasons and states, as percentage
-   * @inventory2018 Appendix 5.B.4
-   * @units %
-   * @type Percentage
-   */
-  BEEF_CRUDEPROTEIN: {
-    spring: {
-      [STATES.ACT]: 7,
-      [STATES.NSW]: 7,
-      [STATES.NT]: 5.8,
-      [STATES.QLD]: 7,
-      [STATES.SA]: 7.2,
-      [STATES.TAS]: 16,
-      [STATES.VIC]: 20,
-      [STATES.WA_SW]: 25,
-      [STATES.WA_NW]: 4,
-    },
-    summer: {
-      [STATES.ACT]: 13,
-      [STATES.NSW]: 13,
-      [STATES.NT]: 9.2,
-      [STATES.QLD]: 13,
-      [STATES.SA]: 9.9,
-      [STATES.TAS]: 7,
-      [STATES.VIC]: 10,
-      [STATES.WA_SW]: 7,
-      [STATES.WA_NW]: 12,
-    },
-    autumn: {
-      [STATES.ACT]: 10,
-      [STATES.NSW]: 10,
-      [STATES.NT]: 7.5,
-      [STATES.QLD]: 10,
-      [STATES.SA]: 7.8,
-      [STATES.TAS]: 9,
-      [STATES.VIC]: 16,
-      [STATES.WA_SW]: 10,
-      [STATES.WA_NW]: 9,
-    },
-    winter: {
-      [STATES.ACT]: 6,
-      [STATES.NSW]: 6,
-      [STATES.NT]: 5.3,
-      [STATES.QLD]: 6,
-      [STATES.SA]: 5.9,
-      [STATES.TAS]: 20,
-      [STATES.VIC]: 20,
-      [STATES.WA_SW]: 21,
-      [STATES.WA_NW]: 6,
-    },
-  },
-
-  /**
    * @description Standard reference weight for sheep across seasons and states, in kilograms
    * @inventory2018 Appendix 5.D.7
    * @units kg
    */
-  SHEEP_STANDARDWEIGHT: {
+  STANDARDWEIGHT: {
     rams: {
       [STATES.ACT]: 78,
       [STATES.NSW]: 78,
@@ -461,6 +356,129 @@ export const constants: Constants = {
       [STATES.QLD]: 50,
       [STATES.NT]: 50,
       [STATES.WA_NW]: 50,
+    },
+  },
+
+  /**
+   * @description Emission factors for purchased sheep by breed, in kg CO2-e/kg liveweight
+   * @reference Wiedemann et al. (2016)
+   * @units kg CO2-e/kg
+   */
+  EMISSIONFACTOR: {
+    MERINO: 9.3,
+    CROSSBRED: 6.9,
+  },
+
+  /**
+   * @description Urine and dung deposited during grazing
+   */
+  EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsSheepD32)
+};
+
+export const constants: Constants = {
+  /**
+   * @description Dry matter digestibility for beef across seasons and states, as percentage
+   * @inventory2018 Appendix 5.B.3
+   * @units %
+   * @type Percentage
+   */
+  BEEF_DRYMATTERDIGESTIBILITY: {
+    spring: {
+      [STATES.ACT]: 55,
+      [STATES.NSW]: 55,
+      [STATES.NT]: 55,
+      [STATES.QLD]: 53,
+      [STATES.SA]: 70,
+      [STATES.TAS]: 75,
+      [STATES.VIC]: 80,
+      [STATES.WA_SW]: 80,
+      [STATES.WA_NW]: 40,
+    },
+    summer: {
+      [STATES.ACT]: 65,
+      [STATES.NSW]: 65,
+      [STATES.NT]: 61,
+      [STATES.QLD]: 57,
+      [STATES.SA]: 55,
+      [STATES.TAS]: 60,
+      [STATES.VIC]: 55,
+      [STATES.WA_SW]: 58,
+      [STATES.WA_NW]: 65,
+    },
+    autumn: {
+      [STATES.ACT]: 60,
+      [STATES.NSW]: 60,
+      [STATES.NT]: 57,
+      [STATES.QLD]: 55,
+      [STATES.SA]: 55,
+      [STATES.TAS]: 70,
+      [STATES.VIC]: 60,
+      [STATES.WA_SW]: 50,
+      [STATES.WA_NW]: 55,
+    },
+    winter: {
+      [STATES.ACT]: 50,
+      [STATES.NSW]: 50,
+      [STATES.NT]: 54,
+      [STATES.QLD]: 51,
+      [STATES.SA]: 75,
+      [STATES.TAS]: 75,
+      [STATES.VIC]: 76,
+      [STATES.WA_SW]: 75,
+      [STATES.WA_NW]: 45,
+    },
+  },
+
+  /**
+   * @description Crude protein content for beef across seasons and states, as percentage
+   * @inventory2018 Appendix 5.B.4
+   * @units %
+   * @type Percentage
+   */
+  BEEF_CRUDEPROTEIN: {
+    spring: {
+      [STATES.ACT]: 7,
+      [STATES.NSW]: 7,
+      [STATES.NT]: 5.8,
+      [STATES.QLD]: 7,
+      [STATES.SA]: 7.2,
+      [STATES.TAS]: 16,
+      [STATES.VIC]: 20,
+      [STATES.WA_SW]: 25,
+      [STATES.WA_NW]: 4,
+    },
+    summer: {
+      [STATES.ACT]: 13,
+      [STATES.NSW]: 13,
+      [STATES.NT]: 9.2,
+      [STATES.QLD]: 13,
+      [STATES.SA]: 9.9,
+      [STATES.TAS]: 7,
+      [STATES.VIC]: 10,
+      [STATES.WA_SW]: 7,
+      [STATES.WA_NW]: 12,
+    },
+    autumn: {
+      [STATES.ACT]: 10,
+      [STATES.NSW]: 10,
+      [STATES.NT]: 7.5,
+      [STATES.QLD]: 10,
+      [STATES.SA]: 7.8,
+      [STATES.TAS]: 9,
+      [STATES.VIC]: 16,
+      [STATES.WA_SW]: 10,
+      [STATES.WA_NW]: 9,
+    },
+    winter: {
+      [STATES.ACT]: 6,
+      [STATES.NSW]: 6,
+      [STATES.NT]: 5.3,
+      [STATES.QLD]: 6,
+      [STATES.SA]: 5.9,
+      [STATES.TAS]: 20,
+      [STATES.VIC]: 20,
+      [STATES.WA_SW]: 21,
+      [STATES.WA_NW]: 6,
     },
   },
 
@@ -841,16 +859,6 @@ export const constants: Constants = {
   },
 
   /**
-   * @description Emission factors for purchased sheep by breed, in kg CO2-e/kg liveweight
-   * @reference Wiedemann et al. (2016)
-   * @units kg CO2-e/kg
-   */
-  SHEEP_EMISSIONFACTOR: {
-    MERINO: 9.3,
-    CROSSBRED: 6.9,
-  },
-
-  /**
    * @description Enteric fermentation emission factor for goat, in kg CH4/head/year
    * @reference IPCC (2006)
    * @units kg CH4/head/year
@@ -1025,11 +1033,6 @@ export const constants: Constants = {
    * @reference IPCC (2006)
    */
   CARBON_FRACTION_OF_UREA: 0.2, // (ureaApplicationD35)
-
-  /**
-   * @description Urine and dung deposited during grazing
-   */
-  EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsSheepD32)
 
   /**
    * @description Urine and dung deposited during grazing

@@ -1,3 +1,4 @@
+import { CommonConstants } from '../../common/constants';
 import { ExecutionContext } from '../../executionContext';
 
 export function getDefaultForAverageStationaryTransport(
@@ -8,79 +9,81 @@ export function getDefaultForAverageStationaryTransport(
     : averageStationaryTransport;
 }
 
-function getFuelEnergyKl(context: ExecutionContext) {
+function getFuelEnergyKl(context: ExecutionContext<CommonConstants>) {
   const { constants } = context;
 
-  const fuelSD = constants.FUEL_ENERGYGJ.STATIONARY.DIESEL;
-  const fuelSP = constants.FUEL_ENERGYGJ.STATIONARY.PETROL;
-  const fuelSL = constants.FUEL_ENERGYGJ.STATIONARY.LPG;
-  const fuelTD = constants.FUEL_ENERGYGJ.TRANSPORT.DIESEL;
-  const fuelTP = constants.FUEL_ENERGYGJ.TRANSPORT.PETROL;
-  const fuelTL = constants.FUEL_ENERGYGJ.TRANSPORT.LPG;
+  const fuelSD = constants.COMMON.FUEL_ENERGYGJ.STATIONARY.DIESEL;
+  const fuelSP = constants.COMMON.FUEL_ENERGYGJ.STATIONARY.PETROL;
+  const fuelSL = constants.COMMON.FUEL_ENERGYGJ.STATIONARY.LPG;
+  const fuelTD = constants.COMMON.FUEL_ENERGYGJ.TRANSPORT.DIESEL;
+  const fuelTP = constants.COMMON.FUEL_ENERGYGJ.TRANSPORT.PETROL;
+  const fuelTL = constants.COMMON.FUEL_ENERGYGJ.TRANSPORT.LPG;
 
   return {
     STATIONARY: {
       DIESEL: {
         ENERGY_CONTENT_FACTOR:
-          constants.FUEL_ENERGYGJ.STATIONARY.DIESEL.ENERGY_CONTENT_FACTOR,
+          constants.COMMON.FUEL_ENERGYGJ.STATIONARY.DIESEL
+            .ENERGY_CONTENT_FACTOR,
         SCOPE1_EF: {
           CO2: (fuelSD.SCOPE1_EF.CO2 * fuelSD.ENERGY_CONTENT_FACTOR) / 1000,
           CH4: (fuelSD.SCOPE1_EF.CH4 * fuelSD.ENERGY_CONTENT_FACTOR) / 1000,
           N2O: (fuelSD.SCOPE1_EF.N2O * fuelSD.ENERGY_CONTENT_FACTOR) / 1000,
         },
-        SCOPE3_EF: constants.FUEL_ENERGYGJ.STATIONARY.DIESEL.SCOPE3_EF,
+        SCOPE3_EF: constants.COMMON.FUEL_ENERGYGJ.STATIONARY.DIESEL.SCOPE3_EF,
       },
       PETROL: {
         ENERGY_CONTENT_FACTOR:
-          constants.FUEL_ENERGYGJ.STATIONARY.PETROL.ENERGY_CONTENT_FACTOR,
+          constants.COMMON.FUEL_ENERGYGJ.STATIONARY.PETROL
+            .ENERGY_CONTENT_FACTOR,
         SCOPE1_EF: {
           CO2: (fuelSP.SCOPE1_EF.CO2 * fuelSP.ENERGY_CONTENT_FACTOR) / 1000,
           CH4: (fuelSP.SCOPE1_EF.CH4 * fuelSP.ENERGY_CONTENT_FACTOR) / 1000,
           N2O: (fuelSP.SCOPE1_EF.N2O * fuelSP.ENERGY_CONTENT_FACTOR) / 1000,
         },
-        SCOPE3_EF: constants.FUEL_ENERGYGJ.STATIONARY.PETROL.SCOPE3_EF,
+        SCOPE3_EF: constants.COMMON.FUEL_ENERGYGJ.STATIONARY.PETROL.SCOPE3_EF,
       },
       LPG: {
         ENERGY_CONTENT_FACTOR:
-          constants.FUEL_ENERGYGJ.STATIONARY.LPG.ENERGY_CONTENT_FACTOR,
+          constants.COMMON.FUEL_ENERGYGJ.STATIONARY.LPG.ENERGY_CONTENT_FACTOR,
         SCOPE1_EF: {
           CO2: (fuelSL.SCOPE1_EF.CO2 * fuelSL.ENERGY_CONTENT_FACTOR) / 1000,
           CH4: (fuelSL.SCOPE1_EF.CH4 * fuelSL.ENERGY_CONTENT_FACTOR) / 1000,
           N2O: (fuelSL.SCOPE1_EF.N2O * fuelSL.ENERGY_CONTENT_FACTOR) / 1000,
         },
-        SCOPE3_EF: constants.FUEL_ENERGYGJ.STATIONARY.LPG.SCOPE3_EF,
+        SCOPE3_EF: constants.COMMON.FUEL_ENERGYGJ.STATIONARY.LPG.SCOPE3_EF,
       },
     },
     TRANSPORT: {
       DIESEL: {
         ENERGY_CONTENT_FACTOR:
-          constants.FUEL_ENERGYGJ.TRANSPORT.DIESEL.ENERGY_CONTENT_FACTOR,
+          constants.COMMON.FUEL_ENERGYGJ.TRANSPORT.DIESEL.ENERGY_CONTENT_FACTOR,
         SCOPE1_EF: {
           CO2: (fuelTD.SCOPE1_EF.CO2 * fuelTD.ENERGY_CONTENT_FACTOR) / 1000,
           CH4: (fuelTD.SCOPE1_EF.CH4 * fuelTD.ENERGY_CONTENT_FACTOR) / 1000,
           N2O: (fuelTD.SCOPE1_EF.N2O * fuelTD.ENERGY_CONTENT_FACTOR) / 1000,
         },
-        SCOPE3_EF: constants.FUEL_ENERGYGJ.TRANSPORT.DIESEL.SCOPE3_EF,
+        SCOPE3_EF: constants.COMMON.FUEL_ENERGYGJ.TRANSPORT.DIESEL.SCOPE3_EF,
       },
       PETROL: {
         ENERGY_CONTENT_FACTOR:
-          constants.FUEL_ENERGYGJ.TRANSPORT.PETROL.ENERGY_CONTENT_FACTOR,
+          constants.COMMON.FUEL_ENERGYGJ.TRANSPORT.PETROL.ENERGY_CONTENT_FACTOR,
         SCOPE1_EF: {
           CO2: (fuelTP.SCOPE1_EF.CO2 * fuelTP.ENERGY_CONTENT_FACTOR) / 1000,
           CH4: (fuelTP.SCOPE1_EF.CH4 * fuelTP.ENERGY_CONTENT_FACTOR) / 1000,
           N2O: (fuelTP.SCOPE1_EF.N2O * fuelTP.ENERGY_CONTENT_FACTOR) / 1000,
         },
-        SCOPE3_EF: constants.FUEL_ENERGYGJ.TRANSPORT.PETROL.SCOPE3_EF,
+        SCOPE3_EF: constants.COMMON.FUEL_ENERGYGJ.TRANSPORT.PETROL.SCOPE3_EF,
       },
       LPG: {
         ENERGY_CONTENT_FACTOR:
-          constants.FUEL_ENERGYGJ.TRANSPORT.LPG.ENERGY_CONTENT_FACTOR,
+          constants.COMMON.FUEL_ENERGYGJ.TRANSPORT.LPG.ENERGY_CONTENT_FACTOR,
         SCOPE1_EF: {
           CO2: (fuelTL.SCOPE1_EF.CO2 * fuelTL.ENERGY_CONTENT_FACTOR) / 1000,
           CH4: (fuelTL.SCOPE1_EF.CH4 * fuelTL.ENERGY_CONTENT_FACTOR) / 1000,
           N2O: (fuelTL.SCOPE1_EF.N2O * fuelTL.ENERGY_CONTENT_FACTOR) / 1000,
         },
-        SCOPE3_EF: constants.FUEL_ENERGYGJ.TRANSPORT.LPG.SCOPE3_EF,
+        SCOPE3_EF: constants.COMMON.FUEL_ENERGYGJ.TRANSPORT.LPG.SCOPE3_EF,
       },
     },
   };
@@ -91,7 +94,7 @@ function calculateFuelScope1BaseLPG(
   annualPetrolConsumption: number,
   annualLPGConsumption: number,
   type: 'CO2' | 'CH4' | 'N2O',
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
   averageStationaryTransportOptional?: boolean,
 ) {
   const averageStationaryTransport = getDefaultForAverageStationaryTransport(
@@ -136,7 +139,7 @@ export function calculateFuelScope1BaseLPGStationary(
   annualPetrolConsumption: number,
   annualLPGConsumption: number,
   type: 'CO2' | 'CH4' | 'N2O',
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
 ) {
   const fuelEnergyKl = getFuelEnergyKl(context);
 
@@ -161,7 +164,7 @@ export function calculateFuelScope1CO2LPG(
   annualDieselConsumption: number,
   annualPetrolConsumption: number,
   annualLPGConsumption: number,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
   averageStationaryTransport?: boolean,
 ) {
   return calculateFuelScope1BaseLPG(
@@ -178,7 +181,7 @@ export function calculateFuelScope1N2OLPG(
   annualDieselConsumption: number,
   annualPetrolConsumption: number,
   annualLPGConsumption: number,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
   averageStationaryTransport?: boolean,
 ) {
   return calculateFuelScope1BaseLPG(
@@ -195,7 +198,7 @@ export function calculateFuelScope1CH4LPG(
   annualDieselConsumption: number,
   annualPetrolConsumption: number,
   annualLPGConsumption: number,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
   averageStationaryTransport?: boolean,
 ) {
   return calculateFuelScope1BaseLPG(
@@ -212,7 +215,7 @@ export function calculateFuelScope1AllLPG(
   annualDieselConsumption: number,
   annualPetrolConsumption: number,
   annualLPGConsumption: number,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
   averageStationaryTransport: boolean = false,
 ) {
   return {

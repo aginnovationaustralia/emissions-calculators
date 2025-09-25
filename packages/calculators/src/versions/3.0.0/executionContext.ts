@@ -6,8 +6,8 @@ type ExecutionMetadata = {
   timestamp: string;
   overrides?: object | undefined;
 };
-export interface ExecutionContext extends ExecutionMetadata {
-  constants: Constants;
+export interface ExecutionContext<T = Constants> extends ExecutionMetadata {
+  constants: T;
 }
 
 export type WithExecutionMetadata<T> = T & { metaData: ExecutionMetadata };

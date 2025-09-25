@@ -201,22 +201,24 @@ type CropResidueFactors = {
   fractionRemoved: number;
 };
 
-export type Constants = {
-  // Sheep
+export type SheepConstants = {
+  FEEDAVAILABILITY: BySeasonAndState;
 
-  SHEEP_FEEDAVAILABILITY: BySeasonAndState;
+  CRUDEPROTEIN: BySeasonAndState;
 
-  SHEEP_CRUDEPROTEIN: BySeasonAndState;
+  DRYMATTERDIGESTIBILITY: BySeasonAndState;
 
-  SHEEP_DRYMATTERDIGESTIBILITY: BySeasonAndState;
-
-  SHEEP_EMISSIONFACTOR: {
+  EMISSIONFACTOR: {
     MERINO: number;
     CROSSBRED: number;
   };
 
-  SHEEP_STANDARDWEIGHT: Record<SheepTypes, Record<States, number>>;
+  STANDARDWEIGHT: Record<SheepTypes, Record<States, number>>;
 
+  EF_URINEDUNGDEPOSITED: number;
+};
+
+export type Constants = {
   // Beef
 
   BEEF_DRYMATTERDIGESTIBILITY: BySeasonAndState;
@@ -864,8 +866,6 @@ export type Constants = {
 
   CARBON_FRACTION_OF_UREA: number;
 
-  // Rename to sheep specific
-  EF_URINEDUNGDEPOSITED: number;
   BEEF_EF_URINEDUNGDEPOSITED: number;
 
   FRAC_GASF: number;

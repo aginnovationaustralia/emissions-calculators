@@ -1,4 +1,5 @@
 import { ExecutionContext } from '../../executionContext';
+import { CommonConstants } from '../constants';
 
 // (dataInputBeefD98)
 /**
@@ -12,19 +13,19 @@ export function calculateScope3PurchasedFeed(
   grain: number,
   hay: number,
   cottonseed: number,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
 ) {
   const { constants } = context;
 
   // grain
-  const grainTotalGHG = grain * constants.FEED_PURCHASED.grain.TotalGHG;
+  const grainTotalGHG = grain * constants.COMMON.FEED_PURCHASED.grain.TotalGHG;
 
   // hay
-  const hayTotalGHG = hay * constants.FEED_PURCHASED.hay.TotalGHG;
+  const hayTotalGHG = hay * constants.COMMON.FEED_PURCHASED.hay.TotalGHG;
 
   // cottonseed
   const cottonseedTotalGHG =
-    cottonseed * constants.FEED_PURCHASED.cottonseed.TotalGHG;
+    cottonseed * constants.COMMON.FEED_PURCHASED.cottonseed.TotalGHG;
 
   const totalEmissionsPurchasedFeed =
     grainTotalGHG + hayTotalGHG + cottonseedTotalGHG;

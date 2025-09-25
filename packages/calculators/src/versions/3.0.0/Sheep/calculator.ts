@@ -19,6 +19,7 @@ import { sumIntermediateResults } from '../common/tools/intermediate-results';
 import { singleAllocationToArray } from '../common/tools/object';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../common/trees';
 import { ExecutionContext } from '../executionContext';
+import { SheepBeefConstants } from '../SheepBeef/constants';
 import { calculateScope1Urea } from '../SheepBeef/Scope1Urea';
 import { calculateScope3Herbicide } from '../SheepBeef/Scope3Herbicides';
 import { calculatePurchasedSheepEmissions } from '../SheepBeef/Scope3PurchasedLivestock';
@@ -75,7 +76,7 @@ export function calculateSingleSheep(
   propertyNorthOfTropicOfCapricorn: boolean,
   rainfallAbove600: boolean,
   sheep: SheepComplete,
-  context: ExecutionContext,
+  context: ExecutionContext<SheepBeefConstants>,
   carbonSequestration: number,
   id: string,
 ) {
@@ -324,7 +325,7 @@ export function calculateSingleSheep(
 
 export function calculateSheep(
   input: SheepInput,
-  context: ExecutionContext,
+  context: ExecutionContext<SheepBeefConstants>,
 ): SheepOutput {
   // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(

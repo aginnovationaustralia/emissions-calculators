@@ -1,8 +1,9 @@
+import { CommonConstants } from '../../common/constants';
 import { ExecutionContext } from '../../executionContext';
 
-function getScope3FuelConstants(context: ExecutionContext) {
+function getScope3FuelConstants(context: ExecutionContext<CommonConstants>) {
   const { constants } = context;
-  const { STATIONARY, TRANSPORT } = constants.FUEL_ENERGYGJ;
+  const { STATIONARY, TRANSPORT } = constants.COMMON.FUEL_ENERGYGJ;
 
   /**
    * NOTE
@@ -44,7 +45,7 @@ export function calculateScope3FuelWithLPG(
   diesel: number,
   petrol: number,
   lpg: number,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
 ) {
   const {
     DIESEL_SCOPE3_EF_TONNES,
@@ -81,7 +82,7 @@ export function calculateScope3FuelWithLPGStationary(
   diesel: number,
   petrol: number,
   lpg: number,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
 ) {
   const {
     DIESEL_SCOPE3_EF_TONNES,
@@ -118,7 +119,7 @@ export function calculateScope3FuelWithLPGAverage(
   diesel: number,
   petrol: number,
   lpg: number,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
 ) {
   const {
     DIESEL_SCOPE3_EF_TONNES,

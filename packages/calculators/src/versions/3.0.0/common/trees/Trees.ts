@@ -1,10 +1,11 @@
 import * as trees from '../../constants/Trees.json';
 import { ExecutionContext } from '../../executionContext';
 import { Vegetation } from '../../types/vegetation.input';
+import { CommonConstants } from '../constants';
 
 export function calculateTreeCarbonSequestration(
   veg: Vegetation,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
 ) {
   const { constants } = context;
 
@@ -14,22 +15,22 @@ export function calculateTreeCarbonSequestration(
   }
 
   // (treesD19)
-  const regionNo = constants.TREE_REGIONS.RegionNo[vegetation.region];
+  const regionNo = constants.COMMON.TREE_REGIONS.RegionNo[vegetation.region];
 
   // TODO: not the best way to do this, but it works for now. would have to
   // regenerate regions constants to be row based
   // (treesD19)
   const regionTrees = [
-    constants.TREE_REGIONS.TreeSpecies1[vegetation.region],
-    constants.TREE_REGIONS.TreeSpecies2[vegetation.region],
-    constants.TREE_REGIONS.TreeSpecies3[vegetation.region],
-    constants.TREE_REGIONS.TreeSpecies4[vegetation.region],
-    constants.TREE_REGIONS.TreeSpecies5[vegetation.region],
-    constants.TREE_REGIONS.TreeSpecies6[vegetation.region],
+    constants.COMMON.TREE_REGIONS.TreeSpecies1[vegetation.region],
+    constants.COMMON.TREE_REGIONS.TreeSpecies2[vegetation.region],
+    constants.COMMON.TREE_REGIONS.TreeSpecies3[vegetation.region],
+    constants.COMMON.TREE_REGIONS.TreeSpecies4[vegetation.region],
+    constants.COMMON.TREE_REGIONS.TreeSpecies5[vegetation.region],
+    constants.COMMON.TREE_REGIONS.TreeSpecies6[vegetation.region],
   ];
   const regionSoils = [
-    constants.TREE_REGIONS.SoilType1[vegetation.region],
-    constants.TREE_REGIONS.SoilType2[vegetation.region],
+    constants.COMMON.TREE_REGIONS.SoilType1[vegetation.region],
+    constants.COMMON.TREE_REGIONS.SoilType2[vegetation.region],
   ];
 
   // TODO: have a failsafe for this where a species is not found, i.e someone
@@ -111,7 +112,7 @@ export function calculateAllCarbonSequestrationWithKey<
   // eslint-disable-next-line no-use-before-define
   T extends { [key in K]: number } & { vegetation: Vegetation },
   K extends keyof T,
->(vegetation: T[], key: K, context: ExecutionContext) {
+>(vegetation: T[], key: K, context: ExecutionContext<CommonConstants>) {
   const vegWithCarbon = vegetation.map((veg) => ({
     ...veg,
     carbon: calculateTreeCarbonSequestration(veg.vegetation, context),
@@ -141,7 +142,12 @@ export function calculateAllCarbonSequestrationWithKeyProportion<
   T extends { [key in K]: number[] } & { vegetation: Vegetation },
   K extends keyof T,
   L,
->(vegetation: T[], allocationKey: K, objects: L[], context: ExecutionContext) {
+>(
+  vegetation: T[],
+  allocationKey: K,
+  objects: L[],
+  context: ExecutionContext<CommonConstants>,
+) {
   const vegWithCarbon = vegetation.map((veg) => ({
     ...veg,
     carbon: calculateTreeCarbonSequestration(veg.vegetation, context),

@@ -1,9 +1,10 @@
 import { ExecutionContext } from '../../executionContext';
 import { Fertiliser } from '../../types/fertiliser.input';
+import { CommonConstants } from '../constants';
 
 export function calculateScope3Fertiliser(
   fertiliser: Fertiliser,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
 ) {
   const { constants } = context;
 
@@ -14,10 +15,10 @@ export function calculateScope3Fertiliser(
     fertiliser.cropsIrrigated; // (embeddedEmissionsC9)
 
   // (embeddedEmissions_I9)
-  const totalUrea = totalUreaFertiliser * constants.UREA_FERTILISER_GHG;
+  const totalUrea = totalUreaFertiliser * constants.COMMON.UREA_FERTILISER_GHG;
 
   const totalSuperPhosphate =
-    fertiliser.singleSuperphosphate * constants.SUPERPHOSPHATE_GHG;
+    fertiliser.singleSuperphosphate * constants.COMMON.SUPERPHOSPHATE_GHG;
 
   const otherFertiliserTotal = (fertiliser?.otherFertilisers ?? []).reduce(
     (acc, otherFertiliser) => {
@@ -27,7 +28,8 @@ export function calculateScope3Fertiliser(
 
       // (embeddedEmissions_E11)
       const otherFertiliserTotalGHGInput =
-        constants.CUSTOMIZED_FERTILIZER[otherFertiliser.otherType].TotalGHG;
+        constants.COMMON.CUSTOMIZED_FERTILIZER[otherFertiliser.otherType]
+          .TotalGHG;
 
       // (embeddedEmissions_I11)
       const otherThisFertiliserTotalEmissions =

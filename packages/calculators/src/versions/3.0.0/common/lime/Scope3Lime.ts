@@ -1,8 +1,9 @@
 import { ExecutionContext } from '../../executionContext';
+import { CommonConstants } from '../constants';
 
 export function calculateScope3Lime(
   limestoneTonnes: number,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
 ) {
   const { constants } = context;
   const {
@@ -12,7 +13,7 @@ export function calculateScope3Lime(
     FUEL_SCOPE3_PRODUCTION_COAL,
     FUEL_SCOPE3_PRODUCTION_GASOLINE,
     FUEL_SCOPE3_POST_PRODUCTION_DISTILLATE_FUEL,
-  } = constants.LIMING.SCOPE3;
+  } = constants.COMMON.LIMING.SCOPE3;
 
   // (Embedded_Emissions_J11)
   const productionTotal =

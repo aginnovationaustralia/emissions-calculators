@@ -1,6 +1,7 @@
 import { ExecutionContext } from '../../executionContext';
 import { Fertiliser } from '../../types/fertiliser.input';
 import { CustomisedFertiliser } from '../../types/types';
+import { CommonConstants } from '../constants';
 
 export const OTHER_TYPE_TO_SIMPLE_KEY: {
   [key in CustomisedFertiliser]:
@@ -35,13 +36,18 @@ export const OTHER_TYPE_TO_SIMPLE_KEY: {
   'Sulphate of Ammonia': 'SULPHATE_OF_AMMONIA',
 };
 
-function getRatioN(context: ExecutionContext, otherType: CustomisedFertiliser) {
+function getRatioN(
+  context: ExecutionContext<CommonConstants>,
+  otherType: CustomisedFertiliser,
+) {
   const { constants } = context;
-  return constants.FERTILISER_CONTENT[OTHER_TYPE_TO_SIMPLE_KEY[otherType]].N;
+  return constants.COMMON.FERTILISER_CONTENT[
+    OTHER_TYPE_TO_SIMPLE_KEY[otherType]
+  ].N;
 }
 
 export function getOtherFertiliserAmounts(
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
   fertiliser: Fertiliser,
 ) {
   return (fertiliser.otherFertilisers ?? []).reduce(
