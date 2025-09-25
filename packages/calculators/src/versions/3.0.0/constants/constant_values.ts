@@ -8,6 +8,7 @@ import {
   Constants,
   FeedlotConstants,
   LIVESTOCK_SOURCE_LOCATION,
+  PorkConstants,
   SavannaConstants,
   SheepConstants,
   STATES,
@@ -1385,6 +1386,172 @@ export const feedlotConstants: FeedlotConstants = {
   },
 };
 
+export const porkConstants: PorkConstants = {
+  /**
+   * @description Methane emission potential for pork, in m3 CH4/kg
+   * @inventory2018 Appendix 5.E.4
+   * @units m3 CH4/kg
+   */
+  METHANE_EMISSION_POTENTIAL: 0.45,
+
+  /**
+   * @description Emission factor for bedding for pork, in kg CO2-e/kg
+   * @reference (Christie et al., 2012)
+   * @units kg CO2-e/kg
+   */
+  EF_BEDDING: 0.225,
+
+  /**
+   * @description Nitrogen content of swine manure, by class
+   * @inventory2022 Table A5.5.5.4
+   * @units kg N/head/year
+   */
+  MANURE_NITROGEN: {
+    boars: 16.93,
+    sows: 17.91,
+    gilts: 16.7,
+    slaughter_pigs: 11.4,
+  },
+
+  // (manureManagementC37)
+  /**
+   * @description Volatile solids content of swine manure, by class
+   * @inventory2022 Table A5.5.5.4
+   * @units kg / head / day
+   */
+  MANURE_CHARACTERISTICS: {
+    boars: 0.4,
+    sows: 0.46,
+    gilts: 0.55,
+    slaughter_pigs: 0.39,
+  },
+
+  // (entericFermentation34)
+  /**
+   * @description Feed intake of swine, by class
+   * @inventory2022 Table A5.5.5.2
+   * @units kg / head / day
+   */
+  HERD_FEEDINTAKE: {
+    boars: 2.3,
+    sows: 2.62,
+    gilts: 2.5,
+    slaughter_pigs: 1.71,
+  },
+
+  // nitrousOxideMMS90
+  /**
+   * @description Integrated emissions factors for swine, by state
+   * @inventory2022 Table A5.5.5.5
+   */
+  INTEGRATED_EF: {
+    // WARNING: what to do here? leave as 0?
+    [STATES.ACT]: {
+      iMCF: 0,
+      iFracGasm: 0,
+      iNOF: 0,
+    },
+    [STATES.NSW]: {
+      iMCF: 0.44174,
+      iFracGasm: 0.45946,
+      iNOF: 0.00517,
+    },
+    [STATES.TAS]: {
+      iMCF: 0.5243,
+      iFracGasm: 0.4786,
+      iNOF: 0.00343,
+    },
+    [STATES.WA_SW]: {
+      iMCF: 0.52871,
+      iFracGasm: 0.46465,
+      iNOF: 0.00498,
+    },
+    [STATES.SA]: {
+      iMCF: 0.5608,
+      iFracGasm: 0.4786,
+      iNOF: 0.00343,
+    },
+    [STATES.VIC]: {
+      iMCF: 0.45067,
+      iFracGasm: 0.45279,
+      iNOF: 0.00533,
+    },
+    [STATES.QLD]: {
+      iMCF: 0.6199,
+      iFracGasm: 0.50371,
+      iNOF: 0.00243,
+    },
+    [STATES.WA_NW]: {
+      iMCF: 0.52871,
+      iFracGasm: 0.46465,
+      iNOF: 0.00498,
+    },
+    [STATES.NT]: {
+      iMCF: 0.64598,
+      iFracGasm: 0.50406,
+      iNOF: 0.00225,
+    },
+  },
+
+  // nitrousOxideC114
+  /**
+   * @description Fraction of animal waste available for leaching and runoff (FracWET)
+   * @inventory2022 Table A5.5.10.2
+   * @type Proportion
+   */
+  FRACWET: {
+    [STATES.ACT]: 0.5,
+    [STATES.NSW]: 0.5,
+    [STATES.TAS]: 1,
+    [STATES.WA_SW]: 0.4,
+    [STATES.SA]: 0.75,
+    [STATES.VIC]: 0.5,
+    [STATES.QLD]: 0.25,
+    [STATES.WA_NW]: 0.4,
+    [STATES.NT]: 0,
+  },
+
+  // nitrousOxideC102
+  /**
+   * @description Allocation of waste to MMS
+   * @inventory2022 Table A5.5.5.6
+   * @type Proportion
+   */
+  WASTE_MMS: {
+    [STATES.ACT]: 0.5,
+    [STATES.NSW]: 0.06,
+    [STATES.TAS]: 0.02,
+    [STATES.WA_SW]: 0.1,
+    [STATES.SA]: 0.02,
+    [STATES.VIC]: 0.06,
+    [STATES.QLD]: 0.03,
+    [STATES.WA_NW]: 0.1,
+    [STATES.NT]: 0.02,
+  },
+
+  // WARNING: what about the others??? TODO: find default from vlookup func
+  // Pig_FeedC28
+  /**
+   * @description Emissions factors for swine feed ingredients, by ingredient
+   * @reference (Wiedemann et al., 2021), (Reckmann et al., 2016)
+   * @units kg CO2-e / kg ingredient
+   */
+  FEED_INGREDIENT_EF: {
+    wheat: 0.252,
+    barley: 0.341,
+    wheyPowder: 0,
+    canolaMeal: 0.284,
+    soybeanMeal: 0.633,
+    meatMeal: 0.386,
+    bloodMeal: 1.9,
+    fishmeal: 0,
+    tallow: 0,
+    wheatBran: 0.547,
+    beetPulp: 0.704,
+    millMix: 0,
+  },
+};
+
 export const constants: Constants = {
   /**
    * @description Energy required to manufacture herbicides and insecticides
@@ -1604,21 +1771,6 @@ export const constants: Constants = {
    * @type Proportion
    */
   DEER_FAECALN_PMF: 0.29,
-
-  // Pork
-  /**
-   * @description Methane emission potential for pork, in m3 CH4/kg
-   * @inventory2018 Appendix 5.E.4
-   * @units m3 CH4/kg
-   */
-  PORK_METHANE_EMISSION_POTENTIAL: 0.45,
-
-  /**
-   * @description Emission factor for bedding for pork, in kg CO2-e/kg
-   * @reference (Christie et al., 2012)
-   * @units kg CO2-e/kg
-   */
-  PORK_EF_BEDDING: 0.225,
 
   // Buffalo
   /**
@@ -3004,150 +3156,6 @@ export const constants: Constants = {
    * @inventory2022 Table A5.5.5.4
    * @units kg N/head/year
    */
-  SWINE_MANURE_NITROGEN: {
-    boars: 16.93,
-    sows: 17.91,
-    gilts: 16.7,
-    slaughter_pigs: 11.4,
-  },
-
-  // (manureManagementC37)
-  /**
-   * @description Volatile solids content of swine manure, by class
-   * @inventory2022 Table A5.5.5.4
-   * @units kg / head / day
-   */
-  SWINE_MANURE_CHARACTERISTICS: {
-    boars: 0.4,
-    sows: 0.46,
-    gilts: 0.55,
-    slaughter_pigs: 0.39,
-  },
-
-  // (entericFermentation34)
-  /**
-   * @description Feed intake of swine, by class
-   * @inventory2022 Table A5.5.5.2
-   * @units kg / head / day
-   */
-  SWINE_HERD_FEEDINTAKE: {
-    boars: 2.3,
-    sows: 2.62,
-    gilts: 2.5,
-    slaughter_pigs: 1.71,
-  },
-
-  // nitrousOxideMMS90
-  /**
-   * @description Integrated emissions factors for swine, by state
-   * @inventory2022 Table A5.5.5.5
-   */
-  SWINE_INTEGRATED_EF: {
-    // WARNING: what to do here? leave as 0?
-    [STATES.ACT]: {
-      iMCF: 0,
-      iFracGasm: 0,
-      iNOF: 0,
-    },
-    [STATES.NSW]: {
-      iMCF: 0.44174,
-      iFracGasm: 0.45946,
-      iNOF: 0.00517,
-    },
-    [STATES.TAS]: {
-      iMCF: 0.5243,
-      iFracGasm: 0.4786,
-      iNOF: 0.00343,
-    },
-    [STATES.WA_SW]: {
-      iMCF: 0.52871,
-      iFracGasm: 0.46465,
-      iNOF: 0.00498,
-    },
-    [STATES.SA]: {
-      iMCF: 0.5608,
-      iFracGasm: 0.4786,
-      iNOF: 0.00343,
-    },
-    [STATES.VIC]: {
-      iMCF: 0.45067,
-      iFracGasm: 0.45279,
-      iNOF: 0.00533,
-    },
-    [STATES.QLD]: {
-      iMCF: 0.6199,
-      iFracGasm: 0.50371,
-      iNOF: 0.00243,
-    },
-    [STATES.WA_NW]: {
-      iMCF: 0.52871,
-      iFracGasm: 0.46465,
-      iNOF: 0.00498,
-    },
-    [STATES.NT]: {
-      iMCF: 0.64598,
-      iFracGasm: 0.50406,
-      iNOF: 0.00225,
-    },
-  },
-
-  // nitrousOxideC114
-  /**
-   * @description Fraction of animal waste available for leaching and runoff (FracWET)
-   * @inventory2022 Table A5.5.10.2
-   * @type Proportion
-   */
-  SWINE_FRACWET: {
-    [STATES.ACT]: 0.5,
-    [STATES.NSW]: 0.5,
-    [STATES.TAS]: 1,
-    [STATES.WA_SW]: 0.4,
-    [STATES.SA]: 0.75,
-    [STATES.VIC]: 0.5,
-    [STATES.QLD]: 0.25,
-    [STATES.WA_NW]: 0.4,
-    [STATES.NT]: 0,
-  },
-
-  // nitrousOxideC102
-  /**
-   * @description Allocation of waste to MMS
-   * @inventory2022 Table A5.5.5.6
-   * @type Proportion
-   */
-  SWINE_WASTE_MMS: {
-    [STATES.ACT]: 0.5,
-    [STATES.NSW]: 0.06,
-    [STATES.TAS]: 0.02,
-    [STATES.WA_SW]: 0.1,
-    [STATES.SA]: 0.02,
-    [STATES.VIC]: 0.06,
-    [STATES.QLD]: 0.03,
-    [STATES.WA_NW]: 0.1,
-    [STATES.NT]: 0.02,
-  },
-
-  // WARNING: what about the others??? TODO: find default from vlookup func
-  // Pig_FeedC28
-  /**
-   * @description Emissions factors for swine feed ingredients, by ingredient
-   * @reference (Wiedemann et al., 2021), (Reckmann et al., 2016)
-   * @units kg CO2-e / kg ingredient
-   */
-  SWINE_FEED_INGREDIENT_EF: {
-    wheat: 0.252,
-    barley: 0.341,
-    wheyPowder: 0,
-    canolaMeal: 0.284,
-    soybeanMeal: 0.633,
-    meatMeal: 0.386,
-    bloodMeal: 1.9,
-    fishmeal: 0,
-    tallow: 0,
-    wheatBran: 0.547,
-    beetPulp: 0.704,
-    millMix: 0,
-  },
 
   // (manureManagementBroilersC83)
   /**

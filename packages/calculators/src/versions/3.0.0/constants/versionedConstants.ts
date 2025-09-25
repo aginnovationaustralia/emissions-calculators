@@ -330,22 +330,20 @@ export type FeedlotConstants = {
   EMISSION_POTENTIAL: number;
 };
 
-export type Constants = {
-  // Pigs
-
-  SWINE_MANURE_NITROGEN: {
+export type PorkConstants = {
+  MANURE_NITROGEN: {
     [type in 'boars' | 'sows' | 'gilts' | 'slaughter_pigs']: number;
   };
 
-  SWINE_MANURE_CHARACTERISTICS: {
+  MANURE_CHARACTERISTICS: {
     [type in 'boars' | 'sows' | 'gilts' | 'slaughter_pigs']: number;
   };
 
-  SWINE_HERD_FEEDINTAKE: {
+  HERD_FEEDINTAKE: {
     [type in 'boars' | 'sows' | 'gilts' | 'slaughter_pigs']: number;
   };
 
-  SWINE_INTEGRATED_EF: {
+  INTEGRATED_EF: {
     [state in States]: {
       iMCF: number;
       iFracGasm: number;
@@ -353,15 +351,15 @@ export type Constants = {
     };
   };
 
-  SWINE_FRACWET: {
+  FRACWET: {
     [state in States]: number;
   };
 
-  SWINE_WASTE_MMS: {
+  WASTE_MMS: {
     [state in States]: number;
   };
 
-  SWINE_FEED_INGREDIENT_EF: {
+  FEED_INGREDIENT_EF: {
     wheat: number;
     barley: number;
     wheyPowder: number;
@@ -376,6 +374,11 @@ export type Constants = {
     millMix: number;
   };
 
+  METHANE_EMISSION_POTENTIAL: number;
+  EF_BEDDING: number;
+};
+
+export type Constants = {
   // Poultry
   POULTRY_DIET_PROPERTIES: {
     [type in
@@ -491,10 +494,6 @@ export type Constants = {
   // Goat
   GOAT_EF: number;
   GOAT_MANUREPRODUCTION: number;
-
-  // Pork
-  PORK_METHANE_EMISSION_POTENTIAL: number;
-  PORK_EF_BEDDING: number;
 
   // Buffalo
   BUFFALO_NITROGEN_EXCRETED_FACTOR: number;

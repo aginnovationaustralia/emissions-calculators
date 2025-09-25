@@ -3,6 +3,7 @@ import { DAYS_IN_SEASON, PORK_CLASSES, SEASONS } from '../constants/constants';
 import { ExecutionContext } from '../executionContext';
 import { LivestockManure } from '../types/livestockManure.input';
 import { ManureManagementSystems, PorkClass, State } from '../types/types';
+import { ConstantsForPorkCalculator } from './constants';
 
 type PorkSeasonNumber = {
   [porkType in PorkClass]?: {
@@ -24,7 +25,7 @@ const EMPTY_INTERNAL_TOTALS = {
 export function calculateScope1Manure(
   state: State,
   head: PorkSeasonNumber,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPorkCalculator>,
 ) {
   const { constants } = context;
 
@@ -47,8 +48,8 @@ export function calculateScope1Manure(
   //  VS = volatile solids production (kg/head/day)
   //  iMCF = integrated methane conversion factor
 
-  const methaneEmissionPotential = constants.PORK_METHANE_EMISSION_POTENTIAL; // Bo
-  const densityOfMethane = constants.METHANE_DENSITY; // p
+  const methaneEmissionPotential = constants.PORK.METHANE_EMISSION_POTENTIAL; // Bo
+  const densityOfMethane = constants.COMMON.METHANE_DENSITY; // p
 
   ManureManagementSystems.forEach((system) => {
     PORK_CLASSES.forEach((type) => {
@@ -75,9 +76,9 @@ export function calculateScope1Manure(
 
         let MCF: number;
         if (system === 'undefinedSystem') {
-          MCF = constants.SWINE_INTEGRATED_EF[state].iMCF;
+          MCF = constants.PORK.INTEGRATED_EF[state].iMCF;
         } else {
-          MCF = constants.MMS[system].MCF;
+          MCF = constants.COMMON.MMS[system].MCF;
         }
 
         const methaneProduction =
@@ -107,7 +108,7 @@ export function calculateScope1Manure(
     );
   }, 0);
 
-  const totalManureGg = totalManure * constants.GWP_FACTORSC5;
+  const totalManureGg = totalManure * constants.COMMON.GWP_FACTORSC5;
   const totalManureTonnes = totalManureGg * 10 ** 3;
 
   return totalManureTonnes;

@@ -1,6 +1,7 @@
 import { PORK_CLASSES, SEASONS } from '../constants/constants';
 import { ExecutionContext } from '../executionContext';
 import { PorkClass, Season } from '../types/types';
+import { ConstantsForPorkCalculator } from './constants';
 
 type PorkSeasonNumber = {
   [porkType in PorkClass]?: {
@@ -17,7 +18,7 @@ const EMPTY_INTERNAL_TOTALS = {
 
 export function calculateScope1Enteric(
   head: PorkSeasonNumber,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPorkCalculator>,
 ) {
   const { constants } = context;
 
@@ -52,7 +53,7 @@ export function calculateScope1Enteric(
       ) as 'sows' | 'boars' | 'gilts' | 'slaughter_pigs';
 
       // (Enteric_FermentationC35)
-      const feedIntakeDM = constants.SWINE_HERD_FEEDINTAKE[newType];
+      const feedIntakeDM = constants.PORK.HERD_FEEDINTAKE[newType];
 
       const headSeasonType = currentClass[season];
 
@@ -78,7 +79,8 @@ export function calculateScope1Enteric(
     );
   }, 0);
 
-  const totalMethaneGg = totalMethaneProduction * constants.GWP_FACTORSC5;
+  const totalMethaneGg =
+    totalMethaneProduction * constants.COMMON.GWP_FACTORSC5;
   const totalMethaneTonnes = totalMethaneGg * 10 ** 3;
 
   // (dataSummaryC9)
