@@ -1,11 +1,12 @@
 import { ExecutionContext } from '../executionContext';
 import { FeedlotStay } from '../types/Feedlot/stay.input';
 import { State } from '../types/types';
+import { ConstantsForFeedlotCalculator } from './constants';
 
 export function calculateScope1ManureManagement(
   stay: FeedlotStay,
   state: State,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForFeedlotCalculator>,
 ) {
   const { constants } = context;
 
@@ -16,17 +17,17 @@ export function calculateScope1ManureManagement(
   const volatileSolidProduction =
     feedIntake *
     (1 - stay.dryMatterDigestibility / 100) *
-    (1 - constants.FEEDLOT_ASH_CONTENT);
+    (1 - constants.FEEDLOT.ASH_CONTENT);
 
   // (manureManagementT14, manureManagementC29)
-  const integratedEF = constants.FEEDLOT_INTEGRATED_EF[state];
+  const integratedEF = constants.FEEDLOT.INTEGRATED_EF[state];
 
   // (manureManagementD47)
   const methaneProductionFromManure =
     volatileSolidProduction *
-    constants.FEEDLOT_EMISSION_POTENTIAL *
+    constants.FEEDLOT.EMISSION_POTENTIAL *
     integratedEF *
-    constants.METHANE_DENSITY;
+    constants.COMMON.METHANE_DENSITY;
 
   // (manureManagementD57:F60, manureManagementC62)
   const seasonalMethaneProduction =
@@ -36,7 +37,7 @@ export function calculateScope1ManureManagement(
     10 ** -6;
 
   // (manureManagementC63)
-  const totalCO2Gg = seasonalMethaneProduction * constants.GWP_FACTORSC5;
+  const totalCO2Gg = seasonalMethaneProduction * constants.COMMON.GWP_FACTORSC5;
 
   // (manureManagementC64, dataSummaryC11)
   const manureManagementCH4 = totalCO2Gg * 10 ** 3;

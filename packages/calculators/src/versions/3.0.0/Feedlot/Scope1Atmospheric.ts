@@ -1,6 +1,7 @@
 import { ExecutionContext } from '../executionContext';
 import { FeedlotStay } from '../types/Feedlot/stay.input';
 import { FeedlotSystem } from '../types/types';
+import { ConstantsForFeedlotCalculator } from './constants';
 import { getFeedlotProductionSystemEF } from './functions';
 
 // system is (dataInputD10, agriculturalSoilsB12)
@@ -15,14 +16,14 @@ import { getFeedlotProductionSystemEF } from './functions';
 export function calculateScope1Atmospheric(
   stay: FeedlotStay,
   system: FeedlotSystem,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForFeedlotCalculator>,
 ) {
   const { constants } = context;
 
   // (agriculturalSoilsD12)
-  const systemEF = constants.FEEDLOT_MANURE_EF[system].EF;
+  const systemEF = constants.FEEDLOT.MANURE_EF[system].EF;
   // (agriculturalSoilsE12)
-  const systemFracGASM = constants.FEEDLOT_MANURE_EF[system].FracGASM;
+  const systemFracGASM = constants.FEEDLOT.MANURE_EF[system].FracGASM;
 
   // (nitrousOxideMMSD5)
   const cudeProteinFraction = stay.crudeProtein / 100;
@@ -46,20 +47,20 @@ export function calculateScope1Atmospheric(
   // (agriculturalSoilsD26)
   const animalWasteAppliedToSoil =
     annualNitrogenExcretion * (1 - systemEF - systemFracGASM) -
-    constants.FEEDLOT_MN_LEACH;
+    constants.FEEDLOT.MN_LEACH;
 
   // (agriculturalSoilsD51)
   const massOfAnimalWasteVolatised =
     (animalWasteAppliedToSoil +
-      constants.FEEDLOT_UN_SOIL +
-      constants.FEEDLOT_FN_SOIL) *
-    constants.FEEDLOT_AG_SOILS;
+      constants.FEEDLOT.UN_SOIL +
+      constants.FEEDLOT.FN_SOIL) *
+    constants.FEEDLOT.AG_SOILS;
 
   // (agriculturalSoilsD62)
   const animalWaste =
     massOfAnimalWasteVolatised *
     getFeedlotProductionSystemEF(system, context) *
-    constants.GWP_FACTORSC15;
+    constants.COMMON.GWP_FACTORSC15;
 
   // (agriculturalSoilsD68)
   const totalAmmoniaLossesCO2 = animalWaste;
@@ -67,15 +68,15 @@ export function calculateScope1Atmospheric(
   // WARNING: GWP_FACTORSC6 is different for feedlot than it is grains, etc
   // (agriculturalSoilsD69)
   const totalAmmoniaLossesGgCO2 =
-    totalAmmoniaLossesCO2 * constants.GWP_FACTORSC6;
+    totalAmmoniaLossesCO2 * constants.COMMON.GWP_FACTORSC6;
 
   // (agriculturalSoilsD36)
   const annualN2OProduction =
     animalWasteAppliedToSoil *
-    constants.FEEDLOT_ANNUAL_N2O_EF *
-    constants.GWP_FACTORSC15;
+    constants.FEEDLOT.ANNUAL_N2O_EF *
+    constants.COMMON.GWP_FACTORSC15;
 
-  const annualN2OGg = annualN2OProduction * constants.GWP_FACTORSC6;
+  const annualN2OGg = annualN2OProduction * constants.COMMON.GWP_FACTORSC6;
 
   const annualN2OTonnes = annualN2OGg * 10 ** 3;
 

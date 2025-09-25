@@ -26,18 +26,19 @@ import { FeedlotComplete } from '../types/Feedlot/feedlot.input';
 import { FeedlotInput } from '../types/Feedlot/input';
 import { FeedlotOutput } from '../types/Feedlot/output';
 import { State } from '../types/types';
+import { ConstantsForFeedlotCalculator } from './constants';
+import { getEmissionsIntensities } from './functions';
 import { calculateScope1Atmospheric } from './Scope1Atmospheric';
 import { calculateScope1Enteric } from './Scope1Enteric';
 import { calculateScope1ManureDirectIndirect } from './Scope1ManureDirectIndirect';
 import { calculateScope1ManureManagement } from './Scope1ManureManagement';
 import { calculateScope1Urea } from './Scope1Urea';
 import { calculateScope3PurchaseLivestock } from './Scope3PurchasedLivestock';
-import { getEmissionsIntensities } from './functions';
 
 export function calculateSingleFeedlot(
   state: State,
   feedlot: FeedlotComplete,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForFeedlotCalculator>,
   carbonSequestration: number,
   id: string,
 ) {
@@ -274,7 +275,7 @@ export function calculateSingleFeedlot(
 
 export function calculateEntireFeedlot(
   feedlot: FeedlotInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForFeedlotCalculator>,
 ): FeedlotOutput {
   const carbonSequestration = calculateAllCarbonSequestrationWithKeyProportion(
     feedlot.vegetation,

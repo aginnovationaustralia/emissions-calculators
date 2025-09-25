@@ -302,35 +302,35 @@ export type SavannaConstants = {
   };
 };
 
-export type Constants = {
-  // Feedlot
-
-  FEEDLOT_MANURE_EF: {
+export type FeedlotConstants = {
+  MANURE_EF: {
     Drylot: { EF: number; FracGASM: number };
     'Solid Storage': { EF: number; FracGASM: number };
     Composting: { EF: number; FracGASM: number };
     'Uncovered anaerobic lagoon': { EF: number; FracGASM: number };
   };
 
-  FEEDLOT_INTEGRATED_EF: {
+  INTEGRATED_EF: {
     [state in States]: number;
   };
 
-  FEEDLOT_PURCHASELIVESTOCK_EF: {
+  PURCHASELIVESTOCK_EF: {
     [location in FeedlotPurchaseSourceLocation]: number;
   };
 
-  FEEDLOT_MN_LEACH: number;
-  FEEDLOT_UN_SOIL: number;
-  FEEDLOT_FN_SOIL: number;
-  FEEDLOT_AG_SOILS: number;
-  FEEDLOT_ANNUAL_N2O_EF: number;
-  FEEDLOT_I_NOF: number;
-  FEEDLOT_I_FRACGASM: number;
-  FEEDLOT_INDIRECT_EF: number;
-  FEEDLOT_ASH_CONTENT: number;
-  FEEDLOT_EMISSION_POTENTIAL: number;
+  MN_LEACH: number;
+  UN_SOIL: number;
+  FN_SOIL: number;
+  AG_SOILS: number;
+  ANNUAL_N2O_EF: number;
+  I_NOF: number;
+  I_FRACGASM: number;
+  INDIRECT_EF: number;
+  ASH_CONTENT: number;
+  EMISSION_POTENTIAL: number;
+};
 
+export type Constants = {
   // Pigs
 
   SWINE_MANURE_NITROGEN: {

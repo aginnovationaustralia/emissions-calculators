@@ -1,4 +1,5 @@
 import { ExecutionContext } from '../../executionContext';
+import { CommonConstants } from '../constants';
 
 /**
  *
@@ -9,7 +10,7 @@ import { ExecutionContext } from '../../executionContext';
 export function calculateScope3Herbicide(
   glyphosateUsage: number,
   generalHerbicideUsage: number,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
 ) {
   const { constants } = context;
 
@@ -18,9 +19,9 @@ export function calculateScope3Herbicide(
 
   // (embeddedEmissions_E148, embeddedEmissions_C129, embeddedEmissions_E13)
   const glyphosateEnergyEmissions =
-    constants.AGROCHEMICAL_ENERGY_MANUFACTURE.HERBICIDE_GLYPHOSATE
+    constants.COMMON.AGROCHEMICAL_ENERGY_MANUFACTURE.HERBICIDE_GLYPHOSATE
       .TOTAL_ENERGY *
-    constants.AGROCHEMICAL_ENERGY_MANUFACTURE.HERBICIDE_GLYPHOSATE.EF;
+    constants.COMMON.AGROCHEMICAL_ENERGY_MANUFACTURE.HERBICIDE_GLYPHOSATE.EF;
 
   // (embeddedEmissions_F13)
   const glyphosateGHGTonnes = glyphosateTonnes * glyphosateEnergyEmissions;
@@ -30,13 +31,14 @@ export function calculateScope3Herbicide(
 
   // (embeddedEmissions_E149)
   const herbicideEnergyEmissions =
-    constants.AGROCHEMICAL_ENERGY_MANUFACTURE.HERBICIDE_GENERAL.TOTAL_ENERGY *
-    constants.AGROCHEMICAL_ENERGY_MANUFACTURE.HERBICIDE_GENERAL.EF;
+    constants.COMMON.AGROCHEMICAL_ENERGY_MANUFACTURE.HERBICIDE_GENERAL
+      .TOTAL_ENERGY *
+    constants.COMMON.AGROCHEMICAL_ENERGY_MANUFACTURE.HERBICIDE_GENERAL.EF;
 
   // (embeddedEmissions_E150)
   const insecticideEnergyEmissions =
-    constants.AGROCHEMICAL_ENERGY_MANUFACTURE.INSECTICIDE.TOTAL_ENERGY *
-    constants.AGROCHEMICAL_ENERGY_MANUFACTURE.INSECTICIDE.EF;
+    constants.COMMON.AGROCHEMICAL_ENERGY_MANUFACTURE.INSECTICIDE.TOTAL_ENERGY *
+    constants.COMMON.AGROCHEMICAL_ENERGY_MANUFACTURE.INSECTICIDE.EF;
 
   // (embeddedEmissions_E151, embeddedEmissions_C128, embeddedEmissions_E14)
   const herbicideAverageEnergyEmissions =

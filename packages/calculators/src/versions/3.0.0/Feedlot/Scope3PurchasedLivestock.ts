@@ -4,12 +4,13 @@ import {
 } from '../constants/constants';
 import { ExecutionContext } from '../executionContext';
 import { FeedlotPurchases } from '../types/Feedlot/purchases.input';
+import { ConstantsForFeedlotCalculator } from './constants';
 
 // breedingSource dataInputD114
 
 export function calculateScope3PurchaseLivestock(
   purchases: FeedlotPurchases,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForFeedlotCalculator>,
 ) {
   const { constants } = context;
 
@@ -21,7 +22,7 @@ export function calculateScope3PurchaseLivestock(
       const totalPurchaseEmissions = (purchases[cur] ?? []).reduce(
         (accP, curP) => {
           const breedingSourceEF =
-            constants.FEEDLOT_PURCHASELIVESTOCK_EF[curP.purchaseSource];
+            constants.FEEDLOT.PURCHASELIVESTOCK_EF[curP.purchaseSource];
           return accP + curP.head * curP.purchaseWeight * breedingSourceEF;
         },
         0,
@@ -37,7 +38,7 @@ export function calculateScope3PurchaseLivestock(
     const totalPurchaseEmissions = (purchases[cur] ?? []).reduce(
       (accP, curP) => {
         const breedingSourceEF =
-          constants.FEEDLOT_PURCHASELIVESTOCK_EF[curP.purchaseSource];
+          constants.FEEDLOT.PURCHASELIVESTOCK_EF[curP.purchaseSource];
         return accP + curP.head * curP.purchaseWeight * breedingSourceEF;
       },
       0,

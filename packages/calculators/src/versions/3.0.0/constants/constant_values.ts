@@ -6,6 +6,7 @@ import {
 import {
   BeefConstants,
   Constants,
+  FeedlotConstants,
   LIVESTOCK_SOURCE_LOCATION,
   SavannaConstants,
   SheepConstants,
@@ -1265,6 +1266,125 @@ export const savannaConstants: SavannaConstants = {
   },
 };
 
+export const feedlotConstants: FeedlotConstants = {
+  /**
+   * @description Leaching and runoff mass for feedlot
+   * @inventory2022 3.D.A_3
+   */
+  MN_LEACH: 0,
+
+  /**
+   * @description mass of urinary N excretion on pasture
+   * @inventory2022 3.D.B_2
+   */
+  UN_SOIL: 0,
+
+  /**
+   * @description mass of faecal N excretion on pasture
+   * @inventory2022 3.D.B_2
+   */
+  FN_SOIL: 0,
+
+  /**
+   * @description FracGASM value for feedlot
+   * @inventory2022 3.D.B_2
+   */
+  AG_SOILS: 0.21,
+
+  /**
+   * @description Emissions factor for amount of N deposited on pasture, weighted average calculated from IPCC 2019
+   * @inventory2022 3.D.A_4
+   */
+  ANNUAL_N2O_EF: 0.00503,
+
+  /**
+   * @description integrated N2O emission factor for each feedlot class and state
+   * @inventory2022 3.B.1c_7
+   */
+  I_NOF: 0.01942,
+
+  /**
+   * @description integrated fraction of N volatilised from feedlot cattle
+   * @inventory2022 3.B.5c_1
+   */
+  I_FRACGASM: 0.71116,
+
+  /**
+   * @description Inorganic fertiliser EF for non-irrigated cropping
+   * @inventory2022 3.B.5c_2
+   */
+  INDIRECT_EF: 0.0041,
+
+  /**
+   * @description Ash content expressed as a fraction of manure
+   * @inventory2022 3.B.1 c_1
+   */
+  ASH_CONTENT: 0.16,
+
+  /**
+   * @description Methane emissions potential for feedlot
+   * @inventory2022 3.B.1 c_1
+   * @units m3 CH4/kg
+   */
+  EMISSION_POTENTIAL: 0.19,
+
+  /**
+   * @description Manure emission factors for each feedlot manure processing system
+   * @inventory2022 Table A5.5.3.6, A5.5.3.7
+   */
+  MANURE_EF: {
+    Drylot: {
+      EF: 0.0054,
+      FracGASM: 0.6,
+    },
+    'Solid Storage': {
+      EF: 0.005,
+      FracGASM: 0.25,
+    },
+    Composting: {
+      EF: 0.01,
+      FracGASM: 0.4,
+    },
+    'Uncovered anaerobic lagoon': {
+      EF: 0,
+      FracGASM: 0.35,
+    },
+  },
+
+  /**
+   * @description Integrated EF for feedlot by state
+   * @inventory2022 A5.5.3.3
+   */
+  INTEGRATED_EF: {
+    act: 0.0323,
+    nsw: 0.0323,
+    tas: 0,
+    wa_sw: 0.0327,
+    sa: 0.0323,
+    vic: 0.0323,
+    qld: 0.04023,
+    nt: 0,
+    wa_nw: 0,
+  },
+
+  /**
+   * @description Emissions factors for purchased live stock, in kg CO2-e/kg liveweight
+   * @reference Wiedemann et al. (2015b)
+   * @units kg CO2-e/kg
+   */
+  PURCHASELIVESTOCK_EF: {
+    NT: 12.4,
+    'nth QLD': 12.4,
+    'sth/central QLD': 12.4,
+    'nth NSW': 11.7,
+    'sth NSW/VIC/sth SA': 11.7,
+    'NSW/SA pastoral zone': 12.4,
+    'sw WA': 11.7,
+    'WA pastoral': 12.4,
+    TAS: 11.7,
+  },
+};
+
 export const constants: Constants = {
   /**
    * @description Energy required to manufacture herbicides and insecticides
@@ -2415,106 +2535,6 @@ export const constants: Constants = {
   },
 
   /**
-   * @description Leaching and runoff mass for feedlot
-   * @inventory2022 3.D.A_3
-   */
-  FEEDLOT_MN_LEACH: 0,
-
-  /**
-   * @description mass of urinary N excretion on pasture
-   * @inventory2022 3.D.B_2
-   */
-  FEEDLOT_UN_SOIL: 0,
-
-  /**
-   * @description mass of faecal N excretion on pasture
-   * @inventory2022 3.D.B_2
-   */
-  FEEDLOT_FN_SOIL: 0,
-
-  /**
-   * @description FracGASM value for feedlot
-   * @inventory2022 3.D.B_2
-   */
-  FEEDLOT_AG_SOILS: 0.21,
-
-  /**
-   * @description Emissions factor for amount of N deposited on pasture, weighted average calculated from IPCC 2019
-   * @inventory2022 3.D.A_4
-   */
-  FEEDLOT_ANNUAL_N2O_EF: 0.00503,
-
-  /**
-   * @description integrated N2O emission factor for each feedlot class and state
-   * @inventory2022 3.B.1c_7
-   */
-  FEEDLOT_I_NOF: 0.01942,
-
-  /**
-   * @description integrated fraction of N volatilised from feedlot cattle
-   * @inventory2022 3.B.5c_1
-   */
-  FEEDLOT_I_FRACGASM: 0.71116,
-
-  /**
-   * @description Inorganic fertiliser EF for non-irrigated cropping
-   * @inventory2022 3.B.5c_2
-   */
-  FEEDLOT_INDIRECT_EF: 0.0041,
-
-  /**
-   * @description Ash content expressed as a fraction of manure
-   * @inventory2022 3.B.1 c_1
-   */
-  FEEDLOT_ASH_CONTENT: 0.16,
-
-  /**
-   * @description Methane emissions potential for feedlot
-   * @inventory2022 3.B.1 c_1
-   * @units m3 CH4/kg
-   */
-  FEEDLOT_EMISSION_POTENTIAL: 0.19,
-
-  /**
-   * @description Manure emission factors for each feedlot manure processing system
-   * @inventory2022 Table A5.5.3.6, A5.5.3.7
-   */
-  FEEDLOT_MANURE_EF: {
-    Drylot: {
-      EF: 0.0054,
-      FracGASM: 0.6,
-    },
-    'Solid Storage': {
-      EF: 0.005,
-      FracGASM: 0.25,
-    },
-    Composting: {
-      EF: 0.01,
-      FracGASM: 0.4,
-    },
-    'Uncovered anaerobic lagoon': {
-      EF: 0,
-      FracGASM: 0.35,
-    },
-  },
-
-  /**
-   * @description Integrated EF for feedlot by state
-   * @inventory2022 A5.5.3.3
-   */
-  FEEDLOT_INTEGRATED_EF: {
-    act: 0.0323,
-    nsw: 0.0323,
-    tas: 0,
-    wa_sw: 0.0327,
-    sa: 0.0323,
-    vic: 0.0323,
-    qld: 0.04023,
-    nt: 0,
-    wa_nw: 0,
-  },
-
-  /**
    * @description Fuel usage for each truck type, in litres / km
    * @units litres / km
    */
@@ -2546,23 +2566,6 @@ export const constants: Constants = {
     EF_IRRIGATEDCROP: 0.007,
     EF_NONIRRIGATEDCROP: 0.0041,
     EF_NONIRRIGATEDPASTURE: 0.0018,
-  },
-
-  /**
-   * @description Emissions factors for purchased live stock, in kg CO2-e/kg liveweight
-   * @reference Wiedemann et al. (2015b)
-   * @units kg CO2-e/kg
-   */
-  FEEDLOT_PURCHASELIVESTOCK_EF: {
-    NT: 12.4,
-    'nth QLD': 12.4,
-    'sth/central QLD': 12.4,
-    'nth NSW': 11.7,
-    'sth NSW/VIC/sth SA': 11.7,
-    'NSW/SA pastoral zone': 12.4,
-    'sw WA': 11.7,
-    'WA pastoral': 12.4,
-    TAS: 11.7,
   },
 
   /**
