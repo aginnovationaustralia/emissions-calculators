@@ -4,8 +4,10 @@ import {
   FreightTypes,
 } from '../types/types';
 import {
+  BeefConstants,
   Constants,
   LIVESTOCK_SOURCE_LOCATION,
+  SavannaConstants,
   SheepConstants,
   STATES,
 } from './versionedConstants';
@@ -375,14 +377,14 @@ export const sheepConstants: SheepConstants = {
   EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsSheepD32)
 };
 
-export const constants: Constants = {
+export const beefConstants: BeefConstants = {
   /**
    * @description Dry matter digestibility for beef across seasons and states, as percentage
    * @inventory2018 Appendix 5.B.3
    * @units %
    * @type Percentage
    */
-  BEEF_DRYMATTERDIGESTIBILITY: {
+  DRYMATTERDIGESTIBILITY: {
     spring: {
       [STATES.ACT]: 55,
       [STATES.NSW]: 55,
@@ -435,7 +437,7 @@ export const constants: Constants = {
    * @units %
    * @type Percentage
    */
-  BEEF_CRUDEPROTEIN: {
+  CRUDEPROTEIN: {
     spring: {
       [STATES.ACT]: 7,
       [STATES.NSW]: 7,
@@ -481,40 +483,11 @@ export const constants: Constants = {
       [STATES.WA_NW]: 6,
     },
   },
-
-  /**
-   * @description Energy required to manufacture herbicides and insecticides
-   * @reference O'Halloran, N., Fisher, P., Rab, A., & Victoria, D. P. I. (2008). Preliminary estimation of the carbon footprint of the Australian vegetable industry (pp. 1-39). Discussion paper 4. Vegetable Industry Carbon Footprint Scoping Study. 2008, Horticulture Australia Ltd. Table 7
-   */
-  ENERGY_TO_MANUFACTURE: {
-    /** @units MJ/kg */
-    HERBICIDE_ENERGY: 550,
-    /** @units MJ/kg */
-    HERBICIDEGENERAL_ENERGY: 310,
-    /** @units MJ/kg */
-    INSECTICIDE_ENERGY: 315,
-    /** @units kg CO2-e/MJ */
-    HERBICIDE_EF: 0.06,
-    /** @units kg CO2-e/MJ */
-    HERBICIDEGENERAL_EF: 0.06,
-    /** @units kg CO2-e/MJ */
-    INSECTICIDE_EF: 0.06,
-  },
-
-  // Embedded emissions M7
-  /**
-   * @description Relative amount of CO2, CH4, and N2O emitted by herbicides
-   * @type Proportion
-   */
-  EMISSION_BREAKDOWN: {
-    HERBICIDE: { CO2: 1.0, CH4: 0.0, N2O: 0.0 },
-  },
-
   /**
    * @description Amount of nitrogen excreted by beef cattle across class and state, in kilograms per year
    * @units kg/year
    */
-  BEEF_NITROGENEXCRETEDNUMBER: {
+  NITROGENEXCRETEDNUMBER: {
     bullsGt1: {
       [STATES.ACT]: 700,
       [STATES.NSW]: 700,
@@ -707,6 +680,618 @@ export const constants: Constants = {
       [REGIONS.KIMBERLEY]: 550,
       [STATES.WA_NW]: 550,
     },
+  },
+
+  /**
+   * @description Urine and dung deposited during grazing
+   */
+  EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsBeefD10)
+};
+
+export const savannaConstants: SavannaConstants = {
+  /**
+   * @description Static lookup for savannah coarse fuel, by region
+   */
+  FUELCOARSE: {
+    'Combined Ref': {
+      Qld1: '71',
+      Qld2: '72',
+      Qld3: '73',
+      Qld4: '74',
+      Qld5: '75',
+      Qld6: '76',
+      Qld7: '77',
+      Qld8: '78',
+      Qld9: '79',
+      Qld10: '710',
+      NT1: '81',
+      NT2: '82',
+      NT3: '83',
+      NT4: '84',
+      NT5: '85',
+      NT6: '86',
+      NT7: '87',
+      NT8: '88',
+      NT9: '89',
+      NT10: '810',
+      Kimberley1: '91',
+      Kimberley2: '92',
+      Kimberley3: '93',
+      Kimberley4: '94',
+      Kimberley5: '95',
+      Kimberley6: '96',
+      Kimberley7: '97',
+      Kimberley8: '98',
+      Kimberley9: '99',
+      Kimberley10: '910',
+      Pilbara1: '101',
+      Pilbara2: '102',
+      Pilbara3: '103',
+      Pilbara4: '104',
+      Pilbara5: '105',
+      Pilbara6: '106',
+      Pilbara7: '107',
+      Pilbara8: '108',
+      Pilbara9: '109',
+      Pilbara10: '1010',
+    },
+    Yo: {
+      Qld1: 5.97818,
+      Qld2: 5.4075,
+      Qld3: 4.96198,
+      Qld4: 4.96198,
+      Qld5: 5.21557,
+      Qld6: 8.55158,
+      Qld7: 8.14308,
+      Qld8: 7.97898,
+      Qld9: 7.8505,
+      Qld10: 7.48462,
+      NT1: 5.97818,
+      NT2: 5.4075,
+      NT3: 4.96198,
+      NT4: 4.96198,
+      NT5: 5.21557,
+      NT6: 8.55158,
+      NT7: 8.14308,
+      NT8: 7.97898,
+      NT9: 7.8505,
+      NT10: 7.48462,
+      Kimberley1: 5.97818,
+      Kimberley2: 5.4075,
+      Kimberley3: 4.96198,
+      Kimberley4: 4.96198,
+      Kimberley5: 5.21557,
+      Kimberley6: 8.55158,
+      Kimberley7: 8.14308,
+      Kimberley8: 7.97898,
+      Kimberley9: 7.8505,
+      Kimberley10: 7.48462,
+      Pilbara1: 5.97818,
+      Pilbara2: 5.4075,
+      Pilbara3: 4.96198,
+      Pilbara4: 4.96198,
+      Pilbara5: 5.21557,
+      Pilbara6: 8.55158,
+      Pilbara7: 8.14308,
+      Pilbara8: 7.97898,
+      Pilbara9: 7.8505,
+      Pilbara10: 7.48462,
+    },
+    L: {
+      Qld1: 0.05888,
+      Qld2: 0.24606,
+      Qld3: 0.18948,
+      Qld4: 0.18948,
+      Qld5: 0.21756,
+      Qld6: 0.0722,
+      Qld7: 0.22387,
+      Qld8: 0.12031,
+      Qld9: 0.12056,
+      Qld10: 0.2044,
+      NT1: 0.05888,
+      NT2: 0.24606,
+      NT3: 0.18948,
+      NT4: 0.18948,
+      NT5: 0.21756,
+      NT6: 0.0722,
+      NT7: 0.22387,
+      NT8: 0.12031,
+      NT9: 0.12056,
+      NT10: 0.2044,
+      Kimberley1: 0.05888,
+      Kimberley2: 0.24606,
+      Kimberley3: 0.18948,
+      Kimberley4: 0.18948,
+      Kimberley5: 0.21756,
+      Kimberley6: 0.0722,
+      Kimberley7: 0.22387,
+      Kimberley8: 0.12031,
+      Kimberley9: 0.12056,
+      Kimberley10: 0.2044,
+      Pilbara1: 0.05888,
+      Pilbara2: 0.24606,
+      Pilbara3: 0.18948,
+      Pilbara4: 0.18948,
+      Pilbara5: 0.21756,
+      Pilbara6: 0.0722,
+      Pilbara7: 0.22387,
+      Pilbara8: 0.12031,
+      Pilbara9: 0.12056,
+      Pilbara10: 0.2044,
+    },
+    D: {
+      Qld1: 0.072,
+      Qld2: 0.072,
+      Qld3: 0.072,
+      Qld4: 0.072,
+      Qld5: 0.072,
+      Qld6: 0.072,
+      Qld7: 0.072,
+      Qld8: 0.072,
+      Qld9: 0.072,
+      Qld10: 0.072,
+      NT1: 0.072,
+      NT2: 0.072,
+      NT3: 0.072,
+      NT4: 0.072,
+      NT5: 0.072,
+      NT6: 0.072,
+      NT7: 0.072,
+      NT8: 0.072,
+      NT9: 0.072,
+      NT10: 0.072,
+      Kimberley1: 0.072,
+      Kimberley2: 0.072,
+      Kimberley3: 0.072,
+      Kimberley4: 0.072,
+      Kimberley5: 0.072,
+      Kimberley6: 0.072,
+      Kimberley7: 0.072,
+      Kimberley8: 0.072,
+      Kimberley9: 0.072,
+      Kimberley10: 0.072,
+      Pilbara1: 0.072,
+      Pilbara2: 0.072,
+      Pilbara3: 0.072,
+      Pilbara4: 0.072,
+      Pilbara5: 0.072,
+      Pilbara6: 0.072,
+      Pilbara7: 0.072,
+      Pilbara8: 0.072,
+      Pilbara9: 0.072,
+      Pilbara10: 0.072,
+    },
+  },
+
+  /**
+   * @description Static lookup for savannah fine fuel, by region
+   */
+  FUELFINE: {
+    'Combined Ref': {
+      Qld1: '71',
+      Qld2: '72',
+      Qld3: '73',
+      Qld4: '74',
+      Qld5: '75',
+      Qld6: '76',
+      Qld7: '77',
+      Qld8: '78',
+      Qld9: '79',
+      Qld10: '710',
+      NT1: '81',
+      NT2: '82',
+      NT3: '83',
+      NT4: '84',
+      NT5: '85',
+      NT6: '86',
+      NT7: '87',
+      NT8: '88',
+      NT9: '89',
+      NT10: '810',
+      Kimberley1: '91',
+      Kimberley2: '92',
+      Kimberley3: '93',
+      Kimberley4: '94',
+      Kimberley5: '95',
+      Kimberley6: '96',
+      Kimberley7: '97',
+      Kimberley8: '98',
+      Kimberley9: '99',
+      Kimberley10: '910',
+      Pilbara1: '101',
+      Pilbara2: '102',
+      Pilbara3: '103',
+      Pilbara4: '104',
+      Pilbara5: '105',
+      Pilbara6: '106',
+      Pilbara7: '107',
+      Pilbara8: '108',
+      Pilbara9: '109',
+      Pilbara10: '1010',
+    },
+    Yo: {
+      Qld1: 0.40885,
+      Qld2: 0.37206,
+      Qld3: 0.37352,
+      Qld4: 0.37352,
+      Qld5: 0.34846,
+      Qld6: 0.26884,
+      Qld7: 0.25533,
+      Qld8: 0.25396,
+      Qld9: 0.24826,
+      Qld10: 0.25508,
+      NT1: 0.40885,
+      NT2: 0.37206,
+      NT3: 0.37352,
+      NT4: 0.37352,
+      NT5: 0.34846,
+      NT6: 0.26884,
+      NT7: 0.25533,
+      NT8: 0.25396,
+      NT9: 0.24826,
+      NT10: 0.25508,
+      Kimberley1: 0.40885,
+      Kimberley2: 0.37206,
+      Kimberley3: 0.37352,
+      Kimberley4: 0.37352,
+      Kimberley5: 0.34846,
+      Kimberley6: 0.26884,
+      Kimberley7: 0.25533,
+      Kimberley8: 0.25396,
+      Kimberley9: 0.24826,
+      Kimberley10: 0.25508,
+      Pilbara1: 0.40885,
+      Pilbara2: 0.37206,
+      Pilbara3: 0.37352,
+      Pilbara4: 0.37352,
+      Pilbara5: 0.34846,
+      Pilbara6: 0.26884,
+      Pilbara7: 0.25533,
+      Pilbara8: 0.25396,
+      Pilbara9: 0.24826,
+      Pilbara10: 0.25508,
+    },
+    L: {
+      Qld1: 5.2189,
+      Qld2: 3.85447,
+      Qld3: 3.46804,
+      Qld4: 4.2354,
+      Qld5: 4.94919,
+      Qld6: 2.67616,
+      Qld7: 2.55178,
+      Qld8: 2.34277,
+      Qld9: 2.45375,
+      Qld10: 2.43343,
+      NT1: 4.02581,
+      NT2: 3.96032,
+      NT3: 2.7036,
+      NT4: 3.99075,
+      NT5: 4.25842,
+      NT6: 2.35541,
+      NT7: 2.70701,
+      NT8: 2.47525,
+      NT9: 2.61767,
+      NT10: 2.9654,
+      Kimberley1: 3.9053,
+      Kimberley2: 3.83521,
+      Kimberley3: 2.4142,
+      Kimberley4: 3.6844,
+      Kimberley5: 3.99772,
+      Kimberley6: 2.46568,
+      Kimberley7: 2.72722,
+      Kimberley8: 2.5792,
+      Kimberley9: 2.89562,
+      Kimberley10: 2.9491,
+      Pilbara1: 3.9053,
+      Pilbara2: 3.83521,
+      Pilbara3: 2.4142,
+      Pilbara4: 3.6844,
+      Pilbara5: 3.99772,
+      Pilbara6: 2.46568,
+      Pilbara7: 2.72722,
+      Pilbara8: 2.5792,
+      Pilbara9: 2.89562,
+      Pilbara10: 2.9491,
+    },
+    D: {
+      Qld1: 0.8,
+      Qld2: 0.8,
+      Qld3: 0.8,
+      Qld4: 0.8,
+      Qld5: 0.8,
+      Qld6: 0.8,
+      Qld7: 0.8,
+      Qld8: 0.8,
+      Qld9: 0.8,
+      Qld10: 0.8,
+      NT1: 0.8,
+      NT2: 0.8,
+      NT3: 0.8,
+      NT4: 0.8,
+      NT5: 0.8,
+      NT6: 0.8,
+      NT7: 0.8,
+      NT8: 0.8,
+      NT9: 0.8,
+      NT10: 0.8,
+      Kimberley1: 0.8,
+      Kimberley2: 0.8,
+      Kimberley3: 0.8,
+      Kimberley4: 0.8,
+      Kimberley5: 0.8,
+      Kimberley6: 0.8,
+      Kimberley7: 0.8,
+      Kimberley8: 0.8,
+      Kimberley9: 0.8,
+      Kimberley10: 0.8,
+      Pilbara1: 0.8,
+      Pilbara2: 0.8,
+      Pilbara3: 0.8,
+      Pilbara4: 0.8,
+      Pilbara5: 0.8,
+      Pilbara6: 0.8,
+      Pilbara7: 0.8,
+      Pilbara8: 0.8,
+      Pilbara9: 0.8,
+      Pilbara10: 0.8,
+    },
+    Gc: {
+      Qld1: 1.33,
+      Qld2: 1.2,
+      Qld3: 1.33,
+      Qld4: 1.15,
+      Qld5: 1.25,
+      Qld6: 1.4,
+      Qld7: 1.7,
+      Qld8: 1.4,
+      Qld9: 1,
+      Qld10: 1.8,
+      NT1: 1.33,
+      NT2: 1.2,
+      NT3: 1.33,
+      NT4: 1.15,
+      NT5: 1.25,
+      NT6: 1.4,
+      NT7: 1.7,
+      NT8: 1.4,
+      NT9: 1,
+      NT10: 1.8,
+      Kimberley1: 1.33,
+      Kimberley2: 1.2,
+      Kimberley3: 1.33,
+      Kimberley4: 1.15,
+      Kimberley5: 1.25,
+      Kimberley6: 1.4,
+      Kimberley7: 1.7,
+      Kimberley8: 1.4,
+      Kimberley9: 1,
+      Kimberley10: 1.8,
+      Pilbara1: 1.33,
+      Pilbara2: 1.2,
+      Pilbara3: 1.33,
+      Pilbara4: 1.15,
+      Pilbara5: 1.25,
+      Pilbara6: 1.4,
+      Pilbara7: 1.7,
+      Pilbara8: 1.4,
+      Pilbara9: 1,
+      Pilbara10: 1.8,
+    },
+  },
+
+  // (savannahBurningX4)
+  /**
+   * @description State lookup values for using other savannah lookup constants
+   */
+  FUEL_STATEREF: {
+    // WARNING: wa_nw is not in original sheet
+    wa_nw: 0,
+    act: 1,
+    nsw: 2,
+    tas: 3,
+    wa_sw: 4,
+    sa: 5,
+    vic: 6,
+    qld: 7,
+    nt: 8,
+    kimberley: 9,
+    pilbara: 10,
+  },
+
+  /**
+   * @description Patchiness values for savannah burning by season
+   * @type Proportion
+   */
+  BURN_PATCHINESS: {
+    'early dry season': { high: 0.709, low: 0.79 },
+    'late dry season': { high: 0.889, low: 0.97 },
+  },
+
+  /**
+   * @description Completeness of combustion values for savannah burning by fuel and season
+   * @type Proportion
+   */
+  BURN_COMPLETENESSOFCOMBUSTION: {
+    low: {
+      fine: { 'early dry season': 0.7992, 'late dry season': 0.8328 },
+      coarse: { 'early dry season': 0.109, 'late dry season': 0.2016 },
+    },
+    high: {
+      fine: { 'early dry season': 0.7444, 'late dry season': 0.8604 },
+      coarse: { 'early dry season': 0.1464, 'late dry season': 0.3571 },
+    },
+  },
+
+  /**
+   * @description Efficiency of residue burning
+   */
+  BURNING_EFFICIENCY_RESIDUE: 0.96,
+
+  /**
+   * @description N2O emissions factor for savannah burning
+   * @inventory2022 Table 5.31
+   * @units Gg element / Gg burnt
+   */
+  BURNING_N2O_EF: 0.0076,
+
+  /**
+   * @description Methane emissions factor for savannah burning
+   * @inventory2022 Table 5.31
+   * @units Gg element / Gg burnt
+   */
+  BURNING_METHANE_EF: 0.0035,
+
+  /**
+   * @description Carbon Mass Fraction Burnt in Fuel Burnt
+   * @units Proportion
+   */
+  FUELBURNT_VEGETATION_CARBONFRACTION: {
+    fine: {
+      'Shrubland hummock': 0.46,
+      'Woodland Hummock': 0.46,
+      'Melaleuca woodland': 0.46,
+      'Woodland Mixed': 0.46,
+      'Open forest mixed': 0.46,
+      'Shrubland (heath) with hummock grass': 0.398,
+      'Woodland with hummock grass': 0.397,
+      'Open woodland with mixed grass': 0.399,
+      'Woodland with mixed grass': 0.41,
+      'Woodland with tussock grass': 0.397,
+    },
+    coarse: {
+      'Shrubland hummock': 0.46,
+      'Woodland Hummock': 0.46,
+      'Melaleuca woodland': 0.46,
+      'Woodland Mixed': 0.46,
+      'Open forest mixed': 0.46,
+      'Shrubland (heath) with hummock grass': 0.482,
+      'Woodland with hummock grass': 0.482,
+      'Open woodland with mixed grass': 0.482,
+      'Woodland with mixed grass': 0.482,
+      'Woodland with tussock grass': 0.482,
+    },
+  },
+
+  /**
+   * @description Methane emissions factor for savannah burning
+   * @units Gg CH$-C / Gg C
+   */
+  FUELBURNT_VEGETATION_EF_CH4: {
+    fine: {
+      'Shrubland hummock': 0.0031,
+      'Woodland Hummock': 0.0015,
+      'Melaleuca woodland': 0.0031,
+      'Woodland Mixed': 0.0031,
+      'Open forest mixed': 0.0031,
+      'Shrubland (heath) with hummock grass': 0.0013,
+      'Woodland with hummock grass': 0.0017,
+      'Open woodland with mixed grass': 0.0012,
+      'Woodland with mixed grass': 0.0016,
+      'Woodland with tussock grass': 0.0015,
+    },
+    coarse: {
+      'Shrubland hummock': 0.0031,
+      'Woodland Hummock': 0.0015,
+      'Melaleuca woodland': 0.0031,
+      'Woodland Mixed': 0.0031,
+      'Open forest mixed': 0.0031,
+      'Shrubland (heath) with hummock grass': 0.0013,
+      'Woodland with hummock grass': 0.0017,
+      'Open woodland with mixed grass': 0.0012,
+      'Woodland with mixed grass': 0.0016,
+      'Woodland with tussock grass': 0.0015,
+    },
+  },
+
+  /**
+   * @description Nitrogen to Carbon ratio in fuel burnt
+   */
+  FUELBURNT_VEGETATION_NITROGENCARBONRATIO: {
+    fine: {
+      'Shrubland hummock': 0.0096,
+      'Woodland Hummock': 0.0096,
+      'Melaleuca woodland': 0.0096,
+      'Woodland Mixed': 0.0096,
+      'Open forest mixed': 0.0096,
+      'Shrubland (heath) with hummock grass': 0.0107,
+      'Woodland with hummock grass': 0.0118,
+      'Open woodland with mixed grass': 0.0102,
+      'Woodland with mixed grass': 0.0105,
+      'Woodland with tussock grass': 0.0113,
+    },
+    coarse: {
+      'Shrubland hummock': 0.0081,
+      'Woodland Hummock': 0.0081,
+      'Melaleuca woodland': 0.0081,
+      'Woodland Mixed': 0.0081,
+      'Open forest mixed': 0.0081,
+      'Shrubland (heath) with hummock grass': 0.00389,
+      'Woodland with hummock grass': 0.00389,
+      'Open woodland with mixed grass': 0.00389,
+      'Woodland with mixed grass': 0.00389,
+      'Woodland with tussock grass': 0.00389,
+    },
+  },
+
+  /**
+   * @description N2O emissions factor for savannah burning
+   * @units Gg N2O-N/Gg N
+   */
+  FUELBURNT_VEGETATION_N2O: {
+    fine: {
+      'Shrubland hummock': 0.0075,
+      'Woodland Hummock': 0.0066,
+      'Melaleuca woodland': 0.0075,
+      'Woodland Mixed': 0.0075,
+      'Open forest mixed': 0.0075,
+      'Shrubland (heath) with hummock grass': 0.0059,
+      'Woodland with hummock grass': 0.006,
+      'Open woodland with mixed grass': 0.006,
+      'Woodland with mixed grass': 0.012,
+      'Woodland with tussock grass': 0.006,
+    },
+    coarse: {
+      'Shrubland hummock': 0.0075,
+      'Woodland Hummock': 0.0066,
+      'Melaleuca woodland': 0.0075,
+      'Woodland Mixed': 0.0075,
+      'Open forest mixed': 0.0075,
+      'Shrubland (heath) with hummock grass': 0.0059,
+      'Woodland with hummock grass': 0.006,
+      'Open woodland with mixed grass': 0.006,
+      'Woodland with mixed grass': 0.012,
+      'Woodland with tussock grass': 0.006,
+    },
+  },
+};
+
+export const constants: Constants = {
+  /**
+   * @description Energy required to manufacture herbicides and insecticides
+   * @reference O'Halloran, N., Fisher, P., Rab, A., & Victoria, D. P. I. (2008). Preliminary estimation of the carbon footprint of the Australian vegetable industry (pp. 1-39). Discussion paper 4. Vegetable Industry Carbon Footprint Scoping Study. 2008, Horticulture Australia Ltd. Table 7
+   */
+  ENERGY_TO_MANUFACTURE: {
+    /** @units MJ/kg */
+    HERBICIDE_ENERGY: 550,
+    /** @units MJ/kg */
+    HERBICIDEGENERAL_ENERGY: 310,
+    /** @units MJ/kg */
+    INSECTICIDE_ENERGY: 315,
+    /** @units kg CO2-e/MJ */
+    HERBICIDE_EF: 0.06,
+    /** @units kg CO2-e/MJ */
+    HERBICIDEGENERAL_EF: 0.06,
+    /** @units kg CO2-e/MJ */
+    INSECTICIDE_EF: 0.06,
+  },
+
+  // Embedded emissions M7
+  /**
+   * @description Relative amount of CO2, CH4, and N2O emitted by herbicides
+   * @type Proportion
+   */
+  EMISSION_BREAKDOWN: {
+    HERBICIDE: { CO2: 1.0, CH4: 0.0, N2O: 0.0 },
   },
 
   /**
@@ -1033,11 +1618,6 @@ export const constants: Constants = {
    * @reference IPCC (2006)
    */
   CARBON_FRACTION_OF_UREA: 0.2, // (ureaApplicationD35)
-
-  /**
-   * @description Urine and dung deposited during grazing
-   */
-  BEEF_EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsBeefD10)
 
   /**
    * @description Proportion of gas volatilised from fertiliser
@@ -2413,581 +2993,6 @@ export const constants: Constants = {
       'Arnhem-Roper': 'No tree data available',
       'Victoria River-TennantCreek': 'No tree data available',
       'Alice Springs': 'No tree data available',
-    },
-  },
-
-  /**
-   * @description Static lookup for savannah coarse fuel, by region
-   */
-  SAVANNAH_FUELCOARSE: {
-    'Combined Ref': {
-      Qld1: '71',
-      Qld2: '72',
-      Qld3: '73',
-      Qld4: '74',
-      Qld5: '75',
-      Qld6: '76',
-      Qld7: '77',
-      Qld8: '78',
-      Qld9: '79',
-      Qld10: '710',
-      NT1: '81',
-      NT2: '82',
-      NT3: '83',
-      NT4: '84',
-      NT5: '85',
-      NT6: '86',
-      NT7: '87',
-      NT8: '88',
-      NT9: '89',
-      NT10: '810',
-      Kimberley1: '91',
-      Kimberley2: '92',
-      Kimberley3: '93',
-      Kimberley4: '94',
-      Kimberley5: '95',
-      Kimberley6: '96',
-      Kimberley7: '97',
-      Kimberley8: '98',
-      Kimberley9: '99',
-      Kimberley10: '910',
-      Pilbara1: '101',
-      Pilbara2: '102',
-      Pilbara3: '103',
-      Pilbara4: '104',
-      Pilbara5: '105',
-      Pilbara6: '106',
-      Pilbara7: '107',
-      Pilbara8: '108',
-      Pilbara9: '109',
-      Pilbara10: '1010',
-    },
-    Yo: {
-      Qld1: 5.97818,
-      Qld2: 5.4075,
-      Qld3: 4.96198,
-      Qld4: 4.96198,
-      Qld5: 5.21557,
-      Qld6: 8.55158,
-      Qld7: 8.14308,
-      Qld8: 7.97898,
-      Qld9: 7.8505,
-      Qld10: 7.48462,
-      NT1: 5.97818,
-      NT2: 5.4075,
-      NT3: 4.96198,
-      NT4: 4.96198,
-      NT5: 5.21557,
-      NT6: 8.55158,
-      NT7: 8.14308,
-      NT8: 7.97898,
-      NT9: 7.8505,
-      NT10: 7.48462,
-      Kimberley1: 5.97818,
-      Kimberley2: 5.4075,
-      Kimberley3: 4.96198,
-      Kimberley4: 4.96198,
-      Kimberley5: 5.21557,
-      Kimberley6: 8.55158,
-      Kimberley7: 8.14308,
-      Kimberley8: 7.97898,
-      Kimberley9: 7.8505,
-      Kimberley10: 7.48462,
-      Pilbara1: 5.97818,
-      Pilbara2: 5.4075,
-      Pilbara3: 4.96198,
-      Pilbara4: 4.96198,
-      Pilbara5: 5.21557,
-      Pilbara6: 8.55158,
-      Pilbara7: 8.14308,
-      Pilbara8: 7.97898,
-      Pilbara9: 7.8505,
-      Pilbara10: 7.48462,
-    },
-    L: {
-      Qld1: 0.05888,
-      Qld2: 0.24606,
-      Qld3: 0.18948,
-      Qld4: 0.18948,
-      Qld5: 0.21756,
-      Qld6: 0.0722,
-      Qld7: 0.22387,
-      Qld8: 0.12031,
-      Qld9: 0.12056,
-      Qld10: 0.2044,
-      NT1: 0.05888,
-      NT2: 0.24606,
-      NT3: 0.18948,
-      NT4: 0.18948,
-      NT5: 0.21756,
-      NT6: 0.0722,
-      NT7: 0.22387,
-      NT8: 0.12031,
-      NT9: 0.12056,
-      NT10: 0.2044,
-      Kimberley1: 0.05888,
-      Kimberley2: 0.24606,
-      Kimberley3: 0.18948,
-      Kimberley4: 0.18948,
-      Kimberley5: 0.21756,
-      Kimberley6: 0.0722,
-      Kimberley7: 0.22387,
-      Kimberley8: 0.12031,
-      Kimberley9: 0.12056,
-      Kimberley10: 0.2044,
-      Pilbara1: 0.05888,
-      Pilbara2: 0.24606,
-      Pilbara3: 0.18948,
-      Pilbara4: 0.18948,
-      Pilbara5: 0.21756,
-      Pilbara6: 0.0722,
-      Pilbara7: 0.22387,
-      Pilbara8: 0.12031,
-      Pilbara9: 0.12056,
-      Pilbara10: 0.2044,
-    },
-    D: {
-      Qld1: 0.072,
-      Qld2: 0.072,
-      Qld3: 0.072,
-      Qld4: 0.072,
-      Qld5: 0.072,
-      Qld6: 0.072,
-      Qld7: 0.072,
-      Qld8: 0.072,
-      Qld9: 0.072,
-      Qld10: 0.072,
-      NT1: 0.072,
-      NT2: 0.072,
-      NT3: 0.072,
-      NT4: 0.072,
-      NT5: 0.072,
-      NT6: 0.072,
-      NT7: 0.072,
-      NT8: 0.072,
-      NT9: 0.072,
-      NT10: 0.072,
-      Kimberley1: 0.072,
-      Kimberley2: 0.072,
-      Kimberley3: 0.072,
-      Kimberley4: 0.072,
-      Kimberley5: 0.072,
-      Kimberley6: 0.072,
-      Kimberley7: 0.072,
-      Kimberley8: 0.072,
-      Kimberley9: 0.072,
-      Kimberley10: 0.072,
-      Pilbara1: 0.072,
-      Pilbara2: 0.072,
-      Pilbara3: 0.072,
-      Pilbara4: 0.072,
-      Pilbara5: 0.072,
-      Pilbara6: 0.072,
-      Pilbara7: 0.072,
-      Pilbara8: 0.072,
-      Pilbara9: 0.072,
-      Pilbara10: 0.072,
-    },
-  },
-
-  /**
-   * @description Static lookup for savannah fine fuel, by region
-   */
-  SAVANNAH_FUELFINE: {
-    'Combined Ref': {
-      Qld1: '71',
-      Qld2: '72',
-      Qld3: '73',
-      Qld4: '74',
-      Qld5: '75',
-      Qld6: '76',
-      Qld7: '77',
-      Qld8: '78',
-      Qld9: '79',
-      Qld10: '710',
-      NT1: '81',
-      NT2: '82',
-      NT3: '83',
-      NT4: '84',
-      NT5: '85',
-      NT6: '86',
-      NT7: '87',
-      NT8: '88',
-      NT9: '89',
-      NT10: '810',
-      Kimberley1: '91',
-      Kimberley2: '92',
-      Kimberley3: '93',
-      Kimberley4: '94',
-      Kimberley5: '95',
-      Kimberley6: '96',
-      Kimberley7: '97',
-      Kimberley8: '98',
-      Kimberley9: '99',
-      Kimberley10: '910',
-      Pilbara1: '101',
-      Pilbara2: '102',
-      Pilbara3: '103',
-      Pilbara4: '104',
-      Pilbara5: '105',
-      Pilbara6: '106',
-      Pilbara7: '107',
-      Pilbara8: '108',
-      Pilbara9: '109',
-      Pilbara10: '1010',
-    },
-    Yo: {
-      Qld1: 0.40885,
-      Qld2: 0.37206,
-      Qld3: 0.37352,
-      Qld4: 0.37352,
-      Qld5: 0.34846,
-      Qld6: 0.26884,
-      Qld7: 0.25533,
-      Qld8: 0.25396,
-      Qld9: 0.24826,
-      Qld10: 0.25508,
-      NT1: 0.40885,
-      NT2: 0.37206,
-      NT3: 0.37352,
-      NT4: 0.37352,
-      NT5: 0.34846,
-      NT6: 0.26884,
-      NT7: 0.25533,
-      NT8: 0.25396,
-      NT9: 0.24826,
-      NT10: 0.25508,
-      Kimberley1: 0.40885,
-      Kimberley2: 0.37206,
-      Kimberley3: 0.37352,
-      Kimberley4: 0.37352,
-      Kimberley5: 0.34846,
-      Kimberley6: 0.26884,
-      Kimberley7: 0.25533,
-      Kimberley8: 0.25396,
-      Kimberley9: 0.24826,
-      Kimberley10: 0.25508,
-      Pilbara1: 0.40885,
-      Pilbara2: 0.37206,
-      Pilbara3: 0.37352,
-      Pilbara4: 0.37352,
-      Pilbara5: 0.34846,
-      Pilbara6: 0.26884,
-      Pilbara7: 0.25533,
-      Pilbara8: 0.25396,
-      Pilbara9: 0.24826,
-      Pilbara10: 0.25508,
-    },
-    L: {
-      Qld1: 5.2189,
-      Qld2: 3.85447,
-      Qld3: 3.46804,
-      Qld4: 4.2354,
-      Qld5: 4.94919,
-      Qld6: 2.67616,
-      Qld7: 2.55178,
-      Qld8: 2.34277,
-      Qld9: 2.45375,
-      Qld10: 2.43343,
-      NT1: 4.02581,
-      NT2: 3.96032,
-      NT3: 2.7036,
-      NT4: 3.99075,
-      NT5: 4.25842,
-      NT6: 2.35541,
-      NT7: 2.70701,
-      NT8: 2.47525,
-      NT9: 2.61767,
-      NT10: 2.9654,
-      Kimberley1: 3.9053,
-      Kimberley2: 3.83521,
-      Kimberley3: 2.4142,
-      Kimberley4: 3.6844,
-      Kimberley5: 3.99772,
-      Kimberley6: 2.46568,
-      Kimberley7: 2.72722,
-      Kimberley8: 2.5792,
-      Kimberley9: 2.89562,
-      Kimberley10: 2.9491,
-      Pilbara1: 3.9053,
-      Pilbara2: 3.83521,
-      Pilbara3: 2.4142,
-      Pilbara4: 3.6844,
-      Pilbara5: 3.99772,
-      Pilbara6: 2.46568,
-      Pilbara7: 2.72722,
-      Pilbara8: 2.5792,
-      Pilbara9: 2.89562,
-      Pilbara10: 2.9491,
-    },
-    D: {
-      Qld1: 0.8,
-      Qld2: 0.8,
-      Qld3: 0.8,
-      Qld4: 0.8,
-      Qld5: 0.8,
-      Qld6: 0.8,
-      Qld7: 0.8,
-      Qld8: 0.8,
-      Qld9: 0.8,
-      Qld10: 0.8,
-      NT1: 0.8,
-      NT2: 0.8,
-      NT3: 0.8,
-      NT4: 0.8,
-      NT5: 0.8,
-      NT6: 0.8,
-      NT7: 0.8,
-      NT8: 0.8,
-      NT9: 0.8,
-      NT10: 0.8,
-      Kimberley1: 0.8,
-      Kimberley2: 0.8,
-      Kimberley3: 0.8,
-      Kimberley4: 0.8,
-      Kimberley5: 0.8,
-      Kimberley6: 0.8,
-      Kimberley7: 0.8,
-      Kimberley8: 0.8,
-      Kimberley9: 0.8,
-      Kimberley10: 0.8,
-      Pilbara1: 0.8,
-      Pilbara2: 0.8,
-      Pilbara3: 0.8,
-      Pilbara4: 0.8,
-      Pilbara5: 0.8,
-      Pilbara6: 0.8,
-      Pilbara7: 0.8,
-      Pilbara8: 0.8,
-      Pilbara9: 0.8,
-      Pilbara10: 0.8,
-    },
-    Gc: {
-      Qld1: 1.33,
-      Qld2: 1.2,
-      Qld3: 1.33,
-      Qld4: 1.15,
-      Qld5: 1.25,
-      Qld6: 1.4,
-      Qld7: 1.7,
-      Qld8: 1.4,
-      Qld9: 1,
-      Qld10: 1.8,
-      NT1: 1.33,
-      NT2: 1.2,
-      NT3: 1.33,
-      NT4: 1.15,
-      NT5: 1.25,
-      NT6: 1.4,
-      NT7: 1.7,
-      NT8: 1.4,
-      NT9: 1,
-      NT10: 1.8,
-      Kimberley1: 1.33,
-      Kimberley2: 1.2,
-      Kimberley3: 1.33,
-      Kimberley4: 1.15,
-      Kimberley5: 1.25,
-      Kimberley6: 1.4,
-      Kimberley7: 1.7,
-      Kimberley8: 1.4,
-      Kimberley9: 1,
-      Kimberley10: 1.8,
-      Pilbara1: 1.33,
-      Pilbara2: 1.2,
-      Pilbara3: 1.33,
-      Pilbara4: 1.15,
-      Pilbara5: 1.25,
-      Pilbara6: 1.4,
-      Pilbara7: 1.7,
-      Pilbara8: 1.4,
-      Pilbara9: 1,
-      Pilbara10: 1.8,
-    },
-  },
-
-  // (savannahBurningX4)
-  /**
-   * @description State lookup values for using other savannah lookup constants
-   */
-  FUEL_STATEREF: {
-    // WARNING: wa_nw is not in original sheet
-    wa_nw: 0,
-    act: 1,
-    nsw: 2,
-    tas: 3,
-    wa_sw: 4,
-    sa: 5,
-    vic: 6,
-    qld: 7,
-    nt: 8,
-    kimberley: 9,
-    pilbara: 10,
-  },
-
-  /**
-   * @description Patchiness values for savannah burning by season
-   * @type Proportion
-   */
-  BURN_PATCHINESS: {
-    'early dry season': { high: 0.709, low: 0.79 },
-    'late dry season': { high: 0.889, low: 0.97 },
-  },
-
-  /**
-   * @description Completeness of combustion values for savannah burning by fuel and season
-   * @type Proportion
-   */
-  BURN_COMPLETENESSOFCOMBUSTION: {
-    low: {
-      fine: { 'early dry season': 0.7992, 'late dry season': 0.8328 },
-      coarse: { 'early dry season': 0.109, 'late dry season': 0.2016 },
-    },
-    high: {
-      fine: { 'early dry season': 0.7444, 'late dry season': 0.8604 },
-      coarse: { 'early dry season': 0.1464, 'late dry season': 0.3571 },
-    },
-  },
-
-  /**
-   * @description Efficiency of residue burning
-   */
-  BURNING_EFFICIENCY_RESIDUE: 0.96,
-
-  /**
-   * @description N2O emissions factor for savannah burning
-   * @inventory2022 Table 5.31
-   * @units Gg element / Gg burnt
-   */
-  BURNING_N2O_EF: 0.0076,
-
-  /**
-   * @description Methane emissions factor for savannah burning
-   * @inventory2022 Table 5.31
-   * @units Gg element / Gg burnt
-   */
-  BURNING_METHANE_EF: 0.0035,
-
-  /**
-   * @description Carbon Mass Fraction Burnt in Fuel Burnt
-   * @units Proportion
-   */
-  FUELBURNT_VEGETATION_CARBONFRACTION: {
-    fine: {
-      'Shrubland hummock': 0.46,
-      'Woodland Hummock': 0.46,
-      'Melaleuca woodland': 0.46,
-      'Woodland Mixed': 0.46,
-      'Open forest mixed': 0.46,
-      'Shrubland (heath) with hummock grass': 0.398,
-      'Woodland with hummock grass': 0.397,
-      'Open woodland with mixed grass': 0.399,
-      'Woodland with mixed grass': 0.41,
-      'Woodland with tussock grass': 0.397,
-    },
-    coarse: {
-      'Shrubland hummock': 0.46,
-      'Woodland Hummock': 0.46,
-      'Melaleuca woodland': 0.46,
-      'Woodland Mixed': 0.46,
-      'Open forest mixed': 0.46,
-      'Shrubland (heath) with hummock grass': 0.482,
-      'Woodland with hummock grass': 0.482,
-      'Open woodland with mixed grass': 0.482,
-      'Woodland with mixed grass': 0.482,
-      'Woodland with tussock grass': 0.482,
-    },
-  },
-
-  /**
-   * @description Methane emissions factor for savannah burning
-   * @units Gg CH$-C / Gg C
-   */
-  FUELBURNT_VEGETATION_EF_CH4: {
-    fine: {
-      'Shrubland hummock': 0.0031,
-      'Woodland Hummock': 0.0015,
-      'Melaleuca woodland': 0.0031,
-      'Woodland Mixed': 0.0031,
-      'Open forest mixed': 0.0031,
-      'Shrubland (heath) with hummock grass': 0.0013,
-      'Woodland with hummock grass': 0.0017,
-      'Open woodland with mixed grass': 0.0012,
-      'Woodland with mixed grass': 0.0016,
-      'Woodland with tussock grass': 0.0015,
-    },
-    coarse: {
-      'Shrubland hummock': 0.0031,
-      'Woodland Hummock': 0.0015,
-      'Melaleuca woodland': 0.0031,
-      'Woodland Mixed': 0.0031,
-      'Open forest mixed': 0.0031,
-      'Shrubland (heath) with hummock grass': 0.0013,
-      'Woodland with hummock grass': 0.0017,
-      'Open woodland with mixed grass': 0.0012,
-      'Woodland with mixed grass': 0.0016,
-      'Woodland with tussock grass': 0.0015,
-    },
-  },
-
-  /**
-   * @description Nitrogen to Carbon ratio in fuel burnt
-   */
-  FUELBURNT_VEGETATION_NITROGENCARBONRATIO: {
-    fine: {
-      'Shrubland hummock': 0.0096,
-      'Woodland Hummock': 0.0096,
-      'Melaleuca woodland': 0.0096,
-      'Woodland Mixed': 0.0096,
-      'Open forest mixed': 0.0096,
-      'Shrubland (heath) with hummock grass': 0.0107,
-      'Woodland with hummock grass': 0.0118,
-      'Open woodland with mixed grass': 0.0102,
-      'Woodland with mixed grass': 0.0105,
-      'Woodland with tussock grass': 0.0113,
-    },
-    coarse: {
-      'Shrubland hummock': 0.0081,
-      'Woodland Hummock': 0.0081,
-      'Melaleuca woodland': 0.0081,
-      'Woodland Mixed': 0.0081,
-      'Open forest mixed': 0.0081,
-      'Shrubland (heath) with hummock grass': 0.00389,
-      'Woodland with hummock grass': 0.00389,
-      'Open woodland with mixed grass': 0.00389,
-      'Woodland with mixed grass': 0.00389,
-      'Woodland with tussock grass': 0.00389,
-    },
-  },
-
-  /**
-   * @description N2O emissions factor for savannah burning
-   * @units Gg N2O-N/Gg N
-   */
-  FUELBURNT_VEGETATION_N2O: {
-    fine: {
-      'Shrubland hummock': 0.0075,
-      'Woodland Hummock': 0.0066,
-      'Melaleuca woodland': 0.0075,
-      'Woodland Mixed': 0.0075,
-      'Open forest mixed': 0.0075,
-      'Shrubland (heath) with hummock grass': 0.0059,
-      'Woodland with hummock grass': 0.006,
-      'Open woodland with mixed grass': 0.006,
-      'Woodland with mixed grass': 0.012,
-      'Woodland with tussock grass': 0.006,
-    },
-    coarse: {
-      'Shrubland hummock': 0.0075,
-      'Woodland Hummock': 0.0066,
-      'Melaleuca woodland': 0.0075,
-      'Woodland Mixed': 0.0075,
-      'Open forest mixed': 0.0075,
-      'Shrubland (heath) with hummock grass': 0.0059,
-      'Woodland with hummock grass': 0.006,
-      'Open woodland with mixed grass': 0.006,
-      'Woodland with mixed grass': 0.012,
-      'Woodland with tussock grass': 0.006,
     },
   },
 

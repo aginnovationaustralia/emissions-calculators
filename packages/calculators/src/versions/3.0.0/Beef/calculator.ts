@@ -34,6 +34,7 @@ import { BeefScope1Output } from '../types/Beef/scope1.output';
 import { BeefScope3Output } from '../types/Beef/scope3.output';
 import { Scope2Output } from '../types/scope2.output';
 import { BeefClassesAPI, State } from '../types/types';
+import { ConstantsForBeefCalculator } from './constants';
 import { calculateCompleteBeefEmissions } from './Scope1Beef';
 import { calculateScope1SavannahBurning } from './Scope1SavannahBurning';
 
@@ -93,7 +94,7 @@ export function calculateSingleBeef(
   propertyNorthOfTropicOfCapricorn: boolean,
   rainfallAbove600: boolean,
   beef: BeefComplete,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForBeefCalculator>,
   carbonSequestration: number,
   id: string,
 ) {
@@ -296,7 +297,7 @@ export function calculateAllBurningWithKeyProportion<
   allocationKey: K,
   objects: L[],
   state: State,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForBeefCalculator>,
 ) {
   const burning = burnings.map((burn) => ({
     ...burn,
@@ -336,7 +337,7 @@ export function calculateAllBurningWithKeyProportion<
 
 export function calculateBeef(
   input: BeefInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForBeefCalculator>,
 ): BeefOutput {
   // in the case that vegetation allocations are a single number, change that to an array
   // eslint-disable-next-line no-param-reassign

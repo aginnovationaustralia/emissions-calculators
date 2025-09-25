@@ -1,19 +1,20 @@
 import { ExecutionContext } from '../executionContext';
+import { ConstantsForBeefCalculator } from './constants';
 
 export function getAtmosphericNDepositionUreaIrrigatedTotal(
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForBeefCalculator>,
   atmosphericNDepositionUreaGrazingIrrigated: number,
   atmosphericNDepositionUreaCroppingIrrigated: number,
   atmosphericNDepositionUreaOtherIrrigated: number,
 ) {
   const { constants } = context;
   const { EF_IRRIGATEDPASTURE, EF_IRRIGATEDCROP } =
-    constants.AGRICULTURAL_SOILS;
+    constants.COMMON.AGRICULTURAL_SOILS;
 
   return (
     (atmosphericNDepositionUreaGrazingIrrigated * EF_IRRIGATEDPASTURE +
       atmosphericNDepositionUreaCroppingIrrigated * EF_IRRIGATEDCROP +
       atmosphericNDepositionUreaOtherIrrigated * EF_IRRIGATEDCROP) *
-    constants.GWP_FACTORSC15
+    constants.COMMON.GWP_FACTORSC15
   );
 }

@@ -1,3 +1,4 @@
+import { ConstantsForBeefCalculator } from '../Beef/constants';
 import {
   SHEEP_CLASSES_BREEDING_API,
   SHEEP_CLASSES_TRADING_API,
@@ -18,11 +19,11 @@ function purchasedBeefLivestock(
   headPurchased: number,
   purchasedWeight: number,
   source: LivestockSourceLocation,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForBeefCalculator>,
 ) {
   // (purchasedLivestockEmissionsB17)
   const emissionFactor =
-    context.constants.LIVESTOCK_SOURCE_EMISSIONFACTOR[source];
+    context.constants.COMMON.LIVESTOCK_SOURCE_EMISSIONFACTOR[source];
   const liveweight = headPurchased * purchasedWeight;
 
   // (purchasedLivestockEmissionsB18)
@@ -39,7 +40,7 @@ export function calculatePurchasedBeefEmissions(
   beef: {
     [type in (typeof BeefClassesAPI)[number]]: BeefPurchase[];
   },
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForBeefCalculator>,
 ) {
   const beefScope3Total = Object.keys(beef).reduce((acc, type) => {
     const b = beef[type as (typeof BeefClassesAPI)[number]];

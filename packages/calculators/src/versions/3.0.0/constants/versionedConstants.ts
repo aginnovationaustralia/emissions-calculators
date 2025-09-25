@@ -218,18 +218,91 @@ export type SheepConstants = {
   EF_URINEDUNGDEPOSITED: number;
 };
 
-export type Constants = {
-  // Beef
+export type BeefConstants = {
+  DRYMATTERDIGESTIBILITY: BySeasonAndState;
 
-  BEEF_DRYMATTERDIGESTIBILITY: BySeasonAndState;
+  CRUDEPROTEIN: BySeasonAndState;
 
-  BEEF_CRUDEPROTEIN: BySeasonAndState;
-
-  BEEF_NITROGENEXCRETEDNUMBER: Record<
+  NITROGENEXCRETEDNUMBER: Record<
     (typeof BeefClassesAPI)[number],
     Record<States, number>
   >;
 
+  EF_URINEDUNGDEPOSITED: number;
+};
+
+export type SavannaConstants = {
+  FUELCOARSE: {
+    'Combined Ref': { [region in SavannahRegions]: string };
+    Yo: { [region in SavannahRegions]: number };
+    L: { [region in SavannahRegions]: number };
+    D: { [region in SavannahRegions]: number };
+  };
+
+  FUELFINE: {
+    'Combined Ref': { [region in SavannahRegions]: string };
+    Yo: { [region in SavannahRegions]: number };
+    L: { [region in SavannahRegions]: number };
+    D: { [region in SavannahRegions]: number };
+    Gc: { [region in SavannahRegions]: number };
+  };
+
+  BURN_PATCHINESS: {
+    'early dry season': { high: number; low: number };
+    'late dry season': { high: number; low: number };
+  };
+
+  BURN_COMPLETENESSOFCOMBUSTION: {
+    low: {
+      fine: { 'early dry season': number; 'late dry season': number };
+      coarse: { 'early dry season': number; 'late dry season': number };
+    };
+    high: {
+      fine: { 'early dry season': number; 'late dry season': number };
+      coarse: { 'early dry season': number; 'late dry season': number };
+    };
+  };
+
+  BURNING_EFFICIENCY_RESIDUE: number;
+  BURNING_N2O_EF: number;
+  BURNING_METHANE_EF: number;
+
+  FUELBURNT_VEGETATION_CARBONFRACTION: {
+    fine: { [vegetationType in VegetationTypes]: number };
+    coarse: { [vegetationType in VegetationTypes]: number };
+  };
+
+  FUELBURNT_VEGETATION_EF_CH4: {
+    fine: { [vegetationType in VegetationTypes]: number };
+    coarse: { [vegetationType in VegetationTypes]: number };
+  };
+
+  FUELBURNT_VEGETATION_NITROGENCARBONRATIO: {
+    fine: { [vegetationType in VegetationTypes]: number };
+    coarse: { [vegetationType in VegetationTypes]: number };
+  };
+
+  FUELBURNT_VEGETATION_N2O: {
+    fine: { [vegetationType in VegetationTypes]: number };
+    coarse: { [vegetationType in VegetationTypes]: number };
+  };
+
+  FUEL_STATEREF: {
+    wa_nw: number;
+    act: number;
+    nsw: number;
+    tas: number;
+    wa_sw: number;
+    sa: number;
+    vic: number;
+    qld: number;
+    nt: number;
+    kimberley: number;
+    pilbara: number;
+  };
+};
+
+export type Constants = {
   // Feedlot
 
   FEEDLOT_MANURE_EF: {
@@ -757,77 +830,6 @@ export type Constants = {
     TreeSpecies6: { [treeRegion in TreeRegions]: string };
   };
 
-  // Savannah
-
-  SAVANNAH_FUELCOARSE: {
-    'Combined Ref': { [region in SavannahRegions]: string };
-    Yo: { [region in SavannahRegions]: number };
-    L: { [region in SavannahRegions]: number };
-    D: { [region in SavannahRegions]: number };
-  };
-
-  SAVANNAH_FUELFINE: {
-    'Combined Ref': { [region in SavannahRegions]: string };
-    Yo: { [region in SavannahRegions]: number };
-    L: { [region in SavannahRegions]: number };
-    D: { [region in SavannahRegions]: number };
-    Gc: { [region in SavannahRegions]: number };
-  };
-
-  BURN_PATCHINESS: {
-    'early dry season': { high: number; low: number };
-    'late dry season': { high: number; low: number };
-  };
-
-  BURN_COMPLETENESSOFCOMBUSTION: {
-    low: {
-      fine: { 'early dry season': number; 'late dry season': number };
-      coarse: { 'early dry season': number; 'late dry season': number };
-    };
-    high: {
-      fine: { 'early dry season': number; 'late dry season': number };
-      coarse: { 'early dry season': number; 'late dry season': number };
-    };
-  };
-
-  BURNING_EFFICIENCY_RESIDUE: number;
-  BURNING_N2O_EF: number;
-  BURNING_METHANE_EF: number;
-
-  FUELBURNT_VEGETATION_CARBONFRACTION: {
-    fine: { [vegetationType in VegetationTypes]: number };
-    coarse: { [vegetationType in VegetationTypes]: number };
-  };
-
-  FUELBURNT_VEGETATION_EF_CH4: {
-    fine: { [vegetationType in VegetationTypes]: number };
-    coarse: { [vegetationType in VegetationTypes]: number };
-  };
-
-  FUELBURNT_VEGETATION_NITROGENCARBONRATIO: {
-    fine: { [vegetationType in VegetationTypes]: number };
-    coarse: { [vegetationType in VegetationTypes]: number };
-  };
-
-  FUELBURNT_VEGETATION_N2O: {
-    fine: { [vegetationType in VegetationTypes]: number };
-    coarse: { [vegetationType in VegetationTypes]: number };
-  };
-
-  FUEL_STATEREF: {
-    wa_nw: number;
-    act: number;
-    nsw: number;
-    tas: number;
-    wa_sw: number;
-    sa: number;
-    vic: number;
-    qld: number;
-    nt: number;
-    kimberley: number;
-    pilbara: number;
-  };
-
   LEACHING: {
     FRACLEACH: number;
     FRACLEACH_MMS: number;
@@ -865,8 +867,6 @@ export type Constants = {
   GWP_FACTORSC22: number;
 
   CARBON_FRACTION_OF_UREA: number;
-
-  BEEF_EF_URINEDUNGDEPOSITED: number;
 
   FRAC_GASF: number;
   FRAC_GASM: number;
