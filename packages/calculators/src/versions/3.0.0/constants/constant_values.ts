@@ -9,6 +9,7 @@ import {
   FeedlotConstants,
   LIVESTOCK_SOURCE_LOCATION,
   PorkConstants,
+  PoultryConstants,
   SavannaConstants,
   SheepConstants,
   STATES,
@@ -1549,6 +1550,119 @@ export const porkConstants: PorkConstants = {
     wheatBran: 0.547,
     beetPulp: 0.704,
     millMix: 0,
+  },
+};
+
+export const poultryConstants: PoultryConstants = {
+  /**
+   * @description Diet properties for poultry, by class
+   * @inventory2022 Table A5.5.6.1
+   */
+  DIET_PROPERTIES: {
+    layers: {
+      dryMatterIntake: 0.086,
+      dryMatterDigestibility: 0.8,
+      crudeProtein: 0.19,
+      nitrogenRetentionRate: 0.35,
+      manureAsh: 0.18,
+    },
+    meat_chicken_growers: {
+      dryMatterIntake: 0.093,
+      dryMatterDigestibility: 0.8,
+      crudeProtein: 0.23,
+      nitrogenRetentionRate: 0.47,
+      manureAsh: 0.15,
+    },
+    // (meat_chicken_breeder)
+    meat_chicken_layers: {
+      dryMatterIntake: 0.103,
+      dryMatterDigestibility: 0.8,
+      crudeProtein: 0.19,
+      nitrogenRetentionRate: 0.32,
+      manureAsh: 0.18,
+    },
+    meat_other: {
+      dryMatterIntake: 0.093,
+      dryMatterDigestibility: 0.8,
+      crudeProtein: 0.23,
+      nitrogenRetentionRate: 0.47,
+      manureAsh: 0.15,
+    },
+  },
+
+  /**
+   * @description MCFs Pasture range and paddock
+   * @inventory2022 Table A5.5.6.5
+   * @type Proportion
+   */
+  WASTE_MMS: {
+    [STATES.ACT]: 0.01,
+    [STATES.NSW]: 0.01,
+    [STATES.NT]: 0.03,
+    [STATES.QLD]: 0.03,
+    [STATES.SA]: 0.01,
+    [STATES.TAS]: 0.01,
+    [STATES.VIC]: 0.01,
+    [STATES.WA_SW]: 0.01,
+    [STATES.WA_NW]: 0.01,
+  },
+
+  // meat chickens are just broilers
+  // (manureManagementBroilersC92)
+  // (nitrousOxideI152)
+  /**
+   * @description Meat and layer chickens – Integrated MCFs, by state
+   */
+  MEATLAYER_EF_IMCF: {
+    meat_chickens: {
+      [STATES.ACT]: 0.024414,
+      [STATES.NSW]: 0.024414,
+      [STATES.NT]: 0.025014,
+      [STATES.QLD]: 0.025014,
+      [STATES.SA]: 0.024414,
+      [STATES.TAS]: 0.23425,
+      [STATES.VIC]: 0.024414,
+      [STATES.WA_SW]: 0.024414,
+      [STATES.WA_NW]: 0.024414,
+    },
+    layer_chickens: {
+      [STATES.ACT]: 0.031702,
+      [STATES.NSW]: 0.031702,
+      [STATES.NT]: 0.03193,
+      [STATES.QLD]: 0.03193,
+      [STATES.SA]: 0.031702,
+      [STATES.TAS]: 0.031011,
+      [STATES.VIC]: 0.031702,
+      [STATES.WA_SW]: 0.031702,
+      [STATES.WA_NW]: 0.031702,
+    },
+  },
+
+  /**
+   * @description Meat and layer chickens – Integrated EFs, by state
+   */
+  MEATLAYER_EF: {
+    meat_chickens: {
+      iFracGASM: 0.385924,
+      iNOF: 0.004157,
+    },
+    layer_chickens: {
+      iFracGASM: 0.315956,
+      iNOF: 0.004728,
+    },
+  },
+
+  /**
+   * @description Emissions factors for poultry feed ingredients, by ingredient
+   * @reference (Christie et al., 2012), (Maraseni & Cockfield, 2011), (Castanheira & Freire, 2013), (O'Halloran et al., 2008)
+   * @units kg CO2-e / kg ingredient
+   */
+  FEED_INGREDIENTS_GHG: {
+    wheat: 0.3,
+    barley: 0.11,
+    soybean: 0.165,
+    sorghum: 0.3,
+    millrun: 0.3,
   },
 };
 
@@ -3157,125 +3271,11 @@ export const constants: Constants = {
    * @units kg N/head/year
    */
 
-  // (manureManagementBroilersC83)
-  /**
-   * @description Diet properties for poultry, by class
-   * @inventory2022 Table A5.5.6.1
-   */
-  POULTRY_DIET_PROPERTIES: {
-    layers: {
-      dryMatterIntake: 0.086,
-      dryMatterDigestibility: 0.8,
-      crudeProtein: 0.19,
-      nitrogenRetentionRate: 0.35,
-      manureAsh: 0.18,
-    },
-    meat_chicken_growers: {
-      dryMatterIntake: 0.093,
-      dryMatterDigestibility: 0.8,
-      crudeProtein: 0.23,
-      nitrogenRetentionRate: 0.47,
-      manureAsh: 0.15,
-    },
-    // (meat_chicken_breeder)
-    meat_chicken_layers: {
-      dryMatterIntake: 0.103,
-      dryMatterDigestibility: 0.8,
-      crudeProtein: 0.19,
-      nitrogenRetentionRate: 0.32,
-      manureAsh: 0.18,
-    },
-    meat_other: {
-      dryMatterIntake: 0.093,
-      dryMatterDigestibility: 0.8,
-      crudeProtein: 0.23,
-      nitrogenRetentionRate: 0.47,
-      manureAsh: 0.15,
-    },
-  },
-
-  /**
-   * @description MCFs Pasture range and paddock
-   * @inventory2022 Table A5.5.6.5
-   * @type Proportion
-   */
-  POULTRY_WASTE_MMS: {
-    [STATES.ACT]: 0.01,
-    [STATES.NSW]: 0.01,
-    [STATES.NT]: 0.03,
-    [STATES.QLD]: 0.03,
-    [STATES.SA]: 0.01,
-    [STATES.TAS]: 0.01,
-    [STATES.VIC]: 0.01,
-    [STATES.WA_SW]: 0.01,
-    [STATES.WA_NW]: 0.01,
-  },
-
-  // meat chickens are just broilers
-  // (manureManagementBroilersC92)
-  // (nitrousOxideI152)
-  /**
-   * @description Meat and layer chickens – Integrated MCFs, by state
-   */
-  POULTRY_MEATLAYER_EF_IMCF: {
-    meat_chickens: {
-      [STATES.ACT]: 0.024414,
-      [STATES.NSW]: 0.024414,
-      [STATES.NT]: 0.025014,
-      [STATES.QLD]: 0.025014,
-      [STATES.SA]: 0.024414,
-      [STATES.TAS]: 0.23425,
-      [STATES.VIC]: 0.024414,
-      [STATES.WA_SW]: 0.024414,
-      [STATES.WA_NW]: 0.024414,
-    },
-    layer_chickens: {
-      [STATES.ACT]: 0.031702,
-      [STATES.NSW]: 0.031702,
-      [STATES.NT]: 0.03193,
-      [STATES.QLD]: 0.03193,
-      [STATES.SA]: 0.031702,
-      [STATES.TAS]: 0.031011,
-      [STATES.VIC]: 0.031702,
-      [STATES.WA_SW]: 0.031702,
-      [STATES.WA_NW]: 0.031702,
-    },
-  },
-
-  /**
-   * @description Meat and layer chickens – Integrated EFs, by state
-   */
-  POULTRY_MEATLAYER_EF: {
-    meat_chickens: {
-      iFracGASM: 0.385924,
-      iNOF: 0.004157,
-    },
-    layer_chickens: {
-      iFracGASM: 0.315956,
-      iNOF: 0.004728,
-    },
-  },
-
-  // assumptions sheet
   /**
    * @description Default percent of sugar yield from total harvest, if no value is supplied in inputs
    * @type Proportion
    */
   SUGAR_YIELD: 0.1188625,
-
-  /**
-   * @description Emissions factors for poultry feed ingredients, by ingredient
-   * @reference (Christie et al., 2012), (Maraseni & Cockfield, 2011), (Castanheira & Freire, 2013), (O'Halloran et al., 2008)
-   * @units kg CO2-e / kg ingredient
-   */
-  POULTRY_FEED_INGREDIENTS_GHG: {
-    wheat: 0.3,
-    barley: 0.11,
-    soybean: 0.165,
-    sorghum: 0.3,
-    millrun: 0.3,
-  },
-
   /**
    * @description Standard reference weights for dairy cattle, by class
    * @inventory2022 Table A5.5.1.3

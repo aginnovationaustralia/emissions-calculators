@@ -1,5 +1,6 @@
 import { calculateScope3FuelWithLPGAverage } from '../common-legacy/fuel';
 import { ExecutionContext } from '../executionContext';
+import { ConstantsForPoultryCalculator } from './constants';
 
 // SHEET: Nitrous Oxide_MMS - Layers
 // Indirect nitrous oxide emissions
@@ -10,29 +11,33 @@ import { ExecutionContext } from '../executionContext';
 // Cg: 1.5714285714 (or 44/28) 16 Jul 2024
 export function layersTotalIndirectNO2(
   massWasteVolatisedLayerAndMeat: number,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
 ) {
   const { constants } = context;
 
   return (
     massWasteVolatisedLayerAndMeat *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
-    constants.GWP_FACTORSC15
+    constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
+    constants.COMMON.GWP_FACTORSC15
   );
 }
 // END Annual atmospheric deposition (E)
 //
 
-export function getLayerProductionSystemEF(context: ExecutionContext) {
+export function getLayerProductionSystemEF(
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
+) {
   const { constants } = context;
 
-  return constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE;
+  return constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE;
 }
 
-export function getBroilerProductionSystemEF(context: ExecutionContext) {
+export function getBroilerProductionSystemEF(
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
+) {
   const { constants } = context;
 
-  return constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE;
+  return constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE;
 }
 
 export function getLayersLeachingMassNLost(
@@ -71,7 +76,7 @@ export function getBroilersTotalDungUrine(
 }
 
 export function getScope3FuelFunction(
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
   diesel: number,
   petrol: number,
   lpg: number,

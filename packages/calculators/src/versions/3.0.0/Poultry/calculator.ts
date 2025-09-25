@@ -27,6 +27,7 @@ import {
 } from './Scope3BroilersPurchasedFeed';
 import { calculateScope3PurchasedHay } from './Scope3PurchasedHay';
 import { calculateScope3PurchasedLivestock } from './Scope3PurchasedLivestock';
+import { ConstantsForPoultryCalculator } from './constants';
 import { getScope3FuelFunction } from './functions';
 
 function getBroilerIntensities(
@@ -103,7 +104,7 @@ export function calculateSingleBroiler(
   broilers: BroilersComplete,
   state: State,
   rainfallAbove600: boolean,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
   carbonSequestration: number,
   id: string,
 ) {
@@ -224,7 +225,7 @@ export function calculateSingleBroiler(
 export function calculateSingleLayer(
   layers: LayersComplete,
   state: State,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
   carbonSequestration: number,
   id: string,
 ) {
@@ -343,7 +344,7 @@ export function calculateSingleLayer(
 
 export function calculatePoultry(
   input: PoultryInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
 ): PoultryOutput {
   // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(

@@ -1,6 +1,7 @@
 import { ExecutionContext } from '../executionContext';
 import { BroilerGroup } from '../types/Poultry/group.input';
 import { PoultryClass } from '../types/types';
+import { ConstantsForPoultryCalculator } from './constants';
 import {
   getBroilerProductionSystemEF,
   getBroilerTotalBirdNumbers,
@@ -11,7 +12,7 @@ function calculateNitrogenExcretion(
   birdNumbers: number,
   averageLengthOfStay50: number,
   averageLengthOfStay100: number,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
   dryMatter?: number,
   crudeProtein?: number,
   nitrogenRetention?: number,
@@ -43,7 +44,7 @@ function calculateNitrogenExcretion(
     dryMatterIntake,
     crudeProtein: crudeProteinConstant,
     nitrogenRetentionRate,
-  } = constants.POULTRY_DIET_PROPERTIES[type];
+  } = constants.POULTRY.DIET_PROPERTIES[type];
 
   const dryMatterInput = dryMatter ?? dryMatterIntake;
   const crudeProteinInput = crudeProtein ?? crudeProteinConstant;
@@ -100,7 +101,7 @@ function calculateNitrogenExcretion(
   // N = number of birds in each class
   // NE = mass of nitrogen excreted (Gg/head/season)
   // iFracGASM = integrated fraction of N volatilised for the meat and layer industries
-  const { iFracGASM } = constants.POULTRY_MEATLAYER_EF.meat_chickens;
+  const { iFracGASM } = constants.POULTRY.MEATLAYER_EF.meat_chickens;
 
   const massOfWasteVolatised =
     totalBirdNumbers * nitrogenExcretion50Depletion * iFracGASM +
@@ -117,7 +118,7 @@ function calculateNitrogenExcretion(
   const EF_MEAT_CHICKEN = getBroilerProductionSystemEF(context);
 
   const annualAtmosphericDeposition =
-    massOfWasteVolatised * EF_MEAT_CHICKEN * constants.GWP_FACTORSC15;
+    massOfWasteVolatised * EF_MEAT_CHICKEN * constants.COMMON.GWP_FACTORSC15;
   // END PART 1 Indirect nitrous oxide emissions: Annual atmospheric deposition (E)
   //
 
@@ -135,7 +136,7 @@ function calculateNitrogenExcretion(
 
 export function calculateScope1BroilersAtmospheric(
   groups: BroilerGroup[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
   litterRecycled: number,
   litterRecycleFrequency: number,
 ) {
@@ -194,13 +195,13 @@ export function calculateScope1BroilersAtmospheric(
         seasonalFaecalOther.annualAtmosphericDeposition;
 
       // (Agricultural_Soils_BroilersD41)
-      const massNVolatised = constants.FRAC_GASM * totalFaecal;
+      const massNVolatised = constants.COMMON.FRAC_GASM * totalFaecal;
 
       // (Agricultural_Soils_BroilersD48)
       const nitrousOxideProduction =
         massNVolatised *
-        constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
-        constants.GWP_FACTORSC15;
+        constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+        constants.COMMON.GWP_FACTORSC15;
 
       return {
         massNVolatised: acc.massNVolatised + massNVolatised,
@@ -221,7 +222,7 @@ export function calculateScope1BroilersAtmospheric(
   // START PART 2 Indirect nitrous oxide emissions: Annual atmospheric deposition (E)
   const totalIndirectNO2 = n2OTotal.annualAtmosphericDeposition;
 
-  const totalIndirectNO2Gg = totalIndirectNO2 * constants.GWP_FACTORSC6;
+  const totalIndirectNO2Gg = totalIndirectNO2 * constants.COMMON.GWP_FACTORSC6;
 
   const totalIndirectNO2Tonnes = totalIndirectNO2Gg * 10 ** 3;
   // END PART 2 Indirect nitrous oxide emissions: Annual atmospheric deposition (E)
@@ -231,7 +232,8 @@ export function calculateScope1BroilersAtmospheric(
   // START Total N2O Emissions from Atmospheric Deposition
   const totalAtmosphericN2O = n2OTotal.nitrousOxideProduction;
 
-  const totalAtmosphericN2OGg = totalAtmosphericN2O * constants.GWP_FACTORSC6;
+  const totalAtmosphericN2OGg =
+    totalAtmosphericN2O * constants.COMMON.GWP_FACTORSC6;
 
   const totalAtmosphericN2OTonnes = totalAtmosphericN2OGg * 10 ** 3;
   // END Total N2O Emissions from Atmospheric Deposition

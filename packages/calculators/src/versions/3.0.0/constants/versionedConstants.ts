@@ -330,6 +330,54 @@ export type FeedlotConstants = {
   EMISSION_POTENTIAL: number;
 };
 
+export type PoultryConstants = {
+  DIET_PROPERTIES: {
+    [type in
+      | 'layers'
+      | 'meat_chicken_growers'
+      | 'meat_chicken_layers'
+      | 'meat_other']: {
+      dryMatterIntake: number;
+      dryMatterDigestibility: number;
+      crudeProtein: number;
+      nitrogenRetentionRate: number;
+      manureAsh: number;
+    };
+  };
+
+  WASTE_MMS: {
+    [state in States]: number;
+  };
+
+  MEATLAYER_EF_IMCF: {
+    meat_chickens: {
+      [state in States]: number;
+    };
+    layer_chickens: {
+      [state in States]: number;
+    };
+  };
+
+  MEATLAYER_EF: {
+    meat_chickens: {
+      iFracGASM: number;
+      iNOF: number;
+    };
+    layer_chickens: {
+      iFracGASM: number;
+      iNOF: number;
+    };
+  };
+
+  FEED_INGREDIENTS_GHG: {
+    wheat: number;
+    barley: number;
+    soybean: number;
+    sorghum: number;
+    millrun: number;
+  };
+};
+
 export type PorkConstants = {
   MANURE_NITROGEN: {
     [type in 'boars' | 'sows' | 'gilts' | 'slaughter_pigs']: number;
@@ -379,53 +427,6 @@ export type PorkConstants = {
 };
 
 export type Constants = {
-  // Poultry
-  POULTRY_DIET_PROPERTIES: {
-    [type in
-      | 'layers'
-      | 'meat_chicken_growers'
-      | 'meat_chicken_layers'
-      | 'meat_other']: {
-      dryMatterIntake: number;
-      dryMatterDigestibility: number;
-      crudeProtein: number;
-      nitrogenRetentionRate: number;
-      manureAsh: number;
-    };
-  };
-
-  POULTRY_WASTE_MMS: {
-    [state in States]: number;
-  };
-
-  POULTRY_MEATLAYER_EF_IMCF: {
-    meat_chickens: {
-      [state in States]: number;
-    };
-    layer_chickens: {
-      [state in States]: number;
-    };
-  };
-
-  POULTRY_MEATLAYER_EF: {
-    meat_chickens: {
-      iFracGASM: number;
-      iNOF: number;
-    };
-    layer_chickens: {
-      iFracGASM: number;
-      iNOF: number;
-    };
-  };
-
-  POULTRY_FEED_INGREDIENTS_GHG: {
-    wheat: number;
-    barley: number;
-    soybean: number;
-    sorghum: number;
-    millrun: number;
-  };
-
   // Diary
   DAIRY_MANURE_MANAGEMENT: {
     PASTURE_EF: number;

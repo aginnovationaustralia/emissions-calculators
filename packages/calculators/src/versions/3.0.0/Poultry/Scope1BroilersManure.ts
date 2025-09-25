@@ -1,6 +1,7 @@
 import { ExecutionContext } from '../executionContext';
 import { BroilerGroup } from '../types/Poultry/group.input';
 import { PoultryClass, State } from '../types/types';
+import { ConstantsForPoultryCalculator } from './constants';
 import { getBroilerTotalBirdNumbers } from './functions';
 
 function calculateMethaneProduction(
@@ -9,7 +10,7 @@ function calculateMethaneProduction(
   averageLengthOfStay50: number,
   averageLengthOfStay100: number,
   state: State,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
   dryMatter?: number,
   dryMatterDigest?: number,
   manureAsh?: number,
@@ -28,7 +29,7 @@ function calculateMethaneProduction(
     nitrogenRetentionRate,
     manureAsh: manureAshConstant,
     dryMatterDigestibility,
-  } = constants.POULTRY_DIET_PROPERTIES[type];
+  } = constants.POULTRY.DIET_PROPERTIES[type];
 
   // (Manure_Management_BroilersD25, Data_Input_BroilersC23)
   const dryMatterInput = dryMatter ?? dryMatterIntake;
@@ -67,10 +68,10 @@ function calculateMethaneProduction(
   const meatChickensEP = 0.36;
 
   // integrated methane conversion factor (Manure_Management_BroilersD59)
-  const ICMF = constants.POULTRY_MEATLAYER_EF_IMCF.meat_chickens[state];
+  const ICMF = constants.POULTRY.MEATLAYER_EF_IMCF.meat_chickens[state];
 
   // (Manure_Management_BroilersD60)
-  const densityOfMethane = constants.METHANE_DENSITY;
+  const densityOfMethane = constants.COMMON.METHANE_DENSITY;
 
   // (Manure_Management_BroilersD61)
   const methaneProductionFromManure =
@@ -122,7 +123,7 @@ function calculateMethaneProduction(
         10 ** -6;
 
   // (Nitrous_Oxide_MMS_BroilersI178)
-  const { iNOF } = constants.POULTRY_MEATLAYER_EF.meat_chickens;
+  const { iNOF } = constants.POULTRY.MEATLAYER_EF.meat_chickens;
 
   // (Nitrous_Oxide_MMS_BroilersD63)
   const daysTo100PDepletion =
@@ -134,8 +135,14 @@ function calculateMethaneProduction(
         10 ** -6;
   // (Nitrous_Oxide_MMS_BroilersD76)
   const totalN2OEmissions =
-    totalBirdNumbers * daysTo50PDepletion * iNOF * constants.GWP_FACTORSC15 +
-    birdNumbersAfter50P * daysTo100PDepletion * iNOF * constants.GWP_FACTORSC15;
+    totalBirdNumbers *
+      daysTo50PDepletion *
+      iNOF *
+      constants.COMMON.GWP_FACTORSC15 +
+    birdNumbersAfter50P *
+      daysTo100PDepletion *
+      iNOF *
+      constants.COMMON.GWP_FACTORSC15;
 
   return { CH4: methaneProduction, N2O: totalN2OEmissions };
 }
@@ -143,7 +150,7 @@ function calculateMethaneProduction(
 export function calculateScope1BroilersManure(
   groups: BroilerGroup[],
   state: State,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
   litterRecycled: number,
   litterRecycleFrequency: number,
 ) {
@@ -217,12 +224,14 @@ export function calculateScope1BroilersManure(
   const { constants } = context;
 
   // (Manure_Management_BroilersC78)
-  const totalMethaneGg = totalMethane.methaneCH4 * constants.GWP_FACTORSC5;
+  const totalMethaneGg =
+    totalMethane.methaneCH4 * constants.COMMON.GWP_FACTORSC5;
   // (Data_SummaryC7, Manure_Management_BroilersC79)
   const totalMethaneTonnes = totalMethaneGg * 10 ** 3;
 
   // (Nitrous_Oxide_MMS_BroilersC83)
-  const totalMethaneN2OGg = totalMethane.methaneN2O * constants.GWP_FACTORSC6;
+  const totalMethaneN2OGg =
+    totalMethane.methaneN2O * constants.COMMON.GWP_FACTORSC6;
 
   // (Data_SummaryC8, Nitrous_Oxide_MMS_BroilersC84)
   const totalMethaneN2OTonnes = totalMethaneN2OGg * 10 ** 3;

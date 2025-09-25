@@ -2,6 +2,7 @@ import { ExecutionContext } from '../executionContext';
 import { LayerClass } from '../types/Poultry/layerclass.input';
 import { LayersComplete } from '../types/Poultry/layers.input';
 import { Seasons } from '../types/types';
+import { ConstantsForPoultryCalculator } from './constants';
 import {
   getLayerProductionSystemEF,
   layersTotalIndirectNO2,
@@ -37,7 +38,7 @@ function nitrogen(
   percentLitterRecycled: number,
   recycleFrequency: number,
   type: 'layers' | 'meat_chicken_layers',
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
 ) {
   const { constants } = context;
 
@@ -64,7 +65,7 @@ function nitrogen(
       // I = dry matter intake (kg/day): is a contsant value
       // CP = dietary crude protein: constant value
       const { dryMatterIntake, crudeProtein } =
-        constants.POULTRY_DIET_PROPERTIES[type];
+        constants.POULTRY.DIET_PROPERTIES[type];
 
       const nitrogenIntake = (dryMatterIntake * crudeProtein) / 6.25;
       // END Nitrogen intake (NI)
@@ -77,7 +78,7 @@ function nitrogen(
       // NE = NI * (1 - NR) x 91.25  x 10^-6
       // NI = Nitrogen intake
       // NR = nitrogen retention as proportion of intake: is a constant value
-      const { nitrogenRetentionRate } = constants.POULTRY_DIET_PROPERTIES[type];
+      const { nitrogenRetentionRate } = constants.POULTRY.DIET_PROPERTIES[type];
 
       const nitrogenExcretion =
         nitrogenIntake * (1 - nitrogenRetentionRate) * 91.25 * 10 ** -6;
@@ -92,7 +93,7 @@ function nitrogen(
       // N = Livestock numbers
       // NE = mass of nitrogen excreted (Gg/head/season)
       // iFracGASM = integrated fraction of N volatilised fro the meat and layer industries
-      const { iFracGASM } = constants.POULTRY_MEATLAYER_EF.layer_chickens; // 0.315956 Jul 16 2024
+      const { iFracGASM } = constants.POULTRY.MEATLAYER_EF.layer_chickens; // 0.315956 Jul 16 2024
 
       const massWasteVolatised =
         livestockNumber * nitrogenExcretion * iFracGASM;
@@ -118,7 +119,7 @@ function nitrogen(
 
 export function calculateScope1LayersAtmospheric(
   layers: LayersComplete,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
 ) {
   const nitrogenLayers = nitrogen(
     layers.layers,
@@ -159,7 +160,7 @@ export function calculateScope1LayersAtmospheric(
     context,
   );
 
-  const totalIndirectNO2Gg = totalIndirectNO2 * constants.GWP_FACTORSC6;
+  const totalIndirectNO2Gg = totalIndirectNO2 * constants.COMMON.GWP_FACTORSC6;
   const totalIndirectNO2Tonnes = totalIndirectNO2Gg * 10 ** 3;
   // END Indirect nitrous oxide emissions Annual atmospheric deposition (E)
   //
@@ -173,7 +174,7 @@ export function calculateScope1LayersAtmospheric(
   // M = (MNSoil + UNSoil + FNSoil) x FracGASM
   const massNVolatisedAnnual =
     (nitrogenLayers.nitrogenExcreted + nitrogenMeatChicken.nitrogenExcreted) *
-    constants.FRAC_GASM;
+    constants.COMMON.FRAC_GASM;
   // END
   //
   //
@@ -183,13 +184,14 @@ export function calculateScope1LayersAtmospheric(
   const prodctionSystemEF = getLayerProductionSystemEF(context);
 
   const totalAtmosphericN2O =
-    massNVolatisedAnnual * prodctionSystemEF * constants.GWP_FACTORSC15;
+    massNVolatisedAnnual * prodctionSystemEF * constants.COMMON.GWP_FACTORSC15;
   // END N dung and urine - Nitrous oxide production
   //
 
   //
   // START Total N2O Emissions from Atmospheric Deposition
-  const totalAtmosphericN2OGg = totalAtmosphericN2O * constants.GWP_FACTORSC6;
+  const totalAtmosphericN2OGg =
+    totalAtmosphericN2O * constants.COMMON.GWP_FACTORSC6;
   const totalAtmosphericN2OTonnes = totalAtmosphericN2OGg * 10 ** 3;
   // END Total N2O Emissions from Atmospheric Deposition
   //

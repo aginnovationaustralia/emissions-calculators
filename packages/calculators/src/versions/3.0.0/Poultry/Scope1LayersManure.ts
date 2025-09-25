@@ -2,6 +2,7 @@ import { ExecutionContext } from '../executionContext';
 import { LayerClass } from '../types/Poultry/layerclass.input';
 import { LayersComplete } from '../types/Poultry/layers.input';
 import { PoultryClass, Seasons, State } from '../types/types';
+import { ConstantsForPoultryCalculator } from './constants';
 
 function layerManure(
   state: State,
@@ -9,7 +10,7 @@ function layerManure(
   percentLitterRecycled: number,
   recyclesPerYear: number,
   type: PoultryClass,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
 ) {
   const { constants } = context;
 
@@ -30,24 +31,24 @@ function layerManure(
         manureAsh,
         crudeProtein,
         nitrogenRetentionRate,
-      } = constants.POULTRY_DIET_PROPERTIES[type];
+      } = constants.POULTRY.DIET_PROPERTIES[type];
 
       // (Manure_Management_LayersD20)
       const volatileSolidProductionLayers =
         dryMatterIntake * (1 - dryMatterDigestibility) * (1 - manureAsh);
 
       // (Manure_Management_LayersC70)
-      const iMCF = constants.POULTRY_MEATLAYER_EF_IMCF.layer_chickens[state];
+      const iMCF = constants.POULTRY.MEATLAYER_EF_IMCF.layer_chickens[state];
 
       // TODO: Needs extraction to a constant
       // (Manure_Management_LayersD24)
       const EP_LAYERS = 0.39;
 
       // (Manure_Management_LayersB34)
-      const MMS = constants.POULTRY_WASTE_MMS[state];
+      const MMS = constants.POULTRY.WASTE_MMS[state];
 
       // (Manure_Management_LayersD26)
-      const densityOfMethane = constants.METHANE_DENSITY;
+      const densityOfMethane = constants.COMMON.METHANE_DENSITY;
 
       // (Manure_Management_LayersD32)
       const mmsLayers =
@@ -68,11 +69,11 @@ function layerManure(
         NI_FACTOR * (1 - nitrogenRetentionRate) * 91.25 * 10 ** -6;
 
       // (Nitrous_Oxide_MMS_LayersI130)
-      const { iNOF } = constants.POULTRY_MEATLAYER_EF.layer_chickens;
+      const { iNOF } = constants.POULTRY.MEATLAYER_EF.layer_chickens;
 
       // (Nitrous_Oxide_MMS_LayersD31)
       const totalN2OLayers =
-        livestockNumber * NE_FACTOR * iNOF * constants.GWP_FACTORSC15;
+        livestockNumber * NE_FACTOR * iNOF * constants.COMMON.GWP_FACTORSC15;
 
       return {
         CH4: acc.CH4 + methaneProduction,
@@ -86,7 +87,7 @@ function layerManure(
 export function calculateScope1LayersManure(
   state: State,
   layers: LayersComplete,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
 ) {
   const methaneProductionLayers = layerManure(
     state,
@@ -113,7 +114,8 @@ export function calculateScope1LayersManure(
     methaneProductionLayers.CH4 + methaneProductionMeatChicken.CH4;
 
   // (Manure_Management_LayersC49)
-  const methaneProductionGg = methaneProductionTotal * constants.GWP_FACTORSC5;
+  const methaneProductionGg =
+    methaneProductionTotal * constants.COMMON.GWP_FACTORSC5;
 
   // (Data_SummaryD7, Manure_Management_LayersC50)
   const methaneTonnesCH4 = methaneProductionGg * 1000;
@@ -123,7 +125,7 @@ export function calculateScope1LayersManure(
     methaneProductionLayers.N2O + methaneProductionMeatChicken.N2O;
 
   // (Nitrous_Oxide_MMS_LayersC38)
-  const totalN2OGg = totalN2O * constants.GWP_FACTORSC6;
+  const totalN2OGg = totalN2O * constants.COMMON.GWP_FACTORSC6;
 
   // (Data_SummaryD8, Nitrous_Oxide_MMS_LayersC39)
   const methaneTonnesN2O = totalN2OGg * 1000;
