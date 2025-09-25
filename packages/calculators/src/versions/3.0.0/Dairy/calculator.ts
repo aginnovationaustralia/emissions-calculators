@@ -26,16 +26,17 @@ import { DairyComplete } from '../types/Dairy/dairy.input';
 import { DairyInput } from '../types/Dairy/input';
 import { DairyOutput } from '../types/Dairy/output';
 import { DairyProductionSystem, State } from '../types/types';
+import { ConstantsForDairyCalculator } from './constants';
+import { getEmissionsIntensities } from './functions';
 import { calculateScope1 } from './Scope1';
 import { calculateScope1Urea } from './Scope1Urea';
-import { getEmissionsIntensities } from './functions';
 
 export function calculateSingleDairy(
   state: State,
   dairy: DairyComplete,
   system: DairyProductionSystem,
   rainfallAbove600: boolean,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForDairyCalculator>,
   carbonSequestration: number,
   id: string,
 ) {
@@ -258,7 +259,7 @@ export function calculateSingleDairy(
 
 export function calculateDairy(
   input: DairyInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForDairyCalculator>,
 ): DairyOutput {
   // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(

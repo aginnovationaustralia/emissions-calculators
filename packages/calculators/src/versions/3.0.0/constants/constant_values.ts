@@ -6,6 +6,7 @@ import {
 import {
   BeefConstants,
   Constants,
+  DairyConstants,
   FeedlotConstants,
   LIVESTOCK_SOURCE_LOCATION,
   PorkConstants,
@@ -1666,6 +1667,168 @@ export const poultryConstants: PoultryConstants = {
   },
 };
 
+export const dairyConstants: DairyConstants = {
+  /**
+   * @description Dairy cattle - Nitrous oxide EFs and fraction of N volatilised by manure management system
+   * @inventory2022 Table A5.5.1.9
+   */
+  MANURE_MANAGEMENT: {
+    PASTURE_EF: 0,
+    ANAEROBIC_EF: 0,
+    SUMP_EF: 0,
+    DRAIN_EF: 0,
+    SOLID_EF: 0.005,
+    PASTURE_FRACGASM: 0,
+    ANAEROBIC_FRACGASM: 0.35,
+    SUMP_FRACGASM: 0.07,
+    DRAIN_FRACGASM: 0.2,
+    SOLID_FRACGASM: 0.3,
+  },
+
+  /**
+   * @description Standard reference weights for dairy cattle, by class
+   * @inventory2022 Table A5.5.1.3
+   * @units kg
+   */
+  CATTLE_STANDARD_REFERENCE_WEIGHTS: {
+    milking_cows: 580.7142857143,
+    heifers_lt_1: 580.7142857143,
+    heifers_gt_1: 580.7142857143,
+    dairyBulls_lt_1: 770,
+    dairyBulls_gt_1: 770,
+  },
+
+  // (Agricultural_SoilsD101)
+  /**
+   * @description N2O oxide emission factors and fraction of N volatilised by manure management system
+   * @inventory2022 Table A5.5.1.9
+   */
+  CATTLE_N2O_MMS: {
+    void_at_pasture: { EF: 0, FracGASM: 0 },
+    anaerobic_lagoon: { EF: 0, FracGASM: 0.35 },
+    daily_spread: { EF: 0, FracGASM: 0.2 },
+    solid_storage: { EF: 0.005, FracGASM: 0.3 },
+  },
+
+  /**
+   * @description Mass of N volatilised from manure management system
+   * @inventory2022 Table 3.D.A_6
+   * @units Gg N2O-N / Gg N
+   */
+  MASS_N_VOLATISED_EF: 0.004,
+
+  // (Agricultural_SoilsD142)
+  /**
+   * @description Mass of N volatilised from manure applied to soils
+   * @inventory2022 Table 3.D.A_4
+   * @units Gg N2O-N / Gg N
+   */
+  MMS_EF: 0.00503,
+
+  /**
+   * @description Methane production from pre weaned calves, by class
+   * @inventory2022 Table A5.5.1.5
+   * @units Gg CH4-C / Gg N
+   */
+  METHANE_MPW: {
+    milking_cows: 0,
+    heifers_lt_1: 0.01825,
+    heifers_gt_1: 0,
+    dairyBulls_lt_1: 0.02081,
+    dairyBulls_gt_1: 0,
+  },
+
+  /**
+   * @description Nitrous oxide EFs for inorganic fertiliser, based on rainfall and crop type
+   * @inventory2022 Table 5.21
+   * @units Gg N2O-N / Gg N
+   */
+  PRODUCTIONSYSTEM_EF: {
+    RAINFALL_LT_600: {
+      'Non-irrigated Crop': 0.0029,
+      'Irrigated Crop': 0.007,
+      'Irrigated Pasture': 0.0059,
+      'Non-irrigated Pasture': 0.0018,
+    },
+    RAINFALL_GT_600: {
+      'Non-irrigated Crop': 0.008,
+      'Irrigated Crop': 0.007,
+      'Irrigated Pasture': 0.0059,
+      'Non-irrigated Pasture': 0.0018,
+    },
+  },
+
+  /**
+   * @description Dairy Cattle - Methane Conversion Factors (MCF)
+   * @inventory2022 Table 5.A.7
+   */
+  METHANE_CONVERSION_FACTOR: {
+    [STATES.ACT]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.73,
+      'Sump and disperal systems': 0.005,
+      'Drains to paddock': 0.15,
+      'Solid Storage': 0.02,
+    },
+    [STATES.NSW]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.75,
+      'Sump and disperal systems': 0.005,
+      'Drains to paddock': 0.18,
+      'Solid Storage': 0.02,
+    },
+    [STATES.NT]: {
+      Pasture: 0.02,
+      'Anaerobic lagoon': 0.8,
+      'Sump and disperal systems': 0.01,
+      'Drains to paddock': 0.5,
+      'Solid Storage': 0.02,
+    },
+    [STATES.QLD]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.77,
+      'Sump and disperal systems': 0.005,
+      'Drains to paddock': 0.24,
+      'Solid Storage': 0.02,
+    },
+    [STATES.SA]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.74,
+      'Sump and disperal systems': 0.005,
+      'Drains to paddock': 0.17,
+      'Solid Storage': 0.02,
+    },
+    [STATES.TAS]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.7,
+      'Sump and disperal systems': 0.001,
+      'Drains to paddock': 0.13,
+      'Solid Storage': 0.02,
+    },
+    [STATES.VIC]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.74,
+      'Sump and disperal systems': 0.005,
+      'Drains to paddock': 0.17,
+      'Solid Storage': 0.02,
+    },
+    [STATES.WA_SW]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.75,
+      'Sump and disperal systems': 0.005,
+      'Drains to paddock': 0.18,
+      'Solid Storage': 0.02,
+    },
+    [STATES.WA_NW]: {
+      Pasture: 0.02,
+      'Anaerobic lagoon': 0.8,
+      'Sump and disperal systems': 0.01,
+      'Drains to paddock': 0.5,
+      'Solid Storage': 0.02,
+    },
+  },
+};
+
 export const constants: Constants = {
   /**
    * @description Energy required to manufacture herbicides and insecticides
@@ -3276,165 +3439,6 @@ export const constants: Constants = {
    * @type Proportion
    */
   SUGAR_YIELD: 0.1188625,
-  /**
-   * @description Standard reference weights for dairy cattle, by class
-   * @inventory2022 Table A5.5.1.3
-   * @units kg
-   */
-  DAIRY_CATTLE_STANDARD_REFERENCE_WEIGHTS: {
-    milking_cows: 580.7142857143,
-    heifers_lt_1: 580.7142857143,
-    heifers_gt_1: 580.7142857143,
-    dairyBulls_lt_1: 770,
-    dairyBulls_gt_1: 770,
-  },
-
-  // (Agricultural_SoilsD101)
-  /**
-   * @description N2O oxide emission factors and fraction of N volatilised by manure management system
-   * @inventory2022 Table A5.5.1.9
-   */
-  DAIRY_CATTLE_N2O_MMS: {
-    void_at_pasture: { EF: 0, FracGASM: 0 },
-    anaerobic_lagoon: { EF: 0, FracGASM: 0.35 },
-    daily_spread: { EF: 0, FracGASM: 0.2 },
-    solid_storage: { EF: 0.005, FracGASM: 0.3 },
-  },
-
-  /**
-   * @description Mass of N volatilised from manure management system
-   * @inventory2022 Table 3.D.A_6
-   * @units Gg N2O-N / Gg N
-   */
-  DAIRY_MASS_N_VOLATISED_EF: 0.004,
-
-  // (Agricultural_SoilsD142)
-  /**
-   * @description Mass of N volatilised from manure applied to soils
-   * @inventory2022 Table 3.D.A_4
-   * @units Gg N2O-N / Gg N
-   */
-  DAIRY_MMS_EF: 0.00503,
-
-  /**
-   * @description Methane production from pre weaned calves, by class
-   * @inventory2022 Table A5.5.1.5
-   * @units Gg CH4-C / Gg N
-   */
-  DAIRY_METHANE_MPW: {
-    milking_cows: 0,
-    heifers_lt_1: 0.01825,
-    heifers_gt_1: 0,
-    dairyBulls_lt_1: 0.02081,
-    dairyBulls_gt_1: 0,
-  },
-
-  /**
-   * @description Nitrous oxide EFs for inorganic fertiliser, based on rainfall and crop type
-   * @inventory2022 Table 5.21
-   * @units Gg N2O-N / Gg N
-   */
-  DAIRY_PRODUCTIONSYSTEM_EF: {
-    RAINFALL_LT_600: {
-      'Non-irrigated Crop': 0.0029,
-      'Irrigated Crop': 0.007,
-      'Irrigated Pasture': 0.0059,
-      'Non-irrigated Pasture': 0.0018,
-    },
-    RAINFALL_GT_600: {
-      'Non-irrigated Crop': 0.008,
-      'Irrigated Crop': 0.007,
-      'Irrigated Pasture': 0.0059,
-      'Non-irrigated Pasture': 0.0018,
-    },
-  },
-
-  /**
-   * @description Dairy cattle - Nitrous oxide EFs and fraction of N volatilised by manure management system
-   * @inventory2022 Table A5.5.1.9
-   */
-  DAIRY_MANURE_MANAGEMENT: {
-    PASTURE_EF: 0,
-    ANAEROBIC_EF: 0,
-    SUMP_EF: 0,
-    DRAIN_EF: 0,
-    SOLID_EF: 0.005,
-    PASTURE_FRACGASM: 0,
-    ANAEROBIC_FRACGASM: 0.35,
-    SUMP_FRACGASM: 0.07,
-    DRAIN_FRACGASM: 0.2,
-    SOLID_FRACGASM: 0.3,
-  },
-
-  /**
-   * @description Dairy Cattle - Methane Conversion Factors (MCF)
-   * @inventory2022 Table 5.A.7
-   */
-  DAIRY_METHANE_CONVERSION_FACTOR: {
-    [STATES.ACT]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.73,
-      'Sump and disperal systems': 0.005,
-      'Drains to paddock': 0.15,
-      'Solid Storage': 0.02,
-    },
-    [STATES.NSW]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.75,
-      'Sump and disperal systems': 0.005,
-      'Drains to paddock': 0.18,
-      'Solid Storage': 0.02,
-    },
-    [STATES.NT]: {
-      Pasture: 0.02,
-      'Anaerobic lagoon': 0.8,
-      'Sump and disperal systems': 0.01,
-      'Drains to paddock': 0.5,
-      'Solid Storage': 0.02,
-    },
-    [STATES.QLD]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.77,
-      'Sump and disperal systems': 0.005,
-      'Drains to paddock': 0.24,
-      'Solid Storage': 0.02,
-    },
-    [STATES.SA]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.74,
-      'Sump and disperal systems': 0.005,
-      'Drains to paddock': 0.17,
-      'Solid Storage': 0.02,
-    },
-    [STATES.TAS]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.7,
-      'Sump and disperal systems': 0.001,
-      'Drains to paddock': 0.13,
-      'Solid Storage': 0.02,
-    },
-    [STATES.VIC]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.74,
-      'Sump and disperal systems': 0.005,
-      'Drains to paddock': 0.17,
-      'Solid Storage': 0.02,
-    },
-    [STATES.WA_SW]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.75,
-      'Sump and disperal systems': 0.005,
-      'Drains to paddock': 0.18,
-      'Solid Storage': 0.02,
-    },
-    [STATES.WA_NW]: {
-      Pasture: 0.02,
-      'Anaerobic lagoon': 0.8,
-      'Sump and disperal systems': 0.01,
-      'Drains to paddock': 0.5,
-      'Solid Storage': 0.02,
-    },
-  },
 
   // other livestock Deer Manure management D42
   /**

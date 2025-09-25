@@ -426,9 +426,8 @@ export type PorkConstants = {
   EF_BEDDING: number;
 };
 
-export type Constants = {
-  // Diary
-  DAIRY_MANURE_MANAGEMENT: {
+export type DairyConstants = {
+  MANURE_MANAGEMENT: {
     PASTURE_EF: number;
     ANAEROBIC_EF: number;
     SUMP_EF: number;
@@ -441,7 +440,7 @@ export type Constants = {
     SOLID_FRACGASM: number;
   };
 
-  DAIRY_CATTLE_STANDARD_REFERENCE_WEIGHTS: {
+  CATTLE_STANDARD_REFERENCE_WEIGHTS: {
     milking_cows: number;
     heifers_lt_1: number;
     heifers_gt_1: number;
@@ -449,17 +448,17 @@ export type Constants = {
     dairyBulls_gt_1: number;
   };
 
-  DAIRY_CATTLE_N2O_MMS: {
+  CATTLE_N2O_MMS: {
     void_at_pasture: { EF: number; FracGASM: number };
     anaerobic_lagoon: { EF: number; FracGASM: number };
     daily_spread: { EF: number; FracGASM: number };
     solid_storage: { EF: number; FracGASM: number };
   };
 
-  DAIRY_MASS_N_VOLATISED_EF: number;
-  DAIRY_MMS_EF: number;
+  MASS_N_VOLATISED_EF: number;
+  MMS_EF: number;
 
-  DAIRY_METHANE_MPW: {
+  METHANE_MPW: {
     milking_cows: number;
     heifers_lt_1: number;
     heifers_gt_1: number;
@@ -467,7 +466,7 @@ export type Constants = {
     dairyBulls_gt_1: number;
   };
 
-  DAIRY_PRODUCTIONSYSTEM_EF: {
+  PRODUCTIONSYSTEM_EF: {
     RAINFALL_LT_600: {
       'Non-irrigated Crop': number;
       'Irrigated Crop': number;
@@ -482,7 +481,7 @@ export type Constants = {
     };
   };
 
-  DAIRY_METHANE_CONVERSION_FACTOR: {
+  METHANE_CONVERSION_FACTOR: {
     [state in States]: {
       Pasture: number;
       'Anaerobic lagoon': number;
@@ -491,7 +490,9 @@ export type Constants = {
       'Solid Storage': number;
     };
   };
+};
 
+export type Constants = {
   // Goat
   GOAT_EF: number;
   GOAT_MANUREPRODUCTION: number;
