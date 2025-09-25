@@ -20,6 +20,7 @@ import { WildCatchFisheryOutput } from '../types/WildCatchFishery/output';
 import { WildCatchFisheryScope1Output } from '../types/WildCatchFishery/scope1.output';
 import { WildCatchFisheryScope3Output } from '../types/WildCatchFishery/scope3.output';
 import { WildCatchFisheryEnterpriseInput } from '../types/WildCatchFishery/wildcatchfishery.input';
+import { ConstantsForWildCatchFisheryCalculator } from './constants';
 import { getIntensities } from './functions';
 import { calculateCustomBait, calculatePurchasedBait } from './PurchasedBait';
 
@@ -32,7 +33,7 @@ type WildCatchFisheryScopesOutput = {
 export function calculateSingleWildCatchFisheryEnterprise(
   state: State,
   enterprise: WildCatchFisheryEnterpriseInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForWildCatchFisheryCalculator>,
   carbonSequestration: number,
   id: string,
 ) {
@@ -131,7 +132,7 @@ export function calculateSingleWildCatchFisheryEnterprise(
 
 export function calculateWildCatchFishery(
   input: WildCatchFisheryInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForWildCatchFisheryCalculator>,
 ): WildCatchFisheryOutput {
   const wildCatchFisheryResults = input.enterprises.map((enterprise, ix) =>
     calculateSingleWildCatchFisheryEnterprise(

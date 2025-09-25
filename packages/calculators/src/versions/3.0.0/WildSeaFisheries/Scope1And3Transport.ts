@@ -1,11 +1,12 @@
 import { ExecutionContext } from '../executionContext';
 import { WildSeaFisheriesCommercialFlight } from '../types/WildSeaFisheries/commercialflight.input';
 import { WildSeaFisheriesTransport } from '../types/WildSeaFisheries/transport.input';
+import { ConstantsForWildSeaFisheriesCalculator } from './constants';
 
 export function calculateScope1And3Transport(
   transports: WildSeaFisheriesTransport[],
   flights: WildSeaFisheriesCommercialFlight[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForWildSeaFisheriesCalculator>,
 ) {
   const { constants } = context;
 
@@ -14,7 +15,7 @@ export function calculateScope1And3Transport(
       // (TransportD41)
       const fuelUsedLitres =
         segment.distance *
-        constants.FISHERIES_TRANSPORT_FUEL_USAGE[segment.type];
+        constants.FISHERIES.TRANSPORT_FUEL_USAGE[segment.type];
 
       // (TransportE41)
       const fuelUsedKL = fuelUsedLitres / 1000;
@@ -25,7 +26,7 @@ export function calculateScope1And3Transport(
         N2O: N2OEF,
         CH4: CH4EF,
         SCOPE3,
-      } = constants.FISHERIES_TRANSPORT_FUEL_EF[segment.fuel];
+      } = constants.FISHERIES.TRANSPORT_FUEL_EF[segment.fuel];
 
       // (TransportF41)
       const scope1CO2 = fuelUsedKL * CO2EF;
@@ -47,7 +48,7 @@ export function calculateScope1And3Transport(
     const scope3Flight =
       (flight.commercialFlightPassengers *
         flight.totalFlightDistance *
-        constants.FISHERIES_COMMERCIALFLIGHT_EF) /
+        constants.COMMON.COMMERCIALFLIGHT_EF) /
       1000;
 
     return acc + scope3Flight;

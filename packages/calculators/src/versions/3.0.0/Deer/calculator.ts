@@ -21,6 +21,7 @@ import { DeerComplete } from '../types/Deer/deer.input';
 import { DeerInput } from '../types/Deer/input';
 import { DeerOutput } from '../types/Deer/output';
 import { DeerClassesAPI, State } from '../types/types';
+import { ConstantsForDeerCalculator } from './constants';
 import { getIntensity } from './functions';
 import { calculateScope1 } from './Scope1Deer';
 import { calculateScope1Urea } from './Scope1Urea';
@@ -37,7 +38,7 @@ export function calculateSingleDeer(
   state: State,
   rainfallAbove600: boolean,
   deer: DeerComplete,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForDeerCalculator>,
   carbonSequestration: number,
   id: string,
 ) {
@@ -205,7 +206,7 @@ export function calculateSingleDeer(
 
 export function calculateDeer(
   input: DeerInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForDeerCalculator>,
 ): DeerOutput {
   // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(

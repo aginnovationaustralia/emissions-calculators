@@ -1,10 +1,11 @@
 import { ExecutionContext } from '../../executionContext';
+import { CommonConstants } from '../constants';
 
 export function calculateCommercialFlights(
   flightDistance: number,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
 ) {
   const { constants } = context;
 
-  return flightDistance * constants.FISHERIES_COMMERCIALFLIGHT_EF;
+  return flightDistance * constants.COMMON.COMMERCIALFLIGHT_EF;
 }

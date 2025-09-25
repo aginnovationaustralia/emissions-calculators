@@ -1,11 +1,12 @@
 import { ExecutionContext } from '../executionContext';
 import { WildSeaFisheriesBaitPurchase } from '../types/WildSeaFisheries/baitpurchase.input';
 import { WildSeaFisheriesCustomBaitPurchase } from '../types/WildSeaFisheries/custombaitpurchase.input';
+import { ConstantsForWildSeaFisheriesCalculator } from './constants';
 
 export function calculateScope3Bait(
   baits: WildSeaFisheriesBaitPurchase[],
   custombait: WildSeaFisheriesCustomBaitPurchase[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForWildSeaFisheriesCalculator>,
 ) {
   const baitTotal = baits.reduce((acc, bait) => {
     // (Embedded_Emissions_C6)
@@ -13,7 +14,7 @@ export function calculateScope3Bait(
     // (Embedded_Emissions_F6)
     const additionalEmissions = additional * bait.emissionsIntensity;
 
-    const ef = context.constants.FISHERIES_BAIT_EF[bait.type];
+    const ef = context.constants.FISHERIES.BAIT_EF[bait.type];
     // (Embedded_Emissions_F5)
     const emissions = (bait.purchased - additional) * ef;
 

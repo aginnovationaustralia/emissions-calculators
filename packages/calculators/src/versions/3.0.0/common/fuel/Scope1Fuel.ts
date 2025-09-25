@@ -6,6 +6,7 @@ import {
   StationaryFuelTypes,
   TransportFuelTypes,
 } from '../../types/types';
+import { CommonConstants } from '../constants';
 import { swapObjectKeysAndValues } from '../tools/object';
 
 /*
@@ -87,10 +88,10 @@ const convertTransportFuelType = (
 export function calculateScope1And3Fuel(
   fuel: FuelInput,
   state: State,
-  context: ExecutionContext,
+  context: ExecutionContext<CommonConstants>,
 ) {
   const { constants } = context;
-  const { FUEL_ENERGYGJ } = constants;
+  const { FUEL_ENERGYGJ } = constants.COMMON;
   const { stationaryFuel, transportFuel, naturalGas } = fuel;
 
   const stationaryFuelAmountsKl = new Map<StationaryFuelTypes, number>();

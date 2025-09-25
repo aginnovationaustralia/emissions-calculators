@@ -505,22 +505,15 @@ export type BuffaloConstants = {
   ENTERIC_EF: number;
 };
 
-export type Constants = {
-  // Deer
-  OTHERLIVESTOCK_ALLOCATION_CLIMATEREGIONS: {
-    [state in States]: {
-      warm: number;
-      temperate: number;
-    };
-  };
+export type DeerConstants = {
+  MANUREPRODUCTION: number;
+  ENTERIC_EF: number;
+  NITROGEN_EXCRETED_FACTOR: number;
+  FAECALN_PMF: number;
+};
 
-  DEER_MANUREPRODUCTION: number;
-  DEER_ENTERIC_EF: number;
-  DEER_NITROGEN_EXCRETED_FACTOR: number;
-  DEER_FAECALN_PMF: number;
-
-  // Fisheries
-  FISHERIES_TRANSPORT_FUEL_USAGE: {
+export type FisheriesConstants = {
+  TRANSPORT_FUEL_USAGE: {
     None: number;
     'Small Car': number;
     'Medium Car': number;
@@ -533,7 +526,7 @@ export type Constants = {
     'Heavy Bus': number;
   };
 
-  FISHERIES_TRANSPORT_FUEL_EF: {
+  TRANSPORT_FUEL_EF: {
     Gasoline: FisheriesFuelFactor;
     'Diesel oil': FisheriesFuelFactor;
     'Liquefied petroleum gas (LPG)': FisheriesFuelFactor;
@@ -545,15 +538,17 @@ export type Constants = {
     'Liquified natural gas': FisheriesFuelFactor;
   };
 
-  FISHERIES_COMMERCIALFLIGHT_EF: number;
-
-  FISHERIES_BAIT_EF: {
+  BAIT_EF: {
     'Fish Frames': number;
     'Fish Heads': number;
     Sardines: number;
     Squid: number;
     'Whole Fish': number;
   };
+};
+
+export type Constants = {
+  COMMERCIALFLIGHT_EF: number;
 
   REFRIGERANT_GWP: Record<Refrigerant, number>;
 
@@ -774,6 +769,13 @@ export type Constants = {
   METHANE_TEMPERATE_EF: number;
   METHANE_EMISSION_POTENTIAL: number;
   METHANE_DENSITY: number;
+
+  OTHERLIVESTOCK_ALLOCATION_CLIMATEREGIONS: {
+    [state in States]: {
+      warm: number;
+      temperate: number;
+    };
+  };
 
   FUEL_ENERGYGJ: {
     STATIONARY: Record<keyof typeof StationaryFuelTypes, FuelFactor>;

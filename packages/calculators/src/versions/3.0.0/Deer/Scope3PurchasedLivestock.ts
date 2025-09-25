@@ -1,10 +1,11 @@
 import { ExecutionContext } from '../executionContext';
 import { DeerClasses } from '../types/Deer/deerclasses.input';
 import { DeerClassesAPI } from '../types/types';
+import { ConstantsForDeerCalculator } from './constants';
 
 export function calculateScope3PurchaseLivestock(
   classes: DeerClasses,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForDeerCalculator>,
 ) {
   const totalKg = DeerClassesAPI.reduce((acc, cur) => {
     const cls = classes[cur];
@@ -16,7 +17,7 @@ export function calculateScope3PurchaseLivestock(
     return acc + totalPurchaseKg;
   }, 0);
 
-  const scope3 = context.constants.PURCHASED_LIVESTOCK_EF.DEER * totalKg;
+  const scope3 = context.constants.COMMON.PURCHASED_LIVESTOCK_EF.DEER * totalKg;
   const scope3Tonnes = scope3 / 1000;
 
   return scope3Tonnes;

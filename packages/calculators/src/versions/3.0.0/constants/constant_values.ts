@@ -8,7 +8,9 @@ import {
   BuffaloConstants,
   Constants,
   DairyConstants,
+  DeerConstants,
   FeedlotConstants,
+  FisheriesConstants,
   GoatConstants,
   LIVESTOCK_SOURCE_LOCATION,
   PorkConstants,
@@ -1883,7 +1885,102 @@ export const buffaloConstants: BuffaloConstants = {
   ENTERIC_EF: 76,
 };
 
+export const deerConstants: DeerConstants = {
+  /**
+   * @description Manure production for deer, in kg DM/head/year
+   * @reference Expert working group assumption - equivalent to one sheep
+   * @units kg DM/head/year
+   */
+  MANUREPRODUCTION: 319,
+
+  /**
+   * @description Enteric fermentation emission factor for deer, in kg CH4/head/year
+   * @reference IPCC (2006)
+   * @units kg CH4/head/year
+   */
+  ENTERIC_EF: 20,
+
+  /**
+   * @description Nitrogen excreted for deer, in kg N/head/year
+   * @reference Expert working group assumption - equivalent to one sheep
+   * @units kg N/head/year
+   */
+  NITROGEN_EXCRETED_FACTOR: 13.2,
+
+  /**
+   * @description Faecal nitrogen proportion for deer, as a proportion
+   * @type Proportion
+   */
+  FAECALN_PMF: 0.29,
+};
+
+export const fisheriesConstants: FisheriesConstants = {
+  /**
+   * @description Coefficients for Rural fuel consumption model (litres per 1 Km)
+   * @inventory2022 Table 56
+   * @units litres / Km
+   */
+  TRANSPORT_FUEL_USAGE: {
+    None: 0,
+    'Small Car': 0.06419556,
+    'Medium Car': 0.07771756,
+    'Large Car': 0.09826507,
+    'Courier Van-Utility': 0.07609467,
+    '4WD Mid Size': 0.1024522,
+    'Light Rigid': 0.08085994,
+    'Medium Rigid': 0.1245859,
+    'Heavy Rigid': 0.2322869,
+    'Heavy Bus': 0.2333246,
+  },
+
+  /**
+   * @description Direct (Scope 1) and indirect (Scope 3) emissions factors for the consumptions of transport fuels in different transport equipment
+   * @inventory2022 Table 9
+   * @units kg CO2-e / GJ
+   */
+  TRANSPORT_FUEL_EF: {
+    Gasoline: { CO2: 67.4, CH4: 0.02, N2O: 0.2, SCOPE3: 17.2 },
+    'Diesel oil': { CO2: 69.9, CH4: 0.01, N2O: 0.5, SCOPE3: 17.3 },
+    'Liquefied petroleum gas (LPG)': {
+      CO2: 60.2,
+      CH4: 0.5,
+      N2O: 0.2,
+      SCOPE3: 15.2,
+    },
+    'Fuel oil': { CO2: 72.7, CH4: 0.01, N2O: 0.5, SCOPE3: 18.0 },
+    Ethanol: { CO2: 0, CH4: 0.02, N2O: 0.2, SCOPE3: 17.2 },
+    Biodiesel: { CO2: 0, CH4: 0.01, N2O: 0.5, SCOPE3: 17.3 },
+    'Renewable diesel': { CO2: 0, CH4: 0.01, N2O: 0.5, SCOPE3: 17.3 },
+    'Other biofuels': { CO2: 0, CH4: 0.01, N2O: 0.5, SCOPE3: 17.3 },
+    'Liquified natural gas': {
+      CO2: 50.2,
+      CH4: 0.5,
+      N2O: 0.2,
+      SCOPE3: 12.7,
+    },
+  },
+
+  /**
+   * @description Emissions factors for bait
+   * @reference FRDC - Data extracted/reverse-engineered by Blueshift/Dan from Seafish Calculator (UK/European numbers).
+   * @units kg CO2-e / kg bait
+   */
+  BAIT_EF: {
+    'Fish Frames': 0.098,
+    'Fish Heads': 0.098,
+    Sardines: 0.05,
+    Squid: 0.192,
+    'Whole Fish': 0.098,
+  },
+};
+
 export const constants: Constants = {
+  /**
+   * @description Emissions factors for commercial flights
+   * @units kg CO2-e / PAX km
+   */
+  COMMERCIALFLIGHT_EF: 0.101,
+
   /**
    * @description Energy required to manufacture herbicides and insecticides
    * @reference O'Halloran, N., Fisher, P., Rab, A., & Victoria, D. P. I. (2008). Preliminary estimation of the carbon footprint of the Australian vegetable industry (pp. 1-39). Discussion paper 4. Vegetable Industry Carbon Footprint Scoping Study. 2008, Horticulture Australia Ltd. Table 7
@@ -2060,34 +2157,6 @@ export const constants: Constants = {
     [LIVESTOCK_SOURCE_LOCATION.TAS]: 11.7,
     [LIVESTOCK_SOURCE_LOCATION.NT]: 12.4,
   },
-
-  // Deer
-  /**
-   * @description Manure production for deer, in kg DM/head/year
-   * @reference Expert working group assumption - equivalent to one sheep
-   * @units kg DM/head/year
-   */
-  DEER_MANUREPRODUCTION: 319,
-
-  /**
-   * @description Enteric fermentation emission factor for deer, in kg CH4/head/year
-   * @reference IPCC (2006)
-   * @units kg CH4/head/year
-   */
-  DEER_ENTERIC_EF: 20,
-
-  /**
-   * @description Nitrogen excreted for deer, in kg N/head/year
-   * @reference Expert working group assumption - equivalent to one sheep
-   * @units kg N/head/year
-   */
-  DEER_NITROGEN_EXCRETED_FACTOR: 13.2,
-
-  /**
-   * @description Faecal nitrogen proportion for deer, as a proportion
-   * @type Proportion
-   */
-  DEER_FAECALN_PMF: 0.29,
 
   /**
    * @description Emission factors for purchased livestock, in kg CO2-e/kg liveweight
@@ -3489,67 +3558,8 @@ export const constants: Constants = {
     },
   },
 
-  /**
-   * @description Coefficients for Rural fuel consumption model (litres per 1 Km)
-   * @inventory2022 Table 56
-   * @units litres / Km
-   */
-  FISHERIES_TRANSPORT_FUEL_USAGE: {
-    None: 0,
-    'Small Car': 0.06419556,
-    'Medium Car': 0.07771756,
-    'Large Car': 0.09826507,
-    'Courier Van-Utility': 0.07609467,
-    '4WD Mid Size': 0.1024522,
-    'Light Rigid': 0.08085994,
-    'Medium Rigid': 0.1245859,
-    'Heavy Rigid': 0.2322869,
-    'Heavy Bus': 0.2333246,
-  },
-
   // (TransportB111)
   // TODO: Replace
-  /**
-   * @description Direct (Scope 1) and indirect (Scope 3) emissions factors for the consumptions of transport fuels in different transport equipment
-   * @inventory2022 Table 9
-   * @units kg CO2-e / GJ
-   */
-  FISHERIES_TRANSPORT_FUEL_EF: {
-    Gasoline: { CO2: 67.4, CH4: 0.02, N2O: 0.2, SCOPE3: 17.2 },
-    'Diesel oil': { CO2: 69.9, CH4: 0.01, N2O: 0.5, SCOPE3: 17.3 },
-    'Liquefied petroleum gas (LPG)': {
-      CO2: 60.2,
-      CH4: 0.5,
-      N2O: 0.3,
-      SCOPE3: 20.2,
-    },
-    'Fuel oil': { CO2: 73.6, CH4: 0.08, N2O: 0.5, SCOPE3: 18 },
-    Ethanol: { CO2: 0, CH4: 0.2, N2O: 0.2, SCOPE3: 0 },
-    Biodiesel: { CO2: 0, CH4: 0.8, N2O: 1.7, SCOPE3: 0 },
-    'Renewable diesel': { CO2: 0, CH4: 0.01, N2O: 0.5, SCOPE3: 0 },
-    'Other biofuels': { CO2: 0, CH4: 0.8, N2O: 1.7, SCOPE3: 0 },
-    'Liquified natural gas': { CO2: 51.4, CH4: 7.3, N2O: 0.3, SCOPE3: 18 },
-  },
-
-  // (TransportD48)
-  /**
-   * @description Emissions factors for commercial flights
-   * @units kg CO2-e / PAX km
-   */
-  FISHERIES_COMMERCIALFLIGHT_EF: 0.101,
-
-  /**
-   * @description Emissions factors for bait
-   * @reference FRDC - Data extracted/reverse-engineered by Blueshift/Dan from Seafish Calculator (UK/European numbers).
-   * @units kg CO2-e / kg bait
-   */
-  FISHERIES_BAIT_EF: {
-    'Fish Frames': 0.098,
-    'Fish Heads': 0.098,
-    Sardines: 0.05,
-    Squid: 0.192,
-    'Whole Fish': 0.098,
-  },
 
   /**
    * @description Global warming potentials for refrigerants

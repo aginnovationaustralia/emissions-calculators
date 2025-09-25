@@ -1,12 +1,13 @@
 import { ExecutionContext } from '../executionContext';
 import { WildSeaFisheriesRefrigerant } from '../types/WildSeaFisheries/refrigerant.input';
+import { ConstantsForWildSeaFisheriesCalculator } from './constants';
 
 export function calculateScope1Refrigerant(
   refrigerants: WildSeaFisheriesRefrigerant[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForWildSeaFisheriesCalculator>,
 ) {
   const total = refrigerants.reduce((acc, { refrigerant, annualRecharge }) => {
-    const gwp = context.constants.REFRIGERANT_GWP[refrigerant];
+    const gwp = context.constants.COMMON.REFRIGERANT_GWP[refrigerant];
     return acc + (gwp * annualRecharge) / 1000;
   }, 0);
 
