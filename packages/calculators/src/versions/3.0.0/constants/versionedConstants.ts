@@ -492,18 +492,20 @@ export type DairyConstants = {
   };
 };
 
+export type GoatConstants = {
+  EF: number;
+  MANUREPRODUCTION: number;
+};
+
+export type BuffaloConstants = {
+  NITROGEN_EXCRETED_FACTOR: number;
+  FAECALN_PMF: number;
+  SEASONALURINE_PMU: number;
+  MANUREPRODUCTION: number;
+  ENTERIC_EF: number;
+};
+
 export type Constants = {
-  // Goat
-  GOAT_EF: number;
-  GOAT_MANUREPRODUCTION: number;
-
-  // Buffalo
-  BUFFALO_NITROGEN_EXCRETED_FACTOR: number;
-  BUFFALO_FAECALN_PMF: number;
-  BUFFALO_SEASONALURINE_PMU: number;
-  BUFFALO_MANUREPRODUCTION: number;
-  BUFFALO_ENTERIC_EF: number;
-
   // Deer
   OTHERLIVESTOCK_ALLOCATION_CLIMATEREGIONS: {
     [state in States]: {

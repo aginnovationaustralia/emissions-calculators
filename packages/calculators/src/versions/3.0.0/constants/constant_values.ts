@@ -5,9 +5,11 @@ import {
 } from '../types/types';
 import {
   BeefConstants,
+  BuffaloConstants,
   Constants,
   DairyConstants,
   FeedlotConstants,
+  GoatConstants,
   LIVESTOCK_SOURCE_LOCATION,
   PorkConstants,
   PoultryConstants,
@@ -1829,6 +1831,58 @@ export const dairyConstants: DairyConstants = {
   },
 };
 
+export const goatConstants: GoatConstants = {
+  /**
+   * @description Enteric fermentation emission factor for goat, in kg CH4/head/year
+   * @reference IPCC (2006)
+   * @units kg CH4/head/year
+   */
+  EF: 5,
+
+  /**
+   * @description Manure production for goat, in kg DM/head/year
+   * @reference Expert working group assumption - equivalent to one sheep
+   * @units kg DM/head/year
+   */
+  MANUREPRODUCTION: 114,
+};
+
+export const buffaloConstants: BuffaloConstants = {
+  /**
+   * @description Nitrogen excreted for buffalo, in kg N/head/year
+   * @reference Expert working group assumption - equivalent to beef cattle - pasture
+   * @units kg N/head/year
+   */
+  NITROGEN_EXCRETED_FACTOR: 39.5,
+
+  /**
+   * @description Faecal nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
+   * @type Proportion
+   */
+  FAECALN_PMF: 0.29,
+
+  /**
+   * @description Seasonal urinary nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
+   * @inventory2018 3B.4_5
+   * @type Proportion
+   */
+  SEASONALURINE_PMU: 0.71,
+
+  /**
+   * @description Manure production for buffalo, in kg DM/head/year
+   * @reference Expert working group assumption - equivalent to beef cattle - pasture
+   * @units kg DM/head/year
+   */
+  MANUREPRODUCTION: 957,
+
+  /**
+   * @description Enteric fermentation emission factor for buffalo, in kg CH4/head/year
+   * @reference IPCC (2006)
+   * @units kg CH4/head/year
+   */
+  ENTERIC_EF: 76,
+};
+
 export const constants: Constants = {
   /**
    * @description Energy required to manufacture herbicides and insecticides
@@ -2007,20 +2061,6 @@ export const constants: Constants = {
     [LIVESTOCK_SOURCE_LOCATION.NT]: 12.4,
   },
 
-  /**
-   * @description Enteric fermentation emission factor for goat, in kg CH4/head/year
-   * @reference IPCC (2006)
-   * @units kg CH4/head/year
-   */
-  GOAT_EF: 5,
-
-  /**
-   * @description Manure production for goat, in kg DM/head/year
-   * @reference Expert working group assumption - equivalent to one sheep
-   * @units kg DM/head/year
-   */
-  GOAT_MANUREPRODUCTION: 114,
-
   // Deer
   /**
    * @description Manure production for deer, in kg DM/head/year
@@ -2048,41 +2088,6 @@ export const constants: Constants = {
    * @type Proportion
    */
   DEER_FAECALN_PMF: 0.29,
-
-  // Buffalo
-  /**
-   * @description Nitrogen excreted for buffalo, in kg N/head/year
-   * @reference Expert working group assumption - equivalent to beef cattle - pasture
-   * @units kg N/head/year
-   */
-  BUFFALO_NITROGEN_EXCRETED_FACTOR: 39.5,
-
-  /**
-   * @description Faecal nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
-   * @type Proportion
-   */
-  BUFFALO_FAECALN_PMF: 0.29,
-
-  /**
-   * @description Seasonal urinary nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
-   * @inventory2018 3B.4_5
-   * @type Proportion
-   */
-  BUFFALO_SEASONALURINE_PMU: 0.71,
-
-  /**
-   * @description Manure production for buffalo, in kg DM/head/year
-   * @reference Expert working group assumption - equivalent to beef cattle - pasture
-   * @units kg DM/head/year
-   */
-  BUFFALO_MANUREPRODUCTION: 957,
-
-  /**
-   * @description Enteric fermentation emission factor for buffalo, in kg CH4/head/year
-   * @reference IPCC (2006)
-   * @units kg CH4/head/year
-   */
-  BUFFALO_ENTERIC_EF: 76,
 
   /**
    * @description Emission factors for purchased livestock, in kg CO2-e/kg liveweight

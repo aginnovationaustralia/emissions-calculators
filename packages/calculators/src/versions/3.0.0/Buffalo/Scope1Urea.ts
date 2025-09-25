@@ -1,9 +1,10 @@
 import { ExecutionContext } from '../executionContext';
 import { Fertiliser } from '../types/fertiliser.input';
+import { ConstantsForBuffaloCalculator } from './constants';
 
 export function calculateScope1Urea(
   fertiliser: Fertiliser,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForBuffaloCalculator>,
 ) {
   const { constants } = context;
 
@@ -18,8 +19,8 @@ export function calculateScope1Urea(
   // WARNING: buffalo calc does not have / 1000
   const carbon =
     totalMassFertiliser *
-    constants.CARBON_FRACTION_OF_UREA *
-    constants.GWP_FACTORSC13;
+    constants.COMMON.CARBON_FRACTION_OF_UREA *
+    constants.COMMON.GWP_FACTORSC13;
 
   return carbon;
 }
