@@ -1,31 +1,34 @@
 import { ExecutionContext } from '../executionContext';
 import { VineyardCrop } from '../types/Vineyard/vineyard.input';
+import { ConstantsForVineyardCalculator } from './constants';
 
 export function getNitrogenFertiliser(
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForVineyardCalculator>,
   vineyard: VineyardCrop,
 ) {
   const { constants } = context;
 
   return (
-    vineyard.ureaApplication * constants.FERTILISER_CONTENT.UREA.N +
+    vineyard.ureaApplication * constants.COMMON.FERTILISER_CONTENT.UREA.N +
     vineyard.nonUreaNitrogen +
-    vineyard.ureaAmmoniumNitrate * constants.FERTILISER_CONTENT.UAN.N
+    vineyard.ureaAmmoniumNitrate * constants.COMMON.FERTILISER_CONTENT.UAN.N
   );
 }
 
-export function getFertiliserFractionRunoff(context: ExecutionContext) {
+export function getFertiliserFractionRunoff(
+  context: ExecutionContext<ConstantsForVineyardCalculator>,
+) {
   const { constants } = context;
 
-  return constants.FERTILISER_FRACTION_RUNOFF_STATIC;
+  return constants.CROP.FERTILISER_FRACTION_RUNOFF_STATIC;
 }
 
 export function calculateScope1N2O(
   vineyard: VineyardCrop,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForVineyardCalculator>,
 ) {
   const { constants } = context;
-  const { PRODUCTIONSYSTEM_EF } = constants;
+  const { PRODUCTIONSYSTEM_EF } = constants.CROP;
 
   const { irrigated, rainfallAbove600 } = vineyard;
 
@@ -45,9 +48,10 @@ export function calculateScope1N2O(
     : productionSystemEfs['Non-irrigated crop'];
 
   // (Fertiliser was C37)
-  const fertiliserN2O = totalMassFertiliser * ef * constants.GWP_FACTORSC15;
+  const fertiliserN2O =
+    totalMassFertiliser * ef * constants.COMMON.GWP_FACTORSC15;
   // Fertiliser C39
-  const fertiliserN2OG = fertiliserN2O * constants.GWP_FACTORSC6;
+  const fertiliserN2OG = fertiliserN2O * constants.COMMON.GWP_FACTORSC6;
   const fertiliserN2OTonnes = fertiliserN2OG * 1000;
 
   // crop residue
@@ -57,7 +61,7 @@ export function calculateScope1N2O(
     (vineyard.averageYield * vineyard.areaPlanted) / 1000;
 
   // Use hops for vineyards
-  const cropResidue = constants.CROPRESIDUE.Hops;
+  const cropResidue = constants.CROP.CROPRESIDUE.Hops;
 
   // (Crop_ResiduesC7)
   const {
@@ -92,13 +96,13 @@ export function calculateScope1N2O(
       belowGroundN;
 
   // (Crop_ResiduesD33)
-  const residueN2OEF = constants.CROP_RESIDUE_N2O_EF;
+  const residueN2OEF = constants.CROP.CROP_RESIDUE_N2O_EF;
 
   // (Crop_ResiduesC33)
   const residueGgN2O =
-    massOfNReturnedToSoil * residueN2OEF * constants.GWP_FACTORSC15;
+    massOfNReturnedToSoil * residueN2OEF * constants.COMMON.GWP_FACTORSC15;
   // (Crop_ResiduesC36)
-  const residuesGgCO2 = residueGgN2O * constants.GWP_FACTORSC6;
+  const residuesGgCO2 = residueGgN2O * constants.COMMON.GWP_FACTORSC6;
 
   // (Crop residues C37)
   const residueN2OTotal = residuesGgCO2 * 1000;
@@ -109,7 +113,7 @@ export function calculateScope1N2O(
   const fractionOfNAvailableForRunoff = getFertiliserFractionRunoff(context);
 
   // (Leaching_And_RunoffE11)
-  const fracLeach = constants.LEACHING.FERT_N_FRACLEACH;
+  const fracLeach = constants.COMMON.LEACHING.FERT_N_FRACLEACH;
 
   const nonIrrigatedMultiplier = vineyard.rainfallAbove600 ? 1 : 0;
   // (Leaching_And_RunoffC20)
@@ -125,23 +129,23 @@ export function calculateScope1N2O(
     leechingZoneMultiplier;
 
   // (Leaching_And_RunoffE14)
-  const fracWet = constants.LEACHING.FRACWET;
+  const fracWet = constants.COMMON.LEACHING.FRACWET;
 
   // (Leaching_And_RunoffC23)
   const leechingResidueNGgN =
     massOfNReturnedToSoil * fracWet * fracLeach * leechingZoneMultiplier;
 
   // (Leaching_And_RunoffE29)
-  const leechingN2OEF = constants.LEACHING.N2O_EF;
+  const leechingN2OEF = constants.COMMON.LEACHING.N2O_EF;
 
   // (Leaching_And_RunoffC32)
   const annualN2OLeeching =
     (fertiliserLeechingGgN + leechingResidueNGgN) *
     leechingN2OEF *
-    constants.GWP_FACTORSC15;
+    constants.COMMON.GWP_FACTORSC15;
 
   // (Leaching_And_RunoffC33)
-  const leechingGgCO2 = annualN2OLeeching * constants.GWP_FACTORSC6;
+  const leechingGgCO2 = annualN2OLeeching * constants.COMMON.GWP_FACTORSC6;
 
   // (Leaching_And_RunoffC35)
   const leechingN2O = leechingGgCO2 * 1000;
@@ -149,16 +153,17 @@ export function calculateScope1N2O(
   // atmospheric deposition
 
   // (Atmospheric_DepositionD10)
-  const fracGASF = constants.FRAC_GASF;
+  const fracGASF = constants.COMMON.FRAC_GASF;
 
   // (Atmospheric_DepositionC12)
   const massOfFertiliserVolatilised = totalMassFertiliser * fracGASF;
 
   // (Atmospheric_DepositionC28)
   const annualN2OAtmospheric =
-    massOfFertiliserVolatilised * ef * constants.GWP_FACTORSC15;
+    massOfFertiliserVolatilised * ef * constants.COMMON.GWP_FACTORSC15;
   // (Atmospheric_DepositionC22)
-  const atmosphericGgCO2 = annualN2OAtmospheric * constants.GWP_FACTORSC6;
+  const atmosphericGgCO2 =
+    annualN2OAtmospheric * constants.COMMON.GWP_FACTORSC6;
   const atmosphericN2O = atmosphericGgCO2 * 1000;
 
   return {

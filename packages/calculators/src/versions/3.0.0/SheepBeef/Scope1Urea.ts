@@ -1,12 +1,12 @@
-import { CommonConstants } from '../common/constants';
 import { ExecutionContext } from '../executionContext';
 import { Fertiliser } from '../types/fertiliser.input';
 import { MineralSupplementation } from '../types/mineral.input';
+import { HasLivestockConstants } from './constants';
 
 export function calculateScope1Urea(
   supplementation: MineralSupplementation,
   fertiliser: Fertiliser,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext<HasLivestockConstants>,
 ) {
   const { constants } = context;
 
@@ -31,7 +31,7 @@ export function calculateScope1Urea(
   // (ureaApplicationC37)
   const carbon =
     totalMassFertiliser *
-    constants.COMMON.CARBON_FRACTION_OF_UREA *
+    constants.LIVESTOCK.CARBON_FRACTION_OF_UREA *
     constants.COMMON.GWP_FACTORSC13;
 
   return carbon;

@@ -3,6 +3,7 @@ import clone from 'nanoclone';
 import { validateCalculatorInput } from '../../calculators';
 import { entriesFromObject } from '../../common/tools/object';
 import { calculateSheep } from '../../Sheep/calculator';
+import { ConstantsForSheepCalculator } from '../../Sheep/constants';
 import { SheepInput, SheepInputSchema } from '../../types/Sheep/input';
 import { SheepIntermediateOutput } from '../../types/Sheep/intermediate.output';
 import { SheepOutput } from '../../types/Sheep/output';
@@ -10,7 +11,7 @@ import {
   compareEmissionsFrom2Inputs,
   transformCarbonSequestration,
 } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext, V3_0_0 } from '../common/context';
 import {
   ensureEveryKeyIsDefined,
   executeEmissionsSpec,
@@ -70,17 +71,17 @@ const lambingExpectations = {
 };
 
 describe('Sheep calculator, VIC', () => {
-  const context = testContext(V2_0_0, 'Sheep');
+  const context = testContext(V3_0_0, 'Sheep');
   const emissions = calculateSheep(sheepTestData, context);
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations);
+  executeEmissionsSpec(V3_0_0, emissions, expectations);
 });
 
 describe('Lambing scenario, VIC', () => {
-  const context = testContext(V2_0_0, 'Sheep');
+  const context = testContext(V3_0_0, 'Sheep');
   const emissions = calculateSheep(lambingRatesTestData, context);
 
-  executeEmissionsSpec(V2_0_0, emissions, lambingExpectations);
+  executeEmissionsSpec(V3_0_0, emissions, lambingExpectations);
 });
 
 describe('Sheep scenarios', () => {
@@ -102,7 +103,7 @@ describe('Sheep scenarios', () => {
 
   expect(validatedInput).toBeDefined();
 
-  const context = testContext(V2_0_0, 'Sheep');
+  const context = testContext(V3_0_0, 'Sheep');
   const emissions = calculateSheep(validatedInput, context);
 
   ensureEveryKeyIsDefined(emissions as unknown as KeyValuePairs);
@@ -140,7 +141,8 @@ describe('Sheep calculator (multi activity)', () => {
     SheepInput,
     SheepIntermediateOutput,
     'intermediate',
-    SheepOutput
+    SheepOutput,
+    ConstantsForSheepCalculator
   >(
     'Sheep',
     calculateSheep,

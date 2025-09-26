@@ -16,6 +16,7 @@ import { SugarOutput } from '../types/Sugar/output';
 import { SugarCrop } from '../types/Sugar/sugar.input';
 import { SugarVegetation } from '../types/Sugar/vegetation.input';
 import { State } from '../types/types';
+import { ConstantsForSugarCalculator } from './constants';
 import { calculateScope1N2O } from './Scope1';
 import { calculateScope1FieldBurning } from './Scope1FieldBurningCH4';
 import { calculateScope1Urea } from './Scope1Urea';
@@ -45,7 +46,7 @@ export function calculateEntireSugar(
   electricityRenewablePercentage: number,
   state: State,
   vegetation: SugarVegetation[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForSugarCalculator>,
 ): SugarOutput {
   const { constants } = context;
 
@@ -150,7 +151,7 @@ export function calculateEntireSugar(
     };
 
     const percentMilledCaneYield =
-      crop.percentMilledCaneYield ?? constants.SUGAR_YIELD;
+      crop.percentMilledCaneYield ?? constants.SUGAR.SUGAR_YIELD;
 
     const sugarDenominator =
       percentMilledCaneYield * crop.averageCaneYield * crop.areaSown;
@@ -258,7 +259,10 @@ export function calculateEntireSugar(
   };
 }
 
-export function calculateSugar(input: SugarInput, context: ExecutionContext) {
+export function calculateSugar(
+  input: SugarInput,
+  context: ExecutionContext<ConstantsForSugarCalculator>,
+) {
   return calculateEntireSugar(
     input.crops,
     input.electricityUse,

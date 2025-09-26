@@ -1,9 +1,10 @@
 import { ExecutionContext } from '../executionContext';
 import { SugarCrop } from '../types/Sugar/sugar.input';
+import { ConstantsForSugarCalculator } from './constants';
 
 export function calculateScope1FieldBurning(
   crop: SugarCrop,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForSugarCalculator>,
 ) {
   const { constants } = context;
 
@@ -12,19 +13,20 @@ export function calculateScope1FieldBurning(
 
   // (cropResiduesC7)
   const residueToCropRatio =
-    constants.CROPRESIDUE['Sugar Cane'].residueCropRatio;
+    constants.CROP.CROPRESIDUE['Sugar Cane'].residueCropRatio;
 
-  // (constants.cropResiduesC9)
-  const { dryMatterContent } = constants.CROPRESIDUE['Sugar Cane'];
+  // (constants.CROP.CROPRESIDUEsC9)
+  const { dryMatterContent } = constants.CROP.CROPRESIDUE['Sugar Cane'];
 
-  // (constants.cropResiduesC14)
+  // (constants.CROP.CROPRESIDUEsC14)
   const fractionOfResidueAtBurn =
-    constants.CROPRESIDUE['Sugar Cane'].fractionOfResidueAtBurning;
+    constants.CROP.CROPRESIDUE['Sugar Cane'].fractionOfResidueAtBurning;
 
-  // (constants.cropResiduesC15)
-  const { carbonMassFraction } = constants.CROPRESIDUE['Sugar Cane'];
+  // (constants.CROP.CROPRESIDUEsC15)
+  const { carbonMassFraction } = constants.CROP.CROPRESIDUE['Sugar Cane'];
 
-  const nitrogenAboveGround = constants.CROPRESIDUE['Sugar Cane'].aboveGroundN;
+  const nitrogenAboveGround =
+    constants.CROP.CROPRESIDUE['Sugar Cane'].aboveGroundN;
 
   // (fieldBurningC22)
   const massOfFuelBurnt =
@@ -32,28 +34,30 @@ export function calculateScope1FieldBurning(
     residueToCropRatio *
     fractionOfResidueAtBurn *
     dryMatterContent *
-    constants.BURNING_EFFICIENCY_RESIDUE *
+    constants.CROP.BURNING_EFFICIENCY_RESIDUE *
     crop.fractionOfAnnualCropBurnt;
 
   // (fieldBurningC29)
   const annualMethaneFromBurning =
     massOfFuelBurnt *
     carbonMassFraction *
-    constants.BURNING_METHANE_EF *
-    constants.GWP_FACTORSC14;
+    constants.CROP.BURNING_METHANE_EF *
+    constants.COMMON.GWP_FACTORSC14;
 
   // (fieldBurningC39)
   const annualN2OFromBurning =
     massOfFuelBurnt *
     nitrogenAboveGround *
-    constants.BURNING_N2O_EF *
-    constants.GWP_FACTORSC15;
+    constants.CROP.BURNING_N2O_EF *
+    constants.COMMON.GWP_FACTORSC15;
 
   // (fieldBurningC31)
-  const totalMethaneGgCO2 = annualMethaneFromBurning * constants.GWP_FACTORSC5;
+  const totalMethaneGgCO2 =
+    annualMethaneFromBurning * constants.COMMON.GWP_FACTORSC5;
   const totalFieldBurningCH4 = totalMethaneGgCO2 * 1000;
 
-  const totalNitrousGgCO2 = annualN2OFromBurning * constants.GWP_FACTORSC6;
+  const totalNitrousGgCO2 =
+    annualN2OFromBurning * constants.COMMON.GWP_FACTORSC6;
   const totalFieldBurningN2O = totalNitrousGgCO2 * 1000;
 
   return { CH4: totalFieldBurningCH4, N2O: totalFieldBurningN2O };

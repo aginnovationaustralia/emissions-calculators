@@ -49,7 +49,7 @@ export function calculateScope1Manure(
   //  iMCF = integrated methane conversion factor
 
   const methaneEmissionPotential = constants.PORK.METHANE_EMISSION_POTENTIAL; // Bo
-  const densityOfMethane = constants.COMMON.METHANE_DENSITY; // p
+  const densityOfMethane = constants.LIVESTOCK.METHANE_DENSITY; // p
 
   ManureManagementSystems.forEach((system) => {
     PORK_CLASSES.forEach((type) => {
@@ -78,7 +78,7 @@ export function calculateScope1Manure(
         if (system === 'undefinedSystem') {
           MCF = constants.PORK.INTEGRATED_EF[state].iMCF;
         } else {
-          MCF = constants.COMMON.MMS[system].MCF;
+          MCF = constants.PORK.MMS[system].MCF;
         }
 
         const methaneProduction =

@@ -71,7 +71,7 @@ function calculateMethaneProduction(
   const ICMF = constants.POULTRY.MEATLAYER_EF_IMCF.meat_chickens[state];
 
   // (Manure_Management_BroilersD60)
-  const densityOfMethane = constants.COMMON.METHANE_DENSITY;
+  const densityOfMethane = constants.LIVESTOCK.METHANE_DENSITY;
 
   // (Manure_Management_BroilersD61)
   const methaneProductionFromManure =

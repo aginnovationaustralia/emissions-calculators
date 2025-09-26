@@ -151,7 +151,7 @@ const isPorkClassWithDetailedEmissions = (
 const getSeasonNitrogenFromManureAndFeed = (
   classes: PorkSeasonNumber,
   porkClass: PorkClass,
-  constants: ConstantsForPorkCalculator['COMMON'],
+  constants: ConstantsForPorkCalculator,
   season: Season,
 ) => {
   const E = isPorkClassWithDetailedEmissions(porkClass)
@@ -167,7 +167,7 @@ const getSeasonNitrogenFromManureAndFeed = (
 const getTotalNitrogenFromManureAndFeed = (
   classes: PorkSeasonNumber,
   porkClass: PorkClass,
-  constants: ConstantsForPorkCalculator['COMMON'],
+  constants: ConstantsForPorkCalculator,
 ) => {
   let result = 0;
 
@@ -257,7 +257,7 @@ export function calculateScope1N2O(
     const nitrogenFromManureAndFeedAE = getTotalNitrogenFromManureAndFeed(
       head,
       type,
-      constants.COMMON,
+      constants,
     );
 
     ManureManagementSystems.forEach((system) => {
@@ -279,7 +279,7 @@ export function calculateScope1N2O(
         totalManureMMSKg += totalN2OForSystem * constants.COMMON.GWP_FACTORSC6;
       } else {
         const { NOF } =
-          constants.COMMON.MMS[
+          constants.PORK.MMS[
             system as Exclude<ManureManagementSystem, 'undefinedSystem'>
           ];
 
@@ -339,19 +339,19 @@ export function calculateScope1N2O(
       const nFromManureFeedAE = getTotalNitrogenFromManureAndFeed(
         head,
         type,
-        constants.COMMON,
+        constants,
       );
 
       const fracGasmForSystem =
         system === 'undefinedSystem'
           ? fracGASMForState
-          : constants.COMMON.MMS[system].FracGASM;
+          : constants.PORK.MMS[system].FracGASM;
 
       const matmos = nFromManureFeedAE * fracGasmForSystem * manureProportion;
 
       const result =
         matmos *
-        constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
+        constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
         constants.COMMON.GWP_FACTORSC15;
 
       indirectN2OEValues[type][system] = result;
@@ -422,7 +422,7 @@ export function calculateScope1N2O(
     const totalNitrogenAEForType = getTotalNitrogenFromManureAndFeed(
       head,
       type,
-      constants.COMMON,
+      constants,
     );
 
     const mnLeach =
@@ -511,7 +511,7 @@ export function calculateScope1N2O(
       const n20AE = getSeasonNitrogenFromManureAndFeed(
         head,
         type,
-        constants.COMMON,
+        constants,
         season,
       );
 
@@ -531,7 +531,7 @@ export function calculateScope1N2O(
     n20AEBySeason,
   ).map(
     ([season, n20AE]) =>
-      [season, n20AE * constants.COMMON.FRAC_GASM] as SeasonNumberEntry,
+      [season, n20AE * constants.LIVESTOCK.FRAC_GASM] as SeasonNumberEntry,
   );
 
   // D80:84
@@ -540,7 +540,7 @@ export function calculateScope1N2O(
       [
         season,
         n20AE *
-          constants.COMMON.AGRICULTURAL_SOILS.EF_IRRIGATEDPASTURE *
+          constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDPASTURE *
           constants.COMMON.GWP_FACTORSC15,
       ] as SeasonNumberEntry,
   );
@@ -583,16 +583,16 @@ export function calculateScope1N2O(
 
   const totalFertiliserN2ODryland =
     (nUreaGrazingDryland + nUreaCropsDryland + nUreaOtherDryland) *
-    constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
     constants.COMMON.GWP_FACTORSC15;
 
   const totalFertiliserN2OIrrigated =
     (nUreaGrazingIrrigated *
-      constants.COMMON.AGRICULTURAL_SOILS.EF_IRRIGATEDPASTURE +
+      constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDPASTURE +
       nUreaCropsIrrigated *
-        constants.COMMON.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP +
+        constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP +
       nUreaOtherIrrigated *
-        constants.COMMON.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP) *
+        constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP) *
     constants.COMMON.GWP_FACTORSC15;
 
   const totalFertiliserN2O =

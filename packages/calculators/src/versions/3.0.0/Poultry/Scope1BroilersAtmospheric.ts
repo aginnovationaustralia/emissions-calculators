@@ -195,12 +195,12 @@ export function calculateScope1BroilersAtmospheric(
         seasonalFaecalOther.annualAtmosphericDeposition;
 
       // (Agricultural_Soils_BroilersD41)
-      const massNVolatised = constants.COMMON.FRAC_GASM * totalFaecal;
+      const massNVolatised = constants.LIVESTOCK.FRAC_GASM * totalFaecal;
 
       // (Agricultural_Soils_BroilersD48)
       const nitrousOxideProduction =
         massNVolatised *
-        constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+        constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
         constants.COMMON.GWP_FACTORSC15;
 
       return {

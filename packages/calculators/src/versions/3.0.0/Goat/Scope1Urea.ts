@@ -31,7 +31,7 @@ export function calculateScope1Urea(
   // (ureaApplicationC37)
   const carbon =
     totalMassFertiliser *
-    constants.COMMON.CARBON_FRACTION_OF_UREA *
+    constants.LIVESTOCK.CARBON_FRACTION_OF_UREA *
     constants.COMMON.GWP_FACTORSC13;
 
   return carbon;

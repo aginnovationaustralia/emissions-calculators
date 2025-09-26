@@ -4,6 +4,7 @@ import {
   calculateEntireGrains,
   calculateGrains,
 } from '../../Grains/calculator';
+import { ConstantsForGrainsCalculator } from '../../Grains/constants';
 import { GrainsInput } from '../../types/Grains/input';
 import { GrainsIntermediateOutput } from '../../types/Grains/intermediate.output';
 import { GrainsOutput } from '../../types/Grains/output';
@@ -118,7 +119,8 @@ describe('Grains calculator (multi activity)', () => {
     GrainsInput,
     GrainsIntermediateOutput,
     'intermediate',
-    GrainsOutput
+    GrainsOutput,
+    ConstantsForGrainsCalculator
   >(
     'Grains',
     calculateGrains,

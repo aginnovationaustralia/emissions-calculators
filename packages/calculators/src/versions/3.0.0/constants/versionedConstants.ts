@@ -229,6 +229,26 @@ export type BeefConstants = {
   >;
 
   EF_URINEDUNGDEPOSITED: number;
+
+  LIVESTOCK_SOURCE_EMISSIONFACTOR: {
+    [location in LivestockSourceLocations]: number;
+  };
+
+  MILK_INTAKE: {
+    NORTHOFTROPIC: {
+      CALVING_SEASON: number;
+      SEASON_AFTER_CALVING: number;
+    };
+    SOUTHOFTROPIC: {
+      CALVING_SEASON: number;
+      SEASON_AFTER_CALVING: number;
+    };
+  };
+
+  FEED_ADJUSTMENT: {
+    CALVING_SEASON: number;
+    SEASON_AFTER_CALVING: number;
+  };
 };
 
 export type SavannaConstants = {
@@ -262,10 +282,6 @@ export type SavannaConstants = {
       coarse: { 'early dry season': number; 'late dry season': number };
     };
   };
-
-  BURNING_EFFICIENCY_RESIDUE: number;
-  BURNING_N2O_EF: number;
-  BURNING_METHANE_EF: number;
 
   FUELBURNT_VEGETATION_CARBONFRACTION: {
     fine: { [vegetationType in VegetationTypes]: number };
@@ -424,6 +440,29 @@ export type PorkConstants = {
 
   METHANE_EMISSION_POTENTIAL: number;
   EF_BEDDING: number;
+
+  MMS: {
+    outdoorSystems: {
+      MCF: number;
+      FracGASM: number;
+      NOF: number;
+    };
+    coveredAnaerobicPond: {
+      MCF: number;
+      FracGASM: number;
+      NOF: number;
+    };
+    uncoveredAnaerobicPond: {
+      MCF: number;
+      FracGASM: number;
+      NOF: number;
+    };
+    deepLitter: {
+      MCF: number;
+      FracGASM: number;
+      NOF: number;
+    };
+  };
 };
 
 export type DairyConstants = {
@@ -490,6 +529,8 @@ export type DairyConstants = {
       'Solid Storage': number;
     };
   };
+
+  ASH_CONTENT: number;
 };
 
 export type GoatConstants = {
@@ -547,23 +588,7 @@ export type FisheriesConstants = {
   };
 };
 
-export type Constants = {
-  COMMERCIALFLIGHT_EF: number;
-
-  REFRIGERANT_GWP: Record<Refrigerant, number>;
-
-  WASTEWATER: {
-    TREATMENT_EF: Record<FluidWasteTreatmentType, number>;
-    F_SLUDGE_FRACTION: number;
-    EF_COD: number;
-    METHANE_PRODUCTION: number;
-    FLARE_EF: number;
-  };
-
-  COMPOSTING_EF: number;
-
-  MUNICIPAL_SOLID_WASTE_EF: number;
-
+export type LivestockConstants = {
   PURCHASED_LIVESTOCK_EF: {
     BUFFALO: number;
     DEER: number;
@@ -581,6 +606,29 @@ export type Constants = {
     EF_NONIRRIGATEDPASTURE: number;
   };
 
+  // Methane
+
+  METHANE_WARM_EF: number;
+  METHANE_TEMPERATE_EF: number;
+  METHANE_EMISSION_POTENTIAL: number;
+  METHANE_DENSITY: number;
+
+  OTHERLIVESTOCK_ALLOCATION_CLIMATEREGIONS: {
+    [state in States]: {
+      warm: number;
+      temperate: number;
+    };
+  };
+
+  URINEDUNG_EF: number;
+
+  CARBON_FRACTION_OF_UREA: number;
+
+  FRAC_GASM: number;
+
+  INOGRANICFERTILISER_ATMOSPHERIC_N: number;
+  LEECHING_AND_RUNOFF: number;
+
   ENERGY_TO_MANUFACTURE: {
     HERBICIDE_ENERGY: number; // MJ/kg
     HERBICIDEGENERAL_ENERGY: number;
@@ -597,63 +645,26 @@ export type Constants = {
       N2O: number;
     };
   };
+};
 
-  ELECTRICITY: {
-    [state in States | 'Australia']: {
-      SCOPE2_EF: number;
-      SCOPE3_EF: number;
-    };
-  };
-
-  UREA_FERTILISER_GHG: number;
-  SUPERPHOSPHATE_GHG: number;
-
-  MATERIAL_BREAKDOWN_SUPPLEMENTATION: {
-    mineralblock: ByChemical & { KG_CO2: number; FRACTION_OF_UREA: number };
-    weanerblock: ByChemical & { KG_CO2: number; FRACTION_OF_UREA: number };
-    dryseasonmix: ByChemical & { KG_CO2: number; FRACTION_OF_UREA: number };
-  };
-
-  CUSTOMIZED_FERTILIZER: {
-    'Monoammonium phosphate (MAP)': { TotalGHG: number };
-    'Diammonium Phosphate (DAP)': { TotalGHG: number };
-    'Urea-Ammonium Nitrate (UAN)': { TotalGHG: number };
-    'Ammonium Nitrate (AN)': { TotalGHG: number };
-    'Calcium Ammonium Nitrate (CAN)': { TotalGHG: number };
-    'Triple Superphosphate (TSP)': { TotalGHG: number };
-    'Super Potash 1:1': { TotalGHG: number };
-    'Super Potash 2:1': { TotalGHG: number };
-    'Super Potash 3:1': { TotalGHG: number };
-    'Super Potash 4:1': { TotalGHG: number };
-    'Super Potash 5:1': { TotalGHG: number };
-    'Muriate of Potash': { TotalGHG: number };
-    'Sulphate of Potash': { TotalGHG: number };
-    'Sulphate of Ammonia': { TotalGHG: number };
-  };
-
-  FERTILISER_EF: number;
-
+export type SugarConstants = {
   SUGAR_ANNUAL_N2O_PRODUCTION_EF: number;
 
-  FERTILISER_CONTENT: {
-    MAP: FertiliserBreakdown;
-    DAP: FertiliserBreakdown;
-    SSP: FertiliserBreakdown;
-    UREA: FertiliserBreakdown;
-    TSP: FertiliserBreakdown;
-    UAN: FertiliserBreakdown;
-    SP11: FertiliserBreakdown;
-    SP21: FertiliserBreakdown;
-    SP31: FertiliserBreakdown;
-    SP41: FertiliserBreakdown;
-    SP51: FertiliserBreakdown;
-    MURIATE_OF_POTASH: FertiliserBreakdown;
-    SULPHATE_OF_POTASH: FertiliserBreakdown;
-    SULPHATE_OF_AMMONIA: FertiliserBreakdown;
-    AN: FertiliserBreakdown;
-    CAN: FertiliserBreakdown;
-  };
+  SUGAR_YIELD: number;
+};
 
+export type CottonConstants = {
+  COTTON_INTENSITY_ECONOMIC_ALLOCATION: {
+    LINT: number;
+    SEED: number;
+  };
+};
+
+export type AquacultureConstants = {
+  AQUACULTURE_BAIT_EF: Record<AquacultureBait, number>;
+};
+
+export type CropConstants = {
   // Added to constant_values.ts as part of 1.1.0 release
   FERTILISER_FRACTION_RUNOFF_STATIC: number;
 
@@ -662,12 +673,6 @@ export type Constants = {
     P: { TOTAL_ENERGY: number; EF: number };
     K: { TOTAL_ENERGY: number; EF: number };
     S: { TOTAL_ENERGY: number; EF: number };
-  };
-
-  AGROCHEMICAL_ENERGY_MANUFACTURE: {
-    HERBICIDE_GLYPHOSATE: { TOTAL_ENERGY: number; EF: number };
-    HERBICIDE_GENERAL: { TOTAL_ENERGY: number; EF: number };
-    INSECTICIDE: { TOTAL_ENERGY: number; EF: number };
   };
 
   PRODUCTIONSYSTEM_EF: {
@@ -737,44 +742,98 @@ export type Constants = {
 
   CROP_RESIDUE_N2O_EF: number;
 
-  LIVESTOCK_SOURCE_EMISSIONFACTOR: {
-    [location in LivestockSourceLocations]: number;
-  };
+  BURNING_EFFICIENCY_RESIDUE: number;
+  BURNING_N2O_EF: number;
+  BURNING_METHANE_EF: number;
+};
 
+export type RiceConstants = {
+  EF_FLOODED_FIELDS: number;
+  SF_CULTIVATION_WATER_REGIME: Record<WaterRegimeSubType, number>;
+  SF_PRESEASON_WATER_REGIME: Record<RicePreseasonFloodingPeriod, number>;
+};
+
+export type Constants = {
   FEED_PURCHASED: {
     grain: { TotalGHG: number };
     cottonseed: { TotalGHG: number };
     hay: { TotalGHG: number };
   };
 
-  MILK_INTAKE: {
-    NORTHOFTROPIC: {
-      CALVING_SEASON: number;
-      SEASON_AFTER_CALVING: number;
-    };
-    SOUTHOFTROPIC: {
-      CALVING_SEASON: number;
-      SEASON_AFTER_CALVING: number;
+  FERTILISER_CONTENT: {
+    MAP: FertiliserBreakdown;
+    DAP: FertiliserBreakdown;
+    SSP: FertiliserBreakdown;
+    UREA: FertiliserBreakdown;
+    TSP: FertiliserBreakdown;
+    UAN: FertiliserBreakdown;
+    SP11: FertiliserBreakdown;
+    SP21: FertiliserBreakdown;
+    SP31: FertiliserBreakdown;
+    SP41: FertiliserBreakdown;
+    SP51: FertiliserBreakdown;
+    MURIATE_OF_POTASH: FertiliserBreakdown;
+    SULPHATE_OF_POTASH: FertiliserBreakdown;
+    SULPHATE_OF_AMMONIA: FertiliserBreakdown;
+    AN: FertiliserBreakdown;
+    CAN: FertiliserBreakdown;
+  };
+
+  COMMERCIALFLIGHT_EF: number;
+
+  REFRIGERANT_GWP: Record<Refrigerant, number>;
+
+  WASTEWATER: {
+    TREATMENT_EF: Record<FluidWasteTreatmentType, number>;
+    F_SLUDGE_FRACTION: number;
+    EF_COD: number;
+    METHANE_PRODUCTION: number;
+    FLARE_EF: number;
+  };
+
+  COMPOSTING_EF: number;
+
+  MUNICIPAL_SOLID_WASTE_EF: number;
+
+  ELECTRICITY: {
+    [state in States | 'Australia']: {
+      SCOPE2_EF: number;
+      SCOPE3_EF: number;
     };
   };
 
-  FEED_ADJUSTMENT: {
-    CALVING_SEASON: number;
-    SEASON_AFTER_CALVING: number;
+  UREA_FERTILISER_GHG: number;
+  SUPERPHOSPHATE_GHG: number;
+
+  MATERIAL_BREAKDOWN_SUPPLEMENTATION: {
+    mineralblock: ByChemical & { KG_CO2: number; FRACTION_OF_UREA: number };
+    weanerblock: ByChemical & { KG_CO2: number; FRACTION_OF_UREA: number };
+    dryseasonmix: ByChemical & { KG_CO2: number; FRACTION_OF_UREA: number };
   };
 
-  // Methane
+  CUSTOMIZED_FERTILIZER: {
+    'Monoammonium phosphate (MAP)': { TotalGHG: number };
+    'Diammonium Phosphate (DAP)': { TotalGHG: number };
+    'Urea-Ammonium Nitrate (UAN)': { TotalGHG: number };
+    'Ammonium Nitrate (AN)': { TotalGHG: number };
+    'Calcium Ammonium Nitrate (CAN)': { TotalGHG: number };
+    'Triple Superphosphate (TSP)': { TotalGHG: number };
+    'Super Potash 1:1': { TotalGHG: number };
+    'Super Potash 2:1': { TotalGHG: number };
+    'Super Potash 3:1': { TotalGHG: number };
+    'Super Potash 4:1': { TotalGHG: number };
+    'Super Potash 5:1': { TotalGHG: number };
+    'Muriate of Potash': { TotalGHG: number };
+    'Sulphate of Potash': { TotalGHG: number };
+    'Sulphate of Ammonia': { TotalGHG: number };
+  };
 
-  METHANE_WARM_EF: number;
-  METHANE_TEMPERATE_EF: number;
-  METHANE_EMISSION_POTENTIAL: number;
-  METHANE_DENSITY: number;
+  FERTILISER_EF: number;
 
-  OTHERLIVESTOCK_ALLOCATION_CLIMATEREGIONS: {
-    [state in States]: {
-      warm: number;
-      temperate: number;
-    };
+  AGROCHEMICAL_ENERGY_MANUFACTURE: {
+    HERBICIDE_GLYPHOSATE: { TOTAL_ENERGY: number; EF: number };
+    HERBICIDE_GENERAL: { TOTAL_ENERGY: number; EF: number };
+    INSECTICIDE: { TOTAL_ENERGY: number; EF: number };
   };
 
   FUEL_ENERGYGJ: {
@@ -849,17 +908,9 @@ export type Constants = {
     N2O_EF: number;
   };
 
-  // Rice
-
-  EF_FLOODED_FIELDS: number;
-  SF_CULTIVATION_WATER_REGIME: Record<WaterRegimeSubType, number>;
-  SF_PRESEASON_WATER_REGIME: Record<RicePreseasonFloodingPeriod, number>;
-
   // Extras
 
   EF_TEMPERATURE: number;
-
-  URINEDUNG_EF: number;
 
   // Factor to convert elemental mass to molecular mass (N2O-N to N2O)
   GWP_FACTORSC5: number;
@@ -871,48 +922,30 @@ export type Constants = {
   GWP_FACTORSC18: number;
   GWP_FACTORSC22: number;
 
-  CARBON_FRACTION_OF_UREA: number;
-
   FRAC_GASF: number;
-  FRAC_GASM: number;
 
   // Atmospheric N deposition inorganic fertiliser
-  INOGRANICFERTILISER_ATMOSPHERIC_N: number;
-  LEECHING_AND_RUNOFF: number;
-
-  SUGAR_YIELD: number;
-
-  ASH_CONTENT: number;
-
-  COTTON_INTENSITY_ECONOMIC_ALLOCATION: {
-    LINT: number;
-    SEED: number;
-  };
-
-  AQUACULTURE_BAIT_EF: Record<AquacultureBait, number>;
 
   FREIGHT_KG_TONNE_EF: Record<FreightTypes, number>;
+};
 
-  MMS: {
-    outdoorSystems: {
-      MCF: number;
-      FracGASM: number;
-      NOF: number;
-    };
-    coveredAnaerobicPond: {
-      MCF: number;
-      FracGASM: number;
-      NOF: number;
-    };
-    uncoveredAnaerobicPond: {
-      MCF: number;
-      FracGASM: number;
-      NOF: number;
-    };
-    deepLitter: {
-      MCF: number;
-      FracGASM: number;
-      NOF: number;
-    };
-  };
+export type AllConstants = {
+  COMMON: Constants;
+  CROP: CropConstants;
+  FISHERIES: FisheriesConstants;
+  RICE: RiceConstants;
+  AQUACULTURE: AquacultureConstants;
+  BEEF: BeefConstants;
+  BUFFALO: BuffaloConstants;
+  COTTON: CottonConstants;
+  DAIRY: DairyConstants;
+  DEER: DeerConstants;
+  FEEDLOT: FeedlotConstants;
+  GOAT: GoatConstants;
+  LIVESTOCK: LivestockConstants;
+  PORK: PorkConstants;
+  POULTRY: PoultryConstants;
+  SAVANNA: SavannaConstants;
+  SHEEP: SheepConstants;
+  SUGAR: SugarConstants;
 };

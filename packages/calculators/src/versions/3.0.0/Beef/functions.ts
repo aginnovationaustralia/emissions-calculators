@@ -9,7 +9,7 @@ export function getAtmosphericNDepositionUreaIrrigatedTotal(
 ) {
   const { constants } = context;
   const { EF_IRRIGATEDPASTURE, EF_IRRIGATEDCROP } =
-    constants.COMMON.AGRICULTURAL_SOILS;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS;
 
   return (
     (atmosphericNDepositionUreaGrazingIrrigated * EF_IRRIGATEDPASTURE +

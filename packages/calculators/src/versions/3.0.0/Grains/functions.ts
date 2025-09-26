@@ -1,26 +1,33 @@
 import { ExecutionContext } from '../executionContext';
 import { CropType, State } from '../types/types';
+import { ConstantsForGrainsCalculator } from './constants';
 
-export function getAnnualN2OProductionEF(context: ExecutionContext) {
+export function getAnnualN2OProductionEF(
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
   const { constants } = context;
 
-  return constants.CROP_RESIDUE_N2O_EF;
+  return constants.CROP.CROP_RESIDUE_N2O_EF;
 }
 
-export function getUreaNConstant(context: ExecutionContext) {
+export function getUreaNConstant(
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
   const { constants } = context;
 
-  return constants.FERTILISER_CONTENT.UREA.N;
+  return constants.COMMON.FERTILISER_CONTENT.UREA.N;
 }
 
-export function getUanNConstant(context: ExecutionContext) {
+export function getUanNConstant(
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
   const { constants } = context;
 
-  return constants.FERTILISER_CONTENT.UAN.N;
+  return constants.COMMON.FERTILISER_CONTENT.UAN.N;
 }
 
 export function getCropResidueFractionRemoved(
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
   cropType: CropType,
   state: State,
 ) {
@@ -43,16 +50,18 @@ export function getCropResidueFractionRemoved(
      * Technically, the sugar calculator should be used instead of the grains calculator.
      * It's been removed from the GAF sheet, but is still supported here for now.
      */
-    return constants.CROPRESIDUE_FRACTIONSUGARCANEBURNT[state].removed;
+    return constants.CROP.CROPRESIDUE_FRACTIONSUGARCANEBURNT[state].removed;
   }
   return (
     intermediaryRemovedTypes[cropType] ??
-    constants.CROPRESIDUE_PROPORTIONBURNT[state].removed
+    constants.CROP.CROPRESIDUE_PROPORTIONBURNT[state].removed
   );
 }
 
-export function getFertiliserFractionRunoff(context: ExecutionContext) {
+export function getFertiliserFractionRunoff(
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
   const { constants } = context;
 
-  return constants.FERTILISER_FRACTION_RUNOFF_STATIC;
+  return constants.CROP.FERTILISER_FRACTION_RUNOFF_STATIC;
 }

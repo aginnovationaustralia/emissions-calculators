@@ -8,8 +8,8 @@ export function getMultiplier(
   const { constants } = context;
 
   return (
-    constants.COMMON.FRAC_GASM *
-    constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+    constants.LIVESTOCK.FRAC_GASM *
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
     constants.COMMON.GWP_FACTORSC15
   );
 }

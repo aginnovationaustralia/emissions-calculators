@@ -17,6 +17,7 @@ import { ProcessingScope1Output } from '../types/Processing/scope1.output';
 import { ProcessingScope3Output } from '../types/Processing/scope3.output';
 import { Scope2Output } from '../types/scope2.output';
 import { State } from '../types/types';
+import { ConstantsForProcessingCalculator } from './constants';
 
 function getIntensities(
   netTotal: number,
@@ -47,7 +48,7 @@ type ProcessingScopesOutput = {
 export function calculateSingleProcessingEnterprise(
   state: State,
   product: ProductProcessingInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForProcessingCalculator>,
   id: string,
 ) {
   const fuelTotals = calculateScope1And3Fuel(product.fuel, state, context);
@@ -124,7 +125,7 @@ export function calculateSingleProcessingEnterprise(
 
 export function calculateProcessing(
   input: ProcessingInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForProcessingCalculator>,
 ): ProcessingOutput {
   const processingResults = input.products.map((product, i) =>
     calculateSingleProcessingEnterprise(

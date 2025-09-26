@@ -1,4 +1,5 @@
 import { loadOverrideConstants } from './constants/constantsLoader';
+import { AllConstants } from './constants/versionedConstants';
 import { trackCalculatorExecution } from './execution/metrics';
 import { ExecutionContext } from './executionContext';
 import { CalculatorNames } from './strings';
@@ -13,7 +14,7 @@ function contextFor(calculator: string, version: string) {
 }
 
 export function executeCalculator<Input extends object, Output extends object>(
-  calculator: (input: Input, context: ExecutionContext) => Output,
+  calculator: (input: Input, context: ExecutionContext<AllConstants>) => Output,
   input: Input,
   calculatorName: CalculatorNames,
 ): Output {

@@ -174,7 +174,7 @@ export function calculateScope1LayersAtmospheric(
   // M = (MNSoil + UNSoil + FNSoil) x FracGASM
   const massNVolatisedAnnual =
     (nitrogenLayers.nitrogenExcreted + nitrogenMeatChicken.nitrogenExcreted) *
-    constants.COMMON.FRAC_GASM;
+    constants.LIVESTOCK.FRAC_GASM;
   // END
   //
   //

@@ -8,7 +8,7 @@ export function getN2OEF(
 ) {
   const { constants } = context;
 
-  return constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP;
+  return constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP;
 }
 
 export function calculateScope3Bedding(

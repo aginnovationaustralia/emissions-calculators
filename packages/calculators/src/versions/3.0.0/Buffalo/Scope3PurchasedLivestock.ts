@@ -18,7 +18,7 @@ export function calculateScope3PurchaseLivestock(
   }, 0);
 
   const scope3 =
-    context.constants.COMMON.PURCHASED_LIVESTOCK_EF.BUFFALO * totalKg;
+    context.constants.LIVESTOCK.PURCHASED_LIVESTOCK_EF.BUFFALO * totalKg;
 
   const scope3Tonnes = scope3 / 1000;
 

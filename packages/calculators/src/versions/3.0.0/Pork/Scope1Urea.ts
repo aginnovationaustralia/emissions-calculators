@@ -16,7 +16,7 @@ export function calculateScope1Urea(
     fertiliser.pastureIrrigated;
 
   // (Urea_ApplicationD15)
-  const ureaCarbonFraction = constants.COMMON.CARBON_FRACTION_OF_UREA;
+  const ureaCarbonFraction = constants.LIVESTOCK.CARBON_FRACTION_OF_UREA;
 
   // (Urea_ApplicationC17)
   const cTonnes =

@@ -19,10 +19,11 @@ import { State } from '../types/types';
 import { calculateScope1N2O } from './Scope1';
 import { calculateScope1Urea } from './Scope1Urea';
 import { calculateScope3Fertiliser } from './Scope3Fertiliser';
+import { ConstantsForCottonCalculator } from './constants';
 import { getIntensityDenominators } from './functions';
 
 const generateIntensities = (
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForCottonCalculator>,
   crops: CottonCrop[],
   carbonSequestrations: number[],
 ) => {
@@ -47,10 +48,10 @@ const generateIntensities = (
         (n + carbonSequestrations[i]) / versionedDenominators.seedMassTonnes,
       lintEconomicAllocation:
         (n + carbonSequestrations[i]) *
-        constants.COTTON_INTENSITY_ECONOMIC_ALLOCATION.LINT,
+        constants.COTTON.COTTON_INTENSITY_ECONOMIC_ALLOCATION.LINT,
       seedEconomicAllocation:
         (n + carbonSequestrations[i]) *
-        constants.COTTON_INTENSITY_ECONOMIC_ALLOCATION.SEED,
+        constants.COTTON.COTTON_INTENSITY_ECONOMIC_ALLOCATION.SEED,
       cottonYieldProducedTonnes:
         crops[i].averageCottonYield * crops[i].areaSown,
       balesProduced: versionedDenominators.bales,
@@ -62,7 +63,7 @@ const generateIntensities = (
 
 const calculateSingleCotton = (
   crop: CottonCrop,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForCottonCalculator>,
   scope2Electricity: number,
   scope3Electricity: number,
   carbonSequestration: number,
@@ -176,7 +177,7 @@ export function calculateEntireCotton(
   electricityRenewablePercentage: number,
   state: State,
   vegetation: CottonVegetation[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForCottonCalculator>,
 ): CottonOutput {
   const electricity = calculateElectricityScope2And3(
     state,
@@ -298,7 +299,10 @@ export function calculateEntireCotton(
   };
 }
 
-export function calculateCotton(input: CottonInput, context: ExecutionContext) {
+export function calculateCotton(
+  input: CottonInput,
+  context: ExecutionContext<ConstantsForCottonCalculator>,
+) {
   return calculateEntireCotton(
     input.crops,
     input.electricityUse,

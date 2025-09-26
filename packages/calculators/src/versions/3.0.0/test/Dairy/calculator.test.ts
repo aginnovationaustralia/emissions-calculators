@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { calculateDairy } from '../../Dairy/calculator';
+import { ConstantsForDairyCalculator } from '../../Dairy/constants';
 import { DairyClass } from '../../types/Dairy/dairyclass.input';
 import { DairyInput } from '../../types/Dairy/input';
 import { DairyIntermediateOutput } from '../../types/Dairy/intermediate.output';
@@ -109,7 +110,8 @@ describe('Dairy calculator (multi activity), VIC', () => {
     DairyInput,
     DairyIntermediateOutput,
     'intermediate',
-    DairyOutput
+    DairyOutput,
+    ConstantsForDairyCalculator
   >(
     'Dairy',
     calculateDairy,

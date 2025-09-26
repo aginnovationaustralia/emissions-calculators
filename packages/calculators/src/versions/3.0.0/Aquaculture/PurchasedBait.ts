@@ -1,10 +1,11 @@
 import { ExecutionContext } from '../executionContext';
 import { AquacultureBaitPurchase } from '../types/Aquaculture/baitpurchase.input';
 import { AquacultureCustomBaitPurchase } from '../types/Aquaculture/custombaitpurchase.input';
+import { ConstantsForAquacultureCalculator } from './constants';
 
 export function calculatePurchasedBait(
   bait: AquacultureBaitPurchase[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForAquacultureCalculator>,
 ) {
   const { constants } = context;
 
@@ -13,7 +14,7 @@ export function calculatePurchasedBait(
       acc,
       { type, purchasedTonnes, additionalIngredients, emissionsIntensity },
     ) => {
-      const baitEF = constants.AQUACULTURE_BAIT_EF[type];
+      const baitEF = constants.AQUACULTURE.AQUACULTURE_BAIT_EF[type];
       const mainEmissions =
         purchasedTonnes * (1 - additionalIngredients) * baitEF;
       const additionalEmissions =

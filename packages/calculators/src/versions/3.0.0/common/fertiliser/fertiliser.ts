@@ -68,10 +68,14 @@ export type CropWithUrea = {
   ureaApplication: number;
   ureaAmmoniumNitrate: number;
 };
-export function getUreaMass(context: ExecutionContext, crop: CropWithUrea) {
+export function getUreaMass(
+  context: ExecutionContext<CommonConstants>,
+  crop: CropWithUrea,
+) {
   const { constants } = context;
 
   return (
-    crop.ureaApplication + crop.ureaAmmoniumNitrate * constants.GWP_FACTORSC22
+    crop.ureaApplication +
+    crop.ureaAmmoniumNitrate * constants.COMMON.GWP_FACTORSC22
   );
 }

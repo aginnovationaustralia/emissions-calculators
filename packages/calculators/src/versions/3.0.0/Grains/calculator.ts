@@ -16,6 +16,7 @@ import { GrainsCrop } from '../types/Grains/crop.input';
 import { GrainsInput } from '../types/Grains/input';
 import { GrainsOutput } from '../types/Grains/output';
 import { State } from '../types/types';
+import { ConstantsForGrainsCalculator } from './constants';
 import { calculateScope1N2O } from './Scope1';
 import { calculateScope1FieldBurning } from './Scope1FieldBurningCH4';
 import { calculateScope1Urea } from './Scope1Urea';
@@ -45,7 +46,7 @@ export function calculateEntireGrains(
   electricityRenewablePercentage: number,
   state: State,
   vegetation: CropVegetation[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
 ): GrainsOutput {
   const electricity = calculateElectricityScope2And3(
     state,
@@ -249,7 +250,10 @@ export function calculateEntireGrains(
   };
 }
 
-export function calculateGrains(input: GrainsInput, context: ExecutionContext) {
+export function calculateGrains(
+  input: GrainsInput,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
   return calculateEntireGrains(
     input.crops,
     input.electricityUse,

@@ -20,6 +20,7 @@ import { VineyardVegetation } from '../types/Vineyard/vineyard-vegetation.input'
 import { VineyardCrop } from '../types/Vineyard/vineyard.input';
 import { State } from '../types/types';
 import { calculateScope1N2O } from './Scope1';
+import { ConstantsForVineyardCalculator } from './constants';
 
 function getIntensities(
   netTotal: number,
@@ -43,7 +44,7 @@ function calculateSingleVineyard(
   state: State,
   vineyard: VineyardCrop,
   carbonSequestration: number,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForVineyardCalculator>,
   id: string,
 ) {
   const fuelTotals = calculateScope1And3Fuel(vineyard.fuel, state, context);
@@ -173,7 +174,7 @@ function calculateSingleVineyard(
 export function calculateEntireVineyard(
   vineyards: VineyardCrop[],
   vegetation: VineyardVegetation[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForVineyardCalculator>,
 ): VineyardOutput {
   const carbonSequestration = calculateAllCarbonSequestrationWithKeyProportion(
     vegetation,
@@ -278,7 +279,7 @@ export function calculateEntireVineyard(
 
 export function calculateVineyard(
   input: VineyardInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForVineyardCalculator>,
 ) {
   return calculateEntireVineyard(input.vineyards, input.vegetation, context);
 }

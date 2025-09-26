@@ -2,6 +2,7 @@
 import clone from 'nanoclone';
 import { entriesFromObject } from '../../common/tools/object';
 import { calculateSheepBeef } from '../../SheepBeef/calculator';
+import { ConstantsForSheepBeefCalculator } from '../../SheepBeef/constants';
 import { BeefIntermediateOutput } from '../../types/Beef/intermediate.output';
 import { SheepIntermediateOutput } from '../../types/Sheep/intermediate.output';
 import { SheepBeefInput } from '../../types/SheepBeef/input';
@@ -130,7 +131,8 @@ describe('Sheepbeef calculator (multi sheep activity)', () => {
     SheepBeefInput,
     SheepIntermediateOutput,
     'intermediateSheep',
-    SheepBeefOutput
+    SheepBeefOutput,
+    ConstantsForSheepBeefCalculator
   >(
     'Sheep',
     calculateSheepBeef,
@@ -209,7 +211,8 @@ describe('Sheepbeef calculator (multi beef activity)', () => {
     SheepBeefInput,
     BeefIntermediateOutput,
     'intermediateBeef',
-    SheepBeefOutput
+    SheepBeefOutput,
+    ConstantsForSheepBeefCalculator
   >(
     'Sheep',
     calculateSheepBeef,

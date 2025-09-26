@@ -17,7 +17,7 @@ export function layersTotalIndirectNO2(
 
   return (
     massWasteVolatisedLayerAndMeat *
-    constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
     constants.COMMON.GWP_FACTORSC15
   );
 }
@@ -29,7 +29,7 @@ export function getLayerProductionSystemEF(
 ) {
   const { constants } = context;
 
-  return constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE;
+  return constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE;
 }
 
 export function getBroilerProductionSystemEF(
@@ -37,7 +37,7 @@ export function getBroilerProductionSystemEF(
 ) {
   const { constants } = context;
 
-  return constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE;
+  return constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE;
 }
 
 export function getLayersLeachingMassNLost(

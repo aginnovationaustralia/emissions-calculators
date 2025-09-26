@@ -23,7 +23,7 @@ function purchasedBeefLivestock(
 ) {
   // (purchasedLivestockEmissionsB17)
   const emissionFactor =
-    context.constants.COMMON.LIVESTOCK_SOURCE_EMISSIONFACTOR[source];
+    context.constants.BEEF.LIVESTOCK_SOURCE_EMISSIONFACTOR[source];
   const liveweight = headPurchased * purchasedWeight;
 
   // (purchasedLivestockEmissionsB18)

@@ -35,7 +35,7 @@ export function calculateScope3PurchasedLivestock(
   }, 0);
 
   const scope3Kg =
-    totalLiveweightPurchased * constants.COMMON.PURCHASED_LIVESTOCK_EF.PORK;
+    totalLiveweightPurchased * constants.LIVESTOCK.PURCHASED_LIVESTOCK_EF.PORK;
 
   return scope3Kg / 1000;
 }

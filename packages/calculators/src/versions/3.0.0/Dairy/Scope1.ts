@@ -382,7 +382,7 @@ export function calculateScope1(
           const volatileSolids =
             (feedIntake * (1 - dryMatterDigestibility / 100) +
               0.04 * feedIntake) *
-            (1 - constants.COMMON.ASH_CONTENT);
+            (1 - constants.DAIRY.ASH_CONTENT);
 
           // (Manure_ManagementM18)
           const methaneMMS1 =
@@ -390,47 +390,47 @@ export function calculateScope1(
             (isMilkingCow
               ? manurePastureFractionMilking
               : manurePastureFractionOther) *
-            constants.COMMON.METHANE_EMISSION_POTENTIAL *
+            constants.LIVESTOCK.METHANE_EMISSION_POTENTIAL *
             constants.DAIRY.METHANE_CONVERSION_FACTOR[state].Pasture *
-            constants.COMMON.METHANE_DENSITY;
+            constants.LIVESTOCK.METHANE_DENSITY;
           const methaneMMS2 =
             volatileSolids *
             (isMilkingCow
               ? manureAnaerobicFractionMilking
               : manureAnaerobicFractionOtherDairy) *
-            constants.COMMON.METHANE_EMISSION_POTENTIAL *
+            constants.LIVESTOCK.METHANE_EMISSION_POTENTIAL *
             constants.DAIRY.METHANE_CONVERSION_FACTOR[state][
               'Anaerobic lagoon'
             ] *
-            constants.COMMON.METHANE_DENSITY;
+            constants.LIVESTOCK.METHANE_DENSITY;
           const methaneMMS3 =
             volatileSolids *
             (isMilkingCow
               ? manureSumpDispersalFractionMilking
               : manureSumpDispersalFractionOther) *
-            constants.COMMON.METHANE_EMISSION_POTENTIAL *
+            constants.LIVESTOCK.METHANE_EMISSION_POTENTIAL *
             constants.DAIRY.METHANE_CONVERSION_FACTOR[state][
               'Sump and disperal systems'
             ] *
-            constants.COMMON.METHANE_DENSITY;
+            constants.LIVESTOCK.METHANE_DENSITY;
           const methaneMMS5 =
             volatileSolids *
             (isMilkingCow
               ? manureDrainToPaddockFractionMilking
               : manureDrainToPaddockFractionOther) *
-            constants.COMMON.METHANE_EMISSION_POTENTIAL *
+            constants.LIVESTOCK.METHANE_EMISSION_POTENTIAL *
             constants.DAIRY.METHANE_CONVERSION_FACTOR[state][
               'Drains to paddock'
             ] *
-            constants.COMMON.METHANE_DENSITY;
+            constants.LIVESTOCK.METHANE_DENSITY;
           const methaneMMS8 =
             volatileSolids *
             (isMilkingCow
               ? manureSolidStorageFractionMilking
               : manureSolidStorageFractionOther) *
-            constants.COMMON.METHANE_EMISSION_POTENTIAL *
+            constants.LIVESTOCK.METHANE_EMISSION_POTENTIAL *
             constants.DAIRY.METHANE_CONVERSION_FACTOR[state]['Solid Storage'] *
-            constants.COMMON.METHANE_DENSITY;
+            constants.LIVESTOCK.METHANE_DENSITY;
 
           // (Manure_ManagementM43)
           const totalMethaneMMS =
@@ -461,7 +461,7 @@ export function calculateScope1(
           // WARNING: calculator only uses milking cows urine dung
           const uringDungNitrogenTotal = isMilkingCow
             ? (urineDungFaecalNitrogen + urineDungUrinaryNitrogen) *
-              constants.COMMON.URINEDUNG_EF *
+              constants.LIVESTOCK.URINEDUNG_EF *
               constants.COMMON.GWP_FACTORSC15
             : 0;
 
@@ -533,7 +533,7 @@ export function calculateScope1(
 
   // (Agricultural_SoilsD216)
   const massOfAnimalWasteVolatised =
-    total.massOfAnimalWasteVolatisedPre * constants.COMMON.FRAC_GASM;
+    total.massOfAnimalWasteVolatisedPre * constants.LIVESTOCK.FRAC_GASM;
 
   // (Enteric_FermentationL35)
   const methaneGg = total.methaneProduction * constants.COMMON.GWP_FACTORSC5;

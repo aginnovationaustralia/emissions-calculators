@@ -11,10 +11,11 @@ import { calculateAllCarbonSequestrationWithKeyProportion } from '../common/tree
 import { ExecutionContext, WithExecutionMetadata } from '../executionContext';
 import { SheepBeefInput } from '../types/SheepBeef/input';
 import { SheepBeefOutput } from '../types/SheepBeef/output';
+import { ConstantsForSheepBeefCalculator } from './constants';
 
 export function calculateSheepBeef(
   input: SheepBeefInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForSheepBeefCalculator>,
 ): WithExecutionMetadata<SheepBeefOutput> {
   // Burning
   const burningResults = input.burning.map((burning) =>

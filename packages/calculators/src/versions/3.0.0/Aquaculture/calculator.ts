@@ -20,6 +20,7 @@ import { AquacultureScope1Output } from '../types/Aquaculture/scope1.output';
 import { AquacultureScope3Output } from '../types/Aquaculture/scope3.output';
 import { Scope2Output } from '../types/scope2.output';
 import { State } from '../types/types';
+import { ConstantsForAquacultureCalculator } from './constants';
 import { getIntensities } from './functions';
 import { calculateCustomBait, calculatePurchasedBait } from './PurchasedBait';
 
@@ -32,7 +33,7 @@ type AquacultureScopesOutput = {
 export function calculateSingleAquacultureEnterprise(
   state: State,
   enterprise: AquacultureEnterpriseInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForAquacultureCalculator>,
   carbonSequestration: number,
   id: string,
 ) {
@@ -131,7 +132,7 @@ export function calculateSingleAquacultureEnterprise(
 
 export function calculateAquaculture(
   input: AquacultureInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForAquacultureCalculator>,
 ): AquacultureOutput {
   const aquacultureResults = input.enterprises.map((enterprise, ix) =>
     calculateSingleAquacultureEnterprise(

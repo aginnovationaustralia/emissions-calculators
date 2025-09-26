@@ -1,9 +1,10 @@
 import { ExecutionContext } from '../executionContext';
 import { HorticultureCrop } from '../types/Horticulture/horticulture.input';
+import { ConstantsForHorticultureCalculator } from './constants';
 
 export function calculateScope1Urea(
   horticulture: HorticultureCrop,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForHorticultureCalculator>,
 ) {
   const { constants } = context;
   // co2
@@ -12,14 +13,14 @@ export function calculateScope1Urea(
   const totalMassFertiliser =
     horticulture.areaSown *
     (horticulture.ureaApplication +
-      horticulture.ureaAmmoniumNitrate * constants.GWP_FACTORSC22) *
+      horticulture.ureaAmmoniumNitrate * constants.COMMON.GWP_FACTORSC22) *
     10 ** -3;
 
   // (Urea_ApplicationC18)
   const totalGg =
     totalMassFertiliser *
-    constants.FERTILISER_EF *
-    constants.GWP_FACTORSC13 *
+    constants.COMMON.FERTILISER_EF *
+    constants.COMMON.GWP_FACTORSC13 *
     10 ** -3;
   const ureaCO2 = totalGg * 10 ** 3;
 

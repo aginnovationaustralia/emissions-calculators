@@ -1,23 +1,24 @@
+import { FluidWasteTreatmentType, FreightTypes } from '../types/types';
 import {
-  AquacultureBait,
-  FluidWasteTreatmentType,
-  FreightTypes,
-} from '../types/types';
-import {
+  AquacultureConstants,
   BeefConstants,
   BuffaloConstants,
   Constants,
+  CottonConstants,
+  CropConstants,
   DairyConstants,
   DeerConstants,
   FeedlotConstants,
   FisheriesConstants,
   GoatConstants,
-  LIVESTOCK_SOURCE_LOCATION,
+  LivestockConstants,
   PorkConstants,
   PoultryConstants,
+  RiceConstants,
   SavannaConstants,
   SheepConstants,
   STATES,
+  SugarConstants,
 } from './versionedConstants';
 
 export const REGIONS = {
@@ -694,6 +695,45 @@ export const beefConstants: BeefConstants = {
    * @description Urine and dung deposited during grazing
    */
   EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsBeefD10)
+
+  /**
+   * @description Livestock source emission factors by location
+   * @units kg CO2-e/kg
+   */
+  LIVESTOCK_SOURCE_EMISSIONFACTOR: {
+    'Dairy origin': 0,
+    'nth/sth/central QLD': 0,
+    'nth/sth NSW/VIC/sth SA': 0,
+    'NSW/SA pastoral zone': 0,
+    'sw WA': 0,
+    'WA pastoral': 0,
+    TAS: 0,
+    NT: 0,
+  },
+
+  /**
+   * @description Milk intake of cows, in kg / day
+   * @inventory2018 5.B.5
+   * @units kg / day
+   */
+  MILK_INTAKE: {
+    NORTHOFTROPIC: {
+      CALVING_SEASON: 0,
+      SEASON_AFTER_CALVING: 0,
+    },
+    SOUTHOFTROPIC: {
+      CALVING_SEASON: 0,
+      SEASON_AFTER_CALVING: 0,
+    },
+  },
+
+  /**
+   * @description Feed adjustment factors
+   */
+  FEED_ADJUSTMENT: {
+    CALVING_SEASON: 0,
+    SEASON_AFTER_CALVING: 0,
+  },
 };
 
 export const savannaConstants: SavannaConstants = {
@@ -1131,25 +1171,6 @@ export const savannaConstants: SavannaConstants = {
   },
 
   /**
-   * @description Efficiency of residue burning
-   */
-  BURNING_EFFICIENCY_RESIDUE: 0.96,
-
-  /**
-   * @description N2O emissions factor for savannah burning
-   * @inventory2022 Table 5.31
-   * @units Gg element / Gg burnt
-   */
-  BURNING_N2O_EF: 0.0076,
-
-  /**
-   * @description Methane emissions factor for savannah burning
-   * @inventory2022 Table 5.31
-   * @units Gg element / Gg burnt
-   */
-  BURNING_METHANE_EF: 0.0035,
-
-  /**
    * @description Carbon Mass Fraction Burnt in Fuel Burnt
    * @units Proportion
    */
@@ -1556,6 +1577,32 @@ export const porkConstants: PorkConstants = {
     beetPulp: 0.704,
     millMix: 0,
   },
+
+  /**
+   * @description Manure management system
+   */
+  MMS: {
+    outdoorSystems: {
+      MCF: 0.02,
+      FracGASM: 0.2,
+      NOF: 0.005,
+    },
+    coveredAnaerobicPond: {
+      MCF: 0.75,
+      FracGASM: 0.35,
+      NOF: 0.005,
+    },
+    uncoveredAnaerobicPond: {
+      MCF: 0.8,
+      FracGASM: 0.35,
+      NOF: 0.005,
+    },
+    deepLitter: {
+      MCF: 0.02,
+      FracGASM: 0.2,
+      NOF: 0.005,
+    },
+  },
 };
 
 export const poultryConstants: PoultryConstants = {
@@ -1831,6 +1878,12 @@ export const dairyConstants: DairyConstants = {
       'Solid Storage': 0.02,
     },
   },
+
+  /**
+   * @description Ash content of dairy cattle manure
+   * @units kg ash/kg manure
+   */
+  ASH_CONTENT: 0.18,
 };
 
 export const goatConstants: GoatConstants = {
@@ -1974,16 +2027,41 @@ export const fisheriesConstants: FisheriesConstants = {
   },
 };
 
-export const constants: Constants = {
+export const riceConstants: RiceConstants = {
   /**
-   * @description Emissions factors for commercial flights
-   * @units kg CO2-e / PAX km
+   * @description Emission factor for flooded fields
    */
-  COMMERCIALFLIGHT_EF: 0.101,
+  EF_FLOODED_FIELDS: 1.19,
 
   /**
+   * @description Scaling factor for cultivation water regime
+   */
+  SF_CULTIVATION_WATER_REGIME: {
+    'Continuously flooded': 1.0,
+    'Single drainage period': 0.8,
+    'Multiple drainage periods': 0.6,
+    'Regular rainfed': 0.4,
+    'Drought prone': 0.2,
+    'Deep water': 1.0,
+    'Paddy rotation': 0.8,
+    'Fallow without flooding in previous year': 0.8,
+  },
+
+  /**
+   * @description Scaling factor for preseason water regime
+   */
+  SF_PRESEASON_WATER_REGIME: {
+    'Non flooded pre-season < 180 days': 1.0,
+    'Non flooded pre-season > 180 days': 0.6,
+    'Flooded pre-season > 30 days': 0.8,
+    'Non-flooded pre-season > 365 days': 0.4,
+  },
+};
+
+export const livestockConstants: LivestockConstants = {
+  /**
    * @description Energy required to manufacture herbicides and insecticides
-   * @reference O'Halloran, N., Fisher, P., Rab, A., & Victoria, D. P. I. (2008). Preliminary estimation of the carbon footprint of the Australian vegetable industry (pp. 1-39). Discussion paper 4. Vegetable Industry Carbon Footprint Scoping Study. 2008, Horticulture Australia Ltd. Table 7
+   * @reference O'Halloran, N., Fisher, P., Rab, A., & Victoria, D. P. I. (2008). Preliminary estimation of the carbon footprint of the Australian vegetable industry (pp. 1-39). Discussion paper 4. Vegetable Industry Carbon Footprint Scoping Study. 2008, Horticulture Australia Ltd. Table 7
    */
   ENERGY_TO_MANUFACTURE: {
     /** @units MJ/kg */
@@ -2008,6 +2086,616 @@ export const constants: Constants = {
   EMISSION_BREAKDOWN: {
     HERBICIDE: { CO2: 1.0, CH4: 0.0, N2O: 0.0 },
   },
+
+  /**
+   * @description Emissions factor for purchased livestock, in kg CO2-e/kg
+   * @units kg CO2-e/kg
+   */
+  PURCHASED_LIVESTOCK_EF: {
+    BUFFALO: 12,
+    DEER: 8.1,
+    GOAT: 23.8,
+    PORK: 3.6,
+    POULTRY_CONVENTIONAL: 2,
+    POULTRY_FREE_RANGE: 1.8,
+  },
+
+  // Emission factor (EF) (Gg N2O-N/GgN)
+  AGRICULTURAL_SOILS: {
+    EF_IRRIGATEDPASTURE: 0.0059,
+    EF_IRRIGATEDCROP: 0.007,
+    EF_NONIRRIGATEDCROP: 0.0041,
+    EF_NONIRRIGATEDPASTURE: 0.0018,
+  },
+
+  // Methane
+
+  /**
+   * @description Methane emission factor for warm climate
+   */
+  METHANE_WARM_EF: 0.012,
+
+  // (manureManagementBeefC29)
+  /**
+   * @description Methane emission factor for temperate climate
+   */
+  METHANE_TEMPERATE_EF: 0.003,
+
+  /**
+   * @description Methane emission potential, in m3 CH4/kg
+   * @inventory2018 3B.1a_2
+   * @units m3 CH4/kg
+   */
+  METHANE_EMISSION_POTENTIAL: 0.24,
+
+  /**
+   * @description Methane density, in kg CH4/m3
+   * @inventory2018 3B.1a_2
+   * @units kg CH4/m3
+   */
+  METHANE_DENSITY: 0.6784,
+
+  // other livestock Deer Manure management D42
+  /**
+   * @description Other livestock – Allocation of animals to climate regions
+   * @inventory2022 Table A5.5.7.3
+   */
+  OTHERLIVESTOCK_ALLOCATION_CLIMATEREGIONS: {
+    [STATES.ACT]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.NT]: {
+      warm: 1,
+      temperate: 0,
+    },
+    [STATES.NSW]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.QLD]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.SA]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.TAS]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.VIC]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.WA_NW]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.WA_SW]: {
+      warm: 0,
+      temperate: 1,
+    },
+  },
+
+  // (Agricultural_SoilsD163)
+  /**
+   * @description Urine and dung emission factor
+   * @inventory2022 3.D.A_6
+   */
+  URINEDUNG_EF: 0.004,
+
+  /**
+   * @description Default emission factor for Urea
+   * @reference IPCC (2006)
+   */
+  CARBON_FRACTION_OF_UREA: 0.2, // (ureaApplicationD35)
+
+  /**
+   * @description Proportion of gas volatilised from manure
+   * @inventory2018 3DB_2
+   */
+  FRAC_GASM: 0.21, // FracGASM
+
+  // Atmospheric N deposition inorganic fertiliser
+  /**
+   * @description Atmospheric N deposition of inorganic fertiliser
+   * @inventory2018 3DB_1
+   */
+  INOGRANICFERTILISER_ATMOSPHERIC_N: 0.11, // (agriculturalSoilsSheepN10)
+
+  /**
+   * @description Leaching and runoff of inorganic fertiliser
+   * @inventory2018 3B.5a_4
+   */
+  LEECHING_AND_RUNOFF: 0.011, // (agriculturalSoilsSheepD11)
+};
+
+export const sugarConstants: SugarConstants = {
+  // Sugar
+  /**
+   * @description Emissions factor for annual N2O production from sugar cane
+   */
+  SUGAR_ANNUAL_N2O_PRODUCTION_EF: 0.00503,
+
+  /**
+   * @description Sugar yield, in tonnes per hectare
+   * @units t/ha
+   */
+  SUGAR_YIELD: 0.1188625,
+};
+
+export const cottonConstants: CottonConstants = {
+  /**
+   * @description Cotton intensity economic allocation factors
+   * @reference Cotton Australia
+   */
+  COTTON_INTENSITY_ECONOMIC_ALLOCATION: {
+    LINT: 0.85,
+    SEED: 0.15,
+  },
+};
+
+export const aquacultureConstants: AquacultureConstants = {
+  /**
+   * @description Emissions factors for aquaculture bait, in kg CO2-e/kg
+   * @units kg CO2-e/kg
+   */
+  AQUACULTURE_BAIT_EF: {
+    'Whole Sardines': 0.05,
+    'Low Animal Protein Formulated Feed': 0.098,
+    'High Animal Protein Formulated Feed': 0.192,
+    'Cereal Grain': 0.098,
+    Squid: 0.192,
+    'Whole Fish': 0.098,
+  },
+};
+
+export const cropConstants: CropConstants = {
+  /**
+   * @description Efficiency of residue burning
+   */
+  BURNING_EFFICIENCY_RESIDUE: 0.96,
+
+  /**
+   * @description N2O emissions factor for savannah burning
+   * @inventory2022 Table 5.31
+   * @units Gg element / Gg burnt
+   */
+  BURNING_N2O_EF: 0.0076,
+
+  /**
+   * @description Methane emissions factor for savannah burning
+   * @inventory2022 Table 5.31
+   * @units Gg element / Gg burnt
+   */
+  BURNING_METHANE_EF: 0.0035,
+
+  // (embeddedEMissions_C133)
+  COMPONENTS_ENERGY_EF: {
+    N: { TOTAL_ENERGY: 65, EF: 0.05 },
+    P: { TOTAL_ENERGY: 15, EF: 0.06 },
+    K: { TOTAL_ENERGY: 10, EF: 0.06 },
+    S: { TOTAL_ENERGY: 5, EF: 0.06 },
+  },
+
+  // (cropResiduesC116)
+  /**
+   * @description Production system emission factors for different rainfall regimes
+   */
+  PRODUCTIONSYSTEM_EF: {
+    RAINFALL_LT_600: {
+      'Non-irrigated crop': 0.0041,
+      'Irrigated crop': 0.007,
+      'Sugar cane': 0.00503,
+      Cotton: 0.0041,
+      Horticulture: 0.0041,
+    },
+    RAINFALL_GT_600: {
+      'Non-irrigated crop': 0.0041,
+      'Irrigated crop': 0.007,
+      'Sugar cane': 0.00503,
+      Cotton: 0.0041,
+      Horticulture: 0.0041,
+    },
+  },
+
+  // (cropResiduesC117)
+  /**
+   * @description Pasture attributes for different pasture types
+   */
+  PASTURE_ATTRIBUTES: {
+    'Annual grass': {
+      FRACRENEWED_INTENSIVE: 0.1,
+      FRACRENEWED_OTHER: 0.05,
+      AVERAGE_YIELD: 8,
+      BELOW_ABOVE_RATIO: 0.6,
+      NCONTENT_ABOVEGROUND: 0.02,
+      NCONTENT_BELOWGROUND: 0.01,
+      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.015,
+    },
+    'Grass clover mixture': {
+      FRACRENEWED_INTENSIVE: 0.1,
+      FRACRENEWED_OTHER: 0.05,
+      AVERAGE_YIELD: 10,
+      BELOW_ABOVE_RATIO: 0.6,
+      NCONTENT_ABOVEGROUND: 0.025,
+      NCONTENT_BELOWGROUND: 0.012,
+      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.02,
+    },
+    Lucerne: {
+      FRACRENEWED_INTENSIVE: 0.1,
+      FRACRENEWED_OTHER: 0.05,
+      AVERAGE_YIELD: 12,
+      BELOW_ABOVE_RATIO: 0.5,
+      NCONTENT_ABOVEGROUND: 0.03,
+      NCONTENT_BELOWGROUND: 0.015,
+      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.025,
+    },
+    'Other legume': {
+      FRACRENEWED_INTENSIVE: 0.1,
+      FRACRENEWED_OTHER: 0.05,
+      AVERAGE_YIELD: 10,
+      BELOW_ABOVE_RATIO: 0.5,
+      NCONTENT_ABOVEGROUND: 0.028,
+      NCONTENT_BELOWGROUND: 0.014,
+      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.023,
+    },
+    'Perennial pasture': {
+      FRACRENEWED_INTENSIVE: 0.1,
+      FRACRENEWED_OTHER: 0.05,
+      AVERAGE_YIELD: 9,
+      BELOW_ABOVE_RATIO: 0.6,
+      NCONTENT_ABOVEGROUND: 0.022,
+      NCONTENT_BELOWGROUND: 0.011,
+      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.018,
+    },
+  },
+
+  // (cropResiduesC118)
+  /**
+   * @description Crop residue proportion burnt by state
+   */
+  CROPRESIDUE_PROPORTIONBURNT: {
+    [STATES.NSW]: { burnt: 0.1, removed: 0.2 },
+    [STATES.VIC]: { burnt: 0.05, removed: 0.15 },
+    [STATES.QLD]: { burnt: 0.15, removed: 0.25 },
+    [STATES.SA]: { burnt: 0.08, removed: 0.18 },
+    [STATES.WA_SW]: { burnt: 0.12, removed: 0.22 },
+    [STATES.WA_NW]: { burnt: 0.18, removed: 0.28 },
+    [STATES.TAS]: { burnt: 0.03, removed: 0.1 },
+    [STATES.NT]: { burnt: 0.2, removed: 0.3 },
+    [STATES.ACT]: { burnt: 0.05, removed: 0.15 },
+  },
+
+  // (cropResiduesC119)
+  /**
+   * @description Sugar cane residue fraction burnt by state
+   */
+  CROPRESIDUE_FRACTIONSUGARCANEBURNT: {
+    [STATES.NSW]: { burnt: 0.3, removed: 0.1 },
+    [STATES.VIC]: { burnt: 0.2, removed: 0.05 },
+    [STATES.QLD]: { burnt: 0.4, removed: 0.15 },
+    [STATES.SA]: { burnt: 0.25, removed: 0.08 },
+    [STATES.WA_SW]: { burnt: 0.35, removed: 0.12 },
+    [STATES.WA_NW]: { burnt: 0.45, removed: 0.18 },
+    [STATES.TAS]: { burnt: 0.15, removed: 0.03 },
+    [STATES.NT]: { burnt: 0.5, removed: 0.2 },
+    [STATES.ACT]: { burnt: 0.2, removed: 0.05 },
+  },
+
+  // (cropResiduesC120)
+  /**
+   * @description Crop residue factors for different crop types
+   */
+  CROPRESIDUE: {
+    Wheat: {
+      residueCropRatio: 1.3,
+      belowAboveResidueRatio: 0.3,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.008,
+      belowGroundN: 0.004,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.1,
+      fractionRemoved: 0.2,
+    },
+    Barley: {
+      residueCropRatio: 1.2,
+      belowAboveResidueRatio: 0.3,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.008,
+      belowGroundN: 0.004,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.1,
+      fractionRemoved: 0.2,
+    },
+    Maize: {
+      residueCropRatio: 1.5,
+      belowAboveResidueRatio: 0.2,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.01,
+      belowGroundN: 0.005,
+      fractionOfResidueAtBurning: 0.7,
+      fractionBurnt: 0.15,
+      fractionRemoved: 0.25,
+    },
+    Oats: {
+      residueCropRatio: 1.2,
+      belowAboveResidueRatio: 0.3,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.008,
+      belowGroundN: 0.004,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.1,
+      fractionRemoved: 0.2,
+    },
+    Rice: {
+      residueCropRatio: 1.4,
+      belowAboveResidueRatio: 0.2,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.009,
+      belowGroundN: 0.0045,
+      fractionOfResidueAtBurning: 0.6,
+      fractionBurnt: 0.2,
+      fractionRemoved: 0.3,
+    },
+    Sorghum: {
+      residueCropRatio: 1.4,
+      belowAboveResidueRatio: 0.2,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.009,
+      belowGroundN: 0.0045,
+      fractionOfResidueAtBurning: 0.7,
+      fractionBurnt: 0.15,
+      fractionRemoved: 0.25,
+    },
+    Triticale: {
+      residueCropRatio: 1.3,
+      belowAboveResidueRatio: 0.3,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.008,
+      belowGroundN: 0.004,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.1,
+      fractionRemoved: 0.2,
+    },
+    'Other Cereals': {
+      residueCropRatio: 1.3,
+      belowAboveResidueRatio: 0.3,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.008,
+      belowGroundN: 0.004,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.1,
+      fractionRemoved: 0.2,
+    },
+    Pulses: {
+      residueCropRatio: 1.1,
+      belowAboveResidueRatio: 0.3,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.012,
+      belowGroundN: 0.006,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.05,
+      fractionRemoved: 0.15,
+    },
+    'Tuber and Roots': {
+      residueCropRatio: 0.5,
+      belowAboveResidueRatio: 0.1,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.015,
+      belowGroundN: 0.0075,
+      fractionOfResidueAtBurning: 0.9,
+      fractionBurnt: 0.2,
+      fractionRemoved: 0.3,
+    },
+    Peanuts: {
+      residueCropRatio: 1.0,
+      belowAboveResidueRatio: 0.2,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.02,
+      belowGroundN: 0.01,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.1,
+      fractionRemoved: 0.2,
+    },
+    'Sugar Cane': {
+      residueCropRatio: 0.3,
+      belowAboveResidueRatio: 0.1,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.008,
+      belowGroundN: 0.004,
+      fractionOfResidueAtBurning: 0.7,
+      fractionBurnt: 0.3,
+      fractionRemoved: 0.1,
+    },
+    Cotton: {
+      residueCropRatio: 2.0,
+      belowAboveResidueRatio: 0.2,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.012,
+      belowGroundN: 0.006,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.2,
+      fractionRemoved: 0.3,
+    },
+    Hops: {
+      residueCropRatio: 1.5,
+      belowAboveResidueRatio: 0.2,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.015,
+      belowGroundN: 0.0075,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.1,
+      fractionRemoved: 0.2,
+    },
+    Oilseeds: {
+      residueCropRatio: 1.5,
+      belowAboveResidueRatio: 0.2,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.01,
+      belowGroundN: 0.005,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.1,
+      fractionRemoved: 0.2,
+    },
+    'Forage Crops': {
+      residueCropRatio: 1.0,
+      belowAboveResidueRatio: 0.3,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.02,
+      belowGroundN: 0.01,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.05,
+      fractionRemoved: 0.15,
+    },
+    Lucerne: {
+      residueCropRatio: 1.0,
+      belowAboveResidueRatio: 0.3,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.03,
+      belowGroundN: 0.015,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.05,
+      fractionRemoved: 0.15,
+    },
+    'Other legume': {
+      residueCropRatio: 1.0,
+      belowAboveResidueRatio: 0.3,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.028,
+      belowGroundN: 0.014,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.05,
+      fractionRemoved: 0.15,
+    },
+    'Annual grass': {
+      residueCropRatio: 1.0,
+      belowAboveResidueRatio: 0.3,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.02,
+      belowGroundN: 0.01,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.05,
+      fractionRemoved: 0.15,
+    },
+    'Grass clover mixture': {
+      residueCropRatio: 1.0,
+      belowAboveResidueRatio: 0.3,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.025,
+      belowGroundN: 0.012,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.05,
+      fractionRemoved: 0.15,
+    },
+    'Perennial pasture': {
+      residueCropRatio: 1.0,
+      belowAboveResidueRatio: 0.3,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.022,
+      belowGroundN: 0.011,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.05,
+      fractionRemoved: 0.15,
+    },
+    'Perennial Hort': {
+      residueCropRatio: 1.0,
+      belowAboveResidueRatio: 0.2,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.015,
+      belowGroundN: 0.0075,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.1,
+      fractionRemoved: 0.2,
+    },
+    'Annual Hort': {
+      residueCropRatio: 1.0,
+      belowAboveResidueRatio: 0.2,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.45,
+      aboveGroundN: 0.015,
+      belowGroundN: 0.0075,
+      fractionOfResidueAtBurning: 0.8,
+      fractionBurnt: 0.1,
+      fractionRemoved: 0.2,
+    },
+  },
+
+  /**
+   * @description Crop residue N2O emission factor
+   */
+  CROP_RESIDUE_N2O_EF: 0.00503,
+
+  // Added to constant_values.ts as part of 1.1.0 release
+  FERTILISER_FRACTION_RUNOFF_STATIC: 1,
+};
+
+export const constants: Constants = {
+  /**
+   * @description Emissions factor for feed purchased, in kg CO2-e/kg
+   * @units kg CO2-e/kg
+   */
+  FEED_PURCHASED: {
+    // (embeddedEmissions_E3)
+    grain: { TotalGHG: 0.3 },
+    // (embeddedEmissions_E4)
+    cottonseed: { TotalGHG: 1.1 },
+    // (embeddedEmissions_E5)
+    /** @description Average of 0.25 and 0.2 */
+    hay: { TotalGHG: 0.225 },
+  },
+
+  /**
+   * @description Fertiliser content breakdown by type
+   */
+  FERTILISER_CONTENT: {
+    MAP: { N: 0.11, P: 0.22, K: 0, S: 0 },
+    DAP: { N: 0.18, P: 0.2, K: 0, S: 0 },
+    SSP: { N: 0, P: 0.09, K: 0, S: 0.12 },
+    UREA: { N: 0.46, P: 0, K: 0, S: 0 },
+    TSP: { N: 0, P: 0.2, K: 0, S: 0 },
+    UAN: { N: 0.32, P: 0, K: 0, S: 0 },
+    SP11: { N: 0, P: 0.09, K: 0.09, S: 0.12 },
+    SP21: { N: 0, P: 0.18, K: 0.09, S: 0.12 },
+    SP31: { N: 0, P: 0.27, K: 0.09, S: 0.12 },
+    SP41: { N: 0, P: 0.36, K: 0.09, S: 0.12 },
+    SP51: { N: 0, P: 0.45, K: 0.09, S: 0.12 },
+    MURIATE_OF_POTASH: { N: 0, P: 0, K: 0.5, S: 0 },
+    SULPHATE_OF_POTASH: { N: 0, P: 0, K: 0.42, S: 0.18 },
+    SULPHATE_OF_AMMONIA: { N: 0.21, P: 0, K: 0, S: 0.24 },
+    AN: { N: 0.34, P: 0, K: 0, S: 0 },
+    CAN: { N: 0.27, P: 0, K: 0, S: 0 },
+  },
+
+  /**
+   * @description Emissions factors for commercial flights
+   * @units kg CO2-e / PAX km
+   */
+  COMMERCIALFLIGHT_EF: 0.101,
 
   /**
    * @description Electricity emission factors for each state and Australia, in kg CO2-e/kWh
@@ -2142,50 +2830,6 @@ export const constants: Constants = {
     },
   },
 
-  /**
-   * @description Emission factors for purchased cattle by region, in kg CO2-e/kg liveweight
-   * @reference Wiedemann et al. (2016); Christie (2022)
-   * @units kg CO2-e/kg
-   */
-  LIVESTOCK_SOURCE_EMISSIONFACTOR: {
-    [LIVESTOCK_SOURCE_LOCATION['Dairy origin']]: 4.4,
-    [LIVESTOCK_SOURCE_LOCATION['nth/sth/central QLD']]: 12.4,
-    [LIVESTOCK_SOURCE_LOCATION['nth/sth NSW/VIC/sth SA']]: 11.7,
-    [LIVESTOCK_SOURCE_LOCATION['NSW/SA pastoral zone']]: 12.4,
-    [LIVESTOCK_SOURCE_LOCATION['sw WA']]: 11.7,
-    [LIVESTOCK_SOURCE_LOCATION['WA pastoral']]: 12.4,
-    [LIVESTOCK_SOURCE_LOCATION.TAS]: 11.7,
-    [LIVESTOCK_SOURCE_LOCATION.NT]: 12.4,
-  },
-
-  /**
-   * @description Emission factors for purchased livestock, in kg CO2-e/kg liveweight
-   * @reference Wiedemann et al. (2015b)
-   * @units kg CO2-e/kg
-   */
-  PURCHASED_LIVESTOCK_EF: {
-    BUFFALO: 12,
-    DEER: 8.1,
-    GOAT: 23.8,
-    PORK: 3.6,
-    POULTRY_CONVENTIONAL: 2,
-    POULTRY_FREE_RANGE: 1.8,
-  },
-
-  /**
-   * @description Emissions factor for feed purchased, in kg CO2-e/kg
-   * @units kg CO2-e/kg
-   */
-  FEED_PURCHASED: {
-    // (embeddedEmissions_E3)
-    grain: { TotalGHG: 0.3 },
-    // (embeddedEmissions_E4)
-    cottonseed: { TotalGHG: 1.1 },
-    // (embeddedEmissions_E5)
-    /** @description Average of 0.25 and 0.2 */
-    hay: { TotalGHG: 0.225 },
-  },
-
   // Misc
 
   // Manure management - sheep
@@ -2227,6 +2871,13 @@ export const constants: Constants = {
   GWP_FACTORSC22: 0.35,
 
   /**
+   * @description Fraction of N volatilised as NH3 and NOx from synthetic fertiliser application
+   * @inventory2022 Table 5.21
+   * @type Proportion
+   */
+  FRAC_GASF: 0.1,
+
+  /**
    * @description Conversion factor for the global warming potential of CH4, as CO2-e
    */
   GWP_FACTORSC5: 28,
@@ -2235,62 +2886,6 @@ export const constants: Constants = {
    * @description Conversion factor for the global warming potential of N2O, as CO2-e
    */
   GWP_FACTORSC6: 265,
-
-  /**
-   * @description Default emission factor for Urea
-   * @reference IPCC (2006)
-   */
-  CARBON_FRACTION_OF_UREA: 0.2, // (ureaApplicationD35)
-
-  /**
-   * @description Proportion of gas volatilised from fertiliser
-   * @inventory2018 3DB_1
-   */
-  FRAC_GASF: 0.11, // FracGASF
-
-  /**
-   * @description Proportion of gas volatilised from manure
-   * @inventory2018 3DB_2
-   */
-  FRAC_GASM: 0.21, // FracGASM
-
-  // Atmospheric N deposition inorganic fertiliser
-  /**
-   * @description Atmospheric N deposition of inorganic fertiliser
-   * @inventory2018 3DB_1
-   */
-  INOGRANICFERTILISER_ATMOSPHERIC_N: 0.11, // (agriculturalSoilsSheepN10)
-
-  /**
-   * @description Leaching and runoff of inorganic fertiliser
-   * @inventory2018 3B.5a_4
-   */
-  LEECHING_AND_RUNOFF: 0.011, // (agriculturalSoilsSheepD11)
-
-  /**
-   * @description Milk intake of cows, in kg / day
-   * @inventory2018 5.B.5
-   * @units kg / day
-   */
-  MILK_INTAKE: {
-    NORTHOFTROPIC: {
-      CALVING_SEASON: 4,
-      SEASON_AFTER_CALVING: 3,
-    },
-    SOUTHOFTROPIC: {
-      CALVING_SEASON: 6,
-      SEASON_AFTER_CALVING: 4,
-    },
-  },
-
-  /**
-   * @description Feed adjustment factor for cows
-   * @inventory2018 5.B.5
-   */
-  FEED_ADJUSTMENT: {
-    CALVING_SEASON: 1.3,
-    SEASON_AFTER_CALVING: 1.1,
-  },
 
   /**
    * @description Scope 1 and Scope 3 values relating to liming
@@ -2530,39 +3125,6 @@ export const constants: Constants = {
     },
   },
 
-  // (manureManagementBeefC26)
-  /**
-   * @description Methane emission factor for warm climate
-   */
-  METHANE_WARM_EF: 0.012,
-
-  // (manureManagementBeefC29)
-  /**
-   * @description Methane emission factor for temperate climate
-   */
-  METHANE_TEMPERATE_EF: 0.003,
-
-  /**
-   * @description Ash content as a proportion of faecal DM
-   * @inventory2018 3B.1a_1
-   * @type Proportion
-   */
-  ASH_CONTENT: 0.08,
-
-  /**
-   * @description Methane emission potential, in m3 CH4/kg
-   * @inventory2018 3B.1a_2
-   * @units m3 CH4/kg
-   */
-  METHANE_EMISSION_POTENTIAL: 0.24,
-
-  /**
-   * @description Methane density, in kg CH4/m3
-   * @inventory2018 3B.1a_2
-   * @units kg CH4/m3
-   */
-  METHANE_DENSITY: 0.6784,
-
   /**
    * @description Total GHG (kg CO2-e/kg input)
    * @units kg CO2-e/kg
@@ -2575,12 +3137,6 @@ export const constants: Constants = {
    */
   SUPERPHOSPHATE_GHG: 0.1122, // (embeddedEmissions_E10)
 
-  // Sugar
-  /**
-   * @description Emissions factor for annual N2O production from sugar cane
-   */
-  SUGAR_ANNUAL_N2O_PRODUCTION_EF: 0.00503,
-
   /**
    * Grains
    */
@@ -2591,70 +3147,14 @@ export const constants: Constants = {
   FERTILISER_EF: 0.2,
 
   /**
-   * @description NO2 emissions factors for synthetic fertilisers
-   * @inventory2018 Table 5.23
+   * @description Energy content and emission factors for agrochemical manufacture
+   * @reference Blueshift estimates
    */
-  PRODUCTIONSYSTEM_EF: {
-    RAINFALL_LT_600: {
-      'Non-irrigated crop': 0.0029,
-      'Irrigated crop': 0.007,
-      'Sugar cane': 0.0199,
-      Cotton: 0.0053,
-      Horticulture: 0.0064,
-    },
-    RAINFALL_GT_600: {
-      'Non-irrigated crop': 0.008,
-      'Irrigated crop': 0.007,
-      'Sugar cane': 0.0199,
-      Cotton: 0.0053,
-      Horticulture: 0.0064,
-    },
+  AGROCHEMICAL_ENERGY_MANUFACTURE: {
+    HERBICIDE_GLYPHOSATE: { TOTAL_ENERGY: 5, EF: 0.06 },
+    HERBICIDE_GENERAL: { TOTAL_ENERGY: 5, EF: 0.06 },
+    INSECTICIDE: { TOTAL_ENERGY: 5, EF: 0.06 },
   },
-
-  /**
-   * @description Proportion of crop residue burnt by state
-   * @inventory2018 5.I.3
-   * @type Proportion
-   */
-  CROPRESIDUE_PROPORTIONBURNT: {
-    [STATES.NSW]: { burnt: 0.22, removed: 0.05 },
-    [STATES.VIC]: { burnt: 0.21, removed: 0.07 },
-    [STATES.QLD]: { burnt: 0.06, removed: 0.04 },
-    [STATES.SA]: { burnt: 0.12, removed: 0.09 },
-    [STATES.WA_SW]: { burnt: 0.06, removed: 0.11 },
-    [STATES.WA_NW]: { burnt: 0.06, removed: 0.11 },
-    [STATES.TAS]: { burnt: 0.09, removed: 0.16 },
-    [STATES.NT]: { burnt: 0.23, removed: 0.01 },
-    [STATES.ACT]: { burnt: 0, removed: 0 },
-  },
-
-  /**
-   * @description Proportion of sugar cane residue burnt by state
-   * @inventory2018 5.I.4
-   * @type Proportion
-   */
-  CROPRESIDUE_FRACTIONSUGARCANEBURNT: {
-    [STATES.NSW]: { burnt: 0.898, removed: 0 },
-    [STATES.VIC]: { burnt: 0, removed: 0 },
-    [STATES.QLD]: { burnt: 0.275, removed: 0.03 },
-    [STATES.SA]: { burnt: 0, removed: 0 },
-    [STATES.WA_SW]: { burnt: 1, removed: 0 },
-    [STATES.WA_NW]: { burnt: 1, removed: 0 },
-    [STATES.TAS]: { burnt: 0, removed: 0 },
-    [STATES.NT]: { burnt: 0, removed: 0 },
-    [STATES.ACT]: { burnt: 0, removed: 0 },
-  },
-
-  /**
-   * @description Emissions factor for annual N2O production from crop residue
-   * @units kg N2O-e/kg N
-   */
-  CROP_RESIDUE_N2O_EF: 0.00503,
-
-  /**
-   * @description Fraction of N available for leaching and runoff from fertiliser
-   */
-  FERTILISER_FRACTION_RUNOFF_STATIC: 1,
 
   /**
    * @description Leaching and runoff parameters
@@ -2672,369 +3172,6 @@ export const constants: Constants = {
     STORAGE_FRACWET: 1,
     STORAGE_EF: 0.011,
     N2O_EF: 0.011,
-  },
-
-  // (Agricultural_SoilsD163)
-  /**
-   * @description Urine and dung emission factor
-   * @inventory2022 3.D.A_6
-   */
-  URINEDUNG_EF: 0.004,
-
-  // (embeddedEMissions_C133)
-  COMPONENTS_ENERGY_EF: {
-    N: { TOTAL_ENERGY: 65, EF: 0.05 },
-    P: { TOTAL_ENERGY: 15, EF: 0.06 },
-    K: { TOTAL_ENERGY: 10, EF: 0.06 },
-    S: { TOTAL_ENERGY: 5, EF: 0.06 },
-  },
-
-  // (embeddedEmissions_C148)
-  /**
-   * @description Energy requirement to manufacture fertiliser components and associated CO2 emissions (EF)
-   * @reference (Wells 2001; cited by Saunders et al. 2006)
-   */
-  AGROCHEMICAL_ENERGY_MANUFACTURE: {
-    HERBICIDE_GLYPHOSATE: { TOTAL_ENERGY: 550, EF: 0.06 },
-    HERBICIDE_GENERAL: { TOTAL_ENERGY: 310, EF: 0.06 },
-    INSECTICIDE: { TOTAL_ENERGY: 315, EF: 0.06 },
-  },
-
-  // (cropResiduesC116)
-  /**
-   * @description Attributes of major pasture types
-   * @inventory2022 A5.5.9.2
-   */
-  PASTURE_ATTRIBUTES: {
-    'Annual grass': {
-      FRACRENEWED_INTENSIVE: 0.1,
-      FRACRENEWED_OTHER: 0.03,
-      AVERAGE_YIELD: 4.41,
-      BELOW_ABOVE_RATIO: 0.4,
-      NCONTENT_ABOVEGROUND: 0.015,
-      NCONTENT_BELOWGROUND: 0.012,
-      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.8,
-    },
-    'Grass clover mixture': {
-      FRACRENEWED_INTENSIVE: 0.1,
-      FRACRENEWED_OTHER: 0.03,
-      AVERAGE_YIELD: 8.34,
-      BELOW_ABOVE_RATIO: 0.8,
-      NCONTENT_ABOVEGROUND: 0.025,
-      NCONTENT_BELOWGROUND: 0.016,
-      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.8,
-    },
-    Lucerne: {
-      FRACRENEWED_INTENSIVE: 0.1,
-      FRACRENEWED_OTHER: 0.03,
-      AVERAGE_YIELD: 8.62,
-      BELOW_ABOVE_RATIO: 0.4,
-      NCONTENT_ABOVEGROUND: 0.027,
-      NCONTENT_BELOWGROUND: 0.019,
-      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.8,
-    },
-    'Other legume': {
-      FRACRENEWED_INTENSIVE: 0.1,
-      FRACRENEWED_OTHER: 0.03,
-      AVERAGE_YIELD: 5.62,
-      BELOW_ABOVE_RATIO: 0.4,
-      NCONTENT_ABOVEGROUND: 0.027,
-      NCONTENT_BELOWGROUND: 0.022,
-      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.8,
-    },
-    'Perennial pasture': {
-      FRACRENEWED_INTENSIVE: 0.1,
-      FRACRENEWED_OTHER: 0.03,
-      AVERAGE_YIELD: 8.35,
-      BELOW_ABOVE_RATIO: 0.8,
-      NCONTENT_ABOVEGROUND: 0.015,
-      NCONTENT_BELOWGROUND: 0.012,
-      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.8,
-    },
-  },
-
-  /**
-   * @description N, P, K and S content in each fertiliser type
-   * @type Proportion
-   */
-  FERTILISER_CONTENT: {
-    MAP: { N: 0.11, P: 0.219, K: 0, S: 0 },
-    DAP: { N: 0.18, P: 0.2, K: 0, S: 0 },
-    SSP: { N: 0, P: 0.088, K: 0, S: 0.11 },
-    UREA: { N: 0.46, P: 0, K: 0, S: 0 },
-    TSP: { N: 0, P: 0.202, K: 0, S: 0.01 },
-    UAN: { N: 0.32, P: 0, K: 0, S: 0 },
-    SP11: { N: 0, P: 0.044, K: 0.25, S: 0.055 },
-    SP21: { N: 0, P: 0.059, K: 0.165, S: 0.074 },
-    SP31: { N: 0, P: 0.066, K: 0.127, S: 0.082 },
-    SP41: { N: 0, P: 0.07, K: 0.1, S: 0.088 },
-    SP51: { N: 0, P: 0.074, K: 0.08, S: 0.092 },
-    MURIATE_OF_POTASH: { N: 0, P: 0, K: 0.5, S: 0 },
-    SULPHATE_OF_POTASH: { N: 0, P: 0, K: 0.41, S: 0.17 },
-    SULPHATE_OF_AMMONIA: { N: 0.21, P: 0, K: 0, S: 0.24 },
-    AN: { N: 0.35, P: 0, K: 0, S: 0 },
-    CAN: { N: 0.265, P: 0, K: 0, S: 0 },
-  },
-
-  // Crop residue
-  /**
-   * @description Crop residue parameters for major crop types
-   * @inventory2022 A5.5.9.1
-   */
-  CROPRESIDUE: {
-    Wheat: {
-      residueCropRatio: 1.5,
-      belowAboveResidueRatio: 0.29,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    Barley: {
-      residueCropRatio: 1.24,
-      belowAboveResidueRatio: 0.32,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.007,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    Maize: {
-      residueCropRatio: 0.81,
-      belowAboveResidueRatio: 0.39,
-      dryMatterContent: 0.85,
-      carbonMassFraction: 0.42,
-      aboveGroundN: 0.005,
-      belowGroundN: 0.007,
-      fractionOfResidueAtBurning: 1,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    Oats: {
-      residueCropRatio: 1.42,
-      belowAboveResidueRatio: 0.43,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    Rice: {
-      residueCropRatio: 1.31,
-      belowAboveResidueRatio: 0.16,
-      dryMatterContent: 0.8,
-      carbonMassFraction: 0.42,
-      aboveGroundN: 0.007,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 1,
-      fractionBurnt: 0.815,
-      fractionRemoved: 0.06,
-    },
-    Sorghum: {
-      residueCropRatio: 1.5,
-      belowAboveResidueRatio: 0.22,
-      dryMatterContent: 0.8,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.008,
-      belowGroundN: 0.007,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    Triticale: {
-      residueCropRatio: 1.5,
-      belowAboveResidueRatio: 0.42,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    'Other Cereals': {
-      residueCropRatio: 1.46,
-      belowAboveResidueRatio: 0.36,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    Pulses: {
-      residueCropRatio: 1.37,
-      belowAboveResidueRatio: 0.51,
-      dryMatterContent: 0.87,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.009,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    'Tuber and Roots': {
-      residueCropRatio: 0.34,
-      belowAboveResidueRatio: 0.43,
-      dryMatterContent: 0.25,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.02,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 1,
-    },
-    Peanuts: {
-      residueCropRatio: 1.07,
-      belowAboveResidueRatio: 0.2,
-      dryMatterContent: 0.8,
-      carbonMassFraction: 0.42,
-      aboveGroundN: 0.016,
-      belowGroundN: 0.014,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    'Sugar Cane': {
-      residueCropRatio: 0.25,
-      belowAboveResidueRatio: 0.45,
-      dryMatterContent: 0.2,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.005,
-      belowGroundN: 0.007,
-      fractionOfResidueAtBurning: 1,
-      fractionBurnt: 0.858,
-      fractionRemoved: 0,
-    },
-    Cotton: {
-      residueCropRatio: 1.9,
-      belowAboveResidueRatio: 0.3,
-      dryMatterContent: 0.9,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.01,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    Hops: {
-      residueCropRatio: 1.5,
-      belowAboveResidueRatio: 0.29,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    Oilseeds: {
-      residueCropRatio: 2.08,
-      belowAboveResidueRatio: 0.33,
-      dryMatterContent: 0.96,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.009,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    'Forage Crops': {
-      residueCropRatio: 1.34,
-      belowAboveResidueRatio: 0.37,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0.8,
-    },
-    Lucerne: {
-      residueCropRatio: 0,
-      belowAboveResidueRatio: 0,
-      dryMatterContent: 0,
-      carbonMassFraction: 0,
-      aboveGroundN: 0,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    'Other legume': {
-      residueCropRatio: 0,
-      belowAboveResidueRatio: 0,
-      dryMatterContent: 0,
-      carbonMassFraction: 0,
-      aboveGroundN: 0,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    'Annual grass': {
-      residueCropRatio: 0,
-      belowAboveResidueRatio: 0,
-      dryMatterContent: 0,
-      carbonMassFraction: 0,
-      aboveGroundN: 0,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    'Grass clover mixture': {
-      residueCropRatio: 0,
-      belowAboveResidueRatio: 0,
-      dryMatterContent: 0,
-      carbonMassFraction: 0,
-      aboveGroundN: 0,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    'Perennial pasture': {
-      residueCropRatio: 0,
-      belowAboveResidueRatio: 0,
-      dryMatterContent: 0,
-      carbonMassFraction: 0,
-      aboveGroundN: 0,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    'Perennial Hort': {
-      residueCropRatio: 1.7,
-      belowAboveResidueRatio: 0.5,
-      dryMatterContent: 0.8,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    'Annual Hort': {
-      residueCropRatio: 1.5,
-      belowAboveResidueRatio: 0.3,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.02,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
   },
 
   /**
@@ -3057,18 +3194,6 @@ export const constants: Constants = {
     CO2: 69.9,
     CH4: 0.1,
     N2O: 0.2,
-  },
-
-  /**
-   * @description Emissions factors for each agricultural soil type, in Gg N2O-N/Gg N
-   * @inventory2022 Table 5.21
-   * @units Gg N2O-N/Gg N
-   */
-  AGRICULTURAL_SOILS: {
-    EF_IRRIGATEDPASTURE: 0.0059,
-    EF_IRRIGATEDCROP: 0.007,
-    EF_NONIRRIGATEDCROP: 0.0041,
-    EF_NONIRRIGATEDPASTURE: 0.0018,
   },
 
   /**
@@ -3508,56 +3633,6 @@ export const constants: Constants = {
    * @units kg N/head/year
    */
 
-  /**
-   * @description Default percent of sugar yield from total harvest, if no value is supplied in inputs
-   * @type Proportion
-   */
-  SUGAR_YIELD: 0.1188625,
-
-  // other livestock Deer Manure management D42
-  /**
-   * @description Other livestock – Allocation of animals to climate regions
-   * @inventory2022 Table A5.5.7.3
-   */
-  OTHERLIVESTOCK_ALLOCATION_CLIMATEREGIONS: {
-    [STATES.ACT]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.NT]: {
-      warm: 1,
-      temperate: 0,
-    },
-    [STATES.NSW]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.QLD]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.SA]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.TAS]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.VIC]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.WA_NW]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.WA_SW]: {
-      warm: 0,
-      temperate: 1,
-    },
-  },
-
   // (TransportB111)
   // TODO: Replace
 
@@ -3693,63 +3768,6 @@ export const constants: Constants = {
   MUNICIPAL_SOLID_WASTE_EF: 1.6,
 
   /**
-   * @description Intensity of economic allocation for cotton co-products, by type
-   * @reference https://www.sciencedirect.com/science/article/abs/pii/S0959652618335935
-   * @type Proportion
-   */
-  COTTON_INTENSITY_ECONOMIC_ALLOCATION: {
-    LINT: 0.86,
-    SEED: 0.14,
-  },
-
-  // Rice
-  /**
-   * @description Emissions factor for permanently flooded fields
-   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
-   */
-  EF_FLOODED_FIELDS: 1.19,
-
-  /**
-   * @description Default CH4 emissions scaling factors for water regimes during the cultivation period relative to continuously flooded fields
-   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
-   */
-  SF_CULTIVATION_WATER_REGIME: {
-    'Continuously flooded': 1,
-    'Single drainage period': 0.71,
-    'Multiple drainage periods': 0.55,
-    'Regular rainfed': 0.54,
-    'Drought prone': 0.16,
-    'Deep water': 0.06,
-    'Paddy rotation': 0,
-    'Fallow without flooding in previous year': 0,
-  },
-
-  /**
-   * @description Default CH4 emissions scaling factors for water regimes before the cultivation period
-   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
-   */
-  SF_PRESEASON_WATER_REGIME: {
-    'Non flooded pre-season < 180 days': 1,
-    'Non flooded pre-season > 180 days': 0.89,
-    'Flooded pre-season > 30 days': 2.41,
-    'Non-flooded pre-season > 365 days': 0.59,
-  },
-
-  /**
-   * @description Emissions factors for aquaculture bait
-   * @reference Blueshift estimates
-   * @units kg CO2-e / kg feed
-   */
-  AQUACULTURE_BAIT_EF: {
-    [AquacultureBait.SARDINES]: 0.3,
-    [AquacultureBait.LOW_ANIMAL_PROTEIN]: 1,
-    [AquacultureBait.HIGH_ANIMAL_PROTEIN]: 2.2,
-    [AquacultureBait.CEREAL]: 0.5,
-    [AquacultureBait.SQUID]: 0.3,
-    [AquacultureBait.FISH]: 0.3,
-  },
-
-  /**
    * @description Emissions factors for freight, in kg CO2-e / tonne-km
    * @reference EUROPEAN CHEMICAL TRANSPORT ASSOCIATION, European Chemical Industry Council, CTA-CEFIC-GUIDELINE-FOR-MEASURING-AND-MANAGING-CO2.
    * @units kg CO2-e / tonne-km
@@ -3761,31 +3779,5 @@ export const constants: Constants = {
     [FreightTypes.MEDIUM_HAUL_FLIGHT]: 0.8,
     [FreightTypes.SMALL_CONTAINER_SHIP]: 0.0135,
     [FreightTypes.LARGE_CONTAINER_SHIP]: 0.0115,
-  },
-
-  /**
-   * @description Methane Conversion Factors (MCF) and Nitrous Oxide Fractions (NOF) for manure management systems
-   */
-  MMS: {
-    deepLitter: {
-      MCF: 0.04,
-      FracGASM: 0.125,
-      NOF: 0.01,
-    },
-    coveredAnaerobicPond: {
-      MCF: 0.1,
-      FracGASM: 0,
-      NOF: 0,
-    },
-    outdoorSystems: {
-      MCF: 0.01,
-      FracGASM: 0.3,
-      NOF: 0.02,
-    },
-    uncoveredAnaerobicPond: {
-      MCF: 0.75,
-      FracGASM: 0.55,
-      NOF: 0,
-    },
   },
 };

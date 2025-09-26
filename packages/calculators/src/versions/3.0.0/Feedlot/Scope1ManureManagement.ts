@@ -27,7 +27,7 @@ export function calculateScope1ManureManagement(
     volatileSolidProduction *
     constants.FEEDLOT.EMISSION_POTENTIAL *
     integratedEF *
-    constants.COMMON.METHANE_DENSITY;
+    constants.LIVESTOCK.METHANE_DENSITY;
 
   // (manureManagementD57:F60, manureManagementC62)
   const seasonalMethaneProduction =

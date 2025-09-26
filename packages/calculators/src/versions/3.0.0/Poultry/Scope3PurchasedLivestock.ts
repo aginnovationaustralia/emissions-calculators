@@ -20,7 +20,7 @@ export function calculateScope3PurchasedLivestock(
   // (Purchased_Poultry_EmissionsF3)
   const conventionalEmissions =
     conventionalLiveweight *
-    constants.COMMON.PURCHASED_LIVESTOCK_EF.POULTRY_CONVENTIONAL;
+    constants.LIVESTOCK.PURCHASED_LIVESTOCK_EF.POULTRY_CONVENTIONAL;
 
   // (Purchased_Poultry_EmissionsG3)
   const conventionalTonnes = conventionalEmissions / 1000;
@@ -31,7 +31,7 @@ export function calculateScope3PurchasedLivestock(
   // (Purchased_Poultry_EmissionsF4)
   const freeRangeEmissions =
     freeRangeLiveweight *
-    constants.COMMON.PURCHASED_LIVESTOCK_EF.POULTRY_FREE_RANGE;
+    constants.LIVESTOCK.PURCHASED_LIVESTOCK_EF.POULTRY_FREE_RANGE;
 
   // (Purchased_Poultry_EmissionsG4)
   const freeRangeTonnes = freeRangeEmissions / 1000;

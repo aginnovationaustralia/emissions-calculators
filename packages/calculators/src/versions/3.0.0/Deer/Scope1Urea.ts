@@ -19,7 +19,7 @@ export function calculateScope1Urea(
   // WARNING: deer calc does not have / 1000
   const carbon =
     totalMassFertiliser *
-    constants.COMMON.CARBON_FRACTION_OF_UREA *
+    constants.LIVESTOCK.CARBON_FRACTION_OF_UREA *
     constants.COMMON.GWP_FACTORSC13;
 
   return carbon;

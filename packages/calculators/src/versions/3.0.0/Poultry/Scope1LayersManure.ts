@@ -48,7 +48,7 @@ function layerManure(
       const MMS = constants.POULTRY.WASTE_MMS[state];
 
       // (Manure_Management_LayersD26)
-      const densityOfMethane = constants.COMMON.METHANE_DENSITY;
+      const densityOfMethane = constants.LIVESTOCK.METHANE_DENSITY;
 
       // (Manure_Management_LayersD32)
       const mmsLayers =

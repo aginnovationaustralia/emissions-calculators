@@ -19,35 +19,35 @@ export function calculateScope1Fertiliser(
   const soilEmissionsGrazingDryland =
     fertiliser.pastureDryland *
     0.46 *
-    constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
     constants.COMMON.GWP_FACTORSC15;
 
   const soilEmissionsCroppingDryland =
     fertiliser.cropsDryland *
     0.46 *
-    constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
     constants.COMMON.GWP_FACTORSC15;
 
   const soilEmissionsOtherDryland =
     otherFertiliserDryland *
-    constants.COMMON.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
     constants.COMMON.GWP_FACTORSC15;
 
   const soilEmissionsGrazingIrrigated =
     fertiliser.pastureIrrigated *
     0.46 *
-    constants.COMMON.AGRICULTURAL_SOILS.EF_IRRIGATEDPASTURE *
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDPASTURE *
     constants.COMMON.GWP_FACTORSC15;
 
   const soilEmissionsCroppingIrrigated =
     fertiliser.cropsIrrigated *
     0.46 *
-    constants.COMMON.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
     constants.COMMON.GWP_FACTORSC15;
 
   const soilEmissionsOtherIrrigated =
     otherFertiliserIrrigated *
-    constants.COMMON.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
     constants.COMMON.GWP_FACTORSC15;
 
   // (Agricultural_SoilsD18)

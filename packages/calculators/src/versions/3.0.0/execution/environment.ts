@@ -1,8 +1,8 @@
 import { AsyncLocalStorage } from 'async_hooks';
 import { PartialDeep } from 'type-fest';
-import { Constants } from '../constants/versionedConstants';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantOverrides = PartialDeep<Constants>;
+export type ConstantOverrides = PartialDeep<AllConstants>;
 type CalculationEnvironmentParameters = {
   overrides?: ConstantOverrides;
   organisation?: string;
