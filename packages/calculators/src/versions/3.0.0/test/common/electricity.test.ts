@@ -1,8 +1,8 @@
 import { calculateElectricityScope2And3 } from '../../common-legacy/electricity';
-import { testContext, V3_0_0 } from './context';
+import { testContext, V2_0_0 } from './context';
 import { defaultPrecision } from './emissions';
 
-const context = testContext(V3_0_0);
+const context = testContext(V2_0_0);
 
 describe('Electricity Tests', () => {
   describe('NSW and ACT matches', () => {

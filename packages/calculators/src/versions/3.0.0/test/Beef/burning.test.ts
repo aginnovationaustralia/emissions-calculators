@@ -1,8 +1,8 @@
 import { calculateScope1SavannahBurning } from '../../Beef/Scope1SavannahBurning';
-import { testContext, V3_0_0 } from '../common/context';
+import { testContext, V2_0_0 } from '../common/context';
 
 describe('checking calculateScope1SavannahBurning, all types of inputs', () => {
-  describe.each([[V3_0_0, 0, 0]])('VIC', (version, totalCH4, totalN2O) => {
+  describe.each([[V2_0_0, 0, 0]])('VIC', (version, totalCH4, totalN2O) => {
     const context = testContext(version, 'Beef');
     const emissions = calculateScope1SavannahBurning(
       {
@@ -27,7 +27,7 @@ describe('checking calculateScope1SavannahBurning, all types of inputs', () => {
     });
   });
 
-  describe.each([[V3_0_0, 1.78569, 1.0323]])(
+  describe.each([[V2_0_0, 1.78569, 1.0323]])(
     'QLD',
     (version, totalCH4, totalN2O) => {
       const context = testContext(version, 'Beef');
@@ -55,7 +55,7 @@ describe('checking calculateScope1SavannahBurning, all types of inputs', () => {
     },
   );
 
-  describe.each([[V3_0_0, 45.46795, 20.06771]])(
+  describe.each([[V2_0_0, 45.46795, 20.06771]])(
     'NT',
     (version, totalCH4, totalN2O) => {
       const context = testContext(version, 'Beef');

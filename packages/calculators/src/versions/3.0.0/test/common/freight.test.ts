@@ -1,10 +1,10 @@
 import { calculateFreight } from '../../common/freight';
 import { FreightInput } from '../../types/common/freight.input';
 import { FreightTypes } from '../../types/types';
-import { testContext, V3_0_0 } from './context';
+import { testContext, V2_0_0 } from './context';
 import { defaultPrecision } from './emissions';
 
-const context = testContext(V3_0_0);
+const context = testContext(V2_0_0);
 
 it('Freight calculation for all types is correct', () => {
   const freightInput: FreightInput[] = Object.values(FreightTypes).map(

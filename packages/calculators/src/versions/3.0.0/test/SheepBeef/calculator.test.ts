@@ -7,7 +7,7 @@ import { SheepIntermediateOutput } from '../../types/Sheep/intermediate.output';
 import { SheepBeefInput } from '../../types/SheepBeef/input';
 import { SheepBeefOutput } from '../../types/SheepBeef/output';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V3_0_0 } from '../common/context';
+import { testContext, V2_0_0 } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { sheepbeefTestData } from './sheepbeef.data';
 
@@ -77,10 +77,10 @@ const expectations_1_2_0 = {
 };
 
 describe('checking Sheepbeef calculator, VIC', () => {
-  const context = testContext(V3_0_0, 'SheepBeef');
+  const context = testContext(V2_0_0, 'SheepBeef');
   const emissions = calculateSheepBeef(sheepbeefTestData, context);
 
-  executeEmissionsSpec(V3_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
 
   it('Generates IDs for intermediate activities', () => {
     expect(emissions.intermediateBeef[0].id).toBe('beef-0');

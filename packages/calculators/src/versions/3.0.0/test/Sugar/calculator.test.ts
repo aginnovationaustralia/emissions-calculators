@@ -3,7 +3,7 @@ import clone from 'nanoclone';
 import { calculateEntireSugar, calculateSugar } from '../../Sugar/calculator';
 import { SugarInput } from '../../types/Sugar/input';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V3_0_0 } from '../common/context';
+import { testContext, V2_0_0 } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { sugarTestData } from './sugar.data';
 
@@ -48,7 +48,7 @@ const expectations_1_2_0 = {
 };
 
 describe('Sugar calculator, QLD', () => {
-  const context = testContext(V3_0_0, 'Sugar');
+  const context = testContext(V2_0_0, 'Sugar');
   const emissions = calculateEntireSugar(
     sugarTestData.crops,
     sugarTestData.electricityUse,
@@ -58,7 +58,7 @@ describe('Sugar calculator, QLD', () => {
     context,
   );
 
-  executeEmissionsSpec(V3_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
 });
 
 describe('Sugar calculator (multi activity)', () => {
@@ -81,7 +81,7 @@ describe('Sugar calculator (multi activity)', () => {
   };
 
   compareEmissionsFrom2Inputs(
-    V3_0_0,
+    V2_0_0,
     calculateSugar,
     sugarTestData,
     sugarDoubleYield,

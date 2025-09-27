@@ -3,7 +3,7 @@ import { validateSync } from 'class-validator';
 import { calculateSheepBeef } from '../../SheepBeef/calculator';
 import { BeefComplete } from '../../types/Beef/beef.input';
 import { beefTestInput } from '../Beef/beef.data';
-import { testContext, V3_0_0 } from '../common/context';
+import { testContext, V2_0_0 } from '../common/context';
 import { sheepTestInput } from '../Sheep/sheep.data';
 import { veg1, veg2, veg3, veg4 } from './vegetation.data';
 
@@ -30,7 +30,7 @@ describe('checking SheefBeef purchases as array', () => {
     ];
   });
 
-  const context = testContext(V3_0_0, 'SheepBeef');
+  const context = testContext(V2_0_0, 'SheepBeef');
 
   const emissions = calculateSheepBeef(
     {
