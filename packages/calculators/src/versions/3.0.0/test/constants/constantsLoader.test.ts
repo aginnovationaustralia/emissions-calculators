@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { constants } from '../../constants/constant_values';
 import {
+  loadAllConstants,
   loadConstants,
   loadOverrideConstants,
 } from '../../constants/constantsLoader';
@@ -27,7 +28,7 @@ describe('constantsLoader', () => {
           },
         },
       };
-      const defaultConstants = loadConstants();
+      const defaultConstants = loadAllConstants();
       const overriddenConstants = CalculationEnvironment.run(
         { overrides },
         () => loadOverrideConstants(),
