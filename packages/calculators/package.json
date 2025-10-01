@@ -9,7 +9,6 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "generate-types": "node -e \"import('./scripts/generate-type-exports.js').then(m => m.generateTypeExports())\"",
     "dev": "rollup -c --watch",
     "clean": "rm -rf dist",
     "check:types": "tsc --noEmit",
