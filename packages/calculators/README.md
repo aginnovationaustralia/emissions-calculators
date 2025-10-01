@@ -1,7 +1,5 @@
 # emissions-calculators
 
-🚧 This readme is a work in progress 🚧
-
 The emissions-calculators package aims to make it easy to calculate carbon emissions using the [Greenhouse Accounting Framework (GAF) Tools for Australian Primary Industries](https://piccc.org.au/resources/Tools.html). It is developed and maintained by [Agricultural Innovation Australia](https://aginnovationaustralia.com.au).
 
 The project implements the GAF tools as a javascript package that can be readily imported and used for calculations. The calculators are also available as an API as part of the [Environmental Accounting Platform (EAP)](https://www.aiaeap.com/).
@@ -15,10 +13,12 @@ npm install @aginnovationaustralia/emissions-calculators
 # Usage
 
 ```javascript
-import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/calculators';
-import { BeefInput } from '@aginnovationaustralia/emissions-calculators/types/Beef/input';
+import { v3_0_0 } from '@aginnovationaustralia/emissions-calculators';
 
-export const beefInputData = {
+const { calculateBeef } = v3_0_0.Calculators;
+const { BeefInput, BeefOutput } = v3_0_0.Types;
+
+export const beefInputData: BeefInput = {
   state: 'nsw' as const,
   northOfTropicOfCapricorn: true,
   rainfallAbove600: true,
@@ -40,16 +40,35 @@ export const beefInputData = {
   ]
 }
 
-const beefResults = calculateBeef(beefInputLatest);
-
+const beefResults: BeefOutput = calculateBeef(beefInputLatest);
 ```
 
-You can also choose specific versions with a longer, more specific path:
-```javascript
-import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/versions/3.0.0/calculators';
-import { BeefInput } from '@aginnovationaustralia/emissions-calculators/versions/3.0.0/types/Beef/input';
+The input objects required for a calculation are deeply nested objects with strict type requirements. The outputs are also nested objects with very specific types. You can access classes for all the input and output types via the `Types`:
 
-...
+```javascript
+import { v3_0_0 } from '@aginnovationaustralia/emissions-calculators';
+
+const { BeefInput, BeefComplete, BeefClasses, BeefScope1Output } = v3_0_0.Types;
+
+const classes: BeefClasses = {
+  steersGt2: {
+    ...
+  }
+}
+
+const beefEnterprise1: BeefComplete = {
+  classes,
+  limestone: 200,
+  ...
+}
+
+export const beefInputData: BeefInput = {
+  state: 'nsw' as const,
+  northOfTropicOfCapricorn: true,
+  rainfallAbove600: true,
+  beef: [beefEnterprise1]
+  ...
+}
 ```
 
 # Data and metrics collection
