@@ -113,7 +113,7 @@ describe('Horticulture calculator (multi activity)', () => {
     },
     {
       transformIntermediate: (intermediate) => {
-        const { intensitiesWithSequestration, ...rest } = intermediate;
+        const { intensitiesWithSequestration: _, ...rest } = intermediate;
         return {
           ...rest,
           intensities: [intermediate.intensitiesWithSequestration],

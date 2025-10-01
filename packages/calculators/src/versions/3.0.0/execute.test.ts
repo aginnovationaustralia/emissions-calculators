@@ -1,3 +1,4 @@
+import { Constants } from './constants';
 import { loadOverrideConstants } from './constants/constantsLoader';
 import { executeCalculator } from './execute';
 import { trackCalculatorExecution } from './metrics';
@@ -23,7 +24,7 @@ describe('executeCalculator', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockLoadOverrideConstants.mockReturnValue({} as any);
+    mockLoadOverrideConstants.mockReturnValue({} as Constants);
   });
 
   describe('successful execution', () => {
@@ -137,7 +138,7 @@ describe('executeCalculator', () => {
       }
 
       const mockCalculator = jest
-        .fn<TestOutput, [TestInput, any]>()
+        .fn<TestOutput, [TestInput]>()
         .mockReturnValue({
           result: 42,
           processed: true,
@@ -264,7 +265,7 @@ describe('executeCalculator', () => {
       const calculatorName = CalculatorNames.Beef;
 
       // Act & Assert
-      errors.forEach((error, index) => {
+      errors.forEach((error) => {
         const mockCalculator = jest.fn().mockImplementation(() => {
           throw error;
         });
@@ -290,13 +291,9 @@ describe('executeCalculator', () => {
       });
 
       // Act & Assert
-      try {
-        executeCalculator(mockCalculator, {}, CalculatorNames.Beef);
-        fail('Expected function to throw');
-      } catch (error: any) {
-        expect(error).toBe(originalError);
-        expect(error.message).toBe('Original error message');
-      }
+      expect(() =>
+        executeCalculator(mockCalculator, {}, CalculatorNames.Beef),
+      ).toThrow(originalError);
 
       expect(mockTrackCalculatorExecution).toHaveBeenCalledWith(
         CalculatorNames.Beef,
@@ -357,8 +354,14 @@ describe('executeCalculator', () => {
 
     it('should handle loadConstants returning different values', () => {
       // Arrange
-      const constants1 = { version: '1.0', apiKey: 'key1' } as any;
-      const constants2 = { version: '2.0', apiKey: 'key2' } as any;
+      const constants1 = {
+        version: '1.0',
+        apiKey: 'key1',
+      } as unknown as Constants;
+      const constants2 = {
+        version: '2.0',
+        apiKey: 'key2',
+      } as unknown as Constants;
       const mockCalculator = jest.fn().mockReturnValue({});
 
       mockLoadOverrideConstants
@@ -461,14 +464,10 @@ describe('executeCalculator', () => {
 
       // Act & Assert
       expect(() =>
-        executeCalculator(mockCalculator, null as any, CalculatorNames.Beef),
+        executeCalculator(mockCalculator, null, CalculatorNames.Beef),
       ).not.toThrow();
       expect(() =>
-        executeCalculator(
-          mockCalculator,
-          undefined as any,
-          CalculatorNames.Beef,
-        ),
+        executeCalculator(mockCalculator, undefined, CalculatorNames.Beef),
       ).not.toThrow();
 
       expect(mockTrackCalculatorExecution).toHaveBeenCalledTimes(2);
@@ -477,7 +476,7 @@ describe('executeCalculator', () => {
     it('should handle calculator that modifies input', () => {
       // Arrange
       const input = { value: 1 };
-      const mockCalculator = jest.fn().mockImplementation((input, context) => {
+      const mockCalculator = jest.fn().mockImplementation((input, _context) => {
         input.value = 2; // Modify input
         return { result: input.value };
       });

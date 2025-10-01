@@ -2,6 +2,7 @@ import alias from '@rollup/plugin-alias';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 import typescript from '@rollup/plugin-typescript';
 import { readFileSync } from 'fs';
 import { glob } from 'glob';
@@ -31,6 +32,10 @@ export default defineConfig([
       entryFileNames: '[name].mjs',
     },
     plugins: [
+      replace({
+        PACKAGE_VERSION: JSON.stringify(packageJson.version),
+        preventAssignment: true,
+      }),
       alias({
         entries: [
           { find: '@', replacement: resolve(__dirname, 'src') }
@@ -82,6 +87,10 @@ export default defineConfig([
       exports: 'auto',
     },
     plugins: [
+      replace({
+        PACKAGE_VERSION: JSON.stringify(packageJson.version),
+        preventAssignment: true,
+      }),
       alias({
         entries: [
           { find: '@', replacement: resolve(__dirname, 'src') }

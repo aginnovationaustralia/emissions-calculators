@@ -1,4 +1,4 @@
-import { TypeHelpOptions, TypeOptions, Type } from 'class-transformer';
+import { Type, TypeHelpOptions, TypeOptions } from 'class-transformer';
 import { IsNumber } from 'class-validator';
 import { JSONSchema } from 'class-validator-jsonschema';
 
@@ -36,14 +36,14 @@ export const DeprecatedSchemaDescription = (
  * overwritten schema refs.
  */
 export function TypeWithArraySchema(
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   typeFunction?: (type?: TypeHelpOptions) => Function,
   description?: string,
   options?: TypeOptions,
 ) {
   const descriptionObj = description ? { description } : {};
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   return (target: object | Function, key?: string) => {
     if (typeFunction !== undefined) {
       JSONSchema({

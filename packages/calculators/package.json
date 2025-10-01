@@ -12,7 +12,7 @@
     "dev": "rollup -c --watch",
     "clean": "rm -rf dist",
     "check:types": "tsc --noEmit",
-    "lint": "pnpm run check:types",
+    "lint": "eslint . && pnpm run check:types",
     "test": "jest",
     "version": "npm version --no-git-tag-version",
     "build:docs": "tsx scripts/build-docs/index.ts"
@@ -28,6 +28,7 @@
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-replace": "^6.0.2",
     "@rollup/plugin-typescript": "^12.1.4",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.3.1",
