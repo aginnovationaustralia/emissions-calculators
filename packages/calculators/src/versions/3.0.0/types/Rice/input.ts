@@ -6,6 +6,8 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
+import { SchemaObject } from 'openapi3-ts/oas31';
 import 'reflect-metadata';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { DESCRIPTIONS } from '../descriptions.schema';
@@ -42,3 +44,5 @@ export class RiceInput {
   @IsDefined()
   vegetation!: RiceVegetation[];
 }
+
+export const schemaRiceInput: SchemaObject = validationMetadatasToSchemas();

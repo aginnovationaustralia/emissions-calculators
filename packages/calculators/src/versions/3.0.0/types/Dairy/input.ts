@@ -1,4 +1,7 @@
 import { IsBoolean, IsDefined, IsEnum, ValidateNested } from 'class-validator';
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
+import { SchemaObject } from 'openapi3-ts/oas31';
+import 'reflect-metadata';
 import { TransformSingleOrArray } from '../../common/tools';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { DESCRIPTIONS } from '../descriptions.schema';
@@ -39,3 +42,5 @@ export class DairyInput {
   @IsDefined()
   vegetation!: DairyVegetation[];
 }
+
+export const schemaDairyInput: SchemaObject = validationMetadatasToSchemas();

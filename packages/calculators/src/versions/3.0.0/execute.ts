@@ -1,13 +1,13 @@
-import { loadConstants } from './constants/constantsLoader';
+import { loadOverrideConstants } from './constants/constantsLoader';
 import { ExecutionContext } from './executionContext';
 import { trackCalculatorExecution } from './metrics';
-import { CalculatorName } from './strings';
+import { CalculatorNames } from './strings';
 
 function contextFor(calculator: string, version: string) {
   return {
     calculator,
     version,
-    constants: loadConstants(),
+    constants: loadOverrideConstants(),
     timestamp: new Date().toISOString(),
   };
 }
@@ -15,7 +15,7 @@ function contextFor(calculator: string, version: string) {
 export function executeCalculator<Input extends object, Output extends object>(
   calculator: (input: Input, context: ExecutionContext) => Output,
   input: Input,
-  calculatorName: CalculatorName,
+  calculatorName: CalculatorNames,
 ): Output {
   const calculatorVersion = '3.0.0';
   const context = contextFor(calculatorName, calculatorVersion);

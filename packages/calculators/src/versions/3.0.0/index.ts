@@ -1,6 +1,6 @@
-import { constants } from './constants/constant_values';
-import { loadConstants } from './constants/constantsLoader';
-export * from './calculators';
-export { CalculatorName } from './strings';
+import * as Calculators from './calculators';
+import * as Constants from './constants';
+import * as Types from './types';
+export { CalculatorNames } from './strings';
 
-export { constants, loadConstants };
+export { Calculators, Constants, Types };

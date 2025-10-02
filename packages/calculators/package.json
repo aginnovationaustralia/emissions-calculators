@@ -1,54 +1,15 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "0.1.4",
-  "type": "module",
-  "main": "dist/versions/3.0.0/calculators.cjs",
-  "module": "dist/versions/3.0.0/calculators.mjs",
-  "types": "dist/versions/3.0.0/calculators.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/versions/3.0.0/calculators.d.ts",
-      "import": "./dist/versions/3.0.0/calculators.mjs",
-      "require": "./dist/versions/3.0.0/calculators.cjs"
-    },
-    "./versions/*": {
-      "types": "./dist/versions/*",
-      "import": "./dist/versions/*",
-      "require": "./dist/versions/*"
-    },
-    "./*": {
-      "types": "./dist/versions/3.0.0/*",
-      "import": "./dist/versions/3.0.0/*",
-      "require": "./dist/versions/3.0.0/*"
-    },
-    "./calculators": {
-      "types": "./dist/versions/3.0.0/calculators.d.ts",
-      "import": "./dist/versions/3.0.0/calculators.mjs",
-      "require": "./dist/versions/3.0.0/calculators.cjs"
-    },
-    "./versions/3.0.0/calculators": {
-      "types": "./dist/versions/3.0.0/calculators.d.ts",
-      "import": "./dist/versions/3.0.0/calculators.mjs",
-      "require": "./dist/versions/3.0.0/calculators.cjs"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "versions/*": [
-        "dist/versions/*"
-      ],
-      "*": [
-        "dist/versions/3.0.0/*"
-      ]
-    }
-  },
+  "version": "0.1.6",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],
   "scripts": {
-    "build": "vite build",
-    "dev": "vite build --watch",
-    "preview": "vite preview",
+    "build": "rollup -c",
+    "dev": "rollup -c --watch",
     "clean": "rm -rf dist",
     "check:types": "tsc --noEmit",
     "lint": "pnpm run check:types",
@@ -63,24 +24,33 @@
     "node": ">=22.19.0"
   },
   "devDependencies": {
+    "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "^12.1.4",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.3.1",
     "@typescript-eslint/parser": "^8.44.0",
+    "glob": "^11.0.3",
     "jest": "^30.1.3",
     "nanoclone": "^1.0.2",
-    "ts-jest": "^29.4.1",
+    "rollup": "^4.51.0",
+    "rollup-plugin-copy": "^3.5.0",
+    "ts-jest": "^29.4.4",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2",
-    "vite": "^7.1.5",
-    "vite-plugin-dts": "^4.5.4"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "class-validator-jsonschema": "^5.1.0",
     "mixpanel": "^0.18.1",
+    "openapi3-ts": "^4.5.0",
+    "reflect-metadata": "^0.2.2",
     "semver": "^7.7.2",
     "ts-deepmerge": "^7.0.3",
+    "tslib": "^2.8.1",
     "type-fest": "^4.41.0"
   }
 }
