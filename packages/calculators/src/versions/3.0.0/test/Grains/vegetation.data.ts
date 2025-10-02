@@ -1,4 +1,4 @@
-import { CropVegetation } from '../../types/Grains/vegetation.input';
+import { CropVegetation } from '../../types/common/crop-vegetation.input';
 
 export const veg1: CropVegetation = {
   vegetation: {
