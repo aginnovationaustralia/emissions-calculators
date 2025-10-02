@@ -12,10 +12,6 @@ All work on this project takes place on [GitHub](/). Both core maintainers and e
 
 Hosting this work as an open source project allows transparency into the implementation of the tools, and collaboration on development and improvements. All contributions will need to follow the process outlined here. The primary role of this project is to offer an open source implementation of the reference calculations. Core maintainers will need to ensure that all changes remain consistent with that goal.
 
-## Versioning
-
-The project has very strict requirements on how we follow semantic versioning of packages.
-
 ### Workflow and Pull Requests
 
 _Before_ submitting a pull request, please make sure the following is done.

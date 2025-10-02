@@ -12,7 +12,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@aginnovationaustralia/emissions-calculators": "0.1.6"
+    "@aginnovationaustralia/emissions-calculators": "file:../../packages/calculators"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
