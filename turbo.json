@@ -5,12 +5,14 @@
       "outputs": ["dist/**"],
       "dependsOn": ["^build"]
     },
-    "test": {
-    },
+    "test": {},
     "lint": {},
     "check:types": {},
     "clean": {
       "cache": false
+    },
+    "examples/ts-client#build": {
+      "dependsOn": ["@aginnovationaustralia/emissions-calculators#build"]
     }
   }
 }
