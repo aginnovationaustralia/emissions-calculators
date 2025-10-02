@@ -1,5 +1,5 @@
 {
-  "name": "emissions-calculators-ts-client",
+  "name": "examples-ts-client",
   "version": "1.0.0",
   "description": "TypeScript client example for @aginnovationaustralia/emissions-calculators",
   "main": "dist/index.js",

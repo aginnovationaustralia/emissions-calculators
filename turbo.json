@@ -11,7 +11,7 @@
     "clean": {
       "cache": false
     },
-    "examples/ts-client#build": {
+    "examples-ts-client#build": {
       "dependsOn": ["@aginnovationaustralia/emissions-calculators#build"]
     }
   }
