@@ -8,8 +8,8 @@
     "lint": "turbo lint",
     "clean": "turbo clean",
     "publish:dry": "pnpm build && pnpm -r publish --filter=@aginnovationaustralia/emissions-calculators --no-git-checks --access private --dry-run",
-		"publish:packages": "pnpm clean && pnpm build && pnpm -r publish --filter=@aginnovationaustralia/emissions-calculators --no-git-checks --access private --force",
-		"version:bump": "pnpm -r version"
+    "publish:packages": "pnpm clean && pnpm build && pnpm -r publish --filter=@aginnovationaustralia/emissions-calculators --no-git-checks --access private --force",
+    "version:bump": "pnpm -r version"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,8 @@
     "node": ">=22.19.0"
   },
   "devDependencies": {
-    "turbo": "^2.5.6"
+    "eslint-plugin-jest": "^29.0.1",
+    "turbo": "^2.5.6",
+    "typescript-eslint": "^8.45.0"
   }
 }
