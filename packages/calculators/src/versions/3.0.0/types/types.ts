@@ -562,7 +562,6 @@ export const Refrigerants = [
   'R-11',
   'R-12',
   'R-13',
-  'R-22',
   'R-23',
   'R-32',
   'R-113',
