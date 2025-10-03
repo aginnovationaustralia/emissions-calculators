@@ -12,7 +12,7 @@ export function trackCalculatorExecution(
       calculatorVersion,
       packageVersion: CalculatorConfig.packageVersion(),
       failed,
-      organisation: CalculatorConfig.getOrganisation(),
+      organisation: CalculatorConfig.organisation(),
     });
   }
 }

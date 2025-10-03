@@ -4,7 +4,7 @@ import { CalculationEnvironment, ConstantOverrides } from './environment';
 declare const PACKAGE_VERSION: string;
 
 export class CalculatorConfig {
-  static getOrganisation(): string | undefined {
+  static organisation(): string | undefined {
     return (
       CalculationEnvironment.getOrganisation() ??
       process.env.CALCULATOR_METRICS_ORGANISATION

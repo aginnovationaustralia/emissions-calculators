@@ -33,7 +33,7 @@ describe('CalculatorConfig', () => {
         'test-organisation',
       );
 
-      const result = CalculatorConfig.getOrganisation();
+      const result = CalculatorConfig.organisation();
 
       expect(result).toBe('test-organisation');
       expect(mockCalculationEnvironment.getOrganisation).toHaveBeenCalled();
@@ -43,7 +43,7 @@ describe('CalculatorConfig', () => {
       mockCalculationEnvironment.getOrganisation.mockReturnValue(undefined);
       process.env.CALCULATOR_METRICS_ORGANISATION = 'env-organisation';
 
-      const result = CalculatorConfig.getOrganisation();
+      const result = CalculatorConfig.organisation();
 
       expect(result).toBe('env-organisation');
       expect(mockCalculationEnvironment.getOrganisation).toHaveBeenCalled();
@@ -53,7 +53,7 @@ describe('CalculatorConfig', () => {
       mockCalculationEnvironment.getOrganisation.mockReturnValue(undefined);
       delete process.env.CALCULATOR_METRICS_ORGANISATION;
 
-      const result = CalculatorConfig.getOrganisation();
+      const result = CalculatorConfig.organisation();
 
       expect(result).toBeUndefined();
     });
@@ -64,7 +64,7 @@ describe('CalculatorConfig', () => {
       );
       process.env.CALCULATOR_METRICS_ORGANISATION = 'env-var-org';
 
-      const result = CalculatorConfig.getOrganisation();
+      const result = CalculatorConfig.organisation();
 
       expect(result).toBe('calc-env-org');
     });
