@@ -1,6 +1,6 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -15,7 +15,8 @@
     "lint": "eslint . && pnpm run check:types",
     "test": "jest",
     "version": "npm version --no-git-tag-version",
-    "build:docs": "tsx scripts/build-docs/index.ts"
+    "build:docs": "tsx scripts/build-docs/index.ts",
+    "generate:exports": "tsx scripts/generate-exports.ts"
   },
   "author": "Agricultural Innovation Australia",
   "license": "ISC",
