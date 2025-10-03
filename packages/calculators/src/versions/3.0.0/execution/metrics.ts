@@ -10,8 +10,8 @@ export function trackCalculatorExecution(
     mixPanelinstance?.track('Execute package calculation', {
       calculator,
       calculatorVersion,
-      packageVersion: CalculatorConfig.packageVersion(),
       failed,
+      packageVersion: CalculatorConfig.packageVersion(),
       organisation: CalculatorConfig.organisation(),
     });
   }
