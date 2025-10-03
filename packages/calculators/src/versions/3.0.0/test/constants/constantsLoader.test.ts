@@ -4,8 +4,8 @@ import {
   loadConstants,
   loadOverrideConstants,
 } from '../../constants/constantsLoader';
-import { ConstantsContext } from '../../constants/context';
 import { STATES } from '../../constants/versionedConstants';
+import { CalculationEnvironment } from '../../execution/environment';
 
 describe('constantsLoader', () => {
   describe('loadConstants', () => {
@@ -26,7 +26,10 @@ describe('constantsLoader', () => {
         },
       };
       const defaultConstants = loadConstants();
-      const overriddenConstants = ConstantsContext.run(overrides, () => loadOverrideConstants());
+      const overriddenConstants = CalculationEnvironment.run(
+        { overrides },
+        () => loadOverrideConstants(),
+      );
       expect(
         overriddenConstants.BEEF_DRYMATTERDIGESTIBILITY.spring.vic,
       ).toEqual(90);

@@ -1,6 +1,6 @@
 import { loadOverrideConstants } from './constants/constantsLoader';
+import { trackCalculatorExecution } from './execution/metrics';
 import { ExecutionContext } from './executionContext';
-import { trackCalculatorExecution } from './metrics';
 import { CalculatorNames } from './strings';
 
 function contextFor(calculator: string, version: string) {

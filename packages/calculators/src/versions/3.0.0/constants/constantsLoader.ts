@@ -1,7 +1,6 @@
-/* eslint-disable camelcase */
 import { merge } from 'ts-deepmerge';
+import { CalculatorConfig } from '../execution/config';
 import { constants } from './constant_values';
-import { ConstantsContext } from './context';
 import { Constants } from './versionedConstants';
 
 export function loadConstants(): Constants {
@@ -9,6 +8,6 @@ export function loadConstants(): Constants {
 }
 
 export function loadOverrideConstants(): Constants {
-  const overrides = ConstantsContext.getOverrides();
+  const overrides = CalculatorConfig.overrides();
   return merge<Constants[]>(loadConstants(), overrides as Constants);
 }
