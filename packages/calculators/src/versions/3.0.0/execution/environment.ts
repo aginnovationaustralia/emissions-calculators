@@ -24,10 +24,7 @@ class CalculationEnvironment {
   }
 
   static getOrganisation(): string | undefined {
-    return (
-      this.storage.getStore()?.organisation ??
-      process.env.CALCULATOR_METRICS_ORGANISATION
-    );
+    return this.storage.getStore()?.organisation;
   }
 }
 
