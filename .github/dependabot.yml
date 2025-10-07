@@ -11,8 +11,6 @@ updates:
   - package-ecosystem: npm
     directories:
       - '/'
-      - '/packages/*'
-      - '/examples/*'
     schedule:
       interval: daily
       time: '03:00'
