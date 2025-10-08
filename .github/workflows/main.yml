@@ -2,7 +2,7 @@ name: Main Branch CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -14,3 +14,18 @@ jobs:
 
       - name: Build and Test
         uses: ./.github/actions/build-and-test
+
+  code-scans:
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Snyk scan
+        uses: ./.github/actions/snyk
