@@ -24,5 +24,8 @@ jobs:
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
       - name: Snyk scan
         uses: ./.github/actions/snyk
