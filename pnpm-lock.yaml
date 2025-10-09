@@ -21,7 +21,7 @@ importers:
   examples/ts-client:
     dependencies:
       '@aginnovationaustralia/emissions-calculators':
-        specifier: file:../../packages/calculators
+        specifier: workspace:*
         version: link:../../packages/calculators
     devDependencies:
       '@types/node':
