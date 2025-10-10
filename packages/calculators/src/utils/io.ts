@@ -10,16 +10,6 @@ export type ValidationErrorResult = {
   message: string;
 
   /**
-   * Property key name.
-   */
-  property: string;
-
-  /**
-   * Name of constraint.
-   */
-  constraint: string;
-
-  /**
    * Input/current value.
    */
   value: unknown;
