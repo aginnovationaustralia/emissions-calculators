@@ -48,5 +48,5 @@ export class GoatOutput {
   @IsDefined()
   intermediate!: GoatIntermediateOutput[];
 }
-
 export const schemaGoatOutput: SchemaObject = validationMetadatasToSchemas();
+

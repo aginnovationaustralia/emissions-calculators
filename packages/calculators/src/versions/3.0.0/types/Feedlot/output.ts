@@ -48,5 +48,5 @@ export class FeedlotOutput {
   @IsDefined()
   intensities!: FeedlotEmissionIntensities;
 }
-
 export const schemaFeedlotOutput: SchemaObject = validationMetadatasToSchemas();
+

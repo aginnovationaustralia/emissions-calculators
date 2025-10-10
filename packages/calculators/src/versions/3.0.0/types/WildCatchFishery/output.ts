@@ -1,7 +1,5 @@
 import { Type } from 'class-transformer';
 import { IsDefined, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
 import { NetOutput } from '../common/net.output';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
 import { PurchasedOffsetsOutput } from '../purchasedOffsets.output';
@@ -57,5 +55,3 @@ export class WildCatchFisheryOutput {
   @IsDefined()
   intermediate!: WildCatchFisheryIntermediateOutput[];
 }
-
-export const schemaWildCatchFisheryOutput: SchemaObject = validationMetadatasToSchemas();

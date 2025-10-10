@@ -53,6 +53,6 @@ export class HorticultureOutput {
   @IsDefined()
   intensities!: HorticultureIntensitiesOutput[];
 }
-
 export const schemaHorticultureOutput: SchemaObject =
   validationMetadatasToSchemas();
+

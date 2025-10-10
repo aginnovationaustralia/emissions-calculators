@@ -25,5 +25,5 @@ export class FeedlotInput {
   @IsDefined()
   vegetation!: FeedlotVegetation[];
 }
-
 export const schemaFeedlotInput: SchemaObject = validationMetadatasToSchemas();
+

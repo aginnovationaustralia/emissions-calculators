@@ -49,5 +49,5 @@ export class DairyOutput {
   @IsDefined()
   intermediate!: DairyIntermediateOutput[];
 }
-
 export const schemaDairyOutput: SchemaObject = validationMetadatasToSchemas();
+

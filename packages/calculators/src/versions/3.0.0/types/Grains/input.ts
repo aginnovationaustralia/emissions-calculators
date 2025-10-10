@@ -6,8 +6,6 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
 import 'reflect-metadata';
 import { CropVegetation } from '../common/crop-vegetation.input';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
@@ -44,5 +42,3 @@ export class GrainsInput {
   @IsDefined()
   vegetation!: CropVegetation[];
 }
-
-export const schemaGrainsInput: SchemaObject = validationMetadatasToSchemas();

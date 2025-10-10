@@ -49,5 +49,5 @@ export class DeerOutput {
   @IsDefined()
   intermediate!: DeerIntermediateOutput[];
 }
-
 export const schemaDeerOutput: SchemaObject = validationMetadatasToSchemas();
+

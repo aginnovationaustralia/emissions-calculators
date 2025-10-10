@@ -40,5 +40,5 @@ export class PorkInput {
   @IsDefined()
   vegetation!: AllocatedVegetation[];
 }
-
 export const schemaPorkInput: SchemaObject = validationMetadatasToSchemas();
+

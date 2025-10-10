@@ -62,6 +62,6 @@ export class SheepBeefOutput {
   @IsDefined()
   intensities!: SheepBeefEmissionsIntensities;
 }
-
 export const schemaSheepBeefOutput: SchemaObject =
   validationMetadatasToSchemas();
+

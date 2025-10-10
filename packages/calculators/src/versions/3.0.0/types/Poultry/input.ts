@@ -43,5 +43,5 @@ export class PoultryInput {
   @IsDefined()
   vegetation!: PoultryVegetation[];
 }
-
 export const schemaPoultryInput: SchemaObject = validationMetadatasToSchemas();
+

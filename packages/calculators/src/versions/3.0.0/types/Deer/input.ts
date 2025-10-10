@@ -58,5 +58,5 @@ export class DeerInput {
   @IsOptional()
   vegetation: DeerVegetation[] = [];
 }
-
 export const schemaDeerInput: SchemaObject = validationMetadatasToSchemas();
+

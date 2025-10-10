@@ -21,6 +21,6 @@ export class ProcessingInput {
   @IsDefined()
   products!: ProductProcessingInput[];
 }
-
 export const schemaProcessingInput: SchemaObject =
   validationMetadatasToSchemas();
+

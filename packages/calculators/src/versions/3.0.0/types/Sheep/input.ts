@@ -36,5 +36,5 @@ export class SheepInput {
   @IsDefined()
   vegetation!: SheepVegetation[];
 }
-
 export const schemaSheepInput: SchemaObject = validationMetadatasToSchemas();
+

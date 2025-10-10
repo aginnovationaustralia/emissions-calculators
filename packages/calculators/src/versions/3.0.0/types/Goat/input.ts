@@ -57,5 +57,5 @@ export class GoatInput {
   @IsOptional()
   vegetation: GoatVegetation[] = [];
 }
-
 export const schemaGoatInput: SchemaObject = validationMetadatasToSchemas();
+

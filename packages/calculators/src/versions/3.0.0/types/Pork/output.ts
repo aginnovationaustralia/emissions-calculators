@@ -48,5 +48,5 @@ export class PorkOutput {
   @IsDefined()
   intermediate!: PorkIntermediateOutput[];
 }
-
 export const schemaPorkOutput: SchemaObject = validationMetadatasToSchemas();
+

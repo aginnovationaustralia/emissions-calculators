@@ -54,5 +54,5 @@ export class PoultryOutput {
   @IsDefined()
   intensities!: PoultryEmissionsIntensities;
 }
-
 export const schemaPoultryOutput: SchemaObject = validationMetadatasToSchemas();
+

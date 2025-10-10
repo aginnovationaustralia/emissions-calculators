@@ -44,6 +44,6 @@ export class HorticultureInput {
   @IsDefined()
   vegetation!: HorticultureVegetation[];
 }
-
 export const schemaHorticultureInput: SchemaObject =
   validationMetadatasToSchemas();
+

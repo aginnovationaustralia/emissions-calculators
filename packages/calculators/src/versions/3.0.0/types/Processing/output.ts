@@ -56,6 +56,6 @@ export class ProcessingOutput {
   @IsDefined()
   intermediate!: ProcessingIntermediateOutput[];
 }
-
 export const schemaProcessingOutput: SchemaObject =
   validationMetadatasToSchemas();
+

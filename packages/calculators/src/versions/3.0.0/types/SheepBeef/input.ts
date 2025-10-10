@@ -56,6 +56,6 @@ export class SheepBeefInput {
   @IsOptional()
   vegetation: SheepBeefVegetation[] = [];
 }
-
 export const schemaSheepBeefInput: SchemaObject =
   validationMetadatasToSchemas();
+

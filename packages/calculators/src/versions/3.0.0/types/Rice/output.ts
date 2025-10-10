@@ -49,5 +49,5 @@ export class RiceOutput {
   @IsDefined()
   intensities!: RiceEmissionsIntensities;
 }
-
 export const schemaRiceOutput: SchemaObject = validationMetadatasToSchemas();
+

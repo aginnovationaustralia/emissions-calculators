@@ -6,8 +6,6 @@ import {
   IsOptional,
   ValidateNested,
 } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
 import 'reflect-metadata';
 import { TransformSingleOrArray } from '../../common/tools';
 import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
@@ -58,5 +56,3 @@ export class BuffaloInput {
   @IsOptional()
   vegetation: BuffaloVegetation[] = [];
 }
-
-export const schemaBuffaloInput: SchemaObject = validationMetadatasToSchemas();
