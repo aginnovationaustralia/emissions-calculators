@@ -3,6 +3,21 @@ description: Scan action for Node using Snyk
 runs:
   using: 'composite'
   steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9.15.4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      run: pnpm install
+      shell: bash
+
     - name: Run Snyk to check for vulnerabilities
       uses: snyk/actions/node@master
       continue-on-error: true # To make sure that SARIF upload gets called
@@ -10,6 +25,7 @@ runs:
         SNYK_TOKEN: ${{ env.SNYK_TOKEN }}
       with:
         args: --sarif-file-output=snyk.sarif --all-projects
+
     - name: Upload result to GitHub Code Scanning
       uses: github/codeql-action/upload-sarif@v3
       with:
