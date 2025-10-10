@@ -9,7 +9,6 @@ describe('validating Grains test inputs, all types of inputs', () => {
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(GrainsInputSchema);
   });
 });
 

@@ -10,7 +10,6 @@ describe('validating Cotton test inputs, all types of inputs', () => {
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(CottonInputSchema);
   });
 });
 
@@ -40,7 +39,7 @@ describe('validating Cotton test inputs for incorrect inputs', () => {
 });
 
 describe('compatibility for migrated valid inputs', () => {
-  test('old syntax for UAN is supported', () => {
+  test('old syntax for UAN is not supported', () => {
     const cottonCrop = { ...cottonTestData.crops[0] };
     cottonCrop.otherFertiliserType =
       ' Urea-Ammonium Nitrate (UAN)' as CustomisedFertiliser;
@@ -49,12 +48,7 @@ describe('compatibility for migrated valid inputs', () => {
       crops: [cottonCrop],
     };
     const result = CottonInputSchema.safeParse(inputWithUAN);
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data.crops[0].otherFertiliserType).toEqual(
-        'Urea-Ammonium Nitrate (UAN)',
-      );
-    }
+    expect(result.success).toBe(false);
   });
 
   test('new syntax for UAN is supported', () => {

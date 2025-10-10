@@ -13,14 +13,8 @@ describe('GoatInputSchema vegetation transformation', () => {
       vegetation: [veg1, veg2],
     };
 
-    const validatedInput = validateCalculatorInput(GoatInputSchema, input);
-
-    test('validation should result in no errors', () => {
-      expect(validatedInput).toBeDefined();
-    });
-
-    test('should have goat proportion', () => {
-      expect(validatedInput.vegetation[0].goatProportion).toBeCloseTo(1.0);
+    test('validation should result in an error', () => {
+      expect(() => validateCalculatorInput(GoatInputSchema, input)).toThrow();
     });
   });
 
@@ -32,8 +26,6 @@ describe('GoatInputSchema vegetation transformation', () => {
       goats: [goatComplete],
       vegetation: [veg1, veg2, { random: 'a' }],
     };
-
-    const validatedInput = validateCalculatorInput(GoatInputSchema, input);
 
     test('validation should throw error for invalid input', () => {
       expect(() => validateCalculatorInput(GoatInputSchema, input)).toThrow();

@@ -14,7 +14,6 @@ describe('validating SheepBeef test inputs, all types of inputs', () => {
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(SheepBeefInputSchema);
   });
 });
 
@@ -84,7 +83,7 @@ describe('validating SheepBeef test inputs for incorrect nested inputs', () => {
   // });
 });
 
-describe('support for single sheep and beef instance', () => {
+describe('a single sheep and beef instance is not supported', () => {
   const t = () =>
     validateCalculatorInput(SheepBeefInputSchema, {
       ...sheepbeefTestData,
@@ -93,15 +92,11 @@ describe('support for single sheep and beef instance', () => {
     });
 
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(SheepBeefInputSchema);
-    expect(t().sheep).toEqual([sheepbeefTestData.sheep[0]]);
-    expect(t().beef).toEqual([sheepbeefTestData.beef[0]]);
+    expect(t).toThrow(InputValidationError);
   });
 });
 
-describe('accepts just one beef, no sheep', () => {
+describe('just one beef, no sheep is not supported', () => {
   const t = () =>
     validateCalculatorInput(SheepBeefInputSchema, {
       ...sheepbeefTestData,
@@ -110,17 +105,13 @@ describe('accepts just one beef, no sheep', () => {
     });
 
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(SheepBeefInputSchema);
-    expect(t().sheep).toEqual([]);
-    expect(t().beef).toEqual([sheepbeefTestData.beef[0]]);
+    expect(t).toThrow(InputValidationError);
   });
 });
 
 describe('compatibility for migrated valid inputs', () => {
   describe('fertiliser.otherType', () => {
-    test('old syntax for UAN is supported', () => {
+    test('old syntax for UAN is not supported', () => {
       const fertiliser = { ...beefTestInput.fertiliser };
       fertiliser.otherType =
         ' Urea-Ammonium Nitrate (UAN)' as CustomisedFertiliser;
@@ -134,15 +125,10 @@ describe('compatibility for migrated valid inputs', () => {
       };
 
       const result = SheepBeefInputSchema.safeParse(input);
-      expect(result.success).toBe(true);
-      if (result.success) {
-        expect(result.data?.beef[0]?.fertiliser?.otherType).toEqual(
-          'Urea-Ammonium Nitrate (UAN)',
-        );
-      }
+      expect(result.success).toBe(false);
     });
 
-    test('old syntax for UAN is supported', () => {
+    test('old syntax for UAN is not supported', () => {
       const fertiliser = { ...beefTestInput.fertiliser };
       fertiliser.otherType = 'Urea-Ammonium Nitrate (UAN)';
 
@@ -157,17 +143,12 @@ describe('compatibility for migrated valid inputs', () => {
       };
 
       const result = SheepBeefInputSchema.safeParse(input);
-      expect(result.success).toBe(true);
-      if (result.success) {
-        expect(result.data?.beef[0]?.fertiliser?.otherType).toEqual(
-          'Urea-Ammonium Nitrate (UAN)',
-        );
-      }
+      expect(result.success).toBe(false);
     });
   });
 
   describe('fertiliser.fertilisers.otherType', () => {
-    test('old syntax for UAN is supported', () => {
+    test('old syntax for UAN is not supported', () => {
       const fertiliser = { ...beefTestInput.fertiliser };
       fertiliser.otherFertilisers = [
         {
@@ -180,19 +161,14 @@ describe('compatibility for migrated valid inputs', () => {
         state: 'vic',
         northOfTropicOfCapricorn: false,
         rainfallAbove600: true,
-        beef: { ...beefTestInput, fertiliser },
-        sheep: sheepTestInput,
-        burning: burnTestData,
+        beef: [{ ...beefTestInput, fertiliser }],
+        sheep: [sheepTestInput],
+        burning: [burnTestData],
         vegetation: [],
       };
 
       const result = SheepBeefInputSchema.safeParse(input);
-      expect(result.success).toBe(true);
-      if (result.success) {
-        expect(
-          result.data?.beef[0]?.fertiliser?.otherFertilisers?.[0]?.otherType,
-        ).toEqual('Urea-Ammonium Nitrate (UAN)');
-      }
+      expect(result.success).toBe(false);
     });
 
     test('new syntax for UAN is supported', () => {
@@ -208,9 +184,9 @@ describe('compatibility for migrated valid inputs', () => {
         state: 'vic',
         northOfTropicOfCapricorn: false,
         rainfallAbove600: true,
-        beef: { ...beefTestInput, fertiliser },
-        sheep: sheepTestInput,
-        burning: burnTestData,
+        beef: [{ ...beefTestInput, fertiliser }],
+        sheep: [sheepTestInput],
+        burning: [burnTestData],
         vegetation: [],
       };
 

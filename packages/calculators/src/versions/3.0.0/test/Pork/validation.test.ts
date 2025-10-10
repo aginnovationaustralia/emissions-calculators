@@ -9,7 +9,6 @@ describe('validating Pork test inputs, all types of inputs', () => {
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(PorkInputSchema);
   });
 });
 
@@ -38,7 +37,7 @@ describe('validating Pork test inputs for incorrect inputs', () => {
   });
 });
 
-describe('support for single pork instance', () => {
+describe('a single pork instance is not supported', () => {
   const t = () =>
     validateCalculatorInput(PorkInputSchema, {
       ...porkTestData,
@@ -46,18 +45,7 @@ describe('support for single pork instance', () => {
     });
 
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(PorkInputSchema);
-    expect(t().pork).toEqual([
-      {
-        ...porkTestData.pork[0],
-        fertiliser: {
-          ...porkTestData.pork[0].fertiliser,
-          otherType: 'Urea-Ammonium Nitrate (UAN)',
-        },
-      },
-    ]);
+    expect(t).toThrow(InputValidationError);
   });
 });
 

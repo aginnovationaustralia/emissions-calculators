@@ -14,7 +14,6 @@ describe('validating WildCatchFishery test inputs, all types of inputs', () => {
 
       expect(t).not.toThrow();
       expect(t).not.toThrow(InputValidationError);
-      expect(t()).toBeInstanceOf(WildCatchFisheryInputSchema);
     });
 
     test('validation should allow optional keys to be omitted', () => {

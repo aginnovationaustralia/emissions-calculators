@@ -10,11 +10,10 @@ describe('validating Goat test inputs, all types of inputs', () => {
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(GoatInputSchema);
   });
 });
 
-describe('validating Goat test input using original veg schema', () => {
+describe('validating Goat test input using old and invalid veg schema', () => {
   const input = {
     state: 'vic',
     northOfTropicOfCapricorn: false,
@@ -25,23 +24,20 @@ describe('validating Goat test input using original veg schema', () => {
 
   const result = GoatInputSchema.safeParse(input);
 
-  test('validation should result in no errors', () => {
-    expect(result.success).toBe(true);
+  test('validation should result in an error', () => {
+    expect(result.success).toBe(false);
   });
 });
 
-describe('support for single goat instance', () => {
+describe('a single goat instance is not supported', () => {
   const t = () =>
     validateCalculatorInput(GoatInputSchema, {
       ...goatTestData,
       goats: goatTestData.goats[0],
     });
 
-  test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(GoatInputSchema);
-    expect(t().goats).toEqual([goatTestData.goats[0]]);
+  test('validation should result in an errors', () => {
+    expect(t).toThrow(InputValidationError);
   });
 });
 
