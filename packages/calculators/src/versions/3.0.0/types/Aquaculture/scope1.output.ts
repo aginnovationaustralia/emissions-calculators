@@ -1,61 +1,36 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { OUTPUTDESCRIPTIONS } from '../descriptions.schema';
 
-@SchemaDescription(OUTPUTDESCRIPTIONS.scope1)
-export class AquacultureScope1Output {
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.fuelCO2)
-  @IsDefined()
-  fuelCO2!: number;
+export const AquacultureScope1OutputSchema = z
+  .object({
+    fuelCO2: z.number().meta({ description: OUTPUTDESCRIPTIONS.fuelCO2 }),
+    fuelCH4: z.number().meta({ description: OUTPUTDESCRIPTIONS.fuelCH4 }),
+    fuelN2O: z.number().meta({ description: OUTPUTDESCRIPTIONS.fuelN2O }),
+    hfcsRefrigerantLeakage: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.hfcsRefrigerant }),
+    wasteWaterCO2: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.wastewaterCO2 }),
+    compostedSolidWasteCO2: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.compostedSolidWasteCO2 }),
+    totalCO2: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.scope1TotalCO2 }),
+    totalCH4: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.scope1TotalCH4 }),
+    totalN2O: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.scope1TotalN2O }),
+    totalHFCs: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.scope1TotalHFCs }),
+    total: z.number().meta({ description: OUTPUTDESCRIPTIONS.scope1Total }),
+  })
+  .meta({ description: OUTPUTDESCRIPTIONS.scope1 });
 
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.fuelCH4)
-  @IsDefined()
-  fuelCH4!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.fuelN2O)
-  @IsDefined()
-  fuelN2O!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.hfcsRefrigerant)
-  @IsDefined()
-  hfcsRefrigerantLeakage!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.wastewaterCO2)
-  @IsDefined()
-  wasteWaterCO2!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.compostedSolidWasteCO2)
-  @IsDefined()
-  compostedSolidWasteCO2!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.scope1TotalCO2)
-  @IsDefined()
-  totalCO2!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.scope1TotalCH4)
-  @IsDefined()
-  totalCH4!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.scope1TotalN2O)
-  @IsDefined()
-  totalN2O!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.scope1TotalHFCs)
-  @IsDefined()
-  totalHFCs!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.scope1Total)
-  @IsDefined()
-  total!: number;
-}
+export type AquacultureScope1Output = z.infer<
+  typeof AquacultureScope1OutputSchema
+>;

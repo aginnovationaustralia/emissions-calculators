@@ -1,31 +1,21 @@
-import { IsDefined, IsEnum, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FluidWasteTreatmentType } from '../types';
 
-export class FluidWasteInput {
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.FLUID_WASTE)
-  @IsDefined()
-  fluidWasteKl!: number;
+export const FluidWasteInputSchema = z.object({
+  fluidWasteKl: z.number().meta({ description: DESCRIPTIONS.FLUID_WASTE }),
+  fluidWasteTreatmentType: z
+    .nativeEnum(FluidWasteTreatmentType)
+    .meta({ description: DESCRIPTIONS.FLUID_WASTE_TREATMENT_TYPE }),
+  averageInletCOD: z
+    .number()
+    .meta({ description: DESCRIPTIONS.AVERAGE_INLET_COD }),
+  averageOutletCOD: z
+    .number()
+    .meta({ description: DESCRIPTIONS.AVERAGE_OUTLET_COD }),
+  flaredCombustedFraction: z
+    .number()
+    .meta({ description: DESCRIPTIONS.FLARED_COMBUSTED_FRACTION }),
+});
 
-  @IsEnum(FluidWasteTreatmentType)
-  @SchemaDescription(DESCRIPTIONS.FLUID_WASTE_TREATMENT_TYPE)
-  @IsDefined()
-  fluidWasteTreatmentType!: FluidWasteTreatmentType;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.AVERAGE_INLET_COD)
-  @IsDefined()
-  averageInletCOD!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.AVERAGE_OUTLET_COD)
-  @IsDefined()
-  averageOutletCOD!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.FLARED_COMBUSTED_FRACTION)
-  @IsDefined()
-  flaredCombustedFraction!: number;
-}
+export type FluidWasteInput = z.infer<typeof FluidWasteInputSchema>;

@@ -1,16 +1,12 @@
-import { IsDefined, IsEnum, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FreightTypes } from '../types';
 
-export class FreightInput {
-  @IsEnum(FreightTypes)
-  @SchemaDescription(DESCRIPTIONS.FREIGHT_TYPE)
-  @IsDefined()
-  type!: FreightTypes;
+export const FreightInputSchema = z.object({
+  type: z
+    .nativeEnum(FreightTypes)
+    .meta({ description: DESCRIPTIONS.FREIGHT_TYPE }),
+  totalKmTonnes: z.number().meta({ description: DESCRIPTIONS.TOTAL_KM_TONNES }),
+});
 
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.TOTAL_KM_TONNES)
-  @IsDefined()
-  totalKmTonnes!: number;
-}
+export type FreightInput = z.infer<typeof FreightInputSchema>;

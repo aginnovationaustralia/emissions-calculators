@@ -1,121 +1,71 @@
-import { Type } from 'class-transformer';
-import {
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import 'reflect-metadata';
-import { FluidWasteInput } from '../common/fluid-waste.input';
-import { FreightInput } from '../common/freight.input';
-import { SolidWasteInput } from '../common/solid-waste.input';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
+import { FluidWasteInputSchema } from '../common/fluid-waste.input';
+import { FreightInputSchema } from '../common/freight.input';
+import { SolidWasteInputSchema } from '../common/solid-waste.input';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { FuelInput } from '../fuel.input';
-import { RefrigerantInput } from '../refrigerant.input';
+import { FuelInputSchema } from '../fuel.input';
+import { RefrigerantInputSchema } from '../refrigerant.input';
 import {
   AquacultureProductionSystem,
-  ElectricitySource,
   ElectricitySources,
-  State,
   States,
 } from '../types';
-import { AquacultureBaitPurchase } from './baitpurchase.input';
-import { AquacultureCustomBaitPurchase } from './custombaitpurchase.input';
+import { AquacultureBaitPurchaseSchema } from './baitpurchase.input';
+import { AquacultureCustomBaitPurchaseSchema } from './custombaitpurchase.input';
 
-@SchemaDescription('Input data required for a single aquaculture enterprise')
-export class AquacultureEnterpriseInput {
-  @IsString()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  id?: string;
+export const AquacultureEnterpriseInputSchema = z
+  .object({
+    id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    productionSystem: z
+      .nativeEnum(AquacultureProductionSystem)
+      .meta({ description: DESCRIPTIONS.AQUACULTURE_PRODUCTION_SYSTEM }),
+    totalHarvestKg: z.number().meta({ description: 'Total harvest in kg' }),
+    refrigerants: z
+      .array(RefrigerantInputSchema)
+      .meta({ description: DESCRIPTIONS.REFRIGERANT }),
+    bait: z
+      .array(AquacultureBaitPurchaseSchema)
+      .meta({ description: DESCRIPTIONS.AQUACULTURE_BAIT }),
+    customBait: z
+      .array(AquacultureCustomBaitPurchaseSchema)
+      .meta({ description: DESCRIPTIONS.AQUACULTURE_CUSTOM_BAIT }),
+    inboundFreight: z
+      .array(FreightInputSchema)
+      .meta({ description: DESCRIPTIONS.INBOUND_FREIGHT }),
+    outboundFreight: z
+      .array(FreightInputSchema)
+      .meta({ description: DESCRIPTIONS.OUTBOUND_FREIGHT }),
+    totalCommercialFlightsKm: z
+      .number()
+      .meta({ description: DESCRIPTIONS.TOTAL_COMMERCIAL_FLIGHTS_KM }),
+    electricityRenewable: z
+      .number()
+      .min(0)
+      .max(1)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+    electricityUse: z
+      .number()
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
+    electricitySource: z
+      .enum(ElectricitySources)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
+    fuel: FuelInputSchema.meta({ description: DESCRIPTIONS.FUEL }),
+    fluidWaste: z
+      .array(FluidWasteInputSchema)
+      .meta({ description: DESCRIPTIONS.FLUID_WASTE }),
+    solidWaste: SolidWasteInputSchema.meta({
+      description: DESCRIPTIONS.SOLID_WASTE,
+    }),
+    carbonOffsets: z
+      .number()
+      .optional()
+      .meta({ description: DESCRIPTIONS.CARBON_OFFSETS }),
+  })
+  .meta({
+    description: 'Input data required for a single aquaculture enterprise',
+  });
 
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
-
-  @IsEnum(AquacultureProductionSystem)
-  @SchemaDescription(DESCRIPTIONS.AQUACULTURE_PRODUCTION_SYSTEM)
-  @IsDefined()
-  productionSystem!: AquacultureProductionSystem;
-
-  @IsNumber()
-  @SchemaDescription('Total harvest in kg')
-  @IsDefined()
-  totalHarvestKg!: number;
-
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.REFRIGERANT)
-  @IsDefined()
-  refrigerants!: RefrigerantInput[];
-
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.AQUACULTURE_BAIT)
-  @IsDefined()
-  bait!: AquacultureBaitPurchase[];
-
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.AQUACULTURE_CUSTOM_BAIT)
-  @IsDefined()
-  customBait!: AquacultureCustomBaitPurchase[];
-
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.INBOUND_FREIGHT)
-  @IsDefined()
-  inboundFreight!: FreightInput[];
-
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.OUTBOUND_FREIGHT)
-  @IsDefined()
-  outboundFreight!: FreightInput[];
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.TOTAL_COMMERCIAL_FLIGHTS_KM)
-  @IsDefined()
-  totalCommercialFlightsKm!: number;
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_RENEWABLE)
-  @IsDefined()
-  electricityRenewable!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_USE)
-  @IsDefined()
-  electricityUse!: number;
-
-  @IsEnum(ElectricitySources)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_SOURCE)
-  @IsDefined()
-  electricitySource!: ElectricitySource;
-
-  @ValidateNested({ always: true })
-  @Type(() => FuelInput)
-  @SchemaDescription(DESCRIPTIONS.FUEL)
-  @IsDefined()
-  fuel!: FuelInput;
-
-  @ValidateNested({ always: true, each: true })
-  @Type(() => FluidWasteInput)
-  @SchemaDescription(DESCRIPTIONS.FLUID_WASTE)
-  @IsDefined()
-  fluidWaste!: FluidWasteInput[];
-
-  @ValidateNested({ always: true })
-  @Type(() => SolidWasteInput)
-  @SchemaDescription(DESCRIPTIONS.SOLID_WASTE)
-  @IsDefined()
-  solidWaste!: SolidWasteInput;
-
-  @IsNumber()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.CARBON_OFFSETS)
-  carbonOffsets?: number;
-}
+export type AquacultureEnterpriseInput = z.infer<
+  typeof AquacultureEnterpriseInputSchema
+>;
