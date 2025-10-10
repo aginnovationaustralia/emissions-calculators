@@ -1,11 +1,11 @@
 import { validateCalculatorInput } from '../../calculators';
-import { BeefInput } from '../../types/Beef/input';
+import { BeefInputSchema } from '../../types/Beef/input';
 import { beefTestData } from './input.data';
 import { veg1, veg2 } from './vegetation.data';
 
 describe('checking beef inputs and outputs', () => {
   const sb = beefTestData;
-  const input = validateCalculatorInput(BeefInput, sb);
+  const input = validateCalculatorInput(BeefInputSchema, sb);
 
   test('top-level input fields', () => {
     const inputFields = [
@@ -37,7 +37,7 @@ describe('vegetation', () => {
   };
 
   test('vegetation beefProportion is not required', () => {
-    const input = validateCalculatorInput(BeefInput, sb);
+    const input = validateCalculatorInput(BeefInputSchema, sb);
     expect(input.vegetation[1].beefProportion).toBeUndefined();
   });
 
@@ -49,7 +49,7 @@ describe('vegetation', () => {
     };
 
     expect(() =>
-      validateCalculatorInput(BeefInput, {
+      validateCalculatorInput(BeefInputSchema, {
         ...sb,
         vegetation: [veg1, vegNoAllocation],
       }),

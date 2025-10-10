@@ -3,7 +3,7 @@ import clone from 'nanoclone';
 import { validateCalculatorInput } from '../../calculators';
 import { entriesFromObject } from '../../common/tools/object';
 import { calculatePork } from '../../Pork/calculator';
-import { PorkInput } from '../../types/Pork/input';
+import { PorkInput, PorkInputSchema } from '../../types/Pork/input';
 import { PorkIntermediateOutput } from '../../types/Pork/intermediate.output';
 import { PorkOutput } from '../../types/Pork/output';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
@@ -60,7 +60,7 @@ const expectations = {
 
 describe('Pork calculator, NSW', () => {
   const context = testContext(V2_0_0, 'Pork');
-  const classedInput = validateCalculatorInput(PorkInput, porkTestData);
+  const classedInput = validateCalculatorInput(PorkInputSchema, porkTestData);
   const emissions = calculatePork(classedInput, context);
 
   executeEmissionsSpec(V2_0_0, emissions, expectations);
@@ -104,9 +104,9 @@ describe('Pork calculator (multi activity)', () => {
   >(
     'Pork',
     calculatePork,
-    validateCalculatorInput(PorkInput, porkTestData),
-    validateCalculatorInput(PorkInput, porkDoubleSaleweight),
-    validateCalculatorInput(PorkInput, porkTestDataAllActivities),
+    validateCalculatorInput(PorkInputSchema, porkTestData),
+    validateCalculatorInput(PorkInputSchema, porkDoubleSaleweight),
+    validateCalculatorInput(PorkInputSchema, porkTestDataAllActivities),
     (originalEmissions, secondEmissions) => {
       expect(originalEmissions.intensities.liveweightProducedKg).toBeCloseTo(
         secondEmissions.intensities.liveweightProducedKg / 2,
@@ -164,7 +164,10 @@ const minimalExpectations = {
 
 describe('Pork calculator minimal input, NSW', () => {
   const context = testContext(V2_0_0, 'Pork');
-  const classedInput = validateCalculatorInput(PorkInput, porkMinimalTestData);
+  const classedInput = validateCalculatorInput(
+    PorkInputSchema,
+    porkMinimalTestData,
+  );
   const emissions = calculatePork(classedInput, context);
 
   executeEmissionsSpec(V2_0_0, emissions, minimalExpectations);

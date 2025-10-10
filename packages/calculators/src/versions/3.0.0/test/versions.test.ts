@@ -1,13 +1,12 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
+import { validateCalculatorInput } from '../calculators';
 import {
   calculateScope3Fertiliser,
   mergeOtherFertilisers,
 } from '../common/fertiliser';
 import { calculateTreeCarbonSequestration } from '../common/trees';
-import { BeefPurchase } from '../types/Beef/beefpurchase.input';
-import { LivestockPurchase } from '../types/livestockPurchase.input';
-import { Vegetation } from '../types/vegetation.input';
+import { Vegetation } from '../types';
+import { BeefPurchaseSchema } from '../types/Beef/beefpurchase.input';
+import { LivestockPurchaseSchema } from '../types/livestockPurchase.input';
 import { beefTestInput } from './Beef/beef.data';
 import { testContext, V2_0_0 } from './common/context';
 import { veg1 } from './SheepBeef/vegetation.data';
@@ -62,32 +61,33 @@ describe('checking Scope3Fertiliser via mergeOtherFertilisers', () => {
   });
 });
 
-describe('checking LivestockPurchases', () => {
+describe('checking LivestockPurchaseSchemas', () => {
   const oldPurchase = {
     head: 1,
     purchaseWeight: 2,
   };
 
-  const livestockPurchase = plainToClass(LivestockPurchase, oldPurchase);
-  const errors = validateSync(livestockPurchase);
+  const validatedPurchase = validateCalculatorInput(
+    LivestockPurchaseSchema,
+    oldPurchase,
+  );
 
   test('validation should result in no error', () => {
-    expect(errors.length).toEqual(0);
+    expect(validatedPurchase).toBeDefined();
   });
 });
 
-describe('checking LivestockPurchases from parent class, set to fail', () => {
+describe('checking LivestockPurchaseSchemas from parent class, set to fail', () => {
   const oldPurchaseFail = {
     headPurchased: undefined,
     purchasedWeight: 2,
     source: 'random source name',
   };
 
-  const beefPurchaseFail = plainToClass(BeefPurchase, oldPurchaseFail);
-  const errorsFail = validateSync(beefPurchaseFail);
-
   test('validation should result in at least one error', () => {
-    expect(errorsFail.length).toBeGreaterThanOrEqual(1);
+    expect(() =>
+      validateCalculatorInput(BeefPurchaseSchema, oldPurchaseFail),
+    ).toThrow();
   });
 });
 

@@ -1,7 +1,6 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
+import { validateCalculatorInput } from '../../calculators';
 import { calculateSheepBeef } from '../../SheepBeef/calculator';
-import { BeefComplete } from '../../types/Beef/beef.input';
+import { BeefCompleteSchema } from '../../types/Beef/beef.input';
 import { beefTestInput } from '../Beef/beef.data';
 import { testContext, V2_0_0 } from '../common/context';
 import { sheepTestInput } from '../Sheep/sheep.data';
@@ -114,10 +113,9 @@ describe('checking SheefBeef purchases as array validation', () => {
     delete beefInput.classes[key].source;
   });
 
-  const classedInput = plainToClass(BeefComplete, beefInput);
-  const errors = validateSync(classedInput);
+  const validatedInput = validateCalculatorInput(BeefCompleteSchema, beefInput);
 
   test('validation should result in no errors', () => {
-    expect(errors.length).toBe(0);
+    expect(validatedInput).toBeDefined();
   });
 });

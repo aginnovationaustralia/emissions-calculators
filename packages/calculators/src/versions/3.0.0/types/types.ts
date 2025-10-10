@@ -95,15 +95,6 @@ export const CustomisedFertilisers = [
 ] as const;
 export type CustomisedFertiliser = (typeof CustomisedFertilisers)[number];
 
-// These keys were incorrectly released in production versions of the calculator.
-// They're here for backwards compatibility.
-export const CustomisedFertilisersWithLegacyKeys = [
-  ...CustomisedFertilisers,
-  ' Urea-Ammonium Nitrate (UAN)',
-] as const;
-export type CustomisedFertiliserWithLegacyKeys =
-  (typeof CustomisedFertilisersWithLegacyKeys)[number];
-
 export const SupplementationTypes = [
   'mineralblock',
   'weanerblock',

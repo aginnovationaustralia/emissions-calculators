@@ -1,13 +1,13 @@
 import { z } from 'zod';
 import { OtherFertiliserSchema } from './otherFertiliser.input';
-import { CustomisedFertilisersWithLegacyKeys } from './types';
+import { CustomisedFertilisers } from './types';
 
 export const FertiliserSchema = z
   .object({
     singleSuperphosphate: z
       .number()
       .meta({ description: 'Single superphosphate usage in tonnes' }),
-    otherType: z.enum(CustomisedFertilisersWithLegacyKeys).optional().meta({
+    otherType: z.enum(CustomisedFertilisers).optional().meta({
       description:
         'Other N fertiliser type. Deprecated note: Use `otherFertilisers` instead',
     }),

@@ -1,16 +1,17 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from './decorator.schema';
+import { z } from 'zod';
 import { OUTPUTDESCRIPTIONS } from './descriptions.schema';
 
-@SchemaDescription(OUTPUTDESCRIPTIONS.sequestration)
-export class SequestrationIntermediateOutput {
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.totalSequestration)
-  @IsDefined()
-  total!: number;
+export const SequestrationIntermediateOutputSchema = z
+  .object({
+    total: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.totalSequestration }),
+    average: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.totalSequestration }),
+  })
+  .meta({ description: OUTPUTDESCRIPTIONS.sequestration });
 
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.totalSequestration)
-  @IsDefined()
-  average!: number;
-}
+export type SequestrationIntermediateOutput = z.infer<
+  typeof SequestrationIntermediateOutputSchema
+>;

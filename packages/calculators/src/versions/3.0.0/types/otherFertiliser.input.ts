@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { CustomisedFertilisersWithLegacyKeys } from './types';
+import { CustomisedFertilisers } from './types';
 
 export const OtherFertiliserSchema = z
   .object({
     otherType: z
-      .enum(CustomisedFertilisersWithLegacyKeys)
+      .enum(CustomisedFertilisers)
       .meta({ description: 'Other N fertiliser type' }),
     otherDryland: z.number().meta({
       description:

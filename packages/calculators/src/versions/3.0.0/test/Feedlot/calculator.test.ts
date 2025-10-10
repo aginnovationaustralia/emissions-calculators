@@ -3,7 +3,7 @@ import clone from 'nanoclone';
 import { validateCalculatorInput } from '../../calculators';
 import { entriesFromObject } from '../../common/tools/object';
 import { calculateEntireFeedlot } from '../../Feedlot/calculator';
-import { FeedlotInput } from '../../types/Feedlot/input';
+import { FeedlotInputSchema } from '../../types/Feedlot/input';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
 import { testContext, V2_0_0 } from '../common/context';
 import {
@@ -71,7 +71,7 @@ describe('Feedlot scenarios', () => {
     sales: {},
   };
 
-  const validatedInput = validateCalculatorInput(FeedlotInput, input);
+  const validatedInput = validateCalculatorInput(FeedlotInputSchema, input);
 
   expect(validatedInput).toBeDefined();
 

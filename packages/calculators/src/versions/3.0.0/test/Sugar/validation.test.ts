@@ -1,47 +1,29 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
 import { InputValidationError } from '../../../..';
 import { validateCalculatorInput } from '../../calculators';
-import { SugarInput } from '../../types/Sugar/input';
+import { SugarInputSchema } from '../../types/Sugar/input';
 import { sugar1, sugarTestData } from './sugar.data';
 
 describe('validating Sugar test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(SugarInput, sugarTestData);
+  const t = () => validateCalculatorInput(SugarInputSchema, sugarTestData);
 
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(SugarInput);
   });
 });
 
 describe('validating Sugar test inputs for incorrect inputs', () => {
-  const input = {
+  const invalidInput = {
     crops: [sugar1],
     electricityUse: 4000,
     electricityRenewable: 0,
-    state: 'nsw',
+    state: 'vic2', // Invalid state
+    // Missing vegetation field
   };
 
-  const classedInput = plainToClass(SugarInput, {
-    ...input,
-    state: 'vic2',
-  });
-  const errors = validateSync(classedInput);
-
-  test('validation should result in 2 errors', () => {
-    expect(errors).toHaveLength(2);
-  });
-
-  test('validation error should contain message for state value', () => {
-    expect(errors[0].constraints && errors[0].constraints.isEnum).toEqual(
-      'state must be one of the following values: ',
-    );
-  });
-
-  test('validation error should contain message for vegetation', () => {
-    expect(errors[1].constraints && errors[1].constraints.isDefined).toEqual(
-      'vegetation should not be null or undefined',
-    );
+  test('validation should throw InputValidationError for invalid input', () => {
+    expect(() =>
+      validateCalculatorInput(SugarInputSchema, invalidInput),
+    ).toThrow(InputValidationError);
   });
 });

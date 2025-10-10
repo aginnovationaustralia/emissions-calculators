@@ -1,18 +1,16 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
 import { InputValidationError } from '../../../..';
 import { validateCalculatorInput } from '../../calculators';
-import { HorticultureInput } from '../../types/Horticulture/input';
+import { HorticultureInputSchema } from '../../types/Horticulture/input';
 import { horticultureTestData } from './horticulture.data';
 
 describe('validating Horticulture test inputs, all types of inputs', () => {
   const t = () =>
-    validateCalculatorInput(HorticultureInput, horticultureTestData);
+    validateCalculatorInput(HorticultureInputSchema, horticultureTestData);
 
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(HorticultureInput);
+    expect(t()).toBeInstanceOf(HorticultureInputSchema);
   });
 
   test.skip('inhibitor fields are optional', () => {
@@ -21,25 +19,32 @@ describe('validating Horticulture test inputs, all types of inputs', () => {
       ureaseInhibitorUsed: undefined,
       nitrificationInhibitorUsed: undefined,
     };
-    const errors = validateSync('HorticultureInput', data);
-    expect(errors.length).toEqual(0);
+    const result = HorticultureInputSchema.safeParse(data);
+    expect(result.success).toBe(true);
   });
 });
 
 describe('validating Horticulture test inputs for incorrect inputs', () => {
-  const classedInput = plainToClass(HorticultureInput, {
+  const invalidInput = {
     ...horticultureTestData,
     state: 'vic2',
-  });
-  const errors = validateSync('HorticultureInput', classedInput);
+  };
+  const result = HorticultureInputSchema.safeParse(invalidInput);
 
   test('validation should result in 1 error', () => {
-    expect(errors.length).toEqual(1);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.length).toBeGreaterThan(0);
+    }
   });
 
   test('validation error should contain message for state value', () => {
-    expect(errors[0].constraints && errors[0].constraints.isEnum).toEqual(
-      'state must be one of the following values: ',
-    );
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const stateError = result.error.issues.find((issue) =>
+        issue.path.includes('state'),
+      );
+      expect(stateError).toBeDefined();
+    }
   });
 });

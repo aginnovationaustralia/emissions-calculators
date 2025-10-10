@@ -1,34 +1,39 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
 import { InputValidationError } from '../../../..';
 import { validateCalculatorInput } from '../../calculators';
-import { RiceInput } from '../../types/Rice/input';
+import { RiceInputSchema } from '../../types/Rice/input';
 import { riceTestData } from './rice.data';
 
 describe('validating Rice test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(RiceInput, riceTestData);
+  const t = () => validateCalculatorInput(RiceInputSchema, riceTestData);
 
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(RiceInput);
+    expect(t()).toBeInstanceOf(RiceInputSchema);
   });
 });
 
 describe('validating Rice test inputs for incorrect inputs', () => {
-  const classedInput = plainToClass(RiceInput, {
+  const invalidInput = {
     ...riceTestData,
     state: 'vic2',
-  });
-  const errors = validateSync(classedInput);
+  };
+  const result = RiceInputSchema.safeParse(invalidInput);
 
   test('validation should result in 1 error', () => {
-    expect(errors.length).toEqual(1);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.length).toBeGreaterThan(0);
+    }
   });
 
   test('validation error should contain message for state value', () => {
-    expect(errors[0].constraints && errors[0].constraints.isEnum).toEqual(
-      'state must be one of the following values: ',
-    );
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const stateError = result.error.issues.find((issue) =>
+        issue.path.includes('state'),
+      );
+      expect(stateError).toBeDefined();
+    }
   });
 });

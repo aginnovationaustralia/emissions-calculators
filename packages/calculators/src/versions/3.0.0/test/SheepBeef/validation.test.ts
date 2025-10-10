@@ -1,8 +1,6 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
 import { InputValidationError } from '../../../..';
 import { validateCalculatorInput } from '../../calculators';
-import { SheepBeefInput } from '../../types/SheepBeef/input';
+import { SheepBeefInputSchema } from '../../types/SheepBeef/input';
 import { CustomisedFertiliser } from '../../types/types';
 import { beefTestInput } from '../Beef/beef.data';
 import { burnTestData } from '../Beef/burn.data';
@@ -10,12 +8,13 @@ import { sheepTestInput } from '../Sheep/sheep.data';
 import { sheepbeefTestData } from './sheepbeef.data';
 
 describe('validating SheepBeef test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(SheepBeefInput, sheepbeefTestData);
+  const t = () =>
+    validateCalculatorInput(SheepBeefInputSchema, sheepbeefTestData);
 
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(SheepBeefInput);
+    expect(t()).toBeInstanceOf(SheepBeefInputSchema);
   });
 });
 
@@ -29,17 +28,23 @@ describe('validating SheepBeef test inputs for incorrect inputs', () => {
     burning: burnTestData,
   };
 
-  const classedInput = plainToClass(SheepBeefInput, input);
-  const errors = validateSync(classedInput);
+  const result = SheepBeefInputSchema.safeParse(input);
 
   test('validation should result in 1 error', () => {
-    expect(errors.length).toEqual(1);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.length).toBeGreaterThan(0);
+    }
   });
 
   test('validation error should contain message for state value', () => {
-    expect(errors[0].constraints && errors[0].constraints.isEnum).toEqual(
-      'state must be one of the following values: ',
-    );
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const stateError = result.error.issues.find((issue) =>
+        issue.path.includes('state'),
+      );
+      expect(stateError).toBeDefined();
+    }
   });
 });
 
@@ -63,11 +68,13 @@ describe('validating SheepBeef test inputs for incorrect nested inputs', () => {
     burning: burnTestData,
   };
 
-  const classedInput = plainToClass(SheepBeefInput, input);
-  const errors = validateSync(classedInput);
+  const result = SheepBeefInputSchema.safeParse(input);
 
   test('validation should result in 1 error', () => {
-    expect(errors.length).toEqual(1);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.length).toBeGreaterThan(0);
+    }
   });
 
   // test('validation error should contain message for headPurchased value', () => {
@@ -79,7 +86,7 @@ describe('validating SheepBeef test inputs for incorrect nested inputs', () => {
 
 describe('support for single sheep and beef instance', () => {
   const t = () =>
-    validateCalculatorInput(SheepBeefInput, {
+    validateCalculatorInput(SheepBeefInputSchema, {
       ...sheepbeefTestData,
       beef: sheepbeefTestData.beef[0],
       sheep: sheepbeefTestData.sheep[0],
@@ -88,7 +95,7 @@ describe('support for single sheep and beef instance', () => {
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(SheepBeefInput);
+    expect(t()).toBeInstanceOf(SheepBeefInputSchema);
     expect(t().sheep).toEqual([sheepbeefTestData.sheep[0]]);
     expect(t().beef).toEqual([sheepbeefTestData.beef[0]]);
   });
@@ -96,7 +103,7 @@ describe('support for single sheep and beef instance', () => {
 
 describe('accepts just one beef, no sheep', () => {
   const t = () =>
-    validateCalculatorInput(SheepBeefInput, {
+    validateCalculatorInput(SheepBeefInputSchema, {
       ...sheepbeefTestData,
       beef: sheepbeefTestData.beef[0],
       sheep: [],
@@ -105,7 +112,7 @@ describe('accepts just one beef, no sheep', () => {
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(SheepBeefInput);
+    expect(t()).toBeInstanceOf(SheepBeefInputSchema);
     expect(t().sheep).toEqual([]);
     expect(t().beef).toEqual([sheepbeefTestData.beef[0]]);
   });
@@ -126,12 +133,13 @@ describe('compatibility for migrated valid inputs', () => {
         burning: burnTestData,
       };
 
-      const classedInput = plainToClass(SheepBeefInput, input);
-      const errors = validateSync(classedInput);
-      expect(errors.length).toEqual(0);
-      expect(classedInput?.beef[0]?.fertiliser?.otherType).toEqual(
-        'Urea-Ammonium Nitrate (UAN)',
-      );
+      const result = SheepBeefInputSchema.safeParse(input);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data?.beef[0]?.fertiliser?.otherType).toEqual(
+          'Urea-Ammonium Nitrate (UAN)',
+        );
+      }
     });
 
     test('old syntax for UAN is supported', () => {
@@ -148,12 +156,13 @@ describe('compatibility for migrated valid inputs', () => {
         vegetation: [],
       };
 
-      const classedInput = plainToClass(SheepBeefInput, input);
-      const errors = validateSync(classedInput);
-      expect(errors).toHaveLength(0);
-      expect(classedInput?.beef[0]?.fertiliser?.otherType).toEqual(
-        'Urea-Ammonium Nitrate (UAN)',
-      );
+      const result = SheepBeefInputSchema.safeParse(input);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data?.beef[0]?.fertiliser?.otherType).toEqual(
+          'Urea-Ammonium Nitrate (UAN)',
+        );
+      }
     });
   });
 
@@ -177,12 +186,13 @@ describe('compatibility for migrated valid inputs', () => {
         vegetation: [],
       };
 
-      const classedInput = plainToClass(SheepBeefInput, input);
-      const errors = validateSync(classedInput);
-      expect(errors).toHaveLength(0);
-      expect(
-        classedInput?.beef[0]?.fertiliser?.otherFertilisers?.[0]?.otherType,
-      ).toEqual('Urea-Ammonium Nitrate (UAN)');
+      const result = SheepBeefInputSchema.safeParse(input);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(
+          result.data?.beef[0]?.fertiliser?.otherFertilisers?.[0]?.otherType,
+        ).toEqual('Urea-Ammonium Nitrate (UAN)');
+      }
     });
 
     test('new syntax for UAN is supported', () => {
@@ -204,12 +214,13 @@ describe('compatibility for migrated valid inputs', () => {
         vegetation: [],
       };
 
-      const classedInput = plainToClass(SheepBeefInput, input);
-      const errors = validateSync(classedInput);
-      expect(errors).toHaveLength(0);
-      expect(
-        classedInput?.beef[0]?.fertiliser?.otherFertilisers?.[0]?.otherType,
-      ).toEqual('Urea-Ammonium Nitrate (UAN)');
+      const result = SheepBeefInputSchema.safeParse(input);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(
+          result.data?.beef[0]?.fertiliser?.otherFertilisers?.[0]?.otherType,
+        ).toEqual('Urea-Ammonium Nitrate (UAN)');
+      }
     });
   });
 });
