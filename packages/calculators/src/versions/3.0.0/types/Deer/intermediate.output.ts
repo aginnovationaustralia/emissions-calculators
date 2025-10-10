@@ -1,50 +1,27 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsString, ValidateNested } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { Scope2Output } from '../scope2.output';
-import { SequestrationTotalOutput } from '../sequestration.total.output';
-import { DeerEmissionsIntensities } from './intensities.output';
-import { DeerNetOutput } from './net.output';
-import { DeerScope1Output } from './scope1.output';
-import { DeerScope3Output } from './scope3.output';
+import { Scope2OutputSchema } from '../scope2.output';
+import { SequestrationTotalOutputSchema } from '../sequestration.total.output';
+import { DeerEmissionsIntensitiesSchema } from './intensities.output';
+import { DeerNetOutputSchema } from './net.output';
+import { DeerScope1OutputSchema } from './scope1.output';
+import { DeerScope3OutputSchema } from './scope3.output';
 
-@SchemaDescription(
-  'Intermediate emissions calculation output for the Deer calculator',
-)
-export class DeerIntermediateOutput {
-  @IsString()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  @IsDefined()
-  id!: string;
+export const DeerIntermediateOutputSchema = z
+  .object({
+    id: z.string().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+    scope1: DeerScope1OutputSchema,
+    scope2: Scope2OutputSchema,
+    scope3: DeerScope3OutputSchema,
+    net: DeerNetOutputSchema,
+    intensities: DeerEmissionsIntensitiesSchema,
+    carbonSequestration: SequestrationTotalOutputSchema,
+  })
+  .meta({
+    description:
+      'Intermediate emissions calculation output for the Deer calculator',
+  });
 
-  @ValidateNested({ always: true })
-  @Type(() => DeerScope1Output)
-  @IsDefined()
-  scope1!: DeerScope1Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => DeerScope3Output)
-  @IsDefined()
-  scope3!: DeerScope3Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => DeerNetOutput)
-  @IsDefined()
-  net!: DeerNetOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => DeerEmissionsIntensities)
-  @IsDefined()
-  intensities!: DeerEmissionsIntensities;
-
-  @ValidateNested({ always: true })
-  @Type(() => SequestrationTotalOutput)
-  @IsDefined()
-  carbonSequestration!: SequestrationTotalOutput;
-}
+export type DeerIntermediateOutput = z.infer<
+  typeof DeerIntermediateOutputSchema
+>;

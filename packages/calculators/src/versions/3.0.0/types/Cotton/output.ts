@@ -1,52 +1,26 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import 'reflect-metadata';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
-import { Scope2Output } from '../scope2.output';
-import { SequestrationOutput } from '../sequestration.output';
-import { CottonIntensitiesOutput } from './intensities.output';
-import { CottonIntermediateOutput } from './intermediate.output';
-import { CottonNetOutput } from './net.output';
-import { CottonScope1Output } from './scope1.output';
-import { CottonScope3Output } from './scope3.output';
+import { z } from 'zod';
+import { Scope2OutputSchema } from '../scope2.output';
+import { SequestrationOutputSchema } from '../sequestration.output';
+import { CottonIntensitiesOutputSchema } from './intensities.output';
+import { CottonIntermediateOutputSchema } from './intermediate.output';
+import { CottonNetOutputSchema } from './net.output';
+import { CottonScope1OutputSchema } from './scope1.output';
+import { CottonScope3OutputSchema } from './scope3.output';
 
-@SchemaDescription('Emissions calculation output for the `cotton` calculator')
-export class CottonOutput {
-  @ValidateNested({ always: true })
-  @Type(() => CottonScope1Output)
-  @IsDefined()
-  scope1!: CottonScope1Output;
+export const CottonOutputSchema = z
+  .object({
+    scope1: CottonScope1OutputSchema,
+    scope2: Scope2OutputSchema,
+    scope3: CottonScope3OutputSchema,
+    carbonSequestration: SequestrationOutputSchema,
+    intermediate: z.array(CottonIntermediateOutputSchema),
+    net: CottonNetOutputSchema,
+    intensities: z
+      .array(CottonIntensitiesOutputSchema)
+      .meta({ description: 'Emissions intensity for each crop (in order)' }),
+  })
+  .meta({
+    description: 'Emissions calculation output for the `cotton` calculator',
+  });
 
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => CottonScope3Output)
-  @IsDefined()
-  scope3!: CottonScope3Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => SequestrationOutput)
-  @IsDefined()
-  carbonSequestration!: SequestrationOutput;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => CottonIntermediateOutput)
-  @IsDefined()
-  intermediate!: CottonIntermediateOutput[];
-
-  @ValidateNested({ always: true })
-  @Type(() => CottonNetOutput)
-  @IsDefined()
-  net!: CottonNetOutput;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(
-    () => CottonIntensitiesOutput,
-    'Emissions intensity for each crop (in order)',
-  )
-  @IsDefined()
-  intensities!: CottonIntensitiesOutput[];
-}
+export type CottonOutput = z.infer<typeof CottonOutputSchema>;

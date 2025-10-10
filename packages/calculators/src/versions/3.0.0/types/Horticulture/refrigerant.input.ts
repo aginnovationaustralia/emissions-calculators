@@ -1,17 +1,18 @@
-import { IsDefined, IsEnum, IsNumber } from 'class-validator';
-import 'reflect-metadata';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { Refrigerant, Refrigerants } from '../types';
+import { Refrigerants } from '../types';
 
-export class HorticultureRefrigerant {
-  @IsEnum(Refrigerants)
-  @SchemaDescription(DESCRIPTIONS.REFRIGERANT)
-  @IsDefined()
-  refrigerant!: Refrigerant;
+export const HorticultureRefrigerantSchema = z.object({
+  refrigerant: z
+    .enum(Refrigerants)
+    .meta({ description: DESCRIPTIONS.REFRIGERANT }),
+  chargeSize: z
+    .number()
+    .meta({
+      description: 'Amount of refrigerant contained in the appliance, in kg',
+    }),
+});
 
-  @IsNumber()
-  @SchemaDescription('Amount of refrigerant contained in the appliance, in kg')
-  @IsDefined()
-  chargeSize!: number;
-}
+export type HorticultureRefrigerant = z.infer<
+  typeof HorticultureRefrigerantSchema
+>;

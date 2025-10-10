@@ -1,15 +1,11 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { OUTPUTDESCRIPTIONS } from '../descriptions.schema';
 
-export class BeefNet {
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.netEmissionsTotal)
-  @IsDefined()
-  total!: number;
+export const BeefNetSchema = z.object({
+  total: z.number().meta({ description: OUTPUTDESCRIPTIONS.netEmissionsTotal }),
+  beef: z
+    .number()
+    .meta({ description: 'Net emissions of beef, in tonnes-CO2e/year' }),
+});
 
-  @IsNumber()
-  @SchemaDescription('Net emissions of beef, in tonnes-CO2e/year')
-  @IsDefined()
-  beef!: number;
-}
+export type BeefNet = z.infer<typeof BeefNetSchema>;

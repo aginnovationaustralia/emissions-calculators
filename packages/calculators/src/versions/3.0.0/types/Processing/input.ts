@@ -1,26 +1,13 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsEnum, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import 'reflect-metadata';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { State, States } from '../types';
-import { ProductProcessingInput } from './processing.input';
+import { States } from '../types';
+import { ProductProcessingInputSchema } from './processing.input';
 
-@SchemaDescription('Input data required for the `processing` calculator')
-export class ProcessingInput {
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
+export const ProcessingInputSchema = z
+  .object({
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    products: z.array(ProductProcessingInputSchema),
+  })
+  .meta({ description: 'Input data required for the `processing` calculator' });
 
-  @ValidateNested({ always: true, each: true })
-  @Type(() => ProductProcessingInput)
-  @TypeWithArraySchema(() => ProductProcessingInput)
-  @IsDefined()
-  products!: ProductProcessingInput[];
-}
-export const schemaProcessingInput: SchemaObject =
-  validationMetadatasToSchemas();
-
+export type ProcessingInput = z.infer<typeof ProcessingInputSchema>;

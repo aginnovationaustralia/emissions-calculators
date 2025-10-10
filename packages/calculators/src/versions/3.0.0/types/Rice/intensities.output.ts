@@ -1,27 +1,21 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import {
-  DeprecatedSchemaDescription,
-  SchemaDescription,
-} from '../decorator.schema';
+import { z } from 'zod';
 
-export class RiceEmissionsIntensities {
-  @IsNumber()
-  @SchemaDescription('Rice produced in tonnes')
-  @IsDefined()
-  riceProducedTonnes!: number;
+export const RiceEmissionsIntensitiesSchema = z.object({
+  riceProducedTonnes: z
+    .number()
+    .meta({ description: 'Rice produced in tonnes' }),
+  riceExcludingSequestration: z
+    .number()
+    .meta({ description: 'Rice excluding sequestration, in t-CO2e/t rice' }),
+  riceIncludingSequestration: z
+    .number()
+    .meta({ description: 'Rice including sequestration, in t-CO2e/t rice' }),
+  intensity: z.number().meta({
+    description:
+      'Use `riceIncludingSequestration` instead. Deprecated note: Use `riceIncludingSequestration` instead',
+  }),
+});
 
-  @IsNumber()
-  @SchemaDescription('Rice excluding sequestration, in t-CO2e/t rice')
-  @IsDefined()
-  riceExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription('Rice including sequestration, in t-CO2e/t rice')
-  @IsDefined()
-  riceIncludingSequestration!: number;
-
-  @IsNumber()
-  @DeprecatedSchemaDescription('Use `riceIncludingSequestration` instead')
-  @IsDefined()
-  intensity!: number;
-}
+export type RiceEmissionsIntensities = z.infer<
+  typeof RiceEmissionsIntensitiesSchema
+>;

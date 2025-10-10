@@ -1,102 +1,39 @@
-import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import 'reflect-metadata';
-
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { Fertiliser } from '../fertiliser.input';
-import { ElectricitySource, ElectricitySources } from '../types';
-import { Feed } from './feed.input';
-import { PorkClasses } from './porkclasses.input';
+import { FertiliserSchema } from '../fertiliser.input';
+import { ElectricitySources } from '../types';
+import { FeedSchema } from './feed.input';
+import { PorkClassesSchema } from './porkclasses.input';
 
-export class PorkComplete {
-  @IsString()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  id?: string;
+export const PorkCompleteSchema = z.object({
+  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+  classes: PorkClassesSchema,
+  limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
+  limestoneFraction: z
+    .number()
+    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  fertiliser: FertiliserSchema,
+  diesel: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
+  petrol: z.number().meta({ description: DESCRIPTIONS.PETROL }),
+  lpg: z.number().meta({ description: DESCRIPTIONS.LPG }),
+  electricitySource: z
+    .enum(ElectricitySources)
+    .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
+  electricityRenewable: z
+    .number()
+    .min(0)
+    .max(1)
+    .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+  electricityUse: z
+    .number()
+    .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
+  herbicide: z.number().meta({ description: DESCRIPTIONS.HERBICIDE }),
+  herbicideOther: z.number().meta({ description: DESCRIPTIONS.HERBICIDEOTHER }),
+  beddingHayBarleyStraw: z.number().meta({
+    description:
+      'Hay, barley, straw, etc. purchased for pig bedding, in tonnes',
+  }),
+  feedProducts: z.array(FeedSchema),
+});
 
-  @ValidateNested({ always: true })
-  @Type(() => PorkClasses)
-  @IsDefined()
-  classes!: PorkClasses;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LIMESTONE)
-  @IsDefined()
-  limestone!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LIMESTONEFRACTION)
-  @IsDefined()
-  limestoneFraction!: number;
-
-  @ValidateNested({ always: true })
-  @Type(() => Fertiliser)
-  @IsDefined()
-  fertiliser!: Fertiliser;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.DIESEL)
-  @IsDefined()
-  diesel!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.PETROL)
-  @IsDefined()
-  petrol!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LPG)
-  @IsDefined()
-  lpg!: number;
-
-  @IsEnum(ElectricitySources)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_SOURCE)
-  @IsDefined()
-  electricitySource!: ElectricitySource;
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_RENEWABLE)
-  @IsDefined()
-  electricityRenewable!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_USE)
-  @IsDefined()
-  electricityUse!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.HERBICIDE)
-  @IsDefined()
-  herbicide!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.HERBICIDEOTHER)
-  @IsDefined()
-  herbicideOther!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Hay, barley, straw, etc. purchased for pig bedding, in tonnes',
-  )
-  @IsDefined()
-  beddingHayBarleyStraw!: number;
-
-  @IsArray()
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => Feed)
-  @IsDefined()
-  feedProducts!: Feed[];
-}
+export type PorkComplete = z.infer<typeof PorkCompleteSchema>;

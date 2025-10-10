@@ -1,52 +1,24 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
-import { Scope2Output } from '../scope2.output';
-import { SequestrationOutput } from '../sequestration.output';
-import { PorkEmissionsIntensities } from './intensities.output';
-import { PorkIntermediateOutput } from './intermediate.output';
-import { PorkNetOutput } from './net.output';
-import { PorkScope1Output } from './scope1.output';
-import { PorkScope3Output } from './scope3.output';
+import { z } from 'zod';
+import { Scope2OutputSchema } from '../scope2.output';
+import { SequestrationOutputSchema } from '../sequestration.output';
+import { PorkEmissionsIntensitiesSchema } from './intensities.output';
+import { PorkIntermediateOutputSchema } from './intermediate.output';
+import { PorkNetOutputSchema } from './net.output';
+import { PorkScope1OutputSchema } from './scope1.output';
+import { PorkScope3OutputSchema } from './scope3.output';
 
-@SchemaDescription('Emissions calculation output for the `pork` calculator')
-export class PorkOutput {
-  @ValidateNested({ always: true })
-  @Type(() => PorkScope1Output)
-  @IsDefined()
-  scope1!: PorkScope1Output;
+export const PorkOutputSchema = z
+  .object({
+    scope1: PorkScope1OutputSchema,
+    scope2: Scope2OutputSchema,
+    scope3: PorkScope3OutputSchema,
+    carbonSequestration: SequestrationOutputSchema,
+    net: PorkNetOutputSchema,
+    intensities: PorkEmissionsIntensitiesSchema,
+    intermediate: z.array(PorkIntermediateOutputSchema),
+  })
+  .meta({
+    description: 'Emissions calculation output for the `pork` calculator',
+  });
 
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => PorkScope3Output)
-  @IsDefined()
-  scope3!: PorkScope3Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => SequestrationOutput)
-  @IsDefined()
-  carbonSequestration!: SequestrationOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => PorkNetOutput)
-  @IsDefined()
-  net!: PorkNetOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => PorkEmissionsIntensities)
-  @IsDefined()
-  intensities!: PorkEmissionsIntensities;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => PorkIntermediateOutput)
-  @IsDefined()
-  intermediate!: PorkIntermediateOutput[];
-}
-export const schemaPorkOutput: SchemaObject = validationMetadatasToSchemas();
-
+export type PorkOutput = z.infer<typeof PorkOutputSchema>;

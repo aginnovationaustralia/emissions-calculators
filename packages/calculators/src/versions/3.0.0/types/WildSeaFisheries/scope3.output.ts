@@ -1,26 +1,17 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { OUTPUTDESCRIPTIONS } from '../descriptions.schema';
 
-@SchemaDescription(OUTPUTDESCRIPTIONS.scope3)
-export class WildSeaFisheriesScope3Output {
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.electricity)
-  @IsDefined()
-  electricity!: number;
+export const WildSeaFisheriesScope3OutputSchema = z
+  .object({
+    electricity: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.electricity }),
+    fuel: z.number().meta({ description: OUTPUTDESCRIPTIONS.fuel }),
+    bait: z.number().meta({ description: OUTPUTDESCRIPTIONS.purchasedBait }),
+    total: z.number().meta({ description: OUTPUTDESCRIPTIONS.scope3Total }),
+  })
+  .meta({ description: OUTPUTDESCRIPTIONS.scope3 });
 
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.fuel)
-  @IsDefined()
-  fuel!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.purchasedBait)
-  @IsDefined()
-  bait!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.scope3Total)
-  @IsDefined()
-  total!: number;
-}
+export type WildSeaFisheriesScope3Output = z.infer<
+  typeof WildSeaFisheriesScope3OutputSchema
+>;

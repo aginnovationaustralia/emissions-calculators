@@ -1,35 +1,20 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsNumber, Max, Min, ValidateNested } from 'class-validator';
-import 'reflect-metadata';
+import { z } from 'zod';
+import { FeedIngredientsSchema } from './feedingredients.input';
 
-import { SchemaDescription } from '../decorator.schema';
-import { FeedIngredients } from './feedingredients.input';
+export const FeedSchema = z
+  .object({
+    feedPurchased: z
+      .number()
+      .meta({ description: 'Pig feed purchased, in tonnes' }),
+    additionalIngredients: z.number().min(0).max(1).meta({
+      description: 'Fraction of additional ingredient in feed mix, from 0 to 1',
+    }),
+    emissionsIntensity: z.number().meta({
+      description:
+        'Emissions intensity of feed product in GHG (kg CO2-e/kg input)',
+    }),
+    ingredients: FeedIngredientsSchema,
+  })
+  .meta({ description: 'Pig feed product' });
 
-@SchemaDescription('Pig feed product')
-export class Feed {
-  @IsNumber()
-  @SchemaDescription('Pig feed purchased, in tonnes')
-  @IsDefined()
-  feedPurchased!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Fraction of additional ingredient in feed mix, from 0 to 1',
-  )
-  @IsDefined()
-  @Min(0)
-  @Max(1)
-  additionalIngredients!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity of feed product in GHG (kg CO2-e/kg input)',
-  )
-  @IsDefined()
-  emissionsIntensity!: number;
-
-  @ValidateNested({ always: true })
-  @Type(() => FeedIngredients)
-  @IsDefined()
-  ingredients!: FeedIngredients;
-}
+export type Feed = z.infer<typeof FeedSchema>;

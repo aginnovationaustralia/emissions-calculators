@@ -1,41 +1,23 @@
-import { IsDefined, IsEnum, IsNumber } from 'class-validator';
-import { SchemaDescription } from './decorator.schema';
-import {
-  RainfallRegion,
-  RainfallRegions,
-  SoilType,
-  SoilTypes,
-  TreeType,
-  TreeTypes,
-} from './types';
+import { z } from 'zod';
+import { RainfallRegions, SoilTypes, TreeTypes } from './types';
 
-// Note: this is the `Data input - vegetation` tab in the spreadsheets
-@SchemaDescription(
-  'Inputs required for non-productive vegetation in order to calculate carbon sequestration',
-)
-export class Vegetation {
-  @IsEnum(RainfallRegions)
-  @SchemaDescription('The rainfall region that the vegetation is in')
-  @IsDefined()
-  region!: RainfallRegion;
+export const VegetationSchema = z
+  .object({
+    region: z
+      .enum(RainfallRegions)
+      .meta({ description: 'The rainfall region that the vegetation is in' }),
+    treeSpecies: z.enum(TreeTypes).meta({ description: 'The species of tree' }),
+    soil: z
+      .enum(SoilTypes)
+      .meta({ description: 'The soil type the tree is in' }),
+    area: z
+      .number()
+      .meta({ description: 'The area of trees, in ha (hectares)' }),
+    age: z.number().meta({ description: 'The age of the trees, in years' }),
+  })
+  .meta({
+    description:
+      'Inputs required for non-productive vegetation in order to calculate carbon sequestration',
+  });
 
-  @IsEnum(TreeTypes)
-  @SchemaDescription('The species of tree')
-  @IsDefined()
-  treeSpecies!: TreeType;
-
-  @IsEnum(SoilTypes)
-  @SchemaDescription('The soil type the tree is in')
-  @IsDefined()
-  soil!: SoilType;
-
-  @IsNumber()
-  @SchemaDescription('The area of trees, in ha (hectares)')
-  @IsDefined()
-  area!: number;
-
-  @IsNumber()
-  @SchemaDescription('The age of the trees, in years')
-  @IsDefined()
-  age!: number;
-}
+export type Vegetation = z.infer<typeof VegetationSchema>;

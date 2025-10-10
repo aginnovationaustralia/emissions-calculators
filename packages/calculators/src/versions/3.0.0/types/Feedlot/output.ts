@@ -1,52 +1,24 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
-import { Scope2Output } from '../scope2.output';
-import { SequestrationOutput } from '../sequestration.output';
-import { FeedlotEmissionIntensities } from './intensities.output';
-import { FeedlotIntermediateOutput } from './intermediate.output';
-import { FeedlotNetOutput } from './net.output';
-import { FeedlotScope1Output } from './scope1.output';
-import { FeedlotScope3Output } from './scope3.output';
+import { z } from 'zod';
+import { Scope2OutputSchema } from '../scope2.output';
+import { SequestrationOutputSchema } from '../sequestration.output';
+import { FeedlotEmissionIntensitiesSchema } from './intensities.output';
+import { FeedlotIntermediateOutputSchema } from './intermediate.output';
+import { FeedlotNetOutputSchema } from './net.output';
+import { FeedlotScope1OutputSchema } from './scope1.output';
+import { FeedlotScope3OutputSchema } from './scope3.output';
 
-@SchemaDescription('Emissions calculation output for the `feedlot` calculator')
-export class FeedlotOutput {
-  @ValidateNested({ always: true })
-  @Type(() => FeedlotScope1Output)
-  @IsDefined()
-  scope1!: FeedlotScope1Output;
+export const FeedlotOutputSchema = z
+  .object({
+    scope1: FeedlotScope1OutputSchema,
+    scope2: Scope2OutputSchema,
+    scope3: FeedlotScope3OutputSchema,
+    carbonSequestration: SequestrationOutputSchema,
+    intermediate: z.array(FeedlotIntermediateOutputSchema),
+    net: FeedlotNetOutputSchema,
+    intensities: FeedlotEmissionIntensitiesSchema,
+  })
+  .meta({
+    description: 'Emissions calculation output for the `feedlot` calculator',
+  });
 
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => FeedlotScope3Output)
-  @IsDefined()
-  scope3!: FeedlotScope3Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => SequestrationOutput)
-  @IsDefined()
-  carbonSequestration!: SequestrationOutput;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => FeedlotIntermediateOutput)
-  @IsDefined()
-  intermediate!: FeedlotIntermediateOutput[];
-
-  @ValidateNested({ always: true })
-  @Type(() => FeedlotNetOutput)
-  @IsDefined()
-  net!: FeedlotNetOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => FeedlotEmissionIntensities)
-  @IsDefined()
-  intensities!: FeedlotEmissionIntensities;
-}
-export const schemaFeedlotOutput: SchemaObject = validationMetadatasToSchemas();
-
+export type FeedlotOutput = z.infer<typeof FeedlotOutputSchema>;

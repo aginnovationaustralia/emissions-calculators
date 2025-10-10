@@ -1,40 +1,21 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsNumber, ValidateNested } from 'class-validator';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
-import { BroilerClass } from './broilerclass.input';
-import { PoultryFeed } from './feed.input';
+import { z } from 'zod';
+import { BroilerClassSchema } from './broilerclass.input';
+import { PoultryFeedSchema } from './feed.input';
 
-@SchemaDescription('Poultry broiler group')
-export class BroilerGroup {
-  @ValidateNested({ always: true })
-  @Type(() => BroilerClass)
-  @IsDefined()
-  meatChickenGrowers!: BroilerClass;
+export const BroilerGroupSchema = z
+  .object({
+    meatChickenGrowers: BroilerClassSchema,
+    meatChickenLayers: BroilerClassSchema,
+    meatOther: BroilerClassSchema,
+    feed: z.array(PoultryFeedSchema),
+    customFeedPurchased: z
+      .number()
+      .meta({ description: 'Custom feed purchased, in tonnes' }),
+    customFeedEmissionIntensity: z.number().meta({
+      description:
+        'Emissions intensity of custom feed in GHG (kg CO2-e/kg input)',
+    }),
+  })
+  .meta({ description: 'Poultry broiler group' });
 
-  @ValidateNested({ always: true })
-  @Type(() => BroilerClass)
-  @IsDefined()
-  meatChickenLayers!: BroilerClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => BroilerClass)
-  @IsDefined()
-  meatOther!: BroilerClass;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => PoultryFeed)
-  @IsDefined()
-  feed!: PoultryFeed[];
-
-  @IsNumber()
-  @SchemaDescription('Custom feed purchased, in tonnes')
-  @IsDefined()
-  customFeedPurchased!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity of custom feed in GHG (kg CO2-e/kg input)',
-  )
-  @IsDefined()
-  customFeedEmissionIntensity!: number;
-}
+export type BroilerGroup = z.infer<typeof BroilerGroupSchema>;

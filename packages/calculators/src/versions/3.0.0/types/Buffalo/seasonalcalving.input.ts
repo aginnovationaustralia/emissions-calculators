@@ -1,21 +1,12 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-@SchemaDescription('Seasonal calving rates, from 0 to 1')
-export class SeasonalCalvingRates {
-  @IsNumber()
-  @IsDefined()
-  spring!: number;
+export const SeasonalCalvingRatesSchema = z
+  .object({
+    spring: z.number(),
+    summer: z.number(),
+    autumn: z.number(),
+    winter: z.number(),
+  })
+  .meta({ description: 'Seasonal calving rates, from 0 to 1' });
 
-  @IsNumber()
-  @IsDefined()
-  summer!: number;
-
-  @IsNumber()
-  @IsDefined()
-  autumn!: number;
-
-  @IsNumber()
-  @IsDefined()
-  winter!: number;
-}
+export type SeasonalCalvingRates = z.infer<typeof SeasonalCalvingRatesSchema>;

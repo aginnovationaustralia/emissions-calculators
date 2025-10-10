@@ -1,15 +1,11 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from './decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
 
-export class LivestockPurchase {
-  @IsNumber()
-  @IsDefined()
-  @SchemaDescription(DESCRIPTIONS.HEADPURCHASED)
-  head!: number;
+export const LivestockPurchaseSchema = z.object({
+  head: z.number().meta({ description: DESCRIPTIONS.HEADPURCHASED }),
+  purchaseWeight: z
+    .number()
+    .meta({ description: DESCRIPTIONS.PURCHASEDWEIGHT }),
+});
 
-  @IsNumber()
-  @IsDefined()
-  @SchemaDescription(DESCRIPTIONS.PURCHASEDWEIGHT)
-  purchaseWeight!: number;
-}
+export type LivestockPurchase = z.infer<typeof LivestockPurchaseSchema>;

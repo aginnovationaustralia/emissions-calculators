@@ -1,29 +1,21 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { IsNumberArray, SchemaDescription } from '../decorator.schema';
-import { Vegetation } from '../vegetation.input';
+import { z } from 'zod';
+import { VegetationSchema } from '../vegetation.input';
 
-// Note: this is the `Data input - vegetation` tab in the spreadsheets
-@SchemaDescription(
-  'Non-productive vegetation inputs along with allocations to broilers and layers',
-)
-export class PoultryVegetation {
-  @ValidateNested({ always: true })
-  @Type(() => Vegetation)
-  @IsDefined()
-  vegetation!: Vegetation;
+export const PoultryVegetationSchema = z
+  .object({
+    vegetation: VegetationSchema,
+    broilersProportion: z.array(z.number()).meta({
+      description:
+        'The proportion of the sequestration that is allocated to broilers',
+    }),
+    layersProportion: z.array(z.number()).meta({
+      description:
+        'The proportion of the sequestration that is allocated to layers',
+    }),
+  })
+  .meta({
+    description:
+      'Non-productive vegetation inputs along with allocations to broilers and layers',
+  });
 
-  @IsNumberArray()
-  @SchemaDescription(
-    'The proportion of the sequestration that is allocated to broilers',
-  )
-  @IsDefined()
-  broilersProportion!: number[];
-
-  @IsNumberArray()
-  @SchemaDescription(
-    'The proportion of the sequestration that is allocated to layers',
-  )
-  @IsDefined()
-  layersProportion!: number[];
-}
+export type PoultryVegetation = z.infer<typeof PoultryVegetationSchema>;

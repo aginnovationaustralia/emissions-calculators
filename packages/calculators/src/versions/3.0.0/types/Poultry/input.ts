@@ -1,47 +1,23 @@
-import { IsBoolean, IsDefined, IsEnum, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import { TransformSingleOrArray } from '../../common/tools';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { State, States } from '../types';
-import { BroilersComplete } from './broilers.input';
-import { LayersComplete } from './layers.input';
-import { PoultryVegetation } from './vegetation.input';
+import { States } from '../types';
+import { BroilersCompleteSchema } from './broilers.input';
+import { LayersCompleteSchema } from './layers.input';
+import { PoultryVegetationSchema } from './vegetation.input';
 
-@SchemaDescription('Input data required for the `poultry` calculator')
-export class PoultryInput {
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
+export const PoultryInputSchema = z
+  .object({
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    northOfTropicOfCapricorn: z
+      .boolean()
+      .meta({ description: DESCRIPTIONS.NORTHOFTROPIC }),
+    rainfallAbove600: z
+      .boolean()
+      .meta({ description: DESCRIPTIONS.RAINFALLABOVE600 }),
+    broilers: z.array(BroilersCompleteSchema),
+    layers: z.array(LayersCompleteSchema),
+    vegetation: z.array(PoultryVegetationSchema),
+  })
+  .meta({ description: 'Input data required for the `poultry` calculator' });
 
-  @IsBoolean()
-  @SchemaDescription(DESCRIPTIONS.NORTHOFTROPIC)
-  @IsDefined()
-  northOfTropicOfCapricorn!: boolean;
-
-  @IsBoolean()
-  @SchemaDescription(DESCRIPTIONS.RAINFALLABOVE600)
-  @IsDefined()
-  rainfallAbove600!: boolean;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => BroilersComplete)
-  @TransformSingleOrArray(BroilersComplete)
-  @IsDefined()
-  broilers!: BroilersComplete[];
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => LayersComplete)
-  @TransformSingleOrArray(LayersComplete)
-  @IsDefined()
-  layers!: LayersComplete[];
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => PoultryVegetation)
-  @IsDefined()
-  vegetation!: PoultryVegetation[];
-}
-export const schemaPoultryInput: SchemaObject = validationMetadatasToSchemas();
-
+export type PoultryInput = z.infer<typeof PoultryInputSchema>;

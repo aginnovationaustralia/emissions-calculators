@@ -1,44 +1,23 @@
-import {
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import 'reflect-metadata';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { State, States } from '../types';
-import { CottonCrop } from './cotton.input';
-import { CottonVegetation } from './vegetation.input';
+import { States } from '../types';
+import { CottonCropSchema } from './cotton.input';
+import { CottonVegetationSchema } from './vegetation.input';
 
-@SchemaDescription('Input data required for the `cotton` calculator')
-export class CottonInput {
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
+export const CottonInputSchema = z
+  .object({
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    crops: z.array(CottonCropSchema),
+    electricityRenewable: z
+      .number()
+      .min(0)
+      .max(1)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+    electricityUse: z
+      .number()
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
+    vegetation: z.array(CottonVegetationSchema),
+  })
+  .meta({ description: 'Input data required for the `cotton` calculator' });
 
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => CottonCrop)
-  @IsDefined()
-  crops!: CottonCrop[];
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_RENEWABLE)
-  @IsDefined()
-  electricityRenewable!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_USE)
-  @IsDefined()
-  electricityUse!: number;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => CottonVegetation)
-  @IsDefined()
-  vegetation!: CottonVegetation[];
-}
+export type CottonInput = z.infer<typeof CottonInputSchema>;

@@ -1,37 +1,16 @@
-import { IsDefined, IsNumber, Max, Min } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-@SchemaDescription(
-  'Manure management for each type, each value is a percentage of all excreta, from 0 to 100',
-)
-export class ManureManagement {
-  @IsNumber()
-  @IsDefined()
-  @Min(0)
-  @Max(100)
-  pasture!: number;
+export const ManureManagementSchema = z
+  .object({
+    pasture: z.number().min(0).max(100),
+    anaerobicLagoon: z.number().min(0).max(100),
+    sumpAndDispersal: z.number().min(0).max(100),
+    drainToPaddocks: z.number().min(0).max(100),
+    soildStorage: z.number().min(0).max(100),
+  })
+  .meta({
+    description:
+      'Manure management for each type, each value is a percentage of all excreta, from 0 to 100',
+  });
 
-  @IsNumber()
-  @IsDefined()
-  @Min(0)
-  @Max(100)
-  anaerobicLagoon!: number;
-
-  @IsNumber()
-  @IsDefined()
-  @Min(0)
-  @Max(100)
-  sumpAndDispersal!: number;
-
-  @IsNumber()
-  @IsDefined()
-  @Min(0)
-  @Max(100)
-  drainToPaddocks!: number;
-
-  @IsNumber()
-  @IsDefined()
-  @Min(0)
-  @Max(100)
-  soildStorage!: number;
-}
+export type ManureManagement = z.infer<typeof ManureManagementSchema>;

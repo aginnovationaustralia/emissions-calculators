@@ -1,44 +1,21 @@
-import { IsBoolean, IsDefined, IsEnum, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import { TransformSingleOrArray } from '../../common/tools';
-import { AllocatedVegetation } from '../allocated-vegetation.input';
-import {
-  DeprecatedSchemaDescription,
-  SchemaDescription,
-  TypeWithArraySchema,
-} from '../decorator.schema';
+import { z } from 'zod';
+import { AllocatedVegetationSchema } from '../allocated-vegetation.input';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { State, States } from '../types';
-import { PorkComplete } from './pork.input';
+import { States } from '../types';
+import { PorkCompleteSchema } from './pork.input';
 
-@SchemaDescription('Input data required for the `pork` calculator')
-export class PorkInput {
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
+export const PorkInputSchema = z
+  .object({
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    northOfTropicOfCapricorn: z.boolean().meta({
+      description: `${DESCRIPTIONS.NORTHOFTROPIC}. Deprecated note: This field is deprecated`,
+    }),
+    rainfallAbove600: z
+      .boolean()
+      .meta({ description: DESCRIPTIONS.RAINFALLABOVE600 }),
+    pork: z.array(PorkCompleteSchema),
+    vegetation: z.array(AllocatedVegetationSchema),
+  })
+  .meta({ description: 'Input data required for the `pork` calculator' });
 
-  @IsBoolean()
-  @DeprecatedSchemaDescription(DESCRIPTIONS.NORTHOFTROPIC)
-  @IsDefined()
-  northOfTropicOfCapricorn!: boolean;
-
-  @IsBoolean()
-  @SchemaDescription(DESCRIPTIONS.RAINFALLABOVE600)
-  @IsDefined()
-  rainfallAbove600!: boolean;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => PorkComplete)
-  @TransformSingleOrArray(PorkComplete)
-  @IsDefined()
-  pork!: PorkComplete[];
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => AllocatedVegetation)
-  @IsDefined()
-  vegetation!: AllocatedVegetation[];
-}
-export const schemaPorkInput: SchemaObject = validationMetadatasToSchemas();
-
+export type PorkInput = z.infer<typeof PorkInputSchema>;

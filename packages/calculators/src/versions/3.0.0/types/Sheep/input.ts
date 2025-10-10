@@ -1,40 +1,21 @@
-import { IsBoolean, IsDefined, IsEnum, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import { TransformSingleOrArray } from '../../common/tools';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { State, States } from '../types';
-import { SheepComplete } from './sheep.input';
-import { SheepVegetation } from './vegetation.input';
+import { States } from '../types';
+import { SheepCompleteSchema } from './sheep.input';
+import { SheepVegetationSchema } from './vegetation.input';
 
-@SchemaDescription('Input data required for the `sheep` calculator')
-export class SheepInput {
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
+export const SheepInputSchema = z
+  .object({
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    northOfTropicOfCapricorn: z
+      .boolean()
+      .meta({ description: DESCRIPTIONS.NORTHOFTROPIC }),
+    rainfallAbove600: z
+      .boolean()
+      .meta({ description: DESCRIPTIONS.RAINFALLABOVE600 }),
+    sheep: z.array(SheepCompleteSchema),
+    vegetation: z.array(SheepVegetationSchema),
+  })
+  .meta({ description: 'Input data required for the `sheep` calculator' });
 
-  @IsBoolean()
-  @SchemaDescription(DESCRIPTIONS.NORTHOFTROPIC)
-  @IsDefined()
-  northOfTropicOfCapricorn!: boolean;
-
-  @IsBoolean()
-  @SchemaDescription(DESCRIPTIONS.RAINFALLABOVE600)
-  @IsDefined()
-  rainfallAbove600!: boolean;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => SheepComplete)
-  @TransformSingleOrArray(SheepComplete)
-  @IsDefined()
-  sheep!: SheepComplete[];
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => SheepVegetation)
-  @IsDefined()
-  vegetation!: SheepVegetation[];
-}
-export const schemaSheepInput: SchemaObject = validationMetadatasToSchemas();
-
+export type SheepInput = z.infer<typeof SheepInputSchema>;

@@ -1,55 +1,25 @@
-import { Type } from 'class-transformer';
-import { IsOptional, ValidateNested } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
-import { BuffaloClass } from './buffaloclass.input';
+import { z } from 'zod';
+import { BuffaloClassSchema } from './buffaloclass.input';
 
-@SchemaDescription('Buffalo classes of different types')
-export class BuffaloClasses {
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloClass)
-  @SchemaDescription('Bulls')
-  @IsOptional()
-  bulls?: BuffaloClass;
+export const BuffaloClassesSchema = z
+  .object({
+    bulls: BuffaloClassSchema.optional().meta({ description: 'Bulls' }),
+    tradeBulls: BuffaloClassSchema.optional().meta({
+      description: 'Trade bulls',
+    }),
+    cows: BuffaloClassSchema.optional().meta({ description: 'Cows' }),
+    tradeCows: BuffaloClassSchema.optional().meta({
+      description: 'Trade cows',
+    }),
+    steers: BuffaloClassSchema.optional().meta({ description: 'Steers' }),
+    tradeSteers: BuffaloClassSchema.optional().meta({
+      description: 'Trade steers',
+    }),
+    calfs: BuffaloClassSchema.optional().meta({ description: 'Calfs' }),
+    tradeCalfs: BuffaloClassSchema.optional().meta({
+      description: 'Trade calfs',
+    }),
+  })
+  .meta({ description: 'Buffalo classes of different types' });
 
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloClass)
-  @SchemaDescription('Trade bulls')
-  @IsOptional()
-  tradeBulls?: BuffaloClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloClass)
-  @SchemaDescription('Cows')
-  @IsOptional()
-  cows?: BuffaloClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloClass)
-  @SchemaDescription('Trade cows')
-  @IsOptional()
-  tradeCows?: BuffaloClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloClass)
-  @SchemaDescription('Steers')
-  @IsOptional()
-  steers?: BuffaloClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloClass)
-  @SchemaDescription('Trade steers')
-  @IsOptional()
-  tradeSteers?: BuffaloClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloClass)
-  @SchemaDescription('Calfs')
-  @IsOptional()
-  calfs?: BuffaloClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloClass)
-  @SchemaDescription('Trade calfs')
-  @IsOptional()
-  tradeCalfs?: BuffaloClass;
-}
+export type BuffaloClasses = z.infer<typeof BuffaloClassesSchema>;

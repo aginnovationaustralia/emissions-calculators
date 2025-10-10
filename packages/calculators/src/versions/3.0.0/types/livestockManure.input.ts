@@ -1,25 +1,11 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { LivestockManureSeason } from './livestockManureSeason.input';
+import { z } from 'zod';
+import { LivestockManureSeasonSchema } from './livestockManureSeason.input';
 
-export class LivestockManure {
-  @ValidateNested({ always: true })
-  @IsDefined()
-  @Type(() => LivestockManureSeason)
-  spring!: LivestockManureSeason;
+export const LivestockManureSchema = z.object({
+  spring: LivestockManureSeasonSchema,
+  summer: LivestockManureSeasonSchema,
+  autumn: LivestockManureSeasonSchema,
+  winter: LivestockManureSeasonSchema,
+});
 
-  @ValidateNested({ always: true })
-  @IsDefined()
-  @Type(() => LivestockManureSeason)
-  summer!: LivestockManureSeason;
-
-  @ValidateNested({ always: true })
-  @IsDefined()
-  @Type(() => LivestockManureSeason)
-  autumn!: LivestockManureSeason;
-
-  @ValidateNested({ always: true })
-  @IsDefined()
-  @Type(() => LivestockManureSeason)
-  winter!: LivestockManureSeason;
-}
+export type LivestockManure = z.infer<typeof LivestockManureSchema>;

@@ -1,15 +1,12 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import 'reflect-metadata';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-export class WildSeaFisheriesCustomBaitPurchase {
-  @IsNumber()
-  @SchemaDescription('Purchased product in tonnes')
-  @IsDefined()
-  purchased!: number;
+export const WildSeaFisheriesCustomBaitPurchaseSchema = z.object({
+  purchased: z.number().meta({ description: 'Purchased product in tonnes' }),
+  emissionsIntensity: z
+    .number()
+    .meta({ description: 'Emissions intensity of product, in kg CO2e/kg' }),
+});
 
-  @IsNumber()
-  @SchemaDescription('Emissions intensity of product, in kg CO2e/kg')
-  @IsDefined()
-  emissionsIntensity!: number;
-}
+export type WildSeaFisheriesCustomBaitPurchase = z.infer<
+  typeof WildSeaFisheriesCustomBaitPurchaseSchema
+>;

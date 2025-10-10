@@ -1,50 +1,27 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsString, ValidateNested } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { Scope2Output } from '../scope2.output';
-import { SequestrationTotalOutput } from '../sequestration.total.output';
-import { DairyEmissionsIntensities } from './intensities.output';
-import { DairyNet } from './net.output';
-import { DairyScope1Output } from './scope1.output';
-import { DairyScope3Output } from './scope3.output';
+import { Scope2OutputSchema } from '../scope2.output';
+import { SequestrationTotalOutputSchema } from '../sequestration.total.output';
+import { DairyEmissionsIntensitiesSchema } from './intensities.output';
+import { DairyNetSchema } from './net.output';
+import { DairyScope1OutputSchema } from './scope1.output';
+import { DairyScope3OutputSchema } from './scope3.output';
 
-@SchemaDescription(
-  'Intermediate emissions calculation output for the Dairy calculator',
-)
-export class DairyIntermediateOutput {
-  @IsString()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  @IsDefined()
-  id!: string;
+export const DairyIntermediateOutputSchema = z
+  .object({
+    id: z.string().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+    scope1: DairyScope1OutputSchema,
+    scope2: Scope2OutputSchema,
+    scope3: DairyScope3OutputSchema,
+    net: DairyNetSchema,
+    intensities: DairyEmissionsIntensitiesSchema,
+    carbonSequestration: SequestrationTotalOutputSchema,
+  })
+  .meta({
+    description:
+      'Intermediate emissions calculation output for the Dairy calculator',
+  });
 
-  @ValidateNested({ always: true })
-  @Type(() => DairyScope1Output)
-  @IsDefined()
-  scope1!: DairyScope1Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => DairyScope3Output)
-  @IsDefined()
-  scope3!: DairyScope3Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => DairyNet)
-  @IsDefined()
-  net!: DairyNet;
-
-  @ValidateNested({ always: true })
-  @Type(() => DairyEmissionsIntensities)
-  @IsDefined()
-  intensities!: DairyEmissionsIntensities;
-
-  @ValidateNested({ always: true })
-  @Type(() => SequestrationTotalOutput)
-  @IsDefined()
-  carbonSequestration!: SequestrationTotalOutput;
-}
+export type DairyIntermediateOutput = z.infer<
+  typeof DairyIntermediateOutputSchema
+>;

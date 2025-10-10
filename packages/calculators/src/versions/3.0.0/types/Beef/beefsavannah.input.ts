@@ -1,19 +1,14 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { IsNumberArray, SchemaDescription } from '../decorator.schema';
-import { SavannahBurning } from './savannah.input';
+import { z } from 'zod';
+import { SavannahBurningSchema } from './savannah.input';
 
-@SchemaDescription('Savannah burning along with allocations to beef')
-export class BeefSavannahBurning {
-  @ValidateNested({ always: true })
-  @Type(() => SavannahBurning)
-  @IsDefined()
-  burning!: SavannahBurning;
+export const BeefSavannahBurningSchema = z
+  .object({
+    burning: SavannahBurningSchema,
+    allocationToBeef: z.array(z.number()).meta({
+      description:
+        'The proportion of the burning that is allocated to each beef',
+    }),
+  })
+  .meta({ description: 'Savannah burning along with allocations to beef' });
 
-  @SchemaDescription(
-    'The proportion of the burning that is allocated to each beef',
-  )
-  @IsNumberArray()
-  @IsDefined()
-  allocationToBeef: number[] = [];
-}
+export type BeefSavannahBurning = z.infer<typeof BeefSavannahBurningSchema>;

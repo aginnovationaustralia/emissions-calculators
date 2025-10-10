@@ -1,81 +1,23 @@
-import { IsNumber, IsOptional, Max, Min } from 'class-validator';
-import 'reflect-metadata';
+import { z } from 'zod';
 
-import { SchemaDescription } from '../decorator.schema';
+export const FeedIngredientsSchema = z
+  .object({
+    wheat: z.number().min(0).max(1).optional(),
+    barley: z.number().min(0).max(1).optional(),
+    wheyPowder: z.number().min(0).max(1).optional(),
+    canolaMeal: z.number().min(0).max(1).optional(),
+    soybeanMeal: z.number().min(0).max(1).optional(),
+    meatMeal: z.number().min(0).max(1).optional(),
+    bloodMeal: z.number().min(0).max(1).optional(),
+    fishmeal: z.number().min(0).max(1).optional(),
+    tallow: z.number().min(0).max(1).optional(),
+    wheatBran: z.number().min(0).max(1).optional(),
+    beetPulp: z.number().min(0).max(1).optional(),
+    millMix: z.number().min(0).max(1).optional(),
+  })
+  .meta({
+    description:
+      'Feed product ingredients, each ingredient is a fraction from 0 to 1',
+  });
 
-@SchemaDescription(
-  'Feed product ingredients, each ingredient is a fraction from 0 to 1',
-)
-export class FeedIngredients {
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  wheat?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  barley?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  wheyPowder?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  canolaMeal?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  soybeanMeal?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  meatMeal?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  bloodMeal?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  fishmeal?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  tallow?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  wheatBran?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  beetPulp?: number;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  millMix?: number;
-}
+export type FeedIngredients = z.infer<typeof FeedIngredientsSchema>;

@@ -1,86 +1,49 @@
-import { Type } from 'class-transformer';
-import {
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import 'reflect-metadata';
-import { FluidWasteInput } from '../common/fluid-waste.input';
-import { SolidWasteInput } from '../common/solid-waste.input';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
+import { FluidWasteInputSchema } from '../common/fluid-waste.input';
+import { SolidWasteInputSchema } from '../common/solid-waste.input';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { FuelInput } from '../fuel.input';
-import { RefrigerantInput } from '../refrigerant.input';
-import { ElectricitySource, ElectricitySources } from '../types';
-import { ProcessingProduct } from './product.input';
+import { FuelInputSchema } from '../fuel.input';
+import { RefrigerantInputSchema } from '../refrigerant.input';
+import { ElectricitySources } from '../types';
+import { ProcessingProductSchema } from './product.input';
 
-@SchemaDescription('Input data required for processing a specific product')
-export class ProductProcessingInput {
-  @IsString()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  id?: string;
+export const ProductProcessingInputSchema = z
+  .object({
+    id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+    product: ProcessingProductSchema.meta({
+      description: DESCRIPTIONS.PROCESSING_PRODUCT,
+    }),
+    electricityRenewable: z
+      .number()
+      .min(0)
+      .max(1)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+    electricityUse: z
+      .number()
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
+    electricitySource: z
+      .enum(ElectricitySources)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
+    fuel: FuelInputSchema.meta({ description: DESCRIPTIONS.FUEL }),
+    refrigerants: z
+      .array(RefrigerantInputSchema)
+      .meta({ description: DESCRIPTIONS.REFRIGERANT }),
+    fluidWaste: z
+      .array(FluidWasteInputSchema)
+      .meta({ description: DESCRIPTIONS.FLUID_WASTE }),
+    solidWaste: SolidWasteInputSchema.meta({
+      description: DESCRIPTIONS.SOLID_WASTE,
+    }),
+    purchasedCO2: z.number().meta({ description: DESCRIPTIONS.PURCHASED_CO2 }),
+    carbonOffsets: z
+      .number()
+      .optional()
+      .meta({ description: DESCRIPTIONS.CARBON_OFFSETS }),
+  })
+  .meta({
+    description: 'Input data required for processing a specific product',
+  });
 
-  @ValidateNested({ always: true })
-  @Type(() => ProcessingProduct)
-  @SchemaDescription(DESCRIPTIONS.PROCESSING_PRODUCT)
-  @IsDefined()
-  product!: ProcessingProduct;
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_RENEWABLE)
-  @IsDefined()
-  electricityRenewable!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_USE)
-  @IsDefined()
-  electricityUse!: number;
-
-  @IsEnum(ElectricitySources)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_SOURCE)
-  @IsDefined()
-  electricitySource!: ElectricitySource;
-
-  @ValidateNested({ always: true })
-  @Type(() => FuelInput)
-  @SchemaDescription(DESCRIPTIONS.FUEL)
-  @IsDefined()
-  fuel!: FuelInput;
-
-  @TypeWithArraySchema(() => RefrigerantInput)
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.REFRIGERANT)
-  @IsDefined()
-  refrigerants!: RefrigerantInput[];
-
-  @ValidateNested({ always: true, each: true })
-  @Type(() => FluidWasteInput)
-  @TypeWithArraySchema(() => FluidWasteInput)
-  @SchemaDescription(DESCRIPTIONS.FLUID_WASTE)
-  @IsDefined()
-  fluidWaste!: FluidWasteInput[];
-
-  @ValidateNested({ always: true })
-  @Type(() => SolidWasteInput)
-  @SchemaDescription(DESCRIPTIONS.SOLID_WASTE)
-  @IsDefined()
-  solidWaste!: SolidWasteInput;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.PURCHASED_CO2)
-  @IsDefined()
-  purchasedCO2!: number;
-
-  @IsNumber()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.CARBON_OFFSETS)
-  carbonOffsets?: number;
-}
+export type ProductProcessingInput = z.infer<
+  typeof ProductProcessingInputSchema
+>;

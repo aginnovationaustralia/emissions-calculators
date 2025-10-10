@@ -1,44 +1,23 @@
-import {
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import 'reflect-metadata';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { State, States } from '../types';
-import { SugarCrop } from './sugar.input';
-import { SugarVegetation } from './vegetation.input';
+import { States } from '../types';
+import { SugarCropSchema } from './sugar.input';
+import { SugarVegetationSchema } from './vegetation.input';
 
-@SchemaDescription('Input data required for the `sugar` calculator')
-export class SugarInput {
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
+export const SugarInputSchema = z
+  .object({
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    crops: z.array(SugarCropSchema),
+    electricityRenewable: z
+      .number()
+      .min(0)
+      .max(1)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+    electricityUse: z
+      .number()
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
+    vegetation: z.array(SugarVegetationSchema),
+  })
+  .meta({ description: 'Input data required for the `sugar` calculator' });
 
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => SugarCrop)
-  @IsDefined()
-  crops!: SugarCrop[];
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_RENEWABLE)
-  @IsDefined()
-  electricityRenewable!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_USE)
-  @IsDefined()
-  electricityUse!: number;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => SugarVegetation)
-  @IsDefined()
-  vegetation!: SugarVegetation[];
-}
+export type SugarInput = z.infer<typeof SugarInputSchema>;

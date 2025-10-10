@@ -1,87 +1,42 @@
-import { Type } from 'class-transformer';
-import {
-  IsDefined,
-  IsNumber,
-  IsOptional,
-  ValidateNested,
-} from 'class-validator';
-import {
-  DeprecatedSchemaDescription,
-  SchemaDescription,
-  TypeWithArraySchema,
-} from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { LivestockPurchase } from '../livestockPurchase.input';
-import { GoatSeason } from './goatseason.input';
+import { LivestockPurchaseSchema } from '../livestockPurchase.input';
+import { GoatSeasonSchema } from './goatseason.input';
 
-@SchemaDescription('Goat class with seasonal data')
-export class GoatClass {
-  @ValidateNested({ always: true })
-  @Type(() => GoatSeason)
-  @IsDefined()
-  autumn!: GoatSeason;
+export const GoatClassSchema = z
+  .object({
+    autumn: GoatSeasonSchema,
+    winter: GoatSeasonSchema,
+    spring: GoatSeasonSchema,
+    summer: GoatSeasonSchema,
+    headPurchased: z
+      .number()
+      .optional()
+      .meta({
+        description: `${DESCRIPTIONS.HEADPURCHASED}. Deprecated note: Please use \`purchases\` instead`,
+      }),
+    purchasedWeight: z
+      .number()
+      .optional()
+      .meta({
+        description: `${DESCRIPTIONS.PURCHASEDWEIGHT}. Deprecated note: Please use \`purchases\` instead`,
+      }),
+    headSold: z.number().meta({ description: DESCRIPTIONS.HEADSOLD }),
+    saleWeight: z.number().meta({ description: DESCRIPTIONS.SALEWEIGHT }),
+    headShorn: z
+      .number()
+      .meta({ description: 'Number of goat shorn, in head' }),
+    woolShorn: z
+      .number()
+      .meta({
+        description: 'Weight of wool shorn, in kg/head (kilogram per head)',
+      }),
+    cleanWoolYield: z.number().meta({
+      description:
+        'Percentage of clean wool from weight of yield, from 0 to 100',
+    }),
+    purchases: z.array(LivestockPurchaseSchema).optional(),
+  })
+  .meta({ description: 'Goat class with seasonal data' });
 
-  @ValidateNested({ always: true })
-  @Type(() => GoatSeason)
-  @IsDefined()
-  winter!: GoatSeason;
-
-  @ValidateNested({ always: true })
-  @Type(() => GoatSeason)
-  @IsDefined()
-  spring!: GoatSeason;
-
-  @ValidateNested({ always: true })
-  @Type(() => GoatSeason)
-  @IsDefined()
-  summer!: GoatSeason;
-
-  @IsNumber()
-  @IsOptional()
-  @DeprecatedSchemaDescription(
-    DESCRIPTIONS.HEADPURCHASED,
-    'Please use `purchases` instead',
-  )
-  headPurchased?: number;
-
-  @IsNumber()
-  @IsOptional()
-  @DeprecatedSchemaDescription(
-    DESCRIPTIONS.PURCHASEDWEIGHT,
-    'Please use `purchases` instead',
-  )
-  purchasedWeight?: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.HEADSOLD)
-  @IsDefined()
-  headSold!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.SALEWEIGHT)
-  @IsDefined()
-  saleWeight!: number;
-
-  @IsNumber()
-  @SchemaDescription('Number of goat shorn, in head')
-  @IsDefined()
-  headShorn!: number;
-
-  @IsNumber()
-  @SchemaDescription('Weight of wool shorn, in kg/head (kilogram per head)')
-  @IsDefined()
-  woolShorn!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Percentage of clean wool from weight of yield, from 0 to 100',
-  )
-  @IsDefined()
-  cleanWoolYield!: number;
-
-  // Make mandatory when headPurchased is deprecated
-  @IsOptional()
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => LivestockPurchase)
-  purchases?: LivestockPurchase[];
-}
+export type GoatClass = z.infer<typeof GoatClassSchema>;

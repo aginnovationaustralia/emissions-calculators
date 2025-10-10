@@ -1,49 +1,18 @@
-import { Type } from 'class-transformer';
-import { IsOptional, ValidateNested } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
-import { PorkClass } from './porkclass.input';
+import { z } from 'zod';
+import { PorkClassSchema } from './porkclass.input';
 
-@SchemaDescription('Pork classes of different types')
-export class PorkClasses {
-  @ValidateNested({ always: true })
-  @Type(() => PorkClass)
-  @IsOptional()
-  @SchemaDescription('Sows')
-  sows?: PorkClass;
+export const PorkClassesSchema = z
+  .object({
+    sows: PorkClassSchema.optional().meta({ description: 'Sows' }),
+    boars: PorkClassSchema.optional().meta({ description: 'Boars' }),
+    gilts: PorkClassSchema.optional().meta({ description: 'Gilts' }),
+    suckers: PorkClassSchema.optional().meta({ description: 'Suckers' }),
+    weaners: PorkClassSchema.optional().meta({ description: 'Weaners' }),
+    growers: PorkClassSchema.optional().meta({ description: 'Growers' }),
+    slaughterPigs: PorkClassSchema.optional().meta({
+      description: 'Slaughter Pigs',
+    }),
+  })
+  .meta({ description: 'Pork classes of different types' });
 
-  @ValidateNested({ always: true })
-  @Type(() => PorkClass)
-  @IsOptional()
-  @SchemaDescription('Boars')
-  boars?: PorkClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => PorkClass)
-  @IsOptional()
-  @SchemaDescription('Gilts')
-  gilts?: PorkClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => PorkClass)
-  @IsOptional()
-  @SchemaDescription('Suckers')
-  suckers?: PorkClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => PorkClass)
-  @IsOptional()
-  @SchemaDescription('Weaners')
-  weaners?: PorkClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => PorkClass)
-  @IsOptional()
-  @SchemaDescription('Growers')
-  growers?: PorkClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => PorkClass)
-  @IsOptional()
-  @SchemaDescription('Slaughter Pigs')
-  slaughterPigs?: PorkClass;
-}
+export type PorkClasses = z.infer<typeof PorkClassesSchema>;

@@ -1,19 +1,17 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-export class GrainsIntensitiesOutput {
-  @IsNumber()
-  @SchemaDescription('Grain produced in tonnes')
-  @IsDefined()
-  grainProducedTonnes!: number;
+export const GrainsIntensitiesOutputSchema = z.object({
+  grainProducedTonnes: z
+    .number()
+    .meta({ description: 'Grain produced in tonnes' }),
+  grainsExcludingSequestration: z
+    .number()
+    .meta({ description: 'Grains excluding sequestration, in t-CO2e/t grain' }),
+  grainsIncludingSequestration: z
+    .number()
+    .meta({ description: 'Grains including sequestration, in t-CO2e/t grain' }),
+});
 
-  @IsNumber()
-  @SchemaDescription('Grains excluding sequestration, in t-CO2e/t grain')
-  @IsDefined()
-  grainsExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription('Grains including sequestration, in t-CO2e/t grain')
-  @IsDefined()
-  grainsIncludingSequestration!: number;
-}
+export type GrainsIntensitiesOutput = z.infer<
+  typeof GrainsIntensitiesOutputSchema
+>;

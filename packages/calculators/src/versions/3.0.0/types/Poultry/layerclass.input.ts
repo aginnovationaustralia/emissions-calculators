@@ -1,25 +1,12 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-@SchemaDescription('Layer class with seasonal data')
-export class LayerClass {
-  @IsNumber()
-  @SchemaDescription('Flock numbers in autumn')
-  @IsDefined()
-  autumn!: number;
+export const LayerClassSchema = z
+  .object({
+    autumn: z.number().meta({ description: 'Flock numbers in autumn' }),
+    winter: z.number().meta({ description: 'Flock numbers in winter' }),
+    spring: z.number().meta({ description: 'Flock numbers in spring' }),
+    summer: z.number().meta({ description: 'Flock numbers in summer' }),
+  })
+  .meta({ description: 'Layer class with seasonal data' });
 
-  @IsNumber()
-  @SchemaDescription('Flock numbers in winter')
-  @IsDefined()
-  winter!: number;
-
-  @IsNumber()
-  @SchemaDescription('Flock numbers in spring')
-  @IsDefined()
-  spring!: number;
-
-  @IsNumber()
-  @SchemaDescription('Flock numbers in summer')
-  @IsDefined()
-  summer!: number;
-}
+export type LayerClass = z.infer<typeof LayerClassSchema>;

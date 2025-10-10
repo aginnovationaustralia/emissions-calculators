@@ -1,61 +1,41 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-export class SheepBeefEmissionsIntensities {
-  @IsNumber()
-  @SchemaDescription(
-    'Beef including carbon sequestration, in kg-CO2e/kg liveweight',
-  )
-  @IsDefined()
-  beefIncludingSequestration!: number;
+export const SheepBeefEmissionsIntensitiesSchema = z.object({
+  beefIncludingSequestration: z.number().meta({
+    description:
+      'Beef including carbon sequestration, in kg-CO2e/kg liveweight',
+  }),
+  beefExcludingSequestration: z.number().meta({
+    description:
+      'Beef excluding carbon sequestration, in kg-CO2e/kg liveweight',
+  }),
+  liveweightBeefProducedKg: z
+    .number()
+    .meta({ description: 'Liveweight produced in kg' }),
+  woolIncludingSequestration: z.number().meta({
+    description:
+      'Wool production including carbon sequestration, in kg-CO2e/kg greasy',
+  }),
+  woolExcludingSequestration: z.number().meta({
+    description:
+      'Wool production excluding carbon sequestration, in kg-CO2e/kg greasy',
+  }),
+  sheepMeatBreedingIncludingSequestration: z.number().meta({
+    description:
+      'Sheep meat (breeding herd) including carbon sequestration, in kg-CO2e/kg liveweight',
+  }),
+  sheepMeatBreedingExcludingSequestration: z.number().meta({
+    description:
+      'Sheep meat (breeding herd) excluding carbon sequestration, in kg-CO2e/kg liveweight',
+  }),
+  woolProducedKg: z
+    .number()
+    .meta({ description: 'Greasy wool produced in kg' }),
+  sheepMeatProducedKg: z
+    .number()
+    .meta({ description: 'Sheep meat produced in kg liveweight' }),
+});
 
-  @IsNumber()
-  @SchemaDescription(
-    'Beef excluding carbon sequestration, in kg-CO2e/kg liveweight',
-  )
-  @IsDefined()
-  beefExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription('Liveweight produced in kg')
-  @IsDefined()
-  liveweightBeefProducedKg!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Wool production including carbon sequestration, in kg-CO2e/kg greasy',
-  )
-  @IsDefined()
-  woolIncludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Wool production excluding carbon sequestration, in kg-CO2e/kg greasy',
-  )
-  @IsDefined()
-  woolExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Sheep meat (breeding herd) including carbon sequestration, in kg-CO2e/kg liveweight',
-  )
-  @IsDefined()
-  sheepMeatBreedingIncludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Sheep meat (breeding herd) excluding carbon sequestration, in kg-CO2e/kg liveweight',
-  )
-  @IsDefined()
-  sheepMeatBreedingExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription('Greasy wool produced in kg')
-  @IsDefined()
-  woolProducedKg!: number;
-
-  @IsNumber()
-  @SchemaDescription('Sheep meat produced in kg liveweight')
-  @IsDefined()
-  sheepMeatProducedKg!: number;
-}
+export type SheepBeefEmissionsIntensities = z.infer<
+  typeof SheepBeefEmissionsIntensitiesSchema
+>;

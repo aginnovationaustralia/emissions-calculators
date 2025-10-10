@@ -1,42 +1,20 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsNumber, ValidateNested } from 'class-validator';
-import { BaseScopesOutput } from '../base';
-import { BeefEmissionsIntensities } from '../Beef/intensities.output';
-import { NetOutput } from '../common/net.output';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
+import { BeefEmissionsIntensitiesSchema } from '../Beef/intensities.output';
+import { NetOutputSchema } from '../common/net.output';
 import { OUTPUTDESCRIPTIONS } from '../descriptions.schema';
-import { Scope2Output } from '../scope2.output';
-import { SheepBeefScope1Output } from './scope1.output';
-import { SheepBeefScope3Output } from './scope3.output';
+import { Scope2OutputSchema } from '../scope2.output';
+import { SheepBeefScope1OutputSchema } from './scope1.output';
+import { SheepBeefScope3OutputSchema } from './scope3.output';
 
-export class BeefSummaryOutput extends BaseScopesOutput {
-  @ValidateNested({ always: true })
-  @Type(() => SheepBeefScope1Output)
-  @IsDefined()
-  scope1!: SheepBeefScope1Output;
+export const BeefSummaryOutputSchema = z.object({
+  scope1: SheepBeefScope1OutputSchema,
+  scope2: Scope2OutputSchema,
+  scope3: SheepBeefScope3OutputSchema,
+  carbonSequestration: z
+    .number()
+    .meta({ description: OUTPUTDESCRIPTIONS.sequestration }),
+  net: NetOutputSchema,
+  intensities: BeefEmissionsIntensitiesSchema,
+});
 
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepBeefScope3Output)
-  @IsDefined()
-  scope3!: SheepBeefScope3Output;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.sequestration)
-  @IsDefined()
-  carbonSequestration!: number;
-
-  @ValidateNested({ always: true })
-  @Type(() => NetOutput)
-  @IsDefined()
-  net!: NetOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => BeefEmissionsIntensities)
-  @IsDefined()
-  intensities!: BeefEmissionsIntensities;
-}
+export type BeefSummaryOutput = z.infer<typeof BeefSummaryOutputSchema>;

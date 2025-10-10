@@ -1,31 +1,24 @@
-import { IsDefined, IsEnum, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { ProductUnit } from './product.input';
 
-export class ProcessingIntensitiesOutput {
-  @IsNumber()
-  @SchemaDescription('Number of processed product units produced')
-  @IsDefined()
-  unitsProduced!: number;
+export const ProcessingIntensitiesOutputSchema = z.object({
+  unitsProduced: z
+    .number()
+    .meta({ description: 'Number of processed product units produced' }),
+  unitOfProduct: z.nativeEnum(ProductUnit).meta({
+    description:
+      'Unit type of the product being produced (used by "unitsProduced")',
+  }),
+  processingExcludingCarbonOffsets: z.number().meta({
+    description:
+      'Processing emissions intensity excluding carbon offsets, in kg-CO2e/number of units produced',
+  }),
+  processingIncludingCarbonOffsets: z.number().meta({
+    description:
+      'Processing emissions intensity including carbon offsets, in kg-CO2e/number of units produced',
+  }),
+});
 
-  @IsEnum(ProductUnit)
-  @SchemaDescription(
-    'Unit type of the product being produced (used by "unitsProduced")',
-  )
-  @IsDefined()
-  unitOfProduct!: ProductUnit;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Processing emissions intensity excluding carbon offsets, in kg-CO2e/number of units produced',
-  )
-  @IsDefined()
-  processingExcludingCarbonOffsets!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Processing emissions intensity including carbon offsets, in kg-CO2e/number of units produced',
-  )
-  @IsDefined()
-  processingIncludingCarbonOffsets!: number;
-}
+export type ProcessingIntensitiesOutput = z.infer<
+  typeof ProcessingIntensitiesOutputSchema
+>;

@@ -1,27 +1,13 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
-import { DairySeason } from './dairyseason.input';
+import { z } from 'zod';
+import { DairySeasonSchema } from './dairyseason.input';
 
-@SchemaDescription('Dairy class with seasonal data')
-export class DairyClass {
-  @ValidateNested({ always: true })
-  @Type(() => DairySeason)
-  @IsDefined()
-  autumn!: DairySeason;
+export const DairyClassSchema = z
+  .object({
+    autumn: DairySeasonSchema,
+    winter: DairySeasonSchema,
+    spring: DairySeasonSchema,
+    summer: DairySeasonSchema,
+  })
+  .meta({ description: 'Dairy class with seasonal data' });
 
-  @ValidateNested({ always: true })
-  @Type(() => DairySeason)
-  @IsDefined()
-  winter!: DairySeason;
-
-  @ValidateNested({ always: true })
-  @Type(() => DairySeason)
-  @IsDefined()
-  spring!: DairySeason;
-
-  @ValidateNested({ always: true })
-  @Type(() => DairySeason)
-  @IsDefined()
-  summer!: DairySeason;
-}
+export type DairyClass = z.infer<typeof DairyClassSchema>;

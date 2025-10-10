@@ -1,18 +1,12 @@
-import { IsDefined, ValidateNested } from 'class-validator';
-import 'reflect-metadata';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
-import { VineyardVegetation } from './vineyard-vegetation.input';
-import { VineyardCrop } from './vineyard.input';
+import { z } from 'zod';
+import { VineyardVegetationSchema } from './vineyard-vegetation.input';
+import { VineyardCropSchema } from './vineyard.input';
 
-@SchemaDescription('Input data required for the `vineyard` calculator')
-export class VineyardInput {
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => VineyardCrop)
-  @IsDefined()
-  vineyards!: VineyardCrop[];
+export const VineyardInputSchema = z
+  .object({
+    vineyards: z.array(VineyardCropSchema),
+    vegetation: z.array(VineyardVegetationSchema),
+  })
+  .meta({ description: 'Input data required for the `vineyard` calculator' });
 
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => VineyardVegetation)
-  @IsDefined()
-  vegetation!: VineyardVegetation[];
-}
+export type VineyardInput = z.infer<typeof VineyardInputSchema>;

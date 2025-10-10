@@ -1,23 +1,17 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-export class SugarIntensitiesOutput {
-  @IsNumber()
-  @SchemaDescription(
-    'Sugar emissions intensity excluding sequestration, in kg-CO2e/kg sugar',
-  )
-  @IsDefined()
-  sugarExcludingSequestration!: number;
+export const SugarIntensitiesOutputSchema = z.object({
+  sugarExcludingSequestration: z.number().meta({
+    description:
+      'Sugar emissions intensity excluding sequestration, in kg-CO2e/kg sugar',
+  }),
+  sugarIncludingSequestration: z.number().meta({
+    description:
+      'Sugar emissions intensity including sequestration, in kg-CO2e/kg sugar',
+  }),
+  sugarProducedKg: z.number().meta({ description: 'Sugar produced in kg' }),
+});
 
-  @IsNumber()
-  @SchemaDescription(
-    'Sugar emissions intensity including sequestration, in kg-CO2e/kg sugar',
-  )
-  @IsDefined()
-  sugarIncludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription('Sugar produced in kg')
-  @IsDefined()
-  sugarProducedKg!: number;
-}
+export type SugarIntensitiesOutput = z.infer<
+  typeof SugarIntensitiesOutputSchema
+>;

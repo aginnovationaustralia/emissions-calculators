@@ -1,95 +1,80 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-@SchemaDescription('Cotton intensities output')
-export class CottonIntensitiesOutput {
-  @IsNumber()
-  @SchemaDescription('Cotton yield produced in tonnes')
-  @IsDefined()
-  cottonYieldProducedTonnes!: number;
+export const CottonIntensitiesOutputSchema = z
+  .object({
+    cottonYieldProducedTonnes: z
+      .number()
+      .meta({ description: 'Cotton yield produced in tonnes' }),
+    balesProduced: z.number().meta({ description: 'Number of bales produced' }),
+    lintProducedTonnes: z
+      .number()
+      .meta({ description: 'Cotton lint produced in tonnes' }),
+    seedProducedTonnes: z
+      .number()
+      .meta({ description: 'Cotton seed produced in tonnes' }),
+    tonnesCropExcludingSequestration: z
+      .number()
+      .meta({
+        description:
+          'Emissions intensity excluding sequestration, in t-CO2e/t crop',
+      }),
+    tonnesCropIncludingSequestration: z
+      .number()
+      .meta({
+        description:
+          'Emissions intensity including sequestration, in t-CO2e/t crop',
+      }),
+    balesExcludingSequestration: z
+      .number()
+      .meta({
+        description:
+          'Emissions intensity excluding sequestration, in t-CO2e/bale',
+      }),
+    balesIncludingSequestration: z
+      .number()
+      .meta({
+        description:
+          'Emissions intensity including sequestration, in t-CO2e/bale',
+      }),
+    lintIncludingSequestration: z
+      .number()
+      .meta({
+        description:
+          'Emissions intensity of lint including sequestration, in t-CO2e/kg',
+      }),
+    lintExcludingSequestration: z
+      .number()
+      .meta({
+        description:
+          'Emissions intensity of lint excluding sequestration, in t-CO2e/kg',
+      }),
+    seedIncludingSequestration: z
+      .number()
+      .meta({
+        description:
+          'Emissions intensity of seed including sequestration, in t-CO2e/kg',
+      }),
+    seedExcludingSequestration: z
+      .number()
+      .meta({
+        description:
+          'Emissions intensity of seed excluding sequestration, in t-CO2e/kg',
+      }),
+    lintEconomicAllocation: z
+      .number()
+      .meta({
+        description:
+          'Emissions intensity of lint using economic allocation, in t-CO2e/kg',
+      }),
+    seedEconomicAllocation: z
+      .number()
+      .meta({
+        description:
+          'Emissions intensity of seed using economic allocation, in t-CO2e/kg',
+      }),
+  })
+  .meta({ description: 'Cotton intensities output' });
 
-  @IsNumber()
-  @SchemaDescription('Number of bales produced')
-  @IsDefined()
-  balesProduced!: number;
-
-  @IsNumber()
-  @SchemaDescription('Cotton lint produced in tonnes')
-  @IsDefined()
-  lintProducedTonnes!: number;
-
-  @IsNumber()
-  @SchemaDescription('Cotton seed produced in tonnes')
-  @IsDefined()
-  seedProducedTonnes!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity excluding sequestration, in t-CO2e/t crop',
-  )
-  @IsDefined()
-  tonnesCropExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity including sequestration, in t-CO2e/t crop',
-  )
-  @IsDefined()
-  tonnesCropIncludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity excluding sequestration, in t-CO2e/bale',
-  )
-  @IsDefined()
-  balesExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity including sequestration, in t-CO2e/bale',
-  )
-  @IsDefined()
-  balesIncludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity of lint including sequestration, in t-CO2e/kg',
-  )
-  @IsDefined()
-  lintIncludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity of lint excluding sequestration, in t-CO2e/kg',
-  )
-  @IsDefined()
-  lintExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity of seed including sequestration, in t-CO2e/kg',
-  )
-  @IsDefined()
-  seedIncludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity of seed excluding sequestration, in t-CO2e/kg',
-  )
-  @IsDefined()
-  seedExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity of lint using economic allocation, in t-CO2e/kg',
-  )
-  @IsDefined()
-  lintEconomicAllocation!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity of seed using economic allocation, in t-CO2e/kg',
-  )
-  @IsDefined()
-  seedEconomicAllocation!: number;
-}
+export type CottonIntensitiesOutput = z.infer<
+  typeof CottonIntensitiesOutputSchema
+>;

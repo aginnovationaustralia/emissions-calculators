@@ -1,49 +1,24 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsString, ValidateNested } from 'class-validator';
-import { BaseScopesOutput } from '../base';
-import { NetOutput } from '../common/net.output';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
+import { NetOutputSchema } from '../common/net.output';
 import { DESCRIPTIONS, OUTPUTDESCRIPTIONS } from '../descriptions.schema';
-import { Scope2Output } from '../scope2.output';
-import { SequestrationTotalOutput } from '../sequestration.total.output';
-import { ProcessingIntensitiesOutput } from './intensities.output';
-import { ProcessingScope1Output } from './scope1.output';
-import { ProcessingScope3Output } from './scope3.output';
+import { Scope2OutputSchema } from '../scope2.output';
+import { SequestrationTotalOutputSchema } from '../sequestration.total.output';
+import { ProcessingIntensitiesOutputSchema } from './intensities.output';
+import { ProcessingScope1OutputSchema } from './scope1.output';
+import { ProcessingScope3OutputSchema } from './scope3.output';
 
-export class ProcessingIntermediateOutput extends BaseScopesOutput {
-  @IsString()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  @IsDefined()
-  id!: string;
+export const ProcessingIntermediateOutputSchema = z.object({
+  id: z.string().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+  scope1: ProcessingScope1OutputSchema,
+  scope2: Scope2OutputSchema,
+  scope3: ProcessingScope3OutputSchema,
+  carbonSequestration: SequestrationTotalOutputSchema.meta({
+    description: OUTPUTDESCRIPTIONS.sequestration,
+  }),
+  intensities: ProcessingIntensitiesOutputSchema,
+  net: NetOutputSchema,
+});
 
-  @ValidateNested({ always: true })
-  @Type(() => ProcessingScope1Output)
-  @IsDefined()
-  scope1!: ProcessingScope1Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => ProcessingScope3Output)
-  @IsDefined()
-  scope3!: ProcessingScope3Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => SequestrationTotalOutput)
-  @SchemaDescription(OUTPUTDESCRIPTIONS.sequestration)
-  @IsDefined()
-  carbonSequestration!: SequestrationTotalOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => ProcessingIntensitiesOutput)
-  @IsDefined()
-  intensities!: ProcessingIntensitiesOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => NetOutput)
-  @IsDefined()
-  net!: NetOutput;
-}
+export type ProcessingIntermediateOutput = z.infer<
+  typeof ProcessingIntermediateOutputSchema
+>;

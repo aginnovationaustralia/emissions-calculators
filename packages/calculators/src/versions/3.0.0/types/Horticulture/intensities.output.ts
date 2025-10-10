@@ -1,24 +1,21 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-@SchemaDescription('Horticulture intensities output')
-export class HorticultureIntensitiesOutput {
-  @IsNumber()
-  @SchemaDescription('Horticultural crop produced in tonnes')
-  @IsDefined()
-  cropProducedTonnes!: number;
+export const HorticultureIntensitiesOutputSchema = z
+  .object({
+    cropProducedTonnes: z
+      .number()
+      .meta({ description: 'Horticultural crop produced in tonnes' }),
+    tonnesCropExcludingSequestration: z.number().meta({
+      description:
+        'Emissions intensity excluding sequestration, in t-CO2e/t crop',
+    }),
+    tonnesCropIncludingSequestration: z.number().meta({
+      description:
+        'Emissions intensity including sequestration, in t-CO2e/t crop',
+    }),
+  })
+  .meta({ description: 'Horticulture intensities output' });
 
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity excluding sequestration, in t-CO2e/t crop',
-  )
-  @IsDefined()
-  tonnesCropExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Emissions intensity including sequestration, in t-CO2e/t crop',
-  )
-  @IsDefined()
-  tonnesCropIncludingSequestration!: number;
-}
+export type HorticultureIntensitiesOutput = z.infer<
+  typeof HorticultureIntensitiesOutputSchema
+>;

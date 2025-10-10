@@ -1,23 +1,19 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-export class WildSeaFisheriesIntensitiesOutput {
-  @IsNumber()
-  @SchemaDescription(
-    'Wild sea fisheries emissions intensity excluding carbon offsets, in kg-CO2e/kg',
-  )
-  @IsDefined()
-  intensityExcludingCarbonOffset!: number;
+export const WildSeaFisheriesIntensitiesOutputSchema = z.object({
+  intensityExcludingCarbonOffset: z.number().meta({
+    description:
+      'Wild sea fisheries emissions intensity excluding carbon offsets, in kg-CO2e/kg',
+  }),
+  intensityIncludingCarbonOffset: z.number().meta({
+    description:
+      'Wild sea fisheries emissions intensity including carbon offsets, in kg-CO2e/kg',
+  }),
+  totalHarvestWeightTonnes: z
+    .number()
+    .meta({ description: 'Total harvest weight in tonnes' }),
+});
 
-  @IsNumber()
-  @SchemaDescription(
-    'Wild sea fisheries emissions intensity including carbon offsets, in kg-CO2e/kg',
-  )
-  @IsDefined()
-  intensityIncludingCarbonOffset!: number;
-
-  @IsNumber()
-  @SchemaDescription('Total harvest weight in tonnes')
-  @IsDefined()
-  totalHarvestWeightTonnes!: number;
-}
+export type WildSeaFisheriesIntensitiesOutput = z.infer<
+  typeof WildSeaFisheriesIntensitiesOutputSchema
+>;

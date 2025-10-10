@@ -1,50 +1,27 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsString, ValidateNested } from 'class-validator';
-import { NetOutput } from '../common/net.output';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
+import { NetOutputSchema } from '../common/net.output';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { Scope2Output } from '../scope2.output';
-import { SequestrationTotalOutput } from '../sequestration.total.output';
-import { HorticultureIntensitiesOutput } from './intensities.output';
-import { HorticultureScope1Output } from './scope1.output';
-import { HorticultureScope3Output } from './scope3.output';
+import { Scope2OutputSchema } from '../scope2.output';
+import { SequestrationTotalOutputSchema } from '../sequestration.total.output';
+import { HorticultureIntensitiesOutputSchema } from './intensities.output';
+import { HorticultureScope1OutputSchema } from './scope1.output';
+import { HorticultureScope3OutputSchema } from './scope3.output';
 
-@SchemaDescription(
-  'Intermediate emissions calculation output for the Horticulture calculator',
-)
-export class HorticultureIntermediateOutput {
-  @IsString()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  @IsDefined()
-  id!: string;
+export const HorticultureIntermediateOutputSchema = z
+  .object({
+    id: z.string().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+    scope1: HorticultureScope1OutputSchema,
+    scope2: Scope2OutputSchema,
+    scope3: HorticultureScope3OutputSchema,
+    intensitiesWithSequestration: HorticultureIntensitiesOutputSchema,
+    net: NetOutputSchema,
+    carbonSequestration: SequestrationTotalOutputSchema,
+  })
+  .meta({
+    description:
+      'Intermediate emissions calculation output for the Horticulture calculator',
+  });
 
-  @ValidateNested({ always: true })
-  @Type(() => HorticultureScope1Output)
-  @IsDefined()
-  scope1!: HorticultureScope1Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => HorticultureScope3Output)
-  @IsDefined()
-  scope3!: HorticultureScope3Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => HorticultureIntensitiesOutput)
-  @IsDefined()
-  intensitiesWithSequestration!: HorticultureIntensitiesOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => NetOutput)
-  @IsDefined()
-  net!: NetOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => SequestrationTotalOutput)
-  @IsDefined()
-  carbonSequestration!: SequestrationTotalOutput;
-}
+export type HorticultureIntermediateOutput = z.infer<
+  typeof HorticultureIntermediateOutputSchema
+>;

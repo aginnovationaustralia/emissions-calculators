@@ -1,22 +1,12 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
-import { PoultrySale } from './sale.input';
+import { z } from 'zod';
+import { PoultrySaleSchema } from './sale.input';
 
-@SchemaDescription('Poultry broiler sales')
-export class BroilerSale {
-  @ValidateNested({ always: true })
-  @Type(() => PoultrySale)
-  @IsDefined()
-  meatChickenGrowersSales!: PoultrySale;
+export const BroilerSaleSchema = z
+  .object({
+    meatChickenGrowersSales: PoultrySaleSchema,
+    meatChickenLayers: PoultrySaleSchema,
+    meatOther: PoultrySaleSchema,
+  })
+  .meta({ description: 'Poultry broiler sales' });
 
-  @ValidateNested({ always: true })
-  @Type(() => PoultrySale)
-  @IsDefined()
-  meatChickenLayers!: PoultrySale;
-
-  @ValidateNested({ always: true })
-  @Type(() => PoultrySale)
-  @IsDefined()
-  meatOther!: PoultrySale;
-}
+export type BroilerSale = z.infer<typeof BroilerSaleSchema>;

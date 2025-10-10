@@ -1,20 +1,14 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { OUTPUTDESCRIPTIONS } from '../descriptions.schema';
 
-export class PoultryNet {
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.netEmissionsTotal)
-  @IsDefined()
-  total!: number;
+export const PoultryNetSchema = z.object({
+  total: z.number().meta({ description: OUTPUTDESCRIPTIONS.netEmissionsTotal }),
+  broilers: z
+    .number()
+    .meta({ description: 'Net emissions of broilers, in tonnes-CO2e/year' }),
+  layers: z
+    .number()
+    .meta({ description: 'Net emissions of layers, in tonnes-CO2e/year' }),
+});
 
-  @IsNumber()
-  @SchemaDescription('Net emissions of broilers, in tonnes-CO2e/year')
-  @IsDefined()
-  broilers!: number;
-
-  @IsNumber()
-  @SchemaDescription('Net emissions of layers, in tonnes-CO2e/year')
-  @IsDefined()
-  layers!: number;
-}
+export type PoultryNet = z.infer<typeof PoultryNetSchema>;

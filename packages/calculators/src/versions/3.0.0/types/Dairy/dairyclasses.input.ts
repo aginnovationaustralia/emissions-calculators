@@ -1,37 +1,22 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
-import { DairyClass } from './dairyclass.input';
+import { z } from 'zod';
+import { DairyClassSchema } from './dairyclass.input';
 
-@SchemaDescription('Dairy classes of different types and age ranges')
-export class DairyClasses {
-  @ValidateNested({ always: true })
-  @Type(() => DairyClass)
-  @SchemaDescription('Milking cows')
-  @IsDefined()
-  milkingCows!: DairyClass;
+export const DairyClassesSchema = z
+  .object({
+    milkingCows: DairyClassSchema.meta({ description: 'Milking cows' }),
+    heifersLt1: DairyClassSchema.meta({
+      description: 'Heifers whose age is less than 1 year old',
+    }),
+    heifersGt1: DairyClassSchema.meta({
+      description: 'Heifers whose age is greater than 1 year old',
+    }),
+    dairyBullsLt1: DairyClassSchema.meta({
+      description: 'Dairy bulls whose age is less than 1 year old',
+    }),
+    dairyBullsGt1: DairyClassSchema.meta({
+      description: 'Dairy bulls whose age is greater than 1 year old',
+    }),
+  })
+  .meta({ description: 'Dairy classes of different types and age ranges' });
 
-  @ValidateNested({ always: true })
-  @Type(() => DairyClass)
-  @SchemaDescription('Heifers whose age is less than 1 year old')
-  @IsDefined()
-  heifersLt1!: DairyClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => DairyClass)
-  @SchemaDescription('Heifers whose age is greater than 1 year old')
-  @IsDefined()
-  heifersGt1!: DairyClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => DairyClass)
-  @SchemaDescription('Dairy bulls whose age is less than 1 year old')
-  @IsDefined()
-  dairyBullsLt1!: DairyClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => DairyClass)
-  @SchemaDescription('Dairy bulls whose age is greater than 1 year old')
-  @IsDefined()
-  dairyBullsGt1!: DairyClass;
-}
+export type DairyClasses = z.infer<typeof DairyClassesSchema>;
