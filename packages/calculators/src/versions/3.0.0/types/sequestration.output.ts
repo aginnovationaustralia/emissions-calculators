@@ -1,5 +1,5 @@
 import { IsDefined, IsNumber } from 'class-validator';
-import { IsNumberArray, SchemaDescription } from './decorator.schema';
+import { SchemaDescription } from './decorator.schema';
 import { OUTPUTDESCRIPTIONS } from './descriptions.schema';
 
 @SchemaDescription(OUTPUTDESCRIPTIONS.sequestration)
@@ -9,7 +9,7 @@ export class SequestrationOutput {
   @IsDefined()
   total!: number;
 
-  @IsNumberArray()
+  @IsNumber({}, { each: true })
   @IsDefined()
   intermediate!: number[];
 }

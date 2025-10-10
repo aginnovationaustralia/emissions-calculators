@@ -13,7 +13,7 @@ import 'reflect-metadata';
 import { FluidWasteInput } from '../common/fluid-waste.input';
 import { FreightInput } from '../common/freight.input';
 import { SolidWasteInput } from '../common/solid-waste.input';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { SchemaDescription } from '../decorator.schema';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FuelInput } from '../fuel.input';
 import { RefrigerantInput } from '../refrigerant.input';
@@ -49,31 +49,26 @@ export class AquacultureEnterpriseInput {
   @IsDefined()
   totalHarvestKg!: number;
 
-  @TypeWithArraySchema(() => RefrigerantInput)
   @ValidateNested({ always: true, each: true })
   @SchemaDescription(DESCRIPTIONS.REFRIGERANT)
   @IsDefined()
   refrigerants!: RefrigerantInput[];
 
-  @TypeWithArraySchema(() => AquacultureBaitPurchase)
   @ValidateNested({ always: true, each: true })
   @SchemaDescription(DESCRIPTIONS.AQUACULTURE_BAIT)
   @IsDefined()
   bait!: AquacultureBaitPurchase[];
 
-  @TypeWithArraySchema(() => AquacultureCustomBaitPurchase)
   @ValidateNested({ always: true, each: true })
   @SchemaDescription(DESCRIPTIONS.AQUACULTURE_CUSTOM_BAIT)
   @IsDefined()
   customBait!: AquacultureCustomBaitPurchase[];
 
-  @TypeWithArraySchema(() => FreightInput)
   @ValidateNested({ always: true, each: true })
   @SchemaDescription(DESCRIPTIONS.INBOUND_FREIGHT)
   @IsDefined()
   inboundFreight!: FreightInput[];
 
-  @TypeWithArraySchema(() => FreightInput)
   @ValidateNested({ always: true, each: true })
   @SchemaDescription(DESCRIPTIONS.OUTBOUND_FREIGHT)
   @IsDefined()
@@ -109,7 +104,6 @@ export class AquacultureEnterpriseInput {
 
   @ValidateNested({ always: true, each: true })
   @Type(() => FluidWasteInput)
-  @TypeWithArraySchema(() => FluidWasteInput)
   @SchemaDescription(DESCRIPTIONS.FLUID_WASTE)
   @IsDefined()
   fluidWaste!: FluidWasteInput[];

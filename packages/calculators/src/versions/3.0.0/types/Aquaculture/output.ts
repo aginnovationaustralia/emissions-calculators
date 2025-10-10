@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsDefined, ValidateNested } from 'class-validator';
 import { NetOutput } from '../common/net.output';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { SchemaDescription } from '../decorator.schema';
 import { PurchasedOffsetsOutput } from '../purchasedOffsets.output';
 import { Scope2Output } from '../scope2.output';
 import { SequestrationOutput } from '../sequestration.output';
@@ -49,7 +49,6 @@ export class AquacultureOutput {
   @IsDefined()
   carbonSequestration!: SequestrationOutput;
 
-  @TypeWithArraySchema(() => AquacultureIntermediateOutput)
   @ValidateNested({ always: true, each: true })
   @Type(() => AquacultureIntermediateOutput)
   @IsDefined()
