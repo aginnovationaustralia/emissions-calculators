@@ -22,7 +22,7 @@ describe('validating Grains test inputs for incorrect inputs', () => {
   test('validation should result in 1 error', () => {
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues.length).toBeGreaterThan(0);
+      expect(result.error.issues.length).toEqual(1);
     }
   });
 

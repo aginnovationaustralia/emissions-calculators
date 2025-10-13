@@ -3,7 +3,6 @@ import { Feed } from '../../types/Pork/feed.input';
 import { PorkInput } from '../../types/Pork/input';
 import { PorkComplete } from '../../types/Pork/pork.input';
 import { PorkClasses } from '../../types/Pork/porkclasses.input';
-import { CustomisedFertiliser } from '../../types/types';
 import { veg1, veg2, veg3, veg4 } from './vegetation.data';
 
 const classes: PorkClasses = {
@@ -293,7 +292,7 @@ const fertiliser: Fertiliser = {
   pastureDryland: 20,
   cropsDryland: 30,
   otherDryland: 5,
-  otherType: 'Urea-Ammonium Nitrate (UAN)' as CustomisedFertiliser,
+  otherType: 'Urea-Ammonium Nitrate (UAN)',
   pastureIrrigated: 20,
   cropsIrrigated: 30,
   otherIrrigated: 5,
