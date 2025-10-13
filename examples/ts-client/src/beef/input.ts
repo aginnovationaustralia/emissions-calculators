@@ -1,5 +1,10 @@
+import { v3_0_0 } from '@aginnovationaustralia/emissions-calculators';
+
+// Use the type directly from the namespace - this is the correct approach
+type BeefInput = v3_0_0.Types.BeefInput;
+
 // Create a sample beef input (simplified for demonstration)
-export const beefInputData = {
+export const beefInputData: BeefInput = {
   state: 'nsw' as const,
   northOfTropicOfCapricorn: true,
   rainfallAbove600: true,
