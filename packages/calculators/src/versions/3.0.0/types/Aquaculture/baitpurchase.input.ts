@@ -2,9 +2,7 @@ import { z } from 'zod';
 import { AquacultureBait } from '../types';
 
 export const AquacultureBaitPurchaseSchema = z.object({
-  type: z
-    .nativeEnum(AquacultureBait)
-    .meta({ description: 'Bait product type' }),
+  type: z.enum(AquacultureBait).meta({ description: 'Bait product type' }),
   purchasedTonnes: z
     .number()
     .meta({ description: 'Purchased product in tonnes' }),
@@ -13,7 +11,7 @@ export const AquacultureBaitPurchaseSchema = z.object({
     .min(0)
     .max(1)
     .meta({ description: 'Additional ingredient fraction, from 0 to 1' }),
-  emissionsIntensity: z.number().default(0).meta({
+  emissionsIntensity: z.number().default(0).optional().meta({
     description:
       'Emissions intensity of additional ingredients, in kg CO2e/kg bait (default 0)',
   }),

@@ -1,12 +1,19 @@
 import { z } from 'zod';
+import { deprecated } from '../schemas';
 import { VegetationSchema } from '../vegetation.input';
 
 export const BeefVegetationSchema = z
   .object({
     vegetation: VegetationSchema,
-    beefProportion: z.number().optional().meta({
-      description: `The proportion of the sequestration that is allocated to beef. Deprecated note: Please use \`allocationToBeef\` instead.`,
-    }),
+    beefProportion: z
+      .number()
+      .optional()
+      .meta(
+        deprecated(
+          `The proportion of the sequestration that is allocated to beef`,
+          `Please use \`allocationToBeef\` instead`,
+        ),
+      ),
     allocationToBeef: z.array(z.number()).meta({
       description:
         'The proportion of the sequestration that is allocated to each beef',

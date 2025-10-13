@@ -11,7 +11,7 @@ export const GrainsCropSchema = z.object({
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   productionSystem: z.enum(ProductionSystems).meta({
     description:
-      "Production system of this crop. Note that the following production systems are now deprecated, the relevant full calculator should be used instead: 'Cotton', 'Sugar cane'",
+      "Production system of this crop. Note that the following production systems are now deprecated, the relevant full calculator should be used instead: 'Cotton', 'Rice', 'Sugar cane'",
   }),
   averageGrainYield: z
     .number()

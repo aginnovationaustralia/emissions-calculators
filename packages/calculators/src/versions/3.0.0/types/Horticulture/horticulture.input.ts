@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
+import { deprecated } from '../schemas';
 import { HorticultureCropTypes } from '../types';
 import { HorticultureRefrigerantSchema } from './refrigerant.input';
 
@@ -37,14 +38,19 @@ export const HorticultureCropSchema = z.object({
   rainfallAbove600: z
     .boolean()
     .meta({ description: DESCRIPTIONS.RAINFALLIRRIGATIONABOVE600 }),
-  ureaseInhibitorUsed: z.boolean().optional().meta({
-    description:
-      'No longer used (since v1.1.0). Deprecated note: No longer used (since v1.1.0)',
-  }),
-  nitrificationInhibitorUsed: z.boolean().optional().meta({
-    description:
-      'No longer used (since v1.1.0). Deprecated note: No longer used (since v1.1.0)',
-  }),
+  ureaseInhibitorUsed: z
+    .boolean()
+    .optional()
+    .meta(deprecated('Urease inhibitor used', 'No longer used (since v1.1.0)')),
+  nitrificationInhibitorUsed: z
+    .boolean()
+    .optional()
+    .meta(
+      deprecated(
+        'Nitrification inhibitor used',
+        'No longer used (since v1.1.0)',
+      ),
+    ),
   fractionOfAnnualCropBurnt: z.number().meta({
     description:
       'Fraction of annual production of crop that is burnt, from 0 to 1',

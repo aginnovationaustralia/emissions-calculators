@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { LivestockManureSchema } from '../livestockManure.input';
 import { LivestockPurchaseSchema } from '../livestockPurchase.input';
+import { deprecated } from '../schemas';
 
 export const PorkClassSchema = z
   .object({
@@ -12,15 +13,21 @@ export const PorkClassSchema = z
     headPurchased: z
       .number()
       .optional()
-      .meta({
-        description: `${DESCRIPTIONS.HEADPURCHASED}. Deprecated note: Please use \`purchases\` instead`,
-      }),
+      .meta(
+        deprecated(
+          DESCRIPTIONS.HEADPURCHASED,
+          'Please use `purchases` instead',
+        ),
+      ),
     purchasedWeight: z
       .number()
       .optional()
-      .meta({
-        description: `${DESCRIPTIONS.PURCHASEDWEIGHT}. Deprecated note: Please use \`purchases\` instead`,
-      }),
+      .meta(
+        deprecated(
+          DESCRIPTIONS.PURCHASEDWEIGHT,
+          'Please use `purchases` instead',
+        ),
+      ),
     headSold: z.number().meta({ description: DESCRIPTIONS.HEADSOLD }),
     saleWeight: z.number().meta({ description: DESCRIPTIONS.SALEWEIGHT }),
     purchases: z.array(LivestockPurchaseSchema).optional(),

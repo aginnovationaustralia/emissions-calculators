@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
+import { deprecated } from '../schemas';
 import { CustomisedFertilisers, States } from '../types';
 
 export const CottonCropSchema = z.object({
@@ -25,10 +26,10 @@ export const CottonCropSchema = z.object({
     description:
       'Urea application, in kg Urea/ha (kilograms of urea per hectare)',
   }),
-  otherFertiliserType: z.enum(CustomisedFertilisers).optional().meta({
-    description:
-      'Other N fertiliser type. Deprecated note: This field is deprecated',
-  }),
+  otherFertiliserType: z
+    .enum(CustomisedFertilisers)
+    .optional()
+    .meta(deprecated('Other N fertiliser type')),
   otherFertiliserApplication: z.number().meta({
     description:
       'Other N fertiliser application, in kg/ha (kilograms per hectare)',
@@ -59,10 +60,14 @@ export const CottonCropSchema = z.object({
   rainfallAbove600: z
     .boolean()
     .meta({ description: DESCRIPTIONS.RAINFALLIRRIGATIONABOVE600 }),
-  fractionOfAnnualCropBurnt: z.number().default(0).meta({
-    description:
-      'Fraction of annual production of crop that is burnt. If included, this should only ever be 0 for cotton. Deprecated note: This field is deprecated',
-  }),
+  fractionOfAnnualCropBurnt: z
+    .number()
+    .default(0)
+    .meta(
+      deprecated(
+        'Fraction of annual production of crop that is burnt. If included, this should only ever be 0 for cotton',
+      ),
+    ),
   herbicideUse: z.number().meta({
     description:
       'Total amount of active ingredients from general herbicide/pesticide use, in kg (kilogram)',
