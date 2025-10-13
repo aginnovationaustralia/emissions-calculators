@@ -1,6 +1,6 @@
 export { AllocatedVegetation } from './allocated-vegetation.input';
 export { AquacultureEnterpriseInput } from './Aquaculture/aquaculture.input';
-export { AquacultureBaitPurchase } from './Aquaculture/baitpurchase.input';
+export { AquacultureBaitPurchaseInput as AquacultureBaitPurchase } from './Aquaculture/baitpurchase.input';
 export { AquacultureCustomBaitPurchase } from './Aquaculture/custombaitpurchase.input';
 export { AquacultureInput } from './Aquaculture/input';
 export { AquacultureIntensitiesOutput } from './Aquaculture/intensities.output';
