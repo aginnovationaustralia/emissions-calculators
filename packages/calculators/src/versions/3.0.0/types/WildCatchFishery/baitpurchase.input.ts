@@ -2,9 +2,7 @@ import { z } from 'zod';
 import { WildCatchFisheryBait } from '../types';
 
 export const WildCatchFisheryBaitPurchaseSchema = z.object({
-  type: z
-    .nativeEnum(WildCatchFisheryBait)
-    .meta({ description: 'Bait product type' }),
+  type: z.enum(WildCatchFisheryBait).meta({ description: 'Bait product type' }),
   purchasedTonnes: z
     .number()
     .meta({ description: 'Purchased product in tonnes' }),

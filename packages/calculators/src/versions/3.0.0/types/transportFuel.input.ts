@@ -4,7 +4,7 @@ import { TransportFuelTypes } from './types';
 
 export const TransportFuelInputSchema = z.object({
   type: z
-    .nativeEnum(TransportFuelTypes)
+    .enum(TransportFuelTypes)
     .meta({ description: DESCRIPTIONS.FUEL_TYPE }),
   amountLitres: z.number().meta({ description: DESCRIPTIONS.FUEL_CONSUMPTION }),
 });

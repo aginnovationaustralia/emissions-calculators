@@ -5,7 +5,7 @@ import { FluidWasteTreatmentType } from '../types';
 export const FluidWasteInputSchema = z.object({
   fluidWasteKl: z.number().meta({ description: DESCRIPTIONS.FLUID_WASTE }),
   fluidWasteTreatmentType: z
-    .nativeEnum(FluidWasteTreatmentType)
+    .enum(FluidWasteTreatmentType)
     .meta({ description: DESCRIPTIONS.FLUID_WASTE_TREATMENT_TYPE }),
   averageInletCOD: z
     .number()

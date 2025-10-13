@@ -18,7 +18,7 @@ export const AquacultureEnterpriseInputSchema = z
     id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
     state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
     productionSystem: z
-      .nativeEnum(AquacultureProductionSystem)
+      .enum(AquacultureProductionSystem)
       .meta({ description: DESCRIPTIONS.AQUACULTURE_PRODUCTION_SYSTEM }),
     totalHarvestKg: z.number().meta({ description: 'Total harvest in kg' }),
     refrigerants: z

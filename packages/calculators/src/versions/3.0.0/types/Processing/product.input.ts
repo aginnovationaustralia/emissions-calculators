@@ -9,7 +9,7 @@ export enum ProductUnit {
 }
 
 export const ProcessingProductSchema = z.object({
-  unit: z.nativeEnum(ProductUnit),
+  unit: z.enum(ProductUnit),
   amountMadePerYear: z.number(),
 });
 

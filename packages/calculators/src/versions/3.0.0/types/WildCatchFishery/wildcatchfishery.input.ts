@@ -29,7 +29,7 @@ export const WildCatchFisheryEnterpriseInputSchema = z
   .object({
     id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
     state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
-    productionSystem: z.nativeEnum(WildCatchFisheryProductionSystem).meta({
+    productionSystem: z.enum(WildCatchFisheryProductionSystem).meta({
       description: 'Production system of the wild catch fishery enterprise',
     }),
     totalHarvestKg: z.number().meta({ description: 'Total harvest in kg' }),

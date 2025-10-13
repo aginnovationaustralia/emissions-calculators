@@ -5,7 +5,7 @@ export const ProcessingIntensitiesOutputSchema = z.object({
   unitsProduced: z
     .number()
     .meta({ description: 'Number of processed product units produced' }),
-  unitOfProduct: z.nativeEnum(ProductUnit).meta({
+  unitOfProduct: z.enum(ProductUnit).meta({
     description:
       'Unit type of the product being produced (used by "unitsProduced")',
   }),

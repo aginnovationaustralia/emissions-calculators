@@ -3,9 +3,7 @@ import { DESCRIPTIONS } from '../descriptions.schema';
 import { FreightTypes } from '../types';
 
 export const FreightInputSchema = z.object({
-  type: z
-    .nativeEnum(FreightTypes)
-    .meta({ description: DESCRIPTIONS.FREIGHT_TYPE }),
+  type: z.enum(FreightTypes).meta({ description: DESCRIPTIONS.FREIGHT_TYPE }),
   totalKmTonnes: z.number().meta({ description: DESCRIPTIONS.TOTAL_KM_TONNES }),
 });
 
