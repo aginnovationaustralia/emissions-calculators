@@ -19,7 +19,7 @@ export class InputValidationError extends Error {
   public errors: ValidationErrorResult[];
 
   constructor(...errors: ValidationErrorResult[]) {
-    super(errors.map((x) => x.message).join(', '));
+    super(errors.map((x) => `${x.path}: ${x.message}`).join(', '));
     Object.setPrototypeOf(this, InputValidationError.prototype);
 
     this.errors = errors;
