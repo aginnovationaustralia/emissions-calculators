@@ -1,13 +1,10 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { IsNumberArray, SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-@SchemaDescription('Net emissions for each crop (in order)')
-export class SugarNetOutput {
-  @IsNumber()
-  @IsDefined()
-  total!: number;
+export const SugarNetOutputSchema = z
+  .object({
+    total: z.number(),
+    crops: z.array(z.number()),
+  })
+  .meta({ description: 'Net emissions for each crop (in order)' });
 
-  @IsNumberArray()
-  @IsDefined()
-  crops!: number[];
-}
+export type SugarNetOutput = z.infer<typeof SugarNetOutputSchema>;

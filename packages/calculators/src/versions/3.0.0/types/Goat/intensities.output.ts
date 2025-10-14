@@ -1,42 +1,30 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-export class GoatEmissionsIntensities {
-  @IsNumber()
-  @SchemaDescription('Amount of goat meat produced in kg liveweight')
-  @IsDefined()
-  amountMeatProduced!: number;
+export const GoatEmissionsIntensitiesSchema = z.object({
+  amountMeatProduced: z
+    .number()
+    .meta({ description: 'Amount of goat meat produced in kg liveweight' }),
+  amountWoolProduced: z
+    .number()
+    .meta({ description: 'Amount of wool produced in kg greasy' }),
+  goatMeatBreedingIncludingSequestration: z.number().meta({
+    description:
+      'Goat meat (breeding herd) including carbon sequestration, in kg-CO2e/kg liveweight',
+  }),
+  goatMeatBreedingExcludingSequestration: z.number().meta({
+    description:
+      'Goat meat (breeding herd) excluding carbon sequestration, in kg-CO2e/kg liveweight',
+  }),
+  woolIncludingSequestration: z.number().meta({
+    description:
+      'Wool production including carbon sequestration, in kg-CO2e/kg greasy',
+  }),
+  woolExcludingSequestration: z.number().meta({
+    description:
+      'Wool production excluding carbon sequestration, in kg-CO2e/kg greasy',
+  }),
+});
 
-  @IsNumber()
-  @SchemaDescription('Amount of wool produced in kg greasy')
-  @IsDefined()
-  amountWoolProduced!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Goat meat (breeding herd) including carbon sequestration, in kg-CO2e/kg liveweight',
-  )
-  @IsDefined()
-  goatMeatBreedingIncludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Goat meat (breeding herd) excluding carbon sequestration, in kg-CO2e/kg liveweight',
-  )
-  @IsDefined()
-  goatMeatBreedingExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Wool production including carbon sequestration, in kg-CO2e/kg greasy',
-  )
-  @IsDefined()
-  woolIncludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Wool production excluding carbon sequestration, in kg-CO2e/kg greasy',
-  )
-  @IsDefined()
-  woolExcludingSequestration!: number;
-}
+export type GoatEmissionsIntensities = z.infer<
+  typeof GoatEmissionsIntensitiesSchema
+>;

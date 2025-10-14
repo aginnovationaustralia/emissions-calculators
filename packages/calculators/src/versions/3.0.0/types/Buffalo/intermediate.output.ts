@@ -1,50 +1,27 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsString, ValidateNested } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { Scope2Output } from '../scope2.output';
-import { SequestrationTotalOutput } from '../sequestration.total.output';
-import { BuffaloEmissionsIntensities } from './intensities.output';
-import { BuffaloNetOutput } from './net.output';
-import { BuffaloScope1Output } from './scope1.output';
-import { BuffaloScope3Output } from './scope3.output';
+import { Scope2OutputSchema } from '../scope2.output';
+import { SequestrationTotalOutputSchema } from '../sequestration.total.output';
+import { BuffaloEmissionsIntensitiesSchema } from './intensities.output';
+import { BuffaloNetOutputSchema } from './net.output';
+import { BuffaloScope1OutputSchema } from './scope1.output';
+import { BuffaloScope3OutputSchema } from './scope3.output';
 
-@SchemaDescription(
-  'Intermediate emissions calculation output for the Buffalo calculator',
-)
-export class BuffaloIntermediateOutput {
-  @IsString()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  @IsDefined()
-  id!: string;
+export const BuffaloIntermediateOutputSchema = z
+  .object({
+    id: z.string().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+    scope1: BuffaloScope1OutputSchema,
+    scope2: Scope2OutputSchema,
+    scope3: BuffaloScope3OutputSchema,
+    net: BuffaloNetOutputSchema,
+    intensities: BuffaloEmissionsIntensitiesSchema,
+    carbonSequestration: SequestrationTotalOutputSchema,
+  })
+  .meta({
+    description:
+      'Intermediate emissions calculation output for the Buffalo calculator',
+  });
 
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloScope1Output)
-  @IsDefined()
-  scope1!: BuffaloScope1Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloScope3Output)
-  @IsDefined()
-  scope3!: BuffaloScope3Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloNetOutput)
-  @IsDefined()
-  net!: BuffaloNetOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloEmissionsIntensities)
-  @IsDefined()
-  intensities!: BuffaloEmissionsIntensities;
-
-  @ValidateNested({ always: true })
-  @Type(() => SequestrationTotalOutput)
-  @IsDefined()
-  carbonSequestration!: SequestrationTotalOutput;
-}
+export type BuffaloIntermediateOutput = z.infer<
+  typeof BuffaloIntermediateOutputSchema
+>;

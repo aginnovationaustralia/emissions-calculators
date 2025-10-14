@@ -1,25 +1,13 @@
-import { Type } from 'class-transformer';
-import {
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import 'reflect-metadata';
-import { FluidWasteInput } from '../common/fluid-waste.input';
-import { FreightInput } from '../common/freight.input';
-import { SolidWasteInput } from '../common/solid-waste.input';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
+import { FluidWasteInputSchema } from '../common/fluid-waste.input';
+import { FreightInputSchema } from '../common/freight.input';
+import { SolidWasteInputSchema } from '../common/solid-waste.input';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { FuelInput } from '../fuel.input';
-import { RefrigerantInput } from '../refrigerant.input';
-import { ElectricitySource, ElectricitySources, State, States } from '../types';
-import { WildCatchFisheryBaitPurchase } from './baitpurchase.input';
-import { WildCatchFisheryCustomBaitPurchase } from './custombaitpurchase.input';
+import { FuelInputSchema } from '../fuel.input';
+import { RefrigerantInputSchema } from '../refrigerant.input';
+import { ElectricitySources, States } from '../types';
+import { WildCatchFisheryBaitPurchaseSchema } from './baitpurchase.input';
+import { WildCatchFisheryCustomBaitPurchaseSchema } from './custombaitpurchase.input';
 
 export enum WildCatchFisheryProductionSystem {
   ABALONE = 'Abalone',
@@ -37,103 +25,60 @@ export enum WildCatchFisheryProductionSystem {
   SOUTHERN_OCEAN_LONGLINE = 'Southern Ocean Longline',
 }
 
-@SchemaDescription(
-  'Input data required for a single wild catch fishery enterprise',
-)
-export class WildCatchFisheryEnterpriseInput {
-  @IsString()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  id?: string;
+export const WildCatchFisheryEnterpriseInputSchema = z
+  .object({
+    id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    productionSystem: z.enum(WildCatchFisheryProductionSystem).meta({
+      description: 'Production system of the wild catch fishery enterprise',
+    }),
+    totalHarvestKg: z.number().meta({ description: 'Total harvest in kg' }),
+    refrigerants: z
+      .array(RefrigerantInputSchema)
+      .meta({ description: DESCRIPTIONS.REFRIGERANT }),
+    bait: z
+      .array(WildCatchFisheryBaitPurchaseSchema)
+      .meta({ description: DESCRIPTIONS.AQUACULTURE_BAIT }),
+    customBait: z
+      .array(WildCatchFisheryCustomBaitPurchaseSchema)
+      .meta({ description: DESCRIPTIONS.AQUACULTURE_CUSTOM_BAIT }),
+    inboundFreight: z
+      .array(FreightInputSchema)
+      .meta({ description: DESCRIPTIONS.INBOUND_FREIGHT }),
+    outboundFreight: z
+      .array(FreightInputSchema)
+      .meta({ description: DESCRIPTIONS.OUTBOUND_FREIGHT }),
+    totalCommercialFlightsKm: z
+      .number()
+      .meta({ description: DESCRIPTIONS.TOTAL_COMMERCIAL_FLIGHTS_KM }),
+    electricityRenewable: z
+      .number()
+      .min(0)
+      .max(1)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+    electricityUse: z
+      .number()
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
+    electricitySource: z
+      .enum(ElectricitySources)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
+    fuel: FuelInputSchema.meta({ description: DESCRIPTIONS.FUEL }),
+    fluidWaste: z
+      .array(FluidWasteInputSchema)
+      .meta({ description: DESCRIPTIONS.FLUID_WASTE }),
+    solidWaste: SolidWasteInputSchema.meta({
+      description: DESCRIPTIONS.SOLID_WASTE,
+    }),
+    carbonOffsets: z
+      .number()
+      .optional()
+      .meta({ description: DESCRIPTIONS.CARBON_OFFSETS }),
+  })
+  .meta({
+    description:
+      'Input data required for a single wild catch fishery enterprise',
+  });
 
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
-
-  @IsEnum(WildCatchFisheryProductionSystem)
-  @SchemaDescription('Production system of the wild catch fishery enterprise')
-  @IsDefined()
-  productionSystem!: WildCatchFisheryProductionSystem;
-
-  @IsNumber()
-  @SchemaDescription('Total harvest in kg')
-  @IsDefined()
-  totalHarvestKg!: number;
-
-  @TypeWithArraySchema(() => RefrigerantInput)
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.REFRIGERANT)
-  @IsDefined()
-  refrigerants!: RefrigerantInput[];
-
-  @TypeWithArraySchema(() => WildCatchFisheryBaitPurchase)
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.AQUACULTURE_BAIT)
-  @IsDefined()
-  bait!: WildCatchFisheryBaitPurchase[];
-
-  @TypeWithArraySchema(() => WildCatchFisheryCustomBaitPurchase)
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.AQUACULTURE_CUSTOM_BAIT)
-  @IsDefined()
-  customBait!: WildCatchFisheryCustomBaitPurchase[];
-
-  @TypeWithArraySchema(() => FreightInput)
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.INBOUND_FREIGHT)
-  @IsDefined()
-  inboundFreight!: FreightInput[];
-
-  @TypeWithArraySchema(() => FreightInput)
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.OUTBOUND_FREIGHT)
-  @IsDefined()
-  outboundFreight!: FreightInput[];
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.TOTAL_COMMERCIAL_FLIGHTS_KM)
-  @IsDefined()
-  totalCommercialFlightsKm!: number;
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_RENEWABLE)
-  @IsDefined()
-  electricityRenewable!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_USE)
-  @IsDefined()
-  electricityUse!: number;
-
-  @IsEnum(ElectricitySources)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_SOURCE)
-  @IsDefined()
-  electricitySource!: ElectricitySource;
-
-  @ValidateNested({ always: true })
-  @Type(() => FuelInput)
-  @SchemaDescription(DESCRIPTIONS.FUEL)
-  @IsDefined()
-  fuel!: FuelInput;
-
-  @ValidateNested({ always: true, each: true })
-  @Type(() => FluidWasteInput)
-  @TypeWithArraySchema(() => FluidWasteInput)
-  @SchemaDescription(DESCRIPTIONS.FLUID_WASTE)
-  @IsDefined()
-  fluidWaste!: FluidWasteInput[];
-
-  @ValidateNested({ always: true })
-  @Type(() => SolidWasteInput)
-  @SchemaDescription(DESCRIPTIONS.SOLID_WASTE)
-  @IsDefined()
-  solidWaste!: SolidWasteInput;
-
-  @IsNumber()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.CARBON_OFFSETS)
-  carbonOffsets?: number;
-}
+export type WildCatchFisheryEnterpriseInput = z.infer<
+  typeof WildCatchFisheryEnterpriseInputSchema
+>;

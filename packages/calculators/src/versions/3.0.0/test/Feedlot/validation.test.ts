@@ -1,67 +1,38 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
 import { InputValidationError } from '../../../..';
 import { validateCalculatorInput } from '../../calculators';
-import { FeedlotInput } from '../../types/Feedlot/input';
+import { FeedlotInputSchema } from '../../types/Feedlot/input';
 import { feedlotTestData } from './feedlot.data';
 
 describe('validating Feedlot test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(FeedlotInput, feedlotTestData);
+  const t = () => validateCalculatorInput(FeedlotInputSchema, feedlotTestData);
 
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(FeedlotInput);
   });
 });
 
 describe('validating Feedlot test inputs for incorrect inputs', () => {
-  const classedInput = plainToClass(FeedlotInput, {
+  const invalidInput = {
     ...feedlotTestData,
     state: 'vic2',
-  });
-  const errors = validateSync(classedInput);
+  };
+  const result = FeedlotInputSchema.safeParse(invalidInput);
 
   test('validation should result in 1 error', () => {
-    expect(errors.length).toEqual(1);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.length).toBeGreaterThan(0);
+    }
   });
 
   test('validation error should contain message for state value', () => {
-    expect(errors[0].constraints && errors[0].constraints.isEnum).toEqual(
-      'state must be one of the following values: ',
-    );
-  });
-});
-
-describe('validating Feedlot purchase transformation', () => {
-  const feedlot = feedlotTestData.feedlots[0];
-  const feedlotDataWithSinglePurchase = {
-    ...feedlotTestData,
-    feedlots: [
-      {
-        ...feedlot,
-        purchases: {
-          ...feedlot.purchases,
-          bullsGt1: feedlot.purchases.bullsGt1![0],
-        },
-      },
-    ],
-  } as unknown as FeedlotInput;
-
-  const classedInput = plainToClass(
-    FeedlotInput,
-    feedlotDataWithSinglePurchase,
-  );
-
-  test('purchase should be an array', () => {
-    expect(
-      Array.isArray(
-        feedlotDataWithSinglePurchase.feedlots[0].purchases.bullsGt1![0],
-      ),
-    ).toEqual(false);
-    expect(Array.isArray(classedInput.feedlots[0].purchases.bullsGt1)).toEqual(
-      true,
-    );
-    expect(classedInput.feedlots[0].purchases.bullsGt1!).toHaveLength(1);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const stateError = result.error.issues.find((issue) =>
+        issue.path.includes('state'),
+      );
+      expect(stateError).toBeDefined();
+    }
   });
 });

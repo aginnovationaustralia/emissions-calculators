@@ -1,42 +1,30 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-export class PoultryEmissionsIntensities {
-  @IsNumber()
-  @SchemaDescription(
-    'Poultry meat including carbon sequestration, in kg-CO2e/kg liveweight',
-  )
-  @IsDefined()
-  poultryMeatIncludingSequestration!: number;
+export const PoultryEmissionsIntensitiesSchema = z.object({
+  poultryMeatIncludingSequestration: z.number().meta({
+    description:
+      'Poultry meat including carbon sequestration, in kg-CO2e/kg liveweight',
+  }),
+  poultryMeatExcludingSequestration: z.number().meta({
+    description:
+      'Poultry meat excluding carbon sequestration, in kg-CO2e/kg liveweight',
+  }),
+  poultryEggsIncludingSequestration: z.number().meta({
+    description:
+      'Poultry eggs including carbon sequestration, in kg-CO2e/kg liveweight',
+  }),
+  poultryEggsExcludingSequestration: z.number().meta({
+    description:
+      'Poultry eggs excluding carbon sequestration, in kg-CO2e/kg liveweight',
+  }),
+  meatProducedKg: z
+    .number()
+    .meta({ description: 'Poultry meat produced in kg' }),
+  eggsProducedKg: z
+    .number()
+    .meta({ description: 'Amount of eggs produced, in kg' }),
+});
 
-  @IsNumber()
-  @SchemaDescription(
-    'Poultry meat excluding carbon sequestration, in kg-CO2e/kg liveweight',
-  )
-  @IsDefined()
-  poultryMeatExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Poultry eggs including carbon sequestration, in kg-CO2e/kg liveweight',
-  )
-  @IsDefined()
-  poultryEggsIncludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Poultry eggs excluding carbon sequestration, in kg-CO2e/kg liveweight',
-  )
-  @IsDefined()
-  poultryEggsExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription('Poultry meat produced in kg')
-  @IsDefined()
-  meatProducedKg!: number;
-
-  @IsNumber()
-  @SchemaDescription('Amount of eggs produced, in kg')
-  @IsDefined()
-  eggsProducedKg!: number;
-}
+export type PoultryEmissionsIntensities = z.infer<
+  typeof PoultryEmissionsIntensitiesSchema
+>;

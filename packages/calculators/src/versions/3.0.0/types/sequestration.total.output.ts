@@ -1,11 +1,14 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from './decorator.schema';
+import { z } from 'zod';
 import { OUTPUTDESCRIPTIONS } from './descriptions.schema';
 
-@SchemaDescription(OUTPUTDESCRIPTIONS.sequestration)
-export class SequestrationTotalOutput {
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.totalSequestration)
-  @IsDefined()
-  total!: number;
-}
+export const SequestrationTotalOutputSchema = z
+  .object({
+    total: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.totalSequestration }),
+  })
+  .meta({ description: OUTPUTDESCRIPTIONS.sequestration });
+
+export type SequestrationTotalOutput = z.infer<
+  typeof SequestrationTotalOutputSchema
+>;

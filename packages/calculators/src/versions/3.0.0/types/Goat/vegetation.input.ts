@@ -1,21 +1,17 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { IsNumberArray, SchemaDescription } from '../decorator.schema';
-import { Vegetation } from '../vegetation.input';
+import { z } from 'zod';
+import { VegetationSchema } from '../vegetation.input';
 
-@SchemaDescription(
-  'Non-productive vegetation inputs along with allocations to goat',
-)
-export class GoatVegetation {
-  @ValidateNested({ always: true })
-  @Type(() => Vegetation)
-  @IsDefined()
-  vegetation!: Vegetation;
+export const GoatVegetationSchema = z
+  .object({
+    vegetation: VegetationSchema,
+    goatProportion: z.array(z.number()).meta({
+      description:
+        'The proportion of the sequestration that is allocated to goat',
+    }),
+  })
+  .meta({
+    description:
+      'Non-productive vegetation inputs along with allocations to goat',
+  });
 
-  @IsNumberArray()
-  @SchemaDescription(
-    'The proportion of the sequestration that is allocated to goat',
-  )
-  @IsDefined()
-  goatProportion!: number[];
-}
+export type GoatVegetation = z.infer<typeof GoatVegetationSchema>;

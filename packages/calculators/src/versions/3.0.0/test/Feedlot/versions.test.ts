@@ -1,7 +1,6 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
+import { validateCalculatorInput } from '../../calculators';
 import { calculateEntireFeedlot } from '../../Feedlot/calculator';
-import { FeedlotInput } from '../../types/Feedlot/input';
+import { FeedlotInputSchema } from '../../types/Feedlot/input';
 import { testContext, V2_0_0 } from '../common/context';
 import { feedlotTestData } from './feedlot.data';
 
@@ -22,16 +21,14 @@ describe('checking Feedlot purchases transformation to array', () => {
     ],
   };
 
-  const classedInput = plainToClass(FeedlotInput, feedlotDataWithPurchase);
-  const errors = validateSync(classedInput);
+  const validatedInput = validateCalculatorInput(
+    FeedlotInputSchema,
+    feedlotDataWithPurchase,
+  );
   const context = testContext(V2_0_0, 'Feedlot');
-  const emissions = calculateEntireFeedlot(classedInput, context);
+  const emissions = calculateEntireFeedlot(validatedInput, context);
 
   test('scope 3 purchaseLivestock should be accurate', () => {
     expect(emissions.scope3.purchaseLivestock).toBeCloseTo(2201.1, P);
-  });
-
-  test('validation should result in no errors', () => {
-    expect(errors).toHaveLength(0);
   });
 });

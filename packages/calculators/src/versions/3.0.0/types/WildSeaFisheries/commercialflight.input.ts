@@ -1,15 +1,14 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import 'reflect-metadata';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-export class WildSeaFisheriesCommercialFlight {
-  @IsNumber()
-  @SchemaDescription('Commercial flight passengers per year')
-  @IsDefined()
-  commercialFlightPassengers!: number;
+export const WildSeaFisheriesCommercialFlightSchema = z.object({
+  commercialFlightPassengers: z
+    .number()
+    .meta({ description: 'Commercial flight passengers per year' }),
+  totalFlightDistance: z
+    .number()
+    .meta({ description: 'Total commercial flight distance in km' }),
+});
 
-  @IsNumber()
-  @SchemaDescription('Total commercial flight distance in km')
-  @IsDefined()
-  totalFlightDistance!: number;
-}
+export type WildSeaFisheriesCommercialFlight = z.infer<
+  typeof WildSeaFisheriesCommercialFlightSchema
+>;

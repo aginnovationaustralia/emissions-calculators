@@ -1,61 +1,18 @@
-import { Transform, plainToClass } from 'class-transformer';
-import {
-  IsBoolean,
-  IsDefined,
-  IsEnum,
-  IsOptional,
-  ValidateNested,
-} from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import { TransformSingleOrArray } from '../../common/tools';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { State, States } from '../types';
-import { Vegetation } from '../vegetation.input';
-import { GoatComplete } from './goat.input';
-import { GoatVegetation } from './vegetation.input';
+import { States } from '../types';
+import { GoatCompleteSchema } from './goat.input';
+import { GoatVegetationSchema } from './vegetation.input';
 
-const TransformNonNestedVegetation = () =>
-  Transform(
-    ({ value }: { value: Vegetation[] | GoatVegetation[] }) =>
-      value.map((v) => {
-        if ('vegetation' in v) {
-          return plainToClass(GoatVegetation, v);
-        }
-        return plainToClass(GoatVegetation, {
-          vegetation: v,
-          goatProportion: 1,
-        });
-      }),
-    {
-      toClassOnly: true,
-    },
-  );
+export const GoatInputSchema = z
+  .object({
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    rainfallAbove600: z
+      .boolean()
+      .meta({ description: DESCRIPTIONS.RAINFALLABOVE600 }),
+    goats: z.array(GoatCompleteSchema),
+    vegetation: z.array(GoatVegetationSchema).default([]),
+  })
+  .meta({ description: 'Input data required for the `goat` calculator' });
 
-@SchemaDescription('Input data required for the `goat` calculator')
-export class GoatInput {
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
-
-  @IsBoolean()
-  @SchemaDescription(DESCRIPTIONS.RAINFALLABOVE600)
-  @IsDefined()
-  rainfallAbove600!: boolean;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => GoatComplete)
-  @TransformSingleOrArray(GoatComplete)
-  @IsDefined()
-  goats!: GoatComplete[];
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => GoatVegetation)
-  @TransformNonNestedVegetation()
-  @IsOptional()
-  vegetation: GoatVegetation[] = [];
-}
-
-export const schemaGoatInput: SchemaObject = validationMetadatasToSchemas();
+export type GoatInput = z.infer<typeof GoatInputSchema>;

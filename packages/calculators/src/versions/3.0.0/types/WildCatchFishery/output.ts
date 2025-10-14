@@ -1,61 +1,29 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import { NetOutput } from '../common/net.output';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
-import { PurchasedOffsetsOutput } from '../purchasedOffsets.output';
-import { Scope2Output } from '../scope2.output';
-import { SequestrationOutput } from '../sequestration.output';
-import { WildCatchFisheryIntensitiesOutput } from './intensities.output';
-import { WildCatchFisheryIntermediateOutput } from './intermediate.output';
-import { WildCatchFisheryScope1Output } from './scope1.output';
-import { WildCatchFisheryScope3Output } from './scope3.output';
+import { z } from 'zod';
+import { NetOutputSchema } from '../common/net.output';
+import { PurchasedOffsetsOutputSchema } from '../purchasedOffsets.output';
+import { Scope2OutputSchema } from '../scope2.output';
+import { SequestrationOutputSchema } from '../sequestration.output';
+import { WildCatchFisheryIntensitiesOutputSchema } from './intensities.output';
+import { WildCatchFisheryIntermediateOutputSchema } from './intermediate.output';
+import { WildCatchFisheryScope1OutputSchema } from './scope1.output';
+import { WildCatchFisheryScope3OutputSchema } from './scope3.output';
 
-@SchemaDescription(
-  'Emissions calculation output for the `wildcatchfishery` calculator',
-)
-export class WildCatchFisheryOutput {
-  @ValidateNested({ always: true })
-  @Type(() => WildCatchFisheryScope1Output)
-  @IsDefined()
-  scope1!: WildCatchFisheryScope1Output;
+export const WildCatchFisheryOutputSchema = z
+  .object({
+    scope1: WildCatchFisheryScope1OutputSchema,
+    scope2: Scope2OutputSchema,
+    scope3: WildCatchFisheryScope3OutputSchema,
+    purchasedOffsets: PurchasedOffsetsOutputSchema,
+    net: NetOutputSchema,
+    intensities: WildCatchFisheryIntensitiesOutputSchema,
+    carbonSequestration: SequestrationOutputSchema,
+    intermediate: z.array(WildCatchFisheryIntermediateOutputSchema),
+  })
+  .meta({
+    description:
+      'Emissions calculation output for the `wildcatchfishery` calculator',
+  });
 
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => WildCatchFisheryScope3Output)
-  @IsDefined()
-  scope3!: WildCatchFisheryScope3Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => PurchasedOffsetsOutput)
-  @IsDefined()
-  purchasedOffsets!: PurchasedOffsetsOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => NetOutput)
-  @IsDefined()
-  net!: NetOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => WildCatchFisheryIntensitiesOutput)
-  @IsDefined()
-  intensities!: WildCatchFisheryIntensitiesOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => SequestrationOutput)
-  @IsDefined()
-  carbonSequestration!: SequestrationOutput;
-
-  @TypeWithArraySchema(() => WildCatchFisheryIntermediateOutput)
-  @ValidateNested({ always: true, each: true })
-  @Type(() => WildCatchFisheryIntermediateOutput)
-  @IsDefined()
-  intermediate!: WildCatchFisheryIntermediateOutput[];
-}
-
-export const schemaWildCatchFisheryOutput: SchemaObject = validationMetadatasToSchemas();
+export type WildCatchFisheryOutput = z.infer<
+  typeof WildCatchFisheryOutputSchema
+>;

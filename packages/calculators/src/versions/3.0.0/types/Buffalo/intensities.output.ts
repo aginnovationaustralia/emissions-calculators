@@ -1,23 +1,19 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-export class BuffaloEmissionsIntensities {
-  @IsNumber()
-  @SchemaDescription('Amount of buffalo meat produced in kg liveweight')
-  @IsDefined()
-  liveweightProducedKg!: number;
+export const BuffaloEmissionsIntensitiesSchema = z.object({
+  liveweightProducedKg: z
+    .number()
+    .meta({ description: 'Amount of buffalo meat produced in kg liveweight' }),
+  buffaloMeatExcludingSequestration: z.number().meta({
+    description:
+      'Buffalo meat (breeding herd) excluding sequestration, in kg-CO2e/kg liveweight',
+  }),
+  buffaloMeatIncludingSequestration: z.number().meta({
+    description:
+      'Buffalo meat (breeding herd) including sequestration, in kg-CO2e/kg liveweight',
+  }),
+});
 
-  @IsNumber()
-  @SchemaDescription(
-    'Buffalo meat (breeding herd) excluding sequestration, in kg-CO2e/kg liveweight',
-  )
-  @IsDefined()
-  buffaloMeatExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Buffalo meat (breeding herd) including sequestration, in kg-CO2e/kg liveweight',
-  )
-  @IsDefined()
-  buffaloMeatIncludingSequestration!: number;
-}
+export type BuffaloEmissionsIntensities = z.infer<
+  typeof BuffaloEmissionsIntensitiesSchema
+>;

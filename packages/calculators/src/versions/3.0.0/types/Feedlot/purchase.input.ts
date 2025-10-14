@@ -1,24 +1,18 @@
-import { IsDefined, IsEnum, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import {
-  FeedlotPurchaseSourceLocation,
-  FeedlotPurchaseSourceLocations,
-} from '../types';
+import { FeedlotPurchaseSourceLocations } from '../types';
 
-export class FeedlotPurchase {
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.HEADPURCHASED)
-  @IsDefined()
-  head!: number;
+export const FeedlotPurchaseSchema = z.object({
+  head: z.number().meta({ description: DESCRIPTIONS.HEADPURCHASED }),
+  purchaseWeight: z
+    .number()
+    .meta({ description: DESCRIPTIONS.PURCHASEDWEIGHT }),
+  purchaseSource: z
+    .enum(FeedlotPurchaseSourceLocations)
+    .default('sth NSW/VIC/sth SA')
+    .meta({
+      description: 'Source location of trading cattle purchases',
+    }),
+});
 
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.PURCHASEDWEIGHT)
-  @IsDefined()
-  purchaseWeight!: number;
-
-  @IsEnum(FeedlotPurchaseSourceLocations)
-  @SchemaDescription('Source location of trading cattle purchases')
-  @IsDefined()
-  purchaseSource: FeedlotPurchaseSourceLocation = 'sth NSW/VIC/sth SA';
-}
+export type FeedlotPurchase = z.infer<typeof FeedlotPurchaseSchema>;

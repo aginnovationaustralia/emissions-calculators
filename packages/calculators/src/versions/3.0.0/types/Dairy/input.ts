@@ -1,46 +1,21 @@
-import { IsBoolean, IsDefined, IsEnum, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import 'reflect-metadata';
-import { TransformSingleOrArray } from '../../common/tools';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import {
-  DairyProductionSystem,
-  DairyProductionSystems,
-  State,
-  States,
-} from '../types';
-import { DairyComplete } from './dairy.input';
-import { DairyVegetation } from './vegetation.input';
+import { DairyProductionSystems, States } from '../types';
+import { DairyCompleteSchema } from './dairy.input';
+import { DairyVegetationSchema } from './vegetation.input';
 
-@SchemaDescription('Input data required for the `dairy` calculator')
-export class DairyInput {
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
+export const DairyInputSchema = z
+  .object({
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    rainfallAbove600: z
+      .boolean()
+      .meta({ description: DESCRIPTIONS.RAINFALLABOVE600 }),
+    productionSystem: z
+      .enum(DairyProductionSystems)
+      .meta({ description: 'Production system' }),
+    dairy: z.array(DairyCompleteSchema),
+    vegetation: z.array(DairyVegetationSchema),
+  })
+  .meta({ description: 'Input data required for the `dairy` calculator' });
 
-  @IsBoolean()
-  @IsDefined()
-  @SchemaDescription(DESCRIPTIONS.RAINFALLABOVE600)
-  rainfallAbove600!: boolean;
-
-  @IsEnum(DairyProductionSystems)
-  @SchemaDescription('Production system')
-  @IsDefined()
-  productionSystem!: DairyProductionSystem;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => DairyComplete)
-  @TransformSingleOrArray(DairyComplete)
-  @IsDefined()
-  dairy!: DairyComplete[];
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => DairyVegetation)
-  @IsDefined()
-  vegetation!: DairyVegetation[];
-}
-
-export const schemaDairyInput: SchemaObject = validationMetadatasToSchemas();
+export type DairyInput = z.infer<typeof DairyInputSchema>;

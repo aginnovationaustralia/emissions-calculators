@@ -1,23 +1,19 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-export class VineyardIntensitiesOutput {
-  @IsNumber()
-  @SchemaDescription(
-    'Vineyard emissions intensity excluding sequestration, in kg-CO2e/kg crop',
-  )
-  @IsDefined()
-  vineyardsExcludingSequestration!: number;
+export const VineyardIntensitiesOutputSchema = z.object({
+  vineyardsExcludingSequestration: z.number().meta({
+    description:
+      'Vineyard emissions intensity excluding sequestration, in kg-CO2e/kg crop',
+  }),
+  vineyardsIncludingSequestration: z.number().meta({
+    description:
+      'Vineyard emissions intensity including sequestration, in kg-CO2e/kg crop',
+  }),
+  cropProducedKg: z
+    .number()
+    .meta({ description: 'Vineyard crop produced in kg' }),
+});
 
-  @IsNumber()
-  @SchemaDescription(
-    'Vineyard emissions intensity including sequestration, in kg-CO2e/kg crop',
-  )
-  @IsDefined()
-  vineyardsIncludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription('Vineyard crop produced in kg')
-  @IsDefined()
-  cropProducedKg!: number;
-}
+export type VineyardIntensitiesOutput = z.infer<
+  typeof VineyardIntensitiesOutputSchema
+>;

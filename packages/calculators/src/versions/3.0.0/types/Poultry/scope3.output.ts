@@ -1,41 +1,24 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { OUTPUTDESCRIPTIONS } from '../descriptions.schema';
 
-@SchemaDescription(OUTPUTDESCRIPTIONS.scope3)
-export class PoultryScope3Output {
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.purchasedFeed)
-  @IsDefined()
-  purchasedFeed!: number;
+export const PoultryScope3OutputSchema = z
+  .object({
+    purchasedFeed: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.purchasedFeed }),
+    purchasedHay: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.purchasedHay }),
+    purchasedLivestock: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.purchasedLivestock }),
+    herbicide: z.number().meta({ description: OUTPUTDESCRIPTIONS.herbicide }),
+    electricity: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.electricity }),
+    fuel: z.number().meta({ description: OUTPUTDESCRIPTIONS.fuel }),
+    total: z.number().meta({ description: OUTPUTDESCRIPTIONS.scope3Total }),
+  })
+  .meta({ description: OUTPUTDESCRIPTIONS.scope3 });
 
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.purchasedHay)
-  @IsDefined()
-  purchasedHay!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.purchasedLivestock)
-  @IsDefined()
-  purchasedLivestock!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.herbicide)
-  @IsDefined()
-  herbicide!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.electricity)
-  @IsDefined()
-  electricity!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.fuel)
-  @IsDefined()
-  fuel!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.scope3Total)
-  @IsDefined()
-  total!: number;
-}
+export type PoultryScope3Output = z.infer<typeof PoultryScope3OutputSchema>;

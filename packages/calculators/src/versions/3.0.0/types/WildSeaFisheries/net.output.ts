@@ -1,13 +1,12 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { IsNumberArray, SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-@SchemaDescription('Net emissions for each enterprise (in order)')
-export class WildSeaFisheriesNetOutput {
-  @IsNumber()
-  @IsDefined()
-  total!: number;
+export const WildSeaFisheriesNetOutputSchema = z
+  .object({
+    total: z.number(),
+    enterprises: z.array(z.number()),
+  })
+  .meta({ description: 'Net emissions for each enterprise (in order)' });
 
-  @IsNumberArray()
-  @IsDefined()
-  enterprises!: number[];
-}
+export type WildSeaFisheriesNetOutput = z.infer<
+  typeof WildSeaFisheriesNetOutputSchema
+>;

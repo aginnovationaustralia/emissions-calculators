@@ -1,15 +1,9 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { IsNumberArray } from '../decorator.schema';
-import { Vegetation } from '../vegetation.input';
+import { z } from 'zod';
+import { VegetationSchema } from '../vegetation.input';
 
-export class VineyardVegetation {
-  @ValidateNested({ always: true })
-  @Type(() => Vegetation)
-  @IsDefined()
-  vegetation!: Vegetation;
+export const VineyardVegetationSchema = z.object({
+  vegetation: VegetationSchema,
+  allocationToVineyards: z.array(z.number()),
+});
 
-  @IsNumberArray()
-  @IsDefined()
-  allocationToVineyards!: number[];
-}
+export type VineyardVegetation = z.infer<typeof VineyardVegetationSchema>;

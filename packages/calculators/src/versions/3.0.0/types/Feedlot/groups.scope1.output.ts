@@ -1,36 +1,25 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { OUTPUTDESCRIPTIONS } from '../descriptions.schema';
 
-@SchemaDescription(OUTPUTDESCRIPTIONS.scope1)
-export class GroupScope1Output {
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.atmosphericN2O)
-  @IsDefined()
-  atmosphericDepositionN2O!: number;
+export const GroupScope1OutputSchema = z
+  .object({
+    atmosphericDepositionN2O: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.atmosphericN2O }),
+    manureDirectN2O: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.manureDirectN2O }),
+    manureIndirectN2O: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.manureIndirectN2O }),
+    manureManagementCH4: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.manureCH4 }),
+    manureAppliedToSoilN2O: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.manureAppliedToSoilN2O }),
+    entericCH4: z.number().meta({ description: OUTPUTDESCRIPTIONS.entericCH4 }),
+  })
+  .meta({ description: OUTPUTDESCRIPTIONS.scope1 });
 
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.manureDirectN2O)
-  @IsDefined()
-  manureDirectN2O!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.manureIndirectN2O)
-  @IsDefined()
-  manureIndirectN2O!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.manureCH4)
-  @IsDefined()
-  manureManagementCH4!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.manureAppliedToSoilN2O)
-  @IsDefined()
-  manureAppliedToSoilN2O!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.entericCH4)
-  @IsDefined()
-  entericCH4!: number;
-}
+export type GroupScope1Output = z.infer<typeof GroupScope1OutputSchema>;

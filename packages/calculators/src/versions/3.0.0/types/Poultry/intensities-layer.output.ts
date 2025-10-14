@@ -1,23 +1,19 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-export class PoultryEmissionsIntensitiesLayer {
-  @IsNumber()
-  @SchemaDescription(
-    'Poultry eggs including carbon sequestration, in kg-CO2e/kg eggs',
-  )
-  @IsDefined()
-  poultryEggsIncludingSequestration!: number;
+export const PoultryEmissionsIntensitiesLayerSchema = z.object({
+  poultryEggsIncludingSequestration: z.number().meta({
+    description:
+      'Poultry eggs including carbon sequestration, in kg-CO2e/kg eggs',
+  }),
+  poultryEggsExcludingSequestration: z.number().meta({
+    description:
+      'Poultry eggs excluding carbon sequestration, in kg-CO2e/kg eggs',
+  }),
+  eggsProducedKg: z
+    .number()
+    .meta({ description: 'Poultry eggs produced in kg' }),
+});
 
-  @IsNumber()
-  @SchemaDescription(
-    'Poultry eggs excluding carbon sequestration, in kg-CO2e/kg eggs',
-  )
-  @IsDefined()
-  poultryEggsExcludingSequestration!: number;
-
-  @IsNumber()
-  @SchemaDescription('Poultry eggs produced in kg')
-  @IsDefined()
-  eggsProducedKg!: number;
-}
+export type PoultryEmissionsIntensitiesLayer = z.infer<
+  typeof PoultryEmissionsIntensitiesLayerSchema
+>;

@@ -1,22 +1,19 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
 import { InputValidationError } from '../../../..';
 import { validateCalculatorInput } from '../../calculators';
-import { GoatInput } from '../../types/Goat/input';
+import { GoatInputSchema } from '../../types/Goat/input';
 import { goatComplete, goatTestData } from './goats.data';
 import { veg1, veg2 } from './vegetation.data';
 
 describe('validating Goat test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(GoatInput, goatTestData);
+  const t = () => validateCalculatorInput(GoatInputSchema, goatTestData);
 
   test('validation should result in no errors', () => {
     expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(GoatInput);
   });
 });
 
-describe('validating Goat test input using original veg schema', () => {
+describe('validating Goat test input using old and invalid veg schema', () => {
   const input = {
     state: 'vic',
     northOfTropicOfCapricorn: false,
@@ -25,40 +22,36 @@ describe('validating Goat test input using original veg schema', () => {
     vegetation: [veg1, veg2],
   };
 
-  const classedInput = plainToClass(GoatInput, input);
-  const errors = validateSync(classedInput);
+  const result = GoatInputSchema.safeParse(input);
 
-  test('validation should result in no errors', () => {
-    expect(errors).toEqual([]);
+  test('validation should result in an error', () => {
+    expect(result.success).toBe(false);
   });
 });
 
-describe('support for single goat instance', () => {
+describe('a single goat instance is not supported', () => {
   const t = () =>
-    validateCalculatorInput(GoatInput, {
+    validateCalculatorInput(GoatInputSchema, {
       ...goatTestData,
       goats: goatTestData.goats[0],
     });
 
-  test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(GoatInput);
-    expect(t().goats).toEqual([goatTestData.goats[0]]);
+  test('validation should result in an errors', () => {
+    expect(t).toThrow(InputValidationError);
   });
 });
 
 describe('invalid requests', () => {
   test('validation should fail with invalid electricityRenewable', () => {
     const tHigh = () =>
-      validateCalculatorInput(GoatInput, {
+      validateCalculatorInput(GoatInputSchema, {
         ...goatTestData,
         goats: [{ ...goatTestData.goats[0], electricityRenewable: 2 }],
       });
     expect(tHigh).toThrow(InputValidationError);
 
     const tLow = () =>
-      validateCalculatorInput(GoatInput, {
+      validateCalculatorInput(GoatInputSchema, {
         ...goatTestData,
         goats: [{ ...goatTestData.goats[0], electricityRenewable: -1 }],
       });

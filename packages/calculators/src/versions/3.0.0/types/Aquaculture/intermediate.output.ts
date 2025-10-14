@@ -1,50 +1,27 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsString, ValidateNested } from 'class-validator';
-import { NetOutput } from '../common/net.output';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
+import { NetOutputSchema } from '../common/net.output';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { Scope2Output } from '../scope2.output';
-import { SequestrationTotalOutput } from '../sequestration.total.output';
-import { AquacultureIntensitiesOutput } from './intensities.output';
-import { AquacultureScope1Output } from './scope1.output';
-import { AquacultureScope3Output } from './scope3.output';
+import { Scope2OutputSchema } from '../scope2.output';
+import { SequestrationTotalOutputSchema } from '../sequestration.total.output';
+import { AquacultureIntensitiesOutputSchema } from './intensities.output';
+import { AquacultureScope1OutputSchema } from './scope1.output';
+import { AquacultureScope3OutputSchema } from './scope3.output';
 
-@SchemaDescription(
-  'Intermediate emissions calculation output for the Aquaculture calculator',
-)
-export class AquacultureIntermediateOutput {
-  @IsString()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  @IsDefined()
-  id!: string;
+export const AquacultureIntermediateOutputSchema = z
+  .object({
+    id: z.string().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+    scope1: AquacultureScope1OutputSchema,
+    scope2: Scope2OutputSchema,
+    scope3: AquacultureScope3OutputSchema,
+    intensities: AquacultureIntensitiesOutputSchema,
+    net: NetOutputSchema,
+    carbonSequestration: SequestrationTotalOutputSchema,
+  })
+  .meta({
+    description:
+      'Intermediate emissions calculation output for the Aquaculture calculator',
+  });
 
-  @ValidateNested({ always: true })
-  @Type(() => AquacultureScope1Output)
-  @IsDefined()
-  scope1!: AquacultureScope1Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => AquacultureScope3Output)
-  @IsDefined()
-  scope3!: AquacultureScope3Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => AquacultureIntensitiesOutput)
-  @IsDefined()
-  intensities!: AquacultureIntensitiesOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => NetOutput)
-  @IsDefined()
-  net!: NetOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => SequestrationTotalOutput)
-  @IsDefined()
-  carbonSequestration!: SequestrationTotalOutput;
-}
+export type AquacultureIntermediateOutput = z.infer<
+  typeof AquacultureIntermediateOutputSchema
+>;

@@ -1,92 +1,34 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsOptional, ValidateNested } from 'class-validator';
-import { DeprecatedSchemaDescription } from '../decorator.schema';
-import { SheepClass } from './sheepclass.input';
+import { z } from 'zod';
+import { deprecated } from '../schemas';
+import { SheepClassSchema } from './sheepclass.input';
 
-export class SheepClasses {
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsOptional()
-  rams?: SheepClass;
+export const SheepClassesSchema = z.object({
+  rams: SheepClassSchema.optional(),
+  tradeRams: SheepClassSchema.optional(),
+  wethers: SheepClassSchema.optional(),
+  tradeWethers: SheepClassSchema.optional(),
+  maidenBreedingEwes: SheepClassSchema.optional(),
+  tradeMaidenBreedingEwes: SheepClassSchema.optional(),
+  breedingEwes: SheepClassSchema,
+  tradeBreedingEwes: SheepClassSchema.optional(),
+  otherEwes: SheepClassSchema.optional(),
+  tradeOtherEwes: SheepClassSchema.optional(),
+  eweLambs: SheepClassSchema,
+  tradeEweLambs: SheepClassSchema.optional(),
+  wetherLambs: SheepClassSchema,
+  tradeWetherLambs: SheepClassSchema.optional(),
+  tradeEwes: SheepClassSchema.optional().meta(
+    deprecated(
+      'Trading ewes',
+      'More specific trading classes are now available',
+    ),
+  ),
+  tradeLambsAndHoggets: SheepClassSchema.optional().meta(
+    deprecated(
+      'Trading lambs and hoggets',
+      'More specific trading classes are now available',
+    ),
+  ),
+});
 
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsOptional()
-  tradeRams?: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsOptional()
-  wethers?: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsOptional()
-  tradeWethers?: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsOptional()
-  maidenBreedingEwes?: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsOptional()
-  tradeMaidenBreedingEwes?: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsDefined()
-  breedingEwes!: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsOptional()
-  tradeBreedingEwes?: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsOptional()
-  otherEwes?: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsOptional()
-  tradeOtherEwes?: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsDefined()
-  eweLambs!: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsOptional()
-  tradeEweLambs?: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsDefined()
-  wetherLambs!: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @IsOptional()
-  tradeWetherLambs?: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @DeprecatedSchemaDescription(
-    'More specific trading classes are now available',
-  )
-  @IsOptional()
-  tradeEwes?: SheepClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => SheepClass)
-  @DeprecatedSchemaDescription(
-    'More specific trading classes are now available',
-  )
-  @IsOptional()
-  tradeLambsAndHoggets?: SheepClass;
-}
+export type SheepClasses = z.infer<typeof SheepClassesSchema>;

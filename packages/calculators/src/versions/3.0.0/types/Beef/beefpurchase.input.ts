@@ -1,15 +1,11 @@
-import { IsDefined, IsEnum } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
-import {
-  LivestockSourceLocation,
-  LivestockSourceLocations,
-} from '../livestock';
-import { LivestockPurchase } from '../livestockPurchase.input';
+import { z } from 'zod';
+import { LivestockSourceLocations } from '../livestock';
+import { LivestockPurchaseSchema } from '../livestockPurchase.input';
 
-@SchemaDescription('Beef purchase')
-export class BeefPurchase extends LivestockPurchase {
-  @SchemaDescription('Source location of livestock purchase')
-  @IsEnum(LivestockSourceLocations)
-  @IsDefined()
-  purchaseSource!: LivestockSourceLocation;
-}
+export const BeefPurchaseSchema = LivestockPurchaseSchema.extend({
+  purchaseSource: z
+    .enum(LivestockSourceLocations)
+    .meta({ description: 'Source location of livestock purchase' }),
+}).meta({ description: 'Beef purchase' });
+
+export type BeefPurchase = z.infer<typeof BeefPurchaseSchema>;

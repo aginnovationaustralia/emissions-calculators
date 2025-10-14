@@ -3,7 +3,7 @@ import clone from 'nanoclone';
 import { validateCalculatorInput } from '../../calculators';
 import { entriesFromObject } from '../../common/tools/object';
 import { calculateDeer } from '../../Deer/calculator';
-import { DeerInput } from '../../types/Deer/input';
+import { DeerInputSchema } from '../../types/Deer/input';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
 import { testContext, V2_0_0 } from '../common/context';
 import {
@@ -72,7 +72,7 @@ describe('Deer scenarios', () => {
     ],
   };
 
-  const validatedInput = validateCalculatorInput(DeerInput, input);
+  const validatedInput = validateCalculatorInput(DeerInputSchema, input);
 
   expect(validatedInput).toBeDefined();
 

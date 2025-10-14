@@ -1,17 +1,12 @@
-import { IsDefined, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import 'reflect-metadata';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
-import { WildSeaFisheriesEnterprise } from './enterprise.input';
+import { z } from 'zod';
+import { WildSeaFisheriesEnterpriseSchema } from './enterprise.input';
 
-@SchemaDescription('Input data required for the `wildseafisheries` calculator')
-export class WildSeaFisheriesInput {
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => WildSeaFisheriesEnterprise)
-  @IsDefined()
-  enterprises!: WildSeaFisheriesEnterprise[];
-}
+export const WildSeaFisheriesInputSchema = z
+  .object({
+    enterprises: z.array(WildSeaFisheriesEnterpriseSchema),
+  })
+  .meta({
+    description: 'Input data required for the `wildseafisheries` calculator',
+  });
 
-export const schemaWildSeaFisheriesInput: SchemaObject =
-  validationMetadatasToSchemas();
+export type WildSeaFisheriesInput = z.infer<typeof WildSeaFisheriesInputSchema>;

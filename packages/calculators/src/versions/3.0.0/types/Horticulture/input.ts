@@ -1,49 +1,25 @@
-import {
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import 'reflect-metadata';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { State, States } from '../types';
-import { HorticultureCrop } from './horticulture.input';
-import { HorticultureVegetation } from './vegetation.input';
+import { States } from '../types';
+import { HorticultureCropSchema } from './horticulture.input';
+import { HorticultureVegetationSchema } from './vegetation.input';
 
-@SchemaDescription('Input data required for the `horticulture` calculator')
-export class HorticultureInput {
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
+export const HorticultureInputSchema = z
+  .object({
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    crops: z.array(HorticultureCropSchema),
+    electricityRenewable: z
+      .number()
+      .min(0)
+      .max(1)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+    electricityUse: z
+      .number()
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
+    vegetation: z.array(HorticultureVegetationSchema),
+  })
+  .meta({
+    description: 'Input data required for the `horticulture` calculator',
+  });
 
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => HorticultureCrop)
-  @IsDefined()
-  crops!: HorticultureCrop[];
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_RENEWABLE)
-  @IsDefined()
-  electricityRenewable!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_USE)
-  @IsDefined()
-  electricityUse!: number;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => HorticultureVegetation)
-  @IsDefined()
-  vegetation!: HorticultureVegetation[];
-}
-
-export const schemaHorticultureInput: SchemaObject =
-  validationMetadatasToSchemas();
+export type HorticultureInput = z.infer<typeof HorticultureInputSchema>;

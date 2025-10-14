@@ -1,30 +1,27 @@
-import { IsNumber, IsOptional } from 'class-validator';
-import { SchemaDescription } from './decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
 
-export class LivestockManureSeason {
-  @IsNumber()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.VOLATILESOLIDS_OUTDOORSYSTEMS)
-  outdoorSystems?: number;
+export const LivestockManureSeasonSchema = z.object({
+  outdoorSystems: z
+    .number()
+    .optional()
+    .meta({ description: DESCRIPTIONS.VOLATILESOLIDS_OUTDOORSYSTEMS }),
+  coveredAnaerobicPond: z
+    .number()
+    .optional()
+    .meta({ description: DESCRIPTIONS.VOLATILESOLIDS_COVEREDANAEROBICPOND }),
+  uncoveredAnaerobicPond: z
+    .number()
+    .optional()
+    .meta({ description: DESCRIPTIONS.VOLATILESOLIDS_UNCOVEREDANAEROBICPOND }),
+  deepLitter: z
+    .number()
+    .optional()
+    .meta({ description: DESCRIPTIONS.VOLATILESOLIDS_DEEPLITTER }),
+  undefinedSystem: z
+    .number()
+    .optional()
+    .meta({ description: DESCRIPTIONS.VOLATILESOLIDS_UNDEFINED }),
+});
 
-  @IsNumber()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.VOLATILESOLIDS_COVEREDANAEROBICPOND)
-  coveredAnaerobicPond?: number;
-
-  @IsNumber()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.VOLATILESOLIDS_UNCOVEREDANAEROBICPOND)
-  uncoveredAnaerobicPond?: number;
-
-  @IsNumber()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.VOLATILESOLIDS_DEEPLITTER)
-  deepLitter?: number;
-
-  @IsNumber()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.VOLATILESOLIDS_UNDEFINED)
-  undefinedSystem?: number;
-}
+export type LivestockManureSeason = z.infer<typeof LivestockManureSeasonSchema>;

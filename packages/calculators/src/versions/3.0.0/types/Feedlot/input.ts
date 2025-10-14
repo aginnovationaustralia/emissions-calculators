@@ -1,29 +1,15 @@
-import { IsDefined, IsEnum, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import 'reflect-metadata';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { State, States } from '../types';
-import { FeedlotComplete } from './feedlot.input';
-import { FeedlotVegetation } from './vegetation.input';
+import { States } from '../types';
+import { FeedlotCompleteSchema } from './feedlot.input';
+import { FeedlotVegetationSchema } from './vegetation.input';
 
-@SchemaDescription('Input data required for the `feedlot` calculator')
-export class FeedlotInput {
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
+export const FeedlotInputSchema = z
+  .object({
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    feedlots: z.array(FeedlotCompleteSchema),
+    vegetation: z.array(FeedlotVegetationSchema),
+  })
+  .meta({ description: 'Input data required for the `feedlot` calculator' });
 
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => FeedlotComplete)
-  @IsDefined()
-  feedlots!: FeedlotComplete[];
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => FeedlotVegetation)
-  @IsDefined()
-  vegetation!: FeedlotVegetation[];
-}
-
-export const schemaFeedlotInput: SchemaObject = validationMetadatasToSchemas();
+export type FeedlotInput = z.infer<typeof FeedlotInputSchema>;

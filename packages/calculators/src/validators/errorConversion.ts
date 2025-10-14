@@ -1,5 +1,5 @@
 import { ValidationErrorResult } from '@/utils/io';
-import { ValidationError } from 'class-validator';
+import { $ZodIssue } from 'zod/v4/core';
 
 // export function parseValidationErrors(
 //   errors: ValidationError[],
@@ -28,28 +28,15 @@ import { ValidationError } from 'class-validator';
  * @returns
  */
 export function parseValidationError(
-  errors: ValidationError[],
-  path: string = '',
+  errors: $ZodIssue[],
 ): ValidationErrorResult[] {
   return errors.reduce((acc, error) => {
-    if (error.children && error.children.length > 0) {
-      return [
-        ...acc,
-        ...parseValidationError(
-          error.children,
-          path.length > 0 ? `${path}.${error.property}` : error.property,
-        ),
-      ];
-    }
-
     return [
       ...acc,
       {
-        path: path.length > 0 ? `${path}.${error.property}` : error.property,
-        message: Object.values(error.constraints || {}).join(', '),
-        property: error.property,
-        constraint: Object.keys(error.constraints || {})[0],
-        value: error.value,
+        path: error.path.join('.'),
+        message: error.message,
+        value: error.input,
       },
     ];
   }, [] as ValidationErrorResult[]);

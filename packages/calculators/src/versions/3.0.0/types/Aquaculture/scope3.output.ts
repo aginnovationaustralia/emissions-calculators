@@ -1,46 +1,31 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { OUTPUTDESCRIPTIONS } from '../descriptions.schema';
 
-@SchemaDescription(OUTPUTDESCRIPTIONS.scope3)
-export class AquacultureScope3Output {
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.purchasedBait)
-  @IsDefined()
-  purchasedBait!: number;
+export const AquacultureScope3OutputSchema = z
+  .object({
+    purchasedBait: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.purchasedBait }),
+    electricity: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.electricity }),
+    fuel: z.number().meta({ description: OUTPUTDESCRIPTIONS.fuel }),
+    commercialFlights: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.commercialFlights }),
+    inboundFreight: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.inboundFreight }),
+    outboundFreight: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.outboundFreight }),
+    solidWasteSentOffsite: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.solidWasteSentOffsite }),
+    total: z.number().meta({ description: OUTPUTDESCRIPTIONS.scope3Total }),
+  })
+  .meta({ description: OUTPUTDESCRIPTIONS.scope3 });
 
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.electricity)
-  @IsDefined()
-  electricity!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.fuel)
-  @IsDefined()
-  fuel!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.commercialFlights)
-  @IsDefined()
-  commercialFlights!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.inboundFreight)
-  @IsDefined()
-  inboundFreight!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.outboundFreight)
-  @IsDefined()
-  outboundFreight!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.solidWasteSentOffsite)
-  @IsDefined()
-  solidWasteSentOffsite!: number;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.scope3Total)
-  @IsDefined()
-  total!: number;
-}
+export type AquacultureScope3Output = z.infer<
+  typeof AquacultureScope3OutputSchema
+>;

@@ -1,19 +1,12 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import 'reflect-metadata';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
-import { AquacultureEnterpriseInput } from './aquaculture.input';
+import { z } from 'zod';
+import { AquacultureEnterpriseInputSchema } from './aquaculture.input';
 
-@SchemaDescription('Input data required for the `aquaculture` calculator')
-export class AquacultureInput {
-  @ValidateNested({ always: true, each: true })
-  @Type(() => AquacultureEnterpriseInput)
-  @TypeWithArraySchema(() => AquacultureEnterpriseInput)
-  @IsDefined()
-  enterprises!: AquacultureEnterpriseInput[];
-}
+export const AquacultureInputSchema = z
+  .object({
+    enterprises: z.array(AquacultureEnterpriseInputSchema),
+  })
+  .meta({
+    description: 'Input data required for the `aquaculture` calculator',
+  });
 
-export const schemaAquacultureInput: SchemaObject =
-  validationMetadatasToSchemas();
+export type AquacultureInput = z.infer<typeof AquacultureInputSchema>;

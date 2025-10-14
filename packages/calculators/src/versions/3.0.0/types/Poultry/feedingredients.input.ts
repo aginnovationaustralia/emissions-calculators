@@ -1,27 +1,18 @@
-import { IsNumber, IsOptional } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-@SchemaDescription(
-  'Poultry broiler feed ingredients as fractions, each from 0 to 1',
-)
-export class PoultryFeedIngredients {
-  @IsNumber()
-  @IsOptional()
-  wheat?: number;
+export const PoultryFeedIngredientsSchema = z
+  .object({
+    wheat: z.number().optional(),
+    barley: z.number().optional(),
+    sorghum: z.number().optional(),
+    soybean: z.number().optional(),
+    millrun: z.number().optional(),
+  })
+  .meta({
+    description:
+      'Poultry broiler feed ingredients as fractions, each from 0 to 1',
+  });
 
-  @IsNumber()
-  @IsOptional()
-  barley?: number;
-
-  @IsNumber()
-  @IsOptional()
-  sorghum?: number;
-
-  @IsNumber()
-  @IsOptional()
-  soybean?: number;
-
-  @IsNumber()
-  @IsOptional()
-  millrun?: number;
-}
+export type PoultryFeedIngredients = z.infer<
+  typeof PoultryFeedIngredientsSchema
+>;

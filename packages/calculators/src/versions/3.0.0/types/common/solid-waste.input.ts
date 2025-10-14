@@ -1,15 +1,13 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 
-export class SolidWasteInput {
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.SOLID_WASTE_SENT_OFFSITE)
-  @IsDefined()
-  sentOffsiteTonnes!: number;
+export const SolidWasteInputSchema = z.object({
+  sentOffsiteTonnes: z
+    .number()
+    .meta({ description: DESCRIPTIONS.SOLID_WASTE_SENT_OFFSITE }),
+  onsiteCompostingTonnes: z
+    .number()
+    .meta({ description: DESCRIPTIONS.SOLID_WASTE_COMPOSTED_ONSITE }),
+});
 
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.SOLID_WASTE_COMPOSTED_ONSITE)
-  @IsDefined()
-  onsiteCompostingTonnes!: number;
-}
+export type SolidWasteInput = z.infer<typeof SolidWasteInputSchema>;

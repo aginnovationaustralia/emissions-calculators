@@ -1,171 +1,87 @@
-import { Type } from 'class-transformer';
-import {
-  IsBoolean,
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import 'reflect-metadata';
-import { FluidWasteInput } from '../common/fluid-waste.input';
-import { FreightInput } from '../common/freight.input';
-import { SolidWasteInput } from '../common/solid-waste.input';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
+import { FluidWasteInputSchema } from '../common/fluid-waste.input';
+import { FreightInputSchema } from '../common/freight.input';
+import { SolidWasteInputSchema } from '../common/solid-waste.input';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { FuelInput } from '../fuel.input';
-import { ElectricitySource, ElectricitySources, State, States } from '../types';
+import { FuelInputSchema } from '../fuel.input';
+import { ElectricitySources, States } from '../types';
 
-export class VineyardCrop {
-  @IsString()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  id?: string;
+export const VineyardCropSchema = z.object({
+  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+  state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+  rainfallAbove600: z
+    .boolean()
+    .meta({ description: DESCRIPTIONS.RAINFALLIRRIGATIONABOVE600 }),
+  irrigated: z.boolean().meta({ description: DESCRIPTIONS.IRRIGATED }),
+  areaPlanted: z
+    .number()
+    .meta({ description: 'Area planted, in ha (hectares)' }),
+  averageYield: z
+    .number()
+    .meta({ description: 'Average yield, in t/ha (tonnes per hectare)' }),
+  nonUreaNitrogen: z.number().meta({
+    description:
+      'Non-urea nitrogen application, in kg N/ha (kilograms of nitrogen per hectare)',
+  }),
+  phosphorusApplication: z.number().meta({
+    description:
+      'Phosphorus application, in kg P/ha (kilograms of phosphorus per hectare)',
+  }),
+  potassiumApplication: z.number().meta({
+    description:
+      'Potassium application, in kg K/ha (kilograms of potassium per hectare)',
+  }),
+  sulfurApplication: z.number().meta({
+    description:
+      'Sulfur application, in kg S/ha (kilograms of sulfur per hectare)',
+  }),
+  ureaApplication: z.number().meta({
+    description:
+      'Urea nitrogen application, in kg Urea/ha (kilograms of urea per hectare)',
+  }),
+  ureaAmmoniumNitrate: z.number().meta({
+    description:
+      'Urea-Ammonium nitrate application, in kg product/ha (kilograms of product per hectare)',
+  }),
+  limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
+  limestoneFraction: z
+    .number()
+    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  herbicideUse: z.number().meta({
+    description:
+      'Total amount of active ingredients from general herbicide/pesticide use, in kg (kilogram)',
+  }),
+  glyphosateOtherHerbicideUse: z.number().meta({
+    description:
+      'Total amount of active ingredients from other herbicide use (Paraquat, Diquat, Glyphosate), in kg (kilogram)',
+  }),
+  electricityRenewable: z
+    .number()
+    .min(0)
+    .max(1)
+    .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+  electricityUse: z
+    .number()
+    .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
+  electricitySource: z
+    .enum(ElectricitySources)
+    .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
+  fuel: FuelInputSchema.meta({ description: DESCRIPTIONS.FUEL }),
+  fluidWaste: z
+    .array(FluidWasteInputSchema)
+    .meta({ description: DESCRIPTIONS.FLUID_WASTE }),
+  solidWaste: SolidWasteInputSchema.meta({
+    description: DESCRIPTIONS.SOLID_WASTE,
+  }),
+  inboundFreight: z
+    .array(FreightInputSchema)
+    .meta({ description: DESCRIPTIONS.INBOUND_FREIGHT }),
+  outboundFreight: z
+    .array(FreightInputSchema)
+    .meta({ description: DESCRIPTIONS.OUTBOUND_FREIGHT }),
+  totalCommercialFlightsKm: z
+    .number()
+    .meta({ description: DESCRIPTIONS.TOTAL_COMMERCIAL_FLIGHTS_KM }),
+});
 
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
-
-  @IsBoolean()
-  @SchemaDescription(DESCRIPTIONS.RAINFALLIRRIGATIONABOVE600)
-  @IsDefined()
-  rainfallAbove600!: boolean;
-
-  @IsBoolean()
-  @SchemaDescription(DESCRIPTIONS.IRRIGATED)
-  @IsDefined()
-  irrigated!: boolean;
-
-  @IsNumber()
-  @SchemaDescription('Area planted, in ha (hectares)')
-  @IsDefined()
-  areaPlanted!: number;
-
-  @IsNumber()
-  @SchemaDescription('Average yield, in t/ha (tonnes per hectare)')
-  @IsDefined()
-  averageYield!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Non-urea nitrogen application, in kg N/ha (kilograms of nitrogen per hectare)',
-  )
-  @IsDefined()
-  nonUreaNitrogen!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Phosphorus application, in kg P/ha (kilograms of phosphorus per hectare)',
-  )
-  @IsDefined()
-  phosphorusApplication!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Potassium application, in kg K/ha (kilograms of potassium per hectare)',
-  )
-  @IsDefined()
-  potassiumApplication!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Sulfur application, in kg S/ha (kilograms of sulfur per hectare)',
-  )
-  @IsDefined()
-  sulfurApplication!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Urea nitrogen application, in kg Urea/ha (kilograms of urea per hectare)',
-  )
-  @IsDefined()
-  ureaApplication!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Urea-Ammonium nitrate application, in kg product/ha (kilograms of product per hectare)',
-  )
-  @IsDefined()
-  ureaAmmoniumNitrate!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LIMESTONE)
-  @IsDefined()
-  limestone!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LIMESTONEFRACTION)
-  @IsDefined()
-  limestoneFraction!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Total amount of active ingredients from general herbicide/pesticide use, in kg (kilogram)',
-  )
-  @IsDefined()
-  herbicideUse!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Total amount of active ingredients from other herbicide use (Paraquat, Diquat, Glyphosate), in kg (kilogram)',
-  )
-  @IsDefined()
-  glyphosateOtherHerbicideUse!: number;
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_RENEWABLE)
-  @IsDefined()
-  electricityRenewable!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_USE)
-  @IsDefined()
-  electricityUse!: number;
-
-  @IsEnum(ElectricitySources)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_SOURCE)
-  @IsDefined()
-  electricitySource!: ElectricitySource;
-
-  @ValidateNested({ always: true })
-  @Type(() => FuelInput)
-  @SchemaDescription(DESCRIPTIONS.FUEL)
-  @IsDefined()
-  fuel!: FuelInput;
-
-  @ValidateNested({ always: true, each: true })
-  @Type(() => FluidWasteInput)
-  @TypeWithArraySchema(() => FluidWasteInput)
-  @SchemaDescription(DESCRIPTIONS.FLUID_WASTE)
-  @IsDefined()
-  fluidWaste!: FluidWasteInput[];
-
-  @ValidateNested({ always: true })
-  @Type(() => SolidWasteInput)
-  @SchemaDescription(DESCRIPTIONS.SOLID_WASTE)
-  @IsDefined()
-  solidWaste!: SolidWasteInput;
-
-  @TypeWithArraySchema(() => FreightInput)
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.INBOUND_FREIGHT)
-  @IsDefined()
-  inboundFreight!: FreightInput[];
-
-  @TypeWithArraySchema(() => FreightInput)
-  @ValidateNested({ always: true, each: true })
-  @SchemaDescription(DESCRIPTIONS.OUTBOUND_FREIGHT)
-  @IsDefined()
-  outboundFreight!: FreightInput[];
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.TOTAL_COMMERCIAL_FLIGHTS_KM)
-  @IsDefined()
-  totalCommercialFlightsKm!: number;
-}
+export type VineyardCrop = z.infer<typeof VineyardCropSchema>;

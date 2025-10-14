@@ -1,16 +1,12 @@
-import { IsDefined, IsEnum, IsNumber } from 'class-validator';
-import { SchemaDescription } from './decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
 import { StationaryFuelTypes } from './types';
 
-export class StationaryFuelInput {
-  @IsEnum(StationaryFuelTypes)
-  @SchemaDescription(DESCRIPTIONS.FUEL_TYPE)
-  @IsDefined()
-  type!: StationaryFuelTypes;
+export const StationaryFuelInputSchema = z.object({
+  type: z
+    .enum(StationaryFuelTypes)
+    .meta({ description: DESCRIPTIONS.FUEL_TYPE }),
+  amountLitres: z.number().meta({ description: DESCRIPTIONS.FUEL_CONSUMPTION }),
+});
 
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.FUEL_CONSUMPTION)
-  @IsDefined()
-  amountLitres!: number;
-}
+export type StationaryFuelInput = z.infer<typeof StationaryFuelInputSchema>;

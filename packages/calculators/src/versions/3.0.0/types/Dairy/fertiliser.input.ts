@@ -1,21 +1,14 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-@SchemaDescription('Nitrogen fertiliser application, each value is in kg N/ha')
-export class NitrogenFertiliser {
-  @IsNumber()
-  @IsDefined()
-  cropsIrrigated!: number;
+export const NitrogenFertiliserSchema = z
+  .object({
+    cropsIrrigated: z.number(),
+    cropsDryland: z.number(),
+    pastureIrrigated: z.number(),
+    pastureDryland: z.number(),
+  })
+  .meta({
+    description: 'Nitrogen fertiliser application, each value is in kg N/ha',
+  });
 
-  @IsNumber()
-  @IsDefined()
-  cropsDryland!: number;
-
-  @IsNumber()
-  @IsDefined()
-  pastureIrrigated!: number;
-
-  @IsNumber()
-  @IsDefined()
-  pastureDryland!: number;
-}
+export type NitrogenFertiliser = z.infer<typeof NitrogenFertiliserSchema>;

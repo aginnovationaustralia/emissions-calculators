@@ -3,7 +3,7 @@ import clone from 'nanoclone';
 import { validateCalculatorInput } from '../../calculators';
 import { entriesFromObject } from '../../common/tools/object';
 import { calculateGoat } from '../../Goat/calculator';
-import { GoatInput } from '../../types/Goat/input';
+import { GoatInput, GoatInputSchema } from '../../types/Goat/input';
 import { GoatIntermediateOutput } from '../../types/Goat/intermediate.output';
 import { GoatOutput } from '../../types/Goat/output';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
@@ -76,7 +76,7 @@ describe('Goat scenarios', () => {
       },
     ],
   } as GoatInput;
-  const validatedInput = validateCalculatorInput(GoatInput, input);
+  const validatedInput = validateCalculatorInput(GoatInputSchema, input);
 
   expect(validatedInput).toBeDefined();
 

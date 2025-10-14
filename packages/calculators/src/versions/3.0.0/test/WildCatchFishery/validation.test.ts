@@ -1,6 +1,6 @@
 import { InputValidationError } from '../../../..';
 import { validateCalculatorInput } from '../../calculators';
-import { WildCatchFisheryInput } from '../../types/WildCatchFishery/input';
+import { WildCatchFisheryInputSchema } from '../../types/WildCatchFishery/input';
 import { wildCatchFisheryTestData } from './input.data';
 
 describe('validating WildCatchFishery test inputs, all types of inputs', () => {
@@ -8,13 +8,12 @@ describe('validating WildCatchFishery test inputs, all types of inputs', () => {
     test('validation should result in no errors', () => {
       const t = () =>
         validateCalculatorInput(
-          WildCatchFisheryInput,
+          WildCatchFisheryInputSchema,
           wildCatchFisheryTestData,
         );
 
       expect(t).not.toThrow();
       expect(t).not.toThrow(InputValidationError);
-      expect(t()).toBeInstanceOf(WildCatchFisheryInput);
     });
 
     test('validation should allow optional keys to be omitted', () => {
@@ -34,7 +33,7 @@ describe('validating WildCatchFishery test inputs, all types of inputs', () => {
       };
 
       const t = () =>
-        validateCalculatorInput(WildCatchFisheryInput, validTestData);
+        validateCalculatorInput(WildCatchFisheryInputSchema, validTestData);
 
       expect(t).not.toThrow(InputValidationError);
     });
@@ -57,7 +56,7 @@ describe('validating WildCatchFishery test inputs, all types of inputs', () => {
         ],
       };
       const t = () =>
-        validateCalculatorInput(WildCatchFisheryInput, invalidTestData);
+        validateCalculatorInput(WildCatchFisheryInputSchema, invalidTestData);
       expect(t).toThrow(InputValidationError);
     });
   });

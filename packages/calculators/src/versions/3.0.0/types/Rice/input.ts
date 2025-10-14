@@ -1,48 +1,23 @@
-import {
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import 'reflect-metadata';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { State, States } from '../types';
-import { RiceCrop } from './rice.input';
-import { RiceVegetation } from './vegetation.input';
+import { States } from '../types';
+import { RiceCropSchema } from './rice.input';
+import { RiceVegetationSchema } from './vegetation.input';
 
-@SchemaDescription('Input data required for the `rice` calculator')
-export class RiceInput {
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
+export const RiceInputSchema = z
+  .object({
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    crops: z.array(RiceCropSchema),
+    electricityRenewable: z
+      .number()
+      .min(0)
+      .max(1)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+    electricityUse: z
+      .number()
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
+    vegetation: z.array(RiceVegetationSchema),
+  })
+  .meta({ description: 'Input data required for the `rice` calculator' });
 
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => RiceCrop)
-  @IsDefined()
-  crops!: RiceCrop[];
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_RENEWABLE)
-  @IsDefined()
-  electricityRenewable!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_USE)
-  @IsDefined()
-  electricityUse!: number;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => RiceVegetation)
-  @IsDefined()
-  vegetation!: RiceVegetation[];
-}
-
-export const schemaRiceInput: SchemaObject = validationMetadatasToSchemas();
+export type RiceInput = z.infer<typeof RiceInputSchema>;

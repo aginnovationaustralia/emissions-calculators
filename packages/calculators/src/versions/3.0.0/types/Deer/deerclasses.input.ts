@@ -1,55 +1,21 @@
-import { Type } from 'class-transformer';
-import { IsOptional, ValidateNested } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
-import { DeerClass } from './deerclass.input';
+import { z } from 'zod';
+import { DeerClassSchema } from './deerclass.input';
 
-@SchemaDescription('Deer classes of different types')
-export class DeerClasses {
-  @ValidateNested({ always: true })
-  @Type(() => DeerClass)
-  @SchemaDescription('Bucks')
-  @IsOptional()
-  bucks?: DeerClass;
+export const DeerClassesSchema = z
+  .object({
+    bucks: DeerClassSchema.optional().meta({ description: 'Bucks' }),
+    tradeBucks: DeerClassSchema.optional().meta({ description: 'Trade bucks' }),
+    breedingDoes: DeerClassSchema.optional().meta({
+      description: 'Breeding does',
+    }),
+    tradeDoes: DeerClassSchema.optional().meta({ description: 'Trade does' }),
+    otherDoes: DeerClassSchema.optional().meta({ description: 'Other does' }),
+    tradeOtherDoes: DeerClassSchema.optional().meta({
+      description: 'Trade other does',
+    }),
+    fawn: DeerClassSchema.optional().meta({ description: 'Fawns' }),
+    tradeFawn: DeerClassSchema.optional().meta({ description: 'Trade fawns' }),
+  })
+  .meta({ description: 'Deer classes of different types' });
 
-  @ValidateNested({ always: true })
-  @Type(() => DeerClass)
-  @SchemaDescription('Trade bucks')
-  @IsOptional()
-  tradeBucks?: DeerClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => DeerClass)
-  @SchemaDescription('Breeding does')
-  @IsOptional()
-  breedingDoes?: DeerClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => DeerClass)
-  @SchemaDescription('Trade does')
-  @IsOptional()
-  tradeDoes?: DeerClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => DeerClass)
-  @SchemaDescription('Other does')
-  @IsOptional()
-  otherDoes?: DeerClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => DeerClass)
-  @SchemaDescription('Trade other does')
-  @IsOptional()
-  tradeOtherDoes?: DeerClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => DeerClass)
-  @SchemaDescription('Fawns')
-  @IsOptional()
-  fawn?: DeerClass;
-
-  @ValidateNested({ always: true })
-  @Type(() => DeerClass)
-  @SchemaDescription('Trade fawns')
-  @IsOptional()
-  tradeFawn?: DeerClass;
-}
+export type DeerClasses = z.infer<typeof DeerClassesSchema>;

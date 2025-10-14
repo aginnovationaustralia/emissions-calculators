@@ -1,122 +1,45 @@
-import { Type } from 'class-transformer';
-import {
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import 'reflect-metadata';
-
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { Fertiliser } from '../fertiliser.input';
-import { MineralSupplementation } from '../mineral.input';
-import { ElectricitySource, ElectricitySources } from '../types';
-import { EwesLambing } from './eweslambing.input';
-import { SeasonalLambing } from './seasonallambing.input';
-import { SheepClasses } from './sheepclasses.input';
+import { FertiliserSchema } from '../fertiliser.input';
+import { MineralSupplementationSchema } from '../mineral.input';
+import { ElectricitySources } from '../types';
+import { EwesLambingSchema } from './eweslambing.input';
+import { SeasonalLambingSchema } from './seasonallambing.input';
+import { SheepClassesSchema } from './sheepclasses.input';
 
-export class SheepComplete {
-  @IsString()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  id?: string;
+export const SheepCompleteSchema = z.object({
+  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+  classes: SheepClassesSchema,
+  limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
+  limestoneFraction: z
+    .number()
+    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  fertiliser: FertiliserSchema,
+  diesel: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
+  petrol: z.number().meta({ description: DESCRIPTIONS.PETROL }),
+  lpg: z.number().meta({ description: DESCRIPTIONS.LPG }),
+  mineralSupplementation: MineralSupplementationSchema,
+  electricitySource: z
+    .enum(ElectricitySources)
+    .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
+  electricityRenewable: z
+    .number()
+    .min(0)
+    .max(1)
+    .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+  electricityUse: z
+    .number()
+    .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
+  grainFeed: z.number().meta({ description: DESCRIPTIONS.GRAINFEED }),
+  hayFeed: z.number().meta({ description: DESCRIPTIONS.HAYFEED }),
+  herbicide: z.number().meta({ description: DESCRIPTIONS.HERBICIDE }),
+  herbicideOther: z.number().meta({ description: DESCRIPTIONS.HERBICIDEOTHER }),
+  merinoPercent: z.number().meta({
+    description:
+      'Percent of sheep purchases that are of type Merino, from 0 to 100',
+  }),
+  ewesLambing: EwesLambingSchema,
+  seasonalLambing: SeasonalLambingSchema,
+});
 
-  @ValidateNested({ always: true })
-  @Type(() => SheepClasses)
-  @IsDefined()
-  classes!: SheepClasses;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LIMESTONE)
-  @IsDefined()
-  limestone!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LIMESTONEFRACTION)
-  @IsDefined()
-  limestoneFraction!: number;
-
-  @ValidateNested({ always: true })
-  @Type(() => Fertiliser)
-  @IsDefined()
-  fertiliser!: Fertiliser;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.DIESEL)
-  @IsDefined()
-  diesel!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.PETROL)
-  @IsDefined()
-  petrol!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LPG)
-  @IsDefined()
-  lpg!: number;
-
-  @ValidateNested({ always: true })
-  @Type(() => MineralSupplementation)
-  @IsDefined()
-  mineralSupplementation!: MineralSupplementation;
-
-  @IsEnum(ElectricitySources)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_SOURCE)
-  @IsDefined()
-  electricitySource!: ElectricitySource;
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_RENEWABLE)
-  @IsDefined()
-  electricityRenewable!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_USE)
-  @IsDefined()
-  electricityUse!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.GRAINFEED)
-  @IsDefined()
-  grainFeed!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.HAYFEED)
-  @IsDefined()
-  hayFeed!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.HERBICIDE)
-  @IsDefined()
-  herbicide!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.HERBICIDEOTHER)
-  @IsDefined()
-  herbicideOther!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Percent of sheep purchases that are of type Merino, from 0 to 100',
-  )
-  @IsDefined()
-  merinoPercent!: number;
-
-  @ValidateNested({ always: true })
-  @Type(() => EwesLambing)
-  @IsDefined()
-  ewesLambing!: EwesLambing;
-
-  @ValidateNested({ always: true })
-  @Type(() => SeasonalLambing)
-  @IsDefined()
-  seasonalLambing!: SeasonalLambing;
-}
+export type SheepComplete = z.infer<typeof SheepCompleteSchema>;

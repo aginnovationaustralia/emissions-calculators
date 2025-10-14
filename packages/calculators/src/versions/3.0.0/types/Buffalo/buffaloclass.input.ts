@@ -1,49 +1,18 @@
-import { Type } from 'class-transformer';
-import {
-  IsDefined,
-  IsNumber,
-  IsOptional,
-  ValidateNested,
-} from 'class-validator';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { LivestockPurchase } from '../livestockPurchase.input';
-import { BuffaloSeason } from './buffaloseason.input';
+import { LivestockPurchaseSchema } from '../livestockPurchase.input';
+import { BuffaloSeasonSchema } from './buffaloseason.input';
 
-@SchemaDescription('Buffalo class with seasonal data')
-export class BuffaloClass {
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloSeason)
-  @IsDefined()
-  autumn!: BuffaloSeason;
+export const BuffaloClassSchema = z
+  .object({
+    autumn: BuffaloSeasonSchema,
+    winter: BuffaloSeasonSchema,
+    spring: BuffaloSeasonSchema,
+    summer: BuffaloSeasonSchema,
+    headSold: z.number().meta({ description: DESCRIPTIONS.HEADSOLD }),
+    saleWeight: z.number().meta({ description: DESCRIPTIONS.SALEWEIGHT }),
+    purchases: z.array(LivestockPurchaseSchema).optional(),
+  })
+  .meta({ description: 'Buffalo class with seasonal data' });
 
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloSeason)
-  @IsDefined()
-  winter!: BuffaloSeason;
-
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloSeason)
-  @IsDefined()
-  spring!: BuffaloSeason;
-
-  @ValidateNested({ always: true })
-  @Type(() => BuffaloSeason)
-  @IsDefined()
-  summer!: BuffaloSeason;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.HEADSOLD)
-  @IsDefined()
-  headSold!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.SALEWEIGHT)
-  @IsDefined()
-  saleWeight!: number;
-
-  @IsOptional()
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => LivestockPurchase)
-  purchases?: LivestockPurchase[];
-}
+export type BuffaloClass = z.infer<typeof BuffaloClassSchema>;

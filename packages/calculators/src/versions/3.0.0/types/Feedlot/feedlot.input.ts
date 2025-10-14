@@ -1,140 +1,62 @@
-import { Type } from 'class-transformer';
-import {
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import 'reflect-metadata';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { Fertiliser } from '../fertiliser.input';
-import {
-  ElectricitySource,
-  ElectricitySources,
-  FeedlotSystem,
-  FeedlotSystems,
-  TruckType,
-  TruckTypes,
-} from '../types';
-import { FeedlotGroup } from './group.input';
-import { FeedlotPurchases } from './purchases.input';
-import { FeedlotSales } from './sales.input';
+import { FertiliserSchema } from '../fertiliser.input';
+import { ElectricitySources, FeedlotSystems, TruckTypes } from '../types';
+import { FeedlotGroupSchema } from './group.input';
+import { FeedlotPurchasesSchema } from './purchases.input';
+import { FeedlotSalesSchema } from './sales.input';
 
-@SchemaDescription(
-  'All fields needed to describe the activity of a single feedlot enterprise',
-)
-export class FeedlotComplete {
-  @IsString()
-  @IsOptional()
-  @SchemaDescription('Unique identifier for the feedlot enterprise')
-  id?: string;
+export const FeedlotCompleteSchema = z
+  .object({
+    id: z
+      .string()
+      .optional()
+      .meta({ description: 'Unique identifier for the feedlot enterprise' }),
+    system: z
+      .enum(FeedlotSystems)
+      .meta({ description: 'Type of feedlot/production system' }),
+    groups: z.array(FeedlotGroupSchema),
+    fertiliser: FertiliserSchema,
+    purchases: FeedlotPurchasesSchema,
+    sales: FeedlotSalesSchema,
+    diesel: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
+    petrol: z.number().meta({ description: DESCRIPTIONS.PETROL }),
+    lpg: z.number().meta({ description: DESCRIPTIONS.LPG }),
+    electricitySource: z
+      .enum(ElectricitySources)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
+    electricityRenewable: z
+      .number()
+      .min(0)
+      .max(1)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+    electricityUse: z
+      .number()
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
+    grainFeed: z.number().meta({ description: DESCRIPTIONS.GRAINFEED }),
+    hayFeed: z.number().meta({ description: DESCRIPTIONS.HAYFEED }),
+    cottonseedFeed: z
+      .number()
+      .meta({ description: DESCRIPTIONS.COTTONSEEDFEED }),
+    herbicide: z.number().meta({ description: DESCRIPTIONS.HERBICIDE }),
+    herbicideOther: z
+      .number()
+      .meta({ description: DESCRIPTIONS.HERBICIDEOTHER }),
+    distanceCattleTransported: z.number().meta({
+      description:
+        'Distance cattle are transported to farm, in km (kilometres)',
+    }),
+    truckType: z
+      .enum(TruckTypes)
+      .meta({ description: 'Type of truck used for cattle transport' }),
+    limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
+    limestoneFraction: z
+      .number()
+      .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  })
+  .meta({
+    description:
+      'All fields needed to describe the activity of a single feedlot enterprise',
+  });
 
-  @IsEnum(FeedlotSystems)
-  @SchemaDescription('Type of feedlot/production system')
-  @IsDefined()
-  system!: FeedlotSystem;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => FeedlotGroup)
-  @IsDefined()
-  groups!: FeedlotGroup[];
-
-  @ValidateNested({ always: true })
-  @Type(() => Fertiliser)
-  @IsDefined()
-  fertiliser!: Fertiliser;
-
-  @ValidateNested({ always: true })
-  @Type(() => FeedlotPurchases)
-  @IsDefined()
-  purchases!: FeedlotPurchases;
-
-  @ValidateNested({ always: true })
-  @Type(() => FeedlotSales)
-  @IsDefined()
-  sales!: FeedlotSales;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.DIESEL)
-  @IsDefined()
-  diesel!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.PETROL)
-  @IsDefined()
-  petrol!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LPG)
-  @IsDefined()
-  lpg!: number;
-
-  @IsEnum(ElectricitySources)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_SOURCE)
-  @IsDefined()
-  electricitySource!: ElectricitySource;
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_RENEWABLE)
-  @IsDefined()
-  electricityRenewable!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_USE)
-  @IsDefined()
-  electricityUse!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.GRAINFEED)
-  @IsDefined()
-  grainFeed!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.HAYFEED)
-  @IsDefined()
-  hayFeed!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.COTTONSEEDFEED)
-  @IsDefined()
-  cottonseedFeed!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.HERBICIDE)
-  @IsDefined()
-  herbicide!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.HERBICIDEOTHER)
-  @IsDefined()
-  herbicideOther!: number;
-
-  @IsNumber()
-  @SchemaDescription(
-    'Distance cattle are transported to farm, in km (kilometres)',
-  )
-  @IsDefined()
-  distanceCattleTransported!: number;
-
-  @IsEnum(TruckTypes)
-  @SchemaDescription('Type of truck used for cattle transport')
-  @IsDefined()
-  truckType!: TruckType;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LIMESTONE)
-  @IsDefined()
-  limestone!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LIMESTONEFRACTION)
-  @IsDefined()
-  limestoneFraction!: number;
-}
+export type FeedlotComplete = z.infer<typeof FeedlotCompleteSchema>;

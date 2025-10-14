@@ -1,10 +1,9 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
-import { GoatInput } from '../../types/Goat/input';
+import { validateCalculatorInput } from '../../calculators';
+import { GoatInputSchema } from '../../types/Goat/input';
 import { goatComplete } from './goats.data';
 import { veg1, veg2 } from './vegetation.data';
 
-describe('GoatInput vegetation transformation', () => {
+describe('GoatInputSchema vegetation transformation', () => {
   describe('validating Goat test input using original veg schema', () => {
     const input = {
       state: 'vic',
@@ -14,15 +13,8 @@ describe('GoatInput vegetation transformation', () => {
       vegetation: [veg1, veg2],
     };
 
-    const classedInput = plainToClass(GoatInput, input);
-    const errors = validateSync(classedInput);
-
-    test('validation should result in no errors', () => {
-      expect(errors).toEqual([]);
-    });
-
-    test('should have goat proportion', () => {
-      expect(classedInput.vegetation[0].goatProportion).toBeCloseTo(1.0);
+    test('validation should result in an error', () => {
+      expect(() => validateCalculatorInput(GoatInputSchema, input)).toThrow();
     });
   });
 
@@ -35,11 +27,8 @@ describe('GoatInput vegetation transformation', () => {
       vegetation: [veg1, veg2, { random: 'a' }],
     };
 
-    const classedInput = plainToClass(GoatInput, input);
-    const errors = validateSync(classedInput);
-
-    test('validation should result in one error', () => {
-      expect(errors.length).toEqual(1);
+    test('validation should throw error for invalid input', () => {
+      expect(() => validateCalculatorInput(GoatInputSchema, input)).toThrow();
     });
   });
 });

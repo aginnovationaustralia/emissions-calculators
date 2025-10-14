@@ -1,15 +1,11 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { IsNumberArray } from '../decorator.schema';
-import { Vegetation } from '../vegetation.input';
+import { z } from 'zod';
+import { VegetationSchema } from '../vegetation.input';
 
-export class WildSeaFisheriesVegetation {
-  @ValidateNested({ always: true })
-  @Type(() => Vegetation)
-  @IsDefined()
-  vegetation!: Vegetation;
+export const WildSeaFisheriesVegetationSchema = z.object({
+  vegetation: VegetationSchema,
+  allocationToEnterprises: z.array(z.number()),
+});
 
-  @IsNumberArray()
-  @IsDefined()
-  allocationToEnterprises!: number[];
-}
+export type WildSeaFisheriesVegetation = z.infer<
+  typeof WildSeaFisheriesVegetationSchema
+>;

@@ -1,9 +1,9 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-@SchemaDescription('Net emissions for the processing activity')
-export class ProcessingNetOutput {
-  @IsNumber()
-  @IsDefined()
-  total!: number;
-}
+export const ProcessingNetOutputSchema = z
+  .object({
+    total: z.number(),
+  })
+  .meta({ description: 'Net emissions for the processing activity' });
+
+export type ProcessingNetOutput = z.infer<typeof ProcessingNetOutputSchema>;

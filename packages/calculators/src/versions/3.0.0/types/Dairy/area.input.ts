@@ -1,21 +1,12 @@
-import { IsNumber, IsOptional } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-@SchemaDescription('Areas in hectares (ha)')
-export class AreaUsed {
-  @IsNumber()
-  @IsOptional()
-  croppedDryland: number = 0;
+export const AreaUsedSchema = z
+  .object({
+    croppedDryland: z.number().default(0),
+    croppedIrrigated: z.number().default(0),
+    improvedPastureDryland: z.number().default(0),
+    improvedPastureIrrigated: z.number().default(0),
+  })
+  .meta({ description: 'Areas in hectares (ha)' });
 
-  @IsNumber()
-  @IsOptional()
-  croppedIrrigated: number = 0;
-
-  @IsNumber()
-  @IsOptional()
-  improvedPastureDryland: number = 0;
-
-  @IsNumber()
-  @IsOptional()
-  improvedPastureIrrigated: number = 0;
-}
+export type AreaUsed = z.infer<typeof AreaUsedSchema>;

@@ -1,30 +1,18 @@
-import { IsDefined, IsNumber, IsOptional } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 
-export class BeefSeason {
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.HEAD)
-  @IsDefined()
-  head!: number;
+export const BeefSeasonSchema = z.object({
+  head: z.number().meta({ description: DESCRIPTIONS.HEAD }),
+  liveweight: z.number().meta({ description: DESCRIPTIONS.LIVEWEIGHT }),
+  liveweightGain: z.number().meta({ description: DESCRIPTIONS.LIVEWEIGHTGAIN }),
+  crudeProtein: z
+    .number()
+    .optional()
+    .meta({ description: DESCRIPTIONS.CRUDEPROTEIN }),
+  dryMatterDigestibility: z
+    .number()
+    .optional()
+    .meta({ description: DESCRIPTIONS.DRYMATTERDIGESTIBILITY }),
+});
 
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LIVEWEIGHT)
-  @IsDefined()
-  liveweight!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.LIVEWEIGHTGAIN)
-  @IsDefined()
-  liveweightGain!: number;
-
-  @IsNumber()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.CRUDEPROTEIN)
-  crudeProtein?: number;
-
-  @IsNumber()
-  @IsOptional()
-  @SchemaDescription(DESCRIPTIONS.DRYMATTERDIGESTIBILITY)
-  dryMatterDigestibility?: number;
-}
+export type BeefSeason = z.infer<typeof BeefSeasonSchema>;

@@ -1,31 +1,15 @@
-import { IsDefined, IsNumber, Max, Min } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-@SchemaDescription(
-  'The proportion of ewes lambing in each season, as a value from 0 to 1',
-)
-export class EwesLambing {
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @IsDefined()
-  autumn!: number;
+export const EwesLambingSchema = z
+  .object({
+    autumn: z.number().min(0).max(1),
+    winter: z.number().min(0).max(1),
+    spring: z.number().min(0).max(1),
+    summer: z.number().min(0).max(1),
+  })
+  .meta({
+    description:
+      'The proportion of ewes lambing in each season, as a value from 0 to 1',
+  });
 
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @IsDefined()
-  winter!: number;
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @IsDefined()
-  spring!: number;
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @IsDefined()
-  summer!: number;
-}
+export type EwesLambing = z.infer<typeof EwesLambingSchema>;

@@ -1,4 +1,4 @@
-import { IsDefined, IsEnum, IsNumber } from 'class-validator';
+import { z } from 'zod';
 
 export enum ProductUnit {
   LITRE = 'litre',
@@ -8,12 +8,9 @@ export enum ProductUnit {
   DOZEN = 'dozen',
 }
 
-export class ProcessingProduct {
-  @IsEnum(ProductUnit)
-  @IsDefined()
-  unit!: ProductUnit;
+export const ProcessingProductSchema = z.object({
+  unit: z.enum(ProductUnit),
+  amountMadePerYear: z.number(),
+});
 
-  @IsNumber()
-  @IsDefined()
-  amountMadePerYear!: number;
-}
+export type ProcessingProduct = z.infer<typeof ProcessingProductSchema>;

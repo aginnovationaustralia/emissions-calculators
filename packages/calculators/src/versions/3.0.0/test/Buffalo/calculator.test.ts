@@ -3,7 +3,7 @@ import clone from 'nanoclone';
 import { calculateBuffalo } from '../../Buffalo/calculator';
 import { validateCalculatorInput } from '../../calculators';
 import { entriesFromObject } from '../../common/tools/object';
-import { BuffaloInput } from '../../types/Buffalo/input';
+import { BuffaloInputSchema } from '../../types/Buffalo/input';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
 import { testContext, V2_0_0 } from '../common/context';
 import {
@@ -72,7 +72,7 @@ describe('Buffalo scenarios', () => {
     ],
   };
 
-  const validatedInput = validateCalculatorInput(BuffaloInput, input);
+  const validatedInput = validateCalculatorInput(BuffaloInputSchema, input);
 
   expect(validatedInput).toBeDefined();
 

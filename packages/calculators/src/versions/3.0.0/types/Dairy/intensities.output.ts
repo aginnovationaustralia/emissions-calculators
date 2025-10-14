@@ -1,16 +1,15 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 
-export class DairyEmissionsIntensities {
-  @IsNumber()
-  @SchemaDescription('Milk solids produced in tonnes')
-  @IsDefined()
-  milkSolidsProducedTonnes!: number;
+export const DairyEmissionsIntensitiesSchema = z.object({
+  milkSolidsProducedTonnes: z
+    .number()
+    .meta({ description: 'Milk solids produced in tonnes' }),
+  intensity: z.number().meta({
+    description:
+      'Dairy intensities including carbon sequestration, in tonnes-CO2e',
+  }),
+});
 
-  @IsNumber()
-  @SchemaDescription(
-    'Dairy intensities including carbon sequestration, in tonnes-CO2e',
-  )
-  @IsDefined()
-  intensity!: number;
-}
+export type DairyEmissionsIntensities = z.infer<
+  typeof DairyEmissionsIntensitiesSchema
+>;

@@ -1,16 +1,13 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from './decorator.schema';
+import { z } from 'zod';
 import { OUTPUTDESCRIPTIONS } from './descriptions.schema';
 
-@SchemaDescription(OUTPUTDESCRIPTIONS.scope2)
-export class Scope2Output {
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.electricity)
-  @IsDefined()
-  electricity!: number;
+export const Scope2OutputSchema = z
+  .object({
+    electricity: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.electricity }),
+    total: z.number().meta({ description: OUTPUTDESCRIPTIONS.scope2Total }),
+  })
+  .meta({ description: OUTPUTDESCRIPTIONS.scope2 });
 
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.scope2Total)
-  @IsDefined()
-  total!: number;
-}
+export type Scope2Output = z.infer<typeof Scope2OutputSchema>;

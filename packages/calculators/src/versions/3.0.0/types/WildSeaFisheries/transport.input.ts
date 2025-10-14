@@ -1,26 +1,17 @@
-import { IsDefined, IsEnum, IsNumber } from 'class-validator';
-import 'reflect-metadata';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import {
-  WildSeaFisheriesFuel,
   WildSeaFisheriesFuels,
-  WildSeaFisheriesTransportType,
   WildSeaFisheriesTransportTypes,
 } from '../types';
 
-export class WildSeaFisheriesTransport {
-  @IsEnum(WildSeaFisheriesTransportTypes)
-  @SchemaDescription('Transport type')
-  @IsDefined()
-  type!: WildSeaFisheriesTransportType;
+export const WildSeaFisheriesTransportSchema = z.object({
+  type: z
+    .enum(WildSeaFisheriesTransportTypes)
+    .meta({ description: 'Transport type' }),
+  fuel: z.enum(WildSeaFisheriesFuels).meta({ description: 'Fuel type' }),
+  distance: z.number().meta({ description: 'Distance in km' }),
+});
 
-  @IsEnum(WildSeaFisheriesFuels)
-  @SchemaDescription('Fuel type')
-  @IsDefined()
-  fuel!: WildSeaFisheriesFuel;
-
-  @IsNumber()
-  @SchemaDescription('Distance in km')
-  @IsDefined()
-  distance!: number;
-}
+export type WildSeaFisheriesTransport = z.infer<
+  typeof WildSeaFisheriesTransportSchema
+>;

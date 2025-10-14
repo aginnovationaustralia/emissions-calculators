@@ -1,11 +1,14 @@
-import { IsDefined, IsNumber } from 'class-validator';
-import { SchemaDescription } from './decorator.schema';
+import { z } from 'zod';
 import { OUTPUTDESCRIPTIONS } from './descriptions.schema';
 
-@SchemaDescription(OUTPUTDESCRIPTIONS.purchasedOffsets)
-export class PurchasedOffsetsOutput {
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.totalSequestration)
-  @IsDefined()
-  total!: number;
-}
+export const PurchasedOffsetsOutputSchema = z
+  .object({
+    total: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.totalSequestration }),
+  })
+  .meta({ description: OUTPUTDESCRIPTIONS.purchasedOffsets });
+
+export type PurchasedOffsetsOutput = z.infer<
+  typeof PurchasedOffsetsOutputSchema
+>;

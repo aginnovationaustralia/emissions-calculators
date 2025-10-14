@@ -3,7 +3,7 @@ import clone from 'nanoclone';
 import { calculateBeef } from '../../Beef/calculator';
 import { validateCalculatorInput } from '../../calculators';
 import { entriesFromObject } from '../../common/tools/object';
-import { BeefInput } from '../../types/Beef/input';
+import { BeefInput, BeefInputSchema } from '../../types/Beef/input';
 import { BeefIntermediateOutput } from '../../types/Beef/intermediate.output';
 import { BeefOutput } from '../../types/Beef/output';
 import {
@@ -65,7 +65,7 @@ const expectations_1_2_0 = {
 describe('Beef calculator, VIC', () => {
   const context = testContext(V2_0_0, 'Beef');
   const emissions = calculateBeef(
-    validateCalculatorInput(BeefInput, beefTestData),
+    validateCalculatorInput(BeefInputSchema, beefTestData),
     context,
   );
 
@@ -84,7 +84,7 @@ describe('Beef input scenarios', () => {
       ],
     };
 
-    const validatedInput = validateCalculatorInput(BeefInput, input);
+    const validatedInput = validateCalculatorInput(BeefInputSchema, input);
 
     expect(validatedInput).toBeDefined();
 

@@ -3,7 +3,7 @@ import clone from 'nanoclone';
 import { validateCalculatorInput } from '../../calculators';
 import { entriesFromObject } from '../../common/tools/object';
 import { calculateSheep } from '../../Sheep/calculator';
-import { SheepInput } from '../../types/Sheep/input';
+import { SheepInput, SheepInputSchema } from '../../types/Sheep/input';
 import { SheepIntermediateOutput } from '../../types/Sheep/intermediate.output';
 import { SheepOutput } from '../../types/Sheep/output';
 import {
@@ -98,7 +98,7 @@ describe('Sheep scenarios', () => {
     ],
   };
 
-  const validatedInput = validateCalculatorInput(SheepInput, input);
+  const validatedInput = validateCalculatorInput(SheepInputSchema, input);
 
   expect(validatedInput).toBeDefined();
 

@@ -1,19 +1,16 @@
-import { IsDefined, IsEnum, IsNumber } from 'class-validator';
-import 'reflect-metadata';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { Refrigerant, Refrigerants } from '../types';
+import { Refrigerants } from '../types';
 
-export class WildSeaFisheriesRefrigerant {
-  @IsEnum(Refrigerants)
-  @SchemaDescription(DESCRIPTIONS.REFRIGERANT)
-  @IsDefined()
-  refrigerant!: Refrigerant;
+export const WildSeaFisheriesRefrigerantSchema = z.object({
+  refrigerant: z
+    .enum(Refrigerants)
+    .meta({ description: DESCRIPTIONS.REFRIGERANT }),
+  annualRecharge: z.number().meta({
+    description: 'Amount of refrigerant annually recharged, kg product/year',
+  }),
+});
 
-  @IsNumber()
-  @IsDefined()
-  @SchemaDescription(
-    'Amount of refrigerant annually recharged, kg product/year',
-  )
-  annualRecharge!: number;
-}
+export type WildSeaFisheriesRefrigerant = z.infer<
+  typeof WildSeaFisheriesRefrigerantSchema
+>;

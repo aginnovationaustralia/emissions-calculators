@@ -1,34 +1,37 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
 import { InputValidationError } from '../../../..';
 import { validateCalculatorInput } from '../../calculators';
-import { PoultryInput } from '../../types/Poultry/input';
+import { PoultryInputSchema } from '../../types/Poultry/input';
 import { poultryTestData } from './poultry.data';
 
 describe('validating Poultry test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(PoultryInput, poultryTestData);
+  const t = () => validateCalculatorInput(PoultryInputSchema, poultryTestData);
 
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
     expect(t).not.toThrow(InputValidationError);
-    expect(t()).toBeInstanceOf(PoultryInput);
   });
 });
 
 describe('validating Poultry test inputs for incorrect inputs', () => {
-  const classedInput = plainToClass(PoultryInput, {
+  const invalidInput = {
     ...poultryTestData,
     state: 'vic2',
-  });
-  const errors = validateSync(classedInput);
+  };
+  const result = PoultryInputSchema.safeParse(invalidInput);
 
   test('validation should result in 1 error', () => {
-    expect(errors.length).toEqual(1);
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.length).toEqual(1);
+    }
   });
 
   test('validation error should contain message for state value', () => {
-    expect(errors[0].constraints && errors[0].constraints.isEnum).toEqual(
-      'state must be one of the following values: ',
-    );
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const stateError = result.error.issues.find((issue) =>
+        issue.path.includes('state'),
+      );
+      expect(stateError).toBeDefined();
+    }
   });
 });

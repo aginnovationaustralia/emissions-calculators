@@ -1,50 +1,27 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsString, ValidateNested } from 'class-validator';
-import { NetOutput } from '../common/net.output';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
+import { NetOutputSchema } from '../common/net.output';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { Scope2Output } from '../scope2.output';
-import { SequestrationTotalOutput } from '../sequestration.total.output';
-import { WildCatchFisheryIntensitiesOutput } from './intensities.output';
-import { WildCatchFisheryScope1Output } from './scope1.output';
-import { WildCatchFisheryScope3Output } from './scope3.output';
+import { Scope2OutputSchema } from '../scope2.output';
+import { SequestrationTotalOutputSchema } from '../sequestration.total.output';
+import { WildCatchFisheryIntensitiesOutputSchema } from './intensities.output';
+import { WildCatchFisheryScope1OutputSchema } from './scope1.output';
+import { WildCatchFisheryScope3OutputSchema } from './scope3.output';
 
-@SchemaDescription(
-  'Intermediate emissions calculation output for the `wildcatchfishery` calculator',
-)
-export class WildCatchFisheryIntermediateOutput {
-  @IsString()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  @IsDefined()
-  id!: string;
+export const WildCatchFisheryIntermediateOutputSchema = z
+  .object({
+    id: z.string().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+    scope1: WildCatchFisheryScope1OutputSchema,
+    scope2: Scope2OutputSchema,
+    scope3: WildCatchFisheryScope3OutputSchema,
+    intensities: WildCatchFisheryIntensitiesOutputSchema,
+    net: NetOutputSchema,
+    carbonSequestration: SequestrationTotalOutputSchema,
+  })
+  .meta({
+    description:
+      'Intermediate emissions calculation output for the `wildcatchfishery` calculator',
+  });
 
-  @ValidateNested({ always: true })
-  @Type(() => WildCatchFisheryScope1Output)
-  @IsDefined()
-  scope1!: WildCatchFisheryScope1Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => WildCatchFisheryScope3Output)
-  @IsDefined()
-  scope3!: WildCatchFisheryScope3Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => WildCatchFisheryIntensitiesOutput)
-  @IsDefined()
-  intensities!: WildCatchFisheryIntensitiesOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => NetOutput)
-  @IsDefined()
-  net!: NetOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => SequestrationTotalOutput)
-  @IsDefined()
-  carbonSequestration!: SequestrationTotalOutput;
-}
+export type WildCatchFisheryIntermediateOutput = z.infer<
+  typeof WildCatchFisheryIntermediateOutputSchema
+>;

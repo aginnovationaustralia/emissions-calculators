@@ -1,48 +1,23 @@
-import {
-  IsDefined,
-  IsEnum,
-  IsNumber,
-  Max,
-  Min,
-  ValidateNested,
-} from 'class-validator';
-import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
-import { SchemaObject } from 'openapi3-ts/oas31';
-import 'reflect-metadata';
-import { CropVegetation } from '../common/crop-vegetation.input';
-import { SchemaDescription, TypeWithArraySchema } from '../decorator.schema';
+import { z } from 'zod';
+import { CropVegetationSchema } from '../common/crop-vegetation.input';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { State, States } from '../types';
-import { GrainsCrop } from './crop.input';
+import { States } from '../types';
+import { GrainsCropSchema } from './crop.input';
 
-@SchemaDescription('Input data required for the `grains` calculator')
-export class GrainsInput {
-  @IsEnum(States)
-  @SchemaDescription(DESCRIPTIONS.STATE)
-  @IsDefined()
-  state!: State;
+export const GrainsInputSchema = z
+  .object({
+    state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
+    crops: z.array(GrainsCropSchema),
+    electricityRenewable: z
+      .number()
+      .min(0)
+      .max(1)
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+    electricityUse: z
+      .number()
+      .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
+    vegetation: z.array(CropVegetationSchema),
+  })
+  .meta({ description: 'Input data required for the `grains` calculator' });
 
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => GrainsCrop)
-  @IsDefined()
-  crops!: GrainsCrop[];
-
-  @IsNumber()
-  @Min(0)
-  @Max(1)
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_RENEWABLE)
-  @IsDefined()
-  electricityRenewable!: number;
-
-  @IsNumber()
-  @SchemaDescription(DESCRIPTIONS.ELECTRICITY_USE)
-  @IsDefined()
-  electricityUse!: number;
-
-  @ValidateNested({ always: true, each: true })
-  @TypeWithArraySchema(() => CropVegetation)
-  @IsDefined()
-  vegetation!: CropVegetation[];
-}
-
-export const schemaGrainsInput: SchemaObject = validationMetadatasToSchemas();
+export type GrainsInput = z.infer<typeof GrainsInputSchema>;

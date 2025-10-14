@@ -1,7 +1,6 @@
 import { InputValidationError } from '@/utils/io';
 import { parseValidationError } from '@/validators/errorConversion';
-import { ClassConstructor, plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
+import { ZodType } from 'zod';
 import { calculateAquaculture as calculateAquacultureInternal } from './Aquaculture/calculator';
 import { calculateBeef as calculateBeefInternal } from './Beef/calculator';
 import { calculateBuffalo as calculateBuffaloInternal } from './Buffalo/calculator';
@@ -66,17 +65,18 @@ import { WildSeaFisheriesInput } from './types/WildSeaFisheries/input';
 import { WildSeaFisheriesOutput } from './types/WildSeaFisheries/output';
 
 export function validateCalculatorInput<T extends object>(
-  cls: ClassConstructor<T>,
+  schema: ZodType<T>,
   input: unknown,
 ) {
-  const classedInput = plainToClass(cls, input, { exposeDefaultValues: true });
-  const errors = validateSync(classedInput);
+  const parseResult = schema.safeParse(input);
 
-  if (errors && errors.length > 0) {
-    throw new InputValidationError(...parseValidationError(errors));
+  if (!parseResult.success) {
+    throw new InputValidationError(
+      ...parseValidationError(parseResult.error.issues),
+    );
+  } else {
+    return parseResult.data;
   }
-
-  return classedInput;
 }
 
 export function calculateBeef(input: BeefInput): BeefOutput {

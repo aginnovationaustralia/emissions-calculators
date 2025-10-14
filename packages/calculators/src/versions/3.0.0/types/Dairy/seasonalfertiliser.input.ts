@@ -1,27 +1,13 @@
-import { Type } from 'class-transformer';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { SchemaDescription } from '../decorator.schema';
-import { NitrogenFertiliser } from './fertiliser.input';
+import { z } from 'zod';
+import { NitrogenFertiliserSchema } from './fertiliser.input';
 
-@SchemaDescription('Seasonal nitrogen fertiliser use')
-export class SeasonalFertiliser {
-  @ValidateNested({ always: true })
-  @Type(() => NitrogenFertiliser)
-  @IsDefined()
-  autumn!: NitrogenFertiliser;
+export const SeasonalFertiliserSchema = z
+  .object({
+    autumn: NitrogenFertiliserSchema,
+    winter: NitrogenFertiliserSchema,
+    spring: NitrogenFertiliserSchema,
+    summer: NitrogenFertiliserSchema,
+  })
+  .meta({ description: 'Seasonal nitrogen fertiliser use' });
 
-  @ValidateNested({ always: true })
-  @Type(() => NitrogenFertiliser)
-  @IsDefined()
-  winter!: NitrogenFertiliser;
-
-  @ValidateNested({ always: true })
-  @Type(() => NitrogenFertiliser)
-  @IsDefined()
-  spring!: NitrogenFertiliser;
-
-  @ValidateNested({ always: true })
-  @Type(() => NitrogenFertiliser)
-  @IsDefined()
-  summer!: NitrogenFertiliser;
-}
+export type SeasonalFertiliser = z.infer<typeof SeasonalFertiliserSchema>;

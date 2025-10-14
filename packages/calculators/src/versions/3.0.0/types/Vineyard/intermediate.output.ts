@@ -1,49 +1,28 @@
-import { Type } from 'class-transformer';
-import { IsDefined, IsNumber, IsString, ValidateNested } from 'class-validator';
-import { NetOutput } from '../common/net.output';
-import { SchemaDescription } from '../decorator.schema';
+import { z } from 'zod';
+import { NetOutputSchema } from '../common/net.output';
 import { DESCRIPTIONS, OUTPUTDESCRIPTIONS } from '../descriptions.schema';
-import { Scope2Output } from '../scope2.output';
-import { VineyardIntensitiesOutput } from './intensities.output';
-import { VineyardScope1Output } from './scope1.output';
-import { VineyardScope3Output } from './scope3.output';
+import { Scope2OutputSchema } from '../scope2.output';
+import { VineyardIntensitiesOutputSchema } from './intensities.output';
+import { VineyardScope1OutputSchema } from './scope1.output';
+import { VineyardScope3OutputSchema } from './scope3.output';
 
-@SchemaDescription(
-  'Intermediate emissions calculation output for the Vineyard calculator',
-)
-export class VineyardIntermediateOutput {
-  @IsString()
-  @SchemaDescription(DESCRIPTIONS.ACTIVITY_ID)
-  @IsDefined()
-  id!: string;
+export const VineyardIntermediateOutputSchema = z
+  .object({
+    id: z.string().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+    scope1: VineyardScope1OutputSchema,
+    scope2: Scope2OutputSchema,
+    scope3: VineyardScope3OutputSchema,
+    carbonSequestration: z
+      .number()
+      .meta({ description: OUTPUTDESCRIPTIONS.sequestration }),
+    intensities: VineyardIntensitiesOutputSchema,
+    net: NetOutputSchema,
+  })
+  .meta({
+    description:
+      'Intermediate emissions calculation output for the Vineyard calculator',
+  });
 
-  @ValidateNested({ always: true })
-  @Type(() => VineyardScope1Output)
-  @IsDefined()
-  scope1!: VineyardScope1Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => Scope2Output)
-  @IsDefined()
-  scope2!: Scope2Output;
-
-  @ValidateNested({ always: true })
-  @Type(() => VineyardScope3Output)
-  @IsDefined()
-  scope3!: VineyardScope3Output;
-
-  @IsNumber()
-  @SchemaDescription(OUTPUTDESCRIPTIONS.sequestration)
-  @IsDefined()
-  carbonSequestration!: number;
-
-  @ValidateNested({ always: true })
-  @Type(() => VineyardIntensitiesOutput)
-  @IsDefined()
-  intensities!: VineyardIntensitiesOutput;
-
-  @ValidateNested({ always: true })
-  @Type(() => NetOutput)
-  @IsDefined()
-  net!: NetOutput;
-}
+export type VineyardIntermediateOutput = z.infer<
+  typeof VineyardIntermediateOutputSchema
+>;
