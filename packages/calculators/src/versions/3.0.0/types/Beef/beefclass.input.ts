@@ -14,15 +14,13 @@ export const BeefClassSchema = z
     headPurchased: z
       .number()
       .optional()
-      .meta({
-        description: `${DESCRIPTIONS.HEADPURCHASED}. Deprecated note: Use \`purchases\` instead`,
-      }),
+      .meta(deprecated(DESCRIPTIONS.HEADPURCHASED, 'Use `purchases` instead')),
     purchasedWeight: z
       .number()
       .optional()
-      .meta({
-        description: `${DESCRIPTIONS.PURCHASEDWEIGHT}. Deprecated note: Use \`purchases\` instead`,
-      }),
+      .meta(
+        deprecated(DESCRIPTIONS.PURCHASEDWEIGHT, 'Use `purchases` instead'),
+      ),
     source: z
       .enum(LivestockSourceLocations)
       .optional()
@@ -34,7 +32,7 @@ export const BeefClassSchema = z
       ),
     headSold: z.number().meta({ description: DESCRIPTIONS.HEADSOLD }),
     saleWeight: z.number().meta({ description: DESCRIPTIONS.SALEWEIGHT }),
-    purchases: z.array(BeefPurchaseSchema),
+    purchases: z.array(BeefPurchaseSchema).optional(),
   })
   .meta({ description: 'Beef class with seasonal data' });
 

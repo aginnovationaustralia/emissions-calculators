@@ -11,7 +11,7 @@ export const AquacultureBaitPurchaseSchema = z.object({
     .min(0)
     .max(1)
     .meta({ description: 'Additional ingredient fraction, from 0 to 1' }),
-  emissionsIntensity: z.number().default(0).meta({
+  emissionsIntensity: z.number().optional().default(0).meta({
     description:
       'Emissions intensity of additional ingredients, in kg CO2e/kg bait (default 0)',
   }),
