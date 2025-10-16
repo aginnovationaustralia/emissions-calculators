@@ -39,7 +39,7 @@
     "nanoclone": "^1.0.2",
     "rollup": "^4.52.4",
     "rollup-plugin-copy": "^3.5.0",
-    "ts-jest": "^29.4.4",
+    "ts-jest": "^29.4.5",
     "tsx": "^4.20.6",
     "typescript": "^5.9.2"
   },
