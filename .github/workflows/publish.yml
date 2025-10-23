@@ -1,0 +1,23 @@
+name: Publish Package
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and Test
+        uses: ./.github/actions/build-and-test
+
+      - name: Publish
+        run: pnpm run publish:packages
+        shell: bash
