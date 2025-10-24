@@ -16,3 +16,8 @@ updates:
       time: '03:00'
       timezone: Australia/Sydney
     open-pull-requests-limit: 10
+    groups:
+      typescript-eslint:
+        patterns:
+          - '@typescript-eslint/*'
+          - 'typescript-eslint'
