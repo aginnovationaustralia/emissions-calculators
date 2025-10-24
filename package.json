@@ -8,7 +8,7 @@
     "lint": "turbo lint",
     "clean": "turbo clean",
     "publish:dry": "pnpm build && pnpm -r publish --filter=@aginnovationaustralia/emissions-calculators --no-git-checks --access private --dry-run",
-    "publish:packages": "pnpm clean && pnpm build && pnpm -r publish --filter=@aginnovationaustralia/emissions-calculators --no-git-checks --access private --force",
+    "publish:packages": "pnpm -r publish --filter=@aginnovationaustralia/emissions-calculators --no-git-checks --access private --force",
     "version:bump": "pnpm -r version"
   },
   "repository": {

@@ -15,9 +15,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build and Test
-        uses: ./.github/actions/build-and-test
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+        shell: bash
+
+      - name: Build
+        run: pnpm run build
+        shell: bash
+
+      - name: Latest npm
+        run: npm install -g npm@latest
+        shell: bash
 
       - name: Publish
-        run: pnpm run publish:packages
+        run: pnpm publish:packages
         shell: bash
