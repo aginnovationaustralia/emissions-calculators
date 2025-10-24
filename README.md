@@ -73,6 +73,17 @@ The project has very strict requirements on following the principles of [semanti
 
 Each release of a package will trigger branching and tagging of the released commit.
 
+# Publishing releases
+
+New versions of the package are published to the NPM registry via a [Github action](./.github/workflows/publish.yml). The action will run when a new version tag is pushed to the repository. Only limited users have permission to push a tag for a new version.
+
+- When a version is ready to be released, update the version number of the calculators [package.json](./packages/calculators/package.json) to the new desired version
+- The most common release will be a patch version bump. You can run `pnpm run version:bump` to achieve this
+- Submit your changes using the regular PR approval workflow
+- Tag the latest commit with the new version ie `v1.5.17`
+- Push the new tag with `git push --tags`
+- The automated publish will trigger when the new tag is detected
+
 # License
 
 ![Creative Commons Attribution No Derivatives](./doc/assets/by-nd.png)
