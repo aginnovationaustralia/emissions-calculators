@@ -20,7 +20,45 @@ def create_valid_beef_input():
         "beef": [
             {
                 "id": "beef_cattle_001",
-                "classes": {},  # All optional fields - can be empty dict
+                "classes": {
+                    # Example: Cows greater than 2 years old
+                    "cowsGt2": {
+                        "spring": {
+                            "head": 50,  # number of animals
+                            "liveweight": 450,  # average kg/head
+                            "liveweightGain": 0.5,  # kg/day
+                            "crudeProtein": None,  # optional
+                            "dryMatterDigestibility": None  # optional
+                        },
+                        "summer": {
+                            "head": 50,
+                            "liveweight": 440,
+                            "liveweightGain": 0.3,
+                            "crudeProtein": None,
+                            "dryMatterDigestibility": None
+                        },
+                        "autumn": {
+                            "head": 50,
+                            "liveweight": 460,
+                            "liveweightGain": 0.4,
+                            "crudeProtein": None,
+                            "dryMatterDigestibility": None
+                        },
+                        "winter": {
+                            "head": 50,
+                            "liveweight": 450,
+                            "liveweightGain": 0.4,
+                            "crudeProtein": None,
+                            "dryMatterDigestibility": None
+                        },
+                        "headSold": 25,  # required: number sold
+                        "saleWeight": 500,  # required: weight at sale in kg/head
+                        "headPurchased": None,  # optional
+                        "purchasedWeight": None,  # optional
+                        "source": None,  # optional
+                        "purchases": None  # optional
+                    }
+                },
                 "limestone": 10.0,
                 "limestoneFraction": 0.8,  # Fraction between 0 and 1
                 "fertiliser": {
