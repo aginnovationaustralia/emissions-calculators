@@ -25,7 +25,8 @@ npm -g install @openapitools/openapi-generator-cli
 openapi-generator-cli generate \
   -i https://d2awla29kxgk7i.cloudfront.net/api/$API_VERSION/openapi.json \
   -g php \
-  -o $API_CLIENT_DIR
+  -o $API_CLIENT_DIR \
+  --global-property apiTests=false,apiDocs=false,modelTests=false,modelDocs=false
 ```
 
 For now, the PHP generator does not support all the configuration needed for an mTLS connection out of the box. Several fixes have been applied to the generated code in the `api-client` folder to let this work end to end. Once this [PR](https://github.com/OpenAPITools/openapi-generator/pull/22229) has been merged and released, it will be possible to make requests via mTLS without any code changes to the generated PHP client code needed.
