@@ -8,7 +8,7 @@ import { PorkInput, PorkInputSchema } from '../../types/Pork/input';
 import { PorkIntermediateOutput } from '../../types/Pork/intermediate.output';
 import { PorkOutput } from '../../types/Pork/output';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V3_0_0 } from '../common/context';
+import { testContext, V2_0_0 } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { porkMinimalTestData, porkTestData } from './pork.data';
 
@@ -60,11 +60,11 @@ const expectations = {
 };
 
 describe('Pork calculator, NSW', () => {
-  const context = testContext(V3_0_0, 'Pork');
+  const context = testContext(V2_0_0, 'Pork');
   const classedInput = validateCalculatorInput(PorkInputSchema, porkTestData);
   const emissions = calculatePork(classedInput, context);
 
-  executeEmissionsSpec(V3_0_0, emissions, expectations);
+  executeEmissionsSpec(V2_0_0, emissions, expectations);
 });
 
 describe('Pork calculator (multi activity)', () => {
@@ -165,12 +165,12 @@ const minimalExpectations = {
 };
 
 describe('Pork calculator minimal input, NSW', () => {
-  const context = testContext(V3_0_0, 'Pork');
+  const context = testContext(V2_0_0, 'Pork');
   const classedInput = validateCalculatorInput(
     PorkInputSchema,
     porkMinimalTestData,
   );
   const emissions = calculatePork(classedInput, context);
 
-  executeEmissionsSpec(V3_0_0, emissions, minimalExpectations);
+  executeEmissionsSpec(V2_0_0, emissions, minimalExpectations);
 });

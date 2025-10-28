@@ -1,5 +1,5 @@
-import { Constants } from '../constants';
 import { loadOverrideConstants } from '../constants/constantsLoader';
+import { AllConstants } from '../constants/versionedConstants';
 import { executeCalculator } from '../execute';
 import { CalculatorNames } from '../strings';
 import { trackCalculatorExecution } from './metrics';
@@ -24,7 +24,7 @@ describe('executeCalculator', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockLoadOverrideConstants.mockReturnValue({} as Constants);
+    mockLoadOverrideConstants.mockReturnValue({} as AllConstants);
   });
 
   describe('successful execution', () => {
@@ -357,11 +357,11 @@ describe('executeCalculator', () => {
       const constants1 = {
         version: '1.0',
         apiKey: 'key1',
-      } as unknown as Constants;
+      } as unknown as AllConstants;
       const constants2 = {
         version: '2.0',
         apiKey: 'key2',
-      } as unknown as Constants;
+      } as unknown as AllConstants;
       const mockCalculator = jest.fn().mockReturnValue({});
 
       mockLoadOverrideConstants
