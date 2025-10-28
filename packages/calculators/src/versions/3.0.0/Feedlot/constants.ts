@@ -1,22 +1,17 @@
 import {
-  constants,
+  commonConstants,
   feedlotConstants,
   livestockConstants,
 } from '../constants/constant_values';
-import {
-  Constants,
-  FeedlotConstants,
-  LivestockConstants,
-} from '../constants/versionedConstants';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantsForFeedlotCalculator = {
-  FEEDLOT: FeedlotConstants;
-  COMMON: Constants;
-  LIVESTOCK: LivestockConstants;
-};
+export type ConstantsForFeedlotCalculator = Pick<
+  AllConstants,
+  'FEEDLOT' | 'COMMON' | 'LIVESTOCK'
+>;
 
 export const constantsForFeedlotCalculator: ConstantsForFeedlotCalculator = {
   FEEDLOT: feedlotConstants,
-  COMMON: constants,
+  COMMON: commonConstants,
   LIVESTOCK: livestockConstants,
 };

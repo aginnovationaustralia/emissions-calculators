@@ -1,7 +1,6 @@
 import { ExecutionContext } from '../../executionContext';
 import { MineralSupplementation } from '../../types/mineral.input';
 import { SupplementationType } from '../../types/types';
-import { CommonConstants } from '../constants';
 
 export function getSupplementUreaCalculation(
   mineralUrea: number,
@@ -28,7 +27,7 @@ export function calculateMineralSupplementationFromType(
   mineralTonnes: number,
   mineralPercentUrea: number,
   supplementationType: SupplementationType,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const materialBreakdown =
     context.constants.COMMON.MATERIAL_BREAKDOWN_SUPPLEMENTATION[
@@ -47,7 +46,7 @@ export function calculateMineralSupplementationFromType(
 
 export function calculateMineralSupplementationScope3(
   mineralSupplementation: MineralSupplementation,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const mineralBlock = calculateMineralSupplementationFromType(
     mineralSupplementation.mineralBlock,

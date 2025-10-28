@@ -3,7 +3,7 @@ import {
   aquacultureConstants,
   beefConstants,
   buffaloConstants,
-  constants,
+  commonConstants,
   cottonConstants,
   cropConstants,
   dairyConstants,
@@ -20,15 +20,11 @@ import {
   sugarConstants,
 } from './constant_values';
 import { ConstantsContext } from './context';
-import { AllConstants, Constants } from './versionedConstants';
-
-export function loadConstants(): Constants {
-  return constants;
-}
+import { AllConstants } from './versionedConstants';
 
 export const loadAllConstants = (): AllConstants => {
   return {
-    COMMON: constants,
+    COMMON: commonConstants,
     CROP: cropConstants,
     FISHERIES: fisheriesConstants,
     RICE: riceConstants,

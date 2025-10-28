@@ -1,22 +1,17 @@
 import {
-  constants,
+  commonConstants,
   cropConstants,
   riceConstants,
 } from '../constants/constant_values';
-import {
-  Constants,
-  CropConstants,
-  RiceConstants,
-} from '../constants/versionedConstants';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantsForRiceCalculator = {
-  CROP: CropConstants;
-  RICE: RiceConstants;
-  COMMON: Constants;
-};
+export type ConstantsForRiceCalculator = Pick<
+  AllConstants,
+  'CROP' | 'RICE' | 'COMMON'
+>;
 
 export const constantsForRiceCalculator: ConstantsForRiceCalculator = {
   CROP: cropConstants,
   RICE: riceConstants,
-  COMMON: constants,
+  COMMON: commonConstants,
 };

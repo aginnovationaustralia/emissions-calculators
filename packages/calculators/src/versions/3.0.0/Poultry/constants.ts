@@ -1,22 +1,17 @@
 import {
-  constants,
+  commonConstants,
   livestockConstants,
   poultryConstants,
 } from '../constants/constant_values';
-import {
-  Constants,
-  LivestockConstants,
-  PoultryConstants,
-} from '../constants/versionedConstants';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantsForPoultryCalculator = {
-  POULTRY: PoultryConstants;
-  COMMON: Constants;
-  LIVESTOCK: LivestockConstants;
-};
+export type ConstantsForPoultryCalculator = Pick<
+  AllConstants,
+  'POULTRY' | 'COMMON' | 'LIVESTOCK'
+>;
 
 export const constantsForPoultryCalculator: ConstantsForPoultryCalculator = {
   POULTRY: poultryConstants,
-  COMMON: constants,
+  COMMON: commonConstants,
   LIVESTOCK: livestockConstants,
 };

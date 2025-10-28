@@ -1,10 +1,9 @@
 import { ExecutionContext } from '../../executionContext';
 import { FluidWasteInput } from '../../types/common/fluid-waste.input';
-import { CommonConstants } from '../constants';
 
 export function calculateScope1WasteWater(
   fluidWastes: FluidWasteInput[],
-  { constants }: ExecutionContext<CommonConstants>,
+  { constants }: ExecutionContext,
 ) {
   const { WASTEWATER } = constants.COMMON;
   const {

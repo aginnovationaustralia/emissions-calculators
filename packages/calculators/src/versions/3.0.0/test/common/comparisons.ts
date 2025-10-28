@@ -1,3 +1,4 @@
+import { HasCommonConstants } from '../../common/constants';
 import { AllConstants } from '../../constants/versionedConstants';
 import { ExecutionContext } from '../../executionContext';
 import { testContext, V2_0_0 } from './context';
@@ -53,7 +54,8 @@ export const compareEmissionsFrom2Inputs = <
   TIntermediate extends EmissionsKeysOnly = EmissionsKeysOnly,
   TKey extends string = 'intermediate',
   E extends Emissions<TKey, TIntermediate> = Emissions<TKey, TIntermediate>,
-  C extends Partial<AllConstants> = Partial<AllConstants>,
+  C extends Partial<AllConstants> & HasCommonConstants = Partial<AllConstants> &
+    HasCommonConstants,
 >(
   calculatorName: string,
   calculateEmissions: (input: Input, context: ExecutionContext<C>) => E,

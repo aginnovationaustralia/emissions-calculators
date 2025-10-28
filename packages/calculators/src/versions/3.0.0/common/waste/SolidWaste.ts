@@ -1,10 +1,9 @@
 import { ExecutionContext } from '../../executionContext';
 import { SolidWasteInput } from '../../types/common/solid-waste.input';
-import { CommonConstants } from '../constants';
 
 export function calculateSolidWaste(
   { onsiteCompostingTonnes, sentOffsiteTonnes }: SolidWasteInput,
-  { constants }: ExecutionContext<CommonConstants>,
+  { constants }: ExecutionContext,
 ) {
   const { COMPOSTING_EF, MUNICIPAL_SOLID_WASTE_EF } = constants.COMMON;
 

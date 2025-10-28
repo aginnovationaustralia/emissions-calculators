@@ -4,10 +4,11 @@ import {
   FreightTypes,
 } from '../types/types';
 import {
+  AllConstants,
   AquacultureConstants,
   BeefConstants,
   BuffaloConstants,
-  Constants,
+  CommonConstants,
   CottonConstants,
   CropConstants,
   DairyConstants,
@@ -2673,7 +2674,7 @@ export const cropConstants: CropConstants = {
   FERTILISER_FRACTION_RUNOFF_STATIC: 1,
 };
 
-export const constants: Constants = {
+export const commonConstants: CommonConstants = {
   /**
    * @description Emissions factor for feed purchased, in kg CO2-e/kg
    * @units kg CO2-e/kg
@@ -3795,4 +3796,25 @@ export const constants: Constants = {
     [FreightTypes.SMALL_CONTAINER_SHIP]: 0.0135,
     [FreightTypes.LARGE_CONTAINER_SHIP]: 0.0115,
   },
+};
+
+export const allConstants: AllConstants = {
+  COMMON: commonConstants,
+  CROP: cropConstants,
+  FISHERIES: fisheriesConstants,
+  RICE: riceConstants,
+  AQUACULTURE: aquacultureConstants,
+  BEEF: beefConstants,
+  BUFFALO: buffaloConstants,
+  COTTON: cottonConstants,
+  DAIRY: dairyConstants,
+  DEER: deerConstants,
+  FEEDLOT: feedlotConstants,
+  GOAT: goatConstants,
+  LIVESTOCK: livestockConstants,
+  PORK: porkConstants,
+  POULTRY: poultryConstants,
+  SAVANNA: savannaConstants,
+  SHEEP: sheepConstants,
+  SUGAR: sugarConstants,
 };

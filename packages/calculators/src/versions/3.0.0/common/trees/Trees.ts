@@ -1,11 +1,10 @@
 import * as trees from '../../constants/Trees.json';
 import { ExecutionContext } from '../../executionContext';
 import { Vegetation } from '../../types/vegetation.input';
-import { CommonConstants } from '../constants';
 
 export function calculateTreeCarbonSequestration(
   veg: Vegetation,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const { constants } = context;
 
@@ -112,7 +111,7 @@ export function calculateAllCarbonSequestrationWithKey<
   // eslint-disable-next-line no-use-before-define
   T extends { [key in K]: number } & { vegetation: Vegetation },
   K extends keyof T,
->(vegetation: T[], key: K, context: ExecutionContext<CommonConstants>) {
+>(vegetation: T[], key: K, context: ExecutionContext) {
   const vegWithCarbon = vegetation.map((veg) => ({
     ...veg,
     carbon: calculateTreeCarbonSequestration(veg.vegetation, context),
@@ -142,12 +141,7 @@ export function calculateAllCarbonSequestrationWithKeyProportion<
   T extends { [key in K]: number[] } & { vegetation: Vegetation },
   K extends keyof T,
   L,
->(
-  vegetation: T[],
-  allocationKey: K,
-  objects: L[],
-  context: ExecutionContext<CommonConstants>,
-) {
+>(vegetation: T[], allocationKey: K, objects: L[], context: ExecutionContext) {
   const vegWithCarbon = vegetation.map((veg) => ({
     ...veg,
     carbon: calculateTreeCarbonSequestration(veg.vegetation, context),

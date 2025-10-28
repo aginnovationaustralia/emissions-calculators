@@ -1,10 +1,9 @@
 import { ExecutionContext } from '../../executionContext';
 import { FreightInput } from '../../types/common/freight.input';
-import { CommonConstants } from '../constants';
 
 export function calculateFreight(
   freight: FreightInput[],
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const { FREIGHT_KG_TONNE_EF } = context.constants.COMMON;
   return freight.reduce((acc, { type, totalKmTonnes }) => {

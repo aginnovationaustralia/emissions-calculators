@@ -1,5 +1,3 @@
-import { Constants } from '../constants';
+import { HasCommonConstants } from '../common/constants';
 
-export type ConstantsForProcessingCalculator = {
-  COMMON: Constants;
-};
+export type ConstantsForProcessingCalculator = HasCommonConstants;

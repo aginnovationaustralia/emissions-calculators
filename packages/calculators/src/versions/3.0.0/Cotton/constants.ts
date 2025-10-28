@@ -1,22 +1,17 @@
 import {
-  constants,
+  commonConstants,
   cottonConstants,
   cropConstants,
 } from '../constants/constant_values';
-import {
-  Constants,
-  CottonConstants,
-  CropConstants,
-} from '../constants/versionedConstants';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantsForCottonCalculator = {
-  CROP: CropConstants;
-  COMMON: Constants;
-  COTTON: CottonConstants;
-};
+export type ConstantsForCottonCalculator = Pick<
+  AllConstants,
+  'CROP' | 'COMMON' | 'COTTON'
+>;
 
 export const constantsForCottonCalculator: ConstantsForCottonCalculator = {
   CROP: cropConstants,
-  COMMON: constants,
+  COMMON: commonConstants,
   COTTON: cottonConstants,
 };

@@ -1,4 +1,3 @@
-import { CommonConstants } from '../../common/constants';
 import { ExecutionContext } from '../../executionContext';
 import { TruckType } from '../../types/types';
 
@@ -9,7 +8,7 @@ export function calculateScope1TransportBase(
   typeOfTruck: TruckType,
   distanceCattleTransported: number,
   type: 'CO2' | 'CH4' | 'N2O',
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const { constants } = context;
 
@@ -35,7 +34,7 @@ export function calculateScope1TransportBase(
 export function calculateScope1TransportCO2(
   typeOfTruck: TruckType,
   distanceCattleTransported: number,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   return calculateScope1TransportBase(
     typeOfTruck,
@@ -48,7 +47,7 @@ export function calculateScope1TransportCO2(
 export function calculateScope1TransportCH4(
   typeOfTruck: TruckType,
   distanceCattleTransported: number,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   return calculateScope1TransportBase(
     typeOfTruck,
@@ -61,7 +60,7 @@ export function calculateScope1TransportCH4(
 export function calculateScope1TransportN2O(
   typeOfTruck: TruckType,
   distanceCattleTransported: number,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   return calculateScope1TransportBase(
     typeOfTruck,

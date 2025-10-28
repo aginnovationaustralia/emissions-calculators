@@ -1,22 +1,17 @@
 import {
-  constants,
+  commonConstants,
   dairyConstants,
   livestockConstants,
 } from '../constants/constant_values';
-import {
-  Constants,
-  DairyConstants,
-  LivestockConstants,
-} from '../constants/versionedConstants';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantsForDairyCalculator = {
-  DAIRY: DairyConstants;
-  COMMON: Constants;
-  LIVESTOCK: LivestockConstants;
-};
+export type ConstantsForDairyCalculator = Pick<
+  AllConstants,
+  'DAIRY' | 'COMMON' | 'LIVESTOCK'
+>;
 
 export const constantsForDairyCalculator: ConstantsForDairyCalculator = {
   DAIRY: dairyConstants,
-  COMMON: constants,
+  COMMON: commonConstants,
   LIVESTOCK: livestockConstants,
 };

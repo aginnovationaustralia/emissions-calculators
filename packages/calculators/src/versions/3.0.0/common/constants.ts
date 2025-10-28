@@ -1,5 +1,5 @@
-import { Constants } from '../constants';
+import { CommonConstants } from '../constants/versionedConstants';
 
-export type CommonConstants = {
-  COMMON: Constants;
+export type HasCommonConstants = {
+  COMMON: CommonConstants;
 };

@@ -1,7 +1,6 @@
 import { ExecutionContext } from '../../executionContext';
 import { Fertiliser } from '../../types/fertiliser.input';
 import { CustomisedFertiliser } from '../../types/types';
-import { CommonConstants } from '../constants';
 
 export const OTHER_TYPE_TO_SIMPLE_KEY: {
   [key in CustomisedFertiliser]:
@@ -36,10 +35,7 @@ export const OTHER_TYPE_TO_SIMPLE_KEY: {
   'Sulphate of Ammonia': 'SULPHATE_OF_AMMONIA',
 };
 
-function getRatioN(
-  context: ExecutionContext<CommonConstants>,
-  otherType: CustomisedFertiliser,
-) {
+function getRatioN(context: ExecutionContext, otherType: CustomisedFertiliser) {
   const { constants } = context;
   return constants.COMMON.FERTILISER_CONTENT[
     OTHER_TYPE_TO_SIMPLE_KEY[otherType]
@@ -47,7 +43,7 @@ function getRatioN(
 }
 
 export function getOtherFertiliserAmounts(
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
   fertiliser: Fertiliser,
 ) {
   return (fertiliser.otherFertilisers ?? []).reduce(
@@ -68,10 +64,7 @@ export type CropWithUrea = {
   ureaApplication: number;
   ureaAmmoniumNitrate: number;
 };
-export function getUreaMass(
-  context: ExecutionContext<CommonConstants>,
-  crop: CropWithUrea,
-) {
+export function getUreaMass(context: ExecutionContext, crop: CropWithUrea) {
   const { constants } = context;
 
   return (

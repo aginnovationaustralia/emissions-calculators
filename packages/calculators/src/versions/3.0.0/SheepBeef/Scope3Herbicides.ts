@@ -1,12 +1,12 @@
-import { LivestockConstants } from '../constants/versionedConstants';
 import { ExecutionContext } from '../executionContext';
+import { HasLivestockConstants } from './constants';
 
 export function calculateScope3Herbicide(
   beefHerbicideKg: number,
   beefOtherherbicideKg: number,
   sheepHerbicideKg: number,
   sheepOtherherbicideKg: number,
-  context: ExecutionContext<{ LIVESTOCK: LivestockConstants }>,
+  context: ExecutionContext<HasLivestockConstants>,
 ) {
   const { constants } = context;
 

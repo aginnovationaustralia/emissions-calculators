@@ -1,22 +1,17 @@
 import {
-  constants,
+  commonConstants,
   livestockConstants,
   porkConstants,
 } from '../constants/constant_values';
-import {
-  Constants,
-  LivestockConstants,
-  PorkConstants,
-} from '../constants/versionedConstants';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantsForPorkCalculator = {
-  PORK: PorkConstants;
-  COMMON: Constants;
-  LIVESTOCK: LivestockConstants;
-};
+export type ConstantsForPorkCalculator = Pick<
+  AllConstants,
+  'PORK' | 'COMMON' | 'LIVESTOCK'
+>;
 
 export const constantsForPorkCalculator: ConstantsForPorkCalculator = {
   PORK: porkConstants,
-  COMMON: constants,
+  COMMON: commonConstants,
   LIVESTOCK: livestockConstants,
 };

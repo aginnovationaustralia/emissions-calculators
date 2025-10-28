@@ -1,5 +1,4 @@
 import { ExecutionContext } from '../../executionContext';
-import { CommonConstants } from '../constants';
 
 /**
  *
@@ -10,7 +9,7 @@ import { CommonConstants } from '../constants';
 export function calculateScope3Herbicide(
   glyphosateUsage: number,
   generalHerbicideUsage: number,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const { constants } = context;
 

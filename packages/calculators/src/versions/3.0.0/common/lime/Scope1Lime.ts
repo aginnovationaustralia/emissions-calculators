@@ -1,5 +1,4 @@
 import { ExecutionContext } from '../../executionContext';
-import { CommonConstants } from '../constants';
 
 /**
  *
@@ -10,7 +9,7 @@ import { CommonConstants } from '../constants';
 export function calculateScope1Lime(
   limestoneTonnes: number,
   limestoneFraction: number,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const { constants } = context;
   const { SCOPE1 } = constants.COMMON.LIMING;

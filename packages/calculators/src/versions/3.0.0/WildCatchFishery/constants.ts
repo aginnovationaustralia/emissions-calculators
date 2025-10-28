@@ -1,13 +1,16 @@
-import { constants, fisheriesConstants } from '../constants/constant_values';
-import { Constants, FisheriesConstants } from '../constants/versionedConstants';
+import {
+  commonConstants,
+  fisheriesConstants,
+} from '../constants/constant_values';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantsForWildCatchFisheryCalculator = {
-  FISHERIES: FisheriesConstants;
-  COMMON: Constants;
-};
+export type ConstantsForWildCatchFisheryCalculator = Pick<
+  AllConstants,
+  'FISHERIES' | 'COMMON'
+>;
 
 export const constantsForWildCatchFisheryCalculator: ConstantsForWildCatchFisheryCalculator =
   {
     FISHERIES: fisheriesConstants,
-    COMMON: constants,
+    COMMON: commonConstants,
   };

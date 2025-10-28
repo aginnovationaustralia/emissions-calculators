@@ -753,7 +753,7 @@ export type RiceConstants = {
   SF_PRESEASON_WATER_REGIME: Record<RicePreseasonFloodingPeriod, number>;
 };
 
-export type Constants = {
+export type CommonConstants = {
   FEED_PURCHASED: {
     grain: { TotalGHG: number };
     cottonseed: { TotalGHG: number };
@@ -930,7 +930,7 @@ export type Constants = {
 };
 
 export type AllConstants = {
-  COMMON: Constants;
+  COMMON: CommonConstants;
   CROP: CropConstants;
   FISHERIES: FisheriesConstants;
   RICE: RiceConstants;

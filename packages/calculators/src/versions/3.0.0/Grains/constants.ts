@@ -1,12 +1,12 @@
-import { constants, cropConstants } from '../constants/constant_values';
-import { Constants, CropConstants } from '../constants/versionedConstants';
+import { commonConstants, cropConstants } from '../constants/constant_values';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantsForGrainsCalculator = {
-  COMMON: Constants;
-  CROP: CropConstants;
-};
+export type ConstantsForGrainsCalculator = Pick<
+  AllConstants,
+  'COMMON' | 'CROP'
+>;
 
 export const constantsForGrainsCalculator: ConstantsForGrainsCalculator = {
-  COMMON: constants,
+  COMMON: commonConstants,
   CROP: cropConstants,
 };

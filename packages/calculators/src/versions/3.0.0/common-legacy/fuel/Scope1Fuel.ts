@@ -1,4 +1,3 @@
-import { CommonConstants } from '../../common/constants';
 import { ExecutionContext } from '../../executionContext';
 
 export function getDefaultForAverageStationaryTransport(
@@ -9,7 +8,7 @@ export function getDefaultForAverageStationaryTransport(
     : averageStationaryTransport;
 }
 
-function getFuelEnergyKl(context: ExecutionContext<CommonConstants>) {
+function getFuelEnergyKl(context: ExecutionContext) {
   const { constants } = context;
 
   const fuelSD = constants.COMMON.FUEL_ENERGYGJ.STATIONARY.DIESEL;
@@ -94,7 +93,7 @@ function calculateFuelScope1BaseLPG(
   annualPetrolConsumption: number,
   annualLPGConsumption: number,
   type: 'CO2' | 'CH4' | 'N2O',
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
   averageStationaryTransportOptional?: boolean,
 ) {
   const averageStationaryTransport = getDefaultForAverageStationaryTransport(
@@ -139,7 +138,7 @@ export function calculateFuelScope1BaseLPGStationary(
   annualPetrolConsumption: number,
   annualLPGConsumption: number,
   type: 'CO2' | 'CH4' | 'N2O',
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const fuelEnergyKl = getFuelEnergyKl(context);
 
@@ -164,7 +163,7 @@ export function calculateFuelScope1CO2LPG(
   annualDieselConsumption: number,
   annualPetrolConsumption: number,
   annualLPGConsumption: number,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
   averageStationaryTransport?: boolean,
 ) {
   return calculateFuelScope1BaseLPG(
@@ -181,7 +180,7 @@ export function calculateFuelScope1N2OLPG(
   annualDieselConsumption: number,
   annualPetrolConsumption: number,
   annualLPGConsumption: number,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
   averageStationaryTransport?: boolean,
 ) {
   return calculateFuelScope1BaseLPG(
@@ -198,7 +197,7 @@ export function calculateFuelScope1CH4LPG(
   annualDieselConsumption: number,
   annualPetrolConsumption: number,
   annualLPGConsumption: number,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
   averageStationaryTransport?: boolean,
 ) {
   return calculateFuelScope1BaseLPG(
@@ -215,7 +214,7 @@ export function calculateFuelScope1AllLPG(
   annualDieselConsumption: number,
   annualPetrolConsumption: number,
   annualLPGConsumption: number,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
   averageStationaryTransport: boolean = false,
 ) {
   return {

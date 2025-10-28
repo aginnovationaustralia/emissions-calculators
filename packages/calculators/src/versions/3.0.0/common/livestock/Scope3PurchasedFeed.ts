@@ -1,5 +1,4 @@
 import { ExecutionContext } from '../../executionContext';
-import { CommonConstants } from '../constants';
 
 // (dataInputBeefD98)
 /**
@@ -13,7 +12,7 @@ export function calculateScope3PurchasedFeed(
   grain: number,
   hay: number,
   cottonseed: number,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const { constants } = context;
 

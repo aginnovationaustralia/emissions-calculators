@@ -1,14 +1,13 @@
-import { Constants } from '../constants';
-import { constants, cropConstants } from '../constants/constant_values';
-import { CropConstants } from '../constants/versionedConstants';
+import { commonConstants, cropConstants } from '../constants/constant_values';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantsForHorticultureCalculator = {
-  COMMON: Constants;
-  CROP: CropConstants;
-};
+export type ConstantsForHorticultureCalculator = Pick<
+  AllConstants,
+  'COMMON' | 'CROP'
+>;
 
 export const constantsForHorticultureCalculator: ConstantsForHorticultureCalculator =
   {
-    COMMON: constants,
+    COMMON: commonConstants,
     CROP: cropConstants,
   };

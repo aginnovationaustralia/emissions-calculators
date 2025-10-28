@@ -1,15 +1,17 @@
-import { constants, Constants } from '../constants';
-import { cropConstants, sugarConstants } from '../constants/constant_values';
-import { CropConstants, SugarConstants } from '../constants/versionedConstants';
+import {
+  commonConstants,
+  cropConstants,
+  sugarConstants,
+} from '../constants/constant_values';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantsForSugarCalculator = {
-  COMMON: Constants;
-  CROP: CropConstants;
-  SUGAR: SugarConstants;
-};
+export type ConstantsForSugarCalculator = Pick<
+  AllConstants,
+  'COMMON' | 'CROP' | 'SUGAR'
+>;
 
 export const constantsForSugarCalculator: ConstantsForSugarCalculator = {
-  COMMON: constants,
+  COMMON: commonConstants,
   CROP: cropConstants,
   SUGAR: sugarConstants,
 };

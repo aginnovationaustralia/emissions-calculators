@@ -1,10 +1,9 @@
 import { ExecutionContext } from '../../executionContext';
 import { Fertiliser } from '../../types/fertiliser.input';
-import { CommonConstants } from '../constants';
 
 export function calculateScope3Fertiliser(
   fertiliser: Fertiliser,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const { constants } = context;
 

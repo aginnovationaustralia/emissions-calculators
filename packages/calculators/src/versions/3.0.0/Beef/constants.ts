@@ -1,26 +1,19 @@
 import {
   beefConstants,
-  constants,
+  commonConstants,
   livestockConstants,
   savannaConstants,
 } from '../constants/constant_values';
-import {
-  BeefConstants,
-  Constants,
-  LivestockConstants,
-  SavannaConstants,
-} from '../constants/versionedConstants';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantsForBeefCalculator = {
-  BEEF: BeefConstants;
-  SAVANNA: SavannaConstants;
-  COMMON: Constants;
-  LIVESTOCK: LivestockConstants;
-};
+export type ConstantsForBeefCalculator = Pick<
+  AllConstants,
+  'BEEF' | 'COMMON' | 'SAVANNA' | 'LIVESTOCK'
+>;
 
 export const constantsForBeefCalculator: ConstantsForBeefCalculator = {
   BEEF: beefConstants,
-  COMMON: constants,
+  COMMON: commonConstants,
   SAVANNA: savannaConstants,
   LIVESTOCK: livestockConstants,
 };

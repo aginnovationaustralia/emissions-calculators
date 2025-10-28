@@ -1,4 +1,3 @@
-import { CommonConstants } from '../../common/constants';
 import { ExecutionContext } from '../../executionContext';
 import { ElectricitySource, State } from '../../types/types';
 
@@ -15,7 +14,7 @@ export function calculateElectricityScope2And3(
   electricitySource: ElectricitySource,
   percentRenewable: number,
   annualElectricityUse: number,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const { constants } = context;
   const stateGridQuantity = annualElectricityUse * (1 - percentRenewable); // (electricityD6)

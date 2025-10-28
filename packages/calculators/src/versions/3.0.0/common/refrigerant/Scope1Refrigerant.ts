@@ -1,10 +1,9 @@
 import { ExecutionContext } from '../../executionContext';
 import { RefrigerantInput } from '../../types/refrigerant.input';
-import { CommonConstants } from '../constants';
 
 export function calculateScope1Refrigerant(
   refrigerants: RefrigerantInput[],
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const { constants } = context;
 

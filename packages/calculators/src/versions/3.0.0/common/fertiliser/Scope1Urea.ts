@@ -1,11 +1,10 @@
 import { ExecutionContext } from '../../executionContext';
-import { CommonConstants } from '../constants';
 import { CropWithUrea, getUreaMass } from './fertiliser';
 
 export function calculateScope1Urea(
   crop: CropWithUrea,
   totalArea: number,
-  context: ExecutionContext<CommonConstants>,
+  context: ExecutionContext,
 ) {
   const { constants } = context;
 

@@ -1,5 +1,5 @@
-import { constants } from './constant_values';
-import { loadConstants } from './constantsLoader';
-import { Constants } from './versionedConstants';
+import { allConstants } from './constant_values';
+import { loadAllConstants } from './constantsLoader';
+import { AllConstants } from './versionedConstants';
 
-export { constants, Constants, loadConstants };
+export { allConstants, AllConstants, loadAllConstants };

@@ -1,16 +1,16 @@
-import { aquacultureConstants, constants } from '../constants/constant_values';
 import {
-  AquacultureConstants,
-  Constants,
-} from '../constants/versionedConstants';
+  aquacultureConstants,
+  commonConstants,
+} from '../constants/constant_values';
+import { AllConstants } from '../constants/versionedConstants';
 
-export type ConstantsForAquacultureCalculator = {
-  AQUACULTURE: AquacultureConstants;
-  COMMON: Constants;
-};
+export type ConstantsForAquacultureCalculator = Pick<
+  AllConstants,
+  'AQUACULTURE' | 'COMMON'
+>;
 
 export const constantsForAquacultureCalculator: ConstantsForAquacultureCalculator =
   {
     AQUACULTURE: aquacultureConstants,
-    COMMON: constants,
+    COMMON: commonConstants,
   };
