@@ -22,7 +22,7 @@ import {
 import { ConstantsContext } from './context';
 import { AllConstants } from './versionedConstants';
 
-export const loadAllConstants = (): AllConstants => {
+export const loadConstants = (): AllConstants => {
   return {
     COMMON: commonConstants,
     CROP: cropConstants,
@@ -47,5 +47,5 @@ export const loadAllConstants = (): AllConstants => {
 
 export function loadOverrideConstants(): AllConstants {
   const overrides = ConstantsContext.getOverrides();
-  return merge<AllConstants[]>(loadAllConstants(), overrides as AllConstants);
+  return merge<AllConstants[]>(loadConstants(), overrides as AllConstants);
 }
