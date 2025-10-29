@@ -7,7 +7,7 @@ import { STATES } from '../../constants/versionedConstants';
 import { CalculationEnvironment } from '../../execution/environment';
 
 describe('constantsLoader', () => {
-  describe('loadOverrideConstants', () => {
+  describe('loadConstants', () => {
     it('should load constants for current version with overrides', () => {
       const overrides = {
         BEEF: {

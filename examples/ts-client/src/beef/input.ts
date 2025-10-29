@@ -1,7 +1,7 @@
-import { V3_0_0 } from '@aginnovationaustralia/emissions-calculators';
+import { v3_0_0 } from '@aginnovationaustralia/emissions-calculators';
 
 // Use the type directly from the namespace - this is the correct approach
-type BeefInput = V3_0_0.Types.BeefInput;
+type BeefInput = v3_0_0.Types.BeefInput;
 
 // Create a sample beef input (simplified for demonstration)
 export const beefInputData: BeefInput = {
