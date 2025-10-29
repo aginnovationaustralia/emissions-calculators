@@ -21,7 +21,7 @@ describe('CalculationEnvironment', () => {
 
       expect(result).toBe('callback-result');
       expect(capturedOverrides).toEqual({
-        SHEEP_FEEDAVAILABILITY: { spring: { nsw: 2.5 } },
+        SHEEP: { FEEDAVAILABILITY: { spring: { nsw: 2.5 } } },
       });
       expect(capturedOrganisation).toBe('test-org');
     });
@@ -68,13 +68,15 @@ describe('CalculationEnvironment', () => {
 
       // Verify outer context
       expect(outerOverrides).toEqual({
-        SHEEP_FEEDAVAILABILITY: { spring: { nsw: 2.5 } },
+        SHEEP: { FEEDAVAILABILITY: { spring: { nsw: 2.5 } } },
       });
       expect(outerOrganisation).toBe('outer-org');
 
       // Verify inner context
       expect(innerOverrides).toEqual({
-        SHEEP_FEEDAVAILABILITY: { spring: { nsw: 3.0 }, summer: { nsw: 0.8 } },
+        SHEEP: {
+          FEEDAVAILABILITY: { spring: { nsw: 3.0 }, summer: { nsw: 0.8 } },
+        },
       });
       expect(innerOrganisation).toBe('inner-org');
     });
@@ -111,10 +113,10 @@ describe('CalculationEnvironment', () => {
 
       // Values should be consistent before and after async delay
       expect(beforeDelayOverrides).toEqual({
-        SHEEP_FEEDAVAILABILITY: { spring: { nsw: 3 } },
+        SHEEP: { FEEDAVAILABILITY: { spring: { nsw: 3 } } },
       });
       expect(afterDelayOverrides).toEqual({
-        SHEEP_FEEDAVAILABILITY: { spring: { nsw: 3 } },
+        SHEEP: { FEEDAVAILABILITY: { spring: { nsw: 3 } } },
       });
       expect(beforeDelayOrganisation).toBe('async-org');
       expect(afterDelayOrganisation).toBe('async-org');
@@ -139,7 +141,7 @@ describe('CalculationEnvironment', () => {
 
       expect(result).toEqual({
         success: true,
-        overrides: { SHEEP_FEEDAVAILABILITY: { spring: { nsw: 1.2 } } },
+        overrides: { SHEEP: { FEEDAVAILABILITY: { spring: { nsw: 1.2 } } } },
         organisation: 'promise-org',
       });
     });
@@ -165,7 +167,7 @@ describe('CalculationEnvironment', () => {
 
       // Context should still be available even when error occurred within it
       expect(overridesInErrorContext).toEqual({
-        SHEEP_FEEDAVAILABILITY: { spring: { nsw: 4.5 } },
+        SHEEP: { FEEDAVAILABILITY: { spring: { nsw: 4.5 } } },
       });
       expect(organisationInErrorContext).toBe('error-org');
     });
@@ -282,10 +284,10 @@ describe('CalculationEnvironment', () => {
       });
 
       expect(context1Result).toEqual({
-        SHEEP_FEEDAVAILABILITY: { spring: { nsw: 2.5 } },
+        SHEEP: { FEEDAVAILABILITY: { spring: { nsw: 2.5 } } },
       });
       expect(context2Result).toEqual({
-        SHEEP_FEEDAVAILABILITY: { summer: { nsw: 0.6 } },
+        SHEEP: { FEEDAVAILABILITY: { summer: { nsw: 0.6 } } },
       });
       expect(context1Result).not.toEqual(context2Result);
     });
