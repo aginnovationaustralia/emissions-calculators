@@ -325,7 +325,7 @@ export function calculateCompleteBeefEmissions(
     constants.LIVESTOCK.INOGRANICFERTILISER_ATMOSPHERIC_N;
 
   const { otherFertiliserDryland, otherFertiliserIrrigated } =
-    getOtherFertiliserAmounts(context as any, fertiliser);
+    getOtherFertiliserAmounts(context, fertiliser);
 
   const atmosphericNDepositionUreaOtherDryland =
     otherFertiliserDryland *
