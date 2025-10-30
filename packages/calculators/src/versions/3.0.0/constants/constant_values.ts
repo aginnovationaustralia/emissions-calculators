@@ -4,9 +4,27 @@ import {
   FreightTypes,
 } from '../types/types';
 import {
-  Constants,
+  AllConstants,
+  AquacultureConstants,
+  BeefConstants,
+  BuffaloConstants,
+  CommonConstants,
+  CottonConstants,
+  CropConstants,
+  DairyConstants,
+  DeerConstants,
+  FeedlotConstants,
+  FisheriesConstants,
+  GoatConstants,
   LIVESTOCK_SOURCE_LOCATION,
+  LivestockConstants,
+  PorkConstants,
+  PoultryConstants,
+  RiceConstants,
+  SavannaConstants,
+  SheepConstants,
   STATES,
+  SugarConstants,
 } from './versionedConstants';
 
 export const REGIONS = {
@@ -15,13 +33,13 @@ export const REGIONS = {
   KIMBERLEY: 'kmberley',
 };
 
-export const constants: Constants = {
+export const sheepConstants: SheepConstants = {
   /**
    * @description Feed availability rate for sheep across seasons and states, in tonnes per hectare
    * @inventory2018 Appendix 5.D.3
    * @units t/ha
    */
-  SHEEP_FEEDAVAILABILITY: {
+  FEEDAVAILABILITY: {
     spring: {
       [STATES.ACT]: 2.9,
       [STATES.NSW]: 2.9,
@@ -74,7 +92,7 @@ export const constants: Constants = {
    * @units %
    * @type Percentage
    */
-  SHEEP_CRUDEPROTEIN: {
+  CRUDEPROTEIN: {
     spring: {
       [STATES.ACT]: 20,
       [STATES.NSW]: 20,
@@ -127,7 +145,7 @@ export const constants: Constants = {
    * @units %
    * @type Percentage
    */
-  SHEEP_DRYMATTERDIGESTIBILITY: {
+  DRYMATTERDIGESTIBILITY: {
     spring: {
       [STATES.ACT]: 75,
       [STATES.NSW]: 75,
@@ -175,117 +193,11 @@ export const constants: Constants = {
   },
 
   /**
-   * @description Dry matter digestibility for beef across seasons and states, as percentage
-   * @inventory2018 Appendix 5.B.3
-   * @units %
-   * @type Percentage
-   */
-  BEEF_DRYMATTERDIGESTIBILITY: {
-    spring: {
-      [STATES.ACT]: 55,
-      [STATES.NSW]: 55,
-      [STATES.NT]: 55,
-      [STATES.QLD]: 53,
-      [STATES.SA]: 70,
-      [STATES.TAS]: 75,
-      [STATES.VIC]: 80,
-      [STATES.WA_SW]: 80,
-      [STATES.WA_NW]: 40,
-    },
-    summer: {
-      [STATES.ACT]: 65,
-      [STATES.NSW]: 65,
-      [STATES.NT]: 61,
-      [STATES.QLD]: 57,
-      [STATES.SA]: 55,
-      [STATES.TAS]: 60,
-      [STATES.VIC]: 55,
-      [STATES.WA_SW]: 58,
-      [STATES.WA_NW]: 65,
-    },
-    autumn: {
-      [STATES.ACT]: 60,
-      [STATES.NSW]: 60,
-      [STATES.NT]: 57,
-      [STATES.QLD]: 55,
-      [STATES.SA]: 55,
-      [STATES.TAS]: 70,
-      [STATES.VIC]: 60,
-      [STATES.WA_SW]: 50,
-      [STATES.WA_NW]: 55,
-    },
-    winter: {
-      [STATES.ACT]: 50,
-      [STATES.NSW]: 50,
-      [STATES.NT]: 54,
-      [STATES.QLD]: 51,
-      [STATES.SA]: 75,
-      [STATES.TAS]: 75,
-      [STATES.VIC]: 76,
-      [STATES.WA_SW]: 75,
-      [STATES.WA_NW]: 45,
-    },
-  },
-
-  /**
-   * @description Crude protein content for beef across seasons and states, as percentage
-   * @inventory2018 Appendix 5.B.4
-   * @units %
-   * @type Percentage
-   */
-  BEEF_CRUDEPROTEIN: {
-    spring: {
-      [STATES.ACT]: 7,
-      [STATES.NSW]: 7,
-      [STATES.NT]: 5.8,
-      [STATES.QLD]: 7,
-      [STATES.SA]: 7.2,
-      [STATES.TAS]: 16,
-      [STATES.VIC]: 20,
-      [STATES.WA_SW]: 25,
-      [STATES.WA_NW]: 4,
-    },
-    summer: {
-      [STATES.ACT]: 13,
-      [STATES.NSW]: 13,
-      [STATES.NT]: 9.2,
-      [STATES.QLD]: 13,
-      [STATES.SA]: 9.9,
-      [STATES.TAS]: 7,
-      [STATES.VIC]: 10,
-      [STATES.WA_SW]: 7,
-      [STATES.WA_NW]: 12,
-    },
-    autumn: {
-      [STATES.ACT]: 10,
-      [STATES.NSW]: 10,
-      [STATES.NT]: 7.5,
-      [STATES.QLD]: 10,
-      [STATES.SA]: 7.8,
-      [STATES.TAS]: 9,
-      [STATES.VIC]: 16,
-      [STATES.WA_SW]: 10,
-      [STATES.WA_NW]: 9,
-    },
-    winter: {
-      [STATES.ACT]: 6,
-      [STATES.NSW]: 6,
-      [STATES.NT]: 5.3,
-      [STATES.QLD]: 6,
-      [STATES.SA]: 5.9,
-      [STATES.TAS]: 20,
-      [STATES.VIC]: 20,
-      [STATES.WA_SW]: 21,
-      [STATES.WA_NW]: 6,
-    },
-  },
-
-  /**
    * @description Standard reference weight for sheep across seasons and states, in kilograms
    * @inventory2018 Appendix 5.D.7
    * @units kg
    */
-  SHEEP_STANDARDWEIGHT: {
+  STANDARDWEIGHT: {
     rams: {
       [STATES.ACT]: 78,
       [STATES.NSW]: 78,
@@ -465,38 +377,132 @@ export const constants: Constants = {
   },
 
   /**
-   * @description Energy required to manufacture herbicides and insecticides
-   * @reference O'Halloran, N., Fisher, P., Rab, A., & Victoria, D. P. I. (2008). Preliminary estimation of the carbon footprint of the Australian vegetable industry (pp. 1-39). Discussion paper 4. Vegetable Industry Carbon Footprint Scoping Study. 2008, Horticulture Australia Ltd. Table 7
+   * @description Emission factors for purchased sheep by breed, in kg CO2-e/kg liveweight
+   * @reference Wiedemann et al. (2016)
+   * @units kg CO2-e/kg
    */
-  ENERGY_TO_MANUFACTURE: {
-    /** @units MJ/kg */
-    HERBICIDE_ENERGY: 550,
-    /** @units MJ/kg */
-    HERBICIDEGENERAL_ENERGY: 310,
-    /** @units MJ/kg */
-    INSECTICIDE_ENERGY: 315,
-    /** @units kg CO2-e/MJ */
-    HERBICIDE_EF: 0.06,
-    /** @units kg CO2-e/MJ */
-    HERBICIDEGENERAL_EF: 0.06,
-    /** @units kg CO2-e/MJ */
-    INSECTICIDE_EF: 0.06,
+  EMISSIONFACTOR: {
+    MERINO: 9.3,
+    CROSSBRED: 6.9,
   },
 
-  // Embedded emissions M7
   /**
-   * @description Relative amount of CO2, CH4, and N2O emitted by herbicides
-   * @type Proportion
+   * @description Urine and dung deposited during grazing
    */
-  EMISSION_BREAKDOWN: {
-    HERBICIDE: { CO2: 1.0, CH4: 0.0, N2O: 0.0 },
+  EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsSheepD32)
+};
+
+export const beefConstants: BeefConstants = {
+  /**
+   * @description Dry matter digestibility for beef across seasons and states, as percentage
+   * @inventory2018 Appendix 5.B.3
+   * @units %
+   * @type Percentage
+   */
+  DRYMATTERDIGESTIBILITY: {
+    spring: {
+      [STATES.ACT]: 55,
+      [STATES.NSW]: 55,
+      [STATES.NT]: 55,
+      [STATES.QLD]: 53,
+      [STATES.SA]: 70,
+      [STATES.TAS]: 75,
+      [STATES.VIC]: 80,
+      [STATES.WA_SW]: 80,
+      [STATES.WA_NW]: 40,
+    },
+    summer: {
+      [STATES.ACT]: 65,
+      [STATES.NSW]: 65,
+      [STATES.NT]: 61,
+      [STATES.QLD]: 57,
+      [STATES.SA]: 55,
+      [STATES.TAS]: 60,
+      [STATES.VIC]: 55,
+      [STATES.WA_SW]: 58,
+      [STATES.WA_NW]: 65,
+    },
+    autumn: {
+      [STATES.ACT]: 60,
+      [STATES.NSW]: 60,
+      [STATES.NT]: 57,
+      [STATES.QLD]: 55,
+      [STATES.SA]: 55,
+      [STATES.TAS]: 70,
+      [STATES.VIC]: 60,
+      [STATES.WA_SW]: 50,
+      [STATES.WA_NW]: 55,
+    },
+    winter: {
+      [STATES.ACT]: 50,
+      [STATES.NSW]: 50,
+      [STATES.NT]: 54,
+      [STATES.QLD]: 51,
+      [STATES.SA]: 75,
+      [STATES.TAS]: 75,
+      [STATES.VIC]: 76,
+      [STATES.WA_SW]: 75,
+      [STATES.WA_NW]: 45,
+    },
   },
 
+  /**
+   * @description Crude protein content for beef across seasons and states, as percentage
+   * @inventory2018 Appendix 5.B.4
+   * @units %
+   * @type Percentage
+   */
+  CRUDEPROTEIN: {
+    spring: {
+      [STATES.ACT]: 7,
+      [STATES.NSW]: 7,
+      [STATES.NT]: 5.8,
+      [STATES.QLD]: 7,
+      [STATES.SA]: 7.2,
+      [STATES.TAS]: 16,
+      [STATES.VIC]: 20,
+      [STATES.WA_SW]: 25,
+      [STATES.WA_NW]: 4,
+    },
+    summer: {
+      [STATES.ACT]: 13,
+      [STATES.NSW]: 13,
+      [STATES.NT]: 9.2,
+      [STATES.QLD]: 13,
+      [STATES.SA]: 9.9,
+      [STATES.TAS]: 7,
+      [STATES.VIC]: 10,
+      [STATES.WA_SW]: 7,
+      [STATES.WA_NW]: 12,
+    },
+    autumn: {
+      [STATES.ACT]: 10,
+      [STATES.NSW]: 10,
+      [STATES.NT]: 7.5,
+      [STATES.QLD]: 10,
+      [STATES.SA]: 7.8,
+      [STATES.TAS]: 9,
+      [STATES.VIC]: 16,
+      [STATES.WA_SW]: 10,
+      [STATES.WA_NW]: 9,
+    },
+    winter: {
+      [STATES.ACT]: 6,
+      [STATES.NSW]: 6,
+      [STATES.NT]: 5.3,
+      [STATES.QLD]: 6,
+      [STATES.SA]: 5.9,
+      [STATES.TAS]: 20,
+      [STATES.VIC]: 20,
+      [STATES.WA_SW]: 21,
+      [STATES.WA_NW]: 6,
+    },
+  },
   /**
    * @description Amount of nitrogen excreted by beef cattle across class and state, in kilograms per year
    * @units kg/year
    */
-  BEEF_NITROGENEXCRETEDNUMBER: {
+  NITROGENEXCRETEDNUMBER: {
     bullsGt1: {
       [STATES.ACT]: 700,
       [STATES.NSW]: 700,
@@ -692,137 +698,9 @@ export const constants: Constants = {
   },
 
   /**
-   * @description Electricity emission factors for each state and Australia, in kg CO2-e/kWh
-   * @reference Primary data sources comprise National Greenhouse and Energy Reporting (Measurement) Determination 2008 (Schedule 1), Australian Energy Statistics, Clean Energy Regulator, and AEMO data and Department of Climate Change, Energy, the Environment and Water.
-   * @units kg CO2-e/kWh
+   * @description Urine and dung deposited during grazing
    */
-  ELECTRICITY: {
-    [STATES.NSW]: {
-      SCOPE2_EF: 0.66,
-      SCOPE3_EF: 0.04,
-    },
-    [STATES.ACT]: {
-      SCOPE2_EF: 0.66,
-      SCOPE3_EF: 0.04,
-    },
-    [STATES.VIC]: {
-      SCOPE2_EF: 0.77,
-      SCOPE3_EF: 0.09,
-    },
-    [STATES.QLD]: {
-      SCOPE2_EF: 0.71,
-      SCOPE3_EF: 0.1,
-    },
-    [STATES.SA]: {
-      SCOPE2_EF: 0.23,
-      SCOPE3_EF: 0.05,
-    },
-    [STATES.WA_SW]: {
-      SCOPE2_EF: 0.51,
-      SCOPE3_EF: 0.06,
-    },
-    [STATES.WA_NW]: {
-      SCOPE2_EF: 0.61,
-      SCOPE3_EF: 0.09,
-    },
-    [STATES.TAS]: {
-      SCOPE2_EF: 0.15,
-      SCOPE3_EF: 0.03,
-    },
-    [STATES.NT]: {
-      SCOPE2_EF: 0.56,
-      SCOPE3_EF: 0.07,
-    },
-    Australia: {
-      SCOPE2_EF: 0.63,
-      SCOPE3_EF: 0.07,
-    },
-  },
-
-  // (embeddedEmissionsM15)
-  /**
-   * @description Material breakdown for supplementation, in kg CO2-e/kg product
-   * @reference AusLCI Published Processes
-   * @link https://www.auslci.com.au/index.php/EmissionFactors
-   * @units kg CO2-e/kg product
-   */
-  MATERIAL_BREAKDOWN_SUPPLEMENTATION: {
-    // mineral block, 30% urea 3,6% P, at production
-    mineralblock: {
-      CO2: 0.98,
-      CH4: 0.0154,
-      N2O: 0.00456826192856515,
-      KG_CO2: 0.89448581,
-      FRACTION_OF_UREA: 0.3,
-    },
-    // weaner Block, 7,1% Urea 0,5% P, at production
-    weanerblock: {
-      CO2: 0.98,
-      CH4: 0.0154,
-      N2O: 0.00456826192856515,
-      KG_CO2: 0.17767843,
-      FRACTION_OF_UREA: 0.071,
-    },
-    // dry season mix, 30% urea, 5.5% P, at production
-    dryseasonmix: {
-      CO2: 0.98,
-      CH4: 0.0154,
-      N2O: 0.00456826192856515,
-      KG_CO2: 1.0057536, // kg CO2-e/kg Product
-      FRACTION_OF_UREA: 0.3,
-    },
-  },
-
-  // embeddedEmissions_B61:E65
-  /**
-   * @description Customized fertilizer emission factors, in kg CO2-e/kg product
-   * @reference (Wood & Cowie, 2004; Davis & Haglund,1999) Table 5, Table 6, and Table 7.
-   * @units kg CO2-e/kg
-   */
-  CUSTOMIZED_FERTILIZER: {
-    'Monoammonium phosphate (MAP)': {
-      TotalGHG: 703.2 / 1000,
-    },
-    'Diammonium Phosphate (DAP)': {
-      TotalGHG: 866.2 / 1000,
-    },
-    'Urea-Ammonium Nitrate (UAN)': {
-      TotalGHG: 1173.8 / 1000,
-    },
-    'Ammonium Nitrate (AN)': {
-      TotalGHG: 2460.8 / 1000,
-    },
-    'Calcium Ammonium Nitrate (CAN)': {
-      TotalGHG: 2336.9 / 1000,
-    },
-    'Triple Superphosphate (TSP)': {
-      TotalGHG: 0.1848,
-    },
-    'Super Potash 1:1': {
-      TotalGHG: 0.2061,
-    },
-    'Super Potash 2:1': {
-      TotalGHG: 0.1743,
-    },
-    'Super Potash 3:1': {
-      TotalGHG: 0.1602,
-    },
-    'Super Potash 4:1': {
-      TotalGHG: 0.0894,
-    },
-    'Super Potash 5:1': {
-      TotalGHG: 0.1422,
-    },
-    'Muriate of Potash': {
-      TotalGHG: 0.3,
-    },
-    'Sulphate of Potash': {
-      TotalGHG: 0.3,
-    },
-    'Sulphate of Ammonia': {
-      TotalGHG: 0.7545,
-    },
-  },
+  EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsBeefD10)
 
   /**
    * @description Emission factors for purchased cattle by region, in kg CO2-e/kg liveweight
@@ -839,227 +717,6 @@ export const constants: Constants = {
     [LIVESTOCK_SOURCE_LOCATION.TAS]: 11.7,
     [LIVESTOCK_SOURCE_LOCATION.NT]: 12.4,
   },
-
-  /**
-   * @description Emission factors for purchased sheep by breed, in kg CO2-e/kg liveweight
-   * @reference Wiedemann et al. (2016)
-   * @units kg CO2-e/kg
-   */
-  SHEEP_EMISSIONFACTOR: {
-    MERINO: 9.3,
-    CROSSBRED: 6.9,
-  },
-
-  /**
-   * @description Enteric fermentation emission factor for goat, in kg CH4/head/year
-   * @reference IPCC (2006)
-   * @units kg CH4/head/year
-   */
-  GOAT_EF: 5,
-
-  /**
-   * @description Manure production for goat, in kg DM/head/year
-   * @reference Expert working group assumption - equivalent to one sheep
-   * @units kg DM/head/year
-   */
-  GOAT_MANUREPRODUCTION: 114,
-
-  // Deer
-  /**
-   * @description Manure production for deer, in kg DM/head/year
-   * @reference Expert working group assumption - equivalent to one sheep
-   * @units kg DM/head/year
-   */
-  DEER_MANUREPRODUCTION: 319,
-
-  /**
-   * @description Enteric fermentation emission factor for deer, in kg CH4/head/year
-   * @reference IPCC (2006)
-   * @units kg CH4/head/year
-   */
-  DEER_ENTERIC_EF: 20,
-
-  /**
-   * @description Nitrogen excreted for deer, in kg N/head/year
-   * @reference Expert working group assumption - equivalent to one sheep
-   * @units kg N/head/year
-   */
-  DEER_NITROGEN_EXCRETED_FACTOR: 13.2,
-
-  /**
-   * @description Faecal nitrogen proportion for deer, as a proportion
-   * @type Proportion
-   */
-  DEER_FAECALN_PMF: 0.29,
-
-  // Pork
-  /**
-   * @description Methane emission potential for pork, in m3 CH4/kg
-   * @inventory2018 Appendix 5.E.4
-   * @units m3 CH4/kg
-   */
-  PORK_METHANE_EMISSION_POTENTIAL: 0.45,
-
-  /**
-   * @description Emission factor for bedding for pork, in kg CO2-e/kg
-   * @reference (Christie et al., 2012)
-   * @units kg CO2-e/kg
-   */
-  PORK_EF_BEDDING: 0.225,
-
-  // Buffalo
-  /**
-   * @description Nitrogen excreted for buffalo, in kg N/head/year
-   * @reference Expert working group assumption - equivalent to beef cattle - pasture
-   * @units kg N/head/year
-   */
-  BUFFALO_NITROGEN_EXCRETED_FACTOR: 39.5,
-
-  /**
-   * @description Faecal nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
-   * @type Proportion
-   */
-  BUFFALO_FAECALN_PMF: 0.29,
-
-  /**
-   * @description Seasonal urinary nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
-   * @inventory2018 3B.4_5
-   * @type Proportion
-   */
-  BUFFALO_SEASONALURINE_PMU: 0.71,
-
-  /**
-   * @description Manure production for buffalo, in kg DM/head/year
-   * @reference Expert working group assumption - equivalent to beef cattle - pasture
-   * @units kg DM/head/year
-   */
-  BUFFALO_MANUREPRODUCTION: 957,
-
-  /**
-   * @description Enteric fermentation emission factor for buffalo, in kg CH4/head/year
-   * @reference IPCC (2006)
-   * @units kg CH4/head/year
-   */
-  BUFFALO_ENTERIC_EF: 76,
-
-  /**
-   * @description Emission factors for purchased livestock, in kg CO2-e/kg liveweight
-   * @reference Wiedemann et al. (2015b)
-   * @units kg CO2-e/kg
-   */
-  PURCHASED_LIVESTOCK_EF: {
-    BUFFALO: 12,
-    DEER: 8.1,
-    GOAT: 23.8,
-    PORK: 3.6,
-    POULTRY_CONVENTIONAL: 2,
-    POULTRY_FREE_RANGE: 1.8,
-  },
-
-  /**
-   * @description Emissions factor for feed purchased, in kg CO2-e/kg
-   * @units kg CO2-e/kg
-   */
-  FEED_PURCHASED: {
-    // (embeddedEmissions_E3)
-    grain: { TotalGHG: 0.3 },
-    // (embeddedEmissions_E4)
-    cottonseed: { TotalGHG: 1.1 },
-    // (embeddedEmissions_E5)
-    /** @description Average of 0.25 and 0.2 */
-    hay: { TotalGHG: 0.225 },
-  },
-
-  // Misc
-
-  // Manure management - sheep
-  /**
-   * @description Temperate emission factor, for sheep manure management
-   */
-  EF_TEMPERATURE: 0.003, // (manureManagementSheepC10)
-
-  /**
-   * @description Conversion factor for elemental to molecular N2O
-   */
-  GWP_FACTORSC15: 44 / 28, // (agriculturalSoilsBeefO5)
-
-  /**
-   * @description Conversion factor for elemental to molecular CO2 from lime
-   */
-  GWP_FACTORSC18: 44 / 12,
-
-  /**
-   * @description Conversion factor for elemental to molecular CO2
-   */
-  GWP_FACTORSC13: 44 / 12,
-
-  /**
-   * @description Conversion factor for elemental to molecular CH4
-   */
-  GWP_FACTORSC14: 16 / 12,
-
-  /**
-   * @description Conversion factor for elemental to molecular Nox
-   */
-  GWP_FACTORSC16: 46 / 14,
-
-  /**
-   * @description Proportion of Urea in UAN
-   * @link http://sds.simplot.com/datasheets/12101.pdf?_gl=1*1j8hnbm*_ga*NDgxMDE2MzQ2LjE2ODUzMzY4ODk.*_ga_NVEQ5HDZCN*MTY4NTMzNjg5MC4xLjEuMTY4NTMzNzExOC4wLjAuMA..&_ga=2.215359572.234437473.1685336889-481016346.1685336889
-   * @type Proportion
-   */
-  GWP_FACTORSC22: 0.35,
-
-  /**
-   * @description Conversion factor for the global warming potential of CH4, as CO2-e
-   */
-  GWP_FACTORSC5: 28,
-
-  /**
-   * @description Conversion factor for the global warming potential of N2O, as CO2-e
-   */
-  GWP_FACTORSC6: 265,
-
-  /**
-   * @description Default emission factor for Urea
-   * @reference IPCC (2006)
-   */
-  CARBON_FRACTION_OF_UREA: 0.2, // (ureaApplicationD35)
-
-  /**
-   * @description Urine and dung deposited during grazing
-   */
-  EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsSheepD32)
-
-  /**
-   * @description Urine and dung deposited during grazing
-   */
-  BEEF_EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsBeefD10)
-
-  /**
-   * @description Proportion of gas volatilised from fertiliser
-   * @inventory2018 3DB_1
-   */
-  FRAC_GASF: 0.11, // FracGASF
-
-  /**
-   * @description Proportion of gas volatilised from manure
-   * @inventory2018 3DB_2
-   */
-  FRAC_GASM: 0.21, // FracGASM
-
-  // Atmospheric N deposition inorganic fertiliser
-  /**
-   * @description Atmospheric N deposition of inorganic fertiliser
-   * @inventory2018 3DB_1
-   */
-  INOGRANICFERTILISER_ATMOSPHERIC_N: 0.11, // (agriculturalSoilsSheepN10)
-
-  /**
-   * @description Leaching and runoff of inorganic fertiliser
-   * @inventory2018 3B.5a_4
-   */
-  LEECHING_AND_RUNOFF: 0.011, // (agriculturalSoilsSheepD11)
 
   /**
    * @description Milk intake of cows, in kg / day
@@ -1085,246 +742,1386 @@ export const constants: Constants = {
     CALVING_SEASON: 1.3,
     SEASON_AFTER_CALVING: 1.1,
   },
+};
 
+export const savannaConstants: SavannaConstants = {
   /**
-   * @description Scope 1 and Scope 3 values relating to liming
-   * @inventory2018 3G_1
-   * @reference Mudahar, M.S., Hignett, T.P., 1982. Energy and Fertilizer— Policy Implications and Options for Developing Countries. International Fertilizer Development Center, Muscle Shoals, Alabama
+   * @description Static lookup for savannah coarse fuel, by region
    */
-  LIMING: {
-    SCOPE1: {
-      /** @type Proportion */
-      LIMESTONE_FRACTIONPURITY: 0.9,
-      LIMESTONE_EF: 0.12,
-      /** @type Proportion */
-      DOLOMITE_FRACTIONPURITY: 0.95,
-      DOLOMITE_EF: 0.13,
+  FUELCOARSE: {
+    'Combined Ref': {
+      Qld1: '71',
+      Qld2: '72',
+      Qld3: '73',
+      Qld4: '74',
+      Qld5: '75',
+      Qld6: '76',
+      Qld7: '77',
+      Qld8: '78',
+      Qld9: '79',
+      Qld10: '710',
+      NT1: '81',
+      NT2: '82',
+      NT3: '83',
+      NT4: '84',
+      NT5: '85',
+      NT6: '86',
+      NT7: '87',
+      NT8: '88',
+      NT9: '89',
+      NT10: '810',
+      Kimberley1: '91',
+      Kimberley2: '92',
+      Kimberley3: '93',
+      Kimberley4: '94',
+      Kimberley5: '95',
+      Kimberley6: '96',
+      Kimberley7: '97',
+      Kimberley8: '98',
+      Kimberley9: '99',
+      Kimberley10: '910',
+      Pilbara1: '101',
+      Pilbara2: '102',
+      Pilbara3: '103',
+      Pilbara4: '104',
+      Pilbara5: '105',
+      Pilbara6: '106',
+      Pilbara7: '107',
+      Pilbara8: '108',
+      Pilbara9: '109',
+      Pilbara10: '1010',
     },
-    SCOPE3: {
-      // (Embedded_Emissions_J5 to J10)
-      FUEL_SCOPE3_PRODUCTION_NATURAL_GAS: 0.09,
-      FUEL_SCOPE3_PRODUCTION_ELECTRICITY: 6.43,
-      FUEL_SCOPE3_PRODUCTION_DISTILLATE_FUEL: 0.72,
-      FUEL_SCOPE3_PRODUCTION_COAL: 0.08,
-      FUEL_SCOPE3_PRODUCTION_GASOLINE: 0.09,
-
-      // (Embedded_Emissions_J14)
-      FUEL_SCOPE3_POST_PRODUCTION_DISTILLATE_FUEL: 28.32,
+    Yo: {
+      Qld1: 5.97818,
+      Qld2: 5.4075,
+      Qld3: 4.96198,
+      Qld4: 4.96198,
+      Qld5: 5.21557,
+      Qld6: 8.55158,
+      Qld7: 8.14308,
+      Qld8: 7.97898,
+      Qld9: 7.8505,
+      Qld10: 7.48462,
+      NT1: 5.97818,
+      NT2: 5.4075,
+      NT3: 4.96198,
+      NT4: 4.96198,
+      NT5: 5.21557,
+      NT6: 8.55158,
+      NT7: 8.14308,
+      NT8: 7.97898,
+      NT9: 7.8505,
+      NT10: 7.48462,
+      Kimberley1: 5.97818,
+      Kimberley2: 5.4075,
+      Kimberley3: 4.96198,
+      Kimberley4: 4.96198,
+      Kimberley5: 5.21557,
+      Kimberley6: 8.55158,
+      Kimberley7: 8.14308,
+      Kimberley8: 7.97898,
+      Kimberley9: 7.8505,
+      Kimberley10: 7.48462,
+      Pilbara1: 5.97818,
+      Pilbara2: 5.4075,
+      Pilbara3: 4.96198,
+      Pilbara4: 4.96198,
+      Pilbara5: 5.21557,
+      Pilbara6: 8.55158,
+      Pilbara7: 8.14308,
+      Pilbara8: 7.97898,
+      Pilbara9: 7.8505,
+      Pilbara10: 7.48462,
+    },
+    L: {
+      Qld1: 0.05888,
+      Qld2: 0.24606,
+      Qld3: 0.18948,
+      Qld4: 0.18948,
+      Qld5: 0.21756,
+      Qld6: 0.0722,
+      Qld7: 0.22387,
+      Qld8: 0.12031,
+      Qld9: 0.12056,
+      Qld10: 0.2044,
+      NT1: 0.05888,
+      NT2: 0.24606,
+      NT3: 0.18948,
+      NT4: 0.18948,
+      NT5: 0.21756,
+      NT6: 0.0722,
+      NT7: 0.22387,
+      NT8: 0.12031,
+      NT9: 0.12056,
+      NT10: 0.2044,
+      Kimberley1: 0.05888,
+      Kimberley2: 0.24606,
+      Kimberley3: 0.18948,
+      Kimberley4: 0.18948,
+      Kimberley5: 0.21756,
+      Kimberley6: 0.0722,
+      Kimberley7: 0.22387,
+      Kimberley8: 0.12031,
+      Kimberley9: 0.12056,
+      Kimberley10: 0.2044,
+      Pilbara1: 0.05888,
+      Pilbara2: 0.24606,
+      Pilbara3: 0.18948,
+      Pilbara4: 0.18948,
+      Pilbara5: 0.21756,
+      Pilbara6: 0.0722,
+      Pilbara7: 0.22387,
+      Pilbara8: 0.12031,
+      Pilbara9: 0.12056,
+      Pilbara10: 0.2044,
+    },
+    D: {
+      Qld1: 0.072,
+      Qld2: 0.072,
+      Qld3: 0.072,
+      Qld4: 0.072,
+      Qld5: 0.072,
+      Qld6: 0.072,
+      Qld7: 0.072,
+      Qld8: 0.072,
+      Qld9: 0.072,
+      Qld10: 0.072,
+      NT1: 0.072,
+      NT2: 0.072,
+      NT3: 0.072,
+      NT4: 0.072,
+      NT5: 0.072,
+      NT6: 0.072,
+      NT7: 0.072,
+      NT8: 0.072,
+      NT9: 0.072,
+      NT10: 0.072,
+      Kimberley1: 0.072,
+      Kimberley2: 0.072,
+      Kimberley3: 0.072,
+      Kimberley4: 0.072,
+      Kimberley5: 0.072,
+      Kimberley6: 0.072,
+      Kimberley7: 0.072,
+      Kimberley8: 0.072,
+      Kimberley9: 0.072,
+      Kimberley10: 0.072,
+      Pilbara1: 0.072,
+      Pilbara2: 0.072,
+      Pilbara3: 0.072,
+      Pilbara4: 0.072,
+      Pilbara5: 0.072,
+      Pilbara6: 0.072,
+      Pilbara7: 0.072,
+      Pilbara8: 0.072,
+      Pilbara9: 0.072,
+      Pilbara10: 0.072,
     },
   },
 
-  // (fuel_B23)
   /**
-   * @description Scope 1 and Scope 3 factors relating to fuel
-   * @reference Table 6 and 7 (Dept of Industry, Science, Energy and Resources 2022)
+   * @description Static lookup for savannah fine fuel, by region
    */
-  FUEL_ENERGYGJ: {
-    STATIONARY: {
-      DIESEL: {
-        ENERGY_CONTENT_FACTOR: 38.6,
-        SCOPE1_EF: {
-          CO2: 69.9,
-          CH4: 0.1,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 17.3,
-      },
-      PETROL: {
-        ENERGY_CONTENT_FACTOR: 34.2,
-        SCOPE1_EF: {
-          CO2: 67.4,
-          CH4: 0.2,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 17.2,
-      },
-      LPG: {
-        ENERGY_CONTENT_FACTOR: 25.7,
-        SCOPE1_EF: {
-          CO2: 60.2,
-          CH4: 0.2,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 20.2,
-      },
-      ETHANOL: {
-        ENERGY_CONTENT_FACTOR: 23.4,
-        SCOPE1_EF: {
-          CO2: 0,
-          CH4: 0.08,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      BIODIESEL: {
-        ENERGY_CONTENT_FACTOR: 34.6,
-        SCOPE1_EF: {
-          CO2: 0,
-          CH4: 0.08,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      RENEWABLE_DIESEL: {
-        ENERGY_CONTENT_FACTOR: 38.6,
-        SCOPE1_EF: {
-          CO2: 0,
-          CH4: 0.1,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      OTHER_BIOFUELS: {
-        ENERGY_CONTENT_FACTOR: 23.4,
-        SCOPE1_EF: {
-          CO2: 0,
-          CH4: 0.08,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      LNG: {
-        ENERGY_CONTENT_FACTOR: 25.3,
-        SCOPE1_EF: {
-          CO2: 51.4,
-          CH4: 7.3,
-          N2O: 0.3,
-        },
-        SCOPE3_EF: 18.0,
-      },
+  FUELFINE: {
+    'Combined Ref': {
+      Qld1: '71',
+      Qld2: '72',
+      Qld3: '73',
+      Qld4: '74',
+      Qld5: '75',
+      Qld6: '76',
+      Qld7: '77',
+      Qld8: '78',
+      Qld9: '79',
+      Qld10: '710',
+      NT1: '81',
+      NT2: '82',
+      NT3: '83',
+      NT4: '84',
+      NT5: '85',
+      NT6: '86',
+      NT7: '87',
+      NT8: '88',
+      NT9: '89',
+      NT10: '810',
+      Kimberley1: '91',
+      Kimberley2: '92',
+      Kimberley3: '93',
+      Kimberley4: '94',
+      Kimberley5: '95',
+      Kimberley6: '96',
+      Kimberley7: '97',
+      Kimberley8: '98',
+      Kimberley9: '99',
+      Kimberley10: '910',
+      Pilbara1: '101',
+      Pilbara2: '102',
+      Pilbara3: '103',
+      Pilbara4: '104',
+      Pilbara5: '105',
+      Pilbara6: '106',
+      Pilbara7: '107',
+      Pilbara8: '108',
+      Pilbara9: '109',
+      Pilbara10: '1010',
     },
-    TRANSPORT: {
-      DIESEL: {
-        ENERGY_CONTENT_FACTOR: 38.6,
-        SCOPE1_EF: {
-          CO2: 69.9,
-          CH4: 0.01,
-          N2O: 0.5,
-        },
-        SCOPE3_EF: 17.3,
-      },
-      PETROL: {
-        ENERGY_CONTENT_FACTOR: 34.2,
-        SCOPE1_EF: {
-          CO2: 67.4,
-          CH4: 0.02,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 17.2,
-      },
-      LPG: {
-        ENERGY_CONTENT_FACTOR: 26.2,
-        SCOPE1_EF: {
-          CO2: 60.2,
-          CH4: 0.5,
-          N2O: 0.3,
-        },
-        SCOPE3_EF: 20.2,
-      },
-      FUEL_OIL: {
-        ENERGY_CONTENT_FACTOR: 39.7,
-        SCOPE1_EF: {
-          CO2: 73.6,
-          CH4: 0.08,
-          N2O: 0.5,
-        },
-        SCOPE3_EF: 18.0,
-      },
-      ETHANOL: {
-        ENERGY_CONTENT_FACTOR: 23.4,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.2,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      BIODIESEL: {
-        ENERGY_CONTENT_FACTOR: 34.6,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.8,
-          N2O: 1.7,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      RENEWABLE_DIESEL: {
-        ENERGY_CONTENT_FACTOR: 38.6,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.01,
-          N2O: 0.5,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      OTHER_BIOFUELS: {
-        ENERGY_CONTENT_FACTOR: 23.4,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.8,
-          N2O: 1.7,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      LNG: {
-        ENERGY_CONTENT_FACTOR: 25.3,
-        SCOPE1_EF: {
-          CO2: 51.4,
-          CH4: 7.3,
-          N2O: 0.3,
-        },
-        SCOPE3_EF: 18.0,
-      },
-      JET_A1: {
-        ENERGY_CONTENT_FACTOR: 36.8,
-        SCOPE1_EF: {
-          CO2: 69.6,
-          CH4: 0.01,
-          N2O: 0.6,
-        },
-        SCOPE3_EF: 18.0,
-      },
-      JET_B: {
-        ENERGY_CONTENT_FACTOR: 36.8,
-        SCOPE1_EF: {
-          CO2: 69.6,
-          CH4: 0.01,
-          N2O: 0.6,
-        },
-        SCOPE3_EF: 18.0,
-      },
-      AVGAS: {
-        ENERGY_CONTENT_FACTOR: 33.1,
-        SCOPE1_EF: {
-          CO2: 67.0,
-          CH4: 0.06,
-          N2O: 0.6,
-        },
-        SCOPE3_EF: 18.0,
-      },
+    Yo: {
+      Qld1: 0.40885,
+      Qld2: 0.37206,
+      Qld3: 0.37352,
+      Qld4: 0.37352,
+      Qld5: 0.34846,
+      Qld6: 0.26884,
+      Qld7: 0.25533,
+      Qld8: 0.25396,
+      Qld9: 0.24826,
+      Qld10: 0.25508,
+      NT1: 0.40885,
+      NT2: 0.37206,
+      NT3: 0.37352,
+      NT4: 0.37352,
+      NT5: 0.34846,
+      NT6: 0.26884,
+      NT7: 0.25533,
+      NT8: 0.25396,
+      NT9: 0.24826,
+      NT10: 0.25508,
+      Kimberley1: 0.40885,
+      Kimberley2: 0.37206,
+      Kimberley3: 0.37352,
+      Kimberley4: 0.37352,
+      Kimberley5: 0.34846,
+      Kimberley6: 0.26884,
+      Kimberley7: 0.25533,
+      Kimberley8: 0.25396,
+      Kimberley9: 0.24826,
+      Kimberley10: 0.25508,
+      Pilbara1: 0.40885,
+      Pilbara2: 0.37206,
+      Pilbara3: 0.37352,
+      Pilbara4: 0.37352,
+      Pilbara5: 0.34846,
+      Pilbara6: 0.26884,
+      Pilbara7: 0.25533,
+      Pilbara8: 0.25396,
+      Pilbara9: 0.24826,
+      Pilbara10: 0.25508,
     },
-    NATURAL_GAS: {
-      ENERGY_CONTENT_FACTOR: 1,
-      SCOPE1_EF: {
-        CO2: 51.4,
-        CH4: 0.1,
-        N2O: 0.03,
-      },
-      SCOPE3_EF: {
-        nsw: 13.1,
-        act: 13.1,
-        vic: 4,
-        qld: 8.8,
-        sa: 10.7,
-        wa_sw: 4.1,
-        wa_nw: 4.1,
-        tas: 0,
-        nt: 0,
-      },
+    L: {
+      Qld1: 5.2189,
+      Qld2: 3.85447,
+      Qld3: 3.46804,
+      Qld4: 4.2354,
+      Qld5: 4.94919,
+      Qld6: 2.67616,
+      Qld7: 2.55178,
+      Qld8: 2.34277,
+      Qld9: 2.45375,
+      Qld10: 2.43343,
+      NT1: 4.02581,
+      NT2: 3.96032,
+      NT3: 2.7036,
+      NT4: 3.99075,
+      NT5: 4.25842,
+      NT6: 2.35541,
+      NT7: 2.70701,
+      NT8: 2.47525,
+      NT9: 2.61767,
+      NT10: 2.9654,
+      Kimberley1: 3.9053,
+      Kimberley2: 3.83521,
+      Kimberley3: 2.4142,
+      Kimberley4: 3.6844,
+      Kimberley5: 3.99772,
+      Kimberley6: 2.46568,
+      Kimberley7: 2.72722,
+      Kimberley8: 2.5792,
+      Kimberley9: 2.89562,
+      Kimberley10: 2.9491,
+      Pilbara1: 3.9053,
+      Pilbara2: 3.83521,
+      Pilbara3: 2.4142,
+      Pilbara4: 3.6844,
+      Pilbara5: 3.99772,
+      Pilbara6: 2.46568,
+      Pilbara7: 2.72722,
+      Pilbara8: 2.5792,
+      Pilbara9: 2.89562,
+      Pilbara10: 2.9491,
+    },
+    D: {
+      Qld1: 0.8,
+      Qld2: 0.8,
+      Qld3: 0.8,
+      Qld4: 0.8,
+      Qld5: 0.8,
+      Qld6: 0.8,
+      Qld7: 0.8,
+      Qld8: 0.8,
+      Qld9: 0.8,
+      Qld10: 0.8,
+      NT1: 0.8,
+      NT2: 0.8,
+      NT3: 0.8,
+      NT4: 0.8,
+      NT5: 0.8,
+      NT6: 0.8,
+      NT7: 0.8,
+      NT8: 0.8,
+      NT9: 0.8,
+      NT10: 0.8,
+      Kimberley1: 0.8,
+      Kimberley2: 0.8,
+      Kimberley3: 0.8,
+      Kimberley4: 0.8,
+      Kimberley5: 0.8,
+      Kimberley6: 0.8,
+      Kimberley7: 0.8,
+      Kimberley8: 0.8,
+      Kimberley9: 0.8,
+      Kimberley10: 0.8,
+      Pilbara1: 0.8,
+      Pilbara2: 0.8,
+      Pilbara3: 0.8,
+      Pilbara4: 0.8,
+      Pilbara5: 0.8,
+      Pilbara6: 0.8,
+      Pilbara7: 0.8,
+      Pilbara8: 0.8,
+      Pilbara9: 0.8,
+      Pilbara10: 0.8,
+    },
+    Gc: {
+      Qld1: 1.33,
+      Qld2: 1.2,
+      Qld3: 1.33,
+      Qld4: 1.15,
+      Qld5: 1.25,
+      Qld6: 1.4,
+      Qld7: 1.7,
+      Qld8: 1.4,
+      Qld9: 1,
+      Qld10: 1.8,
+      NT1: 1.33,
+      NT2: 1.2,
+      NT3: 1.33,
+      NT4: 1.15,
+      NT5: 1.25,
+      NT6: 1.4,
+      NT7: 1.7,
+      NT8: 1.4,
+      NT9: 1,
+      NT10: 1.8,
+      Kimberley1: 1.33,
+      Kimberley2: 1.2,
+      Kimberley3: 1.33,
+      Kimberley4: 1.15,
+      Kimberley5: 1.25,
+      Kimberley6: 1.4,
+      Kimberley7: 1.7,
+      Kimberley8: 1.4,
+      Kimberley9: 1,
+      Kimberley10: 1.8,
+      Pilbara1: 1.33,
+      Pilbara2: 1.2,
+      Pilbara3: 1.33,
+      Pilbara4: 1.15,
+      Pilbara5: 1.25,
+      Pilbara6: 1.4,
+      Pilbara7: 1.7,
+      Pilbara8: 1.4,
+      Pilbara9: 1,
+      Pilbara10: 1.8,
     },
   },
 
-  // (manureManagementBeefC26)
+  // (savannahBurningX4)
+  /**
+   * @description State lookup values for using other savannah lookup constants
+   */
+  FUEL_STATEREF: {
+    // WARNING: wa_nw is not in original sheet
+    wa_nw: 0,
+    act: 1,
+    nsw: 2,
+    tas: 3,
+    wa_sw: 4,
+    sa: 5,
+    vic: 6,
+    qld: 7,
+    nt: 8,
+    kimberley: 9,
+    pilbara: 10,
+  },
+
+  /**
+   * @description Patchiness values for savannah burning by season
+   * @type Proportion
+   */
+  BURN_PATCHINESS: {
+    'early dry season': { high: 0.709, low: 0.79 },
+    'late dry season': { high: 0.889, low: 0.97 },
+  },
+
+  /**
+   * @description Completeness of combustion values for savannah burning by fuel and season
+   * @type Proportion
+   */
+  BURN_COMPLETENESSOFCOMBUSTION: {
+    low: {
+      fine: { 'early dry season': 0.7992, 'late dry season': 0.8328 },
+      coarse: { 'early dry season': 0.109, 'late dry season': 0.2016 },
+    },
+    high: {
+      fine: { 'early dry season': 0.7444, 'late dry season': 0.8604 },
+      coarse: { 'early dry season': 0.1464, 'late dry season': 0.3571 },
+    },
+  },
+
+  /**
+   * @description Carbon Mass Fraction Burnt in Fuel Burnt
+   * @units Proportion
+   */
+  FUELBURNT_VEGETATION_CARBONFRACTION: {
+    fine: {
+      'Shrubland hummock': 0.46,
+      'Woodland Hummock': 0.46,
+      'Melaleuca woodland': 0.46,
+      'Woodland Mixed': 0.46,
+      'Open forest mixed': 0.46,
+      'Shrubland (heath) with hummock grass': 0.398,
+      'Woodland with hummock grass': 0.397,
+      'Open woodland with mixed grass': 0.399,
+      'Woodland with mixed grass': 0.41,
+      'Woodland with tussock grass': 0.397,
+    },
+    coarse: {
+      'Shrubland hummock': 0.46,
+      'Woodland Hummock': 0.46,
+      'Melaleuca woodland': 0.46,
+      'Woodland Mixed': 0.46,
+      'Open forest mixed': 0.46,
+      'Shrubland (heath) with hummock grass': 0.482,
+      'Woodland with hummock grass': 0.482,
+      'Open woodland with mixed grass': 0.482,
+      'Woodland with mixed grass': 0.482,
+      'Woodland with tussock grass': 0.482,
+    },
+  },
+
+  /**
+   * @description Methane emissions factor for savannah burning
+   * @units Gg CH$-C / Gg C
+   */
+  FUELBURNT_VEGETATION_EF_CH4: {
+    fine: {
+      'Shrubland hummock': 0.0031,
+      'Woodland Hummock': 0.0015,
+      'Melaleuca woodland': 0.0031,
+      'Woodland Mixed': 0.0031,
+      'Open forest mixed': 0.0031,
+      'Shrubland (heath) with hummock grass': 0.0013,
+      'Woodland with hummock grass': 0.0017,
+      'Open woodland with mixed grass': 0.0012,
+      'Woodland with mixed grass': 0.0016,
+      'Woodland with tussock grass': 0.0015,
+    },
+    coarse: {
+      'Shrubland hummock': 0.0031,
+      'Woodland Hummock': 0.0015,
+      'Melaleuca woodland': 0.0031,
+      'Woodland Mixed': 0.0031,
+      'Open forest mixed': 0.0031,
+      'Shrubland (heath) with hummock grass': 0.0013,
+      'Woodland with hummock grass': 0.0017,
+      'Open woodland with mixed grass': 0.0012,
+      'Woodland with mixed grass': 0.0016,
+      'Woodland with tussock grass': 0.0015,
+    },
+  },
+
+  /**
+   * @description Nitrogen to Carbon ratio in fuel burnt
+   */
+  FUELBURNT_VEGETATION_NITROGENCARBONRATIO: {
+    fine: {
+      'Shrubland hummock': 0.0096,
+      'Woodland Hummock': 0.0096,
+      'Melaleuca woodland': 0.0096,
+      'Woodland Mixed': 0.0096,
+      'Open forest mixed': 0.0096,
+      'Shrubland (heath) with hummock grass': 0.0107,
+      'Woodland with hummock grass': 0.0118,
+      'Open woodland with mixed grass': 0.0102,
+      'Woodland with mixed grass': 0.0105,
+      'Woodland with tussock grass': 0.0113,
+    },
+    coarse: {
+      'Shrubland hummock': 0.0081,
+      'Woodland Hummock': 0.0081,
+      'Melaleuca woodland': 0.0081,
+      'Woodland Mixed': 0.0081,
+      'Open forest mixed': 0.0081,
+      'Shrubland (heath) with hummock grass': 0.00389,
+      'Woodland with hummock grass': 0.00389,
+      'Open woodland with mixed grass': 0.00389,
+      'Woodland with mixed grass': 0.00389,
+      'Woodland with tussock grass': 0.00389,
+    },
+  },
+
+  /**
+   * @description N2O emissions factor for savannah burning
+   * @units Gg N2O-N/Gg N
+   */
+  FUELBURNT_VEGETATION_N2O: {
+    fine: {
+      'Shrubland hummock': 0.0075,
+      'Woodland Hummock': 0.0066,
+      'Melaleuca woodland': 0.0075,
+      'Woodland Mixed': 0.0075,
+      'Open forest mixed': 0.0075,
+      'Shrubland (heath) with hummock grass': 0.0059,
+      'Woodland with hummock grass': 0.006,
+      'Open woodland with mixed grass': 0.006,
+      'Woodland with mixed grass': 0.012,
+      'Woodland with tussock grass': 0.006,
+    },
+    coarse: {
+      'Shrubland hummock': 0.0075,
+      'Woodland Hummock': 0.0066,
+      'Melaleuca woodland': 0.0075,
+      'Woodland Mixed': 0.0075,
+      'Open forest mixed': 0.0075,
+      'Shrubland (heath) with hummock grass': 0.0059,
+      'Woodland with hummock grass': 0.006,
+      'Open woodland with mixed grass': 0.006,
+      'Woodland with mixed grass': 0.012,
+      'Woodland with tussock grass': 0.006,
+    },
+  },
+};
+
+export const feedlotConstants: FeedlotConstants = {
+  /**
+   * @description Leaching and runoff mass for feedlot
+   * @inventory2022 3.D.A_3
+   */
+  MN_LEACH: 0,
+
+  /**
+   * @description mass of urinary N excretion on pasture
+   * @inventory2022 3.D.B_2
+   */
+  UN_SOIL: 0,
+
+  /**
+   * @description mass of faecal N excretion on pasture
+   * @inventory2022 3.D.B_2
+   */
+  FN_SOIL: 0,
+
+  /**
+   * @description FracGASM value for feedlot
+   * @inventory2022 3.D.B_2
+   */
+  AG_SOILS: 0.21,
+
+  /**
+   * @description Emissions factor for amount of N deposited on pasture, weighted average calculated from IPCC 2019
+   * @inventory2022 3.D.A_4
+   */
+  ANNUAL_N2O_EF: 0.00503,
+
+  /**
+   * @description integrated N2O emission factor for each feedlot class and state
+   * @inventory2022 3.B.1c_7
+   */
+  I_NOF: 0.01942,
+
+  /**
+   * @description integrated fraction of N volatilised from feedlot cattle
+   * @inventory2022 3.B.5c_1
+   */
+  I_FRACGASM: 0.71116,
+
+  /**
+   * @description Inorganic fertiliser EF for non-irrigated cropping
+   * @inventory2022 3.B.5c_2
+   */
+  INDIRECT_EF: 0.0041,
+
+  /**
+   * @description Ash content expressed as a fraction of manure
+   * @inventory2022 3.B.1 c_1
+   */
+  ASH_CONTENT: 0.16,
+
+  /**
+   * @description Methane emissions potential for feedlot
+   * @inventory2022 3.B.1 c_1
+   * @units m3 CH4/kg
+   */
+  EMISSION_POTENTIAL: 0.19,
+
+  /**
+   * @description Manure emission factors for each feedlot manure processing system
+   * @inventory2022 Table A5.5.3.6, A5.5.3.7
+   */
+  MANURE_EF: {
+    Drylot: {
+      EF: 0.0054,
+      FracGASM: 0.6,
+    },
+    'Solid Storage': {
+      EF: 0.005,
+      FracGASM: 0.25,
+    },
+    Composting: {
+      EF: 0.01,
+      FracGASM: 0.4,
+    },
+    'Uncovered anaerobic lagoon': {
+      EF: 0,
+      FracGASM: 0.35,
+    },
+  },
+
+  /**
+   * @description Integrated EF for feedlot by state
+   * @inventory2022 A5.5.3.3
+   */
+  INTEGRATED_EF: {
+    act: 0.0323,
+    nsw: 0.0323,
+    tas: 0,
+    wa_sw: 0.0327,
+    sa: 0.0323,
+    vic: 0.0323,
+    qld: 0.04023,
+    nt: 0,
+    wa_nw: 0,
+  },
+
+  /**
+   * @description Emissions factors for purchased live stock, in kg CO2-e/kg liveweight
+   * @reference Wiedemann et al. (2015b)
+   * @units kg CO2-e/kg
+   */
+  PURCHASELIVESTOCK_EF: {
+    NT: 12.4,
+    'nth QLD': 12.4,
+    'sth/central QLD': 12.4,
+    'nth NSW': 11.7,
+    'sth NSW/VIC/sth SA': 11.7,
+    'NSW/SA pastoral zone': 12.4,
+    'sw WA': 11.7,
+    'WA pastoral': 12.4,
+    TAS: 11.7,
+  },
+};
+
+export const porkConstants: PorkConstants = {
+  /**
+   * @description Methane emission potential for pork, in m3 CH4/kg
+   * @inventory2018 Appendix 5.E.4
+   * @units m3 CH4/kg
+   */
+  METHANE_EMISSION_POTENTIAL: 0.45,
+
+  /**
+   * @description Emission factor for bedding for pork, in kg CO2-e/kg
+   * @reference (Christie et al., 2012)
+   * @units kg CO2-e/kg
+   */
+  EF_BEDDING: 0.225,
+
+  /**
+   * @description Nitrogen content of swine manure, by class
+   * @inventory2022 Table A5.5.5.4
+   * @units kg N/head/year
+   */
+  MANURE_NITROGEN: {
+    boars: 16.93,
+    sows: 17.91,
+    gilts: 16.7,
+    slaughter_pigs: 11.4,
+  },
+
+  // (manureManagementC37)
+  /**
+   * @description Volatile solids content of swine manure, by class
+   * @inventory2022 Table A5.5.5.4
+   * @units kg / head / day
+   */
+  MANURE_CHARACTERISTICS: {
+    boars: 0.4,
+    sows: 0.46,
+    gilts: 0.55,
+    slaughter_pigs: 0.39,
+  },
+
+  // (entericFermentation34)
+  /**
+   * @description Feed intake of swine, by class
+   * @inventory2022 Table A5.5.5.2
+   * @units kg / head / day
+   */
+  HERD_FEEDINTAKE: {
+    boars: 2.3,
+    sows: 2.62,
+    gilts: 2.5,
+    slaughter_pigs: 1.71,
+  },
+
+  // nitrousOxideMMS90
+  /**
+   * @description Integrated emissions factors for swine, by state
+   * @inventory2022 Table A5.5.5.5
+   */
+  INTEGRATED_EF: {
+    // WARNING: what to do here? leave as 0?
+    [STATES.ACT]: {
+      iMCF: 0,
+      iFracGasm: 0,
+      iNOF: 0,
+    },
+    [STATES.NSW]: {
+      iMCF: 0.44174,
+      iFracGasm: 0.45946,
+      iNOF: 0.00517,
+    },
+    [STATES.TAS]: {
+      iMCF: 0.5243,
+      iFracGasm: 0.4786,
+      iNOF: 0.00343,
+    },
+    [STATES.WA_SW]: {
+      iMCF: 0.52871,
+      iFracGasm: 0.46465,
+      iNOF: 0.00498,
+    },
+    [STATES.SA]: {
+      iMCF: 0.5608,
+      iFracGasm: 0.4786,
+      iNOF: 0.00343,
+    },
+    [STATES.VIC]: {
+      iMCF: 0.45067,
+      iFracGasm: 0.45279,
+      iNOF: 0.00533,
+    },
+    [STATES.QLD]: {
+      iMCF: 0.6199,
+      iFracGasm: 0.50371,
+      iNOF: 0.00243,
+    },
+    [STATES.WA_NW]: {
+      iMCF: 0.52871,
+      iFracGasm: 0.46465,
+      iNOF: 0.00498,
+    },
+    [STATES.NT]: {
+      iMCF: 0.64598,
+      iFracGasm: 0.50406,
+      iNOF: 0.00225,
+    },
+  },
+
+  // nitrousOxideC114
+  /**
+   * @description Fraction of animal waste available for leaching and runoff (FracWET)
+   * @inventory2022 Table A5.5.10.2
+   * @type Proportion
+   */
+  FRACWET: {
+    [STATES.ACT]: 0.5,
+    [STATES.NSW]: 0.5,
+    [STATES.TAS]: 1,
+    [STATES.WA_SW]: 0.4,
+    [STATES.SA]: 0.75,
+    [STATES.VIC]: 0.5,
+    [STATES.QLD]: 0.25,
+    [STATES.WA_NW]: 0.4,
+    [STATES.NT]: 0,
+  },
+
+  // nitrousOxideC102
+  /**
+   * @description Allocation of waste to MMS
+   * @inventory2022 Table A5.5.5.6
+   * @type Proportion
+   */
+  WASTE_MMS: {
+    [STATES.ACT]: 0.5,
+    [STATES.NSW]: 0.06,
+    [STATES.TAS]: 0.02,
+    [STATES.WA_SW]: 0.1,
+    [STATES.SA]: 0.02,
+    [STATES.VIC]: 0.06,
+    [STATES.QLD]: 0.03,
+    [STATES.WA_NW]: 0.1,
+    [STATES.NT]: 0.02,
+  },
+
+  // WARNING: what about the others??? TODO: find default from vlookup func
+  // Pig_FeedC28
+  /**
+   * @description Emissions factors for swine feed ingredients, by ingredient
+   * @reference (Wiedemann et al., 2021), (Reckmann et al., 2016)
+   * @units kg CO2-e / kg ingredient
+   */
+  FEED_INGREDIENT_EF: {
+    wheat: 0.252,
+    barley: 0.341,
+    wheyPowder: 0,
+    canolaMeal: 0.284,
+    soybeanMeal: 0.633,
+    meatMeal: 0.386,
+    bloodMeal: 1.9,
+    fishmeal: 0,
+    tallow: 0,
+    wheatBran: 0.547,
+    beetPulp: 0.704,
+    millMix: 0,
+  },
+
+  /**
+   * @description Methane Conversion Factors (MCF) and Nitrous Oxide Fractions (NOF) for manure management systems
+   */
+  MMS: {
+    deepLitter: {
+      MCF: 0.04,
+      FracGASM: 0.125,
+      NOF: 0.01,
+    },
+    coveredAnaerobicPond: {
+      MCF: 0.1,
+      FracGASM: 0,
+      NOF: 0,
+    },
+    outdoorSystems: {
+      MCF: 0.01,
+      FracGASM: 0.3,
+      NOF: 0.02,
+    },
+    uncoveredAnaerobicPond: {
+      MCF: 0.75,
+      FracGASM: 0.55,
+      NOF: 0,
+    },
+  },
+};
+
+export const poultryConstants: PoultryConstants = {
+  /**
+   * @description Diet properties for poultry, by class
+   * @inventory2022 Table A5.5.6.1
+   */
+  DIET_PROPERTIES: {
+    layers: {
+      dryMatterIntake: 0.086,
+      dryMatterDigestibility: 0.8,
+      crudeProtein: 0.19,
+      nitrogenRetentionRate: 0.35,
+      manureAsh: 0.18,
+    },
+    meat_chicken_growers: {
+      dryMatterIntake: 0.093,
+      dryMatterDigestibility: 0.8,
+      crudeProtein: 0.23,
+      nitrogenRetentionRate: 0.47,
+      manureAsh: 0.15,
+    },
+    // (meat_chicken_breeder)
+    meat_chicken_layers: {
+      dryMatterIntake: 0.103,
+      dryMatterDigestibility: 0.8,
+      crudeProtein: 0.19,
+      nitrogenRetentionRate: 0.32,
+      manureAsh: 0.18,
+    },
+    meat_other: {
+      dryMatterIntake: 0.093,
+      dryMatterDigestibility: 0.8,
+      crudeProtein: 0.23,
+      nitrogenRetentionRate: 0.47,
+      manureAsh: 0.15,
+    },
+  },
+
+  /**
+   * @description MCFs Pasture range and paddock
+   * @inventory2022 Table A5.5.6.5
+   * @type Proportion
+   */
+  WASTE_MMS: {
+    [STATES.ACT]: 0.01,
+    [STATES.NSW]: 0.01,
+    [STATES.NT]: 0.03,
+    [STATES.QLD]: 0.03,
+    [STATES.SA]: 0.01,
+    [STATES.TAS]: 0.01,
+    [STATES.VIC]: 0.01,
+    [STATES.WA_SW]: 0.01,
+    [STATES.WA_NW]: 0.01,
+  },
+
+  // meat chickens are just broilers
+  // (manureManagementBroilersC92)
+  // (nitrousOxideI152)
+  /**
+   * @description Meat and layer chickens – Integrated MCFs, by state
+   */
+  MEATLAYER_EF_IMCF: {
+    meat_chickens: {
+      [STATES.ACT]: 0.024414,
+      [STATES.NSW]: 0.024414,
+      [STATES.NT]: 0.025014,
+      [STATES.QLD]: 0.025014,
+      [STATES.SA]: 0.024414,
+      [STATES.TAS]: 0.23425,
+      [STATES.VIC]: 0.024414,
+      [STATES.WA_SW]: 0.024414,
+      [STATES.WA_NW]: 0.024414,
+    },
+    layer_chickens: {
+      [STATES.ACT]: 0.031702,
+      [STATES.NSW]: 0.031702,
+      [STATES.NT]: 0.03193,
+      [STATES.QLD]: 0.03193,
+      [STATES.SA]: 0.031702,
+      [STATES.TAS]: 0.031011,
+      [STATES.VIC]: 0.031702,
+      [STATES.WA_SW]: 0.031702,
+      [STATES.WA_NW]: 0.031702,
+    },
+  },
+
+  /**
+   * @description Meat and layer chickens – Integrated EFs, by state
+   */
+  MEATLAYER_EF: {
+    meat_chickens: {
+      iFracGASM: 0.385924,
+      iNOF: 0.004157,
+    },
+    layer_chickens: {
+      iFracGASM: 0.315956,
+      iNOF: 0.004728,
+    },
+  },
+
+  /**
+   * @description Emissions factors for poultry feed ingredients, by ingredient
+   * @reference (Christie et al., 2012), (Maraseni & Cockfield, 2011), (Castanheira & Freire, 2013), (O'Halloran et al., 2008)
+   * @units kg CO2-e / kg ingredient
+   */
+  FEED_INGREDIENTS_GHG: {
+    wheat: 0.3,
+    barley: 0.11,
+    soybean: 0.165,
+    sorghum: 0.3,
+    millrun: 0.3,
+  },
+};
+
+export const dairyConstants: DairyConstants = {
+  /**
+   * @description Dairy cattle - Nitrous oxide EFs and fraction of N volatilised by manure management system
+   * @inventory2022 Table A5.5.1.9
+   */
+  MANURE_MANAGEMENT: {
+    PASTURE_EF: 0,
+    ANAEROBIC_EF: 0,
+    SUMP_EF: 0,
+    DRAIN_EF: 0,
+    SOLID_EF: 0.005,
+    PASTURE_FRACGASM: 0,
+    ANAEROBIC_FRACGASM: 0.35,
+    SUMP_FRACGASM: 0.07,
+    DRAIN_FRACGASM: 0.2,
+    SOLID_FRACGASM: 0.3,
+  },
+
+  /**
+   * @description Standard reference weights for dairy cattle, by class
+   * @inventory2022 Table A5.5.1.3
+   * @units kg
+   */
+  CATTLE_STANDARD_REFERENCE_WEIGHTS: {
+    milking_cows: 580.7142857143,
+    heifers_lt_1: 580.7142857143,
+    heifers_gt_1: 580.7142857143,
+    dairyBulls_lt_1: 770,
+    dairyBulls_gt_1: 770,
+  },
+
+  // (Agricultural_SoilsD101)
+  /**
+   * @description N2O oxide emission factors and fraction of N volatilised by manure management system
+   * @inventory2022 Table A5.5.1.9
+   */
+  CATTLE_N2O_MMS: {
+    void_at_pasture: { EF: 0, FracGASM: 0 },
+    anaerobic_lagoon: { EF: 0, FracGASM: 0.35 },
+    daily_spread: { EF: 0, FracGASM: 0.2 },
+    solid_storage: { EF: 0.005, FracGASM: 0.3 },
+  },
+
+  /**
+   * @description Mass of N volatilised from manure management system
+   * @inventory2022 Table 3.D.A_6
+   * @units Gg N2O-N / Gg N
+   */
+  MASS_N_VOLATISED_EF: 0.004,
+
+  // (Agricultural_SoilsD142)
+  /**
+   * @description Mass of N volatilised from manure applied to soils
+   * @inventory2022 Table 3.D.A_4
+   * @units Gg N2O-N / Gg N
+   */
+  MMS_EF: 0.00503,
+
+  /**
+   * @description Methane production from pre weaned calves, by class
+   * @inventory2022 Table A5.5.1.5
+   * @units Gg CH4-C / Gg N
+   */
+  METHANE_MPW: {
+    milking_cows: 0,
+    heifers_lt_1: 0.01825,
+    heifers_gt_1: 0,
+    dairyBulls_lt_1: 0.02081,
+    dairyBulls_gt_1: 0,
+  },
+
+  /**
+   * @description Nitrous oxide EFs for inorganic fertiliser, based on rainfall and crop type
+   * @inventory2022 Table 5.21
+   * @units Gg N2O-N / Gg N
+   */
+  PRODUCTIONSYSTEM_EF: {
+    RAINFALL_LT_600: {
+      'Non-irrigated Crop': 0.0029,
+      'Irrigated Crop': 0.007,
+      'Irrigated Pasture': 0.0059,
+      'Non-irrigated Pasture': 0.0018,
+    },
+    RAINFALL_GT_600: {
+      'Non-irrigated Crop': 0.008,
+      'Irrigated Crop': 0.007,
+      'Irrigated Pasture': 0.0059,
+      'Non-irrigated Pasture': 0.0018,
+    },
+  },
+
+  /**
+   * @description Dairy Cattle - Methane Conversion Factors (MCF)
+   * @inventory2022 Table 5.A.7
+   */
+  METHANE_CONVERSION_FACTOR: {
+    [STATES.ACT]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.73,
+      'Sump and disperal systems': 0.005,
+      'Drains to paddock': 0.15,
+      'Solid Storage': 0.02,
+    },
+    [STATES.NSW]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.75,
+      'Sump and disperal systems': 0.005,
+      'Drains to paddock': 0.18,
+      'Solid Storage': 0.02,
+    },
+    [STATES.NT]: {
+      Pasture: 0.02,
+      'Anaerobic lagoon': 0.8,
+      'Sump and disperal systems': 0.01,
+      'Drains to paddock': 0.5,
+      'Solid Storage': 0.02,
+    },
+    [STATES.QLD]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.77,
+      'Sump and disperal systems': 0.005,
+      'Drains to paddock': 0.24,
+      'Solid Storage': 0.02,
+    },
+    [STATES.SA]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.74,
+      'Sump and disperal systems': 0.005,
+      'Drains to paddock': 0.17,
+      'Solid Storage': 0.02,
+    },
+    [STATES.TAS]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.7,
+      'Sump and disperal systems': 0.001,
+      'Drains to paddock': 0.13,
+      'Solid Storage': 0.02,
+    },
+    [STATES.VIC]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.74,
+      'Sump and disperal systems': 0.005,
+      'Drains to paddock': 0.17,
+      'Solid Storage': 0.02,
+    },
+    [STATES.WA_SW]: {
+      Pasture: 0.01,
+      'Anaerobic lagoon': 0.75,
+      'Sump and disperal systems': 0.005,
+      'Drains to paddock': 0.18,
+      'Solid Storage': 0.02,
+    },
+    [STATES.WA_NW]: {
+      Pasture: 0.02,
+      'Anaerobic lagoon': 0.8,
+      'Sump and disperal systems': 0.01,
+      'Drains to paddock': 0.5,
+      'Solid Storage': 0.02,
+    },
+  },
+
+  /**
+   * @description Ash content as a proportion of faecal DM
+   * @inventory2018 3B.1a_1
+   * @type Proportion
+   */
+  ASH_CONTENT: 0.08,
+};
+
+export const goatConstants: GoatConstants = {
+  /**
+   * @description Enteric fermentation emission factor for goat, in kg CH4/head/year
+   * @reference IPCC (2006)
+   * @units kg CH4/head/year
+   */
+  EF: 5,
+
+  /**
+   * @description Manure production for goat, in kg DM/head/year
+   * @reference Expert working group assumption - equivalent to one sheep
+   * @units kg DM/head/year
+   */
+  MANUREPRODUCTION: 114,
+};
+
+export const buffaloConstants: BuffaloConstants = {
+  /**
+   * @description Nitrogen excreted for buffalo, in kg N/head/year
+   * @reference Expert working group assumption - equivalent to beef cattle - pasture
+   * @units kg N/head/year
+   */
+  NITROGEN_EXCRETED_FACTOR: 39.5,
+
+  /**
+   * @description Faecal nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
+   * @type Proportion
+   */
+  FAECALN_PMF: 0.29,
+
+  /**
+   * @description Seasonal urinary nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
+   * @inventory2018 3B.4_5
+   * @type Proportion
+   */
+  SEASONALURINE_PMU: 0.71,
+
+  /**
+   * @description Manure production for buffalo, in kg DM/head/year
+   * @reference Expert working group assumption - equivalent to beef cattle - pasture
+   * @units kg DM/head/year
+   */
+  MANUREPRODUCTION: 957,
+
+  /**
+   * @description Enteric fermentation emission factor for buffalo, in kg CH4/head/year
+   * @reference IPCC (2006)
+   * @units kg CH4/head/year
+   */
+  ENTERIC_EF: 76,
+};
+
+export const deerConstants: DeerConstants = {
+  /**
+   * @description Manure production for deer, in kg DM/head/year
+   * @reference Expert working group assumption - equivalent to one sheep
+   * @units kg DM/head/year
+   */
+  MANUREPRODUCTION: 319,
+
+  /**
+   * @description Enteric fermentation emission factor for deer, in kg CH4/head/year
+   * @reference IPCC (2006)
+   * @units kg CH4/head/year
+   */
+  ENTERIC_EF: 20,
+
+  /**
+   * @description Nitrogen excreted for deer, in kg N/head/year
+   * @reference Expert working group assumption - equivalent to one sheep
+   * @units kg N/head/year
+   */
+  NITROGEN_EXCRETED_FACTOR: 13.2,
+
+  /**
+   * @description Faecal nitrogen proportion for deer, as a proportion
+   * @type Proportion
+   */
+  FAECALN_PMF: 0.29,
+};
+
+export const fisheriesConstants: FisheriesConstants = {
+  /**
+   * @description Coefficients for Rural fuel consumption model (litres per 1 Km)
+   * @inventory2022 Table 56
+   * @units litres / Km
+   */
+  TRANSPORT_FUEL_USAGE: {
+    None: 0,
+    'Small Car': 0.06419556,
+    'Medium Car': 0.07771756,
+    'Large Car': 0.09826507,
+    'Courier Van-Utility': 0.07609467,
+    '4WD Mid Size': 0.1024522,
+    'Light Rigid': 0.08085994,
+    'Medium Rigid': 0.1245859,
+    'Heavy Rigid': 0.2322869,
+    'Heavy Bus': 0.2333246,
+  },
+
+  /**
+   * @description Direct (Scope 1) and indirect (Scope 3) emissions factors for the consumptions of transport fuels in different transport equipment
+   * @inventory2022 Table 9
+   * @units kg CO2-e / GJ
+   */
+  TRANSPORT_FUEL_EF: {
+    Gasoline: { CO2: 67.4, CH4: 0.02, N2O: 0.2, SCOPE3: 17.2 },
+    'Diesel oil': { CO2: 69.9, CH4: 0.01, N2O: 0.5, SCOPE3: 17.3 },
+    'Liquefied petroleum gas (LPG)': {
+      CO2: 60.2,
+      CH4: 0.5,
+      N2O: 0.3,
+      SCOPE3: 20.2,
+    },
+    'Fuel oil': { CO2: 73.6, CH4: 0.08, N2O: 0.5, SCOPE3: 18 },
+    Ethanol: { CO2: 0, CH4: 0.2, N2O: 0.2, SCOPE3: 0 },
+    Biodiesel: { CO2: 0, CH4: 0.8, N2O: 1.7, SCOPE3: 0 },
+    'Renewable diesel': { CO2: 0, CH4: 0.01, N2O: 0.5, SCOPE3: 0 },
+    'Other biofuels': { CO2: 0, CH4: 0.8, N2O: 1.7, SCOPE3: 0 },
+    'Liquified natural gas': { CO2: 51.4, CH4: 7.3, N2O: 0.3, SCOPE3: 18 },
+  },
+
+  /**
+   * @description Emissions factors for bait
+   * @reference FRDC - Data extracted/reverse-engineered by Blueshift/Dan from Seafish Calculator (UK/European numbers).
+   * @units kg CO2-e / kg bait
+   */
+  BAIT_EF: {
+    'Fish Frames': 0.098,
+    'Fish Heads': 0.098,
+    Sardines: 0.05,
+    Squid: 0.192,
+    'Whole Fish': 0.098,
+  },
+};
+
+export const riceConstants: RiceConstants = {
+  /**
+   * @description Emissions factor for permanently flooded fields
+   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
+   */
+  EF_FLOODED_FIELDS: 1.19,
+
+  /**
+   * @description Default CH4 emissions scaling factors for water regimes during the cultivation period relative to continuously flooded fields
+   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
+   */
+  SF_CULTIVATION_WATER_REGIME: {
+    'Continuously flooded': 1,
+    'Single drainage period': 0.71,
+    'Multiple drainage periods': 0.55,
+    'Regular rainfed': 0.54,
+    'Drought prone': 0.16,
+    'Deep water': 0.06,
+    'Paddy rotation': 0,
+    'Fallow without flooding in previous year': 0,
+  },
+
+  /**
+   * @description Default CH4 emissions scaling factors for water regimes before the cultivation period
+   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
+   */
+  SF_PRESEASON_WATER_REGIME: {
+    'Non flooded pre-season < 180 days': 1,
+    'Non flooded pre-season > 180 days': 0.89,
+    'Flooded pre-season > 30 days': 2.41,
+    'Non-flooded pre-season > 365 days': 0.59,
+  },
+};
+
+export const livestockConstants: LivestockConstants = {
+  /**
+   * @description Energy required to manufacture herbicides and insecticides
+   * @reference O'Halloran, N., Fisher, P., Rab, A., & Victoria, D. P. I. (2008). Preliminary estimation of the carbon footprint of the Australian vegetable industry (pp. 1-39). Discussion paper 4. Vegetable Industry Carbon Footprint Scoping Study. 2008, Horticulture Australia Ltd. Table 7
+   */
+  ENERGY_TO_MANUFACTURE: {
+    /** @units MJ/kg */
+    HERBICIDE_ENERGY: 550,
+    /** @units MJ/kg */
+    HERBICIDEGENERAL_ENERGY: 310,
+    /** @units MJ/kg */
+    INSECTICIDE_ENERGY: 315,
+    /** @units kg CO2-e/MJ */
+    HERBICIDE_EF: 0.06,
+    /** @units kg CO2-e/MJ */
+    HERBICIDEGENERAL_EF: 0.06,
+    /** @units kg CO2-e/MJ */
+    INSECTICIDE_EF: 0.06,
+  },
+
+  // Embedded emissions M7
+  /**
+   * @description Relative amount of CO2, CH4, and N2O emitted by herbicides
+   * @type Proportion
+   */
+  EMISSION_BREAKDOWN: {
+    HERBICIDE: { CO2: 1.0, CH4: 0.0, N2O: 0.0 },
+  },
+
+  /**
+   * @description Emission factors for purchased livestock, in kg CO2-e/kg liveweight
+   * @reference Wiedemann et al. (2015b)
+   * @units kg CO2-e/kg
+   */
+  PURCHASED_LIVESTOCK_EF: {
+    BUFFALO: 12,
+    DEER: 8.1,
+    GOAT: 23.8,
+    PORK: 3.6,
+    POULTRY_CONVENTIONAL: 2,
+    POULTRY_FREE_RANGE: 1.8,
+  },
+
+  /**
+   * @description Emissions factors for each agricultural soil type, in Gg N2O-N/Gg N
+   * @inventory2022 Table 5.21
+   * @units Gg N2O-N/Gg N
+   */
+  AGRICULTURAL_SOILS: {
+    EF_IRRIGATEDPASTURE: 0.0059,
+    EF_IRRIGATEDCROP: 0.007,
+    EF_NONIRRIGATEDCROP: 0.0041,
+    EF_NONIRRIGATEDPASTURE: 0.0018,
+  },
+
+  // Methane
+
   /**
    * @description Methane emission factor for warm climate
    */
@@ -1335,13 +2132,6 @@ export const constants: Constants = {
    * @description Methane emission factor for temperate climate
    */
   METHANE_TEMPERATE_EF: 0.003,
-
-  /**
-   * @description Ash content as a proportion of faecal DM
-   * @inventory2018 3B.1a_1
-   * @type Proportion
-   */
-  ASH_CONTENT: 0.08,
 
   /**
    * @description Methane emission potential, in m3 CH4/kg
@@ -1357,33 +2147,153 @@ export const constants: Constants = {
    */
   METHANE_DENSITY: 0.6784,
 
+  // other livestock Deer Manure management D42
   /**
-   * @description Total GHG (kg CO2-e/kg input)
-   * @units kg CO2-e/kg
+   * @description Other livestock – Allocation of animals to climate regions
+   * @inventory2022 Table A5.5.7.3
    */
-  UREA_FERTILISER_GHG: 1.495, // Total GHG (kg CO2-e/kg input) (embeddedEmissionsE9)
+  OTHERLIVESTOCK_ALLOCATION_CLIMATEREGIONS: {
+    [STATES.ACT]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.NT]: {
+      warm: 1,
+      temperate: 0,
+    },
+    [STATES.NSW]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.QLD]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.SA]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.TAS]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.VIC]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.WA_NW]: {
+      warm: 0,
+      temperate: 1,
+    },
+    [STATES.WA_SW]: {
+      warm: 0,
+      temperate: 1,
+    },
+  },
+
+  // (Agricultural_SoilsD163)
+  /**
+   * @description Urine and dung emission factor
+   * @inventory2022 3.D.A_6
+   */
+  URINEDUNG_EF: 0.004,
 
   /**
-   * @description Total GHG (kg CO2-e/kg input)
-   * @units kg CO2-e/kg
+   * @description Default emission factor for Urea
+   * @reference IPCC (2006)
    */
-  SUPERPHOSPHATE_GHG: 0.1122, // (embeddedEmissions_E10)
+  CARBON_FRACTION_OF_UREA: 0.2, // (ureaApplicationD35)
 
-  // Sugar
+  /**
+   * @description Proportion of gas volatilised from manure
+   * @inventory2018 3DB_2
+   */
+  FRAC_GASM: 0.21, // FracGASM
+
+  // Atmospheric N deposition inorganic fertiliser
+  /**
+   * @description Atmospheric N deposition of inorganic fertiliser
+   * @inventory2018 3DB_1
+   */
+  INOGRANICFERTILISER_ATMOSPHERIC_N: 0.11, // (agriculturalSoilsSheepN10)
+
+  /**
+   * @description Leaching and runoff of inorganic fertiliser
+   * @inventory2018 3B.5a_4
+   */
+  LEECHING_AND_RUNOFF: 0.011, // (agriculturalSoilsSheepD11)
+};
+
+export const sugarConstants: SugarConstants = {
   /**
    * @description Emissions factor for annual N2O production from sugar cane
    */
   SUGAR_ANNUAL_N2O_PRODUCTION_EF: 0.00503,
 
   /**
-   * Grains
+   * @description Default percent of sugar yield from total harvest, if no value is supplied in inputs
+   * @type Proportion
    */
-  /**
-   * @description Emissions factor for mass of Urea applied to soils
-   * @inventory2018 3H_1
-   */
-  FERTILISER_EF: 0.2,
+  SUGAR_YIELD: 0.1188625,
+};
 
+export const cottonConstants: CottonConstants = {
+  /**
+   * @description Intensity of economic allocation for cotton co-products, by type
+   * @reference https://www.sciencedirect.com/science/article/abs/pii/S0959652618335935
+   * @type Proportion
+   */
+  COTTON_INTENSITY_ECONOMIC_ALLOCATION: {
+    LINT: 0.86,
+    SEED: 0.14,
+  },
+};
+
+export const aquacultureConstants: AquacultureConstants = {
+  /**
+   * @description Emissions factors for aquaculture bait
+   * @reference Blueshift estimates
+   * @units kg CO2-e / kg feed
+   */
+  AQUACULTURE_BAIT_EF: {
+    [AquacultureBait.SARDINES]: 0.3,
+    [AquacultureBait.LOW_ANIMAL_PROTEIN]: 1,
+    [AquacultureBait.HIGH_ANIMAL_PROTEIN]: 2.2,
+    [AquacultureBait.CEREAL]: 0.5,
+    [AquacultureBait.SQUID]: 0.3,
+    [AquacultureBait.FISH]: 0.3,
+  },
+};
+
+export const cropConstants: CropConstants = {
+  /**
+   * @description Efficiency of residue burning
+   */
+  BURNING_EFFICIENCY_RESIDUE: 0.96,
+
+  /**
+   * @description N2O emissions factor for savannah burning
+   * @inventory2022 Table 5.31
+   * @units Gg element / Gg burnt
+   */
+  BURNING_N2O_EF: 0.0076,
+
+  /**
+   * @description Methane emissions factor for savannah burning
+   * @inventory2022 Table 5.31
+   * @units Gg element / Gg burnt
+   */
+  BURNING_METHANE_EF: 0.0035,
+
+  // (embeddedEMissions_C133)
+  COMPONENTS_ENERGY_EF: {
+    N: { TOTAL_ENERGY: 65, EF: 0.05 },
+    P: { TOTAL_ENERGY: 15, EF: 0.06 },
+    K: { TOTAL_ENERGY: 10, EF: 0.06 },
+    S: { TOTAL_ENERGY: 5, EF: 0.06 },
+  },
+
+  // (cropResiduesC116)
   /**
    * @description NO2 emissions factors for synthetic fertilisers
    * @inventory2018 Table 5.23
@@ -1403,95 +2313,6 @@ export const constants: Constants = {
       Cotton: 0.0053,
       Horticulture: 0.0064,
     },
-  },
-
-  /**
-   * @description Proportion of crop residue burnt by state
-   * @inventory2018 5.I.3
-   * @type Proportion
-   */
-  CROPRESIDUE_PROPORTIONBURNT: {
-    [STATES.NSW]: { burnt: 0.22, removed: 0.05 },
-    [STATES.VIC]: { burnt: 0.21, removed: 0.07 },
-    [STATES.QLD]: { burnt: 0.06, removed: 0.04 },
-    [STATES.SA]: { burnt: 0.12, removed: 0.09 },
-    [STATES.WA_SW]: { burnt: 0.06, removed: 0.11 },
-    [STATES.WA_NW]: { burnt: 0.06, removed: 0.11 },
-    [STATES.TAS]: { burnt: 0.09, removed: 0.16 },
-    [STATES.NT]: { burnt: 0.23, removed: 0.01 },
-    [STATES.ACT]: { burnt: 0, removed: 0 },
-  },
-
-  /**
-   * @description Proportion of sugar cane residue burnt by state
-   * @inventory2018 5.I.4
-   * @type Proportion
-   */
-  CROPRESIDUE_FRACTIONSUGARCANEBURNT: {
-    [STATES.NSW]: { burnt: 0.898, removed: 0 },
-    [STATES.VIC]: { burnt: 0, removed: 0 },
-    [STATES.QLD]: { burnt: 0.275, removed: 0.03 },
-    [STATES.SA]: { burnt: 0, removed: 0 },
-    [STATES.WA_SW]: { burnt: 1, removed: 0 },
-    [STATES.WA_NW]: { burnt: 1, removed: 0 },
-    [STATES.TAS]: { burnt: 0, removed: 0 },
-    [STATES.NT]: { burnt: 0, removed: 0 },
-    [STATES.ACT]: { burnt: 0, removed: 0 },
-  },
-
-  /**
-   * @description Emissions factor for annual N2O production from crop residue
-   * @units kg N2O-e/kg N
-   */
-  CROP_RESIDUE_N2O_EF: 0.00503,
-
-  /**
-   * @description Fraction of N available for leaching and runoff from fertiliser
-   */
-  FERTILISER_FRACTION_RUNOFF_STATIC: 1,
-
-  /**
-   * @description Leaching and runoff parameters
-   * @inventory2022 3.B.5
-   */
-  LEACHING: {
-    FRACLEACH: 0.02,
-    FRACLEACH_MMS: 0.24,
-    FRACLEACH_FERTILISER_SOILS: 0.24,
-    FRACLEACH_BROILER: 0.24, // Added new key due to difference in value between layers and broilers
-    FRACWET: 1,
-    FERT_N_FRACLEACH: 0.24,
-    FERT_N_FRACWET: 1,
-    STORAGE_FRACLEACH: 0.02,
-    STORAGE_FRACWET: 1,
-    STORAGE_EF: 0.011,
-    N2O_EF: 0.011,
-  },
-
-  // (Agricultural_SoilsD163)
-  /**
-   * @description Urine and dung emission factor
-   * @inventory2022 3.D.A_6
-   */
-  URINEDUNG_EF: 0.004,
-
-  // (embeddedEMissions_C133)
-  COMPONENTS_ENERGY_EF: {
-    N: { TOTAL_ENERGY: 65, EF: 0.05 },
-    P: { TOTAL_ENERGY: 15, EF: 0.06 },
-    K: { TOTAL_ENERGY: 10, EF: 0.06 },
-    S: { TOTAL_ENERGY: 5, EF: 0.06 },
-  },
-
-  // (embeddedEmissions_C148)
-  /**
-   * @description Energy requirement to manufacture fertiliser components and associated CO2 emissions (EF)
-   * @reference (Wells 2001; cited by Saunders et al. 2006)
-   */
-  AGROCHEMICAL_ENERGY_MANUFACTURE: {
-    HERBICIDE_GLYPHOSATE: { TOTAL_ENERGY: 550, EF: 0.06 },
-    HERBICIDE_GENERAL: { TOTAL_ENERGY: 310, EF: 0.06 },
-    INSECTICIDE: { TOTAL_ENERGY: 315, EF: 0.06 },
   },
 
   // (cropResiduesC116)
@@ -1548,29 +2369,39 @@ export const constants: Constants = {
   },
 
   /**
-   * @description N, P, K and S content in each fertiliser type
+   * @description Proportion of crop residue burnt by state
+   * @inventory2018 5.I.3
    * @type Proportion
    */
-  FERTILISER_CONTENT: {
-    MAP: { N: 0.11, P: 0.219, K: 0, S: 0 },
-    DAP: { N: 0.18, P: 0.2, K: 0, S: 0 },
-    SSP: { N: 0, P: 0.088, K: 0, S: 0.11 },
-    UREA: { N: 0.46, P: 0, K: 0, S: 0 },
-    TSP: { N: 0, P: 0.202, K: 0, S: 0.01 },
-    UAN: { N: 0.32, P: 0, K: 0, S: 0 },
-    SP11: { N: 0, P: 0.044, K: 0.25, S: 0.055 },
-    SP21: { N: 0, P: 0.059, K: 0.165, S: 0.074 },
-    SP31: { N: 0, P: 0.066, K: 0.127, S: 0.082 },
-    SP41: { N: 0, P: 0.07, K: 0.1, S: 0.088 },
-    SP51: { N: 0, P: 0.074, K: 0.08, S: 0.092 },
-    MURIATE_OF_POTASH: { N: 0, P: 0, K: 0.5, S: 0 },
-    SULPHATE_OF_POTASH: { N: 0, P: 0, K: 0.41, S: 0.17 },
-    SULPHATE_OF_AMMONIA: { N: 0.21, P: 0, K: 0, S: 0.24 },
-    AN: { N: 0.35, P: 0, K: 0, S: 0 },
-    CAN: { N: 0.265, P: 0, K: 0, S: 0 },
+  CROPRESIDUE_PROPORTIONBURNT: {
+    [STATES.NSW]: { burnt: 0.22, removed: 0.05 },
+    [STATES.VIC]: { burnt: 0.21, removed: 0.07 },
+    [STATES.QLD]: { burnt: 0.06, removed: 0.04 },
+    [STATES.SA]: { burnt: 0.12, removed: 0.09 },
+    [STATES.WA_SW]: { burnt: 0.06, removed: 0.11 },
+    [STATES.WA_NW]: { burnt: 0.06, removed: 0.11 },
+    [STATES.TAS]: { burnt: 0.09, removed: 0.16 },
+    [STATES.NT]: { burnt: 0.23, removed: 0.01 },
+    [STATES.ACT]: { burnt: 0, removed: 0 },
   },
 
-  // Crop residue
+  /**
+   * @description Proportion of sugar cane residue burnt by state
+   * @inventory2018 5.I.4
+   * @type Proportion
+   */
+  CROPRESIDUE_FRACTIONSUGARCANEBURNT: {
+    [STATES.NSW]: { burnt: 0.898, removed: 0 },
+    [STATES.VIC]: { burnt: 0, removed: 0 },
+    [STATES.QLD]: { burnt: 0.275, removed: 0.03 },
+    [STATES.SA]: { burnt: 0, removed: 0 },
+    [STATES.WA_SW]: { burnt: 1, removed: 0 },
+    [STATES.WA_NW]: { burnt: 1, removed: 0 },
+    [STATES.TAS]: { burnt: 0, removed: 0 },
+    [STATES.NT]: { burnt: 0, removed: 0 },
+    [STATES.ACT]: { burnt: 0, removed: 0 },
+  },
+
   /**
    * @description Crop residue parameters for major crop types
    * @inventory2022 A5.5.9.1
@@ -1832,103 +2663,531 @@ export const constants: Constants = {
   },
 
   /**
-   * @description Leaching and runoff mass for feedlot
-   * @inventory2022 3.D.A_3
+   * @description Emissions factor for annual N2O production from crop residue
+   * @units kg N2O-e/kg N
    */
-  FEEDLOT_MN_LEACH: 0,
+  CROP_RESIDUE_N2O_EF: 0.00503,
 
   /**
-   * @description mass of urinary N excretion on pasture
-   * @inventory2022 3.D.B_2
+   * @description Fraction of N available for leaching and runoff from fertiliser
    */
-  FEEDLOT_UN_SOIL: 0,
+  FERTILISER_FRACTION_RUNOFF_STATIC: 1,
+};
+
+export const commonConstants: CommonConstants = {
+  /**
+   * @description Emissions factor for feed purchased, in kg CO2-e/kg
+   * @units kg CO2-e/kg
+   */
+  FEED_PURCHASED: {
+    // (embeddedEmissions_E3)
+    grain: { TotalGHG: 0.3 },
+    // (embeddedEmissions_E4)
+    cottonseed: { TotalGHG: 1.1 },
+    // (embeddedEmissions_E5)
+    /** @description Average of 0.25 and 0.2 */
+    hay: { TotalGHG: 0.225 },
+  },
 
   /**
-   * @description mass of faecal N excretion on pasture
-   * @inventory2022 3.D.B_2
+   * @description N, P, K and S content in each fertiliser type
+   * @type Proportion
    */
-  FEEDLOT_FN_SOIL: 0,
+  FERTILISER_CONTENT: {
+    MAP: { N: 0.11, P: 0.219, K: 0, S: 0 },
+    DAP: { N: 0.18, P: 0.2, K: 0, S: 0 },
+    SSP: { N: 0, P: 0.088, K: 0, S: 0.11 },
+    UREA: { N: 0.46, P: 0, K: 0, S: 0 },
+    TSP: { N: 0, P: 0.202, K: 0, S: 0.01 },
+    UAN: { N: 0.32, P: 0, K: 0, S: 0 },
+    SP11: { N: 0, P: 0.044, K: 0.25, S: 0.055 },
+    SP21: { N: 0, P: 0.059, K: 0.165, S: 0.074 },
+    SP31: { N: 0, P: 0.066, K: 0.127, S: 0.082 },
+    SP41: { N: 0, P: 0.07, K: 0.1, S: 0.088 },
+    SP51: { N: 0, P: 0.074, K: 0.08, S: 0.092 },
+    MURIATE_OF_POTASH: { N: 0, P: 0, K: 0.5, S: 0 },
+    SULPHATE_OF_POTASH: { N: 0, P: 0, K: 0.41, S: 0.17 },
+    SULPHATE_OF_AMMONIA: { N: 0.21, P: 0, K: 0, S: 0.24 },
+    AN: { N: 0.35, P: 0, K: 0, S: 0 },
+    CAN: { N: 0.265, P: 0, K: 0, S: 0 },
+  },
 
   /**
-   * @description FracGASM value for feedlot
-   * @inventory2022 3.D.B_2
+   * @description Emissions factors for commercial flights
+   * @units kg CO2-e / PAX km
    */
-  FEEDLOT_AG_SOILS: 0.21,
+  COMMERCIALFLIGHT_EF: 0.101,
 
   /**
-   * @description Emissions factor for amount of N deposited on pasture, weighted average calculated from IPCC 2019
-   * @inventory2022 3.D.A_4
+   * @description Electricity emission factors for each state and Australia, in kg CO2-e/kWh
+   * @reference Primary data sources comprise National Greenhouse and Energy Reporting (Measurement) Determination 2008 (Schedule 1), Australian Energy Statistics, Clean Energy Regulator, and AEMO data and Department of Climate Change, Energy, the Environment and Water.
+   * @units kg CO2-e/kWh
    */
-  FEEDLOT_ANNUAL_N2O_EF: 0.00503,
-
-  /**
-   * @description integrated N2O emission factor for each feedlot class and state
-   * @inventory2022 3.B.1c_7
-   */
-  FEEDLOT_I_NOF: 0.01942,
-
-  /**
-   * @description integrated fraction of N volatilised from feedlot cattle
-   * @inventory2022 3.B.5c_1
-   */
-  FEEDLOT_I_FRACGASM: 0.71116,
-
-  /**
-   * @description Inorganic fertiliser EF for non-irrigated cropping
-   * @inventory2022 3.B.5c_2
-   */
-  FEEDLOT_INDIRECT_EF: 0.0041,
-
-  /**
-   * @description Ash content expressed as a fraction of manure
-   * @inventory2022 3.B.1 c_1
-   */
-  FEEDLOT_ASH_CONTENT: 0.16,
-
-  /**
-   * @description Methane emissions potential for feedlot
-   * @inventory2022 3.B.1 c_1
-   * @units m3 CH4/kg
-   */
-  FEEDLOT_EMISSION_POTENTIAL: 0.19,
-
-  /**
-   * @description Manure emission factors for each feedlot manure processing system
-   * @inventory2022 Table A5.5.3.6, A5.5.3.7
-   */
-  FEEDLOT_MANURE_EF: {
-    Drylot: {
-      EF: 0.0054,
-      FracGASM: 0.6,
+  ELECTRICITY: {
+    [STATES.NSW]: {
+      SCOPE2_EF: 0.66,
+      SCOPE3_EF: 0.04,
     },
-    'Solid Storage': {
-      EF: 0.005,
-      FracGASM: 0.25,
+    [STATES.ACT]: {
+      SCOPE2_EF: 0.66,
+      SCOPE3_EF: 0.04,
     },
-    Composting: {
-      EF: 0.01,
-      FracGASM: 0.4,
+    [STATES.VIC]: {
+      SCOPE2_EF: 0.77,
+      SCOPE3_EF: 0.09,
     },
-    'Uncovered anaerobic lagoon': {
-      EF: 0,
-      FracGASM: 0.35,
+    [STATES.QLD]: {
+      SCOPE2_EF: 0.71,
+      SCOPE3_EF: 0.1,
+    },
+    [STATES.SA]: {
+      SCOPE2_EF: 0.23,
+      SCOPE3_EF: 0.05,
+    },
+    [STATES.WA_SW]: {
+      SCOPE2_EF: 0.51,
+      SCOPE3_EF: 0.06,
+    },
+    [STATES.WA_NW]: {
+      SCOPE2_EF: 0.61,
+      SCOPE3_EF: 0.09,
+    },
+    [STATES.TAS]: {
+      SCOPE2_EF: 0.15,
+      SCOPE3_EF: 0.03,
+    },
+    [STATES.NT]: {
+      SCOPE2_EF: 0.56,
+      SCOPE3_EF: 0.07,
+    },
+    Australia: {
+      SCOPE2_EF: 0.63,
+      SCOPE3_EF: 0.07,
+    },
+  },
+
+  // (embeddedEmissionsM15)
+  /**
+   * @description Material breakdown for supplementation, in kg CO2-e/kg product
+   * @reference AusLCI Published Processes
+   * @link https://www.auslci.com.au/index.php/EmissionFactors
+   * @units kg CO2-e/kg product
+   */
+  MATERIAL_BREAKDOWN_SUPPLEMENTATION: {
+    // mineral block, 30% urea 3,6% P, at production
+    mineralblock: {
+      CO2: 0.98,
+      CH4: 0.0154,
+      N2O: 0.00456826192856515,
+      KG_CO2: 0.89448581,
+      FRACTION_OF_UREA: 0.3,
+    },
+    // weaner Block, 7,1% Urea 0,5% P, at production
+    weanerblock: {
+      CO2: 0.98,
+      CH4: 0.0154,
+      N2O: 0.00456826192856515,
+      KG_CO2: 0.17767843,
+      FRACTION_OF_UREA: 0.071,
+    },
+    // dry season mix, 30% urea, 5.5% P, at production
+    dryseasonmix: {
+      CO2: 0.98,
+      CH4: 0.0154,
+      N2O: 0.00456826192856515,
+      KG_CO2: 1.0057536, // kg CO2-e/kg Product
+      FRACTION_OF_UREA: 0.3,
+    },
+  },
+
+  // embeddedEmissions_B61:E65
+  /**
+   * @description Customized fertilizer emission factors, in kg CO2-e/kg product
+   * @reference (Wood & Cowie, 2004; Davis & Haglund,1999) Table 5, Table 6, and Table 7.
+   * @units kg CO2-e/kg
+   */
+  CUSTOMIZED_FERTILIZER: {
+    'Monoammonium phosphate (MAP)': {
+      TotalGHG: 703.2 / 1000,
+    },
+    'Diammonium Phosphate (DAP)': {
+      TotalGHG: 866.2 / 1000,
+    },
+    'Urea-Ammonium Nitrate (UAN)': {
+      TotalGHG: 1173.8 / 1000,
+    },
+    'Ammonium Nitrate (AN)': {
+      TotalGHG: 2460.8 / 1000,
+    },
+    'Calcium Ammonium Nitrate (CAN)': {
+      TotalGHG: 2336.9 / 1000,
+    },
+    'Triple Superphosphate (TSP)': {
+      TotalGHG: 0.1848,
+    },
+    'Super Potash 1:1': {
+      TotalGHG: 0.2061,
+    },
+    'Super Potash 2:1': {
+      TotalGHG: 0.1743,
+    },
+    'Super Potash 3:1': {
+      TotalGHG: 0.1602,
+    },
+    'Super Potash 4:1': {
+      TotalGHG: 0.0894,
+    },
+    'Super Potash 5:1': {
+      TotalGHG: 0.1422,
+    },
+    'Muriate of Potash': {
+      TotalGHG: 0.3,
+    },
+    'Sulphate of Potash': {
+      TotalGHG: 0.3,
+    },
+    'Sulphate of Ammonia': {
+      TotalGHG: 0.7545,
+    },
+  },
+
+  // Misc
+
+  /**
+   * @description Temperate emission factor, for sheep manure management
+   */
+  EF_TEMPERATURE: 0.003, // (manureManagementSheepC10)
+
+  /**
+   * @description Conversion factor for elemental to molecular N2O
+   */
+  GWP_FACTORSC15: 44 / 28, // (agriculturalSoilsBeefO5)
+
+  /**
+   * @description Conversion factor for elemental to molecular CO2 from lime
+   */
+  GWP_FACTORSC18: 44 / 12,
+
+  /**
+   * @description Conversion factor for elemental to molecular CO2
+   */
+  GWP_FACTORSC13: 44 / 12,
+
+  /**
+   * @description Conversion factor for elemental to molecular CH4
+   */
+  GWP_FACTORSC14: 16 / 12,
+
+  /**
+   * @description Conversion factor for elemental to molecular Nox
+   */
+  GWP_FACTORSC16: 46 / 14,
+
+  /**
+   * @description Proportion of Urea in UAN
+   * @link http://sds.simplot.com/datasheets/12101.pdf?_gl=1*1j8hnbm*_ga*NDgxMDE2MzQ2LjE2ODUzMzY4ODk.*_ga_NVEQ5HDZCN*MTY4NTMzNjg5MC4xLjEuMTY4NTMzNzExOC4wLjAuMA..&_ga=2.215359572.234437473.1685336889-481016346.1685336889
+   * @type Proportion
+   */
+  GWP_FACTORSC22: 0.35,
+
+  /**
+   * @description Proportion of gas volatilised from fertiliser
+   * @inventory2018 3DB_1
+   */
+  FRAC_GASF: 0.11, // FracGASF
+
+  /**
+   * @description Conversion factor for the global warming potential of CH4, as CO2-e
+   */
+  GWP_FACTORSC5: 28,
+
+  /**
+   * @description Conversion factor for the global warming potential of N2O, as CO2-e
+   */
+  GWP_FACTORSC6: 265,
+
+  /**
+   * @description Scope 1 and Scope 3 values relating to liming
+   * @inventory2018 3G_1
+   * @reference Mudahar, M.S., Hignett, T.P., 1982. Energy and Fertilizer— Policy Implications and Options for Developing Countries. International Fertilizer Development Center, Muscle Shoals, Alabama
+   */
+  LIMING: {
+    SCOPE1: {
+      /** @type Proportion */
+      LIMESTONE_FRACTIONPURITY: 0.9,
+      LIMESTONE_EF: 0.12,
+      /** @type Proportion */
+      DOLOMITE_FRACTIONPURITY: 0.95,
+      DOLOMITE_EF: 0.13,
+    },
+    SCOPE3: {
+      // (Embedded_Emissions_J5 to J10)
+      FUEL_SCOPE3_PRODUCTION_NATURAL_GAS: 0.09,
+      FUEL_SCOPE3_PRODUCTION_ELECTRICITY: 6.43,
+      FUEL_SCOPE3_PRODUCTION_DISTILLATE_FUEL: 0.72,
+      FUEL_SCOPE3_PRODUCTION_COAL: 0.08,
+      FUEL_SCOPE3_PRODUCTION_GASOLINE: 0.09,
+
+      // (Embedded_Emissions_J14)
+      FUEL_SCOPE3_POST_PRODUCTION_DISTILLATE_FUEL: 28.32,
+    },
+  },
+
+  // (fuel_B23)
+  /**
+   * @description Scope 1 and Scope 3 factors relating to fuel
+   * @reference Table 6 and 7 (Dept of Industry, Science, Energy and Resources 2022)
+   */
+  FUEL_ENERGYGJ: {
+    STATIONARY: {
+      DIESEL: {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 69.9,
+          CH4: 0.1,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 17.3,
+      },
+      PETROL: {
+        ENERGY_CONTENT_FACTOR: 34.2,
+        SCOPE1_EF: {
+          CO2: 67.4,
+          CH4: 0.2,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 17.2,
+      },
+      LPG: {
+        ENERGY_CONTENT_FACTOR: 25.7,
+        SCOPE1_EF: {
+          CO2: 60.2,
+          CH4: 0.2,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 20.2,
+      },
+      ETHANOL: {
+        ENERGY_CONTENT_FACTOR: 23.4,
+        SCOPE1_EF: {
+          CO2: 0,
+          CH4: 0.08,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0.0,
+      },
+      BIODIESEL: {
+        ENERGY_CONTENT_FACTOR: 34.6,
+        SCOPE1_EF: {
+          CO2: 0,
+          CH4: 0.08,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0.0,
+      },
+      RENEWABLE_DIESEL: {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 0,
+          CH4: 0.1,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0.0,
+      },
+      OTHER_BIOFUELS: {
+        ENERGY_CONTENT_FACTOR: 23.4,
+        SCOPE1_EF: {
+          CO2: 0,
+          CH4: 0.08,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0.0,
+      },
+      LNG: {
+        ENERGY_CONTENT_FACTOR: 25.3,
+        SCOPE1_EF: {
+          CO2: 51.4,
+          CH4: 7.3,
+          N2O: 0.3,
+        },
+        SCOPE3_EF: 18.0,
+      },
+    },
+    TRANSPORT: {
+      DIESEL: {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 69.9,
+          CH4: 0.01,
+          N2O: 0.5,
+        },
+        SCOPE3_EF: 17.3,
+      },
+      PETROL: {
+        ENERGY_CONTENT_FACTOR: 34.2,
+        SCOPE1_EF: {
+          CO2: 67.4,
+          CH4: 0.02,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 17.2,
+      },
+      LPG: {
+        ENERGY_CONTENT_FACTOR: 26.2,
+        SCOPE1_EF: {
+          CO2: 60.2,
+          CH4: 0.5,
+          N2O: 0.3,
+        },
+        SCOPE3_EF: 20.2,
+      },
+      FUEL_OIL: {
+        ENERGY_CONTENT_FACTOR: 39.7,
+        SCOPE1_EF: {
+          CO2: 73.6,
+          CH4: 0.08,
+          N2O: 0.5,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      ETHANOL: {
+        ENERGY_CONTENT_FACTOR: 23.4,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.2,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0.0,
+      },
+      BIODIESEL: {
+        ENERGY_CONTENT_FACTOR: 34.6,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.8,
+          N2O: 1.7,
+        },
+        SCOPE3_EF: 0.0,
+      },
+      RENEWABLE_DIESEL: {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.01,
+          N2O: 0.5,
+        },
+        SCOPE3_EF: 0.0,
+      },
+      OTHER_BIOFUELS: {
+        ENERGY_CONTENT_FACTOR: 23.4,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.8,
+          N2O: 1.7,
+        },
+        SCOPE3_EF: 0.0,
+      },
+      LNG: {
+        ENERGY_CONTENT_FACTOR: 25.3,
+        SCOPE1_EF: {
+          CO2: 51.4,
+          CH4: 7.3,
+          N2O: 0.3,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      JET_A1: {
+        ENERGY_CONTENT_FACTOR: 36.8,
+        SCOPE1_EF: {
+          CO2: 69.6,
+          CH4: 0.01,
+          N2O: 0.6,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      JET_B: {
+        ENERGY_CONTENT_FACTOR: 36.8,
+        SCOPE1_EF: {
+          CO2: 69.6,
+          CH4: 0.01,
+          N2O: 0.6,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      AVGAS: {
+        ENERGY_CONTENT_FACTOR: 33.1,
+        SCOPE1_EF: {
+          CO2: 67.0,
+          CH4: 0.06,
+          N2O: 0.6,
+        },
+        SCOPE3_EF: 18.0,
+      },
+    },
+    NATURAL_GAS: {
+      ENERGY_CONTENT_FACTOR: 1,
+      SCOPE1_EF: {
+        CO2: 51.4,
+        CH4: 0.1,
+        N2O: 0.03,
+      },
+      SCOPE3_EF: {
+        nsw: 13.1,
+        act: 13.1,
+        vic: 4,
+        qld: 8.8,
+        sa: 10.7,
+        wa_sw: 4.1,
+        wa_nw: 4.1,
+        tas: 0,
+        nt: 0,
+      },
     },
   },
 
   /**
-   * @description Integrated EF for feedlot by state
-   * @inventory2022 A5.5.3.3
+   * @description Total GHG (kg CO2-e/kg input)
+   * @units kg CO2-e/kg
    */
-  FEEDLOT_INTEGRATED_EF: {
-    act: 0.0323,
-    nsw: 0.0323,
-    tas: 0,
-    wa_sw: 0.0327,
-    sa: 0.0323,
-    vic: 0.0323,
-    qld: 0.04023,
-    nt: 0,
-    wa_nw: 0,
+  UREA_FERTILISER_GHG: 1.495, // Total GHG (kg CO2-e/kg input) (embeddedEmissionsE9)
+
+  /**
+   * @description Total GHG (kg CO2-e/kg input)
+   * @units kg CO2-e/kg
+   */
+  SUPERPHOSPHATE_GHG: 0.1122, // (embeddedEmissions_E10)
+
+  /**
+   * @description Emissions factor for mass of Urea applied to soils
+   * @inventory2018 3H_1
+   */
+  FERTILISER_EF: 0.2,
+
+  /**
+   * @description Energy requirement to manufacture fertiliser components and associated CO2 emissions (EF)
+   * @reference (Wells 2001; cited by Saunders et al. 2006)
+   */
+  AGROCHEMICAL_ENERGY_MANUFACTURE: {
+    HERBICIDE_GLYPHOSATE: { TOTAL_ENERGY: 550, EF: 0.06 },
+    HERBICIDE_GENERAL: { TOTAL_ENERGY: 310, EF: 0.06 },
+    INSECTICIDE: { TOTAL_ENERGY: 315, EF: 0.06 },
+  },
+
+  /**
+   * @description Leaching and runoff parameters
+   * @inventory2022 3.B.5
+   */
+  LEACHING: {
+    FRACLEACH: 0.02,
+    FRACLEACH_MMS: 0.24,
+    FRACLEACH_FERTILISER_SOILS: 0.24,
+    FRACLEACH_BROILER: 0.24, // Added new key due to difference in value between layers and broilers
+    FRACWET: 1,
+    FERT_N_FRACLEACH: 0.24,
+    FERT_N_FRACWET: 1,
+    STORAGE_FRACLEACH: 0.02,
+    STORAGE_FRACWET: 1,
+    STORAGE_EF: 0.011,
+    N2O_EF: 0.011,
   },
 
   /**
@@ -1951,35 +3210,6 @@ export const constants: Constants = {
     CO2: 69.9,
     CH4: 0.1,
     N2O: 0.2,
-  },
-
-  /**
-   * @description Emissions factors for each agricultural soil type, in Gg N2O-N/Gg N
-   * @inventory2022 Table 5.21
-   * @units Gg N2O-N/Gg N
-   */
-  AGRICULTURAL_SOILS: {
-    EF_IRRIGATEDPASTURE: 0.0059,
-    EF_IRRIGATEDCROP: 0.007,
-    EF_NONIRRIGATEDCROP: 0.0041,
-    EF_NONIRRIGATEDPASTURE: 0.0018,
-  },
-
-  /**
-   * @description Emissions factors for purchased live stock, in kg CO2-e/kg liveweight
-   * @reference Wiedemann et al. (2015b)
-   * @units kg CO2-e/kg
-   */
-  FEEDLOT_PURCHASELIVESTOCK_EF: {
-    NT: 12.4,
-    'nth QLD': 12.4,
-    'sth/central QLD': 12.4,
-    'nth NSW': 11.7,
-    'sth NSW/VIC/sth SA': 11.7,
-    'NSW/SA pastoral zone': 12.4,
-    'sw WA': 11.7,
-    'WA pastoral': 12.4,
-    TAS: 11.7,
   },
 
   /**
@@ -2414,1114 +3644,13 @@ export const constants: Constants = {
   },
 
   /**
-   * @description Static lookup for savannah coarse fuel, by region
-   */
-  SAVANNAH_FUELCOARSE: {
-    'Combined Ref': {
-      Qld1: '71',
-      Qld2: '72',
-      Qld3: '73',
-      Qld4: '74',
-      Qld5: '75',
-      Qld6: '76',
-      Qld7: '77',
-      Qld8: '78',
-      Qld9: '79',
-      Qld10: '710',
-      NT1: '81',
-      NT2: '82',
-      NT3: '83',
-      NT4: '84',
-      NT5: '85',
-      NT6: '86',
-      NT7: '87',
-      NT8: '88',
-      NT9: '89',
-      NT10: '810',
-      Kimberley1: '91',
-      Kimberley2: '92',
-      Kimberley3: '93',
-      Kimberley4: '94',
-      Kimberley5: '95',
-      Kimberley6: '96',
-      Kimberley7: '97',
-      Kimberley8: '98',
-      Kimberley9: '99',
-      Kimberley10: '910',
-      Pilbara1: '101',
-      Pilbara2: '102',
-      Pilbara3: '103',
-      Pilbara4: '104',
-      Pilbara5: '105',
-      Pilbara6: '106',
-      Pilbara7: '107',
-      Pilbara8: '108',
-      Pilbara9: '109',
-      Pilbara10: '1010',
-    },
-    Yo: {
-      Qld1: 5.97818,
-      Qld2: 5.4075,
-      Qld3: 4.96198,
-      Qld4: 4.96198,
-      Qld5: 5.21557,
-      Qld6: 8.55158,
-      Qld7: 8.14308,
-      Qld8: 7.97898,
-      Qld9: 7.8505,
-      Qld10: 7.48462,
-      NT1: 5.97818,
-      NT2: 5.4075,
-      NT3: 4.96198,
-      NT4: 4.96198,
-      NT5: 5.21557,
-      NT6: 8.55158,
-      NT7: 8.14308,
-      NT8: 7.97898,
-      NT9: 7.8505,
-      NT10: 7.48462,
-      Kimberley1: 5.97818,
-      Kimberley2: 5.4075,
-      Kimberley3: 4.96198,
-      Kimberley4: 4.96198,
-      Kimberley5: 5.21557,
-      Kimberley6: 8.55158,
-      Kimberley7: 8.14308,
-      Kimberley8: 7.97898,
-      Kimberley9: 7.8505,
-      Kimberley10: 7.48462,
-      Pilbara1: 5.97818,
-      Pilbara2: 5.4075,
-      Pilbara3: 4.96198,
-      Pilbara4: 4.96198,
-      Pilbara5: 5.21557,
-      Pilbara6: 8.55158,
-      Pilbara7: 8.14308,
-      Pilbara8: 7.97898,
-      Pilbara9: 7.8505,
-      Pilbara10: 7.48462,
-    },
-    L: {
-      Qld1: 0.05888,
-      Qld2: 0.24606,
-      Qld3: 0.18948,
-      Qld4: 0.18948,
-      Qld5: 0.21756,
-      Qld6: 0.0722,
-      Qld7: 0.22387,
-      Qld8: 0.12031,
-      Qld9: 0.12056,
-      Qld10: 0.2044,
-      NT1: 0.05888,
-      NT2: 0.24606,
-      NT3: 0.18948,
-      NT4: 0.18948,
-      NT5: 0.21756,
-      NT6: 0.0722,
-      NT7: 0.22387,
-      NT8: 0.12031,
-      NT9: 0.12056,
-      NT10: 0.2044,
-      Kimberley1: 0.05888,
-      Kimberley2: 0.24606,
-      Kimberley3: 0.18948,
-      Kimberley4: 0.18948,
-      Kimberley5: 0.21756,
-      Kimberley6: 0.0722,
-      Kimberley7: 0.22387,
-      Kimberley8: 0.12031,
-      Kimberley9: 0.12056,
-      Kimberley10: 0.2044,
-      Pilbara1: 0.05888,
-      Pilbara2: 0.24606,
-      Pilbara3: 0.18948,
-      Pilbara4: 0.18948,
-      Pilbara5: 0.21756,
-      Pilbara6: 0.0722,
-      Pilbara7: 0.22387,
-      Pilbara8: 0.12031,
-      Pilbara9: 0.12056,
-      Pilbara10: 0.2044,
-    },
-    D: {
-      Qld1: 0.072,
-      Qld2: 0.072,
-      Qld3: 0.072,
-      Qld4: 0.072,
-      Qld5: 0.072,
-      Qld6: 0.072,
-      Qld7: 0.072,
-      Qld8: 0.072,
-      Qld9: 0.072,
-      Qld10: 0.072,
-      NT1: 0.072,
-      NT2: 0.072,
-      NT3: 0.072,
-      NT4: 0.072,
-      NT5: 0.072,
-      NT6: 0.072,
-      NT7: 0.072,
-      NT8: 0.072,
-      NT9: 0.072,
-      NT10: 0.072,
-      Kimberley1: 0.072,
-      Kimberley2: 0.072,
-      Kimberley3: 0.072,
-      Kimberley4: 0.072,
-      Kimberley5: 0.072,
-      Kimberley6: 0.072,
-      Kimberley7: 0.072,
-      Kimberley8: 0.072,
-      Kimberley9: 0.072,
-      Kimberley10: 0.072,
-      Pilbara1: 0.072,
-      Pilbara2: 0.072,
-      Pilbara3: 0.072,
-      Pilbara4: 0.072,
-      Pilbara5: 0.072,
-      Pilbara6: 0.072,
-      Pilbara7: 0.072,
-      Pilbara8: 0.072,
-      Pilbara9: 0.072,
-      Pilbara10: 0.072,
-    },
-  },
-
-  /**
-   * @description Static lookup for savannah fine fuel, by region
-   */
-  SAVANNAH_FUELFINE: {
-    'Combined Ref': {
-      Qld1: '71',
-      Qld2: '72',
-      Qld3: '73',
-      Qld4: '74',
-      Qld5: '75',
-      Qld6: '76',
-      Qld7: '77',
-      Qld8: '78',
-      Qld9: '79',
-      Qld10: '710',
-      NT1: '81',
-      NT2: '82',
-      NT3: '83',
-      NT4: '84',
-      NT5: '85',
-      NT6: '86',
-      NT7: '87',
-      NT8: '88',
-      NT9: '89',
-      NT10: '810',
-      Kimberley1: '91',
-      Kimberley2: '92',
-      Kimberley3: '93',
-      Kimberley4: '94',
-      Kimberley5: '95',
-      Kimberley6: '96',
-      Kimberley7: '97',
-      Kimberley8: '98',
-      Kimberley9: '99',
-      Kimberley10: '910',
-      Pilbara1: '101',
-      Pilbara2: '102',
-      Pilbara3: '103',
-      Pilbara4: '104',
-      Pilbara5: '105',
-      Pilbara6: '106',
-      Pilbara7: '107',
-      Pilbara8: '108',
-      Pilbara9: '109',
-      Pilbara10: '1010',
-    },
-    Yo: {
-      Qld1: 0.40885,
-      Qld2: 0.37206,
-      Qld3: 0.37352,
-      Qld4: 0.37352,
-      Qld5: 0.34846,
-      Qld6: 0.26884,
-      Qld7: 0.25533,
-      Qld8: 0.25396,
-      Qld9: 0.24826,
-      Qld10: 0.25508,
-      NT1: 0.40885,
-      NT2: 0.37206,
-      NT3: 0.37352,
-      NT4: 0.37352,
-      NT5: 0.34846,
-      NT6: 0.26884,
-      NT7: 0.25533,
-      NT8: 0.25396,
-      NT9: 0.24826,
-      NT10: 0.25508,
-      Kimberley1: 0.40885,
-      Kimberley2: 0.37206,
-      Kimberley3: 0.37352,
-      Kimberley4: 0.37352,
-      Kimberley5: 0.34846,
-      Kimberley6: 0.26884,
-      Kimberley7: 0.25533,
-      Kimberley8: 0.25396,
-      Kimberley9: 0.24826,
-      Kimberley10: 0.25508,
-      Pilbara1: 0.40885,
-      Pilbara2: 0.37206,
-      Pilbara3: 0.37352,
-      Pilbara4: 0.37352,
-      Pilbara5: 0.34846,
-      Pilbara6: 0.26884,
-      Pilbara7: 0.25533,
-      Pilbara8: 0.25396,
-      Pilbara9: 0.24826,
-      Pilbara10: 0.25508,
-    },
-    L: {
-      Qld1: 5.2189,
-      Qld2: 3.85447,
-      Qld3: 3.46804,
-      Qld4: 4.2354,
-      Qld5: 4.94919,
-      Qld6: 2.67616,
-      Qld7: 2.55178,
-      Qld8: 2.34277,
-      Qld9: 2.45375,
-      Qld10: 2.43343,
-      NT1: 4.02581,
-      NT2: 3.96032,
-      NT3: 2.7036,
-      NT4: 3.99075,
-      NT5: 4.25842,
-      NT6: 2.35541,
-      NT7: 2.70701,
-      NT8: 2.47525,
-      NT9: 2.61767,
-      NT10: 2.9654,
-      Kimberley1: 3.9053,
-      Kimberley2: 3.83521,
-      Kimberley3: 2.4142,
-      Kimberley4: 3.6844,
-      Kimberley5: 3.99772,
-      Kimberley6: 2.46568,
-      Kimberley7: 2.72722,
-      Kimberley8: 2.5792,
-      Kimberley9: 2.89562,
-      Kimberley10: 2.9491,
-      Pilbara1: 3.9053,
-      Pilbara2: 3.83521,
-      Pilbara3: 2.4142,
-      Pilbara4: 3.6844,
-      Pilbara5: 3.99772,
-      Pilbara6: 2.46568,
-      Pilbara7: 2.72722,
-      Pilbara8: 2.5792,
-      Pilbara9: 2.89562,
-      Pilbara10: 2.9491,
-    },
-    D: {
-      Qld1: 0.8,
-      Qld2: 0.8,
-      Qld3: 0.8,
-      Qld4: 0.8,
-      Qld5: 0.8,
-      Qld6: 0.8,
-      Qld7: 0.8,
-      Qld8: 0.8,
-      Qld9: 0.8,
-      Qld10: 0.8,
-      NT1: 0.8,
-      NT2: 0.8,
-      NT3: 0.8,
-      NT4: 0.8,
-      NT5: 0.8,
-      NT6: 0.8,
-      NT7: 0.8,
-      NT8: 0.8,
-      NT9: 0.8,
-      NT10: 0.8,
-      Kimberley1: 0.8,
-      Kimberley2: 0.8,
-      Kimberley3: 0.8,
-      Kimberley4: 0.8,
-      Kimberley5: 0.8,
-      Kimberley6: 0.8,
-      Kimberley7: 0.8,
-      Kimberley8: 0.8,
-      Kimberley9: 0.8,
-      Kimberley10: 0.8,
-      Pilbara1: 0.8,
-      Pilbara2: 0.8,
-      Pilbara3: 0.8,
-      Pilbara4: 0.8,
-      Pilbara5: 0.8,
-      Pilbara6: 0.8,
-      Pilbara7: 0.8,
-      Pilbara8: 0.8,
-      Pilbara9: 0.8,
-      Pilbara10: 0.8,
-    },
-    Gc: {
-      Qld1: 1.33,
-      Qld2: 1.2,
-      Qld3: 1.33,
-      Qld4: 1.15,
-      Qld5: 1.25,
-      Qld6: 1.4,
-      Qld7: 1.7,
-      Qld8: 1.4,
-      Qld9: 1,
-      Qld10: 1.8,
-      NT1: 1.33,
-      NT2: 1.2,
-      NT3: 1.33,
-      NT4: 1.15,
-      NT5: 1.25,
-      NT6: 1.4,
-      NT7: 1.7,
-      NT8: 1.4,
-      NT9: 1,
-      NT10: 1.8,
-      Kimberley1: 1.33,
-      Kimberley2: 1.2,
-      Kimberley3: 1.33,
-      Kimberley4: 1.15,
-      Kimberley5: 1.25,
-      Kimberley6: 1.4,
-      Kimberley7: 1.7,
-      Kimberley8: 1.4,
-      Kimberley9: 1,
-      Kimberley10: 1.8,
-      Pilbara1: 1.33,
-      Pilbara2: 1.2,
-      Pilbara3: 1.33,
-      Pilbara4: 1.15,
-      Pilbara5: 1.25,
-      Pilbara6: 1.4,
-      Pilbara7: 1.7,
-      Pilbara8: 1.4,
-      Pilbara9: 1,
-      Pilbara10: 1.8,
-    },
-  },
-
-  // (savannahBurningX4)
-  /**
-   * @description State lookup values for using other savannah lookup constants
-   */
-  FUEL_STATEREF: {
-    // WARNING: wa_nw is not in original sheet
-    wa_nw: 0,
-    act: 1,
-    nsw: 2,
-    tas: 3,
-    wa_sw: 4,
-    sa: 5,
-    vic: 6,
-    qld: 7,
-    nt: 8,
-    kimberley: 9,
-    pilbara: 10,
-  },
-
-  /**
-   * @description Patchiness values for savannah burning by season
-   * @type Proportion
-   */
-  BURN_PATCHINESS: {
-    'early dry season': { high: 0.709, low: 0.79 },
-    'late dry season': { high: 0.889, low: 0.97 },
-  },
-
-  /**
-   * @description Completeness of combustion values for savannah burning by fuel and season
-   * @type Proportion
-   */
-  BURN_COMPLETENESSOFCOMBUSTION: {
-    low: {
-      fine: { 'early dry season': 0.7992, 'late dry season': 0.8328 },
-      coarse: { 'early dry season': 0.109, 'late dry season': 0.2016 },
-    },
-    high: {
-      fine: { 'early dry season': 0.7444, 'late dry season': 0.8604 },
-      coarse: { 'early dry season': 0.1464, 'late dry season': 0.3571 },
-    },
-  },
-
-  /**
-   * @description Efficiency of residue burning
-   */
-  BURNING_EFFICIENCY_RESIDUE: 0.96,
-
-  /**
-   * @description N2O emissions factor for savannah burning
-   * @inventory2022 Table 5.31
-   * @units Gg element / Gg burnt
-   */
-  BURNING_N2O_EF: 0.0076,
-
-  /**
-   * @description Methane emissions factor for savannah burning
-   * @inventory2022 Table 5.31
-   * @units Gg element / Gg burnt
-   */
-  BURNING_METHANE_EF: 0.0035,
-
-  /**
-   * @description Carbon Mass Fraction Burnt in Fuel Burnt
-   * @units Proportion
-   */
-  FUELBURNT_VEGETATION_CARBONFRACTION: {
-    fine: {
-      'Shrubland hummock': 0.46,
-      'Woodland Hummock': 0.46,
-      'Melaleuca woodland': 0.46,
-      'Woodland Mixed': 0.46,
-      'Open forest mixed': 0.46,
-      'Shrubland (heath) with hummock grass': 0.398,
-      'Woodland with hummock grass': 0.397,
-      'Open woodland with mixed grass': 0.399,
-      'Woodland with mixed grass': 0.41,
-      'Woodland with tussock grass': 0.397,
-    },
-    coarse: {
-      'Shrubland hummock': 0.46,
-      'Woodland Hummock': 0.46,
-      'Melaleuca woodland': 0.46,
-      'Woodland Mixed': 0.46,
-      'Open forest mixed': 0.46,
-      'Shrubland (heath) with hummock grass': 0.482,
-      'Woodland with hummock grass': 0.482,
-      'Open woodland with mixed grass': 0.482,
-      'Woodland with mixed grass': 0.482,
-      'Woodland with tussock grass': 0.482,
-    },
-  },
-
-  /**
-   * @description Methane emissions factor for savannah burning
-   * @units Gg CH$-C / Gg C
-   */
-  FUELBURNT_VEGETATION_EF_CH4: {
-    fine: {
-      'Shrubland hummock': 0.0031,
-      'Woodland Hummock': 0.0015,
-      'Melaleuca woodland': 0.0031,
-      'Woodland Mixed': 0.0031,
-      'Open forest mixed': 0.0031,
-      'Shrubland (heath) with hummock grass': 0.0013,
-      'Woodland with hummock grass': 0.0017,
-      'Open woodland with mixed grass': 0.0012,
-      'Woodland with mixed grass': 0.0016,
-      'Woodland with tussock grass': 0.0015,
-    },
-    coarse: {
-      'Shrubland hummock': 0.0031,
-      'Woodland Hummock': 0.0015,
-      'Melaleuca woodland': 0.0031,
-      'Woodland Mixed': 0.0031,
-      'Open forest mixed': 0.0031,
-      'Shrubland (heath) with hummock grass': 0.0013,
-      'Woodland with hummock grass': 0.0017,
-      'Open woodland with mixed grass': 0.0012,
-      'Woodland with mixed grass': 0.0016,
-      'Woodland with tussock grass': 0.0015,
-    },
-  },
-
-  /**
-   * @description Nitrogen to Carbon ratio in fuel burnt
-   */
-  FUELBURNT_VEGETATION_NITROGENCARBONRATIO: {
-    fine: {
-      'Shrubland hummock': 0.0096,
-      'Woodland Hummock': 0.0096,
-      'Melaleuca woodland': 0.0096,
-      'Woodland Mixed': 0.0096,
-      'Open forest mixed': 0.0096,
-      'Shrubland (heath) with hummock grass': 0.0107,
-      'Woodland with hummock grass': 0.0118,
-      'Open woodland with mixed grass': 0.0102,
-      'Woodland with mixed grass': 0.0105,
-      'Woodland with tussock grass': 0.0113,
-    },
-    coarse: {
-      'Shrubland hummock': 0.0081,
-      'Woodland Hummock': 0.0081,
-      'Melaleuca woodland': 0.0081,
-      'Woodland Mixed': 0.0081,
-      'Open forest mixed': 0.0081,
-      'Shrubland (heath) with hummock grass': 0.00389,
-      'Woodland with hummock grass': 0.00389,
-      'Open woodland with mixed grass': 0.00389,
-      'Woodland with mixed grass': 0.00389,
-      'Woodland with tussock grass': 0.00389,
-    },
-  },
-
-  /**
-   * @description N2O emissions factor for savannah burning
-   * @units Gg N2O-N/Gg N
-   */
-  FUELBURNT_VEGETATION_N2O: {
-    fine: {
-      'Shrubland hummock': 0.0075,
-      'Woodland Hummock': 0.0066,
-      'Melaleuca woodland': 0.0075,
-      'Woodland Mixed': 0.0075,
-      'Open forest mixed': 0.0075,
-      'Shrubland (heath) with hummock grass': 0.0059,
-      'Woodland with hummock grass': 0.006,
-      'Open woodland with mixed grass': 0.006,
-      'Woodland with mixed grass': 0.012,
-      'Woodland with tussock grass': 0.006,
-    },
-    coarse: {
-      'Shrubland hummock': 0.0075,
-      'Woodland Hummock': 0.0066,
-      'Melaleuca woodland': 0.0075,
-      'Woodland Mixed': 0.0075,
-      'Open forest mixed': 0.0075,
-      'Shrubland (heath) with hummock grass': 0.0059,
-      'Woodland with hummock grass': 0.006,
-      'Open woodland with mixed grass': 0.006,
-      'Woodland with mixed grass': 0.012,
-      'Woodland with tussock grass': 0.006,
-    },
-  },
-
-  /**
    * @description Nitrogen content of swine manure, by class
    * @inventory2022 Table A5.5.5.4
    * @units kg N/head/year
    */
-  SWINE_MANURE_NITROGEN: {
-    boars: 16.93,
-    sows: 17.91,
-    gilts: 16.7,
-    slaughter_pigs: 11.4,
-  },
-
-  // (manureManagementC37)
-  /**
-   * @description Volatile solids content of swine manure, by class
-   * @inventory2022 Table A5.5.5.4
-   * @units kg / head / day
-   */
-  SWINE_MANURE_CHARACTERISTICS: {
-    boars: 0.4,
-    sows: 0.46,
-    gilts: 0.55,
-    slaughter_pigs: 0.39,
-  },
-
-  // (entericFermentation34)
-  /**
-   * @description Feed intake of swine, by class
-   * @inventory2022 Table A5.5.5.2
-   * @units kg / head / day
-   */
-  SWINE_HERD_FEEDINTAKE: {
-    boars: 2.3,
-    sows: 2.62,
-    gilts: 2.5,
-    slaughter_pigs: 1.71,
-  },
-
-  // nitrousOxideMMS90
-  /**
-   * @description Integrated emissions factors for swine, by state
-   * @inventory2022 Table A5.5.5.5
-   */
-  SWINE_INTEGRATED_EF: {
-    // WARNING: what to do here? leave as 0?
-    [STATES.ACT]: {
-      iMCF: 0,
-      iFracGasm: 0,
-      iNOF: 0,
-    },
-    [STATES.NSW]: {
-      iMCF: 0.44174,
-      iFracGasm: 0.45946,
-      iNOF: 0.00517,
-    },
-    [STATES.TAS]: {
-      iMCF: 0.5243,
-      iFracGasm: 0.4786,
-      iNOF: 0.00343,
-    },
-    [STATES.WA_SW]: {
-      iMCF: 0.52871,
-      iFracGasm: 0.46465,
-      iNOF: 0.00498,
-    },
-    [STATES.SA]: {
-      iMCF: 0.5608,
-      iFracGasm: 0.4786,
-      iNOF: 0.00343,
-    },
-    [STATES.VIC]: {
-      iMCF: 0.45067,
-      iFracGasm: 0.45279,
-      iNOF: 0.00533,
-    },
-    [STATES.QLD]: {
-      iMCF: 0.6199,
-      iFracGasm: 0.50371,
-      iNOF: 0.00243,
-    },
-    [STATES.WA_NW]: {
-      iMCF: 0.52871,
-      iFracGasm: 0.46465,
-      iNOF: 0.00498,
-    },
-    [STATES.NT]: {
-      iMCF: 0.64598,
-      iFracGasm: 0.50406,
-      iNOF: 0.00225,
-    },
-  },
-
-  // nitrousOxideC114
-  /**
-   * @description Fraction of animal waste available for leaching and runoff (FracWET)
-   * @inventory2022 Table A5.5.10.2
-   * @type Proportion
-   */
-  SWINE_FRACWET: {
-    [STATES.ACT]: 0.5,
-    [STATES.NSW]: 0.5,
-    [STATES.TAS]: 1,
-    [STATES.WA_SW]: 0.4,
-    [STATES.SA]: 0.75,
-    [STATES.VIC]: 0.5,
-    [STATES.QLD]: 0.25,
-    [STATES.WA_NW]: 0.4,
-    [STATES.NT]: 0,
-  },
-
-  // nitrousOxideC102
-  /**
-   * @description Allocation of waste to MMS
-   * @inventory2022 Table A5.5.5.6
-   * @type Proportion
-   */
-  SWINE_WASTE_MMS: {
-    [STATES.ACT]: 0.5,
-    [STATES.NSW]: 0.06,
-    [STATES.TAS]: 0.02,
-    [STATES.WA_SW]: 0.1,
-    [STATES.SA]: 0.02,
-    [STATES.VIC]: 0.06,
-    [STATES.QLD]: 0.03,
-    [STATES.WA_NW]: 0.1,
-    [STATES.NT]: 0.02,
-  },
-
-  // WARNING: what about the others??? TODO: find default from vlookup func
-  // Pig_FeedC28
-  /**
-   * @description Emissions factors for swine feed ingredients, by ingredient
-   * @reference (Wiedemann et al., 2021), (Reckmann et al., 2016)
-   * @units kg CO2-e / kg ingredient
-   */
-  SWINE_FEED_INGREDIENT_EF: {
-    wheat: 0.252,
-    barley: 0.341,
-    wheyPowder: 0,
-    canolaMeal: 0.284,
-    soybeanMeal: 0.633,
-    meatMeal: 0.386,
-    bloodMeal: 1.9,
-    fishmeal: 0,
-    tallow: 0,
-    wheatBran: 0.547,
-    beetPulp: 0.704,
-    millMix: 0,
-  },
-
-  // (manureManagementBroilersC83)
-  /**
-   * @description Diet properties for poultry, by class
-   * @inventory2022 Table A5.5.6.1
-   */
-  POULTRY_DIET_PROPERTIES: {
-    layers: {
-      dryMatterIntake: 0.086,
-      dryMatterDigestibility: 0.8,
-      crudeProtein: 0.19,
-      nitrogenRetentionRate: 0.35,
-      manureAsh: 0.18,
-    },
-    meat_chicken_growers: {
-      dryMatterIntake: 0.093,
-      dryMatterDigestibility: 0.8,
-      crudeProtein: 0.23,
-      nitrogenRetentionRate: 0.47,
-      manureAsh: 0.15,
-    },
-    // (meat_chicken_breeder)
-    meat_chicken_layers: {
-      dryMatterIntake: 0.103,
-      dryMatterDigestibility: 0.8,
-      crudeProtein: 0.19,
-      nitrogenRetentionRate: 0.32,
-      manureAsh: 0.18,
-    },
-    meat_other: {
-      dryMatterIntake: 0.093,
-      dryMatterDigestibility: 0.8,
-      crudeProtein: 0.23,
-      nitrogenRetentionRate: 0.47,
-      manureAsh: 0.15,
-    },
-  },
-
-  /**
-   * @description MCFs Pasture range and paddock
-   * @inventory2022 Table A5.5.6.5
-   * @type Proportion
-   */
-  POULTRY_WASTE_MMS: {
-    [STATES.ACT]: 0.01,
-    [STATES.NSW]: 0.01,
-    [STATES.NT]: 0.03,
-    [STATES.QLD]: 0.03,
-    [STATES.SA]: 0.01,
-    [STATES.TAS]: 0.01,
-    [STATES.VIC]: 0.01,
-    [STATES.WA_SW]: 0.01,
-    [STATES.WA_NW]: 0.01,
-  },
-
-  // meat chickens are just broilers
-  // (manureManagementBroilersC92)
-  // (nitrousOxideI152)
-  /**
-   * @description Meat and layer chickens – Integrated MCFs, by state
-   */
-  POULTRY_MEATLAYER_EF_IMCF: {
-    meat_chickens: {
-      [STATES.ACT]: 0.024414,
-      [STATES.NSW]: 0.024414,
-      [STATES.NT]: 0.025014,
-      [STATES.QLD]: 0.025014,
-      [STATES.SA]: 0.024414,
-      [STATES.TAS]: 0.23425,
-      [STATES.VIC]: 0.024414,
-      [STATES.WA_SW]: 0.024414,
-      [STATES.WA_NW]: 0.024414,
-    },
-    layer_chickens: {
-      [STATES.ACT]: 0.031702,
-      [STATES.NSW]: 0.031702,
-      [STATES.NT]: 0.03193,
-      [STATES.QLD]: 0.03193,
-      [STATES.SA]: 0.031702,
-      [STATES.TAS]: 0.031011,
-      [STATES.VIC]: 0.031702,
-      [STATES.WA_SW]: 0.031702,
-      [STATES.WA_NW]: 0.031702,
-    },
-  },
-
-  /**
-   * @description Meat and layer chickens – Integrated EFs, by state
-   */
-  POULTRY_MEATLAYER_EF: {
-    meat_chickens: {
-      iFracGASM: 0.385924,
-      iNOF: 0.004157,
-    },
-    layer_chickens: {
-      iFracGASM: 0.315956,
-      iNOF: 0.004728,
-    },
-  },
-
-  // assumptions sheet
-  /**
-   * @description Default percent of sugar yield from total harvest, if no value is supplied in inputs
-   * @type Proportion
-   */
-  SUGAR_YIELD: 0.1188625,
-
-  /**
-   * @description Emissions factors for poultry feed ingredients, by ingredient
-   * @reference (Christie et al., 2012), (Maraseni & Cockfield, 2011), (Castanheira & Freire, 2013), (O'Halloran et al., 2008)
-   * @units kg CO2-e / kg ingredient
-   */
-  POULTRY_FEED_INGREDIENTS_GHG: {
-    wheat: 0.3,
-    barley: 0.11,
-    soybean: 0.165,
-    sorghum: 0.3,
-    millrun: 0.3,
-  },
-
-  /**
-   * @description Standard reference weights for dairy cattle, by class
-   * @inventory2022 Table A5.5.1.3
-   * @units kg
-   */
-  DAIRY_CATTLE_STANDARD_REFERENCE_WEIGHTS: {
-    milking_cows: 580.7142857143,
-    heifers_lt_1: 580.7142857143,
-    heifers_gt_1: 580.7142857143,
-    dairyBulls_lt_1: 770,
-    dairyBulls_gt_1: 770,
-  },
-
-  // (Agricultural_SoilsD101)
-  /**
-   * @description N2O oxide emission factors and fraction of N volatilised by manure management system
-   * @inventory2022 Table A5.5.1.9
-   */
-  DAIRY_CATTLE_N2O_MMS: {
-    void_at_pasture: { EF: 0, FracGASM: 0 },
-    anaerobic_lagoon: { EF: 0, FracGASM: 0.35 },
-    daily_spread: { EF: 0, FracGASM: 0.2 },
-    solid_storage: { EF: 0.005, FracGASM: 0.3 },
-  },
-
-  /**
-   * @description Mass of N volatilised from manure management system
-   * @inventory2022 Table 3.D.A_6
-   * @units Gg N2O-N / Gg N
-   */
-  DAIRY_MASS_N_VOLATISED_EF: 0.004,
-
-  // (Agricultural_SoilsD142)
-  /**
-   * @description Mass of N volatilised from manure applied to soils
-   * @inventory2022 Table 3.D.A_4
-   * @units Gg N2O-N / Gg N
-   */
-  DAIRY_MMS_EF: 0.00503,
-
-  /**
-   * @description Methane production from pre weaned calves, by class
-   * @inventory2022 Table A5.5.1.5
-   * @units Gg CH4-C / Gg N
-   */
-  DAIRY_METHANE_MPW: {
-    milking_cows: 0,
-    heifers_lt_1: 0.01825,
-    heifers_gt_1: 0,
-    dairyBulls_lt_1: 0.02081,
-    dairyBulls_gt_1: 0,
-  },
-
-  /**
-   * @description Nitrous oxide EFs for inorganic fertiliser, based on rainfall and crop type
-   * @inventory2022 Table 5.21
-   * @units Gg N2O-N / Gg N
-   */
-  DAIRY_PRODUCTIONSYSTEM_EF: {
-    RAINFALL_LT_600: {
-      'Non-irrigated Crop': 0.0029,
-      'Irrigated Crop': 0.007,
-      'Irrigated Pasture': 0.0059,
-      'Non-irrigated Pasture': 0.0018,
-    },
-    RAINFALL_GT_600: {
-      'Non-irrigated Crop': 0.008,
-      'Irrigated Crop': 0.007,
-      'Irrigated Pasture': 0.0059,
-      'Non-irrigated Pasture': 0.0018,
-    },
-  },
-
-  /**
-   * @description Dairy cattle - Nitrous oxide EFs and fraction of N volatilised by manure management system
-   * @inventory2022 Table A5.5.1.9
-   */
-  DAIRY_MANURE_MANAGEMENT: {
-    PASTURE_EF: 0,
-    ANAEROBIC_EF: 0,
-    SUMP_EF: 0,
-    DRAIN_EF: 0,
-    SOLID_EF: 0.005,
-    PASTURE_FRACGASM: 0,
-    ANAEROBIC_FRACGASM: 0.35,
-    SUMP_FRACGASM: 0.07,
-    DRAIN_FRACGASM: 0.2,
-    SOLID_FRACGASM: 0.3,
-  },
-
-  /**
-   * @description Dairy Cattle - Methane Conversion Factors (MCF)
-   * @inventory2022 Table 5.A.7
-   */
-  DAIRY_METHANE_CONVERSION_FACTOR: {
-    [STATES.ACT]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.73,
-      'Sump and disperal systems': 0.005,
-      'Drains to paddock': 0.15,
-      'Solid Storage': 0.02,
-    },
-    [STATES.NSW]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.75,
-      'Sump and disperal systems': 0.005,
-      'Drains to paddock': 0.18,
-      'Solid Storage': 0.02,
-    },
-    [STATES.NT]: {
-      Pasture: 0.02,
-      'Anaerobic lagoon': 0.8,
-      'Sump and disperal systems': 0.01,
-      'Drains to paddock': 0.5,
-      'Solid Storage': 0.02,
-    },
-    [STATES.QLD]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.77,
-      'Sump and disperal systems': 0.005,
-      'Drains to paddock': 0.24,
-      'Solid Storage': 0.02,
-    },
-    [STATES.SA]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.74,
-      'Sump and disperal systems': 0.005,
-      'Drains to paddock': 0.17,
-      'Solid Storage': 0.02,
-    },
-    [STATES.TAS]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.7,
-      'Sump and disperal systems': 0.001,
-      'Drains to paddock': 0.13,
-      'Solid Storage': 0.02,
-    },
-    [STATES.VIC]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.74,
-      'Sump and disperal systems': 0.005,
-      'Drains to paddock': 0.17,
-      'Solid Storage': 0.02,
-    },
-    [STATES.WA_SW]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.75,
-      'Sump and disperal systems': 0.005,
-      'Drains to paddock': 0.18,
-      'Solid Storage': 0.02,
-    },
-    [STATES.WA_NW]: {
-      Pasture: 0.02,
-      'Anaerobic lagoon': 0.8,
-      'Sump and disperal systems': 0.01,
-      'Drains to paddock': 0.5,
-      'Solid Storage': 0.02,
-    },
-  },
-
-  // other livestock Deer Manure management D42
-  /**
-   * @description Other livestock – Allocation of animals to climate regions
-   * @inventory2022 Table A5.5.7.3
-   */
-  OTHERLIVESTOCK_ALLOCATION_CLIMATEREGIONS: {
-    [STATES.ACT]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.NT]: {
-      warm: 1,
-      temperate: 0,
-    },
-    [STATES.NSW]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.QLD]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.SA]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.TAS]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.VIC]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.WA_NW]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.WA_SW]: {
-      warm: 0,
-      temperate: 1,
-    },
-  },
-
-  /**
-   * @description Coefficients for Rural fuel consumption model (litres per 1 Km)
-   * @inventory2022 Table 56
-   * @units litres / Km
-   */
-  FISHERIES_TRANSPORT_FUEL_USAGE: {
-    None: 0,
-    'Small Car': 0.06419556,
-    'Medium Car': 0.07771756,
-    'Large Car': 0.09826507,
-    'Courier Van-Utility': 0.07609467,
-    '4WD Mid Size': 0.1024522,
-    'Light Rigid': 0.08085994,
-    'Medium Rigid': 0.1245859,
-    'Heavy Rigid': 0.2322869,
-    'Heavy Bus': 0.2333246,
-  },
 
   // (TransportB111)
   // TODO: Replace
-  /**
-   * @description Direct (Scope 1) and indirect (Scope 3) emissions factors for the consumptions of transport fuels in different transport equipment
-   * @inventory2022 Table 9
-   * @units kg CO2-e / GJ
-   */
-  FISHERIES_TRANSPORT_FUEL_EF: {
-    Gasoline: { CO2: 67.4, CH4: 0.02, N2O: 0.2, SCOPE3: 17.2 },
-    'Diesel oil': { CO2: 69.9, CH4: 0.01, N2O: 0.5, SCOPE3: 17.3 },
-    'Liquefied petroleum gas (LPG)': {
-      CO2: 60.2,
-      CH4: 0.5,
-      N2O: 0.3,
-      SCOPE3: 20.2,
-    },
-    'Fuel oil': { CO2: 73.6, CH4: 0.08, N2O: 0.5, SCOPE3: 18 },
-    Ethanol: { CO2: 0, CH4: 0.2, N2O: 0.2, SCOPE3: 0 },
-    Biodiesel: { CO2: 0, CH4: 0.8, N2O: 1.7, SCOPE3: 0 },
-    'Renewable diesel': { CO2: 0, CH4: 0.01, N2O: 0.5, SCOPE3: 0 },
-    'Other biofuels': { CO2: 0, CH4: 0.8, N2O: 1.7, SCOPE3: 0 },
-    'Liquified natural gas': { CO2: 51.4, CH4: 7.3, N2O: 0.3, SCOPE3: 18 },
-  },
-
-  // (TransportD48)
-  /**
-   * @description Emissions factors for commercial flights
-   * @units kg CO2-e / PAX km
-   */
-  FISHERIES_COMMERCIALFLIGHT_EF: 0.101,
-
-  /**
-   * @description Emissions factors for bait
-   * @reference FRDC - Data extracted/reverse-engineered by Blueshift/Dan from Seafish Calculator (UK/European numbers).
-   * @units kg CO2-e / kg bait
-   */
-  FISHERIES_BAIT_EF: {
-    'Fish Frames': 0.098,
-    'Fish Heads': 0.098,
-    Sardines: 0.05,
-    Squid: 0.192,
-    'Whole Fish': 0.098,
-  },
 
   /**
    * @description Global warming potentials for refrigerants
@@ -3655,63 +3784,6 @@ export const constants: Constants = {
   MUNICIPAL_SOLID_WASTE_EF: 1.6,
 
   /**
-   * @description Intensity of economic allocation for cotton co-products, by type
-   * @reference https://www.sciencedirect.com/science/article/abs/pii/S0959652618335935
-   * @type Proportion
-   */
-  COTTON_INTENSITY_ECONOMIC_ALLOCATION: {
-    LINT: 0.86,
-    SEED: 0.14,
-  },
-
-  // Rice
-  /**
-   * @description Emissions factor for permanently flooded fields
-   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
-   */
-  EF_FLOODED_FIELDS: 1.19,
-
-  /**
-   * @description Default CH4 emissions scaling factors for water regimes during the cultivation period relative to continuously flooded fields
-   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
-   */
-  SF_CULTIVATION_WATER_REGIME: {
-    'Continuously flooded': 1,
-    'Single drainage period': 0.71,
-    'Multiple drainage periods': 0.55,
-    'Regular rainfed': 0.54,
-    'Drought prone': 0.16,
-    'Deep water': 0.06,
-    'Paddy rotation': 0,
-    'Fallow without flooding in previous year': 0,
-  },
-
-  /**
-   * @description Default CH4 emissions scaling factors for water regimes before the cultivation period
-   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
-   */
-  SF_PRESEASON_WATER_REGIME: {
-    'Non flooded pre-season < 180 days': 1,
-    'Non flooded pre-season > 180 days': 0.89,
-    'Flooded pre-season > 30 days': 2.41,
-    'Non-flooded pre-season > 365 days': 0.59,
-  },
-
-  /**
-   * @description Emissions factors for aquaculture bait
-   * @reference Blueshift estimates
-   * @units kg CO2-e / kg feed
-   */
-  AQUACULTURE_BAIT_EF: {
-    [AquacultureBait.SARDINES]: 0.3,
-    [AquacultureBait.LOW_ANIMAL_PROTEIN]: 1,
-    [AquacultureBait.HIGH_ANIMAL_PROTEIN]: 2.2,
-    [AquacultureBait.CEREAL]: 0.5,
-    [AquacultureBait.SQUID]: 0.3,
-    [AquacultureBait.FISH]: 0.3,
-  },
-
-  /**
    * @description Emissions factors for freight, in kg CO2-e / tonne-km
    * @reference EUROPEAN CHEMICAL TRANSPORT ASSOCIATION, European Chemical Industry Council, CTA-CEFIC-GUIDELINE-FOR-MEASURING-AND-MANAGING-CO2.
    * @units kg CO2-e / tonne-km
@@ -3724,30 +3796,25 @@ export const constants: Constants = {
     [FreightTypes.SMALL_CONTAINER_SHIP]: 0.0135,
     [FreightTypes.LARGE_CONTAINER_SHIP]: 0.0115,
   },
+};
 
-  /**
-   * @description Methane Conversion Factors (MCF) and Nitrous Oxide Fractions (NOF) for manure management systems
-   */
-  MMS: {
-    deepLitter: {
-      MCF: 0.04,
-      FracGASM: 0.125,
-      NOF: 0.01,
-    },
-    coveredAnaerobicPond: {
-      MCF: 0.1,
-      FracGASM: 0,
-      NOF: 0,
-    },
-    outdoorSystems: {
-      MCF: 0.01,
-      FracGASM: 0.3,
-      NOF: 0.02,
-    },
-    uncoveredAnaerobicPond: {
-      MCF: 0.75,
-      FracGASM: 0.55,
-      NOF: 0,
-    },
-  },
+export const allConstants: AllConstants = {
+  COMMON: commonConstants,
+  CROP: cropConstants,
+  FISHERIES: fisheriesConstants,
+  RICE: riceConstants,
+  AQUACULTURE: aquacultureConstants,
+  BEEF: beefConstants,
+  BUFFALO: buffaloConstants,
+  COTTON: cottonConstants,
+  DAIRY: dairyConstants,
+  DEER: deerConstants,
+  FEEDLOT: feedlotConstants,
+  GOAT: goatConstants,
+  LIVESTOCK: livestockConstants,
+  PORK: porkConstants,
+  POULTRY: poultryConstants,
+  SAVANNA: savannaConstants,
+  SHEEP: sheepConstants,
+  SUGAR: sugarConstants,
 };

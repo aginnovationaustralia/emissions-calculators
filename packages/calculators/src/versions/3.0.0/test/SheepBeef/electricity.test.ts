@@ -1,11 +1,12 @@
 import { calculateElectricityScope2And3 } from '../../common-legacy/electricity';
 import { loadConstants } from '../../constants/constantsLoader';
 import { ExecutionContext } from '../../executionContext';
+import { ConstantsForSheepBeefCalculator } from '../../SheepBeef/constants';
 import { V2_0_0 } from '../common/context';
 
 describe('checking calculateElectricityScope2And3, all types of inputs', () => {
   const constants = loadConstants();
-  const context: ExecutionContext = {
+  const context: ExecutionContext<ConstantsForSheepBeefCalculator> = {
     calculator: 'SheepBeef',
     version: V2_0_0,
     constants,
@@ -105,7 +106,7 @@ describe('checking calculateElectricityScope2And3, all types of inputs', () => {
 
 describe('checking calculateElectricityScope2And3, all states', () => {
   const constants = loadConstants();
-  const context: ExecutionContext = {
+  const context: ExecutionContext<ConstantsForSheepBeefCalculator> = {
     calculator: 'SheepBeef',
     version: V2_0_0,
     constants,

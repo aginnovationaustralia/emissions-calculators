@@ -16,8 +16,8 @@ export function calculateScope1Urea(
   // (Urea_ApplicationC18)
   const totalGg =
     totalMassFertiliser *
-    constants.FERTILISER_EF *
-    constants.GWP_FACTORSC13 *
+    constants.COMMON.FERTILISER_EF *
+    constants.COMMON.GWP_FACTORSC13 *
     10 ** -3;
   const ureaCO2 = totalGg * 10 ** 3;
 

@@ -1,13 +1,16 @@
 import { divideOrZero } from '@/utils/utils';
 import { ExecutionContext } from '../executionContext';
+import { ConstantsForGoatCalculator } from './constants';
 
-export function getMultiplier(context: ExecutionContext) {
+export function getMultiplier(
+  context: ExecutionContext<ConstantsForGoatCalculator>,
+) {
   const { constants } = context;
 
   return (
-    constants.FRAC_GASM *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
-    constants.GWP_FACTORSC15
+    constants.LIVESTOCK.FRAC_GASM *
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+    constants.COMMON.GWP_FACTORSC15
   );
 }
 

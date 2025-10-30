@@ -5,7 +5,7 @@ export function calculateScope1WasteWater(
   fluidWastes: FluidWasteInput[],
   { constants }: ExecutionContext,
 ) {
-  const { WASTEWATER } = constants;
+  const { WASTEWATER } = constants.COMMON;
   const {
     TREATMENT_EF,
     EF_COD,

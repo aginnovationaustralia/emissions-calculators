@@ -16,6 +16,7 @@ import { RiceOutput } from '../types/Rice/output';
 import { RiceCrop } from '../types/Rice/rice.input';
 import { RiceVegetation } from '../types/Rice/vegetation.input';
 import { State } from '../types/types';
+import { ConstantsForRiceCalculator } from './constants';
 import { calculateScope1N2O } from './Scope1';
 import { calculateScope1RiceCultivation } from './Scope1RiceCultivation';
 import { calculateScope1Urea } from './Scope1Urea';
@@ -46,7 +47,7 @@ export function calculateEntireRice(
   electricityRenewablePercentage: number,
   state: State,
   vegetation: RiceVegetation[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForRiceCalculator>,
 ): RiceOutput {
   const electricity = calculateElectricityScope2And3(
     state,
@@ -255,7 +256,10 @@ export function calculateEntireRice(
   return result;
 }
 
-export function calculateRice(input: RiceInput, context: ExecutionContext) {
+export function calculateRice(
+  input: RiceInput,
+  context: ExecutionContext<ConstantsForRiceCalculator>,
+) {
   return calculateEntireRice(
     input.crops,
     input.electricityUse,

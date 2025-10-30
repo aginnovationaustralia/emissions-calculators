@@ -14,22 +14,22 @@ export function calculateTreeCarbonSequestration(
   }
 
   // (treesD19)
-  const regionNo = constants.TREE_REGIONS.RegionNo[vegetation.region];
+  const regionNo = constants.COMMON.TREE_REGIONS.RegionNo[vegetation.region];
 
   // TODO: not the best way to do this, but it works for now. would have to
   // regenerate regions constants to be row based
   // (treesD19)
   const regionTrees = [
-    constants.TREE_REGIONS.TreeSpecies1[vegetation.region],
-    constants.TREE_REGIONS.TreeSpecies2[vegetation.region],
-    constants.TREE_REGIONS.TreeSpecies3[vegetation.region],
-    constants.TREE_REGIONS.TreeSpecies4[vegetation.region],
-    constants.TREE_REGIONS.TreeSpecies5[vegetation.region],
-    constants.TREE_REGIONS.TreeSpecies6[vegetation.region],
+    constants.COMMON.TREE_REGIONS.TreeSpecies1[vegetation.region],
+    constants.COMMON.TREE_REGIONS.TreeSpecies2[vegetation.region],
+    constants.COMMON.TREE_REGIONS.TreeSpecies3[vegetation.region],
+    constants.COMMON.TREE_REGIONS.TreeSpecies4[vegetation.region],
+    constants.COMMON.TREE_REGIONS.TreeSpecies5[vegetation.region],
+    constants.COMMON.TREE_REGIONS.TreeSpecies6[vegetation.region],
   ];
   const regionSoils = [
-    constants.TREE_REGIONS.SoilType1[vegetation.region],
-    constants.TREE_REGIONS.SoilType2[vegetation.region],
+    constants.COMMON.TREE_REGIONS.SoilType1[vegetation.region],
+    constants.COMMON.TREE_REGIONS.SoilType2[vegetation.region],
   ];
 
   // TODO: have a failsafe for this where a species is not found, i.e someone

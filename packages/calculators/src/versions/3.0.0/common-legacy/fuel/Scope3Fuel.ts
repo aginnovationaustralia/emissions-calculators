@@ -2,7 +2,7 @@ import { ExecutionContext } from '../../executionContext';
 
 function getScope3FuelConstants(context: ExecutionContext) {
   const { constants } = context;
-  const { STATIONARY, TRANSPORT } = constants.FUEL_ENERGYGJ;
+  const { STATIONARY, TRANSPORT } = constants.COMMON.FUEL_ENERGYGJ;
 
   /**
    * NOTE

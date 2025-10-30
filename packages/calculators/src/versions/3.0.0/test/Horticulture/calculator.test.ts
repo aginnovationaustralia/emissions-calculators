@@ -4,6 +4,7 @@ import {
   calculateEntireHorticulture,
   calculateHorticulture,
 } from '../../Horticulture/calculator';
+import { ConstantsForHorticultureCalculator } from '../../Horticulture/constants';
 import { HorticultureInput } from '../../types/Horticulture/input';
 import { HorticultureIntermediateOutput } from '../../types/Horticulture/intermediate.output';
 import { HorticultureOutput } from '../../types/Horticulture/output';
@@ -98,7 +99,8 @@ describe('Horticulture calculator (multi activity)', () => {
     HorticultureInput,
     HorticultureIntermediateOutput,
     'intermediate',
-    HorticultureOutput
+    HorticultureOutput,
+    ConstantsForHorticultureCalculator
   >(
     'Grains',
     calculateHorticulture,

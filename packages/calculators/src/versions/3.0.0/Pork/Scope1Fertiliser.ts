@@ -1,10 +1,11 @@
 import { getOtherFertiliserAmounts } from '../common/fertiliser';
 import { ExecutionContext } from '../executionContext';
 import { Fertiliser } from '../types/fertiliser.input';
+import { ConstantsForPorkCalculator } from './constants';
 
 export function calculateScope1Fertiliser(
   fertiliser: Fertiliser,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPorkCalculator>,
 ) {
   const { constants } = context;
 
@@ -18,36 +19,36 @@ export function calculateScope1Fertiliser(
   const soilEmissionsGrazingDryland =
     fertiliser.pastureDryland *
     0.46 *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+    constants.COMMON.GWP_FACTORSC15;
 
   const soilEmissionsCroppingDryland =
     fertiliser.cropsDryland *
     0.46 *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
+    constants.COMMON.GWP_FACTORSC15;
 
   const soilEmissionsOtherDryland =
     otherFertiliserDryland *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
+    constants.COMMON.GWP_FACTORSC15;
 
   const soilEmissionsGrazingIrrigated =
     fertiliser.pastureIrrigated *
     0.46 *
-    constants.AGRICULTURAL_SOILS.EF_IRRIGATEDPASTURE *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDPASTURE *
+    constants.COMMON.GWP_FACTORSC15;
 
   const soilEmissionsCroppingIrrigated =
     fertiliser.cropsIrrigated *
     0.46 *
-    constants.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
+    constants.COMMON.GWP_FACTORSC15;
 
   const soilEmissionsOtherIrrigated =
     otherFertiliserIrrigated *
-    constants.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
+    constants.COMMON.GWP_FACTORSC15;
 
   // (Agricultural_SoilsD18)
   const totalCO2 =
@@ -57,7 +58,7 @@ export function calculateScope1Fertiliser(
       soilEmissionsGrazingIrrigated +
       soilEmissionsCroppingIrrigated +
       soilEmissionsOtherIrrigated) *
-    constants.GWP_FACTORSC6;
+    constants.COMMON.GWP_FACTORSC6;
   // END N2O - FERTILISER
   //
   //

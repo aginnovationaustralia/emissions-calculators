@@ -1,5 +1,6 @@
 import { ExecutionContext } from '../executionContext';
 import { FeedlotStay } from '../types/Feedlot/stay.input';
+import { ConstantsForFeedlotCalculator } from './constants';
 
 //
 //
@@ -7,7 +8,7 @@ import { FeedlotStay } from '../types/Feedlot/stay.input';
 // START SCOPE 1 ENTERIC FERMENTATION
 export function calculateScope1Enteric(
   stay: FeedlotStay,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForFeedlotCalculator>,
 ) {
   const feedIntake = stay.dailyIntake;
 
@@ -32,7 +33,7 @@ export function calculateScope1Enteric(
   const seasonalMethane =
     stay.stayAverageDuration * stay.livestock * dailyMethaneYield * 10 ** -6;
 
-  const totalCO2Gg = seasonalMethane * context.constants.GWP_FACTORSC5;
+  const totalCO2Gg = seasonalMethane * context.constants.COMMON.GWP_FACTORSC5;
 
   const totalTonnes = totalCO2Gg * 10 ** 3;
 

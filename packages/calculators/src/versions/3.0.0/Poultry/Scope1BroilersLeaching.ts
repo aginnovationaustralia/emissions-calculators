@@ -2,6 +2,7 @@ import { ExecutionContext } from '../executionContext';
 import { BroilerClass } from '../types/Poultry/broilerclass.input';
 import { BroilersComplete } from '../types/Poultry/broilers.input';
 import { State } from '../types/types';
+import { ConstantsForPoultryCalculator } from './constants';
 import {
   getBroilersTotalDungUrine,
   getBroilerTotalBirdNumbers,
@@ -13,7 +14,7 @@ function broilerLeaching(
   state: State,
   rainfallAbove600: boolean,
   fractionWasteThroughDrylot: number,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
 ) {
   const { constants } = context;
 
@@ -26,7 +27,7 @@ function broilerLeaching(
 
   // (Manure_Management_BroilersD84, Manure_Management_BroilersD86, Manure_Management_BroilersD87)
   const { dryMatterIntake, crudeProtein, nitrogenRetentionRate } =
-    constants.POULTRY_DIET_PROPERTIES.meat_chicken_growers;
+    constants.POULTRY.DIET_PROPERTIES.meat_chicken_growers;
 
   // (Data_Input_BroilersC23, Nitrous_Oxide_MMS_BroilersD25)
   const dryMatterIntakeInput = broiler.dryMatterIntake ?? dryMatterIntake;
@@ -86,8 +87,8 @@ function broilerLeaching(
   const fracWetMultiplier = rainfallAbove600 ? 1 : 0;
 
   // (Agricultural_Soils_BroilersF68)
-  const fracLeach = constants.LEACHING.FRACLEACH_BROILER;
-  const fracLeachMMS = constants.LEACHING.FRACLEACH;
+  const fracLeach = constants.COMMON.LEACHING.FRACLEACH_BROILER;
+  const fracLeachMMS = constants.COMMON.LEACHING.FRACLEACH;
 
   // (Agricultural_Soils_BroilersF69)
   const proportionAppliedToSoil = broilers.manureWasteAllocation;
@@ -100,11 +101,11 @@ function broilerLeaching(
     proportionAppliedToSoil;
 
   // (Nitrous_Oxide_MMS_BroilersD135, Agricultural_Soils_BroilersD11)
-  const leachingEF = constants.LEACHING.N2O_EF;
+  const leachingEF = constants.COMMON.LEACHING.N2O_EF;
 
   // (Agricultural_Soils_BroilersD80)
   const growerNDungUrine =
-    dungAndUrineN * leachingEF * constants.GWP_FACTORSC15;
+    dungAndUrineN * leachingEF * constants.COMMON.GWP_FACTORSC15;
 
   // (Data_Input_BroilersE121, Nitrous_Oxide_MMS_BroilersE148, Nitrous_Oxide_MMS_BroilersF120)
   const fractionOfWasteHandledDrylotSolidStorage = fractionWasteThroughDrylot;
@@ -141,7 +142,7 @@ export function calculateScope1BroilersLeaching(
   broilers: BroilersComplete,
   state: State,
   rainfallAbove600: boolean,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
 ) {
   const meatGrowerLeach = broilers.groups.reduce(
     (acc, group) => {
@@ -209,7 +210,7 @@ export function calculateScope1BroilersLeaching(
   const totalNDungUrineN2O = totalNDungUrine * 10 ** 3;
 
   // (Agricultural_Soils_BroilersC88)
-  const totalN2OLeaching = totalNDungUrineN2O * constants.GWP_FACTORSC6;
+  const totalN2OLeaching = totalNDungUrineN2O * constants.COMMON.GWP_FACTORSC6;
 
   // (Nitrous_Oxide_MMS_BroilersC143)
   const totalLeaching =
@@ -218,7 +219,7 @@ export function calculateScope1BroilersLeaching(
     meatOtherLeach.leaching;
 
   // (Nitrous_Oxide_MMS_BroilersC144)
-  const totalLeachingGg = totalLeaching * constants.GWP_FACTORSC6;
+  const totalLeachingGg = totalLeaching * constants.COMMON.GWP_FACTORSC6;
 
   // (Nitrous_Oxide_MMS_BroilersC145)
   const totalLeachingCO2 = totalLeachingGg * 10 ** 3;

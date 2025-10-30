@@ -10,7 +10,7 @@ export function calculateScope1Refrigerant(
   // resulting units is tonnes CO2e
   return refrigerants.reduce((acc, { refrigerant, chargeSize }) => {
     // chargeSize is in kg
-    const factor = constants.REFRIGERANT_GWP[refrigerant];
+    const factor = constants.COMMON.REFRIGERANT_GWP[refrigerant];
 
     return acc + (factor * chargeSize) / 1000;
   }, 0);

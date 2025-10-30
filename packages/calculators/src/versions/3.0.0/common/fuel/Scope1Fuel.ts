@@ -90,7 +90,7 @@ export function calculateScope1And3Fuel(
   context: ExecutionContext,
 ) {
   const { constants } = context;
-  const { FUEL_ENERGYGJ } = constants;
+  const { FUEL_ENERGYGJ } = constants.COMMON;
   const { stationaryFuel, transportFuel, naturalGas } = fuel;
 
   const stationaryFuelAmountsKl = new Map<StationaryFuelTypes, number>();

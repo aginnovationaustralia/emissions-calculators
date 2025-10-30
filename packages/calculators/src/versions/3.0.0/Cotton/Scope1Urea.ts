@@ -1,10 +1,11 @@
 import { ExecutionContext } from '../executionContext';
 import { CottonCrop } from '../types/Cotton/cotton.input';
+import { ConstantsForCottonCalculator } from './constants';
 import { getUreaMass } from './functions';
 
 export function calculateScope1Urea(
   cotton: CottonCrop,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForCottonCalculator>,
 ) {
   const { constants } = context;
   // co2
@@ -17,8 +18,8 @@ export function calculateScope1Urea(
   // (Urea_ApplicationC18)
   const totalGg =
     totalMassFertiliser *
-    constants.FERTILISER_EF *
-    constants.GWP_FACTORSC13 *
+    constants.COMMON.FERTILISER_EF *
+    constants.COMMON.GWP_FACTORSC13 *
     10 ** -3;
   const ureaCO2 = totalGg * 10 ** 3;
 

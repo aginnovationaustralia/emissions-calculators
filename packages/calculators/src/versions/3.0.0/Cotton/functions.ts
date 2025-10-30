@@ -1,32 +1,38 @@
 import { ExecutionContext } from '../executionContext';
 import { CottonCrop } from '../types/Cotton/cotton.input';
+import { ConstantsForCottonCalculator } from './constants';
 
 export function getNitrogenFertiliser(
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForCottonCalculator>,
   cotton: CottonCrop,
 ) {
   const { constants } = context;
 
   return (
-    cotton.ureaApplication * constants.FERTILISER_CONTENT.UREA.N +
+    cotton.ureaApplication * constants.COMMON.FERTILISER_CONTENT.UREA.N +
     cotton.nonUreaNitrogen +
-    cotton.ureaAmmoniumNitrate * constants.FERTILISER_CONTENT.UAN.N
+    cotton.ureaAmmoniumNitrate * constants.COMMON.FERTILISER_CONTENT.UAN.N
   );
 }
 
-export function getUreaMass(context: ExecutionContext, cotton: CottonCrop) {
+export function getUreaMass(
+  context: ExecutionContext<ConstantsForCottonCalculator>,
+  cotton: CottonCrop,
+) {
   const { constants } = context;
 
   return (
     cotton.ureaApplication +
-    cotton.ureaAmmoniumNitrate * constants.GWP_FACTORSC22
+    cotton.ureaAmmoniumNitrate * constants.COMMON.GWP_FACTORSC22
   );
 }
 
-export function getFertiliserFractionRunoff(context: ExecutionContext) {
+export function getFertiliserFractionRunoff(
+  context: ExecutionContext<ConstantsForCottonCalculator>,
+) {
   const { constants } = context;
 
-  return constants.FERTILISER_FRACTION_RUNOFF_STATIC;
+  return constants.CROP.FERTILISER_FRACTION_RUNOFF_STATIC;
 }
 
 export function getIntensityDenominators(crop: CottonCrop) {

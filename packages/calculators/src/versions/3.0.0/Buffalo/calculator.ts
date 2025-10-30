@@ -21,6 +21,7 @@ import { BuffaloComplete } from '../types/Buffalo/buffalo.input';
 import { BuffaloInput } from '../types/Buffalo/input';
 import { BuffaloOutput } from '../types/Buffalo/output';
 import { BuffaloClassesAPI, State } from '../types/types';
+import { ConstantsForBuffaloCalculator } from './constants';
 import { getEmissionsIntensities } from './functions';
 import { calculateScope1 } from './Scope1Buffalo';
 import { calculateScope1Urea } from './Scope1Urea';
@@ -37,7 +38,7 @@ export function calculateSingleBuffalo(
   state: State,
   rainfallAbove600: boolean,
   buffalo: BuffaloComplete,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForBuffaloCalculator>,
   carbonSequestration: number,
   id: string,
 ) {
@@ -208,7 +209,7 @@ export function calculateSingleBuffalo(
 
 export function calculateBuffalo(
   input: BuffaloInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForBuffaloCalculator>,
 ): BuffaloOutput {
   // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(

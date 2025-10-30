@@ -7,6 +7,7 @@ import {
   DairyProductionSystem,
   State,
 } from '../types/types';
+import { ConstantsForDairyCalculator } from './constants';
 import {
   getManureSumpDispersalFractionMilking,
   getManureSumpDispersalFractionOther,
@@ -39,7 +40,7 @@ export function calculateScope1(
   system: DairyProductionSystem,
   state: State,
   rainfallAbove600: boolean,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForDairyCalculator>,
 ) {
   // (Agricultural_SoilsD77, Data_InputD94)
   const manureAnaerobicFractionMilking =
@@ -164,7 +165,7 @@ export function calculateScope1(
 
           // (Nitrous_Oxide_MMSD59)
           const referenceWeight =
-            constants.DAIRY_CATTLE_STANDARD_REFERENCE_WEIGHTS[dairyClass];
+            constants.DAIRY.CATTLE_STANDARD_REFERENCE_WEIGHTS[dairyClass];
 
           // (Nitrous_Oxide_MMSD45)
           const relativeSize = liveweight / referenceWeight;
@@ -237,7 +238,7 @@ export function calculateScope1(
               ? manureAnaerobicFractionMilking
               : manureAnaerobicFractionOtherDairy) *
             (1 -
-              constants.DAIRY_CATTLE_N2O_MMS.anaerobic_lagoon.EF -
+              constants.DAIRY.CATTLE_N2O_MMS.anaerobic_lagoon.EF -
               mmsAnaerobicLagoonFracGASM);
 
           // (Agricultural_SoilsB121)
@@ -250,7 +251,7 @@ export function calculateScope1(
               ? manureSumpDispersalFractionMilking
               : manureSumpDispersalFractionOther) *
             (1 -
-              constants.DAIRY_CATTLE_N2O_MMS.daily_spread.EF -
+              constants.DAIRY.CATTLE_N2O_MMS.daily_spread.EF -
               mmsSumpDispersalFracGASM);
 
           // (Agricultural_SoilsD123)
@@ -260,8 +261,8 @@ export function calculateScope1(
               ? manureDrainToPaddockFractionMilking
               : manureDrainToPaddockFractionOther) *
             (1 -
-              constants.DAIRY_CATTLE_N2O_MMS.daily_spread.EF -
-              constants.DAIRY_CATTLE_N2O_MMS.daily_spread.FracGASM);
+              constants.DAIRY.CATTLE_N2O_MMS.daily_spread.EF -
+              constants.DAIRY.CATTLE_N2O_MMS.daily_spread.FracGASM);
 
           // (Agricultural_SoilsD128)
           const mmsSolidStorage =
@@ -270,8 +271,8 @@ export function calculateScope1(
                 ? manureSolidStorageFractionMilking
                 : manureSolidStorageFractionOther) *
               (1 -
-                constants.DAIRY_CATTLE_N2O_MMS.solid_storage.EF -
-                constants.DAIRY_CATTLE_N2O_MMS.solid_storage.FracGASM) -
+                constants.DAIRY.CATTLE_N2O_MMS.solid_storage.EF -
+                constants.DAIRY.CATTLE_N2O_MMS.solid_storage.FracGASM) -
             leachingSolidStorage;
 
           // (Agricultural_SoilsD134:137)
@@ -313,8 +314,8 @@ export function calculateScope1(
           // (Agricultural_SoilsD264)
           const massAnimalWastLostThroughRunoff =
             massOfAnimalWasteVolatisedPre *
-            constants.LEACHING.FERT_N_FRACLEACH *
-            constants.LEACHING.FERT_N_FRACWET;
+            constants.COMMON.LEACHING.FERT_N_FRACLEACH *
+            constants.COMMON.LEACHING.FERT_N_FRACWET;
 
           // manure N2O
 
@@ -345,8 +346,8 @@ export function calculateScope1(
               ? manureSolidStorageFractionMilking
               : manureSolidStorageFractionOther);
 
-          const gwpFactorsC15 = constants.GWP_FACTORSC15;
-          const mms = constants.DAIRY_MANURE_MANAGEMENT;
+          const gwpFactorsC15 = constants.COMMON.GWP_FACTORSC15;
+          const mms = constants.DAIRY.MANURE_MANAGEMENT;
           // (Nitrous_Oxide_MMS M108)
           const mms1Total = mms1Fraction * mms.PASTURE_EF * gwpFactorsC15;
           const mms2Total = mms2Fraction * mms.ANAEROBIC_EF * gwpFactorsC15;
@@ -374,14 +375,14 @@ export function calculateScope1(
           // (Nitrous_Oxide_MMSM193)
           const leachingStorage =
             mms8Fraction *
-            constants.LEACHING.STORAGE_FRACWET *
-            constants.LEACHING.STORAGE_FRACLEACH;
+            constants.COMMON.LEACHING.STORAGE_FRACWET *
+            constants.COMMON.LEACHING.STORAGE_FRACLEACH;
 
           // (Manure_ManagementM6)
           const volatileSolids =
             (feedIntake * (1 - dryMatterDigestibility / 100) +
               0.04 * feedIntake) *
-            (1 - constants.ASH_CONTENT);
+            (1 - constants.DAIRY.ASH_CONTENT);
 
           // (Manure_ManagementM18)
           const methaneMMS1 =
@@ -389,53 +390,53 @@ export function calculateScope1(
             (isMilkingCow
               ? manurePastureFractionMilking
               : manurePastureFractionOther) *
-            constants.METHANE_EMISSION_POTENTIAL *
-            constants.DAIRY_METHANE_CONVERSION_FACTOR[state].Pasture *
-            constants.METHANE_DENSITY;
+            constants.LIVESTOCK.METHANE_EMISSION_POTENTIAL *
+            constants.DAIRY.METHANE_CONVERSION_FACTOR[state].Pasture *
+            constants.LIVESTOCK.METHANE_DENSITY;
           const methaneMMS2 =
             volatileSolids *
             (isMilkingCow
               ? manureAnaerobicFractionMilking
               : manureAnaerobicFractionOtherDairy) *
-            constants.METHANE_EMISSION_POTENTIAL *
-            constants.DAIRY_METHANE_CONVERSION_FACTOR[state][
+            constants.LIVESTOCK.METHANE_EMISSION_POTENTIAL *
+            constants.DAIRY.METHANE_CONVERSION_FACTOR[state][
               'Anaerobic lagoon'
             ] *
-            constants.METHANE_DENSITY;
+            constants.LIVESTOCK.METHANE_DENSITY;
           const methaneMMS3 =
             volatileSolids *
             (isMilkingCow
               ? manureSumpDispersalFractionMilking
               : manureSumpDispersalFractionOther) *
-            constants.METHANE_EMISSION_POTENTIAL *
-            constants.DAIRY_METHANE_CONVERSION_FACTOR[state][
+            constants.LIVESTOCK.METHANE_EMISSION_POTENTIAL *
+            constants.DAIRY.METHANE_CONVERSION_FACTOR[state][
               'Sump and disperal systems'
             ] *
-            constants.METHANE_DENSITY;
+            constants.LIVESTOCK.METHANE_DENSITY;
           const methaneMMS5 =
             volatileSolids *
             (isMilkingCow
               ? manureDrainToPaddockFractionMilking
               : manureDrainToPaddockFractionOther) *
-            constants.METHANE_EMISSION_POTENTIAL *
-            constants.DAIRY_METHANE_CONVERSION_FACTOR[state][
+            constants.LIVESTOCK.METHANE_EMISSION_POTENTIAL *
+            constants.DAIRY.METHANE_CONVERSION_FACTOR[state][
               'Drains to paddock'
             ] *
-            constants.METHANE_DENSITY;
+            constants.LIVESTOCK.METHANE_DENSITY;
           const methaneMMS8 =
             volatileSolids *
             (isMilkingCow
               ? manureSolidStorageFractionMilking
               : manureSolidStorageFractionOther) *
-            constants.METHANE_EMISSION_POTENTIAL *
-            constants.DAIRY_METHANE_CONVERSION_FACTOR[state]['Solid Storage'] *
-            constants.METHANE_DENSITY;
+            constants.LIVESTOCK.METHANE_EMISSION_POTENTIAL *
+            constants.DAIRY.METHANE_CONVERSION_FACTOR[state]['Solid Storage'] *
+            constants.LIVESTOCK.METHANE_DENSITY;
 
           // (Manure_ManagementM43)
           const totalMethaneMMS =
             methaneMMS1 + methaneMMS2 + methaneMMS3 + methaneMMS5 + methaneMMS8;
 
-          const mpw = constants.DAIRY_METHANE_MPW[dairyClass];
+          const mpw = constants.DAIRY.METHANE_MPW[dairyClass];
 
           // (Manure_ManagementM53)
           const annualMethaneFromManure =
@@ -460,8 +461,8 @@ export function calculateScope1(
           // WARNING: calculator only uses milking cows urine dung
           const uringDungNitrogenTotal = isMilkingCow
             ? (urineDungFaecalNitrogen + urineDungUrinaryNitrogen) *
-              constants.URINEDUNG_EF *
-              constants.GWP_FACTORSC15
+              constants.LIVESTOCK.URINEDUNG_EF *
+              constants.COMMON.GWP_FACTORSC15
             : 0;
 
           return {
@@ -532,10 +533,10 @@ export function calculateScope1(
 
   // (Agricultural_SoilsD216)
   const massOfAnimalWasteVolatised =
-    total.massOfAnimalWasteVolatisedPre * constants.FRAC_GASM;
+    total.massOfAnimalWasteVolatisedPre * constants.LIVESTOCK.FRAC_GASM;
 
   // (Enteric_FermentationL35)
-  const methaneGg = total.methaneProduction * constants.GWP_FACTORSC5;
+  const methaneGg = total.methaneProduction * constants.COMMON.GWP_FACTORSC5;
   const totalEntericMethane = methaneGg * 10 ** 3;
 
   // (Agricultural_SoilsD139)
@@ -543,9 +544,10 @@ export function calculateScope1(
 
   // (Agricultural_SoilsD145)
   const totalAnimalWasteN2O =
-    totalMMS * constants.DAIRY_MMS_EF * constants.GWP_FACTORSC15;
+    totalMMS * constants.DAIRY.MMS_EF * constants.COMMON.GWP_FACTORSC15;
   // (Agricultural_SoilsD146)
-  const totalAnimalWasteGg = totalAnimalWasteN2O * constants.GWP_FACTORSC6;
+  const totalAnimalWasteGg =
+    totalAnimalWasteN2O * constants.COMMON.GWP_FACTORSC6;
   // (Agricultural_SoilsD147, Data_SummaryC14)
   const totalAnimalWaste = totalAnimalWasteGg * 10 ** 3;
 
@@ -554,8 +556,8 @@ export function calculateScope1(
   const FRACTION_OF_N_APPLIED_TO_PRODUCTIONSYSTEM = 1;
 
   const productionSystemConstants = rainfallAbove600
-    ? constants.DAIRY_PRODUCTIONSYSTEM_EF.RAINFALL_GT_600
-    : constants.DAIRY_PRODUCTIONSYSTEM_EF.RAINFALL_LT_600;
+    ? constants.DAIRY.PRODUCTIONSYSTEM_EF.RAINFALL_GT_600
+    : constants.DAIRY.PRODUCTIONSYSTEM_EF.RAINFALL_LT_600;
 
   // (Agricultural_SoilsD247)
   const totalEmissionsFromFertiliser = SEASONS.reduce(
@@ -599,23 +601,23 @@ export function calculateScope1(
       // (Agricultural_SoilsD247)
       const leachingCropsNonIrrigated =
         nCropsNonIrrigated *
-        constants.LEACHING.FERT_N_FRACWET *
-        constants.LEACHING.FERT_N_FRACLEACH;
+        constants.COMMON.LEACHING.FERT_N_FRACWET *
+        constants.COMMON.LEACHING.FERT_N_FRACLEACH;
 
       const leachingCropsIrrigated =
         nCropsIrrigated *
-        constants.LEACHING.FERT_N_FRACWET *
-        constants.LEACHING.FERT_N_FRACLEACH;
+        constants.COMMON.LEACHING.FERT_N_FRACWET *
+        constants.COMMON.LEACHING.FERT_N_FRACLEACH;
 
       const leachingPastureNonIrrigated =
         nPastureNonIrrigated *
-        constants.LEACHING.FERT_N_FRACWET *
-        constants.LEACHING.FERT_N_FRACLEACH;
+        constants.COMMON.LEACHING.FERT_N_FRACWET *
+        constants.COMMON.LEACHING.FERT_N_FRACLEACH;
 
       const leachingPastureIrrigated =
         nPastureIrrigated *
-        constants.LEACHING.FERT_N_FRACWET *
-        constants.LEACHING.FERT_N_FRACLEACH;
+        constants.COMMON.LEACHING.FERT_N_FRACWET *
+        constants.COMMON.LEACHING.FERT_N_FRACLEACH;
 
       const totalLeaching =
         leachingCropsNonIrrigated +
@@ -629,19 +631,19 @@ export function calculateScope1(
       const cropsNonIrrigatedN2O =
         nCropsNonIrrigated *
         productionSystemConstants['Non-irrigated Crop'] *
-        constants.GWP_FACTORSC15;
+        constants.COMMON.GWP_FACTORSC15;
       const cropsIrrigatedN2O =
         nCropsIrrigated *
         productionSystemConstants['Irrigated Crop'] *
-        constants.GWP_FACTORSC15;
+        constants.COMMON.GWP_FACTORSC15;
       const pastureNonIrrigatedN2O =
         nPastureNonIrrigated *
         productionSystemConstants['Non-irrigated Pasture'] *
-        constants.GWP_FACTORSC15;
+        constants.COMMON.GWP_FACTORSC15;
       const pastureIrrigatedN2O =
         nPastureIrrigated *
         productionSystemConstants['Irrigated Pasture'] *
-        constants.GWP_FACTORSC15;
+        constants.COMMON.GWP_FACTORSC15;
 
       const totalSyntheticFertiliserN2O =
         cropsNonIrrigatedN2O +
@@ -651,13 +653,21 @@ export function calculateScope1(
 
       // (Agricultural_SoilsD184)
       const atmosphericCropsNonIrrigated =
-        nitrogenFertiliserCropsNonIrrigated * 10 ** -6 * constants.FRAC_GASF;
+        nitrogenFertiliserCropsNonIrrigated *
+        10 ** -6 *
+        constants.COMMON.FRAC_GASF;
       const atmosphericCropsIrrigated =
-        nitrogenFertiliserCropsIrrigated * 10 ** -6 * constants.FRAC_GASF;
+        nitrogenFertiliserCropsIrrigated *
+        10 ** -6 *
+        constants.COMMON.FRAC_GASF;
       const atmosphericPastureNonIrrigated =
-        nitrogenFertiliserPastureNonIrrigated * 10 ** -6 * constants.FRAC_GASF;
+        nitrogenFertiliserPastureNonIrrigated *
+        10 ** -6 *
+        constants.COMMON.FRAC_GASF;
       const atmosphericPastureIrrigated =
-        nitrogenFertiliserPastureIrrigated * 10 ** -6 * constants.FRAC_GASF;
+        nitrogenFertiliserPastureIrrigated *
+        10 ** -6 *
+        constants.COMMON.FRAC_GASF;
 
       const totalAtmospheric =
         atmosphericCropsNonIrrigated +
@@ -677,24 +687,25 @@ export function calculateScope1(
   // (Agricultural_SoilsD232)
   const atmosphericDepositionN2OFertiliser =
     (massOfAnimalWasteVolatised + totalEmissionsFromFertiliser.atmospheric) *
-    constants.DAIRY_MASS_N_VOLATISED_EF *
-    constants.GWP_FACTORSC15;
+    constants.DAIRY.MASS_N_VOLATISED_EF *
+    constants.COMMON.GWP_FACTORSC15;
   const atmosphericDepositionN2OFertiliserGg =
-    atmosphericDepositionN2OFertiliser * constants.GWP_FACTORSC6;
+    atmosphericDepositionN2OFertiliser * constants.COMMON.GWP_FACTORSC6;
   const atmosphericDepositionN2O = atmosphericDepositionN2OFertiliserGg * 1000;
 
   // (Agricultural_SoilsD275)
   const totalN2OLeaching =
     (totalEmissionsFromFertiliser.leaching +
       total.massAnimalWastLostThroughRunoff) *
-    constants.LEACHING.N2O_EF *
-    constants.GWP_FACTORSC15;
-  const totalN2OLeachingGg = totalN2OLeaching * constants.GWP_FACTORSC6;
+    constants.COMMON.LEACHING.N2O_EF *
+    constants.COMMON.GWP_FACTORSC15;
+  const totalN2OLeachingGg = totalN2OLeaching * constants.COMMON.GWP_FACTORSC6;
   const totalN2OLeachingTonnes = totalN2OLeachingGg * 10 ** 3;
   // LEACHING VALUE
 
   // (Nitrous_Oxide_MMSL139)
-  const totalMMSN2ODirectGg = total.mmsDirectTotalN2O * constants.GWP_FACTORSC6;
+  const totalMMSN2ODirectGg =
+    total.mmsDirectTotalN2O * constants.COMMON.GWP_FACTORSC6;
   const totalMMSN2ODirect = totalMMSN2ODirectGg * 10 ** 3;
 
   // (Nitrous_Oxide_MMSL183)
@@ -706,17 +717,17 @@ export function calculateScope1(
   const totalMMSN2OIndirectGg =
     totalMMSN2OIndirect *
     productionSystemEF *
-    constants.GWP_FACTORSC15 *
-    constants.GWP_FACTORSC6;
+    constants.COMMON.GWP_FACTORSC15 *
+    constants.COMMON.GWP_FACTORSC6;
 
   const totalMMSN2OIndirectTonnes = totalMMSN2OIndirectGg * 10 ** 3;
 
   // (Nitrous_Oxide_MMSL205)
   const totalLeachingSolidStorageGg =
     total.leachingStorage *
-    constants.LEACHING.STORAGE_EF *
-    constants.GWP_FACTORSC15 *
-    constants.GWP_FACTORSC6;
+    constants.COMMON.LEACHING.STORAGE_EF *
+    constants.COMMON.GWP_FACTORSC15 *
+    constants.COMMON.GWP_FACTORSC6;
 
   const totalLeachingSolidStorage = totalLeachingSolidStorageGg * 10 ** 3;
 
@@ -726,17 +737,17 @@ export function calculateScope1(
   const totalManureN2O = totalMMSN2ODirect + totalManureIndirectN2O;
 
   // (Manure_ManagementL59)
-  const totalMethaneGg = total.annualMethane * constants.GWP_FACTORSC5;
+  const totalMethaneGg = total.annualMethane * constants.COMMON.GWP_FACTORSC5;
   const totalMethaneTonnes = totalMethaneGg * 10 ** 3;
 
   // (Agricultural_SoilsD173)
   const totalUrineDungGg =
-    total.uringDungNitrogenTotal * constants.GWP_FACTORSC6;
+    total.uringDungNitrogenTotal * constants.COMMON.GWP_FACTORSC6;
   const urineDungTonnes = totalUrineDungGg * 10 ** 3;
 
   // (Agricultural_SoilsD71)
   const totalN2OFromFertiliserGg =
-    totalEmissionsFromFertiliser.fertiliser * constants.GWP_FACTORSC6;
+    totalEmissionsFromFertiliser.fertiliser * constants.COMMON.GWP_FACTORSC6;
   const totalN2OFromFertiliser = totalN2OFromFertiliserGg * 10 ** 3;
 
   return {

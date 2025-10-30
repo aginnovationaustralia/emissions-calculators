@@ -12,7 +12,7 @@ export function calculateScope3Lime(
     FUEL_SCOPE3_PRODUCTION_COAL,
     FUEL_SCOPE3_PRODUCTION_GASOLINE,
     FUEL_SCOPE3_POST_PRODUCTION_DISTILLATE_FUEL,
-  } = constants.LIMING.SCOPE3;
+  } = constants.COMMON.LIMING.SCOPE3;
 
   // (Embedded_Emissions_J11)
   const productionTotal =

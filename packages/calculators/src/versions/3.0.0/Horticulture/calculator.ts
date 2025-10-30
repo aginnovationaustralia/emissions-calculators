@@ -20,6 +20,7 @@ import { HorticultureInput } from '../types/Horticulture/input';
 import { HorticultureOutput } from '../types/Horticulture/output';
 import { HorticultureVegetation } from '../types/Horticulture/vegetation.input';
 import { State } from '../types/types';
+import { ConstantsForHorticultureCalculator } from './constants';
 import { calculateScope1N2O } from './Scope1';
 import { calculateScope1Refrigerant } from './Scope1Refrigerant';
 import { calculateScope1Urea } from './Scope1Urea';
@@ -49,7 +50,7 @@ export function calculateEntireHorticulture(
   electricityRenewablePercentage: number,
   state: State,
   vegetation: HorticultureVegetation[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForHorticultureCalculator>,
 ): HorticultureOutput {
   const electricity = calculateElectricityScope2And3(
     state,
@@ -258,7 +259,7 @@ export function calculateEntireHorticulture(
 
 export function calculateHorticulture(
   input: HorticultureInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForHorticultureCalculator>,
 ) {
   return calculateEntireHorticulture(
     input.crops,

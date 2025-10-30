@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import clone from 'nanoclone';
 import { calculateEntireRice, calculateRice } from '../../Rice/calculator';
+import { ConstantsForRiceCalculator } from '../../Rice/constants';
 import { RiceInput } from '../../types/Rice/input';
 import { RiceIntermediateOutput } from '../../types/Rice/intermediate.output';
 import { RiceOutput } from '../../types/Rice/output';
@@ -93,7 +94,8 @@ describe('Rice calculator (multi activity)', () => {
     RiceInput,
     RiceIntermediateOutput,
     'intermediate',
-    RiceOutput
+    RiceOutput,
+    ConstantsForRiceCalculator
   >(
     V2_0_0,
     calculateRice,

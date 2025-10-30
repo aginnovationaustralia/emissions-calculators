@@ -6,5 +6,5 @@ export function calculateCommercialFlights(
 ) {
   const { constants } = context;
 
-  return flightDistance * constants.FISHERIES_COMMERCIALFLIGHT_EF;
+  return flightDistance * constants.COMMON.COMMERCIALFLIGHT_EF;
 }

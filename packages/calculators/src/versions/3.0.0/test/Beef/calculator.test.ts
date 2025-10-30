@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import clone from 'nanoclone';
 import { calculateBeef } from '../../Beef/calculator';
+import { ConstantsForBeefCalculator } from '../../Beef/constants';
 import { validateCalculatorInput } from '../../calculators';
 import { entriesFromObject } from '../../common/tools/object';
 import { BeefInput, BeefInputSchema } from '../../types/Beef/input';
@@ -128,7 +129,8 @@ describe('Beef calculator (multi activity)', () => {
     BeefInput,
     BeefIntermediateOutput,
     'intermediate',
-    BeefOutput
+    BeefOutput,
+    ConstantsForBeefCalculator
   >(
     'Beef',
     calculateBeef,

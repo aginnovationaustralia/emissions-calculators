@@ -1,9 +1,10 @@
 import { ExecutionContext } from '../executionContext';
 import { PorkClasses } from '../types/Pork/porkclasses.input';
+import { ConstantsForPorkCalculator } from './constants';
 
 export function calculateScope3PurchasedLivestock(
   classes: PorkClasses,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPorkCalculator>,
 ) {
   const { constants } = context;
 
@@ -34,7 +35,7 @@ export function calculateScope3PurchasedLivestock(
   }, 0);
 
   const scope3Kg =
-    totalLiveweightPurchased * constants.PURCHASED_LIVESTOCK_EF.PORK;
+    totalLiveweightPurchased * constants.LIVESTOCK.PURCHASED_LIVESTOCK_EF.PORK;
 
   return scope3Kg / 1000;
 }

@@ -1,9 +1,10 @@
 import { ExecutionContext } from '../executionContext';
 import { GrainsCrop } from '../types/Grains/crop.input';
+import { ConstantsForGrainsCalculator } from './constants';
 
 export function calculateScope1Urea(
   crop: GrainsCrop,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) {
   const { constants } = context;
 
@@ -19,8 +20,8 @@ export function calculateScope1Urea(
   // (ureaApplicationC19)
   const massFertiliserGg =
     totalMassOfFertiliser *
-    constants.FERTILISER_EF *
-    constants.GWP_FACTORSC13 *
+    constants.COMMON.FERTILISER_EF *
+    constants.COMMON.GWP_FACTORSC13 *
     10 ** -3;
 
   // (dataSummary_B7)

@@ -1,4 +1,4 @@
-import { Constants } from './constants/versionedConstants';
+import { HasCommonConstants } from './common/constants';
 
 type ExecutionMetadata = {
   calculator: string;
@@ -6,8 +6,10 @@ type ExecutionMetadata = {
   timestamp: string;
   overrides?: object | undefined;
 };
-export interface ExecutionContext extends ExecutionMetadata {
-  constants: Constants;
+export interface ExecutionContext<
+  T extends HasCommonConstants = HasCommonConstants,
+> extends ExecutionMetadata {
+  constants: T;
 }
 
 export type WithExecutionMetadata<T> = T & { metaData: ExecutionMetadata };

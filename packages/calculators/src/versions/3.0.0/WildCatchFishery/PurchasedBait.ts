@@ -1,10 +1,11 @@
 import { ExecutionContext } from '../executionContext';
 import { AquacultureCustomBaitPurchase } from '../types/Aquaculture/custombaitpurchase.input';
 import { WildCatchFisheryBaitPurchase } from '../types/WildCatchFishery/baitpurchase.input';
+import { ConstantsForWildCatchFisheryCalculator } from './constants';
 
 export function calculatePurchasedBait(
   bait: WildCatchFisheryBaitPurchase[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForWildCatchFisheryCalculator>,
 ) {
   const { constants } = context;
 
@@ -13,7 +14,7 @@ export function calculatePurchasedBait(
       acc,
       { type, purchasedTonnes, additionalIngredients, emissionsIntensity },
     ) => {
-      const baitEF = constants.FISHERIES_BAIT_EF[type];
+      const baitEF = constants.FISHERIES.BAIT_EF[type];
       const mainEmissions =
         purchasedTonnes * (1 - additionalIngredients) * baitEF;
       const additionalEmissions =

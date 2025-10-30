@@ -1,14 +1,15 @@
 import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { FeedlotSystem } from '../types/types';
+import { ConstantsForFeedlotCalculator } from './constants';
 
 export function getFeedlotProductionSystemEF(
   system: FeedlotSystem,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForFeedlotCalculator>,
 ) {
   const { constants } = context;
 
-  return constants.FEEDLOT_MANURE_EF[system].EF;
+  return constants.FEEDLOT.MANURE_EF[system].EF;
 }
 
 export function getEmissionsIntensities(

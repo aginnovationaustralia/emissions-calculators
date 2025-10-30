@@ -1,10 +1,11 @@
 import { ExecutionContext } from '../executionContext';
 import { LivestockPurchase } from '../types/livestockPurchase.input';
+import { ConstantsForPoultryCalculator } from './constants';
 
 export function calculateScope3PurchasedLivestock(
   purchases: LivestockPurchase[],
   purchasedFreeRange: number,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
 ) {
   const { constants } = context;
 
@@ -19,7 +20,7 @@ export function calculateScope3PurchasedLivestock(
   // (Purchased_Poultry_EmissionsF3)
   const conventionalEmissions =
     conventionalLiveweight *
-    constants.PURCHASED_LIVESTOCK_EF.POULTRY_CONVENTIONAL;
+    constants.LIVESTOCK.PURCHASED_LIVESTOCK_EF.POULTRY_CONVENTIONAL;
 
   // (Purchased_Poultry_EmissionsG3)
   const conventionalTonnes = conventionalEmissions / 1000;
@@ -29,7 +30,8 @@ export function calculateScope3PurchasedLivestock(
 
   // (Purchased_Poultry_EmissionsF4)
   const freeRangeEmissions =
-    freeRangeLiveweight * constants.PURCHASED_LIVESTOCK_EF.POULTRY_FREE_RANGE;
+    freeRangeLiveweight *
+    constants.LIVESTOCK.PURCHASED_LIVESTOCK_EF.POULTRY_FREE_RANGE;
 
   // (Purchased_Poultry_EmissionsG4)
   const freeRangeTonnes = freeRangeEmissions / 1000;

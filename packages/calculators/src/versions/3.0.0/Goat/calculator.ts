@@ -24,10 +24,11 @@ import { GoatComplete } from '../types/Goat/goat.input';
 import { GoatInput } from '../types/Goat/input';
 import { GoatOutput } from '../types/Goat/output';
 import { GoatClassesAPI, State } from '../types/types';
+import { ConstantsForGoatCalculator } from './constants';
+import { getIntensities } from './functions';
 import { calculateCompleteGoatEmissions } from './Scope1Goat';
 import { calculateScope1Urea } from './Scope1Urea';
 import { calculateScope3PurchaseLivestock } from './Scope3PurchasedLivestock';
-import { getIntensities } from './functions';
 
 /**
  * Entire calculator for Goat
@@ -41,7 +42,7 @@ export function calculateSingleGoat(
   state: State,
   rainfallAbove600: boolean,
   goats: GoatComplete,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForGoatCalculator>,
   carbonSequestration: number,
   id: string,
 ) {
@@ -241,7 +242,7 @@ export function calculateSingleGoat(
 
 export function calculateGoat(
   input: GoatInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForGoatCalculator>,
 ): GoatOutput {
   // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(

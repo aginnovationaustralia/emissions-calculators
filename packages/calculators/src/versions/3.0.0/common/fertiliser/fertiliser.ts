@@ -37,7 +37,9 @@ export const OTHER_TYPE_TO_SIMPLE_KEY: {
 
 function getRatioN(context: ExecutionContext, otherType: CustomisedFertiliser) {
   const { constants } = context;
-  return constants.FERTILISER_CONTENT[OTHER_TYPE_TO_SIMPLE_KEY[otherType]].N;
+  return constants.COMMON.FERTILISER_CONTENT[
+    OTHER_TYPE_TO_SIMPLE_KEY[otherType]
+  ].N;
 }
 
 export function getOtherFertiliserAmounts(
@@ -66,6 +68,7 @@ export function getUreaMass(context: ExecutionContext, crop: CropWithUrea) {
   const { constants } = context;
 
   return (
-    crop.ureaApplication + crop.ureaAmmoniumNitrate * constants.GWP_FACTORSC22
+    crop.ureaApplication +
+    crop.ureaAmmoniumNitrate * constants.COMMON.GWP_FACTORSC22
   );
 }

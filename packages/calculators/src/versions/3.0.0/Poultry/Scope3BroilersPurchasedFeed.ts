@@ -1,6 +1,7 @@
 import { ExecutionContext } from '../executionContext';
 import { PoultryFeed } from '../types/Poultry/feed.input';
 import { BroilerGroup } from '../types/Poultry/group.input';
+import { ConstantsForPoultryCalculator } from './constants';
 
 const INGREDIENTS = [
   'wheat',
@@ -10,14 +11,17 @@ const INGREDIENTS = [
   'millrun',
 ] as const;
 
-export function feedEmissions(feed: PoultryFeed, context: ExecutionContext) {
+export function feedEmissions(
+  feed: PoultryFeed,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
+) {
   const { constants } = context;
 
   // (Embedded_Emissions_F3)
   const totalIngredients = INGREDIENTS.reduce((acc, ingredient) => {
     return (
       acc +
-      constants.POULTRY_FEED_INGREDIENTS_GHG[ingredient] *
+      constants.POULTRY.FEED_INGREDIENTS_GHG[ingredient] *
         (feed.ingredients[ingredient] ?? 0) *
         feed.feedPurchased
     );
@@ -35,7 +39,7 @@ export function calculateScope3PurchasedFeed(
   feeds: PoultryFeed[],
   customFeed: number,
   customFeedEmissionIntensity: number,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
 ) {
   return (
     feeds.reduce((acc, feed) => {
@@ -47,7 +51,7 @@ export function calculateScope3PurchasedFeed(
 
 export function calculateScope3BroilersPurchasedFeed(
   groups: BroilerGroup[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPoultryCalculator>,
 ) {
   return groups.reduce((acc, group) => {
     return (

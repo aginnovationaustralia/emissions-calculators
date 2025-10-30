@@ -3,6 +3,7 @@ import clone from 'nanoclone';
 import { validateCalculatorInput } from '../../calculators';
 import { entriesFromObject } from '../../common/tools/object';
 import { calculatePork } from '../../Pork/calculator';
+import { ConstantsForPorkCalculator } from '../../Pork/constants';
 import { PorkInput, PorkInputSchema } from '../../types/Pork/input';
 import { PorkIntermediateOutput } from '../../types/Pork/intermediate.output';
 import { PorkOutput } from '../../types/Pork/output';
@@ -100,7 +101,8 @@ describe('Pork calculator (multi activity)', () => {
     PorkInput,
     PorkIntermediateOutput,
     'intermediate',
-    PorkOutput
+    PorkOutput,
+    ConstantsForPorkCalculator
   >(
     'Pork',
     calculatePork,

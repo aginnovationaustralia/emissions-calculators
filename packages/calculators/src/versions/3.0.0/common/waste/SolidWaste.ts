@@ -5,7 +5,7 @@ export function calculateSolidWaste(
   { onsiteCompostingTonnes, sentOffsiteTonnes }: SolidWasteInput,
   { constants }: ExecutionContext,
 ) {
-  const { COMPOSTING_EF, MUNICIPAL_SOLID_WASTE_EF } = constants;
+  const { COMPOSTING_EF, MUNICIPAL_SOLID_WASTE_EF } = constants.COMMON;
 
   // Waste (inc. Wastewater) B32
   const solidWasteSentOffsite = sentOffsiteTonnes * MUNICIPAL_SOLID_WASTE_EF;

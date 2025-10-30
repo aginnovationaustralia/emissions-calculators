@@ -8,6 +8,7 @@ import {
 } from '../types/Beef/internal';
 import { Fertiliser } from '../types/fertiliser.input';
 import { BeefClassesAPI, Season, State } from '../types/types';
+import { ConstantsForBeefCalculator } from './constants';
 import { getAtmosphericNDepositionUreaIrrigatedTotal } from './functions';
 
 export function beefEmissionsForSeason(
@@ -21,7 +22,7 @@ export function beefEmissionsForSeason(
   nitrogenExcretedNumber: number,
   milkProduction: number,
   northofTropicOfCapricorn: boolean,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForBeefCalculator>,
 ): BeefIntermediaryEmissions {
   // -------------
   const feedIntake =
@@ -96,8 +97,9 @@ export function beefEmissionsForSeason(
   const methaneProductionFromManure =
     feedIntake *
     (1 - dryMatterDigestibilityPercent) *
-    (animalsInWarmClimate * context.constants.METHANE_WARM_EF +
-      animalsInTemperateClimate * context.constants.METHANE_TEMPERATE_EF);
+    (animalsInWarmClimate * context.constants.LIVESTOCK.METHANE_WARM_EF +
+      animalsInTemperateClimate *
+        context.constants.LIVESTOCK.METHANE_TEMPERATE_EF);
 
   // (manureManagementBeefD41)
   const manureCH4 = head * methaneProductionFromManure * 91.25 * 10 ** -6;
@@ -153,7 +155,7 @@ export function calculateCompleteBeefEmissions(
   percentCowsCalving: {
     [season in Season]: number;
   },
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForBeefCalculator>,
 ): BeefCompleteEmissions {
   const { constants } = context;
 
@@ -188,22 +190,23 @@ export function calculateCompleteBeefEmissions(
 
   SEASONS.forEach((season) => {
     // also known as dry matter availability
-    const crudeProtein = constants.BEEF_CRUDEPROTEIN[season][state];
+    const crudeProtein = constants.BEEF.CRUDEPROTEIN[season][state];
     const dryMatterDigestibility =
-      constants.BEEF_DRYMATTERDIGESTIBILITY[season][state];
+      constants.BEEF.DRYMATTERDIGESTIBILITY[season][state];
 
     // WARNING: season after calving for previous season?
     // (entericFermentationBeefC28)
     const lcfaSeason =
-      percentCowsCalving[season] * constants.FEED_ADJUSTMENT.CALVING_SEASON +
+      percentCowsCalving[season] *
+        constants.BEEF.FEED_ADJUSTMENT.CALVING_SEASON +
       percentCowsCalving[SEASONS_AFTER[season]] *
-        constants.FEED_ADJUSTMENT.SEASON_AFTER_CALVING;
+        constants.BEEF.FEED_ADJUSTMENT.SEASON_AFTER_CALVING;
     // (entericFermentationBeefC29)
     const calfMilkIntakeSeason =
       percentCowsCalving[season] *
-        constants.MILK_INTAKE[tropic].CALVING_SEASON +
+        constants.BEEF.MILK_INTAKE[tropic].CALVING_SEASON +
       percentCowsCalving[SEASONS_AFTER[season]] *
-        constants.MILK_INTAKE[tropic].SEASON_AFTER_CALVING;
+        constants.BEEF.MILK_INTAKE[tropic].SEASON_AFTER_CALVING;
 
     // only for cows > 2 (entericFermentationBeefW14)
     const additionalIntakeForMilkProductionSeason =
@@ -224,7 +227,7 @@ export function calculateCompleteBeefEmissions(
 
       // (nitrousOxideMMSBeefS45)
       const nitrogenExcretedNumber =
-        constants.BEEF_NITROGENEXCRETEDNUMBER[beefType][state];
+        constants.BEEF.NITROGENEXCRETEDNUMBER[beefType][state];
 
       const beefSeasonEmissions = beefEmissionsForSeason(
         beefSeason.head,
@@ -249,11 +252,11 @@ export function calculateCompleteBeefEmissions(
       // (agriculturalSoilsBeefD37)
       const beefSeasonN2O =
         beefSeasonEmissions.faeces *
-          constants.BEEF_EF_URINEDUNGDEPOSITED *
-          constants.GWP_FACTORSC15 +
+          constants.BEEF.EF_URINEDUNGDEPOSITED *
+          constants.COMMON.GWP_FACTORSC15 +
         beefSeasonEmissions.urine *
-          constants.BEEF_EF_URINEDUNGDEPOSITED *
-          constants.GWP_FACTORSC15;
+          constants.BEEF.EF_URINEDUNGDEPOSITED *
+          constants.COMMON.GWP_FACTORSC15;
 
       totals[beefType] = {
         ...totals[beefType],
@@ -280,13 +283,13 @@ export function calculateCompleteBeefEmissions(
     .reduce((a, b) => a + b.faeces + b.urine, 0);
 
   const springTotalNDepositionUrineDung =
-    constants.FRAC_GASM * springTotalUrineDung;
+    constants.LIVESTOCK.FRAC_GASM * springTotalUrineDung;
   const summerTotalNDepositionUrineDung =
-    constants.FRAC_GASM * summerTotalUrineDung;
+    constants.LIVESTOCK.FRAC_GASM * summerTotalUrineDung;
   const autumnTotalNDepositionUrineDung =
-    constants.FRAC_GASM * autumnTotalUrineDung;
+    constants.LIVESTOCK.FRAC_GASM * autumnTotalUrineDung;
   const winterTotalNDepositionUrineDung =
-    constants.FRAC_GASM * winterTotalUrineDung;
+    constants.LIVESTOCK.FRAC_GASM * winterTotalUrineDung;
 
   // Gg N2O/farm/year
   // (agriculturalSoilsBeefC42)
@@ -297,7 +300,7 @@ export function calculateCompleteBeefEmissions(
   // Gg CO2-e/farm/year
   // (agriculturalSoilsBeefC43)
   const totalN2ODepositedGg =
-    totalN2ODepositedDuringGrazing * constants.GWP_FACTORSC6;
+    totalN2ODepositedDuringGrazing * constants.COMMON.GWP_FACTORSC6;
   // t CO2-e/farm/year
   // (agriculturalSoilsBeefC44)
   const totalN2ODepositedTonnes = totalN2ODepositedGg * 1000;
@@ -307,41 +310,44 @@ export function calculateCompleteBeefEmissions(
     (acc, t) => acc + t.intermediate.totalCH4Production,
     0,
   );
-  const totalCH4ProductionGg = totalCH4Production * constants.GWP_FACTORSC5;
+  const totalCH4ProductionGg =
+    totalCH4Production * constants.COMMON.GWP_FACTORSC5;
   const totalCH4ProductionTonnes = totalCH4ProductionGg * 1000;
 
   // (agriculturalSoilsBeefD57)
   const atmosphericNDepositionUreaGrazingDryland =
     fertiliser.pastureDryland *
     0.46 *
-    constants.INOGRANICFERTILISER_ATMOSPHERIC_N;
+    constants.LIVESTOCK.INOGRANICFERTILISER_ATMOSPHERIC_N;
   const atmosphericNDepositionUreaCroppingDryland =
     fertiliser.cropsDryland *
     0.46 *
-    constants.INOGRANICFERTILISER_ATMOSPHERIC_N;
+    constants.LIVESTOCK.INOGRANICFERTILISER_ATMOSPHERIC_N;
 
   const { otherFertiliserDryland, otherFertiliserIrrigated } =
     getOtherFertiliserAmounts(context, fertiliser);
 
   const atmosphericNDepositionUreaOtherDryland =
-    otherFertiliserDryland * constants.INOGRANICFERTILISER_ATMOSPHERIC_N;
+    otherFertiliserDryland *
+    constants.LIVESTOCK.INOGRANICFERTILISER_ATMOSPHERIC_N;
 
   const atmosphericNDepositionUreaDrylandTotal =
     (atmosphericNDepositionUreaGrazingDryland +
       atmosphericNDepositionUreaCroppingDryland +
       atmosphericNDepositionUreaOtherDryland) *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
-    constants.GWP_FACTORSC15; // (agriculturalSoilsBeefD60)
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+    constants.COMMON.GWP_FACTORSC15; // (agriculturalSoilsBeefD60)
   const atmosphericNDepositionUreaGrazingIrrigated =
     fertiliser.pastureIrrigated *
     0.46 *
-    constants.INOGRANICFERTILISER_ATMOSPHERIC_N;
+    constants.LIVESTOCK.INOGRANICFERTILISER_ATMOSPHERIC_N;
   const atmosphericNDepositionUreaCroppingIrrigated =
     fertiliser.cropsIrrigated *
     0.46 *
-    constants.INOGRANICFERTILISER_ATMOSPHERIC_N;
+    constants.LIVESTOCK.INOGRANICFERTILISER_ATMOSPHERIC_N;
   const atmosphericNDepositionUreaOtherIrrigated =
-    otherFertiliserIrrigated * constants.INOGRANICFERTILISER_ATMOSPHERIC_N;
+    otherFertiliserIrrigated *
+    constants.LIVESTOCK.INOGRANICFERTILISER_ATMOSPHERIC_N;
 
   const atmosphericNDepositionUreaIrrigatedTotal =
     getAtmosphericNDepositionUreaIrrigatedTotal(
@@ -351,7 +357,7 @@ export function calculateCompleteBeefEmissions(
       atmosphericNDepositionUreaOtherIrrigated,
     );
 
-  const agriculturalSoilsBeefO6 = constants.GWP_FACTORSC6;
+  const agriculturalSoilsBeefO6 = constants.COMMON.GWP_FACTORSC6;
 
   // (agriculturalSoilsBeefD61)
   const totalAtmosphericNDepositionFertiliser =
@@ -363,20 +369,20 @@ export function calculateCompleteBeefEmissions(
   // (agriculturalSoilsBeefD63)
   const springNDungUrineAtmosphere =
     springTotalNDepositionUrineDung *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+    constants.COMMON.GWP_FACTORSC15;
   const summerNDungUrineAtmosphere =
     summerTotalNDepositionUrineDung *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+    constants.COMMON.GWP_FACTORSC15;
   const autumnNDungUrineAtmosphere =
     autumnTotalNDepositionUrineDung *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+    constants.COMMON.GWP_FACTORSC15;
   const winterNDungUrineAtmosphere =
     winterTotalNDepositionUrineDung *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+    constants.COMMON.GWP_FACTORSC15;
 
   // Gg N2O/farm/year
   // (agriculturalSoilsBeefD68)
@@ -387,7 +393,7 @@ export function calculateCompleteBeefEmissions(
     winterNDungUrineAtmosphere;
 
   // Gg CO2-e/farm/year
-  const totalN2OGg = totalN2O * constants.GWP_FACTORSC6;
+  const totalN2OGg = totalN2O * constants.COMMON.GWP_FACTORSC6;
   // t CO2-e/farm/year
   // (agriculturalSoilsBeefD70)
   const totalN2OTonnes = totalN2OGg * 10 ** 3;
@@ -405,7 +411,7 @@ export function calculateCompleteBeefEmissions(
   );
 
   // (manureManagementBeefC47)
-  const totalCH4Gg = totalCH4FromManure * constants.GWP_FACTORSC5;
+  const totalCH4Gg = totalCH4FromManure * constants.COMMON.GWP_FACTORSC5;
 
   // (manureManagementBeefC48)
   const manureCH4 = totalCH4Gg * 1000;
@@ -413,7 +419,7 @@ export function calculateCompleteBeefEmissions(
   // Leeching and runoff
 
   // (fracLeach)
-  const fracLeach = constants.LEACHING.FRACLEACH_FERTILISER_SOILS;
+  const fracLeach = constants.COMMON.LEACHING.FRACLEACH_FERTILISER_SOILS;
 
   // (fracWetMultiplier)
   const fracWetMultiplier = rainfallAbove600 ? 1 : 0; // 2=yes.1=no
@@ -435,28 +441,28 @@ export function calculateCompleteBeefEmissions(
   // (agriculturalSoilsBeefD99 to agriculturalSoilsBeefF101)
   const nFertiliserGrazingNonIrrigated =
     leechingNFertiliserGrazingNonIrrigated *
-    constants.LEECHING_AND_RUNOFF *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.LEECHING_AND_RUNOFF *
+    constants.COMMON.GWP_FACTORSC15;
   const nFertiliserCroppingNonIrrigated =
     leechingNFertiliserCroppingNonIrrigated *
-    constants.LEECHING_AND_RUNOFF *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.LEECHING_AND_RUNOFF *
+    constants.COMMON.GWP_FACTORSC15;
   const nFertiliserOtherNonIrrigated =
     leechingNFertiliserOtherNonIrrigated *
-    constants.LEECHING_AND_RUNOFF *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.LEECHING_AND_RUNOFF *
+    constants.COMMON.GWP_FACTORSC15;
   const nFertiliserGrazingIrrigated =
     leechingNFertiliserGrazingIrrigated *
-    constants.LEECHING_AND_RUNOFF *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.LEECHING_AND_RUNOFF *
+    constants.COMMON.GWP_FACTORSC15;
   const nFertiliserCroppingIrrigated =
     leechingNFertiliserCroppingIrrigated *
-    constants.LEECHING_AND_RUNOFF *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.LEECHING_AND_RUNOFF *
+    constants.COMMON.GWP_FACTORSC15;
   const nFertiliserOtherIrrigated =
     leechingNFertiliserOtherIrrigated *
-    constants.LEECHING_AND_RUNOFF *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.LEECHING_AND_RUNOFF *
+    constants.COMMON.GWP_FACTORSC15;
 
   // (agriculturalSoilsBeefD102)
   const nFertiliserCropsTotal =
@@ -475,13 +481,21 @@ export function calculateCompleteBeefEmissions(
 
   // (agriculturalSoilsBeefD105)
   const springDungN2O =
-    springDungRunoff * constants.LEECHING_AND_RUNOFF * constants.GWP_FACTORSC15;
+    springDungRunoff *
+    constants.LIVESTOCK.LEECHING_AND_RUNOFF *
+    constants.COMMON.GWP_FACTORSC15;
   const summerDungN2O =
-    summerDungRunoff * constants.LEECHING_AND_RUNOFF * constants.GWP_FACTORSC15;
+    summerDungRunoff *
+    constants.LIVESTOCK.LEECHING_AND_RUNOFF *
+    constants.COMMON.GWP_FACTORSC15;
   const autumnDungN2O =
-    autumnDungRunoff * constants.LEECHING_AND_RUNOFF * constants.GWP_FACTORSC15;
+    autumnDungRunoff *
+    constants.LIVESTOCK.LEECHING_AND_RUNOFF *
+    constants.COMMON.GWP_FACTORSC15;
   const winterDungN2O =
-    winterDungRunoff * constants.LEECHING_AND_RUNOFF * constants.GWP_FACTORSC15;
+    winterDungRunoff *
+    constants.LIVESTOCK.LEECHING_AND_RUNOFF *
+    constants.COMMON.GWP_FACTORSC15;
 
   // (agriculturalSoilsBeefD109)
   const totalNDungUrine =
@@ -491,39 +505,40 @@ export function calculateCompleteBeefEmissions(
   const totalN2OLeechingAndRunoff =
     nFertiliserCropsTotal + totalNDungUrine * 10 ** 3;
 
-  const leechingRunoffN2O = totalN2OLeechingAndRunoff * constants.GWP_FACTORSC6;
+  const leechingRunoffN2O =
+    totalN2OLeechingAndRunoff * constants.COMMON.GWP_FACTORSC6;
 
   // (agriculturalSoilsBeefD14)
   const nFertiliserGrazingDrylandSoil =
     fertiliser.pastureDryland *
     0.46 *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
+    constants.COMMON.GWP_FACTORSC15;
   const nFertiliserCroppingDrylandSoil =
     fertiliser.cropsDryland *
     0.46 *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
+    constants.COMMON.GWP_FACTORSC15;
   // WARNING: other doesnt have * 0.46
   const nFertiliserOtherDrylandSoil =
     otherFertiliserDryland *
-    constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
+    constants.COMMON.GWP_FACTORSC15;
   // same for irrigated
   const nFertiliserGrazingIrrigatedSoil =
     fertiliser.pastureIrrigated *
     0.46 *
-    constants.AGRICULTURAL_SOILS.EF_IRRIGATEDPASTURE *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDPASTURE *
+    constants.COMMON.GWP_FACTORSC15;
   const nFertiliserCroppingIrrigatedSoil =
     fertiliser.cropsIrrigated *
     0.46 *
-    constants.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
+    constants.COMMON.GWP_FACTORSC15;
   const nFertiliserOtherIrrigatedSoil =
     otherFertiliserIrrigated *
-    constants.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
-    constants.GWP_FACTORSC15;
+    constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
+    constants.COMMON.GWP_FACTORSC15;
 
   // (agriculturalSoilsBeefD17)
   const totalN2ODrylandSoil =
@@ -537,7 +552,8 @@ export function calculateCompleteBeefEmissions(
 
   // (agrictulturalSoilsBeefD18)
   const totalSoilCO2e =
-    (totalN2ODrylandSoil + totalN2OIrrigatedSoil) * constants.GWP_FACTORSC6;
+    (totalN2ODrylandSoil + totalN2OIrrigatedSoil) *
+    constants.COMMON.GWP_FACTORSC6;
 
   return {
     leechingRunoffN2O,

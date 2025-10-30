@@ -13,7 +13,7 @@ export function calculateScope1TransportBase(
   const { constants } = context;
 
   // (transportD15)
-  const truckFuelUsage = constants.TRANSPORT_FUEL_USAGE[typeOfTruck];
+  const truckFuelUsage = constants.COMMON.TRANSPORT_FUEL_USAGE[typeOfTruck];
 
   // (transportD17)
   const dieselFuelkL = (truckFuelUsage * distanceCattleTransported) / 1000;
@@ -23,7 +23,10 @@ export function calculateScope1TransportBase(
 
   // (transportD31, dataSummaryC9)
   const emissions =
-    (dieselFuelkL * energyContentFactor * constants.TRANSPORT_ECF[type]) / 1000;
+    (dieselFuelkL *
+      energyContentFactor *
+      constants.COMMON.TRANSPORT_ECF[type]) /
+    1000;
 
   return emissions;
 }

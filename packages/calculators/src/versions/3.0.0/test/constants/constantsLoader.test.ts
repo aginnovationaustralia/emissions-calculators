@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import { constants } from '../../constants/constant_values';
 import {
   loadConstants,
   loadOverrideConstants,
@@ -9,19 +8,13 @@ import { CalculationEnvironment } from '../../execution/environment';
 
 describe('constantsLoader', () => {
   describe('loadConstants', () => {
-    it('should load constants for current version', () => {
-      const loadedConstants = loadConstants();
-      expect(loadedConstants).toBeDefined();
-      expect(loadedConstants).toEqual(constants);
-    });
-  });
-
-  describe('loadOverrideConstants', () => {
     it('should load constants for current version with overrides', () => {
       const overrides = {
-        BEEF_DRYMATTERDIGESTIBILITY: {
-          spring: {
-            [STATES.VIC]: 90,
+        BEEF: {
+          DRYMATTERDIGESTIBILITY: {
+            spring: {
+              [STATES.VIC]: 90,
+            },
           },
         },
       };
@@ -31,11 +24,11 @@ describe('constantsLoader', () => {
         () => loadOverrideConstants(),
       );
       expect(
-        overriddenConstants.BEEF_DRYMATTERDIGESTIBILITY.spring.vic,
+        overriddenConstants.BEEF.DRYMATTERDIGESTIBILITY.spring.vic,
       ).toEqual(90);
 
       // Reset overridden value and ensure other values are not affected
-      overriddenConstants.BEEF_DRYMATTERDIGESTIBILITY.spring.vic = 80;
+      overriddenConstants.BEEF.DRYMATTERDIGESTIBILITY.spring.vic = 80;
       expect(overriddenConstants).toEqual(defaultConstants);
     });
   });

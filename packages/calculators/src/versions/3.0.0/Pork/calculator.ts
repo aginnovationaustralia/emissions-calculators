@@ -27,6 +27,7 @@ import { calculateScope1N2O } from './Scope1N2O';
 import { calculateScope1Urea } from './Scope1Urea';
 import { calculateScope3PurchasedFeed } from './Scope3PurchasedFeed';
 import { calculateScope3PurchasedLivestock } from './Scope3PurchasedLivestock';
+import { ConstantsForPorkCalculator } from './constants';
 import { calculateScope3Bedding, getScope3FuelFunction } from './functions';
 
 function getIntensities(
@@ -61,7 +62,7 @@ export function calculateSinglePork(
   propertyNorthOfTropicOfCapricorn: boolean,
   rainfallAbove600: boolean,
   pork: PorkComplete,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPorkCalculator>,
   carbonSequestration: number,
   id: string,
 ) {
@@ -242,7 +243,7 @@ export function calculateSinglePork(
 
 export function calculatePork(
   input: PorkInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPorkCalculator>,
 ): PorkOutput {
   // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(

@@ -4,6 +4,7 @@ import {
   calculateCotton,
   calculateEntireCotton,
 } from '../../Cotton/calculator';
+import { ConstantsForCottonCalculator } from '../../Cotton/constants';
 import { CottonInput } from '../../types/Cotton/input';
 import { CottonIntermediateOutput } from '../../types/Cotton/intermediate.output';
 import { CottonOutput } from '../../types/Cotton/output';
@@ -100,7 +101,8 @@ describe('Cotton calculator (multi activity)', () => {
     CottonInput,
     CottonIntermediateOutput,
     'intermediate',
-    CottonOutput
+    CottonOutput,
+    ConstantsForCottonCalculator
   >(
     'Grains',
     calculateCotton,

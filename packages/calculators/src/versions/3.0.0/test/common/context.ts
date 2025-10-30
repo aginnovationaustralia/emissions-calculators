@@ -1,4 +1,5 @@
 import { loadConstants } from '../../constants/constantsLoader';
+import { AllConstants } from '../../constants/versionedConstants';
 import { ExecutionContext } from '../../executionContext';
 
 export const V2_0_0 = '2.0.0' as const;
@@ -6,7 +7,7 @@ export const V2_0_0 = '2.0.0' as const;
 export const testContext = (
   version: '2.0.0',
   calculator: string = 'testcalculator',
-): ExecutionContext => {
+): ExecutionContext<AllConstants> => {
   const constants = loadConstants();
   return {
     calculator,

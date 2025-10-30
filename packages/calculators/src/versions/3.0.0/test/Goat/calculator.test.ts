@@ -3,6 +3,7 @@ import clone from 'nanoclone';
 import { validateCalculatorInput } from '../../calculators';
 import { entriesFromObject } from '../../common/tools/object';
 import { calculateGoat } from '../../Goat/calculator';
+import { ConstantsForGoatCalculator } from '../../Goat/constants';
 import { GoatInput, GoatInputSchema } from '../../types/Goat/input';
 import { GoatIntermediateOutput } from '../../types/Goat/intermediate.output';
 import { GoatOutput } from '../../types/Goat/output';
@@ -119,7 +120,8 @@ describe('Goat calculator (multi activity meat)', () => {
     GoatInput,
     GoatIntermediateOutput,
     'intermediate',
-    GoatOutput
+    GoatOutput,
+    ConstantsForGoatCalculator
   >(
     'Goat',
     calculateGoat,
@@ -171,7 +173,8 @@ describe('Goat calculator (multi activity wool)', () => {
     GoatInput,
     GoatIntermediateOutput,
     'intermediate',
-    GoatOutput
+    GoatOutput,
+    ConstantsForGoatCalculator
   >(
     'Goat',
     calculateGoat,

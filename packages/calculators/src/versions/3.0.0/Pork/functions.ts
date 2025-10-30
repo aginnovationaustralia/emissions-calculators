@@ -1,24 +1,27 @@
 import { calculateScope3FuelWithLPGAverage } from '../common-legacy/fuel';
 import { ExecutionContext } from '../executionContext';
 import { PorkComplete } from '../types/Pork/pork.input';
+import { ConstantsForPorkCalculator } from './constants';
 
-export function getN2OEF(context: ExecutionContext) {
+export function getN2OEF(
+  context: ExecutionContext<ConstantsForPorkCalculator>,
+) {
   const { constants } = context;
 
-  return constants.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP;
+  return constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP;
 }
 
 export function calculateScope3Bedding(
   pork: PorkComplete,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPorkCalculator>,
 ) {
   const { constants } = context;
 
-  return pork.beddingHayBarleyStraw * constants.PORK_EF_BEDDING;
+  return pork.beddingHayBarleyStraw * constants.PORK.EF_BEDDING;
 }
 
 export function getScope3FuelFunction(
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPorkCalculator>,
   diesel: number,
   petrol: number,
   lpg: number,

@@ -30,7 +30,9 @@ export function calculateMineralSupplementationFromType(
   context: ExecutionContext,
 ) {
   const materialBreakdown =
-    context.constants.MATERIAL_BREAKDOWN_SUPPLEMENTATION[supplementationType];
+    context.constants.COMMON.MATERIAL_BREAKDOWN_SUPPLEMENTATION[
+      supplementationType
+    ];
 
   const kgCO2: number = materialBreakdown.KG_CO2;
   // (embeddedEmissions_C23)

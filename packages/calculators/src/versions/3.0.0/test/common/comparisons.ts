@@ -1,3 +1,5 @@
+import { HasCommonConstants } from '../../common/constants';
+import { AllConstants } from '../../constants/versionedConstants';
 import { ExecutionContext } from '../../executionContext';
 import { testContext, V2_0_0 } from './context';
 import { executeEmissionsSpec } from './emissions';
@@ -52,9 +54,11 @@ export const compareEmissionsFrom2Inputs = <
   TIntermediate extends EmissionsKeysOnly = EmissionsKeysOnly,
   TKey extends string = 'intermediate',
   E extends Emissions<TKey, TIntermediate> = Emissions<TKey, TIntermediate>,
+  C extends Partial<AllConstants> & HasCommonConstants = Partial<AllConstants> &
+    HasCommonConstants,
 >(
   calculatorName: string,
-  calculateEmissions: (input: Input, context: ExecutionContext) => E,
+  calculateEmissions: (input: Input, context: ExecutionContext<C>) => E,
   originalInput: Input,
   secondInput: Input,
   combinedInput: Input,
@@ -68,7 +72,7 @@ export const compareEmissionsFrom2Inputs = <
 
   describe(`Compare full and intermediate emissions: ${calculatorName}`, () => {
     // As we're using executeEmissionsSpec we can't be inside a test, or rely on a beforeAll etc
-    const context = testContext(V2_0_0, calculatorName);
+    const context = testContext(V2_0_0, calculatorName) as ExecutionContext<C>;
     const originalEmissions = calculateEmissions(originalInput, context);
     const secondEmissions = calculateEmissions(secondInput, context);
     const combinedEmissions = calculateEmissions(combinedInput, context);

@@ -1,19 +1,20 @@
 import { ExecutionContext } from '../executionContext';
 import { SavannahBurning } from '../types/Beef/savannah.input';
 import { State, VegetationClassNumber } from '../types/types';
+import { ConstantsForBeefCalculator } from './constants';
 
 export function calculateScope1SavannahBurning(
   burn: SavannahBurning,
   state: State,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForBeefCalculator>,
 ) {
   const { constants } = context;
-  const stateRef = constants.FUEL_STATEREF[state];
+  const stateRef = constants.SAVANNA.FUEL_STATEREF[state];
   const vegRef = VegetationClassNumber[burn.vegetation];
 
   const combinedReference = `${stateRef}${vegRef}`;
   const combinedRefStateIndex = Object.values(
-    constants.SAVANNAH_FUELFINE['Combined Ref'],
+    constants.SAVANNA.FUELFINE['Combined Ref'],
   ).findIndex((x) => x === combinedReference);
 
   if (combinedRefStateIndex === -1) {
@@ -25,21 +26,21 @@ export function calculateScope1SavannahBurning(
 
   // TODO: this is a very weird way of doing it by state string, but oh well
   const combinedRefStateString = Object.keys(
-    constants.SAVANNAH_FUELFINE['Combined Ref'],
-  )[combinedRefStateIndex] as keyof typeof constants.SAVANNAH_FUELFINE.Yo;
+    constants.SAVANNA.FUELFINE['Combined Ref'],
+  )[combinedRefStateIndex] as keyof typeof constants.SAVANNA.FUELFINE.Yo;
 
   // (savannahBurningE48)
   const fineResidueAfterBurn =
-    constants.SAVANNAH_FUELFINE.Yo[combinedRefStateString];
+    constants.SAVANNA.FUELFINE.Yo[combinedRefStateString];
   // (savannahBurningE49)
   const fineAnnualRateOfFreshLitterInput =
-    constants.SAVANNAH_FUELFINE.L[combinedRefStateString];
+    constants.SAVANNA.FUELFINE.L[combinedRefStateString];
   // (savannahBurningE50)
   const fineDecayConstant =
-    constants.SAVANNAH_FUELFINE.D[combinedRefStateString];
+    constants.SAVANNA.FUELFINE.D[combinedRefStateString];
   // (savannahBurningE51)
   const fineGrassBiomass =
-    constants.SAVANNAH_FUELFINE.Gc[combinedRefStateString];
+    constants.SAVANNA.FUELFINE.Gc[combinedRefStateString];
 
   // (savannahBurningE55)
   const fineFuelLoad =
@@ -52,13 +53,13 @@ export function calculateScope1SavannahBurning(
 
   // (savannahBurningE58)
   const coarseResidueAfterBurn =
-    constants.SAVANNAH_FUELCOARSE.Yo[combinedRefStateString];
+    constants.SAVANNA.FUELCOARSE.Yo[combinedRefStateString];
   // (savannahBurningE59)
   const coarseAnnualRateOfFreshLitterInput =
-    constants.SAVANNAH_FUELCOARSE.L[combinedRefStateString];
+    constants.SAVANNA.FUELCOARSE.L[combinedRefStateString];
   // (savannahBurningE60)
   const coarseDecayConstant =
-    constants.SAVANNAH_FUELCOARSE.D[combinedRefStateString];
+    constants.SAVANNA.FUELCOARSE.D[combinedRefStateString];
 
   // (savannahBurningE64)
   const coarseFuelLoad =
@@ -70,13 +71,13 @@ export function calculateScope1SavannahBurning(
 
   // (savannahBurningE70)
   const patchinessValue =
-    constants.BURN_PATCHINESS[burn.season][burn.patchiness];
+    constants.SAVANNA.BURN_PATCHINESS[burn.season][burn.patchiness];
 
   // (savannahBurningE73)
   const completenessOfCombustion =
-    constants.BURN_COMPLETENESSOFCOMBUSTION[burn.rainfallZone][burn.fuel][
-      burn.season
-    ];
+    constants.SAVANNA.BURN_COMPLETENESSOFCOMBUSTION[burn.rainfallZone][
+      burn.fuel
+    ][burn.season];
 
   // (savannahBurningE78)
   const massOfFineFuelBurnt =
@@ -98,50 +99,56 @@ export function calculateScope1SavannahBurning(
 
   // (savannahBurningE84)
   const fineFuelCarbonContent =
-    constants.FUELBURNT_VEGETATION_CARBONFRACTION.fine[burn.vegetation];
+    constants.SAVANNA.FUELBURNT_VEGETATION_CARBONFRACTION.fine[burn.vegetation];
   // (savannahBurningE85)
   const coarseFuelCarbonContent =
-    constants.FUELBURNT_VEGETATION_CARBONFRACTION.coarse[burn.vegetation];
+    constants.SAVANNA.FUELBURNT_VEGETATION_CARBONFRACTION.coarse[
+      burn.vegetation
+    ];
 
   // (savannahBurningE86)
   const fineFuelEFCH4 =
-    constants.FUELBURNT_VEGETATION_EF_CH4.fine[burn.vegetation];
+    constants.SAVANNA.FUELBURNT_VEGETATION_EF_CH4.fine[burn.vegetation];
   // (savannahBurningE87)
   const coarseFuelEFCH4 =
-    constants.FUELBURNT_VEGETATION_EF_CH4.coarse[burn.vegetation];
+    constants.SAVANNA.FUELBURNT_VEGETATION_EF_CH4.coarse[burn.vegetation];
 
   // (savannahBurningE92)
   const fineEmissionsCH4 =
     massOfFineFuelBurnt *
     fineFuelCarbonContent *
     fineFuelEFCH4 *
-    constants.GWP_FACTORSC14;
+    constants.COMMON.GWP_FACTORSC14;
   // (savannahBurningE93)
   const coarseEmissionsCH4 =
     massOfCoarseFuelBurnt *
     coarseFuelCarbonContent *
     coarseFuelEFCH4 *
-    constants.GWP_FACTORSC14;
+    constants.COMMON.GWP_FACTORSC14;
 
   const totalMethaneGg =
-    (fineEmissionsCH4 + coarseEmissionsCH4) * constants.GWP_FACTORSC5;
+    (fineEmissionsCH4 + coarseEmissionsCH4) * constants.COMMON.GWP_FACTORSC5;
   const totalCH4 = totalMethaneGg * 10 ** 3;
 
   // N2O
 
   // (savannahBurningE101)
   const fineFuelNitrogenContent =
-    constants.FUELBURNT_VEGETATION_NITROGENCARBONRATIO.fine[burn.vegetation];
+    constants.SAVANNA.FUELBURNT_VEGETATION_NITROGENCARBONRATIO.fine[
+      burn.vegetation
+    ];
   // (savannahBurningE102)
   const coarseFuelNitrogenContent =
-    constants.FUELBURNT_VEGETATION_NITROGENCARBONRATIO.coarse[burn.vegetation];
+    constants.SAVANNA.FUELBURNT_VEGETATION_NITROGENCARBONRATIO.coarse[
+      burn.vegetation
+    ];
 
   // (savannahBurningE103)
   const fineFuelEFN2O =
-    constants.FUELBURNT_VEGETATION_N2O.fine[burn.vegetation];
+    constants.SAVANNA.FUELBURNT_VEGETATION_N2O.fine[burn.vegetation];
   // (savannahBurningE104)
   const coarseFuelEFN2O =
-    constants.FUELBURNT_VEGETATION_N2O.coarse[burn.vegetation];
+    constants.SAVANNA.FUELBURNT_VEGETATION_N2O.coarse[burn.vegetation];
 
   // (savannahBurningE109)
   const fineEmissionsN2O =
@@ -149,14 +156,14 @@ export function calculateScope1SavannahBurning(
     fineFuelCarbonContent *
     fineFuelNitrogenContent *
     fineFuelEFN2O *
-    constants.GWP_FACTORSC15;
+    constants.COMMON.GWP_FACTORSC15;
   // (savannahBurningE110)
   const coarseEmissionsN2O =
     massOfCoarseFuelBurnt *
     coarseFuelCarbonContent *
     coarseFuelNitrogenContent *
     coarseFuelEFN2O *
-    constants.GWP_FACTORSC15;
+    constants.COMMON.GWP_FACTORSC15;
 
   const totalN2OGg = (fineEmissionsN2O + coarseEmissionsN2O) * 310;
   const totalN2O = totalN2OGg * 10 ** 3;

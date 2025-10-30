@@ -1,9 +1,10 @@
 import { ExecutionContext } from '../executionContext';
 import { Feed } from '../types/Pork/feed.input';
+import { ConstantsForPorkCalculator } from './constants';
 
 export function calculateScope3PurchasedFeed(
   feeds: Feed[],
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForPorkCalculator>,
 ) {
   const { constants } = context;
 
@@ -24,7 +25,7 @@ export function calculateScope3PurchasedFeed(
           acc +
           (feed.ingredients[ingredientKey] ?? 0) *
             feed.feedPurchased *
-            (constants.SWINE_FEED_INGREDIENT_EF[ingredientKey] ?? 0)
+            (constants.PORK.FEED_INGREDIENT_EF[ingredientKey] ?? 0)
         );
       },
       0,

@@ -12,6 +12,7 @@ import { WildSeaFisheriesOutput } from '../types/WildSeaFisheries/output';
 import { calculateScope1And3Transport } from './Scope1And3Transport';
 import { calculateScope1Refrigerant } from './Scope1Refrigerant';
 import { calculateScope3Bait } from './Scope3Bait';
+import { ConstantsForWildSeaFisheriesCalculator } from './constants';
 
 function getIntensities(
   netTotal: number,
@@ -34,7 +35,7 @@ function getIntensities(
 
 export function calculateSingleWildSeaFisheriesEnterprise(
   enterprise: WildSeaFisheriesEnterprise,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForWildSeaFisheriesCalculator>,
   id: string,
 ) {
   const scope1FuelN2O = calculateFuelScope1BaseLPGStationary(
@@ -135,7 +136,7 @@ export function calculateSingleWildSeaFisheriesEnterprise(
 
 export function calculateWildSeaFisheries(
   input: WildSeaFisheriesInput,
-  context: ExecutionContext,
+  context: ExecutionContext<ConstantsForWildSeaFisheriesCalculator>,
 ): WildSeaFisheriesOutput {
   const fisheriesResults = input.enterprises.map((enterprise, i) =>
     calculateSingleWildSeaFisheriesEnterprise(

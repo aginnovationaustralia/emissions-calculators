@@ -129,7 +129,7 @@ describe('CalculatorConfig', () => {
 
     describe('overrides', () => {
       it('should return overrides from CalculationEnvironment', () => {
-        const mockOverrides = { FEEDLOT_MN_LEACH: 2.5 };
+        const mockOverrides = { FEEDLOT: { MN_LEACH: 2.5 } };
         mockCalculationEnvironment.getOverrides.mockReturnValue(mockOverrides);
 
         const result = CalculatorConfig.overrides();
@@ -158,8 +158,10 @@ describe('CalculatorConfig', () => {
 
       it('should handle nested override objects', () => {
         const mockOverrides = {
-          SWINE_WASTE_MMS: {
-            nsw: 5,
+          PORK: {
+            WASTE_MMS: {
+              nsw: 5,
+            },
           },
           array: [1, 2, 3],
         };

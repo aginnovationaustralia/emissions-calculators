@@ -1,30 +1,39 @@
 import { ExecutionContext } from '../executionContext';
 import { SugarCrop } from '../types/Sugar/sugar.input';
+import { ConstantsForSugarCalculator } from './constants';
 
 export function getResidueBurned(crop: SugarCrop) {
   return crop.fractionOfAnnualCropBurnt;
 }
 
-export function getResidueRemoved(context: ExecutionContext) {
+export function getResidueRemoved(
+  context: ExecutionContext<ConstantsForSugarCalculator>,
+) {
   const { constants } = context;
 
-  return constants.CROPRESIDUE['Sugar Cane'].fractionRemoved;
+  return constants.CROP.CROPRESIDUE['Sugar Cane'].fractionRemoved;
 }
 
-export function getUreaNConstant(context: ExecutionContext) {
+export function getUreaNConstant(
+  context: ExecutionContext<ConstantsForSugarCalculator>,
+) {
   const { constants } = context;
 
-  return constants.FERTILISER_CONTENT.UREA.N;
+  return constants.COMMON.FERTILISER_CONTENT.UREA.N;
 }
 
-export function getUanNConstant(context: ExecutionContext) {
+export function getUanNConstant(
+  context: ExecutionContext<ConstantsForSugarCalculator>,
+) {
   const { constants } = context;
 
-  return constants.FERTILISER_CONTENT.UAN.N;
+  return constants.COMMON.FERTILISER_CONTENT.UAN.N;
 }
 
-export function getFertiliserFractionRunoff(context: ExecutionContext) {
+export function getFertiliserFractionRunoff(
+  context: ExecutionContext<ConstantsForSugarCalculator>,
+) {
   const { constants } = context;
 
-  return constants.FERTILISER_FRACTION_RUNOFF_STATIC;
+  return constants.CROP.FERTILISER_FRACTION_RUNOFF_STATIC;
 }

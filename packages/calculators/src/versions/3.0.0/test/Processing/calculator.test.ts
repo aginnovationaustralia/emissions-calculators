@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import clone from 'nanoclone';
 import { calculateProcessing } from '../../Processing/calculator';
+import { ConstantsForProcessingCalculator } from '../../Processing/constants';
 import { ProcessingInput } from '../../types/Processing/input';
 import { ProcessingIntermediateOutput } from '../../types/Processing/intermediate.output';
 import { ProcessingOutput } from '../../types/Processing/output';
@@ -93,7 +94,8 @@ describe('Processing calculator (multi activity)', () => {
     ProcessingInput,
     ProcessingIntermediateOutput,
     'intermediate',
-    ProcessingOutput
+    ProcessingOutput,
+    ConstantsForProcessingCalculator
   >(
     'Processing',
     calculateProcessing,
