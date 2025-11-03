@@ -5,7 +5,6 @@ import { HorticultureCropTypes } from '../types';
 import { HorticultureRefrigerantSchema } from './refrigerant.input';
 
 export const HorticultureCropSchema = singleEnterpriseInput('Horticulture', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   type: z.enum(HorticultureCropTypes).meta({ description: 'Crop type' }),
   averageYield: z
     .number()

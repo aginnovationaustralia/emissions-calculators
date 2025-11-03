@@ -11,7 +11,6 @@ import { WildSeaFisheriesTransportSchema } from './transport.input';
 export const WildSeaFisheriesEnterpriseSchema = singleEnterpriseInput(
   'WildSeaFisheries',
   {
-    id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
     state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
     electricitySource: z
       .enum(ElectricitySources)

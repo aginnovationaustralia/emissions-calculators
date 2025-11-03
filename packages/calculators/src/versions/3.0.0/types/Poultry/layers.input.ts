@@ -8,7 +8,6 @@ import { PoultryFeedSchema } from './feed.input';
 import { LayerClassSchema } from './layerclass.input';
 
 export const LayersCompleteSchema = singleEnterpriseInput('Poultry (layers)', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   layers: LayerClassSchema.meta({ description: 'Layers' }),
   meatChickenLayers: LayerClassSchema.meta({
     description: 'Meat chicken layers',

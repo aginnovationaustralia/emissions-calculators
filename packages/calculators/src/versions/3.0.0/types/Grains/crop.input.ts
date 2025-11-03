@@ -4,7 +4,6 @@ import { singleEnterpriseInput } from '../schemas';
 import { CropTypes, ProductionSystems, States } from '../types';
 
 export const GrainsCropSchema = singleEnterpriseInput('Grains', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   type: z.enum(CropTypes).meta({
     description:
       "Crop type. Note that the following crop types are now deprecated, the relevant full calculator should be used instead: 'Cotton', 'Rice', 'Sugar Cane'",

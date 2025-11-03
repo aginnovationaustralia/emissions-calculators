@@ -17,7 +17,6 @@ import { AquacultureCustomBaitPurchaseSchema } from './custombaitpurchase.input'
 export const AquacultureEnterpriseInputSchema = singleEnterpriseInput(
   'Aquaculture',
   {
-    id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
     state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
     productionSystem: z
       .enum(AquacultureProductionSystem)

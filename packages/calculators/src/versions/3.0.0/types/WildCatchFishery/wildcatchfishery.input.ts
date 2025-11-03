@@ -29,7 +29,6 @@ export enum WildCatchFisheryProductionSystem {
 export const WildCatchFisheryEnterpriseInputSchema = singleEnterpriseInput(
   'WildCatchFishery',
   {
-    id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
     state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
     productionSystem: z.enum(WildCatchFisheryProductionSystem).meta({
       description: 'Production system of the wild catch fishery enterprise',

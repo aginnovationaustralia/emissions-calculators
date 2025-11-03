@@ -8,7 +8,6 @@ import { CowsCalvingProportionSchema } from './calvingproportion.input';
 import { SeasonalCalvingRatesSchema } from './seasonalcalving.input';
 
 export const BuffaloCompleteSchema = singleEnterpriseInput('Buffalo', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   classes: BuffaloClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: z

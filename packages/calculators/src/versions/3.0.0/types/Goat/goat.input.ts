@@ -7,7 +7,6 @@ import { ElectricitySources } from '../types';
 import { GoatClassesSchema } from './goatclasses.input';
 
 export const GoatCompleteSchema = singleEnterpriseInput('Goat', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   classes: GoatClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: z

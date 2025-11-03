@@ -8,10 +8,6 @@ import { FeedlotPurchasesSchema } from './purchases.input';
 import { FeedlotSalesSchema } from './sales.input';
 
 export const FeedlotCompleteSchema = singleEnterpriseInput('Feedlot', {
-  id: z
-    .string()
-    .optional()
-    .meta({ description: 'Unique identifier for the feedlot enterprise' }),
   system: z
     .enum(FeedlotSystems)
     .meta({ description: 'Type of feedlot/production system' }),

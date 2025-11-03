@@ -9,7 +9,6 @@ import {
 } from '../types';
 
 export const RiceCropSchema = singleEnterpriseInput('Rice', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   averageRiceYield: z
     .number()

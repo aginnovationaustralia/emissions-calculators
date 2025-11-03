@@ -4,7 +4,6 @@ import { singleEnterpriseInput } from '../schemas';
 import { ProductionSystems, States } from '../types';
 
 export const SugarCropSchema = singleEnterpriseInput('Sugar', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   productionSystem: z
     .enum(ProductionSystems)

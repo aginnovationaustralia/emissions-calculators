@@ -8,7 +8,6 @@ import { proportion, singleEnterpriseInput } from '../schemas';
 import { ElectricitySources, States } from '../types';
 
 export const VineyardCropSchema = singleEnterpriseInput('Vineyard', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   rainfallAbove600: z
     .boolean()

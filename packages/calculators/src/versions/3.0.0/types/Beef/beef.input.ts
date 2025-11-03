@@ -8,7 +8,6 @@ import { BeefCalvingSchema } from './beefcalving.input';
 import { BeefClassesSchema } from './beefclasses.input';
 
 export const BeefCompleteSchema = singleEnterpriseInput('Beef', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   classes: BeefClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: z

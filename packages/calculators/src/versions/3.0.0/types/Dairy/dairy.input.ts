@@ -9,7 +9,6 @@ import { ManureManagementSchema } from './manure.input';
 import { SeasonalFertiliserSchema } from './seasonalfertiliser.input';
 
 export const DairyCompleteSchema = singleEnterpriseInput('Dairy', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   classes: DairyClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: z

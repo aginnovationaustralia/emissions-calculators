@@ -9,7 +9,6 @@ import { SeasonalLambingSchema } from './seasonallambing.input';
 import { SheepClassesSchema } from './sheepclasses.input';
 
 export const SheepCompleteSchema = singleEnterpriseInput('Sheep', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   classes: SheepClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: z

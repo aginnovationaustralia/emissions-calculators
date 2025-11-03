@@ -7,7 +7,6 @@ import { FeedSchema } from './feed.input';
 import { PorkClassesSchema } from './porkclasses.input';
 
 export const PorkCompleteSchema = singleEnterpriseInput('Pork', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   classes: PorkClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: z

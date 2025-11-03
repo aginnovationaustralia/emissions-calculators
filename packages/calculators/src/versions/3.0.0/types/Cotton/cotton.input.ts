@@ -4,7 +4,6 @@ import { deprecated, proportion, singleEnterpriseInput } from '../schemas';
 import { CustomisedFertilisers, States } from '../types';
 
 export const CottonCropSchema = singleEnterpriseInput('Cotton', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   averageCottonYield: z.number().meta({
     description: 'Average cotton yield, in t/ha (tonnes per hectare)',

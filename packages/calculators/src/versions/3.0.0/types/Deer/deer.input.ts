@@ -8,7 +8,6 @@ import { DoesFawningProportionSchema } from './fawningproportion.input';
 import { SeasonalFawningRatesSchema } from './seasonalfawning.input';
 
 export const DeerCompleteSchema = singleEnterpriseInput('Deer', {
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   classes: DeerClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: z

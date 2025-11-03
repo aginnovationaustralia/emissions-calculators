@@ -37,14 +37,24 @@ export const calculatorInput = <T extends ZodLooseShape = DefaultLooseShape>(
   });
 
 export const singleEnterpriseInput = <
-  T extends ZodLooseShape = DefaultLooseShape,
+  T extends 'id' extends keyof T ? never : ZodLooseShape = DefaultLooseShape,
 >(
   calculatorName: string,
   shape: T,
 ) =>
-  z.object(shape).meta({
-    description: `Input data required for a single ${calculatorName} enterprise`,
-  });
+  z
+    .object({
+      ...shape,
+      id: z
+        .string()
+        .optional()
+        .meta({
+          description: `Unique identifier for this ${calculatorName} activity`,
+        }),
+    })
+    .meta({
+      description: `Input data required for a single ${calculatorName} enterprise`,
+    });
 
 export const vegetationInput = <T extends ZodLooseShape = DefaultLooseShape>(
   calculatorName: string,
