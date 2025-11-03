@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { DESCRIPTIONS } from '../descriptions.schema';
 import { intermediateEmissionsOutput } from '../schemas';
 import { Scope2OutputSchema } from '../scope2.output';
 import { SequestrationTotalOutputSchema } from '../sequestration.total.output';
@@ -11,7 +10,6 @@ import { DeerScope3OutputSchema } from './scope3.output';
 export const DeerIntermediateOutputSchema = intermediateEmissionsOutput(
   'Deer',
   {
-    id: z.string().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
     scope1: DeerScope1OutputSchema,
     scope2: Scope2OutputSchema,
     scope3: DeerScope3OutputSchema,

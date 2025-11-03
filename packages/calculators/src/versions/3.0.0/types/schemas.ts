@@ -73,11 +73,21 @@ export const emissionsOutput = <T extends ZodLooseShape = DefaultLooseShape>(
   });
 
 export const intermediateEmissionsOutput = <
-  T extends ZodLooseShape = DefaultLooseShape,
+  T extends 'id' extends keyof T ? never : ZodLooseShape = DefaultLooseShape,
 >(
   calculatorName: string,
   shape: T,
 ) =>
-  z.object(shape).meta({
-    description: `Intermediate emissions calculation output for the ${calculatorName} calculator`,
-  });
+  z
+    .object({
+      ...shape,
+      id: z
+        .string()
+        .optional()
+        .meta({
+          description: `Unique identifier for this ${calculatorName} activity`,
+        }),
+    })
+    .meta({
+      description: `Intermediate emissions calculation output for the ${calculatorName} calculator`,
+    });

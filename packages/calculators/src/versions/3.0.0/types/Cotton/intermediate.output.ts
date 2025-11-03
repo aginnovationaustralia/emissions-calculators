@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { NetOutputSchema } from '../common/net.output';
-import { DESCRIPTIONS } from '../descriptions.schema';
 import { intermediateEmissionsOutput } from '../schemas';
 import { Scope2OutputSchema } from '../scope2.output';
 import { SequestrationTotalOutputSchema } from '../sequestration.total.output';
@@ -11,7 +10,6 @@ import { CottonScope3OutputSchema } from './scope3.output';
 export const CottonIntermediateOutputSchema = intermediateEmissionsOutput(
   'Cotton',
   {
-    id: z.string().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
     scope1: CottonScope1OutputSchema,
     scope2: Scope2OutputSchema,
     scope3: CottonScope3OutputSchema,

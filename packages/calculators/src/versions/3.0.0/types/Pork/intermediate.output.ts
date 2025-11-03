@@ -10,7 +10,6 @@ import { PorkScope3OutputSchema } from './scope3.output';
 export const PorkIntermediateOutputSchema = intermediateEmissionsOutput(
   'Pork',
   {
-    id: z.string(),
     scope1: PorkScope1OutputSchema,
     scope2: Scope2OutputSchema,
     scope3: PorkScope3OutputSchema,
