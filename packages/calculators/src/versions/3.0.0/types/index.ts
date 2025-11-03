@@ -149,6 +149,7 @@ export { LivestockManure } from './livestockManure.input';
 export { LivestockManureSeason } from './livestockManureSeason.input';
 export { LivestockPurchase } from './livestockPurchase.input';
 export { MineralSupplementation } from './mineral.input';
+export { openapiSchemas } from './openapi';
 export { OtherFertiliser } from './otherFertiliser.input';
 export { Feed } from './Pork/feed.input';
 export { FeedIngredients } from './Pork/feedingredients.input';
