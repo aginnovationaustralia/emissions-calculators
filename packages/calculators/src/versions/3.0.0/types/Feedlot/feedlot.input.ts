@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FertiliserSchema } from '../fertiliser.input';
-import { singleEnterpriseInput } from '../schemas';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { ElectricitySources, FeedlotSystems, TruckTypes } from '../types';
 import { FeedlotGroupSchema } from './group.input';
 import { FeedlotPurchasesSchema } from './purchases.input';
@@ -41,9 +41,7 @@ export const FeedlotCompleteSchema = singleEnterpriseInput('Feedlot', {
     .enum(TruckTypes)
     .meta({ description: 'Type of truck used for cattle transport' }),
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
 });
 
 export type FeedlotComplete = z.infer<typeof FeedlotCompleteSchema>;

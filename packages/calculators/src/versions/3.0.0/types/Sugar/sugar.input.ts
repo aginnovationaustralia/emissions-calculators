@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { singleEnterpriseInput } from '../schemas';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { ProductionSystems, States } from '../types';
 
 export const SugarCropSchema = singleEnterpriseInput('Sugar', {
@@ -60,9 +60,7 @@ export const SugarCropSchema = singleEnterpriseInput('Sugar', {
       'Percentage of electricity use to allocate to this crop, from 0 to 1',
   }),
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   dieselUse: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
   petrolUse: z.number().meta({ description: DESCRIPTIONS.PETROL }),
   lpg: z.number().meta({ description: DESCRIPTIONS.LPG }),

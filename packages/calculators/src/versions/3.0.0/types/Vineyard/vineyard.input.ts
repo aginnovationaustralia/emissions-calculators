@@ -44,9 +44,7 @@ export const VineyardCropSchema = singleEnterpriseInput('Vineyard', {
       'Urea-Ammonium nitrate application, in kg product/ha (kilograms of product per hectare)',
   }),
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   herbicideUse: z.number().meta({
     description:
       'Total amount of active ingredients from general herbicide/pesticide use, in kg (kilogram)',

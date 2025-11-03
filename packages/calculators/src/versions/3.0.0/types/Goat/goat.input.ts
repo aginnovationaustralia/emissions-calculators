@@ -9,9 +9,7 @@ import { GoatClassesSchema } from './goatclasses.input';
 export const GoatCompleteSchema = singleEnterpriseInput('Goat', {
   classes: GoatClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   fertiliser: FertiliserSchema,
   diesel: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
   petrol: z.number().meta({ description: DESCRIPTIONS.PETROL }),

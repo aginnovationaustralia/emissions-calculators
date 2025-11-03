@@ -11,9 +11,7 @@ import { SeasonalFertiliserSchema } from './seasonalfertiliser.input';
 export const DairyCompleteSchema = singleEnterpriseInput('Dairy', {
   classes: DairyClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   fertiliser: FertiliserSchema,
   seasonalFertiliser: SeasonalFertiliserSchema,
   areas: AreaUsedSchema,

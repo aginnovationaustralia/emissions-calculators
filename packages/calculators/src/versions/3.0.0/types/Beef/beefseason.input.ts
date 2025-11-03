@@ -1,18 +1,15 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
+import { percentage } from '../schemas';
 
 export const BeefSeasonSchema = z.object({
   head: z.number().meta({ description: DESCRIPTIONS.HEAD }),
   liveweight: z.number().meta({ description: DESCRIPTIONS.LIVEWEIGHT }),
   liveweightGain: z.number().meta({ description: DESCRIPTIONS.LIVEWEIGHTGAIN }),
-  crudeProtein: z
-    .number()
-    .optional()
-    .meta({ description: DESCRIPTIONS.CRUDEPROTEIN }),
-  dryMatterDigestibility: z
-    .number()
-    .optional()
-    .meta({ description: DESCRIPTIONS.DRYMATTERDIGESTIBILITY }),
+  crudeProtein: percentage(DESCRIPTIONS.CRUDEPROTEIN).optional(),
+  dryMatterDigestibility: percentage(
+    DESCRIPTIONS.DRYMATTERDIGESTIBILITY,
+  ).optional(),
 });
 
 export type BeefSeason = z.infer<typeof BeefSeasonSchema>;

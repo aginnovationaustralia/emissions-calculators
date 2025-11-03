@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
+import { proportion } from '../schemas';
 import { FluidWasteTreatmentType } from '../types';
 
 export const FluidWasteInputSchema = z.object({
@@ -13,9 +14,7 @@ export const FluidWasteInputSchema = z.object({
   averageOutletCOD: z
     .number()
     .meta({ description: DESCRIPTIONS.AVERAGE_OUTLET_COD }),
-  flaredCombustedFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.FLARED_COMBUSTED_FRACTION }),
+  flaredCombustedFraction: proportion(DESCRIPTIONS.FLARED_COMBUSTED_FRACTION),
 });
 
 export type FluidWasteInput = z.infer<typeof FluidWasteInputSchema>;
