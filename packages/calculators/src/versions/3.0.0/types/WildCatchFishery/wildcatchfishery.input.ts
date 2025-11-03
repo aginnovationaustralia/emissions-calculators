@@ -5,6 +5,7 @@ import { SolidWasteInputSchema } from '../common/solid-waste.input';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FuelInputSchema } from '../fuel.input';
 import { RefrigerantInputSchema } from '../refrigerant.input';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { ElectricitySources, States } from '../types';
 import { WildCatchFisheryBaitPurchaseSchema } from './baitpurchase.input';
 import { WildCatchFisheryCustomBaitPurchaseSchema } from './custombaitpurchase.input';
@@ -25,8 +26,9 @@ export enum WildCatchFisheryProductionSystem {
   SOUTHERN_OCEAN_LONGLINE = 'Southern Ocean Longline',
 }
 
-export const WildCatchFisheryEnterpriseInputSchema = z
-  .object({
+export const WildCatchFisheryEnterpriseInputSchema = singleEnterpriseInput(
+  'WildCatchFishery',
+  {
     id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
     state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
     productionSystem: z.enum(WildCatchFisheryProductionSystem).meta({
@@ -51,11 +53,7 @@ export const WildCatchFisheryEnterpriseInputSchema = z
     totalCommercialFlightsKm: z
       .number()
       .meta({ description: DESCRIPTIONS.TOTAL_COMMERCIAL_FLIGHTS_KM }),
-    electricityRenewable: z
-      .number()
-      .min(0)
-      .max(1)
-      .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+    electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
     electricityUse: z
       .number()
       .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
@@ -73,11 +71,8 @@ export const WildCatchFisheryEnterpriseInputSchema = z
       .number()
       .optional()
       .meta({ description: DESCRIPTIONS.CARBON_OFFSETS }),
-  })
-  .meta({
-    description:
-      'Input data required for a single wild catch fishery enterprise',
-  });
+  },
+);
 
 export type WildCatchFisheryEnterpriseInput = z.infer<
   typeof WildCatchFisheryEnterpriseInputSchema

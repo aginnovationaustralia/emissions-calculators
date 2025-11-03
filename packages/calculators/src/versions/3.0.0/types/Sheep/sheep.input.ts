@@ -2,12 +2,13 @@ import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FertiliserSchema } from '../fertiliser.input';
 import { MineralSupplementationSchema } from '../mineral.input';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { ElectricitySources } from '../types';
 import { EwesLambingSchema } from './eweslambing.input';
 import { SeasonalLambingSchema } from './seasonallambing.input';
 import { SheepClassesSchema } from './sheepclasses.input';
 
-export const SheepCompleteSchema = z.object({
+export const SheepCompleteSchema = singleEnterpriseInput('Sheep', {
   id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   classes: SheepClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
@@ -22,11 +23,7 @@ export const SheepCompleteSchema = z.object({
   electricitySource: z
     .enum(ElectricitySources)
     .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
-  electricityRenewable: z
-    .number()
-    .min(0)
-    .max(1)
-    .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+  electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
   electricityUse: z
     .number()
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),

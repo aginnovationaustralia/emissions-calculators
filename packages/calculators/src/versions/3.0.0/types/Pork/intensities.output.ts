@@ -3,11 +3,11 @@ import { z } from 'zod';
 export const PorkEmissionsIntensitiesSchema = z.object({
   porkMeatIncludingSequestration: z.number().meta({
     description:
-      'Pork meat including carbon sequestration, in kg-CO2e/kg liveweight',
+      'Pork meat emissions intensity including carbon sequestration, in kg-CO2e/kg liveweight',
   }),
   porkMeatExcludingSequestration: z.number().meta({
     description:
-      'Pork meat excluding carbon sequestration, in kg-CO2e/kg liveweight',
+      'Pork meat emissions intensity excluding carbon sequestration, in kg-CO2e/kg liveweight',
   }),
   liveweightProducedKg: z
     .number()

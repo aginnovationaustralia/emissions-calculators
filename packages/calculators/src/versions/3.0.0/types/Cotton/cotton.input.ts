@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { deprecated } from '../schemas';
+import { deprecated, proportion, singleEnterpriseInput } from '../schemas';
 import { CustomisedFertilisers, States } from '../types';
 
-export const CottonCropSchema = z.object({
+export const CottonCropSchema = singleEnterpriseInput('Cotton', {
   id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   averageCottonYield: z.number().meta({
@@ -76,10 +76,9 @@ export const CottonCropSchema = z.object({
     description:
       'Total amount of active ingredients from other herbicide use (Paraquat, Diquat, Glyphosate), in kg (kilogram)',
   }),
-  electricityAllocation: z.number().meta({
-    description:
-      'Percentage of electricity use to allocate to this crop, from 0 to 1',
-  }),
+  electricityAllocation: proportion(
+    'Percentage of electricity use to allocate to this crop, from 0 to 1',
+  ),
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: z
     .number()

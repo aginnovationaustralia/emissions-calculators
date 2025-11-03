@@ -1,12 +1,13 @@
 import { z } from 'zod';
+import { proportion } from '../schemas';
 
 export const PoultryFeedIngredientsSchema = z
   .object({
-    wheat: z.number().optional(),
-    barley: z.number().optional(),
-    sorghum: z.number().optional(),
-    soybean: z.number().optional(),
-    millrun: z.number().optional(),
+    wheat: proportion().optional(),
+    barley: proportion().optional(),
+    sorghum: proportion().optional(),
+    soybean: proportion().optional(),
+    millrun: proportion().optional(),
   })
   .meta({
     description:

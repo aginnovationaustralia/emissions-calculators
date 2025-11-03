@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { deprecated } from '../schemas';
+import { deprecated, singleEnterpriseInput } from '../schemas';
 import { HorticultureCropTypes } from '../types';
 import { HorticultureRefrigerantSchema } from './refrigerant.input';
 
-export const HorticultureCropSchema = z.object({
+export const HorticultureCropSchema = singleEnterpriseInput('Horticulture', {
   id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   type: z.enum(HorticultureCropTypes).meta({ description: 'Crop type' }),
   averageYield: z

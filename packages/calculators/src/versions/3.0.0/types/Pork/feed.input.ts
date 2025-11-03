@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { proportion } from '../schemas';
 import { FeedIngredientsSchema } from './feedingredients.input';
 
 export const FeedSchema = z
@@ -6,9 +7,9 @@ export const FeedSchema = z
     feedPurchased: z
       .number()
       .meta({ description: 'Pig feed purchased, in tonnes' }),
-    additionalIngredients: z.number().min(0).max(1).meta({
-      description: 'Fraction of additional ingredient in feed mix, from 0 to 1',
-    }),
+    additionalIngredients: proportion(
+      'Fraction of additional ingredient in feed mix, from 0 to 1',
+    ),
     emissionsIntensity: z.number().meta({
       description:
         'Emissions intensity of feed product in GHG (kg CO2-e/kg input)',

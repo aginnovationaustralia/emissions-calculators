@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
+import { singleEnterpriseInput } from '../schemas';
 import {
   RicePreseasonFloodingPeriods,
   States,
@@ -7,18 +8,16 @@ import {
   WaterRegimeTypes,
 } from '../types';
 
-export const RiceCropSchema = z.object({
+export const RiceCropSchema = singleEnterpriseInput('Rice', {
   id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   averageRiceYield: z
     .number()
     .meta({ description: 'Average rice yield, in t/ha (tonnes per hectare)' }),
   areaSown: z.number().meta({ description: 'Area sown, in ha (hectares)' }),
-  growingSeasonDays: z
-    .number()
-    .meta({
-      description: 'The length of the growing season for this crop, in days',
-    }),
+  growingSeasonDays: z.number().meta({
+    description: 'The length of the growing season for this crop, in days',
+  }),
   waterRegimeType: z.enum(WaterRegimeTypes),
   waterRegimeSubType: z.enum(WaterRegimeSubTypes),
   ricePreseasonFloodingPeriod: z.enum(RicePreseasonFloodingPeriods),

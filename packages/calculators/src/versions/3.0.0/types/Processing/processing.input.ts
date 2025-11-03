@@ -4,6 +4,7 @@ import { SolidWasteInputSchema } from '../common/solid-waste.input';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FuelInputSchema } from '../fuel.input';
 import { RefrigerantInputSchema } from '../refrigerant.input';
+import { proportion } from '../schemas';
 import { ElectricitySources } from '../types';
 import { ProcessingProductSchema } from './product.input';
 
@@ -13,11 +14,7 @@ export const ProductProcessingInputSchema = z
     product: ProcessingProductSchema.meta({
       description: DESCRIPTIONS.PROCESSING_PRODUCT,
     }),
-    electricityRenewable: z
-      .number()
-      .min(0)
-      .max(1)
-      .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+    electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
     electricityUse: z
       .number()
       .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),

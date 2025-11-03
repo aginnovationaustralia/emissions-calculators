@@ -1,8 +1,9 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
+import { singleEnterpriseInput } from '../schemas';
 import { CropTypes, ProductionSystems, States } from '../types';
 
-export const GrainsCropSchema = z.object({
+export const GrainsCropSchema = singleEnterpriseInput('Grains', {
   id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   type: z.enum(CropTypes).meta({
     description:

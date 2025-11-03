@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { proportion } from '../schemas';
 import { WildCatchFisheryBait } from '../types';
 
 export const WildCatchFisheryBaitPurchaseSchema = z.object({
@@ -6,11 +7,9 @@ export const WildCatchFisheryBaitPurchaseSchema = z.object({
   purchasedTonnes: z
     .number()
     .meta({ description: 'Purchased product in tonnes' }),
-  additionalIngredients: z
-    .number()
-    .min(0)
-    .max(1)
-    .meta({ description: 'Additional ingredient fraction, from 0 to 1' }),
+  additionalIngredients: proportion(
+    'Additional ingredient fraction, from 0 to 1',
+  ),
   emissionsIntensity: z.number().default(0).meta({
     description:
       'Emissions intensity of additional ingredients, in kg CO2e/kg bait (default 0)',

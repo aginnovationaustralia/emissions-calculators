@@ -6,7 +6,7 @@ export const DairyEmissionsIntensitiesSchema = z.object({
     .meta({ description: 'Milk solids produced in tonnes' }),
   intensity: z.number().meta({
     description:
-      'Dairy intensities including carbon sequestration, in tonnes-CO2e',
+      'Dairy emissions intensity including sequestration, in tonnes-CO2e/tonne milk solids',
   }),
 });
 

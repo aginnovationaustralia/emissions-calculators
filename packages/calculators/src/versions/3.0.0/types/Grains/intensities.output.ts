@@ -6,10 +6,16 @@ export const GrainsIntensitiesOutputSchema = z.object({
     .meta({ description: 'Grain produced in tonnes' }),
   grainsExcludingSequestration: z
     .number()
-    .meta({ description: 'Grains excluding sequestration, in t-CO2e/t grain' }),
+    .meta({
+      description:
+        'Grains emissions intensity excluding sequestration, in t-CO2e/t grain',
+    }),
   grainsIncludingSequestration: z
     .number()
-    .meta({ description: 'Grains including sequestration, in t-CO2e/t grain' }),
+    .meta({
+      description:
+        'Grains emissions intensity including sequestration, in t-CO2e/t grain',
+    }),
 });
 
 export type GrainsIntensitiesOutput = z.infer<

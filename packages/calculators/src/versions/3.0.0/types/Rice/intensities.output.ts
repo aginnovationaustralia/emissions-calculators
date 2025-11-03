@@ -7,10 +7,16 @@ export const RiceEmissionsIntensitiesSchema = z.object({
     .meta({ description: 'Rice produced in tonnes' }),
   riceExcludingSequestration: z
     .number()
-    .meta({ description: 'Rice excluding sequestration, in t-CO2e/t rice' }),
+    .meta({
+      description:
+        'Rice emissions intensity excluding sequestration, in t-CO2e/t rice',
+    }),
   riceIncludingSequestration: z
     .number()
-    .meta({ description: 'Rice including sequestration, in t-CO2e/t rice' }),
+    .meta({
+      description:
+        'Rice emissions intensity including sequestration, in t-CO2e/t rice',
+    }),
   intensity: z
     .number()
     .meta(

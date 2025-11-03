@@ -3,19 +3,19 @@ import { z } from 'zod';
 export const PoultryEmissionsIntensitiesSchema = z.object({
   poultryMeatIncludingSequestration: z.number().meta({
     description:
-      'Poultry meat including carbon sequestration, in kg-CO2e/kg liveweight',
+      'Poultry meat emissions intensity including carbon sequestration, in kg-CO2e/kg liveweight',
   }),
   poultryMeatExcludingSequestration: z.number().meta({
     description:
-      'Poultry meat excluding carbon sequestration, in kg-CO2e/kg liveweight',
+      'Poultry meat emissions intensity excluding carbon sequestration, in kg-CO2e/kg liveweight',
   }),
   poultryEggsIncludingSequestration: z.number().meta({
     description:
-      'Poultry eggs including carbon sequestration, in kg-CO2e/kg liveweight',
+      'Poultry eggs emissions intensity including carbon sequestration, in kg-CO2e/kg liveweight',
   }),
   poultryEggsExcludingSequestration: z.number().meta({
     description:
-      'Poultry eggs excluding carbon sequestration, in kg-CO2e/kg liveweight',
+      'Poultry eggs emissions intensity excluding carbon sequestration, in kg-CO2e/kg liveweight',
   }),
   meatProducedKg: z
     .number()

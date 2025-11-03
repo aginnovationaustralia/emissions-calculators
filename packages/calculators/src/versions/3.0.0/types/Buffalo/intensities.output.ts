@@ -6,11 +6,11 @@ export const BuffaloEmissionsIntensitiesSchema = z.object({
     .meta({ description: 'Amount of buffalo meat produced in kg liveweight' }),
   buffaloMeatExcludingSequestration: z.number().meta({
     description:
-      'Buffalo meat (breeding herd) excluding sequestration, in kg-CO2e/kg liveweight',
+      'Buffalo meat (breeding herd) emissions intensity excluding sequestration, in kg-CO2e/kg liveweight',
   }),
   buffaloMeatIncludingSequestration: z.number().meta({
     description:
-      'Buffalo meat (breeding herd) including sequestration, in kg-CO2e/kg liveweight',
+      'Buffalo meat (breeding herd) emissions intensity including sequestration, in kg-CO2e/kg liveweight',
   }),
 });
 

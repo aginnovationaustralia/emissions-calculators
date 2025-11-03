@@ -1,12 +1,11 @@
 import { z } from 'zod';
+import { calculatorInput } from '../schemas';
 import { VineyardVegetationSchema } from './vineyard-vegetation.input';
 import { VineyardCropSchema } from './vineyard.input';
 
-export const VineyardInputSchema = z
-  .object({
-    vineyards: z.array(VineyardCropSchema),
-    vegetation: z.array(VineyardVegetationSchema),
-  })
-  .meta({ description: 'Input data required for the `vineyard` calculator' });
+export const VineyardInputSchema = calculatorInput('Vineyard', {
+  vineyards: z.array(VineyardCropSchema),
+  vegetation: z.array(VineyardVegetationSchema),
+});
 
 export type VineyardInput = z.infer<typeof VineyardInputSchema>;

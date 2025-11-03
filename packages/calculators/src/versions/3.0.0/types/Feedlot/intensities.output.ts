@@ -6,11 +6,11 @@ export const FeedlotEmissionIntensitiesSchema = z.object({
     .meta({ description: 'Amount of meat produced in kg liveweight' }),
   beefIncludingSequestration: z.number().meta({
     description:
-      'Beef including carbon sequestration, in kg-CO2e/kg liveweight',
+      'Beef emissions intensity including carbon sequestration, in kg-CO2e/kg liveweight',
   }),
   beefExcludingSequestration: z.number().meta({
     description:
-      'Beef excluding carbon sequestration, in kg-CO2e/kg liveweight',
+      'Beef emissions intensity excluding carbon sequestration, in kg-CO2e/kg liveweight',
   }),
 });
 

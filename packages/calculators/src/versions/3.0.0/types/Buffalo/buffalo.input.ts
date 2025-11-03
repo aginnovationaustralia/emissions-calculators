@@ -1,12 +1,13 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FertiliserSchema } from '../fertiliser.input';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { ElectricitySources } from '../types';
 import { BuffaloClassesSchema } from './buffaloclasses.input';
 import { CowsCalvingProportionSchema } from './calvingproportion.input';
 import { SeasonalCalvingRatesSchema } from './seasonalcalving.input';
 
-export const BuffaloCompleteSchema = z.object({
+export const BuffaloCompleteSchema = singleEnterpriseInput('Buffalo', {
   id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   classes: BuffaloClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
@@ -20,11 +21,7 @@ export const BuffaloCompleteSchema = z.object({
   electricitySource: z
     .enum(ElectricitySources)
     .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
-  electricityRenewable: z
-    .number()
-    .min(0)
-    .max(1)
-    .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+  electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
   electricityUse: z
     .number()
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),

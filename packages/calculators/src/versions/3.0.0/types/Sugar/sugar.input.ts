@@ -1,18 +1,17 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
+import { singleEnterpriseInput } from '../schemas';
 import { ProductionSystems, States } from '../types';
 
-export const SugarCropSchema = z.object({
+export const SugarCropSchema = singleEnterpriseInput('Sugar', {
   id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   productionSystem: z
     .enum(ProductionSystems)
     .meta({ description: 'Production system of this crop' }),
-  averageCaneYield: z
-    .number()
-    .meta({
-      description: 'Average cane/crop yield, in t/ha (tonnes per hectare)',
-    }),
+  averageCaneYield: z.number().meta({
+    description: 'Average cane/crop yield, in t/ha (tonnes per hectare)',
+  }),
   percentMilledCaneYield: z.number().optional().meta({
     description:
       'Percentage of cane yield that becomes milled sugar, from 0 to 1',
