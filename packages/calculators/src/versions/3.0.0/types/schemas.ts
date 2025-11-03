@@ -44,13 +44,13 @@ export const singleEnterpriseInput = <
 ) =>
   z
     .object({
-      ...shape,
       id: z
         .string()
         .optional()
         .meta({
           description: `Unique identifier for this ${calculatorName} activity`,
         }),
+      ...shape,
     })
     .meta({
       description: `Input data required for a single ${calculatorName} enterprise`,
@@ -80,13 +80,13 @@ export const intermediateEmissionsOutput = <
 ) =>
   z
     .object({
-      ...shape,
       id: z
         .string()
         .optional()
         .meta({
           description: `Unique identifier for this ${calculatorName} activity`,
         }),
+      ...shape,
     })
     .meta({
       description: `Intermediate emissions calculation output for the ${calculatorName} calculator`,

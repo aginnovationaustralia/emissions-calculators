@@ -13,8 +13,6 @@ export const HorticultureInputSchema = singleEnterpriseInput('Horticulture', {
     .number()
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
   vegetation: z.array(HorticultureVegetationSchema),
-}).meta({
-  description: 'Input data required for the `horticulture` calculator',
 });
 
 export type HorticultureInput = z.infer<typeof HorticultureInputSchema>;
