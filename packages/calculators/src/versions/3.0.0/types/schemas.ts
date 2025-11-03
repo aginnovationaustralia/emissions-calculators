@@ -80,12 +80,9 @@ export const intermediateEmissionsOutput = <
 ) =>
   z
     .object({
-      id: z
-        .string()
-        .optional()
-        .meta({
-          description: `Unique identifier for this ${calculatorName} activity`,
-        }),
+      id: z.string().meta({
+        description: `Unique identifier for this ${calculatorName} activity`,
+      }),
       ...shape,
     })
     .meta({
