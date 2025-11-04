@@ -14,7 +14,7 @@ export const SheepBeefEmissionsIntensitiesSchema = z.object({
     .meta({ description: 'Liveweight produced in kg' }),
   woolIncludingSequestration: z.number().meta({
     description:
-      'Wool production emissions intensity including carbon sequestration, in kg-CO2e/kg greasy',
+      'Wool production emissions intensity including carbon sequestration, in kg-CO2e/kg greasy wool',
   }),
   woolExcludingSequestration: z.number().meta({
     description:
