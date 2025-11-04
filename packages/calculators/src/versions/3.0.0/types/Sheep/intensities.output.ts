@@ -13,7 +13,7 @@ export const SheepEmissionsIntensitiesSchema = z.object({
   }),
   woolExcludingSequestration: z.number().meta({
     description:
-      'Wool production emissions intensity excluding carbon sequestration, in kg-CO2e/kg greasy',
+      'Wool production emissions intensity excluding carbon sequestration, in kg-CO2e/kg greasy wool',
   }),
   sheepMeatBreedingIncludingSequestration: z.number().meta({
     description:
