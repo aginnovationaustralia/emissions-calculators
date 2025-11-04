@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { CropTypes, ProductionSystems, States } from '../types';
 
-export const GrainsCropSchema = z.object({
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+export const GrainsCropSchema = singleEnterpriseInput('Grains', {
   type: z.enum(CropTypes).meta({
     description:
       "Crop type. Note that the following crop types are now deprecated, the relevant full calculator should be used instead: 'Cotton', 'Rice', 'Sugar Cane'",
@@ -61,9 +61,7 @@ export const GrainsCropSchema = z.object({
       'Percentage of electricity use to allocate to this crop, from 0 to 1',
   }),
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   dieselUse: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
   petrolUse: z.number().meta({ description: DESCRIPTIONS.PETROL }),
   lpg: z.number().meta({ description: DESCRIPTIONS.LPG }),

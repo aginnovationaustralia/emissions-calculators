@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
+import { proportion } from './schemas';
 
 export const MineralSupplementationSchema = z
   .object({
@@ -7,26 +8,17 @@ export const MineralSupplementationSchema = z
       .number()
       .default(0)
       .meta({ description: 'Mineral block product used, in tonnes' }),
-    mineralBlockUrea: z
-      .number()
-      .default(0)
-      .meta({ description: DESCRIPTIONS.UREACONTENT }),
+    mineralBlockUrea: proportion(DESCRIPTIONS.UREACONTENT),
     weanerBlock: z
       .number()
       .default(0)
       .meta({ description: 'Weaner block product used, in tonnes' }),
-    weanerBlockUrea: z
-      .number()
-      .default(0)
-      .meta({ description: DESCRIPTIONS.UREACONTENT }),
+    weanerBlockUrea: proportion(DESCRIPTIONS.UREACONTENT),
     drySeasonMix: z
       .number()
       .default(0)
       .meta({ description: 'Dry season mix product used, in tonnes' }),
-    drySeasonMixUrea: z
-      .number()
-      .default(0)
-      .meta({ description: DESCRIPTIONS.UREACONTENT }),
+    drySeasonMixUrea: proportion(DESCRIPTIONS.UREACONTENT),
   })
   .meta({ description: 'Supplementation for livestock' });
 

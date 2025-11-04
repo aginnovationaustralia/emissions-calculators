@@ -1,12 +1,9 @@
 import { z } from 'zod';
+import { calculatorInput } from '../schemas';
 import { WildCatchFisheryEnterpriseInputSchema } from './wildcatchfishery.input';
 
-export const WildCatchFisheryInputSchema = z
-  .object({
-    enterprises: z.array(WildCatchFisheryEnterpriseInputSchema),
-  })
-  .meta({
-    description: 'Input data required for the `wildcatchfishery` calculator',
-  });
+export const WildCatchFisheryInputSchema = calculatorInput('WildCatchFishery', {
+  enterprises: z.array(WildCatchFisheryEnterpriseInputSchema),
+});
 
 export type WildCatchFisheryInput = z.infer<typeof WildCatchFisheryInputSchema>;

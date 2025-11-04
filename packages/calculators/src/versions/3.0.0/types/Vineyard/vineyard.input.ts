@@ -4,10 +4,10 @@ import { FreightInputSchema } from '../common/freight.input';
 import { SolidWasteInputSchema } from '../common/solid-waste.input';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FuelInputSchema } from '../fuel.input';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { ElectricitySources, States } from '../types';
 
-export const VineyardCropSchema = z.object({
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+export const VineyardCropSchema = singleEnterpriseInput('Vineyard', {
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   rainfallAbove600: z
     .boolean()
@@ -44,9 +44,7 @@ export const VineyardCropSchema = z.object({
       'Urea-Ammonium nitrate application, in kg product/ha (kilograms of product per hectare)',
   }),
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   herbicideUse: z.number().meta({
     description:
       'Total amount of active ingredients from general herbicide/pesticide use, in kg (kilogram)',
@@ -55,11 +53,7 @@ export const VineyardCropSchema = z.object({
     description:
       'Total amount of active ingredients from other herbicide use (Paraquat, Diquat, Glyphosate), in kg (kilogram)',
   }),
-  electricityRenewable: z
-    .number()
-    .min(0)
-    .max(1)
-    .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+  electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
   electricityUse: z
     .number()
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),

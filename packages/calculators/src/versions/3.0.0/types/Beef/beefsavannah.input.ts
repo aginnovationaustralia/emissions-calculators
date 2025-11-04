@@ -6,7 +6,7 @@ export const BeefSavannahBurningSchema = z
     burning: SavannahBurningSchema,
     allocationToBeef: z.array(z.number()).meta({
       description:
-        'The proportion of the burning that is allocated to each beef',
+        'The proportion of the burning that is allocated to each beef activity',
     }),
   })
   .meta({ description: 'Savannah burning along with allocations to beef' });

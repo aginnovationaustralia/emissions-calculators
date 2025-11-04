@@ -2,18 +2,16 @@ import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FertiliserSchema } from '../fertiliser.input';
 import { MineralSupplementationSchema } from '../mineral.input';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { ElectricitySources } from '../types';
 import { EwesLambingSchema } from './eweslambing.input';
 import { SeasonalLambingSchema } from './seasonallambing.input';
 import { SheepClassesSchema } from './sheepclasses.input';
 
-export const SheepCompleteSchema = z.object({
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+export const SheepCompleteSchema = singleEnterpriseInput('Sheep', {
   classes: SheepClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   fertiliser: FertiliserSchema,
   diesel: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
   petrol: z.number().meta({ description: DESCRIPTIONS.PETROL }),
@@ -22,11 +20,7 @@ export const SheepCompleteSchema = z.object({
   electricitySource: z
     .enum(ElectricitySources)
     .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
-  electricityRenewable: z
-    .number()
-    .min(0)
-    .max(1)
-    .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+  electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
   electricityUse: z
     .number()
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),

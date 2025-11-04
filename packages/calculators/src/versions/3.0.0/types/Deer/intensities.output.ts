@@ -6,11 +6,11 @@ export const DeerEmissionsIntensitiesSchema = z.object({
     .meta({ description: 'Deer meat produced in kg liveweight' }),
   deerMeatExcludingSequestration: z.number().meta({
     description:
-      'Deer meat (breeding herd) excluding sequestration, in kg-CO2e/kg liveweight',
+      'Deer meat (breeding herd) emissions intensity excluding sequestration, in kg-CO2e/kg liveweight',
   }),
   deerMeatIncludingSequestration: z.number().meta({
     description:
-      'Deer meat (breeding herd) including sequestration, in kg-CO2e/kg liveweight',
+      'Deer meat (breeding herd) emissions intensity including sequestration, in kg-CO2e/kg liveweight',
   }),
 });
 

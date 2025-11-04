@@ -9,19 +9,19 @@ export const GoatEmissionsIntensitiesSchema = z.object({
     .meta({ description: 'Amount of wool produced in kg greasy' }),
   goatMeatBreedingIncludingSequestration: z.number().meta({
     description:
-      'Goat meat (breeding herd) including carbon sequestration, in kg-CO2e/kg liveweight',
+      'Goat meat (breeding herd) emissions intensity including carbon sequestration, in kg-CO2e/kg liveweight',
   }),
   goatMeatBreedingExcludingSequestration: z.number().meta({
     description:
-      'Goat meat (breeding herd) excluding carbon sequestration, in kg-CO2e/kg liveweight',
+      'Goat meat (breeding herd) emissions intensity excluding carbon sequestration, in kg-CO2e/kg liveweight',
   }),
   woolIncludingSequestration: z.number().meta({
     description:
-      'Wool production including carbon sequestration, in kg-CO2e/kg greasy',
+      'Wool production emissions intensity including carbon sequestration, in kg-CO2e/kg greasy',
   }),
   woolExcludingSequestration: z.number().meta({
     description:
-      'Wool production excluding carbon sequestration, in kg-CO2e/kg greasy',
+      'Wool production emissions intensity excluding carbon sequestration, in kg-CO2e/kg greasy',
   }),
 });
 

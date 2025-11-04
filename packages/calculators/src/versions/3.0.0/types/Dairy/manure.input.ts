@@ -1,12 +1,13 @@
 import { z } from 'zod';
+import { percentage } from '../schemas';
 
 export const ManureManagementSchema = z
   .object({
-    pasture: z.number().min(0).max(100),
-    anaerobicLagoon: z.number().min(0).max(100),
-    sumpAndDispersal: z.number().min(0).max(100),
-    drainToPaddocks: z.number().min(0).max(100),
-    soildStorage: z.number().min(0).max(100),
+    pasture: percentage(),
+    anaerobicLagoon: percentage(),
+    sumpAndDispersal: percentage(),
+    drainToPaddocks: percentage(),
+    soildStorage: percentage(),
   })
   .meta({
     description:

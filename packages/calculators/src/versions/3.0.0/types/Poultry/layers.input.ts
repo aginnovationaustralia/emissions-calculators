@@ -1,13 +1,13 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { LivestockPurchaseSchema } from '../livestockPurchase.input';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { ElectricitySources } from '../types';
 import { EggSaleSchema } from './eggsale.input';
 import { PoultryFeedSchema } from './feed.input';
 import { LayerClassSchema } from './layerclass.input';
 
-export const LayersCompleteSchema = z.object({
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+export const LayersCompleteSchema = singleEnterpriseInput('Poultry (layers)', {
   layers: LayerClassSchema.meta({ description: 'Layers' }),
   meatChickenLayers: LayerClassSchema.meta({
     description: 'Meat chicken layers',
@@ -23,11 +23,7 @@ export const LayersCompleteSchema = z.object({
   electricitySource: z
     .enum(ElectricitySources)
     .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
-  electricityRenewable: z
-    .number()
-    .min(0)
-    .max(1)
-    .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+  electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
   electricityUse: z
     .number()
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),

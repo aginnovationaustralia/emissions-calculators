@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import {
   RicePreseasonFloodingPeriods,
   States,
@@ -7,18 +8,15 @@ import {
   WaterRegimeTypes,
 } from '../types';
 
-export const RiceCropSchema = z.object({
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+export const RiceCropSchema = singleEnterpriseInput('Rice', {
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   averageRiceYield: z
     .number()
     .meta({ description: 'Average rice yield, in t/ha (tonnes per hectare)' }),
   areaSown: z.number().meta({ description: 'Area sown, in ha (hectares)' }),
-  growingSeasonDays: z
-    .number()
-    .meta({
-      description: 'The length of the growing season for this crop, in days',
-    }),
+  growingSeasonDays: z.number().meta({
+    description: 'The length of the growing season for this crop, in days',
+  }),
   waterRegimeType: z.enum(WaterRegimeTypes),
   waterRegimeSubType: z.enum(WaterRegimeSubTypes),
   ricePreseasonFloodingPeriod: z.enum(RicePreseasonFloodingPeriods),
@@ -63,9 +61,7 @@ export const RiceCropSchema = z.object({
       'Percentage of electricity use to allocate to this crop, from 0 to 1',
   }),
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   dieselUse: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
   petrolUse: z.number().meta({ description: DESCRIPTIONS.PETROL }),
   lpg: z.number().meta({ description: DESCRIPTIONS.LPG }),

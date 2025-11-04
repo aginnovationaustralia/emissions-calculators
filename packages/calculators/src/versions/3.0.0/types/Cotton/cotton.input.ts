@@ -1,10 +1,9 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { deprecated } from '../schemas';
+import { deprecated, proportion, singleEnterpriseInput } from '../schemas';
 import { CustomisedFertilisers, States } from '../types';
 
-export const CottonCropSchema = z.object({
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+export const CottonCropSchema = singleEnterpriseInput('Cotton', {
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   averageCottonYield: z.number().meta({
     description: 'Average cotton yield, in t/ha (tonnes per hectare)',
@@ -76,14 +75,11 @@ export const CottonCropSchema = z.object({
     description:
       'Total amount of active ingredients from other herbicide use (Paraquat, Diquat, Glyphosate), in kg (kilogram)',
   }),
-  electricityAllocation: z.number().meta({
-    description:
-      'Percentage of electricity use to allocate to this crop, from 0 to 1',
-  }),
+  electricityAllocation: proportion(
+    'Percentage of electricity use to allocate to this crop, from 0 to 1',
+  ),
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   dieselUse: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
   petrolUse: z.number().meta({ description: DESCRIPTIONS.PETROL }),
   lpg: z.number().meta({ description: DESCRIPTIONS.LPG }),

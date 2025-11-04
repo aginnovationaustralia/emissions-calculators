@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { proportion } from '../schemas';
 import { WildSeaFisheriesBaits } from '../types';
 
 export const WildSeaFisheriesBaitPurchaseSchema = z.object({
@@ -6,11 +7,9 @@ export const WildSeaFisheriesBaitPurchaseSchema = z.object({
     .enum(WildSeaFisheriesBaits)
     .meta({ description: 'Bait product type' }),
   purchased: z.number().meta({ description: 'Purchased product in tonnes' }),
-  additionalIngredient: z
-    .number()
-    .min(0)
-    .max(1)
-    .meta({ description: 'Additional ingredient fraction, from 0 to 1' }),
+  additionalIngredient: proportion(
+    'Additional ingredient fraction, from 0 to 1',
+  ),
   emissionsIntensity: z
     .number()
     .meta({ description: 'Emissions intensity of product, in kg CO2e/kg' }),

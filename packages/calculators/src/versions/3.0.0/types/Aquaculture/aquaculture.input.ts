@@ -5,6 +5,7 @@ import { SolidWasteInputSchema } from '../common/solid-waste.input';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FuelInputSchema } from '../fuel.input';
 import { RefrigerantInputSchema } from '../refrigerant.input';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import {
   AquacultureProductionSystem,
   ElectricitySources,
@@ -13,9 +14,9 @@ import {
 import { AquacultureBaitPurchaseSchema } from './baitpurchase.input';
 import { AquacultureCustomBaitPurchaseSchema } from './custombaitpurchase.input';
 
-export const AquacultureEnterpriseInputSchema = z
-  .object({
-    id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+export const AquacultureEnterpriseInputSchema = singleEnterpriseInput(
+  'Aquaculture',
+  {
     state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
     productionSystem: z
       .enum(AquacultureProductionSystem)
@@ -39,11 +40,7 @@ export const AquacultureEnterpriseInputSchema = z
     totalCommercialFlightsKm: z
       .number()
       .meta({ description: DESCRIPTIONS.TOTAL_COMMERCIAL_FLIGHTS_KM }),
-    electricityRenewable: z
-      .number()
-      .min(0)
-      .max(1)
-      .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+    electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
     electricityUse: z
       .number()
       .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
@@ -61,10 +58,8 @@ export const AquacultureEnterpriseInputSchema = z
       .number()
       .optional()
       .meta({ description: DESCRIPTIONS.CARBON_OFFSETS }),
-  })
-  .meta({
-    description: 'Input data required for a single aquaculture enterprise',
-  });
+  },
+);
 
 export type AquacultureEnterpriseInput = z.infer<
   typeof AquacultureEnterpriseInputSchema

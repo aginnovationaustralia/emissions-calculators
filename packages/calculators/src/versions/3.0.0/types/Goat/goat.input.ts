@@ -2,16 +2,14 @@ import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FertiliserSchema } from '../fertiliser.input';
 import { MineralSupplementationSchema } from '../mineral.input';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { ElectricitySources } from '../types';
 import { GoatClassesSchema } from './goatclasses.input';
 
-export const GoatCompleteSchema = z.object({
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+export const GoatCompleteSchema = singleEnterpriseInput('Goat', {
   classes: GoatClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   fertiliser: FertiliserSchema,
   diesel: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
   petrol: z.number().meta({ description: DESCRIPTIONS.PETROL }),
@@ -20,11 +18,7 @@ export const GoatCompleteSchema = z.object({
   electricitySource: z
     .enum(ElectricitySources)
     .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
-  electricityRenewable: z
-    .number()
-    .min(0)
-    .max(1)
-    .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+  electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
   electricityUse: z
     .number()
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),

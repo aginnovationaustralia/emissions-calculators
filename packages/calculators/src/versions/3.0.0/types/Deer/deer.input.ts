@@ -1,18 +1,16 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FertiliserSchema } from '../fertiliser.input';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { ElectricitySources } from '../types';
 import { DeerClassesSchema } from './deerclasses.input';
 import { DoesFawningProportionSchema } from './fawningproportion.input';
 import { SeasonalFawningRatesSchema } from './seasonalfawning.input';
 
-export const DeerCompleteSchema = z.object({
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+export const DeerCompleteSchema = singleEnterpriseInput('Deer', {
   classes: DeerClassesSchema,
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   fertiliser: FertiliserSchema,
   diesel: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
   petrol: z.number().meta({ description: DESCRIPTIONS.PETROL }),
@@ -20,11 +18,7 @@ export const DeerCompleteSchema = z.object({
   electricitySource: z
     .enum(ElectricitySources)
     .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
-  electricityRenewable: z
-    .number()
-    .min(0)
-    .max(1)
-    .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+  electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
   electricityUse: z
     .number()
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),

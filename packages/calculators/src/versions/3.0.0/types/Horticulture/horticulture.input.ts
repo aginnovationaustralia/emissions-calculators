@@ -1,11 +1,10 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { deprecated } from '../schemas';
+import { deprecated, proportion, singleEnterpriseInput } from '../schemas';
 import { HorticultureCropTypes } from '../types';
 import { HorticultureRefrigerantSchema } from './refrigerant.input';
 
-export const HorticultureCropSchema = z.object({
-  id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
+export const HorticultureCropSchema = singleEnterpriseInput('Horticulture', {
   type: z.enum(HorticultureCropTypes).meta({ description: 'Crop type' }),
   averageYield: z
     .number()
@@ -68,9 +67,7 @@ export const HorticultureCropSchema = z.object({
       'Percentage of electricity use to allocate to this crop, from 0 to 1',
   }),
   limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: z
-    .number()
-    .meta({ description: DESCRIPTIONS.LIMESTONEFRACTION }),
+  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   dieselUse: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
   petrolUse: z.number().meta({ description: DESCRIPTIONS.PETROL }),
   lpg: z.number().meta({ description: DESCRIPTIONS.LPG }),

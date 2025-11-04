@@ -1,7 +1,8 @@
 import { z } from 'zod';
+import { vegetationInput } from '../schemas';
 import { VegetationSchema } from '../vegetation.input';
 
-export const RiceVegetationSchema = z.object({
+export const RiceVegetationSchema = vegetationInput('Rice', {
   vegetation: VegetationSchema,
   allocationToCrops: z.array(z.number()),
 });

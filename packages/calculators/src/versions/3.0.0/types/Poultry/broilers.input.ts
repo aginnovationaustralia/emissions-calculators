@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { LivestockPurchaseSchema } from '../livestockPurchase.input';
+import { proportion } from '../schemas';
 import { ElectricitySources } from '../types';
 import { BroilerSaleSchema } from './broilersale.input';
 import { BroilerGroupSchema } from './group.input';
@@ -14,11 +15,7 @@ export const BroilersCompleteSchema = z.object({
   electricitySource: z
     .enum(ElectricitySources)
     .meta({ description: DESCRIPTIONS.ELECTRICITY_SOURCE }),
-  electricityRenewable: z
-    .number()
-    .min(0)
-    .max(1)
-    .meta({ description: DESCRIPTIONS.ELECTRICITY_RENEWABLE }),
+  electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
   electricityUse: z
     .number()
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
