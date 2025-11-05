@@ -22,9 +22,6 @@ export function calculateScope1Enteric(
 ) {
   const { constants } = context;
 
-  // (Data_InputD8, Enteric_FermentationD5)
-  //   const Enteric_FermentationD5 = Data_InputD8;
-
   // (Enteric_FermentationD15)
   const methaneMJperkg = 18.6;
 
