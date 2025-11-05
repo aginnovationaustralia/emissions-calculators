@@ -44,7 +44,7 @@ export const States = [
 
 export type State = (typeof States)[number];
 
-export const Regions = ['southwest', 'pilbara', 'kmberley'] as const;
+export const Regions = ['southwest', 'pilbara', 'kimberley'] as const;
 export type Region = (typeof Regions)[number];
 
 export const Seasons = ['spring', 'summer', 'autumn', 'winter'] as const;

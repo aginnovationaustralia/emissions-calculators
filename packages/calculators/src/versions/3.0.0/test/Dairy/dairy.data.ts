@@ -185,7 +185,7 @@ export const dairyComplete = {
     pasture: 20,
     anaerobicLagoon: 20,
     drainToPaddocks: 2,
-    soildStorage: 60,
+    solidStorage: 60,
     sumpAndDispersal: 20,
   },
   manureManagementOtherDairyCows: {
@@ -193,7 +193,7 @@ export const dairyComplete = {
     anaerobicLagoon: 6,
     sumpAndDispersal: 6,
     drainToPaddocks: 20,
-    soildStorage: 6,
+    solidStorage: 6,
   },
   seasonalFertiliser: {
     spring: {
