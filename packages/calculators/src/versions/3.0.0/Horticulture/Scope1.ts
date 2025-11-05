@@ -64,8 +64,6 @@ export function calculateScope1N2O(
   // (cropResiduesL56, Crop_ResiduesC13)
   const { fractionRemoved } = constants.CROP.CROPRESIDUE[horticulture.type];
 
-  // ElectricityC2 is state
-
   // (Crop_ResiduesC30)
   const massOfNReturnedToSoil =
     annualProduction *
@@ -78,8 +76,6 @@ export function calculateScope1N2O(
       belowAboveRatio *
       dryMatterContent *
       belowGroundN;
-
-  // (Crop_ResiduesD33)
 
   // (Crop_ResiduesC36)
   const residueGgN2O =

@@ -7,7 +7,6 @@ export function calculateScope1Urea(
   context: ExecutionContext<ConstantsForHorticultureCalculator>,
 ) {
   const { constants } = context;
-  // co2
 
   // (Urea_ApplicationC8)
   const totalMassFertiliser =
