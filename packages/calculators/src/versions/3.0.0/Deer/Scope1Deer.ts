@@ -7,16 +7,6 @@ import { DeerClassesAPI, State } from '../types/types';
 import { ConstantsForDeerCalculator } from './constants';
 import { getLeachingOtherDryland } from './functions';
 
-// const apiTypeToClassName: { [api in DeerClassAPI]: DeerClass } = {
-//   bucks: 'bucks',
-//   breedingDoes: 'breeding_does',
-//   fawn: 'fawn',
-//   otherDoes: 'other_does',
-//   tradeBucks: 'trade_bucks',
-//   tradeDoes: 'trade_does',
-// };
-
-// another fertiliser input as we merge them before
 export function calculateScope1(
   deer: DeerComplete,
   fertiliser: Fertiliser,
@@ -152,7 +142,6 @@ export function calculateScope1(
     },
   );
 
-  //
   const { otherFertiliserDryland, otherFertiliserIrrigated } =
     getOtherFertiliserAmounts(context, fertiliser);
 
@@ -167,7 +156,6 @@ export function calculateScope1(
   const nFertiliserUreaCropsDryland =
     deer.fertiliser.cropsDryland * 0.46 * ATMOSPHERICNDEPOSITION_FACTOR;
 
-  // WARNING: in code this was Data_InputE47 which points to an undefined cell
   // (Agricultural_SoilsD59)
   const nFertiliserOtherDryland =
     otherFertiliserDryland * ATMOSPHERICNDEPOSITION_FACTOR;
@@ -215,7 +203,7 @@ export function calculateScope1(
   const totalNDungUrine = totalNDungUrineGg * 10 ** 3;
 
   // (Data_SummaryC12)
-  const atmopshericN2O = atmosphericDepositionN2O + totalNDungUrine;
+  const atmosphericN2O = atmosphericDepositionN2O + totalNDungUrine;
 
   // (Enteric_FermentationC22)
   const methaneGg = total.seasonalMethane * constants.COMMON.GWP_FACTORSC5;
@@ -238,19 +226,11 @@ export function calculateScope1(
     fracWetMultiplier,
     fracLEACH,
   );
-  // not used due to below
-  //   const leachingPastureIrrigated =
-  //     deer.fertiliser.pastureIrrigated * 0.46 * fracWetMultiplier * fracLEACH;
-  //   const leachingCropsIrrigated =
-  //     deer.fertiliser.cropsIrrigated * 0.46 * fracWetMultiplier * fracLEACH;
-  //   const leachingOtherIrrigated =
-  //     deer.fertiliser.otherIrrigated * 0.46 * fracWetMultiplier * fracLEACH;
 
   // (Agricultural_SoilsD11)
   const LEACHING_EF = 0.011;
 
   // (Agricultural_SoilsD101)
-  // WARNING: irrigated for this one is all 0
   const nSyntheticPastureDryland =
     leachingPastureDryland * LEACHING_EF * constants.COMMON.GWP_FACTORSC15;
   const nSyntheticCropsDryland =
@@ -341,7 +321,7 @@ export function calculateScope1(
     constants.COMMON.GWP_FACTORSC6;
 
   return {
-    atmopshericN2O,
+    atmosphericN2O,
     totalMethaneEnteric,
     totalLeachingN2O,
     manureMethane,

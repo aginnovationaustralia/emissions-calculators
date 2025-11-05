@@ -52,14 +52,11 @@ export function calculateSingleDeer(
     context,
   );
 
-  // Lime
   const limeCO2 = calculateScope1Lime(
     deer.limestone,
     deer.limestoneFraction,
     context,
   );
-
-  // Fuel
 
   const fuelCO2 = calculateFuelScope1CO2LPG(
     deer.diesel,
@@ -83,11 +80,7 @@ export function calculateSingleDeer(
     true,
   );
 
-  // Urea
-
   const ureaCO2 = calculateScope1Urea(mergedFertiliser, context);
-
-  // Electricity
 
   const electricity = calculateElectricityScope2And3(
     state,
@@ -97,11 +90,7 @@ export function calculateSingleDeer(
     context,
   );
 
-  // Fertiliser
-
   const fertiliser = calculateScope3Fertiliser(mergedFertiliser, context);
-
-  // Purchased Mineral Supplementation
 
   const feed = calculateScope3PurchasedFeed(
     deer.grainFeed,
@@ -135,16 +124,14 @@ export function calculateSingleDeer(
     fuelCH4 + deerEmissions.manureMethane + deerEmissions.totalMethaneEnteric;
   const totalN2O =
     deerEmissions.totalFertiliserSoil +
-    deerEmissions.atmopshericN2O +
+    deerEmissions.atmosphericN2O +
     deerEmissions.totalUrineDung +
     deerEmissions.totalLeachingN2O +
     fuelN2O;
 
-  // totals
-
   const scope1 = addTotalValue({
     fertiliserN2O: deerEmissions.totalFertiliserSoil,
-    atmosphericDepositionN2O: deerEmissions.atmopshericN2O,
+    atmosphericDepositionN2O: deerEmissions.atmosphericN2O,
     manureManagementCH4: deerEmissions.manureMethane,
     entericCH4: deerEmissions.totalMethaneEnteric,
     urineAndDungN2O: deerEmissions.totalUrineDung,
@@ -208,7 +195,6 @@ export function calculateDeer(
   input: DeerInput,
   context: ExecutionContext<ConstantsForDeerCalculator>,
 ): DeerOutput {
-  // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(
     input.vegetation,
     input.deers,
@@ -222,14 +208,14 @@ export function calculateDeer(
     context,
   );
 
-  const deerResults = input.deers.map((singledeer, ix) =>
+  const deerResults = input.deers.map((singleDeer, ix) =>
     calculateSingleDeer(
       input.state,
       input.rainfallAbove600,
-      singledeer,
+      singleDeer,
       context,
       carbonSequestration.intermediate[ix],
-      singledeer.id || ix.toString(),
+      singleDeer.id || ix.toString(),
     ),
   );
 
