@@ -24,7 +24,7 @@ export function calculateScope1SavannahBurning(
     };
   }
 
-  // TODO: this is a very weird way of doing it by state string, but oh well
+  // REVISIT: this could be done in a more idiomatic and typescript friendly way
   const combinedRefStateString = Object.keys(
     constants.SAVANNA.FUELFINE['Combined Ref'],
   )[combinedRefStateIndex] as keyof typeof constants.SAVANNA.FUELFINE.Yo;
@@ -95,8 +95,6 @@ export function calculateScope1SavannahBurning(
     completenessOfCombustion *
     10 ** -3;
 
-  // methane
-
   // (savannahBurningE84)
   const fineFuelCarbonContent =
     constants.SAVANNA.FUELBURNT_VEGETATION_CARBONFRACTION.fine[burn.vegetation];
@@ -129,8 +127,6 @@ export function calculateScope1SavannahBurning(
   const totalMethaneGg =
     (fineEmissionsCH4 + coarseEmissionsCH4) * constants.COMMON.GWP_FACTORSC5;
   const totalCH4 = totalMethaneGg * 10 ** 3;
-
-  // N2O
 
   // (savannahBurningE101)
   const fineFuelNitrogenContent =

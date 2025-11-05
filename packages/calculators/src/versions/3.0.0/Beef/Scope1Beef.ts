@@ -24,7 +24,6 @@ export function beefEmissionsForSeason(
   northofTropicOfCapricorn: boolean,
   context: ExecutionContext<ConstantsForBeefCalculator>,
 ): BeefIntermediaryEmissions {
-  // -------------
   const feedIntake =
     (1.185 +
       0.00454 * liveweight -
@@ -60,7 +59,7 @@ export function beefEmissionsForSeason(
   // (nitrousOxideMMSBeefD45)
   const relativeSize = liveweight / nitrogenExcretedNumber;
 
-  // WARNING: calfMilkIntake is actually milk production (nitriousOxideMMSBeefH30)
+  // NOTE: calfMilkIntake is actually milk production (nitrousOxideMMSBeefH30)
   // (nitrousOxideMMSBeefS23)
   const nitrogenRetainedInTheBody =
     (0.032 * milkProduction) / 6.38 +
@@ -72,7 +71,7 @@ export function beefEmissionsForSeason(
       6.25;
 
   // (nitrousOxideMMSBeefS49)
-  const nitrogenExctretedInUrine =
+  const nitrogenExcretedInUrine =
     ((crudeProtein / 100) * feedIntake) / 6.25 +
     (calfMilkIntake * 0.032) / 6.38 -
     nitrogenRetainedInTheBody -
@@ -81,7 +80,7 @@ export function beefEmissionsForSeason(
 
   // (nitrousOxideMMSBeefS61)
   const seasonalUrinaryNitrogenExcreted =
-    91.25 * head * nitrogenExctretedInUrine * 10 ** -6;
+    91.25 * head * nitrogenExcretedInUrine * 10 ** -6;
 
   // (entericFermentationBeefS20)
   const dailyMethaneYield = (20.7 * feedIntake) / 1000;
@@ -139,13 +138,6 @@ const EMPTY_INTERNAL_TOTALS: Record<Season, BeefSeasonEmissions> = {
   winter: emptySeason,
 };
 
-/**
- *
- * @param beef
- * @param state
- * @param fertiliser (dataInputBeefD84 to dataInputBeefF86)
- * @returns
- */
 export function calculateCompleteBeefEmissions(
   beef: BeefClasses,
   state: State,
@@ -186,15 +178,12 @@ export function calculateCompleteBeefEmissions(
   const tropic = propertyNorthOfTropicOfCapricorn
     ? 'NORTHOFTROPIC'
     : 'SOUTHOFTROPIC';
-  // const wet = rainfallAbove600 ? 2 : 1;
 
   SEASONS.forEach((season) => {
-    // also known as dry matter availability
     const crudeProtein = constants.BEEF.CRUDEPROTEIN[season][state];
     const dryMatterDigestibility =
       constants.BEEF.DRYMATTERDIGESTIBILITY[season][state];
 
-    // WARNING: season after calving for previous season?
     // (entericFermentationBeefC28)
     const lcfaSeason =
       percentCowsCalving[season] *
@@ -236,7 +225,6 @@ export function calculateCompleteBeefEmissions(
         beefType === 'steersLt1' || beefType === 'heifersLt1'
           ? calfMilkIntakeSeason
           : 0,
-        // or * 1 as its just a multiplier on entire feedIntake
         beefType === 'cowsGt2' ? additionalIntakeForMilkProductionSeason : 1,
         beefSeason.dryMatterDigestibility ?? dryMatterDigestibility,
         beefSeason.crudeProtein ?? crudeProtein,
@@ -245,8 +233,6 @@ export function calculateCompleteBeefEmissions(
         propertyNorthOfTropicOfCapricorn,
         context,
       );
-
-      // console.log(JSON.stringify(beefSeasonEmissions, null, 2));
 
       // for urine and dung
       // (agriculturalSoilsBeefD37)
@@ -365,7 +351,6 @@ export function calculateCompleteBeefEmissions(
       atmosphericNDepositionUreaIrrigatedTotal) *
     agriculturalSoilsBeefO6;
 
-  // TODO: wrap these in a reduce?
   // (agriculturalSoilsBeefD63)
   const springNDungUrineAtmosphere =
     springTotalNDepositionUrineDung *
@@ -422,7 +407,7 @@ export function calculateCompleteBeefEmissions(
   const fracLeach = constants.COMMON.LEACHING.FRACLEACH_FERTILISER_SOILS;
 
   // (fracWetMultiplier)
-  const fracWetMultiplier = rainfallAbove600 ? 1 : 0; // 2=yes.1=no
+  const fracWetMultiplier = rainfallAbove600 ? 1 : 0;
 
   // (agriculturalSoilsBeefD86 to F88)
   const leechingNFertiliserGrazingNonIrrigated =
@@ -519,7 +504,7 @@ export function calculateCompleteBeefEmissions(
     0.46 *
     constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
     constants.COMMON.GWP_FACTORSC15;
-  // WARNING: other doesnt have * 0.46
+  // NOTE: other doesn't have * 0.46
   const nFertiliserOtherDrylandSoil =
     otherFertiliserDryland *
     constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDCROP *
@@ -550,7 +535,7 @@ export function calculateCompleteBeefEmissions(
     nFertiliserCroppingIrrigatedSoil +
     nFertiliserOtherIrrigatedSoil;
 
-  // (agrictulturalSoilsBeefD18)
+  // (agriculturalSoilsBeefD18)
   const totalSoilCO2e =
     (totalN2ODrylandSoil + totalN2OIrrigatedSoil) *
     constants.COMMON.GWP_FACTORSC6;
