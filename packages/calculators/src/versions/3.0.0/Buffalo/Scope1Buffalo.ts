@@ -7,7 +7,6 @@ import { BuffaloClassesAPI, State } from '../types/types';
 import { ConstantsForBuffaloCalculator } from './constants';
 import { getLeachingOtherDryland } from './functions';
 
-// another fertiliser input as we merge them before
 export function calculateScope1(
   buffalo: BuffaloComplete,
   fertiliser: Fertiliser,
@@ -154,8 +153,6 @@ export function calculateScope1(
     },
   );
 
-  //
-
   const { otherFertiliserDryland, otherFertiliserIrrigated } =
     getOtherFertiliserAmounts(context, fertiliser);
 
@@ -170,7 +167,6 @@ export function calculateScope1(
   const nFertiliserUreaCropsDryland =
     buffalo.fertiliser.cropsDryland * 0.46 * ATMOSPHERICNDEPOSITION_FACTOR;
 
-  // WARNING: in code this was Data_InputE47 which points to an undefined cell
   // (Agricultural_SoilsD59)
   const nFertiliserOtherDryland =
     otherFertiliserDryland * ATMOSPHERICNDEPOSITION_FACTOR;
@@ -187,15 +183,9 @@ export function calculateScope1(
   const nFertiliserUreaGrazingIrrigated =
     buffalo.fertiliser.pastureIrrigated * 0.46 * ATMOSPHERICNDEPOSITION_FACTOR;
 
-  // (Agricultural_SoilsD5)
-  // const IRRIGATEDPASTURE_EF = 0.0039;
-
   // (Agricultural_SoilsF58)
   const nFertiliserUreaCropsIrrigated =
     buffalo.fertiliser.cropsIrrigated * 0.46 * ATMOSPHERICNDEPOSITION_FACTOR;
-
-  // (Agricultural_SoilsD6)
-  // const IRRIGATEDCROP_EF = 0.0085;
 
   // (Agricultural_SoilsF59)
   const nFertiliserUreaOtherIrrigated =
@@ -247,16 +237,9 @@ export function calculateScope1(
     fracWetMultiplier,
     fracLEACH,
   );
-  // not used due to below
-  //   const leachingPastureIrrigated =
-  //     buffalo.fertiliser.pastureIrrigated * 0.46 * fracWetMultiplier * fracLEACH;
-  //   const leachingCropsIrrigated =
-  //     buffalo.fertiliser.cropsIrrigated * 0.46 * fracWetMultiplier * fracLEACH;
-  //   const leachingOtherIrrigated =
-  //     buffalo.fertiliser.otherIrrigated * 0.46 * fracWetMultiplier * fracLEACH;
 
   // (Agricultural_SoilsD101)
-  // WARNING: irrigated for this one is all 0
+  // NOTE: irrigated for this one is all 0
   const nSyntheticPastureDryland =
     leachingPastureDryland *
     constants.COMMON.LEACHING.N2O_EF *
@@ -265,7 +248,6 @@ export function calculateScope1(
     leachingCropsDryland *
     constants.COMMON.LEACHING.N2O_EF *
     constants.COMMON.GWP_FACTORSC15;
-  // WARNING: Agricultural_SoilsD103 points to E not D
   const nSyntheticOtherDryland =
     leachingOtherDryland *
     constants.COMMON.LEACHING.N2O_EF *
@@ -301,9 +283,9 @@ export function calculateScope1(
   // (Manure_ManagementC31, Data_SummaryC9)
 
   // (Agricultural_SoilsD40)
-  const uringDungGrazing = total.urineDungDepositedDuringGrazing;
+  const urineDungGrazing = total.urineDungDepositedDuringGrazing;
   // (Agricultural_SoilsD41)
-  const urineDungGrazingGg = uringDungGrazing * constants.COMMON.GWP_FACTORSC6;
+  const urineDungGrazingGg = urineDungGrazing * constants.COMMON.GWP_FACTORSC6;
   // (Agricultural_SoilsD42, Data_SummaryC11)
   const totalUrineDung = urineDungGrazingGg * 10 ** 3;
 

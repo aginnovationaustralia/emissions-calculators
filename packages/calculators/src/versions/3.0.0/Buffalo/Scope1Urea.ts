@@ -16,7 +16,7 @@ export function calculateScope1Urea(
     fertiliser.cropsIrrigated;
 
   // (ureaApplicationC37)
-  // WARNING: buffalo calc does not have / 1000
+  // NOTE: buffalo calc does not have / 1000
   const carbon =
     totalMassFertiliser *
     constants.LIVESTOCK.CARBON_FRACTION_OF_UREA *
