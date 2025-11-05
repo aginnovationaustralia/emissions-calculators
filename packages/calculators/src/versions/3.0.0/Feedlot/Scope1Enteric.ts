@@ -2,10 +2,6 @@ import { ExecutionContext } from '../executionContext';
 import { FeedlotStay } from '../types/Feedlot/stay.input';
 import { ConstantsForFeedlotCalculator } from './constants';
 
-//
-//
-//
-// START SCOPE 1 ENTERIC FERMENTATION
 export function calculateScope1Enteric(
   stay: FeedlotStay,
   context: ExecutionContext<ConstantsForFeedlotCalculator>,
@@ -14,7 +10,7 @@ export function calculateScope1Enteric(
 
   // Daily methane production
   // M = (5.11 × I - 4.00 × EE + 2.26 × NDF ) × 10-3
-  //  I = Intanke of dry matter per day
+  //  I = Intake of dry matter per day
   //  EE = Ether extract as a percentage of intake
   //  NDF = Neutral detergent fibre (as a percentage of intake)
   const dailyMethaneYield =
@@ -39,7 +35,3 @@ export function calculateScope1Enteric(
 
   return totalTonnes;
 }
-// END SCOPE 1 ENTERIC FERMENTATION
-//
-//
-//

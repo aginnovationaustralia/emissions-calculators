@@ -8,7 +8,7 @@ import { getFeedlotProductionSystemEF } from './functions';
 // head (dataInputC15, nitrousOxideMMSD20, entericFermentationC6)
 // liveweight kg (dataInputC17, entericFermentationC8)
 // crudeprotein 0-100 (dataInputC19)
-// nitrogenretention 0-100% (dataInputC21)
+// nitrogen retention 0-100% (dataInputC21)
 // averageLengthOfStay (dataInputC16, nitrousOxideMMSD25)
 // Dietary net energy concentration MJ/kg
 // dietaryNetEnergyConcentration (dataInputC20, entericFermentationC9)
@@ -26,10 +26,10 @@ export function calculateScope1Atmospheric(
   const systemFracGASM = constants.FEEDLOT.MANURE_EF[system].FracGASM;
 
   // (nitrousOxideMMSD5)
-  const cudeProteinFraction = stay.crudeProtein / 100;
+  const crudeProteinFraction = stay.crudeProtein / 100;
 
   // (nitrousOxideMMSK8)
-  const nitrogenIntake = (stay.dailyIntake * cudeProteinFraction) / 6.25;
+  const nitrogenIntake = (stay.dailyIntake * crudeProteinFraction) / 6.25;
 
   // (nitrousOxideMMSD15)
   const nitrogenRetentionFraction = stay.nitrogenRetention / 100;
@@ -40,9 +40,6 @@ export function calculateScope1Atmospheric(
   // (nitrousOxideMMSK20, agriculturalSoilsD15)
   const annualNitrogenExcretion =
     stay.livestock * nitrogenExcreted * stay.stayAverageDuration * 10 ** -6;
-
-  // (agriculturalSoilsD24)
-  // const mnLeach = 0;
 
   // (agriculturalSoilsD26)
   const animalWasteAppliedToSoil =
@@ -65,7 +62,6 @@ export function calculateScope1Atmospheric(
   // (agriculturalSoilsD68)
   const totalAmmoniaLossesCO2 = animalWaste;
 
-  // WARNING: GWP_FACTORSC6 is different for feedlot than it is grains, etc
   // (agriculturalSoilsD69)
   const totalAmmoniaLossesGgCO2 =
     totalAmmoniaLossesCO2 * constants.COMMON.GWP_FACTORSC6;
