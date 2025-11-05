@@ -14,7 +14,7 @@ const mockMixpanelInstance = {
 };
 
 jest.mock('./mixpanel', () => ({
-  mixPanelinstance: mockMixpanelInstance,
+  mixPanelInstance: mockMixpanelInstance,
 }));
 
 import { CalculatorConfig } from './config';

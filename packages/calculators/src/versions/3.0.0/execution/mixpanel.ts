@@ -1,6 +1,6 @@
 import { init } from 'mixpanel';
 import { CalculatorConfig } from './config';
 
-export const mixPanelinstance = CalculatorConfig.isMetricsEnabled()
+export const mixPanelInstance = CalculatorConfig.isMetricsEnabled()
   ? init(CalculatorConfig.mixpanelKey())
   : null;
