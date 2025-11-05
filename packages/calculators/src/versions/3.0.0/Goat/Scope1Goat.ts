@@ -25,7 +25,6 @@ export function goatEmissionsForSeason(
   // (manureManagementE35)
   const MANUREYEAR = constants.GOAT.MANUREPRODUCTION / 365;
 
-  //   WARNING manureManagementD18 is always 1, based off wrong state
   const proportionAnimalsWarmClimate = state === 'nt' ? 1 : 0;
   const proportionAnimalsTemperateClimate = state === 'nt' ? 0 : 1;
 
@@ -38,7 +37,6 @@ export function goatEmissionsForSeason(
       proportionAnimalsTemperateClimate *
       constants.LIVESTOCK.METHANE_TEMPERATE_EF;
 
-  // WARNING: manureManagementL24 has L20 but should be D20
   // (manureManagementD24)
   const seasonalManureMethaneProduction = head * M * 91.25 * 10 ** -6;
 
@@ -309,18 +307,15 @@ export function calculateCompleteGoatEmissions(
     nFertiliserCroppingIrrigatedSoil +
     nFertiliserOtherIrrigatedSoil;
 
-  // (agrictulturalSoilsD18)
+  // (agriculturalSoilsD18)
   const totalSoilCO2e =
     (totalN2ODrylandSoil + totalN2OIrrigatedSoil) *
     constants.COMMON.GWP_FACTORSC6;
 
-  // (fracLeach)
   const fracLeach = constants.COMMON.LEACHING.FRACLEACH_MMS;
 
-  // (fracWetMultiplier)
   const fracWetMultiplier = rainfallAbove600 ? 1 : 0; // 2=yes.1=no
 
-  // WARNING: why is * 0.46 now included in other when in other calcs (sb) its not?
   // (agriculturalSoilsD87 to F89)
   const leechingNFertiliserGrazingNonIrrigated =
     fertiliser.pastureDryland * 0.46 * fracWetMultiplier * fracLeach;
@@ -332,12 +327,6 @@ export function calculateCompleteGoatEmissions(
     fracWetMultiplier,
     fracLeach,
   );
-  // const leechingNFertiliserGrazingIrrigated =
-  //   fertiliser.pastureIrrigated * 0.46 * fracWetMultiplier * fracLeach;
-  // const leechingNFertiliserCroppingIrrigated =
-  //   fertiliser.cropsIrrigated * 0.46 * fracWetMultiplier * fracLeach;
-  // const leechingNFertiliserOtherIrrigated =
-  //   fertiliser.otherIrrigated * 0.46 * fracWetMultiplier * fracLeach;
 
   // (agriculturalSoilsBeefD99 to agriculturalSoilsBeefF101)
   const nFertiliserGrazingNonIrrigated =
@@ -352,18 +341,8 @@ export function calculateCompleteGoatEmissions(
     leechingNFertiliserOtherNonIrrigated *
     constants.LIVESTOCK.LEECHING_AND_RUNOFF *
     constants.COMMON.GWP_FACTORSC15;
-  // const nFertiliserGrazingIrrigated =
-  //   leechingNFertiliserGrazingIrrigated *
-  //   constants.LEECHING_AND_RUNOFF *
-  //   constants.COMMON.GWP_FACTORSC15;
-  // const nFertiliserCroppingIrrigated =
-  //   leechingNFertiliserCroppingIrrigated *
-  //   constants.LEECHING_AND_RUNOFF *
-  //   constants.COMMON.GWP_FACTORSC15;
-  // const nFertiliserOtherIrrigated =
-  //   leechingNFertiliserOtherIrrigated * constants.LEECHING_AND_RUNOFF * constants.COMMON.GWP_FACTORSC15;
 
-  // WARNING: F101:F103 is all hardcoded 0
+  // NOTE: F101:F103 is all hardcoded to 0
   // (agriculturalSoilsD104)
   const nFertiliserCropsTotal =
     nFertiliserGrazingNonIrrigated +

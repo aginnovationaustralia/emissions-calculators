@@ -11,7 +11,6 @@ export function calculateScope3PurchaseLivestock(
 ) {
   const { constants } = context;
 
-  // ()
   const totalKg = GoatClassesAPI.reduce((acc, cur) => {
     const cls = classes[cur];
     const purchases =
