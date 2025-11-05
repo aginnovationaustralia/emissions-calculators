@@ -10,10 +10,8 @@ export function calculateScope1Urea(
 
   const massUrea = getUreaMass(context, crop);
 
-  // (Urea_ApplicationC8)
   const totalMassFertiliser = totalArea * massUrea * 10 ** -3;
 
-  // (Urea_ApplicationC18)
   const totalGg =
     totalMassFertiliser *
     constants.COMMON.FERTILISER_EF *

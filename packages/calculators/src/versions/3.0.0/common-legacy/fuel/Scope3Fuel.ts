@@ -34,12 +34,6 @@ function getScope3FuelConstants(context: ExecutionContext) {
   };
 }
 
-/**
- *
- * @param diesel Diesel usage for  Litres/year (dataInputBeefD95)
- * @param petrol Petrol usage for  Litres/year(dataInputBeefD96)
- * @returns
- */
 export function calculateScope3FuelWithLPG(
   diesel: number,
   petrol: number,
@@ -67,7 +61,6 @@ export function calculateScope3FuelWithLPG(
   // (fuel_C5)
   const lpgkL = lpg / 1000;
 
-  // WARNING: Pork FuelH6 refers to M18 but should be M19
   const lpgScope3Tonnes = lpgkL * LPG_SCOPE3_EF_TONNES;
 
   // (fuel_H6)
@@ -104,7 +97,6 @@ export function calculateScope3FuelWithLPGStationary(
   // (fuel_C5)
   const lpgkL = lpg / 1000;
 
-  // WARNING: Pork FuelH6 refers to M18 but should be M19
   const lpgScope3Tonnes = lpgkL * LPG_SCOPE3_EF_TONNES_STATIONARY;
 
   // (fuel_H6)
@@ -142,7 +134,6 @@ export function calculateScope3FuelWithLPGAverage(
   // (fuel_C5)
   const lpgkL = lpg / 1000;
 
-  // introduced in dairy due to averaging of different LPG factors
   const lpgAverageScope3EF =
     (LPG_SCOPE3_EF_TONNES_STATIONARY + LPG_SCOPE3_EF_TONNES_TRANSPORT) / 2;
 

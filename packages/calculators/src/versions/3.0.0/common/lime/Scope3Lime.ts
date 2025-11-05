@@ -14,7 +14,6 @@ export function calculateScope3Lime(
     FUEL_SCOPE3_POST_PRODUCTION_DISTILLATE_FUEL,
   } = constants.COMMON.LIMING.SCOPE3;
 
-  // (Embedded_Emissions_J11)
   const productionTotal =
     FUEL_SCOPE3_PRODUCTION_NATURAL_GAS +
     FUEL_SCOPE3_PRODUCTION_ELECTRICITY +
@@ -22,7 +21,6 @@ export function calculateScope3Lime(
     FUEL_SCOPE3_PRODUCTION_COAL +
     FUEL_SCOPE3_PRODUCTION_GASOLINE;
 
-  // (Embedded_Emissions_J16)
   const totalGHG =
     (productionTotal + FUEL_SCOPE3_POST_PRODUCTION_DISTILLATE_FUEL) / 1000;
   const limeGHG = limestoneTonnes * totalGHG;
