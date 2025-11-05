@@ -32,7 +32,7 @@ type InternalOutput = {
   mmsIndirectTotalN2O: number;
   leachingStorage: number;
   annualMethane: number;
-  uringDungNitrogenTotal: number;
+  urineDungNitrogenTotal: number;
 };
 
 export function calculateScope1(
@@ -70,9 +70,9 @@ export function calculateScope1(
 
   // (Agricultural_SoilsG77, Nitrous_Oxide_MMSG62, Data_InputG94)
   const manureSolidStorageFractionMilking =
-    complete.manureManagementMilkingCows.soildStorage / 100;
+    complete.manureManagementMilkingCows.solidStorage / 100;
   const manureSolidStorageFractionOther =
-    complete.manureManagementOtherDairyCows.soildStorage / 100;
+    complete.manureManagementOtherDairyCows.solidStorage / 100;
 
   const { constants } = context;
 
@@ -215,20 +215,6 @@ export function calculateScope1(
             leachingForSolidStorageFracLEACH;
 
           // (Agricultural_SoilsB116)
-          // const mmsPastureFracGASM = 0.0;
-
-          // (Agricultural_SoilsD108)
-          // const mmsPasture =
-          //   seasonalNitrogenExcreted *
-          //     (isMilkingCow
-          //       ? manurePastureFractionMilking
-          //       : manurePastureFractionOther) *
-          //     (1 -
-          //       DAIRY_CATTLE_N2O_MMS.void_at_pasture.EF -
-          //       mmsPastureFracGASM) -
-          //   leachingSolidStorage;
-
-          // (Agricultural_SoilsB116)
           const mmsAnaerobicLagoonFracGASM = 0.35;
 
           // (Agricultural_SoilsD113)
@@ -277,8 +263,7 @@ export function calculateScope1(
 
           // (Agricultural_SoilsD134:137)
           const mmsTotal =
-            // WARNING: pasture not included in spreadsheet, not sure if mistake or not
-            // mmsPasture +
+            // NOTE: pasture not included in spreadsheet, or here either
             mmsAnaerobicLagoon +
             mmsSumpDispersal +
             mmsDrainToPaddocks +
@@ -410,7 +395,7 @@ export function calculateScope1(
               : manureSumpDispersalFractionOther) *
             constants.LIVESTOCK.METHANE_EMISSION_POTENTIAL *
             constants.DAIRY.METHANE_CONVERSION_FACTOR[state][
-              'Sump and disperal systems'
+              'Sump and dispersal systems'
             ] *
             constants.LIVESTOCK.METHANE_DENSITY;
           const methaneMMS5 =
@@ -458,8 +443,8 @@ export function calculateScope1(
               : manurePastureFractionOther);
 
           // (Agricultural_SoilsD166)
-          // WARNING: calculator only uses milking cows urine dung
-          const uringDungNitrogenTotal = isMilkingCow
+          // NOTE: calculator only uses milking cows urine dung
+          const urineDungNitrogenTotal = isMilkingCow
             ? (urineDungFaecalNitrogen + urineDungUrinaryNitrogen) *
               constants.LIVESTOCK.URINEDUNG_EF *
               constants.COMMON.GWP_FACTORSC15
@@ -479,8 +464,8 @@ export function calculateScope1(
             mmsIndirectTotalN2O: acc2.mmsIndirectTotalN2O + mmsIndirectTotalN2O,
             leachingStorage: acc2.leachingStorage + leachingStorage,
             annualMethane: acc2.annualMethane + annualMethaneFromManure,
-            uringDungNitrogenTotal:
-              acc2.uringDungNitrogenTotal + uringDungNitrogenTotal,
+            urineDungNitrogenTotal:
+              acc2.urineDungNitrogenTotal + urineDungNitrogenTotal,
           };
         },
         {
@@ -492,7 +477,7 @@ export function calculateScope1(
           massAnimalWastLostThroughRunoff: 0,
           massOfAnimalWasteVolatisedPre: 0,
           methaneProduction: 0,
-          uringDungNitrogenTotal: 0,
+          urineDungNitrogenTotal: 0,
         } as InternalOutput,
       );
 
@@ -512,8 +497,8 @@ export function calculateScope1(
           acc.mmsIndirectTotalN2O + seasonTotal.mmsIndirectTotalN2O,
         leachingStorage: acc.leachingStorage + seasonTotal.leachingStorage,
         annualMethane: acc.annualMethane + seasonTotal.annualMethane,
-        uringDungNitrogenTotal:
-          acc.uringDungNitrogenTotal + seasonTotal.uringDungNitrogenTotal,
+        urineDungNitrogenTotal:
+          acc.urineDungNitrogenTotal + seasonTotal.urineDungNitrogenTotal,
       };
     },
     {
@@ -525,11 +510,9 @@ export function calculateScope1(
       massAnimalWastLostThroughRunoff: 0,
       massOfAnimalWasteVolatisedPre: 0,
       methaneProduction: 0,
-      uringDungNitrogenTotal: 0,
+      urineDungNitrogenTotal: 0,
     } as InternalOutput,
   );
-
-  //
 
   // (Agricultural_SoilsD216)
   const massOfAnimalWasteVolatised =
@@ -701,7 +684,6 @@ export function calculateScope1(
     constants.COMMON.GWP_FACTORSC15;
   const totalN2OLeachingGg = totalN2OLeaching * constants.COMMON.GWP_FACTORSC6;
   const totalN2OLeachingTonnes = totalN2OLeachingGg * 10 ** 3;
-  // LEACHING VALUE
 
   // (Nitrous_Oxide_MMSL139)
   const totalMMSN2ODirectGg =
@@ -742,7 +724,7 @@ export function calculateScope1(
 
   // (Agricultural_SoilsD173)
   const totalUrineDungGg =
-    total.uringDungNitrogenTotal * constants.COMMON.GWP_FACTORSC6;
+    total.urineDungNitrogenTotal * constants.COMMON.GWP_FACTORSC6;
   const urineDungTonnes = totalUrineDungGg * 10 ** 3;
 
   // (Agricultural_SoilsD71)

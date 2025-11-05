@@ -53,14 +53,11 @@ export function calculateSingleDairy(
     totalN2OFromFertiliser: fertiliserN2O,
   } = calculateScope1(dairy, system, state, rainfallAbove600, context);
 
-  // Lime
   const limeCO2 = calculateScope1Lime(
     dairy.limestone,
     dairy.limestoneFraction,
     context,
   );
-
-  // Fuel
 
   const fuelCO2 = calculateFuelScope1CO2LPG(
     dairy.diesel,
@@ -102,11 +99,7 @@ export function calculateSingleDairy(
     context,
   );
 
-  // Urea
-
   const ureaCO2 = calculateScope1Urea(mergedDairyFertiliser, context);
-
-  // Electricity
 
   const dairyElectricity = calculateElectricityScope2And3(
     state,
@@ -116,14 +109,10 @@ export function calculateSingleDairy(
     context,
   );
 
-  // Fertiliser
-
   const dairyFertiliser = calculateScope3Fertiliser(
     mergedDairyFertiliser,
     context,
   );
-
-  // Purchased Mineral Supplementation
 
   const dairyFeed = calculateScope3PurchasedFeed(
     dairy.grainFeed,
@@ -158,8 +147,6 @@ export function calculateSingleDairy(
     leachingAndRunoffN2O +
     atmosphericDepositionN2O +
     transportN2O;
-
-  // totals
 
   const scope1 = addTotalValue({
     leachingAndRunoffN2O,
@@ -219,7 +206,6 @@ export function calculateSingleDairy(
     summer: milkingCows.summer.head,
   };
 
-  // milk solids
   const milkSolidsSpring =
     ((milkProduction.spring * (365.25 / 4)) / 1.03) * 0.073;
   const milkSolidsAutumn =
@@ -261,7 +247,6 @@ export function calculateDairy(
   input: DairyInput,
   context: ExecutionContext<ConstantsForDairyCalculator>,
 ): DairyOutput {
-  // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(
     input.vegetation,
     input.dairy,
@@ -389,7 +374,7 @@ export function calculateDairy(
     ...combinedResult,
     carbonSequestration: {
       total: carbonSequestration.total,
-      intermediate: [], // TODO
+      intermediate: [], // TODO: This needs to be populated
     },
     intensities: getEmissionsIntensities(
       combinedResult.net.total,
