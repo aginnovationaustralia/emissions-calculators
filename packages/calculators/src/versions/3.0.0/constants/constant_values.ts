@@ -30,7 +30,7 @@ import {
 export const REGIONS = {
   SOUTHWEST: 'southwest',
   PILBARA: 'pilbara',
-  KIMBERLEY: 'kmberley',
+  KIMBERLEY: 'kimberley',
 };
 
 export const sheepConstants: SheepConstants = {
@@ -389,7 +389,7 @@ export const sheepConstants: SheepConstants = {
   /**
    * @description Urine and dung deposited during grazing
    */
-  EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsSheepD32)
+  EF_URINEDUNGDEPOSITED: 0.004,
 };
 
 export const beefConstants: BeefConstants = {
@@ -700,7 +700,7 @@ export const beefConstants: BeefConstants = {
   /**
    * @description Urine and dung deposited during grazing
    */
-  EF_URINEDUNGDEPOSITED: 0.004, // (agriculturalSoilsBeefD10)
+  EF_URINEDUNGDEPOSITED: 0.004,
 
   /**
    * @description Emission factors for purchased cattle by region, in kg CO2-e/kg liveweight
@@ -1135,12 +1135,10 @@ export const savannaConstants: SavannaConstants = {
     },
   },
 
-  // (savannahBurningX4)
   /**
    * @description State lookup values for using other savannah lookup constants
    */
   FUEL_STATEREF: {
-    // WARNING: wa_nw is not in original sheet
     wa_nw: 0,
     act: 1,
     nsw: 2,
@@ -1448,7 +1446,6 @@ export const porkConstants: PorkConstants = {
     slaughter_pigs: 11.4,
   },
 
-  // (manureManagementC37)
   /**
    * @description Volatile solids content of swine manure, by class
    * @inventory2022 Table A5.5.5.4
@@ -1461,7 +1458,6 @@ export const porkConstants: PorkConstants = {
     slaughter_pigs: 0.39,
   },
 
-  // (entericFermentation34)
   /**
    * @description Feed intake of swine, by class
    * @inventory2022 Table A5.5.5.2
@@ -1474,13 +1470,11 @@ export const porkConstants: PorkConstants = {
     slaughter_pigs: 1.71,
   },
 
-  // nitrousOxideMMS90
   /**
    * @description Integrated emissions factors for swine, by state
    * @inventory2022 Table A5.5.5.5
    */
   INTEGRATED_EF: {
-    // WARNING: what to do here? leave as 0?
     [STATES.ACT]: {
       iMCF: 0,
       iFracGasm: 0,
@@ -1528,7 +1522,6 @@ export const porkConstants: PorkConstants = {
     },
   },
 
-  // nitrousOxideC114
   /**
    * @description Fraction of animal waste available for leaching and runoff (FracWET)
    * @inventory2022 Table A5.5.10.2
@@ -1546,7 +1539,6 @@ export const porkConstants: PorkConstants = {
     [STATES.NT]: 0,
   },
 
-  // nitrousOxideC102
   /**
    * @description Allocation of waste to MMS
    * @inventory2022 Table A5.5.5.6
@@ -1564,8 +1556,6 @@ export const porkConstants: PorkConstants = {
     [STATES.NT]: 0.02,
   },
 
-  // WARNING: what about the others??? TODO: find default from vlookup func
-  // Pig_FeedC28
   /**
    * @description Emissions factors for swine feed ingredients, by ingredient
    * @reference (Wiedemann et al., 2021), (Reckmann et al., 2016)
@@ -1633,7 +1623,6 @@ export const poultryConstants: PoultryConstants = {
       nitrogenRetentionRate: 0.47,
       manureAsh: 0.15,
     },
-    // (meat_chicken_breeder)
     meat_chicken_layers: {
       dryMatterIntake: 0.103,
       dryMatterDigestibility: 0.8,
@@ -1667,9 +1656,6 @@ export const poultryConstants: PoultryConstants = {
     [STATES.WA_NW]: 0.01,
   },
 
-  // meat chickens are just broilers
-  // (manureManagementBroilersC92)
-  // (nitrousOxideI152)
   /**
    * @description Meat and layer chickens – Integrated MCFs, by state
    */
@@ -1757,7 +1743,6 @@ export const dairyConstants: DairyConstants = {
     dairyBulls_gt_1: 770,
   },
 
-  // (Agricultural_SoilsD101)
   /**
    * @description N2O oxide emission factors and fraction of N volatilised by manure management system
    * @inventory2022 Table A5.5.1.9
@@ -1776,7 +1761,6 @@ export const dairyConstants: DairyConstants = {
    */
   MASS_N_VOLATISED_EF: 0.004,
 
-  // (Agricultural_SoilsD142)
   /**
    * @description Mass of N volatilised from manure applied to soils
    * @inventory2022 Table 3.D.A_4
@@ -1825,63 +1809,63 @@ export const dairyConstants: DairyConstants = {
     [STATES.ACT]: {
       Pasture: 0.01,
       'Anaerobic lagoon': 0.73,
-      'Sump and disperal systems': 0.005,
+      'Sump and dispersal systems': 0.005,
       'Drains to paddock': 0.15,
       'Solid Storage': 0.02,
     },
     [STATES.NSW]: {
       Pasture: 0.01,
       'Anaerobic lagoon': 0.75,
-      'Sump and disperal systems': 0.005,
+      'Sump and dispersal systems': 0.005,
       'Drains to paddock': 0.18,
       'Solid Storage': 0.02,
     },
     [STATES.NT]: {
       Pasture: 0.02,
       'Anaerobic lagoon': 0.8,
-      'Sump and disperal systems': 0.01,
+      'Sump and dispersal systems': 0.01,
       'Drains to paddock': 0.5,
       'Solid Storage': 0.02,
     },
     [STATES.QLD]: {
       Pasture: 0.01,
       'Anaerobic lagoon': 0.77,
-      'Sump and disperal systems': 0.005,
+      'Sump and dispersal systems': 0.005,
       'Drains to paddock': 0.24,
       'Solid Storage': 0.02,
     },
     [STATES.SA]: {
       Pasture: 0.01,
       'Anaerobic lagoon': 0.74,
-      'Sump and disperal systems': 0.005,
+      'Sump and dispersal systems': 0.005,
       'Drains to paddock': 0.17,
       'Solid Storage': 0.02,
     },
     [STATES.TAS]: {
       Pasture: 0.01,
       'Anaerobic lagoon': 0.7,
-      'Sump and disperal systems': 0.001,
+      'Sump and dispersal systems': 0.001,
       'Drains to paddock': 0.13,
       'Solid Storage': 0.02,
     },
     [STATES.VIC]: {
       Pasture: 0.01,
       'Anaerobic lagoon': 0.74,
-      'Sump and disperal systems': 0.005,
+      'Sump and dispersal systems': 0.005,
       'Drains to paddock': 0.17,
       'Solid Storage': 0.02,
     },
     [STATES.WA_SW]: {
       Pasture: 0.01,
       'Anaerobic lagoon': 0.75,
-      'Sump and disperal systems': 0.005,
+      'Sump and dispersal systems': 0.005,
       'Drains to paddock': 0.18,
       'Solid Storage': 0.02,
     },
     [STATES.WA_NW]: {
       Pasture: 0.02,
       'Anaerobic lagoon': 0.8,
-      'Sump and disperal systems': 0.01,
+      'Sump and dispersal systems': 0.01,
       'Drains to paddock': 0.5,
       'Solid Storage': 0.02,
     },
@@ -2085,7 +2069,6 @@ export const livestockConstants: LivestockConstants = {
     INSECTICIDE_EF: 0.06,
   },
 
-  // Embedded emissions M7
   /**
    * @description Relative amount of CO2, CH4, and N2O emitted by herbicides
    * @type Proportion
@@ -2120,14 +2103,11 @@ export const livestockConstants: LivestockConstants = {
     EF_NONIRRIGATEDPASTURE: 0.0018,
   },
 
-  // Methane
-
   /**
    * @description Methane emission factor for warm climate
    */
   METHANE_WARM_EF: 0.012,
 
-  // (manureManagementBeefC29)
   /**
    * @description Methane emission factor for temperate climate
    */
@@ -2147,7 +2127,6 @@ export const livestockConstants: LivestockConstants = {
    */
   METHANE_DENSITY: 0.6784,
 
-  // other livestock Deer Manure management D42
   /**
    * @description Other livestock – Allocation of animals to climate regions
    * @inventory2022 Table A5.5.7.3
@@ -2191,7 +2170,6 @@ export const livestockConstants: LivestockConstants = {
     },
   },
 
-  // (Agricultural_SoilsD163)
   /**
    * @description Urine and dung emission factor
    * @inventory2022 3.D.A_6
@@ -2202,26 +2180,25 @@ export const livestockConstants: LivestockConstants = {
    * @description Default emission factor for Urea
    * @reference IPCC (2006)
    */
-  CARBON_FRACTION_OF_UREA: 0.2, // (ureaApplicationD35)
+  CARBON_FRACTION_OF_UREA: 0.2,
 
   /**
    * @description Proportion of gas volatilised from manure
    * @inventory2018 3DB_2
    */
-  FRAC_GASM: 0.21, // FracGASM
+  FRAC_GASM: 0.21,
 
-  // Atmospheric N deposition inorganic fertiliser
   /**
    * @description Atmospheric N deposition of inorganic fertiliser
    * @inventory2018 3DB_1
    */
-  INOGRANICFERTILISER_ATMOSPHERIC_N: 0.11, // (agriculturalSoilsSheepN10)
+  INOGRANICFERTILISER_ATMOSPHERIC_N: 0.11,
 
   /**
    * @description Leaching and runoff of inorganic fertiliser
    * @inventory2018 3B.5a_4
    */
-  LEECHING_AND_RUNOFF: 0.011, // (agriculturalSoilsSheepD11)
+  LEECHING_AND_RUNOFF: 0.011,
 };
 
 export const sugarConstants: SugarConstants = {
@@ -2285,7 +2262,6 @@ export const cropConstants: CropConstants = {
    */
   BURNING_METHANE_EF: 0.0035,
 
-  // (embeddedEMissions_C133)
   COMPONENTS_ENERGY_EF: {
     N: { TOTAL_ENERGY: 65, EF: 0.05 },
     P: { TOTAL_ENERGY: 15, EF: 0.06 },
@@ -2293,7 +2269,6 @@ export const cropConstants: CropConstants = {
     S: { TOTAL_ENERGY: 5, EF: 0.06 },
   },
 
-  // (cropResiduesC116)
   /**
    * @description NO2 emissions factors for synthetic fertilisers
    * @inventory2018 Table 5.23
@@ -2315,7 +2290,6 @@ export const cropConstants: CropConstants = {
     },
   },
 
-  // (cropResiduesC116)
   /**
    * @description Attributes of major pasture types
    * @inventory2022 A5.5.9.2
@@ -2680,11 +2654,8 @@ export const commonConstants: CommonConstants = {
    * @units kg CO2-e/kg
    */
   FEED_PURCHASED: {
-    // (embeddedEmissions_E3)
     grain: { TotalGHG: 0.3 },
-    // (embeddedEmissions_E4)
     cottonseed: { TotalGHG: 1.1 },
-    // (embeddedEmissions_E5)
     /** @description Average of 0.25 and 0.2 */
     hay: { TotalGHG: 0.225 },
   },
@@ -2766,7 +2737,6 @@ export const commonConstants: CommonConstants = {
     },
   },
 
-  // (embeddedEmissionsM15)
   /**
    * @description Material breakdown for supplementation, in kg CO2-e/kg product
    * @reference AusLCI Published Processes
@@ -2774,7 +2744,6 @@ export const commonConstants: CommonConstants = {
    * @units kg CO2-e/kg product
    */
   MATERIAL_BREAKDOWN_SUPPLEMENTATION: {
-    // mineral block, 30% urea 3,6% P, at production
     mineralblock: {
       CO2: 0.98,
       CH4: 0.0154,
@@ -2782,7 +2751,6 @@ export const commonConstants: CommonConstants = {
       KG_CO2: 0.89448581,
       FRACTION_OF_UREA: 0.3,
     },
-    // weaner Block, 7,1% Urea 0,5% P, at production
     weanerblock: {
       CO2: 0.98,
       CH4: 0.0154,
@@ -2790,7 +2758,6 @@ export const commonConstants: CommonConstants = {
       KG_CO2: 0.17767843,
       FRACTION_OF_UREA: 0.071,
     },
-    // dry season mix, 30% urea, 5.5% P, at production
     dryseasonmix: {
       CO2: 0.98,
       CH4: 0.0154,
@@ -2800,7 +2767,6 @@ export const commonConstants: CommonConstants = {
     },
   },
 
-  // embeddedEmissions_B61:E65
   /**
    * @description Customized fertilizer emission factors, in kg CO2-e/kg product
    * @reference (Wood & Cowie, 2004; Davis & Haglund,1999) Table 5, Table 6, and Table 7.
@@ -2851,17 +2817,15 @@ export const commonConstants: CommonConstants = {
     },
   },
 
-  // Misc
-
   /**
    * @description Temperate emission factor, for sheep manure management
    */
-  EF_TEMPERATURE: 0.003, // (manureManagementSheepC10)
+  EF_TEMPERATURE: 0.003,
 
   /**
    * @description Conversion factor for elemental to molecular N2O
    */
-  GWP_FACTORSC15: 44 / 28, // (agriculturalSoilsBeefO5)
+  GWP_FACTORSC15: 44 / 28,
 
   /**
    * @description Conversion factor for elemental to molecular CO2 from lime
@@ -2894,7 +2858,7 @@ export const commonConstants: CommonConstants = {
    * @description Proportion of gas volatilised from fertiliser
    * @inventory2018 3DB_1
    */
-  FRAC_GASF: 0.11, // FracGASF
+  FRAC_GASF: 0.11,
 
   /**
    * @description Conversion factor for the global warming potential of CH4, as CO2-e
@@ -2921,19 +2885,15 @@ export const commonConstants: CommonConstants = {
       DOLOMITE_EF: 0.13,
     },
     SCOPE3: {
-      // (Embedded_Emissions_J5 to J10)
       FUEL_SCOPE3_PRODUCTION_NATURAL_GAS: 0.09,
       FUEL_SCOPE3_PRODUCTION_ELECTRICITY: 6.43,
       FUEL_SCOPE3_PRODUCTION_DISTILLATE_FUEL: 0.72,
       FUEL_SCOPE3_PRODUCTION_COAL: 0.08,
       FUEL_SCOPE3_PRODUCTION_GASOLINE: 0.09,
-
-      // (Embedded_Emissions_J14)
       FUEL_SCOPE3_POST_PRODUCTION_DISTILLATE_FUEL: 28.32,
     },
   },
 
-  // (fuel_B23)
   /**
    * @description Scope 1 and Scope 3 factors relating to fuel
    * @reference Table 6 and 7 (Dept of Industry, Science, Energy and Resources 2022)
@@ -3148,13 +3108,13 @@ export const commonConstants: CommonConstants = {
    * @description Total GHG (kg CO2-e/kg input)
    * @units kg CO2-e/kg
    */
-  UREA_FERTILISER_GHG: 1.495, // Total GHG (kg CO2-e/kg input) (embeddedEmissionsE9)
+  UREA_FERTILISER_GHG: 1.495,
 
   /**
    * @description Total GHG (kg CO2-e/kg input)
    * @units kg CO2-e/kg
    */
-  SUPERPHOSPHATE_GHG: 0.1122, // (embeddedEmissions_E10)
+  SUPERPHOSPHATE_GHG: 0.1122,
 
   /**
    * @description Emissions factor for mass of Urea applied to soils
@@ -3180,7 +3140,10 @@ export const commonConstants: CommonConstants = {
     FRACLEACH: 0.02,
     FRACLEACH_MMS: 0.24,
     FRACLEACH_FERTILISER_SOILS: 0.24,
-    FRACLEACH_BROILER: 0.24, // Added new key due to difference in value between layers and broilers
+    /**
+     * @description Added new key due to difference in value between layers and broilers
+     */
+    FRACLEACH_BROILER: 0.24,
     FRACWET: 1,
     FERT_N_FRACLEACH: 0.24,
     FERT_N_FRACWET: 1,
@@ -3200,7 +3163,6 @@ export const commonConstants: CommonConstants = {
     'B-Double': 0.625,
   },
 
-  // (transportD20)
   /**
    * @description Emissions factor for each gas, in kg CO2-e / GJ
    * @reference Department of Industry, Science, Energy and Resources 2021
@@ -3648,9 +3610,6 @@ export const commonConstants: CommonConstants = {
    * @inventory2022 Table A5.5.5.4
    * @units kg N/head/year
    */
-
-  // (TransportB111)
-  // TODO: Replace
 
   /**
    * @description Global warming potentials for refrigerants
