@@ -38,16 +38,16 @@ export function getSheepIntensities(
 ) {
   const proteinFactor = 0.18;
 
-  const sheepMeatprotein = sheepMeatProducedKg * proteinFactor;
+  const sheepMeatProtein = sheepMeatProducedKg * proteinFactor;
 
   // (assumptionsE3)
   const sheepMeatAllocationFactor =
-    sheepMeatprotein / (sheepMeatprotein + cleanWoolProducedKg * 1000);
+    sheepMeatProtein / (sheepMeatProtein + cleanWoolProducedKg * 1000);
 
   // (assumptionsF3)
   const woolAllocationFactor =
     (cleanWoolProducedKg * 1000) /
-    (sheepMeatprotein + cleanWoolProducedKg * 1000);
+    (sheepMeatProtein + cleanWoolProducedKg * 1000);
 
   return {
     woolProducedKg: greasyWoolProducedKg,
@@ -99,14 +99,11 @@ export function calculateSingleSheep(
     context,
   );
 
-  // Lime
   const limeCO2 = calculateScope1Lime(
     sheep.limestone,
     sheep.limestoneFraction,
     context,
   );
-
-  // Fuel
 
   const { lpg } = sheep;
 
@@ -131,14 +128,11 @@ export function calculateSingleSheep(
     context,
   );
 
-  // Urea
   const ureaCO2 = calculateScope1Urea(
     sheep.mineralSupplementation,
     mergedSheepFertiliser,
     context,
   );
-
-  // Electricity
 
   const sheepElectricity = calculateElectricityScope2And3(
     state,
@@ -148,14 +142,10 @@ export function calculateSingleSheep(
     context,
   );
 
-  // Fertiliser
-
   const sheepFertiliser = calculateScope3Fertiliser(
     mergedSheepFertiliser,
     context,
   );
-
-  // Purchased Mineral Supplementation
 
   const sheepMineralSupplementation = calculateMineralSupplementationScope3(
     sheep.mineralSupplementation,
@@ -231,8 +221,6 @@ export function calculateSingleSheep(
     urineAndDungN2O +
     fertiliserN2O;
 
-  // totals
-
   const scope1 = addTotalValue({
     leachingAndRunoffN2O: leechingRunoffN2O,
     atmosphericDepositionN2O,
@@ -270,8 +258,6 @@ export function calculateSingleSheep(
     scope2,
     scope3,
   };
-
-  // Wool
 
   // (dataInputSheepN53)
   const { greasyWoolShornTotal, totalSheepSaleWeight, cleanWoolYieldTotal } =
@@ -327,7 +313,6 @@ export function calculateSheep(
   input: SheepInput,
   context: ExecutionContext<ConstantsForSheepCalculator>,
 ): SheepOutput {
-  // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(
     input.vegetation,
     input.sheep,
@@ -444,7 +429,7 @@ export function calculateSheep(
     ...combinedResult,
     carbonSequestration: {
       total: sheepCarbonSequestration.total,
-      intermediate: [], // TODO
+      intermediate: [], // TODO: Needs to be populated
     },
     intermediate: sheepResults.map((x) => ({
       ...x.output,
