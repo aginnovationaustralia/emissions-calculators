@@ -55,7 +55,7 @@ export const executeEmissionsSpec = (
   emissionsInput: object,
   expectations: Emissions,
 ) => {
-  describe(`Emissions tests (${global.PACKAGE_VERSION})`, () => {
+  describe(`Emissions tests (${global.CURRENT_VERSION})`, () => {
     const emissions = emissionsInput as Emissions;
 
     recurseExpectations(expectations, emissions);

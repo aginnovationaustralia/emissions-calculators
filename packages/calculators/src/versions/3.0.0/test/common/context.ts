@@ -8,7 +8,7 @@ export const testContext = (
   const constants = loadConstants();
   return {
     calculator,
-    version: global.PACKAGE_VERSION,
+    version: global.CURRENT_VERSION,
     constants,
     timestamp: '2000-01-01T00:00:00Z',
   };

@@ -7,7 +7,7 @@ describe('checking calculateElectricityScope2And3, all types of inputs', () => {
   const constants = loadConstants();
   const context: ExecutionContext<ConstantsForSheepBeefCalculator> = {
     calculator: 'SheepBeef',
-    version: global.PACKAGE_VERSION,
+    version: global.CURRENT_VERSION,
     constants,
     timestamp: '2000-01-01T00:00:00Z',
   };
@@ -107,7 +107,7 @@ describe('checking calculateElectricityScope2And3, all states', () => {
   const constants = loadConstants();
   const context: ExecutionContext<ConstantsForSheepBeefCalculator> = {
     calculator: 'SheepBeef',
-    version: global.PACKAGE_VERSION,
+    version: global.CURRENT_VERSION,
     constants,
     timestamp: '2000-01-01T00:00:00Z',
   };

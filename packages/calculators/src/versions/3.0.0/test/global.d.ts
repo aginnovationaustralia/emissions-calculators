@@ -1,5 +1,5 @@
 declare global {
-  var PACKAGE_VERSION: string;
+  var CURRENT_VERSION: string;
 }
 
 export {};
