@@ -46,24 +46,18 @@ export function calculateScope3FuelWithLPG(
     LPG_SCOPE3_EF_TONNES,
   } = getScope3FuelConstants(context);
 
-  // (fuel_C4)
   const dieselkL = diesel / 1000;
 
-  // (fuel_H4)
   const dieselScope3Tonnes = dieselkL * DIESEL_SCOPE3_EF_TONNES;
 
-  // (fuel_C5)
   const petrolkL = petrol / 1000;
 
-  // (fuel_H5)
   const petrolScope3Tonnes = petrolkL * PETROL_SCOPE3_EF_TONNES;
 
-  // (fuel_C5)
   const lpgkL = lpg / 1000;
 
   const lpgScope3Tonnes = lpgkL * LPG_SCOPE3_EF_TONNES;
 
-  // (fuel_H6)
   const totalScope3Tonnes =
     dieselScope3Tonnes + petrolScope3Tonnes + lpgScope3Tonnes;
 
@@ -82,24 +76,18 @@ export function calculateScope3FuelWithLPGStationary(
     LPG_SCOPE3_EF_TONNES_STATIONARY,
   } = getScope3FuelConstants(context);
 
-  // (fuel_C4)
   const dieselkL = diesel / 1000;
 
-  // (fuel_H4)
   const dieselScope3Tonnes = dieselkL * DIESEL_SCOPE3_EF_TONNES;
 
-  // (fuel_C5)
   const petrolkL = petrol / 1000;
 
-  // (fuel_H5)
   const petrolScope3Tonnes = petrolkL * PETROL_SCOPE3_EF_TONNES;
 
-  // (fuel_C5)
   const lpgkL = lpg / 1000;
 
   const lpgScope3Tonnes = lpgkL * LPG_SCOPE3_EF_TONNES_STATIONARY;
 
-  // (fuel_H6)
   const totalScope3Tonnes =
     dieselScope3Tonnes + petrolScope3Tonnes + lpgScope3Tonnes;
 
@@ -119,19 +107,14 @@ export function calculateScope3FuelWithLPGAverage(
     LPG_SCOPE3_EF_TONNES: LPG_SCOPE3_EF_TONNES_TRANSPORT,
   } = getScope3FuelConstants(context);
 
-  // (fuel_C4)
   const dieselkL = diesel / 1000;
 
-  // (fuel_H4)
   const dieselScope3Tonnes = dieselkL * DIESEL_SCOPE3_EF_TONNES;
 
-  // (fuel_C5)
   const petrolkL = petrol / 1000;
 
-  // (fuel_H5)
   const petrolScope3Tonnes = petrolkL * PETROL_SCOPE3_EF_TONNES;
 
-  // (fuel_C5)
   const lpgkL = lpg / 1000;
 
   const lpgAverageScope3EF =
@@ -139,7 +122,6 @@ export function calculateScope3FuelWithLPGAverage(
 
   const lpgScope3Tonnes = lpgkL * lpgAverageScope3EF;
 
-  // (fuel_H6)
   const totalScope3Tonnes =
     dieselScope3Tonnes + petrolScope3Tonnes + lpgScope3Tonnes;
 

@@ -101,7 +101,6 @@ function calculateFuelScope1BaseLPG(
   );
   const fuelEnergyKl = getFuelEnergyKl(context);
   // average is used for grains calcs, transport is for livestock
-  // (fuelF6)
   const dieselEF = averageStationaryTransport
     ? (fuelEnergyKl.STATIONARY.DIESEL.SCOPE1_EF[type] +
         fuelEnergyKl.TRANSPORT.DIESEL.SCOPE1_EF[type]) /
