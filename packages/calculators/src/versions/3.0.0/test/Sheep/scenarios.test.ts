@@ -1,5 +1,5 @@
 import { calculateSheep } from '../../Sheep/calculator';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext } from '../common/context';
 import { sheepTestData } from './input.data';
 
 const zeroAll = {
@@ -50,7 +50,7 @@ describe('checking Sheep, no lambs', () => {
     ],
   };
 
-  const context = testContext(V2_0_0, 'Sheep');
+  const context = testContext('Sheep');
   const emissions = calculateSheep(sheepDataNoLambs, context);
 
   test('scope 1s and total not to be nan', () => {

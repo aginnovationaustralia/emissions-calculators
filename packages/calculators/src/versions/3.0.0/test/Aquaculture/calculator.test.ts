@@ -3,7 +3,7 @@ import clone from 'nanoclone';
 import { calculateAquaculture } from '../../Aquaculture/calculator';
 import { AquacultureOutput } from '../../types/Aquaculture/output';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext } from '../common/context';
 import { executeEmissionsSpec, KeyValuePairs } from '../common/emissions';
 import { aquacultureTestData } from './input.data';
 
@@ -49,7 +49,7 @@ const expectedScopes = {
   },
 };
 
-const expectations_1_2_0: AquacultureOutput = {
+const expectations: AquacultureOutput = {
   ...expectedScopes,
 
   purchasedOffsets: {
@@ -62,14 +62,10 @@ const expectations_1_2_0: AquacultureOutput = {
 };
 
 describe('Aquaculture calculator, SW WA', () => {
-  const context = testContext(V2_0_0, 'Aquaculture');
+  const context = testContext('Aquaculture');
   const emissions = calculateAquaculture(aquacultureTestData, context);
 
-  executeEmissionsSpec(
-    V2_0_0,
-    emissions,
-    expectations_1_2_0 as unknown as KeyValuePairs,
-  );
+  executeEmissionsSpec(emissions, expectations as unknown as KeyValuePairs);
 });
 
 describe('Aquaculture calculator (multi activity)', () => {

@@ -1,7 +1,7 @@
 import { validateCalculatorInput } from '../../calculators';
 import { calculateEntireFeedlot } from '../../Feedlot/calculator';
 import { FeedlotInputSchema } from '../../types/Feedlot/input';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext } from '../common/context';
 import { feedlotTestData } from './feedlot.data';
 
 const P = 7;
@@ -25,7 +25,7 @@ describe('checking Feedlot purchases transformation to array', () => {
     FeedlotInputSchema,
     feedlotDataWithPurchase,
   );
-  const context = testContext(V2_0_0, 'Feedlot');
+  const context = testContext('Feedlot');
   const emissions = calculateEntireFeedlot(validatedInput, context);
 
   test('scope 3 purchaseLivestock should be accurate', () => {

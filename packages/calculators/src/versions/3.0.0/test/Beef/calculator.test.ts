@@ -11,7 +11,7 @@ import {
   compareEmissionsFrom2Inputs,
   transformCarbonSequestration,
 } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext } from '../common/context';
 import {
   ensureEveryKeyIsDefined,
   executeEmissionsSpec,
@@ -20,7 +20,7 @@ import {
 import { beefTestInput } from './beef.data';
 import { beefTestData } from './input.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     atmosphericDepositionN2O: 4414.937327266,
     leachingAndRunoffN2O: 30832.2499168963,
@@ -64,13 +64,13 @@ const expectations_1_2_0 = {
 };
 
 describe('Beef calculator, VIC', () => {
-  const context = testContext(V2_0_0, 'Beef');
+  const context = testContext('Beef');
   const emissions = calculateBeef(
     validateCalculatorInput(BeefInputSchema, beefTestData),
     context,
   );
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Beef input scenarios', () => {
@@ -89,7 +89,7 @@ describe('Beef input scenarios', () => {
 
     expect(validatedInput).toBeDefined();
 
-    const context = testContext(V2_0_0, 'Beef');
+    const context = testContext('Beef');
     const emissions = calculateBeef(validatedInput, context);
 
     ensureEveryKeyIsDefined(emissions as unknown as KeyValuePairs);

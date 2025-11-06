@@ -2,3 +2,4 @@
 **/dist
 .turbo
 .npmrc
+**/.DS_Store

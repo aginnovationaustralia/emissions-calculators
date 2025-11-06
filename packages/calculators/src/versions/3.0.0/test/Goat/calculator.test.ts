@@ -8,7 +8,7 @@ import { GoatInput, GoatInputSchema } from '../../types/Goat/input';
 import { GoatIntermediateOutput } from '../../types/Goat/intermediate.output';
 import { GoatOutput } from '../../types/Goat/output';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext } from '../common/context';
 import {
   ensureEveryKeyIsDefined,
   executeEmissionsSpec,
@@ -16,7 +16,7 @@ import {
 } from '../common/emissions';
 import { goatTestData } from './goats.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     atmosphericDepositionN2O: 3.03504802857,
     fertiliserN2O: 19.79243357143,
@@ -61,10 +61,10 @@ const expectations_1_2_0 = {
 };
 
 describe('Goat calculator, NSW', () => {
-  const context = testContext(V2_0_0, 'Goat');
+  const context = testContext('Goat');
   const emissions = calculateGoat(goatTestData, context);
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Goat scenarios', () => {
@@ -81,7 +81,7 @@ describe('Goat scenarios', () => {
 
   expect(validatedInput).toBeDefined();
 
-  const context = testContext(V2_0_0, 'Goat');
+  const context = testContext('Goat');
   const actualEmissions = calculateGoat(validatedInput, context);
 
   ensureEveryKeyIsDefined(actualEmissions as unknown as KeyValuePairs);

@@ -6,11 +6,11 @@ import { DairyInput } from '../../types/Dairy/input';
 import { DairyIntermediateOutput } from '../../types/Dairy/intermediate.output';
 import { DairyOutput } from '../../types/Dairy/output';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { dairyComplete, dairyTestData } from './dairy.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     atmosphericDepositionN2O: 31.6148351498862,
     fertiliserN2O: 19.6560948571429,
@@ -55,10 +55,10 @@ const expectations_1_2_0 = {
 };
 
 describe('Dairy calculator, VIC', () => {
-  const context = testContext(V2_0_0, 'Diary');
+  const context = testContext('Diary');
   const emissions = calculateDairy(dairyTestData, context);
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Dairy calculator (multi activity), VIC', () => {

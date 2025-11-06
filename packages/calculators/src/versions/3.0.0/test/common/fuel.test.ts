@@ -6,10 +6,10 @@ import {
   StationaryFuelTypes,
   TransportFuelTypes,
 } from '../../types/types';
-import { testContext, V2_0_0 } from './context';
+import { testContext } from './context';
 import { defaultPrecision } from './emissions';
 
-const context = testContext(V2_0_0);
+const context = testContext();
 
 /**
  * The following test cases are designed to cover as many fuel constants at once as possible.
