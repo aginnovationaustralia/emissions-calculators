@@ -9,7 +9,7 @@ import { CottonInput } from '../../types/Cotton/input';
 import { CottonIntermediateOutput } from '../../types/Cotton/intermediate.output';
 import { CottonOutput } from '../../types/Cotton/output';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { cottonTestData } from './cotton.data';
 
@@ -65,7 +65,7 @@ const expectations_1_2_0 = {
 };
 
 describe('Cotton calculator, NSW', () => {
-  const context = testContext(V2_0_0, 'Cotton');
+  const context = testContext('Cotton');
   const emissions = calculateEntireCotton(
     cottonTestData.crops,
     cottonTestData.electricityUse,
@@ -75,7 +75,7 @@ describe('Cotton calculator, NSW', () => {
     context,
   );
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations_1_2_0);
 });
 
 describe('Cotton calculator (multi activity)', () => {

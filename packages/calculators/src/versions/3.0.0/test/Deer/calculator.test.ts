@@ -5,7 +5,7 @@ import { entriesFromObject } from '../../common/tools/object';
 import { calculateDeer } from '../../Deer/calculator';
 import { DeerInputSchema } from '../../types/Deer/input';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext } from '../common/context';
 import {
   ensureEveryKeyIsDefined,
   executeEmissionsSpec,
@@ -55,10 +55,10 @@ const expectations_1_2_0 = {
 };
 
 describe('Deer calculator, TAS', () => {
-  const context = testContext(V2_0_0, 'Deer');
+  const context = testContext('Deer');
   const emissions = calculateDeer(deerTestData, context);
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations_1_2_0);
 });
 
 describe('Deer scenarios', () => {
@@ -76,7 +76,7 @@ describe('Deer scenarios', () => {
 
   expect(validatedInput).toBeDefined();
 
-  const context = testContext(V2_0_0, 'Beef');
+  const context = testContext('Beef');
   const emissions = calculateDeer(validatedInput, context);
 
   ensureEveryKeyIsDefined(emissions as unknown as KeyValuePairs);

@@ -1,8 +1,8 @@
 import { calculateTreeCarbonSequestration } from '../common/trees';
 import { Vegetation } from '../types/vegetation.input';
-import { testContext, V2_0_0 } from './common/context';
+import { testContext } from './common/context';
 
-const context = testContext(V2_0_0);
+const context = testContext();
 
 describe('validating Tree carbon', () => {
   const carbon = calculateTreeCarbonSequestration(

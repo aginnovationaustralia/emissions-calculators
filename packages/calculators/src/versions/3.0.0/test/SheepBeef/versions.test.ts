@@ -2,7 +2,7 @@ import { validateCalculatorInput } from '../../calculators';
 import { calculateSheepBeef } from '../../SheepBeef/calculator';
 import { BeefCompleteSchema } from '../../types/Beef/beef.input';
 import { beefTestInput } from '../Beef/beef.data';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext } from '../common/context';
 import { sheepTestInput } from '../Sheep/sheep.data';
 import { veg1, veg2, veg3, veg4 } from './vegetation.data';
 
@@ -29,7 +29,7 @@ describe('checking SheefBeef purchases as array', () => {
     ];
   });
 
-  const context = testContext(V2_0_0, 'SheepBeef');
+  const context = testContext('SheepBeef');
 
   const emissions = calculateSheepBeef(
     {

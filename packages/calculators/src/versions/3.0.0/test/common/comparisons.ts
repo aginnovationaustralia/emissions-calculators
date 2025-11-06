@@ -1,7 +1,7 @@
 import { HasCommonConstants } from '../../common/constants';
 import { AllConstants } from '../../constants/versionedConstants';
 import { ExecutionContext } from '../../executionContext';
-import { testContext, V2_0_0 } from './context';
+import { testContext } from './context';
 import { executeEmissionsSpec } from './emissions';
 
 type EmissionsKeysOnly = {
@@ -72,7 +72,7 @@ export const compareEmissionsFrom2Inputs = <
 
   describe(`Compare full and intermediate emissions: ${calculatorName}`, () => {
     // As we're using executeEmissionsSpec we can't be inside a test, or rely on a beforeAll etc
-    const context = testContext(V2_0_0, calculatorName) as ExecutionContext<C>;
+    const context = testContext(calculatorName) as ExecutionContext<C>;
     const originalEmissions = calculateEmissions(originalInput, context);
     const secondEmissions = calculateEmissions(secondInput, context);
     const combinedEmissions = calculateEmissions(combinedInput, context);
@@ -83,7 +83,7 @@ export const compareEmissionsFrom2Inputs = <
       const expectations = transformIntermediate
         ? transformIntermediate(originalIntermediate)
         : originalEmissions;
-      executeEmissionsSpec(V2_0_0, originalEmissions, expectations);
+      executeEmissionsSpec(originalEmissions, expectations);
     });
 
     // Check the second activity in the second emissions matches the intermediate emissions
@@ -92,7 +92,7 @@ export const compareEmissionsFrom2Inputs = <
       const expectations = transformIntermediate
         ? transformIntermediate(secondIntermediate)
         : secondEmissions;
-      executeEmissionsSpec(V2_0_0, secondEmissions, expectations);
+      executeEmissionsSpec(secondEmissions, expectations);
     });
 
     // Check the combined emissions match the sum of the original and second emissions

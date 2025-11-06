@@ -5,7 +5,7 @@ import { VineyardInput } from '../../types/Vineyard/input';
 import { VineyardIntermediateOutput } from '../../types/Vineyard/intermediate.output';
 import { VineyardOutput } from '../../types/Vineyard/output';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext } from '../common/context';
 import { executeEmissionsSpec, KeyValuePairs } from '../common/emissions';
 import { vineyardTestData } from './input.data';
 
@@ -67,11 +67,10 @@ const expectations_1_2_0: VineyardOutput = {
 };
 
 describe('Vineyard calculator, SA', () => {
-  const context = testContext(V2_0_0, 'Vineyard');
+  const context = testContext('Vineyard');
   const emissions = calculateVineyard(vineyardTestData, context);
 
   executeEmissionsSpec(
-    V2_0_0,
     emissions,
     expectations_1_2_0 as unknown as KeyValuePairs,
   );
@@ -97,7 +96,7 @@ describe('Vineyard calculator (multi activity)', () => {
   };
 
   compareEmissionsFrom2Inputs(
-    V2_0_0,
+    'Vineyard',
     calculateVineyard,
     vineyardTestData,
     vineyardDoubleYield,

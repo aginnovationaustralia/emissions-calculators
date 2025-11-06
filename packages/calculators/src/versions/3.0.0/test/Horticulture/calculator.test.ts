@@ -9,7 +9,7 @@ import { HorticultureInput } from '../../types/Horticulture/input';
 import { HorticultureIntermediateOutput } from '../../types/Horticulture/intermediate.output';
 import { HorticultureOutput } from '../../types/Horticulture/output';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
-import { testContext, V2_0_0 } from '../common/context';
+import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { horticultureTestData } from './horticulture.data';
 
@@ -54,7 +54,7 @@ const expectations_1_2_0 = {
 };
 
 describe('Horticulture calculator, VIC', () => {
-  const context = testContext(V2_0_0, 'Horticulture');
+  const context = testContext('Horticulture');
   const emissions = calculateEntireHorticulture(
     horticultureTestData.crops,
     horticultureTestData.electricityUse,
@@ -64,7 +64,7 @@ describe('Horticulture calculator, VIC', () => {
     context,
   );
 
-  executeEmissionsSpec(V2_0_0, emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations_1_2_0);
 });
 
 describe('Horticulture calculator (multi activity)', () => {
