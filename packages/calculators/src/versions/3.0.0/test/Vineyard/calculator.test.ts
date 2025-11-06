@@ -46,7 +46,7 @@ const expectedScopes = {
   carbonSequestration: 95.9705,
 };
 
-const expectations_1_2_0: VineyardOutput = {
+const expectations: VineyardOutput = {
   ...expectedScopes,
   net: {
     vineyards: [5876.15975605],
@@ -70,10 +70,7 @@ describe('Vineyard calculator, SA', () => {
   const context = testContext('Vineyard');
   const emissions = calculateVineyard(vineyardTestData, context);
 
-  executeEmissionsSpec(
-    emissions,
-    expectations_1_2_0 as unknown as KeyValuePairs,
-  );
+  executeEmissionsSpec(emissions, expectations as unknown as KeyValuePairs);
 });
 
 describe('Vineyard calculator (multi activity)', () => {

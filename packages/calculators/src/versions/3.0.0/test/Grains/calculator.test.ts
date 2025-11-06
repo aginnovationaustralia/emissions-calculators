@@ -13,7 +13,7 @@ import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { grainsTestData } from './grains.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     atmosphericDepositionN2O: 15.0356816029,
     fuelCO2: 8.442144,
@@ -84,7 +84,7 @@ describe('Grains calculator, NSW', () => {
     context,
   );
 
-  executeEmissionsSpec(emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Grains calculator (multi activity)', () => {

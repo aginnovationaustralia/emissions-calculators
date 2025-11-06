@@ -16,7 +16,7 @@ import {
 } from '../common/emissions';
 import { goatTestData } from './goats.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     atmosphericDepositionN2O: 3.03504802857,
     fertiliserN2O: 19.79243357143,
@@ -64,7 +64,7 @@ describe('Goat calculator, NSW', () => {
   const context = testContext('Goat');
   const emissions = calculateGoat(goatTestData, context);
 
-  executeEmissionsSpec(emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Goat scenarios', () => {

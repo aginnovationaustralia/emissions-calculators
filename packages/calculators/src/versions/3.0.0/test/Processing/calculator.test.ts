@@ -38,7 +38,7 @@ const expectedScopes = {
   },
 } as ProcessingIntermediateOutput;
 
-const expectations_1_2_0: ProcessingOutput = {
+const expectations: ProcessingOutput = {
   ...expectedScopes,
   net: {
     total: 250.17672328,
@@ -65,10 +65,7 @@ describe('Processing calculator, SW WA', () => {
   const context = testContext('Processing');
   const emissions = calculateProcessing(processingTestData, context);
 
-  executeEmissionsSpec(
-    emissions,
-    expectations_1_2_0 as unknown as KeyValuePairs,
-  );
+  executeEmissionsSpec(emissions, expectations as unknown as KeyValuePairs);
 });
 
 describe('Processing calculator (multi activity)', () => {

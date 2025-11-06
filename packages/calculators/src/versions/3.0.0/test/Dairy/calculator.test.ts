@@ -10,7 +10,7 @@ import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { dairyComplete, dairyTestData } from './dairy.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     atmosphericDepositionN2O: 31.6148351498862,
     fertiliserN2O: 19.6560948571429,
@@ -58,7 +58,7 @@ describe('Dairy calculator, VIC', () => {
   const context = testContext('Diary');
   const emissions = calculateDairy(dairyTestData, context);
 
-  executeEmissionsSpec(emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Dairy calculator (multi activity), VIC', () => {

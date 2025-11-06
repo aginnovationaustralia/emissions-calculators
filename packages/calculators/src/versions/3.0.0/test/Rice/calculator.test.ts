@@ -13,7 +13,7 @@ import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { riceTestData } from './rice.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     fuelCO2: 1.848387,
     limeCO2: 198,
@@ -68,7 +68,7 @@ describe('Rice calculator, QLD', () => {
     context,
   );
 
-  executeEmissionsSpec(emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Rice calculator (multi activity)', () => {

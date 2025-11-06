@@ -7,7 +7,7 @@ import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { fisheriesTestData } from './input.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     fuelCO2: 14.7463028713,
     fuelCH4: 0.021384268,
@@ -48,7 +48,7 @@ describe('WildSeaFisheries calculator, NSW', () => {
   const context = testContext('WildSeaFisheries');
   const emissions = calculateWildSeaFisheries(fisheriesTestData, context);
 
-  executeEmissionsSpec(emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('WildSeaFisheries calculator (multi activity)', () => {

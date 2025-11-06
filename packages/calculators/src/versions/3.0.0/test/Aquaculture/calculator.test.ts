@@ -49,7 +49,7 @@ const expectedScopes = {
   },
 };
 
-const expectations_1_2_0: AquacultureOutput = {
+const expectations: AquacultureOutput = {
   ...expectedScopes,
 
   purchasedOffsets: {
@@ -65,10 +65,7 @@ describe('Aquaculture calculator, SW WA', () => {
   const context = testContext('Aquaculture');
   const emissions = calculateAquaculture(aquacultureTestData, context);
 
-  executeEmissionsSpec(
-    emissions,
-    expectations_1_2_0 as unknown as KeyValuePairs,
-  );
+  executeEmissionsSpec(emissions, expectations as unknown as KeyValuePairs);
 });
 
 describe('Aquaculture calculator (multi activity)', () => {

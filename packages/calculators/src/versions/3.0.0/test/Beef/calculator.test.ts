@@ -20,7 +20,7 @@ import {
 import { beefTestInput } from './beef.data';
 import { beefTestData } from './input.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     atmosphericDepositionN2O: 4414.937327266,
     leachingAndRunoffN2O: 30832.2499168963,
@@ -70,7 +70,7 @@ describe('Beef calculator, VIC', () => {
     context,
   );
 
-  executeEmissionsSpec(emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Beef input scenarios', () => {

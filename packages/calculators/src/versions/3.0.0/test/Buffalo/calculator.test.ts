@@ -13,7 +13,7 @@ import {
 } from '../common/emissions';
 import { buffaloTestData } from './buffalo.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     atmosphericDepositionN2O: 14.11225364018,
     leachingAndRunoffN2O: 135.31544517857,
@@ -58,7 +58,7 @@ describe('Buffalo calculator, NSW', () => {
   const context = testContext('Beef');
   const emissions = calculateBuffalo(buffaloTestData, context);
 
-  executeEmissionsSpec(emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Buffalo scenarios', () => {

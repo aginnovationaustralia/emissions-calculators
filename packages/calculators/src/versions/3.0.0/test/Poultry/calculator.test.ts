@@ -7,7 +7,7 @@ import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { poultryTestData } from './poultry.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     atmosphericDepositionN2O: 4605.25194469257,
     leachingAndRunoffN2O: 581.764538125885,
@@ -43,7 +43,7 @@ describe('Poultry calculator, QLD', () => {
   const context = testContext('Poultry');
   const emissions = calculatePoultry(poultryTestData, context);
 
-  executeEmissionsSpec(emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 
   it('Generates IDs for intermediate activities', () => {
     expect(emissions.intermediateBroilers[0].id).toBe('broiler-0');

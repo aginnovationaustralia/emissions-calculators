@@ -13,7 +13,7 @@ import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { cottonTestData } from './cotton.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     fuelCO2: 5.1281952,
     limeCO2: 2.8515666667,
@@ -75,7 +75,7 @@ describe('Cotton calculator, NSW', () => {
     context,
   );
 
-  executeEmissionsSpec(emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Cotton calculator (multi activity)', () => {

@@ -13,7 +13,7 @@ import {
 } from '../common/emissions';
 import { deerTestData } from './deer.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     atmosphericDepositionN2O: 4.65150006357,
     fertiliserN2O: 19.57505785714,
@@ -58,7 +58,7 @@ describe('Deer calculator, TAS', () => {
   const context = testContext('Deer');
   const emissions = calculateDeer(deerTestData, context);
 
-  executeEmissionsSpec(emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Deer scenarios', () => {

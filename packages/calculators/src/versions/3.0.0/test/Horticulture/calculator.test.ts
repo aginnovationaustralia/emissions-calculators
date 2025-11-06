@@ -13,7 +13,7 @@ import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { horticultureTestData } from './horticulture.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     atmosphericDepositionN2O: 12.488859429,
     fuelCO2: 1.848387,
@@ -64,7 +64,7 @@ describe('Horticulture calculator, VIC', () => {
     context,
   );
 
-  executeEmissionsSpec(emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Horticulture calculator (multi activity)', () => {

@@ -7,7 +7,7 @@ import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { sugarTestData } from './sugar.data';
 
-const expectations_1_2_0 = {
+const expectations = {
   scope1: {
     fuelCO2: 979.1126628,
     limeCO2: 0.198,
@@ -58,7 +58,7 @@ describe('Sugar calculator, QLD', () => {
     context,
   );
 
-  executeEmissionsSpec(emissions, expectations_1_2_0);
+  executeEmissionsSpec(emissions, expectations);
 });
 
 describe('Sugar calculator (multi activity)', () => {
