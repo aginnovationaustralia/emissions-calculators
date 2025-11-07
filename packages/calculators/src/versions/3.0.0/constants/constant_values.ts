@@ -3719,9 +3719,9 @@ export const commonConstants: CommonConstants = {
     TREATMENT_EF: {
       [FluidWasteTreatmentType.MANAGED_AEROBIC]: 0,
       [FluidWasteTreatmentType.UNMANAGED_AEROBIC]: 0.3,
-      [FluidWasteTreatmentType.ANEAROBIC_DIGESTER_REACTOR]: 0.8,
-      [FluidWasteTreatmentType.SHALLOW_ANEAROBIC_LAGOON_LT_2M]: 0.2,
-      [FluidWasteTreatmentType.DEEP_ANEAROBIC_LAGOON_GT_2M]: 0.8,
+      [FluidWasteTreatmentType.ANAEROBIC_DIGESTER_REACTOR]: 0.8,
+      [FluidWasteTreatmentType.SHALLOW_ANAEROBIC_LAGOON_LT_2M]: 0.2,
+      [FluidWasteTreatmentType.DEEP_ANAEROBIC_LAGOON_GT_2M]: 0.8,
     },
     F_SLUDGE_FRACTION: 0.15,
     EF_COD: (6.3 / 25) * 28,
