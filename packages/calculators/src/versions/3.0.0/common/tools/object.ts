@@ -8,7 +8,6 @@ import type { ObjectEntries } from 'type-fest/source/entries';
 export function entriesFromObject<T extends object>(
   object: T,
 ): ObjectEntries<T> {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Filling TS gaps
   return Object.entries(object) as ObjectEntries<T>;
 }
 
@@ -20,7 +19,6 @@ export function entriesFromObject<T extends object>(
 export function objectFromEntries<T extends object>(
   entries: ObjectEntries<T>,
 ): T {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Filling TS gaps
   return Object.fromEntries(entries) as T;
 }
 
@@ -51,7 +49,6 @@ export function valuesFromObject<T extends object>(
  * @returns The keys of the object.
  */
 export function keysFromObject<T extends object>(object: T): Array<keyof T> {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Filling TS gaps
   return Object.keys(object) as Array<keyof T>;
 }
 
@@ -74,7 +71,6 @@ export function isNumber(value: unknown): boolean {
 }
 
 export function singleAllocationToArray<
-  // eslint-disable-next-line no-use-before-define
   T extends { [key in W]?: number | number[] } & object,
   K extends object,
   W extends keyof T,

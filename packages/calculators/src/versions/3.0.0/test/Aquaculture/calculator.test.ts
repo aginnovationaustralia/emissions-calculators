@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import clone from 'nanoclone';
 import { calculateAquaculture } from '../../Aquaculture/calculator';
 import { AquacultureOutput } from '../../types/Aquaculture/output';

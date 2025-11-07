@@ -7,7 +7,7 @@ export const ManureManagementSchema = z
     anaerobicLagoon: percentage(),
     sumpAndDispersal: percentage(),
     drainToPaddocks: percentage(),
-    soildStorage: percentage(),
+    solidStorage: percentage(),
   })
   .meta({
     description:

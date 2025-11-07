@@ -52,7 +52,7 @@ export function getLayersLeachingMassNLost(
   // NE = mass of nitrogen excreted (Gg/head/season)
   // MS = fraction of waste handled through drylot and solid storage
   // FracWET = Fraction of N available for leaching and runoff
-  // FracLeach_Ms = Fraction of N lost trhough leaching and runoff
+  // FracLeach_Ms = Fraction of N lost through leaching and runoff
 
   return (
     livestockNumbersLayersSpring *

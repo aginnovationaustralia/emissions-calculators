@@ -8,7 +8,6 @@ export function calculateScope1Urea(
   context: ExecutionContext<ConstantsForCottonCalculator>,
 ) {
   const { constants } = context;
-  // co2
 
   const massUrea = getUreaMass(context, cotton);
 

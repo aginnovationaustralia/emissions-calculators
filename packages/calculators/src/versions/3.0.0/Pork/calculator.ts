@@ -66,9 +66,6 @@ export function calculateSinglePork(
   carbonSequestration: number,
   id: string,
 ) {
-  // before doing anything, lets combine the fertilisers as we are doing a new
-  // form of input for these
-
   const fixedClasses = {
     ...pork.classes,
     slaughter_pigs: pork.classes.slaughterPigs,
@@ -92,17 +89,12 @@ export function calculateSinglePork(
 
   const scope1Fertiliser = calculateScope1Fertiliser(mergedFertiliser, context);
 
-  // Lime
   const scope1Lime = calculateScope1Lime(
     pork.limestone,
     pork.limestoneFraction,
     context,
   );
 
-  // Fuel
-
-  // WARNING: in the sheet, FuelD6 refers to J18 for scope1 CO2 EF but should
-  // refer to J19
   const fuelCO2 = calculateFuelScope1CO2LPG(
     pork.diesel,
     pork.petrol,
@@ -122,8 +114,6 @@ export function calculateSinglePork(
     context,
   );
 
-  // Electricity
-
   const electricity = calculateElectricityScope2And3(
     state,
     pork.electricitySource,
@@ -131,8 +121,6 @@ export function calculateSinglePork(
     pork.electricityUse,
     context,
   );
-
-  // Fertiliser
 
   const fertiliser = calculateScope3Fertiliser(mergedFertiliser, context);
 
@@ -160,7 +148,6 @@ export function calculateSinglePork(
 
   const bedding = calculateScope3Bedding(pork, context);
 
-  // TODO: update these and check if they add everything
   const totalCO2 = fuelCO2 + scope1Urea + scope1Lime;
   const totalCH4 = fuelCH4 + scope1ManureCH4 + scope1Enteric;
   const totalN2O =
@@ -171,8 +158,6 @@ export function calculateSinglePork(
     scope1N2O.atmosphericN2O +
     scope1N2O.atmosphericIndirectN2O +
     scope1N2O.manureDirectN2O;
-
-  // totals
 
   const scope1 = addTotalValue({
     leachingAndRunoffSoilN2O: scope1N2O.leachingSoilN2O,
@@ -245,7 +230,6 @@ export function calculatePork(
   input: PorkInput,
   context: ExecutionContext<ConstantsForPorkCalculator>,
 ): PorkOutput {
-  // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(
     input.vegetation,
     input.pork,

@@ -35,7 +35,6 @@ function purchasedBeefLivestock(
   return scope3KgTonnes;
 }
 
-// done once for each ram, wethers, etc
 export function calculatePurchasedBeefEmissions(
   beef: {
     [type in (typeof BeefClassesAPI)[number]]: BeefPurchase[];
@@ -63,7 +62,6 @@ export function calculatePurchasedBeefEmissions(
   return beefScope3Total;
 }
 
-// done once for each ram, wethers, etc
 export function calculatePurchasedSheepEmissions(
   sheep: {
     [type in (typeof SheepClassesAPI)[number]]: {

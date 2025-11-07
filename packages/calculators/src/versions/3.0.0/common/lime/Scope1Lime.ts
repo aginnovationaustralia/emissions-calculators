@@ -1,11 +1,5 @@
 import { ExecutionContext } from '../../executionContext';
 
-/**
- *
- * @param limestoneTonnes
- * @param limestoneFraction Fraction as CaCO3 (vs dolomite)
- * @returns
- */
 export function calculateScope1Lime(
   limestoneTonnes: number,
   limestoneFraction: number,

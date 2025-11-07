@@ -34,12 +34,6 @@ function getScope3FuelConstants(context: ExecutionContext) {
   };
 }
 
-/**
- *
- * @param diesel Diesel usage for  Litres/year (dataInputBeefD95)
- * @param petrol Petrol usage for  Litres/year(dataInputBeefD96)
- * @returns
- */
 export function calculateScope3FuelWithLPG(
   diesel: number,
   petrol: number,
@@ -52,25 +46,18 @@ export function calculateScope3FuelWithLPG(
     LPG_SCOPE3_EF_TONNES,
   } = getScope3FuelConstants(context);
 
-  // (fuel_C4)
   const dieselkL = diesel / 1000;
 
-  // (fuel_H4)
   const dieselScope3Tonnes = dieselkL * DIESEL_SCOPE3_EF_TONNES;
 
-  // (fuel_C5)
   const petrolkL = petrol / 1000;
 
-  // (fuel_H5)
   const petrolScope3Tonnes = petrolkL * PETROL_SCOPE3_EF_TONNES;
 
-  // (fuel_C5)
   const lpgkL = lpg / 1000;
 
-  // WARNING: Pork FuelH6 refers to M18 but should be M19
   const lpgScope3Tonnes = lpgkL * LPG_SCOPE3_EF_TONNES;
 
-  // (fuel_H6)
   const totalScope3Tonnes =
     dieselScope3Tonnes + petrolScope3Tonnes + lpgScope3Tonnes;
 
@@ -89,25 +76,18 @@ export function calculateScope3FuelWithLPGStationary(
     LPG_SCOPE3_EF_TONNES_STATIONARY,
   } = getScope3FuelConstants(context);
 
-  // (fuel_C4)
   const dieselkL = diesel / 1000;
 
-  // (fuel_H4)
   const dieselScope3Tonnes = dieselkL * DIESEL_SCOPE3_EF_TONNES;
 
-  // (fuel_C5)
   const petrolkL = petrol / 1000;
 
-  // (fuel_H5)
   const petrolScope3Tonnes = petrolkL * PETROL_SCOPE3_EF_TONNES;
 
-  // (fuel_C5)
   const lpgkL = lpg / 1000;
 
-  // WARNING: Pork FuelH6 refers to M18 but should be M19
   const lpgScope3Tonnes = lpgkL * LPG_SCOPE3_EF_TONNES_STATIONARY;
 
-  // (fuel_H6)
   const totalScope3Tonnes =
     dieselScope3Tonnes + petrolScope3Tonnes + lpgScope3Tonnes;
 
@@ -127,28 +107,21 @@ export function calculateScope3FuelWithLPGAverage(
     LPG_SCOPE3_EF_TONNES: LPG_SCOPE3_EF_TONNES_TRANSPORT,
   } = getScope3FuelConstants(context);
 
-  // (fuel_C4)
   const dieselkL = diesel / 1000;
 
-  // (fuel_H4)
   const dieselScope3Tonnes = dieselkL * DIESEL_SCOPE3_EF_TONNES;
 
-  // (fuel_C5)
   const petrolkL = petrol / 1000;
 
-  // (fuel_H5)
   const petrolScope3Tonnes = petrolkL * PETROL_SCOPE3_EF_TONNES;
 
-  // (fuel_C5)
   const lpgkL = lpg / 1000;
 
-  // introduced in dairy due to averaging of different LPG factors
   const lpgAverageScope3EF =
     (LPG_SCOPE3_EF_TONNES_STATIONARY + LPG_SCOPE3_EF_TONNES_TRANSPORT) / 2;
 
   const lpgScope3Tonnes = lpgkL * lpgAverageScope3EF;
 
-  // (fuel_H6)
   const totalScope3Tonnes =
     dieselScope3Tonnes + petrolScope3Tonnes + lpgScope3Tonnes;
 

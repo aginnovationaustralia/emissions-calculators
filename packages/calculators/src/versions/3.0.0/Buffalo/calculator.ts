@@ -52,14 +52,12 @@ export function calculateSingleBuffalo(
     context,
   );
 
-  // Lime
   const limeCO2 = calculateScope1Lime(
     buffalo.limestone,
     buffalo.limestoneFraction,
     context,
   );
 
-  // Fuel
   const fuelCO2 = calculateFuelScope1CO2LPG(
     buffalo.diesel,
     buffalo.petrol,
@@ -82,11 +80,7 @@ export function calculateSingleBuffalo(
     true,
   );
 
-  // Urea
-
   const ureaCO2 = calculateScope1Urea(mergedFertiliser, context);
-
-  // Electricity
 
   const electricity = calculateElectricityScope2And3(
     state,
@@ -96,11 +90,7 @@ export function calculateSingleBuffalo(
     context,
   );
 
-  // Fertiliser
-
   const fertiliser = calculateScope3Fertiliser(mergedFertiliser, context);
-
-  // Purchased Mineral Supplementation
 
   const feed = calculateScope3PurchasedFeed(
     buffalo.grainFeed,
@@ -140,8 +130,6 @@ export function calculateSingleBuffalo(
     buffaloEmissions.totalUrineDung +
     buffaloEmissions.totalLeachingN2O +
     fuelN2O;
-
-  // totals
 
   const scope1 = addTotalValue({
     fertiliserN2O: buffaloEmissions.totalFertiliserSoil,
@@ -211,7 +199,6 @@ export function calculateBuffalo(
   input: BuffaloInput,
   context: ExecutionContext<ConstantsForBuffaloCalculator>,
 ): BuffaloOutput {
-  // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(
     input.vegetation,
     input.buffalos,
@@ -225,14 +212,14 @@ export function calculateBuffalo(
     context,
   );
 
-  const buffaloResults = input.buffalos.map((singlebuffalo, ix) =>
+  const buffaloResults = input.buffalos.map((singleBuffalo, ix) =>
     calculateSingleBuffalo(
       input.state,
       input.rainfallAbove600,
-      singlebuffalo,
+      singleBuffalo,
       context,
       carbonSequestration.intermediate[ix],
-      singlebuffalo.id || ix.toString(),
+      singleBuffalo.id || ix.toString(),
     ),
   );
 

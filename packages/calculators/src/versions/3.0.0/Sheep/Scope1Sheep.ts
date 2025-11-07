@@ -106,10 +106,6 @@ export function sheepEmissionsForSeason(
   const seasonalNitrogenUrinaryExcreted =
     head * nExcretedUrine * 91.25 * 10 ** -6; // (nitrousOxideMMSSheepS51)
 
-  // these were from a different part of the spreadsheet than above
-  // manure management
-  // actual intake
-
   // (manureManagementSheepD20)
   const methaneProductionFromManure =
     actualIntake *
@@ -286,7 +282,6 @@ export function calculateCompleteSheepEmissions(
     .map((t) => t.winter)
     .reduce((a, b) => a + b.faeces + b.urine, 0);
 
-  // TODO: cleanup this mess
   // this is just urine + faeces for every type of sheep
   const springTotalNDungUrine =
     constants.LIVESTOCK.FRAC_GASM * springTotalUrineDung;
@@ -300,7 +295,6 @@ export function calculateCompleteSheepEmissions(
   const { otherFertiliserDryland, otherFertiliserIrrigated } =
     getOtherFertiliserAmounts(context, fertiliser);
 
-  // TODO: pull this out into separate function as its used in beef too
   // (agriculturalSoilsSheepD14)
   const nFertiliserGrazingDrylandSoil =
     fertiliser.pastureDryland *
@@ -450,7 +444,6 @@ export function calculateCompleteSheepEmissions(
 
   // ------------
 
-  // same name as above... (agriculturalSoilsSheepD87)
   const nFertiliserUreaGrazingNonIrrigated =
     fertiliser.pastureDryland * 0.46 * fracWetMultiplier * fracLeach;
   const nFertiliserUreaCroppingNonIrrigated =

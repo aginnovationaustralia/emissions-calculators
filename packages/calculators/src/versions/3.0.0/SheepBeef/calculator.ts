@@ -17,7 +17,6 @@ export function calculateSheepBeef(
   input: SheepBeefInput,
   context: ExecutionContext<ConstantsForSheepBeefCalculator>,
 ): WithExecutionMetadata<SheepBeefOutput> {
-  // Burning
   const burningResults = input.burning.map((burning) =>
     calculateScope1SavannahBurning(burning, input.state, context),
   );
@@ -32,14 +31,12 @@ export function calculateSheepBeef(
     },
   );
 
-  // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(
     input.vegetation,
     input.beef,
     'beefProportion',
   );
 
-  // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(
     input.vegetation,
     input.sheep,
@@ -225,7 +222,7 @@ export function calculateSheepBeef(
     ...combinedResult,
     carbonSequestration: {
       total: beefCarbonSequestration.total + sheepCarbonSequestration.total,
-      intermediate: [], // TODO
+      intermediate: [], // TODO: Needs to be populated
     },
     intermediate: {
       beef: {

@@ -44,7 +44,7 @@ export const States = [
 
 export type State = (typeof States)[number];
 
-export const Regions = ['southwest', 'pilbara', 'kmberley'] as const;
+export const Regions = ['southwest', 'pilbara', 'kimberley'] as const;
 export type Region = (typeof Regions)[number];
 
 export const Seasons = ['spring', 'summer', 'autumn', 'winter'] as const;
@@ -630,9 +630,9 @@ export type Refrigerant = (typeof Refrigerants)[number];
 export enum FluidWasteTreatmentType {
   MANAGED_AEROBIC = 'Managed Aerobic',
   UNMANAGED_AEROBIC = 'Unmanaged Aerobic',
-  ANEAROBIC_DIGESTER_REACTOR = 'Anaerobic Digester/Reactor',
-  SHALLOW_ANEAROBIC_LAGOON_LT_2M = 'Shallow Anaerobic Lagoon <2m',
-  DEEP_ANEAROBIC_LAGOON_GT_2M = 'Deep Anaerobic Lagoon >2m',
+  ANAEROBIC_DIGESTER_REACTOR = 'Anaerobic Digester/Reactor',
+  SHALLOW_ANAEROBIC_LAGOON_LT_2M = 'Shallow Anaerobic Lagoon <2m',
+  DEEP_ANAEROBIC_LAGOON_GT_2M = 'Deep Anaerobic Lagoon >2m',
 }
 
 export enum AquacultureProductionSystem {

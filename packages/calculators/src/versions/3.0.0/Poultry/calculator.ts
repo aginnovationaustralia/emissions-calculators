@@ -346,14 +346,12 @@ export function calculatePoultry(
   input: PoultryInput,
   context: ExecutionContext<ConstantsForPoultryCalculator>,
 ): PoultryOutput {
-  // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(
     input.vegetation,
     input.broilers,
     'broilersProportion',
   );
 
-  // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(
     input.vegetation,
     input.layers,

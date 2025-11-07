@@ -18,7 +18,7 @@ export const calculateScope1RiceCultivation = (
   // Methane rice F32
   const totalGgCH4 = rice.areaSown * growingSeasonEmissionRate * 10 ** -6;
 
-  // Methan rice F33
+  // Methane rice F33
   const totalGgCO2 = totalGgCH4 * constants.COMMON.GWP_FACTORSC5;
 
   // Methane rice F34

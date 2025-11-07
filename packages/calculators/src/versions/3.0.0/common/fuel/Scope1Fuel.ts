@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import { ExecutionContext } from '../../executionContext';
 import { FuelInput } from '../../types/fuel.input';
 import {
@@ -7,11 +6,6 @@ import {
   TransportFuelTypes,
 } from '../../types/types';
 import { swapObjectKeysAndValues } from '../tools/object';
-
-/*
-  This implementation of calculating fuel will be the new standard in the future.
-  For now it is only consumed by the processing calculator.
-*/
 
 type FuelTotal = {
   co2: number;
@@ -113,7 +107,7 @@ export function calculateScope1And3Fuel(
   }
   const { STATIONARY, TRANSPORT, NATURAL_GAS } = FUEL_ENERGYGJ;
 
-  // All intermediate and final total values being computed are in tonnes CO2e
+  // NOTE: All intermediate and final total values being computed are in tonnes CO2e
   const stationaryTotals: FuelTotalsForUse<StationaryFuelTypes> = Array.from(
     stationaryFuelAmountsKl,
   ).reduce(

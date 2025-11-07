@@ -1,4 +1,4 @@
-import { divideOrZero } from '@/utils/utils';
+import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForGoatCalculator } from './constants';
 
@@ -34,32 +34,32 @@ export function getIntensities(
   // (assumptionsD3)
   const meatProtein = totalSaleWeightKg * proteinFactor;
 
-  const meatAllocationFactor = divideOrZero(
+  const meatAllocationFactor = divideBySafeFromZero(
     meatProtein,
     meatProtein + cleanWoolTonnes * 1000,
   );
 
-  const woolAllocationFactor = divideOrZero(
+  const woolAllocationFactor = divideBySafeFromZero(
     cleanWoolTonnes * 1000,
     meatProtein + cleanWoolTonnes * 1000,
   );
 
-  const goatMeatBreedingExcludingSequestration = divideOrZero(
+  const goatMeatBreedingExcludingSequestration = divideBySafeFromZero(
     grossEmissions * 1000 * meatAllocationFactor,
     totalSaleWeightKg,
   );
 
-  const goatMeatBreedingIncludingSequestration = divideOrZero(
+  const goatMeatBreedingIncludingSequestration = divideBySafeFromZero(
     (grossEmissions - carbonSequestration) * 1000 * meatAllocationFactor,
     totalSaleWeightKg,
   );
 
-  const woolExcludingSequestration = divideOrZero(
+  const woolExcludingSequestration = divideBySafeFromZero(
     grossEmissions * 1000 * woolAllocationFactor,
     greasyWoolTonnes,
   );
 
-  const woolIncludingSequestration = divideOrZero(
+  const woolIncludingSequestration = divideBySafeFromZero(
     (grossEmissions - carbonSequestration) * 1000 * woolAllocationFactor,
     greasyWoolTonnes,
   );

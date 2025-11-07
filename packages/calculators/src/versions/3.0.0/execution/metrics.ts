@@ -1,5 +1,5 @@
 import { CalculatorConfig } from './config';
-import { mixPanelinstance } from './mixpanel';
+import { mixPanelInstance } from './mixpanel';
 
 export function trackCalculatorExecution(
   calculator: string,
@@ -7,7 +7,7 @@ export function trackCalculatorExecution(
   failed: boolean,
 ) {
   if (CalculatorConfig.isMetricsEnabled()) {
-    mixPanelinstance?.track('Execute package calculation', {
+    mixPanelInstance?.track('Execute package calculation', {
       calculator,
       calculatorVersion,
       failed,

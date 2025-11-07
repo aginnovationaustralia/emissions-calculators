@@ -112,7 +112,7 @@ export const aquacultureTestData: AquacultureInput = {
         {
           fluidWasteKl: 10000,
           fluidWasteTreatmentType:
-            FluidWasteTreatmentType.DEEP_ANEAROBIC_LAGOON_GT_2M,
+            FluidWasteTreatmentType.DEEP_ANAEROBIC_LAGOON_GT_2M,
           averageInletCOD: 1500,
           averageOutletCOD: 25,
           flaredCombustedFraction: 0.5,

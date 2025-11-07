@@ -3,9 +3,9 @@ import { HasLivestockConstants } from './constants';
 
 export function calculateScope3Herbicide(
   beefHerbicideKg: number,
-  beefOtherherbicideKg: number,
+  beefOtherHerbicideKg: number,
   sheepHerbicideKg: number,
-  sheepOtherherbicideKg: number,
+  sheepOtherHerbicideKg: number,
   context: ExecutionContext<HasLivestockConstants>,
 ) {
   const { constants } = context;
@@ -40,7 +40,7 @@ export function calculateScope3Herbicide(
   const beefHerbicideTotalGHG =
     beefHerbicideCO2 + beefHerbicideCH4 + beefHerbicideN2O;
 
-  const beefOtherHerbicideTonnes = beefOtherherbicideKg / 1000;
+  const beefOtherHerbicideTonnes = beefOtherHerbicideKg / 1000;
 
   const beefHerbicideOtherCO2 =
     beefOtherHerbicideTonnes *
@@ -77,17 +77,17 @@ export function calculateScope3Herbicide(
   const sheepHerbicideTotalGHG =
     sheepHerbicideCO2 + sheepHerbicideCH4 + sheepHerbicideN2O;
 
-  const sheepOtherherbicideTonnes = sheepOtherherbicideKg / 1000;
+  const sheepOtherHerbicideTonnes = sheepOtherHerbicideKg / 1000;
   const sheepHerbicideOtherCO2 =
-    sheepOtherherbicideTonnes *
+    sheepOtherHerbicideTonnes *
     herbicidePesticideAverage *
     constants.LIVESTOCK.EMISSION_BREAKDOWN.HERBICIDE.CO2;
   const sheepHerbicideOtherCH4 =
-    sheepOtherherbicideTonnes *
+    sheepOtherHerbicideTonnes *
     herbicidePesticideAverage *
     constants.LIVESTOCK.EMISSION_BREAKDOWN.HERBICIDE.CH4;
   const sheepHerbicideOtherN2O =
-    sheepOtherherbicideTonnes *
+    sheepOtherHerbicideTonnes *
     herbicidePesticideAverage *
     constants.LIVESTOCK.EMISSION_BREAKDOWN.HERBICIDE.N2O;
   const sheepHerbicideOtherTotalGHG =

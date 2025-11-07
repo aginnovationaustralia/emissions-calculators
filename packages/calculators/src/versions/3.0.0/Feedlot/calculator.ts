@@ -120,15 +120,6 @@ export function calculateSingleFeedlot(
     context,
   );
 
-  // WARNING: `+'Data input - vegetation'!D39` at end of equation is always
-  // adding 1 as the allocation is 100%, but it should be multiplying
-  // instead
-  // (dataSummaryC35)
-  // const trees = feedlot.vegetation.map((veg) =>
-  //   calculateTreeCarbonSequestration(veg),
-  // );
-  // const treesTotal = trees.reduce((acc, tree) => acc + tree.total, 0);
-
   const allFeedlotGroups = feedlot.groups.map((group) => {
     const stayResults = group.stays.map((stay) => {
       const scope1N2O = calculateScope1Atmospheric(

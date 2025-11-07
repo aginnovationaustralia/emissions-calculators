@@ -62,7 +62,7 @@ function nitrogen(
       //
       // START Nitrogen intake (NI)
       // NI = I x CP /6.25
-      // I = dry matter intake (kg/day): is a contsant value
+      // I = dry matter intake (kg/day): is a constant value
       // CP = dietary crude protein: constant value
       const { dryMatterIntake, crudeProtein } =
         constants.POULTRY.DIET_PROPERTIES[type];
@@ -181,10 +181,10 @@ export function calculateScope1LayersAtmospheric(
 
   //
   // START N dung and urine - Nitrous oxide production
-  const prodctionSystemEF = getLayerProductionSystemEF(context);
+  const productionSystemEF = getLayerProductionSystemEF(context);
 
   const totalAtmosphericN2O =
-    massNVolatisedAnnual * prodctionSystemEF * constants.COMMON.GWP_FACTORSC15;
+    massNVolatisedAnnual * productionSystemEF * constants.COMMON.GWP_FACTORSC15;
   // END N dung and urine - Nitrous oxide production
   //
 

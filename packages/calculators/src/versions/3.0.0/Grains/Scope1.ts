@@ -79,9 +79,6 @@ export function calculateScope1N2O(
     belowGroundN,
   } = constants.CROP.CROPRESIDUE[crop.type];
 
-  // for sugar, use CROPRESIDUE_FRACTIONSUGARCANEBURNT instead
-  // for tuber and roots, cotton, hops, forage crops, lucerne - pasture is all 0
-
   const burnt0: CropType[] = [
     'Tuber and Roots',
     'Cotton',
@@ -99,7 +96,6 @@ export function calculateScope1N2O(
     : constants.CROP.CROPRESIDUE_PROPORTIONBURNT[crop.state].burnt;
 
   // (cropResiduesC12, cropResiduesK67:K82)
-  // for sugar, use CROPRESIDUE_FRACTIONSUGARCANEBURNT instead
   const fractionBurnt =
     crop.type === 'Sugar Cane'
       ? constants.CROP.CROPRESIDUE_FRACTIONSUGARCANEBURNT[crop.state].burnt

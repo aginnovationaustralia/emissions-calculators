@@ -56,14 +56,11 @@ export function calculateSingleGoat(
     context,
   );
 
-  // Lime
   const limeCO2 = calculateScope1Lime(
     goats.limestone,
     goats.limestoneFraction,
     context,
   );
-
-  // Fuel
 
   const fuelCO2 = calculateFuelScope1CO2LPG(
     goats.diesel,
@@ -87,15 +84,11 @@ export function calculateSingleGoat(
     true,
   );
 
-  // Urea
-
   const ureaCO2 = calculateScope1Urea(
     goats.mineralSupplementation,
     mergedFertiliser,
     context,
   );
-
-  // Electricity
 
   const electricity = calculateElectricityScope2And3(
     state,
@@ -105,11 +98,7 @@ export function calculateSingleGoat(
     context,
   );
 
-  // Fertiliser
-
   const fertiliser = calculateScope3Fertiliser(mergedFertiliser, context);
-
-  // Purchased Mineral Supplementation
 
   const feed = calculateScope3PurchasedFeed(
     goats.grainFeed,
@@ -151,8 +140,6 @@ export function calculateSingleGoat(
     goatEmissions.urineDungN2O +
     goatEmissions.leechingRunoffN2O +
     fuelN2O;
-
-  // totals
 
   const scope1 = addTotalValue({
     fertiliserN2O: goatEmissions.fertiliserN2O,
@@ -244,7 +231,6 @@ export function calculateGoat(
   input: GoatInput,
   context: ExecutionContext<ConstantsForGoatCalculator>,
 ): GoatOutput {
-  // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(
     input.vegetation,
     input.goats,

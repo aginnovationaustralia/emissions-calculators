@@ -6,9 +6,7 @@ import {
   SheepClassesAPI,
 } from '../types/types';
 
-// WARNING: season after calving for previous season?
 // Used for calving calculations where we need to also get the previous season
-// (entericFermentationBeefC28)
 export const SEASONS_AFTER = {
   spring: 'winter',
   summer: 'spring',

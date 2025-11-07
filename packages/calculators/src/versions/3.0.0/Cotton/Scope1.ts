@@ -30,8 +30,6 @@ export function calculateScope1N2O(
   const fertiliserN2OG = fertiliserN2O * constants.COMMON.GWP_FACTORSC6;
   const fertiliserN2OTonnes = fertiliserN2OG * 1000;
 
-  // crop residue
-
   // (Crop_ResiduesC6)
   const annualProduction = (cotton.averageCottonYield * cotton.areaSown) / 1000;
 
@@ -59,8 +57,6 @@ export function calculateScope1N2O(
   // (cropResiduesL56, Crop_ResiduesC13)
   const { fractionRemoved } = constants.CROP.CROPRESIDUE.Cotton;
 
-  // ElectricityC2 is state
-
   // (Crop_ResiduesC30)
   const massOfNReturnedToSoil =
     annualProduction *
@@ -85,8 +81,6 @@ export function calculateScope1N2O(
 
   // (Data_Summary_C13)
   const residueN2OTotal = residuesGgCO2 * 1000;
-
-  // leeching
 
   // (Leaching_And_RunoffC21)
   const fractionOfNAvailableForRunoff = getFertiliserFractionRunoff(context);
@@ -125,8 +119,6 @@ export function calculateScope1N2O(
 
   const leechingN2O = leechingGgCO2 * 1000;
 
-  // atmospheric deposition
-
   // (Atmospheric_DepositionD10)
   const fracGASF = constants.COMMON.FRAC_GASF;
 
@@ -140,8 +132,6 @@ export function calculateScope1N2O(
   const atmosphericGgCO2 =
     annualN2OAtmospheric * constants.COMMON.GWP_FACTORSC6;
   const atmosphericN2O = atmosphericGgCO2 * 1000;
-
-  // field burning
 
   // (Crop_ResiduesC14)
   const fractionRemainingAtBurning =

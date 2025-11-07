@@ -23,10 +23,8 @@ export function calculateScope1WasteWater(
       fluidWasteTreatmentType,
     } = fluidWaste;
 
-    // Waste (inc. Wastewater) B6
     const treatmentEF = TREATMENT_EF[fluidWasteTreatmentType];
 
-    // Waste (inc. Wastewater) B17
     // resulting units is tonnes CO2e
     const subTotal =
       ((wasteWaterGenerated *

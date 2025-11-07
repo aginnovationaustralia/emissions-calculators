@@ -11,9 +11,8 @@ export function calculateScope3Fertiliser(
     fertiliser.pastureDryland +
     fertiliser.pastureIrrigated +
     fertiliser.cropsDryland +
-    fertiliser.cropsIrrigated; // (embeddedEmissionsC9)
+    fertiliser.cropsIrrigated;
 
-  // (embeddedEmissions_I9)
   const totalUrea = totalUreaFertiliser * constants.COMMON.UREA_FERTILISER_GHG;
 
   const totalSuperPhosphate =
@@ -21,16 +20,13 @@ export function calculateScope3Fertiliser(
 
   const otherFertiliserTotal = (fertiliser?.otherFertilisers ?? []).reduce(
     (acc, otherFertiliser) => {
-      // (embeddedEmissions_C11)
       const otherNThisFertiliserTotal =
         otherFertiliser.otherDryland + otherFertiliser.otherIrrigated;
 
-      // (embeddedEmissions_E11)
       const otherFertiliserTotalGHGInput =
         constants.COMMON.CUSTOMIZED_FERTILIZER[otherFertiliser.otherType]
           .TotalGHG;
 
-      // (embeddedEmissions_I11)
       const otherThisFertiliserTotalEmissions =
         otherNThisFertiliserTotal * otherFertiliserTotalGHGInput;
 
@@ -40,7 +36,7 @@ export function calculateScope3Fertiliser(
   );
 
   const totalEmbeddedEmissionsFertiliser =
-    totalUrea + totalSuperPhosphate + otherFertiliserTotal; // (embeddedEmissions_I12)
+    totalUrea + totalSuperPhosphate + otherFertiliserTotal;
 
   return totalEmbeddedEmissionsFertiliser;
 }

@@ -117,14 +117,11 @@ export function calculateSingleBeef(
     context,
   );
 
-  // Lime
   const limeCO2 = calculateScope1Lime(
     beef.limestone,
     beef.limestoneFraction,
     context,
   );
-
-  // Fuel
 
   const { lpg } = beef;
 
@@ -147,15 +144,11 @@ export function calculateSingleBeef(
     context,
   );
 
-  // Urea
-
   const ureaCO2 = calculateScope1Urea(
     beef.mineralSupplementation,
     mergedBeefFertiliser,
     context,
   );
-
-  // Electricity
 
   const beefElectricity = calculateElectricityScope2And3(
     state,
@@ -165,14 +158,10 @@ export function calculateSingleBeef(
     context,
   );
 
-  // Fertiliser
-
   const beefFertiliser = calculateScope3Fertiliser(
     mergedBeefFertiliser,
     context,
   );
-
-  // Purchased Mineral Supplementation
 
   const beefMineralSupplementation = calculateMineralSupplementationScope3(
     beef.mineralSupplementation,
@@ -218,8 +207,6 @@ export function calculateSingleBeef(
     atmosphericDepositionN2O +
     urineAndDungN2O +
     fertiliserN2O;
-
-  // totals
 
   const scope1 = addTotalValue({
     leachingAndRunoffN2O: leechingRunoffN2O,
@@ -288,7 +275,6 @@ export function calculateSingleBeef(
 }
 
 export function calculateAllBurningWithKeyProportion<
-  // eslint-disable-next-line no-use-before-define
   T extends { [key in K]: number[] } & { burning: SavannahBurning },
   K extends keyof T,
   L,
@@ -340,7 +326,6 @@ export function calculateBeef(
   context: ExecutionContext<ConstantsForBeefCalculator>,
 ): BeefOutput {
   // in the case that vegetation allocations are a single number, change that to an array
-  // eslint-disable-next-line no-param-reassign
   input.vegetation = input.vegetation.map((x) => {
     if (
       (x.allocationToBeef === undefined ||
@@ -350,21 +335,17 @@ export function calculateBeef(
     ) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      // eslint-disable-next-line no-param-reassign
       x.allocationToBeef = x.beefProportion;
     }
 
     return x;
   });
 
-  // eslint-disable-next-line no-param-reassign
   input.vegetation = singleAllocationToArray(
     input.vegetation,
     input.beef,
     'allocationToBeef',
   );
-
-  // TODO: transform purchases
 
   const burningResults = calculateAllBurningWithKeyProportion(
     input.burning,

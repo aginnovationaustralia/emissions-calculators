@@ -15,7 +15,7 @@ const enumLookups: Record<string, Record<string, string>> = {
   REGIONS: {
     SOUTHWEST: 'southwest',
     PILBARA: 'pilbara',
-    KIMBERLEY: 'kmberley',
+    KIMBERLEY: 'kimberley',
   },
   LIVESTOCK_SOURCE_LOCATION: {
     'Dairy origin': 'dairy origin',

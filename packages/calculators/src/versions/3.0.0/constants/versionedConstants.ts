@@ -12,7 +12,6 @@ import {
   WaterRegimeSubType,
 } from '../types/types';
 
-/* eslint-disable camelcase */
 export const STATES = {
   NSW: 'nsw',
   VIC: 'vic',
@@ -524,7 +523,7 @@ export type DairyConstants = {
     [state in States]: {
       Pasture: number;
       'Anaerobic lagoon': number;
-      'Sump and disperal systems': number;
+      'Sump and dispersal systems': number;
       'Drains to paddock': number;
       'Solid Storage': number;
     };
@@ -665,7 +664,6 @@ export type AquacultureConstants = {
 };
 
 export type CropConstants = {
-  // Added to constant_values.ts as part of 1.1.0 release
   FERTILISER_FRACTION_RUNOFF_STATIC: number;
 
   COMPONENTS_ENERGY_EF: {
@@ -912,7 +910,6 @@ export type CommonConstants = {
 
   EF_TEMPERATURE: number;
 
-  // Factor to convert elemental mass to molecular mass (N2O-N to N2O)
   GWP_FACTORSC5: number;
   GWP_FACTORSC6: number;
   GWP_FACTORSC13: number;

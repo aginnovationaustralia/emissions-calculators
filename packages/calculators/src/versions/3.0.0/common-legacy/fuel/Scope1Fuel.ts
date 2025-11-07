@@ -100,9 +100,7 @@ function calculateFuelScope1BaseLPG(
     averageStationaryTransportOptional,
   );
   const fuelEnergyKl = getFuelEnergyKl(context);
-  // average is used for grains/horticulture/etc calcs, transport is for
-  // sheepbeef/feedlot/etc
-  // (fuelF6)
+  // average is used for grains calcs, transport is for livestock
   const dieselEF = averageStationaryTransport
     ? (fuelEnergyKl.STATIONARY.DIESEL.SCOPE1_EF[type] +
         fuelEnergyKl.TRANSPORT.DIESEL.SCOPE1_EF[type]) /
@@ -142,7 +140,6 @@ export function calculateFuelScope1BaseLPGStationary(
 ) {
   const fuelEnergyKl = getFuelEnergyKl(context);
 
-  // stationary is only for fisheries
   const dieselEF = fuelEnergyKl.STATIONARY.DIESEL.SCOPE1_EF[type];
   const petrolEF = fuelEnergyKl.STATIONARY.PETROL.SCOPE1_EF[type];
   const lpgEF = fuelEnergyKl.STATIONARY.LPG.SCOPE1_EF[type];

@@ -10,7 +10,6 @@ export function calculateScope1Urea(
 ) {
   const { constants } = context;
 
-  // the ?? 0 was from excel (in case its not inputted or used on farm?)
   // (ureaApplicationC26)
   const massUreaLickBlocks =
     (supplementation.mineralBlock ?? 0) *
