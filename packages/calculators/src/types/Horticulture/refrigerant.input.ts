@@ -1,0 +1,16 @@
+import { Refrigerants } from '@/types/types';
+import { z } from 'zod';
+import { DESCRIPTIONS } from '../descriptions.schema';
+
+export const HorticultureRefrigerantSchema = z.object({
+  refrigerant: z
+    .enum(Refrigerants)
+    .meta({ description: DESCRIPTIONS.REFRIGERANT }),
+  chargeSize: z.number().meta({
+    description: 'Amount of refrigerant contained in the appliance, in kg',
+  }),
+});
+
+export type HorticultureRefrigerant = z.infer<
+  typeof HorticultureRefrigerantSchema
+>;
