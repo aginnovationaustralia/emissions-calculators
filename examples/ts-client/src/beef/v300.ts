@@ -1,5 +1,5 @@
-import { v3_0_0 } from '@aginnovationaustralia/emissions-calculators';
+import { Calculators } from '@aginnovationaustralia/emissions-calculators';
 import { beefInputData } from './input';
-const { calculateBeef } = v3_0_0.Calculators;
+const { calculateBeef } = Calculators;
 
 export const calculateBeef300 = () => calculateBeef(beefInputData);
