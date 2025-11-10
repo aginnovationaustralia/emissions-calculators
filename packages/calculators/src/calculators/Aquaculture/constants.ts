@@ -1,8 +1,5 @@
-import {
-  aquacultureConstants,
-  commonConstants,
-} from '@/constants/constant_values';
-import { AllConstants } from '@/constants/versionedConstants';
+import { AllConstants } from '@/constants/types';
+import { aquacultureConstants, commonConstants } from '@/constants/values';
 
 export type ConstantsForAquacultureCalculator = Pick<
   AllConstants,

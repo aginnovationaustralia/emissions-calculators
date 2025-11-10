@@ -1,5 +1,6 @@
 import { merge } from 'ts-deepmerge';
 import { CalculatorConfig } from '../calculators/execution/config';
+import { AllConstants } from './types';
 import {
   aquacultureConstants,
   beefConstants,
@@ -19,8 +20,7 @@ import {
   savannaConstants,
   sheepConstants,
   sugarConstants,
-} from './constant_values';
-import { AllConstants } from './versionedConstants';
+} from './values';
 
 export const loadConstants = (): AllConstants => {
   return {

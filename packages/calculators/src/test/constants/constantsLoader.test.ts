@@ -1,9 +1,6 @@
 /* eslint-disable camelcase */
-import {
-  loadConstants,
-  loadOverrideConstants,
-} from '@/constants/constantsLoader';
-import { STATES } from '@/constants/versionedConstants';
+import { loadConstants, loadOverrideConstants } from '@/constants/loader';
+import { STATES } from '@/constants/types';
 import { CalculationEnvironment } from '../../calculators/execution/environment';
 
 describe('constantsLoader', () => {

@@ -1,4 +1,4 @@
-import { AllConstants } from '@/constants/versionedConstants';
+import { AllConstants } from '@/constants/types';
 import { AsyncLocalStorage } from 'async_hooks';
 import { PartialDeep } from 'type-fest';
 

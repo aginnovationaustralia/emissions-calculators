@@ -1,4 +1,4 @@
-import { AllConstants } from '@/constants/versionedConstants';
+import { AllConstants } from '@/constants/types';
 import { HasCommonConstants } from '../../calculators/common/constants';
 import { ExecutionContext } from '../../calculators/executionContext';
 import { testContext } from './context';

@@ -1,10 +1,10 @@
+import { AllConstants } from '@/constants/types';
 import {
   beefConstants,
   commonConstants,
   livestockConstants,
   savannaConstants,
-} from '@/constants/constant_values';
-import { AllConstants } from '@/constants/versionedConstants';
+} from '@/constants/values';
 
 export type ConstantsForBeefCalculator = Pick<
   AllConstants,

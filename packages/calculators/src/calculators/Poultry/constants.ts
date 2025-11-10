@@ -1,9 +1,9 @@
+import { AllConstants } from '@/constants/types';
 import {
   commonConstants,
   livestockConstants,
   poultryConstants,
-} from '@/constants/constant_values';
-import { AllConstants } from '@/constants/versionedConstants';
+} from '@/constants/values';
 
 export type ConstantsForPoultryCalculator = Pick<
   AllConstants,

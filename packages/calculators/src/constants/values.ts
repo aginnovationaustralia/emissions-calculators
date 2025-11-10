@@ -25,7 +25,7 @@ import {
   SheepConstants,
   STATES,
   SugarConstants,
-} from './versionedConstants';
+} from './types';
 
 export const REGIONS = {
   SOUTHWEST: 'southwest',

@@ -1,14 +1,11 @@
+import { CommonConstants, LivestockConstants } from '@/constants/types';
 import {
   beefConstants,
   commonConstants,
   livestockConstants,
   savannaConstants,
   sheepConstants,
-} from '@/constants/constant_values';
-import {
-  CommonConstants,
-  LivestockConstants,
-} from '@/constants/versionedConstants';
+} from '@/constants/values';
 import { ConstantsForBeefCalculator } from '../Beef/constants';
 import { ConstantsForSheepCalculator } from '../Sheep/constants';
 

@@ -1,5 +1,5 @@
-import { loadOverrideConstants } from '@/constants/constantsLoader';
-import { AllConstants } from '@/constants/versionedConstants';
+import { loadOverrideConstants } from '@/constants/loader';
+import { AllConstants } from '@/constants/types';
 import { trackCalculatorExecution } from './execution/metrics';
 import { ExecutionContext } from './executionContext';
 import { CalculatorNames } from './strings';

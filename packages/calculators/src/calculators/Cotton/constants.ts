@@ -1,9 +1,9 @@
+import { AllConstants } from '@/constants/types';
 import {
   commonConstants,
   cottonConstants,
   cropConstants,
-} from '@/constants/constant_values';
-import { AllConstants } from '@/constants/versionedConstants';
+} from '@/constants/values';
 
 export type ConstantsForCottonCalculator = Pick<
   AllConstants,

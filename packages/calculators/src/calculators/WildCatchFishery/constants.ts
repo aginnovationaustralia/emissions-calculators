@@ -1,8 +1,5 @@
-import {
-  commonConstants,
-  fisheriesConstants,
-} from '@/constants/constant_values';
-import { AllConstants } from '@/constants/versionedConstants';
+import { AllConstants } from '@/constants/types';
+import { commonConstants, fisheriesConstants } from '@/constants/values';
 
 export type ConstantsForWildCatchFisheryCalculator = Pick<
   AllConstants,

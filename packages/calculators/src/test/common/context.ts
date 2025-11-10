@@ -1,5 +1,5 @@
-import { loadConstants } from '@/constants/constantsLoader';
-import { AllConstants } from '@/constants/versionedConstants';
+import { loadConstants } from '@/constants/loader';
+import { AllConstants } from '@/constants/types';
 import { ExecutionContext } from '../../calculators/executionContext';
 
 export const testContext = (

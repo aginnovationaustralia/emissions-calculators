@@ -1,5 +1,5 @@
-import { AllConstants } from '@/constants/versionedConstants';
-import { loadOverrideConstants } from '../constants/constantsLoader';
+import { AllConstants } from '@/constants/types';
+import { loadOverrideConstants } from '../constants/loader';
 import { executeCalculator } from './execute';
 import { trackCalculatorExecution } from './execution/metrics';
 import { CalculatorNames } from './strings';
@@ -9,7 +9,7 @@ jest.mock('./execution/metrics', () => ({
   trackCalculatorExecution: jest.fn(),
 }));
 
-jest.mock('../constants/constantsLoader', () => ({
+jest.mock('../constants/loader', () => ({
   loadConstants: jest.fn(),
   loadOverrideConstants: jest.fn(),
 }));

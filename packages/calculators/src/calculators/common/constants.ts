@@ -1,4 +1,4 @@
-import { CommonConstants } from '@/constants/versionedConstants';
+import { CommonConstants } from '@/constants/types';
 
 export type HasCommonConstants = {
   COMMON: CommonConstants;

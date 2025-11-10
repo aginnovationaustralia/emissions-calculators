@@ -1,5 +1,5 @@
-import { commonConstants, cropConstants } from '@/constants/constant_values';
-import { AllConstants } from '@/constants/versionedConstants';
+import { AllConstants } from '@/constants/types';
+import { commonConstants, cropConstants } from '@/constants/values';
 
 export type ConstantsForVineyardCalculator = Pick<
   AllConstants,

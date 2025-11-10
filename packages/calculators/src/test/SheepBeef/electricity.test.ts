@@ -1,7 +1,7 @@
 import { ConstantsForSheepBeefCalculator } from '@/calculators/SheepBeef/constants';
 import { calculateElectricityScope2And3 } from '@/calculators/common-legacy/electricity';
 import { ExecutionContext } from '@/calculators/executionContext';
-import { loadConstants } from '@/constants/constantsLoader';
+import { loadConstants } from '@/constants/loader';
 
 describe('checking calculateElectricityScope2And3, all types of inputs', () => {
   const constants = loadConstants();
