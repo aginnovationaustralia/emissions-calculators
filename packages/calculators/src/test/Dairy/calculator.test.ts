@@ -45,6 +45,7 @@ const expectations = {
   },
   carbonSequestration: {
     total: 50.4992,
+    intermediate: [50.4992],
   },
   net: {
     total: 3586.45387572054,
