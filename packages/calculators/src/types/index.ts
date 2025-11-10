@@ -1,414 +1,531 @@
 export { AllocatedVegetation } from './allocated-vegetation.input';
-export { AquacultureBaitPurchase } from './Aquaculture/baitpurchase.input';
-export { AquacultureBaitPurchaseInput } from './Aquaculture/baitpurchase.input';
+export {
+  AquacultureEnterpriseInput,
+  AquacultureEnterpriseInputSchema,
+} from './Aquaculture/aquaculture.input';
+export {
+  AquacultureBaitPurchase,
+  AquacultureBaitPurchaseInput,
+} from './Aquaculture/baitpurchase.input';
 export { AquacultureCustomBaitPurchase } from './Aquaculture/custombaitpurchase.input';
-export { AquacultureEnterpriseInput } from './Aquaculture/aquaculture.input';
-export { AquacultureEnterpriseInputSchema } from './Aquaculture/aquaculture.input';
-export { AquacultureInput } from './Aquaculture/input';
-export { AquacultureInputSchema } from './Aquaculture/input';
-export { AquacultureIntensitiesOutput } from './Aquaculture/intensities.output';
-export { AquacultureIntensitiesOutputSchema } from './Aquaculture/intensities.output';
-export { AquacultureIntermediateOutput } from './Aquaculture/intermediate.output';
-export { AquacultureIntermediateOutputSchema } from './Aquaculture/intermediate.output';
-export { AquacultureOutput } from './Aquaculture/output';
-export { AquacultureOutputSchema } from './Aquaculture/output';
-export { AquacultureScope1Output } from './Aquaculture/scope1.output';
-export { AquacultureScope1OutputSchema } from './Aquaculture/scope1.output';
-export { AquacultureScope3Output } from './Aquaculture/scope3.output';
-export { AquacultureScope3OutputSchema } from './Aquaculture/scope3.output';
-export { AreaUsed } from './Dairy/area.input';
+export { AquacultureInput, AquacultureInputSchema } from './Aquaculture/input';
+export {
+  AquacultureIntensitiesOutput,
+  AquacultureIntensitiesOutputSchema,
+} from './Aquaculture/intensities.output';
+export {
+  AquacultureIntermediateOutput,
+  AquacultureIntermediateOutputSchema,
+} from './Aquaculture/intermediate.output';
+export {
+  AquacultureOutput,
+  AquacultureOutputSchema,
+} from './Aquaculture/output';
+export {
+  AquacultureScope1Output,
+  AquacultureScope1OutputSchema,
+} from './Aquaculture/scope1.output';
+export {
+  AquacultureScope3Output,
+  AquacultureScope3OutputSchema,
+} from './Aquaculture/scope3.output';
+export { BeefComplete } from './Beef/beef.input';
 export { BeefCalving } from './Beef/beefcalving.input';
 export { BeefClass } from './Beef/beefclass.input';
 export { BeefClasses } from './Beef/beefclasses.input';
-export { BeefComplete } from './Beef/beef.input';
-export { BeefCompleteEmissions } from './Beef/internal';
-export { BeefEmissionsIntensities } from './Beef/intensities.output';
-export { BeefInput } from './Beef/input';
-export { BeefInputSchema } from './Beef/input';
-export { BeefIntermediaryEmissions } from './Beef/internal';
-export { BeefIntermediateOutput } from './Beef/intermediate.output';
-export { BeefIntermediateOutputSchema } from './Beef/intermediate.output';
-export { BeefNet } from './Beef/net.output';
-export { BeefOutput } from './Beef/output';
-export { BeefOutputSchema } from './Beef/output';
 export { BeefPurchase } from './Beef/beefpurchase.input';
 export { BeefSavannahBurning } from './Beef/beefsavannah.input';
-export { BeefScope1Output } from './Beef/scope1.output';
-export { BeefScope1OutputSchema } from './Beef/scope1.output';
-export { BeefScope3Output } from './Beef/scope3.output';
-export { BeefScope3OutputSchema } from './Beef/scope3.output';
 export { BeefSeason } from './Beef/beefseason.input';
-export { BeefSummaryOutput } from './SheepBeef/beef-summary.output';
-export { BeefSummaryOutputSchema } from './SheepBeef/beef-summary.output';
+export { BeefInput, BeefInputSchema } from './Beef/input';
+export { BeefEmissionsIntensities } from './Beef/intensities.output';
+export {
+  BeefIntermediateOutput,
+  BeefIntermediateOutputSchema,
+} from './Beef/intermediate.output';
+export {
+  BeefCompleteEmissions,
+  BeefIntermediaryEmissions,
+} from './Beef/internal';
+export { BeefNet } from './Beef/net.output';
+export { BeefOutput, BeefOutputSchema } from './Beef/output';
+export { SavannahBurning } from './Beef/savannah.input';
+export { BeefScope1Output, BeefScope1OutputSchema } from './Beef/scope1.output';
+export { BeefScope3Output, BeefScope3OutputSchema } from './Beef/scope3.output';
 export { BeefVegetation } from './Beef/vegetation.input';
-export { BroilerClass } from './Poultry/broilerclass.input';
-export { BroilerGroup } from './Poultry/group.input';
-export { BroilerSale } from './Poultry/broilersale.input';
-export { BroilersComplete } from './Poultry/broilers.input';
+export { BuffaloComplete } from './Buffalo/buffalo.input';
 export { BuffaloClass } from './Buffalo/buffaloclass.input';
 export { BuffaloClasses } from './Buffalo/buffaloclasses.input';
-export { BuffaloComplete } from './Buffalo/buffalo.input';
-export { BuffaloEmissionsIntensities } from './Buffalo/intensities.output';
-export { BuffaloInput } from './Buffalo/input';
-export { BuffaloInputSchema } from './Buffalo/input';
-export { BuffaloIntermediateOutput } from './Buffalo/intermediate.output';
-export { BuffaloIntermediateOutputSchema } from './Buffalo/intermediate.output';
-export { BuffaloNetOutput } from './Buffalo/net.output';
-export { BuffaloNetOutputSchema } from './Buffalo/net.output';
-export { BuffaloOutput } from './Buffalo/output';
-export { BuffaloOutputSchema } from './Buffalo/output';
-export { BuffaloScope1Output } from './Buffalo/scope1.output';
-export { BuffaloScope1OutputSchema } from './Buffalo/scope1.output';
-export { BuffaloScope3Output } from './Buffalo/scope3.output';
-export { BuffaloScope3OutputSchema } from './Buffalo/scope3.output';
 export { BuffaloSeason } from './Buffalo/buffaloseason.input';
-export { BuffaloVegetation } from './Buffalo/vegetation.input';
-export { CottonCrop } from './Cotton/cotton.input';
-export { CottonInput } from './Cotton/input';
-export { CottonInputSchema } from './Cotton/input';
-export { CottonIntensitiesOutput } from './Cotton/intensities.output';
-export { CottonIntensitiesOutputSchema } from './Cotton/intensities.output';
-export { CottonIntermediateOutput } from './Cotton/intermediate.output';
-export { CottonIntermediateOutputSchema } from './Cotton/intermediate.output';
-export { CottonNetOutput } from './Cotton/net.output';
-export { CottonNetOutputSchema } from './Cotton/net.output';
-export { CottonOutput } from './Cotton/output';
-export { CottonOutputSchema } from './Cotton/output';
-export { CottonScope1Output } from './Cotton/scope1.output';
-export { CottonScope1OutputSchema } from './Cotton/scope1.output';
-export { CottonScope3Output } from './Cotton/scope3.output';
-export { CottonScope3OutputSchema } from './Cotton/scope3.output';
-export { CottonVegetation } from './Cotton/vegetation.input';
 export { CowsCalvingProportion } from './Buffalo/calvingproportion.input';
+export { BuffaloInput, BuffaloInputSchema } from './Buffalo/input';
+export { BuffaloEmissionsIntensities } from './Buffalo/intensities.output';
+export {
+  BuffaloIntermediateOutput,
+  BuffaloIntermediateOutputSchema,
+} from './Buffalo/intermediate.output';
+export { BuffaloNetOutput, BuffaloNetOutputSchema } from './Buffalo/net.output';
+export { BuffaloOutput, BuffaloOutputSchema } from './Buffalo/output';
+export {
+  BuffaloScope1Output,
+  BuffaloScope1OutputSchema,
+} from './Buffalo/scope1.output';
+export {
+  BuffaloScope3Output,
+  BuffaloScope3OutputSchema,
+} from './Buffalo/scope3.output';
+export { SeasonalCalvingRates } from './Buffalo/seasonalcalving.input';
+export { BuffaloVegetation } from './Buffalo/vegetation.input';
 export { CropVegetation } from './common/crop-vegetation.input';
+export {
+  FluidWasteInput,
+  FluidWasteInputSchema,
+} from './common/fluid-waste.input';
+export { FreightInput, FreightInputSchema } from './common/freight.input';
+export { NetOutput, NetOutputSchema } from './common/net.output';
+export {
+  SolidWasteInput,
+  SolidWasteInputSchema,
+} from './common/solid-waste.input';
+export { CottonCrop } from './Cotton/cotton.input';
+export { CottonInput, CottonInputSchema } from './Cotton/input';
+export {
+  CottonIntensitiesOutput,
+  CottonIntensitiesOutputSchema,
+} from './Cotton/intensities.output';
+export {
+  CottonIntermediateOutput,
+  CottonIntermediateOutputSchema,
+} from './Cotton/intermediate.output';
+export { CottonNetOutput, CottonNetOutputSchema } from './Cotton/net.output';
+export { CottonOutput, CottonOutputSchema } from './Cotton/output';
+export {
+  CottonScope1Output,
+  CottonScope1OutputSchema,
+} from './Cotton/scope1.output';
+export {
+  CottonScope3Output,
+  CottonScope3OutputSchema,
+} from './Cotton/scope3.output';
+export { CottonVegetation } from './Cotton/vegetation.input';
+export { AreaUsed } from './Dairy/area.input';
+export { DairyComplete } from './Dairy/dairy.input';
 export { DairyClass } from './Dairy/dairyclass.input';
 export { DairyClasses } from './Dairy/dairyclasses.input';
-export { DairyComplete } from './Dairy/dairy.input';
-export { DairyEmissionsIntensities } from './Dairy/intensities.output';
-export { DairyInput } from './Dairy/input';
-export { DairyInputSchema } from './Dairy/input';
-export { DairyIntermediateOutput } from './Dairy/intermediate.output';
-export { DairyIntermediateOutputSchema } from './Dairy/intermediate.output';
-export { DairyNet } from './Dairy/net.output';
-export { DairyOutput } from './Dairy/output';
-export { DairyOutputSchema } from './Dairy/output';
-export { DairyScope1Output } from './Dairy/scope1.output';
-export { DairyScope1OutputSchema } from './Dairy/scope1.output';
-export { DairyScope3Output } from './Dairy/scope3.output';
-export { DairyScope3OutputSchema } from './Dairy/scope3.output';
 export { DairySeason } from './Dairy/dairyseason.input';
+export { NitrogenFertiliser } from './Dairy/fertiliser.input';
+export { DairyInput, DairyInputSchema } from './Dairy/input';
+export { DairyEmissionsIntensities } from './Dairy/intensities.output';
+export {
+  DairyIntermediateOutput,
+  DairyIntermediateOutputSchema,
+} from './Dairy/intermediate.output';
+export { ManureManagement } from './Dairy/manure.input';
+export { DairyNet } from './Dairy/net.output';
+export { DairyOutput, DairyOutputSchema } from './Dairy/output';
+export {
+  DairyScope1Output,
+  DairyScope1OutputSchema,
+} from './Dairy/scope1.output';
+export {
+  DairyScope3Output,
+  DairyScope3OutputSchema,
+} from './Dairy/scope3.output';
+export { SeasonalFertiliser } from './Dairy/seasonalfertiliser.input';
 export { DairyVegetation } from './Dairy/vegetation.input';
+export { DeerComplete } from './Deer/deer.input';
 export { DeerClass } from './Deer/deerclass.input';
 export { DeerClasses } from './Deer/deerclasses.input';
-export { DeerComplete } from './Deer/deer.input';
-export { DeerEmissionsIntensities } from './Deer/intensities.output';
-export { DeerInput } from './Deer/input';
-export { DeerInputSchema } from './Deer/input';
-export { DeerIntermediateOutput } from './Deer/intermediate.output';
-export { DeerIntermediateOutputSchema } from './Deer/intermediate.output';
-export { DeerNetOutput } from './Deer/net.output';
-export { DeerNetOutputSchema } from './Deer/net.output';
-export { DeerOutput } from './Deer/output';
-export { DeerOutputSchema } from './Deer/output';
-export { DeerScope1Output } from './Deer/scope1.output';
-export { DeerScope1OutputSchema } from './Deer/scope1.output';
-export { DeerScope3Output } from './Deer/scope3.output';
-export { DeerScope3OutputSchema } from './Deer/scope3.output';
 export { DeerSeason } from './Deer/deerseason.input';
-export { DeerVegetation } from './Deer/vegetation.input';
 export { DoesFawningProportion } from './Deer/fawningproportion.input';
-export { EggSale } from './Poultry/eggsale.input';
-export { EwesLambing } from './Sheep/eweslambing.input';
-export { Feed } from './Pork/feed.input';
-export { FeedIngredients } from './Pork/feedingredients.input';
+export { DeerInput, DeerInputSchema } from './Deer/input';
+export { DeerEmissionsIntensities } from './Deer/intensities.output';
+export {
+  DeerIntermediateOutput,
+  DeerIntermediateOutputSchema,
+} from './Deer/intermediate.output';
+export { DeerNetOutput, DeerNetOutputSchema } from './Deer/net.output';
+export { DeerOutput, DeerOutputSchema } from './Deer/output';
+export { DeerScope1Output, DeerScope1OutputSchema } from './Deer/scope1.output';
+export { DeerScope3Output, DeerScope3OutputSchema } from './Deer/scope3.output';
+export { SeasonalFawningRates } from './Deer/seasonalfawning.input';
+export { DeerVegetation } from './Deer/vegetation.input';
 export { FeedlotComplete } from './Feedlot/feedlot.input';
-export { FeedlotEmissionIntensities } from './Feedlot/intensities.output';
 export { FeedlotGroup } from './Feedlot/group.input';
-export { FeedlotInput } from './Feedlot/input';
-export { FeedlotInputSchema } from './Feedlot/input';
-export { FeedlotIntermediateOutput } from './Feedlot/intermediate.output';
-export { FeedlotIntermediateOutputSchema } from './Feedlot/intermediate.output';
-export { FeedlotNetOutput } from './Feedlot/net.output';
-export { FeedlotNetOutputSchema } from './Feedlot/net.output';
-export { FeedlotOutput } from './Feedlot/output';
-export { FeedlotOutputSchema } from './Feedlot/output';
+export {
+  GroupScope1Output,
+  GroupScope1OutputSchema,
+} from './Feedlot/groups.scope1.output';
+export { FeedlotInput, FeedlotInputSchema } from './Feedlot/input';
+export { FeedlotEmissionIntensities } from './Feedlot/intensities.output';
+export {
+  FeedlotIntermediateOutput,
+  FeedlotIntermediateOutputSchema,
+} from './Feedlot/intermediate.output';
+export { FeedlotNetOutput, FeedlotNetOutputSchema } from './Feedlot/net.output';
+export { FeedlotOutput, FeedlotOutputSchema } from './Feedlot/output';
 export { FeedlotPurchase } from './Feedlot/purchase.input';
 export { FeedlotPurchases } from './Feedlot/purchases.input';
 export { FeedlotSale } from './Feedlot/sale.input';
 export { FeedlotSales } from './Feedlot/sales.input';
-export { FeedlotScope1Output } from './Feedlot/scope1.output';
-export { FeedlotScope1OutputSchema } from './Feedlot/scope1.output';
-export { FeedlotScope3Output } from './Feedlot/scope3.output';
-export { FeedlotScope3OutputSchema } from './Feedlot/scope3.output';
+export {
+  FeedlotScope1Output,
+  FeedlotScope1OutputSchema,
+} from './Feedlot/scope1.output';
+export {
+  FeedlotScope3Output,
+  FeedlotScope3OutputSchema,
+} from './Feedlot/scope3.output';
 export { FeedlotStay } from './Feedlot/stay.input';
 export { FeedlotVegetation } from './Feedlot/vegetation.input';
 export { Fertiliser } from './fertiliser.input';
-export { FluidWasteInput } from './common/fluid-waste.input';
-export { FluidWasteInputSchema } from './common/fluid-waste.input';
-export { FreightInput } from './common/freight.input';
-export { FreightInputSchema } from './common/freight.input';
-export { FuelInput } from './fuel.input';
-export { FuelInputSchema } from './fuel.input';
+export { FuelInput, FuelInputSchema } from './fuel.input';
+export { GoatComplete } from './Goat/goat.input';
 export { GoatClass } from './Goat/goatclass.input';
 export { GoatClasses } from './Goat/goatclasses.input';
-export { GoatComplete } from './Goat/goat.input';
-export { GoatEmissionsIntensities } from './Goat/intensities.output';
-export { GoatInput } from './Goat/input';
-export { GoatInputSchema } from './Goat/input';
-export { GoatIntermediateOutput } from './Goat/intermediate.output';
-export { GoatIntermediateOutputSchema } from './Goat/intermediate.output';
-export { GoatNetOutput } from './Goat/net.output';
-export { GoatNetOutputSchema } from './Goat/net.output';
-export { GoatOutput } from './Goat/output';
-export { GoatOutputSchema } from './Goat/output';
-export { GoatScope1Output } from './Goat/scope1.output';
-export { GoatScope1OutputSchema } from './Goat/scope1.output';
-export { GoatScope3Output } from './Goat/scope3.output';
-export { GoatScope3OutputSchema } from './Goat/scope3.output';
 export { GoatSeason } from './Goat/goatseason.input';
+export { GoatInput, GoatInputSchema } from './Goat/input';
+export { GoatEmissionsIntensities } from './Goat/intensities.output';
+export {
+  GoatIntermediateOutput,
+  GoatIntermediateOutputSchema,
+} from './Goat/intermediate.output';
+export { GoatNetOutput, GoatNetOutputSchema } from './Goat/net.output';
+export { GoatOutput, GoatOutputSchema } from './Goat/output';
+export { GoatScope1Output, GoatScope1OutputSchema } from './Goat/scope1.output';
+export { GoatScope3Output, GoatScope3OutputSchema } from './Goat/scope3.output';
 export { GoatVegetation } from './Goat/vegetation.input';
 export { GrainsCrop } from './Grains/crop.input';
-export { GrainsInput } from './Grains/input';
-export { GrainsInputSchema } from './Grains/input';
-export { GrainsIntensitiesOutput } from './Grains/intensities.output';
-export { GrainsIntensitiesOutputSchema } from './Grains/intensities.output';
-export { GrainsIntermediateOutput } from './Grains/intermediate.output';
-export { GrainsIntermediateOutputSchema } from './Grains/intermediate.output';
-export { GrainsNetOutput } from './Grains/net.output';
-export { GrainsNetOutputSchema } from './Grains/net.output';
-export { GrainsOutput } from './Grains/output';
-export { GrainsOutputSchema } from './Grains/output';
-export { GrainsScope1Output } from './Grains/scope1.output';
-export { GrainsScope1OutputSchema } from './Grains/scope1.output';
-export { GrainsScope3Output } from './Grains/scope3.output';
-export { GrainsScope3OutputSchema } from './Grains/scope3.output';
-export { GroupScope1Output } from './Feedlot/groups.scope1.output';
-export { GroupScope1OutputSchema } from './Feedlot/groups.scope1.output';
+export { GrainsInput, GrainsInputSchema } from './Grains/input';
+export {
+  GrainsIntensitiesOutput,
+  GrainsIntensitiesOutputSchema,
+} from './Grains/intensities.output';
+export {
+  GrainsIntermediateOutput,
+  GrainsIntermediateOutputSchema,
+} from './Grains/intermediate.output';
+export { GrainsNetOutput, GrainsNetOutputSchema } from './Grains/net.output';
+export { GrainsOutput, GrainsOutputSchema } from './Grains/output';
+export {
+  GrainsScope1Output,
+  GrainsScope1OutputSchema,
+} from './Grains/scope1.output';
+export {
+  GrainsScope3Output,
+  GrainsScope3OutputSchema,
+} from './Grains/scope3.output';
 export { HorticultureCrop } from './Horticulture/horticulture.input';
-export { HorticultureInput } from './Horticulture/input';
-export { HorticultureInputSchema } from './Horticulture/input';
-export { HorticultureIntensitiesOutput } from './Horticulture/intensities.output';
-export { HorticultureIntensitiesOutputSchema } from './Horticulture/intensities.output';
-export { HorticultureIntermediateOutput } from './Horticulture/intermediate.output';
-export { HorticultureIntermediateOutputSchema } from './Horticulture/intermediate.output';
-export { HorticultureNetOutput } from './Horticulture/net.output';
-export { HorticultureNetOutputSchema } from './Horticulture/net.output';
-export { HorticultureOutput } from './Horticulture/output';
-export { HorticultureOutputSchema } from './Horticulture/output';
+export {
+  HorticultureInput,
+  HorticultureInputSchema,
+} from './Horticulture/input';
+export {
+  HorticultureIntensitiesOutput,
+  HorticultureIntensitiesOutputSchema,
+} from './Horticulture/intensities.output';
+export {
+  HorticultureIntermediateOutput,
+  HorticultureIntermediateOutputSchema,
+} from './Horticulture/intermediate.output';
+export {
+  HorticultureNetOutput,
+  HorticultureNetOutputSchema,
+} from './Horticulture/net.output';
+export {
+  HorticultureOutput,
+  HorticultureOutputSchema,
+} from './Horticulture/output';
 export { HorticultureRefrigerant } from './Horticulture/refrigerant.input';
-export { HorticultureScope1Output } from './Horticulture/scope1.output';
-export { HorticultureScope1OutputSchema } from './Horticulture/scope1.output';
-export { HorticultureScope3Output } from './Horticulture/scope3.output';
-export { HorticultureScope3OutputSchema } from './Horticulture/scope3.output';
+export {
+  HorticultureScope1Output,
+  HorticultureScope1OutputSchema,
+} from './Horticulture/scope1.output';
+export {
+  HorticultureScope3Output,
+  HorticultureScope3OutputSchema,
+} from './Horticulture/scope3.output';
 export { HorticultureVegetation } from './Horticulture/vegetation.input';
-export { LayerClass } from './Poultry/layerclass.input';
-export { LayersComplete } from './Poultry/layers.input';
+export {
+  SequestrationIntermediateOutput,
+  SequestrationIntermediateOutputSchema,
+} from './intermediate.sequestration.output';
+export { LivestockSourceLocation, LivestockSourceLocations } from './livestock';
 export { LivestockManure } from './livestockManure.input';
 export { LivestockManureSeason } from './livestockManureSeason.input';
 export { LivestockPurchase } from './livestockPurchase.input';
-export { LivestockSourceLocation } from './livestock';
-export { LivestockSourceLocations } from './livestock';
-export { ManureManagement } from './Dairy/manure.input';
 export { MineralSupplementation } from './mineral.input';
-export { NetOutput } from './common/net.output';
-export { NetOutputSchema } from './common/net.output';
-export { NitrogenFertiliser } from './Dairy/fertiliser.input';
+export { openapiSchemas } from './openapi';
 export { OtherFertiliser } from './otherFertiliser.input';
+export { Feed } from './Pork/feed.input';
+export { FeedIngredients } from './Pork/feedingredients.input';
+export { PorkInput, PorkInputSchema } from './Pork/input';
+export { PorkEmissionsIntensities } from './Pork/intensities.output';
+export {
+  PorkIntermediateOutput,
+  PorkIntermediateOutputSchema,
+} from './Pork/intermediate.output';
+export { PorkNetOutput, PorkNetOutputSchema } from './Pork/net.output';
+export { PorkOutput, PorkOutputSchema } from './Pork/output';
+export { PorkComplete } from './Pork/pork.input';
 export { PorkClass } from './Pork/porkclass.input';
 export { PorkClasses } from './Pork/porkclasses.input';
-export { PorkComplete } from './Pork/pork.input';
-export { PorkEmissionsIntensities } from './Pork/intensities.output';
-export { PorkInput } from './Pork/input';
-export { PorkInputSchema } from './Pork/input';
-export { PorkIntermediateOutput } from './Pork/intermediate.output';
-export { PorkIntermediateOutputSchema } from './Pork/intermediate.output';
-export { PorkNetOutput } from './Pork/net.output';
-export { PorkNetOutputSchema } from './Pork/net.output';
-export { PorkOutput } from './Pork/output';
-export { PorkOutputSchema } from './Pork/output';
-export { PorkScope1Output } from './Pork/scope1.output';
-export { PorkScope1OutputSchema } from './Pork/scope1.output';
-export { PorkScope3Output } from './Pork/scope3.output';
-export { PorkScope3OutputSchema } from './Pork/scope3.output';
-export { PoultryEmissionsIntensities } from './Poultry/intensities.output';
-export { PoultryEmissionsIntensitiesBroiler } from './Poultry/intensities-broiler.output';
-export { PoultryEmissionsIntensitiesLayer } from './Poultry/intensities-layer.output';
+export { PorkScope1Output, PorkScope1OutputSchema } from './Pork/scope1.output';
+export { PorkScope3Output, PorkScope3OutputSchema } from './Pork/scope3.output';
+export { BroilerClass } from './Poultry/broilerclass.input';
+export { BroilersComplete } from './Poultry/broilers.input';
+export { BroilerSale } from './Poultry/broilersale.input';
+export { EggSale } from './Poultry/eggsale.input';
 export { PoultryFeed } from './Poultry/feed.input';
 export { PoultryFeedIngredients } from './Poultry/feedingredients.input';
-export { PoultryInput } from './Poultry/input';
-export { PoultryInputSchema } from './Poultry/input';
-export { PoultryIntermediateBroilersOutput } from './Poultry/intermediate-broilers.output';
-export { PoultryIntermediateBroilersOutputSchema } from './Poultry/intermediate-broilers.output';
-export { PoultryIntermediateLayersOutput } from './Poultry/intermediate-layers.output';
-export { PoultryIntermediateLayersOutputSchema } from './Poultry/intermediate-layers.output';
+export { BroilerGroup } from './Poultry/group.input';
+export { PoultryInput, PoultryInputSchema } from './Poultry/input';
+export { PoultryEmissionsIntensitiesBroiler } from './Poultry/intensities-broiler.output';
+export { PoultryEmissionsIntensitiesLayer } from './Poultry/intensities-layer.output';
+export { PoultryEmissionsIntensities } from './Poultry/intensities.output';
+export {
+  PoultryIntermediateBroilersOutput,
+  PoultryIntermediateBroilersOutputSchema,
+} from './Poultry/intermediate-broilers.output';
+export {
+  PoultryIntermediateLayersOutput,
+  PoultryIntermediateLayersOutputSchema,
+} from './Poultry/intermediate-layers.output';
+export { LayerClass } from './Poultry/layerclass.input';
+export { LayersComplete } from './Poultry/layers.input';
 export { PoultryNet } from './Poultry/net.output';
-export { PoultryOutput } from './Poultry/output';
-export { PoultryOutputSchema } from './Poultry/output';
+export { PoultryOutput, PoultryOutputSchema } from './Poultry/output';
 export { PoultrySale } from './Poultry/sale.input';
-export { PoultryScope1Output } from './Poultry/scope1.output';
-export { PoultryScope1OutputSchema } from './Poultry/scope1.output';
-export { PoultryScope3Output } from './Poultry/scope3.output';
-export { PoultryScope3OutputSchema } from './Poultry/scope3.output';
+export {
+  PoultryScope1Output,
+  PoultryScope1OutputSchema,
+} from './Poultry/scope1.output';
+export {
+  PoultryScope3Output,
+  PoultryScope3OutputSchema,
+} from './Poultry/scope3.output';
 export { PoultryVegetation } from './Poultry/vegetation.input';
-export { ProcessingInput } from './Processing/input';
-export { ProcessingInputSchema } from './Processing/input';
-export { ProcessingIntensitiesOutput } from './Processing/intensities.output';
-export { ProcessingIntensitiesOutputSchema } from './Processing/intensities.output';
-export { ProcessingIntermediateOutput } from './Processing/intermediate.output';
-export { ProcessingIntermediateOutputSchema } from './Processing/intermediate.output';
-export { ProcessingNetOutput } from './Processing/net.output';
-export { ProcessingNetOutputSchema } from './Processing/net.output';
-export { ProcessingOutput } from './Processing/output';
-export { ProcessingOutputSchema } from './Processing/output';
-export { ProcessingProduct } from './Processing/product.input';
-export { ProcessingScope1Output } from './Processing/scope1.output';
-export { ProcessingScope1OutputSchema } from './Processing/scope1.output';
-export { ProcessingScope3Output } from './Processing/scope3.output';
-export { ProcessingScope3OutputSchema } from './Processing/scope3.output';
-export { ProductProcessingInput } from './Processing/processing.input';
-export { ProductProcessingInputSchema } from './Processing/processing.input';
-export { ProductUnit } from './Processing/product.input';
-export { PurchasedOffsetsOutput } from './purchasedOffsets.output';
-export { PurchasedOffsetsOutputSchema } from './purchasedOffsets.output';
-export { RefrigerantInput } from './refrigerant.input';
-export { RefrigerantInputSchema } from './refrigerant.input';
-export { RiceCrop } from './Rice/rice.input';
+export { ProcessingInput, ProcessingInputSchema } from './Processing/input';
+export {
+  ProcessingIntensitiesOutput,
+  ProcessingIntensitiesOutputSchema,
+} from './Processing/intensities.output';
+export {
+  ProcessingIntermediateOutput,
+  ProcessingIntermediateOutputSchema,
+} from './Processing/intermediate.output';
+export {
+  ProcessingNetOutput,
+  ProcessingNetOutputSchema,
+} from './Processing/net.output';
+export { ProcessingOutput, ProcessingOutputSchema } from './Processing/output';
+export {
+  ProductProcessingInput,
+  ProductProcessingInputSchema,
+} from './Processing/processing.input';
+export { ProcessingProduct, ProductUnit } from './Processing/product.input';
+export {
+  ProcessingScope1Output,
+  ProcessingScope1OutputSchema,
+} from './Processing/scope1.output';
+export {
+  ProcessingScope3Output,
+  ProcessingScope3OutputSchema,
+} from './Processing/scope3.output';
+export {
+  PurchasedOffsetsOutput,
+  PurchasedOffsetsOutputSchema,
+} from './purchasedOffsets.output';
+export { RefrigerantInput, RefrigerantInputSchema } from './refrigerant.input';
+export { RiceInput, RiceInputSchema } from './Rice/input';
 export { RiceEmissionsIntensities } from './Rice/intensities.output';
-export { RiceInput } from './Rice/input';
-export { RiceInputSchema } from './Rice/input';
-export { RiceIntermediateOutput } from './Rice/intermediate.output';
-export { RiceIntermediateOutputSchema } from './Rice/intermediate.output';
-export { RiceNetOutput } from './Rice/net.output';
-export { RiceNetOutputSchema } from './Rice/net.output';
-export { RiceOutput } from './Rice/output';
-export { RiceOutputSchema } from './Rice/output';
-export { RiceScope1Output } from './Rice/scope1.output';
-export { RiceScope1OutputSchema } from './Rice/scope1.output';
-export { RiceScope3Output } from './Rice/scope3.output';
-export { RiceScope3OutputSchema } from './Rice/scope3.output';
+export {
+  RiceIntermediateOutput,
+  RiceIntermediateOutputSchema,
+} from './Rice/intermediate.output';
+export { RiceNetOutput, RiceNetOutputSchema } from './Rice/net.output';
+export { RiceOutput, RiceOutputSchema } from './Rice/output';
+export { RiceCrop } from './Rice/rice.input';
+export { RiceScope1Output, RiceScope1OutputSchema } from './Rice/scope1.output';
+export { RiceScope3Output, RiceScope3OutputSchema } from './Rice/scope3.output';
 export { RiceVegetation } from './Rice/vegetation.input';
-export { SavannahBurning } from './Beef/savannah.input';
-export { Scope2Output } from './scope2.output';
-export { Scope2OutputSchema } from './scope2.output';
-export { SeasonalCalvingRates } from './Buffalo/seasonalcalving.input';
-export { SeasonalFawningRates } from './Deer/seasonalfawning.input';
-export { SeasonalFertiliser } from './Dairy/seasonalfertiliser.input';
+export { Scope2Output, Scope2OutputSchema } from './scope2.output';
+export {
+  SequestrationOutput,
+  SequestrationOutputSchema,
+} from './sequestration.output';
+export {
+  SequestrationTotalOutput,
+  SequestrationTotalOutputSchema,
+} from './sequestration.total.output';
+export { EwesLambing } from './Sheep/eweslambing.input';
+export { SheepInput, SheepInputSchema } from './Sheep/input';
+export { SheepEmissionsIntensities } from './Sheep/intensities.output';
+export {
+  SheepIntermediateOutput,
+  SheepIntermediateOutputSchema,
+} from './Sheep/intermediate.output';
+export {
+  SheepCompleteEmissions,
+  SheepIntermediaryEmissions,
+} from './Sheep/internal';
+export { SheepNet } from './Sheep/net.output';
+export { SheepOutput, SheepOutputSchema } from './Sheep/output';
+export {
+  SheepScope1Output,
+  SheepScope1OutputSchema,
+} from './Sheep/scope1.output';
+export {
+  SheepScope3Output,
+  SheepScope3OutputSchema,
+} from './Sheep/scope3.output';
 export { SeasonalLambing } from './Sheep/seasonallambing.input';
-export { SequestrationIntermediateOutput } from './intermediate.sequestration.output';
-export { SequestrationIntermediateOutputSchema } from './intermediate.sequestration.output';
-export { SequestrationOutput } from './sequestration.output';
-export { SequestrationOutputSchema } from './sequestration.output';
-export { SequestrationTotalOutput } from './sequestration.total.output';
-export { SequestrationTotalOutputSchema } from './sequestration.total.output';
-export { SheepBeefEmissionsIntensities } from './SheepBeef/intensities.output';
-export { SheepBeefInput } from './SheepBeef/input';
-export { SheepBeefInputSchema } from './SheepBeef/input';
-export { SheepBeefIntermediateOutput } from './SheepBeef/intermediate.output';
-export { SheepBeefIntermediateOutputSchema } from './SheepBeef/intermediate.output';
-export { SheepBeefNet } from './SheepBeef/net.output';
-export { SheepBeefOutput } from './SheepBeef/output';
-export { SheepBeefOutputSchema } from './SheepBeef/output';
-export { SheepBeefScope1Output } from './SheepBeef/scope1.output';
-export { SheepBeefScope1OutputSchema } from './SheepBeef/scope1.output';
-export { SheepBeefScope3Output } from './SheepBeef/scope3.output';
-export { SheepBeefScope3OutputSchema } from './SheepBeef/scope3.output';
-export { SheepBeefVegetation } from './SheepBeef/vegetation.input';
+export { SheepComplete } from './Sheep/sheep.input';
 export { SheepClass } from './Sheep/sheepclass.input';
 export { SheepClasses } from './Sheep/sheepclasses.input';
-export { SheepComplete } from './Sheep/sheep.input';
-export { SheepCompleteEmissions } from './Sheep/internal';
-export { SheepEmissionsIntensities } from './Sheep/intensities.output';
-export { SheepInput } from './Sheep/input';
-export { SheepInputSchema } from './Sheep/input';
-export { SheepIntermediaryEmissions } from './Sheep/internal';
-export { SheepIntermediateOutput } from './Sheep/intermediate.output';
-export { SheepIntermediateOutputSchema } from './Sheep/intermediate.output';
-export { SheepNet } from './Sheep/net.output';
-export { SheepOutput } from './Sheep/output';
-export { SheepOutputSchema } from './Sheep/output';
-export { SheepScope1Output } from './Sheep/scope1.output';
-export { SheepScope1OutputSchema } from './Sheep/scope1.output';
-export { SheepScope3Output } from './Sheep/scope3.output';
-export { SheepScope3OutputSchema } from './Sheep/scope3.output';
 export { SheepSeason } from './Sheep/sheepseason.input';
-export { SheepSummaryOutput } from './SheepBeef/sheep-summary.output';
-export { SheepSummaryOutputSchema } from './SheepBeef/sheep-summary.output';
 export { SheepVegetation } from './Sheep/vegetation.input';
-export { SolidWasteInput } from './common/solid-waste.input';
-export { SolidWasteInputSchema } from './common/solid-waste.input';
-export { StationaryFuelInput } from './stationaryFuel.input';
-export { StationaryFuelInputSchema } from './stationaryFuel.input';
+export {
+  BeefSummaryOutput,
+  BeefSummaryOutputSchema,
+} from './SheepBeef/beef-summary.output';
+export { SheepBeefInput, SheepBeefInputSchema } from './SheepBeef/input';
+export { SheepBeefEmissionsIntensities } from './SheepBeef/intensities.output';
+export {
+  SheepBeefIntermediateOutput,
+  SheepBeefIntermediateOutputSchema,
+} from './SheepBeef/intermediate.output';
+export { SheepBeefNet } from './SheepBeef/net.output';
+export { SheepBeefOutput, SheepBeefOutputSchema } from './SheepBeef/output';
+export {
+  SheepBeefScope1Output,
+  SheepBeefScope1OutputSchema,
+} from './SheepBeef/scope1.output';
+export {
+  SheepBeefScope3Output,
+  SheepBeefScope3OutputSchema,
+} from './SheepBeef/scope3.output';
+export {
+  SheepSummaryOutput,
+  SheepSummaryOutputSchema,
+} from './SheepBeef/sheep-summary.output';
+export { SheepBeefVegetation } from './SheepBeef/vegetation.input';
+export {
+  StationaryFuelInput,
+  StationaryFuelInputSchema,
+} from './stationaryFuel.input';
+export { SugarInput, SugarInputSchema } from './Sugar/input';
+export {
+  SugarIntensitiesOutput,
+  SugarIntensitiesOutputSchema,
+} from './Sugar/intensities.output';
+export {
+  SugarIntermediateOutput,
+  SugarIntermediateOutputSchema,
+} from './Sugar/intermediate.output';
+export { SugarNetOutput, SugarNetOutputSchema } from './Sugar/net.output';
+export { SugarOutput, SugarOutputSchema } from './Sugar/output';
+export {
+  SugarScope1Output,
+  SugarScope1OutputSchema,
+} from './Sugar/scope1.output';
+export {
+  SugarScope3Output,
+  SugarScope3OutputSchema,
+} from './Sugar/scope3.output';
 export { SugarCrop } from './Sugar/sugar.input';
-export { SugarInput } from './Sugar/input';
-export { SugarInputSchema } from './Sugar/input';
-export { SugarIntensitiesOutput } from './Sugar/intensities.output';
-export { SugarIntensitiesOutputSchema } from './Sugar/intensities.output';
-export { SugarIntermediateOutput } from './Sugar/intermediate.output';
-export { SugarIntermediateOutputSchema } from './Sugar/intermediate.output';
-export { SugarNetOutput } from './Sugar/net.output';
-export { SugarNetOutputSchema } from './Sugar/net.output';
-export { SugarOutput } from './Sugar/output';
-export { SugarOutputSchema } from './Sugar/output';
-export { SugarScope1Output } from './Sugar/scope1.output';
-export { SugarScope1OutputSchema } from './Sugar/scope1.output';
-export { SugarScope3Output } from './Sugar/scope3.output';
-export { SugarScope3OutputSchema } from './Sugar/scope3.output';
 export { SugarVegetation } from './Sugar/vegetation.input';
-export { TransportFuelInput } from './transportFuel.input';
-export { TransportFuelInputSchema } from './transportFuel.input';
+export {
+  TransportFuelInput,
+  TransportFuelInputSchema,
+} from './transportFuel.input';
 export { Vegetation } from './vegetation.input';
-export { VineyardCrop } from './Vineyard/vineyard.input';
-export { VineyardInput } from './Vineyard/input';
-export { VineyardInputSchema } from './Vineyard/input';
-export { VineyardIntensitiesOutput } from './Vineyard/intensities.output';
-export { VineyardIntensitiesOutputSchema } from './Vineyard/intensities.output';
-export { VineyardIntermediateOutput } from './Vineyard/intermediate.output';
-export { VineyardIntermediateOutputSchema } from './Vineyard/intermediate.output';
-export { VineyardNetOutput } from './Vineyard/net.output';
-export { VineyardNetOutputSchema } from './Vineyard/net.output';
-export { VineyardOutput } from './Vineyard/output';
-export { VineyardOutputSchema } from './Vineyard/output';
-export { VineyardScope1Output } from './Vineyard/scope1.output';
-export { VineyardScope1OutputSchema } from './Vineyard/scope1.output';
-export { VineyardScope3Output } from './Vineyard/scope3.output';
-export { VineyardScope3OutputSchema } from './Vineyard/scope3.output';
+export { VineyardInput, VineyardInputSchema } from './Vineyard/input';
+export {
+  VineyardIntensitiesOutput,
+  VineyardIntensitiesOutputSchema,
+} from './Vineyard/intensities.output';
+export {
+  VineyardIntermediateOutput,
+  VineyardIntermediateOutputSchema,
+} from './Vineyard/intermediate.output';
+export {
+  VineyardNetOutput,
+  VineyardNetOutputSchema,
+} from './Vineyard/net.output';
+export { VineyardOutput, VineyardOutputSchema } from './Vineyard/output';
+export {
+  VineyardScope1Output,
+  VineyardScope1OutputSchema,
+} from './Vineyard/scope1.output';
+export {
+  VineyardScope3Output,
+  VineyardScope3OutputSchema,
+} from './Vineyard/scope3.output';
 export { VineyardVegetation } from './Vineyard/vineyard-vegetation.input';
+export { VineyardCrop } from './Vineyard/vineyard.input';
 export { WildCatchFisheryBaitPurchase } from './WildCatchFishery/baitpurchase.input';
 export { WildCatchFisheryCustomBaitPurchase } from './WildCatchFishery/custombaitpurchase.input';
-export { WildCatchFisheryEnterpriseInput } from './WildCatchFishery/wildcatchfishery.input';
-export { WildCatchFisheryEnterpriseInputSchema } from './WildCatchFishery/wildcatchfishery.input';
-export { WildCatchFisheryInput } from './WildCatchFishery/input';
-export { WildCatchFisheryInputSchema } from './WildCatchFishery/input';
-export { WildCatchFisheryIntensitiesOutput } from './WildCatchFishery/intensities.output';
-export { WildCatchFisheryIntensitiesOutputSchema } from './WildCatchFishery/intensities.output';
-export { WildCatchFisheryIntermediateOutput } from './WildCatchFishery/intermediate.output';
-export { WildCatchFisheryIntermediateOutputSchema } from './WildCatchFishery/intermediate.output';
-export { WildCatchFisheryOutput } from './WildCatchFishery/output';
-export { WildCatchFisheryOutputSchema } from './WildCatchFishery/output';
-export { WildCatchFisheryProductionSystem } from './WildCatchFishery/wildcatchfishery.input';
-export { WildCatchFisheryScope1Output } from './WildCatchFishery/scope1.output';
-export { WildCatchFisheryScope1OutputSchema } from './WildCatchFishery/scope1.output';
-export { WildCatchFisheryScope3Output } from './WildCatchFishery/scope3.output';
-export { WildCatchFisheryScope3OutputSchema } from './WildCatchFishery/scope3.output';
+export {
+  WildCatchFisheryInput,
+  WildCatchFisheryInputSchema,
+} from './WildCatchFishery/input';
+export {
+  WildCatchFisheryIntensitiesOutput,
+  WildCatchFisheryIntensitiesOutputSchema,
+} from './WildCatchFishery/intensities.output';
+export {
+  WildCatchFisheryIntermediateOutput,
+  WildCatchFisheryIntermediateOutputSchema,
+} from './WildCatchFishery/intermediate.output';
+export {
+  WildCatchFisheryOutput,
+  WildCatchFisheryOutputSchema,
+} from './WildCatchFishery/output';
+export {
+  WildCatchFisheryScope1Output,
+  WildCatchFisheryScope1OutputSchema,
+} from './WildCatchFishery/scope1.output';
+export {
+  WildCatchFisheryScope3Output,
+  WildCatchFisheryScope3OutputSchema,
+} from './WildCatchFishery/scope3.output';
+export {
+  WildCatchFisheryEnterpriseInput,
+  WildCatchFisheryEnterpriseInputSchema,
+  WildCatchFisheryProductionSystem,
+} from './WildCatchFishery/wildcatchfishery.input';
 export { WildSeaFisheriesBaitPurchase } from './WildSeaFisheries/baitpurchase.input';
 export { WildSeaFisheriesCommercialFlight } from './WildSeaFisheries/commercialflight.input';
 export { WildSeaFisheriesCustomBaitPurchase } from './WildSeaFisheries/custombaitpurchase.input';
 export { WildSeaFisheriesEnterprise } from './WildSeaFisheries/enterprise.input';
-export { WildSeaFisheriesInput } from './WildSeaFisheries/input';
-export { WildSeaFisheriesInputSchema } from './WildSeaFisheries/input';
-export { WildSeaFisheriesIntensitiesOutput } from './WildSeaFisheries/intensities.output';
-export { WildSeaFisheriesIntensitiesOutputSchema } from './WildSeaFisheries/intensities.output';
-export { WildSeaFisheriesIntermediateOutput } from './WildSeaFisheries/intermediate.output';
-export { WildSeaFisheriesIntermediateOutputSchema } from './WildSeaFisheries/intermediate.output';
-export { WildSeaFisheriesNetOutput } from './WildSeaFisheries/net.output';
-export { WildSeaFisheriesNetOutputSchema } from './WildSeaFisheries/net.output';
-export { WildSeaFisheriesOutput } from './WildSeaFisheries/output';
-export { WildSeaFisheriesOutputSchema } from './WildSeaFisheries/output';
+export {
+  WildSeaFisheriesInput,
+  WildSeaFisheriesInputSchema,
+} from './WildSeaFisheries/input';
+export {
+  WildSeaFisheriesIntensitiesOutput,
+  WildSeaFisheriesIntensitiesOutputSchema,
+} from './WildSeaFisheries/intensities.output';
+export {
+  WildSeaFisheriesIntermediateOutput,
+  WildSeaFisheriesIntermediateOutputSchema,
+} from './WildSeaFisheries/intermediate.output';
+export {
+  WildSeaFisheriesNetOutput,
+  WildSeaFisheriesNetOutputSchema,
+} from './WildSeaFisheries/net.output';
+export {
+  WildSeaFisheriesOutput,
+  WildSeaFisheriesOutputSchema,
+} from './WildSeaFisheries/output';
 export { WildSeaFisheriesRefrigerant } from './WildSeaFisheries/refrigerant.input';
-export { WildSeaFisheriesScope1Output } from './WildSeaFisheries/scope1.output';
-export { WildSeaFisheriesScope1OutputSchema } from './WildSeaFisheries/scope1.output';
-export { WildSeaFisheriesScope3Output } from './WildSeaFisheries/scope3.output';
-export { WildSeaFisheriesScope3OutputSchema } from './WildSeaFisheries/scope3.output';
+export {
+  WildSeaFisheriesScope1Output,
+  WildSeaFisheriesScope1OutputSchema,
+} from './WildSeaFisheries/scope1.output';
+export {
+  WildSeaFisheriesScope3Output,
+  WildSeaFisheriesScope3OutputSchema,
+} from './WildSeaFisheries/scope3.output';
 export { WildSeaFisheriesTransport } from './WildSeaFisheries/transport.input';
 export { WildSeaFisheriesVegetation } from './WildSeaFisheries/vegetation.input';
-export { openapiSchemas } from './openapi';
