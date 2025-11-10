@@ -1,5 +1,5 @@
 import { BuffaloClasses } from '@/types/Buffalo/buffaloclasses.input';
-import { BuffaloClassesAPI } from '@/types/types';
+import { BuffaloClassesAPI } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForBuffaloCalculator } from './constants';
 

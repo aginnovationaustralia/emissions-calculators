@@ -1,5 +1,5 @@
 import { CottonInputSchema } from '@/types/Cotton/input';
-import { CustomisedFertiliser } from '@/types/types';
+import { CustomisedFertiliser } from '@/types/enums';
 import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/calculators';
 import { cottonTestData } from './cotton.data';

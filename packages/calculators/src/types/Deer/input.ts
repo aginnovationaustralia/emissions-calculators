@@ -1,4 +1,4 @@
-import { States } from '@/types/types';
+import { States } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { singleEnterpriseInput } from '../schemas';

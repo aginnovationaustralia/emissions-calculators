@@ -3,8 +3,8 @@ import { AquacultureInput } from '@/types/Aquaculture/input';
 import { AquacultureOutput } from '@/types/Aquaculture/output';
 import { AquacultureScope1Output } from '@/types/Aquaculture/scope1.output';
 import { AquacultureScope3Output } from '@/types/Aquaculture/scope3.output';
+import { State } from '@/types/enums';
 import { Scope2Output } from '@/types/scope2.output';
-import { State } from '@/types/types';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {
   calculateCommercialFlights,

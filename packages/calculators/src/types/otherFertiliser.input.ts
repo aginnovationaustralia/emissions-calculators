@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CustomisedFertilisers } from './types';
+import { CustomisedFertilisers } from './enums';
 
 export const OtherFertiliserSchema = z
   .object({

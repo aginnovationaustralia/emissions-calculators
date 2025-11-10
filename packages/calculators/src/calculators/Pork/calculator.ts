@@ -2,7 +2,7 @@ import { PorkInput } from '@/types/Pork/input';
 import { PorkOutput } from '@/types/Pork/output';
 import { PorkComplete } from '@/types/Pork/pork.input';
 import { PorkClasses } from '@/types/Pork/porkclasses.input';
-import { State } from '@/types/types';
+import { State } from '@/types/enums';
 import {
   calculateScope3Fertiliser,
   mergeOtherFertilisers,

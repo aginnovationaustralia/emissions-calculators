@@ -3,7 +3,7 @@ import {
   States,
   WaterRegimeSubTypes,
   WaterRegimeTypes,
-} from '@/types/types';
+} from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { proportion, singleEnterpriseInput } from '../schemas';

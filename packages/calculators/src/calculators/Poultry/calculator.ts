@@ -3,7 +3,7 @@ import { BroilerSale } from '@/types/Poultry/broilersale.input';
 import { PoultryInput } from '@/types/Poultry/input';
 import { LayersComplete } from '@/types/Poultry/layers.input';
 import { PoultryOutput } from '@/types/Poultry/output';
-import { State } from '@/types/types';
+import { State } from '@/types/enums';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import { calculateFuelScope1AllLPG } from '../common-legacy/fuel';

@@ -1,5 +1,5 @@
 import { SheepBeefInputSchema } from '@/types/SheepBeef/input';
-import { CustomisedFertiliser } from '@/types/types';
+import { CustomisedFertiliser } from '@/types/enums';
 import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/calculators';
 import { beefTestInput } from '../Beef/beef.data';

@@ -1,7 +1,7 @@
+import { SheepClassesAPI, State } from '@/types/enums';
 import { SheepInput } from '@/types/Sheep/input';
 import { SheepOutput } from '@/types/Sheep/output';
 import { SheepComplete } from '@/types/Sheep/sheep.input';
-import { SheepClassesAPI, State } from '@/types/types';
 import {
   calculateScope3Fertiliser,
   mergeOtherFertilisers,

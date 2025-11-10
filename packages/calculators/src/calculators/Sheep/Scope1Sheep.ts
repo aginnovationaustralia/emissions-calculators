@@ -1,4 +1,5 @@
 import { SEASONS } from '@/constants/constants';
+import { Season, SheepClassesAPI, State } from '@/types/enums';
 import { Fertiliser } from '@/types/fertiliser.input';
 import { EwesLambing } from '@/types/Sheep/eweslambing.input';
 import {
@@ -7,7 +8,6 @@ import {
 } from '@/types/Sheep/internal';
 import { SeasonalLambing } from '@/types/Sheep/seasonallambing.input';
 import { SheepClasses } from '@/types/Sheep/sheepclasses.input';
-import { Season, SheepClassesAPI, State } from '@/types/types';
 import { getOtherFertiliserAmounts } from '../../calculators/common/fertiliser';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForSheepCalculator } from './constants';

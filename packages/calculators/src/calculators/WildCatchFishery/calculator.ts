@@ -1,5 +1,5 @@
+import { State } from '@/types/enums';
 import { Scope2Output } from '@/types/scope2.output';
-import { State } from '@/types/types';
 import { WildCatchFisheryInput } from '@/types/WildCatchFishery/input';
 import { WildCatchFisheryOutput } from '@/types/WildCatchFishery/output';
 import { WildCatchFisheryScope1Output } from '@/types/WildCatchFishery/scope1.output';

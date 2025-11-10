@@ -1,7 +1,7 @@
+import { GoatClassesAPI, State } from '@/types/enums';
 import { GoatComplete } from '@/types/Goat/goat.input';
 import { GoatInput } from '@/types/Goat/input';
 import { GoatOutput } from '@/types/Goat/output';
-import { GoatClassesAPI, State } from '@/types/types';
 import {
   calculateScope3Fertiliser,
   mergeOtherFertilisers,

@@ -1,4 +1,4 @@
-import { ElectricitySources } from '@/types/types';
+import { ElectricitySources } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { LivestockPurchaseSchema } from '../livestockPurchase.input';

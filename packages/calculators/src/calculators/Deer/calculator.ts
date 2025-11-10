@@ -5,7 +5,7 @@ import {
 import { DeerComplete } from '@/types/Deer/deer.input';
 import { DeerInput } from '@/types/Deer/input';
 import { DeerOutput } from '@/types/Deer/output';
-import { DeerClassesAPI, State } from '@/types/types';
+import { DeerClassesAPI, State } from '@/types/enums';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {

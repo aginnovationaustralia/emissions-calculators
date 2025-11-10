@@ -1,4 +1,4 @@
-import { WildCatchFisheryBait } from '@/types/types';
+import { WildCatchFisheryBait } from '@/types/enums';
 import { z } from 'zod';
 import { proportion } from '../schemas';
 

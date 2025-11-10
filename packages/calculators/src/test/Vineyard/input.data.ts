@@ -3,7 +3,7 @@ import {
   FreightTypes,
   StationaryFuelTypes,
   TransportFuelTypes,
-} from '@/types/types';
+} from '@/types/enums';
 import { VineyardInput } from '@/types/Vineyard/input';
 
 export const vineyardTestData: VineyardInput = {

@@ -4,7 +4,7 @@ import {
   PoultryClass,
   Season,
   SheepClassesAPI,
-} from '@/types/types';
+} from '@/types/enums';
 
 // Used for calving calculations where we need to also get the previous season
 export const SEASONS_AFTER = {

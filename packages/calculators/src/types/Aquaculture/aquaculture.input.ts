@@ -2,7 +2,7 @@ import {
   AquacultureProductionSystem,
   ElectricitySources,
   States,
-} from '@/types/types';
+} from '@/types/enums';
 import { z } from 'zod';
 import { FluidWasteInputSchema } from '../common/fluid-waste.input';
 import { FreightInputSchema } from '../common/freight.input';

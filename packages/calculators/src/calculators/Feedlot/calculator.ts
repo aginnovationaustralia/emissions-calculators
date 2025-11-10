@@ -1,7 +1,7 @@
+import { State } from '@/types/enums';
 import { FeedlotComplete } from '@/types/Feedlot/feedlot.input';
 import { FeedlotInput } from '@/types/Feedlot/input';
 import { FeedlotOutput } from '@/types/Feedlot/output';
-import { State } from '@/types/types';
 import {
   calculateScope3Fertiliser,
   mergeOtherFertilisers,

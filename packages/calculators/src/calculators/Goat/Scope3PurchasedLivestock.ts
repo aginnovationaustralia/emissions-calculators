@@ -1,5 +1,5 @@
 import { GoatClasses } from '@/types/Goat/goatclasses.input';
-import { GoatClassesAPI } from '@/types/types';
+import { GoatClassesAPI } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForGoatCalculator } from './constants';
 

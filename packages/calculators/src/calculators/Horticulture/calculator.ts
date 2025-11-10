@@ -1,8 +1,8 @@
+import { State } from '@/types/enums';
 import { HorticultureCrop } from '@/types/Horticulture/horticulture.input';
 import { HorticultureInput } from '@/types/Horticulture/input';
 import { HorticultureOutput } from '@/types/Horticulture/output';
 import { HorticultureVegetation } from '@/types/Horticulture/vegetation.input';
-import { State } from '@/types/types';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {

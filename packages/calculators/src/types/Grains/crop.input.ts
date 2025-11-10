@@ -1,4 +1,4 @@
-import { CropTypes, ProductionSystems, States } from '@/types/types';
+import { CropTypes, ProductionSystems, States } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { proportion, singleEnterpriseInput } from '../schemas';

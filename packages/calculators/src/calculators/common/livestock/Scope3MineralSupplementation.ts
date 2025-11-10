@@ -1,5 +1,5 @@
+import { SupplementationType } from '@/types/enums';
 import { MineralSupplementation } from '@/types/mineral.input';
-import { SupplementationType } from '@/types/types';
 import { ExecutionContext } from '../../executionContext';
 
 export function getSupplementUreaCalculation(

@@ -1,5 +1,5 @@
+import { State, StationaryFuelTypes, TransportFuelTypes } from '@/types/enums';
 import { FuelInput } from '@/types/fuel.input';
-import { State, StationaryFuelTypes, TransportFuelTypes } from '@/types/types';
 import { ExecutionContext } from '../../executionContext';
 import { swapObjectKeysAndValues } from '../tools/object';
 

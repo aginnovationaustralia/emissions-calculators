@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
-import { StationaryFuelTypes } from './types';
+import { StationaryFuelTypes } from './enums';
 
 export const StationaryFuelInputSchema = z.object({
   type: z

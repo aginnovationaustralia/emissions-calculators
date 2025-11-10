@@ -1,6 +1,6 @@
 import { calculateFreight } from '@/calculators/common/freight';
 import { FreightInput } from '@/types/common/freight.input';
-import { FreightTypes } from '@/types/types';
+import { FreightTypes } from '@/types/enums';
 import { testContext } from './context';
 import { defaultPrecision } from './emissions';
 

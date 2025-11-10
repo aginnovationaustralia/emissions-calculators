@@ -1,4 +1,4 @@
-import { CropType, State } from '@/types/types';
+import { CropType, State } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForGrainsCalculator } from './constants';
 

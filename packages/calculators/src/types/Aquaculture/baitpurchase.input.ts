@@ -1,4 +1,4 @@
-import { AquacultureBait } from '@/types/types';
+import { AquacultureBait } from '@/types/enums';
 import { z } from 'zod';
 import { proportion } from '../schemas';
 

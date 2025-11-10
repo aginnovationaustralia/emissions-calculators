@@ -1,7 +1,7 @@
 import { calculateScope1And3Fuel } from '@/calculators/common/fuel';
+import { State, StationaryFuelTypes, TransportFuelTypes } from '@/types/enums';
 import { StationaryFuelInput } from '@/types/stationaryFuel.input';
 import { TransportFuelInput } from '@/types/transportFuel.input';
-import { State, StationaryFuelTypes, TransportFuelTypes } from '@/types/types';
 import { testContext } from './context';
 import { defaultPrecision } from './emissions';
 

@@ -1,5 +1,5 @@
 import { BroilerGroup } from '@/types/Poultry/group.input';
-import { PoultryClass, State } from '@/types/types';
+import { PoultryClass, State } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForPoultryCalculator } from './constants';
 import { getBroilerTotalBirdNumbers } from './functions';

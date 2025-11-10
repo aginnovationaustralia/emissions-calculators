@@ -1,5 +1,5 @@
 import { DeerClasses } from '@/types/Deer/deerclasses.input';
-import { DeerClassesAPI } from '@/types/types';
+import { DeerClassesAPI } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForDeerCalculator } from './constants';
 

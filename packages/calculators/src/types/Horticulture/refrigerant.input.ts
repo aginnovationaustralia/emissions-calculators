@@ -1,4 +1,4 @@
-import { Refrigerants } from '@/types/types';
+import { Refrigerants } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 

@@ -1,6 +1,6 @@
 import { LayerClass } from '@/types/Poultry/layerclass.input';
 import { LayersComplete } from '@/types/Poultry/layers.input';
-import { Seasons } from '@/types/types';
+import { Seasons } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForPoultryCalculator } from './constants';
 import {

@@ -1,5 +1,5 @@
 import { FeedlotStay } from '@/types/Feedlot/stay.input';
-import { State } from '@/types/types';
+import { State } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForFeedlotCalculator } from './constants';
 

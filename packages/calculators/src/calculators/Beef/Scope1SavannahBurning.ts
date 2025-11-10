@@ -1,5 +1,5 @@
 import { SavannahBurning } from '@/types/Beef/savannah.input';
-import { State, VegetationClassNumber } from '@/types/types';
+import { State, VegetationClassNumber } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForBeefCalculator } from './constants';
 

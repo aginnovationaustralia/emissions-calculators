@@ -1,4 +1,4 @@
-import { TruckType } from '@/types/types';
+import { TruckType } from '@/types/enums';
 import { ExecutionContext } from '../../executionContext';
 
 export function calculateScope1TransportBase(

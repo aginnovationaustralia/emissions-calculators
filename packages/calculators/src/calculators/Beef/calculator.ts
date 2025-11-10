@@ -9,8 +9,8 @@ import { BeefOutput } from '@/types/Beef/output';
 import { SavannahBurning } from '@/types/Beef/savannah.input';
 import { BeefScope1Output } from '@/types/Beef/scope1.output';
 import { BeefScope3Output } from '@/types/Beef/scope3.output';
+import { BeefClassesAPI, State } from '@/types/enums';
 import { Scope2Output } from '@/types/scope2.output';
-import { BeefClassesAPI, State } from '@/types/types';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {

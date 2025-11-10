@@ -1,4 +1,4 @@
-import { FeedlotPurchaseSourceLocations } from '@/types/types';
+import { FeedlotPurchaseSourceLocations } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 

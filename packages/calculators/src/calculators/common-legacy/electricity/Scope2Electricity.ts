@@ -1,4 +1,4 @@
-import { ElectricitySource, State } from '@/types/types';
+import { ElectricitySource, State } from '@/types/enums';
 import { ExecutionContext } from '../../executionContext';
 
 /**

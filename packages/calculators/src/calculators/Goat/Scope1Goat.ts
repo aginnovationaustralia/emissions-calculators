@@ -1,7 +1,7 @@
 import { SEASONS } from '@/constants/constants';
+import { GoatClassAPI, GoatClassesAPI, Season, State } from '@/types/enums';
 import { Fertiliser } from '@/types/fertiliser.input';
 import { GoatClasses } from '@/types/Goat/goatclasses.input';
-import { GoatClassAPI, GoatClassesAPI, Season, State } from '@/types/types';
 import { getOtherFertiliserAmounts } from '../../calculators/common/fertiliser';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForGoatCalculator } from './constants';

@@ -1,8 +1,8 @@
+import { State } from '@/types/enums';
 import { SugarInput } from '@/types/Sugar/input';
 import { SugarOutput } from '@/types/Sugar/output';
 import { SugarCrop } from '@/types/Sugar/sugar.input';
 import { SugarVegetation } from '@/types/Sugar/vegetation.input';
-import { State } from '@/types/types';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {

@@ -1,8 +1,8 @@
 import { getOtherFertiliserAmounts } from '@/calculators/common/fertiliser';
 import { SEASONS } from '@/constants/constants';
 import { DeerComplete } from '@/types/Deer/deer.input';
+import { DeerClassesAPI, State } from '@/types/enums';
 import { Fertiliser } from '@/types/fertiliser.input';
-import { DeerClassesAPI, State } from '@/types/types';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForDeerCalculator } from './constants';
 import { getLeachingOtherDryland } from './functions';

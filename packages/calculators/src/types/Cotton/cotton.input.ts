@@ -1,4 +1,4 @@
-import { CustomisedFertilisers, States } from '@/types/types';
+import { CustomisedFertilisers, States } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { deprecated, proportion, singleEnterpriseInput } from '../schemas';

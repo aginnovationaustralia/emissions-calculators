@@ -1,7 +1,7 @@
 import { z } from 'zod';
+import { CustomisedFertilisers } from './enums';
 import { OtherFertiliserSchema } from './otherFertiliser.input';
 import { deprecated } from './schemas';
-import { CustomisedFertilisers } from './types';
 
 export const FertiliserSchema = z
   .object({

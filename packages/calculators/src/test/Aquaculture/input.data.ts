@@ -6,7 +6,7 @@ import {
   FreightTypes,
   StationaryFuelTypes,
   TransportFuelTypes,
-} from '@/types/types';
+} from '@/types/enums';
 
 export const aquacultureTestData: AquacultureInput = {
   // input tab

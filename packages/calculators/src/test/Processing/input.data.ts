@@ -1,6 +1,6 @@
 import { ProcessingInput } from '@/types/Processing/input';
 import { ProductUnit } from '@/types/Processing/product.input';
-import { FluidWasteTreatmentType, StationaryFuelTypes } from '@/types/types';
+import { FluidWasteTreatmentType, StationaryFuelTypes } from '@/types/enums';
 
 export const processingTestData: ProcessingInput = {
   // input tab

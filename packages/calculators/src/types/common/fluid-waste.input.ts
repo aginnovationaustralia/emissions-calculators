@@ -1,4 +1,4 @@
-import { FluidWasteTreatmentType } from '@/types/types';
+import { FluidWasteTreatmentType } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { proportion } from '../schemas';

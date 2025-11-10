@@ -2,7 +2,7 @@ import { VineyardInput } from '@/types/Vineyard/input';
 import { VineyardOutput } from '@/types/Vineyard/output';
 import { VineyardVegetation } from '@/types/Vineyard/vineyard-vegetation.input';
 import { VineyardCrop } from '@/types/Vineyard/vineyard.input';
-import { State } from '@/types/types';
+import { State } from '@/types/enums';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateScope3Fertiliser } from '../Grains/Scope3Fertiliser';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';

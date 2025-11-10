@@ -1,6 +1,6 @@
 import { DAYS_IN_SEASON, PORK_CLASSES, SEASONS } from '@/constants/constants';
+import { ManureManagementSystems, PorkClass, State } from '@/types/enums';
 import { LivestockManure } from '@/types/livestockManure.input';
-import { ManureManagementSystems, PorkClass, State } from '@/types/types';
 import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForPorkCalculator } from './constants';

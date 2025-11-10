@@ -1,4 +1,4 @@
-import { DairyProductionSystems, States } from '@/types/types';
+import { DairyProductionSystems, States } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { singleEnterpriseInput } from '../schemas';

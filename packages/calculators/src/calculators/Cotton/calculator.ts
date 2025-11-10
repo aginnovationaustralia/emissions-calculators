@@ -2,7 +2,7 @@ import { CottonCrop } from '@/types/Cotton/cotton.input';
 import { CottonInput } from '@/types/Cotton/input';
 import { CottonOutput } from '@/types/Cotton/output';
 import { CottonVegetation } from '@/types/Cotton/vegetation.input';
-import { State } from '@/types/types';
+import { State } from '@/types/enums';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {

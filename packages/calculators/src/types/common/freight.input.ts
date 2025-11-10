@@ -1,4 +1,4 @@
-import { FreightTypes } from '@/types/types';
+import { FreightTypes } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 

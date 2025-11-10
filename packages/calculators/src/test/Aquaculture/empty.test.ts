@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { AquacultureEnterpriseInput, AquacultureInput } from '@/types';
 import { AquacultureOutput } from '@/types/Aquaculture/output';
-import { AquacultureProductionSystem } from '@/types/types';
+import { AquacultureProductionSystem } from '@/types/enums';
 import { calculateAquaculture } from '../../calculators/Aquaculture/calculator';
 import { testContext } from '../common/context';
 import { executeEmissionsSpec, KeyValuePairs } from '../common/emissions';

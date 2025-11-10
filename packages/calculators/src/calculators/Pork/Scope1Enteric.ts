@@ -1,5 +1,5 @@
 import { PORK_CLASSES, SEASONS } from '@/constants/constants';
-import { PorkClass, Season } from '@/types/types';
+import { PorkClass, Season } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForPorkCalculator } from './constants';
 

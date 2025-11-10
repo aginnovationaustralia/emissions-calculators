@@ -1,5 +1,5 @@
 import { GrainsCrop } from '@/types/Grains/crop.input';
-import { CropType } from '@/types/types';
+import { CropType } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForGrainsCalculator } from './constants';
 import {

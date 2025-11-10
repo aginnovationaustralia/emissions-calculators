@@ -1,4 +1,4 @@
-import { ElectricitySources } from '@/types/types';
+import { ElectricitySources } from '@/types/enums';
 import { z } from 'zod';
 import { FluidWasteInputSchema } from '../common/fluid-waste.input';
 import { SolidWasteInputSchema } from '../common/solid-waste.input';

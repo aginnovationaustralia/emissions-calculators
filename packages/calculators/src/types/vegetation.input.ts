@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { RainfallRegions, SoilTypes, TreeTypes } from './types';
+import { RainfallRegions, SoilTypes, TreeTypes } from './enums';
 
 export const VegetationSchema = z
   .object({

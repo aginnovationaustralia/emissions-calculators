@@ -1,8 +1,8 @@
+import { State } from '@/types/enums';
 import { RiceInput } from '@/types/Rice/input';
 import { RiceOutput } from '@/types/Rice/output';
 import { RiceCrop } from '@/types/Rice/rice.input';
 import { RiceVegetation } from '@/types/Rice/vegetation.input';
-import { State } from '@/types/types';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {

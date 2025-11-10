@@ -1,5 +1,5 @@
+import { CustomisedFertiliser } from '@/types/enums';
 import { Fertiliser } from '@/types/fertiliser.input';
-import { CustomisedFertiliser } from '@/types/types';
 import { ExecutionContext } from '../../executionContext';
 
 export const OTHER_TYPE_TO_SIMPLE_KEY: {

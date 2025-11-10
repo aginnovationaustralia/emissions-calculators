@@ -1,8 +1,8 @@
 import { CropVegetation } from '@/types/common/crop-vegetation.input';
+import { State } from '@/types/enums';
 import { GrainsCrop } from '@/types/Grains/crop.input';
 import { GrainsInput } from '@/types/Grains/input';
 import { GrainsOutput } from '@/types/Grains/output';
-import { State } from '@/types/types';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {

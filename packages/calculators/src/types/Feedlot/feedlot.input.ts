@@ -1,4 +1,4 @@
-import { ElectricitySources, FeedlotSystems, TruckTypes } from '@/types/types';
+import { ElectricitySources, FeedlotSystems, TruckTypes } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FertiliserSchema } from '../fertiliser.input';

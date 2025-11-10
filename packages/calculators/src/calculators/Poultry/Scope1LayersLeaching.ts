@@ -1,6 +1,6 @@
 import { LayerClass } from '@/types/Poultry/layerclass.input';
 import { LayersComplete } from '@/types/Poultry/layers.input';
-import { Seasons, State } from '@/types/types';
+import { Seasons, State } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForPoultryCalculator } from './constants';
 import { getLayersLeachingMassNLost } from './functions';

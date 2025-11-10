@@ -2,7 +2,7 @@ import {
   AquacultureBait,
   FluidWasteTreatmentType,
   FreightTypes,
-} from '@/types/types';
+} from '@/types/enums';
 import {
   AllConstants,
   AquacultureConstants,

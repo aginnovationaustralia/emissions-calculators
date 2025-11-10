@@ -5,7 +5,7 @@ import {
   DairyClassAPI,
   DairyProductionSystem,
   State,
-} from '@/types/types';
+} from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForDairyCalculator } from './constants';
 import {

@@ -1,4 +1,4 @@
-import { FeedlotSystem } from '@/types/types';
+import { FeedlotSystem } from '@/types/enums';
 import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForFeedlotCalculator } from './constants';

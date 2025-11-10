@@ -10,7 +10,7 @@ import {
   StationaryFuelTypes,
   TransportFuelTypes,
   WaterRegimeSubType,
-} from '@/types/types';
+} from '@/types/enums';
 
 export const STATES = {
   NSW: 'nsw',

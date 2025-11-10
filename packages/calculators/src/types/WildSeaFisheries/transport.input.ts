@@ -1,7 +1,7 @@
 import {
   WildSeaFisheriesFuels,
   WildSeaFisheriesTransportTypes,
-} from '@/types/types';
+} from '@/types/enums';
 import { z } from 'zod';
 
 export const WildSeaFisheriesTransportSchema = z.object({

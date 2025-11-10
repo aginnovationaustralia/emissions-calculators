@@ -1,8 +1,8 @@
 import { getOtherFertiliserAmounts } from '@/calculators/common/fertiliser';
 import { SEASONS } from '@/constants/constants';
 import { BuffaloComplete } from '@/types/Buffalo/buffalo.input';
+import { BuffaloClassesAPI, State } from '@/types/enums';
 import { Fertiliser } from '@/types/fertiliser.input';
-import { BuffaloClassesAPI, State } from '@/types/types';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForBuffaloCalculator } from './constants';
 import { getLeachingOtherDryland } from './functions';

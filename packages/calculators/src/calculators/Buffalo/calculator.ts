@@ -5,7 +5,7 @@ import {
 import { BuffaloComplete } from '@/types/Buffalo/buffalo.input';
 import { BuffaloInput } from '@/types/Buffalo/input';
 import { BuffaloOutput } from '@/types/Buffalo/output';
-import { BuffaloClassesAPI, State } from '@/types/types';
+import { BuffaloClassesAPI, State } from '@/types/enums';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {

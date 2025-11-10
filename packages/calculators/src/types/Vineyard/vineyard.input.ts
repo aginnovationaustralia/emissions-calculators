@@ -1,4 +1,4 @@
-import { ElectricitySources, States } from '@/types/types';
+import { ElectricitySources, States } from '@/types/enums';
 import { z } from 'zod';
 import { FluidWasteInputSchema } from '../common/fluid-waste.input';
 import { FreightInputSchema } from '../common/freight.input';

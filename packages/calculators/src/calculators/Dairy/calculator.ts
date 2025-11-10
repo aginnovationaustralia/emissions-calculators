@@ -5,7 +5,7 @@ import {
 import { DairyComplete } from '@/types/Dairy/dairy.input';
 import { DairyInput } from '@/types/Dairy/input';
 import { DairyOutput } from '@/types/Dairy/output';
-import { DairyProductionSystem, State } from '@/types/types';
+import { DairyProductionSystem, State } from '@/types/enums';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {

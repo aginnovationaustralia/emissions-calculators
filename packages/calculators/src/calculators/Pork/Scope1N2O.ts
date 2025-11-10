@@ -1,13 +1,13 @@
 import { PORK_CLASSES, SEASONS } from '@/constants/constants';
-import { Fertiliser } from '@/types/fertiliser.input';
-import { LivestockManure } from '@/types/livestockManure.input';
 import {
   ManureManagementSystem,
   ManureManagementSystems,
   PorkClass,
   Season,
   State,
-} from '@/types/types';
+} from '@/types/enums';
+import { Fertiliser } from '@/types/fertiliser.input';
+import { LivestockManure } from '@/types/livestockManure.input';
 import { ObjectEntry } from 'type-fest/source/entry';
 import { getOtherFertiliserAmounts } from '../../calculators/common/fertiliser';
 import { divideBySafeFromZero } from '../common/tools';

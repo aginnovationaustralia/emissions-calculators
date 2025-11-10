@@ -5,8 +5,8 @@ import {
   BeefCompleteEmissions,
   BeefIntermediaryEmissions,
 } from '@/types/Beef/internal';
+import { BeefClassesAPI, Season, State } from '@/types/enums';
 import { Fertiliser } from '@/types/fertiliser.input';
-import { BeefClassesAPI, Season, State } from '@/types/types';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForBeefCalculator } from './constants';
 import { getAtmosphericNDepositionUreaIrrigatedTotal } from './functions';

@@ -1,4 +1,4 @@
-import { TruckTypes } from '@/types/types';
+import { TruckTypes } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FertiliserSchema } from '../fertiliser.input';

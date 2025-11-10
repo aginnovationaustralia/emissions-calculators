@@ -4,7 +4,7 @@ import {
   Patchinesses,
   RainfallZones,
   VegetationClasses,
-} from '@/types/types';
+} from '@/types/enums';
 import { z } from 'zod';
 
 export const SavannahBurningSchema = z

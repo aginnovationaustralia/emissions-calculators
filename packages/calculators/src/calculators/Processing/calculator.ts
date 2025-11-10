@@ -1,3 +1,4 @@
+import { State } from '@/types/enums';
 import { ProcessingInput } from '@/types/Processing/input';
 import { ProcessingOutput } from '@/types/Processing/output';
 import { ProductProcessingInput } from '@/types/Processing/processing.input';
@@ -5,7 +6,6 @@ import { ProductUnit } from '@/types/Processing/product.input';
 import { ProcessingScope1Output } from '@/types/Processing/scope1.output';
 import { ProcessingScope3Output } from '@/types/Processing/scope3.output';
 import { Scope2Output } from '@/types/scope2.output';
-import { State } from '@/types/types';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import { calculateScope1And3Fuel } from '../common/fuel';
 import { calculateScope1Refrigerant } from '../common/refrigerant';

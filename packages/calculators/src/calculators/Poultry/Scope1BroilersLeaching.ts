@@ -1,6 +1,6 @@
 import { BroilerClass } from '@/types/Poultry/broilerclass.input';
 import { BroilersComplete } from '@/types/Poultry/broilers.input';
-import { State } from '@/types/types';
+import { State } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForPoultryCalculator } from './constants';
 import {

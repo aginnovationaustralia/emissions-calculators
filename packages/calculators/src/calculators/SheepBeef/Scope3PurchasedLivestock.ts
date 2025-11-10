@@ -3,8 +3,8 @@ import {
   SHEEP_CLASSES_TRADING_API,
 } from '@/constants/constants';
 import { BeefPurchase } from '@/types/Beef/beefpurchase.input';
+import { BeefClassesAPI, SheepClassesAPI } from '@/types/enums';
 import { LivestockSourceLocation } from '@/types/livestock';
-import { BeefClassesAPI, SheepClassesAPI } from '@/types/types';
 import { ConstantsForBeefCalculator } from '../Beef/constants';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForSheepCalculator } from '../Sheep/constants';

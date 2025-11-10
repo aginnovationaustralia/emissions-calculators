@@ -4,7 +4,7 @@ import {
   StationaryFuelTypes,
   TransportFuelTypes,
   WildCatchFisheryBait,
-} from '@/types/types';
+} from '@/types/enums';
 import { WildCatchFisheryInput } from '@/types/WildCatchFishery/input';
 import { WildCatchFisheryProductionSystem } from '@/types/WildCatchFishery/wildcatchfishery.input';
 

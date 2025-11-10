@@ -1,5 +1,5 @@
 import { FeedlotStay } from '@/types/Feedlot/stay.input';
-import { FeedlotSystem } from '@/types/types';
+import { FeedlotSystem } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForFeedlotCalculator } from './constants';
 import { getFeedlotProductionSystemEF } from './functions';

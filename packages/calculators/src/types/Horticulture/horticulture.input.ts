@@ -1,4 +1,4 @@
-import { HorticultureCropTypes } from '@/types/types';
+import { HorticultureCropTypes } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { deprecated, proportion, singleEnterpriseInput } from '../schemas';
