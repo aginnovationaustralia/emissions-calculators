@@ -1,8 +1,8 @@
 import { keysFromObject } from '@/calculators/common/tools/object';
 import { BeefClassesSchema } from './Beef/beefclasses.input';
-import { BuffaloClasses as BuffaloClassesInput } from './Buffalo/buffaloclasses.input';
+import { BuffaloClassesSchema } from './Buffalo/buffaloclasses.input';
 import { DairyClassesSchema } from './Dairy/dairyclasses.input';
-import { DeerClasses as DeerClassesInput } from './Deer/deerclasses.input';
+import { DeerClassesSchema } from './Deer/deerclasses.input';
 import { GoatClassesSchema } from './Goat/goatclasses.input';
 import { PorkClassesSchema } from './Pork/porkclasses.input';
 import { SheepClassesSchema } from './Sheep/sheepclasses.input';
@@ -373,31 +373,11 @@ export type DairyProductionSystem = (typeof DairyProductionSystems)[number];
 
 // Deer
 
-export const DeerClassesAPI: (keyof DeerClassesInput)[] = [
-  'tradeBucks',
-  'tradeDoes',
-  'bucks',
-  'breedingDoes',
-  'otherDoes',
-  'tradeOtherDoes',
-  'fawn',
-  'tradeFawn',
-];
-export type DeerClassAPI = (typeof DeerClassesAPI)[number];
+export const DeerClassesAPI = keysFromObject(DeerClassesSchema.shape);
 
 // Buffalo
 
-export const BuffaloClassesAPI: (keyof BuffaloClassesInput)[] = [
-  'bulls',
-  'tradeBulls',
-  'cows',
-  'tradeCows',
-  'steers',
-  'tradeSteers',
-  'calfs',
-  'tradeCalfs',
-];
-export type BuffaloClassAPI = (typeof BuffaloClassesAPI)[number];
+export const BuffaloClassesAPI = keysFromObject(BuffaloClassesSchema.shape);
 
 // Wild sea fisheries
 
