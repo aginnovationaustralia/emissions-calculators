@@ -2,7 +2,7 @@ import { keysFromObject } from '@/calculators/common/tools/object';
 import { BeefClassesSchema } from './Beef/beefclasses.input';
 import { BuffaloClasses as BuffaloClassesInput } from './Buffalo/buffaloclasses.input';
 import { DeerClasses as DeerClassesInput } from './Deer/deerclasses.input';
-import { GoatClasses as GoatClassesInput } from './Goat/goatclasses.input';
+import { GoatClassesSchema } from './Goat/goatclasses.input';
 import { PorkClassesSchema } from './Pork/porkclasses.input';
 import { SheepClassesSchema } from './Sheep/sheepclasses.input';
 
@@ -346,22 +346,7 @@ export type RainfallZone = (typeof RainfallZones)[number];
 
 // Goat
 
-export const GoatClassesAPI: (keyof GoatClassesInput)[] = [
-  'wethers',
-  'tradeWethers',
-  'tradeBucks',
-  'tradeDoes',
-  'bucksBilly',
-  'maidenBreedingDoesNannies',
-  'tradeMaidenBreedingDoesNannies',
-  'breedingDoesNannies',
-  'tradeBreedingDoesNannies',
-  'otherDoesCulledFemales',
-  'tradeOtherDoesCulledFemales',
-  'kids',
-  'tradeKids',
-];
-export type GoatClassAPI = (typeof GoatClassesAPI)[number];
+export const GoatClassesAPI = keysFromObject(GoatClassesSchema.shape);
 
 // Poultry
 
