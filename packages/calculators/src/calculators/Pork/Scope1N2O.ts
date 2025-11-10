@@ -1,13 +1,14 @@
-import { PORK_CLASSES, SEASONS } from '@/constants/constants';
+import { SEASONS } from '@/constants/constants';
 import {
   ManureManagementSystem,
   ManureManagementSystems,
-  PorkClass,
+  PorkClassesAPI,
   Season,
   State,
 } from '@/types/enums';
 import { Fertiliser } from '@/types/fertiliser.input';
 import { LivestockManure } from '@/types/livestockManure.input';
+import { PorkClasses } from '@/types/Pork/porkclasses.input';
 import { ObjectEntry } from 'type-fest/source/entry';
 import { getOtherFertiliserAmounts } from '../../calculators/common/fertiliser';
 import { divideBySafeFromZero } from '../common/tools';
@@ -17,7 +18,7 @@ import { ConstantsForPorkCalculator } from './constants';
 import { getNFertiliserOtherDryland } from './functions';
 
 function calculateAnnualNitrogenFromManureAndWaste(
-  type: PorkClass,
+  type: keyof PorkClasses,
   head: number,
   context: ExecutionContext<ConstantsForPorkCalculator>,
 ) {
@@ -77,7 +78,7 @@ const emptyManureSystems: Record<ManureManagementSystem, number> = {
 };
 
 const emptyByTypeAndSystem: Record<
-  PorkClass,
+  keyof PorkClasses,
   Record<ManureManagementSystem, number>
 > = {
   sows: { ...emptyManureSystems },
@@ -86,27 +87,19 @@ const emptyByTypeAndSystem: Record<
   suckers: { ...emptyManureSystems },
   weaners: { ...emptyManureSystems },
   growers: { ...emptyManureSystems },
-  slaughter_pigs: { ...emptyManureSystems },
+  slaughterPigs: { ...emptyManureSystems },
 };
 
-type PorkSeasonNumber = {
-  [porkType in PorkClass]?: {
-    summer: number;
-    autumn: number;
-    winter: number;
-    spring: number;
-    manure: LivestockManure;
-  };
-};
-
-type PorkSeasonNitrogen = {
-  [porkType in PorkClass]: {
-    [season in Season]: {
+type PorkSeasonNitrogen = Record<
+  keyof PorkClasses,
+  Record<
+    Season,
+    {
       annualNitrogen: number;
       annualIndirectNitrogen: number;
-    };
-  };
-};
+    }
+  >
+>;
 
 /**
  * @param manure the complete LivestockManure object
@@ -144,13 +137,13 @@ const getTotalManureTonnes = (manure: LivestockManure) => {
 };
 
 const isPorkClassWithDetailedEmissions = (
-  porkClass: PorkClass,
+  porkClass: keyof PorkClasses,
 ): porkClass is 'sows' | 'boars' | 'gilts' =>
   ['sows', 'boars', 'gilts'].includes(porkClass);
 
 const getSeasonNitrogenFromManureAndFeed = (
-  classes: PorkSeasonNumber,
-  porkClass: PorkClass,
+  classes: PorkClasses,
+  porkClass: keyof PorkClasses,
   constants: ConstantsForPorkCalculator,
   season: Season,
 ) => {
@@ -165,8 +158,8 @@ const getSeasonNitrogenFromManureAndFeed = (
 };
 
 const getTotalNitrogenFromManureAndFeed = (
-  classes: PorkSeasonNumber,
-  porkClass: PorkClass,
+  classes: PorkClasses,
+  porkClass: keyof PorkClasses,
   constants: ConstantsForPorkCalculator,
 ) => {
   let result = 0;
@@ -194,7 +187,7 @@ const getTotalNitrogenFromManureAndFeed = (
  */
 export function calculateScope1N2O(
   state: State,
-  head: PorkSeasonNumber,
+  head: PorkClasses,
   fertiliser: Fertiliser,
   rainfallAbove600: boolean,
   context: ExecutionContext<ConstantsForPorkCalculator>,
@@ -208,7 +201,7 @@ export function calculateScope1N2O(
     suckers: { ...EMPTY_INTERNAL_TOTALS },
     weaners: { ...EMPTY_INTERNAL_TOTALS },
     growers: { ...EMPTY_INTERNAL_TOTALS },
-    slaughter_pigs: { ...EMPTY_INTERNAL_TOTALS },
+    slaughterPigs: { ...EMPTY_INTERNAL_TOTALS },
   };
 
   //
@@ -221,7 +214,7 @@ export function calculateScope1N2O(
   //  Cg = Global Warming Potential of nitrous oxide
 
   SEASONS.forEach((season) => {
-    PORK_CLASSES.forEach((type) => {
+    PorkClassesAPI.forEach((type) => {
       const currentClass = head[type];
       if (!currentClass) {
         return;
@@ -245,7 +238,7 @@ export function calculateScope1N2O(
 
   let totalManureMMSKg = 0;
 
-  PORK_CLASSES.forEach((type) => {
+  PorkClassesAPI.forEach((type) => {
     const currentClass = head[type];
     if (!currentClass) {
       return;
@@ -311,13 +304,13 @@ export function calculateScope1N2O(
   const fracGASMForState = constants.PORK.INTEGRATED_EF[state].iFracGasm;
 
   const indirectN2OEValues: Record<
-    PorkClass,
+    keyof PorkClasses,
     Record<ManureManagementSystem, number>
   > = {
     ...emptyByTypeAndSystem,
   };
 
-  PORK_CLASSES.forEach((type) => {
+  PorkClassesAPI.forEach((type) => {
     const currentClass = head[type];
     if (!currentClass) {
       return;
@@ -401,7 +394,7 @@ export function calculateScope1N2O(
   let annualLeachingAndRunoffE = 0;
   let annualLeachingAndRunoffAEUndefined = 0;
 
-  PORK_CLASSES.forEach((type) => {
+  PorkClassesAPI.forEach((type) => {
     const currentClass = head[type];
     if (!currentClass) {
       return;
@@ -494,7 +487,7 @@ export function calculateScope1N2O(
   };
 
   SEASONS.forEach((season) => {
-    PORK_CLASSES.forEach((type) => {
+    PorkClassesAPI.forEach((type) => {
       const currentClass = head[type];
       if (!currentClass) {
         return;

@@ -1,6 +1,5 @@
 import {
   DairyClass,
-  PorkClass,
   PoultryClass,
   Season,
   SheepClassesAPI,
@@ -62,16 +61,6 @@ export const BEEF_CLASSES_TRADING_API = [
   'heifers1To2Traded',
   'heifersGt2Traded',
 ] as const;
-
-export const PORK_CLASSES: PorkClass[] = [
-  'boars',
-  'sows',
-  'gilts',
-  'suckers',
-  'weaners',
-  'growers',
-  'slaughter_pigs',
-];
 
 export const POULTRY_CLASSES: PoultryClass[] = [
   'layers',

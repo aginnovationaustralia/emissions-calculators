@@ -1,19 +1,9 @@
-import { DAYS_IN_SEASON, PORK_CLASSES, SEASONS } from '@/constants/constants';
-import { ManureManagementSystems, PorkClass, State } from '@/types/enums';
-import { LivestockManure } from '@/types/livestockManure.input';
+import { DAYS_IN_SEASON, SEASONS } from '@/constants/constants';
+import { ManureManagementSystems, PorkClassesAPI, State } from '@/types/enums';
+import { PorkClasses } from '@/types/Pork/porkclasses.input';
 import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForPorkCalculator } from './constants';
-
-type PorkSeasonNumber = {
-  [porkType in PorkClass]?: {
-    spring: number;
-    summer: number;
-    autumn: number;
-    winter: number;
-    manure: LivestockManure;
-  };
-};
 
 const EMPTY_INTERNAL_TOTALS = {
   spring: 0,
@@ -24,7 +14,7 @@ const EMPTY_INTERNAL_TOTALS = {
 
 export function calculateScope1Manure(
   state: State,
-  head: PorkSeasonNumber,
+  head: PorkClasses,
   context: ExecutionContext<ConstantsForPorkCalculator>,
 ) {
   const { constants } = context;
@@ -36,7 +26,7 @@ export function calculateScope1Manure(
     suckers: { ...EMPTY_INTERNAL_TOTALS },
     weaners: { ...EMPTY_INTERNAL_TOTALS },
     growers: { ...EMPTY_INTERNAL_TOTALS },
-    slaughter_pigs: { ...EMPTY_INTERNAL_TOTALS },
+    slaughterPigs: { ...EMPTY_INTERNAL_TOTALS },
   };
 
   //
@@ -52,7 +42,7 @@ export function calculateScope1Manure(
   const densityOfMethane = constants.LIVESTOCK.METHANE_DENSITY; // p
 
   ManureManagementSystems.forEach((system) => {
-    PORK_CLASSES.forEach((type) => {
+    PorkClassesAPI.forEach((type) => {
       const currentClass = head[type];
       if (!currentClass) {
         return;
@@ -99,7 +89,7 @@ export function calculateScope1Manure(
     });
   });
 
-  const totalManure = PORK_CLASSES.reduce((acc, type) => {
+  const totalManure = PorkClassesAPI.reduce((acc, type) => {
     return (
       acc +
       SEASONS.reduce((acc2, season) => {

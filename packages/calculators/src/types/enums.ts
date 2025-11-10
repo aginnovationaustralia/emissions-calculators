@@ -1,8 +1,10 @@
-import { BeefClasses as BeefClassesInput } from './Beef/beefclasses.input';
+import { keysFromObject } from '@/calculators/common/tools/object';
+import { BeefClassesSchema } from './Beef/beefclasses.input';
 import { BuffaloClasses as BuffaloClassesInput } from './Buffalo/buffaloclasses.input';
 import { DeerClasses as DeerClassesInput } from './Deer/deerclasses.input';
 import { GoatClasses as GoatClassesInput } from './Goat/goatclasses.input';
-import { SheepClasses as SheepClassesInput } from './Sheep/sheepclasses.input';
+import { PorkClassesSchema } from './Pork/porkclasses.input';
+import { SheepClassesSchema } from './Sheep/sheepclasses.input';
 
 export enum StationaryFuelTypes {
   PETROL = 'petrol',
@@ -180,69 +182,13 @@ export const HorticultureCropTypes = [
 export type HorticultureCropType = (typeof HorticultureCropTypes)[number];
 
 // SheepBeef
-// TODO: these lists of keys are vulnerable to missing values that don't get processed. Need ot protect
-// via typescript or change how we loop
-export const BeefClassesAPI: (keyof BeefClassesInput)[] = [
-  'bullsGt1',
-  'bullsGt1Traded',
-  'steersLt1',
-  'steersLt1Traded',
-  'steers1To2',
-  'steers1To2Traded',
-  'steersGt2',
-  'steersGt2Traded',
-  'cowsGt2',
-  'cowsGt2Traded',
-  'heifersLt1',
-  'heifersLt1Traded',
-  'heifers1To2',
-  'heifers1To2Traded',
-  'heifersGt2',
-  'heifersGt2Traded',
-];
+export const BeefClassesAPI = keysFromObject(BeefClassesSchema.shape);
 
-export const SheepClassesAPI: (keyof SheepClassesInput)[] = [
-  'wethers',
-  'tradeWethers',
-  'rams',
-  'tradeRams',
-  'maidenBreedingEwes',
-  'tradeMaidenBreedingEwes',
-  'breedingEwes',
-  'tradeBreedingEwes',
-  'otherEwes',
-  'tradeOtherEwes',
-  'eweLambs',
-  'tradeEweLambs',
-  'wetherLambs',
-  'tradeWetherLambs',
-  'tradeEwes',
-  'tradeLambsAndHoggets',
-];
+export const SheepClassesAPI = keysFromObject(SheepClassesSchema.shape);
 
 // Pork
 
-export const PorkClasses = [
-  'sows',
-  'boars',
-  'gilts',
-  'suckers',
-  'weaners',
-  'growers',
-  'slaughter_pigs',
-] as const;
-export type PorkClass = (typeof PorkClasses)[number];
-
-// TODO improve iteration of livestock classes to ensure none are missed
-export const PorkClassesAPI = [
-  'sows',
-  'boars',
-  'gilts',
-  'suckers',
-  'weaners',
-  'growers',
-  'slaughterPigs',
-] as const;
+export const PorkClassesAPI = keysFromObject(PorkClassesSchema.shape);
 
 export const ManureManagementSystems = [
   'outdoorSystems',

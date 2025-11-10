@@ -1,13 +1,8 @@
-import { PORK_CLASSES, SEASONS } from '@/constants/constants';
-import { PorkClass, Season } from '@/types/enums';
+import { SEASONS } from '@/constants/constants';
+import { PorkClasses } from '@/types/Pork/porkclasses.input';
+import { PorkClassesAPI, Season } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForPorkCalculator } from './constants';
-
-type PorkSeasonNumber = {
-  [porkType in PorkClass]?: {
-    [season in Season]: number;
-  };
-};
 
 const EMPTY_INTERNAL_TOTALS = {
   spring: 0,
@@ -17,7 +12,7 @@ const EMPTY_INTERNAL_TOTALS = {
 };
 
 export function calculateScope1Enteric(
-  head: PorkSeasonNumber,
+  head: PorkClasses,
   context: ExecutionContext<ConstantsForPorkCalculator>,
 ) {
   const { constants } = context;
@@ -28,18 +23,18 @@ export function calculateScope1Enteric(
   // (Enteric_FermentationD14)
   const methaneF = 55.22;
 
-  const totals: Required<PorkSeasonNumber> = {
+  const totals: Record<keyof PorkClasses, Record<Season, number>> = {
     sows: { ...EMPTY_INTERNAL_TOTALS },
     boars: { ...EMPTY_INTERNAL_TOTALS },
     gilts: { ...EMPTY_INTERNAL_TOTALS },
     suckers: { ...EMPTY_INTERNAL_TOTALS },
     weaners: { ...EMPTY_INTERNAL_TOTALS },
     growers: { ...EMPTY_INTERNAL_TOTALS },
-    slaughter_pigs: { ...EMPTY_INTERNAL_TOTALS },
+    slaughterPigs: { ...EMPTY_INTERNAL_TOTALS },
   };
 
   SEASONS.forEach((season) => {
-    PORK_CLASSES.forEach((type) => {
+    PorkClassesAPI.forEach((type) => {
       const currentClass = head[type];
       if (!currentClass) {
         return;
@@ -67,7 +62,7 @@ export function calculateScope1Enteric(
   });
 
   // (entericFermentationC28)
-  const totalMethaneProduction = PORK_CLASSES.reduce((acc, type) => {
+  const totalMethaneProduction = PorkClassesAPI.reduce((acc, type) => {
     return (
       acc +
       SEASONS.reduce((acc2, season) => {
