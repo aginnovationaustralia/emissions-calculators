@@ -5,6 +5,7 @@ const filesToSkip = [
   'types.ts',
   'descriptions.schema.ts',
   'decorator.schema.ts',
+  'schemas.ts',
 ];
 
 function getAllTypeFiles(dir: string, typeFiles: string[] = []) {
@@ -40,17 +41,24 @@ function extractExports(filePath: string) {
 }
 
 export function generateTypeExports() {
-  const typesDir = 'src/versions/3.0.0/types';
+  const typesDir = 'src/types';
   const typeFiles = getAllTypeFiles(typesDir);
 
   const allExports = [];
   const seenExports = new Set();
 
   for (const file of typeFiles) {
-    const relativePath = file.replace('src/versions/3.0.0/types/', './');
+    const relativePath = file.replace('src/types/', './');
     const exports = extractExports(file);
 
     for (const exportName of exports) {
+      if (
+        exportName.endsWith('Schema') &&
+        !exportName.endsWith('OutputSchema') &&
+        !exportName.endsWith('InputSchema')
+      ) {
+        continue;
+      }
       if (!seenExports.has(exportName)) {
         allExports.push(
           `export { ${exportName} } from '${relativePath.replace('.ts', '')}';`,
@@ -67,7 +75,7 @@ export function generateTypeExports() {
 
   const indexContent = allExports.join('\n') + '\n';
 
-  writeFileSync('src/versions/3.0.0/types/index.ts', indexContent);
+  writeFileSync('src/types/index.ts', indexContent);
   console.log(`Generated ${allExports.length} type exports`);
 }
 
