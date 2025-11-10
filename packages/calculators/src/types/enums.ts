@@ -358,14 +358,6 @@ export const PoultryClasses = [
 ] as const;
 export type PoultryClass = (typeof PoultryClasses)[number];
 
-export const PoultryClassesAPI = [
-  'meatChickenGrowers',
-  'meatChickenLayers',
-  'meatOther',
-  'layers',
-] as const;
-export type PoultryClassAPI = (typeof PoultryClassesAPI)[number];
-
 // Dairy
 
 export const DairyClasses = [
