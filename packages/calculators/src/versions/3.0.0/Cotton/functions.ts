@@ -1,3 +1,4 @@
+import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { CottonCrop } from '../types/Cotton/cotton.input';
 import { ConstantsForCottonCalculator } from './constants';
@@ -36,10 +37,11 @@ export function getFertiliserFractionRunoff(
 }
 
 export function getIntensityDenominators(crop: CottonCrop) {
-  const totalBales =
-    ((crop.averageCottonYield * 1000) /
-      (crop.averageWeightPerBaleKg - crop.wastePerBaleKg)) *
-    crop.areaSown;
+  const baleWeight = crop.averageWeightPerBaleKg - crop.wastePerBaleKg;
+  const totalBales = divideBySafeFromZero(
+    crop.averageCottonYield * 1000 * crop.areaSown,
+    baleWeight,
+  );
 
   return {
     bales: totalBales,

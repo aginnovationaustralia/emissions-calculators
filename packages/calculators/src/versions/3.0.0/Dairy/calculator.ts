@@ -17,7 +17,7 @@ import {
 import { calculateScope3Herbicide } from '../common/herbicide';
 import { calculateScope1Lime, calculateScope3Lime } from '../common/lime';
 import { calculateScope3PurchasedFeed } from '../common/livestock';
-import { addTotalValue } from '../common/tools';
+import { addTotalValue, divideBySafeFromZero } from '../common/tools';
 import { sumIntermediateResults } from '../common/tools/intermediate-results';
 import { singleAllocationToArray } from '../common/tools/object';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../common/trees';
@@ -334,11 +334,13 @@ export function calculateDairy(
   const redMeatProductionAllocation = dairyResults.reduce(
     (acc, dairy) =>
       acc +
-      (dairy.extensions.emissionsAllocationToRedMeatProduction *
-        (dairy.output.scope1.total +
-          dairy.output.scope2.total +
-          dairy.output.scope3.total)) /
+      divideBySafeFromZero(
+        dairy.extensions.emissionsAllocationToRedMeatProduction *
+          (dairy.output.scope1.total +
+            dairy.output.scope2.total +
+            dairy.output.scope3.total),
         totalScope123,
+      ),
     0,
   );
 

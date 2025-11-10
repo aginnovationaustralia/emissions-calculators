@@ -7,7 +7,7 @@ import {
 } from '../common-legacy/fuel';
 import { calculateScope3Herbicide } from '../common/herbicide';
 import { calculateScope1Lime, calculateScope3Lime } from '../common/lime';
-import { addTotalValue } from '../common/tools';
+import { addTotalValue, divideBySafeFromZero } from '../common/tools';
 import { sumIntermediateResults } from '../common/tools/intermediate-results';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../common/trees';
 import { ExecutionContext } from '../executionContext';
@@ -31,29 +31,44 @@ const generateIntensities = (
 
   return (n: number, i: number) => {
     const versionedDenominators = getIntensityDenominators(crops[i]);
+    const cropYieldArea = crops[i].averageCottonYield * crops[i].areaSown;
     return {
-      tonnesCropIncludingSequestration:
-        n / (crops[i].averageCottonYield * crops[i].areaSown),
-      tonnesCropExcludingSequestration:
-        (n + carbonSequestrations[i]) /
-        (crops[i].averageCottonYield * crops[i].areaSown),
-      balesIncludingSequestration: n / versionedDenominators.bales,
-      balesExcludingSequestration:
-        (n + carbonSequestrations[i]) / versionedDenominators.bales,
-      lintIncludingSequestration: n / versionedDenominators.lintMassTonnes,
-      lintExcludingSequestration:
-        (n + carbonSequestrations[i]) / versionedDenominators.lintMassTonnes,
-      seedIncludingSequestration: n / versionedDenominators.seedMassTonnes,
-      seedExcludingSequestration:
-        (n + carbonSequestrations[i]) / versionedDenominators.seedMassTonnes,
+      tonnesCropIncludingSequestration: divideBySafeFromZero(n, cropYieldArea),
+      tonnesCropExcludingSequestration: divideBySafeFromZero(
+        n + carbonSequestrations[i],
+        cropYieldArea,
+      ),
+      balesIncludingSequestration: divideBySafeFromZero(
+        n,
+        versionedDenominators.bales,
+      ),
+      balesExcludingSequestration: divideBySafeFromZero(
+        n + carbonSequestrations[i],
+        versionedDenominators.bales,
+      ),
+      lintIncludingSequestration: divideBySafeFromZero(
+        n,
+        versionedDenominators.lintMassTonnes,
+      ),
+      lintExcludingSequestration: divideBySafeFromZero(
+        n + carbonSequestrations[i],
+        versionedDenominators.lintMassTonnes,
+      ),
+      seedIncludingSequestration: divideBySafeFromZero(
+        n,
+        versionedDenominators.seedMassTonnes,
+      ),
+      seedExcludingSequestration: divideBySafeFromZero(
+        n + carbonSequestrations[i],
+        versionedDenominators.seedMassTonnes,
+      ),
       lintEconomicAllocation:
         (n + carbonSequestrations[i]) *
         constants.COTTON.COTTON_INTENSITY_ECONOMIC_ALLOCATION.LINT,
       seedEconomicAllocation:
         (n + carbonSequestrations[i]) *
         constants.COTTON.COTTON_INTENSITY_ECONOMIC_ALLOCATION.SEED,
-      cottonYieldProducedTonnes:
-        crops[i].averageCottonYield * crops[i].areaSown,
+      cottonYieldProducedTonnes: cropYieldArea,
       balesProduced: versionedDenominators.bales,
       lintProducedTonnes: versionedDenominators.lintMassTonnes,
       seedProducedTonnes: versionedDenominators.seedMassTonnes,
