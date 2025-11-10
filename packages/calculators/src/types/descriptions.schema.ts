@@ -87,11 +87,6 @@ export const DESCRIPTIONS = {
   ACTIVITY_ID: 'Unique identifier for this activity',
 };
 
-// TODO: use this in all descriptions
-const KGCO2E = 'kg-CO2e';
-
-export const kgCO2Units = `${KGCO2E} (kilograms of carbon dioxide equivalent)`;
-
 const emissionsText = (
   chemical: 'CO2' | 'CH4' | 'N2O',
   use: string,
