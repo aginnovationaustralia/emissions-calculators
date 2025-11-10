@@ -479,11 +479,11 @@ export type DairyConstants = {
   };
 
   CATTLE_STANDARD_REFERENCE_WEIGHTS: {
-    milking_cows: number;
-    heifers_lt_1: number;
-    heifers_gt_1: number;
-    dairyBulls_lt_1: number;
-    dairyBulls_gt_1: number;
+    milkingCows: number;
+    heifersLt1: number;
+    heifersGt1: number;
+    dairyBullsLt1: number;
+    dairyBullsGt1: number;
   };
 
   CATTLE_N2O_MMS: {
@@ -497,11 +497,11 @@ export type DairyConstants = {
   MMS_EF: number;
 
   METHANE_MPW: {
-    milking_cows: number;
-    heifers_lt_1: number;
-    heifers_gt_1: number;
-    dairyBulls_lt_1: number;
-    dairyBulls_gt_1: number;
+    milkingCows: number;
+    heifersLt1: number;
+    heifersGt1: number;
+    dairyBullsLt1: number;
+    dairyBullsGt1: number;
   };
 
   PRODUCTIONSYSTEM_EF: {

@@ -1,9 +1,4 @@
-import {
-  DairyClass,
-  PoultryClass,
-  Season,
-  SheepClassesAPI,
-} from '@/types/enums';
+import { PoultryClass, Season, SheepClassesAPI } from '@/types/enums';
 
 // Used for calving calculations where we need to also get the previous season
 export const SEASONS_AFTER = {
@@ -67,14 +62,6 @@ export const POULTRY_CLASSES: PoultryClass[] = [
   'meat_chicken_growers',
   'meat_chicken_layers',
   'meat_other',
-];
-
-export const DAIRY_CLASSES: DairyClass[] = [
-  'milking_cows',
-  'heifers_gt_1',
-  'heifers_lt_1',
-  'dairyBulls_gt_1',
-  'dairyBulls_lt_1',
 ];
 
 export const DAYS_IN_SEASON = 365 / 4;

@@ -1,6 +1,7 @@
 import { keysFromObject } from '@/calculators/common/tools/object';
 import { BeefClassesSchema } from './Beef/beefclasses.input';
 import { BuffaloClasses as BuffaloClassesInput } from './Buffalo/buffaloclasses.input';
+import { DairyClassesSchema } from './Dairy/dairyclasses.input';
 import { DeerClasses as DeerClassesInput } from './Deer/deerclasses.input';
 import { GoatClassesSchema } from './Goat/goatclasses.input';
 import { PorkClassesSchema } from './Pork/porkclasses.input';
@@ -360,23 +361,7 @@ export type PoultryClass = (typeof PoultryClasses)[number];
 
 // Dairy
 
-export const DairyClasses = [
-  'milking_cows',
-  'heifers_lt_1',
-  'heifers_gt_1',
-  'dairyBulls_lt_1',
-  'dairyBulls_gt_1',
-] as const;
-export type DairyClass = (typeof DairyClasses)[number];
-
-export const DairyClassesAPI = [
-  'milkingCows',
-  'heifersLt1',
-  'heifersGt1',
-  'dairyBullsLt1',
-  'dairyBullsGt1',
-] as const;
-export type DairyClassAPI = (typeof DairyClassesAPI)[number];
+export const DairyClassesAPI = keysFromObject(DairyClassesSchema.shape);
 
 export const DairyProductionSystems = [
   'Non-irrigated Crop',
