@@ -11,10 +11,9 @@ export const SugarCropSchema = singleEnterpriseInput('Sugar', {
   averageCaneYield: z.number().meta({
     description: 'Average cane/crop yield, in t/ha (tonnes per hectare)',
   }),
-  percentMilledCaneYield: z.number().optional().meta({
-    description:
-      'Percentage of cane yield that becomes milled sugar, from 0 to 1',
-  }),
+  percentMilledCaneYield: proportion(
+    'Percentage of cane yield that becomes milled sugar, from 0 to 1',
+  ).optional(),
   areaSown: z.number().meta({ description: 'Area sown, in ha (hectares)' }),
   nonUreaNitrogen: z.number().meta({
     description:
