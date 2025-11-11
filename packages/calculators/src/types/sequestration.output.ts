@@ -6,7 +6,6 @@ export const SequestrationOutputSchema = z
     total: z
       .number()
       .meta({ description: OUTPUTDESCRIPTIONS.totalSequestration }),
-    intermediate: z.array(z.number()),
   })
   .meta({ description: OUTPUTDESCRIPTIONS.sequestration });
 

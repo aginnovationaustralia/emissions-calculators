@@ -41,7 +41,6 @@ const expectations: SugarOutput = {
   ...expectedScopes,
   carbonSequestration: {
     total: 0,
-    intermediate: [],
   },
   net: {
     total: 0,
@@ -94,12 +93,13 @@ describe('Sugar calculator, empty enterprise', () => {
   const context = testContext('Sugar');
   const emissions = calculateSugar(emptyInputWithEnterprise, context);
 
-  const expectedWithEnterprise = {
+  const expectedWithEnterprise: SugarOutput = {
     ...expectations,
     intermediate: [
       {
         ...expectedScopes,
-        carbonSequestration: 0,
+        carbonSequestration: { total: 0 },
+        id: 'sugar-0',
         intensities: {
           sugarProducedKg: 0,
           sugarExcludingSequestration: 0,

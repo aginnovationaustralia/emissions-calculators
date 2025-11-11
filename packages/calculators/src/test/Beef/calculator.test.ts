@@ -7,10 +7,7 @@ import { BeefIntermediateOutput } from '@/types/Beef/intermediate.output';
 import { BeefOutput } from '@/types/Beef/output';
 import clone from 'nanoclone';
 import { validateCalculatorInput } from '../../calculators/calculators';
-import {
-  compareEmissionsFrom2Inputs,
-  transformCarbonSequestration,
-} from '../common/comparisons';
+import { compareEmissionsFrom2Inputs } from '../common/comparisons';
 import { testContext } from '../common/context';
 import {
   ensureEveryKeyIsDefined,
@@ -141,9 +138,6 @@ describe('Beef calculator (multi activity)', () => {
       expect(
         originalEmissions.intensities.liveweightBeefProducedKg,
       ).toBeCloseTo(secondEmissions.intensities.liveweightBeefProducedKg / 2);
-    },
-    {
-      transformIntermediate: transformCarbonSequestration,
     },
   );
 });

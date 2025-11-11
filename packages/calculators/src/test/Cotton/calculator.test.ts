@@ -117,15 +117,5 @@ describe('Cotton calculator (multi activity)', () => {
         7,
       );
     },
-    {
-      transformIntermediate: (intermediate) => ({
-        ...intermediate,
-        intensities: [intermediate.intensities],
-        carbonSequestration: {
-          total: intermediate.carbonSequestration.total,
-          intermediate: [intermediate.carbonSequestration.total],
-        },
-      }),
-    },
   );
 });

@@ -42,7 +42,6 @@ const expectedScopes = {
   },
   carbonSequestration: {
     total: 0,
-    intermediate: [0],
   },
   net: {
     total: 3823.64121867,

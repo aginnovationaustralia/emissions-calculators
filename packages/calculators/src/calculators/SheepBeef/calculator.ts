@@ -222,12 +222,11 @@ export function calculateSheepBeef(
     ...combinedResult,
     carbonSequestration: {
       total: beefCarbonSequestration.total + sheepCarbonSequestration.total,
-      intermediate: [], // TODO: Needs to be populated
     },
     intermediate: {
       beef: {
         ...baseBeefEmissions,
-        carbonSequestration: baseBeefEmissions.carbonSequestration.total,
+        carbonSequestration: baseBeefEmissions.carbonSequestration,
         intensities: getBeefIntensities(
           baseBeefEmissions.net.total,
           baseBeefEmissions.carbonSequestration.total,
@@ -236,7 +235,7 @@ export function calculateSheepBeef(
       },
       sheep: {
         ...baseSheepEmissions,
-        carbonSequestration: baseSheepEmissions.carbonSequestration.total,
+        carbonSequestration: baseSheepEmissions.carbonSequestration,
         intensities: getSheepIntensities(
           baseSheepEmissions.net.total,
           baseSheepEmissions.carbonSequestration.total,
@@ -248,7 +247,7 @@ export function calculateSheepBeef(
     },
     intermediateBeef: beefResults.map((x, i) => ({
       ...x.output,
-      carbonSequestration: beefCarbonSequestration.intermediate[i],
+      carbonSequestration: { total: beefCarbonSequestration.intermediate[i] },
       net: {
         total: x.net.total,
       },
@@ -261,7 +260,7 @@ export function calculateSheepBeef(
     })),
     intermediateSheep: sheepResults.map((x, i) => ({
       ...x.output,
-      carbonSequestration: sheepCarbonSequestration.intermediate[i],
+      carbonSequestration: { total: sheepCarbonSequestration.intermediate[i] },
       intensities: getSheepIntensities(
         x.net.total,
         x.extensions.carbonSequestration,

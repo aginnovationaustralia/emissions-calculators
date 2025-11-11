@@ -43,7 +43,6 @@ const expectations: BuffaloOutput = {
   ...expectedScopes,
   carbonSequestration: {
     total: 0,
-    intermediate: [],
   },
   net: {
     total: 0,

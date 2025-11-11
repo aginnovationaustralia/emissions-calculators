@@ -8,10 +8,7 @@ import { RiceInput } from '@/types/Rice/input';
 import { RiceIntermediateOutput } from '@/types/Rice/intermediate.output';
 import { RiceOutput } from '@/types/Rice/output';
 import clone from 'nanoclone';
-import {
-  compareEmissionsFrom2Inputs,
-  transformCarbonSequestration,
-} from '../common/comparisons';
+import { compareEmissionsFrom2Inputs } from '../common/comparisons';
 import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
 import { riceTestData } from './rice.data';
@@ -110,9 +107,6 @@ describe('Rice calculator (multi activity)', () => {
         secondEmissions.intensities.riceProducedTonnes / 2,
         7,
       );
-    },
-    {
-      transformIntermediate: transformCarbonSequestration,
     },
   );
 });

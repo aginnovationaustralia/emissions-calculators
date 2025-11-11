@@ -252,7 +252,7 @@ export function calculateEntireVineyard(
   const result: VineyardOutput = {
     carbonSequestration,
     intermediate: vineyardResults.map((vineyard) => ({
-      carbonSequestration: vineyard.extensions.carbonSequestration,
+      carbonSequestration: { total: vineyard.extensions.carbonSequestration },
       id: vineyard.meta.id,
       scope1: vineyard.output.scope1,
       scope2: vineyard.output.scope2,
