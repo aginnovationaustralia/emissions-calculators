@@ -17,6 +17,8 @@ import { ExecutionContext } from '../executionContext';
 import { ConstantsForPorkCalculator } from './constants';
 import { getNFertiliserOtherDryland } from './functions';
 
+type PorkClass = keyof PorkClasses;
+
 function calculateAnnualNitrogenFromManureAndWaste(
   type: keyof PorkClasses,
   head: number,
@@ -78,7 +80,7 @@ const emptyManureSystems: Record<ManureManagementSystem, number> = {
 };
 
 const emptyByTypeAndSystem: Record<
-  keyof PorkClasses,
+  PorkClass,
   Record<ManureManagementSystem, number>
 > = {
   sows: { ...emptyManureSystems },
@@ -91,7 +93,7 @@ const emptyByTypeAndSystem: Record<
 };
 
 type PorkSeasonNitrogen = Record<
-  keyof PorkClasses,
+  PorkClass,
   Record<
     Season,
     {
@@ -137,13 +139,13 @@ const getTotalManureTonnes = (manure: LivestockManure) => {
 };
 
 const isPorkClassWithDetailedEmissions = (
-  porkClass: keyof PorkClasses,
+  porkClass: PorkClass,
 ): porkClass is 'sows' | 'boars' | 'gilts' =>
   ['sows', 'boars', 'gilts'].includes(porkClass);
 
 const getSeasonNitrogenFromManureAndFeed = (
   classes: PorkClasses,
-  porkClass: keyof PorkClasses,
+  porkClass: PorkClass,
   constants: ConstantsForPorkCalculator,
   season: Season,
 ) => {
@@ -159,7 +161,7 @@ const getSeasonNitrogenFromManureAndFeed = (
 
 const getTotalNitrogenFromManureAndFeed = (
   classes: PorkClasses,
-  porkClass: keyof PorkClasses,
+  porkClass: PorkClass,
   constants: ConstantsForPorkCalculator,
 ) => {
   let result = 0;
@@ -304,7 +306,7 @@ export function calculateScope1N2O(
   const fracGASMForState = constants.PORK.INTEGRATED_EF[state].iFracGasm;
 
   const indirectN2OEValues: Record<
-    keyof PorkClasses,
+    PorkClass,
     Record<ManureManagementSystem, number>
   > = {
     ...emptyByTypeAndSystem,
