@@ -23,10 +23,10 @@ const expectations = {
     fertiliserN2O: 1106.47111929,
     atmosphericDepositionN2O: 121.7118231214286,
     fieldBurningN2O: 0,
-    cropResidueN2O: 244.32000636921427,
-    leachingAndRunoffN2O: 679.3794522051428,
+    cropResidueN2O: 244.320006369,
+    leachingAndRunoffN2O: 679.379452205,
     fuelN2O: 0.02087,
-    total: 2472.1162058431,
+    total: 2558.089647448,
   },
   scope2: {
     electricity: 2.112,
@@ -41,30 +41,29 @@ const expectations = {
     total: 969.0868152,
   },
   net: {
-    total: 3338.3530210431,
-    crops: [3338.3530210431],
+    total: 3424.326462648,
+    crops: [3424.326462648],
   },
   carbonSequestration: {
     total: 104.962,
   },
   intensities: [
     {
-      tonnesCropExcludingSequestration: 0.6562445247,
-      tonnesCropIncludingSequestration: 0.6362403318,
-      // REVISIT: Calculate fresh bales intensity using 1.1.0 sheet
-      // balesExcludingSequestration: 0.1509164417733,
-      // balesIncludingSequestration: 0.1463754899913,
-      lintExcludingSequestration: 0.72186897716,
-      lintIncludingSequestration: 0.699864364999,
-      seedExcludingSequestration: 7.2186897716,
-      seedIncludingSequestration: 6.99864364999,
-      lintEconomicAllocation: 2961.2509180971,
-      seedEconomicAllocation: 482.064102946,
+      tonnesCropExcludingSequestration: 0.67262978133,
+      tonnesCropIncludingSequestration: 0.65262558846,
+      balesExcludingSequestration: 0.14797855189,
+      balesIncludingSequestration: 0.14357762946,
+      lintExcludingSequestration: 0.73989275947,
+      lintIncludingSequestration: 0.71788814731,
+      seedExcludingSequestration: 7.39892759465,
+      seedIncludingSequestration: 7.17888147306,
+      lintEconomicAllocation: 3035.18807787742,
+      seedEconomicAllocation: 494.10038477074,
     },
   ],
 };
 
-describe.only('Cotton calculator, NSW', () => {
+describe('Cotton calculator, NSW', () => {
   const context = testContext('Cotton');
   const emissions = calculateEntireCotton(
     cottonTestData.crops,
@@ -78,7 +77,7 @@ describe.only('Cotton calculator, NSW', () => {
   executeEmissionsSpec(emissions, expectations);
 });
 
-describe.skip('Cotton calculator (multi activity)', () => {
+describe('Cotton calculator (multi activity)', () => {
   const originalActivity = clone(cottonTestData.crops[0]);
   originalActivity.id = 'cotton-original';
   const activityDoubleSaleYield = clone(originalActivity);

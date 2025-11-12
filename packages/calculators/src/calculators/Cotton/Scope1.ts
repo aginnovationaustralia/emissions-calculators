@@ -70,25 +70,8 @@ export function calculateScope1N2O(
       dryMatterContent *
       belowGroundN;
 
-  // console.log({
-  //   c6: annualProduction,
-  //   c7: residueCropRatio,
-  //   c12: fractionBurnt,
-  //   c13: fractionRemoved,
-  //   c9: dryMatterContent,
-  //   c10: aboveGroundN,
-  //   c8: belowAboveRatio,
-  //   c11: belowGroundN,
-  // });
-
   // (Crop_ResiduesD33)
   const residueN2OEF = constants.CROP.CROP_RESIDUE_N2O_EF;
-
-  // console.log({
-  //   c30: massOfNReturnedToSoil,
-  //   d33: residueN2OEF,
-  //   d34: constants.COMMON.GWP_FACTORSC15,
-  // });
 
   // (Crop_ResiduesC36)
   const residueGgN2O =
@@ -98,13 +81,6 @@ export function calculateScope1N2O(
 
   // (Data_Summary_C13)
   const residueN2OTotal = residuesGgCO2 * 1000;
-
-  // console.log({
-  //   c36: residueGgN2O,
-  //   c38: residuesGgCO2,
-  //   c40: residueN2OTotal,
-  //   gwpC6: constants.COMMON.GWP_FACTORSC6,
-  // });
 
   // (Leaching_And_RunoffC21)
   const fractionOfNAvailableForRunoff = getFertiliserFractionRunoff(context);
@@ -122,13 +98,6 @@ export function calculateScope1N2O(
     fracLeach *
     leechingZoneMultiplier;
 
-  console.log({
-    c6: totalMassFertiliser,
-    c21: fractionOfNAvailableForRunoff,
-    e11: fracLeach,
-    c20: leechingZoneMultiplier,
-  });
-
   // (Leaching_And_RunoffE14)
   const fracWet = constants.COMMON.LEACHING.FRACWET;
 
@@ -144,13 +113,6 @@ export function calculateScope1N2O(
     (fertiliserLeechingGgN + leechingResidueNGgN) *
     leechingN2OEF *
     constants.COMMON.GWP_FACTORSC15;
-
-  console.log({
-    c23: fertiliserLeechingGgN,
-    c24: leechingResidueNGgN,
-    e29: leechingN2OEF,
-    e30: constants.COMMON.GWP_FACTORSC15,
-  });
 
   // (Leaching_And_RunoffC34)
   const leechingGgCO2 = annualN2OLeeching * constants.COMMON.GWP_FACTORSC6;
