@@ -41,7 +41,6 @@ const expectations: PoultryOutput = {
   ...expectedScopes,
   carbonSequestration: {
     total: 0,
-    intermediate: [],
   },
   net: {
     total: 0,

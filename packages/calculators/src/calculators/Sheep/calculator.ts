@@ -429,11 +429,10 @@ export function calculateSheep(
     ...combinedResult,
     carbonSequestration: {
       total: sheepCarbonSequestration.total,
-      intermediate: [], // TODO: Needs to be populated
     },
     intermediate: sheepResults.map((x) => ({
       ...x.output,
-      carbonSequestration: x.extensions.carbonSequestration,
+      carbonSequestration: { total: x.extensions.carbonSequestration },
       id: x.meta.id,
       net: {
         total: x.net.total,

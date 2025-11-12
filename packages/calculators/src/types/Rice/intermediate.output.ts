@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { NetOutputSchema } from '../common/net.output';
-import { OUTPUTDESCRIPTIONS } from '../descriptions.schema';
 import { intermediateEmissionsOutput } from '../schemas';
 import { Scope2OutputSchema } from '../scope2.output';
 import { RiceEmissionsIntensitiesSchema } from './intensities.output';
@@ -13,9 +12,6 @@ export const RiceIntermediateOutputSchema = intermediateEmissionsOutput(
     scope1: RiceScope1OutputSchema,
     scope2: Scope2OutputSchema,
     scope3: RiceScope3OutputSchema,
-    carbonSequestration: z
-      .number()
-      .meta({ description: OUTPUTDESCRIPTIONS.sequestration }),
     intensities: RiceEmissionsIntensitiesSchema,
     net: NetOutputSchema,
   },

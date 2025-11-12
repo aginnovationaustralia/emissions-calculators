@@ -1,4 +1,5 @@
 import { core, z } from 'zod';
+import { SequestrationTotalOutputSchema } from './sequestration.total.output';
 
 export const deprecated = (description: string, deprecationNote?: string) => {
   return {
@@ -73,7 +74,11 @@ export const emissionsOutput = <T extends ZodLooseShape = DefaultLooseShape>(
   });
 
 export const intermediateEmissionsOutput = <
-  T extends 'id' extends keyof T ? never : ZodLooseShape = DefaultLooseShape,
+  T extends 'id' extends keyof T
+    ? never
+    : 'carbonSequestration' extends keyof T
+    ? never
+    : ZodLooseShape = DefaultLooseShape,
 >(
   calculatorName: string,
   shape: T,
@@ -84,6 +89,7 @@ export const intermediateEmissionsOutput = <
         description: `Unique identifier for this ${calculatorName} activity`,
       }),
       ...shape,
+      carbonSequestration: SequestrationTotalOutputSchema,
     })
     .meta({
       description: `Intermediate emissions calculation output for the ${calculatorName} calculator`,

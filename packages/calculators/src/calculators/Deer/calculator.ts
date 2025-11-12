@@ -288,7 +288,6 @@ export function calculateDeer(
     scope3: deerResult.output.scope3,
     carbonSequestration: {
       total: deerResult.extensions.carbonSequestration,
-      intermediate: carbonSequestration.intermediate,
     },
     intensities,
     intermediate: deerResults.map((result) => ({

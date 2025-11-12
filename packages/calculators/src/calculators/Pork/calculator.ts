@@ -339,7 +339,7 @@ export function calculatePork(
         scope1: x.output.scope1,
         scope2: x.output.scope2,
         scope3: x.output.scope3,
-        carbonSequestration: x.extensions.carbonSequestration,
+        carbonSequestration: { total: x.extensions.carbonSequestration },
         id: x.meta.id,
       };
     }),

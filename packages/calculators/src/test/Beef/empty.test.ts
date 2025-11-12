@@ -46,7 +46,6 @@ const expectations: BeefOutput = {
   ...expectedScopes,
   carbonSequestration: {
     total: 0,
-    intermediate: [],
   },
   net: {
     total: 0,
@@ -120,12 +119,13 @@ describe('Beef calculator, empty enterprise', () => {
   const context = testContext('Beef');
   const emissions = calculateBeef(emptyInputWithEnterprise, context);
 
-  const expectedWithEnterprise = {
+  const expectedWithEnterprise: BeefOutput = {
     ...expectations,
     intermediate: [
       {
         ...expectedScopes,
-        carbonSequestration: 0,
+        carbonSequestration: { total: 0 },
+        id: 'beef-0',
         intensities: expectations.intensities,
         net: {
           total: 0,

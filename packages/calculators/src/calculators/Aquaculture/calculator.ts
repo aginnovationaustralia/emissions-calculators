@@ -240,7 +240,6 @@ export function calculateAquaculture(
     },
     carbonSequestration: {
       total: 0,
-      intermediate: aquacultureResults.map(() => 0),
     },
   };
 }

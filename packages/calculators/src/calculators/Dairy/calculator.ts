@@ -376,7 +376,6 @@ export function calculateDairy(
     ...combinedResult,
     carbonSequestration: {
       total: carbonSequestration.total,
-      intermediate: [], // TODO: This needs to be populated
     },
     intensities: getEmissionsIntensities(
       combinedResult.net.total,

@@ -240,7 +240,6 @@ export function calculateWildCatchFishery(
     },
     carbonSequestration: {
       total: 0,
-      intermediate: wildCatchFisheryResults.map(() => 0),
     },
   };
 }

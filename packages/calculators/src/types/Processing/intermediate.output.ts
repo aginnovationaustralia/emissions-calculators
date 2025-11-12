@@ -1,9 +1,7 @@
 import { z } from 'zod';
 import { NetOutputSchema } from '../common/net.output';
-import { OUTPUTDESCRIPTIONS } from '../descriptions.schema';
 import { intermediateEmissionsOutput } from '../schemas';
 import { Scope2OutputSchema } from '../scope2.output';
-import { SequestrationTotalOutputSchema } from '../sequestration.total.output';
 import { ProcessingIntensitiesOutputSchema } from './intensities.output';
 import { ProcessingScope1OutputSchema } from './scope1.output';
 import { ProcessingScope3OutputSchema } from './scope3.output';
@@ -14,9 +12,6 @@ export const ProcessingIntermediateOutputSchema = intermediateEmissionsOutput(
     scope1: ProcessingScope1OutputSchema,
     scope2: Scope2OutputSchema,
     scope3: ProcessingScope3OutputSchema,
-    carbonSequestration: SequestrationTotalOutputSchema.meta({
-      description: OUTPUTDESCRIPTIONS.sequestration,
-    }),
     intensities: ProcessingIntensitiesOutputSchema,
     net: NetOutputSchema,
   },

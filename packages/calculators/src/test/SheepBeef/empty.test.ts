@@ -67,7 +67,6 @@ const expectations: SheepBeefOutput = {
   scope3: expectedScopes.scope3,
   carbonSequestration: {
     total: 0,
-    intermediate: [],
   },
   net: {
     total: 0,
@@ -90,7 +89,7 @@ const expectations: SheepBeefOutput = {
       scope1: expectedScopes.scope1,
       scope2: expectedScopes.scope2,
       scope3: expectedScopes.scope3,
-      carbonSequestration: 0,
+      carbonSequestration: { total: 0 },
       net: {
         total: 0,
       },
@@ -108,7 +107,7 @@ const expectations: SheepBeefOutput = {
       },
       scope2: expectedScopes.scope2,
       scope3: expectedScopes.scope3,
-      carbonSequestration: 0,
+      carbonSequestration: { total: 0 },
       net: {
         total: 0,
       },
@@ -254,14 +253,15 @@ describe('SheepBeef calculator, empty enterprise', () => {
   const context = testContext('SheepBeef');
   const emissions = calculateSheepBeef(emptyInputWithEnterprise, context);
 
-  const expectedWithEnterprise = {
+  const expectedWithEnterprise: SheepBeefOutput = {
     ...expectations,
     intermediateBeef: [
       {
+        id: 'beef-0',
         scope1: expectedScopes.scope1,
         scope2: expectedScopes.scope2,
         scope3: expectedScopes.scope3,
-        carbonSequestration: 0,
+        carbonSequestration: { total: 0 },
         intensities: {
           liveweightBeefProducedKg: 0,
           beefExcludingSequestration: 0,
@@ -274,10 +274,11 @@ describe('SheepBeef calculator, empty enterprise', () => {
     ],
     intermediateSheep: [
       {
+        id: 'sheep-0',
         scope1: expectedScopes.scope1Sheep,
         scope2: expectedScopes.scope2,
         scope3: expectedScopes.scope3,
-        carbonSequestration: 0,
+        carbonSequestration: { total: 0 },
         intensities: {
           woolProducedKg: 0,
           sheepMeatProducedKg: 0,

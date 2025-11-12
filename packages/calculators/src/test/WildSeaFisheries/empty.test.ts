@@ -73,13 +73,14 @@ describe('WildSeaFisheries calculator, empty enterprise', () => {
     context,
   );
 
-  const expectedWithEnterprise = {
+  const expectedWithEnterprise: WildSeaFisheriesOutput = {
     ...expectations,
     intermediate: [
       {
         ...expectedScopes,
         purchasedOffsets: { total: 0 },
-        carbonSequestration: 0,
+        carbonSequestration: { total: 0 },
+        id: 'wild-sea-fisheries-0',
         intensities: {
           intensityExcludingCarbonOffset: 0,
           intensityIncludingCarbonOffset: 0,

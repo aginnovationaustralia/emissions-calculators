@@ -245,10 +245,6 @@ export {
   HorticultureScope3OutputSchema,
 } from './Horticulture/scope3.output';
 export { HorticultureVegetation } from './Horticulture/vegetation.input';
-export {
-  SequestrationIntermediateOutput,
-  SequestrationIntermediateOutputSchema,
-} from './intermediate.sequestration.output';
 export { LivestockSourceLocation, LivestockSourceLocations } from './livestock';
 export { LivestockManure } from './livestockManure.input';
 export { LivestockManureSeason } from './livestockManureSeason.input';

@@ -42,7 +42,6 @@ const expectations: WildCatchFisheryOutput = {
   ...expectedScopes,
   carbonSequestration: {
     total: 0,
-    intermediate: [],
   },
   purchasedOffsets: {
     total: 0,

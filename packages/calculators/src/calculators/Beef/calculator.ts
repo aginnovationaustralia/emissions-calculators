@@ -480,11 +480,10 @@ export function calculateBeef(
     ...combinedResult,
     carbonSequestration: {
       total: beefCarbonSequestration.total,
-      intermediate: beefCarbonSequestration.intermediate,
     },
     intermediate: beefResultsWithBurning.map((x, i) => ({
       ...x.output,
-      carbonSequestration: beefCarbonSequestration.intermediate[i],
+      carbonSequestration: { total: beefCarbonSequestration.intermediate[i] },
       id: x.meta.id,
       intensities: getBeefIntensities(
         x.net.total,

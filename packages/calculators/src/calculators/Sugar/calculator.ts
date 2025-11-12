@@ -230,7 +230,7 @@ export function calculateEntireSugar(
   return {
     carbonSequestration,
     intermediate: allCrops.map((crop) => ({
-      carbonSequestration: crop.extensions.carbonSequestration,
+      carbonSequestration: { total: crop.extensions.carbonSequestration },
       id: crop.meta.id,
       intensities: getIntensities(
         crop.net.total,

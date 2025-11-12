@@ -1,13 +1,14 @@
-import { PORK_CLASSES, SEASONS } from '@/constants/constants';
+import { SEASONS } from '@/constants/constants';
 import {
   ManureManagementSystem,
   ManureManagementSystems,
-  PorkClass,
+  PorkClassesAPI,
   Season,
   State,
 } from '@/types/enums';
 import { Fertiliser } from '@/types/fertiliser.input';
 import { LivestockManure } from '@/types/livestockManure.input';
+import { PorkClasses } from '@/types/Pork/porkclasses.input';
 import { ObjectEntry } from 'type-fest/source/entry';
 import { getOtherFertiliserAmounts } from '../../calculators/common/fertiliser';
 import { divideBySafeFromZero } from '../common/tools';
@@ -16,8 +17,10 @@ import { ExecutionContext } from '../executionContext';
 import { ConstantsForPorkCalculator } from './constants';
 import { getNFertiliserOtherDryland } from './functions';
 
+type PorkClass = keyof PorkClasses;
+
 function calculateAnnualNitrogenFromManureAndWaste(
-  type: PorkClass,
+  type: keyof PorkClasses,
   head: number,
   context: ExecutionContext<ConstantsForPorkCalculator>,
 ) {
@@ -86,27 +89,19 @@ const emptyByTypeAndSystem: Record<
   suckers: { ...emptyManureSystems },
   weaners: { ...emptyManureSystems },
   growers: { ...emptyManureSystems },
-  slaughter_pigs: { ...emptyManureSystems },
+  slaughterPigs: { ...emptyManureSystems },
 };
 
-type PorkSeasonNumber = {
-  [porkType in PorkClass]?: {
-    summer: number;
-    autumn: number;
-    winter: number;
-    spring: number;
-    manure: LivestockManure;
-  };
-};
-
-type PorkSeasonNitrogen = {
-  [porkType in PorkClass]: {
-    [season in Season]: {
+type PorkSeasonNitrogen = Record<
+  PorkClass,
+  Record<
+    Season,
+    {
       annualNitrogen: number;
       annualIndirectNitrogen: number;
-    };
-  };
-};
+    }
+  >
+>;
 
 /**
  * @param manure the complete LivestockManure object
@@ -149,7 +144,7 @@ const isPorkClassWithDetailedEmissions = (
   ['sows', 'boars', 'gilts'].includes(porkClass);
 
 const getSeasonNitrogenFromManureAndFeed = (
-  classes: PorkSeasonNumber,
+  classes: PorkClasses,
   porkClass: PorkClass,
   constants: ConstantsForPorkCalculator,
   season: Season,
@@ -165,7 +160,7 @@ const getSeasonNitrogenFromManureAndFeed = (
 };
 
 const getTotalNitrogenFromManureAndFeed = (
-  classes: PorkSeasonNumber,
+  classes: PorkClasses,
   porkClass: PorkClass,
   constants: ConstantsForPorkCalculator,
 ) => {
@@ -194,7 +189,7 @@ const getTotalNitrogenFromManureAndFeed = (
  */
 export function calculateScope1N2O(
   state: State,
-  head: PorkSeasonNumber,
+  head: PorkClasses,
   fertiliser: Fertiliser,
   rainfallAbove600: boolean,
   context: ExecutionContext<ConstantsForPorkCalculator>,
@@ -208,7 +203,7 @@ export function calculateScope1N2O(
     suckers: { ...EMPTY_INTERNAL_TOTALS },
     weaners: { ...EMPTY_INTERNAL_TOTALS },
     growers: { ...EMPTY_INTERNAL_TOTALS },
-    slaughter_pigs: { ...EMPTY_INTERNAL_TOTALS },
+    slaughterPigs: { ...EMPTY_INTERNAL_TOTALS },
   };
 
   //
@@ -221,7 +216,7 @@ export function calculateScope1N2O(
   //  Cg = Global Warming Potential of nitrous oxide
 
   SEASONS.forEach((season) => {
-    PORK_CLASSES.forEach((type) => {
+    PorkClassesAPI.forEach((type) => {
       const currentClass = head[type];
       if (!currentClass) {
         return;
@@ -245,7 +240,7 @@ export function calculateScope1N2O(
 
   let totalManureMMSKg = 0;
 
-  PORK_CLASSES.forEach((type) => {
+  PorkClassesAPI.forEach((type) => {
     const currentClass = head[type];
     if (!currentClass) {
       return;
@@ -317,7 +312,7 @@ export function calculateScope1N2O(
     ...emptyByTypeAndSystem,
   };
 
-  PORK_CLASSES.forEach((type) => {
+  PorkClassesAPI.forEach((type) => {
     const currentClass = head[type];
     if (!currentClass) {
       return;
@@ -401,7 +396,7 @@ export function calculateScope1N2O(
   let annualLeachingAndRunoffE = 0;
   let annualLeachingAndRunoffAEUndefined = 0;
 
-  PORK_CLASSES.forEach((type) => {
+  PorkClassesAPI.forEach((type) => {
     const currentClass = head[type];
     if (!currentClass) {
       return;
@@ -494,7 +489,7 @@ export function calculateScope1N2O(
   };
 
   SEASONS.forEach((season) => {
-    PORK_CLASSES.forEach((type) => {
+    PorkClassesAPI.forEach((type) => {
       const currentClass = head[type];
       if (!currentClass) {
         return;

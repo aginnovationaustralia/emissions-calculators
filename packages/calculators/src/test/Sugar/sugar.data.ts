@@ -5,6 +5,7 @@ import { veg1, veg2, veg3, veg4 } from './vegetation.data';
 export const sugar1: SugarCrop = {
   state: 'qld',
   productionSystem: 'Sugar cane',
+  percentMilledCaneYield: 0.12,
   averageCaneYield: 90,
   areaSown: 2300,
   nonUreaNitrogen: 20,

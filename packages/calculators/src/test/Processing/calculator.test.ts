@@ -56,7 +56,6 @@ const expectations: ProcessingOutput = {
   },
   carbonSequestration: {
     total: 0,
-    intermediate: [0],
   },
   intermediate: [expectedScopes as ProcessingIntermediateOutput],
 };
@@ -102,16 +101,6 @@ describe('Processing calculator (multi activity)', () => {
       expect(originalEmissions.intensities[0].unitsProduced).toBeCloseTo(
         secondEmissions.intensities[0].unitsProduced / 2,
       );
-    },
-    {
-      transformIntermediate: (intermediate) => ({
-        ...intermediate,
-        intensities: [intermediate.intensities],
-        carbonSequestration: {
-          total: intermediate.carbonSequestration.total,
-          intermediate: [intermediate.carbonSequestration.total],
-        },
-      }),
     },
   );
 });

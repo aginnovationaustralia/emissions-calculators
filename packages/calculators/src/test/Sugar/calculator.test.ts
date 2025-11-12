@@ -37,15 +37,17 @@ const expectations = {
     lime: 0.017865,
     total: 1700.4990344666667,
   },
+  carbonSequestration: {
+    total: 236.2379,
+  },
   net: {
     total: 6906.93374562262,
     crops: [6906.93374562262],
   },
   intensities: [
     {
-      // REVISIT: Calculate fresh intensity using 1.1.0 sheet
-      // sugarExcludingSequestration: 0.28953141875015065,
-      sugarIncludingSequestration: 0.2807178857,
+      sugarExcludingSequestration: 0.2875673,
+      sugarIncludingSequestration: 0.27805691,
     },
   ],
 };

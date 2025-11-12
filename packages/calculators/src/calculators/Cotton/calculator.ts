@@ -292,7 +292,6 @@ export function calculateEntireCotton(
     },
     carbonSequestration: {
       total: carbonSequestration.total,
-      intermediate: carbonSequestration.intermediate,
     },
     intermediate: allCrops.map((crop, ix) => {
       return {
