@@ -11,6 +11,7 @@ export const SugarInputSchema = calculatorInput('Sugar', {
   electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
   electricityUse: z
     .number()
+    .min(0)
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
   vegetation: z.array(SugarVegetationSchema),
 });

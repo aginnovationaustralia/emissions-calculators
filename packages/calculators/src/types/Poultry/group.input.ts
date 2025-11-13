@@ -10,8 +10,9 @@ export const BroilerGroupSchema = z
     feed: z.array(PoultryFeedSchema),
     customFeedPurchased: z
       .number()
+      .min(0)
       .meta({ description: 'Custom feed purchased, in tonnes' }),
-    customFeedEmissionIntensity: z.number().meta({
+    customFeedEmissionIntensity: z.number().min(0).meta({
       description:
         'Emissions intensity of custom feed in GHG (kg CO2-e/kg input)',
     }),

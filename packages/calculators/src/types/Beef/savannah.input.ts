@@ -25,6 +25,7 @@ export const SavannahBurningSchema = z
     }),
     yearsSinceLastFire: z
       .number()
+      .min(0)
       .default(0)
       .meta({ description: 'Time since the last fire, in years' }),
     fireScarArea: z.number().default(0).meta({

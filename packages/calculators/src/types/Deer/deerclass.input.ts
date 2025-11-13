@@ -9,8 +9,11 @@ export const DeerClassSchema = z
     winter: DeerSeasonSchema,
     spring: DeerSeasonSchema,
     summer: DeerSeasonSchema,
-    headSold: z.number().meta({ description: DESCRIPTIONS.HEADSOLD }),
-    saleWeight: z.number().meta({ description: DESCRIPTIONS.SALEWEIGHT }),
+    headSold: z.number().min(0).meta({ description: DESCRIPTIONS.HEADSOLD }),
+    saleWeight: z
+      .number()
+      .min(0)
+      .meta({ description: DESCRIPTIONS.SALEWEIGHT }),
     purchases: z.array(LivestockPurchaseSchema).optional(),
   })
   .meta({ description: 'Deer class with seasonal data' });

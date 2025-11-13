@@ -6,11 +6,11 @@ export const OtherFertiliserSchema = z
     otherType: z
       .enum(CustomisedFertilisers)
       .meta({ description: 'Other N fertiliser type' }),
-    otherDryland: z.number().meta({
+    otherDryland: z.number().min(0).meta({
       description:
         'Other N fertiliser used for dryland. From v1.1.0, supply tonnes of product. For earlier versions, supply tonnes of N',
     }),
-    otherIrrigated: z.number().meta({
+    otherIrrigated: z.number().min(0).meta({
       description:
         'Other N fertiliser used for irrigated. From v1.1.0, supply tonnes of product. For earlier versions, supply tonnes of N',
     }),
