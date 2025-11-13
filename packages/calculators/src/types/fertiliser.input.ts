@@ -7,6 +7,7 @@ export const FertiliserSchema = z
   .object({
     singleSuperphosphate: z
       .number()
+      .min(0)
       .meta({ description: 'Single superphosphate usage in tonnes' }),
     otherType: z
       .enum(CustomisedFertilisers)
@@ -14,20 +15,21 @@ export const FertiliserSchema = z
       .meta(
         deprecated('Other N fertiliser type', 'Use `otherFertilisers` instead'),
       ),
-    pastureDryland: z.number().meta({
+    pastureDryland: z.number().min(0).meta({
       description: 'Urea fertiliser used for dryland pasture, in tonnes Urea',
     }),
-    pastureIrrigated: z.number().meta({
+    pastureIrrigated: z.number().min(0).meta({
       description: 'Urea fertiliser used for irrigated pasture, in tonnes Urea',
     }),
-    cropsDryland: z.number().meta({
+    cropsDryland: z.number().min(0).meta({
       description: 'Urea fertiliser used for dryland crops, in tonnes Urea',
     }),
-    cropsIrrigated: z.number().meta({
+    cropsIrrigated: z.number().min(0).meta({
       description: 'Urea fertiliser used for irrigated crops, in tonnes Urea',
     }),
     otherDryland: z
       .number()
+      .min(0)
       .optional()
       .meta(
         deprecated(
@@ -37,6 +39,7 @@ export const FertiliserSchema = z
       ),
     otherIrrigated: z
       .number()
+      .min(0)
       .optional()
       .meta(
         deprecated(

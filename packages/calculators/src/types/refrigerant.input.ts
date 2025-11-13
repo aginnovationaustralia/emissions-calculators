@@ -6,7 +6,7 @@ export const RefrigerantInputSchema = z.object({
   refrigerant: z
     .enum(Refrigerants)
     .meta({ description: DESCRIPTIONS.REFRIGERANT }),
-  chargeSize: z.number().meta({
+  chargeSize: z.number().min(0).meta({
     description: 'Amount of refrigerant contained in the appliance, in kg',
   }),
 });

@@ -6,12 +6,13 @@ import { deprecated } from '../schemas';
 
 export const PorkClassSchema = z
   .object({
-    autumn: z.number().meta({ description: 'Pig numbers in autumn' }),
-    winter: z.number().meta({ description: 'Pig numbers in winter' }),
-    spring: z.number().meta({ description: 'Pig numbers in spring' }),
-    summer: z.number().meta({ description: 'Pig numbers in summer' }),
+    autumn: z.number().min(0).meta({ description: 'Pig numbers in autumn' }),
+    winter: z.number().min(0).meta({ description: 'Pig numbers in winter' }),
+    spring: z.number().min(0).meta({ description: 'Pig numbers in spring' }),
+    summer: z.number().min(0).meta({ description: 'Pig numbers in summer' }),
     headPurchased: z
       .number()
+      .min(0)
       .optional()
       .meta(
         deprecated(
@@ -21,6 +22,7 @@ export const PorkClassSchema = z
       ),
     purchasedWeight: z
       .number()
+      .min(0)
       .optional()
       .meta(
         deprecated(
@@ -28,8 +30,11 @@ export const PorkClassSchema = z
           'Please use `purchases` instead',
         ),
       ),
-    headSold: z.number().meta({ description: DESCRIPTIONS.HEADSOLD }),
-    saleWeight: z.number().meta({ description: DESCRIPTIONS.SALEWEIGHT }),
+    headSold: z.number().min(0).meta({ description: DESCRIPTIONS.HEADSOLD }),
+    saleWeight: z
+      .number()
+      .min(0)
+      .meta({ description: DESCRIPTIONS.SALEWEIGHT }),
     purchases: z.array(LivestockPurchaseSchema).optional(),
     manure: LivestockManureSchema,
   })

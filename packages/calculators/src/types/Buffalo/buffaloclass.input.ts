@@ -9,8 +9,11 @@ export const BuffaloClassSchema = z
     winter: BuffaloSeasonSchema,
     spring: BuffaloSeasonSchema,
     summer: BuffaloSeasonSchema,
-    headSold: z.number().meta({ description: DESCRIPTIONS.HEADSOLD }),
-    saleWeight: z.number().meta({ description: DESCRIPTIONS.SALEWEIGHT }),
+    headSold: z.number().min(0).meta({ description: DESCRIPTIONS.HEADSOLD }),
+    saleWeight: z
+      .number()
+      .min(0)
+      .meta({ description: DESCRIPTIONS.SALEWEIGHT }),
     purchases: z.array(LivestockPurchaseSchema).optional(),
   })
   .meta({ description: 'Buffalo class with seasonal data' });

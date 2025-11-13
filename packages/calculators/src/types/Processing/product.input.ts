@@ -10,7 +10,7 @@ export enum ProductUnit {
 
 export const ProcessingProductSchema = z.object({
   unit: z.enum(ProductUnit),
-  amountMadePerYear: z.number(),
+  amountMadePerYear: z.number().min(0),
 });
 
 export type ProcessingProduct = z.infer<typeof ProcessingProductSchema>;

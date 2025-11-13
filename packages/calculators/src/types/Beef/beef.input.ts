@@ -9,12 +9,12 @@ import { BeefClassesSchema } from './beefclasses.input';
 
 export const BeefCompleteSchema = singleEnterpriseInput('Beef', {
   classes: BeefClassesSchema,
-  limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
+  limestone: z.number().min(0).meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   fertiliser: FertiliserSchema,
-  diesel: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
-  petrol: z.number().meta({ description: DESCRIPTIONS.PETROL }),
-  lpg: z.number().meta({ description: DESCRIPTIONS.LPG }),
+  diesel: z.number().min(0).meta({ description: DESCRIPTIONS.DIESEL }),
+  petrol: z.number().min(0).meta({ description: DESCRIPTIONS.PETROL }),
+  lpg: z.number().min(0).meta({ description: DESCRIPTIONS.LPG }),
   mineralSupplementation: MineralSupplementationSchema,
   electricitySource: z
     .enum(ElectricitySources)
@@ -22,12 +22,19 @@ export const BeefCompleteSchema = singleEnterpriseInput('Beef', {
   electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
   electricityUse: z
     .number()
+    .min(0)
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
-  grainFeed: z.number().meta({ description: DESCRIPTIONS.GRAINFEED }),
-  hayFeed: z.number().meta({ description: DESCRIPTIONS.HAYFEED }),
-  cottonseedFeed: z.number().meta({ description: DESCRIPTIONS.COTTONSEEDFEED }),
-  herbicide: z.number().meta({ description: DESCRIPTIONS.HERBICIDE }),
-  herbicideOther: z.number().meta({ description: DESCRIPTIONS.HERBICIDEOTHER }),
+  grainFeed: z.number().min(0).meta({ description: DESCRIPTIONS.GRAINFEED }),
+  hayFeed: z.number().min(0).meta({ description: DESCRIPTIONS.HAYFEED }),
+  cottonseedFeed: z
+    .number()
+    .min(0)
+    .meta({ description: DESCRIPTIONS.COTTONSEEDFEED }),
+  herbicide: z.number().min(0).meta({ description: DESCRIPTIONS.HERBICIDE }),
+  herbicideOther: z
+    .number()
+    .min(0)
+    .meta({ description: DESCRIPTIONS.HERBICIDEOTHER }),
   cowsCalving: BeefCalvingSchema,
 });
 

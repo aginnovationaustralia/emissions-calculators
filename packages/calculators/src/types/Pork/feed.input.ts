@@ -6,11 +6,12 @@ export const FeedSchema = z
   .object({
     feedPurchased: z
       .number()
+      .min(0)
       .meta({ description: 'Pig feed purchased, in tonnes' }),
     additionalIngredients: proportion(
       'Fraction of additional ingredient in feed mix, from 0 to 1',
     ),
-    emissionsIntensity: z.number().meta({
+    emissionsIntensity: z.number().min(0).meta({
       description:
         'Emissions intensity of feed product in GHG (kg CO2-e/kg input)',
     }),

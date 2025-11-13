@@ -1,10 +1,11 @@
 import { z } from 'zod';
+import { proportion } from './schemas';
 import { VegetationSchema } from './vegetation.input';
 
 export const AllocatedVegetationSchema = z
   .object({
     vegetation: VegetationSchema,
-    allocatedProportion: z.array(z.number()).meta({
+    allocatedProportion: z.array(proportion()).meta({
       description:
         'The proportion of the sequestration that is allocated to the activity',
     }),

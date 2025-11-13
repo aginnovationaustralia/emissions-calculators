@@ -6,7 +6,10 @@ export const StationaryFuelInputSchema = z.object({
   type: z
     .enum(StationaryFuelTypes)
     .meta({ description: DESCRIPTIONS.FUEL_TYPE }),
-  amountLitres: z.number().meta({ description: DESCRIPTIONS.FUEL_CONSUMPTION }),
+  amountLitres: z
+    .number()
+    .min(0)
+    .meta({ description: DESCRIPTIONS.FUEL_CONSUMPTION }),
 });
 
 export type StationaryFuelInput = z.infer<typeof StationaryFuelInputSchema>;

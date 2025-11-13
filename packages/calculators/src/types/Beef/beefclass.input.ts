@@ -13,10 +13,12 @@ export const BeefClassSchema = z
     summer: BeefSeasonSchema,
     headPurchased: z
       .number()
+      .min(0)
       .optional()
       .meta(deprecated(DESCRIPTIONS.HEADPURCHASED, 'Use `purchases` instead')),
     purchasedWeight: z
       .number()
+      .min(0)
       .optional()
       .meta(
         deprecated(DESCRIPTIONS.PURCHASEDWEIGHT, 'Use `purchases` instead'),
@@ -30,8 +32,11 @@ export const BeefClassSchema = z
           `Use \`purchases\` instead`,
         ),
       ),
-    headSold: z.number().meta({ description: DESCRIPTIONS.HEADSOLD }),
-    saleWeight: z.number().meta({ description: DESCRIPTIONS.SALEWEIGHT }),
+    headSold: z.number().min(0).meta({ description: DESCRIPTIONS.HEADSOLD }),
+    saleWeight: z
+      .number()
+      .min(0)
+      .meta({ description: DESCRIPTIONS.SALEWEIGHT }),
     purchases: z.array(BeefPurchaseSchema).optional(),
   })
   .meta({ description: 'Beef class with seasonal data' });

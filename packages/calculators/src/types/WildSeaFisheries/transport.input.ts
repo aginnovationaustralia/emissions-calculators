@@ -9,7 +9,7 @@ export const WildSeaFisheriesTransportSchema = z.object({
     .enum(WildSeaFisheriesTransportTypes)
     .meta({ description: 'Transport type' }),
   fuel: z.enum(WildSeaFisheriesFuels).meta({ description: 'Fuel type' }),
-  distance: z.number().meta({ description: 'Distance in km' }),
+  distance: z.number().min(0).meta({ description: 'Distance in km' }),
 });
 
 export type WildSeaFisheriesTransport = z.infer<

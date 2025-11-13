@@ -2,10 +2,10 @@ import { z } from 'zod';
 
 export const NitrogenFertiliserSchema = z
   .object({
-    cropsIrrigated: z.number(),
-    cropsDryland: z.number(),
-    pastureIrrigated: z.number(),
-    pastureDryland: z.number(),
+    cropsIrrigated: z.number().min(0),
+    cropsDryland: z.number().min(0),
+    pastureIrrigated: z.number().min(0),
+    pastureDryland: z.number().min(0),
   })
   .meta({
     description: 'Nitrogen fertiliser application, each value is in kg N/ha',

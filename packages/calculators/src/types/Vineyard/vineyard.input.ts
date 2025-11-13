@@ -15,41 +15,43 @@ export const VineyardCropSchema = singleEnterpriseInput('Vineyard', {
   irrigated: z.boolean().meta({ description: DESCRIPTIONS.IRRIGATED }),
   areaPlanted: z
     .number()
+    .min(0)
     .meta({ description: 'Area planted, in ha (hectares)' }),
   averageYield: z
     .number()
+    .min(0)
     .meta({ description: 'Average yield, in t/ha (tonnes per hectare)' }),
-  nonUreaNitrogen: z.number().meta({
+  nonUreaNitrogen: z.number().min(0).meta({
     description:
       'Non-urea nitrogen application, in kg N/ha (kilograms of nitrogen per hectare)',
   }),
-  phosphorusApplication: z.number().meta({
+  phosphorusApplication: z.number().min(0).meta({
     description:
       'Phosphorus application, in kg P/ha (kilograms of phosphorus per hectare)',
   }),
-  potassiumApplication: z.number().meta({
+  potassiumApplication: z.number().min(0).meta({
     description:
       'Potassium application, in kg K/ha (kilograms of potassium per hectare)',
   }),
-  sulfurApplication: z.number().meta({
+  sulfurApplication: z.number().min(0).meta({
     description:
       'Sulfur application, in kg S/ha (kilograms of sulfur per hectare)',
   }),
-  ureaApplication: z.number().meta({
+  ureaApplication: z.number().min(0).meta({
     description:
       'Urea nitrogen application, in kg Urea/ha (kilograms of urea per hectare)',
   }),
-  ureaAmmoniumNitrate: z.number().meta({
+  ureaAmmoniumNitrate: z.number().min(0).meta({
     description:
       'Urea-Ammonium nitrate application, in kg product/ha (kilograms of product per hectare)',
   }),
-  limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
+  limestone: z.number().min(0).meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
-  herbicideUse: z.number().meta({
+  herbicideUse: z.number().min(0).meta({
     description:
       'Total amount of active ingredients from general herbicide/pesticide use, in kg (kilogram)',
   }),
-  glyphosateOtherHerbicideUse: z.number().meta({
+  glyphosateOtherHerbicideUse: z.number().min(0).meta({
     description:
       'Total amount of active ingredients from other herbicide use (Paraquat, Diquat, Glyphosate), in kg (kilogram)',
   }),

@@ -3,9 +3,10 @@ import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 
 export const FeedlotPurchaseSchema = z.object({
-  head: z.number().meta({ description: DESCRIPTIONS.HEADPURCHASED }),
+  head: z.number().min(0).meta({ description: DESCRIPTIONS.HEADPURCHASED }),
   purchaseWeight: z
     .number()
+    .min(0)
     .meta({ description: DESCRIPTIONS.PURCHASEDWEIGHT }),
   purchaseSource: z
     .enum(FeedlotPurchaseSourceLocations)

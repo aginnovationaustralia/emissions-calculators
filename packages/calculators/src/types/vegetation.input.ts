@@ -12,8 +12,12 @@ export const VegetationSchema = z
       .meta({ description: 'The soil type the tree is in' }),
     area: z
       .number()
+      .min(0)
       .meta({ description: 'The area of trees, in ha (hectares)' }),
-    age: z.number().meta({ description: 'The age of the trees, in years' }),
+    age: z
+      .number()
+      .min(0)
+      .meta({ description: 'The age of the trees, in years' }),
   })
   .meta({
     description:

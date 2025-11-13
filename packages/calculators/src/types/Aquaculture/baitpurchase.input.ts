@@ -6,6 +6,7 @@ export const AquacultureBaitPurchaseSchema = z.object({
   type: z.enum(AquacultureBait).meta({ description: 'Bait product type' }),
   purchasedTonnes: z
     .number()
+    .min(0)
     .meta({ description: 'Purchased product in tonnes' }),
   additionalIngredients: proportion(
     'Additional ingredient fraction, from 0 to 1',

@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { vegetationInput } from '../schemas';
+import { proportion, vegetationInput } from '../schemas';
 import { VegetationSchema } from '../vegetation.input';
 
 export const RiceVegetationSchema = vegetationInput('Rice', {
   vegetation: VegetationSchema,
-  allocationToCrops: z.array(z.number()),
+  allocationToCrops: z.array(proportion()),
 });
 
 export type RiceVegetation = z.infer<typeof RiceVegetationSchema>;
