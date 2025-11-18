@@ -4,6 +4,7 @@
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "browser": "dist/browser.mjs",
   "files": [
     "dist/**/*"
   ],
@@ -45,6 +46,7 @@
   },
   "dependencies": {
     "mixpanel": "^0.18.1",
+    "mixpanel-browser": "^2.72.0",
     "openapi3-ts": "^4.5.0",
     "reflect-metadata": "^0.2.2",
     "semver": "^7.7.3",
