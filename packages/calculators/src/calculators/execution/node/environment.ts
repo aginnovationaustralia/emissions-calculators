@@ -14,6 +14,11 @@ type CalculationEnvironmentParameters = {
   organisation?: string;
 };
 
+/**
+ * The CalculationEnvironment is a wrapper around the AsyncLocalStorage API that allows for the
+ * overriding of constants and organisation for a calculator execution. It is designed to wrap a calculator
+ * execution in a web server context.
+ */
 class CalculationEnvironment {
   private static storage =
     new AsyncLocalStorage<CalculationEnvironmentParameters>();
@@ -48,6 +53,9 @@ class CalculationEnvironment {
   }
 }
 
+/**
+ * Create an instance of an Environment that can be used to execute a calculator in a Node.js context.
+ */
 class NodeEnvironment implements Environment {
   loadConstants(): AllConstants {
     return merge<AllConstants[]>(
