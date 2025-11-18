@@ -1,4 +1,4 @@
-import { InputValidationError } from './utils/io';
+import { InputValidationError } from './calculators/validate';
 
 import * as Calculators from './calculators';
 import * as Constants from './constants';

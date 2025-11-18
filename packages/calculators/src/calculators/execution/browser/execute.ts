@@ -1,19 +1,10 @@
 import { loadConstants } from '@/constants/loader';
 import { AllConstants } from '@/constants/types';
-import { ExecutionContext } from '../../executionContext';
+import { contextFor, ExecutionContext } from '../../executionContext';
 import { CalculatorNames } from '../../strings';
 import { CALCULATOR_VERSION } from '../constants';
 import { packageVersion } from '../version';
 import { trackCalculatorExecution } from './metrics';
-
-function contextFor(calculator: string) {
-  return {
-    calculator,
-    version: CALCULATOR_VERSION,
-    constants: loadConstants(),
-    timestamp: new Date().toISOString(),
-  };
-}
 
 export type CalculatorOptions = {
   disableMetrics?: boolean;
@@ -26,7 +17,7 @@ export function executeCalculator<Input extends object, Output extends object>(
   calculatorName: CalculatorNames,
   options?: CalculatorOptions,
 ): Output {
-  const context = contextFor(calculatorName);
+  const context = contextFor(calculatorName, loadConstants());
   let result: Output;
   let failed = false;
 
