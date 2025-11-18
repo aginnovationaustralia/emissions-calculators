@@ -1,5 +1,5 @@
 import { AllConstants } from '@/constants/types';
-import { CalculatorNames } from '../strings';
+import { CalculatorNames } from '../../strings';
 import { executeCalculator } from './execute';
 import { trackCalculatorExecution } from './metrics';
 

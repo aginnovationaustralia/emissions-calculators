@@ -58,7 +58,10 @@ import { calculateSugar as calculateSugarInternal } from './Sugar/calculator';
 import { calculateVineyard as calculateVineyardInternal } from './Vineyard/calculator';
 import { calculateWildCatchFishery as calculateWildCatchFisheryInternal } from './WildCatchFishery/calculator';
 import { calculateWildSeaFisheries as calculateWildSeaFisheriesInternal } from './WildSeaFisheries/calculator';
-import { CalculatorOptions, executeCalculator } from './browser-execute';
+import {
+  CalculatorOptions,
+  executeCalculator,
+} from './execution/browser/browser-execute';
 import { CalculatorNames } from './strings';
 
 export function calculateBeef(input: BeefInput): BeefOutput {
