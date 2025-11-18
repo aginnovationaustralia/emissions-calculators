@@ -1,7 +1,7 @@
 import { CottonInputSchema } from '@/types/Cotton/input';
 import { CustomisedFertiliser } from '@/types/enums';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { cottonTestData } from './cotton.data';
 
 describe('validating Cotton test inputs, all types of inputs', () => {

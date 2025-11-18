@@ -6,7 +6,7 @@ import { BeefInput, BeefInputSchema } from '@/types/Beef/input';
 import { BeefIntermediateOutput } from '@/types/Beef/intermediate.output';
 import { BeefOutput } from '@/types/Beef/output';
 import clone from 'nanoclone';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
 import { testContext } from '../common/context';
 import {

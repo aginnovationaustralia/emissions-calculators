@@ -1,6 +1,6 @@
 import { DeerInputSchema } from '@/types/Deer/input';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { deerTestData } from './deer.data';
 
 describe('validating Deer test inputs, all types of inputs', () => {

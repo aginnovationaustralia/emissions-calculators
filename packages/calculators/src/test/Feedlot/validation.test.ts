@@ -1,6 +1,6 @@
 import { FeedlotInputSchema } from '@/types/Feedlot/input';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { feedlotTestData } from './feedlot.data';
 
 describe('validating Feedlot test inputs, all types of inputs', () => {

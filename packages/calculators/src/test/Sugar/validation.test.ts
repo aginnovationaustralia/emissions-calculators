@@ -1,6 +1,6 @@
 import { SugarInputSchema } from '@/types/Sugar/input';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { sugar1, sugarTestData } from './sugar.data';
 
 describe('validating Sugar test inputs, all types of inputs', () => {

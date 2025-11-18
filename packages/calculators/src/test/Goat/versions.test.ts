@@ -1,5 +1,5 @@
 import { GoatInputSchema } from '@/types/Goat/input';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { goatComplete } from './goats.data';
 import { veg1, veg2 } from './vegetation.data';
 

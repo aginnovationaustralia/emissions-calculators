@@ -6,7 +6,7 @@ import { PorkInput, PorkInputSchema } from '@/types/Pork/input';
 import { PorkIntermediateOutput } from '@/types/Pork/intermediate.output';
 import { PorkOutput } from '@/types/Pork/output';
 import clone from 'nanoclone';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
 import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';

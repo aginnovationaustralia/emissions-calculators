@@ -6,7 +6,7 @@ import { calculateTreeCarbonSequestration } from '@/calculators/common/trees';
 import { Vegetation } from '@/types';
 import { BeefPurchaseSchema } from '@/types/Beef/beefpurchase.input';
 import { LivestockPurchaseSchema } from '@/types/livestockPurchase.input';
-import { validateCalculatorInput } from '../calculators/calculators';
+import { validateCalculatorInput } from '../calculators/validate';
 import { beefTestInput } from './Beef/beef.data';
 import { testContext } from './common/context';
 import { veg1 } from './SheepBeef/vegetation.data';

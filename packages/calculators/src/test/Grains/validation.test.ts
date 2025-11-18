@@ -1,6 +1,6 @@
 import { GrainsInputSchema } from '@/types/Grains/input';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { grainsTestData } from './grains.data';
 
 describe('validating Grains test inputs, all types of inputs', () => {

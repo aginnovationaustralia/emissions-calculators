@@ -1,6 +1,6 @@
 import { calculateSheepBeef } from '@/calculators/SheepBeef/calculator';
 import { BeefCompleteSchema } from '@/types/Beef/beef.input';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { beefTestInput } from '../Beef/beef.data';
 import { testContext } from '../common/context';
 import { sheepTestInput } from '../Sheep/sheep.data';
