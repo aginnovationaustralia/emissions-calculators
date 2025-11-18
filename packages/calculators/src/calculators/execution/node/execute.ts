@@ -1,39 +1,18 @@
-import { AllConstants } from '@/constants/types';
-import { contextFor, ExecutionContext } from '../../executionContext';
 import { CalculatorNames } from '../../strings';
-import { CALCULATOR_VERSION } from '../constants';
-import { packageVersion } from '../version';
-import { CalculationEnvironment } from './environment';
-import { trackCalculatorExecution } from './metrics';
+import { Calculator, executeCalculator } from '../execute';
+import { NodeEnvironment } from './environment';
 
-export function executeCalculator<Input extends object, Output extends object>(
-  calculator: (input: Input, context: ExecutionContext<AllConstants>) => Output,
+type NodeCalculator<Input extends object, Output extends object> = (
   input: Input,
+) => Output;
+
+export function createNodeCalculator<
+  Input extends object,
+  Output extends object,
+>(
+  calculator: Calculator<Input, Output>,
   calculatorName: CalculatorNames,
-): Output {
-  const context = contextFor(
-    calculatorName,
-    CalculationEnvironment.loadConstants(),
-  );
-  let result: Output;
-  let failed = false;
-
-  try {
-    result = calculator(input, context);
-  } catch (error) {
-    failed = true;
-    throw error;
-  } finally {
-    if (CalculationEnvironment.isMetricsEnabled()) {
-      trackCalculatorExecution({
-        calculator: calculatorName,
-        calculatorVersion: CALCULATOR_VERSION,
-        failed,
-        packageVersion: packageVersion(),
-        organisation: CalculationEnvironment.getOrganisation(),
-      });
-    }
-  }
-
-  return result;
+): NodeCalculator<Input, Output> {
+  return (input: Input): Output =>
+    executeCalculator(calculator, input, calculatorName, new NodeEnvironment());
 }

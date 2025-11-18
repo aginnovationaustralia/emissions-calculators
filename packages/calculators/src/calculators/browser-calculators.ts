@@ -1,43 +1,3 @@
-import { AquacultureInput } from '@/types/Aquaculture/input';
-import { AquacultureOutput } from '@/types/Aquaculture/output';
-import { BeefInput } from '@/types/Beef/input';
-import { BeefOutput } from '@/types/Beef/output';
-import { BuffaloInput } from '@/types/Buffalo/input';
-import { BuffaloOutput } from '@/types/Buffalo/output';
-import { CottonInput } from '@/types/Cotton/input';
-import { CottonOutput } from '@/types/Cotton/output';
-import { DairyInput } from '@/types/Dairy/input';
-import { DairyOutput } from '@/types/Dairy/output';
-import { DeerInput } from '@/types/Deer/input';
-import { DeerOutput } from '@/types/Deer/output';
-import { FeedlotInput } from '@/types/Feedlot/input';
-import { FeedlotOutput } from '@/types/Feedlot/output';
-import { GoatInput } from '@/types/Goat/input';
-import { GoatOutput } from '@/types/Goat/output';
-import { GrainsInput } from '@/types/Grains/input';
-import { GrainsOutput } from '@/types/Grains/output';
-import { HorticultureInput } from '@/types/Horticulture/input';
-import { HorticultureOutput } from '@/types/Horticulture/output';
-import { PorkInput } from '@/types/Pork/input';
-import { PorkOutput } from '@/types/Pork/output';
-import { PoultryInput } from '@/types/Poultry/input';
-import { PoultryOutput } from '@/types/Poultry/output';
-import { ProcessingInput } from '@/types/Processing/input';
-import { ProcessingOutput } from '@/types/Processing/output';
-import { RiceInput } from '@/types/Rice/input';
-import { RiceOutput } from '@/types/Rice/output';
-import { SheepInput } from '@/types/Sheep/input';
-import { SheepOutput } from '@/types/Sheep/output';
-import { SheepBeefInput } from '@/types/SheepBeef/input';
-import { SheepBeefOutput } from '@/types/SheepBeef/output';
-import { SugarInput } from '@/types/Sugar/input';
-import { SugarOutput } from '@/types/Sugar/output';
-import { VineyardInput } from '@/types/Vineyard/input';
-import { VineyardOutput } from '@/types/Vineyard/output';
-import { WildCatchFisheryInput } from '@/types/WildCatchFishery/input';
-import { WildCatchFisheryOutput } from '@/types/WildCatchFishery/output';
-import { WildSeaFisheriesInput } from '@/types/WildSeaFisheries/input';
-import { WildSeaFisheriesOutput } from '@/types/WildSeaFisheries/output';
 import { calculateAquaculture as calculateAquacultureInternal } from './Aquaculture/calculator';
 import { calculateBeef as calculateBeefInternal } from './Beef/calculator';
 import { calculateBuffalo as calculateBuffaloInternal } from './Buffalo/calculator';
@@ -58,240 +18,105 @@ import { calculateSugar as calculateSugarInternal } from './Sugar/calculator';
 import { calculateVineyard as calculateVineyardInternal } from './Vineyard/calculator';
 import { calculateWildCatchFishery as calculateWildCatchFisheryInternal } from './WildCatchFishery/calculator';
 import { calculateWildSeaFisheries as calculateWildSeaFisheriesInternal } from './WildSeaFisheries/calculator';
-import {
-  CalculatorOptions,
-  executeCalculator,
-} from './execution/browser/execute';
+import { createBrowserCalculator } from './execution/browser/execute';
 import { CalculatorNames } from './strings';
 
-export function calculateBeef(input: BeefInput): BeefOutput {
-  return executeCalculator(calculateBeefInternal, input, CalculatorNames.Beef);
-}
+export const calculateAquaculture = createBrowserCalculator(
+  calculateAquacultureInternal,
+  CalculatorNames.Aquaculture,
+);
 
-export function calculateAquaculture(
-  input: AquacultureInput,
-  options?: CalculatorOptions,
-): AquacultureOutput {
-  return executeCalculator(
-    calculateAquacultureInternal,
-    input,
-    CalculatorNames.Aquaculture,
-    options,
-  );
-}
+export const calculateBeef = createBrowserCalculator(
+  calculateBeefInternal,
+  CalculatorNames.Beef,
+);
 
-export function calculateBuffalo(
-  input: BuffaloInput,
-  options?: CalculatorOptions,
-): BuffaloOutput {
-  return executeCalculator(
-    calculateBuffaloInternal,
-    input,
-    CalculatorNames.Buffalo,
-    options,
-  );
-}
+export const calculateBuffalo = createBrowserCalculator(
+  calculateBuffaloInternal,
+  CalculatorNames.Buffalo,
+);
 
-export function calculateCotton(
-  input: CottonInput,
-  options?: CalculatorOptions,
-): CottonOutput {
-  return executeCalculator(
-    calculateCottonInternal,
-    input,
-    CalculatorNames.Cotton,
-    options,
-  );
-}
+export const calculateCotton = createBrowserCalculator(
+  calculateCottonInternal,
+  CalculatorNames.Cotton,
+);
 
-export function calculateDairy(
-  input: DairyInput,
-  options?: CalculatorOptions,
-): DairyOutput {
-  return executeCalculator(
-    calculateDairyInternal,
-    input,
-    CalculatorNames.Dairy,
-    options,
-  );
-}
+export const calculateDairy = createBrowserCalculator(
+  calculateDairyInternal,
+  CalculatorNames.Dairy,
+);
 
-export function calculateDeer(
-  input: DeerInput,
-  options?: CalculatorOptions,
-): DeerOutput {
-  return executeCalculator(
-    calculateDeerInternal,
-    input,
-    CalculatorNames.Deer,
-    options,
-  );
-}
+export const calculateDeer = createBrowserCalculator(
+  calculateDeerInternal,
+  CalculatorNames.Deer,
+);
 
-export function calculateFeedlot(
-  input: FeedlotInput,
-  options?: CalculatorOptions,
-): FeedlotOutput {
-  return executeCalculator(
-    calculateFeedlotInternal,
-    input,
-    CalculatorNames.Feedlot,
-    options,
-  );
-}
+export const calculateFeedlot = createBrowserCalculator(
+  calculateFeedlotInternal,
+  CalculatorNames.Feedlot,
+);
 
-export function calculateGoat(
-  input: GoatInput,
-  options?: CalculatorOptions,
-): GoatOutput {
-  return executeCalculator(
-    calculateGoatInternal,
-    input,
-    CalculatorNames.Goat,
-    options,
-  );
-}
+export const calculateGoat = createBrowserCalculator(
+  calculateGoatInternal,
+  CalculatorNames.Goat,
+);
 
-export function calculateGrains(
-  input: GrainsInput,
-  options?: CalculatorOptions,
-): GrainsOutput {
-  return executeCalculator(
-    calculateGrainsInternal,
-    input,
-    CalculatorNames.Grains,
-    options,
-  );
-}
+export const calculateGrains = createBrowserCalculator(
+  calculateGrainsInternal,
+  CalculatorNames.Grains,
+);
 
-export function calculateHorticulture(
-  input: HorticultureInput,
-  options?: CalculatorOptions,
-): HorticultureOutput {
-  return executeCalculator(
-    calculateHorticultureInternal,
-    input,
-    CalculatorNames.Horticulture,
-    options,
-  );
-}
+export const calculateHorticulture = createBrowserCalculator(
+  calculateHorticultureInternal,
+  CalculatorNames.Horticulture,
+);
 
-export function calculatePork(
-  input: PorkInput,
-  options?: CalculatorOptions,
-): PorkOutput {
-  return executeCalculator(
-    calculatePorkInternal,
-    input,
-    CalculatorNames.Pork,
-    options,
-  );
-}
+export const calculatePork = createBrowserCalculator(
+  calculatePorkInternal,
+  CalculatorNames.Pork,
+);
 
-export function calculatePoultry(
-  input: PoultryInput,
-  options?: CalculatorOptions,
-): PoultryOutput {
-  return executeCalculator(
-    calculatePoultryInternal,
-    input,
-    CalculatorNames.Poultry,
-    options,
-  );
-}
+export const calculatePoultry = createBrowserCalculator(
+  calculatePoultryInternal,
+  CalculatorNames.Poultry,
+);
 
-export function calculateProcessing(
-  input: ProcessingInput,
-  options?: CalculatorOptions,
-): ProcessingOutput {
-  return executeCalculator(
-    calculateProcessingInternal,
-    input,
-    CalculatorNames.Processing,
-    options,
-  );
-}
+export const calculateProcessing = createBrowserCalculator(
+  calculateProcessingInternal,
+  CalculatorNames.Processing,
+);
 
-export function calculateRice(
-  input: RiceInput,
-  options?: CalculatorOptions,
-): RiceOutput {
-  return executeCalculator(
-    calculateRiceInternal,
-    input,
-    CalculatorNames.Rice,
-    options,
-  );
-}
+export const calculateRice = createBrowserCalculator(
+  calculateRiceInternal,
+  CalculatorNames.Rice,
+);
 
-export function calculateSheep(
-  input: SheepInput,
-  options?: CalculatorOptions,
-): SheepOutput {
-  return executeCalculator(
-    calculateSheepInternal,
-    input,
-    CalculatorNames.Sheep,
-    options,
-  );
-}
+export const calculateSheep = createBrowserCalculator(
+  calculateSheepInternal,
+  CalculatorNames.Sheep,
+);
 
-export function calculateSheepBeef(
-  input: SheepBeefInput,
-  options?: CalculatorOptions,
-): SheepBeefOutput {
-  return executeCalculator(
-    calculateSheepBeefInternal,
-    input,
-    CalculatorNames.SheepBeef,
-    options,
-  );
-}
+export const calculateSheepBeef = createBrowserCalculator(
+  calculateSheepBeefInternal,
+  CalculatorNames.SheepBeef,
+);
 
-export function calculateSugar(
-  input: SugarInput,
-  options?: CalculatorOptions,
-): SugarOutput {
-  return executeCalculator(
-    calculateSugarInternal,
-    input,
-    CalculatorNames.Sugar,
-    options,
-  );
-}
+export const calculateSugar = createBrowserCalculator(
+  calculateSugarInternal,
+  CalculatorNames.Sugar,
+);
 
-export function calculateVineyard(
-  input: VineyardInput,
-  options?: CalculatorOptions,
-): VineyardOutput {
-  return executeCalculator(
-    calculateVineyardInternal,
-    input,
-    CalculatorNames.Vineyard,
-    options,
-  );
-}
+export const calculateVineyard = createBrowserCalculator(
+  calculateVineyardInternal,
+  CalculatorNames.Vineyard,
+);
 
-export function calculateWildCatchFishery(
-  input: WildCatchFisheryInput,
-  options?: CalculatorOptions,
-): WildCatchFisheryOutput {
-  return executeCalculator(
-    calculateWildCatchFisheryInternal,
-    input,
-    CalculatorNames.WildCatchFishery,
-    options,
-  );
-}
+export const calculateWildCatchFishery = createBrowserCalculator(
+  calculateWildCatchFisheryInternal,
+  CalculatorNames.WildCatchFishery,
+);
 
-export function calculateWildSeaFisheries(
-  input: WildSeaFisheriesInput,
-  options?: CalculatorOptions,
-): WildSeaFisheriesOutput {
-  return executeCalculator(
-    calculateWildSeaFisheriesInternal,
-    input,
-    CalculatorNames.WildSeaFisheries,
-    options,
-  );
-}
+export const calculateWildSeaFisheries = createBrowserCalculator(
+  calculateWildSeaFisheriesInternal,
+  CalculatorNames.WildSeaFisheries,
+);

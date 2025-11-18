@@ -3,6 +3,10 @@ import { AllConstants } from '@/constants/types';
 import { AsyncLocalStorage } from 'async_hooks';
 import { merge } from 'ts-deepmerge';
 import { PartialDeep } from 'type-fest';
+import { CALCULATOR_VERSION } from '../constants';
+import { Environment } from '../types';
+import { packageVersion } from '../version';
+import { getMixpanelInstance } from './mixpanel';
 
 export type ConstantOverrides = PartialDeep<AllConstants>;
 type CalculationEnvironmentParameters = {
@@ -44,4 +48,31 @@ class CalculationEnvironment {
   }
 }
 
-export { CalculationEnvironment };
+class NodeEnvironment implements Environment {
+  loadConstants(): AllConstants {
+    return merge<AllConstants[]>(
+      loadConstants(),
+      CalculationEnvironment.getOverrides() as AllConstants,
+    );
+  }
+
+  isMetricsEnabled(): boolean {
+    return process.env.DISABLE_CALCULATOR_METRICS !== 'true';
+  }
+
+  getOrganisation(): string | undefined {
+    return CalculationEnvironment.getOrganisation();
+  }
+
+  trackCalculatorExecution(calculatorName: string, failed: boolean) {
+    getMixpanelInstance().track('Execute package calculation', {
+      calculator: calculatorName,
+      failed,
+      organisation: this.getOrganisation(),
+      packageVersion: packageVersion(),
+      calculatorVersion: CALCULATOR_VERSION,
+    });
+  }
+}
+
+export { CalculationEnvironment, NodeEnvironment };

@@ -1,44 +1,24 @@
-import { loadConstants } from '@/constants/loader';
-import { AllConstants } from '@/constants/types';
-import { contextFor, ExecutionContext } from '../../executionContext';
 import { CalculatorNames } from '../../strings';
-import { CALCULATOR_VERSION } from '../constants';
-import { packageVersion } from '../version';
-import { trackCalculatorExecution } from './metrics';
+import { Calculator, executeCalculator } from '../execute';
+import { BrowserEnvironment, CalculatorOptions } from './environment';
 
-export type CalculatorOptions = {
-  disableMetrics?: boolean;
-  organisation?: string;
-};
-
-export function executeCalculator<Input extends object, Output extends object>(
-  calculator: (input: Input, context: ExecutionContext<AllConstants>) => Output,
+type BrowserCalculator<Input extends object, Output extends object> = (
   input: Input,
+  calculatorOptions?: CalculatorOptions,
+) => Output;
+
+export function createBrowserCalculator<
+  Input extends object,
+  Output extends object,
+>(
+  calculator: Calculator<Input, Output>,
   calculatorName: CalculatorNames,
-  options?: CalculatorOptions,
-): Output {
-  const context = contextFor(calculatorName, loadConstants());
-  let result: Output;
-  let failed = false;
-
-  const trackingDisabled = Boolean(options && options.disableMetrics === false);
-
-  try {
-    result = calculator(input, context);
-  } catch (error) {
-    failed = true;
-    throw error;
-  } finally {
-    if (!trackingDisabled) {
-      trackCalculatorExecution({
-        calculator: calculatorName,
-        calculatorVersion: CALCULATOR_VERSION,
-        failed,
-        packageVersion: packageVersion(),
-        organisation: options?.organisation,
-      });
-    }
-  }
-
-  return result;
+): BrowserCalculator<Input, Output> {
+  return (input: Input, calculatorOptions?: CalculatorOptions): Output =>
+    executeCalculator(
+      calculator,
+      input,
+      calculatorName,
+      new BrowserEnvironment(calculatorOptions),
+    );
 }
