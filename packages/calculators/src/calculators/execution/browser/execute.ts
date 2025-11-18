@@ -2,13 +2,14 @@ import { loadConstants } from '@/constants/loader';
 import { AllConstants } from '@/constants/types';
 import { ExecutionContext } from '../../executionContext';
 import { CalculatorNames } from '../../strings';
+import { CALCULATOR_VERSION } from '../constants';
 import { packageVersion } from '../version';
 import { trackCalculatorExecution } from './metrics';
 
-function contextFor(calculator: string, version: string) {
+function contextFor(calculator: string) {
   return {
     calculator,
-    version,
+    version: CALCULATOR_VERSION,
     constants: loadConstants(),
     timestamp: new Date().toISOString(),
   };
@@ -25,8 +26,7 @@ export function executeCalculator<Input extends object, Output extends object>(
   calculatorName: CalculatorNames,
   options?: CalculatorOptions,
 ): Output {
-  const calculatorVersion = '3.0.0';
-  const context = contextFor(calculatorName, calculatorVersion);
+  const context = contextFor(calculatorName);
   let result: Output;
   let failed = false;
 
@@ -41,7 +41,7 @@ export function executeCalculator<Input extends object, Output extends object>(
     if (!trackingDisabled) {
       trackCalculatorExecution({
         calculator: calculatorName,
-        calculatorVersion,
+        calculatorVersion: CALCULATOR_VERSION,
         failed,
         packageVersion: packageVersion(),
         organisation: options?.organisation,

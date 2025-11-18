@@ -61,7 +61,7 @@ import { calculateWildSeaFisheries as calculateWildSeaFisheriesInternal } from '
 import {
   CalculatorOptions,
   executeCalculator,
-} from './execution/browser/browser-execute';
+} from './execution/browser/execute';
 import { CalculatorNames } from './strings';
 
 export function calculateBeef(input: BeefInput): BeefOutput {
