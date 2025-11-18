@@ -1,5 +1,3 @@
-import { merge } from 'ts-deepmerge';
-import { CalculatorConfig } from '../calculators/execution/config';
 import { AllConstants } from './types';
 import {
   aquacultureConstants,
@@ -44,8 +42,3 @@ export const loadConstants = (): AllConstants => {
     SUGAR: sugarConstants,
   };
 };
-
-export function loadOverrideConstants(): AllConstants {
-  const overrides = CalculatorConfig.overrides();
-  return merge<AllConstants[]>(loadConstants(), overrides as AllConstants);
-}

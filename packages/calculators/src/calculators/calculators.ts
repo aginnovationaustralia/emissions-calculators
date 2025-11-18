@@ -38,9 +38,6 @@ import { WildCatchFisheryInput } from '@/types/WildCatchFishery/input';
 import { WildCatchFisheryOutput } from '@/types/WildCatchFishery/output';
 import { WildSeaFisheriesInput } from '@/types/WildSeaFisheries/input';
 import { WildSeaFisheriesOutput } from '@/types/WildSeaFisheries/output';
-import { InputValidationError } from '@/utils/io';
-import { parseValidationError } from '@/validators/errorConversion';
-import { ZodType } from 'zod';
 import { calculateAquaculture as calculateAquacultureInternal } from './Aquaculture/calculator';
 import { calculateBeef as calculateBeefInternal } from './Beef/calculator';
 import { calculateBuffalo as calculateBuffaloInternal } from './Buffalo/calculator';
@@ -61,23 +58,8 @@ import { calculateSugar as calculateSugarInternal } from './Sugar/calculator';
 import { calculateVineyard as calculateVineyardInternal } from './Vineyard/calculator';
 import { calculateWildCatchFishery as calculateWildCatchFisheryInternal } from './WildCatchFishery/calculator';
 import { calculateWildSeaFisheries as calculateWildSeaFisheriesInternal } from './WildSeaFisheries/calculator';
-import { executeCalculator } from './execute';
+import { executeCalculator } from './execution-node/execute';
 import { CalculatorNames } from './strings';
-
-export function validateCalculatorInput<T extends object>(
-  schema: ZodType<T>,
-  input: unknown,
-) {
-  const parseResult = schema.safeParse(input);
-
-  if (!parseResult.success) {
-    throw new InputValidationError(
-      ...parseValidationError(parseResult.error.issues),
-    );
-  } else {
-    return parseResult.data;
-  }
-}
 
 export function calculateBeef(input: BeefInput): BeefOutput {
   return executeCalculator(calculateBeefInternal, input, CalculatorNames.Beef);

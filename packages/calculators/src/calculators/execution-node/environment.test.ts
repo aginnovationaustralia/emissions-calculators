@@ -1,3 +1,10 @@
+// Set environment variable before importing the module
+// This ensures AsyncLocalStorage is used instead of the stub
+process.env.ASYNC_LOCAL_STORAGE = 'true';
+
+// Reset modules to ensure the environment variable is picked up during module initialization
+jest.resetModules();
+
 import { CalculationEnvironment, ConstantOverrides } from './environment';
 
 describe('CalculationEnvironment', () => {
