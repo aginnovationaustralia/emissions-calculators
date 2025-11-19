@@ -1,6 +1,6 @@
 import { GoatInputSchema } from '@/types/Goat/input';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { goatComplete, goatTestData } from './goats.data';
 import { veg1, veg2 } from './vegetation.data';
 

@@ -18,105 +18,105 @@ import { calculateSugar as calculateSugarInternal } from './Sugar/calculator';
 import { calculateVineyard as calculateVineyardInternal } from './Vineyard/calculator';
 import { calculateWildCatchFishery as calculateWildCatchFisheryInternal } from './WildCatchFishery/calculator';
 import { calculateWildSeaFisheries as calculateWildSeaFisheriesInternal } from './WildSeaFisheries/calculator';
-import { createNodeCalculator } from './execution/node/execute';
+import { createBrowserCalculator } from './execution/browser/execute';
 import { CalculatorNames } from './strings';
 
-export const calculateAquaculture = createNodeCalculator(
+export const calculateAquaculture = createBrowserCalculator(
   calculateAquacultureInternal,
   CalculatorNames.Aquaculture,
 );
 
-export const calculateBeef = createNodeCalculator(
+export const calculateBeef = createBrowserCalculator(
   calculateBeefInternal,
   CalculatorNames.Beef,
 );
 
-export const calculateBuffalo = createNodeCalculator(
+export const calculateBuffalo = createBrowserCalculator(
   calculateBuffaloInternal,
   CalculatorNames.Buffalo,
 );
 
-export const calculateCotton = createNodeCalculator(
+export const calculateCotton = createBrowserCalculator(
   calculateCottonInternal,
   CalculatorNames.Cotton,
 );
 
-export const calculateDairy = createNodeCalculator(
+export const calculateDairy = createBrowserCalculator(
   calculateDairyInternal,
   CalculatorNames.Dairy,
 );
 
-export const calculateDeer = createNodeCalculator(
+export const calculateDeer = createBrowserCalculator(
   calculateDeerInternal,
   CalculatorNames.Deer,
 );
 
-export const calculateFeedlot = createNodeCalculator(
+export const calculateFeedlot = createBrowserCalculator(
   calculateFeedlotInternal,
   CalculatorNames.Feedlot,
 );
 
-export const calculateGoat = createNodeCalculator(
+export const calculateGoat = createBrowserCalculator(
   calculateGoatInternal,
   CalculatorNames.Goat,
 );
 
-export const calculateGrains = createNodeCalculator(
+export const calculateGrains = createBrowserCalculator(
   calculateGrainsInternal,
   CalculatorNames.Grains,
 );
 
-export const calculateHorticulture = createNodeCalculator(
+export const calculateHorticulture = createBrowserCalculator(
   calculateHorticultureInternal,
   CalculatorNames.Horticulture,
 );
 
-export const calculatePork = createNodeCalculator(
+export const calculatePork = createBrowserCalculator(
   calculatePorkInternal,
   CalculatorNames.Pork,
 );
 
-export const calculatePoultry = createNodeCalculator(
+export const calculatePoultry = createBrowserCalculator(
   calculatePoultryInternal,
   CalculatorNames.Poultry,
 );
 
-export const calculateProcessing = createNodeCalculator(
+export const calculateProcessing = createBrowserCalculator(
   calculateProcessingInternal,
   CalculatorNames.Processing,
 );
 
-export const calculateRice = createNodeCalculator(
+export const calculateRice = createBrowserCalculator(
   calculateRiceInternal,
   CalculatorNames.Rice,
 );
 
-export const calculateSheep = createNodeCalculator(
+export const calculateSheep = createBrowserCalculator(
   calculateSheepInternal,
   CalculatorNames.Sheep,
 );
 
-export const calculateSheepBeef = createNodeCalculator(
+export const calculateSheepBeef = createBrowserCalculator(
   calculateSheepBeefInternal,
   CalculatorNames.SheepBeef,
 );
 
-export const calculateSugar = createNodeCalculator(
+export const calculateSugar = createBrowserCalculator(
   calculateSugarInternal,
   CalculatorNames.Sugar,
 );
 
-export const calculateVineyard = createNodeCalculator(
+export const calculateVineyard = createBrowserCalculator(
   calculateVineyardInternal,
   CalculatorNames.Vineyard,
 );
 
-export const calculateWildCatchFishery = createNodeCalculator(
+export const calculateWildCatchFishery = createBrowserCalculator(
   calculateWildCatchFisheryInternal,
   CalculatorNames.WildCatchFishery,
 );
 
-export const calculateWildSeaFisheries = createNodeCalculator(
+export const calculateWildSeaFisheries = createBrowserCalculator(
   calculateWildSeaFisheriesInternal,
   CalculatorNames.WildSeaFisheries,
 );

@@ -3,7 +3,7 @@ import { entriesFromObject } from '@/calculators/common/tools/object';
 import { calculateEntireFeedlot } from '@/calculators/Feedlot/calculator';
 import { FeedlotInputSchema } from '@/types/Feedlot/input';
 import clone from 'nanoclone';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
 import { testContext } from '../common/context';
 import {

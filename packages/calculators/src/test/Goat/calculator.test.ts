@@ -6,7 +6,7 @@ import { GoatInput, GoatInputSchema } from '@/types/Goat/input';
 import { GoatIntermediateOutput } from '@/types/Goat/intermediate.output';
 import { GoatOutput } from '@/types/Goat/output';
 import clone from 'nanoclone';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
 import { testContext } from '../common/context';
 import {

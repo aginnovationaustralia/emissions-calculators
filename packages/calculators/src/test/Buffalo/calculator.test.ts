@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { calculateBuffalo } from '@/calculators/Buffalo/calculator';
-import { validateCalculatorInput } from '@/calculators/calculators';
 import { entriesFromObject } from '@/calculators/common/tools/object';
+import { validateCalculatorInput } from '@/calculators/validate';
 import { BuffaloInputSchema } from '@/types/Buffalo/input';
 import clone from 'nanoclone';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';

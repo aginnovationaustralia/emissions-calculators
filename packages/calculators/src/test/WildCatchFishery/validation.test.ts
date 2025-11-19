@@ -1,6 +1,6 @@
 import { WildCatchFisheryInputSchema } from '@/types/WildCatchFishery/input';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { wildCatchFisheryTestData } from './input.data';
 
 describe('validating WildCatchFishery test inputs, all types of inputs', () => {

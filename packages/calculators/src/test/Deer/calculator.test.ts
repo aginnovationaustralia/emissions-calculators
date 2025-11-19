@@ -3,7 +3,7 @@ import { entriesFromObject } from '@/calculators/common/tools/object';
 import { calculateDeer } from '@/calculators/Deer/calculator';
 import { DeerInputSchema } from '@/types/Deer/input';
 import clone from 'nanoclone';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
 import { testContext } from '../common/context';
 import {

@@ -6,7 +6,7 @@ import { SheepInput, SheepInputSchema } from '@/types/Sheep/input';
 import { SheepIntermediateOutput } from '@/types/Sheep/intermediate.output';
 import { SheepOutput } from '@/types/Sheep/output';
 import clone from 'nanoclone';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { compareEmissionsFrom2Inputs } from '../common/comparisons';
 import { testContext } from '../common/context';
 import {

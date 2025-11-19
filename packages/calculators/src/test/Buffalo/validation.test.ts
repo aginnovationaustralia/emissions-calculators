@@ -1,6 +1,6 @@
 import { BuffaloInputSchema } from '@/types/Buffalo/input';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { buffaloTestData } from './buffalo.data';
 
 describe('validating Buffalo test inputs, all types of inputs', () => {

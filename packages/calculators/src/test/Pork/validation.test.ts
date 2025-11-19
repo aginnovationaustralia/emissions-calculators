@@ -1,6 +1,6 @@
 import { PorkInputSchema } from '@/types/Pork/input';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { porkTestData } from './pork.data';
 
 describe('validating Pork test inputs, all types of inputs', () => {

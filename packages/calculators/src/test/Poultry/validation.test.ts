@@ -1,6 +1,6 @@
 import { PoultryInputSchema } from '@/types/Poultry/input';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { poultryTestData } from './poultry.data';
 
 describe('validating Poultry test inputs, all types of inputs', () => {

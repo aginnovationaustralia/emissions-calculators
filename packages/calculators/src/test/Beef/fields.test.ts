@@ -1,5 +1,5 @@
 import { BeefInputSchema } from '@/types/Beef/input';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { beefTestData } from './input.data';
 import { veg1, veg2 } from './vegetation.data';
 
