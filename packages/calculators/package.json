@@ -17,6 +17,16 @@
       "import": "./dist/browser.mjs",
       "require": "./dist/browser.cjs"
     },
+    "./internal": {
+      "types": "./dist/internal.d.ts",
+      "import": "./dist/internal.mjs",
+      "require": "./dist/internal.cjs"
+    },
+    "./tools": {
+      "types": "./dist/tools.d.ts",
+      "import": "./dist/tools.mjs",
+      "require": "./dist/tools.cjs"
+    },
     "./aquaculture": {
       "import": {
         "browser": "./dist/calculators/Aquaculture/browser.mjs",
