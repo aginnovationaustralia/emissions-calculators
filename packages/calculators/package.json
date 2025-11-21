@@ -9,21 +9,252 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "browser": "./dist/browser.mjs"
     },
     "./browser": {
       "types": "./dist/browser.d.ts",
       "import": "./dist/browser.mjs",
       "require": "./dist/browser.cjs"
     },
+    "./aquaculture": {
+      "import": {
+        "browser": "./dist/calculators/Aquaculture/browser.mjs",
+        "types": "./dist/calculators/Aquaculture/index.d.ts",
+        "default": "./dist/calculators/Aquaculture/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Aquaculture/browser.cjs",
+        "types": "./dist/calculators/Aquaculture/index.d.ts",
+        "default": "./dist/calculators/Aquaculture/index.cjs"
+      }
+    },
     "./beef": {
       "import": {
+        "browser": "./dist/calculators/Beef/browser.mjs",
         "types": "./dist/calculators/Beef/index.d.ts",
         "default": "./dist/calculators/Beef/index.mjs"
       },
       "require": {
+        "browser": "./dist/calculators/Beef/browser.cjs",
         "types": "./dist/calculators/Beef/index.d.ts",
         "default": "./dist/calculators/Beef/index.cjs"
+      }
+    },
+    "./buffalo": {
+      "import": {
+        "browser": "./dist/calculators/Buffalo/browser.mjs",
+        "types": "./dist/calculators/Buffalo/index.d.ts",
+        "default": "./dist/calculators/Buffalo/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Buffalo/browser.cjs",
+        "types": "./dist/calculators/Buffalo/index.d.ts",
+        "default": "./dist/calculators/Buffalo/index.cjs"
+      }
+    },
+    "./cotton": {
+      "import": {
+        "browser": "./dist/calculators/Cotton/browser.mjs",
+        "types": "./dist/calculators/Cotton/index.d.ts",
+        "default": "./dist/calculators/Cotton/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Cotton/browser.cjs",
+        "types": "./dist/calculators/Cotton/index.d.ts",
+        "default": "./dist/calculators/Cotton/index.cjs"
+      }
+    },
+    "./dairy": {
+      "import": {
+        "browser": "./dist/calculators/Dairy/browser.mjs",
+        "types": "./dist/calculators/Dairy/index.d.ts",
+        "default": "./dist/calculators/Dairy/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Dairy/browser.cjs",
+        "types": "./dist/calculators/Dairy/index.d.ts",
+        "default": "./dist/calculators/Dairy/index.cjs"
+      }
+    },
+    "./deer": {
+      "import": {
+        "browser": "./dist/calculators/Deer/browser.mjs",
+        "types": "./dist/calculators/Deer/index.d.ts",
+        "default": "./dist/calculators/Deer/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Deer/browser.cjs",
+        "types": "./dist/calculators/Deer/index.d.ts",
+        "default": "./dist/calculators/Deer/index.cjs"
+      }
+    },
+    "./feedlot": {
+      "import": {
+        "browser": "./dist/calculators/Feedlot/browser.mjs",
+        "types": "./dist/calculators/Feedlot/index.d.ts",
+        "default": "./dist/calculators/Feedlot/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Feedlot/browser.cjs",
+        "types": "./dist/calculators/Feedlot/index.d.ts",
+        "default": "./dist/calculators/Feedlot/index.cjs"
+      }
+    },
+    "./goat": {
+      "import": {
+        "browser": "./dist/calculators/Goat/browser.mjs",
+        "types": "./dist/calculators/Goat/index.d.ts",
+        "default": "./dist/calculators/Goat/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Goat/browser.cjs",
+        "types": "./dist/calculators/Goat/index.d.ts",
+        "default": "./dist/calculators/Goat/index.cjs"
+      }
+    },
+    "./grains": {
+      "import": {
+        "browser": "./dist/calculators/Grains/browser.mjs",
+        "types": "./dist/calculators/Grains/index.d.ts",
+        "default": "./dist/calculators/Grains/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Grains/browser.cjs",
+        "types": "./dist/calculators/Grains/index.d.ts",
+        "default": "./dist/calculators/Grains/index.cjs"
+      }
+    },
+    "./horticulture": {
+      "import": {
+        "browser": "./dist/calculators/Horticulture/browser.mjs",
+        "types": "./dist/calculators/Horticulture/index.d.ts",
+        "default": "./dist/calculators/Horticulture/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Horticulture/browser.cjs",
+        "types": "./dist/calculators/Horticulture/index.d.ts",
+        "default": "./dist/calculators/Horticulture/index.cjs"
+      }
+    },
+    "./pork": {
+      "import": {
+        "browser": "./dist/calculators/Pork/browser.mjs",
+        "types": "./dist/calculators/Pork/index.d.ts",
+        "default": "./dist/calculators/Pork/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Pork/browser.cjs",
+        "types": "./dist/calculators/Pork/index.d.ts",
+        "default": "./dist/calculators/Pork/index.cjs"
+      }
+    },
+    "./poultry": {
+      "import": {
+        "browser": "./dist/calculators/Poultry/browser.mjs",
+        "types": "./dist/calculators/Poultry/index.d.ts",
+        "default": "./dist/calculators/Poultry/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Poultry/browser.cjs",
+        "types": "./dist/calculators/Poultry/index.d.ts",
+        "default": "./dist/calculators/Poultry/index.cjs"
+      }
+    },
+    "./processing": {
+      "import": {
+        "browser": "./dist/calculators/Processing/browser.mjs",
+        "types": "./dist/calculators/Processing/index.d.ts",
+        "default": "./dist/calculators/Processing/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Processing/browser.cjs",
+        "types": "./dist/calculators/Processing/index.d.ts",
+        "default": "./dist/calculators/Processing/index.cjs"
+      }
+    },
+    "./rice": {
+      "import": {
+        "browser": "./dist/calculators/Rice/browser.mjs",
+        "types": "./dist/calculators/Rice/index.d.ts",
+        "default": "./dist/calculators/Rice/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Rice/browser.cjs",
+        "types": "./dist/calculators/Rice/index.d.ts",
+        "default": "./dist/calculators/Rice/index.cjs"
+      }
+    },
+    "./sheep": {
+      "import": {
+        "browser": "./dist/calculators/Sheep/browser.mjs",
+        "types": "./dist/calculators/Sheep/index.d.ts",
+        "default": "./dist/calculators/Sheep/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Sheep/browser.cjs",
+        "types": "./dist/calculators/Sheep/index.d.ts",
+        "default": "./dist/calculators/Sheep/index.cjs"
+      }
+    },
+    "./sheepbeef": {
+      "import": {
+        "browser": "./dist/calculators/SheepBeef/browser.mjs",
+        "types": "./dist/calculators/SheepBeef/index.d.ts",
+        "default": "./dist/calculators/SheepBeef/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/SheepBeef/browser.cjs",
+        "types": "./dist/calculators/SheepBeef/index.d.ts",
+        "default": "./dist/calculators/SheepBeef/index.cjs"
+      }
+    },
+    "./sugar": {
+      "import": {
+        "browser": "./dist/calculators/Sugar/browser.mjs",
+        "types": "./dist/calculators/Sugar/index.d.ts",
+        "default": "./dist/calculators/Sugar/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Sugar/browser.cjs",
+        "types": "./dist/calculators/Sugar/index.d.ts",
+        "default": "./dist/calculators/Sugar/index.cjs"
+      }
+    },
+    "./vineyard": {
+      "import": {
+        "browser": "./dist/calculators/Vineyard/browser.mjs",
+        "types": "./dist/calculators/Vineyard/index.d.ts",
+        "default": "./dist/calculators/Vineyard/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/Vineyard/browser.cjs",
+        "types": "./dist/calculators/Vineyard/index.d.ts",
+        "default": "./dist/calculators/Vineyard/index.cjs"
+      }
+    },
+    "./wildcatchfishery": {
+      "import": {
+        "browser": "./dist/calculators/WildCatchFishery/browser.mjs",
+        "types": "./dist/calculators/WildCatchFishery/index.d.ts",
+        "default": "./dist/calculators/WildCatchFishery/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/WildCatchFishery/browser.cjs",
+        "types": "./dist/calculators/WildCatchFishery/index.d.ts",
+        "default": "./dist/calculators/WildCatchFishery/index.cjs"
+      }
+    },
+    "./wildseafisheries": {
+      "import": {
+        "browser": "./dist/calculators/WildSeaFisheries/browser.mjs",
+        "types": "./dist/calculators/WildSeaFisheries/index.d.ts",
+        "default": "./dist/calculators/WildSeaFisheries/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/WildSeaFisheries/browser.cjs",
+        "types": "./dist/calculators/WildSeaFisheries/index.d.ts",
+        "default": "./dist/calculators/WildSeaFisheries/index.cjs"
       }
     }
   },
