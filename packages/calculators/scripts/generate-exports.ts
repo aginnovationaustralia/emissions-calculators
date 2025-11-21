@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
-import { join } from 'path';
+import path, { join } from 'path';
 
 const filesToSkip = [
   'types.ts',
@@ -7,6 +7,14 @@ const filesToSkip = [
   'decorator.schema.ts',
   'schemas.ts',
 ];
+
+function isDeepSchema(exportName: string): boolean {
+  return (
+    exportName.endsWith('Schema') &&
+    !exportName.endsWith('OutputSchema') &&
+    !exportName.endsWith('InputSchema')
+  );
+}
 
 function getAllTypeFiles(dir: string, typeFiles: string[] = []) {
   const files = readdirSync(dir);
@@ -40,7 +48,42 @@ function extractExports(filePath: string) {
   return exports;
 }
 
-export function generateTypeExports() {
+const typesFoldersToSkip = ['common'];
+
+function generatePerFolderTypeExports() {
+  // Get all folders in src/types
+  const typesFolders = readdirSync('src/types', { withFileTypes: true });
+  for (const folder of typesFolders.filter((entry) => entry.isDirectory())) {
+    if (typesFoldersToSkip.includes(folder.name)) {
+      continue;
+    }
+    const folderPath = join('src/types', folder.name);
+    const folderFiles = getAllTypeFiles(folderPath);
+
+    // For each file in the folder, extract the exports
+    // Collect them in a list just for this folder
+    const folderExports = [];
+    for (const file of folderFiles) {
+      const exports = extractExports(file);
+      for (const exportName of exports) {
+        if (isDeepSchema(exportName)) {
+          continue;
+        }
+        folderExports.push(
+          `export { ${exportName} } from './${path
+            .basename(file)
+            .replace('.ts', '')}';`,
+        );
+      }
+    }
+
+    // Now dump the exports for this folder into the folder's index.ts
+    const indexContent = folderExports.join('\n') + '\n';
+    writeFileSync(join('src/types', folder.name, 'index.ts'), indexContent);
+  }
+}
+
+function generateRootTypeExports() {
   const typesDir = 'src/types';
   const typeFiles = getAllTypeFiles(typesDir);
 
@@ -52,11 +95,7 @@ export function generateTypeExports() {
     const exports = extractExports(file);
 
     for (const exportName of exports) {
-      if (
-        exportName.endsWith('Schema') &&
-        !exportName.endsWith('OutputSchema') &&
-        !exportName.endsWith('InputSchema')
-      ) {
+      if (isDeepSchema(exportName)) {
         continue;
       }
       if (!seenExports.has(exportName)) {
@@ -77,6 +116,11 @@ export function generateTypeExports() {
 
   writeFileSync('src/types/index.ts', indexContent);
   console.log(`Generated ${allExports.length} type exports`);
+}
+
+export function generateTypeExports() {
+  generateRootTypeExports();
+  generatePerFolderTypeExports();
 }
 
 // Run if called directly

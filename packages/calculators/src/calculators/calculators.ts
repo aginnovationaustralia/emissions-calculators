@@ -1,5 +1,5 @@
 import { calculateAquaculture as calculateAquacultureInternal } from './Aquaculture/calculator';
-import { calculateBeef as calculateBeefInternal } from './Beef/calculator';
+import { calculateBeef } from './Beef';
 import { calculateBuffalo as calculateBuffaloInternal } from './Buffalo/calculator';
 import { calculateCotton as calculateCottonInternal } from './Cotton/calculator';
 import { calculateDairy as calculateDairyInternal } from './Dairy/calculator';
@@ -24,11 +24,6 @@ import { CalculatorNames } from './strings';
 export const calculateAquaculture = createNodeCalculator(
   calculateAquacultureInternal,
   CalculatorNames.Aquaculture,
-);
-
-export const calculateBeef = createNodeCalculator(
-  calculateBeefInternal,
-  CalculatorNames.Beef,
 );
 
 export const calculateBuffalo = createNodeCalculator(
@@ -120,3 +115,5 @@ export const calculateWildSeaFisheries = createNodeCalculator(
   calculateWildSeaFisheriesInternal,
   CalculatorNames.WildSeaFisheries,
 );
+
+export { calculateBeef };

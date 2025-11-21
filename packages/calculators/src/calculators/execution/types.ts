@@ -14,3 +14,8 @@ export interface Environment {
   getOrganisation: () => string | undefined;
   trackCalculatorExecution: (calculatorName: string, failed: boolean) => void;
 }
+
+export type CalculatorOptions = {
+  disableMetrics?: boolean;
+  organisation?: string;
+};

@@ -4,7 +4,7 @@ import { AsyncLocalStorage } from 'async_hooks';
 import { merge } from 'ts-deepmerge';
 import { PartialDeep } from 'type-fest';
 import { CALCULATOR_VERSION } from '../constants';
-import { Environment } from '../types';
+import { CalculatorOptions, Environment } from '../types';
 import { packageVersion } from '../version';
 import { getMixpanelInstance } from './mixpanel';
 
@@ -57,6 +57,14 @@ class CalculationEnvironment {
  * Create an instance of an Environment that can be used to execute a calculator in a Node.js context.
  */
 class NodeEnvironment implements Environment {
+  private disableMetrics: boolean | undefined;
+  private organisation: string | undefined;
+
+  constructor(options?: CalculatorOptions) {
+    this.disableMetrics = options?.disableMetrics;
+    this.organisation = options?.organisation ?? undefined;
+  }
+
   loadConstants(): AllConstants {
     return merge<AllConstants[]>(
       loadConstants(),
@@ -65,10 +73,18 @@ class NodeEnvironment implements Environment {
   }
 
   isMetricsEnabled(): boolean {
+    if (this.disableMetrics === true) {
+      return false;
+    }
+
     return process.env.DISABLE_CALCULATOR_METRICS !== 'true';
   }
 
   getOrganisation(): string | undefined {
+    if (this.organisation !== undefined) {
+      return this.organisation;
+    }
+
     return CalculationEnvironment.getOrganisation();
   }
 

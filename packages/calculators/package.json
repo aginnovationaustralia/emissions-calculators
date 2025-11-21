@@ -5,6 +5,28 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "browser": "dist/browser.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./browser": {
+      "types": "./dist/browser.d.ts",
+      "import": "./dist/browser.mjs",
+      "require": "./dist/browser.cjs"
+    },
+    "./beef": {
+      "import": {
+        "types": "./dist/calculators/Beef/index.d.ts",
+        "default": "./dist/calculators/Beef/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Beef/index.d.ts",
+        "default": "./dist/calculators/Beef/index.cjs"
+      }
+    }
+  },
   "files": [
     "dist/**/*"
   ],
