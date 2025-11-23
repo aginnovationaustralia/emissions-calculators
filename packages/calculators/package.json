@@ -8,9 +8,12 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs",
-      "browser": "./dist/browser.mjs"
+      "browser": "./dist/browser.mjs",
+      "import": {
+        "browser": "./dist/browser.mjs",
+        "default": "./dist/index.mjs"
+      },
+      "require": "./dist/index.cjs"
     },
     "./browser": {
       "types": "./dist/browser.d.ts",
