@@ -1,4 +1,6 @@
 import {
+  AquacultureBaitPurchase,
+  AquacultureCustomBaitPurchase,
   AquacultureIntermediateOutput,
   calculateAquaculture,
 } from '@/calculators/Aquaculture';
@@ -9,9 +11,14 @@ import {
   AquacultureProductionSystem,
   RefrigerantInput,
 } from '@/types';
-import { Refrigerant, Refrigerants } from '@/types/enums';
+import { AquacultureBait, Refrigerant, Refrigerants } from '@/types/enums';
 import XLSX, { Cell } from 'xlsx-populate';
-import { getWorkbook, mapInput, numberInput } from '../common/sheets';
+import {
+  getWorkbook,
+  isEmptyCell,
+  mapInput,
+  numberInput,
+} from '../common/sheets';
 
 const mapInputRegion = mapInput<States>({
   wa_sw: 'SW WA',
@@ -36,6 +43,16 @@ const mapInputProductionSystem = mapInput<AquacultureProductionSystem>({
   'Prawn Farming': 'Prawn farming',
   'Seaweed and Macroalgae Farming': 'Seaweed and macroalgae farming',
   Other: 'Other',
+});
+
+const mapInputAquacultureBait = mapInput<AquacultureBait | 'None'>({
+  None: 'None',
+  'Whole Sardines': 'Whole Sardines',
+  'Low Animal Protein Formulated Feed': 'Low Animal Protein Formulated Feed',
+  'High Animal Protein Formulated Feed': 'High Animal Protein Formulated Feed',
+  'Cereal Grain': 'Cereal Grain',
+  Squid: 'Squid',
+  'Whole Fish': 'Whole Fish',
 });
 
 const getRefrigerant = (
@@ -75,8 +92,54 @@ const getRefrigerants = (sheet: XLSX.Sheet): RefrigerantInput[] => {
   ].filter((r) => r !== null);
 };
 
-const getBait = (sheet: XLSX.Sheet): AquacultureBaitPurchaseInput[] => {
-  return [];
+const getBaitPurchase = (range: XLSX.Range): AquacultureBaitPurchase | null => {
+  const typeCell = range.cell(1, 0);
+  const amountCell = range.cell(0, 0);
+  const additionalIngredientsCell = range.cell(2, 0);
+  const emissionsIntensityCell = range.cell(3, 0);
+  if (
+    isEmptyCell(typeCell) ||
+    isEmptyCell(amountCell) ||
+    isEmptyCell(additionalIngredientsCell) ||
+    isEmptyCell(emissionsIntensityCell)
+  ) {
+    return null;
+  }
+  const type = mapInputAquacultureBait(typeCell);
+  if (type === 'None') {
+    return null;
+  }
+  return {
+    type,
+    purchasedTonnes: numberInput(range.cell(0, 0)),
+    additionalIngredients: numberInput(range.cell(2, 0)),
+    emissionsIntensity: numberInput(range.cell(3, 0)),
+  };
+};
+
+const getBaitPurchases = (sheet: XLSX.Sheet): AquacultureBaitPurchase[] => {
+  return [
+    getBaitPurchase(sheet.range('C26:C29')),
+    getBaitPurchase(sheet.range('D26:D29')),
+    getBaitPurchase(sheet.range('E26:E29')),
+    getBaitPurchase(sheet.range('F26:F29')),
+  ].filter((b) => b !== null);
+};
+
+const getCustomBaitPurchase = (
+  sheet: XLSX.Sheet,
+): AquacultureCustomBaitPurchase[] => {
+  const amountCell = sheet.cell('G26');
+  const emissionsIntensityCell = sheet.cell('G30');
+  if (isEmptyCell(amountCell) || isEmptyCell(emissionsIntensityCell)) {
+    return [];
+  }
+  return [
+    {
+      purchasedTonnes: numberInput(amountCell),
+      emissionsIntensity: numberInput(emissionsIntensityCell),
+    },
+  ];
 };
 
 const getCalculatorInput = (workbook: XLSX.Workbook): AquacultureInput => {
@@ -96,8 +159,8 @@ const getCalculatorInput = (workbook: XLSX.Workbook): AquacultureInput => {
         productionSystem: mapInputProductionSystem(farm('C10')),
         totalHarvestKg: numberInput(farm('C11')),
         refrigerants: getRefrigerants(sheetInputFarm),
-        bait: [],
-        customBait: [],
+        bait: getBaitPurchases(sheetInputFarm),
+        customBait: getCustomBaitPurchase(sheetInputFarm),
         inboundFreight: [],
         outboundFreight: [],
         totalCommercialFlightsKm: 0,

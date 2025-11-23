@@ -36,3 +36,8 @@ export const numberInput = (input: Cell): number => {
   }
   return value;
 };
+
+export const isEmptyCell = (input: Cell): boolean => {
+  const value = input.value();
+  return value === undefined || value === null || value === '';
+};
