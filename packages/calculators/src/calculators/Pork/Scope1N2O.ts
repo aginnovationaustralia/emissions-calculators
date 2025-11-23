@@ -1,4 +1,5 @@
 import { SEASONS } from '@/constants/constants';
+import { Fertiliser, LivestockManure } from '@/types';
 import {
   ManureManagementSystem,
   ManureManagementSystems,
@@ -6,11 +7,9 @@ import {
   Season,
   State,
 } from '@/types/enums';
-import { Fertiliser } from '@/types/fertiliser.input';
-import { LivestockManure } from '@/types/livestockManure.input';
 import { PorkClasses } from '@/types/Pork/porkclasses.input';
-import { ObjectEntry } from 'type-fest/source/entry';
-import { getOtherFertiliserAmounts } from '../../calculators/common/fertiliser';
+import { Entry } from 'type-fest';
+import { getOtherFertiliserAmounts } from '../common/fertiliser';
 import { divideBySafeFromZero } from '../common/tools';
 import { entriesFromObject } from '../common/tools/object';
 import { ExecutionContext } from '../executionContext';
@@ -479,7 +478,7 @@ export function calculateScope1N2O(
   //  Cg = Global Warming Potential of nitrous oxide
 
   type NumberBySeason = Record<Season, number>;
-  type SeasonNumberEntry = ObjectEntry<NumberBySeason>;
+  type SeasonNumberEntry = Entry<NumberBySeason>;
 
   const n20AEBySeason: NumberBySeason = {
     spring: 0,
