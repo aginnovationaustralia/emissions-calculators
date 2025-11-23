@@ -2,69 +2,96 @@ import {
   AquacultureIntermediateOutput,
   calculateAquaculture,
 } from '@/calculators/Aquaculture';
-import { entriesFromObject } from '@/calculators/common/tools/object';
 import { States } from '@/constants/types';
 import {
   AquacultureInput,
   AquacultureOutput,
   AquacultureProductionSystem,
+  RefrigerantInput,
 } from '@/types';
+import { Refrigerant, Refrigerants } from '@/types/enums';
 import XLSX, { Cell } from 'xlsx-populate';
+import { getWorkbook, mapInput, numberInput } from '../common/sheets';
 
-type CellValue = string | number | boolean | Date | undefined;
+const mapInputRegion = mapInput<States>({
+  wa_sw: 'SW WA',
+  wa_nw: 'NW WA',
+  vic: 'Vic',
+  qld: 'Qld',
+  sa: 'SA',
+  tas: 'Tas',
+  nt: 'NT',
+  act: 'ACT',
+  nsw: 'NSW',
+});
 
-const getWorkbook = async (filePath: string) => {
-  // log the current working directory
-  console.log(process.cwd());
-  const workbook = await XLSX.fromFileAsync(filePath);
-  return workbook;
+const mapInputProductionSystem = mapInput<AquacultureProductionSystem>({
+  'Offshore Caged Aquaculture': 'Offshore caged aquaculture',
+  'Onland Fish Farming': 'On-land fish farming (eg. barra, perch etc)',
+  'Onshore Hatchery': 'On-shore hatchery only',
+  'Abalone Farming': 'Abalone farming',
+  'Mussel Farming': 'Mussel farming',
+  'Oyster Farming': 'Oyster farming',
+  'Pearl Farming': 'Pearl farming',
+  'Prawn Farming': 'Prawn farming',
+  'Seaweed and Macroalgae Farming': 'Seaweed and macroalgae farming',
+  Other: 'Other',
+});
+
+const getRefrigerant = (
+  typeCell: Cell,
+  amountCell: Cell,
+): RefrigerantInput | null => {
+  const typeValue = typeCell.value();
+  if (typeof typeValue !== 'string') {
+    throw new Error(`Cell is not a string: ${typeCell.address()}`);
+  }
+  const amountValue = amountCell.value();
+  if (amountValue === undefined) {
+    return null;
+  }
+  if (typeof amountValue !== 'number') {
+    throw new Error(
+      `Cell address ${amountCell.address()} is not a number: ${amountValue}`,
+    );
+  }
+  if (typeValue === 'None') {
+    return null;
+  }
+  if (!Refrigerants.includes(typeValue as unknown as Refrigerant)) {
+    throw new Error(
+      `Cell address ${typeCell.address()} is not a valid refrigerant: ${typeValue}`,
+    );
+  }
+  return { refrigerant: typeValue as Refrigerant, chargeSize: amountValue };
 };
 
-const mapInputRegion = (input: Cell): States => {
-  const value = input.value();
-  if (typeof value !== 'string') {
-    throw new Error(`Cell is not a string: ${input.address()}`);
-  }
-
-  const lookup: Record<States, string> = {
-    wa_sw: 'SW WA',
-    wa_nw: 'NW WA',
-    vic: 'Vic',
-    qld: 'Qld',
-    sa: 'SA',
-    tas: 'Tas',
-    nt: 'NT',
-    act: 'ACT',
-    nsw: 'NSW',
-  };
-
-  const match = entriesFromObject(lookup).find(([_k, v]) => v === value);
-
-  if (match) {
-    return match[0];
-  }
-
-  throw new Error(`Cell is not a valid region: ${input.address()}`);
+const getRefrigerants = (sheet: XLSX.Sheet): RefrigerantInput[] => {
+  return [
+    getRefrigerant(sheet.cell('C17'), sheet.cell('E17')),
+    getRefrigerant(sheet.cell('C18'), sheet.cell('E18')),
+    getRefrigerant(sheet.cell('C19'), sheet.cell('E19')),
+    getRefrigerant(sheet.cell('C20'), sheet.cell('E20')),
+  ].filter((r) => r !== null);
 };
 
 const getCalculatorInput = (workbook: XLSX.Workbook): AquacultureInput => {
   const sheetInputFarm = workbook.sheet('Input - Farm');
-  const sheetInputElectricityFuel = workbook.sheet(
-    'Input - Electricity & Fuel',
-  );
-  const sheetInputWasteOutputs = workbook.sheet('Input - Waste & Outputs');
-  const sheetInputVegetation = workbook.sheet('Input - Vegetation');
+  const farm = (address: string) => sheetInputFarm.cell(address);
 
-  const state = mapInputRegion(sheetInputFarm.cell('C5'));
+  //   const sheetInputElectricityFuel = workbook.sheet(
+  //     'Input - Electricity & Fuel',
+  //   );
+  //   const sheetInputWasteOutputs = workbook.sheet('Input - Waste & Outputs');
+  //   const sheetInputVegetation = workbook.sheet('Input - Vegetation');
 
   const input: AquacultureInput = {
     enterprises: [
       {
-        state,
-        productionSystem:
-          AquacultureProductionSystem.OFFSHORE_CAGED_AQUACULTURE,
-        totalHarvestKg: 0,
-        refrigerants: [],
+        state: mapInputRegion(farm('C5')),
+        productionSystem: mapInputProductionSystem(farm('C10')),
+        totalHarvestKg: numberInput(farm('C11')),
+        refrigerants: getRefrigerants(sheetInputFarm),
         bait: [],
         customBait: [],
         inboundFreight: [],
@@ -148,7 +175,7 @@ describe('Compare aquaculture calculator to spreadsheet', () => {
       './src/test/sheets/comparison/Aq-GAFv1.0.xlsx',
     );
     const input = getCalculatorInput(workbook);
-    console.log(input);
+    console.dir(input, { depth: null });
     const expectedOutput = getExpectedOutput(workbook);
     const calculatorData = calculateAquaculture(input);
     expect(calculatorData).toEqual(expectedOutput);
