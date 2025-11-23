@@ -2,12 +2,16 @@ import {
   AquacultureIntermediateOutput,
   calculateAquaculture,
 } from '@/calculators/Aquaculture';
+import { entriesFromObject } from '@/calculators/common/tools/object';
+import { States } from '@/constants/types';
 import {
   AquacultureInput,
   AquacultureOutput,
   AquacultureProductionSystem,
 } from '@/types';
-import XLSX from 'xlsx-populate';
+import XLSX, { Cell } from 'xlsx-populate';
+
+type CellValue = string | number | boolean | Date | undefined;
 
 const getWorkbook = async (filePath: string) => {
   // log the current working directory
@@ -16,12 +20,47 @@ const getWorkbook = async (filePath: string) => {
   return workbook;
 };
 
+const mapInputRegion = (input: Cell): States => {
+  const value = input.value();
+  if (typeof value !== 'string') {
+    throw new Error(`Cell is not a string: ${input.address()}`);
+  }
+
+  const lookup: Record<States, string> = {
+    wa_sw: 'SW WA',
+    wa_nw: 'NW WA',
+    vic: 'Vic',
+    qld: 'Qld',
+    sa: 'SA',
+    tas: 'Tas',
+    nt: 'NT',
+    act: 'ACT',
+    nsw: 'NSW',
+  };
+
+  const match = entriesFromObject(lookup).find(([_k, v]) => v === value);
+
+  if (match) {
+    return match[0];
+  }
+
+  throw new Error(`Cell is not a valid region: ${input.address()}`);
+};
+
 const getCalculatorInput = (workbook: XLSX.Workbook): AquacultureInput => {
-  const worksheet = workbook.sheet('Input');
+  const sheetInputFarm = workbook.sheet('Input - Farm');
+  const sheetInputElectricityFuel = workbook.sheet(
+    'Input - Electricity & Fuel',
+  );
+  const sheetInputWasteOutputs = workbook.sheet('Input - Waste & Outputs');
+  const sheetInputVegetation = workbook.sheet('Input - Vegetation');
+
+  const state = mapInputRegion(sheetInputFarm.cell('C5'));
+
   const input: AquacultureInput = {
     enterprises: [
       {
-        state: 'wa_sw',
+        state,
         productionSystem:
           AquacultureProductionSystem.OFFSHORE_CAGED_AQUACULTURE,
         totalHarvestKg: 0,
