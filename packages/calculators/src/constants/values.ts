@@ -1736,11 +1736,11 @@ export const dairyConstants: DairyConstants = {
    * @units kg
    */
   CATTLE_STANDARD_REFERENCE_WEIGHTS: {
-    milking_cows: 580.7142857143,
-    heifers_lt_1: 580.7142857143,
-    heifers_gt_1: 580.7142857143,
-    dairyBulls_lt_1: 770,
-    dairyBulls_gt_1: 770,
+    milkingCows: 580.7142857143,
+    heifersLt1: 580.7142857143,
+    heifersGt1: 580.7142857143,
+    dairyBullsLt1: 770,
+    dairyBullsGt1: 770,
   },
 
   /**
@@ -1774,11 +1774,11 @@ export const dairyConstants: DairyConstants = {
    * @units Gg CH4-C / Gg N
    */
   METHANE_MPW: {
-    milking_cows: 0,
-    heifers_lt_1: 0.01825,
-    heifers_gt_1: 0,
-    dairyBulls_lt_1: 0.02081,
-    dairyBulls_gt_1: 0,
+    milkingCows: 0,
+    heifersLt1: 0.01825,
+    heifersGt1: 0,
+    dairyBullsLt1: 0.02081,
+    dairyBullsGt1: 0,
   },
 
   /**

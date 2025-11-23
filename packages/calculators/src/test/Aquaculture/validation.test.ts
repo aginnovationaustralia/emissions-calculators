@@ -1,6 +1,6 @@
 import { AquacultureInputSchema } from '@/types/Aquaculture/input';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { aquacultureTestData } from './input.data';
 
 describe('validating Aquaculture test inputs, all types of inputs', () => {

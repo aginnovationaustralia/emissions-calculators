@@ -1,5 +1,6 @@
 import { calculatePork } from '@/calculators/Pork/calculator';
 import { PorkInput } from '@/types/Pork/input';
+import { PorkOutput } from '@/types/Pork/output';
 import { PorkComplete } from '@/types/Pork/pork.input';
 import { testContext } from '../common/context';
 import { executeEmissionsSpec, KeyValuePairs } from '../common/emissions';
@@ -32,6 +33,11 @@ const expectedScopes = {
     purchasedFeed: 0,
     electricity: 0,
     fuel: 0,
+    fertiliser: 0,
+    herbicide: 0,
+    lime: 0,
+    purchasedLivestock: 0,
+    bedding: 0,
     total: 0,
   },
 };
@@ -96,12 +102,13 @@ describe('Pork calculator, empty enterprise', () => {
   const context = testContext('Pork');
   const emissions = calculatePork(emptyInputWithEnterprise, context);
 
-  const expectedWithEnterprise = {
+  const expectedWithEnterprise: PorkOutput = {
     ...expectations,
     intermediate: [
       {
         ...expectedScopes,
-        carbonSequestration: 0,
+        carbonSequestration: { total: 0 },
+        id: 'pork-0',
         intensities: expectations.intensities,
         net: {
           total: 0,

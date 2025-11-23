@@ -24,7 +24,13 @@ export function calculateScope1SavannahBurning(
     };
   }
 
-  // REVISIT: this could be done in a more idiomatic and typescript friendly way
+  // Example to help understand the combined reference lookup:
+  // if state = 'nt', then stateRef = 8
+  // if burn.vegetation = 'Melaleuca woodland', then vegRef = 3
+  // combinedReference = '83'
+  // combinedRefStateIndex = 12
+  // combinedRefStateString = 'NT3'
+
   const combinedRefStateString = Object.keys(
     constants.SAVANNA.FUELFINE['Combined Ref'],
   )[combinedRefStateIndex] as keyof typeof constants.SAVANNA.FUELFINE.Yo;

@@ -234,7 +234,7 @@ export function calculateEntireRice(
       scope2: c.output.scope2,
       scope3: c.output.scope3,
       net: c.net,
-      carbonSequestration: c.extensions.carbonSequestration,
+      carbonSequestration: { total: c.extensions.carbonSequestration },
       intensities: getIntensities(
         c.net.total,
         c.extensions.carbonSequestration,

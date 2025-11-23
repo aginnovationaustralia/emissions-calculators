@@ -21,7 +21,10 @@ export const AquacultureEnterpriseInputSchema = singleEnterpriseInput(
     productionSystem: z
       .enum(AquacultureProductionSystem)
       .meta({ description: DESCRIPTIONS.AQUACULTURE_PRODUCTION_SYSTEM }),
-    totalHarvestKg: z.number().meta({ description: 'Total harvest in kg' }),
+    totalHarvestKg: z
+      .number()
+      .min(0)
+      .meta({ description: 'Total harvest in kg' }),
     refrigerants: z
       .array(RefrigerantInputSchema)
       .meta({ description: DESCRIPTIONS.REFRIGERANT }),
@@ -39,10 +42,12 @@ export const AquacultureEnterpriseInputSchema = singleEnterpriseInput(
       .meta({ description: DESCRIPTIONS.OUTBOUND_FREIGHT }),
     totalCommercialFlightsKm: z
       .number()
+      .min(0)
       .meta({ description: DESCRIPTIONS.TOTAL_COMMERCIAL_FLIGHTS_KM }),
     electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
     electricityUse: z
       .number()
+      .min(0)
       .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
     electricitySource: z
       .enum(ElectricitySources)
@@ -56,6 +61,7 @@ export const AquacultureEnterpriseInputSchema = singleEnterpriseInput(
     }),
     carbonOffsets: z
       .number()
+      .min(0)
       .optional()
       .meta({ description: DESCRIPTIONS.CARBON_OFFSETS }),
   },

@@ -497,7 +497,6 @@ export function calculatePoultry(
     carbonSequestration: {
       total:
         broilersCarbonSequestration.total + layersCarbonSequestration.total,
-      intermediate: [], // TODO
     },
     intermediateBroilers: broilerResults.map((x, i) => ({
       ...x.output,

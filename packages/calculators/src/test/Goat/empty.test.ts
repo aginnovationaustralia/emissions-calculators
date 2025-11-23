@@ -44,7 +44,6 @@ const expectations: GoatOutput = {
   ...expectedScopes,
   carbonSequestration: {
     total: 0,
-    intermediate: [],
   },
   net: {
     total: 0,

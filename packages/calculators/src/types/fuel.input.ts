@@ -10,7 +10,7 @@ export const FuelInputSchema = z.object({
   stationaryFuel: z
     .array(StationaryFuelInputSchema)
     .meta({ description: DESCRIPTIONS.FUEL_STATIONARY }),
-  naturalGas: z.number().meta({ description: DESCRIPTIONS.NATURAL_GAS }),
+  naturalGas: z.number().min(0).meta({ description: DESCRIPTIONS.NATURAL_GAS }),
 });
 
 export type FuelInput = z.infer<typeof FuelInputSchema>;

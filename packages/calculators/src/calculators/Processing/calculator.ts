@@ -227,7 +227,6 @@ export function calculateProcessing(
     },
     carbonSequestration: {
       total: 0,
-      intermediate: processingResults.map(() => 0),
     },
   };
 }

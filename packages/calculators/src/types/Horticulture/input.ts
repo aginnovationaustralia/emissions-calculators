@@ -11,6 +11,7 @@ export const HorticultureInputSchema = singleEnterpriseInput('Horticulture', {
   electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
   electricityUse: z
     .number()
+    .min(0)
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
   vegetation: z.array(HorticultureVegetationSchema),
 });

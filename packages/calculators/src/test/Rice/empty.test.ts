@@ -1,5 +1,6 @@
 import { calculateRice } from '@/calculators/Rice/calculator';
 import { RiceInput } from '@/types/Rice/input';
+import { RiceOutput } from '@/types/Rice/output';
 import { RiceCrop } from '@/types/Rice/rice.input';
 import { testContext } from '../common/context';
 import { executeEmissionsSpec, KeyValuePairs } from '../common/emissions';
@@ -32,6 +33,7 @@ const expectedScopes = {
     herbicide: 0,
     electricity: 0,
     fuel: 0,
+    lime: 0,
     total: 0,
   },
 };
@@ -40,7 +42,6 @@ const expectations = {
   ...expectedScopes,
   carbonSequestration: {
     total: 0,
-    intermediate: [],
   },
   net: {
     total: 0,
@@ -100,12 +101,13 @@ describe('Rice calculator, empty enterprise', () => {
   const context = testContext('Rice');
   const emissions = calculateRice(emptyInputWithEnterprise, context);
 
-  const expectedWithEnterprise = {
+  const expectedWithEnterprise: RiceOutput = {
     ...expectations,
     intermediate: [
       {
         ...expectedScopes,
-        carbonSequestration: 0,
+        id: 'rice-0',
+        carbonSequestration: { total: 0 },
         intensities: expectations.intensities,
         net: {
           total: 0,

@@ -1,5 +1,6 @@
 import { calculateSheep } from '@/calculators/Sheep/calculator';
 import { SheepInput } from '@/types/Sheep/input';
+import { SheepOutput } from '@/types/Sheep/output';
 import { SheepComplete } from '@/types/Sheep/sheep.input';
 import { SheepClass } from '@/types/Sheep/sheepclass.input';
 import { testContext } from '../common/context';
@@ -29,6 +30,13 @@ const expectedScopes = {
   },
   scope3: {
     electricity: 0,
+    fertiliser: 0,
+    purchasedMineralSupplementation: 0,
+    purchasedFeed: 0,
+    herbicide: 0,
+    lime: 0,
+    purchasedLivestock: 0,
+    fuel: 0,
     total: 0,
   },
 };
@@ -140,12 +148,13 @@ describe('Sheep calculator, empty enterprise', () => {
   const context = testContext('Sheep');
   const emissions = calculateSheep(emptyInputWithEnterprise, context);
 
-  const expectedWithEnterprise = {
+  const expectedWithEnterprise: SheepOutput = {
     ...expectations,
     intermediate: [
       {
         ...expectedScopes,
-        carbonSequestration: 0,
+        carbonSequestration: { total: 0 },
+        id: 'sheep-0',
         intensities: expectations.intensities,
         net: {
           total: 0,

@@ -112,18 +112,6 @@ export const compareEmissionsFrom2Inputs = <
   });
 };
 
-export const transformCarbonSequestration = <
-  TIntermediate extends EmissionsKeysOnly & { carbonSequestration: number },
->(
-  intermediate: TIntermediate,
-) => ({
-  ...intermediate,
-  carbonSequestration: {
-    total: intermediate.carbonSequestration,
-    intermediate: [],
-  },
-});
-
 export const transformIntensitiesWithSequestration = <
   TIntermediate extends EmissionsKeysOnly & {
     intensitiesWithSequestration: Record<string, number>;

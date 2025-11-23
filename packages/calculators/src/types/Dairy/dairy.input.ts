@@ -10,23 +10,30 @@ import { SeasonalFertiliserSchema } from './seasonalfertiliser.input';
 
 export const DairyCompleteSchema = singleEnterpriseInput('Dairy', {
   classes: DairyClassesSchema,
-  limestone: z.number().meta({ description: DESCRIPTIONS.LIMESTONE }),
+  limestone: z.number().min(0).meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   fertiliser: FertiliserSchema,
   seasonalFertiliser: SeasonalFertiliserSchema,
   areas: AreaUsedSchema,
-  diesel: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
-  petrol: z.number().meta({ description: DESCRIPTIONS.PETROL }),
-  lpg: z.number().meta({ description: DESCRIPTIONS.LPG }),
+  diesel: z.number().min(0).meta({ description: DESCRIPTIONS.DIESEL }),
+  petrol: z.number().min(0).meta({ description: DESCRIPTIONS.PETROL }),
+  lpg: z.number().min(0).meta({ description: DESCRIPTIONS.LPG }),
   electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
   electricityUse: z
     .number()
+    .min(0)
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
-  grainFeed: z.number().meta({ description: DESCRIPTIONS.GRAINFEED }),
-  hayFeed: z.number().meta({ description: DESCRIPTIONS.HAYFEED }),
-  cottonseedFeed: z.number().meta({ description: DESCRIPTIONS.COTTONSEEDFEED }),
-  herbicide: z.number().meta({ description: DESCRIPTIONS.HERBICIDE }),
-  herbicideOther: z.number().meta({ description: DESCRIPTIONS.HERBICIDEOTHER }),
+  grainFeed: z.number().min(0).meta({ description: DESCRIPTIONS.GRAINFEED }),
+  hayFeed: z.number().min(0).meta({ description: DESCRIPTIONS.HAYFEED }),
+  cottonseedFeed: z
+    .number()
+    .min(0)
+    .meta({ description: DESCRIPTIONS.COTTONSEEDFEED }),
+  herbicide: z.number().min(0).meta({ description: DESCRIPTIONS.HERBICIDE }),
+  herbicideOther: z
+    .number()
+    .min(0)
+    .meta({ description: DESCRIPTIONS.HERBICIDEOTHER }),
   manureManagementMilkingCows: ManureManagementSchema,
   manureManagementOtherDairyCows: ManureManagementSchema,
   emissionsAllocationToRedMeatProduction: proportion(
@@ -35,7 +42,7 @@ export const DairyCompleteSchema = singleEnterpriseInput('Dairy', {
   truckType: z
     .enum(TruckTypes)
     .meta({ description: 'Type of truck used for cattle transport' }),
-  distanceCattleTransported: z.number().meta({
+  distanceCattleTransported: z.number().min(0).meta({
     description:
       'Distance cattle are transported between farms, in km (kilometres)',
   }),

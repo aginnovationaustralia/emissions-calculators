@@ -212,7 +212,7 @@ export function calculateWildSeaFisheries(
       total: fisheriesResult.extensions.carbonOffset,
     },
     intermediate: fisheriesResults.map((result) => ({
-      carbonSequestration: 0,
+      carbonSequestration: { total: 0 },
       id: result.meta.id,
       net: result.net,
       scope1: result.output.scope1,

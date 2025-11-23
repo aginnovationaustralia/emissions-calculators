@@ -330,7 +330,6 @@ export function calculateGoat(
     scope3: goatResult.output.scope3,
     carbonSequestration: {
       total: goatResult.extensions.carbonSequestration,
-      intermediate: carbonSequestration.intermediate,
     },
     intensities,
     intermediate: goatResults.map((result) => {

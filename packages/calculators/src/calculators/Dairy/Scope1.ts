@@ -1,27 +1,12 @@
-import { DAIRY_CLASSES, SEASONS } from '@/constants/constants';
+import { SEASONS } from '@/constants/constants';
 import { DairyComplete } from '@/types/Dairy/dairy.input';
-import {
-  DairyClass,
-  DairyClassAPI,
-  DairyProductionSystem,
-  State,
-} from '@/types/enums';
+import { DairyClassesAPI, DairyProductionSystem, State } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForDairyCalculator } from './constants';
 import {
   getManureSumpDispersalFractionMilking,
   getManureSumpDispersalFractionOther,
 } from './functions';
-
-const DAIRYCLASSES_TO_CAMELCASE: {
-  [key in DairyClass]: DairyClassAPI;
-} = {
-  milking_cows: 'milkingCows',
-  heifers_lt_1: 'heifersLt1',
-  heifers_gt_1: 'heifersGt1',
-  dairyBulls_lt_1: 'dairyBullsLt1',
-  dairyBulls_gt_1: 'dairyBullsGt1',
-};
 
 type InternalOutput = {
   mmsTotal: number;
@@ -78,12 +63,11 @@ export function calculateScope1(
 
   const total = SEASONS.reduce(
     (acc, season) => {
-      const seasonTotal = DAIRY_CLASSES.reduce(
+      const seasonTotal = DairyClassesAPI.reduce(
         (acc2, dairyClass) => {
-          const dairyKey = DAIRYCLASSES_TO_CAMELCASE[dairyClass];
-          const isMilkingCow = dairyClass === 'milking_cows';
+          const isMilkingCow = dairyClass === 'milkingCows';
 
-          const dairyClassSeason = complete.classes[dairyKey][season];
+          const dairyClassSeason = complete.classes[dairyClass][season];
 
           // (Nitrous_Oxide_MMSD40, Data_InputD9)
           // (Enteric_FermentationD15, Nitrous_Oxide_MMSD30, Data_InputD15)
@@ -425,7 +409,7 @@ export function calculateScope1(
 
           // (Manure_ManagementM53)
           const annualMethaneFromManure =
-            dairyClass === 'dairyBulls_lt_1' || dairyClass === 'heifers_lt_1'
+            dairyClass === 'dairyBullsLt1' || dairyClass === 'heifersLt1'
               ? (head * totalMethaneMMS * 7.25 + head * mpw * 84) * 10 ** -6
               : head * totalMethaneMMS * 91.25 * 10 ** -6;
 

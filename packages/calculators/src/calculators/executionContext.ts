@@ -1,4 +1,6 @@
+import { AllConstants } from '@/constants';
 import { HasCommonConstants } from './common/constants';
+import { CALCULATOR_VERSION } from './execution/constants';
 
 type ExecutionMetadata = {
   calculator: string;
@@ -13,3 +15,12 @@ export interface ExecutionContext<
 }
 
 export type WithExecutionMetadata<T> = T & { metaData: ExecutionMetadata };
+
+export function contextFor(calculator: string, constants: AllConstants) {
+  return {
+    calculator,
+    version: CALCULATOR_VERSION,
+    constants,
+    timestamp: new Date().toISOString(),
+  };
+}

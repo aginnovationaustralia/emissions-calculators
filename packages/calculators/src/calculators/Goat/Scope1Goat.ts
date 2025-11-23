@@ -1,5 +1,5 @@
 import { SEASONS } from '@/constants/constants';
-import { GoatClassAPI, GoatClassesAPI, Season, State } from '@/types/enums';
+import { GoatClassesAPI, Season, State } from '@/types/enums';
 import { Fertiliser } from '@/types/fertiliser.input';
 import { GoatClasses } from '@/types/Goat/goatclasses.input';
 import { getOtherFertiliserAmounts } from '../../calculators/common/fertiliser';
@@ -95,11 +95,10 @@ export function calculateCompleteGoatEmissions(
 ) {
   const { constants } = context;
 
-  const totals: {
-    [goatType in GoatClassAPI]: {
-      [season in Season]: GoatSeasonEmissions;
-    };
-  } = {
+  const totals: Record<
+    keyof GoatClasses,
+    Record<Season, GoatSeasonEmissions>
+  > = {
     bucksBilly: { ...EMPTY_INTERNAL_TOTALS },
     wethers: { ...EMPTY_INTERNAL_TOTALS },
     maidenBreedingDoesNannies: { ...EMPTY_INTERNAL_TOTALS },

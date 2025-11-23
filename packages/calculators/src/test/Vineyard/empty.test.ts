@@ -45,7 +45,6 @@ const expectations: VineyardOutput = {
   ...expectedScopes,
   carbonSequestration: {
     total: 0,
-    intermediate: [],
   },
   net: {
     total: 0,
@@ -103,12 +102,13 @@ describe('Vineyard calculator, empty enterprise', () => {
   const context = testContext('Vineyard');
   const emissions = calculateVineyard(emptyInputWithEnterprise, context);
 
-  const expectedWithEnterprise = {
+  const expectedWithEnterprise: VineyardOutput = {
     ...expectations,
     intermediate: [
       {
         ...expectedScopes,
-        carbonSequestration: 0,
+        carbonSequestration: { total: 0 },
+        id: 'vineyard-0',
         intensities: {
           cropProducedKg: 0,
           vineyardsExcludingSequestration: 0,

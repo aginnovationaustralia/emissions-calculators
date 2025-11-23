@@ -46,7 +46,7 @@ const beefScope123 = {
     total: 630.520464154375,
   },
   net: { total: 358221.9653635175 },
-  carbonSequestration: 256.7532,
+  carbonSequestration: { total: 256.7532 },
   intensities: {
     beefIncludingSequestration: 16282.816607432615,
     beefExcludingSequestration: 16294.487207432614,
@@ -88,7 +88,7 @@ const sheepScope123 = {
     total: 931.434024277575,
   },
   net: { total: 212.69846125250595 },
-  carbonSequestration: 114.4306,
+  carbonSequestration: { total: 114.4306 },
   intensities: {
     woolProducedKg: 100000,
     sheepMeatProducedKg: 20000,
@@ -150,7 +150,6 @@ const expectations = {
   },
   carbonSequestration: {
     total: 371.1838,
-    intermediate: [],
   },
   net: {
     total: 358434.66382477,
@@ -255,10 +254,7 @@ describe('Sheepbeef calculator (multi sheep activity)', () => {
           savannahBurningCH4: 0,
           savannahBurningN2O: 0,
         },
-        carbonSequestration: {
-          total: intermediate.carbonSequestration,
-          intermediate: [],
-        },
+        carbonSequestration: intermediate.carbonSequestration,
         intermediateBeef: emptyArray,
       }),
     },
@@ -338,10 +334,7 @@ describe('Sheepbeef calculator (multi beef activity)', () => {
           savannahBurningCH4: 0,
           savannahBurningN2O: 0,
         },
-        carbonSequestration: {
-          total: intermediate.carbonSequestration,
-          intermediate: [],
-        },
+        carbonSequestration: intermediate.carbonSequestration,
         intermediateSheep: emptyArray,
       }),
     },

@@ -6,11 +6,8 @@ import { SheepInput, SheepInputSchema } from '@/types/Sheep/input';
 import { SheepIntermediateOutput } from '@/types/Sheep/intermediate.output';
 import { SheepOutput } from '@/types/Sheep/output';
 import clone from 'nanoclone';
-import { validateCalculatorInput } from '../../calculators/calculators';
-import {
-  compareEmissionsFrom2Inputs,
-  transformCarbonSequestration,
-} from '../common/comparisons';
+import { validateCalculatorInput } from '../../calculators/validate';
+import { compareEmissionsFrom2Inputs } from '../common/comparisons';
 import { testContext } from '../common/context';
 import {
   ensureEveryKeyIsDefined,
@@ -153,9 +150,6 @@ describe('Sheep calculator (multi activity)', () => {
       expect(originalEmissions.intensities.woolProducedKg).toBeCloseTo(
         secondEmissions.intensities.woolProducedKg / 2,
       );
-    },
-    {
-      transformIntermediate: transformCarbonSequestration,
     },
   );
 });

@@ -1,5 +1,5 @@
-import { validateCalculatorInput } from '@/calculators/calculators';
 import { calculateEntireFeedlot } from '@/calculators/Feedlot/calculator';
+import { validateCalculatorInput } from '@/calculators/validate';
 import { FeedlotInputSchema } from '@/types/Feedlot/input';
 import { testContext } from '../common/context';
 import { feedlotTestData } from './feedlot.data';

@@ -44,7 +44,6 @@ const expectations: AquacultureOutput = {
   },
   carbonSequestration: {
     total: 0,
-    intermediate: [0],
   },
   net: {
     total: 0,

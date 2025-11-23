@@ -17,6 +17,7 @@ export const ProductProcessingInputSchema = z
     electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
     electricityUse: z
       .number()
+      .min(0)
       .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
     electricitySource: z
       .enum(ElectricitySources)
@@ -31,9 +32,13 @@ export const ProductProcessingInputSchema = z
     solidWaste: SolidWasteInputSchema.meta({
       description: DESCRIPTIONS.SOLID_WASTE,
     }),
-    purchasedCO2: z.number().meta({ description: DESCRIPTIONS.PURCHASED_CO2 }),
+    purchasedCO2: z
+      .number()
+      .min(0)
+      .meta({ description: DESCRIPTIONS.PURCHASED_CO2 }),
     carbonOffsets: z
       .number()
+      .min(0)
       .optional()
       .meta({ description: DESCRIPTIONS.CARBON_OFFSETS }),
   })

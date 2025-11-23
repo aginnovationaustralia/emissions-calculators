@@ -2,9 +2,10 @@ import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
 
 export const LivestockPurchaseSchema = z.object({
-  head: z.number().meta({ description: DESCRIPTIONS.HEADPURCHASED }),
+  head: z.number().min(0).meta({ description: DESCRIPTIONS.HEADPURCHASED }),
   purchaseWeight: z
     .number()
+    .min(0)
     .meta({ description: DESCRIPTIONS.PURCHASEDWEIGHT }),
 });
 

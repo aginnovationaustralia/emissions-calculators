@@ -18,13 +18,15 @@ export const WildSeaFisheriesEnterpriseSchema = singleEnterpriseInput(
     electricityRenewable: proportion(DESCRIPTIONS.ELECTRICITY_RENEWABLE),
     electricityUse: z
       .number()
+      .min(0)
       .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
     totalWholeWeightCaught: z
       .number()
+      .min(0)
       .meta({ description: 'Total whole weight caught in kg' }),
-    diesel: z.number().meta({ description: DESCRIPTIONS.DIESEL }),
-    petrol: z.number().meta({ description: DESCRIPTIONS.PETROL }),
-    lpg: z.number().meta({ description: DESCRIPTIONS.LPG }),
+    diesel: z.number().min(0).meta({ description: DESCRIPTIONS.DIESEL }),
+    petrol: z.number().min(0).meta({ description: DESCRIPTIONS.PETROL }),
+    lpg: z.number().min(0).meta({ description: DESCRIPTIONS.LPG }),
     refrigerants: z.array(WildSeaFisheriesRefrigerantSchema),
     transports: z
       .array(WildSeaFisheriesTransportSchema)
@@ -38,7 +40,7 @@ export const WildSeaFisheriesEnterpriseSchema = singleEnterpriseInput(
     custombait: z
       .array(WildSeaFisheriesCustomBaitPurchaseSchema)
       .meta({ description: 'Custom bait' }),
-    carbonOffset: z.number().meta({
+    carbonOffset: z.number().min(0).meta({
       description:
         'Carbon offsets purchased, in t CO2. Offsetting 2 t CO2 would be 2.0 (not -2.0)',
     }),

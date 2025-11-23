@@ -6,7 +6,7 @@ export const WildSeaFisheriesRefrigerantSchema = z.object({
   refrigerant: z
     .enum(Refrigerants)
     .meta({ description: DESCRIPTIONS.REFRIGERANT }),
-  annualRecharge: z.number().meta({
+  annualRecharge: z.number().min(0).meta({
     description: 'Amount of refrigerant annually recharged, kg product/year',
   }),
 });

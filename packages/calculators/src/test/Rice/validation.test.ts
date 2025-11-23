@@ -1,6 +1,6 @@
 import { RiceInputSchema } from '@/types/Rice/input';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { riceTestData } from './rice.data';
 
 describe('validating Rice test inputs, all types of inputs', () => {

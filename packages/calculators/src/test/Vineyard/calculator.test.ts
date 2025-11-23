@@ -43,7 +43,9 @@ const expectedScopes = {
     outboundFreight: 3669.8875,
     total: 5899.52781038,
   },
-  carbonSequestration: 95.9705,
+  carbonSequestration: {
+    total: 95.9705,
+  },
 };
 
 const expectations: VineyardOutput = {
@@ -61,7 +63,6 @@ const expectations: VineyardOutput = {
   ],
   carbonSequestration: {
     total: 95.9705,
-    intermediate: [95.9705],
   },
   intermediate: [expectedScopes as VineyardIntermediateOutput],
 };

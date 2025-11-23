@@ -1,7 +1,7 @@
 import { SheepBeefInputSchema } from '@/types/SheepBeef/input';
 import { CustomisedFertiliser } from '@/types/enums';
 import { InputValidationError } from '../..';
-import { validateCalculatorInput } from '../../calculators/calculators';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { beefTestInput } from '../Beef/beef.data';
 import { burnTestData } from '../Beef/burn.data';
 import { sheepTestInput } from '../Sheep/sheep.data';

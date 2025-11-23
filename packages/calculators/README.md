@@ -13,10 +13,10 @@ npm install @aginnovationaustralia/emissions-calculators
 # Usage
 
 ```javascript
-import { v3_0_0 } from '@aginnovationaustralia/emissions-calculators';
+import { Calculators, Types } from '@aginnovationaustralia/emissions-calculators';
 
-const { calculateBeef } = v3_0_0.Calculators;
-const { BeefInput, BeefOutput } = v3_0_0.Types;
+const { calculateBeef } = Calculators;
+const { BeefInput, BeefOutput } = Types;
 
 export const beefInputData: BeefInput = {
   state: 'nsw' as const,
@@ -43,12 +43,28 @@ export const beefInputData: BeefInput = {
 const beefResults: BeefOutput = calculateBeef(beefInputLatest);
 ```
 
+You can also use specific nested exports if you only need a single calculator. This should allow for a smaller bundle size via tree shaking:
+
+```javascript
+import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/beef';
+import type { BeefInput } from '@aginnovationaustralia/emissions-calculators/beef';
+```
+
+As well as the calculators and their types, there are some other resources that are useful for building a robust calculator:
+
+```javascript
+import {
+  CalculatorNames,
+  validateCalculatorInput,
+} from '@aginnovationaustralia/emissions-calculators/tools';
+```
+
 The input objects required for a calculation are deeply nested objects with strict type requirements. The outputs are also nested objects with very specific types. You can access classes for all the input and output types via the `Types`:
 
 ```javascript
-import { v3_0_0 } from '@aginnovationaustralia/emissions-calculators';
+import { Types } from '@aginnovationaustralia/emissions-calculators';
 
-const { BeefInput, BeefComplete, BeefClasses, BeefScope1Output } = v3_0_0.Types;
+const { BeefInput, BeefComplete, BeefClasses, BeefScope1Output } = Types;
 
 const classes: BeefClasses = {
   steersGt2: {
@@ -75,7 +91,7 @@ export const beefInputData: BeefInput = {
 
 This package includes functionality to collect anonymous metrics on how often features are being used. The data collected is not associated with specific users or organisations, and includes no personally identifying information like email addresses. It is only to understand the runtime adoption and usage of each calculator.
 
-If you don't want the library to report details of which calculators are being used, all reporting can be disabled by setting the environment variable `DISABLE_CALCULATOR_METRICS` to the value `true`.
+If you don't want the library to report details of which calculators are being used, all reporting can be disabled by setting the environment variable `DISABLE_CALCULATOR_METRICS` to the value `true`. You can also supply it as a function parameter when calling a calculator.
 
 The tool used to collect the usage metrics is [MixPanel](https://mixpanel.com/home/). The specific details that are collected is limited to:
 
