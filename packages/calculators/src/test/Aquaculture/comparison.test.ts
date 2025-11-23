@@ -75,6 +75,10 @@ const getRefrigerants = (sheet: XLSX.Sheet): RefrigerantInput[] => {
   ].filter((r) => r !== null);
 };
 
+const getBait = (sheet: XLSX.Sheet): AquacultureBaitPurchaseInput[] => {
+  return [];
+};
+
 const getCalculatorInput = (workbook: XLSX.Workbook): AquacultureInput => {
   const sheetInputFarm = workbook.sheet('Input - Farm');
   const farm = (address: string) => sheetInputFarm.cell(address);
@@ -117,7 +121,9 @@ const getCalculatorInput = (workbook: XLSX.Workbook): AquacultureInput => {
 };
 
 const getExpectedOutput = (workbook: XLSX.Workbook): AquacultureOutput => {
-  const worksheet = workbook.sheet('Output');
+  const summary = workbook.sheet('Summary - Farm');
+  const sheetInputFarm = workbook.sheet('Input - Farm');
+
   const expectedIntermediate: Omit<AquacultureIntermediateOutput, 'id'> = {
     scope1: {
       fuelCO2: 0,
@@ -152,7 +158,7 @@ const getExpectedOutput = (workbook: XLSX.Workbook): AquacultureOutput => {
     intensities: {
       aquacultureIncludingCarbonOffsets: 0,
       aquacultureExcludingCarbonOffsets: 0,
-      totalHarvestWeightKg: 0,
+      totalHarvestWeightKg: numberInput(sheetInputFarm.cell('C11')),
     },
     net: {
       total: 0,

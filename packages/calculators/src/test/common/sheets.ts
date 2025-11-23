@@ -30,7 +30,9 @@ export const mapInput =
 export const numberInput = (input: Cell): number => {
   const value = input.value();
   if (typeof value !== 'number') {
-    throw new Error(`Cell is not a number: ${input.address()}`);
+    throw new Error(
+      `Cell address ${input.address()} is not a number: ${value}`,
+    );
   }
   return value;
 };
