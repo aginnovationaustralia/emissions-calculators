@@ -1,0 +1,24 @@
+import { AllConstants } from '../../constants/types';
+import { GoatInput, GoatInputSchema, GoatOutput } from '../../types/Goat';
+import { CalculatorNames } from '../browser';
+import { BrowserEnvironment } from '../execution/browser/environment';
+import { executeCalculator } from '../execution/execute';
+import { CalculatorOptions } from '../execution/types';
+import { calculateGoat as calculateGoatInternal } from './calculator';
+export * from '../../types/Goat';
+
+function calculateGoat(
+  input: GoatInput,
+  options?: CalculatorOptions,
+): GoatOutput {
+  return executeCalculator(
+    calculateGoatInternal,
+    input,
+    CalculatorNames.Goat,
+    new BrowserEnvironment(options),
+  );
+}
+
+export { GoatInputSchema, calculateGoat };
+export type { AllConstants, GoatInput, GoatOutput };
+

@@ -1,13 +1,8 @@
 import { AllConstants, loadConstants } from '@/constants';
 import { CALCULATOR_VERSION } from '../constants';
-import { Environment } from '../types';
+import { CalculatorOptions, Environment } from '../types';
 import { packageVersion } from '../version';
 import { trackCalculatorExecution } from './metrics';
-
-export type CalculatorOptions = {
-  disableMetrics?: boolean;
-  organisation?: string;
-};
 
 /**
  * The BrowserEnvironment can provide a calculator execution with all of the config and setup logic it needs,

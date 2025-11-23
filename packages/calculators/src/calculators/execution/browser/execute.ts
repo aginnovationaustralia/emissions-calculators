@@ -1,6 +1,7 @@
 import { CalculatorNames } from '../../strings';
 import { Calculator, executeCalculator } from '../execute';
-import { BrowserEnvironment, CalculatorOptions } from './environment';
+import { CalculatorOptions } from '../types';
+import { BrowserEnvironment } from './environment';
 
 type BrowserCalculator<Input extends object, Output extends object> = (
   input: Input,
