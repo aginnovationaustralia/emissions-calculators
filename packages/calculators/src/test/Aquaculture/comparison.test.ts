@@ -258,8 +258,7 @@ const getCommercialFlights = (sheet: XLSX.Sheet): number => {
     return 0;
   }
 
-  const amount = emptyOrNumber(sheet.cell('C34'));
-  return amount ?? 0;
+  return numberInput(sheet.cell('C38'));
 };
 
 const getElectricity = (sheet: XLSX.Sheet) => {
@@ -318,7 +317,7 @@ const getTransportFuel = (sheet: XLSX.Sheet): TransportFuelInput[] => {
         },
       ];
 
-  const marineEnabled = sheet.cell('C52').value() === 'Yes';
+  const marineEnabled = sheet.cell('C50').value() === 'Yes';
 
   const marineRecords = !marineEnabled
     ? []
@@ -368,23 +367,23 @@ const getTransportFuel = (sheet: XLSX.Sheet): TransportFuelInput[] => {
     : [
         {
           type: TransportFuelTypes.AVGAS,
-          amountLitres: emptyOrNumber(sheet.cell('C69')),
+          amountLitres: emptyOrNumber(sheet.cell('C73')),
         },
         {
           type: TransportFuelTypes.JET_A1,
-          amountLitres: emptyOrNumber(sheet.cell('C70')),
+          amountLitres: emptyOrNumber(sheet.cell('C74')),
         },
         {
           type: TransportFuelTypes.JET_B,
-          amountLitres: emptyOrNumber(sheet.cell('C71')),
+          amountLitres: emptyOrNumber(sheet.cell('C75')),
         },
         {
           type: TransportFuelTypes.LNG,
-          amountLitres: emptyOrNumber(sheet.cell('C72')),
+          amountLitres: emptyOrNumber(sheet.cell('C76')),
         },
         {
           type: TransportFuelTypes.OTHER_BIOFUELS,
-          amountLitres: emptyOrNumber(sheet.cell('C73')),
+          amountLitres: emptyOrNumber(sheet.cell('C77')),
         },
       ];
 
@@ -414,26 +413,25 @@ const getStationaryFuel = (sheet: XLSX.Sheet): StationaryFuelInput[] => {
       type: StationaryFuelTypes.LPG,
       amountLitres: emptyOrNumber(sheet.cell('C22')),
     },
-
     {
       type: StationaryFuelTypes.ETHANOL,
-      amountLitres: emptyOrNumber(sheet.cell('C41')),
+      amountLitres: emptyOrNumber(sheet.cell('C23')),
     },
     {
       type: StationaryFuelTypes.BIODIESEL,
-      amountLitres: emptyOrNumber(sheet.cell('C42')),
+      amountLitres: emptyOrNumber(sheet.cell('C24')),
     },
     {
       type: StationaryFuelTypes.RENEWABLE_DIESEL,
-      amountLitres: emptyOrNumber(sheet.cell('C43')),
+      amountLitres: emptyOrNumber(sheet.cell('C25')),
     },
     {
       type: StationaryFuelTypes.OTHER_BIOFUELS,
-      amountLitres: emptyOrNumber(sheet.cell('C44')),
+      amountLitres: emptyOrNumber(sheet.cell('C26')),
     },
     {
       type: StationaryFuelTypes.LNG,
-      amountLitres: emptyOrNumber(sheet.cell('C45')),
+      amountLitres: emptyOrNumber(sheet.cell('C27')),
     },
   ].filter((f) => f.amountLitres !== null) as StationaryFuelInput[];
 

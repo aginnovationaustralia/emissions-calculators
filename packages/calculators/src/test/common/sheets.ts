@@ -31,7 +31,9 @@ export const numberInput = (input: Cell): number => {
   const value = input.value();
   if (typeof value !== 'number') {
     throw new Error(
-      `Cell address ${input.address()} is not a number: ${value}`,
+      `Cell address ${input
+        .sheet()
+        .name()}:${input.address()} is not a number: ${value}`,
     );
   }
   return value;
