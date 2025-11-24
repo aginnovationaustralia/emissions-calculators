@@ -517,47 +517,49 @@ const getCalculatorInput = (workbook: XLSX.Workbook): AquacultureInput => {
 };
 
 const getExpectedOutput = (workbook: XLSX.Workbook): AquacultureOutput => {
-  const summary = workbook.sheet('Summary - Farm');
+  const summarySheet = workbook.sheet('Summary - Farm');
+  const summary = (address: string) => numberInput(summarySheet.cell(address));
+
   const sheetInputFarm = workbook.sheet('Input - Farm');
 
   const expectedIntermediate: Omit<AquacultureIntermediateOutput, 'id'> = {
     scope1: {
-      fuelCO2: 0,
-      fuelCH4: 0,
-      fuelN2O: 0,
-      hfcsRefrigerantLeakage: 0,
-      wasteWaterCO2: 0,
-      compostedSolidWasteCO2: 0,
-      totalCO2: 0,
-      totalCH4: 0,
-      totalN2O: 0,
-      totalHFCs: 0,
-      total: 0,
+      fuelCO2: summary('B5'),
+      fuelCH4: summary('B6'),
+      fuelN2O: summary('B7'),
+      wasteWaterCO2: summary('B8'),
+      compostedSolidWasteCO2: summary('B9'),
+      hfcsRefrigerantLeakage: summary('B10'),
+      totalCO2: summary('E4'),
+      totalCH4: summary('E5'),
+      totalN2O: summary('E6'),
+      totalHFCs: summary('E7'),
+      total: summary('B12'),
     },
     scope2: {
-      electricity: 0,
-      total: 0,
+      electricity: summary('B15'),
+      total: summary('B16'),
     },
     scope3: {
-      purchasedBait: 0,
-      electricity: 0,
-      fuel: 0,
-      commercialFlights: 0,
-      inboundFreight: 0,
-      outboundFreight: 0,
-      solidWasteSentOffsite: 0,
-      total: 0,
+      purchasedBait: summary('B20'),
+      electricity: summary('B22'),
+      fuel: summary('B23'),
+      commercialFlights: summary('B24'),
+      inboundFreight: summary('B25'),
+      outboundFreight: summary('B27'),
+      solidWasteSentOffsite: summary('B28'),
+      total: summary('B29'),
     },
     carbonSequestration: {
       total: 0,
     },
     intensities: {
-      aquacultureIncludingCarbonOffsets: 0,
-      aquacultureExcludingCarbonOffsets: 0,
+      aquacultureIncludingCarbonOffsets: summary('B36'),
+      aquacultureExcludingCarbonOffsets: summary('B37'),
       totalHarvestWeightKg: numberInput(sheetInputFarm.cell('C11')),
     },
     net: {
-      total: 0,
+      total: summary('B34'),
     },
   };
   const output: AquacultureOutput = {
