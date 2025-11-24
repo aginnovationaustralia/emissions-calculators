@@ -9,11 +9,26 @@ import {
   AquacultureInput,
   AquacultureOutput,
   AquacultureProductionSystem,
+  FluidWasteInput,
+  FreightInput,
+  FuelInput,
   RefrigerantInput,
+  SolidWasteInput,
+  StationaryFuelInput,
+  TransportFuelInput,
 } from '@/types';
-import { AquacultureBait, Refrigerant, Refrigerants } from '@/types/enums';
+import {
+  AquacultureBait,
+  FluidWasteTreatmentType,
+  FreightTypes,
+  Refrigerant,
+  Refrigerants,
+  StationaryFuelTypes,
+  TransportFuelTypes,
+} from '@/types/enums';
 import XLSX, { Cell } from 'xlsx-populate';
 import {
+  emptyOrNumber,
   getWorkbook,
   isEmptyCell,
   mapInput,
@@ -53,6 +68,17 @@ const mapInputAquacultureBait = mapInput<AquacultureBait | 'None'>({
   'Cereal Grain': 'Cereal Grain',
   Squid: 'Squid',
   'Whole Fish': 'Whole Fish',
+});
+
+const mapFluidWasteTreatmentType = mapInput<FluidWasteTreatmentType>({
+  [FluidWasteTreatmentType.MANAGED_AEROBIC]: 'managed aerobic treatment',
+  [FluidWasteTreatmentType.UNMANAGED_AEROBIC]: 'unmanaged aerobic treatment',
+  [FluidWasteTreatmentType.ANAEROBIC_DIGESTER_REACTOR]:
+    'anaerobic digester/reactor',
+  [FluidWasteTreatmentType.SHALLOW_ANAEROBIC_LAGOON_LT_2M]:
+    'shallow anaerobic lagoon (<2 metres)',
+  [FluidWasteTreatmentType.DEEP_ANAEROBIC_LAGOON_GT_2M]:
+    'deep anaerobic lagoon (>2 metres)',
 });
 
 const getRefrigerant = (
@@ -142,14 +168,330 @@ const getCustomBaitPurchase = (
   ];
 };
 
+const getDownstreamFreight = (sheet: XLSX.Sheet): FreightInput[] => {
+  const enabled = sheet.cell('C5').value() === 'Yes';
+
+  if (!enabled) {
+    return [];
+  }
+
+  const truck = {
+    type: FreightTypes.TRUCK,
+    totalKmTonnes: emptyOrNumber(sheet.cell('C10')),
+  };
+  const rail = {
+    type: FreightTypes.RAIL,
+    totalKmTonnes: emptyOrNumber(sheet.cell('C11')),
+  };
+  const longHaulFlight = {
+    type: FreightTypes.LONG_HAUL_FLIGHT,
+    totalKmTonnes: emptyOrNumber(sheet.cell('C12')),
+  };
+  const mediumHaulFlight = {
+    type: FreightTypes.MEDIUM_HAUL_FLIGHT,
+    totalKmTonnes: emptyOrNumber(sheet.cell('C13')),
+  };
+  const smallContainerShip = {
+    type: FreightTypes.SMALL_CONTAINER_SHIP,
+    totalKmTonnes: emptyOrNumber(sheet.cell('C14')),
+  };
+  const largeContainerShip = {
+    type: FreightTypes.LARGE_CONTAINER_SHIP,
+    totalKmTonnes: emptyOrNumber(sheet.cell('C15')),
+  };
+
+  return [
+    truck,
+    rail,
+    longHaulFlight,
+    mediumHaulFlight,
+    smallContainerShip,
+    largeContainerShip,
+  ].filter((f) => f.totalKmTonnes !== null) as FreightInput[];
+};
+
+const getUpstreamFreight = (sheet: XLSX.Sheet): FreightInput[] => {
+  const enabled = sheet.cell('C19').value() === 'Yes';
+
+  if (!enabled) {
+    return [];
+  }
+
+  const truck = {
+    type: FreightTypes.TRUCK,
+    totalKmTonnes: emptyOrNumber(sheet.cell('C24')),
+  };
+  const rail = {
+    type: FreightTypes.RAIL,
+    totalKmTonnes: emptyOrNumber(sheet.cell('C25')),
+  };
+  const longHaulFlight = {
+    type: FreightTypes.LONG_HAUL_FLIGHT,
+    totalKmTonnes: emptyOrNumber(sheet.cell('C26')),
+  };
+  const mediumHaulFlight = {
+    type: FreightTypes.MEDIUM_HAUL_FLIGHT,
+    totalKmTonnes: emptyOrNumber(sheet.cell('C27')),
+  };
+  const smallContainerShip = {
+    type: FreightTypes.SMALL_CONTAINER_SHIP,
+    totalKmTonnes: emptyOrNumber(sheet.cell('C28')),
+  };
+  const largeContainerShip = {
+    type: FreightTypes.LARGE_CONTAINER_SHIP,
+    totalKmTonnes: emptyOrNumber(sheet.cell('C29')),
+  };
+
+  return [
+    truck,
+    rail,
+    longHaulFlight,
+    mediumHaulFlight,
+    smallContainerShip,
+    largeContainerShip,
+  ].filter((f) => f.totalKmTonnes !== null) as FreightInput[];
+};
+
+const getCommercialFlights = (sheet: XLSX.Sheet): number => {
+  const enabled = sheet.cell('C33').value() === 'Yes';
+  if (!enabled) {
+    return 0;
+  }
+
+  const amount = emptyOrNumber(sheet.cell('C34'));
+  return amount ?? 0;
+};
+
+const getElectricity = (sheet: XLSX.Sheet) => {
+  const nonRenewable = emptyOrNumber(sheet.cell('C9')) ?? 0;
+  const electricityRenewable = emptyOrNumber(sheet.cell('C10')) ?? 0;
+
+  return {
+    electricitySource: nonRenewable > 0 ? 'State Grid' : 'Renewable',
+    electricityUse: nonRenewable + electricityRenewable,
+    electricityRenewable,
+  } as const;
+};
+
+const getTransportFuel = (sheet: XLSX.Sheet): TransportFuelInput[] => {
+  const roadEnabled = sheet.cell('C32').value() === 'Yes';
+
+  const roadRecords = !roadEnabled
+    ? []
+    : [
+        // Road vehicles
+        {
+          type: TransportFuelTypes.PETROL,
+          amountLitres: emptyOrNumber(sheet.cell('C37')),
+        },
+        {
+          type: TransportFuelTypes.DIESEL,
+          amountLitres: emptyOrNumber(sheet.cell('C38')),
+        },
+        {
+          type: TransportFuelTypes.LPG,
+          amountLitres: emptyOrNumber(sheet.cell('C39')),
+        },
+        {
+          type: TransportFuelTypes.FUEL_OIL,
+          amountLitres: emptyOrNumber(sheet.cell('C40')),
+        },
+        {
+          type: TransportFuelTypes.ETHANOL,
+          amountLitres: emptyOrNumber(sheet.cell('C41')),
+        },
+        {
+          type: TransportFuelTypes.BIODIESEL,
+          amountLitres: emptyOrNumber(sheet.cell('C42')),
+        },
+        {
+          type: TransportFuelTypes.RENEWABLE_DIESEL,
+          amountLitres: emptyOrNumber(sheet.cell('C43')),
+        },
+        {
+          type: TransportFuelTypes.OTHER_BIOFUELS,
+          amountLitres: emptyOrNumber(sheet.cell('C44')),
+        },
+        {
+          type: TransportFuelTypes.LNG,
+          amountLitres: emptyOrNumber(sheet.cell('C45')),
+        },
+      ];
+
+  const marineEnabled = sheet.cell('C52').value() === 'Yes';
+
+  const marineRecords = !marineEnabled
+    ? []
+    : [
+        {
+          type: TransportFuelTypes.PETROL,
+          amountLitres: emptyOrNumber(sheet.cell('C55')),
+        },
+        {
+          type: TransportFuelTypes.DIESEL,
+          amountLitres: emptyOrNumber(sheet.cell('C56')),
+        },
+        {
+          type: TransportFuelTypes.LPG,
+          amountLitres: emptyOrNumber(sheet.cell('C57')),
+        },
+        {
+          type: TransportFuelTypes.FUEL_OIL,
+          amountLitres: emptyOrNumber(sheet.cell('C58')),
+        },
+        {
+          type: TransportFuelTypes.ETHANOL,
+          amountLitres: emptyOrNumber(sheet.cell('C59')),
+        },
+        {
+          type: TransportFuelTypes.BIODIESEL,
+          amountLitres: emptyOrNumber(sheet.cell('C60')),
+        },
+        {
+          type: TransportFuelTypes.RENEWABLE_DIESEL,
+          amountLitres: emptyOrNumber(sheet.cell('C61')),
+        },
+        {
+          type: TransportFuelTypes.OTHER_BIOFUELS,
+          amountLitres: emptyOrNumber(sheet.cell('C62')),
+        },
+        {
+          type: TransportFuelTypes.LNG,
+          amountLitres: emptyOrNumber(sheet.cell('C63')),
+        },
+      ];
+
+  const aviationEnabled = sheet.cell('C68').value() === 'Yes';
+
+  const aviationRecords = !aviationEnabled
+    ? []
+    : [
+        {
+          type: TransportFuelTypes.AVGAS,
+          amountLitres: emptyOrNumber(sheet.cell('C69')),
+        },
+        {
+          type: TransportFuelTypes.JET_A1,
+          amountLitres: emptyOrNumber(sheet.cell('C70')),
+        },
+        {
+          type: TransportFuelTypes.JET_B,
+          amountLitres: emptyOrNumber(sheet.cell('C71')),
+        },
+        {
+          type: TransportFuelTypes.LNG,
+          amountLitres: emptyOrNumber(sheet.cell('C72')),
+        },
+        {
+          type: TransportFuelTypes.OTHER_BIOFUELS,
+          amountLitres: emptyOrNumber(sheet.cell('C73')),
+        },
+      ];
+
+  return roadRecords
+    .concat(marineRecords)
+    .concat(aviationRecords)
+    .filter((f) => f.amountLitres !== null) as TransportFuelInput[];
+};
+
+const getStationaryFuel = (sheet: XLSX.Sheet): StationaryFuelInput[] => {
+  const enabled = sheet.cell('C15').value() === 'Yes';
+
+  if (!enabled) {
+    return [];
+  }
+
+  const result = [
+    {
+      type: StationaryFuelTypes.PETROL,
+      amountLitres: emptyOrNumber(sheet.cell('C20')),
+    },
+    {
+      type: StationaryFuelTypes.DIESEL,
+      amountLitres: emptyOrNumber(sheet.cell('C21')),
+    },
+    {
+      type: StationaryFuelTypes.LPG,
+      amountLitres: emptyOrNumber(sheet.cell('C22')),
+    },
+
+    {
+      type: StationaryFuelTypes.ETHANOL,
+      amountLitres: emptyOrNumber(sheet.cell('C41')),
+    },
+    {
+      type: StationaryFuelTypes.BIODIESEL,
+      amountLitres: emptyOrNumber(sheet.cell('C42')),
+    },
+    {
+      type: StationaryFuelTypes.RENEWABLE_DIESEL,
+      amountLitres: emptyOrNumber(sheet.cell('C43')),
+    },
+    {
+      type: StationaryFuelTypes.OTHER_BIOFUELS,
+      amountLitres: emptyOrNumber(sheet.cell('C44')),
+    },
+    {
+      type: StationaryFuelTypes.LNG,
+      amountLitres: emptyOrNumber(sheet.cell('C45')),
+    },
+  ].filter((f) => f.amountLitres !== null) as StationaryFuelInput[];
+
+  return result;
+};
+
+const getFuel = (sheet: XLSX.Sheet): FuelInput => {
+  return {
+    transportFuel: getTransportFuel(sheet),
+    stationaryFuel: getStationaryFuel(sheet),
+    naturalGas: emptyOrNumber(sheet.cell('C28')) ?? 0,
+  };
+};
+
+const getFluidWaste = (sheet: XLSX.Sheet): FluidWasteInput[] => {
+  const enabled = sheet.cell('C5').value() === 'Yes';
+  const amountCell = sheet.cell('C7');
+
+  if (!enabled || isEmptyCell(amountCell)) {
+    return [];
+  }
+
+  return [
+    {
+      fluidWasteKl: numberInput(amountCell),
+      fluidWasteTreatmentType: mapFluidWasteTreatmentType(sheet.cell('C9')),
+      averageInletCOD: numberInput(sheet.cell('C10')),
+      averageOutletCOD: numberInput(sheet.cell('C11')),
+      flaredCombustedFraction: numberInput(sheet.cell('C12')),
+    },
+  ];
+};
+
+const getSolidWaste = (sheet: XLSX.Sheet): SolidWasteInput => {
+  const enabled = sheet.cell('C17').value() === 'Yes';
+
+  if (!enabled) {
+    return {
+      sentOffsiteTonnes: 0,
+      onsiteCompostingTonnes: 0,
+    };
+  }
+
+  return {
+    sentOffsiteTonnes: numberInput(sheet.cell('C19')),
+    onsiteCompostingTonnes: numberInput(sheet.cell('C20')),
+  };
+};
+
 const getCalculatorInput = (workbook: XLSX.Workbook): AquacultureInput => {
   const sheetInputFarm = workbook.sheet('Input - Farm');
   const farm = (address: string) => sheetInputFarm.cell(address);
 
-  //   const sheetInputElectricityFuel = workbook.sheet(
-  //     'Input - Electricity & Fuel',
-  //   );
-  //   const sheetInputWasteOutputs = workbook.sheet('Input - Waste & Outputs');
+  const sheetInputElectricityFuel = workbook.sheet(
+    'Input - Electricity & Fuel',
+  );
+  const sheetTravelFreight = workbook.sheet('Input - Travel & freight');
+  const sheetInputWasteOutputs = workbook.sheet('Input - Waste & Outputs');
   //   const sheetInputVegetation = workbook.sheet('Input - Vegetation');
 
   const input: AquacultureInput = {
@@ -161,22 +503,13 @@ const getCalculatorInput = (workbook: XLSX.Workbook): AquacultureInput => {
         refrigerants: getRefrigerants(sheetInputFarm),
         bait: getBaitPurchases(sheetInputFarm),
         customBait: getCustomBaitPurchase(sheetInputFarm),
-        inboundFreight: [],
-        outboundFreight: [],
-        totalCommercialFlightsKm: 0,
-        electricitySource: 'State Grid',
-        electricityUse: 0,
-        electricityRenewable: 0,
-        fuel: {
-          transportFuel: [],
-          stationaryFuel: [],
-          naturalGas: 0,
-        },
-        fluidWaste: [],
-        solidWaste: {
-          sentOffsiteTonnes: 0,
-          onsiteCompostingTonnes: 0,
-        },
+        inboundFreight: getDownstreamFreight(sheetTravelFreight),
+        outboundFreight: getUpstreamFreight(sheetTravelFreight),
+        totalCommercialFlightsKm: getCommercialFlights(sheetTravelFreight),
+        ...getElectricity(sheetInputElectricityFuel),
+        fuel: getFuel(sheetInputElectricityFuel),
+        fluidWaste: getFluidWaste(sheetInputWasteOutputs),
+        solidWaste: getSolidWaste(sheetInputWasteOutputs),
       },
     ],
   };

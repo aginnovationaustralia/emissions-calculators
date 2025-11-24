@@ -41,3 +41,10 @@ export const isEmptyCell = (input: Cell): boolean => {
   const value = input.value();
   return value === undefined || value === null || value === '';
 };
+
+export const emptyOrNumber = (input: Cell): number | null => {
+  if (isEmptyCell(input)) {
+    return null;
+  }
+  return numberInput(input);
+};
