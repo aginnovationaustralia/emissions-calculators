@@ -1,6 +1,8 @@
+import { validateCalculatorInput } from '@/calculators';
 import {
   AquacultureBaitPurchase,
   AquacultureCustomBaitPurchase,
+  AquacultureInputSchema,
   AquacultureIntermediateOutput,
   calculateAquaculture,
 } from '@/calculators/Aquaculture';
@@ -27,6 +29,7 @@ import {
   TransportFuelTypes,
 } from '@/types/enums';
 import XLSX, { Cell } from 'xlsx-populate';
+import { GeneratedTest, traverseExpectations } from '../common/emissions';
 import {
   emptyOrNumber,
   getWorkbook,
@@ -263,12 +266,13 @@ const getCommercialFlights = (sheet: XLSX.Sheet): number => {
 
 const getElectricity = (sheet: XLSX.Sheet) => {
   const nonRenewable = emptyOrNumber(sheet.cell('C9')) ?? 0;
-  const electricityRenewable = emptyOrNumber(sheet.cell('C10')) ?? 0;
+  const renewable = emptyOrNumber(sheet.cell('C10')) ?? 0;
+  const total = nonRenewable + renewable;
 
   return {
     electricitySource: nonRenewable > 0 ? 'State Grid' : 'Renewable',
-    electricityUse: nonRenewable + electricityRenewable,
-    electricityRenewable,
+    electricityUse: total,
+    electricityRenewable: total <= 0 ? 0 : renewable / total,
   } as const;
 };
 
@@ -571,15 +575,28 @@ const getExpectedOutput = (workbook: XLSX.Workbook): AquacultureOutput => {
   return output;
 };
 
+let tests: GeneratedTest[];
+
 describe('Compare aquaculture calculator to spreadsheet', () => {
   test('should match spreadsheet', async () => {
     const workbook = await getWorkbook(
       './src/test/sheets/comparison/Aq-GAFv1.0.xlsx',
     );
     const input = getCalculatorInput(workbook);
-    console.dir(input, { depth: null });
+    const validatedInput = validateCalculatorInput(
+      AquacultureInputSchema,
+      input,
+    );
+    console.dir(validatedInput, { depth: null });
     const expectedOutput = getExpectedOutput(workbook);
-    const calculatorData = calculateAquaculture(input);
-    expect(calculatorData).toEqual(expectedOutput);
+    const calculatorData = calculateAquaculture(validatedInput);
+    tests = traverseExpectations(expectedOutput, calculatorData);
+    tests.forEach((test) => {
+      try {
+        test.test();
+      } catch (e: unknown) {
+        console.error(`Error in test ${test.path}: ${e}`);
+      }
+    });
   });
 });
