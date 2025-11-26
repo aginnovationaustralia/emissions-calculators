@@ -145,10 +145,14 @@ export const deerComplete: DeerComplete = {
     pastureIrrigated: 2.5,
     cropsDryland: 7,
     cropsIrrigated: 3.5,
-    otherDryland: 5,
-    otherIrrigated: 3,
+    otherFertilisers: [
+      {
+        otherType: 'Diammonium Phosphate (DAP)',
+        otherDryland: 5,
+        otherIrrigated: 3,
+      },
+    ],
     singleSuperphosphate: 10,
-    otherType: 'Diammonium Phosphate (DAP)',
   },
   limestone: 10,
   limestoneFraction: 1,

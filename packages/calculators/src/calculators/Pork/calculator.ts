@@ -3,10 +3,7 @@ import { PorkOutput } from '@/types/Pork/output';
 import { PorkComplete } from '@/types/Pork/pork.input';
 import { PorkClasses } from '@/types/Pork/porkclasses.input';
 import { State } from '@/types/enums';
-import {
-  calculateScope3Fertiliser,
-  mergeOtherFertilisers,
-} from '../../calculators/common/fertiliser';
+import { calculateScope3Fertiliser } from '../../calculators/common/fertiliser';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {
@@ -51,7 +48,6 @@ function getIntensities(
 /**
  * Entire calculator for Pork
  * @param state
- * @param propertyNorthOfTropicOfCapricorn
  * @param rainfallAbove600
  * @param beef
  * @param sheep
@@ -59,7 +55,6 @@ function getIntensities(
  */
 export function calculateSinglePork(
   state: State,
-  propertyNorthOfTropicOfCapricorn: boolean,
   rainfallAbove600: boolean,
   pork: PorkComplete,
   context: ExecutionContext<ConstantsForPorkCalculator>,
@@ -71,12 +66,10 @@ export function calculateSinglePork(
     slaughter_pigs: pork.classes.slaughterPigs,
   };
 
-  const mergedFertiliser = mergeOtherFertilisers(pork.fertiliser);
-
   const scope1N2O = calculateScope1N2O(
     state,
     fixedClasses,
-    mergedFertiliser,
+    pork.fertiliser,
     rainfallAbove600,
     context,
   );
@@ -85,9 +78,9 @@ export function calculateSinglePork(
 
   const scope1Enteric = calculateScope1Enteric(fixedClasses, context);
 
-  const scope1Urea = calculateScope1Urea(mergedFertiliser, context);
+  const scope1Urea = calculateScope1Urea(pork.fertiliser, context);
 
-  const scope1Fertiliser = calculateScope1Fertiliser(mergedFertiliser, context);
+  const scope1Fertiliser = calculateScope1Fertiliser(pork.fertiliser, context);
 
   const scope1Lime = calculateScope1Lime(
     pork.limestone,
@@ -122,7 +115,7 @@ export function calculateSinglePork(
     context,
   );
 
-  const fertiliser = calculateScope3Fertiliser(mergedFertiliser, context);
+  const fertiliser = calculateScope3Fertiliser(pork.fertiliser, context);
 
   const herbicide = calculateScope3Herbicide(
     pork.herbicide,
@@ -246,7 +239,6 @@ export function calculatePork(
   const porkResults = input.pork.map((singlePork, ix) =>
     calculateSinglePork(
       input.state,
-      input.northOfTropicOfCapricorn,
       input.rainfallAbove600,
       singlePork,
       context,

@@ -1,3 +1,4 @@
+import { DairyComplete } from '@/types';
 import { DairyInput } from '@/types/Dairy/input';
 import { veg1, veg2, veg3, veg4 } from './vegetation.data';
 
@@ -158,7 +159,7 @@ export const dairies = {
   },
 } as const;
 
-export const dairyComplete = {
+export const dairyComplete: DairyComplete = {
   classes: dairies,
   areas: {
     croppedDryland: 100,
@@ -227,9 +228,13 @@ export const dairyComplete = {
     pastureDryland: 4,
     pastureIrrigated: 2,
     singleSuperphosphate: 4,
-    otherType: 'Diammonium Phosphate (DAP)',
-    otherDryland: 2,
-    otherIrrigated: 2,
+    otherFertilisers: [
+      {
+        otherDryland: 2,
+        otherIrrigated: 2,
+        otherType: 'Diammonium Phosphate (DAP)',
+      },
+    ],
   },
 } as const;
 

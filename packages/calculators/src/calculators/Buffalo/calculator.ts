@@ -1,7 +1,4 @@
-import {
-  calculateScope3Fertiliser,
-  mergeOtherFertilisers,
-} from '@/calculators/common/fertiliser';
+import { calculateScope3Fertiliser } from '@/calculators/common/fertiliser';
 import { BuffaloComplete } from '@/types/Buffalo/buffalo.input';
 import { BuffaloInput } from '@/types/Buffalo/input';
 import { BuffaloOutput } from '@/types/Buffalo/output';
@@ -42,11 +39,9 @@ export function calculateSingleBuffalo(
   carbonSequestration: number,
   id: string,
 ) {
-  const mergedFertiliser = mergeOtherFertilisers(buffalo.fertiliser);
-
   const buffaloEmissions = calculateScope1(
     buffalo,
-    mergedFertiliser,
+    buffalo.fertiliser,
     rainfallAbove600,
     state,
     context,
@@ -80,7 +75,7 @@ export function calculateSingleBuffalo(
     true,
   );
 
-  const ureaCO2 = calculateScope1Urea(mergedFertiliser, context);
+  const ureaCO2 = calculateScope1Urea(buffalo.fertiliser, context);
 
   const electricity = calculateElectricityScope2And3(
     state,
@@ -90,7 +85,7 @@ export function calculateSingleBuffalo(
     context,
   );
 
-  const fertiliser = calculateScope3Fertiliser(mergedFertiliser, context);
+  const fertiliser = calculateScope3Fertiliser(buffalo.fertiliser, context);
 
   const feed = calculateScope3PurchasedFeed(
     buffalo.grainFeed,

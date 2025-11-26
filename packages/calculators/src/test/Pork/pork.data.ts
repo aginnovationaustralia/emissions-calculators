@@ -11,10 +11,9 @@ const classes: PorkClasses = {
     summer: 120,
     autumn: 130,
     winter: 140,
-    headPurchased: 0,
     headSold: 0,
-    purchasedWeight: 0,
     saleWeight: 0,
+    purchases: [],
     manure: {
       autumn: {
         outdoorSystems: 50,
@@ -51,10 +50,9 @@ const classes: PorkClasses = {
     summer: 200,
     autumn: 200,
     winter: 200,
-    headPurchased: 0,
     headSold: 0,
-    purchasedWeight: 0,
     saleWeight: 0,
+    purchases: [],
     manure: {
       autumn: {
         outdoorSystems: 50,
@@ -91,10 +89,9 @@ const classes: PorkClasses = {
     summer: 320,
     autumn: 330,
     winter: 340,
-    headPurchased: 0,
     headSold: 1000,
-    purchasedWeight: 0,
     saleWeight: 400,
+    purchases: [],
     manure: {
       autumn: {
         outdoorSystems: 50,
@@ -131,10 +128,9 @@ const classes: PorkClasses = {
     summer: 420,
     autumn: 430,
     winter: 440,
-    headPurchased: 0,
     headSold: 0,
-    purchasedWeight: 0,
     saleWeight: 0,
+    purchases: [],
     manure: {
       autumn: {
         outdoorSystems: 25,
@@ -171,10 +167,9 @@ const classes: PorkClasses = {
     summer: 520,
     autumn: 530,
     winter: 540,
-    headPurchased: 100,
     headSold: 100,
-    purchasedWeight: 50,
     saleWeight: 100,
+    purchases: [{ head: 100, purchaseWeight: 50 }],
     manure: {
       autumn: {
         outdoorSystems: 25,
@@ -211,10 +206,9 @@ const classes: PorkClasses = {
     summer: 620,
     autumn: 630,
     winter: 640,
-    headPurchased: 0,
     headSold: 0,
-    purchasedWeight: 0,
     saleWeight: 0,
+    purchases: [],
     manure: {
       autumn: {
         outdoorSystems: 25,
@@ -251,10 +245,9 @@ const classes: PorkClasses = {
     summer: 720,
     autumn: 730,
     winter: 740,
-    headPurchased: 0,
     headSold: 150,
-    purchasedWeight: 0,
     saleWeight: 200,
+    purchases: [],
     manure: {
       autumn: {
         outdoorSystems: 50,
@@ -291,13 +284,16 @@ const classes: PorkClasses = {
 const fertiliser: Fertiliser = {
   pastureDryland: 20,
   cropsDryland: 30,
-  otherDryland: 5,
-  otherType: 'Urea-Ammonium Nitrate (UAN)',
   pastureIrrigated: 20,
   cropsIrrigated: 30,
-  otherIrrigated: 5,
   singleSuperphosphate: 25,
-  otherFertilisers: [],
+  otherFertilisers: [
+    {
+      otherType: 'Urea-Ammonium Nitrate (UAN)',
+      otherDryland: 5,
+      otherIrrigated: 5,
+    },
+  ],
 };
 
 const limestone = 0;
@@ -407,7 +403,6 @@ export const porkComplete: PorkComplete = {
 export const porkTestData: PorkInput = {
   state: 'nsw',
   pork: [porkComplete],
-  northOfTropicOfCapricorn: false,
   rainfallAbove600: false,
   vegetation: [
     {
@@ -435,10 +430,9 @@ const minimalClasses: PorkClasses = {
     summer: 120,
     autumn: 130,
     winter: 140,
-    headPurchased: 5,
     headSold: 5,
-    purchasedWeight: 10,
     saleWeight: 10,
+    purchases: [{ head: 5, purchaseWeight: 10 }],
     manure: {
       autumn: {},
       winter: {},
@@ -451,10 +445,9 @@ const minimalClasses: PorkClasses = {
     summer: 0,
     autumn: 0,
     winter: 0,
-    headPurchased: 0,
     headSold: 0,
-    purchasedWeight: 0,
     saleWeight: 0,
+    purchases: [],
     manure: {
       autumn: {
         outdoorSystems: 50,
@@ -493,13 +486,16 @@ const porkMinimalComplete: PorkComplete = {
   fertiliser: {
     pastureDryland: 0,
     cropsDryland: 0,
-    otherDryland: 0,
-    otherType: 'Urea-Ammonium Nitrate (UAN)',
     pastureIrrigated: 0,
     cropsIrrigated: 0,
-    otherIrrigated: 0,
     singleSuperphosphate: 0,
-    otherFertilisers: [],
+    otherFertilisers: [
+      {
+        otherType: 'Urea-Ammonium Nitrate (UAN)',
+        otherDryland: 0,
+        otherIrrigated: 0,
+      },
+    ],
   },
   feedProducts: [],
 };
@@ -507,7 +503,6 @@ const porkMinimalComplete: PorkComplete = {
 export const porkMinimalTestData: PorkInput = {
   state: 'nsw',
   pork: [porkMinimalComplete],
-  northOfTropicOfCapricorn: false,
   rainfallAbove600: false,
   vegetation: [],
 };

@@ -1,7 +1,4 @@
-import {
-  calculateScope3Fertiliser,
-  mergeOtherFertilisers,
-} from '@/calculators/common/fertiliser';
+import { calculateScope3Fertiliser } from '@/calculators/common/fertiliser';
 import { DairyComplete } from '@/types/Dairy/dairy.input';
 import { DairyInput } from '@/types/Dairy/input';
 import { DairyOutput } from '@/types/Dairy/output';
@@ -40,8 +37,6 @@ export function calculateSingleDairy(
   carbonSequestration: number,
   id: string,
 ) {
-  const mergedDairyFertiliser = mergeOtherFertilisers(dairy.fertiliser);
-
   const {
     totalAnimalWaste: animalWasteN2O,
     atmosphericDepositionN2O,
@@ -99,7 +94,7 @@ export function calculateSingleDairy(
     context,
   );
 
-  const ureaCO2 = calculateScope1Urea(mergedDairyFertiliser, context);
+  const ureaCO2 = calculateScope1Urea(dairy.fertiliser, context);
 
   const dairyElectricity = calculateElectricityScope2And3(
     state,
@@ -109,10 +104,7 @@ export function calculateSingleDairy(
     context,
   );
 
-  const dairyFertiliser = calculateScope3Fertiliser(
-    mergedDairyFertiliser,
-    context,
-  );
+  const dairyFertiliser = calculateScope3Fertiliser(dairy.fertiliser, context);
 
   const dairyFeed = calculateScope3PurchasedFeed(
     dairy.grainFeed,

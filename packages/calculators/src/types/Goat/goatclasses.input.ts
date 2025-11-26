@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { deprecated } from '../schemas';
 import { GoatClassSchema } from './goatclass.input';
 
 export const GoatClassesSchema = z
@@ -34,9 +33,6 @@ export const GoatClassesSchema = z
     }),
     kids: GoatClassSchema.optional().meta({ description: 'kids' }),
     tradeKids: GoatClassSchema.optional().meta({ description: 'trade kids' }),
-    tradeDoes: GoatClassSchema.optional().meta(
-      deprecated('Trade does', 'More specific trade doe classes now available'),
-    ),
   })
   .meta({ description: 'Goat classes of different types' });
 

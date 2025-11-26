@@ -1,7 +1,4 @@
-import {
-  calculateScope3Fertiliser,
-  mergeOtherFertilisers,
-} from '@/calculators/common/fertiliser';
+import { calculateScope3Fertiliser } from '@/calculators/common/fertiliser';
 import { DeerComplete } from '@/types/Deer/deer.input';
 import { DeerInput } from '@/types/Deer/input';
 import { DeerOutput } from '@/types/Deer/output';
@@ -42,11 +39,9 @@ export function calculateSingleDeer(
   carbonSequestration: number,
   id: string,
 ) {
-  const mergedFertiliser = mergeOtherFertilisers(deer.fertiliser);
-
   const deerEmissions = calculateScope1(
     deer,
-    mergedFertiliser,
+    deer.fertiliser,
     rainfallAbove600,
     state,
     context,
@@ -80,7 +75,7 @@ export function calculateSingleDeer(
     true,
   );
 
-  const ureaCO2 = calculateScope1Urea(mergedFertiliser, context);
+  const ureaCO2 = calculateScope1Urea(deer.fertiliser, context);
 
   const electricity = calculateElectricityScope2And3(
     state,
@@ -90,7 +85,7 @@ export function calculateSingleDeer(
     context,
   );
 
-  const fertiliser = calculateScope3Fertiliser(mergedFertiliser, context);
+  const fertiliser = calculateScope3Fertiliser(deer.fertiliser, context);
 
   const feed = calculateScope3PurchasedFeed(
     deer.grainFeed,
