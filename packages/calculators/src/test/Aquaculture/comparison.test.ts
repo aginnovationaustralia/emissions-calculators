@@ -505,8 +505,8 @@ const getCalculatorInput = (workbook: XLSX.Workbook): AquacultureInput => {
         refrigerants: getRefrigerants(sheetInputFarm),
         bait: getBaitPurchases(sheetInputFarm),
         customBait: getCustomBaitPurchase(sheetInputFarm),
-        inboundFreight: getDownstreamFreight(sheetTravelFreight),
-        outboundFreight: getUpstreamFreight(sheetTravelFreight),
+        inboundFreight: getUpstreamFreight(sheetTravelFreight),
+        outboundFreight: getDownstreamFreight(sheetTravelFreight),
         totalCommercialFlightsKm: getCommercialFlights(sheetTravelFreight),
         ...getElectricity(sheetInputElectricityFuel),
         fuel: getFuel(sheetInputElectricityFuel),
@@ -596,6 +596,7 @@ describe('Compare aquaculture calculator to spreadsheet', () => {
         test.test();
       } catch (e: unknown) {
         console.error(`Error in test ${test.path}: ${e}`);
+        throw e;
       }
     });
   });
