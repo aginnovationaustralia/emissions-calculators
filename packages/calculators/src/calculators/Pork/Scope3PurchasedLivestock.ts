@@ -17,8 +17,7 @@ export function calculateScope3PurchasedLivestock(
       return acc;
     }
 
-    const purchases =
-      cls.purchases && cls.purchases.length > 0 ? cls.purchases : [];
+    const purchases = cls?.purchases ?? [];
 
     const totalPurchaseKg = purchases.reduce((accP, curP) => {
       return accP + curP.head * curP.purchaseWeight;

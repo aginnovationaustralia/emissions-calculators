@@ -13,8 +13,7 @@ export function calculateScope3PurchaseLivestock(
 
   const totalKg = GoatClassesAPI.reduce((acc, cur) => {
     const cls = classes[cur];
-    const purchases =
-      cls?.purchases && cls.purchases.length > 0 ? cls.purchases : [];
+    const purchases = cls?.purchases ?? [];
 
     const totalPurchaseKg = purchases.reduce((accP, curP) => {
       return accP + curP.head * curP.purchaseWeight;

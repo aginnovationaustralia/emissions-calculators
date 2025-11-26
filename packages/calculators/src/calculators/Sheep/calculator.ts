@@ -172,8 +172,7 @@ export function calculateSingleSheep(
     (acc, type) => {
       const s = sheep.classes[type];
 
-      const purchases =
-        s && s.purchases && s.purchases.length > 0 ? s.purchases : [];
+      const purchases = s?.purchases ?? [];
 
       return {
         ...acc,

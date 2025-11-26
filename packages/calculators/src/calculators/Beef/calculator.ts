@@ -64,8 +64,7 @@ function transformBeefPurchasedLivestock(beef: BeefComplete) {
     (acc, type) => {
       const b = beef.classes[type];
 
-      const purchases =
-        b && b.purchases && b.purchases.length > 0 ? b.purchases : [];
+      const purchases = b?.purchases ?? [];
 
       return {
         ...acc,
