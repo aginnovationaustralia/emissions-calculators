@@ -6,7 +6,6 @@ import {
   AquacultureIntermediateOutput,
   calculateAquaculture,
 } from '@/calculators/Aquaculture';
-import { States } from '@/constants/types';
 import {
   AquacultureInput,
   AquacultureOutput,
@@ -31,24 +30,14 @@ import {
 import XLSX, { Cell } from 'xlsx-populate';
 import { GeneratedTest, traverseExpectations } from '../common/emissions';
 import {
+  calculateElectricity,
   emptyOrNumber,
   getWorkbook,
   isEmptyCell,
   mapInput,
+  mapInputRegion,
   numberInput,
 } from '../common/sheets';
-
-const mapInputRegion = mapInput<States>({
-  wa_sw: 'SW WA',
-  wa_nw: 'NW WA',
-  vic: 'Vic',
-  qld: 'Qld',
-  sa: 'SA',
-  tas: 'Tas',
-  nt: 'NT',
-  act: 'ACT',
-  nsw: 'NSW',
-});
 
 const mapInputProductionSystem = mapInput<AquacultureProductionSystem>({
   'Offshore Caged Aquaculture': 'Offshore caged aquaculture',
@@ -267,13 +256,8 @@ const getCommercialFlights = (sheet: XLSX.Sheet): number => {
 const getElectricity = (sheet: XLSX.Sheet) => {
   const nonRenewable = emptyOrNumber(sheet.cell('C9')) ?? 0;
   const renewable = emptyOrNumber(sheet.cell('C10')) ?? 0;
-  const total = nonRenewable + renewable;
 
-  return {
-    electricitySource: nonRenewable > 0 ? 'State Grid' : 'Renewable',
-    electricityUse: total,
-    electricityRenewable: total <= 0 ? 0 : renewable / total,
-  } as const;
+  return calculateElectricity(renewable, nonRenewable);
 };
 
 const getTransportFuel = (sheet: XLSX.Sheet): TransportFuelInput[] => {
@@ -587,7 +571,6 @@ describe('Compare aquaculture calculator to spreadsheet', () => {
       AquacultureInputSchema,
       input,
     );
-    console.dir(validatedInput, { depth: null });
     const expectedOutput = getExpectedOutput(workbook);
     const calculatorData = calculateAquaculture(validatedInput);
     tests = traverseExpectations(expectedOutput, calculatorData);
