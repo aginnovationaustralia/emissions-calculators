@@ -66,7 +66,6 @@ const emptyCottonCrop: CottonCrop = {
   sulfurApplication: 0,
   singleSuperPhosphate: 0,
   rainfallAbove600: false,
-  fractionOfAnnualCropBurnt: 0,
   herbicideUse: 0,
   glyphosateOtherHerbicideUse: 0,
   electricityAllocation: 0,

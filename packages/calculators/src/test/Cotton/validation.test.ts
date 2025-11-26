@@ -1,5 +1,4 @@
 import { CottonInputSchema } from '@/types/Cotton/input';
-import { CustomisedFertiliser } from '@/types/enums';
 import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { cottonTestData } from './cotton.data';
@@ -34,36 +33,6 @@ describe('validating Cotton test inputs for incorrect inputs', () => {
         issue.path.includes('state'),
       );
       expect(stateError).toBeDefined();
-    }
-  });
-});
-
-describe('compatibility for migrated valid inputs', () => {
-  test('old syntax for UAN is not supported', () => {
-    const cottonCrop = { ...cottonTestData.crops[0] };
-    cottonCrop.otherFertiliserType =
-      ' Urea-Ammonium Nitrate (UAN)' as CustomisedFertiliser;
-    const inputWithUAN = {
-      ...cottonTestData,
-      crops: [cottonCrop],
-    };
-    const result = CottonInputSchema.safeParse(inputWithUAN);
-    expect(result.success).toBe(false);
-  });
-
-  test('new syntax for UAN is supported', () => {
-    const cottonCrop = { ...cottonTestData.crops[0] };
-    cottonCrop.otherFertiliserType = 'Urea-Ammonium Nitrate (UAN)';
-    const inputWithUAN = {
-      ...cottonTestData,
-      crops: [cottonCrop],
-    };
-    const result = CottonInputSchema.safeParse(inputWithUAN);
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data.crops[0].otherFertiliserType).toEqual(
-        'Urea-Ammonium Nitrate (UAN)',
-      );
     }
   });
 });

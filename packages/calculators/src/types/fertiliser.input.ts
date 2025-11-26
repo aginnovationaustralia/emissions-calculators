@@ -1,7 +1,5 @@
 import { z } from 'zod';
-import { CustomisedFertilisers } from './enums';
 import { OtherFertiliserSchema } from './otherFertiliser.input';
-import { deprecated } from './schemas';
 
 export const FertiliserSchema = z
   .object({
@@ -9,12 +7,7 @@ export const FertiliserSchema = z
       .number()
       .min(0)
       .meta({ description: 'Single superphosphate usage in tonnes' }),
-    otherType: z
-      .enum(CustomisedFertilisers)
-      .optional()
-      .meta(
-        deprecated('Other N fertiliser type', 'Use `otherFertilisers` instead'),
-      ),
+
     pastureDryland: z.number().min(0).meta({
       description: 'Urea fertiliser used for dryland pasture, in tonnes Urea',
     }),
@@ -27,26 +20,6 @@ export const FertiliserSchema = z
     cropsIrrigated: z.number().min(0).meta({
       description: 'Urea fertiliser used for irrigated crops, in tonnes Urea',
     }),
-    otherDryland: z
-      .number()
-      .min(0)
-      .optional()
-      .meta(
-        deprecated(
-          'Other N fertiliser used for dryland',
-          'Use `otherFertilisers` instead',
-        ),
-      ),
-    otherIrrigated: z
-      .number()
-      .min(0)
-      .optional()
-      .meta(
-        deprecated(
-          'Other N fertiliser used for irrigated',
-          'Use `otherFertilisers` instead',
-        ),
-      ),
     otherFertilisers: z.array(OtherFertiliserSchema).optional().meta({
       description:
         'Array of Other N fertiliser. Version note: If this field is set and has a length > 0, the `other` fields within this object are ignored, and this array is used instead',

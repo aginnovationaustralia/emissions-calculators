@@ -1,7 +1,7 @@
 import { HorticultureCropTypes } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { deprecated, proportion, singleEnterpriseInput } from '../schemas';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { HorticultureRefrigerantSchema } from './refrigerant.input';
 
 export const HorticultureCropSchema = singleEnterpriseInput('Horticulture', {
@@ -41,19 +41,6 @@ export const HorticultureCropSchema = singleEnterpriseInput('Horticulture', {
   rainfallAbove600: z
     .boolean()
     .meta({ description: DESCRIPTIONS.RAINFALLIRRIGATIONABOVE600 }),
-  ureaseInhibitorUsed: z
-    .boolean()
-    .optional()
-    .meta(deprecated('Urease inhibitor used', 'No longer used (since v1.1.0)')),
-  nitrificationInhibitorUsed: z
-    .boolean()
-    .optional()
-    .meta(
-      deprecated(
-        'Nitrification inhibitor used',
-        'No longer used (since v1.1.0)',
-      ),
-    ),
   fractionOfAnnualCropBurnt: proportion(
     'Fraction of annual production of crop that is burnt, from 0 to 1',
   ),

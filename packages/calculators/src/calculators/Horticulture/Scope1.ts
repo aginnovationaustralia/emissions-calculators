@@ -30,10 +30,6 @@ export function calculateScope1N2O(
   const fertiliserN2OG = fertiliserN2O * constants.COMMON.GWP_FACTORSC6;
   const fertiliserN2OTonnes = fertiliserN2OG * 1000;
 
-  const finalFertiliser = horticulture.nitrificationInhibitorUsed
-    ? fertiliserN2OTonnes * 0.5
-    : fertiliserN2OTonnes;
-
   // crop residue
 
   // (Crop_ResiduesC6)
@@ -113,10 +109,6 @@ export function calculateScope1N2O(
 
   const leechingN2O = leechingGgCO2 * 1000;
 
-  const finalLeaching = horticulture.nitrificationInhibitorUsed
-    ? 0.5 * leechingN2O
-    : leechingN2O;
-
   // atmospheric deposition
 
   // (Atmospheric_DepositionC12)
@@ -129,9 +121,7 @@ export function calculateScope1N2O(
   // (Atmospheric_DepositionC25)
   const atmosphericGgCO2 =
     annualN2OAtmospheric * constants.COMMON.GWP_FACTORSC6;
-  const atmosphericN2O = horticulture.ureaseInhibitorUsed
-    ? 0
-    : atmosphericGgCO2 * 1000;
+  const atmosphericN2O = atmosphericGgCO2 * 1000;
 
   // field burning
 
@@ -177,8 +167,8 @@ export function calculateScope1N2O(
 
   return {
     cropResiduesN2O: residueN2OTotal,
-    fertiliserN2O: finalFertiliser,
-    leechingN2O: finalLeaching,
+    fertiliserN2O: fertiliserN2OTonnes,
+    leechingN2O,
     atmosphericN2O,
     burningN2O: burningN2OTonnes,
     burningCH4,

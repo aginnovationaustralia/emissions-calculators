@@ -28,8 +28,6 @@ export const horticulture1: HorticultureCrop = {
       refrigerant: 'HFC-134a',
     },
   ],
-  nitrificationInhibitorUsed: false,
-  ureaseInhibitorUsed: false,
 };
 
 export const horticulture2: HorticultureCrop = {
@@ -58,8 +56,6 @@ export const horticulture2: HorticultureCrop = {
       refrigerant: 'HFC-245fa',
     },
   ],
-  nitrificationInhibitorUsed: false,
-  ureaseInhibitorUsed: true,
 };
 
 export const horticulture3: HorticultureCrop = {
@@ -88,8 +84,6 @@ export const horticulture3: HorticultureCrop = {
       refrigerant: 'HFC-41',
     },
   ],
-  nitrificationInhibitorUsed: true,
-  ureaseInhibitorUsed: false,
 };
 
 export const horticulture4: HorticultureCrop = {
@@ -118,8 +112,6 @@ export const horticulture4: HorticultureCrop = {
       chargeSize: 10,
     },
   ],
-  nitrificationInhibitorUsed: true,
-  ureaseInhibitorUsed: true,
 };
 
 export const horticultureTestData: HorticultureInput = {

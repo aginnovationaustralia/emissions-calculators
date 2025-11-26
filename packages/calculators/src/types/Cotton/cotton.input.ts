@@ -1,7 +1,7 @@
-import { CustomisedFertilisers, States } from '@/types/enums';
+import { States } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { deprecated, proportion, singleEnterpriseInput } from '../schemas';
+import { proportion, singleEnterpriseInput } from '../schemas';
 
 export const CottonCropSchema = singleEnterpriseInput('Cotton', {
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
@@ -29,10 +29,6 @@ export const CottonCropSchema = singleEnterpriseInput('Cotton', {
     description:
       'Urea application, in kg Urea/ha (kilograms of urea per hectare)',
   }),
-  otherFertiliserType: z
-    .enum(CustomisedFertilisers)
-    .optional()
-    .meta(deprecated('Other N fertiliser type')),
   otherFertiliserApplication: z.number().min(0).meta({
     description:
       'Other N fertiliser application, in kg/ha (kilograms per hectare)',
@@ -63,15 +59,6 @@ export const CottonCropSchema = singleEnterpriseInput('Cotton', {
   rainfallAbove600: z
     .boolean()
     .meta({ description: DESCRIPTIONS.RAINFALLIRRIGATIONABOVE600 }),
-  fractionOfAnnualCropBurnt: z
-    .number()
-    .min(0)
-    .default(0)
-    .meta(
-      deprecated(
-        'Fraction of annual production of crop that is burnt. If included, this should only ever be 0 for cotton',
-      ),
-    ),
   herbicideUse: z.number().min(0).meta({
     description:
       'Total amount of active ingredients from general herbicide/pesticide use, in kg (kilogram)',

@@ -144,9 +144,13 @@ export const buffaloComplete: BuffaloComplete = {
     pastureIrrigated: 2,
     cropsDryland: 0,
     cropsIrrigated: 2,
-    otherType: 'Monoammonium phosphate (MAP)',
-    otherDryland: 650,
-    otherIrrigated: 2,
+    otherFertilisers: [
+      {
+        otherType: 'Monoammonium phosphate (MAP)',
+        otherDryland: 650,
+        otherIrrigated: 2,
+      },
+    ],
     singleSuperphosphate: 0,
   },
   limestone: 85,
