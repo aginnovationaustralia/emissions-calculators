@@ -22,7 +22,12 @@ export type GeneratedTest = {
   test: () => void;
 };
 
-export const traverseExpectations = (
+export const traverseTree = (
+  generator: (
+    path: string[],
+    expectation: number,
+    value: number,
+  ) => GeneratedTest,
   expectations: KeyValuePairs,
   emissions: KeyValuePairs,
   path: string[] = [],
@@ -34,24 +39,17 @@ export const traverseExpectations = (
           console.log(path, k1, emissions);
         }
         return [
-          executeKeyValues(
-            [...path, k1],
-            v1 as number,
-            emissions[k1] as number,
-          ),
+          generator([...path, k1], v1 as number, emissions[k1] as number),
         ];
       } else if (Array.isArray(v1)) {
         if (typeof v1[0] === 'number') {
           return (v1 as number[]).flatMap((v2, i) => {
-            return executeKeyValues(
-              [...path, k1],
-              v2,
-              (emissions[k1] as number[])[i],
-            );
+            return generator([...path, k1], v2, (emissions[k1] as number[])[i]);
           });
         } else if (typeof v1[0] === 'object') {
           return (v1 as KeyValuePairs[]).flatMap((v2, i) => {
-            return traverseExpectations(
+            return traverseTree(
+              generator,
               v2,
               (emissions[k1] as KeyValuePairs[])[i],
               [...path, k1],
@@ -59,7 +57,8 @@ export const traverseExpectations = (
           });
         }
       } else if (typeof v1 === 'object') {
-        return traverseExpectations(
+        return traverseTree(
+          generator,
           v1 as KeyValuePairs,
           emissions[k1] as KeyValuePairs,
           [...path, k1],
@@ -79,12 +78,19 @@ export const traverseExpectations = (
   });
 };
 
+export const traverseExpectations = (
+  expectations: KeyValuePairs,
+  emissions: KeyValuePairs,
+) => {
+  return traverseTree(executeKeyValues, expectations, emissions);
+};
+
 export const recurseExpectations = (
   expectations: KeyValuePairs,
   emissions: KeyValuePairs,
   path: string[] = [],
 ) => {
-  const tests = traverseExpectations(expectations, emissions, path);
+  const tests = traverseTree(executeKeyValues, expectations, emissions, path);
   tests.forEach((t) => test(`test ${t.path}`, t.test));
 };
 

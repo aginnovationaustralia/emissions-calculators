@@ -1,12 +1,14 @@
-import { Entries, Entry } from 'type-fest';
+type ObjectEntry<T extends object> = [keyof T, T[keyof T]];
 
 /**
  * Type-safe version of Object.entries.
  * @param object The object to get entries from.
  * @returns The entries of the object.
  */
-export function entriesFromObject<T extends object>(object: T): Entries<T> {
-  return Object.entries(object) as Entries<T>;
+export function entriesFromObject<T extends object>(
+  object: T,
+): ObjectEntry<T>[] {
+  return Object.entries(object) as ObjectEntry<T>[];
 }
 
 /**
@@ -14,7 +16,9 @@ export function entriesFromObject<T extends object>(object: T): Entries<T> {
  * @param entries The entries to get an object from.
  * @returns The object from the entries.
  */
-export function objectFromEntries<T extends object>(entries: Entry<T>[]): T {
+export function objectFromEntries<T extends object>(
+  entries: ObjectEntry<T>[],
+): T {
   return Object.fromEntries(entries) as T;
 }
 
@@ -26,7 +30,7 @@ export const swapObjectKeysAndValues = <
 ): Record<V, K> =>
   objectFromEntries(
     (entriesFromObject(input) as Array<[K, V]>).map(
-      ([key, value]) => [value, key] as Entry<Record<V, K>>,
+      ([key, value]) => [value, key] as ObjectEntry<Record<V, K>>,
     ),
   );
 
