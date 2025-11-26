@@ -1,5 +1,6 @@
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import { States } from '@/constants/types';
+import { CropVegetation, RainfallRegion, SoilType, TreeType } from '@/types';
 import XLSX, { Cell } from 'xlsx-populate';
 
 export const getWorkbook = async (filePath: string) => {
@@ -37,6 +38,18 @@ export const numberInput = (input: Cell): number => {
       `Cell address ${input
         .sheet()
         .name()}:${input.address()} is not a number: ${value}`,
+    );
+  }
+  return value;
+};
+
+export const stringInput = (input: Cell): string => {
+  const value = input.value();
+  if (typeof value !== 'string') {
+    throw new Error(
+      `Cell address ${input
+        .sheet()
+        ?.name()}:${input.address()} is not a string: ${value}`,
     );
   }
   return value;
@@ -102,4 +115,31 @@ export const calculateElectricity = (
     electricityUse: total,
     electricityRenewable: total <= 0 ? 0 : renewable / total,
   } as const;
+};
+
+const getCropVegetation = (
+  details: XLSX.Range,
+  allocations: XLSX.Range,
+): CropVegetation => {
+  return {
+    allocationToCrops: allocations
+      .cells()[0]
+      .map((allocation) => numberInput(allocation)),
+    vegetation: {
+      region: stringInput(details.cell(0, 0)) as RainfallRegion,
+      treeSpecies: stringInput(details.cell(1, 0)) as TreeType,
+      soil: stringInput(details.cell(2, 0)) as SoilType,
+      area: numberInput(details.cell(3, 0)),
+      age: numberInput(details.cell(4, 0)),
+    },
+  };
+};
+
+export const getCropVegetations = (sheet: XLSX.Sheet): CropVegetation[] => {
+  return [
+    getCropVegetation(sheet.range('E3:E7'), sheet.range('E9:E13')),
+    getCropVegetation(sheet.range('E16:E20'), sheet.range('E22:E26')),
+    getCropVegetation(sheet.range('E29:E33'), sheet.range('E35:E39')),
+    getCropVegetation(sheet.range('E42:E46'), sheet.range('E48:E52')),
+  ];
 };
