@@ -40,10 +40,6 @@ describe('checking Sheep, no lambs', () => {
           ...classes.wetherLambs,
           ...zeroAll,
         };
-        classes.tradeLambsAndHoggets = {
-          ...classes.tradeLambsAndHoggets!,
-          ...zeroAll,
-        };
 
         return { ...x, classes };
       }),

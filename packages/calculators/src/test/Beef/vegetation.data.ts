@@ -8,7 +8,6 @@ export const veg1: BeefVegetation = {
     area: 1,
     age: 1,
   },
-  beefProportion: 1.0,
   allocationToBeef: [1.0],
 };
 
@@ -20,7 +19,6 @@ export const veg2: BeefVegetation = {
     area: 5,
     age: 5,
   },
-  beefProportion: 0.4,
   allocationToBeef: [0.4],
 };
 
@@ -32,7 +30,6 @@ export const veg3: BeefVegetation = {
     area: 10,
     age: 10,
   },
-  beefProportion: 0.2,
   allocationToBeef: [0.2],
 };
 
@@ -44,6 +41,5 @@ export const veg4: BeefVegetation = {
     area: 15,
     age: 15,
   },
-  beefProportion: 1.0,
   allocationToBeef: [1.0],
 };

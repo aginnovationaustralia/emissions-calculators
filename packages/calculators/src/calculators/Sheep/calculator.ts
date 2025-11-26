@@ -2,10 +2,7 @@ import { SheepClassesAPI, State } from '@/types/enums';
 import { SheepInput } from '@/types/Sheep/input';
 import { SheepOutput } from '@/types/Sheep/output';
 import { SheepComplete } from '@/types/Sheep/sheep.input';
-import {
-  calculateScope3Fertiliser,
-  mergeOtherFertilisers,
-} from '../../calculators/common/fertiliser';
+import { calculateScope3Fertiliser } from '../../calculators/common/fertiliser';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {
@@ -80,8 +77,6 @@ export function calculateSingleSheep(
   carbonSequestration: number,
   id: string,
 ) {
-  const mergedSheepFertiliser = mergeOtherFertilisers(sheep.fertiliser);
-
   const {
     atmosphericDepositionN2O,
     entericCH4,
@@ -92,7 +87,7 @@ export function calculateSingleSheep(
   } = calculateCompleteSheepEmissions(
     sheep.classes,
     state,
-    mergedSheepFertiliser,
+    sheep.fertiliser,
     rainfallAbove600,
     sheep.ewesLambing,
     sheep.seasonalLambing,
@@ -130,7 +125,7 @@ export function calculateSingleSheep(
 
   const ureaCO2 = calculateScope1Urea(
     sheep.mineralSupplementation,
-    mergedSheepFertiliser,
+    sheep.fertiliser,
     context,
   );
 
@@ -142,10 +137,7 @@ export function calculateSingleSheep(
     context,
   );
 
-  const sheepFertiliser = calculateScope3Fertiliser(
-    mergedSheepFertiliser,
-    context,
-  );
+  const sheepFertiliser = calculateScope3Fertiliser(sheep.fertiliser, context);
 
   const sheepMineralSupplementation = calculateMineralSupplementationScope3(
     sheep.mineralSupplementation,
@@ -181,17 +173,7 @@ export function calculateSingleSheep(
       const s = sheep.classes[type];
 
       const purchases =
-        s && s.purchases && s.purchases.length > 0
-          ? s.purchases
-          : [
-              {
-                head: s?.headPurchased ?? 0,
-                purchaseWeight: s?.purchasedWeight ?? 0,
-              } as {
-                head: number;
-                purchaseWeight: number;
-              },
-            ];
+        s && s.purchases && s.purchases.length > 0 ? s.purchases : [];
 
       return {
         ...acc,

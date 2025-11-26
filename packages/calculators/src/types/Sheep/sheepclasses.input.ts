@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { deprecated } from '../schemas';
 import { SheepClassSchema } from './sheepclass.input';
 
 export const SheepClassesSchema = z.object({
@@ -17,18 +16,6 @@ export const SheepClassesSchema = z.object({
   tradeEweLambs: SheepClassSchema.optional(),
   wetherLambs: SheepClassSchema,
   tradeWetherLambs: SheepClassSchema.optional(),
-  tradeEwes: SheepClassSchema.optional().meta(
-    deprecated(
-      'Trading ewes',
-      'More specific trading classes are now available',
-    ),
-  ),
-  tradeLambsAndHoggets: SheepClassSchema.optional().meta(
-    deprecated(
-      'Trading lambs and hoggets',
-      'More specific trading classes are now available',
-    ),
-  ),
 });
 
 export type SheepClasses = z.infer<typeof SheepClassesSchema>;

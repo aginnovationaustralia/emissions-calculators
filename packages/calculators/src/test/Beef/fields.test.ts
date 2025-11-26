@@ -36,11 +36,6 @@ describe('vegetation', () => {
     vegetation: [veg1, migratedVeg2],
   };
 
-  test('vegetation beefProportion is not required', () => {
-    const input = validateCalculatorInput(BeefInputSchema, sb);
-    expect(input.vegetation[1].beefProportion).toBeUndefined();
-  });
-
   test('check optional status of allocationToBeef', () => {
     const vegNoAllocation = {
       ...veg2,

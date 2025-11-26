@@ -25,8 +25,6 @@ const classes: SheepClasses = {
   tradeRams: emptyClass,
   tradeMaidenBreedingEwes: emptyClass,
   tradeBreedingEwes: emptyClass,
-  tradeOtherEwes: emptyClass,
-  tradeEweLambs: emptyClass,
   tradeWetherLambs: emptyClass,
   rams: {
     summer: {
@@ -52,10 +50,9 @@ const classes: SheepClasses = {
     headShorn: 100,
     woolShorn: 100,
     cleanWoolYield: 65,
-    headPurchased: 100,
-    purchasedWeight: 100,
     headSold: 20,
     saleWeight: 100,
+    purchases: [{ head: 100, purchaseWeight: 100 }],
   },
   wethers: {
     summer: {
@@ -81,10 +78,9 @@ const classes: SheepClasses = {
     headShorn: 100,
     woolShorn: 100,
     cleanWoolYield: 65,
-    headPurchased: 100,
-    purchasedWeight: 100,
     headSold: 20,
     saleWeight: 100,
+    purchases: [{ head: 100, purchaseWeight: 100 }],
   },
   maidenBreedingEwes: {
     summer: {
@@ -110,10 +106,9 @@ const classes: SheepClasses = {
     headShorn: 100,
     woolShorn: 100,
     cleanWoolYield: 65,
-    headPurchased: 100,
-    purchasedWeight: 100,
     headSold: 20,
     saleWeight: 100,
+    purchases: [{ head: 100, purchaseWeight: 100 }],
   },
   breedingEwes: {
     summer: {
@@ -139,10 +134,9 @@ const classes: SheepClasses = {
     headShorn: 100,
     woolShorn: 100,
     cleanWoolYield: 65,
-    headPurchased: 100,
-    purchasedWeight: 100,
     headSold: 20,
     saleWeight: 100,
+    purchases: [{ head: 100, purchaseWeight: 100 }],
   },
   otherEwes: {
     summer: {
@@ -168,10 +162,9 @@ const classes: SheepClasses = {
     headShorn: 100,
     woolShorn: 100,
     cleanWoolYield: 65,
-    headPurchased: 100,
-    purchasedWeight: 100,
     headSold: 20,
     saleWeight: 100,
+    purchases: [{ head: 100, purchaseWeight: 100 }],
   },
   eweLambs: {
     summer: {
@@ -197,10 +190,9 @@ const classes: SheepClasses = {
     headShorn: 100,
     woolShorn: 100,
     cleanWoolYield: 65,
-    headPurchased: 100,
-    purchasedWeight: 100,
     headSold: 20,
     saleWeight: 100,
+    purchases: [{ head: 100, purchaseWeight: 100 }],
   },
   wetherLambs: {
     summer: {
@@ -225,13 +217,12 @@ const classes: SheepClasses = {
     },
     headShorn: 100,
     woolShorn: 100,
+    purchases: [{ head: 100, purchaseWeight: 100 }],
     cleanWoolYield: 65,
-    headPurchased: 100,
-    purchasedWeight: 100,
     headSold: 20,
     saleWeight: 100,
   },
-  tradeLambsAndHoggets: {
+  tradeOtherEwes: {
     summer: {
       head: 100,
       liveweight: 100,
@@ -255,8 +246,7 @@ const classes: SheepClasses = {
     headShorn: 100,
     woolShorn: 100,
     cleanWoolYield: 65,
-    headPurchased: 100,
-    purchasedWeight: 100,
+    purchases: [{ head: 100, purchaseWeight: 100 }],
     headSold: 20,
     saleWeight: 100,
   },
@@ -284,12 +274,11 @@ const classes: SheepClasses = {
     headShorn: 100,
     woolShorn: 100,
     cleanWoolYield: 65,
-    headPurchased: 100,
-    purchasedWeight: 100,
     headSold: 20,
     saleWeight: 100,
+    purchases: [{ head: 100, purchaseWeight: 100 }],
   },
-  tradeEwes: {
+  tradeEweLambs: {
     summer: {
       head: 100,
       liveweight: 100,
@@ -313,8 +302,7 @@ const classes: SheepClasses = {
     headShorn: 100,
     woolShorn: 100,
     cleanWoolYield: 65,
-    headPurchased: 100,
-    purchasedWeight: 100,
+    purchases: [{ head: 100, purchaseWeight: 100 }],
     headSold: 20,
     saleWeight: 100,
   },
@@ -327,12 +315,16 @@ export const sheepTestInput: SheepComplete = {
   fertiliser: {
     cropsDryland: 2,
     cropsIrrigated: 5,
-    otherDryland: 1,
-    otherIrrigated: 4,
     pastureDryland: 10,
     pastureIrrigated: 3,
     singleSuperphosphate: 2,
-    otherType: 'Monoammonium phosphate (MAP)',
+    otherFertilisers: [
+      {
+        otherType: 'Monoammonium phosphate (MAP)',
+        otherDryland: 1,
+        otherIrrigated: 4,
+      },
+    ],
   },
   diesel: 300,
   petrol: 300,
@@ -387,7 +379,6 @@ export const lambingScenarioInput: SheepComplete = {
     rams: emptyClass,
     wethers: emptyClass,
     otherEwes: emptyClass,
-    tradeEwes: emptyClass,
     tradeWethers: emptyClass,
     maidenBreedingEwes: emptyClass,
     breedingEwes: {
@@ -472,7 +463,6 @@ export const lambingScenarioInput: SheepComplete = {
       headSold: 50,
       saleWeight: 14,
     },
-    tradeLambsAndHoggets: emptyClass,
   },
   diesel: 0,
   petrol: 0,

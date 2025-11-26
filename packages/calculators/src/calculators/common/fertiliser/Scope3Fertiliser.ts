@@ -40,20 +40,3 @@ export function calculateScope3Fertiliser(
 
   return totalEmbeddedEmissionsFertiliser;
 }
-
-// Temporary function for new `.otherFertilisers` array field, until the
-// individual other fertiliser fields are removed
-export function mergeOtherFertilisers(fertiliser: Fertiliser) {
-  const otherFertilisers =
-    fertiliser.otherFertilisers && fertiliser.otherFertilisers.length > 0
-      ? fertiliser.otherFertilisers
-      : [
-          {
-            otherType: fertiliser.otherType ?? 'Urea-Ammonium Nitrate (UAN)',
-            otherDryland: fertiliser.otherDryland ?? 0,
-            otherIrrigated: fertiliser.otherIrrigated ?? 0,
-          },
-        ];
-
-  return { ...fertiliser, otherFertilisers };
-}
