@@ -7,7 +7,6 @@ export const FertiliserSchema = z
       .number()
       .min(0)
       .meta({ description: 'Single superphosphate usage in tonnes' }),
-
     pastureDryland: z.number().min(0).meta({
       description: 'Urea fertiliser used for dryland pasture, in tonnes Urea',
     }),
