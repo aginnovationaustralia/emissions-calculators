@@ -272,7 +272,8 @@
     }
   },
   "files": [
-    "dist/**/*"
+    "dist/**/*",
+    "doc/**/*"
   ],
   "scripts": {
     "build": "rollup -c",
