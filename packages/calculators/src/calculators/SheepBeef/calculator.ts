@@ -179,11 +179,7 @@ export function calculateSheepBeef(
     sheepResult.extensions;
 
   const baseSheepEmissions = {
-    scope1: {
-      ...sheepResult.output.scope1,
-      savannahBurningN2O: 0,
-      savannahBurningCH4: 0,
-    },
+    scope1: sheepResult.output.scope1,
     scope2: sheepResult.output.scope2,
     scope3: sheepResult.output.scope3,
     net: {
@@ -199,10 +195,11 @@ export function calculateSheepBeef(
   };
 
   const combinedResult = {
-    scope1: addAcrossAllKeys(
-      baseBeefEmissions.scope1,
-      baseSheepEmissions.scope1,
-    ),
+    scope1: addAcrossAllKeys(baseBeefEmissions.scope1, {
+      ...baseSheepEmissions.scope1,
+      savannahBurningN2O: 0,
+      savannahBurningCH4: 0,
+    }),
     scope2: addAcrossAllKeys(
       baseBeefEmissions.scope2,
       baseSheepEmissions.scope2,

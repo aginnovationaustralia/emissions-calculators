@@ -100,11 +100,7 @@ const expectations: SheepBeefOutput = {
       },
     },
     sheep: {
-      scope1: {
-        ...expectedScopes.scope1Sheep,
-        savannahBurningN2O: 0,
-        savannahBurningCH4: 0,
-      },
+      scope1: expectedScopes.scope1Sheep,
       scope2: expectedScopes.scope2,
       scope3: expectedScopes.scope3,
       carbonSequestration: { total: 0 },
