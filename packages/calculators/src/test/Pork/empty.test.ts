@@ -84,7 +84,6 @@ const emptyPork: PorkComplete = {
 
 const emptyInputWithEnterprise: PorkInput = {
   state: 'vic',
-  northOfTropicOfCapricorn: false,
   rainfallAbove600: false,
   pork: [emptyPork],
   vegetation: [],
@@ -92,7 +91,6 @@ const emptyInputWithEnterprise: PorkInput = {
 
 const emptyInput: PorkInput = {
   state: 'vic',
-  northOfTropicOfCapricorn: false,
   rainfallAbove600: false,
   pork: [],
   vegetation: [],

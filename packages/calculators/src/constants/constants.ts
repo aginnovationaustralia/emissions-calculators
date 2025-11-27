@@ -30,8 +30,6 @@ export const SHEEP_CLASSES_TRADING_API: (typeof SheepClassesAPI)[number][] = [
   'tradeOtherEwes',
   'tradeEweLambs',
   'tradeWetherLambs',
-  'tradeLambsAndHoggets',
-  'tradeEwes',
   'tradeMaidenBreedingEwes',
 ];
 

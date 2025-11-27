@@ -1,7 +1,4 @@
-import {
-  calculateScope3Fertiliser,
-  mergeOtherFertilisers,
-} from '@/calculators/common/fertiliser';
+import { calculateScope3Fertiliser } from '@/calculators/common/fertiliser';
 import { BeefComplete } from '@/types/Beef/beef.input';
 import { BeefPurchase } from '@/types/Beef/beefpurchase.input';
 import { BeefInput } from '@/types/Beef/input';
@@ -67,16 +64,7 @@ function transformBeefPurchasedLivestock(beef: BeefComplete) {
     (acc, type) => {
       const b = beef.classes[type];
 
-      const purchases =
-        b && b.purchases && b.purchases.length > 0
-          ? b.purchases
-          : [
-              {
-                head: b?.headPurchased ?? 0,
-                purchaseWeight: b?.purchasedWeight ?? 0,
-                purchaseSource: b?.source ?? 'Dairy origin',
-              } as BeefPurchase,
-            ];
+      const purchases = b?.purchases ?? [];
 
       return {
         ...acc,
@@ -98,8 +86,6 @@ export function calculateSingleBeef(
   carbonSequestration: number,
   id: string,
 ) {
-  const mergedBeefFertiliser = mergeOtherFertilisers(beef.fertiliser);
-
   const {
     atmosphericDepositionN2O,
     entericCH4,
@@ -110,7 +96,7 @@ export function calculateSingleBeef(
   } = calculateCompleteBeefEmissions(
     beef.classes,
     state,
-    mergedBeefFertiliser,
+    beef.fertiliser,
     propertyNorthOfTropicOfCapricorn,
     rainfallAbove600,
     beef.cowsCalving,
@@ -146,7 +132,7 @@ export function calculateSingleBeef(
 
   const ureaCO2 = calculateScope1Urea(
     beef.mineralSupplementation,
-    mergedBeefFertiliser,
+    beef.fertiliser,
     context,
   );
 
@@ -158,10 +144,7 @@ export function calculateSingleBeef(
     context,
   );
 
-  const beefFertiliser = calculateScope3Fertiliser(
-    mergedBeefFertiliser,
-    context,
-  );
+  const beefFertiliser = calculateScope3Fertiliser(beef.fertiliser, context);
 
   const beefMineralSupplementation = calculateMineralSupplementationScope3(
     beef.mineralSupplementation,
@@ -325,22 +308,6 @@ export function calculateBeef(
   input: BeefInput,
   context: ExecutionContext<ConstantsForBeefCalculator>,
 ): BeefOutput {
-  // in the case that vegetation allocations are a single number, change that to an array
-  input.vegetation = input.vegetation.map((x) => {
-    if (
-      (x.allocationToBeef === undefined ||
-        x.allocationToBeef === null ||
-        x.allocationToBeef.length === 0) &&
-      x.beefProportion
-    ) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      x.allocationToBeef = x.beefProportion;
-    }
-
-    return x;
-  });
-
   input.vegetation = singleAllocationToArray(
     input.vegetation,
     input.beef,

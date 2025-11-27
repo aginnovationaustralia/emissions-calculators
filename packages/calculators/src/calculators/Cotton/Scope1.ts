@@ -51,7 +51,7 @@ export function calculateScope1N2O(
 
   // always 0 for cotton
   // (cropResiduesK56, Crop_ResiduesC12)
-  const fractionBurnt = cotton.fractionOfAnnualCropBurnt;
+  const fractionBurnt = 0; // always 0 for cotton
 
   // always 0 for cotton
   // (cropResiduesL56, Crop_ResiduesC13)
@@ -147,7 +147,7 @@ export function calculateScope1N2O(
     fractionRemainingAtBurning *
     dryMatterContent *
     burningEfficiencyForResidue *
-    cotton.fractionOfAnnualCropBurnt;
+    0; // always 0 for cotton
 
   // (Field_BurningD36)
   const burningN2OEF = constants.CROP.BURNING_N2O_EF;

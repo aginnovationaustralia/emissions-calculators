@@ -106,7 +106,6 @@ export function calculateCompleteGoatEmissions(
     otherDoesCulledFemales: { ...EMPTY_INTERNAL_TOTALS },
     kids: { ...EMPTY_INTERNAL_TOTALS },
     tradeBucks: { ...EMPTY_INTERNAL_TOTALS },
-    tradeDoes: { ...EMPTY_INTERNAL_TOTALS },
     tradeWethers: { ...EMPTY_INTERNAL_TOTALS },
     tradeMaidenBreedingDoesNannies: { ...EMPTY_INTERNAL_TOTALS },
     tradeBreedingDoesNannies: { ...EMPTY_INTERNAL_TOTALS },

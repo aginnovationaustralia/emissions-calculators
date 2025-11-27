@@ -2,10 +2,7 @@ import { GoatClassesAPI, State } from '@/types/enums';
 import { GoatComplete } from '@/types/Goat/goat.input';
 import { GoatInput } from '@/types/Goat/input';
 import { GoatOutput } from '@/types/Goat/output';
-import {
-  calculateScope3Fertiliser,
-  mergeOtherFertilisers,
-} from '../../calculators/common/fertiliser';
+import { calculateScope3Fertiliser } from '../../calculators/common/fertiliser';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {
@@ -46,12 +43,10 @@ export function calculateSingleGoat(
   carbonSequestration: number,
   id: string,
 ) {
-  const mergedFertiliser = mergeOtherFertilisers(goats.fertiliser);
-
   const goatEmissions = calculateCompleteGoatEmissions(
     goats.classes,
     state,
-    mergedFertiliser,
+    goats.fertiliser,
     rainfallAbove600,
     context,
   );
@@ -86,7 +81,7 @@ export function calculateSingleGoat(
 
   const ureaCO2 = calculateScope1Urea(
     goats.mineralSupplementation,
-    mergedFertiliser,
+    goats.fertiliser,
     context,
   );
 
@@ -98,7 +93,7 @@ export function calculateSingleGoat(
     context,
   );
 
-  const fertiliser = calculateScope3Fertiliser(mergedFertiliser, context);
+  const fertiliser = calculateScope3Fertiliser(goats.fertiliser, context);
 
   const feed = calculateScope3PurchasedFeed(
     goats.grainFeed,

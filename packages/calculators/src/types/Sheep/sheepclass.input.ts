@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { LivestockPurchaseSchema } from '../livestockPurchase.input';
-import { deprecated, percentage } from '../schemas';
+import { percentage } from '../schemas';
 import { SheepSeasonSchema } from './sheepseason.input';
 
 export const SheepClassSchema = z.object({
@@ -19,23 +19,6 @@ export const SheepClassSchema = z.object({
   cleanWoolYield: percentage(
     'Percentage of clean wool from weight of yield, from 0 to 100',
   ),
-  headPurchased: z
-    .number()
-    .min(0)
-    .optional()
-    .meta(
-      deprecated(DESCRIPTIONS.HEADPURCHASED, 'Please use `purchases` instead'),
-    ),
-  purchasedWeight: z
-    .number()
-    .min(0)
-    .optional()
-    .meta(
-      deprecated(
-        DESCRIPTIONS.PURCHASEDWEIGHT,
-        'Please use `purchases` instead',
-      ),
-    ),
   headSold: z.number().min(0).meta({ description: DESCRIPTIONS.HEADSOLD }),
   saleWeight: z.number().min(0).meta({ description: DESCRIPTIONS.SALEWEIGHT }),
   purchases: z.array(LivestockPurchaseSchema).optional(),

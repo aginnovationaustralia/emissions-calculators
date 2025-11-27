@@ -2,10 +2,7 @@ import { State } from '@/types/enums';
 import { FeedlotComplete } from '@/types/Feedlot/feedlot.input';
 import { FeedlotInput } from '@/types/Feedlot/input';
 import { FeedlotOutput } from '@/types/Feedlot/output';
-import {
-  calculateScope3Fertiliser,
-  mergeOtherFertilisers,
-} from '../../calculators/common/fertiliser';
+import { calculateScope3Fertiliser } from '../../calculators/common/fertiliser';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import {
@@ -42,8 +39,6 @@ export function calculateSingleFeedlot(
   carbonSequestration: number,
   id: string,
 ) {
-  const mergedFertiliser = mergeOtherFertilisers(feedlot.fertiliser);
-
   const electricity = calculateElectricityScope2And3(
     state,
     feedlot.electricitySource,
@@ -52,7 +47,7 @@ export function calculateSingleFeedlot(
     context,
   );
 
-  const ureaCO2 = calculateScope1Urea(mergedFertiliser, context);
+  const ureaCO2 = calculateScope1Urea(feedlot.fertiliser, context);
 
   const { lpg } = feedlot;
 
@@ -109,7 +104,10 @@ export function calculateSingleFeedlot(
     feedlot.cottonseedFeed,
     context,
   );
-  const scope3Fertiliser = calculateScope3Fertiliser(mergedFertiliser, context);
+  const scope3Fertiliser = calculateScope3Fertiliser(
+    feedlot.fertiliser,
+    context,
+  );
   const scope3Herbicide = calculateScope3Herbicide(
     feedlot.herbicide,
     feedlot.herbicideOther,

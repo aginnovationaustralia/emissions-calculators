@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { LivestockPurchaseSchema } from '../livestockPurchase.input';
-import { deprecated, percentage } from '../schemas';
+import { percentage } from '../schemas';
 import { GoatSeasonSchema } from './goatseason.input';
 
 export const GoatClassSchema = z
@@ -10,26 +10,6 @@ export const GoatClassSchema = z
     winter: GoatSeasonSchema,
     spring: GoatSeasonSchema,
     summer: GoatSeasonSchema,
-    headPurchased: z
-      .number()
-      .min(0)
-      .optional()
-      .meta(
-        deprecated(
-          DESCRIPTIONS.HEADPURCHASED,
-          'Please use `purchases` instead',
-        ),
-      ),
-    purchasedWeight: z
-      .number()
-      .min(0)
-      .optional()
-      .meta(
-        deprecated(
-          DESCRIPTIONS.PURCHASEDWEIGHT,
-          'Please use `purchases` instead',
-        ),
-      ),
     headSold: z.number().min(0).meta({ description: DESCRIPTIONS.HEADSOLD }),
     saleWeight: z
       .number()

@@ -1,30 +1,17 @@
 import { z } from 'zod';
-import { deprecated } from '../schemas';
 
 export const RiceEmissionsIntensitiesSchema = z.object({
   riceProducedTonnes: z
     .number()
     .meta({ description: 'Rice produced in tonnes' }),
-  riceExcludingSequestration: z
-    .number()
-    .meta({
-      description:
-        'Rice emissions intensity excluding sequestration, in t-CO2e/t rice',
-    }),
-  riceIncludingSequestration: z
-    .number()
-    .meta({
-      description:
-        'Rice emissions intensity including sequestration, in t-CO2e/t rice',
-    }),
-  intensity: z
-    .number()
-    .meta(
-      deprecated(
-        'Emissions intensity of rice production',
-        'Use `riceIncludingSequestration` instead',
-      ),
-    ),
+  riceExcludingSequestration: z.number().meta({
+    description:
+      'Rice emissions intensity excluding sequestration, in t-CO2e/t rice',
+  }),
+  riceIncludingSequestration: z.number().meta({
+    description:
+      'Rice emissions intensity including sequestration, in t-CO2e/t rice',
+  }),
 });
 
 export type RiceEmissionsIntensities = z.infer<

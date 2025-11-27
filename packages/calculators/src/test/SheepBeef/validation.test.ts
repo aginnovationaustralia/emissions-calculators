@@ -110,43 +110,6 @@ describe('just one beef, no sheep is not supported', () => {
 });
 
 describe('compatibility for migrated valid inputs', () => {
-  describe('fertiliser.otherType', () => {
-    test('old syntax for UAN is not supported', () => {
-      const fertiliser = { ...beefTestInput.fertiliser };
-      fertiliser.otherType =
-        ' Urea-Ammonium Nitrate (UAN)' as CustomisedFertiliser;
-      const input = {
-        state: 'vic',
-        northOfTropicOfCapricorn: false,
-        rainfallAbove600: true,
-        beef: { ...beefTestInput, fertiliser },
-        sheep: sheepTestInput,
-        burning: burnTestData,
-      };
-
-      const result = SheepBeefInputSchema.safeParse(input);
-      expect(result.success).toBe(false);
-    });
-
-    test('old syntax for UAN is not supported', () => {
-      const fertiliser = { ...beefTestInput.fertiliser };
-      fertiliser.otherType = 'Urea-Ammonium Nitrate (UAN)';
-
-      const input = {
-        state: 'vic',
-        northOfTropicOfCapricorn: false,
-        rainfallAbove600: true,
-        beef: { ...beefTestInput, fertiliser },
-        sheep: sheepTestInput,
-        burning: burnTestData,
-        vegetation: [],
-      };
-
-      const result = SheepBeefInputSchema.safeParse(input);
-      expect(result.success).toBe(false);
-    });
-  });
-
   describe('fertiliser.fertilisers.otherType', () => {
     test('old syntax for UAN is not supported', () => {
       const fertiliser = { ...beefTestInput.fertiliser };

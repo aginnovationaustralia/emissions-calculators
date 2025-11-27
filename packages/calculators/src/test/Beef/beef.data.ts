@@ -13,9 +13,6 @@ const emptyClass: BeefClass = {
   autumn: emptySeason,
   winter: emptySeason,
   spring: emptySeason,
-  headPurchased: 0,
-  purchasedWeight: 0,
-  source: 'Dairy origin',
   headSold: 0,
   saleWeight: 0,
   purchases: [],
@@ -43,12 +40,11 @@ const classes: BeefClasses = {
       liveweight: 100,
       liveweightGain: 100,
     },
-    headPurchased: 100,
-    purchasedWeight: 100,
-    source: 'Dairy origin',
     headSold: 20,
     saleWeight: 100,
-    purchases: [],
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
   },
   steersLt1: {
     summer: {
@@ -71,12 +67,11 @@ const classes: BeefClasses = {
       liveweight: 100,
       liveweightGain: 100,
     },
-    headPurchased: 100,
-    purchasedWeight: 100,
-    source: 'Dairy origin',
     headSold: 20,
     saleWeight: 100,
-    purchases: [],
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
   },
   steers1To2: {
     summer: {
@@ -99,12 +94,11 @@ const classes: BeefClasses = {
       liveweight: 100,
       liveweightGain: 100,
     },
-    headPurchased: 100,
-    purchasedWeight: 100,
-    source: 'Dairy origin',
     headSold: 20,
     saleWeight: 100,
-    purchases: [],
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
   },
   steersGt2: {
     summer: {
@@ -127,12 +121,11 @@ const classes: BeefClasses = {
       liveweight: 100,
       liveweightGain: 100,
     },
-    headPurchased: 100,
-    purchasedWeight: 100,
-    source: 'Dairy origin',
     headSold: 20,
     saleWeight: 100,
-    purchases: [],
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
   },
   cowsGt2: {
     summer: {
@@ -155,12 +148,11 @@ const classes: BeefClasses = {
       liveweight: 100,
       liveweightGain: 100,
     },
-    headPurchased: 100,
-    purchasedWeight: 100,
-    source: 'Dairy origin',
     headSold: 20,
     saleWeight: 100,
-    purchases: [],
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
   },
   heifersLt1: {
     summer: {
@@ -183,12 +175,11 @@ const classes: BeefClasses = {
       liveweight: 100,
       liveweightGain: 100,
     },
-    headPurchased: 100,
-    purchasedWeight: 100,
-    source: 'Dairy origin',
     headSold: 20,
     saleWeight: 100,
-    purchases: [],
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
   },
   heifers1To2: {
     summer: {
@@ -211,12 +202,11 @@ const classes: BeefClasses = {
       liveweight: 100,
       liveweightGain: 100,
     },
-    headPurchased: 100,
-    purchasedWeight: 100,
-    source: 'Dairy origin',
     headSold: 20,
     saleWeight: 100,
-    purchases: [],
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
   },
   heifersGt2: {
     summer: {
@@ -239,12 +229,11 @@ const classes: BeefClasses = {
       liveweight: 100,
       liveweightGain: 100,
     },
-    headPurchased: 100,
-    purchasedWeight: 100,
-    source: 'Dairy origin',
     headSold: 20,
     saleWeight: 100,
-    purchases: [],
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
   },
   steersGt2Traded: {
     summer: {
@@ -267,12 +256,11 @@ const classes: BeefClasses = {
       liveweight: 100,
       liveweightGain: 100,
     },
-    headPurchased: 100,
-    purchasedWeight: 100,
-    source: 'Dairy origin',
     headSold: 20,
     saleWeight: 100,
-    purchases: [],
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
   },
   steers1To2Traded: {
     summer: {
@@ -295,12 +283,11 @@ const classes: BeefClasses = {
       liveweight: 100,
       liveweightGain: 100,
     },
-    headPurchased: 100,
-    purchasedWeight: 100,
-    source: 'Dairy origin',
     headSold: 20,
     saleWeight: 100,
-    purchases: [],
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
   },
   steersLt1Traded: {
     summer: {
@@ -323,12 +310,11 @@ const classes: BeefClasses = {
       liveweight: 100,
       liveweightGain: 100,
     },
-    headPurchased: 100,
-    purchasedWeight: 100,
-    source: 'Dairy origin',
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
     headSold: 20,
     saleWeight: 100,
-    purchases: [],
   },
   bullsGt1Traded: emptyClass,
   cowsGt2Traded: emptyClass,
@@ -344,12 +330,16 @@ export const beefTestInput: BeefComplete = {
   fertiliser: {
     cropsDryland: 2,
     cropsIrrigated: 5,
-    otherDryland: 1,
-    otherIrrigated: 4,
+    otherFertilisers: [
+      {
+        otherType: 'Ammonium Nitrate (AN)',
+        otherDryland: 1,
+        otherIrrigated: 4,
+      },
+    ],
     pastureDryland: 10,
     pastureIrrigated: 3,
     singleSuperphosphate: 2,
-    otherType: 'Ammonium Nitrate (AN)',
   },
   diesel: 200,
   petrol: 400,
