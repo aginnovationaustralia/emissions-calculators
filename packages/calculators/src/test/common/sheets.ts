@@ -106,14 +106,15 @@ export const mapInputRegionFromNumber = (input: Cell): States => {
 };
 
 export const calculateElectricity = (
-  renewable: number,
-  nonRenewable: number,
+  renewable: number | null,
+  nonRenewable: number | null,
 ) => {
-  const total = renewable + nonRenewable;
+  const total = (renewable ?? 0) + (nonRenewable ?? 0);
   return {
-    electricitySource: nonRenewable > 0 ? 'State Grid' : 'Renewable',
+    electricitySource:
+      nonRenewable && renewable && renewable > 0 ? 'State Grid' : 'Renewable',
     electricityUse: total,
-    electricityRenewable: total <= 0 ? 0 : renewable / total,
+    electricityRenewable: total <= 0 ? 0 : (renewable ?? 0) / total,
   } as const;
 };
 
