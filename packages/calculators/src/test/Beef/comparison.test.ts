@@ -1,6 +1,8 @@
 import { calculateBeef, validateCalculatorInput } from '@/calculators';
 import { entriesFromObject } from '@/calculators/common/tools/object';
+import { LivestockSourceLocations } from '@/constants/types';
 import {
+  BeefClass,
   BeefInput,
   BeefInputSchema,
   BeefOutput,
@@ -87,6 +89,43 @@ const getElectricity = (
   } as const;
 };
 
+const getBeefClass = (range: XLSX.Range): BeefClass => {
+  return {
+    spring: {
+      head: emptyOrNumber(range.cell(0, 0)) ?? 0,
+      liveweight: emptyOrNumber(range.cell(6, 0)) ?? 0,
+      liveweightGain: emptyOrNumber(range.cell(12, 0)) ?? 0,
+    },
+    summer: {
+      head: emptyOrNumber(range.cell(1, 0)) ?? 0,
+      liveweight: emptyOrNumber(range.cell(7, 0)) ?? 0,
+      liveweightGain: emptyOrNumber(range.cell(13, 0)) ?? 0,
+    },
+    autumn: {
+      head: emptyOrNumber(range.cell(2, 0)) ?? 0,
+      liveweight: emptyOrNumber(range.cell(8, 0)) ?? 0,
+      liveweightGain: emptyOrNumber(range.cell(14, 0)) ?? 0,
+    },
+    winter: {
+      head: emptyOrNumber(range.cell(3, 0)) ?? 0,
+      liveweight: emptyOrNumber(range.cell(9, 0)) ?? 0,
+      liveweightGain: emptyOrNumber(range.cell(15, 0)) ?? 0,
+    },
+    purchases: [
+      {
+        head: emptyOrNumber(range.cell(31, 0)) ?? 0,
+        purchaseWeight: emptyOrNumber(range.cell(32, 0)) ?? 0,
+        // @ts-expect-error - this is a string input
+        purchaseSource: stringInput(
+          range.cell(35, 0),
+        ) as unknown as LivestockSourceLocations,
+      },
+    ],
+    headSold: emptyOrNumber(range.cell(39, 0)) ?? 0,
+    saleWeight: emptyOrNumber(range.cell(40, 0)) ?? 0,
+  };
+};
+
 const getCalculatorInput = (workbook: XLSX.Workbook): BeefInput => {
   const sheetInputBeef = workbook.sheet('Data input - beef');
   const beef = (address: string) => sheetInputBeef.cell(address);
@@ -99,7 +138,9 @@ const getCalculatorInput = (workbook: XLSX.Workbook): BeefInput => {
     rainfallAbove600: beef('M5').value() === 'Yes',
     beef: [
       {
-        classes: {},
+        classes: {
+          bullsGt1: getBeefClass(sheetInputBeef.range('D13:D63')),
+        },
         cowsCalving: {
           spring: numberInput(beef('D71')),
           summer: numberInput(beef('D72')),
