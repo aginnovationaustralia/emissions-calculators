@@ -377,11 +377,7 @@ export function calculateSheep(
     sheepResult.extensions;
 
   const baseSheepEmissions = {
-    scope1: {
-      ...sheepResult.output.scope1,
-      savannahBurningN2O: 0,
-      savannahBurningCH4: 0,
-    },
+    scope1: sheepResult.output.scope1,
     scope2: sheepResult.output.scope2,
     scope3: sheepResult.output.scope3,
     net: {
