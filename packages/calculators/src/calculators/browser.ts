@@ -1,3 +1,4 @@
 export * from './browser-calculators';
-export { CalculatorNames } from './strings';
+export { CalculatorOptions } from './execution/types';
+export { CalculatorNames, isValidCalculatorName } from './strings';
 export { validateCalculatorInput } from './validate';
