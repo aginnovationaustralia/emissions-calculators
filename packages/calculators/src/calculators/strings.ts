@@ -1,3 +1,5 @@
+import { entriesFromObject } from './common/tools/object';
+
 export enum CalculatorNames {
   Beef = 'beef',
   Aquaculture = 'aquaculture',
@@ -21,3 +23,11 @@ export enum CalculatorNames {
   WildCatchFishery = 'wildcatchfishery',
   WildSeaFisheries = 'wildseafisheries',
 }
+
+export const isValidCalculatorName = (
+  name: string,
+): name is CalculatorNames => {
+  return entriesFromObject(CalculatorNames).some(
+    ([_key, value]) => value === name,
+  );
+};
