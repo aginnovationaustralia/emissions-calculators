@@ -20,6 +20,23 @@
       "import": "./dist/browser.mjs",
       "require": "./dist/browser.cjs"
     },
+    "./calculators": {
+      "import": {
+        "browser": "./dist/calculators/browser.mjs",
+        "types": "./dist/calculators/index.d.ts",
+        "default": "./dist/calculators/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/browser.cjs",
+        "types": "./dist/calculators/index.d.ts",
+        "default": "./dist/calculators/index.cjs"
+      }
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.mjs",
+      "require": "./dist/types.cjs"
+    },
     "./internal": {
       "types": "./dist/internal.d.ts",
       "import": "./dist/internal.mjs",
