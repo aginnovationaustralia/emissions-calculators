@@ -1,4 +1,5 @@
-import { calculateBeef, validateCalculatorInput } from '@/calculators';
+import { validateCalculatorInput } from '@/calculators';
+import { calculateBeef } from '@/calculators/Beef/calculator';
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import { LivestockSourceLocations } from '@/constants/types';
 import {
@@ -11,6 +12,7 @@ import {
   ProductionSystem,
 } from '@/types';
 import XLSX, { Cell } from 'xlsx-populate';
+import { testContext } from '../common/context';
 import { traverseExpectations } from '../common/emissions';
 import {
   emptyOrNumber,
@@ -93,37 +95,63 @@ const getBeefClass = (range: XLSX.Range): BeefClass => {
   return {
     spring: {
       head: emptyOrNumber(range.cell(0, 0)) ?? 0,
-      liveweight: emptyOrNumber(range.cell(6, 0)) ?? 0,
-      liveweightGain: emptyOrNumber(range.cell(12, 0)) ?? 0,
+      liveweight: emptyOrNumber(range.cell(16, 0)) ?? 0,
+      liveweightGain: emptyOrNumber(range.cell(22, 0)) ?? 0,
     },
     summer: {
       head: emptyOrNumber(range.cell(1, 0)) ?? 0,
-      liveweight: emptyOrNumber(range.cell(7, 0)) ?? 0,
-      liveweightGain: emptyOrNumber(range.cell(13, 0)) ?? 0,
+      liveweight: emptyOrNumber(range.cell(17, 0)) ?? 0,
+      liveweightGain: emptyOrNumber(range.cell(23, 0)) ?? 0,
     },
     autumn: {
       head: emptyOrNumber(range.cell(2, 0)) ?? 0,
-      liveweight: emptyOrNumber(range.cell(8, 0)) ?? 0,
-      liveweightGain: emptyOrNumber(range.cell(14, 0)) ?? 0,
+      liveweight: emptyOrNumber(range.cell(18, 0)) ?? 0,
+      liveweightGain: emptyOrNumber(range.cell(24, 0)) ?? 0,
     },
     winter: {
       head: emptyOrNumber(range.cell(3, 0)) ?? 0,
-      liveweight: emptyOrNumber(range.cell(9, 0)) ?? 0,
-      liveweightGain: emptyOrNumber(range.cell(15, 0)) ?? 0,
+      liveweight: emptyOrNumber(range.cell(19, 0)) ?? 0,
+      liveweightGain: emptyOrNumber(range.cell(25, 0)) ?? 0,
     },
     purchases: [
       {
-        head: emptyOrNumber(range.cell(31, 0)) ?? 0,
-        purchaseWeight: emptyOrNumber(range.cell(32, 0)) ?? 0,
+        head: emptyOrNumber(range.cell(41, 0)) ?? 0,
+        purchaseWeight: emptyOrNumber(range.cell(42, 0)) ?? 0,
         // @ts-expect-error - this is a string input
         purchaseSource: stringInput(
-          range.cell(35, 0),
+          range.cell(45, 0),
         ) as unknown as LivestockSourceLocations,
       },
     ],
-    headSold: emptyOrNumber(range.cell(39, 0)) ?? 0,
-    saleWeight: emptyOrNumber(range.cell(40, 0)) ?? 0,
+    headSold: emptyOrNumber(range.cell(49, 0)) ?? 0,
+    saleWeight: emptyOrNumber(range.cell(50, 0)) ?? 0,
   };
+};
+
+const emptyBeefClass: BeefClass = {
+  summer: {
+    head: 0,
+    liveweight: 0,
+    liveweightGain: 0,
+  },
+  autumn: {
+    head: 0,
+    liveweight: 0,
+    liveweightGain: 0,
+  },
+  winter: {
+    head: 0,
+    liveweight: 0,
+    liveweightGain: 0,
+  },
+  spring: {
+    head: 0,
+    liveweight: 0,
+    liveweightGain: 0,
+  },
+  headSold: 0,
+  saleWeight: 0,
+  purchases: [],
 };
 
 const getCalculatorInput = (workbook: XLSX.Workbook): BeefInput => {
@@ -140,6 +168,21 @@ const getCalculatorInput = (workbook: XLSX.Workbook): BeefInput => {
       {
         classes: {
           bullsGt1: getBeefClass(sheetInputBeef.range('D13:D63')),
+          bullsGt1Traded: emptyBeefClass,
+          cowsGt2: getBeefClass(sheetInputBeef.range('H13:H63')),
+          cowsGt2Traded: emptyBeefClass,
+          heifers1To2: getBeefClass(sheetInputBeef.range('J13:J63')),
+          heifers1To2Traded: emptyBeefClass,
+          heifersLt1: getBeefClass(sheetInputBeef.range('I13:I63')),
+          heifersLt1Traded: emptyBeefClass,
+          steersLt1: getBeefClass(sheetInputBeef.range('E13:E63')),
+          steersLt1Traded: getBeefClass(sheetInputBeef.range('N13:N63')),
+          steers1To2: getBeefClass(sheetInputBeef.range('F13:F63')),
+          steers1To2Traded: getBeefClass(sheetInputBeef.range('M13:M63')),
+          heifersGt2: getBeefClass(sheetInputBeef.range('K13:K63')),
+          heifersGt2Traded: emptyBeefClass,
+          steersGt2: getBeefClass(sheetInputBeef.range('G13:G63')),
+          steersGt2Traded: getBeefClass(sheetInputBeef.range('L13:L63')),
         },
         cowsCalving: {
           spring: numberInput(beef('D71')),
@@ -156,10 +199,10 @@ const getCalculatorInput = (workbook: XLSX.Workbook): BeefInput => {
           drySeasonMix: numberInput(beef('F79')),
         },
         fertiliser: {
-          pastureDryland: numberInput(beef('D85')),
-          cropsDryland: numberInput(beef('D86')),
-          pastureIrrigated: numberInput(beef('F85')),
-          cropsIrrigated: numberInput(beef('F86')),
+          pastureDryland: numberInput(beef('D84')),
+          cropsDryland: numberInput(beef('D85')),
+          pastureIrrigated: numberInput(beef('F84')),
+          cropsIrrigated: numberInput(beef('F85')),
           otherFertilisers: [
             {
               otherType: stringInput(beef('C86')) as CustomisedFertiliser,
@@ -200,56 +243,58 @@ const getExpectedOutput = (workbook: XLSX.Workbook): BeefOutput => {
 
   const expectedScopes = {
     scope1: {
-      fuelCO2: 0,
-      fuelCH4: 0,
-      fuelN2O: 0,
-      ureaCO2: 0,
-      limeCO2: 0,
-      fertiliserN2O: 0,
-      entericCH4: 0,
-      manureManagementCH4: 0,
-      urineAndDungN2O: 0,
-      atmosphericDepositionN2O: 0,
-      leachingAndRunoffN2O: 0,
-      savannahBurningN2O: 0,
-      savannahBurningCH4: 0,
-      totalCO2: 0,
-      totalCH4: 0,
-      totalN2O: 0,
-      total: 0,
+      fuelCO2: summary('C4'),
+      limeCO2: summary('C5'),
+      ureaCO2: summary('C6'),
+      fuelCH4: summary('C7'),
+      entericCH4: summary('C8'),
+      manureManagementCH4: summary('C9'),
+      savannahBurningCH4: summary('C10'),
+      fertiliserN2O: summary('C11'),
+      urineAndDungN2O: summary('C12'),
+      atmosphericDepositionN2O: summary('C13'),
+      leachingAndRunoffN2O: summary('C14'),
+      savannahBurningN2O: summary('C15'),
+      fuelN2O: summary('C16'),
+      totalCO2: summary('G4'),
+      totalCH4: summary('G5'),
+      totalN2O: summary('G6'),
+      total: summary('E17'),
     },
     scope2: {
-      electricity: 0,
-      total: 0,
+      electricity: summary('C20'),
+      total: summary('C21'),
     },
     scope3: {
-      fertiliser: 0,
-      purchasedMineralSupplementation: 0,
-      purchasedFeed: 0,
-      herbicide: 0,
-      electricity: 0,
-      fuel: 0,
-      lime: 0,
-      purchasedLivestock: 0,
-      total: 0,
+      fertiliser: summary('C24'),
+      purchasedMineralSupplementation: summary('C25'),
+      purchasedFeed: summary('C26'),
+      herbicide: summary('C27'),
+      electricity: summary('C28'),
+      fuel: summary('C29'),
+      lime: summary('C30'),
+      purchasedLivestock: summary('C31'),
+      total: summary('C32'),
     },
-  };
+    intensities: {
+      liveweightBeefProducedKg: beef('O64') + beef('P64'),
+      beefExcludingSequestration: summary('C44'),
+      beefIncludingSequestration: summary('C45'),
+    },
+    carbonSequestration: {
+      total: summary('C35'),
+    },
+  } as const;
 
   const output: BeefOutput = {
     ...expectedScopes,
-    carbonSequestration: {
-      total: 0,
-    },
     net: {
-      total: 0,
-      beef: 0,
+      total: summary('E37'),
+      beef: summary('C37'),
     },
-    intensities: {
-      liveweightBeefProducedKg: 0,
-      beefExcludingSequestration: 0,
-      beefIncludingSequestration: 0,
-    },
-    intermediate: [],
+    intermediate: [
+      { ...expectedScopes, id: 'beef-0', net: { total: summary('E37') } },
+    ],
   };
 
   return output;
@@ -262,8 +307,12 @@ describe('Compare grains calculator to spreadsheet', () => {
     );
     const input = getCalculatorInput(workbook);
     const validatedInput = validateCalculatorInput(BeefInputSchema, input);
+    // console.dir(validatedInput, { depth: null });
     const expectedOutput = getExpectedOutput(workbook);
-    const calculatorData = calculateBeef(validatedInput);
+    const calculatorData = calculateBeef(
+      validatedInput,
+      testContext('Beef', workbook),
+    );
     const tests = traverseExpectations(expectedOutput, calculatorData);
     tests.forEach((test) => {
       try {

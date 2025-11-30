@@ -149,7 +149,7 @@ export function calculateCompleteBeefEmissions(
   },
   context: ExecutionContext<ConstantsForBeefCalculator>,
 ): BeefCompleteEmissions {
-  const { constants } = context;
+  const { constants, checkpoint } = context;
 
   const totals: Record<
     (typeof BeefClassesAPI)[number],
@@ -489,6 +489,21 @@ export function calculateCompleteBeefEmissions(
   // (agriculturalSoilsBeefC111)
   const totalN2OLeechingAndRunoff =
     nFertiliserCropsTotal + totalNDungUrine * 10 ** 3;
+
+  checkpoint?.('Agricultural soils - beef', {
+    nFertiliserCropsTotal: {
+      cell: 'D102',
+      value: nFertiliserCropsTotal,
+    },
+    totalNDungUrine: {
+      cell: 'D109',
+      value: totalNDungUrine,
+    },
+    totalN2OLeechingAndRunoff: {
+      cell: 'C111',
+      value: totalN2OLeechingAndRunoff,
+    },
+  });
 
   const leechingRunoffN2O =
     totalN2OLeechingAndRunoff * constants.COMMON.GWP_FACTORSC6;

@@ -7,6 +7,10 @@ type ExecutionMetadata = {
   version: string;
   timestamp: string;
   overrides?: object | undefined;
+  checkpoint?: (
+    name: string,
+    data: Record<string, { cell: string; value: number }>,
+  ) => void;
 };
 export interface ExecutionContext<
   T extends HasCommonConstants = HasCommonConstants,
