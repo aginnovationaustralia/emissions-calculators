@@ -12,11 +12,10 @@ npm install @aginnovationaustralia/emissions-calculators
 
 # Usage
 
-```javascript
-import { Calculators, Types } from '@aginnovationaustralia/emissions-calculators';
+If you're looking to make an emissions calculation with the least amount of setup required, you can simply pass your calculator input to `calculateEmissions`:
 
-const { calculateBeef } = Calculators;
-const { BeefInput, BeefOutput } = Types;
+```javascript
+import { calculateEmissions } from '@aginnovationaustralia/emissions-calculators';
 
 export const beefInputData: BeefInput = {
   state: 'nsw' as const,
@@ -40,29 +39,53 @@ export const beefInputData: BeefInput = {
   ]
 }
 
-const beefResults: BeefOutput = calculateBeef(beefInputLatest);
+const emissionsResult = calculateEmissions('beef', beefInputLatest);
+
+if (emissionsResult.succeeded) {
+  console.log('Here are your emissions!', emissionsResult.emissions);
+} else {
+  if (emissionsResult.valid) {
+    console.error('Something went wrong', emissionsResult.error);
+  } else {
+    console.error('The input was not valid', emissionsResult.error);
+  }
+}
+```
+
+As well as the calculators and their types, there are some other resources that are important for building a robust calculator. You might want to perform the validation yourself, or make use of the `zod` validation schema:
+
+```javascript
+import {
+  BeefInputSchema,
+  validateCalculatorInput,
+} from '@aginnovationaustralia/emissions-calculators';
+
+const validation = validateCalculatorInput(BeefInputSchema, rawInput);
+
+if (validation.valid) {
+  console.log('Ready to use the input value', validation.result);
+else {
+  console.error('The input was not valid', validation.error);
+}
 ```
 
 You can also use specific nested exports if you only need a single calculator. This should allow for a smaller bundle size via tree shaking:
 
 ```javascript
-import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/beef';
-import type { BeefInput } from '@aginnovationaustralia/emissions-calculators/beef';
-```
-
-As well as the calculators and their types, there are some other resources that are useful for building a robust calculator:
-
-```javascript
 import {
-  CalculatorNames,
-  validateCalculatorInput,
-} from '@aginnovationaustralia/emissions-calculators/tools';
+  calculateBeef,
+  BeefInputSchema,
+} from '@aginnovationaustralia/emissions-calculators/beef';
+import type { BeefInput } from '@aginnovationaustralia/emissions-calculators/beef';
+import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
 ```
 
-The input objects required for a calculation are deeply nested objects with strict type requirements. The outputs are also nested objects with very specific types. You can access classes for all the input and output types via the `Types`:
+The inputs required for a calculation are deeply nested objects with strict type requirements. The outputs are also nested objects with very specific types. You can access classes for all the input and output types via the top level exports, under `/types` or under each calculator nested import path:
 
 ```javascript
-import { Types } from '@aginnovationaustralia/emissions-calculators';
+import { BeefClasses } from '@aginnovationaustralia/emissions-calculators';
+import { BeefComplete } from '@aginnovationaustralia/emissions-calculators/beef';
+import { BeefInput } from '@aginnovationaustralia/emissions-calculators/types';
 
 const { BeefInput, BeefComplete, BeefClasses, BeefScope1Output } = Types;
 
@@ -103,6 +126,8 @@ The tool used to collect the usage metrics is [MixPanel](https://mixpanel.com/ho
 - the `MixPanel` client will include the IP address of the machine sending the metrics, which in turn is used for basic geolocation of the origin
 
 If you want to associate the execution of a calculator with your organisation, you can set a value for the environment variable `CALCULATOR_METRICS_ORGANISATION`. This is entirely optional. You might want to consider this to help with the process of getting support, if you are having problems or seeing errors.
+
+The calculator functions also accept an optional `options` parameter which allows controlling these features.
 
 # License
 

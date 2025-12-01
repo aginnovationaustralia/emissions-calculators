@@ -15,10 +15,7 @@ npm install @aginnovationaustralia/emissions-calculators
 You can find more details on using the NPM package in its [README](./packages/calculators/README.md) file. It can be as simple as:
 
 ```javascript
-import { Calculators, Types } from '@aginnovationaustralia/emissions-calculators';
-
-const { calculateBeef } = Calculators;
-const { BeefInput, BeefOutput } = Types;
+import { calculateEmissions } from '@aginnovationaustralia/emissions-calculators';
 
 export const beefInputData: BeefInput = {
   state: 'nsw' as const,
@@ -42,7 +39,17 @@ export const beefInputData: BeefInput = {
   ]
 }
 
-const beefResults: BeefOutput = calculateBeef(beefInputLatest);
+const emissionsResult = calculateEmissions('beef', beefInputLatest);
+
+if (emissionsResult.succeeded) {
+  console.log('Here are your emissions!', emissionsResult.emissions);
+} else {
+  if (emissionsResult.valid) {
+    console.error('Something went wrong', emissionsResult.error);
+  } else {
+    console.error('The input was not valid', emissionsResult.error);
+  }
+}
 ```
 
 The repo also includes [examples](./examples) to help you get started consuming the package.
