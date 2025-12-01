@@ -25,8 +25,14 @@ describe('checking Feedlot purchases transformation to array', () => {
     FeedlotInputSchema,
     feedlotDataWithPurchase,
   );
+  expect(validatedInput).toBeDefined();
+
+  if (!validatedInput.valid) {
+    throw validatedInput.error;
+  }
+
   const context = testContext('Feedlot');
-  const emissions = calculateEntireFeedlot(validatedInput, context);
+  const emissions = calculateEntireFeedlot(validatedInput.result, context);
 
   test('scope 3 purchaseLivestock should be accurate', () => {
     expect(emissions.scope3.purchaseLivestock).toBeCloseTo(2201.1, P);

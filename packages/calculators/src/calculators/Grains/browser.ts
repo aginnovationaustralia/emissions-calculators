@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { GrainsInput, GrainsInputSchema, GrainsOutput } from '../../types/Grains';
-import { CalculatorNames } from '../browser';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateGrains(
   return executeCalculator(
     calculateGrainsInternal,
     input,
-    CalculatorNames.Grains,
+    'grains',
     new BrowserEnvironment(options),
   );
 }

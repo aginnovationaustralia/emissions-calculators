@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { FeedlotInput, FeedlotInputSchema, FeedlotOutput } from '../../types/Feedlot';
-import { CalculatorNames } from '../browser';
 import { executeCalculator } from '../execution/execute';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateFeedlot(
   return executeCalculator(
     calculateEntireFeedlotInternal,
     input,
-    CalculatorNames.Feedlot,
+    'feedlot',
     new NodeEnvironment(options),
   );
 }

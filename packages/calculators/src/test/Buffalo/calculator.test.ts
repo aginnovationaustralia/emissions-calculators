@@ -76,8 +76,12 @@ describe('Buffalo scenarios', () => {
 
   expect(validatedInput).toBeDefined();
 
+  if (!validatedInput.valid) {
+    throw validatedInput.error;
+  }
+
   const context = testContext('Buffalo');
-  const actualEmissions = calculateBuffalo(validatedInput, context);
+  const actualEmissions = calculateBuffalo(validatedInput.result, context);
 
   ensureEveryKeyIsDefined(actualEmissions as unknown as KeyValuePairs);
 });

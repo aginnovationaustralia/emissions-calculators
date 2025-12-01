@@ -81,8 +81,12 @@ describe('Goat scenarios', () => {
 
   expect(validatedInput).toBeDefined();
 
+  if (!validatedInput.valid) {
+    throw validatedInput.error;
+  }
+
   const context = testContext('Goat');
-  const actualEmissions = calculateGoat(validatedInput, context);
+  const actualEmissions = calculateGoat(validatedInput.result, context);
 
   ensureEveryKeyIsDefined(actualEmissions as unknown as KeyValuePairs);
 });

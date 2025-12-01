@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { SheepBeefInput, SheepBeefInputSchema, SheepBeefOutput } from '../../types/SheepBeef';
-import { CalculatorNames } from '../browser';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateSheepBeef(
   return executeCalculator(
     calculateSheepBeefInternal,
     input,
-    CalculatorNames.SheepBeef,
+    'sheepbeef',
     new BrowserEnvironment(options),
   );
 }

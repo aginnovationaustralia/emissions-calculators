@@ -100,8 +100,12 @@ describe('Sheep scenarios', () => {
 
   expect(validatedInput).toBeDefined();
 
+  if (!validatedInput.valid) {
+    throw validatedInput.error;
+  }
+
   const context = testContext('Sheep');
-  const emissions = calculateSheep(validatedInput, context);
+  const emissions = calculateSheep(validatedInput.result, context);
 
   ensureEveryKeyIsDefined(emissions as unknown as KeyValuePairs);
 });

@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { PoultryInput, PoultryInputSchema, PoultryOutput } from '../../types/Poultry';
-import { CalculatorNames } from '../browser';
 import { executeCalculator } from '../execution/execute';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculatePoultry(
   return executeCalculator(
     calculatePoultryInternal,
     input,
-    CalculatorNames.Poultry,
+    'poultry',
     new NodeEnvironment(options),
   );
 }

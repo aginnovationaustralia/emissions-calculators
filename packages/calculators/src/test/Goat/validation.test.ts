@@ -30,31 +30,43 @@ describe('validating Goat test input using old and invalid veg schema', () => {
 });
 
 describe('a single goat instance is not supported', () => {
-  const t = () =>
-    validateCalculatorInput(GoatInputSchema, {
-      ...goatTestData,
-      goats: goatTestData.goats[0],
-    });
+  const t = validateCalculatorInput(GoatInputSchema, {
+    ...goatTestData,
+    goats: goatTestData.goats[0],
+  });
 
   test('validation should result in an errors', () => {
-    expect(t).toThrow(InputValidationError);
+    expect(t).toEqual(
+      expect.objectContaining({
+        valid: false,
+        error: expect.any(InputValidationError),
+      }),
+    );
   });
 });
 
 describe('invalid requests', () => {
   test('validation should fail with invalid electricityRenewable', () => {
-    const tHigh = () =>
-      validateCalculatorInput(GoatInputSchema, {
-        ...goatTestData,
-        goats: [{ ...goatTestData.goats[0], electricityRenewable: 2 }],
-      });
-    expect(tHigh).toThrow(InputValidationError);
+    const tHigh = validateCalculatorInput(GoatInputSchema, {
+      ...goatTestData,
+      goats: [{ ...goatTestData.goats[0], electricityRenewable: 2 }],
+    });
+    expect(tHigh).toEqual(
+      expect.objectContaining({
+        valid: false,
+        error: expect.any(InputValidationError),
+      }),
+    );
 
-    const tLow = () =>
-      validateCalculatorInput(GoatInputSchema, {
-        ...goatTestData,
-        goats: [{ ...goatTestData.goats[0], electricityRenewable: -1 }],
-      });
-    expect(tLow).toThrow(InputValidationError);
+    const tLow = validateCalculatorInput(GoatInputSchema, {
+      ...goatTestData,
+      goats: [{ ...goatTestData.goats[0], electricityRenewable: -1 }],
+    });
+    expect(tLow).toEqual(
+      expect.objectContaining({
+        valid: false,
+        error: expect.any(InputValidationError),
+      }),
+    );
   });
 });

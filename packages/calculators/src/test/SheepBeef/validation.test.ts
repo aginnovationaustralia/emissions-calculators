@@ -84,28 +84,31 @@ describe('validating SheepBeef test inputs for incorrect nested inputs', () => {
 });
 
 describe('a single sheep and beef instance is not supported', () => {
-  const t = () =>
-    validateCalculatorInput(SheepBeefInputSchema, {
-      ...sheepbeefTestData,
-      beef: sheepbeefTestData.beef[0],
-      sheep: sheepbeefTestData.sheep[0],
-    });
+  const t = validateCalculatorInput(SheepBeefInputSchema, {
+    ...sheepbeefTestData,
+    beef: sheepbeefTestData.beef[0],
+    sheep: sheepbeefTestData.sheep[0],
+  });
 
   test('validation should result in no errors', () => {
-    expect(t).toThrow(InputValidationError);
+    expect(t).toEqual(
+      expect.objectContaining({
+        valid: false,
+        error: expect.any(InputValidationError),
+      }),
+    );
   });
 });
 
 describe('just one beef, no sheep is not supported', () => {
-  const t = () =>
-    validateCalculatorInput(SheepBeefInputSchema, {
-      ...sheepbeefTestData,
-      beef: sheepbeefTestData.beef[0],
-      sheep: [],
-    });
+  const t = validateCalculatorInput(SheepBeefInputSchema, {
+    ...sheepbeefTestData,
+    beef: sheepbeefTestData.beef[0],
+    sheep: [],
+  });
 
   test('validation should result in no errors', () => {
-    expect(t).toThrow(InputValidationError);
+    expect(t.valid).toBe(false);
   });
 });
 

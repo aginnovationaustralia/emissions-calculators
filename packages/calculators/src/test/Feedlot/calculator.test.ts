@@ -75,8 +75,12 @@ describe('Feedlot scenarios', () => {
 
   expect(validatedInput).toBeDefined();
 
+  if (!validatedInput.valid) {
+    throw validatedInput.error;
+  }
+
   const context = testContext('Beef');
-  const emissions = calculateEntireFeedlot(validatedInput, context);
+  const emissions = calculateEntireFeedlot(validatedInput.result, context);
 
   ensureEveryKeyIsDefined(emissions as unknown as KeyValuePairs);
 });

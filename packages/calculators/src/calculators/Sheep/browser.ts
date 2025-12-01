@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { SheepInput, SheepInputSchema, SheepOutput } from '../../types/Sheep';
-import { CalculatorNames } from '../browser';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateSheep(
   return executeCalculator(
     calculateSheepInternal,
     input,
-    CalculatorNames.Sheep,
+    'sheep',
     new BrowserEnvironment(options),
   );
 }

@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { DairyInput, DairyInputSchema, DairyOutput } from '../../types/Dairy';
-import { CalculatorNames } from '../browser';
 import { executeCalculator } from '../execution/execute';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateDairy(
   return executeCalculator(
     calculateDairyInternal,
     input,
-    CalculatorNames.Dairy,
+    'dairy',
     new NodeEnvironment(options),
   );
 }

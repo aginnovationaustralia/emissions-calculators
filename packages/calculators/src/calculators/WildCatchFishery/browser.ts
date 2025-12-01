@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { WildCatchFisheryInput, WildCatchFisheryInputSchema, WildCatchFisheryOutput } from '../../types/WildCatchFishery';
-import { CalculatorNames } from '../browser';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateWildCatchFishery(
   return executeCalculator(
     calculateWildCatchFisheryInternal,
     input,
-    CalculatorNames.WildCatchFishery,
+    'wildcatchfishery',
     new BrowserEnvironment(options),
   );
 }

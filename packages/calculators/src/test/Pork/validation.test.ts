@@ -38,14 +38,18 @@ describe('validating Pork test inputs for incorrect inputs', () => {
 });
 
 describe('a single pork instance is not supported', () => {
-  const t = () =>
-    validateCalculatorInput(PorkInputSchema, {
-      ...porkTestData,
-      pork: porkTestData.pork[0],
-    });
+  const t = validateCalculatorInput(PorkInputSchema, {
+    ...porkTestData,
+    pork: porkTestData.pork[0],
+  });
 
   test('validation should result in no errors', () => {
-    expect(t).toThrow(InputValidationError);
+    expect(t).toEqual(
+      expect.objectContaining({
+        valid: false,
+        error: expect.any(InputValidationError),
+      }),
+    );
   });
 });
 

@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { HorticultureInput, HorticultureInputSchema, HorticultureOutput } from '../../types/Horticulture';
-import { CalculatorNames } from '../browser';
 import { executeCalculator } from '../execution/execute';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateHorticulture(
   return executeCalculator(
     calculateHorticultureInternal,
     input,
-    CalculatorNames.Horticulture,
+    'horticulture',
     new NodeEnvironment(options),
   );
 }
