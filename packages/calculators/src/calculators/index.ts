@@ -28,7 +28,7 @@ export { CalculatorOptions } from './execution/types';
 export { CalculatorNames, isValidCalculatorName } from './strings';
 export { validateCalculatorInput } from './validate';
 
-export const calculate = generateCalculate({
+export const calculateEmissions = generateCalculate({
   calculateBeef,
   calculateAquaculture,
   calculateBuffalo,
@@ -50,3 +50,5 @@ export const calculate = generateCalculate({
   calculateWildCatchFishery,
   calculateWildSeaFisheries,
 });
+
+export type { CalculateEmissionsResult } from '../calculate';

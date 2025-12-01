@@ -1,7 +1,4 @@
-import { Types } from '@aginnovationaustralia/emissions-calculators';
-
-// Use the type directly from the namespace - this is the correct approach
-type BeefInput = Types.BeefInput;
+import { BeefInput } from '@aginnovationaustralia/emissions-calculators/beef';
 
 // Create a sample beef input (simplified for demonstration)
 export const beefInputData: BeefInput = {

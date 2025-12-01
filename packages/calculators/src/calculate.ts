@@ -1,7 +1,11 @@
 import { ZodType } from 'zod';
-import { CalculatorOptions, validateCalculatorInput } from './calculators';
+// import { CalculatorOptions, validateCalculatorInput } from './calculators';
+import { CalculatorOptions } from './calculators/execution/types';
 import { CalculatorNames } from './calculators/strings';
-import { InputValidationError } from './calculators/validate';
+import {
+  InputValidationError,
+  validateCalculatorInput,
+} from './calculators/validate';
 import {
   AquacultureInput,
   AquacultureInputSchema,
@@ -65,16 +69,11 @@ import {
   WildSeaFisheriesOutput,
 } from './types';
 
-export * from './calculators';
-export { InputValidationError } from './calculators/validate';
-export * from './constants';
-export * from './types';
-
-type CalculateResult<O extends object> =
+export type CalculateEmissionsResult<O extends object> =
   | {
       succeeded: true;
       valid: true;
-      result: O;
+      emissions: O;
     }
   | {
       succeeded: false;
@@ -92,7 +91,7 @@ const tryCalculate = <S extends object, Z extends ZodType<S>, O extends object>(
   input: unknown,
   calculator: (input: S, options?: CalculatorOptions) => O,
   options?: CalculatorOptions,
-): CalculateResult<O> => {
+): CalculateEmissionsResult<O> => {
   try {
     const validatedInput = validateCalculatorInput(schema, input);
     if (!validatedInput.valid) {
@@ -102,11 +101,11 @@ const tryCalculate = <S extends object, Z extends ZodType<S>, O extends object>(
         error: validatedInput.error,
       };
     }
-    const result = calculator(validatedInput.result, options);
+    const emissions = calculator(validatedInput.result, options);
     return {
       succeeded: true,
       valid: true,
-      result: result,
+      emissions,
     };
   } catch (error) {
     return {
@@ -255,9 +254,9 @@ export const generateCalculate =
   }: Calculators) =>
   (
     calculatorName: N,
-    input: object,
+    input: unknown,
     options?: CalculatorOptions,
-  ): CalculateResult<O> => {
+  ): CalculateEmissionsResult<O> => {
     switch (calculatorName) {
       case 'beef':
         return tryCalculate(
@@ -265,152 +264,152 @@ export const generateCalculate =
           input,
           calculateBeef,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'aquaculture':
         return tryCalculate(
           AquacultureInputSchema,
           input,
           calculateAquaculture,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'buffalo':
         return tryCalculate(
           BuffaloInputSchema,
           input,
           calculateBuffalo,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'cotton':
         return tryCalculate(
           CottonInputSchema,
           input,
           calculateCotton,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'dairy':
         return tryCalculate(
           DairyInputSchema,
           input,
           calculateDairy,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'deer':
         return tryCalculate(
           DeerInputSchema,
           input,
           calculateDeer,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'feedlot':
         return tryCalculate(
           FeedlotInputSchema,
           input,
           calculateFeedlot,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'feedlotbeef':
         return tryCalculate(
           FeedlotInputSchema,
           input,
           calculateFeedlot,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'goat':
         return tryCalculate(
           GoatInputSchema,
           input,
           calculateGoat,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'grains':
         return tryCalculate(
           GrainsInputSchema,
           input,
           calculateGrains,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'horticulture':
         return tryCalculate(
           HorticultureInputSchema,
           input,
           calculateHorticulture,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'pork':
         return tryCalculate(
           PorkInputSchema,
           input,
           calculatePork,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'poultry':
         return tryCalculate(
           PoultryInputSchema,
           input,
           calculatePoultry,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'processing':
         return tryCalculate(
           ProcessingInputSchema,
           input,
           calculateProcessing,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'rice':
         return tryCalculate(
           RiceInputSchema,
           input,
           calculateRice,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'sheep':
         return tryCalculate(
           SheepInputSchema,
           input,
           calculateSheep,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'sheepbeef':
         return tryCalculate(
           SheepBeefInputSchema,
           input,
           calculateSheepBeef,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'sugar':
         return tryCalculate(
           SugarInputSchema,
           input,
           calculateSugar,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'vineyard':
         return tryCalculate(
           VineyardInputSchema,
           input,
           calculateVineyard,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'wildcatchfishery':
         return tryCalculate(
           WildCatchFisheryInputSchema,
           input,
           calculateWildCatchFishery,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       case 'wildseafisheries':
         return tryCalculate(
           WildSeaFisheriesInputSchema,
           input,
           calculateWildSeaFisheries,
           options,
-        ) as CalculateResult<O>;
+        ) as CalculateEmissionsResult<O>;
       default: {
         // This ensures compile-time exhaustiveness checking
         // If a case is missed, TypeScript will error here
         const _exhaustive: never = calculatorName as never;
-        return _exhaustive as CalculateResult<O>;
+        return _exhaustive as CalculateEmissionsResult<O>;
       }
     }
   };

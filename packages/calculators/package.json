@@ -37,6 +37,11 @@
       "import": "./dist/types.mjs",
       "require": "./dist/types.cjs"
     },
+    "./validate": {
+      "types": "./dist/calculators/validate.d.ts",
+      "import": "./dist/calculators/validate.mjs",
+      "require": "./dist/calculators/validate.cjs"
+    },
     "./internal": {
       "types": "./dist/internal.d.ts",
       "import": "./dist/internal.mjs",

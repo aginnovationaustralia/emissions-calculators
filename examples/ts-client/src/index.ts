@@ -1,3 +1,7 @@
-import { calculateBeef300 } from './beef/v300';
+import { calculateBeefSimple } from './beef/calculate-emissions';
+import { calculateBeefNestedExport } from './beef/nested-exports';
+import { calculateBeefTopLevel } from './beef/top-level';
 
-calculateBeef300();
+calculateBeefSimple();
+calculateBeefTopLevel();
+calculateBeefNestedExport();
