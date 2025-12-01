@@ -1,49 +1,36 @@
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import * as z from 'zod';
 import { createSchema } from 'zod-openapi';
+import { CalculatorNames } from '../calculators/strings';
+import { AquacultureInputSchema, AquacultureOutputSchema } from './Aquaculture';
+import { BeefInputSchema, BeefOutputSchema } from './Beef';
+import { BuffaloInputSchema, BuffaloOutputSchema } from './Buffalo';
+import { CottonInputSchema, CottonOutputSchema } from './Cotton';
+import { DairyInputSchema, DairyOutputSchema } from './Dairy';
+import { DeerInputSchema, DeerOutputSchema } from './Deer';
+import { FeedlotInputSchema, FeedlotOutputSchema } from './Feedlot';
+import { GoatInputSchema, GoatOutputSchema } from './Goat';
+import { GrainsInputSchema, GrainsOutputSchema } from './Grains';
 import {
-  AquacultureOutputSchema,
-  BeefInputSchema,
-  BeefOutputSchema,
-  BuffaloInputSchema,
-  BuffaloOutputSchema,
-  CottonInputSchema,
-  CottonOutputSchema,
-  DairyInputSchema,
-  DairyOutputSchema,
-  DeerInputSchema,
-  DeerOutputSchema,
-  FeedlotInputSchema,
-  FeedlotOutputSchema,
-  GoatInputSchema,
-  GoatOutputSchema,
-  GrainsInputSchema,
-  GrainsOutputSchema,
   HorticultureInputSchema,
   HorticultureOutputSchema,
-  PorkInputSchema,
-  PorkOutputSchema,
-  PoultryInputSchema,
-  PoultryOutputSchema,
-  ProcessingInputSchema,
-  ProcessingOutputSchema,
-  RiceInputSchema,
-  RiceOutputSchema,
-  SheepBeefInputSchema,
-  SheepBeefOutputSchema,
-  SheepInputSchema,
-  SheepOutputSchema,
-  SugarInputSchema,
-  SugarOutputSchema,
-  VineyardInputSchema,
-  VineyardOutputSchema,
+} from './Horticulture';
+import { PorkInputSchema, PorkOutputSchema } from './Pork';
+import { PoultryInputSchema, PoultryOutputSchema } from './Poultry';
+import { ProcessingInputSchema, ProcessingOutputSchema } from './Processing';
+import { RiceInputSchema, RiceOutputSchema } from './Rice';
+import { SheepInputSchema, SheepOutputSchema } from './Sheep';
+import { SheepBeefInputSchema, SheepBeefOutputSchema } from './SheepBeef';
+import { SugarInputSchema, SugarOutputSchema } from './Sugar';
+import { VineyardInputSchema, VineyardOutputSchema } from './Vineyard';
+import {
   WildCatchFisheryInputSchema,
   WildCatchFisheryOutputSchema,
+} from './WildCatchFishery';
+import {
   WildSeaFisheriesInputSchema,
   WildSeaFisheriesOutputSchema,
-} from '.';
-import { CalculatorNames } from '../calculators/strings';
-import { AquacultureInputSchema } from './Aquaculture/input';
+} from './WildSeaFisheries';
 
 type Endpoint<
   TI extends z.core.$ZodLooseShape,
