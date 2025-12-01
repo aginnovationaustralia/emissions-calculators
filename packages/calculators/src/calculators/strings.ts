@@ -1,33 +1,52 @@
-import { entriesFromObject } from './common/tools/object';
+export type CalculatorNames =
+  | 'beef'
+  | 'aquaculture'
+  | 'buffalo'
+  | 'cotton'
+  | 'dairy'
+  | 'deer'
+  | 'feedlot'
+  | 'feedlotbeef'
+  | 'goat'
+  | 'grains'
+  | 'horticulture'
+  | 'pork'
+  | 'poultry'
+  | 'processing'
+  | 'rice'
+  | 'sheep'
+  | 'sheepbeef'
+  | 'sugar'
+  | 'vineyard'
+  | 'wildcatchfishery'
+  | 'wildseafisheries';
 
-export enum CalculatorNames {
-  Beef = 'beef',
-  Aquaculture = 'aquaculture',
-  Buffalo = 'buffalo',
-  Cotton = 'cotton',
-  Dairy = 'dairy',
-  Deer = 'deer',
-  Feedlot = 'feedlot',
-  FeedlotBeef = 'feedlotbeef',
-  Goat = 'goat',
-  Grains = 'grains',
-  Horticulture = 'horticulture',
-  Pork = 'pork',
-  Poultry = 'poultry',
-  Processing = 'processing',
-  Rice = 'rice',
-  Sheep = 'sheep',
-  SheepBeef = 'sheepbeef',
-  Sugar = 'sugar',
-  Vineyard = 'vineyard',
-  WildCatchFishery = 'wildcatchfishery',
-  WildSeaFisheries = 'wildseafisheries',
-}
+export const allCalculatorNames: CalculatorNames[] = [
+  'beef',
+  'aquaculture',
+  'buffalo',
+  'cotton',
+  'dairy',
+  'deer',
+  'feedlot',
+  'feedlotbeef',
+  'goat',
+  'grains',
+  'horticulture',
+  'pork',
+  'poultry',
+  'processing',
+  'rice',
+  'sheep',
+  'sheepbeef',
+  'sugar',
+  'vineyard',
+  'wildcatchfishery',
+  'wildseafisheries',
+];
 
 export const isValidCalculatorName = (
   name: string,
 ): name is CalculatorNames => {
-  return entriesFromObject(CalculatorNames).some(
-    ([_key, value]) => value === name,
-  );
+  return allCalculatorNames.includes(name as CalculatorNames);
 };
