@@ -1,5 +1,4 @@
 import { ZodType } from 'zod';
-// import { CalculatorOptions, validateCalculatorInput } from './calculators';
 import { CalculatorOptions } from './calculators/execution/types';
 import { CalculatorNames } from './calculators/strings';
 import {
@@ -184,7 +183,7 @@ type Calculators = {
   ) => WildSeaFisheriesOutput;
 };
 
-export const generateCalculate =
+export const generateCalculateEmissions =
   <
     N extends CalculatorNames,
     O extends N extends 'beef'

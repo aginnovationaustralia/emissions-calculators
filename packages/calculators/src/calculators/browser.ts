@@ -1,4 +1,4 @@
-import { generateCalculate } from '@/calculate';
+import { generateCalculateEmissions } from '@/calculate';
 import {
   calculateAquaculture,
   calculateBeef,
@@ -27,7 +27,7 @@ export { CalculatorOptions } from './execution/types';
 export { CalculatorNames, isValidCalculatorName } from './strings';
 export { validateCalculatorInput } from './validate';
 
-export const calculateEmissions = generateCalculate({
+export const calculateEmissions = generateCalculateEmissions({
   calculateBeef,
   calculateAquaculture,
   calculateBuffalo,

@@ -103,33 +103,6 @@ describe('Pork calculator (multi activity)', () => {
     pork: [originalActivity, activityDoubleSaleweight],
   };
 
-  const validatedPorkTestData = validateCalculatorInput(
-    PorkInputSchema,
-    porkTestData,
-  );
-  expect(validatedPorkTestData).toBeDefined();
-  if (!validatedPorkTestData.valid) {
-    throw validatedPorkTestData.error;
-  }
-
-  const validatedPorkDoubleSaleweight = validateCalculatorInput(
-    PorkInputSchema,
-    porkDoubleSaleweight,
-  );
-  expect(validatedPorkDoubleSaleweight).toBeDefined();
-  if (!validatedPorkDoubleSaleweight.valid) {
-    throw validatedPorkDoubleSaleweight.error;
-  }
-
-  const validatedPorkTestDataAllActivities = validateCalculatorInput(
-    PorkInputSchema,
-    porkTestDataAllActivities,
-  );
-  expect(validatedPorkTestDataAllActivities).toBeDefined();
-  if (!validatedPorkTestDataAllActivities.valid) {
-    throw validatedPorkTestDataAllActivities.error;
-  }
-
   compareEmissionsFrom2Inputs<
     PorkInput,
     PorkIntermediateOutput,
@@ -139,9 +112,9 @@ describe('Pork calculator (multi activity)', () => {
   >(
     'Pork',
     calculatePork,
-    validatedPorkTestData.result,
-    validatedPorkDoubleSaleweight.result,
-    validatedPorkTestDataAllActivities.result,
+    porkTestData,
+    porkDoubleSaleweight,
+    porkTestDataAllActivities,
     (originalEmissions, secondEmissions) => {
       expect(originalEmissions.intensities.liveweightProducedKg).toBeCloseTo(
         secondEmissions.intensities.liveweightProducedKg / 2,
