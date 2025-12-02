@@ -319,10 +319,13 @@ describe('Compare beef calculator to spreadsheet', () => {
     );
     const input = getCalculatorInput(workbook);
     const validatedInput = validateCalculatorInput(BeefInputSchema, input);
+    if (!validatedInput.valid) {
+      throw validatedInput.error;
+    }
     // console.dir(validatedInput, { depth: null });
     const expectedOutput = getExpectedOutput(workbook);
     const calculatorData = calculateBeef(
-      validatedInput,
+      validatedInput.result,
       testContext('Beef', workbook),
     );
     // console.dir(calculatorData, { depth: null });

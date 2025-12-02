@@ -561,8 +561,11 @@ describe('Compare aquaculture calculator to spreadsheet', () => {
       AquacultureInputSchema,
       input,
     );
+    if (!validatedInput.valid) {
+      throw validatedInput.error;
+    }
     const expectedOutput = getExpectedOutput(workbook);
-    const calculatorData = calculateAquaculture(validatedInput);
+    const calculatorData = calculateAquaculture(validatedInput.result);
     tests = traverseExpectations(expectedOutput, calculatorData);
     tests.forEach((test) => {
       try {
