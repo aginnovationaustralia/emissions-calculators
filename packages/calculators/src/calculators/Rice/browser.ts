@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { RiceInput, RiceInputSchema, RiceOutput } from '../../types/Rice';
-import { CalculatorNames } from '../browser';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateRice(
   return executeCalculator(
     calculateRiceInternal,
     input,
-    CalculatorNames.Rice,
+    'rice',
     new BrowserEnvironment(options),
   );
 }

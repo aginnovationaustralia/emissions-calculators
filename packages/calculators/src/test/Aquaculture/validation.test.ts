@@ -52,9 +52,16 @@ describe('validating Aquaculture test inputs, all types of inputs', () => {
           },
         ],
       };
-      const t = () =>
-        validateCalculatorInput(AquacultureInputSchema, invalidTestData);
-      expect(t).toThrow(InputValidationError);
+      const t = validateCalculatorInput(
+        AquacultureInputSchema,
+        invalidTestData,
+      );
+      expect(t).toEqual(
+        expect.objectContaining({
+          valid: false,
+          error: expect.any(InputValidationError),
+        }),
+      );
     });
   });
 });

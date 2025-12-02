@@ -1,167 +1,137 @@
+import { entriesFromObject } from '@/calculators/common/tools/object';
 import * as z from 'zod';
 import { createSchema } from 'zod-openapi';
+import { CalculatorNames } from '../calculators/strings';
+import { AquacultureInputSchema, AquacultureOutputSchema } from './Aquaculture';
+import { BeefInputSchema, BeefOutputSchema } from './Beef';
+import { BuffaloInputSchema, BuffaloOutputSchema } from './Buffalo';
+import { CottonInputSchema, CottonOutputSchema } from './Cotton';
+import { DairyInputSchema, DairyOutputSchema } from './Dairy';
+import { DeerInputSchema, DeerOutputSchema } from './Deer';
+import { FeedlotInputSchema, FeedlotOutputSchema } from './Feedlot';
+import { GoatInputSchema, GoatOutputSchema } from './Goat';
+import { GrainsInputSchema, GrainsOutputSchema } from './Grains';
 import {
-  AquacultureOutputSchema,
-  BeefInputSchema,
-  BeefOutputSchema,
-  BuffaloInputSchema,
-  BuffaloOutputSchema,
-  CottonInputSchema,
-  CottonOutputSchema,
-  DairyInputSchema,
-  DairyOutputSchema,
-  DeerInputSchema,
-  DeerOutputSchema,
-  FeedlotInputSchema,
-  FeedlotOutputSchema,
-  GoatInputSchema,
-  GoatOutputSchema,
-  GrainsInputSchema,
-  GrainsOutputSchema,
   HorticultureInputSchema,
   HorticultureOutputSchema,
-  PorkInputSchema,
-  PorkOutputSchema,
-  PoultryInputSchema,
-  PoultryOutputSchema,
-  ProcessingInputSchema,
-  ProcessingOutputSchema,
-  RiceInputSchema,
-  RiceOutputSchema,
-  SheepBeefInputSchema,
-  SheepBeefOutputSchema,
-  SheepInputSchema,
-  SheepOutputSchema,
-  SugarInputSchema,
-  SugarOutputSchema,
-  VineyardInputSchema,
-  VineyardOutputSchema,
+} from './Horticulture';
+import { PorkInputSchema, PorkOutputSchema } from './Pork';
+import { PoultryInputSchema, PoultryOutputSchema } from './Poultry';
+import { ProcessingInputSchema, ProcessingOutputSchema } from './Processing';
+import { RiceInputSchema, RiceOutputSchema } from './Rice';
+import { SheepInputSchema, SheepOutputSchema } from './Sheep';
+import { SheepBeefInputSchema, SheepBeefOutputSchema } from './SheepBeef';
+import { SugarInputSchema, SugarOutputSchema } from './Sugar';
+import { VineyardInputSchema, VineyardOutputSchema } from './Vineyard';
+import {
   WildCatchFisheryInputSchema,
   WildCatchFisheryOutputSchema,
+} from './WildCatchFishery';
+import {
   WildSeaFisheriesInputSchema,
   WildSeaFisheriesOutputSchema,
-} from '.';
-import { CalculatorNames } from '../calculators/strings';
-import { AquacultureInputSchema } from './Aquaculture/input';
+} from './WildSeaFisheries';
 
 type Endpoint<
   TI extends z.core.$ZodLooseShape,
   TO extends z.core.$ZodLooseShape,
 > = {
-  name: CalculatorNames;
   inputSchema: z.ZodObject<TI>;
   outputSchema: z.ZodObject<TO>;
 };
 
-const endpoints: Endpoint<z.core.$ZodLooseShape, z.core.$ZodLooseShape>[] = [
-  {
-    name: CalculatorNames.Aquaculture,
+const endpoints: Record<
+  Omit<CalculatorNames, 'feedlotbeef'> & string,
+  Endpoint<z.core.$ZodLooseShape, z.core.$ZodLooseShape>
+> = {
+  aquaculture: {
     inputSchema: AquacultureInputSchema,
     outputSchema: AquacultureOutputSchema,
   },
-  {
-    name: CalculatorNames.Beef,
+  beef: {
     inputSchema: BeefInputSchema,
     outputSchema: BeefOutputSchema,
   },
-  {
-    name: CalculatorNames.Buffalo,
+  buffalo: {
     inputSchema: BuffaloInputSchema,
     outputSchema: BuffaloOutputSchema,
   },
-  {
-    name: CalculatorNames.Cotton,
+  cotton: {
     inputSchema: CottonInputSchema,
     outputSchema: CottonOutputSchema,
   },
-  {
-    name: CalculatorNames.Dairy,
+  dairy: {
     inputSchema: DairyInputSchema,
     outputSchema: DairyOutputSchema,
   },
-  {
-    name: CalculatorNames.Deer,
+  deer: {
     inputSchema: DeerInputSchema,
     outputSchema: DeerOutputSchema,
   },
-  {
-    name: CalculatorNames.Feedlot,
+  feedlot: {
     inputSchema: FeedlotInputSchema,
     outputSchema: FeedlotOutputSchema,
   },
-  {
-    name: CalculatorNames.Goat,
+  goat: {
     inputSchema: GoatInputSchema,
     outputSchema: GoatOutputSchema,
   },
-  {
-    name: CalculatorNames.Grains,
+  grains: {
     inputSchema: GrainsInputSchema,
     outputSchema: GrainsOutputSchema,
   },
-  {
-    name: CalculatorNames.Horticulture,
+  horticulture: {
     inputSchema: HorticultureInputSchema,
     outputSchema: HorticultureOutputSchema,
   },
-  {
-    name: CalculatorNames.Rice,
+  rice: {
     inputSchema: RiceInputSchema,
     outputSchema: RiceOutputSchema,
   },
-  {
-    name: CalculatorNames.Processing,
+  processing: {
     inputSchema: ProcessingInputSchema,
     outputSchema: ProcessingOutputSchema,
   },
-  {
-    name: CalculatorNames.Pork,
+  pork: {
     inputSchema: PorkInputSchema,
     outputSchema: PorkOutputSchema,
   },
-  {
-    name: CalculatorNames.Poultry,
+  poultry: {
     inputSchema: PoultryInputSchema,
     outputSchema: PoultryOutputSchema,
   },
-  {
-    name: CalculatorNames.Sheep,
+  sheep: {
     inputSchema: SheepInputSchema,
     outputSchema: SheepOutputSchema,
   },
-  {
-    name: CalculatorNames.SheepBeef,
+  sheepbeef: {
     inputSchema: SheepBeefInputSchema,
     outputSchema: SheepBeefOutputSchema,
   },
-  {
-    name: CalculatorNames.Sugar,
+  sugar: {
     inputSchema: SugarInputSchema,
     outputSchema: SugarOutputSchema,
   },
-  {
-    name: CalculatorNames.Vineyard,
+  vineyard: {
     inputSchema: VineyardInputSchema,
     outputSchema: VineyardOutputSchema,
   },
-  {
-    name: CalculatorNames.WildCatchFishery,
+  wildcatchfishery: {
     inputSchema: WildCatchFisheryInputSchema,
     outputSchema: WildCatchFisheryOutputSchema,
   },
-  {
-    name: CalculatorNames.WildSeaFisheries,
+  wildseafisheries: {
     inputSchema: WildSeaFisheriesInputSchema,
     outputSchema: WildSeaFisheriesOutputSchema,
   },
-];
+};
 
 /* NOTE: The zod meta tag content is collected in a global registry object that is not accessible outside the library boundary at runtime.
  * This is why we need to create the schemas manually here.
  */
 export const openapiSchemas = () =>
-  endpoints.map((endpoint) => ({
-    name: endpoint.name,
+  entriesFromObject(endpoints).map(([name, endpoint]) => ({
+    name,
     inputSchema: createSchema(endpoint.inputSchema).schema,
     outputSchema: createSchema(endpoint.outputSchema).schema,
   }));

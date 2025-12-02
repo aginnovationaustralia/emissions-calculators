@@ -1,6 +1,6 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -19,6 +19,28 @@
       "types": "./dist/browser.d.ts",
       "import": "./dist/browser.mjs",
       "require": "./dist/browser.cjs"
+    },
+    "./calculators": {
+      "import": {
+        "browser": "./dist/calculators/browser.mjs",
+        "types": "./dist/calculators/index.d.ts",
+        "default": "./dist/calculators/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/calculators/browser.cjs",
+        "types": "./dist/calculators/index.d.ts",
+        "default": "./dist/calculators/index.cjs"
+      }
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.mjs",
+      "require": "./dist/types.cjs"
+    },
+    "./validate": {
+      "types": "./dist/calculators/validate.d.ts",
+      "import": "./dist/calculators/validate.mjs",
+      "require": "./dist/calculators/validate.cjs"
     },
     "./internal": {
       "types": "./dist/internal.d.ts",

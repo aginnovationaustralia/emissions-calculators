@@ -1,5 +1,8 @@
 import { GoatInputSchema } from '@/types/Goat/input';
-import { validateCalculatorInput } from '../../calculators/validate';
+import {
+  InputValidationError,
+  validateCalculatorInput,
+} from '../../calculators/validate';
 import { goatComplete } from './goats.data';
 import { veg1, veg2 } from './vegetation.data';
 
@@ -14,7 +17,12 @@ describe('GoatInputSchema vegetation transformation', () => {
     };
 
     test('validation should result in an error', () => {
-      expect(() => validateCalculatorInput(GoatInputSchema, input)).toThrow();
+      expect(validateCalculatorInput(GoatInputSchema, input)).toEqual(
+        expect.objectContaining({
+          valid: false,
+          error: expect.any(InputValidationError),
+        }),
+      );
     });
   });
 
@@ -27,8 +35,13 @@ describe('GoatInputSchema vegetation transformation', () => {
       vegetation: [veg1, veg2, { random: 'a' }],
     };
 
-    test('validation should throw error for invalid input', () => {
-      expect(() => validateCalculatorInput(GoatInputSchema, input)).toThrow();
+    test('validation should generate an error for invalid input', () => {
+      expect(validateCalculatorInput(GoatInputSchema, input)).toEqual(
+        expect.objectContaining({
+          valid: false,
+          error: expect.any(InputValidationError),
+        }),
+      );
     });
   });
 });

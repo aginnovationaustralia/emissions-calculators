@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { PorkInput, PorkInputSchema, PorkOutput } from '../../types/Pork';
-import { CalculatorNames } from '../browser';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculatePork(
   return executeCalculator(
     calculatePorkInternal,
     input,
-    CalculatorNames.Pork,
+    'pork',
     new BrowserEnvironment(options),
   );
 }

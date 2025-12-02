@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { BuffaloInput, BuffaloInputSchema, BuffaloOutput } from '../../types/Buffalo';
-import { CalculatorNames } from '../browser';
 import { executeCalculator } from '../execution/execute';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateBuffalo(
   return executeCalculator(
     calculateBuffaloInternal,
     input,
-    CalculatorNames.Buffalo,
+    'buffalo',
     new NodeEnvironment(options),
   );
 }

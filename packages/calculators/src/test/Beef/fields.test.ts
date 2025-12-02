@@ -1,5 +1,8 @@
 import { BeefInputSchema } from '@/types/Beef/input';
-import { validateCalculatorInput } from '../../calculators/validate';
+import {
+  InputValidationError,
+  validateCalculatorInput,
+} from '../../calculators/validate';
 import { beefTestData } from './input.data';
 import { veg1, veg2 } from './vegetation.data';
 
@@ -17,10 +20,14 @@ describe('checking beef inputs and outputs', () => {
       'vegetation',
     ];
 
+    if (!input.valid) {
+      throw input.error;
+    }
+
     inputFields.forEach((f) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      expect(input[f]).toBeDefined();
+      expect(input.result[f]).toBeDefined();
     });
   });
 });
@@ -43,11 +50,16 @@ describe('vegetation', () => {
       allocationToBeef: undefined,
     };
 
-    expect(() =>
+    expect(
       validateCalculatorInput(BeefInputSchema, {
         ...sb,
         vegetation: [veg1, vegNoAllocation],
       }),
-    ).toThrow();
+    ).toEqual(
+      expect.objectContaining({
+        valid: false,
+        error: expect.any(InputValidationError),
+      }),
+    );
   });
 });

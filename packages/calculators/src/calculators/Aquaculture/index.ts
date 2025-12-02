@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { AquacultureInput, AquacultureInputSchema, AquacultureOutput } from '../../types/Aquaculture';
-import { CalculatorNames } from '../browser';
 import { executeCalculator } from '../execution/execute';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateAquaculture(
   return executeCalculator(
     calculateAquacultureInternal,
     input,
-    CalculatorNames.Aquaculture,
+    'aquaculture',
     new NodeEnvironment(options),
   );
 }

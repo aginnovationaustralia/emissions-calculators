@@ -22,8 +22,11 @@ describe('validating Sugar test inputs for incorrect inputs', () => {
   };
 
   test('validation should throw InputValidationError for invalid input', () => {
-    expect(() =>
-      validateCalculatorInput(SugarInputSchema, invalidInput),
-    ).toThrow(InputValidationError);
+    expect(validateCalculatorInput(SugarInputSchema, invalidInput)).toEqual(
+      expect.objectContaining({
+        valid: false,
+        error: expect.any(InputValidationError),
+      }),
+    );
   });
 });

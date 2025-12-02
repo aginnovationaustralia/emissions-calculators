@@ -76,8 +76,12 @@ describe('Deer scenarios', () => {
 
   expect(validatedInput).toBeDefined();
 
+  if (!validatedInput.valid) {
+    throw validatedInput.error;
+  }
+
   const context = testContext('Beef');
-  const emissions = calculateDeer(validatedInput, context);
+  const emissions = calculateDeer(validatedInput.result, context);
 
   ensureEveryKeyIsDefined(emissions as unknown as KeyValuePairs);
 });

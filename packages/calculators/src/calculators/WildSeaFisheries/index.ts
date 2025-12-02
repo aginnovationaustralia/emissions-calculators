@@ -1,6 +1,9 @@
 import { AllConstants } from '../../constants/types';
-import { WildSeaFisheriesInput, WildSeaFisheriesInputSchema, WildSeaFisheriesOutput } from '../../types/WildSeaFisheries';
-import { CalculatorNames } from '../browser';
+import {
+  WildSeaFisheriesInput,
+  WildSeaFisheriesInputSchema,
+  WildSeaFisheriesOutput,
+} from '../../types/WildSeaFisheries';
 import { executeCalculator } from '../execution/execute';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -14,11 +17,10 @@ function calculateWildSeaFisheries(
   return executeCalculator(
     calculateWildSeaFisheriesInternal,
     input,
-    CalculatorNames.WildSeaFisheries,
+    'wildseafisheries',
     new NodeEnvironment(options),
   );
 }
 
-export { WildSeaFisheriesInputSchema, calculateWildSeaFisheries };
+export { calculateWildSeaFisheries, WildSeaFisheriesInputSchema };
 export type { AllConstants, WildSeaFisheriesInput, WildSeaFisheriesOutput };
-

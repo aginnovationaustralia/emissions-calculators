@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { BeefInput, BeefInputSchema, BeefOutput } from '../../types/Beef';
-import { CalculatorNames } from '../browser';
 import { executeCalculator } from '../execution/execute';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateBeef(
   return executeCalculator(
     calculateBeefInternal,
     input,
-    CalculatorNames.Beef,
+    'beef',
     new NodeEnvironment(options),
   );
 }

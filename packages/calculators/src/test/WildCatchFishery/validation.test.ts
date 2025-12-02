@@ -55,9 +55,16 @@ describe('validating WildCatchFishery test inputs, all types of inputs', () => {
           },
         ],
       };
-      const t = () =>
-        validateCalculatorInput(WildCatchFisheryInputSchema, invalidTestData);
-      expect(t).toThrow(InputValidationError);
+      const t = validateCalculatorInput(
+        WildCatchFisheryInputSchema,
+        invalidTestData,
+      );
+      expect(t).toEqual(
+        expect.objectContaining({
+          valid: false,
+          error: expect.any(InputValidationError),
+        }),
+      );
     });
   });
 });

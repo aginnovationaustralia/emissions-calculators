@@ -60,9 +60,15 @@ const expectations = {
 };
 
 describe('Pork calculator, NSW', () => {
+  const validatedInput = validateCalculatorInput(PorkInputSchema, porkTestData);
+  expect(validatedInput).toBeDefined();
+
+  if (!validatedInput.valid) {
+    throw validatedInput.error;
+  }
+
   const context = testContext('Pork');
-  const classedInput = validateCalculatorInput(PorkInputSchema, porkTestData);
-  const emissions = calculatePork(classedInput, context);
+  const emissions = calculatePork(validatedInput.result, context);
 
   executeEmissionsSpec(emissions, expectations);
 });
@@ -106,9 +112,9 @@ describe('Pork calculator (multi activity)', () => {
   >(
     'Pork',
     calculatePork,
-    validateCalculatorInput(PorkInputSchema, porkTestData),
-    validateCalculatorInput(PorkInputSchema, porkDoubleSaleweight),
-    validateCalculatorInput(PorkInputSchema, porkTestDataAllActivities),
+    porkTestData,
+    porkDoubleSaleweight,
+    porkTestDataAllActivities,
     (originalEmissions, secondEmissions) => {
       expect(originalEmissions.intensities.liveweightProducedKg).toBeCloseTo(
         secondEmissions.intensities.liveweightProducedKg / 2,
@@ -165,12 +171,18 @@ const minimalExpectations = {
 };
 
 describe('Pork calculator minimal input, NSW', () => {
-  const context = testContext('Pork');
-  const classedInput = validateCalculatorInput(
+  const validatedInput = validateCalculatorInput(
     PorkInputSchema,
     porkMinimalTestData,
   );
-  const emissions = calculatePork(classedInput, context);
+  expect(validatedInput).toBeDefined();
+
+  if (!validatedInput.valid) {
+    throw validatedInput.error;
+  }
+
+  const context = testContext('Pork');
+  const emissions = calculatePork(validatedInput.result, context);
 
   executeEmissionsSpec(emissions, minimalExpectations);
 });

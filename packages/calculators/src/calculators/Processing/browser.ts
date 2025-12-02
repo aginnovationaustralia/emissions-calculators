@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { ProcessingInput, ProcessingInputSchema, ProcessingOutput } from '../../types/Processing';
-import { CalculatorNames } from '../browser';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateProcessing(
   return executeCalculator(
     calculateProcessingInternal,
     input,
-    CalculatorNames.Processing,
+    'processing',
     new BrowserEnvironment(options),
   );
 }

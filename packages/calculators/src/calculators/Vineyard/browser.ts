@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { VineyardInput, VineyardInputSchema, VineyardOutput } from '../../types/Vineyard';
-import { CalculatorNames } from '../browser';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateVineyard(
   return executeCalculator(
     calculateVineyardInternal,
     input,
-    CalculatorNames.Vineyard,
+    'vineyard',
     new BrowserEnvironment(options),
   );
 }

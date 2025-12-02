@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { SugarInput, SugarInputSchema, SugarOutput } from '../../types/Sugar';
-import { CalculatorNames } from '../browser';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateSugar(
   return executeCalculator(
     calculateSugarInternal,
     input,
-    CalculatorNames.Sugar,
+    'sugar',
     new BrowserEnvironment(options),
   );
 }

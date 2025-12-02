@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { CottonInput, CottonInputSchema, CottonOutput } from '../../types/Cotton';
-import { CalculatorNames } from '../browser';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateCotton(
   return executeCalculator(
     calculateCottonInternal,
     input,
-    CalculatorNames.Cotton,
+    'cotton',
     new BrowserEnvironment(options),
   );
 }

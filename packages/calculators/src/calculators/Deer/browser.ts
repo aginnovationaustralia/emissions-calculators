@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { DeerInput, DeerInputSchema, DeerOutput } from '../../types/Deer';
-import { CalculatorNames } from '../browser';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateDeer(
   return executeCalculator(
     calculateDeerInternal,
     input,
-    CalculatorNames.Deer,
+    'deer',
     new BrowserEnvironment(options),
   );
 }

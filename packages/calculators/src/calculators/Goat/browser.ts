@@ -1,6 +1,5 @@
 import { AllConstants } from '../../constants/types';
 import { GoatInput, GoatInputSchema, GoatOutput } from '../../types/Goat';
-import { CalculatorNames } from '../browser';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
 import { CalculatorOptions } from '../execution/types';
@@ -14,7 +13,7 @@ function calculateGoat(
   return executeCalculator(
     calculateGoatInternal,
     input,
-    CalculatorNames.Goat,
+    'goat',
     new BrowserEnvironment(options),
   );
 }

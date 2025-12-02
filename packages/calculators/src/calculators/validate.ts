@@ -1,5 +1,6 @@
 import { ZodType } from 'zod';
 import { $ZodIssue } from 'zod/v4/core';
+import { objectFromEntries } from './common/tools/object';
 
 export type ValidationErrorResult = {
   /**
@@ -19,40 +20,49 @@ export type ValidationErrorResult = {
 };
 
 export class InputValidationError extends Error {
-  public errors: ValidationErrorResult[];
+  public errors: Record<string, string>;
 
-  constructor(...errors: ValidationErrorResult[]) {
-    super(errors.map((x) => `${x.path}: ${x.message}`).join(', '));
+  constructor(errors: $ZodIssue[]) {
+    const formattedErrors = errors.map((x) => ({
+      key: x.path.join('.'),
+      message: x.message,
+    }));
+    super(
+      formattedErrors
+        .map(({ key, message }) => `${key}: ${message}`)
+        .join(', '),
+    );
+    this.errors = objectFromEntries(
+      formattedErrors.map(({ key, message }) => [key, message]),
+    );
     Object.setPrototypeOf(this, InputValidationError.prototype);
-
-    this.errors = errors;
   }
 }
 
-function parseValidationError(errors: $ZodIssue[]): ValidationErrorResult[] {
-  return errors.reduce((acc, error) => {
-    return [
-      ...acc,
-      {
-        path: error.path.join('.'),
-        message: error.message,
-        value: error.input,
-      },
-    ];
-  }, [] as ValidationErrorResult[]);
-}
-
+export type ValidationResult<T extends object> =
+  | {
+      valid: true;
+      result: T;
+    }
+  | {
+      valid: false;
+      error: InputValidationError;
+    };
 export function validateCalculatorInput<T extends object>(
   schema: ZodType<T>,
   input: unknown,
-) {
+): ValidationResult<T> {
   const parseResult = schema.safeParse(input);
 
-  if (!parseResult.success) {
-    throw new InputValidationError(
-      ...parseValidationError(parseResult.error.issues),
-    );
+  if (parseResult.success) {
+    return {
+      valid: true,
+      result: parseResult.data,
+    };
   } else {
-    return parseResult.data;
+    return {
+      valid: false,
+      error: new InputValidationError(parseResult.error.issues),
+    };
   }
 }

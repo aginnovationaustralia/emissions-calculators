@@ -61,11 +61,15 @@ const expectations = {
 };
 
 describe('Beef calculator, VIC', () => {
+  const validatedInput = validateCalculatorInput(BeefInputSchema, beefTestData);
+  expect(validatedInput).toBeDefined();
+
+  if (!validatedInput.valid) {
+    throw validatedInput.error;
+  }
+
   const context = testContext('Beef');
-  const emissions = calculateBeef(
-    validateCalculatorInput(BeefInputSchema, beefTestData),
-    context,
-  );
+  const emissions = calculateBeef(validatedInput.result, context);
 
   executeEmissionsSpec(emissions, expectations);
 });
@@ -86,8 +90,12 @@ describe('Beef input scenarios', () => {
 
     expect(validatedInput).toBeDefined();
 
+    if (!validatedInput.valid) {
+      throw validatedInput.error;
+    }
+
     const context = testContext('Beef');
-    const emissions = calculateBeef(validatedInput, context);
+    const emissions = calculateBeef(validatedInput.result, context);
 
     ensureEveryKeyIsDefined(emissions as unknown as KeyValuePairs);
   });
