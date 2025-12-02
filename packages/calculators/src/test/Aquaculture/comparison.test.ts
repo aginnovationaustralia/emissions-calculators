@@ -79,11 +79,11 @@ const getRefrigerant = (
   amountCell: Cell,
 ): RefrigerantInput | null => {
   const typeValue = stringInput(typeCell);
-  const amountValue = numberInput(amountCell);
 
   if (typeValue === 'None') {
     return null;
   }
+  const amountValue = numberInput(amountCell);
   if (!Refrigerants.includes(typeValue as unknown as Refrigerant)) {
     throw new Error(
       `Cell address ${typeCell.address()} is not a valid refrigerant: ${typeValue}`,
