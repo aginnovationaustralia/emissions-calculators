@@ -85,6 +85,7 @@ export function calculateSingleBeef(
   context: ExecutionContext<ConstantsForBeefCalculator>,
   carbonSequestration: number,
   id: string,
+  // TODO: AIAEAP-675 these are only optional with defaults because the SheepBeef calculator does not yet support allocation of burning
   savannahBurningN2O: number = 0,
   savannahBurningCH4: number = 0,
 ) {
@@ -404,7 +405,7 @@ export function calculateBeef(
   const { totalBeefSaleWeight } = beefResult.extensions;
 
   const baseBeefEmissions = {
-    scope1: addTotalValue(beefResult.output.scope1),
+    scope1: beefResult.output.scope1,
     scope2: beefResult.output.scope2,
     scope3: beefResult.output.scope3,
     net: {

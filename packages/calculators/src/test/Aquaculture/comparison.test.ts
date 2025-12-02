@@ -37,6 +37,7 @@ import {
   mapInput,
   mapInputRegion,
   numberInput,
+  stringInput,
 } from '../common/sheets';
 
 const mapInputProductionSystem = mapInput<AquacultureProductionSystem>({
@@ -77,19 +78,9 @@ const getRefrigerant = (
   typeCell: Cell,
   amountCell: Cell,
 ): RefrigerantInput | null => {
-  const typeValue = typeCell.value();
-  if (typeof typeValue !== 'string') {
-    throw new Error(`Cell is not a string: ${typeCell.address()}`);
-  }
-  const amountValue = amountCell.value();
-  if (amountValue === undefined) {
-    return null;
-  }
-  if (typeof amountValue !== 'number') {
-    throw new Error(
-      `Cell address ${amountCell.address()} is not a number: ${amountValue}`,
-    );
-  }
+  const typeValue = stringInput(typeCell);
+  const amountValue = numberInput(amountCell);
+
   if (typeValue === 'None') {
     return null;
   }
@@ -478,7 +469,6 @@ const getCalculatorInput = (workbook: XLSX.Workbook): AquacultureInput => {
   );
   const sheetTravelFreight = workbook.sheet('Input - Travel & freight');
   const sheetInputWasteOutputs = workbook.sheet('Input - Waste & Outputs');
-  //   const sheetInputVegetation = workbook.sheet('Input - Vegetation');
 
   const input: AquacultureInput = {
     enterprises: [
