@@ -64,8 +64,8 @@ importers:
         specifier: ^4.1.13
         version: 4.1.13
       zod-openapi:
-        specifier: ^5.4.3
-        version: 5.4.3(zod@4.1.13)
+        specifier: ^5.4.5
+        version: 5.4.5(zod@4.1.13)
     devDependencies:
       '@rollup/plugin-alias':
         specifier: ^5.1.1
@@ -2526,8 +2526,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  zod-openapi@5.4.3:
-    resolution: {integrity: sha512-6kJ/gJdvHZtuxjYHoMtkl2PixCwRuZ/s79dVkEr7arHvZGXfx7Cvh53X3HfJ5h9FzGelXOXlnyjwfX0sKEPByw==}
+  zod-openapi@5.4.5:
+    resolution: {integrity: sha512-DVLBNsnggh8k/Yq7qp+NeQCH6JuLIyGzUQWA1wN5+7DpQJSwC7WYR/2lE6uQDmGcS/X6l4tUyYFpeG4nk3nOpA==}
     engines: {node: '>=20'}
     peerDependencies:
       zod: ^3.25.74 || ^4.0.0
@@ -5183,7 +5183,7 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  zod-openapi@5.4.3(zod@4.1.13):
+  zod-openapi@5.4.5(zod@4.1.13):
     dependencies:
       zod: 4.1.13
 
