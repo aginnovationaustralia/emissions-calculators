@@ -491,6 +491,10 @@ export function calculateCompleteBeefEmissions(
     nFertiliserCropsTotal + totalNDungUrine * 10 ** 3;
 
   checkpoint?.('Agricultural soils - beef', {
+    leechingNFertiliserGrazingNonIrrigated: {
+      cell: 'D86',
+      value: leechingNFertiliserGrazingNonIrrigated,
+    },
     nFertiliserCropsTotal: {
       cell: 'D102',
       value: nFertiliserCropsTotal,

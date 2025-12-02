@@ -8,7 +8,7 @@ type ExecutionMetadata = {
   timestamp: string;
   overrides?: object | undefined;
   checkpoint?: (
-    name: string,
+    sheetName: string,
     data: Record<string, { cell: string; value: number }>,
   ) => void;
 };

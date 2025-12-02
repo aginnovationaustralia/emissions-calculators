@@ -1,9 +1,12 @@
-export function addTotalValue<T extends Record<string, number>>(breakdown: T) {
+export function addTotalValue<T extends Record<string, number | undefined>>(
+  breakdown: T,
+): T & { total: number } {
   return {
     ...breakdown,
     total: Object.entries(breakdown)
       .filter((x) => !x[0].includes('total'))
       .map((x) => x[1])
+      .filter((x) => x !== undefined)
       .reduce((a, b) => a + b, 0),
   };
 }

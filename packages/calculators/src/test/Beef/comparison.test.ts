@@ -1,81 +1,55 @@
 import { validateCalculatorInput } from '@/calculators';
 import { calculateBeef } from '@/calculators/Beef/calculator';
-import { entriesFromObject } from '@/calculators/common/tools/object';
 import { LivestockSourceLocations } from '@/constants/types';
 import {
   BeefClass,
   BeefInput,
   BeefInputSchema,
   BeefOutput,
-  CropType,
+  BeefVegetation,
   CustomisedFertiliser,
-  ProductionSystem,
 } from '@/types';
-import XLSX, { Cell } from 'xlsx-populate';
+import {
+  FireSeasons,
+  Fuels,
+  Patchinesses,
+  RainfallRegion,
+  RainfallZones,
+  SoilType,
+  TreeType,
+  VegetationClass,
+} from '@/types/enums';
+import XLSX from 'xlsx-populate';
 import { testContext } from '../common/context';
 import { traverseExpectations } from '../common/emissions';
 import {
   emptyOrNumber,
   getWorkbook,
+  mapInput,
   mapInputRegion,
   numberInput,
   stringInput,
 } from '../common/sheets';
 
-const mapCropTypeFromNumber = (input: Cell): CropType => {
-  const numberValue = numberInput(input);
+const mapBurningFuelSize = mapInput<(typeof Fuels)[number]>({
+  fine: 'Fine',
+  coarse: 'Course',
+});
 
-  const lookup: Record<
-    Exclude<CropType, 'Rice' | 'Sugar Cane' | 'Cotton'>,
-    number
-  > = {
-    Wheat: 1,
-    Barley: 2,
-    Maize: 3,
-    Oats: 4,
-    Sorghum: 5,
-    Triticale: 6,
-    'Other Cereals': 7,
-    Pulses: 8,
-    'Tuber and Roots': 9,
-    Peanuts: 10,
-    Hops: 11,
-    Oilseeds: 12,
-    'Forage Crops': 13,
-    Lucerne: 14,
-    'Other legume': 15,
-    'Annual grass': 16,
-    'Grass clover mixture': 17,
-    'Perennial pasture': 18,
-  };
-  const match = entriesFromObject(lookup).find(([_k, v]) => v === numberValue);
+const mapBurningSeason = mapInput<(typeof FireSeasons)[number]>({
+  'early dry season': 'Early Dry Season',
+  'late dry season': 'Late Dry Season',
+});
 
-  if (match) {
-    return match[0];
-  }
+const mapBurningPatchiness = mapInput<(typeof Patchinesses)[number]>({
+  low: 'Low',
+  high: 'High',
+});
 
-  throw new Error(
-    `Cell address ${input.address()} is not a valid crop type: ${numberValue}`,
-  );
-};
-
-const mapProductionSystemFromNumber = (input: Cell): ProductionSystem => {
-  const numberValue = numberInput(input);
-  const lookup: Record<ProductionSystem, number> = {
-    'Non-irrigated crop': 1,
-    'Irrigated crop': 2,
-    'Sugar cane': 3,
-    Cotton: 4,
-    Horticulture: 5,
-  };
-  const match = entriesFromObject(lookup).find(([_k, v]) => v === numberValue);
-  if (match) {
-    return match[0];
-  }
-  throw new Error(
-    `Cell address ${input.address()} is not a valid production system: ${numberValue}`,
-  );
-};
+const mapBurningRainfallZone = mapInput<(typeof RainfallZones)[number]>({
+  low: 'Low',
+  high: 'High',
+});
 
 const getElectricity = (
   annualElectricityUse: number | null,
@@ -154,6 +128,31 @@ const emptyBeefClass: BeefClass = {
   purchases: [],
 };
 
+export const getCropVegetation = (
+  details: XLSX.Range,
+  allocations: XLSX.Range,
+): BeefVegetation => {
+  return {
+    allocationToBeef: [numberInput(allocations.cell(0, 0))],
+    vegetation: {
+      region: stringInput(details.cell(0, 0)) as RainfallRegion,
+      treeSpecies: stringInput(details.cell(1, 0)) as TreeType,
+      soil: stringInput(details.cell(2, 0)) as SoilType,
+      area: numberInput(details.cell(3, 0)),
+      age: numberInput(details.cell(4, 0)),
+    },
+  };
+};
+
+const getBeefVegetations = (sheet: XLSX.Sheet): BeefVegetation[] => {
+  return [
+    getCropVegetation(sheet.range('D3:D7'), sheet.range('D9:D10')),
+    getCropVegetation(sheet.range('D13:D17'), sheet.range('D19:D20')),
+    getCropVegetation(sheet.range('D23:D27'), sheet.range('D29:D30')),
+    getCropVegetation(sheet.range('D33:D37'), sheet.range('D39:D40')),
+  ];
+};
+
 const getCalculatorInput = (workbook: XLSX.Workbook): BeefInput => {
   const sheetInputBeef = workbook.sheet('Data input - beef');
   const beef = (address: string) => sheetInputBeef.cell(address);
@@ -163,7 +162,7 @@ const getCalculatorInput = (workbook: XLSX.Workbook): BeefInput => {
   const input: BeefInput = {
     state: mapInputRegion(beef('D6')),
     northOfTropicOfCapricorn: beef('M4').value() === 'Yes',
-    rainfallAbove600: beef('M5').value() === 'Yes',
+    rainfallAbove600: beef('M6').value() === 'Yes',
     beef: [
       {
         classes: {
@@ -216,7 +215,7 @@ const getCalculatorInput = (workbook: XLSX.Workbook): BeefInput => {
         limestoneFraction: numberInput(beef('D90')),
         ...getElectricity(
           emptyOrNumber(beef('D98')),
-          emptyOrNumber(beef('D92')),
+          emptyOrNumber(beef('D94')),
         ),
         diesel: numberInput(beef('D95')),
         petrol: numberInput(beef('D96')),
@@ -228,8 +227,21 @@ const getCalculatorInput = (workbook: XLSX.Workbook): BeefInput => {
         herbicideOther: numberInput(beef('D103')),
       },
     ],
-    burning: [],
-    vegetation: [],
+    burning: [
+      {
+        allocationToBeef: [1],
+        burning: {
+          rainfallZone: mapBurningRainfallZone(beef('D106')),
+          vegetation: stringInput(beef('D107')) as unknown as VegetationClass,
+          patchiness: mapBurningPatchiness(beef('D108')),
+          fuel: mapBurningFuelSize(beef('D109')),
+          season: mapBurningSeason(beef('I106')),
+          yearsSinceLastFire: numberInput(beef('I107')),
+          fireScarArea: numberInput(beef('I108')),
+        },
+      },
+    ],
+    vegetation: getBeefVegetations(sheetInputVegetation),
   };
   return input;
 };
@@ -282,7 +294,7 @@ const getExpectedOutput = (workbook: XLSX.Workbook): BeefOutput => {
       beefIncludingSequestration: summary('C45'),
     },
     carbonSequestration: {
-      total: summary('C35'),
+      total: -summary('C35'),
     },
   } as const;
 
@@ -300,7 +312,7 @@ const getExpectedOutput = (workbook: XLSX.Workbook): BeefOutput => {
   return output;
 };
 
-describe('Compare grains calculator to spreadsheet', () => {
+describe('Compare beef calculator to spreadsheet', () => {
   test('should match spreadsheet', async () => {
     const workbook = await getWorkbook(
       './src/test/sheets/comparison/SB-GAFv2.6_Seasonal.xlsx',
@@ -313,6 +325,7 @@ describe('Compare grains calculator to spreadsheet', () => {
       validatedInput,
       testContext('Beef', workbook),
     );
+    // console.dir(calculatorData, { depth: null });
     const tests = traverseExpectations(expectedOutput, calculatorData);
     tests.forEach((test) => {
       try {

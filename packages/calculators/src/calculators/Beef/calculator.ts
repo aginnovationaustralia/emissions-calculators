@@ -85,6 +85,8 @@ export function calculateSingleBeef(
   context: ExecutionContext<ConstantsForBeefCalculator>,
   carbonSequestration: number,
   id: string,
+  savannahBurningN2O: number = 0,
+  savannahBurningCH4: number = 0,
 ) {
   const {
     atmosphericDepositionN2O,
@@ -183,13 +185,15 @@ export function calculateSingleBeef(
   );
 
   const totalCO2 = fuelCO2 + ureaCO2 + limeCO2;
-  const totalCH4 = fuelCH4 + entericCH4 + manureManagementCH4;
+  const totalCH4 =
+    fuelCH4 + entericCH4 + manureManagementCH4 + savannahBurningCH4;
   const totalN2O =
     fuelN2O +
     leechingRunoffN2O +
     atmosphericDepositionN2O +
     urineAndDungN2O +
-    fertiliserN2O;
+    fertiliserN2O +
+    savannahBurningN2O;
 
   const scope1 = addTotalValue({
     leachingAndRunoffN2O: leechingRunoffN2O,
@@ -198,8 +202,8 @@ export function calculateSingleBeef(
     manureManagementCH4,
     entericCH4,
     fertiliserN2O,
-    savannahBurningCH4: 0,
-    savannahBurningN2O: 0,
+    savannahBurningCH4,
+    savannahBurningN2O,
     limeCO2,
     fuelCO2,
     fuelCH4,
@@ -339,26 +343,10 @@ export function calculateBeef(
       context,
       beefCarbonSequestration.intermediate[i],
       singleBeef.id ?? i.toString(),
+      burningResults.intermediate[i].savannahBurningN2O,
+      burningResults.intermediate[i].savannahBurningCH4,
     ),
   );
-
-  const beefResultsWithBurning = beefResults.map((x, i) => ({
-    ...x,
-    output: {
-      ...x.output,
-      scope1: addTotalValue({
-        ...x.output.scope1,
-        savannahBurningCH4: burningResults.intermediate[i].savannahBurningCH4,
-        savannahBurningN2O: burningResults.intermediate[i].savannahBurningN2O,
-        totalCH4:
-          x.output.scope1.totalCH4 +
-          burningResults.intermediate[i].savannahBurningCH4,
-        totalN2O:
-          x.output.scope1.totalN2O +
-          burningResults.intermediate[i].savannahBurningN2O,
-      }),
-    },
-  }));
 
   const emptyOutput: Omit<
     BeefScopesOutput,
@@ -410,15 +398,13 @@ export function calculateBeef(
         id: '',
       },
     },
-    beefResultsWithBurning,
+    beefResults,
   );
 
   const { totalBeefSaleWeight } = beefResult.extensions;
 
   const baseBeefEmissions = {
-    scope1: addTotalValue({
-      ...beefResult.output.scope1,
-    }),
+    scope1: addTotalValue(beefResult.output.scope1),
     scope2: beefResult.output.scope2,
     scope3: beefResult.output.scope3,
     net: {
@@ -448,7 +434,7 @@ export function calculateBeef(
     carbonSequestration: {
       total: beefCarbonSequestration.total,
     },
-    intermediate: beefResultsWithBurning.map((x, i) => ({
+    intermediate: beefResults.map((x, i) => ({
       ...x.output,
       carbonSequestration: { total: beefCarbonSequestration.intermediate[i] },
       id: x.meta.id,

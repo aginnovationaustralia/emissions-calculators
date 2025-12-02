@@ -20,14 +20,16 @@ export const mapInput =
       );
     }
 
-    const match = entriesFromObject(lookup).find(([_k, v]) => v === value);
+    const trimmed = value.trim();
+
+    const match = entriesFromObject(lookup).find(([_k, v]) => v === trimmed);
 
     if (match) {
       return match[0];
     }
 
     throw new Error(
-      `Cell address ${input.address()} is not a valid value: ${value}`,
+      `Cell address ${input.address()} is not a valid value: '${trimmed}'`,
     );
   };
 
@@ -118,7 +120,7 @@ export const calculateElectricity = (
   } as const;
 };
 
-const getCropVegetation = (
+export const getCropVegetation = (
   details: XLSX.Range,
   allocations: XLSX.Range,
 ): CropVegetation => {

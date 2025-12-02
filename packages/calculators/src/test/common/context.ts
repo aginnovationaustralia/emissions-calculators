@@ -11,25 +11,26 @@ export const testContext = (
 ): ExecutionContext<AllConstants> => {
   const constants = loadConstants();
   const checkpoint = workbook
-    ? (name: string, data: Record<string, { cell: string; value: number }>) => {
-        // console.log(`Checkpoint: ${name}`);
-        // console.dir(data, { depth: null });
+    ? (
+        sheetName: string,
+        data: Record<string, { cell: string; value: number }>,
+      ) => {
         if (workbook) {
-          const sheet = workbook.sheet(name);
+          const sheet = workbook.sheet(sheetName);
           if (!sheet) {
             console.log(`❌ Checkpoint sheet not found: '${name}'`);
             return;
           }
           entriesFromObject(data).forEach(([name, { cell, value }]) => {
             const expectedValue = numberInput(sheet.cell(cell));
-            if (expectedValue !== value) {
+            if (expectedValue.toFixed(8) !== value.toFixed(8)) {
               console.log(
-                `❌ Checkpoint failed: '${name}' ${cell} -> expected ${expectedValue}, actual ${value}`,
+                `❌ Checkpoint failed: ${sheetName}(${cell}) -> sheet has ${expectedValue}, calculated ${value} for ${name}`,
               );
             } else {
-              console.log(
-                `✅ Checkpoint passed: '${name}' ${cell} (${expectedValue})`,
-              );
+              // console.log(
+              //   `✅ Checkpoint passed: '${name}' ${cell} (${expectedValue})`,
+              // );
             }
           });
         }
