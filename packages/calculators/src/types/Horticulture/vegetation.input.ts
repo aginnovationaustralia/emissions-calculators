@@ -1,12 +1,12 @@
 import { z } from 'zod';
-import { singleEnterpriseInput } from '../schemas';
+import { proportion, singleEnterpriseInput } from '../schemas';
 import { VegetationSchema } from '../vegetation.input';
 
 export const HorticultureVegetationSchema = singleEnterpriseInput(
   'Horticulture',
   {
     vegetation: VegetationSchema,
-    allocationToCrops: z.array(z.number()),
+    allocationToCrops: z.array(proportion()),
   },
 );
 
