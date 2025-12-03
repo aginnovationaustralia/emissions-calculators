@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { WildSeaFisheriesInput } from '@/types/WildSeaFisheries/input';
 import clone from 'nanoclone';
 import { calculateWildSeaFisheries } from '../../calculators/WildSeaFisheries/calculator';

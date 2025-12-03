@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import { calculatePork } from '@/calculators/Pork/calculator';
 import { ConstantsForPorkCalculator } from '@/calculators/Pork/constants';
@@ -61,7 +60,6 @@ const expectations = {
 
 describe('Pork calculator, NSW', () => {
   const validatedInput = validateCalculatorInput(PorkInputSchema, porkTestData);
-  expect(validatedInput).toBeDefined();
 
   if (!validatedInput.valid) {
     throw validatedInput.error;
@@ -175,8 +173,6 @@ describe('Pork calculator minimal input, NSW', () => {
     PorkInputSchema,
     porkMinimalTestData,
   );
-  expect(validatedInput).toBeDefined();
-
   if (!validatedInput.valid) {
     throw validatedInput.error;
   }

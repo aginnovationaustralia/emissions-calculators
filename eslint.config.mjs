@@ -8,15 +8,24 @@ export default [
 	},
 	{
 		...js.configs.recommended,
-		plugins: { jest },
-		files: ['**/*.js'],
+	},
+	{
+		files: ['**/*.cjs', '**/*.mjs'],
+		languageOptions: {
+			globals: {
+				module: 'readonly',
+				require: 'readonly',
+				exports: 'readonly',
+				__dirname: 'readonly',
+				__filename: 'readonly',
+				process: 'readonly',
+				Buffer: 'readonly',
+				console: 'readonly',
+			},
+		},
 	},
 	...tseslint.configs.recommended.map(config => ({
 		...config,
-		plugins: {
-			...config.plugins,
-			jest,
-		},
 		rules: {
 			...config.rules,
 			'@typescript-eslint/no-unused-vars': [
@@ -29,4 +38,14 @@ export default [
 			],
 		},
 	})),
+	{
+		...jest.configs['flat/recommended'],
+		files: ['**/*.test.ts', '**/*.test.js'],
+		"rules": {
+			"jest/no-standalone-expect": [
+			  "error",
+			  { "additionalTestBlockFunctions": ["compareEmissionsFrom2Inputs"] }
+			]
+		  }
+	},
 ];

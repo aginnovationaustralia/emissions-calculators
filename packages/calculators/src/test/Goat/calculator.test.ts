@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import { calculateGoat } from '@/calculators/Goat/calculator';
 import { ConstantsForGoatCalculator } from '@/calculators/Goat/constants';
@@ -78,8 +77,6 @@ describe('Goat scenarios', () => {
     ],
   } as GoatInput;
   const validatedInput = validateCalculatorInput(GoatInputSchema, input);
-
-  expect(validatedInput).toBeDefined();
 
   if (!validatedInput.valid) {
     throw validatedInput.error;

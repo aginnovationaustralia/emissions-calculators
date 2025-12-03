@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { calculatePoultry } from '@/calculators/Poultry/calculator';
 import { PoultryInput } from '@/types/Poultry/input';
 import clone from 'nanoclone';
@@ -59,11 +58,8 @@ describe('Poultry calculator (multi activity)', () => {
   const activityBroilerDoubleWeight = clone(originalBroilerActivity);
   activityBroilerDoubleWeight.id = 'broiler-double-weight';
   activityBroilerDoubleWeight.sales.forEach((s) => {
-    // eslint-disable-next-line no-param-reassign
     s.meatChickenGrowersSales.saleWeight *= 2;
-    // eslint-disable-next-line no-param-reassign
     s.meatChickenLayers.saleWeight *= 2;
-    // eslint-disable-next-line no-param-reassign
     s.meatOther.saleWeight *= 2;
   });
 

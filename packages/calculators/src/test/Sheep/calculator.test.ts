@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import { calculateSheep } from '@/calculators/Sheep/calculator';
 import { ConstantsForSheepCalculator } from '@/calculators/Sheep/constants';
@@ -97,8 +96,6 @@ describe('Sheep scenarios', () => {
   };
 
   const validatedInput = validateCalculatorInput(SheepInputSchema, input);
-
-  expect(validatedInput).toBeDefined();
 
   if (!validatedInput.valid) {
     throw validatedInput.error;

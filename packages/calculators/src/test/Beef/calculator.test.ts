@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { calculateBeef } from '@/calculators/Beef/calculator';
 import { ConstantsForBeefCalculator } from '@/calculators/Beef/constants';
 import { entriesFromObject } from '@/calculators/common/tools/object';
@@ -62,7 +61,6 @@ const expectations = {
 
 describe('Beef calculator, VIC', () => {
   const validatedInput = validateCalculatorInput(BeefInputSchema, beefTestData);
-  expect(validatedInput).toBeDefined();
 
   if (!validatedInput.valid) {
     throw validatedInput.error;
@@ -87,8 +85,6 @@ describe('Beef input scenarios', () => {
     };
 
     const validatedInput = validateCalculatorInput(BeefInputSchema, input);
-
-    expect(validatedInput).toBeDefined();
 
     if (!validatedInput.valid) {
       throw validatedInput.error;
