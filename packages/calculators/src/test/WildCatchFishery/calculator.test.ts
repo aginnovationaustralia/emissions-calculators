@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { WildCatchFisheryOutput } from '@/types/WildCatchFishery/output';
 import clone from 'nanoclone';
 import { calculateWildCatchFishery } from '../../calculators/WildCatchFishery/calculator';

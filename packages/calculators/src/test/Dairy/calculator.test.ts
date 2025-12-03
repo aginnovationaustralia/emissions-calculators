@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { calculateDairy } from '@/calculators/Dairy/calculator';
 import { ConstantsForDairyCalculator } from '@/calculators/Dairy/constants';
 import { DairyClass } from '@/types/Dairy/dairyclass.input';

@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import { calculateSheepBeef } from '@/calculators/SheepBeef/calculator';
 import { ConstantsForSheepBeefCalculator } from '@/calculators/SheepBeef/constants';

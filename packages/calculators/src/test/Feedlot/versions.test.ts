@@ -25,7 +25,6 @@ describe('checking Feedlot purchases transformation to array', () => {
     FeedlotInputSchema,
     feedlotDataWithPurchase,
   );
-  expect(validatedInput).toBeDefined();
 
   if (!validatedInput.valid) {
     throw validatedInput.error;

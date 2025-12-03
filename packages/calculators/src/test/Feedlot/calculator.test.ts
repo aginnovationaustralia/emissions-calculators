@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import { calculateEntireFeedlot } from '@/calculators/Feedlot/calculator';
 import { FeedlotInputSchema } from '@/types/Feedlot/input';
@@ -72,8 +71,6 @@ describe('Feedlot scenarios', () => {
   };
 
   const validatedInput = validateCalculatorInput(FeedlotInputSchema, input);
-
-  expect(validatedInput).toBeDefined();
 
   if (!validatedInput.valid) {
     throw validatedInput.error;

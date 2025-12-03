@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import { calculateDeer } from '@/calculators/Deer/calculator';
 import { DeerInputSchema } from '@/types/Deer/input';
@@ -73,8 +72,6 @@ describe('Deer scenarios', () => {
   };
 
   const validatedInput = validateCalculatorInput(DeerInputSchema, input);
-
-  expect(validatedInput).toBeDefined();
 
   if (!validatedInput.valid) {
     throw validatedInput.error;

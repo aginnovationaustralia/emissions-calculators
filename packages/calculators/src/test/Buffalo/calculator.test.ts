@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { calculateBuffalo } from '@/calculators/Buffalo/calculator';
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import { validateCalculatorInput } from '@/calculators/validate';
@@ -73,8 +72,6 @@ describe('Buffalo scenarios', () => {
   };
 
   const validatedInput = validateCalculatorInput(BuffaloInputSchema, input);
-
-  expect(validatedInput).toBeDefined();
 
   if (!validatedInput.valid) {
     throw validatedInput.error;

@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { AquacultureEnterpriseInput, AquacultureInput } from '@/types';
 import { AquacultureOutput } from '@/types/Aquaculture/output';
 import { AquacultureProductionSystem } from '@/types/enums';

@@ -2030,7 +2030,7 @@ export const riceConstants: RiceConstants = {
 export const livestockConstants: LivestockConstants = {
   /**
    * @description Energy required to manufacture herbicides and insecticides
-   * @reference O'Halloran, N., Fisher, P., Rab, A., & Victoria, D. P. I. (2008). Preliminary estimation of the carbon footprint of the Australian vegetable industry (pp. 1-39). Discussion paper 4. Vegetable Industry Carbon Footprint Scoping Study. 2008, Horticulture Australia Ltd. Table 7
+   * @reference O'Halloran, N., Fisher, P., Rab, A., & Victoria, D. P. I. (2008). Preliminary estimation of the carbon footprint of the Australian vegetable industry (pp. 1-39). Discussion paper 4. Vegetable Industry Carbon Footprint Scoping Study. 2008, Horticulture Australia Ltd. Table 7
    */
   ENERGY_TO_MANUFACTURE: {
     /** @units MJ/kg */

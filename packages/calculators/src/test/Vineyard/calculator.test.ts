@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { VineyardInput } from '@/types/Vineyard/input';
 import { VineyardIntermediateOutput } from '@/types/Vineyard/intermediate.output';
 import { VineyardOutput } from '@/types/Vineyard/output';

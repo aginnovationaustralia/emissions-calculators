@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { calculateProcessing } from '@/calculators/Processing/calculator';
 import { ConstantsForProcessingCalculator } from '@/calculators/Processing/constants';
 import { ProcessingInput } from '@/types/Processing/input';

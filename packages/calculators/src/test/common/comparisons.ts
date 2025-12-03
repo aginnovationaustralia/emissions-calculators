@@ -105,7 +105,6 @@ export const compareEmissionsFrom2Inputs = <
     });
 
     // Check the differences between the original and second emissions
-    // eslint-disable-next-line jest/expect-expect
     it('check differences between original vs second emissions', () => {
       expectOriginalVsSecond(originalEmissions, secondEmissions);
     });
