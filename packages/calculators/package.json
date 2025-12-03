@@ -316,6 +316,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^6.0.0",
+    "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
@@ -331,7 +332,8 @@
     "rollup-plugin-copy": "^3.5.0",
     "ts-jest": "^29.4.5",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "xlsx-populate": "^1.21.0"
   },
   "dependencies": {
     "mixpanel": "^0.19.1",
