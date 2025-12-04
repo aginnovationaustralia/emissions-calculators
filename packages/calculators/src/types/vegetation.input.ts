@@ -9,7 +9,6 @@ function getValidTreeSpeciesForRegion(
   region: (typeof RainfallRegions)[number],
 ): string[] {
   const treeRegions = commonConstants.TREE_REGIONS;
-  const validSpecies = new Set<string>();
 
   // Collect all valid tree species for this region (TreeSpecies1-6)
   const treeSpecies1 = treeRegions.TreeSpecies1[region];
@@ -19,21 +18,21 @@ function getValidTreeSpeciesForRegion(
   const treeSpecies5 = treeRegions.TreeSpecies5[region];
   const treeSpecies6 = treeRegions.TreeSpecies6[region];
 
-  [
-    treeSpecies1,
-    treeSpecies2,
-    treeSpecies3,
-    treeSpecies4,
-    treeSpecies5,
-    treeSpecies6,
-  ]
-    .filter(
-      (species): species is string =>
-        typeof species === 'string' && species !== 'No tree data available',
-    )
-    .forEach((species) => validSpecies.add(species));
-
-  return Array.from(validSpecies);
+  return Array.from(
+    new Set(
+      [
+        treeSpecies1,
+        treeSpecies2,
+        treeSpecies3,
+        treeSpecies4,
+        treeSpecies5,
+        treeSpecies6,
+      ].filter(
+        (species): species is string =>
+          typeof species === 'string' && species !== 'No tree data available',
+      ),
+    ),
+  );
 }
 
 /**
@@ -43,20 +42,19 @@ function getValidSoilTypesForRegion(
   region: (typeof RainfallRegions)[number],
 ): string[] {
   const treeRegions = commonConstants.TREE_REGIONS;
-  const validSoils = new Set<string>();
 
   // Collect all valid soil types for this region (SoilType1-2)
   const soilType1 = treeRegions.SoilType1[region];
   const soilType2 = treeRegions.SoilType2[region];
 
-  [soilType1, soilType2]
-    .filter(
-      (soil): soil is string =>
-        typeof soil === 'string' && soil !== 'No Soil / Tree data available',
-    )
-    .forEach((soil) => validSoils.add(soil));
-
-  return Array.from(validSoils);
+  return Array.from(
+    new Set(
+      [soilType1, soilType2].filter(
+        (soil): soil is string =>
+          typeof soil === 'string' && soil !== 'No Soil / Tree data available',
+      ),
+    ),
+  );
 }
 
 export const VegetationSchema = z
