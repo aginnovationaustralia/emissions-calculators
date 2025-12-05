@@ -1,8 +1,7 @@
 import { z } from 'zod';
-import { proportion } from '../schemas';
+import { object, proportion } from '../schemas';
 
-export const PoultryFeedIngredientsSchema = z
-  .object({
+export const PoultryFeedIngredientsSchema = object({
     wheat: proportion().optional(),
     barley: proportion().optional(),
     sorghum: proportion().optional(),

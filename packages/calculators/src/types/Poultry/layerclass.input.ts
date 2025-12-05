@@ -1,7 +1,7 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 
-export const LayerClassSchema = z
-  .object({
+export const LayerClassSchema = object({
     autumn: z.number().min(0).meta({ description: 'Flock numbers in autumn' }),
     winter: z.number().min(0).meta({ description: 'Flock numbers in winter' }),
     spring: z.number().min(0).meta({ description: 'Flock numbers in spring' }),

@@ -1,3 +1,4 @@
+import { SheepClass } from '@/types';
 import { SheepComplete } from '@/types/Sheep/sheep.input';
 import { SheepClasses } from '@/types/Sheep/sheepclasses.input';
 
@@ -7,7 +8,7 @@ const emptySeason = {
   liveweightGain: 0,
 };
 
-const emptyClass = {
+const emptyClass: SheepClass = {
   summer: emptySeason,
   autumn: emptySeason,
   winter: emptySeason,
@@ -15,8 +16,6 @@ const emptyClass = {
   headShorn: 0,
   woolShorn: 0,
   cleanWoolYield: 0,
-  headPurchased: 0,
-  purchasedWeight: 0,
   headSold: 0,
   saleWeight: 0,
 };

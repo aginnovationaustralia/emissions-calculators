@@ -1,7 +1,7 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 
-export const NitrogenFertiliserSchema = z
-  .object({
+export const NitrogenFertiliserSchema = object({
     cropsIrrigated: z.number().min(0),
     cropsDryland: z.number().min(0),
     pastureIrrigated: z.number().min(0),

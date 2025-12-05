@@ -3,8 +3,9 @@ import {
   WildSeaFisheriesTransportTypes,
 } from '@/types/enums';
 import { z } from 'zod';
+import { object } from '../schemas';
 
-export const WildSeaFisheriesTransportSchema = z.object({
+export const WildSeaFisheriesTransportSchema = object({
   type: z
     .enum(WildSeaFisheriesTransportTypes)
     .meta({ description: 'Transport type' }),

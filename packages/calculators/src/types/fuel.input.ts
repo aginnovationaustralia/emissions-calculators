@@ -2,8 +2,9 @@ import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
 import { StationaryFuelInputSchema } from './stationaryFuel.input';
 import { TransportFuelInputSchema } from './transportFuel.input';
+import { object } from './schemas';
 
-export const FuelInputSchema = z.object({
+export const FuelInputSchema = object({
   transportFuel: z
     .array(TransportFuelInputSchema)
     .meta({ description: DESCRIPTIONS.FUEL_TRANSPORT }),

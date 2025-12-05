@@ -1,9 +1,8 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { percentage } from '../schemas';
+import { object, percentage } from '../schemas';
 
-export const FeedlotStaySchema = z
-  .object({
+export const FeedlotStaySchema = object({
     livestock: z.number().min(0).meta({ description: DESCRIPTIONS.HEAD }),
     stayAverageDuration: z
       .number()

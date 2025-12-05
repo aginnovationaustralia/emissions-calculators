@@ -1,8 +1,8 @@
 import { WildCatchFisheryBait } from '@/types/enums';
 import { z } from 'zod';
-import { proportion } from '../schemas';
+import { object, proportion } from '../schemas';
 
-export const WildCatchFisheryBaitPurchaseSchema = z.object({
+export const WildCatchFisheryBaitPurchaseSchema = object({
   type: z.enum(WildCatchFisheryBait).meta({ description: 'Bait product type' }),
   purchasedTonnes: z
     .number()

@@ -157,6 +157,7 @@ describe('compatibility for migrated valid inputs', () => {
       };
 
       const result = SheepBeefInputSchema.safeParse(input);
+      console.log(result.error?.issues);
       expect(result.success).toBe(true);
       if (result.success) {
         expect(

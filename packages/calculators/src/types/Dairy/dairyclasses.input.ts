@@ -1,8 +1,8 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 import { DairyClassSchema } from './dairyclass.input';
 
-export const DairyClassesSchema = z
-  .object({
+export const DairyClassesSchema = object({
     milkingCows: DairyClassSchema.meta({ description: 'Milking cows' }),
     heifersLt1: DairyClassSchema.meta({
       description: 'Heifers whose age is less than 1 year old',

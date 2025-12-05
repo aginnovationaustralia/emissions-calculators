@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 
 export enum ProductUnit {
   LITRE = 'litre',
@@ -8,7 +9,7 @@ export enum ProductUnit {
   DOZEN = 'dozen',
 }
 
-export const ProcessingProductSchema = z.object({
+export const ProcessingProductSchema = object({
   unit: z.enum(ProductUnit),
   amountMadePerYear: z.number().min(0),
 });

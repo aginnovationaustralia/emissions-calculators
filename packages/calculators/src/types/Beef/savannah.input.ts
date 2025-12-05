@@ -6,9 +6,9 @@ import {
   VegetationClasses,
 } from '@/types/enums';
 import { z } from 'zod';
+import { object } from '../schemas';
 
-export const SavannahBurningSchema = z
-  .object({
+export const SavannahBurningSchema = object({
     fuel: z
       .enum(Fuels)
       .default('coarse')

@@ -94,3 +94,6 @@ export const intermediateEmissionsOutput = <
     .meta({
       description: `Intermediate emissions calculation output for the ${calculatorName} calculator`,
     });
+
+export const object = <T extends ZodLooseShape = DefaultLooseShape>(shape: T) =>
+  z.strictObject(shape);

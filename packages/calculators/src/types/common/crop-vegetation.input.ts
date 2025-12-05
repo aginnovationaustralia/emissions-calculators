@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { proportion } from '../schemas';
+import { object, proportion } from '../schemas';
 import { VegetationSchema } from '../vegetation.input';
 
-export const CropVegetationSchema = z.object({
+export const CropVegetationSchema = object({
   vegetation: VegetationSchema,
   allocationToCrops: z.array(proportion()).meta({
     description:

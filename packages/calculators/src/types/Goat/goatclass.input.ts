@@ -1,11 +1,10 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { LivestockPurchaseSchema } from '../livestockPurchase.input';
-import { percentage } from '../schemas';
+import { object, percentage } from '../schemas';
 import { GoatSeasonSchema } from './goatseason.input';
 
-export const GoatClassSchema = z
-  .object({
+export const GoatClassSchema = object({
     autumn: GoatSeasonSchema,
     winter: GoatSeasonSchema,
     spring: GoatSeasonSchema,

@@ -1,9 +1,9 @@
 import { FluidWasteTreatmentType } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { proportion } from '../schemas';
+import { object, proportion } from '../schemas';
 
-export const FluidWasteInputSchema = z.object({
+export const FluidWasteInputSchema = object({
   fluidWasteKl: z
     .number()
     .min(0)

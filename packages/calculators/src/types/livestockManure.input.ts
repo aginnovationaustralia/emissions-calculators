@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import { LivestockManureSeasonSchema } from './livestockManureSeason.input';
+import { object } from './schemas';
 
-export const LivestockManureSchema = z.object({
+export const LivestockManureSchema = object({
   spring: LivestockManureSeasonSchema,
   summer: LivestockManureSeasonSchema,
   autumn: LivestockManureSeasonSchema,

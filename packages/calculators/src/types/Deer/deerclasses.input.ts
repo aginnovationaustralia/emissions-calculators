@@ -1,8 +1,8 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 import { DeerClassSchema } from './deerclass.input';
 
-export const DeerClassesSchema = z
-  .object({
+export const DeerClassesSchema = object({
     bucks: DeerClassSchema.optional().meta({ description: 'Bucks' }),
     tradeBucks: DeerClassSchema.optional().meta({ description: 'Trade bucks' }),
     breedingDoes: DeerClassSchema.optional().meta({

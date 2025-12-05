@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
+import { object } from './schemas';
 
-export const LivestockPurchaseSchema = z.object({
+export const LivestockPurchaseSchema = object({
   head: z.number().min(0).meta({ description: DESCRIPTIONS.HEADPURCHASED }),
   purchaseWeight: z
     .number()

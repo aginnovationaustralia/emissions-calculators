@@ -1,6 +1,7 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 
-export const EggSaleSchema = z.object({
+export const EggSaleSchema = object({
   eggsProduced: z
     .number()
     .min(0)

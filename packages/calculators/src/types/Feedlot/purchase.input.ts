@@ -1,8 +1,9 @@
 import { FeedlotPurchaseSourceLocations } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
+import { object } from '../schemas';
 
-export const FeedlotPurchaseSchema = z.object({
+export const FeedlotPurchaseSchema = object({
   head: z.number().min(0).meta({ description: DESCRIPTIONS.HEADPURCHASED }),
   purchaseWeight: z
     .number()

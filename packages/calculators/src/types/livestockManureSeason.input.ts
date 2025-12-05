@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
+import { object } from './schemas';
 
-export const LivestockManureSeasonSchema = z.object({
+export const LivestockManureSeasonSchema = object({
   outdoorSystems: z
     .number()
     .min(0)

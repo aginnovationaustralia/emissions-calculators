@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { LivestockPurchaseSchema } from '../livestockPurchase.input';
+import { object } from '../schemas';
 import { BuffaloSeasonSchema } from './buffaloseason.input';
 
-export const BuffaloClassSchema = z
-  .object({
+export const BuffaloClassSchema = object({
     autumn: BuffaloSeasonSchema,
     winter: BuffaloSeasonSchema,
     spring: BuffaloSeasonSchema,

@@ -1,9 +1,9 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 import { BroilerClassSchema } from './broilerclass.input';
 import { PoultryFeedSchema } from './feed.input';
 
-export const BroilerGroupSchema = z
-  .object({
+export const BroilerGroupSchema = object({
     meatChickenGrowers: BroilerClassSchema,
     meatChickenLayers: BroilerClassSchema,
     meatOther: BroilerClassSchema,
