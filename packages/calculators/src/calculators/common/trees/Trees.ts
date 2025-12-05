@@ -11,9 +11,6 @@ export function calculateTreeCarbonSequestration(
   const { constants } = context;
 
   const vegetation = veg;
-  if (vegetation.soil === 'Other Soils') {
-    vegetation.soil = '"Other Soils"';
-  }
 
   const regionNo = constants.COMMON.TREE_REGIONS.RegionNo[vegetation.region];
 

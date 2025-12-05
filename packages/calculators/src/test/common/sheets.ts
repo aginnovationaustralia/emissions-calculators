@@ -124,6 +124,10 @@ export const getCropVegetation = (
   details: XLSX.Range,
   allocations: XLSX.Range,
 ): CropVegetation => {
+  const soilTypeRaw = stringInput(details.cell(2, 0));
+  // The spreadsheet dropdown uses quotes, but the API and validation does not
+  const soil =
+    soilTypeRaw === '"Other Soils"' ? 'Other Soils' : (soilTypeRaw as SoilType);
   return {
     allocationToCrops: allocations
       .cells()[0]
@@ -131,7 +135,7 @@ export const getCropVegetation = (
     vegetation: {
       region: stringInput(details.cell(0, 0)) as RainfallRegion,
       treeSpecies: stringInput(details.cell(1, 0)) as TreeType,
-      soil: stringInput(details.cell(2, 0)) as SoilType,
+      soil,
       area: numberInput(details.cell(3, 0)),
       age: numberInput(details.cell(4, 0)),
     },

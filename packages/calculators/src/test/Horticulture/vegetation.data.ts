@@ -4,7 +4,7 @@ export const veg1: HorticultureVegetation = {
   vegetation: {
     region: 'East Coast',
     treeSpecies: 'Tasmanian Blue Gum',
-    soil: '"Other Soils"',
+    soil: 'Other Soils',
     area: 3,
     age: 15,
   },

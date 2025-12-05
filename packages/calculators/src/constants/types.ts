@@ -7,8 +7,10 @@ import {
   Refrigerant,
   RicePreseasonFloodingPeriod,
   SheepClassesAPI,
+  SoilType,
   StationaryFuelTypes,
   TransportFuelTypes,
+  TreeType,
   WaterRegimeSubType,
 } from '@/types/enums';
 
@@ -882,14 +884,14 @@ export type CommonConstants = {
   // Trees
   TREE_REGIONS: {
     RegionNo: { [treeRegion in TreeRegions]: number };
-    SoilType1: { [treeRegion in TreeRegions]: string };
-    SoilType2: { [treeRegion in TreeRegions]: string };
-    TreeSpecies1: { [treeRegion in TreeRegions]: string };
-    TreeSpecies2: { [treeRegion in TreeRegions]: string };
-    TreeSpecies3: { [treeRegion in TreeRegions]: string };
-    TreeSpecies4: { [treeRegion in TreeRegions]: string };
-    TreeSpecies5: { [treeRegion in TreeRegions]: string };
-    TreeSpecies6: { [treeRegion in TreeRegions]: string };
+    SoilType1: { [treeRegion in TreeRegions]: SoilType };
+    SoilType2: { [treeRegion in TreeRegions]: SoilType };
+    TreeSpecies1: { [treeRegion in TreeRegions]: TreeType };
+    TreeSpecies2: { [treeRegion in TreeRegions]: TreeType };
+    TreeSpecies3: { [treeRegion in TreeRegions]: TreeType };
+    TreeSpecies4: { [treeRegion in TreeRegions]: TreeType };
+    TreeSpecies5: { [treeRegion in TreeRegions]: TreeType };
+    TreeSpecies6: { [treeRegion in TreeRegions]: TreeType };
   };
 
   LEACHING: {

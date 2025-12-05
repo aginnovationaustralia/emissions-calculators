@@ -27,10 +27,7 @@ function getValidTreeSpeciesForRegion(
         treeSpecies4,
         treeSpecies5,
         treeSpecies6,
-      ].filter(
-        (species): species is string =>
-          typeof species === 'string' && species !== 'No tree data available',
-      ),
+      ].filter((species) => species !== 'No tree data available'),
     ),
   );
 }
@@ -50,8 +47,7 @@ function getValidSoilTypesForRegion(
   return Array.from(
     new Set(
       [soilType1, soilType2].filter(
-        (soil): soil is string =>
-          typeof soil === 'string' && soil !== 'No Soil / Tree data available',
+        (soil) => soil !== 'No Soil / Tree data available',
       ),
     ),
   );
