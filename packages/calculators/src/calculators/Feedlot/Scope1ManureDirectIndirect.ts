@@ -8,22 +8,16 @@ export function calculateScope1ManureDirectIndirect(
 ) {
   const { constants } = context;
 
-  // (entericFermentationK9)
   const feedIntake = stay.dailyIntake;
 
-  // (nitrousOxideMMSD5)
   const crudeProteinFraction = stay.crudeProtein / 100;
 
-  // (nitrousOxideMMSK8)
   const nitrogenIntake = (feedIntake * crudeProteinFraction) / 6.25;
 
-  // (nitrousOxideMMSD15)
   const nitrogenRetentionFraction = stay.nitrogenRetention / 100;
 
-  // (nitrousOxideMMSK14)
   const nitrogenExcreted = nitrogenIntake * (1 - nitrogenRetentionFraction);
 
-  // (nitrousOxideMMSK20)
   const annualNitrogenExcretion =
     stay.livestock * nitrogenExcreted * stay.stayAverageDuration * 10 ** -6;
 
@@ -33,7 +27,6 @@ export function calculateScope1ManureDirectIndirect(
     constants.FEEDLOT.I_NOF *
     constants.COMMON.GWP_FACTORSC15;
 
-  // (nitrousOxideMMSK36)
   const totalDirectGgCO2 =
     totalDirectEmissionsN2O * constants.COMMON.GWP_FACTORSC6;
   // (nitrousOxideMMSK37, dataSummaryC12)
@@ -41,20 +34,16 @@ export function calculateScope1ManureDirectIndirect(
 
   // Indirect
 
-  // (nitrousOxideMMSK46)
   const mnAtmosphere = annualNitrogenExcretion * constants.FEEDLOT.I_FRACGASM;
 
-  // (nitrousOxideMMSK56)
   const totalIndirectEmissionsN2O =
     mnAtmosphere *
     constants.FEEDLOT.INDIRECT_EF *
     constants.COMMON.GWP_FACTORSC15;
 
-  // (nitrousOxideMMSK62)
   const totalIndirectGgCO2 =
     totalIndirectEmissionsN2O * constants.COMMON.GWP_FACTORSC6;
 
-  // (nitrousOxideMMSK63)
   const totalIndirectTonnes = totalIndirectGgCO2 * 10 ** 3;
 
   return { direct: totalDirectTonnes, indirect: totalIndirectTonnes };

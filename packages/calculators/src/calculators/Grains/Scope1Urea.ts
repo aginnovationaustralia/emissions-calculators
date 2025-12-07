@@ -8,16 +8,12 @@ export function calculateScope1Urea(
 ) {
   const { constants } = context;
 
-  // (ureaApplicationC8)
   const uan = crop.ureaAmmoniumNitrate * 0.35;
 
-  // (ureaApplicationC9)
   const totalUreaApplied = crop.ureaApplication + uan;
 
-  // (ureaApplicationC11)
   const totalMassOfFertiliser = crop.areaSown * totalUreaApplied * 10 ** -3;
 
-  // (ureaApplicationC19)
   const massFertiliserGg =
     totalMassOfFertiliser *
     constants.COMMON.FERTILISER_EF *

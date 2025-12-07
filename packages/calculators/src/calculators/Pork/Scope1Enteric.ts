@@ -61,7 +61,6 @@ export function calculateScope1Enteric(
     });
   });
 
-  // (entericFermentationC28)
   const totalMethaneProduction = PorkClassesAPI.reduce((acc, type) => {
     return (
       acc +
@@ -75,6 +74,5 @@ export function calculateScope1Enteric(
     totalMethaneProduction * constants.COMMON.GWP_FACTORSC5;
   const totalMethaneTonnes = totalMethaneGg * 10 ** 3;
 
-  // (dataSummaryC9)
   return totalMethaneTonnes;
 }

@@ -15,16 +15,13 @@ export function calculateScope1N2O(
     horticulture.ureaAmmoniumNitrate * getUanNConstant(context);
 
   // fertiliser N2O
-  // (FertiliserC13)
   const totalMassFertiliser =
     horticulture.areaSown * nitrogenFertiliser * 10 ** -6;
 
-  // (fertiliserC41)
   const ef = horticulture.rainfallAbove600
     ? constants.CROP.PRODUCTIONSYSTEM_EF.RAINFALL_GT_600.Horticulture
     : constants.CROP.PRODUCTIONSYSTEM_EF.RAINFALL_LT_600.Horticulture;
 
-  // (FertiliserC43)
   const fertiliserN2O =
     totalMassFertiliser * ef * constants.COMMON.GWP_FACTORSC15;
   const fertiliserN2OG = fertiliserN2O * constants.COMMON.GWP_FACTORSC6;

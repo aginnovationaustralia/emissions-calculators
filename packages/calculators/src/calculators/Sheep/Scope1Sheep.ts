@@ -63,19 +63,18 @@ export function sheepEmissionsForSeason(
       ? additionalIntakeForMilk * potentialIntake * relativeIntake
       : potentialIntake * relativeIntake;
 
-  // (entericFermentationSheepR35)
   const methaneProduction = actualIntake * 0.0188 + 0.00158;
   const seasonalMethaneProduction = 91.25 * head * methaneProduction * 10 ** -6;
 
   const crudeProteinIntake =
-    actualIntake * (crudeProtein / 100) + 0.045 * milkIntake; // (nitrousOxideMMSSheepS7)
-  const metabolisableEnergy = 0.1604 * dryMatterDigestibility - 1.037; // (nitrousOxideMMSSheepD25)
+    actualIntake * (crudeProtein / 100) + 0.045 * milkIntake;
+  const metabolisableEnergy = 0.1604 * dryMatterDigestibility - 1.037;
   const nitrogenExcretedInFaeces =
     (0.3 * (crudeProteinIntake * (1 - (dryMatterDigestibility + 10) / 100)) +
       0.105 * (metabolisableEnergy * actualIntake * 0.008) +
       0.08 * (0.045 * milkIntake) +
       0.0152 * actualIntake) /
-    6.25; // (nitrousOxideMMSSheepS33)
+    6.25;
   const seasonalFaecalNExcreted =
     head * nitrogenExcretedInFaeces * 91.25 * 10 ** -6;
 
@@ -101,18 +100,16 @@ export function sheepEmissionsForSeason(
   const nExcretedUrine =
     crudeProteinIntake / 6.25 -
     nitrogenRetainedInBody -
-    nitrogenExcretedInFaeces; // (nitrousOxideMMSSheepS39)
+    nitrogenExcretedInFaeces;
 
   const seasonalNitrogenUrinaryExcreted =
-    head * nExcretedUrine * 91.25 * 10 ** -6; // (nitrousOxideMMSSheepS51)
+    head * nExcretedUrine * 91.25 * 10 ** -6;
 
-  // (manureManagementSheepD20)
   const methaneProductionFromManure =
     actualIntake *
     (1 - dryMatterDigestibility / 100) *
     context.constants.COMMON.EF_TEMPERATURE;
 
-  // (manureManagementSheepD26)
   const seasonalMethaneProductionManure =
     head * methaneProductionFromManure * 91.25 * 10 ** -6;
 
@@ -247,7 +244,6 @@ export function calculateCompleteSheepEmissions(
         context,
       );
 
-      // (agriculturalSoilsSheepD35)
       const sheepSeasonN2O =
         sheepSeasonEmissions.faeces *
           constants.SHEEP.EF_URINEDUNGDEPOSITED *
@@ -293,7 +289,6 @@ export function calculateCompleteSheepEmissions(
   const { otherFertiliserDryland, otherFertiliserIrrigated } =
     getOtherFertiliserAmounts(context, fertiliser);
 
-  // (agriculturalSoilsSheepD14)
   const nFertiliserGrazingDrylandSoil =
     fertiliser.pastureDryland *
     0.46 *
@@ -323,7 +318,6 @@ export function calculateCompleteSheepEmissions(
     otherFertiliserIrrigated *
     constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
     constants.COMMON.GWP_FACTORSC15;
-  // (agriculturalSoilsSheepD17)
   const totalN2ODrylandSoil =
     nFertiliserGrazingDrylandSoil +
     nFertiliserCroppingDrylandSoil +
@@ -332,15 +326,13 @@ export function calculateCompleteSheepEmissions(
     nFertiliserGrazingIrrigatedSoil +
     nFertiliserCroppingIrrigatedSoil +
     nFertiliserOtherIrrigatedSoil;
-  // (agriculturalSoilsSheepD18)
   const totalSoilCO2e =
     (totalN2ODrylandSoil + totalN2OIrrigatedSoil) *
     constants.COMMON.GWP_FACTORSC6;
 
-  const fracWetMultiplier = rainfallAbove600 ? 1 : 0; // (agriculturalSoilsSheepF83)
+  const fracWetMultiplier = rainfallAbove600 ? 1 : 0;
   const fracLeach = constants.COMMON.LEACHING.FRACLEACH_FERTILISER_SOILS;
 
-  // (agriculturalSoilsSheepD57)
   const nUreaGrazingDryland =
     fertiliser.pastureDryland *
     0.46 *
@@ -379,11 +371,9 @@ export function calculateCompleteSheepEmissions(
         constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP) *
     constants.COMMON.GWP_FACTORSC15;
 
-  // (agriculturalSoilsSheepD61)
   const totalCO2e =
     (totalN2ODryland + totalN2OIrrigated) * constants.COMMON.GWP_FACTORSC6;
 
-  // (agriculturalSoilsSheepD64)
   const springNDungUrine =
     springTotalNDungUrine *
     constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *
@@ -402,42 +392,33 @@ export function calculateCompleteSheepEmissions(
     constants.COMMON.GWP_FACTORSC15;
 
   // total N2O from atmospheric deposition
-  // (agriculturalSoilsSheepD70)
   const totalN2OAtmosphereGg =
     (springNDungUrine +
       summerNDungUrine +
       autumnNDungUrine +
       winterNDungUrine) *
     constants.COMMON.GWP_FACTORSC6;
-  // (agriculturalSoilsSheepD71)
   const totalN2OAtmosphereTonnes = totalN2OAtmosphereGg * 10 ** 3;
-  // (dataSummaryD13)
   const totalAtmosphere = totalCO2e + totalN2OAtmosphereTonnes;
 
   // total N2O from urine and dung for all
-  // (agriculturalSoilsSheepD40)
   const totalN2O = allSheepClass.reduce((a, b) => a + b.N2O, 0);
   const totalN2OUrineDungGg = totalN2O * constants.COMMON.GWP_FACTORSC6;
-  // (agriculturalSoilsSheepD42)
   const totalN2OUrineDungTonnes = totalN2OUrineDungGg * 10 ** 3;
 
-  // (manureManagementSheepC31)
   const totalMethaneManure = allSheepClass.reduce(
     (a, b) => a + b.intermediate.seasonalMethaneProductionManure,
     0,
   ); //  Gg CH4/farm/year
   const totalMethaneManureGg =
     totalMethaneManure * constants.COMMON.GWP_FACTORSC5; // Gg CO2-e/farm/year
-  // (manureManagementSheepC33)
   const totalMethaneManureTonnes = totalMethaneManureGg * 10 ** 3; // t CO2-e/farm/year
 
-  // (entericFermentationSheepQ46)
   const totalMethane = allSheepClass.reduce(
     (a, b) => a + b.intermediate.seasonalMethaneProduction,
     0,
   ); //  Gg CH4/farm/year
   const totalMethaneGg = totalMethane * constants.COMMON.GWP_FACTORSC5; // Gg CO2-e/farm/year
-  // (entericFermentationSheepQ48)
   const totalMethaneTonnes = totalMethaneGg * 10 ** 3; // t CO2-e/farm/year
 
   // ------------
@@ -459,14 +440,12 @@ export function calculateCompleteSheepEmissions(
   );
 
   // The mass of dung and urine N applied to soils that is lost through leaching and runoff (M)
-  // (agriculturalSoilsSheepD92)
   const springDungRunoff = springTotalUrineDung * fracWetMultiplier * fracLeach;
   const summerDungRunoff = summerTotalUrineDung * fracWetMultiplier * fracLeach;
   const autumnDungRunoff = autumnTotalUrineDung * fracWetMultiplier * fracLeach;
   const winterDungRunoff = winterTotalUrineDung * fracWetMultiplier * fracLeach;
 
   // total N2O from leeching and runoff
-  // (agriculturalSoilsSheepD101)
   const ureaGrazingNonIrrigatedN2O =
     nFertiliserUreaGrazingNonIrrigated *
     constants.LIVESTOCK.LEECHING_AND_RUNOFF *
@@ -492,7 +471,6 @@ export function calculateCompleteSheepEmissions(
     constants.LIVESTOCK.LEECHING_AND_RUNOFF *
     constants.COMMON.GWP_FACTORSC15;
 
-  // (agriculturalSoilsSheepD104)
   const totalFertiliserN2OLeeching =
     ureaGrazingNonIrrigatedN2O +
     ureaCroppingNonIrrigatedN2O +
@@ -501,7 +479,6 @@ export function calculateCompleteSheepEmissions(
     ureaCroppingIrrigatedN2O +
     ureaOtherIrrigatedN2O;
 
-  // (agriculturalSoilsSheepD107)
   const springN2ODungLeeching =
     springDungRunoff *
     constants.LIVESTOCK.LEECHING_AND_RUNOFF *
@@ -519,18 +496,15 @@ export function calculateCompleteSheepEmissions(
     constants.LIVESTOCK.LEECHING_AND_RUNOFF *
     constants.COMMON.GWP_FACTORSC15;
 
-  // (agriculturalSoilsSheepD111)
   const totalN2ODungLeeching =
     springN2ODungLeeching +
     summerN2ODungLeeching +
     autumnN2ODungLeeching +
     winterN2ODungLeeching;
 
-  // (agriculturalSoilsSheepD113)
   const totalN2OLeeching =
     totalFertiliserN2OLeeching + totalN2ODungLeeching * 1000;
 
-  // (agriculturalSoilsSheepD115, dataSummaryD14)
   const totalN2OLeechingGg = totalN2OLeeching * constants.COMMON.GWP_FACTORSC6;
 
   return {

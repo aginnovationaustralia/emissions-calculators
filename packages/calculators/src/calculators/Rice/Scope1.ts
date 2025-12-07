@@ -18,7 +18,6 @@ export function calculateScope1N2O(
   // (Fertiliser was C13 now D24)
   const totalMassFertiliser = rice.areaSown * nitrogenFertiliser * 10 ** -6;
 
-  // (fertiliserC41)
   // NOTE: Rice is always irrigated
   // 'Data input - crops' sheet enforces > 600mm and irrigated production system
   const ef =

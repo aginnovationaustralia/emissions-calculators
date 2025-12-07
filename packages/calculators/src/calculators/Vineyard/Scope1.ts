@@ -42,7 +42,6 @@ export function calculateScope1N2O(
   const productionSystemEfs = rainfallAbove600
     ? PRODUCTIONSYSTEM_EF.RAINFALL_GT_600
     : PRODUCTIONSYSTEM_EF.RAINFALL_LT_600;
-  // (fertiliserD32)
   const ef = irrigated
     ? productionSystemEfs['Irrigated crop']
     : productionSystemEfs['Non-irrigated crop'];

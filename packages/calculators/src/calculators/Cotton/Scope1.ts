@@ -18,7 +18,6 @@ export function calculateScope1N2O(
   // (Fertiliser was C13 now D24)
   const totalMassFertiliser = cotton.areaSown * nitrogenFertiliser * 10 ** -6;
 
-  // (fertiliserC41)
   const ef = cotton.rainfallAbove600
     ? constants.CROP.PRODUCTIONSYSTEM_EF.RAINFALL_GT_600.Cotton
     : constants.CROP.PRODUCTIONSYSTEM_EF.RAINFALL_LT_600.Cotton;

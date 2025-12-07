@@ -21,12 +21,10 @@ function purchasedBeefLivestock(
   source: LivestockSourceLocation,
   context: ExecutionContext<ConstantsForBeefCalculator>,
 ) {
-  // (purchasedLivestockEmissionsB17)
   const emissionFactor =
     context.constants.BEEF.LIVESTOCK_SOURCE_EMISSIONFACTOR[source];
   const liveweight = headPurchased * purchasedWeight;
 
-  // (purchasedLivestockEmissionsB18)
   const scope3Kg = liveweight * emissionFactor;
 
   // (Scope 3 Emissions tonnes CO2-e)
@@ -72,7 +70,7 @@ export function calculatePurchasedSheepEmissions(
   sheepMerinoPercent: number,
   context: ExecutionContext<ConstantsForSheepCalculator>,
 ) {
-  const sheepCrossBredPercent = 100 - sheepMerinoPercent; // (dataInputSheepE39)
+  const sheepCrossBredPercent = 100 - sheepMerinoPercent;
 
   const sheepLiveweight: {
     [type in (typeof SheepClassesAPI)[number]]: number;
@@ -89,7 +87,6 @@ export function calculatePurchasedSheepEmissions(
     };
   }, {} as { [type in (typeof SheepClassesAPI)[number]]: number });
 
-  // (dataInputSheepN36)
   const purchasedBreedingHerd = Object.keys(sheepLiveweight)
     .filter((sc) =>
       SHEEP_CLASSES_BREEDING_API.includes(
@@ -116,14 +113,11 @@ export function calculatePurchasedSheepEmissions(
 
   const { constants } = context;
 
-  // (purchasedLivestockEmissionsD23)
   const merinoTotalLiveweight =
     (sheepMerinoPercent / 100) * (purchasedBreedingHerd + purchasedTradeSheep);
-  // (purchasedLivestockEmissionsF23)
   const merinoScope3Kg =
     merinoTotalLiveweight * constants.SHEEP.EMISSIONFACTOR.MERINO;
   const merinoScope3Tonnes = merinoScope3Kg / 1000;
-  // (purchasedLivestockEmissionsD24)
   const crossbredTotalLiveweight =
     (sheepCrossBredPercent / 100) *
     (purchasedBreedingHerd + purchasedTradeSheep);

@@ -14,9 +14,6 @@ export function calculateScope3PurchaseLivestock(
 ) {
   const { constants } = context;
 
-  // (purchasedLivestockEmissionsE15)
-  //
-  // (dataInputO111)
   const breedingTotalEmissionsKg = BEEF_CLASSES_BREEDING_API.reduce(
     (acc, cur) => {
       const totalPurchaseEmissions = (purchases[cur] ?? []).reduce(
@@ -33,7 +30,6 @@ export function calculateScope3PurchaseLivestock(
     0,
   );
 
-  // (dataInputP111)
   const tradeTotalEmissionsKg = BEEF_CLASSES_TRADING_API.reduce((acc, cur) => {
     const totalPurchaseEmissions = (purchases[cur] ?? []).reduce(
       (accP, curP) => {
@@ -47,7 +43,6 @@ export function calculateScope3PurchaseLivestock(
     return acc + totalPurchaseEmissions;
   }, 0);
 
-  // (purchasedLivestockEmissionsG15)
   const breedingTonnes = breedingTotalEmissionsKg / 1000;
   const tradingTonnes = tradeTotalEmissionsKg / 1000;
 

@@ -31,7 +31,6 @@ export function getIntensities(
 ) {
   const proteinFactor = 0.18;
 
-  // (assumptionsD3)
   const meatProtein = totalSaleWeightKg * proteinFactor;
 
   const meatAllocationFactor = divideBySafeFromZero(

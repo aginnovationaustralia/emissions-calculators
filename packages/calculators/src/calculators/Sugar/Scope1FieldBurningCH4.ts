@@ -8,10 +8,8 @@ export function calculateScope1FieldBurning(
 ) {
   const { constants } = context;
 
-  // (cropResiduesC6)
   const annualProduction = (crop.averageCaneYield * crop.areaSown) / 1000;
 
-  // (cropResiduesC7)
   const residueToCropRatio =
     constants.CROP.CROPRESIDUE['Sugar Cane'].residueCropRatio;
 
@@ -28,7 +26,6 @@ export function calculateScope1FieldBurning(
   const nitrogenAboveGround =
     constants.CROP.CROPRESIDUE['Sugar Cane'].aboveGroundN;
 
-  // (fieldBurningC22)
   const massOfFuelBurnt =
     annualProduction *
     residueToCropRatio *
@@ -37,21 +34,18 @@ export function calculateScope1FieldBurning(
     constants.CROP.BURNING_EFFICIENCY_RESIDUE *
     crop.fractionOfAnnualCropBurnt;
 
-  // (fieldBurningC29)
   const annualMethaneFromBurning =
     massOfFuelBurnt *
     carbonMassFraction *
     constants.CROP.BURNING_METHANE_EF *
     constants.COMMON.GWP_FACTORSC14;
 
-  // (fieldBurningC39)
   const annualN2OFromBurning =
     massOfFuelBurnt *
     nitrogenAboveGround *
     constants.CROP.BURNING_N2O_EF *
     constants.COMMON.GWP_FACTORSC15;
 
-  // (fieldBurningC31)
   const totalMethaneGgCO2 =
     annualMethaneFromBurning * constants.COMMON.GWP_FACTORSC5;
   const totalFieldBurningCH4 = totalMethaneGgCO2 * 1000;
