@@ -287,7 +287,6 @@ export const SoilTypes = [
   'Coloured Sands',
   'Duplex',
   'Clay',
-  '"Other Soils"',
   'Other Soils',
   'Duplex Soils',
   'Sandy Soils',

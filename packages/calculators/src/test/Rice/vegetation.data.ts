@@ -15,7 +15,7 @@ export const veg2: CropVegetation = {
   vegetation: {
     region: 'Central North/Midlands/South East',
     treeSpecies: 'Shining Gum',
-    soil: '"Other Soils"',
+    soil: 'Other Soils',
     area: 5,
     age: 16,
   },
