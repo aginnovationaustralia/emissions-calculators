@@ -81,8 +81,6 @@ export function calculateScope1N2O(
       dryMatterContent *
       belowGroundN;
 
-  // leachingAndRunoff row 51 is all FERTILISER_FRACTION_RUNOFF for state
-
   const fertiliserFractionRunoff = getFertiliserFractionRunoff(context);
 
   const fracLeach = constants.COMMON.LEACHING.FRACLEACH_FERTILISER_SOILS;

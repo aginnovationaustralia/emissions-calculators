@@ -4,15 +4,6 @@ import { ExecutionContext } from '../executionContext';
 import { ConstantsForFeedlotCalculator } from './constants';
 import { getFeedlotProductionSystemEF } from './functions';
 
-// system is
-// head
-// liveweight kg
-// crudeprotein 0-100
-// nitrogen retention 0-100%
-// averageLengthOfStay
-// Dietary net energy concentration MJ/kg
-// dietaryNetEnergyConcentration
-
 export function calculateScope1Atmospheric(
   stay: FeedlotStay,
   system: FeedlotSystem,
