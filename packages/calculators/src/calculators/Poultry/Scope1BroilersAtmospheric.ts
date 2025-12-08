@@ -21,6 +21,11 @@ function calculateNitrogenExcretion(
 ) {
   const { constants } = context;
 
+  // SHEET: Nitrous Oxide_MMS - Layers
+  // Nitrous oxide emissions from Free range MMS - Layers
+
+  // // Data Inputs
+  // // // Livestock numbers (N)
   const totalBirdNumbers = getBroilerTotalBirdNumbers(
     birdNumbers,
     percentLitterRecycled,
@@ -36,10 +41,27 @@ function calculateNitrogenExcretion(
   const dryMatterInput = dryMatter ?? dryMatterIntake;
   const crudeProteinInput = crudeProtein ?? crudeProteinConstant;
   const nitrogenRetentionInput = nitrogenRetention ?? nitrogenRetentionRate;
+  // END Data Inputs
+  //
+
+  //
+  // START Nitrogen intake
+  // (NI): NI = I x CP /6.25
+  // I = dry matter intake (kg/day)
+  // CP = dietary crude protein
+  // 6.25 = factor for converting crude protein into nitrogen
 
   const nitrogenIntake =
     totalBirdNumbers === 0 ? 0 : (dryMatterInput * crudeProteinInput) / 6.25;
+  // END Nitrogen intake
+  //
 
+  //
+  // START Nitrogen excretion depletion
+  // NE = NI * (1 - NR) x DD  x 10^-6
+  // NI = Nitrogen Intake
+  // NR = nitrogen retention as proportion of intake
+  // DD= Total number of days
   const nitrogenExcretion50Depletion =
     totalBirdNumbers === 0
       ? 0
@@ -61,17 +83,35 @@ function calculateNitrogenExcretion(
         (1 - nitrogenRetentionInput) *
         lengthOfStay100Depletion *
         10 ** -6;
+  // END Nitrogen excretion depletion
+  //
 
+  //
+  // START Mass of poultry waste volatilised  (Matmos)
+  // (Matmos) = (N x NE x iFracGASM)
+  // N = number of birds in each class
+  // NE = mass of nitrogen excreted (Gg/head/season)
+  // iFracGASM = integrated fraction of N volatilised for the meat and layer industries
   const { iFracGASM } = constants.POULTRY.MEATLAYER_EF.meat_chickens;
 
   const massOfWasteVolatised =
     totalBirdNumbers * nitrogenExcretion50Depletion * iFracGASM +
     birdsAfter50Depletion * nitrogenExcretion100Depletion * iFracGASM;
+  // END Mass of poultry waste volatilised  (Matmos)
+  //
 
+  //
+  // START PART 1 Indirect nitrous oxide emissions: Annual atmospheric deposition (E)
+  // E = MNatmos x EF x C
+  // MNatmos = The mass of poultry waste volatilised
+  // EF (meat chicken) = constant value
+  // Cg = constant value
   const EF_MEAT_CHICKEN = getBroilerProductionSystemEF(context);
 
   const annualAtmosphericDeposition =
     massOfWasteVolatised * EF_MEAT_CHICKEN * constants.COMMON.GWP_FACTORSC15;
+  // END PART 1 Indirect nitrous oxide emissions: Annual atmospheric deposition (E)
+  //
 
   const totalSeasonalFaecalNitrogenExcreted =
     totalBirdNumbers * nitrogenExcretion50Depletion +
@@ -165,18 +205,26 @@ export function calculateScope1BroilersAtmospheric(
     },
   );
 
+  //
+  // START PART 2 Indirect nitrous oxide emissions: Annual atmospheric deposition (E)
   const totalIndirectNO2 = n2OTotal.annualAtmosphericDeposition;
 
   const totalIndirectNO2Gg = totalIndirectNO2 * constants.COMMON.GWP_FACTORSC6;
 
   const totalIndirectNO2Tonnes = totalIndirectNO2Gg * 10 ** 3;
+  // END PART 2 Indirect nitrous oxide emissions: Annual atmospheric deposition (E)
+  //
 
+  //
+  // START Total N2O Emissions from Atmospheric Deposition
   const totalAtmosphericN2O = n2OTotal.nitrousOxideProduction;
 
   const totalAtmosphericN2OGg =
     totalAtmosphericN2O * constants.COMMON.GWP_FACTORSC6;
 
   const totalAtmosphericN2OTonnes = totalAtmosphericN2OGg * 10 ** 3;
+  // END Total N2O Emissions from Atmospheric Deposition
+  //
 
   const scope1BroilerAtmosphericDeposition =
     totalIndirectNO2Tonnes + totalAtmosphericN2OTonnes;

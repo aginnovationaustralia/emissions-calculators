@@ -47,7 +47,7 @@ export function getLayersLeachingMassNLost(
   fracWET: number,
   fracLeachMS: number,
 ) {
-  // MNLEACH = N x NE x MS x FracWET x FracLeach
+  // (MNLEACH) = N x NE x MS x FracWET x FracLeach
   // N = Number of livestock
   // NE = mass of nitrogen excreted (Gg/head/season)
   // MS = fraction of waste handled through drylot and solid storage
