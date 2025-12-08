@@ -41,20 +41,16 @@ export function goatEmissionsForSeason(
   const seasonalEntericMethaneProduction =
     ((head * constants.GOAT.EF) / 4) * 10 ** -6;
 
-  // (Nitrous_Oxide_MMSC16)
   const NITROGENEF = 7;
 
-  // (Nitrous_Oxide_MMSR7)
   const seasonalUrinaryExcreted = ((head * NITROGENEF) / 4) * 10 ** -6;
   // R15
   const seasonalFaecelExcreted = seasonalUrinaryExcreted * 0.29;
   // R24
   const seasonalUrineExcreted = seasonalUrinaryExcreted * 0.71;
 
-  // (Agricultural_SoilsD32)
   const URINEEF = 0.004;
 
-  // (Agricultural_SoilsE35)
   const urineDungDeposited =
     seasonalFaecelExcreted * URINEEF * constants.COMMON.GWP_FACTORSC15 +
     seasonalUrineExcreted * URINEEF * constants.COMMON.GWP_FACTORSC15;
@@ -186,7 +182,6 @@ export function calculateCompleteGoatEmissions(
     );
 
   const multiplier = getMultiplier(context);
-  // (agriculturalSoilsD64 + D48)
   const springUrineDungN2O = springTotalUrineDung * multiplier;
   const summerUrineDungN2O = summerTotalUrineDung * multiplier;
   const winterUrineDungN2O = winterTotalUrineDung * multiplier;
@@ -282,7 +277,6 @@ export function calculateCompleteGoatEmissions(
     constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
     constants.COMMON.GWP_FACTORSC15;
 
-  // WARNING: agriculturalSoilsF16 points to G62 but should be F62
   const nFertiliserOtherIrrigatedSoil =
     otherFertiliserIrrigated *
     constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
@@ -329,7 +323,6 @@ export function calculateCompleteGoatEmissions(
     constants.LIVESTOCK.LEECHING_AND_RUNOFF *
     constants.COMMON.GWP_FACTORSC15;
 
-  // NOTE: F101:F103 is all hardcoded to 0
   const nFertiliserCropsTotal =
     nFertiliserGrazingNonIrrigated +
     nFertiliserCroppingNonIrrigated +

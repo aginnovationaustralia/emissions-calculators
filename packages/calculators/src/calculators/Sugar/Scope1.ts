@@ -156,7 +156,6 @@ export function calculateScope1N2O(
   const cropResiduePastureGgCO2 =
     annualN2OProductionPasture * constants.COMMON.GWP_FACTORSC6;
 
-  // (dataSummary_B13)
   const cropResidueTonnes = cropResiduePastureGgCO2 * 1000;
 
   return {

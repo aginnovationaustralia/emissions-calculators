@@ -21,7 +21,6 @@ export function calculateScope1ManureDirectIndirect(
   const annualNitrogenExcretion =
     stay.livestock * nitrogenExcreted * stay.stayAverageDuration * 10 ** -6;
 
-  // (nitrousOxideMMSK30 > nitrousOxideMMSK35)
   const totalDirectEmissionsN2O =
     annualNitrogenExcretion *
     constants.FEEDLOT.I_NOF *
@@ -29,7 +28,6 @@ export function calculateScope1ManureDirectIndirect(
 
   const totalDirectGgCO2 =
     totalDirectEmissionsN2O * constants.COMMON.GWP_FACTORSC6;
-  // (nitrousOxideMMSK37, dataSummaryC12)
   const totalDirectTonnes = totalDirectGgCO2 * 10 ** 3;
 
   // Indirect

@@ -13,14 +13,11 @@ export function calculateScope1FieldBurning(
   const residueToCropRatio =
     constants.CROP.CROPRESIDUE['Sugar Cane'].residueCropRatio;
 
-  // (constants.CROP.CROPRESIDUEsC9)
   const { dryMatterContent } = constants.CROP.CROPRESIDUE['Sugar Cane'];
 
-  // (constants.CROP.CROPRESIDUEsC14)
   const fractionOfResidueAtBurn =
     constants.CROP.CROPRESIDUE['Sugar Cane'].fractionOfResidueAtBurning;
 
-  // (constants.CROP.CROPRESIDUEsC15)
   const { carbonMassFraction } = constants.CROP.CROPRESIDUE['Sugar Cane'];
 
   const nitrogenAboveGround =

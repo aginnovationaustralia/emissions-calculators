@@ -17,7 +17,6 @@ export function feedEmissions(
 ) {
   const { constants } = context;
 
-  // (Embedded_Emissions_F3)
   const totalIngredients = INGREDIENTS.reduce((acc, ingredient) => {
     return (
       acc +
@@ -26,8 +25,6 @@ export function feedEmissions(
         feed.feedPurchased
     );
   }, 0);
-
-  // (Embedded_Emissions_F27)
 
   return (
     totalIngredients +

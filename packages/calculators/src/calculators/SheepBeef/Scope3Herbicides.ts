@@ -22,7 +22,6 @@ export function calculateScope3Herbicide(
   const herbicidePesticideAverage =
     (herbicideOtherEnergyProduction + insecticideEnergyProduction) / 2;
 
-  //   const dataInputBeefD101 = beefHerbicide; // kg a.i. per enterprise
   const beefHerbicideTonnes = beefHerbicideKg / 1000;
 
   const beefHerbicideCO2 =

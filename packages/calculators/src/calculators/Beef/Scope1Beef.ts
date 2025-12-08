@@ -363,8 +363,6 @@ export function calculateCompleteBeefEmissions(
   const atmosphericDeposition =
     totalAtmosphericNDepositionFertiliser + totalN2OTonnes;
 
-  // manureManagementCH4
-
   const totalCH4FromManure = allBeefSeasons.reduce(
     (acc, t) => acc + t.intermediate.manureCH4,
     0,

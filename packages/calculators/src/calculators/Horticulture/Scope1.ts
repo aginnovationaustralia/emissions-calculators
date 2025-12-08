@@ -29,35 +29,26 @@ export function calculateScope1N2O(
 
   // crop residue
 
-  // (Crop_ResiduesC6)
   const annualProduction =
     (horticulture.averageYield * horticulture.areaSown) / 1000;
 
-  // (Crop_ResiduesC7)
   const { residueCropRatio } = constants.CROP.CROPRESIDUE[horticulture.type];
 
-  // (Crop_ResiduesC8)
   const belowAboveRatio =
     constants.CROP.CROPRESIDUE[horticulture.type].belowAboveResidueRatio;
 
-  // (Crop_ResiduesC9)
   const { dryMatterContent } = constants.CROP.CROPRESIDUE[horticulture.type];
 
-  // (Crop_ResiduesC10)
   const { aboveGroundN } = constants.CROP.CROPRESIDUE[horticulture.type];
 
-  // (Crop_ResiduesC11)
   const { belowGroundN } = constants.CROP.CROPRESIDUE[horticulture.type];
 
   // always 0 for horticulture
-  // (cropResiduesK56, Crop_ResiduesC12)
   const { fractionBurnt } = constants.CROP.CROPRESIDUE[horticulture.type];
 
   // always 0 for horticulture
-  // (cropResiduesL56, Crop_ResiduesC13)
   const { fractionRemoved } = constants.CROP.CROPRESIDUE[horticulture.type];
 
-  // (Crop_ResiduesC30)
   const massOfNReturnedToSoil =
     annualProduction *
       residueCropRatio *
@@ -70,66 +61,51 @@ export function calculateScope1N2O(
       dryMatterContent *
       belowGroundN;
 
-  // (Crop_ResiduesC36)
   const residueGgN2O =
     massOfNReturnedToSoil *
     constants.CROP.CROP_RESIDUE_N2O_EF *
     constants.COMMON.GWP_FACTORSC15;
-  // (Crop_ResiduesC38)
   const residuesGgCO2 = residueGgN2O * constants.COMMON.GWP_FACTORSC6;
 
-  // (Data_Summary_C13)
   const residueN2OTotal = residuesGgCO2 * 1000;
 
   // leeching
 
-  // (Leaching_And_RunoffE11)
   const fracLeach = constants.COMMON.LEACHING.FRACLEACH_MMS;
 
-  // (Leaching_And_RunoffE14)
   const fracWet = constants.COMMON.LEACHING.FRACWET;
 
-  // (Leaching_And_RunoffC23)
   const fertiliserLeechingGgN = totalMassFertiliser * fracWet * fracLeach;
 
-  // (Leaching_And_RunoffC24)
   const leechingResidueNGgN = massOfNReturnedToSoil * fracWet * fracLeach;
 
-  // (Leaching_And_RunoffC32)
   const annualN2OLeeching =
     (fertiliserLeechingGgN + leechingResidueNGgN) *
     constants.COMMON.LEACHING.N2O_EF *
     constants.COMMON.GWP_FACTORSC15;
 
-  // (Leaching_And_RunoffC34)
   const leechingGgCO2 = annualN2OLeeching * constants.COMMON.GWP_FACTORSC6;
 
   const leechingN2O = leechingGgCO2 * 1000;
 
   // atmospheric deposition
 
-  // (Atmospheric_DepositionC12)
   const massOfFertiliserVolatilised =
     totalMassFertiliser * constants.COMMON.FRAC_GASF;
 
-  // (Atmospheric_DepositionC20)
   const annualN2OAtmospheric =
     massOfFertiliserVolatilised * ef * constants.COMMON.GWP_FACTORSC15;
-  // (Atmospheric_DepositionC25)
   const atmosphericGgCO2 =
     annualN2OAtmospheric * constants.COMMON.GWP_FACTORSC6;
   const atmosphericN2O = atmosphericGgCO2 * 1000;
 
   // field burning
 
-  // (Crop_ResiduesC14)
   const fractionRemainingAtBurning =
     constants.CROP.CROPRESIDUE[horticulture.type].fractionOfResidueAtBurning;
 
-  // (Field_BurningC10)
   const burningEfficiencyForResidue = constants.CROP.BURNING_EFFICIENCY_RESIDUE;
 
-  // (Field_BurningC22)
   const massOfFuelBurnt =
     annualProduction *
     residueCropRatio *
@@ -138,27 +114,22 @@ export function calculateScope1N2O(
     burningEfficiencyForResidue *
     horticulture.fractionOfAnnualCropBurnt;
 
-  // (Field_BurningC39)
   const burningN2O =
     massOfFuelBurnt *
     aboveGroundN *
     constants.CROP.BURNING_N2O_EF *
     constants.COMMON.GWP_FACTORSC15;
 
-  // (Field_BurningC41)
   const burningGgCO2 = burningN2O * constants.COMMON.GWP_FACTORSC6;
   const burningN2OTonnes = burningGgCO2 * 1000;
 
-  // (Crop_ResiduesC15)
   const { carbonMassFraction } = constants.CROP.CROPRESIDUE[horticulture.type];
 
-  // (Field_BurningC29)
   const methaneTotal =
     massOfFuelBurnt *
     carbonMassFraction *
     constants.CROP.BURNING_METHANE_EF *
     constants.COMMON.GWP_FACTORSC14;
-  // (Field_BurningC31)
   const methaneBurningGg = methaneTotal * constants.COMMON.GWP_FACTORSC5;
   const burningCH4 = methaneBurningGg * 1000;
 

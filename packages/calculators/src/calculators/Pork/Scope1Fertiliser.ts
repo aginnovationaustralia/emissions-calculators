@@ -12,10 +12,7 @@ export function calculateScope1Fertiliser(
   const { otherFertiliserDryland, otherFertiliserIrrigated } =
     getOtherFertiliserAmounts(context, fertiliser);
 
-  //
-  //
-  //
-  // START N2O - FERTILISER
+  // N2O - FERTILISER
   const soilEmissionsGrazingDryland =
     fertiliser.pastureDryland *
     0.46 *
@@ -50,7 +47,6 @@ export function calculateScope1Fertiliser(
     constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
     constants.COMMON.GWP_FACTORSC15;
 
-  // (Agricultural_SoilsD18)
   const totalCO2 =
     (soilEmissionsGrazingDryland +
       soilEmissionsCroppingDryland +
@@ -59,10 +55,6 @@ export function calculateScope1Fertiliser(
       soilEmissionsCroppingIrrigated +
       soilEmissionsOtherIrrigated) *
     constants.COMMON.GWP_FACTORSC6;
-  // END N2O - FERTILISER
-  //
-  //
-  //
 
   return totalCO2;
 }

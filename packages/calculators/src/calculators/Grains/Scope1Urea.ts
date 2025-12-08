@@ -20,7 +20,6 @@ export function calculateScope1Urea(
     constants.COMMON.GWP_FACTORSC13 *
     10 ** -3;
 
-  // (dataSummary_B7)
   const total = massFertiliserGg * 1000;
   return total;
 }

@@ -6,8 +6,6 @@ import { FeedlotPurchases } from '@/types/Feedlot/purchases.input';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForFeedlotCalculator } from './constants';
 
-// breedingSource dataInputD114
-
 export function calculateScope3PurchaseLivestock(
   purchases: FeedlotPurchases,
   context: ExecutionContext<ConstantsForFeedlotCalculator>,

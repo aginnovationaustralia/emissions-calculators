@@ -33,7 +33,6 @@ export function calculateScope1ManureManagement(
 
   const totalCO2Gg = seasonalMethaneProduction * constants.COMMON.GWP_FACTORSC5;
 
-  // (manureManagementC64, dataSummaryC11)
   const manureManagementCH4 = totalCO2Gg * 10 ** 3;
 
   return manureManagementCH4;

@@ -29,7 +29,6 @@ export function calculateScope1N2O(
   // Mass of synthetic fertiliser volatilised
   const fertiliserMassVolatilised = massOfFertiliser * fracGASF;
 
-  // for determining fertiliserC48
   const rainfallKey = crop.rainfallAbove600
     ? 'RAINFALL_GT_600'
     : 'RAINFALL_LT_600';
@@ -105,8 +104,6 @@ export function calculateScope1N2O(
       belowAboveResidueRatio *
       dryMatterContent *
       belowGroundN;
-
-  // leachingAndRunoff row 51 is all FERTILISER_FRACTION_RUNOFF for state
 
   const fertiliserFractionRunoff = getFertiliserFractionRunoff(context);
 
