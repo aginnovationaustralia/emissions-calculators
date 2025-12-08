@@ -37,11 +37,9 @@ export function getSheepIntensities(
 
   const sheepMeatProtein = sheepMeatProducedKg * proteinFactor;
 
-  // (assumptionsE3)
   const sheepMeatAllocationFactor =
     sheepMeatProtein / (sheepMeatProtein + cleanWoolProducedKg * 1000);
 
-  // (assumptionsF3)
   const woolAllocationFactor =
     (cleanWoolProducedKg * 1000) /
     (sheepMeatProtein + cleanWoolProducedKg * 1000);
@@ -240,7 +238,6 @@ export function calculateSingleSheep(
     scope3,
   };
 
-  // (dataInputSheepN53)
   const { greasyWoolShornTotal, totalSheepSaleWeight, cleanWoolYieldTotal } =
     SheepClassesAPI.reduce(
       (acc, type) => {

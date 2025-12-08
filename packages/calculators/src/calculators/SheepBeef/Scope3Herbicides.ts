@@ -18,11 +18,10 @@ export function calculateScope3Herbicide(
     constants.LIVESTOCK.ENERGY_TO_MANUFACTURE.HERBICIDEGENERAL_EF;
   const insecticideEnergyProduction =
     constants.LIVESTOCK.ENERGY_TO_MANUFACTURE.INSECTICIDE_ENERGY *
-    constants.LIVESTOCK.ENERGY_TO_MANUFACTURE.INSECTICIDE_EF; // (embeddedEmissionsE104)
+    constants.LIVESTOCK.ENERGY_TO_MANUFACTURE.INSECTICIDE_EF;
   const herbicidePesticideAverage =
     (herbicideOtherEnergyProduction + insecticideEnergyProduction) / 2;
 
-  //   const dataInputBeefD101 = beefHerbicide; // kg a.i. per enterprise
   const beefHerbicideTonnes = beefHerbicideKg / 1000;
 
   const beefHerbicideCO2 =

@@ -17,10 +17,8 @@ export function calculateScope1Enteric(
 ) {
   const { constants } = context;
 
-  // (Enteric_FermentationD15)
   const methaneMJperkg = 18.6;
 
-  // (Enteric_FermentationD14)
   const methaneF = 55.22;
 
   const totals: Record<keyof PorkClasses, Record<Season, number>> = {
@@ -44,16 +42,13 @@ export function calculateScope1Enteric(
         ['sows', 'boars', 'gilts'].includes(type) ? type : 'slaughter_pigs'
       ) as 'sows' | 'boars' | 'gilts' | 'slaughter_pigs';
 
-      // (Enteric_FermentationC35)
       const feedIntakeDM = constants.PORK.HERD_FEEDINTAKE[newType];
 
       const headSeasonType = currentClass[season];
 
-      // (Enteric_FermentationD17)
       const dailyMethaneProduction =
         (feedIntakeDM * methaneMJperkg * 0.007) / methaneF;
 
-      // (Enteric_FermentationD23)
       const methaneProductionSeason =
         headSeasonType * dailyMethaneProduction * 91.25 * 10 ** -6;
 
@@ -61,7 +56,6 @@ export function calculateScope1Enteric(
     });
   });
 
-  // (entericFermentationC28)
   const totalMethaneProduction = PorkClassesAPI.reduce((acc, type) => {
     return (
       acc +
@@ -75,6 +69,5 @@ export function calculateScope1Enteric(
     totalMethaneProduction * constants.COMMON.GWP_FACTORSC5;
   const totalMethaneTonnes = totalMethaneGg * 10 ** 3;
 
-  // (dataSummaryC9)
   return totalMethaneTonnes;
 }

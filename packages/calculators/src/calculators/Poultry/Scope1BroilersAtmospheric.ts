@@ -32,14 +32,6 @@ function calculateNitrogenExcretion(
     recyclesPerYear,
   );
 
-  // // Direct nitrous oxide emissions
-  // // // Nitrogen intake (NI): NI = I x CP /6.25
-  // // // ----- I = dry matter intake (kg/day)
-  // // // ----- CP = dietary crude protein
-  // // // ----- 6.25 = factor for converting crude protein into nitrogen
-  //
-  //
-  // START Data Inputs
   const {
     dryMatterIntake,
     crudeProtein: crudeProteinConstant,
@@ -58,6 +50,7 @@ function calculateNitrogenExcretion(
   // I = dry matter intake (kg/day)
   // CP = dietary crude protein
   // 6.25 = factor for converting crude protein into nitrogen
+
   const nitrogenIntake =
     totalBirdNumbers === 0 ? 0 : (dryMatterInput * crudeProteinInput) / 6.25;
   // END Nitrogen intake
@@ -77,11 +70,9 @@ function calculateNitrogenExcretion(
         averageLengthOfStay50 *
         10 ** -6;
 
-  // Days to 50% depletion (L1)
   const depletion50 = 0.5;
   const birdsAfter50Depletion = totalBirdNumbers * depletion50;
 
-  // Days to 100% depletion (L2)
   const lengthOfStay100Depletion =
     averageLengthOfStay100 - averageLengthOfStay50;
 
@@ -122,7 +113,6 @@ function calculateNitrogenExcretion(
   // END PART 1 Indirect nitrous oxide emissions: Annual atmospheric deposition (E)
   //
 
-  // (Agricultural_Soils_BroilersD17)
   const totalSeasonalFaecalNitrogenExcreted =
     totalBirdNumbers * nitrogenExcretion50Depletion +
     birdsAfter50Depletion * nitrogenExcretion100Depletion;
@@ -142,7 +132,6 @@ export function calculateScope1BroilersAtmospheric(
 ) {
   const { constants } = context;
 
-  // (Agricultural_Soils_BroilersD44)
   const n2OTotal = groups.reduce(
     (acc, group) => {
       const seasonalFaecalGrowers = calculateNitrogenExcretion(
@@ -194,10 +183,8 @@ export function calculateScope1BroilersAtmospheric(
         seasonalFaecalLayers.annualAtmosphericDeposition +
         seasonalFaecalOther.annualAtmosphericDeposition;
 
-      // (Agricultural_Soils_BroilersD41)
       const massNVolatised = constants.LIVESTOCK.FRAC_GASM * totalFaecal;
 
-      // (Agricultural_Soils_BroilersD48)
       const nitrousOxideProduction =
         massNVolatised *
         constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_NONIRRIGATEDPASTURE *

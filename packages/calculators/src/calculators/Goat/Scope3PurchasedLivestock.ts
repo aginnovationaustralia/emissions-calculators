@@ -3,8 +3,6 @@ import { GoatClassesAPI } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForGoatCalculator } from './constants';
 
-// breedingSource dataInputD114
-
 export function calculateScope3PurchaseLivestock(
   classes: GoatClasses,
   context: ExecutionContext<ConstantsForGoatCalculator>,

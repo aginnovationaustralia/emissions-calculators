@@ -12,15 +12,12 @@ export function calculateScope1And3Transport(
 
   const segmentTotal = transports.reduce(
     (acc, segment) => {
-      // (TransportD41)
       const fuelUsedLitres =
         segment.distance *
         constants.FISHERIES.TRANSPORT_FUEL_USAGE[segment.type];
 
-      // (TransportE41)
       const fuelUsedKL = fuelUsedLitres / 1000;
 
-      // (TransportD119)
       const {
         CO2: CO2EF,
         N2O: N2OEF,
@@ -28,7 +25,6 @@ export function calculateScope1And3Transport(
         SCOPE3,
       } = constants.FISHERIES.TRANSPORT_FUEL_EF[segment.fuel];
 
-      // (TransportF41)
       const scope1CO2 = fuelUsedKL * CO2EF;
       const scope1N2O = fuelUsedKL * N2OEF;
       const scope1CH4 = fuelUsedKL * CH4EF;

@@ -27,7 +27,6 @@ export function calculateScope3PurchasedFeed(
       totalGHGWithoutOther +
       feed.additionalIngredients * feed.feedPurchased * feed.emissionsIntensity;
 
-    // (embeddedEmissionsF10)
     return accTotal + totalGHGIngredient;
   }, 0);
 

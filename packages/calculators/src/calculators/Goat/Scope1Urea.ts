@@ -10,7 +10,6 @@ export function calculateScope1Urea(
 ) {
   const { constants } = context;
 
-  // (ureaApplicationC26)
   const massUreaLickBlocks =
     (supplementation.mineralBlock ?? 0) *
       (supplementation.mineralBlockUrea ?? 0) +
@@ -19,7 +18,6 @@ export function calculateScope1Urea(
     (supplementation.drySeasonMix ?? 0) *
       (supplementation.drySeasonMixUrea ?? 0);
 
-  // (ureaApplicationC29)
   const totalMassFertiliser =
     massUreaLickBlocks +
     fertiliser.pastureDryland +
@@ -27,7 +25,6 @@ export function calculateScope1Urea(
     fertiliser.cropsDryland +
     fertiliser.cropsIrrigated;
 
-  // (ureaApplicationC37)
   const carbon =
     totalMassFertiliser *
     constants.LIVESTOCK.CARBON_FRACTION_OF_UREA *

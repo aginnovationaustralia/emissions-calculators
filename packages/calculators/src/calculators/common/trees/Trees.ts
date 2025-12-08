@@ -2,8 +2,6 @@ import * as trees from '@/constants/Trees.json';
 import { Vegetation } from '@/types/vegetation.input';
 import { ExecutionContext } from '../../executionContext';
 
-// REVISIT: The structures for storing tree data, and the code for traversing through them, is probably more
-// complex than is necessary. This section could do with some refactoring and cleanup.
 export function calculateTreeCarbonSequestration(
   veg: Vegetation,
   context: ExecutionContext,
@@ -27,9 +25,6 @@ export function calculateTreeCarbonSequestration(
     constants.COMMON.TREE_REGIONS.SoilType2[vegetation.region],
   ];
 
-  // REVISIT: have a failsafe for this where a species is not found, i.e someone
-  // passed in a species that doesn't exist in this region
-  // these should never be < 1
   const treeNo =
     regionTrees.findIndex((tree) => tree === vegetation.treeSpecies) + 1;
   const soilNo = regionSoils.findIndex((soil) => soil === vegetation.soil) + 1;

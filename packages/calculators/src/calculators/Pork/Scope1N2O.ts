@@ -453,7 +453,6 @@ export function calculateScope1N2O(
       totalUndefined * constants.COMMON.GWP_FACTORSC6;
   });
 
-  // C273
   const totalAnnualLeachingMMSTonnes =
     (annualLeachingAndRunoffE + annualLeachingAndRunoffAEUndefined) * 10 ** 3;
   // END LEACHING AND RUNOFF - Nitrous Oxide_MMS
@@ -520,7 +519,6 @@ export function calculateScope1N2O(
     });
   });
 
-  // D72:75
   const nVolatilisedBySeason: SeasonNumberEntry[] = entriesFromObject(
     n20AEBySeason,
   ).map(
@@ -528,7 +526,6 @@ export function calculateScope1N2O(
       [season, n20AE * constants.LIVESTOCK.FRAC_GASM] as SeasonNumberEntry,
   );
 
-  // D80:84
   const totalN2OBySeason = nVolatilisedBySeason.map(
     ([season, n20AE]) =>
       [
@@ -539,17 +536,14 @@ export function calculateScope1N2O(
       ] as SeasonNumberEntry,
   );
 
-  // D85
   const totalN2OProductionAtmospheric = totalN2OBySeason.reduce(
     (acc, [, n20AE]) => acc + n20AE,
     0,
   );
 
-  // D86
   const totalN2OProductionAtmosphericGg =
     totalN2OProductionAtmospheric * constants.COMMON.GWP_FACTORSC16;
 
-  // D87
   const totalN2OProductionAtmosphericTonnes =
     totalN2OProductionAtmosphericGg * 10 ** 3;
   // END Atmospheric nitrogen deposition Urine and Dung

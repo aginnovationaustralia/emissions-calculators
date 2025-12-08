@@ -22,7 +22,7 @@ export function calculateElectricityScope2And3(
   const scope2Emissions = stateGridQuantity * scope2EF;
   const scope3Emissions = stateGridQuantity * scope3EF;
   const scope2FinalEmissions =
-    (electricitySource === 'Renewable' ? 0 : scope2Emissions) / 1000; // 0 is due to renewables having no emissions, t CO2-e / kWh (electricityC9)
+    (electricitySource === 'Renewable' ? 0 : scope2Emissions) / 1000; // 0 is due to renewables having no emissions, t CO2-e / kWh
   const scope3FinalEmissions =
     (electricitySource === 'Renewable' ? 0 : scope3Emissions) / 1000;
   return {

@@ -8,14 +8,12 @@ export function calculateScope1Urea(
 ) {
   const { constants } = context;
 
-  // (ureaApplicationC10)
   const totalMassOfFertiliser =
     fertiliser.pastureDryland +
     fertiliser.pastureIrrigated +
     fertiliser.cropsDryland +
     fertiliser.cropsIrrigated;
 
-  // (ureaApplicationC19)
   const massFertiliserGg =
     totalMassOfFertiliser *
     constants.COMMON.FERTILISER_EF *

@@ -22,13 +22,11 @@ export function goatEmissionsForSeason(
 ): GoatSeasonEmissions {
   const { constants } = context;
 
-  // (manureManagementE35)
   const MANUREYEAR = constants.GOAT.MANUREPRODUCTION / 365;
 
   const proportionAnimalsWarmClimate = state === 'nt' ? 1 : 0;
   const proportionAnimalsTemperateClimate = state === 'nt' ? 0 : 1;
 
-  // (manureManagementD20)
   const M =
     MANUREYEAR *
       proportionAnimalsWarmClimate *
@@ -37,27 +35,22 @@ export function goatEmissionsForSeason(
       proportionAnimalsTemperateClimate *
       constants.LIVESTOCK.METHANE_TEMPERATE_EF;
 
-  // (manureManagementD24)
   const seasonalManureMethaneProduction = head * M * 91.25 * 10 ** -6;
 
   //   enteric
   const seasonalEntericMethaneProduction =
     ((head * constants.GOAT.EF) / 4) * 10 ** -6;
 
-  // (Nitrous_Oxide_MMSC16)
   const NITROGENEF = 7;
 
-  // (Nitrous_Oxide_MMSR7)
   const seasonalUrinaryExcreted = ((head * NITROGENEF) / 4) * 10 ** -6;
   // R15
   const seasonalFaecelExcreted = seasonalUrinaryExcreted * 0.29;
   // R24
   const seasonalUrineExcreted = seasonalUrinaryExcreted * 0.71;
 
-  // (Agricultural_SoilsD32)
   const URINEEF = 0.004;
 
-  // (Agricultural_SoilsE35)
   const urineDungDeposited =
     seasonalFaecelExcreted * URINEEF * constants.COMMON.GWP_FACTORSC15 +
     seasonalUrineExcreted * URINEEF * constants.COMMON.GWP_FACTORSC15;
@@ -160,7 +153,6 @@ export function calculateCompleteGoatEmissions(
     constants.COMMON.GWP_FACTORSC6 *
     1000;
 
-  // (agriculturalSoilsD48)
   const springTotalUrineDung = Object.values(totals)
     .map((t) => t.spring)
     .reduce(
@@ -190,13 +182,11 @@ export function calculateCompleteGoatEmissions(
     );
 
   const multiplier = getMultiplier(context);
-  // (agriculturalSoilsD64 + D48)
   const springUrineDungN2O = springTotalUrineDung * multiplier;
   const summerUrineDungN2O = summerTotalUrineDung * multiplier;
   const winterUrineDungN2O = winterTotalUrineDung * multiplier;
   const autumnUrineDungN2O = autumnTotalUrineDung * multiplier;
 
-  // (agriculturalSoilsD71)
   const totalAtmosphericDeposition =
     (springUrineDungN2O +
       summerUrineDungN2O +
@@ -205,7 +195,6 @@ export function calculateCompleteGoatEmissions(
     constants.COMMON.GWP_FACTORSC6 *
     1000;
 
-  // (agriculturalSoilsD57)
   // Atmospheric nitrogen deposition Fertiliser
   // Dryland
   const atmosphericNDepositionUreaGrazingDryland =
@@ -262,7 +251,6 @@ export function calculateCompleteGoatEmissions(
     constants.COMMON.GWP_FACTORSC6;
   // END Atmospheric nitrogen deposition Fertiliser
 
-  // (agriculturalSoilsD14)
   const nFertiliserGrazingDrylandSoil =
     fertiliser.pastureDryland *
     0.46 *
@@ -289,13 +277,11 @@ export function calculateCompleteGoatEmissions(
     constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
     constants.COMMON.GWP_FACTORSC15;
 
-  // WARNING: agriculturalSoilsF16 points to G62 but should be F62
   const nFertiliserOtherIrrigatedSoil =
     otherFertiliserIrrigated *
     constants.LIVESTOCK.AGRICULTURAL_SOILS.EF_IRRIGATEDCROP *
     constants.COMMON.GWP_FACTORSC15;
 
-  // (agriculturalSoilsD17)
   const totalN2ODrylandSoil =
     nFertiliserGrazingDrylandSoil +
     nFertiliserCroppingDrylandSoil +
@@ -305,7 +291,6 @@ export function calculateCompleteGoatEmissions(
     nFertiliserCroppingIrrigatedSoil +
     nFertiliserOtherIrrigatedSoil;
 
-  // (agriculturalSoilsD18)
   const totalSoilCO2e =
     (totalN2ODrylandSoil + totalN2OIrrigatedSoil) *
     constants.COMMON.GWP_FACTORSC6;
@@ -314,7 +299,6 @@ export function calculateCompleteGoatEmissions(
 
   const fracWetMultiplier = rainfallAbove600 ? 1 : 0; // 2=yes.1=no
 
-  // (agriculturalSoilsD87 to F89)
   const leechingNFertiliserGrazingNonIrrigated =
     fertiliser.pastureDryland * 0.46 * fracWetMultiplier * fracLeach;
   const leechingNFertiliserCroppingNonIrrigated =
@@ -326,7 +310,6 @@ export function calculateCompleteGoatEmissions(
     fracLeach,
   );
 
-  // (agriculturalSoilsBeefD99 to agriculturalSoilsBeefF101)
   const nFertiliserGrazingNonIrrigated =
     leechingNFertiliserGrazingNonIrrigated *
     constants.LIVESTOCK.LEECHING_AND_RUNOFF *
@@ -340,8 +323,6 @@ export function calculateCompleteGoatEmissions(
     constants.LIVESTOCK.LEECHING_AND_RUNOFF *
     constants.COMMON.GWP_FACTORSC15;
 
-  // NOTE: F101:F103 is all hardcoded to 0
-  // (agriculturalSoilsD104)
   const nFertiliserCropsTotal =
     nFertiliserGrazingNonIrrigated +
     nFertiliserCroppingNonIrrigated +
@@ -350,13 +331,11 @@ export function calculateCompleteGoatEmissions(
     0 +
     0;
 
-  // (agriculturalSoilsD92)
   const springDungRunoff = springTotalUrineDung * fracWetMultiplier * fracLeach;
   const summerDungRunoff = summerTotalUrineDung * fracWetMultiplier * fracLeach;
   const autumnDungRunoff = autumnTotalUrineDung * fracWetMultiplier * fracLeach;
   const winterDungRunoff = winterTotalUrineDung * fracWetMultiplier * fracLeach;
 
-  // (agriculturalSoilsD107)
   const springDungN2O =
     springDungRunoff *
     constants.LIVESTOCK.LEECHING_AND_RUNOFF *
@@ -374,11 +353,9 @@ export function calculateCompleteGoatEmissions(
     constants.LIVESTOCK.LEECHING_AND_RUNOFF *
     constants.COMMON.GWP_FACTORSC15;
 
-  // (agriculturalSoilsBeefD109)
   const totalNDungUrine =
     springDungN2O + summerDungN2O + autumnDungN2O + winterDungN2O;
 
-  // (agriculturalSoilsBeefC111)
   const totalN2OLeechingAndRunoff =
     nFertiliserCropsTotal + totalNDungUrine * 10 ** 3;
 
