@@ -52,11 +52,16 @@ export default [
         'error',
         { additionalTestBlockFunctions: ['compareEmissionsFrom2Inputs'] },
       ],
-      //   'no-console': 'off',
     },
   },
   {
     files: ['**/scripts/**/*.ts'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+  {
+    files: ['examples/ts-client/**'],
     rules: {
       'no-console': 'off',
     },
