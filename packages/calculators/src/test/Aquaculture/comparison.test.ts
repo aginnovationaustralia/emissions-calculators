@@ -28,7 +28,11 @@ import {
   TransportFuelTypes,
 } from '@/types/enums';
 import XLSX, { Cell } from 'xlsx-populate';
-import { GeneratedTest, traverseExpectations } from '../common/emissions';
+import {
+  executeTest,
+  GeneratedTest,
+  traverseExpectations,
+} from '../common/emissions';
 import {
   calculateElectricity,
   emptyOrNumber,
@@ -567,13 +571,6 @@ describe('Compare aquaculture calculator to spreadsheet', () => {
     const expectedOutput = getExpectedOutput(workbook);
     const calculatorData = calculateAquaculture(validatedInput.result);
     tests = traverseExpectations(expectedOutput, calculatorData);
-    tests.forEach((test) => {
-      try {
-        test.test();
-      } catch (e: unknown) {
-        console.error(`Error in test ${test.path}: ${e}`);
-        throw e;
-      }
-    });
+    tests.forEach(executeTest);
   });
 });

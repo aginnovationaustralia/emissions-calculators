@@ -21,7 +21,7 @@ import {
 } from '@/types/enums';
 import XLSX from 'xlsx-populate';
 import { testContext } from '../common/context';
-import { traverseExpectations } from '../common/emissions';
+import { executeTest, traverseExpectations } from '../common/emissions';
 import {
   emptyOrNumber,
   getWorkbook,
@@ -330,13 +330,6 @@ describe('Compare beef calculator to spreadsheet', () => {
     );
     // console.dir(calculatorData, { depth: null });
     const tests = traverseExpectations(expectedOutput, calculatorData);
-    tests.forEach((test) => {
-      try {
-        test.test();
-      } catch (e: unknown) {
-        console.error(`Error in test ${test.path}: ${e}`);
-        throw e;
-      }
-    });
+    tests.forEach(executeTest);
   });
 });
