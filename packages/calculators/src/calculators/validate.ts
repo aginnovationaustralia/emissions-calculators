@@ -12,11 +12,6 @@ export type ValidationErrorResult = {
    * Message explaining why the validation failed.
    */
   message: string;
-
-  /**
-   * Input/current value.
-   */
-  value: unknown;
 };
 
 export class InputValidationError extends Error {
@@ -46,7 +41,7 @@ export type ValidationResult<T extends object> =
     }
   | {
       valid: false;
-      error: InputValidationError;
+      issues: ValidationErrorResult[];
     };
 export function validateCalculatorInput<T extends object>(
   schema: ZodType<T>,
@@ -62,7 +57,10 @@ export function validateCalculatorInput<T extends object>(
   } else {
     return {
       valid: false,
-      error: new InputValidationError(parseResult.error.issues),
+      issues: parseResult.error.issues.map((x) => ({
+        path: x.path.join('.'),
+        message: x.message,
+      })),
     };
   }
 }

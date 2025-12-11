@@ -1,4 +1,4 @@
-import { generateCalculateEmissions } from '@/calculate';
+import { generateCalculateEmissions } from '../calculate';
 import {
   calculateAquaculture,
   calculateBeef,

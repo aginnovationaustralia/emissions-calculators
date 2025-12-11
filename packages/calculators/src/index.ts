@@ -1,4 +1,7 @@
+export {
+  CalculateEmissionsResult,
+  CalculateEmissionsStatus,
+} from './calculate';
 export * from './calculators';
-export { InputValidationError } from './calculators/validate';
 export * from './constants';
 export * from './types';

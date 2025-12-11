@@ -2,8 +2,8 @@ import { ZodType } from 'zod';
 import { CalculatorOptions } from './calculators/execution/types';
 import { CalculatorNames } from './calculators/strings';
 import {
-  InputValidationError,
   validateCalculatorInput,
+  ValidationErrorResult,
 } from './calculators/validate';
 import {
   AquacultureInput,
@@ -68,20 +68,22 @@ import {
   WildSeaFisheriesOutput,
 } from './types';
 
+export enum CalculateEmissionsStatus {
+  OK,
+  INVALID_INPUT,
+  ERROR,
+}
 export type CalculateEmissionsResult<O extends object> =
   | {
-      succeeded: true;
-      valid: true;
+      status: CalculateEmissionsStatus.OK;
       emissions: O;
     }
   | {
-      succeeded: false;
-      valid: false;
-      error: InputValidationError;
+      status: CalculateEmissionsStatus.INVALID_INPUT;
+      issues: ValidationErrorResult[];
     }
   | {
-      succeeded: false;
-      valid: true;
+      status: CalculateEmissionsStatus.ERROR;
       error: Error;
     };
 
@@ -95,21 +97,18 @@ const tryCalculate = <S extends object, Z extends ZodType<S>, O extends object>(
     const validatedInput = validateCalculatorInput(schema, input);
     if (!validatedInput.valid) {
       return {
-        succeeded: false,
-        valid: false,
-        error: validatedInput.error,
+        status: CalculateEmissionsStatus.INVALID_INPUT,
+        issues: validatedInput.issues,
       };
     }
     const emissions = calculator(validatedInput.result, options);
     return {
-      succeeded: true,
-      valid: true,
+      status: CalculateEmissionsStatus.OK,
       emissions,
     };
   } catch (error) {
     return {
-      succeeded: false,
-      valid: true,
+      status: CalculateEmissionsStatus.ERROR,
       error: error as Error,
     };
   }
