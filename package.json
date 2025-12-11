@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/aginnovationaustralia/emissions-calculators#readme",
   "description": "",
-  "packageManager": "pnpm@9.15.4",
+  "packageManager": "pnpm@10",
   "engines": {
     "node": ">=22.19.0"
   },
