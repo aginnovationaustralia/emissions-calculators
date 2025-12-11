@@ -1,8 +1,8 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 import { BuffaloClassSchema } from './buffaloclass.input';
 
-export const BuffaloClassesSchema = z
-  .object({
+export const BuffaloClassesSchema = object({
     bulls: BuffaloClassSchema.optional().meta({ description: 'Bulls' }),
     tradeBulls: BuffaloClassSchema.optional().meta({
       description: 'Trade bulls',

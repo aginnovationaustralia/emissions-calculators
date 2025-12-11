@@ -1,6 +1,7 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 
-export const AquacultureCustomBaitPurchaseSchema = z.object({
+export const AquacultureCustomBaitPurchaseSchema = object({
   purchasedTonnes: z
     .number()
     .min(0)

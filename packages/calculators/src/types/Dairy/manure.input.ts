@@ -1,8 +1,7 @@
 import { z } from 'zod';
-import { percentage } from '../schemas';
+import { object, percentage } from '../schemas';
 
-export const ManureManagementSchema = z
-  .object({
+export const ManureManagementSchema = object({
     pasture: percentage(),
     anaerobicLagoon: percentage(),
     sumpAndDispersal: percentage(),

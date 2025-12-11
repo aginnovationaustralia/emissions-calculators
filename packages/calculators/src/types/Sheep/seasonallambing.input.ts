@@ -1,7 +1,7 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 
-export const SeasonalLambingSchema = z
-  .object({
+export const SeasonalLambingSchema = object({
     autumn: z.number().min(0),
     winter: z.number().min(0),
     spring: z.number().min(0),

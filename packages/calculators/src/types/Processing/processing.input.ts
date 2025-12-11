@@ -5,11 +5,10 @@ import { SolidWasteInputSchema } from '../common/solid-waste.input';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { FuelInputSchema } from '../fuel.input';
 import { RefrigerantInputSchema } from '../refrigerant.input';
-import { proportion } from '../schemas';
+import { object, proportion } from '../schemas';
 import { ProcessingProductSchema } from './product.input';
 
-export const ProductProcessingInputSchema = z
-  .object({
+export const ProductProcessingInputSchema = object({
     id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
     product: ProcessingProductSchema.meta({
       description: DESCRIPTIONS.PROCESSING_PRODUCT,

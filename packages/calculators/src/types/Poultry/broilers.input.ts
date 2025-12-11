@@ -2,11 +2,11 @@ import { ElectricitySources } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { LivestockPurchaseSchema } from '../livestockPurchase.input';
-import { proportion } from '../schemas';
+import { object, proportion } from '../schemas';
 import { BroilerSaleSchema } from './broilersale.input';
 import { BroilerGroupSchema } from './group.input';
 
-export const BroilersCompleteSchema = z.object({
+export const BroilersCompleteSchema = object({
   id: z.string().optional().meta({ description: DESCRIPTIONS.ACTIVITY_ID }),
   groups: z.array(BroilerGroupSchema),
   diesel: z.number().min(0).meta({ description: DESCRIPTIONS.DIESEL }),

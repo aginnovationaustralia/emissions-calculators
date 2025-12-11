@@ -64,19 +64,16 @@ describe('Feedlot calculator, VIC', () => {
 });
 
 describe('Feedlot scenarios', () => {
-  const input = {
-    ...feedlotTestData110,
-    purchases: {},
-    sales: {},
-  };
-
-  const validatedInput = validateCalculatorInput(FeedlotInputSchema, input);
+  const validatedInput = validateCalculatorInput(
+    FeedlotInputSchema,
+    feedlotTestData,
+  );
 
   if (!validatedInput.valid) {
     throw validatedInput.error;
   }
 
-  const context = testContext('Beef');
+  const context = testContext('Feedlot');
   const emissions = calculateEntireFeedlot(validatedInput.result, context);
 
   ensureEveryKeyIsDefined(emissions as unknown as KeyValuePairs);

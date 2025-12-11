@@ -1,9 +1,8 @@
 import { z } from 'zod';
-import { proportion } from '../schemas';
+import { object, proportion } from '../schemas';
 import { SavannahBurningSchema } from './savannah.input';
 
-export const BeefSavannahBurningSchema = z
-  .object({
+export const BeefSavannahBurningSchema = object({
     burning: SavannahBurningSchema,
     allocationToBeef: z.array(proportion()).meta({
       description:

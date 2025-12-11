@@ -1,8 +1,9 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
 import { TransportFuelTypes } from './enums';
+import { object } from './schemas';
 
-export const TransportFuelInputSchema = z.object({
+export const TransportFuelInputSchema = object({
   type: z
     .enum(TransportFuelTypes)
     .meta({ description: DESCRIPTIONS.FUEL_TYPE }),

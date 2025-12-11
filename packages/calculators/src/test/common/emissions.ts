@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 export const defaultPrecision = 7;
 
 export type KeyValuePairs = {
@@ -119,4 +120,13 @@ export const ensureEveryKeyIsDefined = (emissions: KeyValuePairs) => {
       ensureEveryKeyIsDefined(value as KeyValuePairs);
     }
   });
+};
+
+export const executeTest = (test: GeneratedTest) => {
+  try {
+    test.test();
+  } catch (e: unknown) {
+    console.error(`Error in test ${test.path}: ${e}`);
+    throw e;
+  }
 };

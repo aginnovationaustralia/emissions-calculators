@@ -1,9 +1,8 @@
 import { z } from 'zod';
-import { proportion } from '../schemas';
+import { object, proportion } from '../schemas';
 import { PoultryFeedIngredientsSchema } from './feedingredients.input';
 
-export const PoultryFeedSchema = z
-  .object({
+export const PoultryFeedSchema = object({
     ingredients: PoultryFeedIngredientsSchema,
     feedPurchased: z
       .number()

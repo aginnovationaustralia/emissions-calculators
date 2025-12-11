@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import { loadConstants } from '@/constants/loader';
 import { AllConstants } from '@/constants/types';

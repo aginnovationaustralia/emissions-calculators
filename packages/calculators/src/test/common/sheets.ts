@@ -5,7 +5,6 @@ import XLSX, { Cell } from 'xlsx-populate';
 
 export const getWorkbook = async (filePath: string) => {
   // log the current working directory
-  console.log(process.cwd());
   const workbook = await XLSX.fromFileAsync(filePath);
   return workbook;
 };

@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import { SheepClassSchema } from './sheepclass.input';
+import { object } from '../schemas';
 
-export const SheepClassesSchema = z.object({
+export const SheepClassesSchema = object({
   rams: SheepClassSchema.optional(),
   tradeRams: SheepClassSchema.optional(),
   wethers: SheepClassSchema.optional(),

@@ -1,8 +1,8 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 import { NitrogenFertiliserSchema } from './fertiliser.input';
 
-export const SeasonalFertiliserSchema = z
-  .object({
+export const SeasonalFertiliserSchema = object({
     autumn: NitrogenFertiliserSchema,
     winter: NitrogenFertiliserSchema,
     spring: NitrogenFertiliserSchema,

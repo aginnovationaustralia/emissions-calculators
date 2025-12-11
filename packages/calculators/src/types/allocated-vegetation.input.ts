@@ -1,18 +1,16 @@
 import { z } from 'zod';
-import { proportion } from './schemas';
+import { object, proportion } from './schemas';
 import { VegetationSchema } from './vegetation.input';
 
-export const AllocatedVegetationSchema = z
-  .object({
-    vegetation: VegetationSchema,
-    allocatedProportion: z.array(proportion()).meta({
-      description:
-        'The proportion of the sequestration that is allocated to the activity',
-    }),
-  })
-  .meta({
+export const AllocatedVegetationSchema = object({
+  vegetation: VegetationSchema,
+  allocatedProportion: z.array(proportion()).meta({
     description:
-      'Non-productive vegetation inputs allocated to a particular activity type',
-  });
+      'The proportion of the sequestration that is allocated to the activity',
+  }),
+}).meta({
+  description:
+    'Non-productive vegetation inputs allocated to a particular activity type',
+});
 
 export type AllocatedVegetation = z.infer<typeof AllocatedVegetationSchema>;

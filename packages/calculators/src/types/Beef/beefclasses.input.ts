@@ -1,8 +1,8 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 import { BeefClassSchema } from './beefclass.input';
 
-export const BeefClassesSchema = z
-  .object({
+export const BeefClassesSchema = object({
     bullsGt1: BeefClassSchema.optional().meta({
       description: 'Bulls whose age is greater than 1 year old',
     }),

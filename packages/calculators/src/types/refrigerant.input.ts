@@ -1,8 +1,9 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
 import { Refrigerants } from './enums';
+import { object } from './schemas';
 
-export const RefrigerantInputSchema = z.object({
+export const RefrigerantInputSchema = object({
   refrigerant: z
     .enum(Refrigerants)
     .meta({ description: DESCRIPTIONS.REFRIGERANT }),

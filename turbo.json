@@ -6,7 +6,9 @@
       "dependsOn": ["^build"]
     },
     "test": {},
-    "lint": {},
+    "lint": {
+      "inputs": ["eslint.config.mjs"]
+    },
     "check:types": {},
     "clean": {
       "cache": false

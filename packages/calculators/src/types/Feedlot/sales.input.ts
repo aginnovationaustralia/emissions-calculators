@@ -1,8 +1,8 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 import { FeedlotSaleSchema } from './sale.input';
 
-export const FeedlotSalesSchema = z
-  .object({
+export const FeedlotSalesSchema = object({
     bullsGt1: z.array(FeedlotSaleSchema).meta({
       description:
         'Livestock sales for bulls whose age is greater than 1 year old',

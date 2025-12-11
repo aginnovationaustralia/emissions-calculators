@@ -9,7 +9,7 @@ import {
   ProductionSystem,
 } from '@/types';
 import XLSX, { Cell } from 'xlsx-populate';
-import { traverseExpectations } from '../common/emissions';
+import { executeTest, traverseExpectations } from '../common/emissions';
 import {
   getCropVegetations,
   getWorkbook,
@@ -198,13 +198,6 @@ describe('Compare grains calculator to spreadsheet', () => {
     const expectedOutput = getExpectedOutput(workbook);
     const calculatorData = calculateGrains(validatedInput.result);
     const tests = traverseExpectations(expectedOutput, calculatorData);
-    tests.forEach((test) => {
-      try {
-        test.test();
-      } catch (e: unknown) {
-        console.error(`Error in test ${test.path}: ${e}`);
-        throw e;
-      }
-    });
+    tests.forEach(executeTest);
   });
 });

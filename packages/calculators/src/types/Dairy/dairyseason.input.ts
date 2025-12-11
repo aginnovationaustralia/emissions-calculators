@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
-import { percentage } from '../schemas';
+import { object, percentage } from '../schemas';
 
 const optionalDietInputNote =
   'Note: If no value is provided, zero will be assumed. This will result in large, negative output values. This input will become mandatory in a future version.';
 
-export const DairySeasonSchema = z.object({
+export const DairySeasonSchema = object({
   head: z.number().min(0).meta({ description: DESCRIPTIONS.HEAD }),
   liveweight: z.number().min(0).meta({ description: DESCRIPTIONS.LIVEWEIGHT }),
   liveweightGain: z.number().meta({ description: DESCRIPTIONS.LIVEWEIGHTGAIN }),

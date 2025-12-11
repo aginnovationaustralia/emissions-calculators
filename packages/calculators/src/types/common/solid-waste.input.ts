@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
+import { object } from '../schemas';
 
-export const SolidWasteInputSchema = z.object({
+export const SolidWasteInputSchema = object({
   sentOffsiteTonnes: z
     .number()
     .meta({ description: DESCRIPTIONS.SOLID_WASTE_SENT_OFFSITE }),

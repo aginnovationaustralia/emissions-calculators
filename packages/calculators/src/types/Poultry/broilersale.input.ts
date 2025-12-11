@@ -1,8 +1,8 @@
 import { z } from 'zod';
+import { object } from '../schemas';
 import { PoultrySaleSchema } from './sale.input';
 
-export const BroilerSaleSchema = z
-  .object({
+export const BroilerSaleSchema = object({
     meatChickenGrowersSales: PoultrySaleSchema,
     meatChickenLayers: PoultrySaleSchema,
     meatOther: PoultrySaleSchema,
