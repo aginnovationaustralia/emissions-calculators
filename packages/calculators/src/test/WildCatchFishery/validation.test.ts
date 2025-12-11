@@ -62,7 +62,7 @@ describe('validating WildCatchFishery test inputs, all types of inputs', () => {
       expect(t).toEqual(
         expect.objectContaining({
           valid: false,
-          error: expect.any(InputValidationError),
+          issues: expect.any(Array),
         }),
       );
     });

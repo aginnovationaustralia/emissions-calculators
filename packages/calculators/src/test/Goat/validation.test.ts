@@ -39,7 +39,7 @@ describe('a single goat instance is not supported', () => {
     expect(t).toEqual(
       expect.objectContaining({
         valid: false,
-        error: expect.any(InputValidationError),
+        issues: expect.any(Array),
       }),
     );
   });
@@ -54,7 +54,7 @@ describe('invalid requests', () => {
     expect(tHigh).toEqual(
       expect.objectContaining({
         valid: false,
-        error: expect.any(InputValidationError),
+        issues: expect.any(Array),
       }),
     );
 
@@ -65,7 +65,7 @@ describe('invalid requests', () => {
     expect(tLow).toEqual(
       expect.objectContaining({
         valid: false,
-        error: expect.any(InputValidationError),
+        issues: expect.any(Array),
       }),
     );
   });

@@ -94,7 +94,7 @@ describe('a single sheep and beef instance is not supported', () => {
     expect(t).toEqual(
       expect.objectContaining({
         valid: false,
-        error: expect.any(InputValidationError),
+        issues: expect.any(Array),
       }),
     );
   });

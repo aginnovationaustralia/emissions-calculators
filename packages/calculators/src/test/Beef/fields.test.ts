@@ -1,8 +1,5 @@
 import { BeefInputSchema } from '@/types/Beef/input';
-import {
-  InputValidationError,
-  validateCalculatorInput,
-} from '../../calculators/validate';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { beefTestData } from './input.data';
 import { veg1, veg2 } from './vegetation.data';
 
@@ -58,7 +55,7 @@ describe('vegetation', () => {
     ).toEqual(
       expect.objectContaining({
         valid: false,
-        error: expect.any(InputValidationError),
+        issues: expect.any(Array),
       }),
     );
   });
