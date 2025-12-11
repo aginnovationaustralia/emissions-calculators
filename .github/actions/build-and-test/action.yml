@@ -14,6 +14,11 @@ runs:
         node-version-file: '.nvmrc'
         cache: 'pnpm'
 
+    - name: set git options
+      shell: bash
+      run: |
+        git config --global url."https://".insteadOf git+ssh://git@
+
     - name: Install dependencies
       run: pnpm install
       shell: bash
