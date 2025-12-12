@@ -18,8 +18,11 @@ export const calculateBeefNestedExport = () => {
   );
 
   if (!validatedInput.valid) {
-    console.error('Input was not valid', validatedInput.error.errors);
-    throw validatedInput.error;
+    const formattedString = validatedInput.issues
+      .map((issue) => `${issue.path}: ${issue.message}`)
+      .join(', ');
+    console.error('Input was not valid', formattedString);
+    throw new Error('Input was not valid: ' + formattedString);
   }
 
   const result = calculateBeef(validatedInput.result, { disableMetrics: true });

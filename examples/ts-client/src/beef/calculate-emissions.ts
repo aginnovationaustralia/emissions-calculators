@@ -2,6 +2,7 @@ import {
   BeefOutput,
   calculateEmissions,
   CalculateEmissionsResult,
+  CalculateEmissionsStatus,
   isValidCalculatorName,
 } from '@aginnovationaustralia/emissions-calculators';
 import { beefInputData } from './input';
@@ -23,12 +24,12 @@ export const calculateBeefSimple = () => {
     calculatorName,
     beefInputData,
   );
-  if (result.succeeded) {
+  if (result.status === CalculateEmissionsStatus.OK) {
     console.log('Emissions calculated correctly', result.emissions);
-  } else if (result.valid) {
-    console.error('Emissions calculation failed', result.error);
+  } else if (result.status === CalculateEmissionsStatus.INVALID_INPUT) {
+    console.error('Input was not valid', result.issues.join(', '));
   } else {
-    console.error('Input was not valid', result.error.errors);
+    console.error('Error calculating emissions', result.error);
   }
 
   return result;

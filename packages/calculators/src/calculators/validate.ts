@@ -2,7 +2,7 @@ import { ZodType } from 'zod';
 import { $ZodIssue } from 'zod/v4/core';
 import { objectFromEntries } from './common/tools/object';
 
-export type ValidationErrorResult = {
+export type ValidationIssue = {
   /**
    * The path to the property that failed validation.
    */
@@ -41,7 +41,7 @@ export type ValidationResult<T extends object> =
     }
   | {
       valid: false;
-      issues: ValidationErrorResult[];
+      issues: ValidationIssue[];
     };
 export function validateCalculatorInput<T extends object>(
   schema: ZodType<T>,
