@@ -1,15 +1,12 @@
 import { GoatInputSchema } from '@/types/Goat/input';
-import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { goatComplete, goatTestData } from './goats.data';
 import { veg1, veg2 } from './vegetation.data';
 
 describe('validating Goat test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(GoatInputSchema, goatTestData);
-
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
+    const result = validateCalculatorInput(GoatInputSchema, goatTestData);
+    expect(result.valid).toBe(true);
   });
 });
 

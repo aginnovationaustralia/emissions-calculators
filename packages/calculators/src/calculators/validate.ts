@@ -1,6 +1,4 @@
 import { ZodType } from 'zod';
-import { $ZodIssue } from 'zod/v4/core';
-import { objectFromEntries } from './common/tools/object';
 
 export type ValidationIssue = {
   /**
@@ -13,26 +11,6 @@ export type ValidationIssue = {
    */
   message: string;
 };
-
-export class InputValidationError extends Error {
-  public errors: Record<string, string>;
-
-  constructor(errors: $ZodIssue[]) {
-    const formattedErrors = errors.map((x) => ({
-      key: x.path.join('.'),
-      message: x.message,
-    }));
-    super(
-      formattedErrors
-        .map(({ key, message }) => `${key}: ${message}`)
-        .join(', '),
-    );
-    this.errors = objectFromEntries(
-      formattedErrors.map(({ key, message }) => [key, message]),
-    );
-    Object.setPrototypeOf(this, InputValidationError.prototype);
-  }
-}
 
 export type ValidationResult<T extends object> =
   | {

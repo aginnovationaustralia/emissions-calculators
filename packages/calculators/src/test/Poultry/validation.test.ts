@@ -1,13 +1,11 @@
 import { PoultryInputSchema } from '@/types/Poultry/input';
-import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { poultryTestData } from './poultry.data';
 
 describe('validating Poultry test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(PoultryInputSchema, poultryTestData);
-
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow(InputValidationError);
+    const result = validateCalculatorInput(PoultryInputSchema, poultryTestData);
+    expect(result.valid).toBe(true);
   });
 });
 

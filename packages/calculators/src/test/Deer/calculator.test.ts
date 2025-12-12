@@ -74,7 +74,7 @@ describe('Deer scenarios', () => {
   const validatedInput = validateCalculatorInput(DeerInputSchema, input);
 
   if (!validatedInput.valid) {
-    throw validatedInput.error;
+    throw new Error(JSON.stringify(validatedInput.issues));
   }
 
   const context = testContext('Beef');

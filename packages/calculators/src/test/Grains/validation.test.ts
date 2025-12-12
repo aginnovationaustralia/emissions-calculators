@@ -1,14 +1,11 @@
 import { GrainsInputSchema } from '@/types/Grains/input';
-import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { grainsTestData } from './grains.data';
 
 describe('validating Grains test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(GrainsInputSchema, grainsTestData);
-
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
+    const result = validateCalculatorInput(GrainsInputSchema, grainsTestData);
+    expect(result.valid).toBe(true);
   });
 });
 

@@ -74,7 +74,7 @@ describe('Buffalo scenarios', () => {
   const validatedInput = validateCalculatorInput(BuffaloInputSchema, input);
 
   if (!validatedInput.valid) {
-    throw validatedInput.error;
+    throw new Error(JSON.stringify(validatedInput.issues));
   }
 
   const context = testContext('Buffalo');

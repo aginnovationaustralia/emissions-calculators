@@ -24,7 +24,7 @@ describe('validating Sugar test inputs for incorrect inputs', () => {
     // Missing vegetation field
   };
 
-  test('validation should throw InputValidationError for invalid input', () => {
+  test('validation should return invalid result for invalid input', () => {
     expect(validateCalculatorInput(SugarInputSchema, invalidInput)).toEqual(
       expect.objectContaining({
         valid: false,

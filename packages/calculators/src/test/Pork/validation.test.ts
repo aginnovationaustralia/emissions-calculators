@@ -1,14 +1,11 @@
 import { PorkInputSchema } from '@/types/Pork/input';
-import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { porkTestData } from './pork.data';
 
 describe('validating Pork test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(PorkInputSchema, porkTestData);
-
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
+    const result = validateCalculatorInput(PorkInputSchema, porkTestData);
+    expect(result.valid).toBe(true);
   });
 });
 

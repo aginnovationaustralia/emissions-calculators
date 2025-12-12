@@ -1,6 +1,5 @@
 import { SheepBeefInputSchema } from '@/types/SheepBeef/input';
 import { CustomisedFertiliser } from '@/types/enums';
-import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { beefTestInput } from '../Beef/beef.data';
 import { burnTestData } from '../Beef/burn.data';
@@ -8,12 +7,10 @@ import { sheepTestInput } from '../Sheep/sheep.data';
 import { sheepbeefTestData } from './sheepbeef.data';
 
 describe('validating SheepBeef test inputs, all types of inputs', () => {
-  const t = () =>
-    validateCalculatorInput(SheepBeefInputSchema, sheepbeefTestData);
+  const t = validateCalculatorInput(SheepBeefInputSchema, sheepbeefTestData);
 
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
+    expect(t.valid).toBe(true);
   });
 });
 

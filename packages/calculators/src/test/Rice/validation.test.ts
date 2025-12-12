@@ -1,14 +1,11 @@
 import { RiceInputSchema } from '@/types/Rice/input';
-import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { riceTestData } from './rice.data';
 
 describe('validating Rice test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(RiceInputSchema, riceTestData);
-
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
+    const result = validateCalculatorInput(RiceInputSchema, riceTestData);
+    expect(result.valid).toBe(true);
   });
 });
 

@@ -193,7 +193,7 @@ describe('Compare grains calculator to spreadsheet', () => {
     const input = getCalculatorInput(workbook);
     const validatedInput = validateCalculatorInput(GrainsInputSchema, input);
     if (!validatedInput.valid) {
-      throw validatedInput.error;
+      throw new Error(JSON.stringify(validatedInput.issues));
     }
     const expectedOutput = getExpectedOutput(workbook);
     const calculatorData = calculateGrains(validatedInput.result);

@@ -18,7 +18,7 @@ describe('checking beef inputs and outputs', () => {
     ];
 
     if (!input.valid) {
-      throw input.error;
+      throw new Error(JSON.stringify(input.issues));
     }
 
     inputFields.forEach((f) => {

@@ -1,14 +1,11 @@
 import { FeedlotInputSchema } from '@/types/Feedlot/input';
-import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { feedlotTestData } from './feedlot.data';
 
 describe('validating Feedlot test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(FeedlotInputSchema, feedlotTestData);
-
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
+    const result = validateCalculatorInput(FeedlotInputSchema, feedlotTestData);
+    expect(result.valid).toBe(true);
   });
 });
 

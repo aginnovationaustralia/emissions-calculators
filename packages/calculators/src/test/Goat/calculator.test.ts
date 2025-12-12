@@ -79,7 +79,7 @@ describe('Goat scenarios', () => {
   const validatedInput = validateCalculatorInput(GoatInputSchema, input);
 
   if (!validatedInput.valid) {
-    throw validatedInput.error;
+    throw new Error(JSON.stringify(validatedInput.issues));
   }
 
   const context = testContext('Goat');
