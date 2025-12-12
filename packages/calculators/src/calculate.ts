@@ -5,22 +5,19 @@ import {
   ValidationIssue,
 } from './calculators/validate';
 
-export enum CalculateEmissionsStatus {
-  OK,
-  INVALID_INPUT,
-  ERROR,
-}
+export type CalculateEmissionsStatus = 'OK' | 'INVALID_INPUT' | 'ERROR';
+
 export type CalculateEmissionsResult<O extends object> =
   | {
-      status: CalculateEmissionsStatus.OK;
+      status: 'OK';
       emissions: O;
     }
   | {
-      status: CalculateEmissionsStatus.INVALID_INPUT;
+      status: 'INVALID_INPUT';
       issues: ValidationIssue[];
     }
   | {
-      status: CalculateEmissionsStatus.ERROR;
+      status: 'ERROR';
       error: Error;
     };
 
@@ -38,18 +35,18 @@ export const tryCalculate = <
     const validatedInput = validateCalculatorInput(schema, input);
     if (!validatedInput.valid) {
       return {
-        status: CalculateEmissionsStatus.INVALID_INPUT,
+        status: 'INVALID_INPUT',
         issues: validatedInput.issues,
       };
     }
     const emissions = calculator(validatedInput.result, options);
     return {
-      status: CalculateEmissionsStatus.OK,
+      status: 'OK',
       emissions,
     };
   } catch (error) {
     return {
-      status: CalculateEmissionsStatus.ERROR,
+      status: 'ERROR',
       error: error as Error,
     };
   }
