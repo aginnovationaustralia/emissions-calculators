@@ -98,7 +98,7 @@ describe('Sheep scenarios', () => {
   const validatedInput = validateCalculatorInput(SheepInputSchema, input);
 
   if (!validatedInput.valid) {
-    throw new Error(JSON.stringify(validatedInput.issues));
+    throw new Error(validatedInput.message);
   }
 
   const context = testContext('Sheep');

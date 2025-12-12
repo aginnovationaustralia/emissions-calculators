@@ -63,7 +63,7 @@ describe('Beef calculator, VIC', () => {
   const validatedInput = validateCalculatorInput(BeefInputSchema, beefTestData);
 
   if (!validatedInput.valid) {
-    throw new Error(JSON.stringify(validatedInput.issues));
+    throw new Error(validatedInput.message);
   }
 
   const context = testContext('Beef');
@@ -87,7 +87,7 @@ describe('Beef input scenarios', () => {
     const validatedInput = validateCalculatorInput(BeefInputSchema, input);
 
     if (!validatedInput.valid) {
-      throw new Error(JSON.stringify(validatedInput.issues));
+      throw new Error(validatedInput.message);
     }
 
     const context = testContext('Beef');
