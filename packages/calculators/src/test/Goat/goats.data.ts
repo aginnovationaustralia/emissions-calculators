@@ -14,8 +14,6 @@ const emptyClass = {
   headShorn: 0,
   woolShorn: 0,
   cleanWoolYield: 0,
-  headPurchased: 0,
-  purchasedWeight: 0,
   headSold: 0,
   saleWeight: 0,
 };
