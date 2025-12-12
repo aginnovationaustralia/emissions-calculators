@@ -15,6 +15,7 @@ export type CalculateEmissionsResult<O extends object> =
   | {
       status: 'INVALID_INPUT';
       issues: ValidationIssue[];
+      message: string;
     }
   | {
       status: 'ERROR';
@@ -34,9 +35,13 @@ export const tryCalculate = <
   try {
     const validatedInput = validateCalculatorInput(schema, input);
     if (!validatedInput.valid) {
+      const message = validatedInput.issues
+        .map((issue) => `${issue.path}: ${issue.message}`)
+        .join(', ');
       return {
         status: 'INVALID_INPUT',
         issues: validatedInput.issues,
+        message,
       };
     }
     const emissions = calculator(validatedInput.result, options);

@@ -26,7 +26,7 @@ export const calculateBeefSimple = () => {
   if (result.status === 'OK') {
     console.log('Emissions calculated correctly', result.emissions);
   } else if (result.status === 'INVALID_INPUT') {
-    console.error('Input was not valid', result.issues.join(', '));
+    console.error('Input was not valid', result.message);
   } else {
     console.error('Error calculating emissions', result.error.message);
   }
