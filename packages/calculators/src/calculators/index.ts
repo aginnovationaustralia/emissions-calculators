@@ -87,9 +87,6 @@ export { validateCalculatorInput } from './validate';
  *    .map((issue) => `${issue.path}: ${issue.message}`)
  *    .join(', ');
  *   console.error('Input was not valid', formattedString);
- *   throw new Error('Input was not valid: ' + formattedString);
- *   console.error('Input was not valid', formattedString);
- *   throw new Error('Input was not valid: ' + formattedString);
  * } else {
  *   console.error('Error calculating emissions', result.error);
  * }
