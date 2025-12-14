@@ -324,7 +324,7 @@
     "@rollup/plugin-typescript": "^12.3.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.1",
-    "@typescript-eslint/parser": "^8.47.0",
+    "@typescript-eslint/parser": "^8.49.0",
     "glob": "^13.0.0",
     "jest": "^30.2.0",
     "nanoclone": "^1.0.2",
