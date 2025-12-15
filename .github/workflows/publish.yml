@@ -39,7 +39,36 @@ jobs:
         run: npm install -g npm@latest
         shell: bash
 
+      - name: Determine release type
+        id: release-type
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+          if [[ "$TAG" == *"-beta"* ]]; then
+            echo "npm_tag=beta" >> $GITHUB_OUTPUT
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+          elif [[ "$TAG" == *"-rc"* ]]; then
+            echo "npm_tag=rc" >> $GITHUB_OUTPUT
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+          elif [[ "$TAG" == *"-alpha"* ]]; then
+            echo "npm_tag=alpha" >> $GITHUB_OUTPUT
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "npm_tag=latest" >> $GITHUB_OUTPUT
+            echo "is_prerelease=false" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
       - name: Publish
-        run: npm publish
+        run: npm publish --tag ${{ steps.release-type.outputs.npm_tag }}
         working-directory: packages/calculators
         shell: bash
+
+      - name: Summary
+        run: |
+          echo "### 📦 Published Package" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Tag:** ${{ steps.release-type.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **npm tag:** \`${{ steps.release-type.outputs.npm_tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Prerelease:** ${{ steps.release-type.outputs.is_prerelease }}" >> $GITHUB_STEP_SUMMARY
