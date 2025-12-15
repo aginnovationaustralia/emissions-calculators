@@ -1,6 +1,6 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -298,7 +298,7 @@
     "doc/**/*"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c && tsc-alias -p tsconfig.json",
     "dev": "rollup -c --watch",
     "clean": "rm -rf dist",
     "check:types": "tsc --noEmit",
@@ -316,7 +316,6 @@
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^6.0.0",
-    "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
@@ -324,6 +323,7 @@
     "@rollup/plugin-typescript": "^12.3.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.1",
+    "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
     "@typescript-eslint/parser": "^8.47.0",
     "glob": "^13.0.0",
     "jest": "^30.2.0",
@@ -331,6 +331,7 @@
     "rollup": "^4.53.3",
     "rollup-plugin-copy": "^3.5.0",
     "ts-jest": "^29.4.5",
+    "tsc-alias": "^1.8.10",
     "tsx": "^4.21.0",
     "typescript": "^5.9.2",
     "xlsx-populate": "^1.21.0"

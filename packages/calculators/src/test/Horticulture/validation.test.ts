@@ -1,15 +1,14 @@
 import { HorticultureInputSchema } from '@/types/Horticulture/input';
-import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { horticultureTestData } from './horticulture.data';
 
 describe('validating Horticulture test inputs, all types of inputs', () => {
-  const t = () =>
-    validateCalculatorInput(HorticultureInputSchema, horticultureTestData);
-
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
+    const result = validateCalculatorInput(
+      HorticultureInputSchema,
+      horticultureTestData,
+    );
+    expect(result.valid).toBe(true);
   });
 
   test.skip('inhibitor fields are optional', () => {

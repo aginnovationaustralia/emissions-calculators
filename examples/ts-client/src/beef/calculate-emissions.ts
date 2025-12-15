@@ -23,12 +23,12 @@ export const calculateBeefSimple = () => {
     calculatorName,
     beefInputData,
   );
-  if (result.succeeded) {
+  if (result.status === 'OK') {
     console.log('Emissions calculated correctly', result.emissions);
-  } else if (result.valid) {
-    console.error('Emissions calculation failed', result.error);
+  } else if (result.status === 'INVALID_INPUT') {
+    console.error('Input was not valid', result.message);
   } else {
-    console.error('Input was not valid', result.error.errors);
+    console.error('Error calculating emissions', result.error.message);
   }
 
   return result;

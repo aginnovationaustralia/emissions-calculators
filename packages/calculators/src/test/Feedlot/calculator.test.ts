@@ -70,7 +70,7 @@ describe('Feedlot scenarios', () => {
   );
 
   if (!validatedInput.valid) {
-    throw validatedInput.error;
+    throw new Error(validatedInput.message);
   }
 
   const context = testContext('Feedlot');

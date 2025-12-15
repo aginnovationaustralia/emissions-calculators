@@ -1,14 +1,11 @@
 import { CottonInputSchema } from '@/types/Cotton/input';
-import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { cottonTestData } from './cotton.data';
 
 describe('validating Cotton test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(CottonInputSchema, cottonTestData);
-
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
+    const result = validateCalculatorInput(CottonInputSchema, cottonTestData);
+    expect(result.valid).toBe(true);
   });
 });
 

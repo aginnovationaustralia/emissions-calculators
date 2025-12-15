@@ -1,16 +1,16 @@
 import { AquacultureInputSchema } from '@/types/Aquaculture/input';
-import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { aquacultureTestData } from './input.data';
 
 describe('validating Aquaculture test inputs, all types of inputs', () => {
   describe('when the input is valid', () => {
     test('validation should result in no errors', () => {
-      const t = () =>
-        validateCalculatorInput(AquacultureInputSchema, aquacultureTestData);
+      const result = validateCalculatorInput(
+        AquacultureInputSchema,
+        aquacultureTestData,
+      );
 
-      expect(t).not.toThrow();
-      expect(t).not.toThrow(InputValidationError);
+      expect(result.valid).toBe(true);
     });
 
     test('validation should allow optional keys to be omitted', () => {
@@ -29,10 +29,12 @@ describe('validating Aquaculture test inputs, all types of inputs', () => {
         ],
       };
 
-      const t = () =>
-        validateCalculatorInput(AquacultureInputSchema, validTestData);
+      const result = validateCalculatorInput(
+        AquacultureInputSchema,
+        validTestData,
+      );
 
-      expect(t).not.toThrow(InputValidationError);
+      expect(result.valid).toBe(true);
     });
   });
 
@@ -59,7 +61,7 @@ describe('validating Aquaculture test inputs, all types of inputs', () => {
       expect(t).toEqual(
         expect.objectContaining({
           valid: false,
-          error: expect.any(InputValidationError),
+          issues: expect.any(Array),
         }),
       );
     });

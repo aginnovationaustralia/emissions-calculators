@@ -62,7 +62,7 @@ describe('Pork calculator, NSW', () => {
   const validatedInput = validateCalculatorInput(PorkInputSchema, porkTestData);
 
   if (!validatedInput.valid) {
-    throw validatedInput.error;
+    throw new Error(validatedInput.message);
   }
 
   const context = testContext('Pork');
@@ -174,7 +174,7 @@ describe('Pork calculator minimal input, NSW', () => {
     porkMinimalTestData,
   );
   if (!validatedInput.valid) {
-    throw validatedInput.error;
+    throw new Error(validatedInput.message);
   }
 
   const context = testContext('Pork');

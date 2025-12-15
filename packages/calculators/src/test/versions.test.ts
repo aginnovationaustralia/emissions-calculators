@@ -2,10 +2,7 @@ import { calculateTreeCarbonSequestration } from '@/calculators/common/trees';
 import { Vegetation } from '@/types';
 import { BeefPurchaseSchema } from '@/types/Beef/beefpurchase.input';
 import { LivestockPurchaseSchema } from '@/types/livestockPurchase.input';
-import {
-  InputValidationError,
-  validateCalculatorInput,
-} from '../calculators/validate';
+import { validateCalculatorInput } from '../calculators/validate';
 import { testContext } from './common/context';
 import { veg1 } from './SheepBeef/vegetation.data';
 
@@ -40,7 +37,7 @@ describe('checking LivestockPurchaseSchemas from parent class, set to fail', () 
     ).toEqual(
       expect.objectContaining({
         valid: false,
-        error: expect.any(InputValidationError),
+        issues: expect.any(Array),
       }),
     );
   });

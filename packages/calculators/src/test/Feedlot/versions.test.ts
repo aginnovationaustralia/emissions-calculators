@@ -27,7 +27,7 @@ describe('checking Feedlot purchases transformation to array', () => {
   );
 
   if (!validatedInput.valid) {
-    throw validatedInput.error;
+    throw new Error(validatedInput.message);
   }
 
   const context = testContext('Feedlot');

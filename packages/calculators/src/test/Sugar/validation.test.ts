@@ -1,14 +1,17 @@
 import { SugarInputSchema } from '@/types/Sugar/input';
-import { InputValidationError } from '../..';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { sugar1, sugarTestData } from './sugar.data';
 
 describe('validating Sugar test inputs, all types of inputs', () => {
-  const t = () => validateCalculatorInput(SugarInputSchema, sugarTestData);
+  const t = validateCalculatorInput(SugarInputSchema, sugarTestData);
 
   test('validation should result in no errors', () => {
-    expect(t).not.toThrow();
-    expect(t).not.toThrow(InputValidationError);
+    expect(t).toEqual(
+      expect.objectContaining({
+        valid: true,
+        result: expect.any(Object),
+      }),
+    );
   });
 });
 
@@ -21,11 +24,11 @@ describe('validating Sugar test inputs for incorrect inputs', () => {
     // Missing vegetation field
   };
 
-  test('validation should throw InputValidationError for invalid input', () => {
+  test('validation should return invalid result for invalid input', () => {
     expect(validateCalculatorInput(SugarInputSchema, invalidInput)).toEqual(
       expect.objectContaining({
         valid: false,
-        error: expect.any(InputValidationError),
+        issues: expect.any(Array),
       }),
     );
   });

@@ -1,8 +1,5 @@
 import { GoatInputSchema } from '@/types/Goat/input';
-import {
-  InputValidationError,
-  validateCalculatorInput,
-} from '../../calculators/validate';
+import { validateCalculatorInput } from '../../calculators/validate';
 import { goatComplete } from './goats.data';
 import { veg1, veg2 } from './vegetation.data';
 
@@ -20,7 +17,7 @@ describe('GoatInputSchema vegetation transformation', () => {
       expect(validateCalculatorInput(GoatInputSchema, input)).toEqual(
         expect.objectContaining({
           valid: false,
-          error: expect.any(InputValidationError),
+          issues: expect.any(Array),
         }),
       );
     });
@@ -39,7 +36,7 @@ describe('GoatInputSchema vegetation transformation', () => {
       expect(validateCalculatorInput(GoatInputSchema, input)).toEqual(
         expect.objectContaining({
           valid: false,
-          error: expect.any(InputValidationError),
+          issues: expect.any(Array),
         }),
       );
     });

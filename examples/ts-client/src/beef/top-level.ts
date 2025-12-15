@@ -1,8 +1,10 @@
 import {
+  BeefInput,
   BeefInputSchema,
   calculateBeef,
   validateCalculatorInput,
 } from '@aginnovationaustralia/emissions-calculators';
+import { ValidationResult } from '@aginnovationaustralia/emissions-calculators/validate';
 import { beefInputData } from './input';
 
 /**
@@ -11,13 +13,17 @@ import { beefInputData } from './input';
  * @returns Beef emissions
  */
 export const calculateBeefTopLevel = () => {
-  const validatedInput = validateCalculatorInput(
+  const validatedInput: ValidationResult<BeefInput> = validateCalculatorInput(
     BeefInputSchema,
     beefInputData,
   );
 
   if (!validatedInput.valid) {
-    throw validatedInput.error;
+    const formattedString = validatedInput.issues
+      .map((issue) => `${issue.path}: ${issue.message}`)
+      .join(', ');
+    console.error('Input was not valid', formattedString);
+    throw new Error('Input was not valid: ' + formattedString);
   }
 
   const result = calculateBeef(validatedInput.result, { disableMetrics: true });
