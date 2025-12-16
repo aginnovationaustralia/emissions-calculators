@@ -295,7 +295,7 @@
   },
   "files": [
     "dist/**/*",
-    "doc/**/*"
+    "assets/**/*"
   ],
   "scripts": {
     "build": "rollup -c && tsc-alias -p tsconfig.json",
@@ -309,7 +309,7 @@
     "generate:exports": "tsx scripts/generate-exports.ts"
   },
   "author": "Agricultural Innovation Australia",
-  "license": "CC-BY-ND-4.0",
+  "license": "CC-BY-4.0",
   "description": "",
   "engines": {
     "node": ">=22.19.0"

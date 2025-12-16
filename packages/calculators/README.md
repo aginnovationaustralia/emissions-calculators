@@ -131,6 +131,6 @@ The calculator functions also accept an optional `options` parameter which allow
 
 # License
 
-![Creative Commons Attribution No Derivatives](./doc/assets/by-nd.png)
+![Creative Commons Attribution No Derivatives](./assets/by.png)
 
-This project is licensed under a [Creative Commons Attribution No Derivatives 4.0](https://creativecommons.org/licenses/by-nd/4.0/) license.
+This project is licensed under a [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) license.
