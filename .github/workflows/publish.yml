@@ -27,6 +27,10 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'pnpm'
 
+      - name: Configure git to use HTTPS instead of SSH
+        run: git config --global url."https://github.com/".insteadOf git@github.com:
+        shell: bash
+
       - name: Install dependencies
         run: pnpm install
         shell: bash
