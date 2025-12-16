@@ -324,7 +324,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^25.0.1",
     "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
-    "@typescript-eslint/parser": "^8.49.0",
+    "@typescript-eslint/parser": "^8.50.0",
     "glob": "^13.0.0",
     "jest": "^30.2.0",
     "nanoclone": "^1.0.2",
