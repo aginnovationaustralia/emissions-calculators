@@ -16,7 +16,7 @@
     "url": "git+https://github.com/aginnovationaustralia/emissions-calculators.git"
   },
   "author": "Agricultural Innovation Australia",
-  "license": "ISC",
+  "license": "CC-BY-ND-4.0",
   "bugs": {
     "url": "https://github.com/aginnovationaustralia/emissions-calculators/issues"
   },

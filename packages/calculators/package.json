@@ -309,7 +309,7 @@
     "generate:exports": "tsx scripts/generate-exports.ts"
   },
   "author": "Agricultural Innovation Australia",
-  "license": "ISC",
+  "license": "CC-BY-ND-4.0",
   "description": "",
   "engines": {
     "node": ">=22.19.0"
