@@ -1,6 +1,6 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "0.1.22",
+  "version": "3.0.0-beta.1",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -295,7 +295,7 @@
   },
   "files": [
     "dist/**/*",
-    "doc/**/*"
+    "assets/**/*"
   ],
   "scripts": {
     "build": "rollup -c && tsc-alias -p tsconfig.json",
@@ -309,7 +309,7 @@
     "generate:exports": "tsx scripts/generate-exports.ts"
   },
   "author": "Agricultural Innovation Australia",
-  "license": "ISC",
+  "license": "CC-BY-4.0",
   "description": "",
   "engines": {
     "node": ">=22.19.0"

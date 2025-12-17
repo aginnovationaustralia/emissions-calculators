@@ -93,6 +93,6 @@ New versions of the package are published to the NPM registry via a [Github acti
 
 # License
 
-![Creative Commons Attribution No Derivatives](./doc/assets/by-nd.png)
+![Creative Commons Attribution](./assets/by.png)
 
-This project is licensed under a [Creative Commons Attribution No Derivatives 4.0](https://creativecommons.org/licenses/by-nd/4.0/) license.
+This project is licensed under a [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) license.
