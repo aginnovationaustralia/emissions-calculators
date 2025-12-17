@@ -41,14 +41,12 @@ export const beefInputData: BeefInput = {
 
 const emissionsResult = calculateEmissions('beef', beefInputLatest);
 
-if (emissionsResult.succeeded) {
+if (result.status === 'OK') {
   console.log('Here are your emissions!', emissionsResult.emissions);
+} else if (result.status === 'INVALID_INPUT') {
+  console.error('Input was not valid', result.message);
 } else {
-  if (emissionsResult.valid) {
-    console.error('Something went wrong', emissionsResult.error);
-  } else {
-    console.error('The input was not valid', emissionsResult.error);
-  }
+  console.error('Error calculating emissions', result.error.message);
 }
 ```
 
