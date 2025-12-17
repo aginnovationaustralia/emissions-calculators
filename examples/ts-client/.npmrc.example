@@ -1,0 +1,4 @@
+# NPM configuration for accessing private packages
+# Replace YOUR_NPM_TOKEN with your actual npm token
+@aginnovationaustralia:registry=https://registry.npmjs.org/
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}

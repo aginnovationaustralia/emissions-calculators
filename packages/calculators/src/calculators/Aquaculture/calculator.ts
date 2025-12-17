@@ -1,0 +1,245 @@
+import { AquacultureEnterpriseInput } from '@/types/Aquaculture/aquaculture.input';
+import { AquacultureInput } from '@/types/Aquaculture/input';
+import { AquacultureOutput } from '@/types/Aquaculture/output';
+import { AquacultureScope1Output } from '@/types/Aquaculture/scope1.output';
+import { AquacultureScope3Output } from '@/types/Aquaculture/scope3.output';
+import { State } from '@/types/enums';
+import { Scope2Output } from '@/types/scope2.output';
+import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
+import {
+  calculateCommercialFlights,
+  calculateFreight,
+} from '../common/freight';
+import { calculateScope1And3Fuel } from '../common/fuel';
+import { calculateScope1Refrigerant } from '../common/refrigerant';
+import { addTotalValue } from '../common/tools';
+import {
+  sumIntermediateResults,
+  SummableObject,
+} from '../common/tools/intermediate-results';
+import { calculateScope1WasteWater } from '../common/waste/Scope1WasteWater';
+import { calculateSolidWaste } from '../common/waste/SolidWaste';
+import { ExecutionContext } from '../executionContext';
+import { ConstantsForAquacultureCalculator } from './constants';
+import { getIntensities } from './functions';
+import { calculateCustomBait, calculatePurchasedBait } from './PurchasedBait';
+
+type AquacultureScopesOutput = {
+  scope1: AquacultureScope1Output & SummableObject;
+  scope2: Scope2Output & SummableObject;
+  scope3: AquacultureScope3Output & SummableObject;
+};
+
+export function calculateSingleAquacultureEnterprise(
+  state: State,
+  enterprise: AquacultureEnterpriseInput,
+  context: ExecutionContext<ConstantsForAquacultureCalculator>,
+  carbonSequestration: number,
+  id: string,
+) {
+  const fuelTotals = calculateScope1And3Fuel(enterprise.fuel, state, context);
+
+  const electricity = calculateElectricityScope2And3(
+    state,
+    enterprise.electricitySource,
+    enterprise.electricityRenewable,
+    enterprise.electricityUse,
+    context,
+  );
+
+  const refrigerant = calculateScope1Refrigerant(
+    enterprise.refrigerants,
+    context,
+  );
+
+  const fuelCO2 = fuelTotals.co2;
+  const fuelCH4 = fuelTotals.ch4;
+  const fuelN2O = fuelTotals.n2o;
+
+  const baitCO2 = calculatePurchasedBait(enterprise.bait, context);
+  const customBaitCO2 = calculateCustomBait(enterprise.customBait);
+
+  const wasteWaterCO2 = calculateScope1WasteWater(
+    enterprise.fluidWaste,
+    context,
+  );
+
+  const { compostedSolidWasteCO2, solidWasteSentOffsite } = calculateSolidWaste(
+    enterprise.solidWaste,
+    context,
+  );
+
+  const inboundFreightCO2 = calculateFreight(
+    enterprise.inboundFreight,
+    context,
+  );
+  const outboundFreightCO2 = calculateFreight(
+    enterprise.outboundFreight,
+    context,
+  );
+  const commercialFlightsCO2 = calculateCommercialFlights(
+    enterprise.totalCommercialFlightsKm,
+    context,
+  );
+
+  const res: AquacultureScopesOutput = {
+    scope1: addTotalValue({
+      hfcsRefrigerantLeakage: refrigerant,
+      fuelN2O,
+      fuelCH4,
+      fuelCO2,
+      wasteWaterCO2,
+      compostedSolidWasteCO2,
+
+      totalCH4: fuelCH4,
+      totalCO2: fuelCO2 + wasteWaterCO2 + compostedSolidWasteCO2,
+      totalN2O: fuelN2O,
+      totalHFCs: refrigerant,
+    }),
+    scope2: addTotalValue({
+      electricity: electricity.scope2,
+    }),
+    scope3: addTotalValue({
+      electricity: electricity.scope3,
+      fuel: fuelTotals.scope3Total,
+      purchasedBait: baitCO2 + customBaitCO2,
+      inboundFreight: inboundFreightCO2,
+      outboundFreight: outboundFreightCO2,
+      commercialFlights: commercialFlightsCO2,
+      solidWasteSentOffsite,
+    }),
+  };
+
+  return {
+    output: res,
+    net: {
+      total:
+        res.scope1.total +
+        res.scope2.total +
+        res.scope3.total -
+        (enterprise.carbonOffsets ?? 0),
+    },
+    extensions: {
+      carbonOffsets: enterprise.carbonOffsets,
+      totalHarvestKg: enterprise.totalHarvestKg,
+      carbonSequestration,
+    },
+    meta: {
+      id,
+    },
+  };
+}
+
+export function calculateAquaculture(
+  input: AquacultureInput,
+  context: ExecutionContext<ConstantsForAquacultureCalculator>,
+): AquacultureOutput {
+  const aquacultureResults = input.enterprises.map((enterprise, ix) =>
+    calculateSingleAquacultureEnterprise(
+      enterprise.state,
+      enterprise,
+      context,
+      0,
+      enterprise.id ?? ix.toString(),
+    ),
+  );
+
+  const aquacultureResult = sumIntermediateResults(
+    {
+      output: {
+        scope1: {
+          hfcsRefrigerantLeakage: 0,
+          fuelN2O: 0,
+          fuelCH4: 0,
+          fuelCO2: 0,
+          wasteWaterCO2: 0,
+          compostedSolidWasteCO2: 0,
+          totalCH4: 0,
+          totalCO2: 0,
+          totalN2O: 0,
+          totalHFCs: 0,
+          total: 0,
+        },
+        scope2: {
+          electricity: 0,
+          total: 0,
+        },
+        scope3: {
+          electricity: 0,
+          fuel: 0,
+          purchasedBait: 0,
+          inboundFreight: 0,
+          outboundFreight: 0,
+          commercialFlights: 0,
+          solidWasteSentOffsite: 0,
+          total: 0,
+        },
+      },
+      net: {
+        total: 0,
+      },
+      extensions: {
+        carbonOffsets: 0,
+        totalHarvestKg: 0,
+        carbonSequestration: 0,
+      },
+      meta: {
+        id: '',
+      },
+    },
+    aquacultureResults,
+  );
+
+  const emissionsTotal =
+    aquacultureResult.output.scope1.total +
+    aquacultureResult.output.scope2.total +
+    aquacultureResult.output.scope3.total;
+
+  const netTotal =
+    emissionsTotal - (aquacultureResult.extensions.carbonOffsets ?? 0);
+
+  const baseEmissions = {
+    ...aquacultureResult.output,
+    net: {
+      total: netTotal,
+    },
+  };
+
+  const intensities = getIntensities(
+    netTotal,
+    aquacultureResult.extensions.carbonOffsets ?? 0,
+    aquacultureResult.extensions.totalHarvestKg,
+  );
+
+  const intermediate = aquacultureResults.map((result) => {
+    return {
+      scope1: result.output.scope1,
+      scope2: result.output.scope2,
+      scope3: result.output.scope3,
+      carbonSequestration: {
+        total: result.extensions.carbonSequestration,
+      },
+      intensities: getIntensities(
+        result.net.total,
+        result.extensions.carbonOffsets ?? 0,
+        result.extensions.totalHarvestKg,
+      ),
+      net: {
+        total: result.net.total,
+      },
+      id: result.meta.id,
+    };
+  });
+
+  return {
+    ...baseEmissions,
+    intensities,
+    intermediate,
+    purchasedOffsets: {
+      total: aquacultureResult.extensions.carbonOffsets ?? 0,
+    },
+    carbonSequestration: {
+      total: 0,
+    },
+  };
+}

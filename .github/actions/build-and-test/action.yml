@@ -1,0 +1,36 @@
+name: 'Build and Test'
+description: 'Build, lint, and test the emissions-calculators project'
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9.15.4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+        cache: 'pnpm'
+
+    - name: Configure git to use HTTPS instead of SSH
+      run: |
+        git config --global url."https://github.com/".insteadOf git@github.com:
+      shell: bash
+
+    - name: Install dependencies
+      run: pnpm install
+      shell: bash
+
+    - name: Build
+      run: pnpm run build
+      shell: bash
+
+    - name: Lint
+      run: pnpm run lint
+      shell: bash
+
+    - name: Test
+      run: pnpm run test
+      shell: bash

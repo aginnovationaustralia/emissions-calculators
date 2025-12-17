@@ -1,0 +1,369 @@
+import { BeefComplete } from '@/types/Beef/beef.input';
+import { BeefClass } from '@/types/Beef/beefclass.input';
+import { BeefClasses } from '@/types/Beef/beefclasses.input';
+
+const emptySeason = {
+  head: 0,
+  liveweight: 0,
+  liveweightGain: 0,
+};
+
+const emptyClass: BeefClass = {
+  summer: emptySeason,
+  autumn: emptySeason,
+  winter: emptySeason,
+  spring: emptySeason,
+  headSold: 0,
+  saleWeight: 0,
+  purchases: [],
+};
+
+const classes: BeefClasses = {
+  bullsGt1: {
+    summer: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    autumn: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    winter: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    spring: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    headSold: 20,
+    saleWeight: 100,
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
+  },
+  steersLt1: {
+    summer: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    autumn: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    winter: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    spring: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    headSold: 20,
+    saleWeight: 100,
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
+  },
+  steers1To2: {
+    summer: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    autumn: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    winter: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    spring: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    headSold: 20,
+    saleWeight: 100,
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
+  },
+  steersGt2: {
+    summer: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    autumn: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    winter: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    spring: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    headSold: 20,
+    saleWeight: 100,
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
+  },
+  cowsGt2: {
+    summer: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    autumn: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    winter: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    spring: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    headSold: 20,
+    saleWeight: 100,
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
+  },
+  heifersLt1: {
+    summer: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    autumn: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    winter: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    spring: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    headSold: 20,
+    saleWeight: 100,
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
+  },
+  heifers1To2: {
+    summer: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    autumn: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    winter: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    spring: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    headSold: 20,
+    saleWeight: 100,
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
+  },
+  heifersGt2: {
+    summer: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    autumn: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    winter: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    spring: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    headSold: 20,
+    saleWeight: 100,
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
+  },
+  steersGt2Traded: {
+    summer: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    autumn: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    winter: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    spring: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    headSold: 20,
+    saleWeight: 100,
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
+  },
+  steers1To2Traded: {
+    summer: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    autumn: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    winter: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    spring: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    headSold: 20,
+    saleWeight: 100,
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
+  },
+  steersLt1Traded: {
+    summer: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    autumn: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    winter: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    spring: {
+      head: 100,
+      liveweight: 100,
+      liveweightGain: 100,
+    },
+    purchases: [
+      { head: 100, purchaseWeight: 100, purchaseSource: 'Dairy origin' },
+    ],
+    headSold: 20,
+    saleWeight: 100,
+  },
+  bullsGt1Traded: emptyClass,
+  cowsGt2Traded: emptyClass,
+  heifers1To2Traded: emptyClass,
+  heifersGt2Traded: emptyClass,
+  heifersLt1Traded: emptyClass,
+};
+
+export const beefTestInput: BeefComplete = {
+  classes,
+  limestone: 100,
+  limestoneFraction: 1,
+  fertiliser: {
+    cropsDryland: 2,
+    cropsIrrigated: 5,
+    otherFertilisers: [
+      {
+        otherType: 'Ammonium Nitrate (AN)',
+        otherDryland: 1,
+        otherIrrigated: 4,
+      },
+    ],
+    pastureDryland: 10,
+    pastureIrrigated: 3,
+    singleSuperphosphate: 2,
+  },
+  diesel: 200,
+  petrol: 400,
+  lpg: 100,
+  mineralSupplementation: {
+    drySeasonMixUrea: 0.05,
+    drySeasonMix: 0.05,
+    mineralBlockUrea: 0.3,
+    mineralBlock: 0.1,
+    weanerBlockUrea: 0.25,
+    weanerBlock: 0.01,
+  },
+  electricitySource: 'State Grid',
+  electricityRenewable: 0.1,
+  electricityUse: 3000,
+  grainFeed: 100,
+  hayFeed: 80,
+  cottonseedFeed: 30,
+  herbicide: 400,
+  herbicideOther: 300,
+  cowsCalving: {
+    spring: 0.9,
+    summer: 0.9,
+    autumn: 0.9,
+    winter: 0.9,
+  },
+};

@@ -1,0 +1,16 @@
+export { CottonCrop } from './cotton.input';
+export { CottonInputSchema } from './input';
+export { CottonInput } from './input';
+export { CottonIntensitiesOutputSchema } from './intensities.output';
+export { CottonIntensitiesOutput } from './intensities.output';
+export { CottonIntermediateOutputSchema } from './intermediate.output';
+export { CottonIntermediateOutput } from './intermediate.output';
+export { CottonNetOutputSchema } from './net.output';
+export { CottonNetOutput } from './net.output';
+export { CottonOutputSchema } from './output';
+export { CottonOutput } from './output';
+export { CottonScope1OutputSchema } from './scope1.output';
+export { CottonScope1Output } from './scope1.output';
+export { CottonScope3OutputSchema } from './scope3.output';
+export { CottonScope3Output } from './scope3.output';
+export { CottonVegetation } from './vegetation.input';

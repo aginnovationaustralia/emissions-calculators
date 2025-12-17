@@ -1,0 +1,18 @@
+on:
+  issues:
+    types: [opened]
+  # pull_request_target:
+  #   types: [opened]
+
+jobs:
+  initial-reply:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: EddieHubCommunity/gh-action-community/src/welcome@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: "Thanks for opening an issue. We'll get back to you as soon as possible. To make sure we can give you a helpful response, make sure the issue template is filled out and you include as much detail as you can about your issue."
+          footer: 'Thanks for your contribution!'

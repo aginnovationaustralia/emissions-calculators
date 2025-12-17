@@ -1,0 +1,29 @@
+{
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules", "src/_raw"],
+  
+  "compilerOptions": {
+    "target": "es2017",
+    "lib": [
+      "es2019",
+      "DOM"
+    ],
+    "types": [
+      "node",
+      "jest"
+    ],
+    "strict": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "outDir": "./dist",
+    "noEmit": false
+  }
+}

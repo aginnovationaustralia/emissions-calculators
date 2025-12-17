@@ -1,0 +1,20 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "outputs": ["dist/**"],
+      "dependsOn": ["^build"]
+    },
+    "test": {},
+    "lint": {
+      "inputs": ["eslint.config.mjs"]
+    },
+    "check:types": {},
+    "clean": {
+      "cache": false
+    },
+    "examples-ts-client#build": {
+      "dependsOn": ["@aginnovationaustralia/emissions-calculators#build"]
+    }
+  }
+}

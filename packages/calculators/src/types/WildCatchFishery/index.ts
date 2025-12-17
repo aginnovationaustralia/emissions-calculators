@@ -1,0 +1,17 @@
+export { WildCatchFisheryBaitPurchase } from './baitpurchase.input';
+export { WildCatchFisheryCustomBaitPurchase } from './custombaitpurchase.input';
+export { WildCatchFisheryInputSchema } from './input';
+export { WildCatchFisheryInput } from './input';
+export { WildCatchFisheryIntensitiesOutputSchema } from './intensities.output';
+export { WildCatchFisheryIntensitiesOutput } from './intensities.output';
+export { WildCatchFisheryIntermediateOutputSchema } from './intermediate.output';
+export { WildCatchFisheryIntermediateOutput } from './intermediate.output';
+export { WildCatchFisheryOutputSchema } from './output';
+export { WildCatchFisheryOutput } from './output';
+export { WildCatchFisheryScope1OutputSchema } from './scope1.output';
+export { WildCatchFisheryScope1Output } from './scope1.output';
+export { WildCatchFisheryScope3OutputSchema } from './scope3.output';
+export { WildCatchFisheryScope3Output } from './scope3.output';
+export { WildCatchFisheryProductionSystem } from './wildcatchfishery.input';
+export { WildCatchFisheryEnterpriseInputSchema } from './wildcatchfishery.input';
+export { WildCatchFisheryEnterpriseInput } from './wildcatchfishery.input';
