@@ -2,7 +2,11 @@
 
 The emissions-calculators project aims to make it easy to calculate carbon emissions using the [Greenhouse Accounting Framework (GAF) Tools for Australian Primary Industries](https://piccc.org.au/resources/Tools.html). It is developed and maintained by [Agricultural Innovation Australia](https://aginnovationaustralia.com.au).
 
-[![Agricultural Innovation Australia](./assets/logo-light.svg)](https://aginnovationaustralia.com.au)
+<p align='center'>
+  <a href='https://aginnovationaustralia.com.au'>
+    <img src='./assets/logo-light.svg' alt='Agricultural Innovation Australia' />
+  </a>
+</p>
 
 The project implements the GAF tools as a javascript package that can be readily imported and used for calculations. The calculators are also available as an API as part of the [Environmental Accounting Platform (EAP)](https://www.aiaeap.com/). Implementation of these tools is a key aspect of delivering the [Improving Consistency of On-farm Emissions Estimates](https://www.agriculture.gov.au/agriculture-land/farm-food-drought/climatechange/greenhouse-gas-accounting/grant-program) grant program.
 

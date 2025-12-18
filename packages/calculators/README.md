@@ -2,7 +2,11 @@
 
 The emissions-calculators package aims to make it easy to calculate carbon emissions using the [Greenhouse Accounting Framework (GAF) Tools for Australian Primary Industries](https://piccc.org.au/resources/Tools.html). It is developed and maintained by [Agricultural Innovation Australia](https://aginnovationaustralia.com.au).
 
-[![Agricultural Innovation Australia](./assets/logo-light.svg)](https://aginnovationaustralia.com.au)
+<p align='center'>
+  <a href='https://aginnovationaustralia.com.au'>
+    <img src='./assets/logo-light.svg' alt='Agricultural Innovation Australia' />
+  </a>
+</p>
 
 The project implements the GAF tools as a javascript package that can be readily imported and used for calculations. The calculators are also available as an API as part of the [Environmental Accounting Platform (EAP)](https://www.aiaeap.com/).
 
@@ -135,4 +139,16 @@ The calculator functions also accept an optional `options` parameter which allow
 
 This project is licensed under a [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) license.
 
-Made with ❤️ by <a href="https://exogee.com"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/exogee-white.svg"><img src="./assets/exogee-black.svg" alt="Exogee"></picture></a>
+---
+
+<p align="center">
+Made with ❤️ by
+</p>
+
+<p align="center">
+<a href="https://exogee.com">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/exogee-white.svg">
+  <img src="./assets/exogee-black.svg" alt="Exogee">
+</picture>
+</a>
