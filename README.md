@@ -98,3 +98,5 @@ New versions of the package are published to the NPM registry via a [Github acti
 This project is licensed under a [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) license.
 
 Made with ❤️ by <a href="https://exogee.com"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/exogee-white.svg"><img src="./assets/exogee-black.svg" alt="Exogee"></picture></a>
+
+<table><tr><td valign="top">Made with ❤️ by</td><td valign="center"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/exogee-white.svg"><img src="./assets/exogee-black.svg" alt="Exogee"></picture></td></tr></table>
