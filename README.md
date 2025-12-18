@@ -97,6 +97,38 @@ New versions of the package are published to the NPM registry via a [Github acti
 
 This project is licensed under a [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) license.
 
-Made with ❤️ by <a href="https://exogee.com"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/exogee-white.svg"><img src="./assets/exogee-black.svg" alt="Exogee"></picture></a>
+<p align="center">
+Made with ❤️ by
+</p>
+<p align="center">
+  <img src="./assets/exogee-black.svg" alt="Exogee">
+<!-- <a href="https://exogee.com"> -->
+
+<!-- <sub> -->
+<!-- <picture> -->
+
+  <!-- <source media="(prefers-color-scheme: dark)" srcset="./assets/exogee-white.svg"> -->
+<!-- </picture> -->
+<!-- </sub> -->
+<!-- </a> -->
+</p>
+
+<p align="center">
+<a href="https://exogee.com">
+  <img src="./assets/exogee-black.svg" alt="Exogee">
+</a>
+
+<p align="center">
+<a href="https://exogee.com">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/exogee-white.svg">
+  <img src="./assets/exogee-black.svg" alt="Exogee">
+</picture>
+</a>
+
+<!-- <sub> -->
+
+<!-- </sub> -->
+</p>
 
 <table><tr><td valign="top">Made with ❤️ by</td><td valign="center"><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/exogee-white.svg"><img src="./assets/exogee-black.svg" alt="Exogee"></picture></td></tr></table>
