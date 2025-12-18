@@ -5,6 +5,7 @@ This is a TypeScript client example that demonstrates how to consume the `@aginn
 ## Overview
 
 This example shows how to:
+
 - Install and import the emissions calculators package
 - Use both versioned imports (`/versions/3.0.0/`) and top-level aliases (`/calculators`, `/types`)
 - Create input data for beef emissions calculations
@@ -114,9 +115,9 @@ const result = calculateBeef(beefInputData);
 import { calculateEmissions } from '@aginnovationaustralia/emissions-calculators';
 
 const result = calculateEmissions(
-  'beef',           // Calculator type
-  '3.0.0',         // Version
-  beefInputData     // Input data object
+  'beef', // Calculator type
+  '3.0.0', // Version
+  beefInputData, // Input data object
 );
 ```
 
@@ -194,6 +195,8 @@ npm run clean
 npm run build
 ```
 
-## License
+# License
 
-This example is provided under the MIT License. The underlying `@aginnovationaustralia/emissions-calculators` package is licensed under Creative Commons Attribution No Derivatives 4.0.
+[Creative Commons Attribution](./assets/by.png)
+
+This project is licensed under a [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) license.
