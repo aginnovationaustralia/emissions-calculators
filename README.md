@@ -1,14 +1,22 @@
 # emissions-calculators
 
-The emissions-calculators project aims to make it easy to calculate carbon emissions using the [Greenhouse Accounting Framework (GAF) Tools for Australian Primary Industries](https://piccc.org.au/resources/Tools.html). It is developed and maintained by [Agricultural Innovation Australia](https://aginnovationaustralia.com.au).
+The [AIA Environmental Accounting Platform (EAP)](https://www.aiaeap.com/) is an on-farm GHG emissions calculation engine developed by [Agricultural Innovation Australia](https://aginnovationaustralia.com.au). Free access to AIA’s open-source code is supported by the Australian Government through funding from the _Improving Consistency of On-Farm Emissions Estimates Program_.
+
+The objectives of this program are to:
+
+- Support adoption and consistent incorporation of the forthcoming guidelines (and in the meantime, the Greenhouse Accounting Framework tools) into third-party GHG accounting tools and calculators
+- Provide a product that is freely available to third-party GHG accounting tool and calculator providers, encapsulates as many commodities as possible, and is suitable for mixed farming enterprises.
+- Provide a product that is maintained and updated regularly until June 2028 to ensure it aligns with the guidelines once available and the GAF tools in the meantime.
+- Improve producer and farm adviser access to GHG accounting tools to increase the proportion of producers that know and understand their business’s net emissions profile.
+
+Currently, the EAP implements the GAF tools as a JavaScript package that can be readily imported and used for calculations and will transition to the Australian Government’s guidelines once they are available.
+Under the grant program, AIA also provides [free API access to the EAP calculation engine](https://www.aiaeap.com/partner).
 
 <p align='center'>
   <a href='https://aginnovationaustralia.com.au'>
     <img src='./assets/logo-light.svg' alt='Agricultural Innovation Australia' />
   </a>
 </p>
-
-The project implements the GAF tools as a javascript package that can be readily imported and used for calculations. The calculators are also available as an API as part of the [Environmental Accounting Platform (EAP)](https://www.aiaeap.com/). Implementation of these tools is a key aspect of delivering the [Improving Consistency of On-farm Emissions Estimates](https://www.agriculture.gov.au/agriculture-land/farm-food-drought/climatechange/greenhouse-gas-accounting/grant-program) grant program.
 
 # Installation
 
@@ -60,21 +68,32 @@ The repo also includes [examples](./examples) to help you get started consuming 
 
 # Data and metrics collection
 
-These tools include functionality to collect anonymous metrics on how often key features are being used. Understanding how the tools are being used is an important requirement for the [Improving Consistency of On-farm Emissions Estimates](https://www.agriculture.gov.au/agriculture-land/farm-food-drought/climatechange/greenhouse-gas-accounting/grant-program) grant program, to ensure the tools are useful and accessible for all potential users.
+Understanding usage of the open source code provides AIA and the Australian Government with valuable insights to support and enhance its availability and utility.
+The tools includes functionality to collect anonymous metrics on how often features are being used. The data collected is not associated with specific users or organisations and includes no personally identifying information like email addresses. It is only to understand the runtime adoption and usage of each calculator.
 
 More details on configuring or disabling the metrics collection is available in the package [README](./packages/calculators/README.md#data-and-metrics-collection).
 
-# Contributing and support
+# Use of code and making contributions
 
-If you are looking for help using the tools available here, there are a number of resources available to you.
+Organisations, users, developers, and software products that integrate or make use of the Code, whether directly or indirectly, should first read the [AIA EAP Open Source Code Use Policy](https://www.aiaeap.com/_files/ugd/78d843_9e54854b615f4d5b891a58453fe2829a.pdf), which establishes the terms of use for the code.
 
-First of all, we aim to make the tools as easy to use as possible out of the box, and for users to be able to self service their own questions. We have detailed developer documentation available here in the repo. Documentation for consuming the REST API is available online [here](https://docs.aiaplatform.com.au).
+By providing a contribution to us, you agree to be bound by the terms and conditions contained in the [AIA EAP Open Source Code Contributor Licence Agreement](https://www.aiaeap.com/_files/ugd/78d843_76f5b1cec5034ca18188d96f977704a7.pdf).
+
+All community members are expected to understand and respect out [code of conduct](./CODE_OF_CONDUCT.MD). Our code of conduct is based on the [Contributor Covenant](https://www.contributor-covenant.org/version/3/0/).
+
+# Support
+
+There are several support resources available to you.
+
+We aim to make the tools as easy to use as possible out of the box, and for users to be able to self service their own questions. We have detailed developer documentation available here in the repo. Documentation for consuming the REST API is available online [here](https://docs.aiaplatform.com.au/).
 
 If you still have a question, feel free to [open a github issue](https://github.com/aginnovationaustralia/emissions-calculators/issues/new) and fill in the template with as much context as possible. We aim to have a response to your question within 24 hours.
 
 If you would like to get involved and contribute to the project, you can find more details [here](./CONTRIBUTING.md).
 
-# Code of conduct
+# Terms and Conditions
+
+By providing a contribution to us, you agree to be bound by the terms and conditions contained in the [AIA EAP Open Source Code Contributor Licence Agreement](https://www.aiaeap.com/_files/ugd/78d843_76f5b1cec5034ca18188d96f977704a7.pdf).
 
 All community members are expected to understand and respect out [code of conduct](./CODE_OF_CONDUCT.MD). Our code of conduct is based on the [Contributor Covenant](https://www.contributor-covenant.org/version/3/0/).
 
