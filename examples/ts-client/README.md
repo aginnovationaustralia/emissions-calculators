@@ -7,16 +7,10 @@ This is a TypeScript client example that demonstrates how to consume the `@aginn
 This example shows how to:
 
 - Install and import the emissions calculators package
-- Use both versioned imports (`/versions/3.0.0/`) and top-level aliases (`/calculators`, `/types`)
+- Use the top-level `calculateEmissions` function for quick calculations
+- Use nested imports (`/beef`, `/grains`, etc.) for smaller bundle sizes
 - Create input data for beef emissions calculations
-- Call the `calculateBeef` function from different import paths
-- Compare results from different import methods
-
-## Prerequisites
-
-- Node.js v22.19.0 or higher
-- npm or pnpm package manager
-- Access to the private `@aginnovationaustralia/emissions-calculators` package
+- Validate input data using the provided schemas
 
 ## Setup
 
@@ -26,26 +20,7 @@ This example shows how to:
 npm install
 ```
 
-### 2. Configure NPM Authentication
-
-While this is a private package, you need to authenticate with npm:
-
-#### Option A: Using NPM Token (Recommended)
-
-1. Get your npm token from [npmjs.com](https://www.npmjs.com/settings/tokens)
-2. Set the token as an environment variable:
-
-```bash
-export NPM_TOKEN=your_npm_token_here
-```
-
-#### Option B: Using NPM Login
-
-```bash
-npm login
-```
-
-### 3. Build the Project
+### 2. Build the Project
 
 ```bash
 npm run build
@@ -65,60 +40,99 @@ npm run dev
 
 ### Example Output
 
-The example will calculate beef emissions for a sample farm using both import methods:
+The example will calculate beef emissions for a sample farm using three different approaches:
 
-1. **Top-level alias imports** (`/calculators`, `/types`) - demonstrates the simplified import paths
-2. **Versioned imports** (`/versions/3.0.0/`) - demonstrates the explicit version path
+1. **Simple calculation** (`calculate-emissions.ts`) - uses the top-level `calculateEmissions` function
+2. **Top-level exports** (`top-level.ts`) - uses calculator-specific functions from the main entry point
+3. **Nested exports** (`nested-exports.ts`) - uses nested import paths for better tree shaking
 
-Both methods should produce identical results, showing the flexibility of the package's export configuration.
+All methods produce identical results, showing the flexibility of the package's export configuration.
 
 ## Project Structure
 
 ```
 ts-client/
 ├── src/
-│   ├── beef/                 # Beef calculator examples
-│   │   ├── input.ts          # Sample beef input data
-│   │   ├── latest.ts         # Example using top-level aliases
-│   │   └── v300.ts           # Example using versioned imports
-│   └── index.ts              # Main example file
-├── dist/                     # Compiled JavaScript output
-├── package.json              # Project dependencies and scripts
-├── tsconfig.json             # TypeScript configuration
-├── .npmrc                    # NPM configuration for private packages
-└── README.md                 # This file
+│   ├── beef/                       # Beef calculator examples
+│   │   ├── input.ts                # Sample beef input data
+│   │   ├── calculate-emissions.ts  # Example using calculateEmissions
+│   │   ├── top-level.ts            # Example using top-level exports
+│   │   └── nested-exports.ts       # Example using nested exports
+│   └── index.ts                    # Main example file
+├── dist/                           # Compiled JavaScript output
+├── package.json                    # Project dependencies and scripts
+├── tsconfig.json                   # TypeScript configuration
+└── README.md                       # This file
 ```
 
 ## API Usage
 
-### Method 1: Top-level Aliases (Recommended)
+### Method 1: Simple Calculation (Recommended for getting started)
 
-```typescript
-import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/calculators';
-import { BeefInput } from '@aginnovationaustralia/emissions-calculators/types/Beef/input';
-
-const result = calculateBeef(beefInputData);
-```
-
-### Method 2: Versioned Imports
-
-```typescript
-import { calculateBeef } from '@aginnovationaustralia/emissions-calculators/versions/3.0.0/calculators';
-import { BeefInput } from '@aginnovationaustralia/emissions-calculators/versions/3.0.0/types/Beef/input';
-
-const result = calculateBeef(beefInputData);
-```
-
-### Legacy Method: Main Entry Point
+The simplest way to calculate emissions using the top-level `calculateEmissions` function:
 
 ```typescript
 import { calculateEmissions } from '@aginnovationaustralia/emissions-calculators';
+import type { BeefInput } from '@aginnovationaustralia/emissions-calculators/beef';
 
-const result = calculateEmissions(
-  'beef', // Calculator type
-  '3.0.0', // Version
-  beefInputData, // Input data object
-);
+const beefInputData: BeefInput = {
+  state: 'nsw',
+  northOfTropicOfCapricorn: true,
+  rainfallAbove600: true,
+  beef: [
+    /* ... beef enterprise data ... */
+  ],
+};
+
+const result = calculateEmissions('beef', beefInputData);
+
+if (result.status === 'OK') {
+  console.log('Emissions calculated:', result.emissions);
+} else if (result.status === 'INVALID_INPUT') {
+  console.error('Input was not valid:', result.message);
+} else {
+  console.error('Error calculating emissions:', result.error.message);
+}
+```
+
+### Method 2: Top-level Exports
+
+Use calculator-specific functions and types from the main entry point:
+
+```typescript
+import {
+  BeefInputSchema,
+  calculateBeef,
+  validateCalculatorInput,
+} from '@aginnovationaustralia/emissions-calculators';
+
+const validatedInput = validateCalculatorInput(BeefInputSchema, beefInputData);
+
+if (validatedInput.valid) {
+  const result = calculateBeef(validatedInput.result);
+  console.log('Emissions calculated:', result);
+} else {
+  console.error('Validation errors:', validatedInput.issues);
+}
+```
+
+### Method 3: Nested Exports (Recommended for production)
+
+Use nested import paths for smaller bundle sizes via tree shaking:
+
+```typescript
+import {
+  BeefInputSchema,
+  calculateBeef,
+} from '@aginnovationaustralia/emissions-calculators/beef';
+import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+
+const validatedInput = validateCalculatorInput(BeefInputSchema, beefInputData);
+
+if (validatedInput.valid) {
+  const result = calculateBeef(validatedInput.result);
+  console.log('Emissions calculated:', result);
+}
 ```
 
 ### Available Calculators
@@ -144,46 +158,6 @@ The package includes calculators for:
 - `vineyard` - Vineyard operations
 - `wildCatchFishery` - Wild catch fisheries
 - `wildSeaFisheries` - Wild sea fisheries
-
-## Troubleshooting
-
-### Authentication Issues
-
-If you get authentication errors:
-
-1. Verify your npm token is set: `echo $NPM_TOKEN`
-2. Check your `.npmrc` file is configured correctly
-3. Try logging in again: `npm login`
-
-### Package Not Found
-
-If the package cannot be found:
-
-1. Ensure you have access to the `@aginnovationaustralia` organization on npm
-2. Verify the package version exists: `npm view @aginnovationaustralia/emissions-calculators versions`
-
-### Type Errors
-
-If you encounter TypeScript errors:
-
-1. Ensure you're using the correct input data structure
-2. Check the package documentation for the latest API
-3. Verify your TypeScript version is compatible
-
-## Development
-
-### Adding New Examples
-
-To add examples for other calculators:
-
-1. Create a new folder in `src/` (e.g., `src/dairy/`)
-2. Create an `input.ts` file with sample data
-3. Create example files using both import methods:
-   - `latest.ts` - using top-level aliases (`/calculators`, `/types`)
-   - `v300.ts` - using versioned imports (`/versions/3.0.0/`)
-4. Import the necessary types and functions
-5. Call the appropriate calculator function
-6. Update `src/index.ts` to run your examples
 
 ### Building
 
