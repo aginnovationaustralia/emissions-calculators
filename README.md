@@ -127,9 +127,10 @@ Made with ❤️ by
 </p>
 
 <p align="center">
-<a href="https://exogee.com">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/exogee-white.svg">
-  <img src="./assets/exogee-black.svg" alt="Exogee">
-</picture>
-</a>
+    <a href="https://exogee.com">
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="./assets/exogee-white.svg">
+            <img src="./assets/exogee-black.svg" alt="Exogee">
+        </picture>
+    </a>
+</p>
