@@ -1,3 +1,4 @@
+import { entriesFromObject } from '@/calculators/common/tools/object';
 import { HasMetadata, ValueMetadata } from './metadata';
 import { DecimalValue } from './values';
 
@@ -54,4 +55,16 @@ export const scope1Output = <
     value: from.value,
     from,
   };
+};
+
+export const outputsToNumbers = <
+  T extends Record<K, DecimalValue>,
+  K extends keyof T & string,
+>(
+  t: T,
+): Record<K, number> => {
+  return entriesFromObject(t).map(([key, value]): [K, number] => [
+    key as K,
+    value.value().toNumber(),
+  ]) as Record<K, number>;
 };

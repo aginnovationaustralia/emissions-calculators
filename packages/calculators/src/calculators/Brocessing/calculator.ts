@@ -6,17 +6,22 @@ import { ProductUnit } from '@/types/Processing/product.input';
 import { ProcessingScope1Output } from '@/types/Processing/scope1.output';
 import { ProcessingScope3Output } from '@/types/Processing/scope3.output';
 import { Scope2Output } from '@/types/scope2.output';
+import Decimal from 'decimal.js-light';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import { calculateScope1And3Fuel } from '../common/fuel';
 import { calculateScope1Refrigerant } from '../common/refrigerant';
 import { divideBySafeFromZero } from '../common/tools/calculate';
-import { sumIntermediateResults } from '../common/tools/intermediate-results';
 import { calculateScope1WasteWater } from '../common/waste/Scope1WasteWater';
 import { calculateSolidWaste } from '../common/waste/SolidWaste';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForBrocessingCalculator } from './constants';
-import { Output } from './types/output';
-import { addTotals } from './types/totals';
+import { Output, outputsToNumbers } from './types/output';
+import {
+  addScope1Totals,
+  addScope23Totals,
+  calculateNet,
+  sumIntermediateResults,
+} from './types/totals';
 
 function getIntensities(
   netTotal: number,
@@ -59,12 +64,19 @@ type ProcessingScopesOutput = {
 };
 
 type IntermediateOutputs = {
-  output: ProcessingScopesOutput;
+  scope1: Scope1Outputs<ProcessingScope1Output>;
+  scope2: Scope2Outputs<Scope2Output>;
+  scope3: Scope3Outputs<ProcessingScope3Output>;
+  net: {
+    total: Decimal;
+  };
   extensions: {
     carbonOffsets: number;
     unitsProduced: number;
-    unitOfProduct: ProductUnit;
+  };
+  meta: {
     id: string;
+    unitOfProduct: ProductUnit;
   };
 };
 
@@ -100,7 +112,7 @@ export function calculateSingleProcessingEnterprise(
   const purchasedCO2Tonnes = product.purchasedCO2 / 1000;
 
   const res: ProcessingScopesOutput = {
-    scope1: addTotals({
+    scope1: addScope1Totals({
       hfcsRefrigerantLeakage: refrigerant,
       fuelN2O,
       fuelCH4,
@@ -114,10 +126,10 @@ export function calculateSingleProcessingEnterprise(
       compostedSolidWasteCO2,
       totalHFCs: refrigerant,
     }),
-    scope2: addTotals({
+    scope2: addScope23Totals({
       electricity: electricity.scope2,
     }),
-    scope3: addTotals({
+    scope3: addScope23Totals({
       electricity: electricity.scope3,
       fuel: fuelTotals.scope3Total,
       solidWasteSentOffsite,
@@ -127,11 +139,13 @@ export function calculateSingleProcessingEnterprise(
   const carbonOffsets = product.carbonOffsets ?? 0;
 
   return {
-    output: res,
+    ...res,
     net: calculateNet(res, [carbonOffsets]),
     extensions: {
       carbonOffsets: product.carbonOffsets ?? 0,
       unitsProduced: product.product.amountMadePerYear,
+    },
+    meta: {
       unitOfProduct: product.product.unit,
       id,
     },
@@ -151,67 +165,14 @@ export function calculateBrocessing(
     ),
   );
 
-  const processingResult = sumIntermediateResults(
-    {
-      output: {
-        scope1: {
-          hfcsRefrigerantLeakage: 0,
-          fuelN2O: 0,
-          fuelCH4: 0,
-          fuelCO2: 0,
-          totalCH4: 0,
-          totalCO2: 0,
-          totalN2O: 0,
-          purchasedCO2: 0,
-          wastewaterCO2: 0,
-          compostedSolidWasteCO2: 0,
-          totalHFCs: 0,
-          total: 0,
-        },
-        scope2: {
-          electricity: 0,
-          total: 0,
-        },
-        scope3: {
-          electricity: 0,
-          fuel: 0,
-          solidWasteSentOffsite: 0,
-          total: 0,
-        },
-      },
-      net: {
-        total: 0,
-      },
-      extensions: {
-        carbonOffsets: 0,
-        unitsProduced: 0,
-      },
-      meta: {
-        id: '',
-        unitOfProduct: ProductUnit.UNIT,
-      },
-    },
-    processingResults,
-  );
+  const processingResult = sumIntermediateResults(processingResults);
 
-  const emissionsTotal =
-    processingResult.output.scope1.total +
-    processingResult.output.scope2.total +
-    processingResult.output.scope3.total;
-
-  const netTotal =
-    emissionsTotal - (processingResult.extensions.carbonOffsets ?? 0);
-
-  const baseEmissions = {
-    ...processingResult.output,
-    net: {
-      total: netTotal,
-    },
-  };
+  // const netTotal =
+  //   processingResult.net
 
   const intensities = processingResults.map((result) =>
     getIntensities(
-      result.net.total,
+      result.net.total.toNumber(),
       result.extensions.carbonOffsets ?? 0,
       result.extensions.unitsProduced,
       result.meta.unitOfProduct,
@@ -219,10 +180,12 @@ export function calculateBrocessing(
   );
 
   const intermediate = processingResults.map((result) => ({
-    ...result.output,
+    scope1: result.scope1,
+    scope2: result.scope2,
+    scope3: result.scope3,
     id: result.meta.id,
     intensities: getIntensities(
-      result.net.total,
+      result.net.total.toNumber(),
       result.extensions.carbonOffsets ?? 0,
       result.extensions.unitsProduced,
       result.meta.unitOfProduct,
@@ -233,8 +196,8 @@ export function calculateBrocessing(
     },
   }));
 
-  return {
-    ...baseEmissions,
+  const fullOutputs = {
+    ...processingResult,
     intensities,
     intermediate,
     purchasedOffsets: {
@@ -244,4 +207,31 @@ export function calculateBrocessing(
       total: 0,
     },
   };
+
+  const result = {
+    scope1: outputsToNumbers(fullOutputs.scope1),
+    scope2: outputsToNumbers(fullOutputs.scope2),
+    scope3: outputsToNumbers(fullOutputs.scope3),
+    net: {
+      total: fullOutputs.net.total.toNumber(),
+    },
+    intensities,
+    intermediate: intermediate.map((i) => ({
+      ...i,
+      scope1: outputsToNumbers(i.scope1),
+      scope2: outputsToNumbers(i.scope2),
+      scope3: outputsToNumbers(i.scope3),
+      net: {
+        total: i.net.total.toNumber(),
+      },
+    })),
+    purchasedOffsets: {
+      total: fullOutputs.extensions.carbonOffsets ?? 0,
+    },
+    carbonSequestration: {
+      total: 0,
+    },
+  };
+
+  return result;
 }
