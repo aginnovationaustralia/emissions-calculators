@@ -162,7 +162,7 @@ Each release of a package will trigger branching and tagging of the released com
 
 # License
 
-[Creative Commons Attribution No Derivatives](./assets/by.png)
+[Creative Commons Attribution](./assets/by.png)
 
 This project is licensed under a [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) license.
 
