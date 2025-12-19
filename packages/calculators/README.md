@@ -9,6 +9,13 @@ The objectives of this program are to:
 - Provide a product that is maintained and updated regularly until June 2028 to ensure it aligns with the guidelines once available and the GAF tools in the meantime.
 - Improve producer and farm adviser access to GHG accounting tools to increase the proportion of producers that know and understand their business’s net emissions profile.
 
+To deliver on the program’s objectives and ensure the Code remains consistent with the forthcoming guidelines, and in the meantime the GAF tools, it is recommended that:
+
+- Users integrating the Code into their own systems, tools, or applications, retain the integrity of the original.
+- Any enhancements to user interfaces, reporting layers, or data inputs do not interfere with or alter the functioning of the calculation logic.
+
+If a user needs to adapt the Code to ensure it is compatible with their own platform or product, it is recommended that they first contact AIA to discuss any deviations required from the original Code.
+
 Currently, the EAP implements the GAF tools as a JavaScript package that can be readily imported and used for calculations and will transition to the Australian Government’s guidelines once they are available.
 Under the grant program, AIA also provides [free API access to the EAP calculation engine](https://www.aiaeap.com/partner).
 
