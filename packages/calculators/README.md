@@ -9,6 +9,13 @@ The objectives of this program are to:
 - Provide a product that is maintained and updated regularly until June 2028 to ensure it aligns with the guidelines once available and the GAF tools in the meantime.
 - Improve producer and farm adviser access to GHG accounting tools to increase the proportion of producers that know and understand their business’s net emissions profile.
 
+To deliver on the program’s objectives and ensure the Code remains consistent with the forthcoming guidelines, and in the meantime the GAF tools, it is recommended that:
+
+- Users integrating the Code into their own systems, tools, or applications, retain the integrity of the original.
+- Any enhancements to user interfaces, reporting layers, or data inputs do not interfere with or alter the functioning of the calculation logic.
+
+If a user needs to adapt the Code to ensure it is compatible with their own platform or product, it is recommended that they first contact AIA to discuss any deviations required from the original Code.
+
 Currently, the EAP implements the GAF tools as a JavaScript package that can be readily imported and used for calculations and will transition to the Australian Government’s guidelines once they are available.
 Under the grant program, AIA also provides [free API access to the EAP calculation engine](https://www.aiaeap.com/partner).
 
@@ -162,9 +169,21 @@ Each release of a package will trigger branching and tagging of the released com
 
 # License
 
-[Creative Commons Attribution](./assets/by.png)
+![Creative Commons Attribution](./assets/by.png)
 
 This project is licensed under a [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) license.
+
+All users of the Code must acknowledge AIA as the source and maintainer of the EAP Calculator Engine code. All users of the Code must acknowledge that free access to the Code is supported by the Australian Government through funding from the Improving Consistency of On-Farm Emissions Estimates Program.
+
+The acknowledgement must be displayed in documentation, digital interfaces, or product materials where attribution of technical components is ordinarily provided.
+
+This includes the need to display the [‘Powered by EAP’](https://www.aiaeap.com/branding) logo in any systems which directly or indirectly use the open-source code, in a way which is clearly visible to third-party clients/customers/users of those systems.
+
+At a minimum, the acknowledgement must state:
+
+> “This product incorporates the EAP Calculator Engine open-source code developed and maintained by Agricultural Innovation Australia Ltd. Free access to AIA’s open-source code is supported by the Australian Government through funding from the Improving Consistency of On-Farm Emissions Estimates Program”
+
+Users may not imply or state endorsement by AIA, unless explicit written consent from AIA has been granted. Users must not imply or state endorsement by the Australian Government.
 
 ---
 
