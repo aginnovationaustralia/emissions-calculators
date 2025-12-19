@@ -1,8 +1,10 @@
 # How to Contribute
 
-## Code of Conduct
+## Terms and Conditions
 
-Everyone actively engaged with this project must understand and respect the rules and principles clearly laid out in the project's [code of conduct](./CODE_OF_CONDUCT.md).
+By providing a contribution to us, you agree to be bound by the terms and conditions contained in the AIA EAP Open Source Code Contributor Licence Agreement.
+
+All community members are expected to understand and respect out code of conduct. Our code of conduct is based on the Contributor Covenant.
 
 ## Open Development
 
