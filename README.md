@@ -123,9 +123,21 @@ New versions of the package are published to the NPM registry via a [Github acti
 
 # License
 
-[Creative Commons Attribution](./assets/by.png)
+![Creative Commons Attribution](./assets/by.png)
 
 This project is licensed under a [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) license.
+
+All users of the Code must acknowledge AIA as the source and maintainer of the EAP Calculator Engine code. All users of the Code must acknowledge that free access to the Code is supported by the Australian Government through funding from the Improving Consistency of On-Farm Emissions Estimates Program.
+
+The acknowledgement must be displayed in documentation, digital interfaces, or product materials where attribution of technical components is ordinarily provided.
+
+This includes the need to display the [‘Powered by EAP’](https://www.aiaeap.com/branding) logo in any systems which directly or indirectly use the open-source code, in a way which is clearly visible to third-party clients/customers/users of those systems.
+
+At a minimum, the acknowledgement must state:
+
+> “This product incorporates the EAP Calculator Engine open-source code developed and maintained by Agricultural Innovation Australia Ltd. Free access to AIA’s open-source code is supported by the Australian Government through funding from the Improving Consistency of On-Farm Emissions Estimates Program”
+
+Users may not imply or state endorsement by AIA, unless explicit written consent from AIA has been granted. Users must not imply or state endorsement by the Australian Government.
 
 ---
 
