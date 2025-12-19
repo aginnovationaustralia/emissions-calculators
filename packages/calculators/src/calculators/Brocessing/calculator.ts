@@ -9,15 +9,14 @@ import { Scope2Output } from '@/types/scope2.output';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import { calculateScope1And3Fuel } from '../common/fuel';
 import { calculateScope1Refrigerant } from '../common/refrigerant';
-import { addTotalValue, divideBySafeFromZero } from '../common/tools/calculate';
-import {
-  sumIntermediateResults,
-  SummableObject,
-} from '../common/tools/intermediate-results';
+import { divideBySafeFromZero } from '../common/tools/calculate';
+import { sumIntermediateResults } from '../common/tools/intermediate-results';
 import { calculateScope1WasteWater } from '../common/waste/Scope1WasteWater';
 import { calculateSolidWaste } from '../common/waste/SolidWaste';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForBrocessingCalculator } from './constants';
+import { Output } from './types/output';
+import { addTotals } from './types/totals';
 
 function getIntensities(
   netTotal: number,
@@ -39,10 +38,34 @@ function getIntensities(
   };
 }
 
+// Define a generic type that maps over the values of an object that is purely string based keys, with number values
+// Each number value is wrapped by a Scope1Output.
+type Scope1Outputs<T extends Record<string, number>> = {
+  [K in keyof T]: Output<1>;
+};
+
+type Scope2Outputs<T extends Record<string, number>> = {
+  [K in keyof T]: Output<2>;
+};
+
+type Scope3Outputs<T extends Record<string, number>> = {
+  [K in keyof T]: Output<3>;
+};
+
 type ProcessingScopesOutput = {
-  scope1: ProcessingScope1Output & SummableObject;
-  scope2: Scope2Output & SummableObject;
-  scope3: ProcessingScope3Output & SummableObject;
+  scope1: Scope1Outputs<ProcessingScope1Output>;
+  scope2: Scope2Outputs<Scope2Output>;
+  scope3: Scope3Outputs<ProcessingScope3Output>;
+};
+
+type IntermediateOutputs = {
+  output: ProcessingScopesOutput;
+  extensions: {
+    carbonOffsets: number;
+    unitsProduced: number;
+    unitOfProduct: ProductUnit;
+    id: string;
+  };
 };
 
 export function calculateSingleProcessingEnterprise(
@@ -50,7 +73,7 @@ export function calculateSingleProcessingEnterprise(
   product: ProductProcessingInput,
   context: ExecutionContext<ConstantsForBrocessingCalculator>,
   id: string,
-) {
+): IntermediateOutputs {
   const fuelTotals = calculateScope1And3Fuel(product.fuel, state, context);
 
   const electricity = calculateElectricityScope2And3(
@@ -77,7 +100,7 @@ export function calculateSingleProcessingEnterprise(
   const purchasedCO2Tonnes = product.purchasedCO2 / 1000;
 
   const res: ProcessingScopesOutput = {
-    scope1: addTotalValue({
+    scope1: addTotals({
       hfcsRefrigerantLeakage: refrigerant,
       fuelN2O,
       fuelCH4,
@@ -91,32 +114,21 @@ export function calculateSingleProcessingEnterprise(
       compostedSolidWasteCO2,
       totalHFCs: refrigerant,
     }),
-    scope2: addTotalValue({
+    scope2: addTotals({
       electricity: electricity.scope2,
     }),
-    scope3: addTotalValue({
+    scope3: addTotals({
       electricity: electricity.scope3,
       fuel: fuelTotals.scope3Total,
       solidWasteSentOffsite,
     }),
   };
 
-  const netTotal =
-    res.scope1.total +
-    res.scope2.total +
-    res.scope3.total -
-    (product.carbonOffsets ?? 0);
-
   return {
     output: res,
-    net: {
-      total: netTotal,
-    },
     extensions: {
-      carbonOffsets: product.carbonOffsets,
+      carbonOffsets: product.carbonOffsets ?? 0,
       unitsProduced: product.product.amountMadePerYear,
-    },
-    meta: {
       unitOfProduct: product.product.unit,
       id,
     },
