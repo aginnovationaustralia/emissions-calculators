@@ -36,3 +36,28 @@ export const addTotals = <T extends Record<string, Output<1 | 2 | 3>>>(
     total: { value: () => total },
   };
 };
+
+type ScopeTotals = {
+  scope1: {
+    total: DecimalValue;
+  };
+  scope2: {
+    total: DecimalValue;
+  };
+  scope3: {
+    total: DecimalValue;
+  };
+};
+
+export const calculateNet = <T extends ScopeTotals>(
+  totals: T,
+  reductions: number[],
+): { total: DecimalValue } => {
+  return {
+    total: totals.scope1.total
+      .value()
+      .add(totals.scope2.total.value())
+      .add(totals.scope3.total.value())
+      .sub(reductions.reduce((a, b) => a.add(new Decimal(b)), new Decimal(0))),
+  };
+};

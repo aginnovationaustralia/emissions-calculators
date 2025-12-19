@@ -124,8 +124,11 @@ export function calculateSingleProcessingEnterprise(
     }),
   };
 
+  const carbonOffsets = product.carbonOffsets ?? 0;
+
   return {
     output: res,
+    net: calculateNet(res, [carbonOffsets]),
     extensions: {
       carbonOffsets: product.carbonOffsets ?? 0,
       unitsProduced: product.product.amountMadePerYear,
