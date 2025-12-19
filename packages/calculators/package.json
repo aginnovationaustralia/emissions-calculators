@@ -308,6 +308,10 @@
     "build:docs": "tsx scripts/build-docs/index.ts",
     "generate:exports": "tsx scripts/generate-exports.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aginnovationaustralia/emissions-calculators.git"
+  },
   "author": "Agricultural Innovation Australia",
   "license": "CC-BY-4.0",
   "description": "",
