@@ -4,6 +4,8 @@
 
 By providing a contribution to us, you agree to be bound by the terms and conditions contained in the [AIA EAP Open Source Code Contributor Licence Agreement](https://www.aiaeap.com/_files/ugd/78d843_76f5b1cec5034ca18188d96f977704a7.pdf).
 
+## Code of Conduct
+
 All community members are expected to understand and respect out [code of conduct](./CODE_OF_CONDUCT.md). Our code of conduct is based on the [Contributor Covenant](https://www.contributor-covenant.org/version/3/0/).
 
 ## Open Development
