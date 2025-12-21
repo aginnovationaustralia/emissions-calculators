@@ -9,11 +9,11 @@ import { Scope2Output } from '@/types/scope2.output';
 import Decimal from 'decimal.js-light';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import { calculateScope1And3Fuel } from '../common/fuel';
-import { calculateScope1Refrigerant } from '../common/refrigerant';
 import { divideBySafeFromZero } from '../common/tools/calculate';
 import { calculateScope1WasteWater } from '../common/waste/Scope1WasteWater';
 import { calculateSolidWaste } from '../common/waste/SolidWaste';
 import { ExecutionContext } from '../executionContext';
+import { calculateScope1Refrigerant } from './common/Scope1Refrigerant';
 import { ConstantsForBrocessingCalculator } from './constants';
 import { Output, outputsToNumbers } from './types/output';
 import {
@@ -96,7 +96,10 @@ export function calculateSingleProcessingEnterprise(
     context,
   );
 
-  const refrigerant = calculateScope1Refrigerant(product.refrigerants, context);
+  const hfcsRefrigerantLeakage = calculateScope1Refrigerant(
+    product.refrigerants,
+    context,
+  );
 
   const fuelCO2 = fuelTotals.co2;
   const fuelCH4 = fuelTotals.ch4;
@@ -113,7 +116,7 @@ export function calculateSingleProcessingEnterprise(
 
   const res: ProcessingScopesOutput = {
     scope1: addScope1Totals({
-      hfcsRefrigerantLeakage: refrigerant,
+      hfcsRefrigerantLeakage,
       fuelN2O,
       fuelCH4,
       fuelCO2,
