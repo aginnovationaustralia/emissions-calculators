@@ -1,33 +1,27 @@
-import { HasNumberValue } from './constants';
 import { HasMetadata, ValueMetadata } from './metadata';
-import { HasOperation, MethodReturnType, Operation } from './operations';
-import { NumberUnit } from './values';
+import { Origin } from './origins';
+import { CanPrint, DecimalValue } from './values';
 
-export interface Variable<
-  L extends NumberUnit,
-  K extends keyof L & string,
-  R extends NumberUnit,
-  O extends NumberUnit & MethodReturnType<L, K, R>,
-> extends HasNumberValue<O>,
-    HasOperation<L, K, R, O>,
-    HasMetadata {
-  valueType: 'variable';
-}
-export const variable = <
-  L extends NumberUnit,
-  K extends keyof L & string,
-  R extends NumberUnit,
-  O extends NumberUnit & MethodReturnType<L, K, R>,
->(
+export type Variable = CanPrint &
+  DecimalValue &
+  HasMetadata & {
+    name: string;
+    valueType: 'variable';
+    from: Origin;
+  };
+
+export const variable = (
   name: string,
-  op: Operation<L, K, R, O>,
+  from: Origin,
   metadata?: ValueMetadata,
-): Variable<L, K, R, O> => {
+): Variable => {
   return {
-    valueType: 'variable',
     name,
-    operation: op,
-    value: op.value,
+    valueType: 'variable',
+    from,
+    value: () => from.value(),
     metadata,
+    printValue: () => from.printValue(),
+    printWithUnits: () => from.printWithUnits(),
   };
 };
