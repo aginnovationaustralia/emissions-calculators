@@ -40,8 +40,8 @@ importers:
         specifier: ^0.19.1
         version: 0.19.1
       mixpanel-browser:
-        specifier: ^2.72.0
-        version: 2.72.0(@mixpanel/rrweb-utils@2.0.0-alpha.18.2)
+        specifier: ^2.73.0
+        version: 2.73.0(@mixpanel/rrweb-utils@2.0.0-alpha.18.2)
       openapi3-ts:
         specifier: ^4.5.0
         version: 4.5.0
@@ -2016,8 +2016,8 @@ packages:
   mitt@3.0.1:
     resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
 
-  mixpanel-browser@2.72.0:
-    resolution: {integrity: sha512-Olc+1ebVBSVBjtR/Pp4t8Pc1wAI9AfA5e668B0MsI/gKJ43QcndzfQ/AT/TiP1Klup8O1C9vwykoWjvPqX+SRA==}
+  mixpanel-browser@2.73.0:
+    resolution: {integrity: sha512-Ny+6BVeWJozZoyrzB+5/6LTqBZ0gDY1pwcs7PQLQVGPKMTdL8qAz0yV4H8ykGQEA5KrW2Ky/KZ3uMEHGjE7oSA==}
 
   mixpanel@0.19.1:
     resolution: {integrity: sha512-NK3kJ7/ke1KfLeZyfl9Ec9XALzfI3cclpnpD3Uu0N2kTjlpeIs+zN/mpd1ZxwaiZLK3muccSzmecQ8HzqtMptw==}
@@ -4742,7 +4742,7 @@ snapshots:
 
   mitt@3.0.1: {}
 
-  mixpanel-browser@2.72.0(@mixpanel/rrweb-utils@2.0.0-alpha.18.2):
+  mixpanel-browser@2.73.0(@mixpanel/rrweb-utils@2.0.0-alpha.18.2):
     dependencies:
       '@mixpanel/rrweb': 2.0.0-alpha.18.2
       '@mixpanel/rrweb-plugin-console-record': 2.0.0-alpha.18.2(@mixpanel/rrweb-utils@2.0.0-alpha.18.2)(@mixpanel/rrweb@2.0.0-alpha.18.2)

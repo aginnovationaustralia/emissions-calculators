@@ -342,7 +342,7 @@
   },
   "dependencies": {
     "mixpanel": "^0.19.1",
-    "mixpanel-browser": "^2.72.0",
+    "mixpanel-browser": "^2.73.0",
     "openapi3-ts": "^4.5.0",
     "reflect-metadata": "^0.2.2",
     "semver": "^7.7.3",
