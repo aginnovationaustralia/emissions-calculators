@@ -24,25 +24,27 @@ export class BooleanUnit implements CanPrint {
   }
 }
 
-export class StringUnit implements CanPrint {
-  private readonly __unitType: 'StringUnit' = 'StringUnit' as const;
+export type StringUnit<V extends string = string> = V;
+// export type StringUnit = string;
+// export class StringUnit implements CanPrint {
+//   private readonly __unitType: 'StringUnit' = 'StringUnit' as const;
 
-  private _value: string;
+//   private _value: string;
 
-  constructor(value: string) {
-    this._value = value;
-  }
+//   constructor(value: string) {
+//     this._value = value;
+//   }
 
-  printValue() {
-    return this._value;
-  }
+//   printValue() {
+//     return this._value;
+//   }
 
-  printWithUnits() {
-    return this._value;
-  }
-}
+//   printWithUnits() {
+//     return this._value;
+//   }
+// }
 
-export type AnyUnit = NumberUnit | BooleanUnit | StringUnit;
+export type AnyUnit = NumberUnit | BooleanUnit | StringUnit<string>;
 
 export interface CanPrint {
   printValue(): string;

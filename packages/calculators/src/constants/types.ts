@@ -1,3 +1,4 @@
+import { KgCO2ePerKgRefrigerant } from '@/calculators/Brocessing/types/overloads';
 import {
   AquacultureBait,
   BeefClassesAPI,
@@ -781,7 +782,7 @@ export type CommonConstants = {
 
   COMMERCIALFLIGHT_EF: number;
 
-  REFRIGERANT_GWP: Record<Refrigerant, number>;
+  REFRIGERANT_GWP: Record<Refrigerant, KgCO2ePerKgRefrigerant>;
 
   WASTEWATER: {
     TREATMENT_EF: Record<FluidWasteTreatmentType, number>;
