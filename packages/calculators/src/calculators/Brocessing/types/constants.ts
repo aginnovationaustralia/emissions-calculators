@@ -13,8 +13,9 @@ export interface HasValue<T extends AnyUnit & CanPrint> {
 
 /*
 A generic function to select a constant from a constants object.
-The constantName is the name of a key of the constants object. It contains a Record<string, number>.
-The keyInConstant value is a key in that Record, so the Record must contain that key.
+The constantName is the name of a key of the constants object. It contains a ConstantSelectionSource
+with unit and values properties.
+The keyInConstant value is a key in the values Record, so the Record must contain that key.
 The constants parameter is a larger set of constants, that includes the constantName key.
 
 The function should have generic constraints on the constantName and keyInRecord parameters, so that the function can be used to select any constant from any constants object.
@@ -22,25 +23,20 @@ The function should have generic constraints on the constantName and keyInRecord
 export const selectConstant = <
   Constants extends object,
   KC extends string & keyof Constants,
-  KN extends string & keyof Constants[KC],
-  U extends NumberUnit,
-  TSource extends ConstantSelectionSource<U> & Constants[KC][KN],
-  //   TSource extends Constants[KC] &
-  //     (Constants[KC] extends Record<string, V> ? Record<string, V> : never),
+  TSource extends ConstantSelectionSource<NumberUnit> & Constants[KC],
+  KN extends string & keyof TSource['values'],
 >(
   constants: Constants,
   constantName: KC,
   selector: TypedOrigin<StringUnit<KN>>,
-): ConstantSelectionOrigin<U, KN> => {
+): ConstantSelectionOrigin<TSource['unit'], KN> => {
   const s = selector.unit;
-  const source: TSource = constants[constantName] as TSource;
-  //   const value: V = source[s] as V;
+  const source = constants[constantName] as TSource;
 
   return {
-    // ConstantSelectionOrigin
     valueType: 'constant',
     name: `${constantName}[${s}]`,
-    unit: source.unit, // new KgCO2ePerKgRefrigerant(new Decimal(138)),
+    unit: source.unit,
     originType: 'constant_selection',
     sourceName: constantName,
     selector,
