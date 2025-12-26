@@ -1,20 +1,6 @@
 import { rootOrigin, RootOrigin } from './origins';
-import { AnyUnit } from './values';
+import { AnyUnit } from './overloads';
 
-// export interface Input<T extends AnyUnit> extends HasValue<T>, HasMetadata {
-//   valueType: 'input';
-// }
-// export const input = <T extends AnyUnit>(
-//   name: string,
-//   value: T,
-//   metadata?: ValueMetadata,
-// ): Input<T> => {
-//   return { valueType: 'input', name, value, metadata };
-// };
-
-// export interface Input<T extends AnyUnit> extends HasValue<T>, HasMetadata {
-//   valueType: 'input';
-// }
 export const input = <T extends AnyUnit>(
   name: string,
   value: T,

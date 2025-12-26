@@ -1,43 +1,12 @@
 import { RefrigerantInput } from '@/types/refrigerant.input';
 import { Decimal } from 'decimal.js-light';
 import { ExecutionContext } from '../../executionContext';
-import { ConstantSelectionOrigin, TypedOrigin } from '../types/origins';
+import { selectConstant } from '../types/constants';
+import { input } from '../types/inputs';
+import { multiply } from '../types/multiply';
 import { Output, scope1Output } from '../types/output';
-import { input, massKg, multiply, NumberUnit } from '../types/overloads';
+import { massKg } from '../types/overloads';
 import { sum } from '../types/sum';
-import { StringUnit } from '../types/values';
-
-/*
-A generic function to select a constant from a constants object.
-The constantName is the name of a key of the constants object. It contains a Record<string, number>.
-The keyInConstant value is a key in that Record, so the Record must contain that key.
-The constants parameter is a larger set of constants, that includes the constantName key.
-
-The function should have generic constraints on the constantName and keyInRecord parameters, so that the function can be used to select any constant from any constants object.
-*/
-const selectConstant = <
-  Constants extends object,
-  KC extends string & keyof Constants,
-  KN extends string & keyof Constants[KC],
-  V extends NumberUnit & Constants[KC][KN],
->(
-  constants: Constants,
-  constantName: KC,
-  selector: TypedOrigin<StringUnit<KN>>,
-): ConstantSelectionOrigin<V> => {
-  const s = selector.unit;
-  const value: V = constants[constantName][s] as V;
-
-  return {
-    // ConstantSelectionOrigin
-    valueType: 'constant',
-    name: `${constantName}[${s}]`,
-    unit: value, // new KgCO2ePerKgRefrigerant(new Decimal(138)),
-    originType: 'constant_selection',
-    sourceName: constantName,
-    selector,
-  };
-};
 
 export function calculateScope1Refrigerant(
   refrigerants: RefrigerantInput[],
@@ -68,7 +37,10 @@ export function calculateScope1Refrigerant(
       return result;
     });
 
-  const totalKgCO2eFromRefrigerant = sum(amounts);
+  const totalKgCO2eFromRefrigerant = sum({
+    items: amounts,
+    unit: massKg('CO2e'),
+  });
   const totalTCO2eFromRefrigerant =
     totalKgCO2eFromRefrigerant.toMassTonnes('CO2e');
 
@@ -178,6 +150,7 @@ const expressionTree = {
   },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const output = {
   valueType: 'output',
   scope: 1,
@@ -188,83 +161,83 @@ const output = {
   from: expressionTree,
 };
 
-const expressionTreeAnnotated = {
-  valueType: 'intermediate',
-  unit: 't CO2e',
-  value: 151.6,
-  from: {
-    type: 'conversion',
-    previousUnit: 'kg CO2e',
-    newUnit: 't CO2e',
-    newValue: 151.6,
-    operation: {
-      type: 'divide',
-      by: 1000,
-    },
-    from: {
-      valueType: 'intermediate',
-      unit: 'kg CO2e',
-      value: 151600,
-      from: {
-        type: 'sum',
-        from: [
-          {
-            type: 'multiply',
-            unit: 'kg CO2e',
-            value: 138 * 200,
-            left: {
-              // ConstantSelectionOrigin
-              valueType: 'constant',
-              name: 'REFRIGERANT_GWP[HFC-152a]',
-              // value: 138,
-              // unit: 'kg CO2e/kg',
-              unit: new KgCO2ePerKgRefrigerant(new Decimal(138)),
-              originType: 'constant_selection',
-              sourceName: 'REFRIGERANT_GWP',
-              selector: {
-                // Input, RootOrigin
-                valueType: 'input',
-                name: 'REFRIGERANT[HFC-152a]',
-                unit: 'HFC-152a',
-              },
-            },
-            right: {
-              valueType: 'input',
-              name: 'CHARGE_SIZE[HFC-152a]',
-              value: 200,
-              unit: 'kg',
-            },
-          },
-          {
-            type: 'multiply',
-            unit: 'kg CO2e',
-            value: 1300 * 100,
-            left: {
-              valueType: 'constant',
-              name: 'REFRIGERANT_GWP[HFC-134a]',
-              value: 1300,
-              unit: 'kg CO2e/kg',
-              from: {
-                type: 'selected',
-                constants: {
-                  name: 'REFRIGERANT_GWP',
-                },
-                selection: {
-                  valueType: 'input',
-                  name: 'REFRIGERANT[HFC-134a]',
-                  value: 'HFC-152a',
-                },
-              },
-            },
-            right: {
-              valueType: 'input',
-              name: 'CHARGE_SIZE[HFC-134a]',
-              value: 100,
-              unit: 'kg',
-            },
-          },
-        ],
-      },
-    },
-  },
-};
+// const expressionTreeAnnotated = {
+//   valueType: 'intermediate',
+//   unit: 't CO2e',
+//   value: 151.6,
+//   from: {
+//     type: 'conversion',
+//     previousUnit: 'kg CO2e',
+//     newUnit: 't CO2e',
+//     newValue: 151.6,
+//     operation: {
+//       type: 'divide',
+//       by: 1000,
+//     },
+//     from: {
+//       valueType: 'intermediate',
+//       unit: 'kg CO2e',
+//       value: 151600,
+//       from: {
+//         type: 'sum',
+//         from: [
+//           {
+//             type: 'multiply',
+//             unit: 'kg CO2e',
+//             value: 138 * 200,
+//             left: {
+//               // ConstantSelectionOrigin
+//               valueType: 'constant',
+//               name: 'REFRIGERANT_GWP[HFC-152a]',
+//               // value: 138,
+//               // unit: 'kg CO2e/kg',
+//               unit: new KgCO2ePerKgRefrigerant(new Decimal(138)),
+//               originType: 'constant_selection',
+//               sourceName: 'REFRIGERANT_GWP',
+//               selector: {
+//                 // Input, RootOrigin
+//                 valueType: 'input',
+//                 name: 'REFRIGERANT[HFC-152a]',
+//                 unit: 'HFC-152a',
+//               },
+//             },
+//             right: {
+//               valueType: 'input',
+//               name: 'CHARGE_SIZE[HFC-152a]',
+//               value: 200,
+//               unit: 'kg',
+//             },
+//           },
+//           {
+//             type: 'multiply',
+//             unit: 'kg CO2e',
+//             value: 1300 * 100,
+//             left: {
+//               valueType: 'constant',
+//               name: 'REFRIGERANT_GWP[HFC-134a]',
+//               value: 1300,
+//               unit: 'kg CO2e/kg',
+//               from: {
+//                 type: 'selected',
+//                 constants: {
+//                   name: 'REFRIGERANT_GWP',
+//                 },
+//                 selection: {
+//                   valueType: 'input',
+//                   name: 'REFRIGERANT[HFC-134a]',
+//                   value: 'HFC-152a',
+//                 },
+//               },
+//             },
+//             right: {
+//               valueType: 'input',
+//               name: 'CHARGE_SIZE[HFC-134a]',
+//               value: 100,
+//               unit: 'kg',
+//             },
+//           },
+//         ],
+//       },
+//     },
+//   },
+// };

@@ -1,20 +1,15 @@
-import Decimal from 'decimal.js-light';
-import { Origin, SummedOrigin } from './origins';
-import { NumberUnit } from './overloads';
+import { BaseOrigin, SummedOrigin } from './origins';
+import { NumberUnit, UnitArray } from './overloads';
 
-const sumNumberUnits = <N extends NumberUnit>(a: N, bs: N[]): N => {
-    if (bs.length === 0) {
-        return a;
-    }
-    const [first, ...rest] = bs;
-    return sumNumberUnits(a.add(first), rest);
-};
-
-export const sum = <N extends NumberUnit>(values: Origin<N>[]): SummedOrigin<N> => {
-    const [first, ...rest] = values;
+export const sum = <N extends NumberUnit>(
+  array: UnitArray<N>,
+  baseOrigin?: BaseOrigin<N>,
+): SummedOrigin<N> => {
+  const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
   return {
-    type: 'sum',
-    from: values,
-    unit: rest.reduce((acc, curr) => acc.add((curr.unit as N), first.unit),
+    originType: 'sum',
+    from: array,
+    unit: array.unit,
+    ...baseOrDefault,
   };
 };

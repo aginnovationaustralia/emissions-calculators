@@ -2,6 +2,10 @@ export type Substance = 'CO2' | 'CH4' | 'N2O' | 'CO2e' | 'Refrigerant';
 
 import Decimal from 'decimal.js-light';
 
+/*
+ * NOTE: This file is capturing the class based approach for units and values
+ */
+
 export interface DecimalValue {
   value(): Decimal;
 }
@@ -103,10 +107,12 @@ export type CanDivide<U extends NumberUnit, O extends NumberUnit> = CanCallWith<
   O
 >;
 
-type MathOps<TSelf extends NumberUnit> = CanAdd<TSelf, TSelf> &
-  CanMultiply<RealNumber, TSelf> &
-  CanSubtract<TSelf, TSelf> &
-  CanDivide<RealNumber, TSelf>;
+type MathOps<TSelf extends object> = TSelf;
+
+// CanAdd<TSelf, TSelf> &
+//   CanMultiply<RealNumber, TSelf> &
+//   CanSubtract<TSelf, TSelf> &
+//   CanDivide<RealNumber, TSelf>;
 
 export class RealNumber extends UnitWithDecimal implements MathOps<RealNumber> {
   private readonly __unitType: 'RealNumber' = 'RealNumber' as const;

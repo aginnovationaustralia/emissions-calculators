@@ -1,11 +1,16 @@
 import { entriesFromObject } from '@/calculators/common/tools/object';
+import Decimal from 'decimal.js-light';
 import { HasMetadata, ValueMetadata } from './metadata';
-import { Origin } from './origins';
-import { DecimalValue, NumberUnit } from './values';
+import { evaluate, Origin } from './origins';
+import { NumberUnit } from './overloads';
+import { DecimalValue } from './values';
 
+type HasDecimalValue = {
+  value: Decimal;
+};
 export interface Output<Scope extends 1 | 2 | 3>
   extends HasMetadata,
-    DecimalValue {
+    HasDecimalValue {
   name: string;
   scope: Scope;
   from: Origin<NumberUnit>;
@@ -17,7 +22,7 @@ export const output = <Scope extends 2 | 3>(
   from: Origin<NumberUnit>,
   metadata?: ValueMetadata,
 ): Output<Scope> => {
-  return { name, scope, value: () => from.unit.value(), from, metadata };
+  return { name, scope, value: evaluate(from), from, metadata };
 };
 
 export interface Scope1Output<S = 'CO2' | 'CH4' | 'N2O'> extends Output<1> {
@@ -32,7 +37,7 @@ export const scope1Output = <S = 'CO2' | 'CH4' | 'N2O'>(
     name,
     scope: 1,
     gas,
-    value: () => from.unit.value(),
+    value: evaluate(from),
     from,
   };
 };

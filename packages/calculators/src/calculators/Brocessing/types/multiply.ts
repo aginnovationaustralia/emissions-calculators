@@ -1,19 +1,28 @@
-import { HasValue } from './constants';
-import { ValueMetadata } from './metadata';
-import { BinaryMethodReturnType, binaryOperation } from './operations';
-import { CanMultiply, NumberUnit } from './values';
-import { variable, Variable } from './variable';
+import { BaseOrigin, BinaryOrigin, TypedOrigin } from './origins';
+import { KgPerKg, MassKg, NumberUnit, Substance } from './overloads';
 
 export function multiply<
-  R extends NumberUnit,
-  // eslint-disable-next-line no-use-before-define
-  L extends CanMultiply<R, O> & NumberUnit,
-  O extends BinaryMethodReturnType<L, 'multiply', R>,
->(
-  left: HasValue<L>,
-  right: HasValue<R>,
-  name: string,
-  metadata?: ValueMetadata,
-): Variable<L, 'multiply', R, O> {
-  return variable(name, binaryOperation(left, right, 'multiply'), metadata);
+  SNum extends Substance,
+  SDenom extends Substance,
+  UL extends TypedOrigin<KgPerKg<SNum, SDenom>>,
+  UR extends TypedOrigin<MassKg<SDenom>>,
+>(left: UL, right: UR, baseOrigin?: BaseOrigin): BinaryOrigin<MassKg<SNum>>;
+export function multiply<UL extends NumberUnit, UR extends NumberUnit>(
+  left: TypedOrigin<UL>,
+  right: TypedOrigin<UR>,
+  baseOrigin?: BaseOrigin,
+): BinaryOrigin<NumberUnit> {
+  const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
+  // let unit: NumberUnit; // = new RealNumber(0);
+  // if (isKgPerKg(left.unit) && isMassKg(right.unit)) {
+  //   unit = massKg(left.unit.snum, left.unit.value.mul(right.unit.value));
+  // }
+
+  return {
+    type: 'multiply',
+    originType: 'binary',
+    left,
+    right,
+    ...baseOrDefault,
+  };
 }

@@ -16,15 +16,15 @@ export const addScope1Totals = <T extends Record<string, Output<1>>>(
   // TODO should be filtering by substance type
   const totalCH4 = scopeEntries
     .filter(([key]) => typeof key === 'string' && key.endsWith('CH4'))
-    .map(([_, value]) => value.value())
+    .map(([_, value]) => value.value)
     .reduce((a, b) => a.add(b), new Decimal(0));
   const totalCO2 = scopeEntries
     .filter(([key]) => typeof key === 'string' && key.endsWith('CO2'))
-    .map(([_, value]) => value.value())
+    .map(([_, value]) => value.value)
     .reduce((a, b) => a.add(b), new Decimal(0));
   const totalN2O = scopeEntries
     .filter(([key]) => typeof key === 'string' && key.endsWith('N2O'))
-    .map(([_, value]) => value.value())
+    .map(([_, value]) => value.value)
     .reduce((a, b) => a.add(b), new Decimal(0));
   const total = totalCH4.add(totalCO2).add(totalN2O);
 
@@ -45,7 +45,7 @@ export const addScope23Totals = <T extends Record<string, Output<2 | 3>>>(
   const scopeEntries = entriesFromObject(totals);
 
   const total = scopeEntries
-    .map(([_, value]) => value.value())
+    .map(([_, value]) => value.value)
     .reduce((a, b) => a.add(b), new Decimal(0));
 
   return {
@@ -94,7 +94,7 @@ export function addAcrossAllKeys<
   T extends Record<K, Output<1 | 2 | 3>>,
 >(obj1: T, obj2: T): T {
   return entriesFromObject(obj2).reduce(
-    (acc, [k, v]) => ({ ...acc, [k]: v.value().add(acc[k].value()) }),
+    (acc, [k, v]) => ({ ...acc, [k]: v.value.add(acc[k].value) }),
     obj1,
   );
 }
