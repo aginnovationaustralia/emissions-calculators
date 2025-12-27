@@ -2,7 +2,7 @@ import { RefrigerantInputOrigin } from '@/types/refrigerant.input';
 import { ExecutionContext } from '../../executionContext';
 import { selectConstant } from '../types/constants';
 import { multiply } from '../types/multiply';
-import { BinaryOrigin } from '../types/origins';
+import { Origin } from '../types/origins';
 import { Output, scope1Output } from '../types/output';
 import { Mass, mass, UnitArray } from '../types/overloads';
 import { sum } from '../types/sum';
@@ -22,7 +22,7 @@ export function calculateScope1Refrigerant(
       refrigerant,
     );
 
-    const result: BinaryOrigin<Mass<'CO2e'>> = multiply(factor, chargeSize);
+    const result: Origin<Mass<'CO2e'>> = multiply(factor, chargeSize);
     return result;
   });
 

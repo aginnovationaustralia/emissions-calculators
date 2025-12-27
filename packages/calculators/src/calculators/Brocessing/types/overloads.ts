@@ -59,7 +59,13 @@ type NumberUnitBase = { initialValue: Decimal };
 
 type VoidUnit = {
   __unitType: 'Void';
+  initialValue: Decimal;
 };
+
+export const voidUnit = () => ({
+  __unitType: 'Void' as const,
+  initialValue: new Decimal(0),
+});
 
 export type NumberUnit =
   | MassPerMass<Substance, Substance>

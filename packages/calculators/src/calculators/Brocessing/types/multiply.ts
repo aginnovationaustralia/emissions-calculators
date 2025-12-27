@@ -7,6 +7,7 @@ import {
   isMass,
   isMassPerMass,
   mass,
+  voidUnit,
 } from './overloads';
 
 export function multiply<
@@ -25,7 +26,7 @@ export function multiply<UL extends NumberUnit, UR extends NumberUnit>(
   baseOrigin?: BaseOrigin<NumberUnit>,
 ): BinaryOrigin<NumberUnit> {
   const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
-  let unit: NumberUnit = { __unitType: 'Void' };
+  let unit: NumberUnit = voidUnit();
   if (isMassPerMass(left.unit) && isMass(right.unit)) {
     unit = mass(left.unit.snum);
   }
