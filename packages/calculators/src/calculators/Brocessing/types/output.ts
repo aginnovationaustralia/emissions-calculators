@@ -2,42 +2,65 @@ import { entriesFromObject } from '@/calculators/common/tools/object';
 import Decimal from 'decimal.js-light';
 import { HasMetadata, ValueMetadata } from './metadata';
 import { evaluate, Origin } from './origins';
-import { NumberUnit } from './overloads';
+import { Mass } from './overloads';
 import { DecimalValue } from './values';
 
 type HasDecimalValue = {
   value: Decimal;
 };
-export interface Output<Scope extends 1 | 2 | 3>
-  extends HasMetadata,
-    HasDecimalValue {
-  name: string;
-  scope: Scope;
-  from: Origin<NumberUnit>;
-}
 
-export const output = <Scope extends 2 | 3>(
-  name: string,
-  scope: Scope,
-  from: Origin<NumberUnit>,
-  metadata?: ValueMetadata,
-): Output<Scope> => {
-  return { name, scope, value: evaluate(from), from, metadata };
+const convertToCO2e = (
+  gasAmountKg: Decimal,
+  gas: 'CO2' | 'CH4' | 'N2O' | 'CO2e',
+) => {
+  if (gas === 'CH4') {
+    return gasAmountKg.mul(new Decimal(28));
+  } else if (gas === 'N2O') {
+    return gasAmountKg.mul(new Decimal(265));
+  }
+  return gasAmountKg;
 };
 
-export interface Scope1Output<S = 'CO2' | 'CH4' | 'N2O'> extends Output<1> {
+export interface Output<
+  Scope extends 1 | 2 | 3,
+  S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e',
+> extends HasMetadata,
+    HasDecimalValue {
+  amountCO2e: Decimal;
+  name: string;
+  scope: Scope;
+  from: Origin<Mass<S>>;
+}
+
+export const output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
+  name: string,
+  scope: Scope,
+  from: Origin<Mass<S>>,
+  metadata?: ValueMetadata,
+): Output<Scope, S> => {
+  const gasAmountKg = evaluate(from);
+  const gas = from.unit.substance;
+  const amountCO2e = convertToCO2e(gasAmountKg, gas);
+  return { name, scope, value: gasAmountKg, amountCO2e, from, metadata };
+};
+
+export interface Scope1Output<S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>
+  extends Output<1, S> {
   gas: S;
 }
-export const scope1Output = <S = 'CO2' | 'CH4' | 'N2O'>(
+export const scope1Output = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
   name: string,
-  from: Origin<NumberUnit>,
-  gas: S,
+  from: Origin<Mass<S>>,
 ): Scope1Output<S> => {
+  const gasAmountKg = evaluate(from);
+  const gas = from.unit.substance;
+  const amountCO2e = convertToCO2e(gasAmountKg, gas);
   return {
     name,
     scope: 1,
     gas,
-    value: evaluate(from),
+    value: gasAmountKg,
+    amountCO2e,
     from,
   };
 };

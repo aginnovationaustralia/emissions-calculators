@@ -1,71 +1,77 @@
 import Decimal from 'decimal.js-light';
 import { BaseOrigin, Origin, SummedOrigin } from './origins';
-// import { KgPerKg, MassKg } from './values';
 
 export type Substance = 'CO2' | 'CH4' | 'N2O' | 'CO2e' | 'Refrigerant';
 
-export type KgPerKg<
+export type MassPerMass<
   SNum extends Substance,
   SDenom extends Substance,
 > = NumberUnitBase & {
-  __unitType: 'KgCO2ePerKg';
+  __unitType: 'MassPerMass';
   snum: SNum;
   sdenom: SDenom;
 };
-export const kgPerKg = <SNum extends Substance, SDenom extends Substance>(
+export const massPerMass = <SNum extends Substance, SDenom extends Substance>(
   snum: SNum,
   sdenom: SDenom,
   initialValue?: Decimal,
-): KgPerKg<SNum, SDenom> => {
+): MassPerMass<SNum, SDenom> => {
   return {
-    __unitType: 'KgCO2ePerKg',
+    __unitType: 'MassPerMass',
     snum,
     sdenom,
     initialValue: initialValue ?? new Decimal(0),
   };
 };
 
-export type KgCO2ePerKgRefrigerant = KgPerKg<'CO2e', 'Refrigerant'>;
-export const kgCO2ePerKgRefrigerant = (
+export type MassCO2ePerMassRefrigerant = MassPerMass<'CO2e', 'Refrigerant'>;
+export const massCO2ePerMassRefrigerant = (
   initialValue?: Decimal,
-): KgCO2ePerKgRefrigerant => {
-  return kgPerKg('CO2e', 'Refrigerant', initialValue);
+): MassCO2ePerMassRefrigerant => {
+  return massPerMass('CO2e', 'Refrigerant', initialValue);
 };
 
-export const isKgPerKg = (
+export const isMassPerMass = (
   unit: NumberUnit,
-): unit is KgPerKg<Substance, Substance> => {
-  return unit.__unitType === 'KgCO2ePerKg';
+): unit is MassPerMass<Substance, Substance> => {
+  return unit.__unitType === 'MassPerMass';
 };
 
-export type MassKg<T extends Substance> = NumberUnitBase & {
-  __unitType: 'MassKg';
+export type Mass<T extends Substance> = NumberUnitBase & {
+  __unitType: 'Mass';
   substance: T;
 };
-export const massKg = <S extends Substance>(
+export const mass = <S extends Substance>(
   substance: S,
   initialValue?: Decimal,
-): MassKg<S> => {
+): Mass<S> => {
   return {
-    __unitType: 'MassKg',
+    __unitType: 'Mass',
     substance,
     initialValue: initialValue ?? new Decimal(0),
   };
 };
-export const isMassKg = (unit: NumberUnit): unit is MassKg<Substance> => {
-  return unit.__unitType === 'MassKg';
+export const isMass = (unit: NumberUnit): unit is Mass<Substance> => {
+  return unit.__unitType === 'Mass';
 };
 
 type NumberUnitBase = { initialValue: Decimal };
 
-export type NumberUnit = KgPerKg<Substance, Substance> | MassKg<Substance>;
+type VoidUnit = {
+  __unitType: 'Void';
+};
+
+export type NumberUnit =
+  | MassPerMass<Substance, Substance>
+  | Mass<Substance>
+  | VoidUnit;
 
 export type StringUnit<V extends string = string> = V;
 
 export type AnyUnit = NumberUnit | StringUnit;
 
 // Use function overloading to define different units that can be multiplied
-// For example, KgPerKg<SNum extends Substance, SDenom extends Substance> can be multiplied by MassKg<SDenom>
+// For example, MassPerMass<SNum extends Substance, SDenom extends Substance> can be multiplied by Mass<SDenom>
 
 export type UnitArray<U extends AnyUnit, O extends Origin<U> = Origin<U>> = {
   unit: U;

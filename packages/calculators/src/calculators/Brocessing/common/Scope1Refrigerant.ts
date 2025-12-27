@@ -1,54 +1,39 @@
-import { RefrigerantInput } from '@/types/refrigerant.input';
-import { Decimal } from 'decimal.js-light';
+import { RefrigerantInputOrigin } from '@/types/refrigerant.input';
 import { ExecutionContext } from '../../executionContext';
 import { selectConstant } from '../types/constants';
-import { input } from '../types/inputs';
 import { multiply } from '../types/multiply';
+import { BinaryOrigin } from '../types/origins';
 import { Output, scope1Output } from '../types/output';
-import { massKg } from '../types/overloads';
+import { Mass, mass, UnitArray } from '../types/overloads';
 import { sum } from '../types/sum';
 
 export function calculateScope1Refrigerant(
-  refrigerants: RefrigerantInput[],
+  refrigerants: RefrigerantInputOrigin[],
   context: ExecutionContext,
-): Output<1> {
+): Output<1, 'CO2e'> {
   const { constants } = context;
 
   // resulting units is tonnes CO2e
-  const amounts = refrigerants
-    .map(({ refrigerant, chargeSize }) => {
-      return {
-        refrigerant: input(`REFRIGERANT[${refrigerant}]`, refrigerant),
-        chargeSize: input(
-          `CHARGE_SIZE[${refrigerant}]`,
-          massKg('Refrigerant', new Decimal(chargeSize)),
-        ),
-      };
-    })
-    .map(({ refrigerant, chargeSize }) => {
-      // chargeSize is in kg
-      const factor = selectConstant(
-        constants.COMMON,
-        'REFRIGERANT_GWP',
-        refrigerant,
-      );
+  const amounts = refrigerants.map(({ refrigerant, chargeSize }) => {
+    // chargeSize is in kg
+    const factor = selectConstant(
+      constants.COMMON,
+      'REFRIGERANT_GWP',
+      refrigerant,
+    );
 
-      const result = multiply(factor, chargeSize);
-      return result;
-    });
-
-  const totalKgCO2eFromRefrigerant = sum({
-    items: amounts,
-    unit: massKg('CO2e'),
+    const result: BinaryOrigin<Mass<'CO2e'>> = multiply(factor, chargeSize);
+    return result;
   });
-  const totalTCO2eFromRefrigerant =
-    totalKgCO2eFromRefrigerant.toMassTonnes('CO2e');
 
-  return scope1Output(
-    'hfcsRefrigerantLeakage',
-    totalTCO2eFromRefrigerant,
-    'CO2',
-  );
+  const array: UnitArray<Mass<'CO2e'>> = {
+    items: amounts,
+    unit: mass('CO2e'), // TODO: This is needed to keep empty arrays typed. It would be error prone. Is there a better way to do this?
+  };
+
+  const massCO2eFromRefrigerant = sum(array);
+
+  return scope1Output('hfcsRefrigerantLeakage', massCO2eFromRefrigerant);
 }
 
 /*
