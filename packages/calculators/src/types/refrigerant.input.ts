@@ -23,4 +23,6 @@ export const RefrigerantInputSchema = object({
 });
 
 export type RefrigerantInput = z.infer<typeof RefrigerantInputSchema>;
-export type RefrigerantInputOrigin = z.output<typeof RefrigerantInputSchema>;
+export type RefrigerantInputTransformed = z.output<
+  typeof RefrigerantInputSchema
+>;

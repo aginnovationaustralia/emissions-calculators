@@ -3,19 +3,20 @@
 import Decimal from 'decimal.js-light';
 import { AnyUnit, NumberUnit, StringUnit, UnitArray } from './overloads';
 
-type NamedValueType = 'input' | 'variable' | 'constant';
+type NamedValueType = 'input' | 'variable' | 'constant' | 'output';
 
-export type BaseOrigin<U extends AnyUnit> = {
-  unit: U;
-} & (
+export type IntermediateOrNamedOrigin =
   | {
       valueType: NamedValueType;
       name: string;
     }
   | {
       valueType: 'intermediate';
-    }
-);
+    };
+
+export type BaseOrigin<U extends AnyUnit> = {
+  unit: U;
+} & IntermediateOrNamedOrigin;
 
 export type BinaryOrigin<U extends AnyUnit> = BaseOrigin<U> & {
   originType: 'binary';
@@ -26,7 +27,7 @@ export type BinaryOrigin<U extends AnyUnit> = BaseOrigin<U> & {
 };
 export type UnaryOrigin<U extends AnyUnit> = BaseOrigin<U> & {
   originType: 'unary';
-  type: 'toMassKg' | 'toMassTonnes' | 'toCO2e';
+  // type: 'output';
   from: Origin<NumberUnit>;
   //   unit: U;
 };
@@ -106,16 +107,7 @@ const evaluateBinary = (from: BinaryOrigin<NumberUnit>): Decimal => {
 
 // REVISIT: Unit conversions should be replaced with unitless operations. Maybe we just need toCO2e ?
 const evaluateUnary = (from: UnaryOrigin<NumberUnit>): Decimal => {
-  //   const fromValue = evaluate(from.from);
-  //   switch (from.type) {
-  //     case 'toMassKg':
-  //       return fromValue.toMassKg();
-  //     case 'toMassTonnes':
-  //       return fromValue.toMassTonnes();
-  //     case 'toCO2e':
-  //       return fromValue.toCO2e();
-  //   }
-  throw new Error(`Unknown unary operation: ${from.type}`);
+  return evaluate(from.from);
 };
 
 const evaluateRoot = (from: RootOrigin<NumberUnit>): Decimal => {

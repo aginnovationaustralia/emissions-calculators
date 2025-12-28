@@ -1,4 +1,8 @@
-import { BaseOrigin, BinaryOrigin, TypedOrigin } from './origins';
+import {
+  BinaryOrigin,
+  IntermediateOrNamedOrigin,
+  TypedOrigin,
+} from './origins';
 import {
   Mass,
   MassPerMass,
@@ -18,12 +22,12 @@ export function multiply<
 >(
   left: UL,
   right: UR,
-  baseOrigin?: BaseOrigin<Mass<SNum>>,
+  baseOrigin?: IntermediateOrNamedOrigin,
 ): BinaryOrigin<Mass<SNum>>;
 export function multiply<UL extends NumberUnit, UR extends NumberUnit>(
   left: TypedOrigin<UL>,
   right: TypedOrigin<UR>,
-  baseOrigin?: BaseOrigin<NumberUnit>,
+  baseOrigin?: IntermediateOrNamedOrigin,
 ): BinaryOrigin<NumberUnit> {
   const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
   let unit: NumberUnit = voidUnit();

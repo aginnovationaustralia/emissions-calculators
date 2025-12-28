@@ -2,7 +2,7 @@ import { entriesFromObject } from '@/calculators/common/tools/object';
 import Decimal from 'decimal.js-light';
 import { HasMetadata, ValueMetadata } from './metadata';
 import { evaluate, Origin } from './origins';
-import { Mass } from './overloads';
+import { mass, Mass } from './overloads';
 import { DecimalValue } from './values';
 
 type HasDecimalValue = {
@@ -23,13 +23,16 @@ const convertToCO2e = (
 
 export interface Output<
   Scope extends 1 | 2 | 3,
-  S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e',
+  S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e' = 'CO2' | 'CH4' | 'N2O' | 'CO2e',
 > extends HasMetadata,
     HasDecimalValue {
   amountCO2e: Decimal;
   name: string;
+  unit: Mass<S>;
   scope: Scope;
   from: Origin<Mass<S>>;
+  valueType: 'output';
+  originType: 'unary';
 }
 
 export const output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
@@ -41,7 +44,17 @@ export const output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
   const gasAmountKg = evaluate(from);
   const gas = from.unit.substance;
   const amountCO2e = convertToCO2e(gasAmountKg, gas);
-  return { name, scope, value: gasAmountKg, amountCO2e, from, metadata };
+  return {
+    valueType: 'output',
+    originType: 'unary',
+    name,
+    scope,
+    value: gasAmountKg,
+    amountCO2e,
+    from,
+    metadata,
+    unit: mass(gas),
+  };
 };
 
 export interface Scope1Output<S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>
@@ -56,12 +69,15 @@ export const scope1Output = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
   const gas = from.unit.substance;
   const amountCO2e = convertToCO2e(gasAmountKg, gas);
   return {
+    valueType: 'output',
+    originType: 'unary',
     name,
     scope: 1,
     gas,
     value: gasAmountKg,
     amountCO2e,
     from,
+    unit: mass(gas),
   };
 };
 

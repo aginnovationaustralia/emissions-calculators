@@ -1,4 +1,4 @@
-import { RefrigerantInputOrigin } from '@/types/refrigerant.input';
+import { RefrigerantInputTransformed } from '@/types/refrigerant.input';
 import { ExecutionContext } from '../../executionContext';
 import { selectConstant } from '../types/constants';
 import { multiply } from '../types/multiply';
@@ -8,14 +8,12 @@ import { Mass, mass, UnitArray } from '../types/overloads';
 import { sum } from '../types/sum';
 
 export function calculateScope1Refrigerant(
-  refrigerants: RefrigerantInputOrigin[],
+  refrigerants: RefrigerantInputTransformed[],
   context: ExecutionContext,
 ): Output<1, 'CO2e'> {
   const { constants } = context;
 
-  // resulting units is tonnes CO2e
   const amounts = refrigerants.map(({ refrigerant, chargeSize }) => {
-    // chargeSize is in kg
     const factor = selectConstant(
       constants.COMMON,
       'REFRIGERANT_GWP',

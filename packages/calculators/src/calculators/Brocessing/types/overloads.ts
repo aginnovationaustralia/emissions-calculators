@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js-light';
-import { BaseOrigin, Origin, SummedOrigin } from './origins';
+import { IntermediateOrNamedOrigin, Origin, SummedOrigin } from './origins';
 
 export type Substance = 'CO2' | 'CH4' | 'N2O' | 'CO2e' | 'Refrigerant';
 
@@ -85,14 +85,14 @@ export type UnitArray<U extends AnyUnit, O extends Origin<U> = Origin<U>> = {
 };
 
 export const sum = <N extends NumberUnit>(
-  values: UnitArray<N>,
-  baseOrigin?: BaseOrigin<N>,
+  array: UnitArray<N>,
+  baseOrigin?: IntermediateOrNamedOrigin,
 ): SummedOrigin<N> => {
   const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
   return {
     originType: 'sum',
-    from: values,
-    unit: values.unit,
+    from: array,
+    unit: array.unit,
     ...baseOrDefault,
   };
 };
