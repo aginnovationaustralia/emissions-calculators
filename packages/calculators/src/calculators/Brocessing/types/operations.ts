@@ -1,5 +1,4 @@
-import { HasValue } from './constants';
-import { NumberUnit } from './values';
+import { AnyUnit, CanPrint, NumberUnit } from './values';
 
 export interface HasOperation<
   L extends NumberUnit,
@@ -9,6 +8,11 @@ export interface HasOperation<
 > {
   // eslint-disable-next-line no-use-before-define
   operation: Operation<L, K, R, O>;
+}
+
+export interface HasValue<T extends AnyUnit & CanPrint> {
+  name: string;
+  value: T;
 }
 
 export type BinaryMethodReturnType<L, K extends keyof L, R> = L[K] extends (

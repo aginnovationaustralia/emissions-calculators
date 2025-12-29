@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js-light';
 import { IntermediateOrNamedOrigin, Origin, SummedOrigin } from './origins';
 
-export type Substance = 'CO2' | 'CH4' | 'N2O' | 'CO2e' | 'Refrigerant';
+export type Substance = 'CO2' | 'CH4' | 'N2O' | 'CO2e' | 'Refrigerant' | 'Fuel';
 
 export type MassPerMass<
   SNum extends Substance,
@@ -73,6 +73,12 @@ export type NumberUnit =
   | VoidUnit;
 
 export type StringUnit<V extends string = string> = V;
+
+export const stringUnit = <V extends string = string>(
+  value: V,
+): StringUnit<V> => {
+  return value;
+};
 
 export type AnyUnit = NumberUnit | StringUnit;
 

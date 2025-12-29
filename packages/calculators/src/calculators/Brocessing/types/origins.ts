@@ -66,11 +66,48 @@ export type RootOrigin<U extends AnyUnit> = BaseOrigin<U> & {
   originType: 'root';
 };
 export const rootOrigin = <U extends AnyUnit>(
-  baseOrigin: BaseOrigin<U>,
+  unit: U,
+  baseOrigin?: IntermediateOrNamedOrigin,
 ): RootOrigin<U> => {
+  const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
   return {
     originType: 'root',
-    ...baseOrigin,
+    unit,
+    ...baseOrDefault,
+  };
+};
+export type TransformOrigin<
+  U extends StringUnit<V>,
+  V extends string = string,
+  I extends string = string,
+  // IO extends TypedOrigin<StringUnit<I>> = TypedOrigin<StringUnit<I>>,
+> = BaseOrigin<U> & {
+  originType: 'transform';
+  // value: V;
+  transform: (i: StringUnit<I>) => U;
+  from: RootOrigin<StringUnit<I>>;
+};
+
+export const transform = <
+  U extends StringUnit<V>,
+  V extends string = string,
+  I extends string = string,
+  // IO extends Origin<StringUnit<I>> = Origin<StringUnit<I>>,
+>(
+  // value: V,
+  unit: U,
+  transform: (i: StringUnit<I>) => U,
+  from: RootOrigin<StringUnit<I>>,
+  baseOrigin?: IntermediateOrNamedOrigin,
+): TransformOrigin<U, V, I> => {
+  const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
+  return {
+    originType: 'transform',
+    unit,
+    // value,
+    transform,
+    from,
+    ...baseOrDefault,
   };
 };
 
@@ -78,7 +115,8 @@ export type TypedOrigin<U extends AnyUnit> =
   | BinaryOrigin<U>
   | UnaryOrigin<U>
   | RootOrigin<U>
-  | ConstantSelectionOrigin<U extends NumberUnit ? U : never>;
+  | ConstantSelectionOrigin<U extends NumberUnit ? U : never>
+  | TransformOrigin<U extends StringUnit ? U : never>;
 
 export type MultiOrigin<U extends NumberUnit = NumberUnit> = SummedOrigin<U>;
 //   | ConstantSelectionOrigin
@@ -127,6 +165,11 @@ const evaluateSum = (from: SummedOrigin<NumberUnit>): Decimal => {
   );
 };
 
+const evaluateTransform = (_from: TransformOrigin<StringUnit>): Decimal => {
+  // TODO: Necessary?
+  return new Decimal(0);
+};
+
 export const evaluate = (from: Origin<NumberUnit>): Decimal => {
   switch (from.originType) {
     case 'binary':
@@ -139,5 +182,7 @@ export const evaluate = (from: Origin<NumberUnit>): Decimal => {
       return evaluateConstantSelection(from);
     case 'sum':
       return evaluateSum(from);
+    case 'transform':
+      return evaluateTransform(from);
   }
 };

@@ -74,6 +74,34 @@ const convertTransportFuelType = (
   return reverseTransportFuelKeys[fuelType];
 };
 
+/*
+ * Algorithm
+ * 1 - Merge all stationary and transport fuel amounts by type
+ * 2 - Grab COMMON.FUEL_ENERGYGJ constants
+ * For stationary fuels:
+ *  - Convert fuel type to key in constants STATIONARY
+ *  - Select FuelFactors keys from constants STATIONARY using stationary fuel
+ *      - Gives you energy content factor and scope 1 and 3 emission factors
+ *  - Calculate CO2, CH4, and N2O scope 1 emissions for each fuel type using amount * FuelFactors.SCOPE1_EF.<Gas type> * FuelFactors.ENERGY_CONTENT_FACTOR
+ *  - Calculate CO2e scope 3 emissions for each fuel type using amount * FuelFactors.SCOPE3_EF * FuelFactors.ENERGY_CONTENT_FACTOR
+ *  - Sum all fuel types to get total emissions for Scope 1 CO2, CH4, and N2O, and Scope 3 CO2e
+ * For transport fuels:
+ *  - Convert fuel type to key in constants TRANSPORT
+ *  - Select FuelFactors keys from constants TRANSPORT using transport fuel
+ *      - Gives you energy content factor and scope 1 and 3 emission factors
+ *  - Calculate CO2, CH4, and N2O scope 1 emissions for each fuel type using amount * FuelFactors.SCOPE1_EF.<Gas type> * FuelFactors.ENERGY_CONTENT_FACTOR
+ *  - Calculate CO2e scope 3 emissions for each fuel type using amount * FuelFactors.SCOPE3_EF * FuelFactors.ENERGY_CONTENT_FACTOR
+ *  - Sum all fuel types to get total emissions for Scope 1 CO2, CH4, and N2O, and Scope 3 CO2e
+ * For natural gas:
+ * - Select ENERGY_CONTENT_FACTOR, SCOPE1_EF, SCOPE3_EF from constants NATURAL_GAS
+ * - Calculate CO2, CH4, and N2O scope 1 emissions using amount * ENERGY_CONTENT_FACTOR * SCOPE1_EF.<Gas type>
+ * - Calculate CO2e scope 3 emissions using amount * ENERGY_CONTENT_FACTOR * SCOPE3_EF[state]
+ * - Sum all fuel types to get total emissions for Scope 1 CO2, CH4, and N2O, and Scope 3 CO2e
+ *
+ * Final step:
+ * Sum from the 3 sources to get distinct total emissions outputs for Scope 1 CO2, CH4, and N2O, and Scope 3 CO2e
+ */
+
 export function calculateScope1And3Fuel(
   fuel: FuelInput,
   state: State,
