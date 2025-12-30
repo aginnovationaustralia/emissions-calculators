@@ -4,15 +4,10 @@ import { FuelInputTransformed } from '@/types/fuel.input';
 import Decimal from 'decimal.js-light';
 import { ExecutionContext } from '../../executionContext';
 import { selectValue } from '../types/constants';
-import { rootOrigin, transform } from '../types/origins';
+import { multiply } from '../types/multiply';
+import { rootOrigin } from '../types/origins';
 import { output, Output, scope1Output } from '../types/output';
-import {
-  mass,
-  massPerMass,
-  realNumber,
-  stringUnit,
-  StringUnit,
-} from '../types/overloads';
+import { energyPerVolume, mass, massPerEnergy } from '../types/overloads';
 
 type FuelTotal = {
   co2: Output<1, 'CO2'>;
@@ -77,36 +72,40 @@ export function calculateScope1And3Fuel(
   const stationaryAmounts = fuel.stationaryFuel.map(
     ({ type, amountLitres }) => {
       // REVISIT: The generics on transform are super noisy right now
-      const fuelTypeKey = transform<
-        StringUnit<keyof typeof StationaryFuelTypes>,
-        keyof typeof StationaryFuelTypes,
-        StationaryFuelTypes
-      >(
-        stringUnit(convertStationaryFuelType(type.unit)),
-        convertStationaryFuelType,
-        type,
-      );
+      // const fuelTypeKey = transform<
+      //   StringUnit<keyof typeof StationaryFuelTypes>,
+      //   keyof typeof StationaryFuelTypes,
+      //   StationaryFuelTypes
+      // >(
+      //   stringUnit(convertStationaryFuelType(type.unit)),
+      //   convertStationaryFuelType,
+      //   type,
+      // );
 
       // const fuelFactors = constants.COMMON.FUEL_ENERGYGJ.STATIONARY[fuelTypeKey.unit].;
 
-      const co2Scope1EF = selectValue(
+      const scope1EFCo2 = selectValue(
         constants.COMMON,
-        (value) => massPerMass(value, 'CO2'),
+        (value) => massPerEnergy('CO2', new Decimal(value)),
         'FUEL_ENERGYGJ',
         'STATIONARY',
-        fuelTypeKey,
+        type,
         'SCOPE1_EF',
         'CO2',
       );
 
       const energyContentFactor = selectValue(
         constants.COMMON,
-        (value) => realNumber(new Decimal(value)),
+        (value) => energyPerVolume('Fuel', new Decimal(value)),
         'FUEL_ENERGYGJ',
         'STATIONARY',
-        fuelTypeKey,
+        type,
         'ENERGY_CONTENT_FACTOR',
       );
+
+      const totalEnergy = multiply(energyContentFactor, amountLitres);
+
+      const co2Scope1 = multiply(scope1EFCo2, totalEnergy);
     },
   );
 
