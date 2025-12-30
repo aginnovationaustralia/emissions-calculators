@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js-light';
-import { IntermediateOrNamedOrigin, Origin, SummedOrigin } from './origins';
 
 export type Substance = 'CO2' | 'CH4' | 'N2O' | 'CO2e' | 'Refrigerant' | 'Fuel';
 
@@ -150,24 +149,3 @@ export const stringUnit = <V extends string = string>(
 };
 
 export type AnyUnit = NumberUnit | StringUnit;
-
-// Use function overloading to define different units that can be multiplied
-// For example, MassPerMass<SNum extends Substance, SDenom extends Substance> can be multiplied by Mass<SDenom>
-
-export type UnitArray<U extends AnyUnit, O extends Origin<U> = Origin<U>> = {
-  unit: U;
-  items: O[];
-};
-
-export const sum = <N extends NumberUnit>(
-  array: UnitArray<N>,
-  baseOrigin?: IntermediateOrNamedOrigin,
-): SummedOrigin<N> => {
-  const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
-  return {
-    originType: 'sum',
-    from: array,
-    unit: array.unit,
-    ...baseOrDefault,
-  };
-};

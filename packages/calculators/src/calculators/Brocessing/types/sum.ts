@@ -1,5 +1,10 @@
-import { BaseOrigin, SummedOrigin } from './origins';
-import { NumberUnit, UnitArray } from './overloads';
+import { BaseOrigin, Origin, SummedOrigin } from './origins';
+import { AnyUnit, NumberUnit } from './overloads';
+
+export type UnitArray<U extends AnyUnit, O extends Origin<U> = Origin<U>> = {
+  unit: U;
+  items: O[];
+};
 
 export const sum = <N extends NumberUnit>(
   array: UnitArray<N>,

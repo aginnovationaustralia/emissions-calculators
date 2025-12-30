@@ -49,18 +49,6 @@ export type ConstantSelectionOrigin<
   selectors: (TypedOrigin<StringUnit> | string)[];
   // source: ConstantSelectionSource<U>;
 };
-// export const constantSelection = (
-//   sourceName: string,
-//   selector: Origin<StringUnit>,
-//   baseOrigin: BaseOrigin<AnyUnit>,
-// ): ConstantSelectionOrigin<AnyUnit> => {
-//   return {
-//     originType: 'constant_selection',
-//     sourceName,
-//     selector,
-//     ...baseOrigin,
-//   };
-// };
 
 export type RootOrigin<U extends AnyUnit> = BaseOrigin<U> & {
   originType: 'root';
