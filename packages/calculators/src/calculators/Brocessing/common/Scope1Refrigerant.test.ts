@@ -189,10 +189,17 @@ describe('calculateScope1Refrigerant', () => {
           multiplyOp.originType === 'binary' &&
           multiplyOp.left.originType === 'constant_selection'
         ) {
-          expect(multiplyOp.left.selector.originType).toBe('root');
-          expect(multiplyOp.left.selector.valueType).toBe('input');
-          expect(multiplyOp.left.selector.unit).toBe('HFC-152a');
+          const selectors = multiplyOp.left.selectors;
+          expect(selectors).toHaveLength(2);
+          expect(selectors[0]).toBe('REFRIGERANT_GWP');
+          expect(selectors[1]).toBe('HFC-152a');
+        } else {
+          throw new Error(
+            'multiplyOp.left.originType is not constant_selection',
+          );
         }
+      } else {
+        throw new Error('result.from.originType is not sum');
       }
     });
 
@@ -213,25 +220,6 @@ describe('calculateScope1Refrigerant', () => {
           } else {
             throw new Error('multiplyOp.left.valueType is not constant');
           }
-        }
-      }
-    });
-
-    it('has source with unit and values from constants', () => {
-      const refrigerants = [createRefrigerantInput('HFC-152a', 200)];
-      const context = createMockContext();
-
-      const result = calculateScope1Refrigerant(refrigerants, context);
-
-      if (result.from.originType === 'sum') {
-        const multiplyOp = result.from.from.items[0];
-        if (
-          multiplyOp.originType === 'binary' &&
-          multiplyOp.left.originType === 'constant_selection'
-        ) {
-          expect(multiplyOp.left.source).toHaveProperty('unit');
-          expect(multiplyOp.left.source).toHaveProperty('values');
-          expect(multiplyOp.left.source.unit.__unitType).toBe('MassPerMass');
         }
       }
     });

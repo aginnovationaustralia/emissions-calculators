@@ -29,24 +29,6 @@ export class BooleanUnit implements CanPrint {
 }
 
 export type StringUnit<V extends string = string> = V;
-// export type StringUnit = string;
-// export class StringUnit implements CanPrint {
-//   private readonly __unitType: 'StringUnit' = 'StringUnit' as const;
-
-//   private _value: string;
-
-//   constructor(value: string) {
-//     this._value = value;
-//   }
-
-//   printValue() {
-//     return this._value;
-//   }
-
-//   printWithUnits() {
-//     return this._value;
-//   }
-// }
 
 export type AnyUnit = NumberUnit | BooleanUnit | StringUnit<string>;
 
