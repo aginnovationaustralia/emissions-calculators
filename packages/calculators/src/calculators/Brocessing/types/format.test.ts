@@ -16,7 +16,7 @@ import {
   MassCO2ePerMassRefrigerant,
   massCO2ePerMassRefrigerant,
   sum,
-} from './overloads';
+} from './units';
 
 describe('formatOrigin', () => {
   const mockConstants = {

@@ -1,5 +1,5 @@
 import { Origin, RootOrigin } from './origins';
-import { NumberUnit } from './overloads';
+import { NumberUnit } from './units';
 
 const formatRoot = (origin: RootOrigin<NumberUnit>): string => {
   if (origin.valueType === 'intermediate') {
@@ -21,7 +21,7 @@ export const formatOriginRecursive = (origin: Origin<NumberUnit>): string => {
     case 'sum':
       return origin.from.items.map(formatOriginRecursive).join(' + ');
     case 'constant_selection':
-      return origin.sourceName;
+      return origin.selectors.join('.');
   }
 };
 

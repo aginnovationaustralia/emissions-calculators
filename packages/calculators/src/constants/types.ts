@@ -1,5 +1,5 @@
 import { ConstantSelectionSource } from '@/calculators/Brocessing/types/origins';
-import { KgCO2ePerKgRefrigerant } from '@/calculators/Brocessing/types/overloads';
+import { KgCO2ePerKgRefrigerant } from '@/calculators/Brocessing/types/units';
 import {
   AquacultureBait,
   BeefClassesAPI,

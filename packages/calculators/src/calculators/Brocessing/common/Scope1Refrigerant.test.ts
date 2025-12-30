@@ -2,7 +2,7 @@ import { RefrigerantInputTransformed } from '@/types/refrigerant.input';
 import Decimal from 'decimal.js-light';
 import { ExecutionContext } from '../../executionContext';
 import { input } from '../types/inputs';
-import { mass, massCO2ePerMassRefrigerant } from '../types/overloads';
+import { mass, massCO2ePerMassRefrigerant } from '../types/units';
 import { calculateScope1Refrigerant } from './Scope1Refrigerant';
 
 // Helper to create mock refrigerant inputs matching RefrigerantInputTransformed

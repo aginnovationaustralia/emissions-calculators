@@ -1,8 +1,8 @@
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import Decimal from 'decimal.js-light';
 import { HasMetadata, ValueMetadata } from './metadata';
-import { evaluate, Origin } from './origins';
-import { mass, Mass } from './overloads';
+import { Origin } from './origins';
+import { mass, Mass } from './units';
 import { DecimalValue } from './values';
 
 type HasDecimalValue = {
@@ -41,7 +41,7 @@ export const output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
   from: Origin<Mass<S>>,
   metadata?: ValueMetadata,
 ): Output<Scope, S> => {
-  const gasAmountKg = evaluate(from);
+  const gasAmountKg = from.unit.value;
   const gas = from.unit.substance;
   const amountCO2e = convertToCO2e(gasAmountKg, gas);
   return {
@@ -65,7 +65,7 @@ export const scope1Output = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
   name: string,
   from: Origin<Mass<S>>,
 ): Scope1Output<S> => {
-  const gasAmountKg = evaluate(from);
+  const gasAmountKg = from.unit.value;
   const gas = from.unit.substance;
   const amountCO2e = convertToCO2e(gasAmountKg, gas);
   return {

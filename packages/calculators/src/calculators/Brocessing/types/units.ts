@@ -2,6 +2,8 @@ import Decimal from 'decimal.js-light';
 
 export type Substance = 'CO2' | 'CH4' | 'N2O' | 'CO2e' | 'Refrigerant' | 'Fuel';
 
+type NumberUnitBase = { value: Decimal };
+
 export type MassPerMass<
   SNum extends Substance,
   SDenom extends Substance,
@@ -19,7 +21,7 @@ export const massPerMass = <SNum extends Substance, SDenom extends Substance>(
     __unitType: 'MassPerMass',
     snum,
     sdenom,
-    initialValue: initialValue ?? new Decimal(0),
+    value: initialValue ?? new Decimal(0),
   };
 };
 
@@ -47,7 +49,7 @@ export const mass = <S extends Substance>(
   return {
     __unitType: 'Mass',
     substance,
-    initialValue: initialValue ?? new Decimal(0),
+    value: initialValue ?? new Decimal(0),
   };
 };
 export const isMass = (unit: NumberUnit): unit is Mass<Substance> => {
@@ -56,7 +58,6 @@ export const isMass = (unit: NumberUnit): unit is Mass<Substance> => {
 export type Volume<S extends Substance> = NumberUnitBase & {
   __unitType: 'Volume';
   substance: S;
-  initialValue: Decimal;
 };
 export const volume = <S extends Substance>(
   substance: S,
@@ -65,18 +66,17 @@ export const volume = <S extends Substance>(
   return {
     __unitType: 'Volume',
     substance,
-    initialValue: initialValue ?? new Decimal(0),
+    value: initialValue ?? new Decimal(0),
   };
 };
 
 export type Energy = NumberUnitBase & {
   __unitType: 'Energy';
-  initialValue: Decimal;
 };
 export const energy = (initialValue?: Decimal): Energy => {
   return {
     __unitType: 'Energy',
-    initialValue: initialValue ?? new Decimal(0),
+    value: initialValue ?? new Decimal(0),
   };
 };
 
@@ -91,13 +91,12 @@ export const massPerEnergy = <S extends Substance>(
   return {
     __unitType: 'MassPerEnergy',
     substance,
-    initialValue: initialValue ?? new Decimal(0),
+    value: initialValue ?? new Decimal(0),
   };
 };
 export type EnergyPerVolume<S extends Substance> = NumberUnitBase & {
   __unitType: 'EnergyPerVolume';
   substance: S;
-  initialValue: Decimal;
 };
 export const energyPerVolume = <S extends Substance>(
   substance: S,
@@ -106,11 +105,9 @@ export const energyPerVolume = <S extends Substance>(
   return {
     __unitType: 'EnergyPerVolume',
     substance,
-    initialValue: initialValue ?? new Decimal(0),
+    value: initialValue ?? new Decimal(0),
   };
 };
-
-type NumberUnitBase = { initialValue: Decimal };
 
 type RealNumber = NumberUnitBase & {
   __unitType: 'RealNumber';
@@ -118,13 +115,12 @@ type RealNumber = NumberUnitBase & {
 export const realNumber = (initialValue?: Decimal): RealNumber => {
   return {
     __unitType: 'RealNumber',
-    initialValue: initialValue ?? new Decimal(0),
+    value: initialValue ?? new Decimal(0),
   };
 };
 
 type VoidUnit = {
   __unitType: 'Void';
-  initialValue: Decimal;
 };
 
 export const voidUnit = () => ({
@@ -136,7 +132,9 @@ export type NumberUnit =
   | MassPerMass<Substance, Substance>
   | Mass<Substance>
   | MassPerEnergy<Substance>
-  | EnergyPerVolume
+  | EnergyPerVolume<Substance>
+  | Volume<Substance>
+  | Energy
   | VoidUnit
   | RealNumber;
 

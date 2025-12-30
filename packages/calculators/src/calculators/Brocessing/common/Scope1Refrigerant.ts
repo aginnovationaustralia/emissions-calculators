@@ -4,8 +4,8 @@ import { selectConstant } from '../types/constants';
 import { multiply } from '../types/multiply';
 import { Origin } from '../types/origins';
 import { Output, scope1Output } from '../types/output';
-import { Mass, mass, UnitArray } from '../types/overloads';
-import { sum } from '../types/sum';
+import { sum, UnitArray } from '../types/sum';
+import { Mass, mass } from '../types/units';
 
 export function calculateScope1Refrigerant(
   refrigerants: RefrigerantInputTransformed[],

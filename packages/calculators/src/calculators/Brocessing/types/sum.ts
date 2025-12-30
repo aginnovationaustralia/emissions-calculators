@@ -1,5 +1,5 @@
 import { BaseOrigin, Origin, SummedOrigin } from './origins';
-import { AnyUnit, NumberUnit } from './overloads';
+import { AnyUnit, NumberUnit } from './units';
 
 export type UnitArray<U extends AnyUnit, O extends Origin<U> = Origin<U>> = {
   unit: U;

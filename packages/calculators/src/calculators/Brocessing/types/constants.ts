@@ -4,7 +4,7 @@ import {
   RootOrigin,
   TypedOrigin,
 } from './origins';
-import { AnyUnit, NumberUnit, StringUnit } from './overloads';
+import { AnyUnit, NumberUnit, StringUnit } from './units';
 
 /*
 A generic function to select a constant from a constants object.

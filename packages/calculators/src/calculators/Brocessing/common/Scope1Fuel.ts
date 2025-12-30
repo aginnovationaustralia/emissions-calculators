@@ -6,13 +6,13 @@ import { selectValue } from '../types/constants';
 import { input } from '../types/inputs';
 import { multiply } from '../types/multiply';
 import { output, scope1Output } from '../types/output';
+import { sum } from '../types/sum';
 import {
   energyPerVolume,
   mass,
   massPerEnergy,
   stringUnit,
-  sum,
-} from '../types/overloads';
+} from '../types/units';
 
 /*
  * Algorithm

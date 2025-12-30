@@ -1,5 +1,5 @@
 import { input } from '@/calculators/Brocessing/types/inputs';
-import { mass } from '@/calculators/Brocessing/types/overloads';
+import { mass } from '@/calculators/Brocessing/types/units';
 import { Decimal } from 'decimal.js-light';
 import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
