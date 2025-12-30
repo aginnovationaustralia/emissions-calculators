@@ -10,24 +10,21 @@ import {
   SummedOrigin,
 } from './origins';
 import { output } from './output';
+import { sum } from './sum';
 import {
   mass,
   Mass,
-  MassCO2ePerMassRefrigerant,
   massCO2ePerMassRefrigerant,
-  sum,
+  MassCO2ePerMassRefrigerant,
 } from './units';
 
 describe('formatOrigin', () => {
   const mockConstants = {
     COMMON: {
       REFRIGERANT_GWP: {
-        unit: massCO2ePerMassRefrigerant(),
-        values: {
-          'HFC-152a': new Decimal(138),
-          'HFC-134a': new Decimal(1300),
-          'HFC-23': new Decimal(12400),
-        } as Record<string, Decimal>,
+        'HFC-152a': new Decimal(138),
+        'HFC-134a': new Decimal(1300),
+        'HFC-23': new Decimal(12400),
       },
     },
   };
@@ -38,6 +35,7 @@ describe('formatOrigin', () => {
   const constantGWPCH4: ConstantSelectionOrigin<MassCO2ePerMassRefrigerant> =
     selectConstant(
       mockConstants.COMMON,
+      (value) => massCO2ePerMassRefrigerant(value),
       'REFRIGERANT_GWP',
       input('inputRefrigerantType', 'HFC-152a'),
     );
@@ -48,7 +46,7 @@ describe('formatOrigin', () => {
   );
   const namedSum: SummedOrigin<Mass<'CO2e'>> = sum(
     { items: [intermediateVariableMultiply], unit: mass('CO2e') },
-    { valueType: 'variable', name: 'testSum' },
+    { unit: mass('CO2e'), valueType: 'variable', name: 'testSum' },
   );
   const testOutput = output('testOutput', 3, namedSum);
 

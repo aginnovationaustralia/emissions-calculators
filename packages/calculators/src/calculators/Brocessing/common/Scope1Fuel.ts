@@ -2,13 +2,15 @@ import { State } from '@/types/enums';
 import { FuelInputTransformed } from '@/types/fuel.input';
 import Decimal from 'decimal.js-light';
 import { ExecutionContext } from '../../executionContext';
-import { selectValue } from '../types/constants';
+import { selectConstant } from '../types/constants';
 import { input } from '../types/inputs';
 import { multiply } from '../types/multiply';
+import { Origin } from '../types/origins';
 import { output, scope1Output } from '../types/output';
 import { sum } from '../types/sum';
 import {
   energyPerVolume,
+  Mass,
   mass,
   massPerEnergy,
   stringUnit,
@@ -51,7 +53,7 @@ export function calculateScope1And3Fuel(
   // Stationary
   const stationaryAmounts = fuel.stationaryFuel.map(
     ({ type, amountLitres }) => {
-      const scope1EFCo2 = selectValue(
+      const scope1EFCo2 = selectConstant(
         constants.COMMON,
         (value) => massPerEnergy('CO2', new Decimal(value)),
         'FUEL_ENERGYGJ',
@@ -61,7 +63,7 @@ export function calculateScope1And3Fuel(
         'CO2',
       );
 
-      const scope1EFCh4 = selectValue(
+      const scope1EFCh4 = selectConstant(
         constants.COMMON,
         (value) => massPerEnergy('CH4', new Decimal(value)),
         'FUEL_ENERGYGJ',
@@ -71,7 +73,7 @@ export function calculateScope1And3Fuel(
         'CH4',
       );
 
-      const scope1EFn2o = selectValue(
+      const scope1EFn2o = selectConstant(
         constants.COMMON,
         (value) => massPerEnergy('N2O', new Decimal(value)),
         'FUEL_ENERGYGJ',
@@ -81,7 +83,7 @@ export function calculateScope1And3Fuel(
         'N2O',
       );
 
-      const scope3EF = selectValue(
+      const scope3EF = selectConstant(
         constants.COMMON,
         (value) => massPerEnergy('CO2e', new Decimal(value)),
         'FUEL_ENERGYGJ',
@@ -90,7 +92,7 @@ export function calculateScope1And3Fuel(
         'SCOPE3_EF',
       );
 
-      const energyContentFactor = selectValue(
+      const energyContentFactor = selectConstant(
         constants.COMMON,
         (value) => energyPerVolume('Fuel', new Decimal(value)),
         'FUEL_ENERGYGJ',
@@ -101,10 +103,11 @@ export function calculateScope1And3Fuel(
 
       const totalEnergy = multiply(energyContentFactor, amountLitres);
 
-      const co2Scope1 = multiply(scope1EFCo2, totalEnergy);
-      const ch4Scope1 = multiply(scope1EFCh4, totalEnergy);
-      const n2oScope1 = multiply(scope1EFn2o, totalEnergy);
-      const scope3 = multiply(scope3EF, totalEnergy);
+      // TODO: multiply is not passing through the detail of the mass substance generics
+      const co2Scope1: Origin<Mass<'CO2'>> = multiply(scope1EFCo2, totalEnergy);
+      const ch4Scope1: Origin<Mass<'CH4'>> = multiply(scope1EFCh4, totalEnergy);
+      const n2oScope1: Origin<Mass<'N2O'>> = multiply(scope1EFn2o, totalEnergy);
+      const scope3: Origin<Mass<'CO2e'>> = multiply(scope3EF, totalEnergy);
 
       return {
         co2Scope1,
@@ -118,7 +121,7 @@ export function calculateScope1And3Fuel(
   // Transport
 
   const transportAmounts = fuel.transportFuel.map(({ type, amountLitres }) => {
-    const scope1EFCo2 = selectValue(
+    const scope1EFCo2 = selectConstant(
       constants.COMMON,
       (value) => massPerEnergy('CO2', new Decimal(value)),
       'FUEL_ENERGYGJ',
@@ -128,7 +131,7 @@ export function calculateScope1And3Fuel(
       'CO2',
     );
 
-    const scope1EFCh4 = selectValue(
+    const scope1EFCh4 = selectConstant(
       constants.COMMON,
       (value) => massPerEnergy('CH4', new Decimal(value)),
       'FUEL_ENERGYGJ',
@@ -138,7 +141,7 @@ export function calculateScope1And3Fuel(
       'CH4',
     );
 
-    const scope1EFn2o = selectValue(
+    const scope1EFn2o = selectConstant(
       constants.COMMON,
       (value) => massPerEnergy('N2O', new Decimal(value)),
       'FUEL_ENERGYGJ',
@@ -148,7 +151,7 @@ export function calculateScope1And3Fuel(
       'N2O',
     );
 
-    const scope3EF = selectValue(
+    const scope3EF = selectConstant(
       constants.COMMON,
       (value) => massPerEnergy('CO2e', new Decimal(value)),
       'FUEL_ENERGYGJ',
@@ -157,7 +160,7 @@ export function calculateScope1And3Fuel(
       'SCOPE3_EF',
     );
 
-    const energyContentFactor = selectValue(
+    const energyContentFactor = selectConstant(
       constants.COMMON,
       (value) => energyPerVolume('Fuel', new Decimal(value)),
       'FUEL_ENERGYGJ',
@@ -168,10 +171,10 @@ export function calculateScope1And3Fuel(
 
     const totalEnergy = multiply(energyContentFactor, amountLitres);
 
-    const co2Scope1 = multiply(scope1EFCo2, totalEnergy);
-    const ch4Scope1 = multiply(scope1EFCh4, totalEnergy);
-    const n2oScope1 = multiply(scope1EFn2o, totalEnergy);
-    const scope3 = multiply(scope3EF, totalEnergy);
+    const co2Scope1: Origin<Mass<'CO2'>> = multiply(scope1EFCo2, totalEnergy);
+    const ch4Scope1: Origin<Mass<'CH4'>> = multiply(scope1EFCh4, totalEnergy);
+    const n2oScope1: Origin<Mass<'N2O'>> = multiply(scope1EFn2o, totalEnergy);
+    const scope3: Origin<Mass<'CO2e'>> = multiply(scope3EF, totalEnergy);
 
     return {
       co2Scope1,
@@ -183,7 +186,7 @@ export function calculateScope1And3Fuel(
 
   // Natural Gas
 
-  const naturalGasScope1EFCo2 = selectValue(
+  const naturalGasScope1EFCo2 = selectConstant(
     constants.COMMON,
     (value) => massPerEnergy('CO2', new Decimal(value)),
     'FUEL_ENERGYGJ',
@@ -192,7 +195,7 @@ export function calculateScope1And3Fuel(
     'CO2',
   );
 
-  const naturalGasScope1EFCh4 = selectValue(
+  const naturalGasScope1EFCh4 = selectConstant(
     constants.COMMON,
     (value) => massPerEnergy('CH4', new Decimal(value)),
     'FUEL_ENERGYGJ',
@@ -201,7 +204,7 @@ export function calculateScope1And3Fuel(
     'CH4',
   );
 
-  const naturalGasScope1EFn2o = selectValue(
+  const naturalGasScope1EFn2o = selectConstant(
     constants.COMMON,
     (value) => massPerEnergy('N2O', new Decimal(value)),
     'FUEL_ENERGYGJ',
@@ -210,7 +213,7 @@ export function calculateScope1And3Fuel(
     'N2O',
   );
 
-  const naturalGasScope3EF = selectValue(
+  const naturalGasScope3EF = selectConstant(
     constants.COMMON,
     (value) => massPerEnergy('CO2e', new Decimal(value)),
     'FUEL_ENERGYGJ',
@@ -219,12 +222,24 @@ export function calculateScope1And3Fuel(
     input('STATE', stringUnit(state)),
   );
 
-  const naturalGasCo2Scope1 = multiply(naturalGasScope1EFCo2, fuel.naturalGas);
-  const naturalGasCh4Scope1 = multiply(naturalGasScope1EFCh4, fuel.naturalGas);
-  const naturalGasN2oScope1 = multiply(naturalGasScope1EFn2o, fuel.naturalGas);
-  const naturalGasScope3 = multiply(naturalGasScope3EF, fuel.naturalGas);
+  const naturalGasCo2Scope1: Origin<Mass<'CO2'>> = multiply(
+    naturalGasScope1EFCo2,
+    fuel.naturalGas,
+  );
+  const naturalGasCh4Scope1: Origin<Mass<'CH4'>> = multiply(
+    naturalGasScope1EFCh4,
+    fuel.naturalGas,
+  );
+  const naturalGasN2oScope1: Origin<Mass<'N2O'>> = multiply(
+    naturalGasScope1EFn2o,
+    fuel.naturalGas,
+  );
+  const naturalGasScope3: Origin<Mass<'CO2e'>> = multiply(
+    naturalGasScope3EF,
+    fuel.naturalGas,
+  );
 
-  const scope1Co2Total = sum({
+  const scope1Co2Total: Origin<Mass<'CO2'>> = sum({
     items: stationaryAmounts
       .map(({ co2Scope1 }) => co2Scope1)
       .concat(transportAmounts.map(({ co2Scope1 }) => co2Scope1))

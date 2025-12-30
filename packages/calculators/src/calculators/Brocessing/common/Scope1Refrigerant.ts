@@ -1,11 +1,12 @@
 import { RefrigerantInputTransformed } from '@/types/refrigerant.input';
+import { Decimal } from 'decimal.js-light';
 import { ExecutionContext } from '../../executionContext';
 import { selectConstant } from '../types/constants';
 import { multiply } from '../types/multiply';
 import { Origin } from '../types/origins';
 import { Output, scope1Output } from '../types/output';
 import { sum, UnitArray } from '../types/sum';
-import { Mass, mass } from '../types/units';
+import { Mass, mass, massCO2ePerMassRefrigerant } from '../types/units';
 
 export function calculateScope1Refrigerant(
   refrigerants: RefrigerantInputTransformed[],
@@ -16,6 +17,7 @@ export function calculateScope1Refrigerant(
   const amounts = refrigerants.map(({ refrigerant, chargeSize }) => {
     const factor = selectConstant(
       constants.COMMON,
+      (value) => massCO2ePerMassRefrigerant(new Decimal(value)),
       'REFRIGERANT_GWP',
       refrigerant,
     );

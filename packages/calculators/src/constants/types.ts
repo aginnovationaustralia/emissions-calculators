@@ -1,11 +1,10 @@
-import { ConstantSelectionSource } from '@/calculators/Brocessing/types/origins';
-import { KgCO2ePerKgRefrigerant } from '@/calculators/Brocessing/types/units';
 import {
   AquacultureBait,
   BeefClassesAPI,
   FeedlotPurchaseSourceLocation,
   FluidWasteTreatmentType,
   FreightTypes,
+  Refrigerant,
   RicePreseasonFloodingPeriod,
   SheepClassesAPI,
   SoilType,
@@ -782,7 +781,7 @@ export type CommonConstants = {
 
   COMMERCIALFLIGHT_EF: number;
 
-  REFRIGERANT_GWP: ConstantSelectionSource<KgCO2ePerKgRefrigerant>;
+  REFRIGERANT_GWP: Record<Refrigerant, number>;
 
   WASTEWATER: {
     TREATMENT_EF: Record<FluidWasteTreatmentType, number>;

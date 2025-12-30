@@ -1,9 +1,4 @@
-import {
-  ConstantSelectionOrigin,
-  ConstantSelectionSource,
-  RootOrigin,
-  TypedOrigin,
-} from './origins';
+import { ConstantSelectionOrigin, RootOrigin, TypedOrigin } from './origins';
 import { AnyUnit, NumberUnit, StringUnit } from './units';
 
 /*
@@ -15,68 +10,68 @@ The constants parameter is a larger set of constants, that includes the constant
 
 The function should have generic constraints on the constantName and keyInRecord parameters, so that the function can be used to select any constant from any constants object.
 */
-export function selectConstant<
-  Constants extends object,
-  KC1 extends string & keyof Constants,
-  KC2 extends string & keyof Constants[KC1],
-  TSource extends ConstantSelectionSource<NumberUnit> & Constants[KC1][KC2],
-  KN extends string & keyof TSource['values'],
->(
-  constants: Constants,
-  selector: TypedOrigin<StringUnit<KN>>,
-  firstConstantName: KC1,
-  secondConstantName: KC2,
-): ConstantSelectionOrigin<TSource['unit']>;
+// export function selectConstant<
+//   Constants extends object,
+//   KC1 extends string & keyof Constants,
+//   KC2 extends string & keyof Constants[KC1],
+//   TSource extends ConstantSelectionSource<NumberUnit> & Constants[KC1][KC2],
+//   KN extends string & keyof TSource['values'],
+// >(
+//   constants: Constants,
+//   selector: TypedOrigin<StringUnit<KN>>,
+//   firstConstantName: KC1,
+//   secondConstantName: KC2,
+// ): ConstantSelectionOrigin<TSource['unit']>;
 
-// One-level traversal: constants[firstConstantName]
-export function selectConstant<
-  Constants extends object,
-  KC extends string & keyof Constants,
-  TSource extends ConstantSelectionSource<NumberUnit> & Constants[KC],
-  KN extends string & keyof TSource['values'],
->(
-  constants: Constants,
-  selector: TypedOrigin<StringUnit<KN>>,
-  firstConstantName: KC,
-): ConstantSelectionOrigin<TSource['unit']>;
+// // One-level traversal: constants[firstConstantName]
+// export function selectConstant<
+//   Constants extends object,
+//   KC extends string & keyof Constants,
+//   TSource extends ConstantSelectionSource<NumberUnit> & Constants[KC],
+//   KN extends string & keyof TSource['values'],
+// >(
+//   constants: Constants,
+//   selector: TypedOrigin<StringUnit<KN>>,
+//   firstConstantName: KC,
+// ): ConstantSelectionOrigin<TSource['unit']>;
 
-// Implementation - must be compatible with both overloads
-export function selectConstant(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constants: any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  selector: TypedOrigin<any>,
-  firstConstantName: string,
-  secondConstantName?: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): ConstantSelectionOrigin<any> {
-  const s = selector.unit;
+// // Implementation - must be compatible with both overloads
+// export function selectConstant(
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   constants: any,
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   selector: TypedOrigin<any>,
+//   firstConstantName: string,
+//   secondConstantName?: string,
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// ): ConstantSelectionOrigin<any> {
+//   const s = selector.unit;
 
-  // Determine source based on whether we have one or two constant names
-  const source = secondConstantName
-    ? ((constants[firstConstantName] as Record<string, unknown>)[
-        secondConstantName
-      ] as ConstantSelectionSource<NumberUnit>)
-    : (constants[firstConstantName] as ConstantSelectionSource<NumberUnit>);
+//   // Determine source based on whether we have one or two constant names
+//   const source = secondConstantName
+//     ? ((constants[firstConstantName] as Record<string, unknown>)[
+//         secondConstantName
+//       ] as ConstantSelectionSource<NumberUnit>)
+//     : (constants[firstConstantName] as ConstantSelectionSource<NumberUnit>);
 
-  const selectors = (
-    secondConstantName
-      ? [firstConstantName, secondConstantName, selector]
-      : [firstConstantName, selector]
-  ) as (string | TypedOrigin<StringUnit>)[];
+//   const selectors = (
+//     secondConstantName
+//       ? [firstConstantName, secondConstantName, selector]
+//       : [firstConstantName, selector]
+//   ) as (string | TypedOrigin<StringUnit>)[];
 
-  const sourceName = secondConstantName
-    ? `${firstConstantName}.${secondConstantName}`
-    : firstConstantName;
+//   const sourceName = secondConstantName
+//     ? `${firstConstantName}.${secondConstantName}`
+//     : firstConstantName;
 
-  return {
-    valueType: 'constant',
-    name: `${sourceName}[${s}]`,
-    unit: source.unit,
-    originType: 'constant_selection',
-    selectors,
-  };
-}
+//   return {
+//     valueType: 'constant',
+//     name: `${sourceName}[${s}]`,
+//     unit: source.unit,
+//     originType: 'constant_selection',
+//     selectors,
+//   };
+// }
 
 export const constant = <U extends AnyUnit>(
   name: string,
@@ -112,7 +107,7 @@ export type CommonConstants = {
   }
 }
 
-define a function 'selectValue' that takes these parameters:
+define a function 'selectConstant' that takes these parameters:
 - the constants object
 - a function which takes the value at the path specified by the key selectors and returns a value of type T
 - up to 5 key selectors, each of which can be a string or a TypedOrigin
@@ -122,7 +117,7 @@ The return value should be of type RootOrigin<T>, with an originType of root and
 */
 
 // 1-level: constants[CK1]
-export function selectValue<
+export function selectConstant<
   TOut extends NumberUnit,
   CK1 extends string,
   Constants extends Record<CK1, unknown>,
@@ -131,10 +126,10 @@ export function selectValue<
   constants: Constants,
   getValue: (value: TConstant) => TOut,
   selector1: CK1 | TypedOrigin<StringUnit<CK1>>,
-): RootOrigin<TOut>;
+): ConstantSelectionOrigin<TOut>;
 
 // 2-level: constants[CK1][CK2]
-export function selectValue<
+export function selectConstant<
   TOut extends NumberUnit,
   CK1 extends string,
   CK2 extends string,
@@ -145,10 +140,10 @@ export function selectValue<
   getValue: (value: TConstant) => TOut,
   selector1: CK1 | TypedOrigin<StringUnit<CK1>>,
   selector2: CK2 | TypedOrigin<StringUnit<CK2>>,
-): RootOrigin<TOut>;
+): ConstantSelectionOrigin<TOut>;
 
 // 3-level: constants[CK1][CK2][CK3]
-export function selectValue<
+export function selectConstant<
   TOut extends NumberUnit,
   CK1 extends string,
   CK2 extends string,
@@ -161,10 +156,10 @@ export function selectValue<
   selector1: CK1 | TypedOrigin<StringUnit<CK1>>,
   selector2: CK2 | TypedOrigin<StringUnit<CK2>>,
   selector3: CK3 | TypedOrigin<StringUnit<CK3>>,
-): RootOrigin<TOut>;
+): ConstantSelectionOrigin<TOut>;
 
 // 4-level: constants[CK1][CK2][CK3][CK4]
-export function selectValue<
+export function selectConstant<
   TOut extends NumberUnit,
   CK1 extends string,
   CK2 extends string,
@@ -179,10 +174,10 @@ export function selectValue<
   selector2: CK2 | TypedOrigin<StringUnit<CK2>>,
   selector3: CK3 | TypedOrigin<StringUnit<CK3>>,
   selector4: CK4 | TypedOrigin<StringUnit<CK4>>,
-): RootOrigin<TOut>;
+): ConstantSelectionOrigin<TOut>;
 
 // 5-level: constants[CK1][CK2][CK3][CK4][CK5]
-export function selectValue<
+export function selectConstant<
   TOut extends NumberUnit,
   CK1 extends string,
   CK2 extends string,
@@ -202,11 +197,11 @@ export function selectValue<
   selector3: CK3 | TypedOrigin<StringUnit<CK3>>,
   selector4: CK4 | TypedOrigin<StringUnit<CK4>>,
   selector5: CK5 | TypedOrigin<StringUnit<CK5>>,
-): RootOrigin<TOut>;
+): ConstantSelectionOrigin<TOut>;
 
 // Implementation
 
-export function selectValue<TOut extends NumberUnit>(
+export function selectConstant<TOut extends NumberUnit>(
   constants: Record<string, unknown>,
   getValue: (value: unknown) => TOut,
   selector1: string | TypedOrigin<StringUnit>,
@@ -214,7 +209,7 @@ export function selectValue<TOut extends NumberUnit>(
   selector3?: string | TypedOrigin<StringUnit>,
   selector4?: string | TypedOrigin<StringUnit>,
   selector5?: string | TypedOrigin<StringUnit>,
-): RootOrigin<TOut> {
+): ConstantSelectionOrigin<TOut> {
   const selectors = [selector1, selector2, selector3, selector4, selector5]
     .filter((s): s is string | TypedOrigin<StringUnit> => s !== undefined)
     .map((s) => (typeof s === 'string' ? s : s.unit));
@@ -231,6 +226,7 @@ export function selectValue<TOut extends NumberUnit>(
     valueType: 'constant',
     name: selectors.join('.'),
     unit: value,
-    originType: 'root',
+    originType: 'constant_selection',
+    selectors,
   };
 }

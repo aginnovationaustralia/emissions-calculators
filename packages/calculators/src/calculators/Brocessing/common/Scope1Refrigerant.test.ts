@@ -35,7 +35,7 @@ const createMockContext = (): ExecutionContext => ({
   calculator: 'test',
   version: '1.0.0',
   timestamp: new Date().toISOString(),
-  constants: createMockConstants() as ExecutionContext['constants'],
+  constants: createMockConstants() as unknown as ExecutionContext['constants'],
 });
 
 describe('calculateScope1Refrigerant', () => {
@@ -172,7 +172,7 @@ describe('calculateScope1Refrigerant', () => {
           multiplyOp.originType === 'binary' &&
           multiplyOp.left.originType === 'constant_selection'
         ) {
-          expect(multiplyOp.left.sourceName).toBe('REFRIGERANT_GWP');
+          expect(multiplyOp.left.selectors).toBe(['REFRIGERANT_GWP']);
         }
       }
     });
