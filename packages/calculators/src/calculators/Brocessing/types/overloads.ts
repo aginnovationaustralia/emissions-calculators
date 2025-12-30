@@ -57,6 +57,16 @@ export const isMass = (unit: NumberUnit): unit is Mass<Substance> => {
 
 type NumberUnitBase = { initialValue: Decimal };
 
+type RealNumber = NumberUnitBase & {
+  __unitType: 'RealNumber';
+};
+export const realNumber = (initialValue?: Decimal): RealNumber => {
+  return {
+    __unitType: 'RealNumber',
+    initialValue: initialValue ?? new Decimal(0),
+  };
+};
+
 type VoidUnit = {
   __unitType: 'Void';
   initialValue: Decimal;
@@ -70,7 +80,8 @@ export const voidUnit = () => ({
 export type NumberUnit =
   | MassPerMass<Substance, Substance>
   | Mass<Substance>
-  | VoidUnit;
+  | VoidUnit
+  | RealNumber;
 
 export type StringUnit<V extends string = string> = V;
 

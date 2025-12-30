@@ -26,7 +26,7 @@ export function selectConstant<
   selector: TypedOrigin<StringUnit<KN>>,
   firstConstantName: KC1,
   secondConstantName: KC2,
-): ConstantSelectionOrigin<TSource['unit'], KN>;
+): ConstantSelectionOrigin<TSource['unit']>;
 
 // One-level traversal: constants[firstConstantName]
 export function selectConstant<
@@ -38,7 +38,7 @@ export function selectConstant<
   constants: Constants,
   selector: TypedOrigin<StringUnit<KN>>,
   firstConstantName: KC,
-): ConstantSelectionOrigin<TSource['unit'], KN>;
+): ConstantSelectionOrigin<TSource['unit']>;
 
 // Implementation - must be compatible with both overloads
 export function selectConstant(
@@ -49,7 +49,7 @@ export function selectConstant(
   firstConstantName: string,
   secondConstantName?: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): ConstantSelectionOrigin<any, any> {
+): ConstantSelectionOrigin<any> {
   const s = selector.unit;
 
   // Determine source based on whether we have one or two constant names
@@ -58,6 +58,12 @@ export function selectConstant(
         secondConstantName
       ] as ConstantSelectionSource<NumberUnit>)
     : (constants[firstConstantName] as ConstantSelectionSource<NumberUnit>);
+
+  const selectors = (
+    secondConstantName
+      ? [firstConstantName, secondConstantName, selector]
+      : [firstConstantName, selector]
+  ) as (string | TypedOrigin<StringUnit>)[];
 
   const sourceName = secondConstantName
     ? `${firstConstantName}.${secondConstantName}`
@@ -68,9 +74,7 @@ export function selectConstant(
     name: `${sourceName}[${s}]`,
     unit: source.unit,
     originType: 'constant_selection',
-    sourceName,
-    selector,
-    source,
+    selectors,
   };
 }
 
@@ -85,3 +89,146 @@ export const constant = <U extends AnyUnit>(
     valueType: 'constant',
   };
 };
+
+/*
+ *
+
+For a shape of CommonConstants like this:
+
+type FuelFactor = {
+  ENERGY_CONTENT_FACTOR: number;
+  SCOPE1_EF: {
+    CO2: number;
+    CH4: number;
+    N2O: number;
+  };
+  SCOPE3_EF: number;
+};
+
+
+export type CommonConstants = {
+  FUEL_ENERGYGJ: {
+    STATIONARY: Record<keyof typeof StationaryFuelTypes, FuelFactor>;
+  }
+}
+
+define a function 'selectValue' that takes these parameters:
+- the constants object
+- a function which takes the value at the path specified by the key selectors and returns a value of type T
+- up to 5 key selectors, each of which can be a string or a TypedOrigin
+
+The return value should be of type RootOrigin<T>, with an originType of root and valueType of constant
+
+*/
+
+// 1-level: constants[CK1]
+export function selectValue<
+  TOut extends NumberUnit,
+  CK1 extends string,
+  Constants extends Record<CK1, unknown>,
+  TConstant extends Constants[CK1],
+>(
+  constants: Constants,
+  getValue: (value: TConstant) => TOut,
+  selector1: CK1 | TypedOrigin<StringUnit<CK1>>,
+): RootOrigin<TOut>;
+
+// 2-level: constants[CK1][CK2]
+export function selectValue<
+  TOut extends NumberUnit,
+  CK1 extends string,
+  CK2 extends string,
+  Constants extends Record<CK1, Record<CK2, unknown>>,
+  TConstant extends Constants[CK1][CK2],
+>(
+  constants: Constants,
+  getValue: (value: TConstant) => TOut,
+  selector1: CK1 | TypedOrigin<StringUnit<CK1>>,
+  selector2: CK2 | TypedOrigin<StringUnit<CK2>>,
+): RootOrigin<TOut>;
+
+// 3-level: constants[CK1][CK2][CK3]
+export function selectValue<
+  TOut extends NumberUnit,
+  CK1 extends string,
+  CK2 extends string,
+  CK3 extends string,
+  Constants extends Record<CK1, Record<CK2, Record<CK3, unknown>>>,
+  TConstant extends Constants[CK1][CK2][CK3],
+>(
+  constants: Constants,
+  getValue: (value: TConstant) => TOut,
+  selector1: CK1 | TypedOrigin<StringUnit<CK1>>,
+  selector2: CK2 | TypedOrigin<StringUnit<CK2>>,
+  selector3: CK3 | TypedOrigin<StringUnit<CK3>>,
+): RootOrigin<TOut>;
+
+// 4-level: constants[CK1][CK2][CK3][CK4]
+export function selectValue<
+  TOut extends NumberUnit,
+  CK1 extends string,
+  CK2 extends string,
+  CK3 extends string,
+  CK4 extends string,
+  Constants extends Record<CK1, Record<CK2, Record<CK3, Record<CK4, unknown>>>>,
+  TConstant extends Constants[CK1][CK2][CK3][CK4],
+>(
+  constants: Constants,
+  getValue: (value: TConstant) => TOut,
+  selector1: CK1 | TypedOrigin<StringUnit<CK1>>,
+  selector2: CK2 | TypedOrigin<StringUnit<CK2>>,
+  selector3: CK3 | TypedOrigin<StringUnit<CK3>>,
+  selector4: CK4 | TypedOrigin<StringUnit<CK4>>,
+): RootOrigin<TOut>;
+
+// 5-level: constants[CK1][CK2][CK3][CK4][CK5]
+export function selectValue<
+  TOut extends NumberUnit,
+  CK1 extends string,
+  CK2 extends string,
+  CK3 extends string,
+  CK4 extends string,
+  CK5 extends string,
+  Constants extends Record<
+    CK1,
+    Record<CK2, Record<CK3, Record<CK4, Record<CK5, unknown>>>>
+  >,
+  TConstant extends Constants[CK1][CK2][CK3][CK4][CK5],
+>(
+  constants: Constants,
+  getValue: (value: TConstant) => TOut,
+  selector1: CK1 | TypedOrigin<StringUnit<CK1>>,
+  selector2: CK2 | TypedOrigin<StringUnit<CK2>>,
+  selector3: CK3 | TypedOrigin<StringUnit<CK3>>,
+  selector4: CK4 | TypedOrigin<StringUnit<CK4>>,
+  selector5: CK5 | TypedOrigin<StringUnit<CK5>>,
+): RootOrigin<TOut>;
+// Implementation
+export function selectValue<TOut extends NumberUnit>(
+  constants: Record<string, unknown>,
+  getValue: (value: unknown) => TOut,
+  selector1: string | TypedOrigin<StringUnit>,
+  selector2?: string | TypedOrigin<StringUnit>,
+  selector3?: string | TypedOrigin<StringUnit>,
+  selector4?: string | TypedOrigin<StringUnit>,
+  selector5?: string | TypedOrigin<StringUnit>,
+): RootOrigin<TOut> {
+  const selectors = [selector1, selector2, selector3, selector4, selector5]
+    .filter((s): s is string | TypedOrigin<StringUnit> => s !== undefined)
+    .map((s) => (typeof s === 'string' ? s : s.unit));
+
+  // Traverse the constants object using the selectors
+  let current: unknown = constants;
+  for (const key of selectors) {
+    current = (current as Record<string, unknown>)[key];
+  }
+
+  const value = getValue(current);
+
+  return {
+    valueType: 'constant',
+    name: selectors.join('.'),
+    unit: value,
+    originType: 'root',
+  };
+}

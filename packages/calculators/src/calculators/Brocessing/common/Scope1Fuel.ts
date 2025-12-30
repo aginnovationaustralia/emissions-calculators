@@ -1,11 +1,18 @@
 import { swapObjectKeysAndValues } from '@/calculators/common/tools/object';
 import { State, StationaryFuelTypes, TransportFuelTypes } from '@/types/enums';
 import { FuelInputTransformed } from '@/types/fuel.input';
+import Decimal from 'decimal.js-light';
 import { ExecutionContext } from '../../executionContext';
-import { selectConstant } from '../types/constants';
+import { selectValue } from '../types/constants';
 import { rootOrigin, transform } from '../types/origins';
 import { output, Output, scope1Output } from '../types/output';
-import { mass, stringUnit, StringUnit } from '../types/overloads';
+import {
+  mass,
+  massPerMass,
+  realNumber,
+  stringUnit,
+  StringUnit,
+} from '../types/overloads';
 
 type FuelTotal = {
   co2: Output<1, 'CO2'>;
@@ -64,8 +71,8 @@ export function calculateScope1And3Fuel(
   context: ExecutionContext,
 ) {
   const { constants } = context;
-  const { FUEL_ENERGYGJ } = constants.COMMON;
-  const { STATIONARY, TRANSPORT, NATURAL_GAS } = FUEL_ENERGYGJ;
+  // const { FUEL_ENERGYGJ } = constants.COMMON;
+  // const { STATIONARY, TRANSPORT, NATURAL_GAS } = FUEL_ENERGYGJ;
   // Stationary
   const stationaryAmounts = fuel.stationaryFuel.map(
     ({ type, amountLitres }) => {
@@ -80,11 +87,25 @@ export function calculateScope1And3Fuel(
         type,
       );
 
-      const fuelFactors = selectConstant(
+      // const fuelFactors = constants.COMMON.FUEL_ENERGYGJ.STATIONARY[fuelTypeKey.unit].;
+
+      const co2Scope1EF = selectValue(
         constants.COMMON,
-        fuelTypeKey,
+        (value) => massPerMass(value, 'CO2'),
         'FUEL_ENERGYGJ',
         'STATIONARY',
+        fuelTypeKey,
+        'SCOPE1_EF',
+        'CO2',
+      );
+
+      const energyContentFactor = selectValue(
+        constants.COMMON,
+        (value) => realNumber(new Decimal(value)),
+        'FUEL_ENERGYGJ',
+        'STATIONARY',
+        fuelTypeKey,
+        'ENERGY_CONTENT_FACTOR',
       );
     },
   );
