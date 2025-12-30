@@ -1,3 +1,6 @@
+import { input } from '@/calculators/Brocessing/types/inputs';
+import { energy } from '@/calculators/Brocessing/types/overloads';
+import Decimal from 'decimal.js-light';
 import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
 import { object } from './schemas';
@@ -11,7 +14,11 @@ export const FuelInputSchema = object({
   stationaryFuel: z
     .array(StationaryFuelInputSchema)
     .meta({ description: DESCRIPTIONS.FUEL_STATIONARY }),
-  naturalGas: z.number().min(0).meta({ description: DESCRIPTIONS.NATURAL_GAS }),
+  naturalGas: z
+    .number()
+    .min(0)
+    .meta({ description: DESCRIPTIONS.NATURAL_GAS })
+    .transform((a) => input(`NATURAL_GAS[${a}]`, energy(new Decimal(a)))),
 });
 
 export type FuelInput = z.infer<typeof FuelInputSchema>;

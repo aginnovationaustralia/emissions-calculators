@@ -1,36 +1,18 @@
-import { swapObjectKeysAndValues } from '@/calculators/common/tools/object';
-import { State, StationaryFuelTypes, TransportFuelTypes } from '@/types/enums';
+import { State } from '@/types/enums';
 import { FuelInputTransformed } from '@/types/fuel.input';
 import Decimal from 'decimal.js-light';
 import { ExecutionContext } from '../../executionContext';
 import { selectValue } from '../types/constants';
+import { input } from '../types/inputs';
 import { multiply } from '../types/multiply';
-import { rootOrigin } from '../types/origins';
-import { output, Output, scope1Output } from '../types/output';
-import { energyPerVolume, mass, massPerEnergy } from '../types/overloads';
-
-type FuelTotal = {
-  co2: Output<1, 'CO2'>;
-  ch4: Output<1, 'CH4'>;
-  n2o: Output<1, 'N2O'>;
-  scope3Total: Output<3, 'CO2e'>;
-};
-
-// This juggling of fuel key names is mainly here to avoid changing existing constant key names,
-// as this would technically be a breaking change.
-const reverseStationaryFuelKeys = swapObjectKeysAndValues(StationaryFuelTypes);
-const convertStationaryFuelType = (
-  fuelType: StationaryFuelTypes,
-): keyof typeof StationaryFuelTypes => {
-  return reverseStationaryFuelKeys[fuelType];
-};
-
-const reverseTransportFuelKeys = swapObjectKeysAndValues(TransportFuelTypes);
-const convertTransportFuelType = (
-  fuelType: TransportFuelTypes,
-): keyof typeof TransportFuelTypes => {
-  return reverseTransportFuelKeys[fuelType];
-};
+import { output, scope1Output } from '../types/output';
+import {
+  energyPerVolume,
+  mass,
+  massPerEnergy,
+  stringUnit,
+  sum,
+} from '../types/overloads';
 
 /*
  * Algorithm
@@ -66,24 +48,9 @@ export function calculateScope1And3Fuel(
   context: ExecutionContext,
 ) {
   const { constants } = context;
-  // const { FUEL_ENERGYGJ } = constants.COMMON;
-  // const { STATIONARY, TRANSPORT, NATURAL_GAS } = FUEL_ENERGYGJ;
   // Stationary
   const stationaryAmounts = fuel.stationaryFuel.map(
     ({ type, amountLitres }) => {
-      // REVISIT: The generics on transform are super noisy right now
-      // const fuelTypeKey = transform<
-      //   StringUnit<keyof typeof StationaryFuelTypes>,
-      //   keyof typeof StationaryFuelTypes,
-      //   StationaryFuelTypes
-      // >(
-      //   stringUnit(convertStationaryFuelType(type.unit)),
-      //   convertStationaryFuelType,
-      //   type,
-      // );
-
-      // const fuelFactors = constants.COMMON.FUEL_ENERGYGJ.STATIONARY[fuelTypeKey.unit].;
-
       const scope1EFCo2 = selectValue(
         constants.COMMON,
         (value) => massPerEnergy('CO2', new Decimal(value)),
@@ -92,6 +59,35 @@ export function calculateScope1And3Fuel(
         type,
         'SCOPE1_EF',
         'CO2',
+      );
+
+      const scope1EFCh4 = selectValue(
+        constants.COMMON,
+        (value) => massPerEnergy('CH4', new Decimal(value)),
+        'FUEL_ENERGYGJ',
+        'STATIONARY',
+        type,
+        'SCOPE1_EF',
+        'CH4',
+      );
+
+      const scope1EFn2o = selectValue(
+        constants.COMMON,
+        (value) => massPerEnergy('N2O', new Decimal(value)),
+        'FUEL_ENERGYGJ',
+        'STATIONARY',
+        type,
+        'SCOPE1_EF',
+        'N2O',
+      );
+
+      const scope3EF = selectValue(
+        constants.COMMON,
+        (value) => massPerEnergy('CO2e', new Decimal(value)),
+        'FUEL_ENERGYGJ',
+        'STATIONARY',
+        type,
+        'SCOPE3_EF',
       );
 
       const energyContentFactor = selectValue(
@@ -106,22 +102,164 @@ export function calculateScope1And3Fuel(
       const totalEnergy = multiply(energyContentFactor, amountLitres);
 
       const co2Scope1 = multiply(scope1EFCo2, totalEnergy);
+      const ch4Scope1 = multiply(scope1EFCh4, totalEnergy);
+      const n2oScope1 = multiply(scope1EFn2o, totalEnergy);
+      const scope3 = multiply(scope3EF, totalEnergy);
+
+      return {
+        co2Scope1,
+        ch4Scope1,
+        n2oScope1,
+        scope3,
+      };
     },
   );
 
-  // const stationaryScope3 =
-
   // Transport
 
+  const transportAmounts = fuel.transportFuel.map(({ type, amountLitres }) => {
+    const scope1EFCo2 = selectValue(
+      constants.COMMON,
+      (value) => massPerEnergy('CO2', new Decimal(value)),
+      'FUEL_ENERGYGJ',
+      'TRANSPORT',
+      type,
+      'SCOPE1_EF',
+      'CO2',
+    );
+
+    const scope1EFCh4 = selectValue(
+      constants.COMMON,
+      (value) => massPerEnergy('CH4', new Decimal(value)),
+      'FUEL_ENERGYGJ',
+      'TRANSPORT',
+      type,
+      'SCOPE1_EF',
+      'CH4',
+    );
+
+    const scope1EFn2o = selectValue(
+      constants.COMMON,
+      (value) => massPerEnergy('N2O', new Decimal(value)),
+      'FUEL_ENERGYGJ',
+      'TRANSPORT',
+      type,
+      'SCOPE1_EF',
+      'N2O',
+    );
+
+    const scope3EF = selectValue(
+      constants.COMMON,
+      (value) => massPerEnergy('CO2e', new Decimal(value)),
+      'FUEL_ENERGYGJ',
+      'TRANSPORT',
+      type,
+      'SCOPE3_EF',
+    );
+
+    const energyContentFactor = selectValue(
+      constants.COMMON,
+      (value) => energyPerVolume('Fuel', new Decimal(value)),
+      'FUEL_ENERGYGJ',
+      'TRANSPORT',
+      type,
+      'ENERGY_CONTENT_FACTOR',
+    );
+
+    const totalEnergy = multiply(energyContentFactor, amountLitres);
+
+    const co2Scope1 = multiply(scope1EFCo2, totalEnergy);
+    const ch4Scope1 = multiply(scope1EFCh4, totalEnergy);
+    const n2oScope1 = multiply(scope1EFn2o, totalEnergy);
+    const scope3 = multiply(scope3EF, totalEnergy);
+
+    return {
+      co2Scope1,
+      ch4Scope1,
+      n2oScope1,
+      scope3,
+    };
+  });
+
   // Natural Gas
+
+  const naturalGasScope1EFCo2 = selectValue(
+    constants.COMMON,
+    (value) => massPerEnergy('CO2', new Decimal(value)),
+    'FUEL_ENERGYGJ',
+    'NATURAL_GAS',
+    'SCOPE1_EF',
+    'CO2',
+  );
+
+  const naturalGasScope1EFCh4 = selectValue(
+    constants.COMMON,
+    (value) => massPerEnergy('CH4', new Decimal(value)),
+    'FUEL_ENERGYGJ',
+    'NATURAL_GAS',
+    'SCOPE1_EF',
+    'CH4',
+  );
+
+  const naturalGasScope1EFn2o = selectValue(
+    constants.COMMON,
+    (value) => massPerEnergy('N2O', new Decimal(value)),
+    'FUEL_ENERGYGJ',
+    'NATURAL_GAS',
+    'SCOPE1_EF',
+    'N2O',
+  );
+
+  const naturalGasScope3EF = selectValue(
+    constants.COMMON,
+    (value) => massPerEnergy('CO2e', new Decimal(value)),
+    'FUEL_ENERGYGJ',
+    'NATURAL_GAS',
+    'SCOPE3_EF',
+    input('STATE', stringUnit(state)),
+  );
+
+  const naturalGasCo2Scope1 = multiply(naturalGasScope1EFCo2, fuel.naturalGas);
+  const naturalGasCh4Scope1 = multiply(naturalGasScope1EFCh4, fuel.naturalGas);
+  const naturalGasN2oScope1 = multiply(naturalGasScope1EFn2o, fuel.naturalGas);
+  const naturalGasScope3 = multiply(naturalGasScope3EF, fuel.naturalGas);
+
+  const scope1Co2Total = sum({
+    items: stationaryAmounts
+      .map(({ co2Scope1 }) => co2Scope1)
+      .concat(transportAmounts.map(({ co2Scope1 }) => co2Scope1))
+      .concat(naturalGasCo2Scope1),
+    unit: mass('CO2'),
+  });
+  const scope1Ch4Total = sum({
+    items: stationaryAmounts
+      .map(({ ch4Scope1 }) => ch4Scope1)
+      .concat(transportAmounts.map(({ ch4Scope1 }) => ch4Scope1))
+      .concat(naturalGasCh4Scope1),
+    unit: mass('CH4'),
+  });
+  const scope1N2oTotal = sum({
+    items: stationaryAmounts
+      .map(({ n2oScope1 }) => n2oScope1)
+      .concat(transportAmounts.map(({ n2oScope1 }) => n2oScope1))
+      .concat(naturalGasN2oScope1),
+    unit: mass('N2O'),
+  });
+  const scope3Total = sum({
+    items: stationaryAmounts
+      .map(({ scope3 }) => scope3)
+      .concat(transportAmounts.map(({ scope3 }) => scope3))
+      .concat(naturalGasScope3),
+    unit: mass('CO2e'),
+  });
 
   // Final sums
 
   const total = {
-    fuelCO2: scope1Output('fuelCO2', rootOrigin(mass('CO2'))),
-    fuelCH4: scope1Output('fuelCH4', rootOrigin(mass('CH4'))),
-    fuelN2O: scope1Output('fuelN2O', rootOrigin(mass('N2O'))),
-    fuel: output('fuel', 3, rootOrigin(mass('CO2e'))),
+    fuelCO2: scope1Output('fuelCO2', scope1Co2Total),
+    fuelCH4: scope1Output('fuelCH4', scope1Ch4Total),
+    fuelN2O: scope1Output('fuelN2O', scope1N2oTotal),
+    fuel: output('fuel', 3, scope3Total),
   };
 
   return total;

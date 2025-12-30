@@ -203,7 +203,9 @@ export function selectValue<
   selector4: CK4 | TypedOrigin<StringUnit<CK4>>,
   selector5: CK5 | TypedOrigin<StringUnit<CK5>>,
 ): RootOrigin<TOut>;
+
 // Implementation
+
 export function selectValue<TOut extends NumberUnit>(
   constants: Record<string, unknown>,
   getValue: (value: unknown) => TOut,
