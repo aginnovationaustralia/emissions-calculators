@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js-light';
 import { selectConstant } from './constants';
-import { formatOrigin } from './format';
+import { formatNames } from './format';
 import { input } from './inputs';
 import { multiply } from './multiply';
 import {
@@ -18,7 +18,7 @@ import {
   MassCO2ePerMassRefrigerant,
 } from './units';
 
-describe('formatOrigin', () => {
+describe('formatNames', () => {
   const mockConstants = {
     COMMON: {
       REFRIGERANT_GWP: {
@@ -28,24 +28,44 @@ describe('formatOrigin', () => {
       },
     },
   };
-  const inputChargeSize: RootOrigin<Mass<'Refrigerant'>> = input(
-    'testInputCH4',
+  const inputChargeSizeHFC152a: RootOrigin<Mass<'Refrigerant'>> = input(
+    'inputChargeSize',
     mass('Refrigerant', new Decimal(100)),
   );
-  const constantGWPCH4: ConstantSelectionOrigin<MassCO2ePerMassRefrigerant> =
+  const constantHFC152a: ConstantSelectionOrigin<MassCO2ePerMassRefrigerant> =
     selectConstant(
       mockConstants.COMMON,
       (value) => massCO2ePerMassRefrigerant(value),
       'REFRIGERANT_GWP',
       input('inputRefrigerantType', 'HFC-152a'),
     );
-  const intermediateVariableMultiply: BinaryOrigin<Mass<'CO2e'>> = multiply(
-    constantGWPCH4,
-    inputChargeSize,
-    { valueType: 'intermediate' },
+  const intermediateVariableMultiplyHFC152a: BinaryOrigin<Mass<'CO2e'>> =
+    multiply(constantHFC152a, inputChargeSizeHFC152a, {
+      valueType: 'intermediate',
+    });
+  const inputChargeSizeHFC23: RootOrigin<Mass<'Refrigerant'>> = input(
+    'inputChargeSize',
+    mass('Refrigerant', new Decimal(100)),
   );
+  const constantHFC23: ConstantSelectionOrigin<MassCO2ePerMassRefrigerant> =
+    selectConstant(
+      mockConstants.COMMON,
+      (value) => massCO2ePerMassRefrigerant(value),
+      'REFRIGERANT_GWP',
+      input('inputRefrigerantType', 'HFC-23'),
+    );
+  const intermediateVariableMultiplyHFC23: BinaryOrigin<Mass<'CO2e'>> =
+    multiply(constantHFC23, inputChargeSizeHFC23, {
+      valueType: 'intermediate',
+    });
   const namedSum: SummedOrigin<Mass<'CO2e'>> = sum(
-    { items: [intermediateVariableMultiply], unit: mass('CO2e') },
+    {
+      items: [
+        intermediateVariableMultiplyHFC152a,
+        intermediateVariableMultiplyHFC23,
+      ],
+      unit: mass('CO2e'),
+    },
     { unit: mass('CO2e'), valueType: 'variable', name: 'testSum' },
   );
   const testOutput = output('testOutput', 3, namedSum);
@@ -53,9 +73,9 @@ describe('formatOrigin', () => {
   it.each([
     [
       testOutput,
-      'testOutput = sum(REFRIGERANT_GWP[inputRefrigerantType] * CHARGE_SIZE[testInputCH4])',
+      'testOutput = sum(REFRIGERANT_GWP.[inputRefrigerantType] * inputChargeSize)',
     ],
   ])('should format an origin', (origin, actualText) => {
-    expect(formatOrigin(origin)).toBe(actualText);
+    expect(formatNames(origin)).toBe(actualText);
   });
 });

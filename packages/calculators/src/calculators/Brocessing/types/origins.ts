@@ -4,14 +4,14 @@ import { AnyUnit, NumberUnit, StringUnit } from './units';
 
 type NamedValueType = 'input' | 'variable' | 'constant' | 'output';
 
-export type IntermediateOrNamedOrigin =
-  | {
-      valueType: NamedValueType;
-      name: string;
-    }
-  | {
-      valueType: 'intermediate';
-    };
+export type NamedOrigin = {
+  valueType: NamedValueType;
+  name: string;
+};
+export type IntermediateOrigin = {
+  valueType: 'intermediate';
+};
+export type IntermediateOrNamedOrigin = NamedOrigin | IntermediateOrigin;
 
 export type BaseOrigin<U extends AnyUnit> = {
   unit: U;
@@ -49,12 +49,13 @@ export type ConstantSelectionOrigin<
   // source: ConstantSelectionSource<U>;
 };
 
-export type RootOrigin<U extends AnyUnit> = BaseOrigin<U> & {
+export type RootOrigin<U extends AnyUnit> = NamedOrigin & {
+  unit: U;
   originType: 'root';
 };
 export const rootOrigin = <U extends AnyUnit>(
   unit: U,
-  baseOrigin?: IntermediateOrNamedOrigin,
+  baseOrigin: NamedOrigin,
 ): RootOrigin<U> => {
   const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
   return {

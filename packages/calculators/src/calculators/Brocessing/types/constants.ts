@@ -210,14 +210,21 @@ export function selectConstant<TOut extends NumberUnit>(
   selector4?: string | TypedOrigin<StringUnit>,
   selector5?: string | TypedOrigin<StringUnit>,
 ): ConstantSelectionOrigin<TOut> {
-  const selectors = [selector1, selector2, selector3, selector4, selector5]
-    .filter((s): s is string | TypedOrigin<StringUnit> => s !== undefined)
-    .map((s) => (typeof s === 'string' ? s : s.unit));
+  const selectors = [
+    selector1,
+    selector2,
+    selector3,
+    selector4,
+    selector5,
+  ].filter((s): s is string | TypedOrigin<StringUnit> => s !== undefined);
+  // .map((s) => (typeof s === 'string' ? s : s.unit));
 
   // Traverse the constants object using the selectors
   let current: unknown = constants;
   for (const key of selectors) {
-    current = (current as Record<string, unknown>)[key];
+    current = (current as Record<string, unknown>)[
+      typeof key === 'string' ? key : key.unit
+    ];
   }
 
   const value = getValue(current);

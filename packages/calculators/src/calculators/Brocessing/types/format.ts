@@ -1,35 +1,81 @@
-import { Origin, RootOrigin } from './origins';
+import {
+  BinaryOrigin,
+  ConstantSelectionOrigin,
+  Origin,
+  RootOrigin,
+  SummedOrigin,
+} from './origins';
 import { NumberUnit } from './units';
 
 const formatRoot = (origin: RootOrigin<NumberUnit>): string => {
-  if (origin.valueType === 'intermediate') {
-    return `unnamed root`;
-  }
   return origin.name;
 };
 
-export const formatOriginRecursive = (origin: Origin<NumberUnit>): string => {
+// A function you can pass to array.filter that will create a unique array of strings
+const uniqueStrings = (value: string, index: number, self: string[]): boolean =>
+  self.indexOf(value) === index;
+
+const formatNamesSum = (origin: SummedOrigin<NumberUnit>): string => {
+  return `sum(${origin.from.items
+    .map(formatNamesRecursive)
+    .filter(uniqueStrings)
+    .join(' + ')})`;
+};
+
+const binaryExpression = (
+  type: 'add' | 'subtract' | 'multiply' | 'divide',
+): string => {
+  switch (type) {
+    case 'add':
+      return '+';
+    case 'subtract':
+      return '-';
+    case 'multiply':
+      return '*';
+    case 'divide':
+      return '/';
+  }
+};
+const formatNamesBinary = (origin: BinaryOrigin<NumberUnit>): string => {
+  return `${formatNamesRecursive(origin.left)} ${binaryExpression(
+    origin.type,
+  )} ${formatNamesRecursive(origin.right)}`;
+};
+
+const formatNamesConstantSelection = (
+  origin: ConstantSelectionOrigin<NumberUnit>,
+): string => {
+  return origin.selectors
+    .map((selector) =>
+      typeof selector === 'string'
+        ? selector
+        : selector.originType === 'root'
+        ? `[${selector.name}]`
+        : `${[selector.unit]}`,
+    )
+    .join('.');
+};
+
+export const formatNamesRecursive = (origin: Origin<NumberUnit>): string => {
   switch (origin.originType) {
     case 'root':
       return formatRoot(origin);
     case 'binary':
-      return `${formatOriginRecursive(origin.left)} ${
-        origin.type
-      } ${formatOriginRecursive(origin.right)}`;
+      return formatNamesBinary(origin);
     case 'unary':
-      return `${formatOriginRecursive(origin.from)}`;
+      return `${formatNamesRecursive(origin.from)}`;
     case 'sum':
-      return origin.from.items.map(formatOriginRecursive).join(' + ');
+      return formatNamesSum(origin);
     case 'constant_selection':
-      return origin.selectors.join('.');
+      return formatNamesConstantSelection(origin);
   }
 };
 
-export const formatOrigin = (origin: Origin<NumberUnit>): string => {
+export const formatNames = (origin: Origin<NumberUnit>): string => {
   const lhs =
     origin.valueType === 'intermediate'
       ? `unnamed ${origin.originType}`
       : origin.name;
 
-  return `${lhs} = ${formatOriginRecursive(origin)}`;
+  return `${lhs} = ${formatNamesRecursive(origin)}`;
 };
