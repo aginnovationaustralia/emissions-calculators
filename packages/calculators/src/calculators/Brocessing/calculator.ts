@@ -1,7 +1,7 @@
 import { BrocessingInput } from '@/types/Brocessing';
 import { BrocessingOutput } from '@/types/Brocessing/output';
 import { State } from '@/types/enums';
-import { ProductProcessingInput } from '@/types/Processing/processing.input';
+import { ProductProcessingInputTransformed } from '@/types/Processing/processing.input';
 import { ProductUnit } from '@/types/Processing/product.input';
 import { ProcessingScope1Output } from '@/types/Processing/scope1.output';
 import { ProcessingScope3Output } from '@/types/Processing/scope3.output';
@@ -9,13 +9,13 @@ import { Scope2Output } from '@/types/scope2.output';
 import Decimal from 'decimal.js-light';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
 import { divideBySafeFromZero } from '../common/tools/calculate';
-import { calculateScope1WasteWater } from '../common/waste/Scope1WasteWater';
 import { calculateSolidWaste } from '../common/waste/SolidWaste';
 import { ExecutionContext } from '../executionContext';
 import { calculateScope1And3Fuel } from './common/Scope1Fuel';
 import { calculateScope1Refrigerant } from './common/Scope1Refrigerant';
+import { calculateScope1WasteWater } from './common/Scope1WasteWater';
 import { ConstantsForBrocessingCalculator } from './constants';
-import { Output, outputsToNumbers } from './types/output';
+import { Output, outputsToNumbers, scope1Output } from './types/output';
 import {
   addScope1Totals,
   addScope23Totals,
@@ -82,11 +82,15 @@ type IntermediateOutputs = {
 
 export function calculateSingleProcessingEnterprise(
   state: State,
-  product: ProductProcessingInput,
+  product: ProductProcessingInputTransformed,
   context: ExecutionContext<ConstantsForBrocessingCalculator>,
   id: string,
 ): IntermediateOutputs {
-  const fuelTotals = calculateScope1And3Fuel(product.fuel, state, context);
+  const { fuelCO2, fuelCH4, fuelN2O, fuel } = calculateScope1And3Fuel(
+    product.fuel,
+    state,
+    context,
+  );
 
   const electricity = calculateElectricityScope2And3(
     state,
@@ -101,10 +105,6 @@ export function calculateSingleProcessingEnterprise(
     context,
   );
 
-  const fuelCO2 = fuelTotals.co2;
-  const fuelCH4 = fuelTotals.ch4;
-  const fuelN2O = fuelTotals.n2o;
-
   const wastewaterCO2 = calculateScope1WasteWater(product.fluidWaste, context);
 
   const { compostedSolidWasteCO2, solidWasteSentOffsite } = calculateSolidWaste(
@@ -112,7 +112,7 @@ export function calculateSingleProcessingEnterprise(
     context,
   );
 
-  const purchasedCO2Tonnes = product.purchasedCO2 / 1000;
+  const purchasedCO2 = scope1Output('purchasedCO2', product.purchasedCO2);
 
   const res: ProcessingScopesOutput = {
     scope1: addScope1Totals({
@@ -124,7 +124,7 @@ export function calculateSingleProcessingEnterprise(
       totalCO2:
         fuelCO2 + wastewaterCO2 + compostedSolidWasteCO2 + purchasedCO2Tonnes,
       totalN2O: fuelN2O,
-      purchasedCO2: purchasedCO2Tonnes,
+      purchasedCO2,
       wastewaterCO2,
       compostedSolidWasteCO2,
       totalHFCs: refrigerant,
@@ -134,7 +134,7 @@ export function calculateSingleProcessingEnterprise(
     }),
     scope3: addScope23Totals({
       electricity: electricity.scope3,
-      fuel: fuelTotals.scope3Total,
+      fuel,
       solidWasteSentOffsite,
     }),
   };

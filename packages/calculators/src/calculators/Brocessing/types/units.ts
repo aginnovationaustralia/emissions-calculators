@@ -1,6 +1,14 @@
 import Decimal from 'decimal.js-light';
 
-export type Substance = 'CO2' | 'CH4' | 'N2O' | 'CO2e' | 'Refrigerant' | 'Fuel';
+export type Substance =
+  | 'CO2'
+  | 'CH4'
+  | 'N2O'
+  | 'CO2e'
+  | 'Refrigerant'
+  | 'Fuel'
+  | 'FluidWaste'
+  | 'Oxygen';
 
 type NumberUnitBase = { value: Decimal };
 
@@ -109,7 +117,31 @@ export const energyPerVolume = <S extends Substance>(
   };
 };
 
-type RealNumber = NumberUnitBase & {
+export type MassPerVolume<
+  SMass extends Substance,
+  SVolume extends Substance,
+> = NumberUnitBase & {
+  __unitType: 'MassPerVolume';
+  mass: SMass;
+  volume: SVolume;
+};
+export const massPerVolume = <
+  SMass extends Substance,
+  SVolume extends Substance,
+>(
+  mass: SMass,
+  volume: SVolume,
+  initialValue?: Decimal,
+): MassPerVolume<SMass, SVolume> => {
+  return {
+    __unitType: 'MassPerVolume',
+    mass,
+    volume,
+    value: initialValue ?? new Decimal(0),
+  };
+};
+
+export type RealNumber = NumberUnitBase & {
   __unitType: 'RealNumber';
 };
 export const realNumber = (initialValue?: Decimal): RealNumber => {
@@ -119,9 +151,9 @@ export const realNumber = (initialValue?: Decimal): RealNumber => {
   };
 };
 
-type VoidUnit = {
-  __unitType: 'Void';
-};
+// type VoidUnit = {
+//   __unitType: 'Void';
+// };
 
 export const voidUnit = () => ({
   __unitType: 'Void' as const,
@@ -133,9 +165,10 @@ export type NumberUnit =
   | Mass<Substance>
   | MassPerEnergy<Substance>
   | EnergyPerVolume<Substance>
+  | MassPerVolume<Substance, Substance>
   | Volume<Substance>
   | Energy
-  | VoidUnit
+  // | VoidUnit
   | RealNumber;
 
 export type StringUnit<V extends string = string> = V;

@@ -1,11 +1,12 @@
 import { selectConstant } from '@/calculators/Brocessing/types/constants';
 import { multiply } from '@/calculators/Brocessing/types/multiply';
-import { Origin } from '@/calculators/Brocessing/types/origins';
+import { Origin, rootOrigin } from '@/calculators/Brocessing/types/origins';
 import { sum } from '@/calculators/Brocessing/types/sum';
 import { mass, Mass, realNumber } from '@/calculators/Brocessing/types/units';
 import { FluidWasteInputTransformed } from '@/types/common/fluid-waste.input';
 import Decimal from 'decimal.js-light';
 import { ExecutionContext } from '../../executionContext';
+import { subtract } from '../types/subtract';
 
 export function calculateScope1WasteWater(
   fluidWastes: FluidWasteInputTransformed[],
@@ -46,7 +47,10 @@ export function calculateScope1WasteWater(
     );
 
     const nonSludgeFraction = subtract(
-      realNumber(new Decimal(1)),
+      rootOrigin(realNumber(new Decimal(1)), {
+        name: '1',
+        valueType: 'variable',
+      }),
       sludgeFraction,
     );
 

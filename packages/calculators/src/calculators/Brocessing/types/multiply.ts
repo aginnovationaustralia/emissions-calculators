@@ -10,6 +10,7 @@ import {
   MassPerEnergy,
   MassPerMass,
   NumberUnit,
+  RealNumber,
   Substance,
   Volume,
   isMass,
@@ -17,6 +18,13 @@ import {
   mass,
   voidUnit,
 } from './units';
+
+// Multiply by a simple real number, preserving unit
+export function multiply<
+  U extends NumberUnit,
+  UL extends TypedOrigin<U>,
+  UR extends TypedOrigin<RealNumber>,
+>(left: UL, right: UR, baseOrigin?: IntermediateOrNamedOrigin): BinaryOrigin<U>;
 
 // kg CO2e per kg Refrigerant * kg Refrigerant = kg CO2e
 export function multiply<

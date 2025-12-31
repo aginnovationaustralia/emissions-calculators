@@ -57,11 +57,10 @@ export const rootOrigin = <U extends AnyUnit>(
   unit: U,
   baseOrigin: NamedOrigin,
 ): RootOrigin<U> => {
-  const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
   return {
     originType: 'root',
     unit,
-    ...baseOrDefault,
+    ...baseOrigin,
   };
 };
 // export type TransformOrigin<
