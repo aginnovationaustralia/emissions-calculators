@@ -385,13 +385,13 @@ export const getSheepCalculatorInput = (
           maidenBreedingEwes: getSheepClass(sheetInputSheep.range('F9:F55')),
           otherEwes: getSheepClass(sheetInputSheep.range('H9:H55')),
           rams: getSheepClass(sheetInputSheep.range('D9:D55')),
-          tradeBreedingEwes: getSheepClass(sheetInputSheep.range('M9:M55')),
+          tradeBreedingEwes: getSheepClass(sheetInputSheep.range('M9:M55')), // trade ewes
           tradeEweLambs: emptySheepClass,
           tradeMaidenBreedingEwes: emptySheepClass,
           tradeOtherEwes: emptySheepClass,
           tradeRams: emptySheepClass,
-          tradeWetherLambs: getSheepClass(sheetInputSheep.range('K9:K55')),
-          tradeWethers: getSheepClass(sheetInputSheep.range('L9:L55')),
+          tradeWetherLambs: getSheepClass(sheetInputSheep.range('K9:K55')), // trade lambs and hoggets
+          tradeWethers: getSheepClass(sheetInputSheep.range('L9:L55')), // trade wethers
           wethers: emptySheepClass,
         },
         merinoPercent: numberInput(sheep('D39')),
@@ -448,6 +448,7 @@ export const getSheepCalculatorInput = (
 
     vegetation: getSheepVegetations(sheetInputVegetation),
   };
+
   return input;
 };
 
@@ -530,7 +531,7 @@ export const getExpectedBeefOutput = (workbook: XLSX.Workbook): BeefOutput => {
       beef: summary('C37'),
     },
     intermediate: [
-      { ...expectedScopes, id: 'beef-0', net: { total: summary('E37') } },
+      { ...expectedScopes, id: 'beef-0', net: { total: summary('C37') } },
     ],
   };
 

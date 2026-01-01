@@ -128,14 +128,8 @@ export function calculateSheepBeef(
   const baseBeefEmissions = {
     scope1: addTotalValue({
       ...beefResult.output.scope1,
-      savannahBurningN2O: burningResults.total.savannahBurningN2O,
-      savannahBurningCH4: burningResults.total.savannahBurningCH4,
-      totalCH4:
-        beefResult.output.scope1.totalCH4 +
-        burningResults.total.savannahBurningCH4,
-      totalN2O:
-        beefResult.output.scope1.totalN2O +
-        burningResults.total.savannahBurningN2O,
+      totalCH4: beefResult.output.scope1.totalCH4,
+      totalN2O: beefResult.output.scope1.totalN2O,
       totalCO2: beefResult.output.scope1.totalCO2,
     }),
     scope2: beefResult.output.scope2,
@@ -173,14 +167,6 @@ export function calculateSheepBeef(
       cell: 'C9',
       value: beefResult.output.scope1.manureManagementCH4,
     },
-    // totalCH4: {
-    //   cell: '',
-    //   value: beefResult.output.scope1.totalCH4 ,
-    // },
-    // totalN2O: {
-    //   cell: '',
-    //   value: beefResult.output.scope1.totalN2O ,
-    // },
     ureaCO2: {
       cell: 'C6',
       value: beefResult.output.scope1.ureaCO2,
@@ -201,10 +187,6 @@ export function calculateSheepBeef(
       cell: 'C5',
       value: beefResult.output.scope1.limeCO2,
     },
-    // totalCO2: {
-    //   cell: '',
-    //   value: beefResult.output.scope1.totalCO2 ,
-    // },
     total: {
       cell: 'C17',
       value: beefResult.output.scope1.total,
@@ -272,6 +254,14 @@ export function calculateSheepBeef(
     },
     sheepResults,
   );
+
+  checkpoint?.('Data summary', {
+    entericCH4: {
+      cell: 'D8',
+      value: sheepResult.output.scope1.entericCH4,
+    },
+  });
+
   const { totalSheepSaleWeight, greasyWoolShornTotal, cleanWoolYieldTotal } =
     sheepResult.extensions;
 
@@ -328,10 +318,10 @@ export function calculateSheepBeef(
   };
 
   checkpoint?.('Data summary', {
-    netTotal: {
-      cell: 'E37',
-      value: combinedResult.net.total,
-    },
+    // netTotal: {
+    //   cell: 'E37',
+    //   value: combinedResult.net.total,
+    // },
     beefCarbonSequestration: {
       cell: 'C35',
       value: -beefCarbonSequestration.total,

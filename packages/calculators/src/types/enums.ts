@@ -186,6 +186,7 @@ export type HorticultureCropType = (typeof HorticultureCropTypes)[number];
 export const BeefClassesAPI = keysFromObject(BeefClassesSchema.shape);
 
 export const SheepClassesAPI = keysFromObject(SheepClassesSchema.shape);
+export type SheepClassName = (typeof SheepClassesAPI)[number];
 
 // Pork
 
