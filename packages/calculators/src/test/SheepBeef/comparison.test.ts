@@ -23,7 +23,7 @@ const getCalculatorInput = (workbook: XLSX.Workbook): SheepBeefInput => {
   const result: SheepBeefInput = {
     state: beefInput.state,
     beef: beefInput.beef,
-    burning: beefInput.burning.map((burning) => burning.burning),
+    burning: beefInput.burning,
     northOfTropicOfCapricorn: beefInput.northOfTropicOfCapricorn,
     rainfallAbove600: beefInput.rainfallAbove600,
     sheep: sheepInput.sheep,

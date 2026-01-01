@@ -458,25 +458,45 @@ export const getExpectedBeefOutput = (workbook: XLSX.Workbook): BeefOutput => {
   const sheetInputBeef = workbook.sheet('Data input - beef');
   const beef = (address: string) => numberInput(sheetInputBeef.cell(address));
 
+  const fuelCO2 = summary('C4');
+  const limeCO2 = summary('C5');
+  const ureaCO2 = summary('C6');
+  const fuelCH4 = summary('C7');
+  const entericCH4 = summary('C8');
+  const manureManagementCH4 = summary('C9');
+  const savannahBurningCH4 = summary('C10');
+  const fertiliserN2O = summary('C11');
+  const urineAndDungN2O = summary('C12');
+  const atmosphericDepositionN2O = summary('C13');
+  const leachingAndRunoffN2O = summary('C14');
+  const savannahBurningN2O = summary('C15');
+  const fuelN2O = summary('C16');
+
   const expectedScopes = {
     scope1: {
-      fuelCO2: summary('C4'),
-      limeCO2: summary('C5'),
-      ureaCO2: summary('C6'),
-      fuelCH4: summary('C7'),
-      entericCH4: summary('C8'),
-      manureManagementCH4: summary('C9'),
-      savannahBurningCH4: summary('C10'),
-      fertiliserN2O: summary('C11'),
-      urineAndDungN2O: summary('C12'),
-      atmosphericDepositionN2O: summary('C13'),
-      leachingAndRunoffN2O: summary('C14'),
-      savannahBurningN2O: summary('C15'),
-      fuelN2O: summary('C16'),
-      totalCO2: summary('G4'),
-      totalCH4: summary('G5'),
-      totalN2O: summary('G6'),
-      total: summary('E17'),
+      fuelCO2,
+      limeCO2,
+      ureaCO2,
+      fuelCH4,
+      entericCH4,
+      manureManagementCH4,
+      savannahBurningCH4,
+      fertiliserN2O,
+      urineAndDungN2O,
+      atmosphericDepositionN2O,
+      leachingAndRunoffN2O,
+      savannahBurningN2O,
+      fuelN2O,
+      totalCO2: fuelCO2 + limeCO2 + ureaCO2,
+      totalCH4: fuelCH4 + entericCH4 + manureManagementCH4 + savannahBurningCH4,
+      totalN2O:
+        fuelN2O +
+        urineAndDungN2O +
+        atmosphericDepositionN2O +
+        leachingAndRunoffN2O +
+        fertiliserN2O +
+        savannahBurningN2O,
+      total: summary('C17'),
     },
     scope2: {
       electricity: summary('C20'),
@@ -596,25 +616,9 @@ export const getExpectedSheepBeefOutput = (
   const intermediateSheep = expectedSheepOutput.intermediate[0];
 
   return {
-    carbonSequestration: {
-      total:
-        expectedBeefOutput.carbonSequestration.total +
-        expectedSheepOutput.carbonSequestration.total,
-    },
-    intensities: {
-      ...expectedBeefOutput.intensities,
-      ...expectedSheepOutput.intensities,
-    },
     intermediate: {
       beef: intermediateBeef,
       sheep: intermediateSheep,
-    },
-    intermediateBeef: expectedBeefOutput.intermediate,
-    intermediateSheep: expectedSheepOutput.intermediate,
-    net: {
-      beef: expectedBeefOutput.net.total,
-      sheep: expectedSheepOutput.net.total,
-      total: expectedBeefOutput.net.total + expectedSheepOutput.net.total,
     },
     scope1: {
       atmosphericDepositionN2O:
@@ -686,6 +690,23 @@ export const getExpectedSheepBeefOutput = (
         expectedBeefOutput.scope3.purchasedLivestock +
         expectedSheepOutput.scope3.purchasedLivestock,
       total: expectedBeefOutput.scope3.total + expectedSheepOutput.scope3.total,
+    },
+    carbonSequestration: {
+      total:
+        expectedBeefOutput.carbonSequestration.total +
+        expectedSheepOutput.carbonSequestration.total,
+    },
+    intensities: {
+      ...expectedBeefOutput.intensities,
+      ...expectedSheepOutput.intensities,
+    },
+
+    intermediateBeef: expectedBeefOutput.intermediate,
+    intermediateSheep: expectedSheepOutput.intermediate,
+    net: {
+      beef: expectedBeefOutput.net.total,
+      sheep: expectedSheepOutput.net.total,
+      total: expectedBeefOutput.net.total + expectedSheepOutput.net.total,
     },
   };
 };
