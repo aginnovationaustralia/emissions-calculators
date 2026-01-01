@@ -19,6 +19,18 @@ import {
   voidUnit,
 } from './units';
 
+// Helper types to extract substance from origin types
+type ExtractMassPerMassNumerator<T> = T extends {
+  unit: MassPerMass<infer SNum, Substance>;
+}
+  ? SNum
+  : never;
+type ExtractMassPerEnergySubstance<T> = T extends {
+  unit: MassPerEnergy<infer S>;
+}
+  ? S
+  : never;
+
 // Multiply by a simple real number, preserving unit
 export function multiply<
   U extends NumberUnit,
@@ -28,15 +40,13 @@ export function multiply<
 
 // kg CO2e per kg Refrigerant * kg Refrigerant = kg CO2e
 export function multiply<
-  SNum extends Substance,
-  SDenom extends Substance,
-  UL extends TypedOrigin<MassPerMass<SNum, SDenom>>,
-  UR extends TypedOrigin<Mass<SDenom>>,
+  UL extends TypedOrigin<MassPerMass<Substance, Substance>>,
+  UR extends TypedOrigin<Mass<Substance>>,
 >(
   left: UL,
   right: UR,
   baseOrigin?: IntermediateOrNamedOrigin,
-): BinaryOrigin<Mass<SNum>>;
+): BinaryOrigin<Mass<ExtractMassPerMassNumerator<UL>>>;
 
 // GJ per litre Fuel * litres Fuel = GJ
 export function multiply<
@@ -51,14 +61,13 @@ export function multiply<
 
 // kg CO2e per GJ * GJ = kg CO2e
 export function multiply<
-  S extends Substance,
-  UL extends TypedOrigin<MassPerEnergy<S>>,
+  UL extends TypedOrigin<MassPerEnergy<Substance>>,
   UR extends TypedOrigin<Energy>,
 >(
   left: UL,
   right: UR,
   baseOrigin?: IntermediateOrNamedOrigin,
-): BinaryOrigin<Mass<S>>;
+): BinaryOrigin<Mass<ExtractMassPerEnergySubstance<UL>>>;
 
 export function multiply<UL extends NumberUnit, UR extends NumberUnit>(
   left: TypedOrigin<UL>,

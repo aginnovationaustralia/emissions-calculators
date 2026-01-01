@@ -103,11 +103,10 @@ export function calculateScope1And3Fuel(
 
       const totalEnergy = multiply(energyContentFactor, amountLitres);
 
-      // TODO: multiply is not passing through the detail of the mass substance generics
-      const co2Scope1: Origin<Mass<'CO2'>> = multiply(scope1EFCo2, totalEnergy);
-      const ch4Scope1: Origin<Mass<'CH4'>> = multiply(scope1EFCh4, totalEnergy);
-      const n2oScope1: Origin<Mass<'N2O'>> = multiply(scope1EFn2o, totalEnergy);
-      const scope3: Origin<Mass<'CO2e'>> = multiply(scope3EF, totalEnergy);
+      const co2Scope1 = multiply(scope1EFCo2, totalEnergy);
+      const ch4Scope1 = multiply(scope1EFCh4, totalEnergy);
+      const n2oScope1 = multiply(scope1EFn2o, totalEnergy);
+      const scope3 = multiply(scope3EF, totalEnergy);
 
       return {
         co2Scope1,
@@ -171,10 +170,10 @@ export function calculateScope1And3Fuel(
 
     const totalEnergy = multiply(energyContentFactor, amountLitres);
 
-    const co2Scope1: Origin<Mass<'CO2'>> = multiply(scope1EFCo2, totalEnergy);
-    const ch4Scope1: Origin<Mass<'CH4'>> = multiply(scope1EFCh4, totalEnergy);
-    const n2oScope1: Origin<Mass<'N2O'>> = multiply(scope1EFn2o, totalEnergy);
-    const scope3: Origin<Mass<'CO2e'>> = multiply(scope3EF, totalEnergy);
+    const co2Scope1 = multiply(scope1EFCo2, totalEnergy);
+    const ch4Scope1 = multiply(scope1EFCh4, totalEnergy);
+    const n2oScope1 = multiply(scope1EFn2o, totalEnergy);
+    const scope3 = multiply(scope3EF, totalEnergy);
 
     return {
       co2Scope1,
@@ -222,22 +221,10 @@ export function calculateScope1And3Fuel(
     input('STATE', stringUnit(state)),
   );
 
-  const naturalGasCo2Scope1: Origin<Mass<'CO2'>> = multiply(
-    naturalGasScope1EFCo2,
-    fuel.naturalGas,
-  );
-  const naturalGasCh4Scope1: Origin<Mass<'CH4'>> = multiply(
-    naturalGasScope1EFCh4,
-    fuel.naturalGas,
-  );
-  const naturalGasN2oScope1: Origin<Mass<'N2O'>> = multiply(
-    naturalGasScope1EFn2o,
-    fuel.naturalGas,
-  );
-  const naturalGasScope3: Origin<Mass<'CO2e'>> = multiply(
-    naturalGasScope3EF,
-    fuel.naturalGas,
-  );
+  const naturalGasCo2Scope1 = multiply(naturalGasScope1EFCo2, fuel.naturalGas);
+  const naturalGasCh4Scope1 = multiply(naturalGasScope1EFCh4, fuel.naturalGas);
+  const naturalGasN2oScope1 = multiply(naturalGasScope1EFn2o, fuel.naturalGas);
+  const naturalGasScope3 = multiply(naturalGasScope3EF, fuel.naturalGas);
 
   const scope1Co2Total: Origin<Mass<'CO2'>> = sum({
     items: stationaryAmounts
