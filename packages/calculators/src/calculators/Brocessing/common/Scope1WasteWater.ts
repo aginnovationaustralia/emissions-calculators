@@ -54,10 +54,9 @@ export function calculateScope1WasteWater(
       sludgeFraction,
     );
 
-    const oxygenPerVolume = subtract(
-      multiply(averageInletCOD, nonSludgeFraction),
-      averageOutletCOD,
-    );
+    const netInletCOD = multiply(averageInletCOD, nonSludgeFraction);
+
+    const oxygenPerVolume = subtract(netInletCOD, averageOutletCOD);
 
     const emissionsPerVolume = multiply(treatmentEF, oxygenPerVolume);
 
