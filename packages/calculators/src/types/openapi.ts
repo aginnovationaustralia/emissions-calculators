@@ -1,6 +1,16 @@
-import { entriesFromObject } from '@/calculators/common/tools/object';
+import {
+  entriesFromObject,
+  ObjectEntry,
+  objectFromEntries,
+} from '@/calculators/common/tools/object';
+import { packageVersion } from '@/calculators/execution/version';
+import { OpenAPIObject } from 'openapi3-ts/oas31';
 import * as z from 'zod';
-import { createSchema } from 'zod-openapi';
+import {
+  createDocument,
+  createSchema,
+  ZodOpenApiPathsObject,
+} from 'zod-openapi';
 import { CalculatorNames } from '../calculators/strings';
 import { AquacultureInputSchema, AquacultureOutputSchema } from './Aquaculture';
 import { BeefInputSchema, BeefOutputSchema } from './Beef';
@@ -135,3 +145,89 @@ export const openapiSchemas = () =>
     inputSchema: createSchema(endpoint.inputSchema).schema,
     outputSchema: createSchema(endpoint.outputSchema).schema,
   }));
+
+export const createOpenApiSchema = (): OpenAPIObject => {
+  const deprecatedPaths = ['wildseafisheries'];
+
+  const endpoints = openapiSchemas().map((schema) => ({
+    // NOTE: This API uses the CalculatorNames enum as the API paths for each calculator
+    path: schema.name,
+    inputSchema: schema.inputSchema,
+    outputSchema: schema.outputSchema,
+  }));
+
+  const paths = objectFromEntries(
+    endpoints.map(
+      ({
+        path,
+        inputSchema,
+        outputSchema,
+      }): ObjectEntry<ZodOpenApiPathsObject> => [
+        `/${path}`,
+        {
+          post: {
+            summary: `Perform ${path} calculation`,
+            description: 'Retrieve a simple JSON response',
+            operationId: `post-${path}`,
+            deprecated: deprecatedPaths.includes(path),
+            requestBody: {
+              required: true,
+              content: {
+                'application/json': {
+                  schema: inputSchema,
+                },
+              },
+            },
+            responses: {
+              200: {
+                description: 'Executes a calculation',
+                content: {
+                  'application/json': {
+                    schema: outputSchema,
+                  },
+                },
+              },
+              401: {
+                description: 'Unauthorized',
+              },
+            },
+            tags: ['GAF'],
+          },
+        },
+      ],
+    ),
+  );
+
+  const schema = createDocument({
+    openapi: '3.1.0',
+    info: {
+      title: 'AIA Calculator API',
+      version: packageVersion(),
+      description: 'Emissions Calculators for various farming activities',
+      contact: {
+        name: 'AIA',
+        url: 'https://aginnovationaustralia.com.au/contact-us/',
+        email: 'contact@aginnovationaustralia.com.au',
+      },
+      license: {
+        name: 'CC-BY-4.0',
+        identifier: 'CC-BY-4.0',
+      },
+    },
+    servers: [
+      {
+        url: `https://emissionscalculator-mtls.production.aiaapi.com/calculator/${packageVersion()}`,
+        description: 'Production Server',
+      },
+    ],
+    tags: [
+      {
+        name: 'GAF',
+        description: 'GAF spreadsheet-based calculator',
+      },
+    ],
+    paths,
+  });
+
+  return schema;
+};
