@@ -43,13 +43,11 @@ describe('Compare beef calculator to spreadsheet', () => {
     if (!validatedInput.valid) {
       throw new Error(validatedInput.message);
     }
-    // console.dir(validatedInput, { depth: null });
     const expectedOutput = getExpectedSheepBeefOutput(workbook);
     const { metaData: _, ...calculatorData } = calculateSheepBeef(
       validatedInput.result,
       testContext('SheepBeef', workbook),
     );
-    // console.dir(calculatorData, { depth: null });
     const tests = traverseExpectations(expectedOutput, calculatorData);
     tests.forEach(executeTest);
   });

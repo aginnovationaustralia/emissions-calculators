@@ -449,8 +449,6 @@ export const getSheepCalculatorInput = (
     vegetation: getSheepVegetations(sheetInputVegetation),
   };
 
-  // console.dir(input, { depth: null });
-
   return input;
 };
 

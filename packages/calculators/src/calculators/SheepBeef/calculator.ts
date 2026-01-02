@@ -282,18 +282,18 @@ export function calculateSheepBeef(
   };
 
   checkpoint?.('Data summary', {
-    // sheepScope1Total: {
-    //   cell: 'D17',
-    //   value: baseSheepEmissions.scope1.total,
-    // },
-    // sheepScope2Total: {
-    //   cell: 'D21',
-    //   value: baseSheepEmissions.scope2.total,
-    // },
-    // sheepScope3Total: {
-    //   cell: 'D32',
-    //   value: baseSheepEmissions.scope3.total,
-    // },
+    sheepScope1Total: {
+      cell: 'D17',
+      value: baseSheepEmissions.scope1.total,
+    },
+    sheepScope2Total: {
+      cell: 'D21',
+      value: baseSheepEmissions.scope2.total,
+    },
+    sheepScope3Total: {
+      cell: 'D32',
+      value: baseSheepEmissions.scope3.total,
+    },
   });
 
   const combinedResult = {
@@ -334,10 +334,10 @@ export function calculateSheepBeef(
       cell: 'D35',
       value: -sheepCarbonSequestration.total,
     },
-    // sheepNetTotal: {
-    //   cell: 'D37',
-    //   value: baseSheepEmissions.net.total,
-    // },
+    sheepNetTotal: {
+      cell: 'D37',
+      value: baseSheepEmissions.net.total,
+    },
   });
 
   return {
