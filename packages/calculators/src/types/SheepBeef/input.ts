@@ -45,5 +45,5 @@ export const SheepBeefInputSchema = calculatorInput('SheepBeef', {
   vegetation: z.array(SheepBeefVegetationSchema).default([]),
 });
 
-export type SheepBeefInput = z.infer<typeof SheepBeefInputSchema>;
+export type SheepBeefInput = z.input<typeof SheepBeefInputSchema>;
 export type SheepBeefInputTransformed = z.output<typeof SheepBeefInputSchema>;
