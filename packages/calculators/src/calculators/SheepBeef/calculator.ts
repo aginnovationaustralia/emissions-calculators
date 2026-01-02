@@ -318,10 +318,10 @@ export function calculateSheepBeef(
   };
 
   checkpoint?.('Data summary', {
-    // netTotal: {
-    //   cell: 'E37',
-    //   value: combinedResult.net.total,
-    // },
+    netTotal: {
+      cell: 'E37',
+      value: combinedResult.net.total,
+    },
     beefCarbonSequestration: {
       cell: 'C35',
       value: -beefCarbonSequestration.total,
@@ -397,14 +397,14 @@ export function calculateSheepBeef(
     })),
     intensities: {
       ...getSheepIntensities(
-        combinedResult.net.total,
+        baseSheepEmissions.net.total,
         sheepCarbonSequestration.total,
         cleanWoolYieldTotal,
         greasyWoolShornTotal,
         totalSheepSaleWeight,
       ),
       ...getBeefIntensities(
-        combinedResult.net.total,
+        baseBeefEmissions.net.total,
         beefCarbonSequestration.total,
         totalBeefSaleWeight,
       ),

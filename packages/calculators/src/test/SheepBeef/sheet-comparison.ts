@@ -394,7 +394,7 @@ export const getSheepCalculatorInput = (
           tradeWethers: getSheepClass(sheetInputSheep.range('L9:L55')), // trade wethers
           wethers: emptySheepClass,
         },
-        merinoPercent: numberInput(sheep('D39')),
+        merinoPercent: numberInput(sheep('D39')) * 100,
         ewesLambing: {
           spring: numberInput(sheep('G61')),
           summer: numberInput(sheep('G62')),
@@ -448,6 +448,8 @@ export const getSheepCalculatorInput = (
 
     vegetation: getSheepVegetations(sheetInputVegetation),
   };
+
+  // console.dir(input, { depth: null });
 
   return input;
 };
@@ -547,22 +549,38 @@ export const getExpectedSheepOutput = (
   const sheetInputSheep = workbook.sheet(' Data input - sheep');
   const sheep = (address: string) => numberInput(sheetInputSheep.cell(address));
 
+  const fuelCO2 = summary('D4');
+  const limeCO2 = summary('D5');
+  const ureaCO2 = summary('D6');
+  const fuelCH4 = summary('D7');
+  const entericCH4 = summary('D8');
+  const manureManagementCH4 = summary('D9');
+  const fertiliserN2O = summary('D11');
+  const urineAndDungN2O = summary('D12');
+  const atmosphericDepositionN2O = summary('D13');
+  const leachingAndRunoffN2O = summary('D14');
+  const fuelN2O = summary('D16');
   const expectedScopes = {
     scope1: {
-      fuelCO2: summary('D4'),
-      limeCO2: summary('D5'),
-      ureaCO2: summary('D6'),
-      fuelCH4: summary('D7'),
-      entericCH4: summary('D8'),
-      manureManagementCH4: summary('D9'),
-      fertiliserN2O: summary('D11'),
-      urineAndDungN2O: summary('D12'),
-      atmosphericDepositionN2O: summary('D13'),
-      leachingAndRunoffN2O: summary('D14'),
-      fuelN2O: summary('D16'),
-      totalCO2: summary('G4'),
-      totalCH4: summary('G5'),
-      totalN2O: summary('G6'),
+      fuelCO2,
+      limeCO2,
+      ureaCO2,
+      fuelCH4,
+      entericCH4,
+      manureManagementCH4,
+      fertiliserN2O,
+      urineAndDungN2O,
+      atmosphericDepositionN2O,
+      leachingAndRunoffN2O,
+      fuelN2O,
+      totalCO2: fuelCO2 + limeCO2 + ureaCO2,
+      totalCH4: fuelCH4 + entericCH4 + manureManagementCH4,
+      totalN2O:
+        fuelN2O +
+        urineAndDungN2O +
+        atmosphericDepositionN2O +
+        leachingAndRunoffN2O +
+        fertiliserN2O,
       total: summary('D17'),
     },
     scope2: {
@@ -705,9 +723,9 @@ export const getExpectedSheepBeefOutput = (
     intermediateBeef: expectedBeefOutput.intermediate,
     intermediateSheep: expectedSheepOutput.intermediate,
     net: {
-      beef: expectedBeefOutput.net.total,
-      sheep: expectedSheepOutput.net.total,
-      total: expectedBeefOutput.net.total + expectedSheepOutput.net.total,
+      beef: expectedBeefOutput.net.beef,
+      sheep: expectedSheepOutput.net.sheep,
+      total: expectedBeefOutput.net.beef + expectedSheepOutput.net.sheep,
     },
   };
 };
