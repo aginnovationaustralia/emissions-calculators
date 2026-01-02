@@ -85,9 +85,8 @@ export function calculateSingleBeef(
   context: ExecutionContext<ConstantsForBeefCalculator>,
   carbonSequestration: number,
   id: string,
-  // TODO: AIAEAP-675 these are only optional with defaults because the SheepBeef calculator does not yet support allocation of burning
-  savannahBurningN2O: number = 0,
-  savannahBurningCH4: number = 0,
+  savannahBurningN2O: number,
+  savannahBurningCH4: number,
 ) {
   const {
     atmosphericDepositionN2O,

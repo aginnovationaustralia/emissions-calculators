@@ -1,8 +1,11 @@
-import { SheepBeefInput } from '@/types/SheepBeef/input';
+import { SheepBeefInput, SheepBeefInputSchema } from '@/types/SheepBeef/input';
 import { SheepBeefOutput } from '@/types/SheepBeef/output';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
-import { calculateScope1SavannahBurning } from '../Beef/Scope1SavannahBurning';
-import { calculateSingleBeef, getBeefIntensities } from '../Beef/calculator';
+import {
+  calculateAllBurningWithKeyProportion,
+  calculateSingleBeef,
+  getBeefIntensities,
+} from '../Beef/calculator';
 import { calculateSingleSheep, getSheepIntensities } from '../Sheep/calculator';
 import { addTotalValue } from '../common/tools/calculate';
 import { sumIntermediateResults } from '../common/tools/intermediate-results';
@@ -14,21 +17,18 @@ import { ExecutionContext, WithExecutionMetadata } from '../executionContext';
 import { ConstantsForSheepBeefCalculator } from './constants';
 
 export function calculateSheepBeef(
-  input: SheepBeefInput,
+  inputOriginal: SheepBeefInput,
   context: ExecutionContext<ConstantsForSheepBeefCalculator>,
 ): WithExecutionMetadata<SheepBeefOutput> {
-  const burningResults = input.burning.map((burning) =>
-    calculateScope1SavannahBurning(burning, input.state, context),
-  );
+  const input = SheepBeefInputSchema.parse(inputOriginal);
+  const { checkpoint } = context;
 
-  const burningEmissions = burningResults.reduce(
-    (acc, curr) => {
-      return addAcrossAllKeys(acc, curr);
-    },
-    {
-      totalCH4: 0,
-      totalN2O: 0,
-    },
+  const burningResults = calculateAllBurningWithKeyProportion(
+    input.burning,
+    'allocationToBeef',
+    input.beef,
+    input.state,
+    context,
   );
 
   input.vegetation = singleAllocationToArray(
@@ -68,6 +68,8 @@ export function calculateSheepBeef(
       context,
       beefCarbonSequestration.intermediate[i],
       singleBeef.id ?? `beef-${i}`,
+      burningResults.intermediate[i].savannahBurningN2O,
+      burningResults.intermediate[i].savannahBurningCH4,
     ),
   );
 
@@ -126,10 +128,9 @@ export function calculateSheepBeef(
   const baseBeefEmissions = {
     scope1: addTotalValue({
       ...beefResult.output.scope1,
-      savannahBurningN2O: burningEmissions.totalN2O,
-      savannahBurningCH4: burningEmissions.totalCH4,
-      totalCH4: beefResult.output.scope1.totalCH4 + burningEmissions.totalCH4,
-      totalN2O: beefResult.output.scope1.totalN2O + burningEmissions.totalN2O,
+      totalCH4: beefResult.output.scope1.totalCH4,
+      totalN2O: beefResult.output.scope1.totalN2O,
+      totalCO2: beefResult.output.scope1.totalCO2,
     }),
     scope2: beefResult.output.scope2,
     scope3: beefResult.output.scope3,
@@ -144,6 +145,84 @@ export function calculateSheepBeef(
       total: beefCarbonSequestration.total,
     },
   };
+
+  checkpoint?.('Data summary', {
+    atmosphericDepositionN2O: {
+      cell: 'C13',
+      value: beefResult.output.scope1.atmosphericDepositionN2O,
+    },
+    entericCH4: {
+      cell: 'C8',
+      value: beefResult.output.scope1.entericCH4,
+    },
+    fertiliserN2O: {
+      cell: 'C11',
+      value: beefResult.output.scope1.fertiliserN2O,
+    },
+    leachingAndRunoffN2O: {
+      cell: 'C14',
+      value: beefResult.output.scope1.leachingAndRunoffN2O,
+    },
+    manureManagementCH4: {
+      cell: 'C9',
+      value: beefResult.output.scope1.manureManagementCH4,
+    },
+    ureaCO2: {
+      cell: 'C6',
+      value: beefResult.output.scope1.ureaCO2,
+    },
+    fuelCO2: {
+      cell: 'C4',
+      value: beefResult.output.scope1.fuelCO2,
+    },
+    fuelCH4: {
+      cell: 'C7',
+      value: beefResult.output.scope1.fuelCH4,
+    },
+    fuelN2O: {
+      cell: 'C16',
+      value: beefResult.output.scope1.fuelN2O,
+    },
+    limeCO2: {
+      cell: 'C5',
+      value: beefResult.output.scope1.limeCO2,
+    },
+    total: {
+      cell: 'C17',
+      value: beefResult.output.scope1.total,
+    },
+    urineAndDungN2O: {
+      cell: 'C12',
+      value: beefResult.output.scope1.urineAndDungN2O,
+    },
+    savannahBurningN2O: {
+      cell: 'C15',
+      value: beefResult.output.scope1.savannahBurningN2O,
+    },
+    savannahBurningCH4: {
+      cell: 'C10',
+      value: beefResult.output.scope1.savannahBurningCH4,
+    },
+  });
+
+  checkpoint?.('Data summary', {
+    beefScope1Total: {
+      cell: 'C17',
+      value: beefResult.output.scope1.total,
+    },
+    beefScope2Total: {
+      cell: 'C21',
+      value: beefResult.output.scope2.total,
+    },
+    beefScope3Total: {
+      cell: 'C32',
+      value: beefResult.output.scope3.total,
+    },
+    beefCarbonSequestration: {
+      cell: 'C35',
+      value: -beefCarbonSequestration.total,
+    },
+  });
 
   const sheepResults = input.sheep.map((singleSheep, i) =>
     calculateSingleSheep(
@@ -175,6 +254,14 @@ export function calculateSheepBeef(
     },
     sheepResults,
   );
+
+  checkpoint?.('Data summary', {
+    entericCH4: {
+      cell: 'D8',
+      value: sheepResult.output.scope1.entericCH4,
+    },
+  });
+
   const { totalSheepSaleWeight, greasyWoolShornTotal, cleanWoolYieldTotal } =
     sheepResult.extensions;
 
@@ -193,6 +280,21 @@ export function calculateSheepBeef(
       total: sheepCarbonSequestration.total,
     },
   };
+
+  checkpoint?.('Data summary', {
+    sheepScope1Total: {
+      cell: 'D17',
+      value: baseSheepEmissions.scope1.total,
+    },
+    sheepScope2Total: {
+      cell: 'D21',
+      value: baseSheepEmissions.scope2.total,
+    },
+    sheepScope3Total: {
+      cell: 'D32',
+      value: baseSheepEmissions.scope3.total,
+    },
+  });
 
   const combinedResult = {
     scope1: addAcrossAllKeys(baseBeefEmissions.scope1, {
@@ -214,6 +316,29 @@ export function calculateSheepBeef(
       sheep: baseSheepEmissions.net.total,
     },
   };
+
+  checkpoint?.('Data summary', {
+    netTotal: {
+      cell: 'E37',
+      value: combinedResult.net.total,
+    },
+    beefCarbonSequestration: {
+      cell: 'C35',
+      value: -beefCarbonSequestration.total,
+    },
+    beefNetTotal: {
+      cell: 'C37',
+      value: baseBeefEmissions.net.total,
+    },
+    sheepCarbonSequestration: {
+      cell: 'D35',
+      value: -sheepCarbonSequestration.total,
+    },
+    sheepNetTotal: {
+      cell: 'D37',
+      value: baseSheepEmissions.net.total,
+    },
+  });
 
   return {
     ...combinedResult,
@@ -272,14 +397,14 @@ export function calculateSheepBeef(
     })),
     intensities: {
       ...getSheepIntensities(
-        combinedResult.net.total,
+        baseSheepEmissions.net.total,
         sheepCarbonSequestration.total,
         cleanWoolYieldTotal,
         greasyWoolShornTotal,
         totalSheepSaleWeight,
       ),
       ...getBeefIntensities(
-        combinedResult.net.total,
+        baseBeefEmissions.net.total,
         beefCarbonSequestration.total,
         totalBeefSaleWeight,
       ),

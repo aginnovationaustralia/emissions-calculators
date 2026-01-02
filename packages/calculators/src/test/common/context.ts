@@ -19,7 +19,7 @@ export const testContext = (
         if (workbook) {
           const sheet = workbook.sheet(sheetName);
           if (!sheet) {
-            console.log(`❌ Checkpoint sheet not found: '${name}'`);
+            console.log(`❌ Checkpoint sheet not found: '${sheetName}'`);
             return;
           }
           entriesFromObject(data).forEach(([name, { cell, value }]) => {

@@ -1,4 +1,4 @@
-import { SheepBeefInputSchema } from '@/types/SheepBeef/input';
+import { SheepBeefInput, SheepBeefInputSchema } from '@/types/SheepBeef/input';
 import { CustomisedFertiliser } from '@/types/enums';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { beefTestInput } from '../Beef/beef.data';
@@ -143,13 +143,18 @@ describe('compatibility for migrated valid inputs', () => {
           otherIrrigated: 0,
         },
       ];
-      const input = {
+      const input: SheepBeefInput = {
         state: 'vic',
         northOfTropicOfCapricorn: false,
         rainfallAbove600: true,
         beef: [{ ...beefTestInput, fertiliser }],
         sheep: [sheepTestInput],
-        burning: [burnTestData],
+        burning: [
+          {
+            allocationToBeef: [1],
+            ...burnTestData,
+          },
+        ],
         vegetation: [],
       };
 

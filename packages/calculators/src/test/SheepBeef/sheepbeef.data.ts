@@ -8,6 +8,7 @@ export const sheepbeefTestData: SheepBeefInput = {
   sheep: [sheepTestInput],
   burning: [
     {
+      allocationToBeef: [1],
       fireScarArea: 100,
       yearsSinceLastFire: 3,
       season: 'late dry season',
