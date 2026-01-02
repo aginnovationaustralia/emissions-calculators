@@ -159,8 +159,6 @@ export function sheepEmissionsForSeason(
   const seasonalMethaneProductionManure =
     head * methaneProductionFromManure * 91.25 * 10 ** -6;
 
-  // console.log(sheepType);
-
   const sheetColumn = sheepClassMMSColumns[sheepType];
   const sheetRowFaecal = sheepSeasonMMSFaecalRows[season];
   const sheetRowUrinary = sheepSeasonMMSUrinaryRows[season];
@@ -323,7 +321,6 @@ export function calculateCompleteSheepEmissions(
       const sheetRowFaecal = sheepSeasonAgSoilsFaecalRows[season];
       const sheetRowUrinary = sheepSeasonAgSoilsUrinaryRows[season];
 
-      // console.log(sheepType, season, sheepSeasonN2O);
       if (sheetColumn && sheetRowN2O) {
         checkpoint?.('Agricultural Soils - sheep', {
           [`urineDungN2O_${sheepType}_${season}`]: {
@@ -507,13 +504,7 @@ export function calculateCompleteSheepEmissions(
     (a, b) => a + b.intermediate.seasonalMethaneProduction,
     0,
   ); //  Gg CH4/farm/year
-  // console.dir(
-  //   allSheepClass.map((s) => ({
-  //     seasonalMethaneProduction: s.intermediate.seasonalMethaneProduction,
-  //   })),
-  //   { depth: null },
-  // );
-  // Q46
+
   checkpoint?.('Enteric fermentation - sheep', {
     totalMethane: {
       cell: 'Q46',
