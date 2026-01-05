@@ -1,6 +1,6 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "3.0.2",
+  "version": "3.0.1",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -306,7 +306,9 @@
     "test": "jest",
     "version": "npm version --no-git-tag-version",
     "build:docs": "tsx scripts/build-docs/index.ts",
-    "generate:exports": "tsx scripts/generate-exports.ts"
+    "generate:exports": "tsx scripts/generate-exports.ts",
+    "generate:openapi": "tsx scripts/generate-openapi.ts",
+    "prepare:release": "pnpm run build && pnpm run generate:exports && pnpm run generate:openapi"
   },
   "repository": {
     "type": "git",

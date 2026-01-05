@@ -146,7 +146,7 @@ export const openapiSchemas = () =>
     outputSchema: createSchema(endpoint.outputSchema).schema,
   }));
 
-export const createOpenApiSchema = (): OpenAPIObject => {
+export const createOpenApiSchemaFile = (): OpenAPIObject => {
   const deprecatedPaths = ['wildseafisheries'];
 
   const endpoints = openapiSchemas().map((schema) => ({
