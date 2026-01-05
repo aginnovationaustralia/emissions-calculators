@@ -91,9 +91,12 @@ importers:
       '@types/node':
         specifier: ^25.0.1
         version: 25.0.1
+      '@types/semver':
+        specifier: ^7.7.1
+        version: 7.7.1
       '@types/xlsx-populate':
         specifier: git+https://github.com/JanLoebel/types-xlsx-populate.git
-        version: git+https://git@github.com:JanLoebel/types-xlsx-populate.git#7ef81174e495fe9ef2689bd329499f81a2a93d43
+        version: https://codeload.github.com/JanLoebel/types-xlsx-populate/tar.gz/7ef81174e495fe9ef2689bd329499f81a2a93d43
       '@typescript-eslint/parser':
         specifier: ^8.49.0
         version: 8.49.0(eslint@9.35.0)(typescript@5.9.2)
@@ -941,11 +944,14 @@ packages:
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
 
+  '@types/semver@7.7.1':
+    resolution: {integrity: sha512-FmgJfu+MOcQ370SD0ev7EI8TlCAfKYU+B4m5T3yXc1CiRN94g/SZPtsCkk506aUDtlMnFZvasDwHHUcZUEaYuA==}
+
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
 
-  '@types/xlsx-populate@git+https://git@github.com:JanLoebel/types-xlsx-populate.git#7ef81174e495fe9ef2689bd329499f81a2a93d43':
-    resolution: {commit: 7ef81174e495fe9ef2689bd329499f81a2a93d43, repo: git@github.com:JanLoebel/types-xlsx-populate.git, type: git}
+  '@types/xlsx-populate@https://codeload.github.com/JanLoebel/types-xlsx-populate/tar.gz/7ef81174e495fe9ef2689bd329499f81a2a93d43':
+    resolution: {tarball: https://codeload.github.com/JanLoebel/types-xlsx-populate/tar.gz/7ef81174e495fe9ef2689bd329499f81a2a93d43}
     version: 1.19.1
 
   '@types/yargs-parser@21.0.3':
@@ -3450,9 +3456,11 @@ snapshots:
 
   '@types/resolve@1.20.2': {}
 
+  '@types/semver@7.7.1': {}
+
   '@types/stack-utils@2.0.3': {}
 
-  '@types/xlsx-populate@git+https://git@github.com:JanLoebel/types-xlsx-populate.git#7ef81174e495fe9ef2689bd329499f81a2a93d43': {}
+  '@types/xlsx-populate@https://codeload.github.com/JanLoebel/types-xlsx-populate/tar.gz/7ef81174e495fe9ef2689bd329499f81a2a93d43': {}
 
   '@types/yargs-parser@21.0.3': {}
 

@@ -308,7 +308,8 @@
     "build:docs": "tsx scripts/build-docs/index.ts",
     "generate:exports": "tsx scripts/generate-exports.ts",
     "generate:openapi": "tsx scripts/generate-openapi.ts",
-    "prepare:release": "pnpm run build && pnpm run generate:exports && pnpm run generate:openapi"
+    "check:openapi-breaking": "tsx scripts/check-openapi-breaking.ts",
+    "prepare:release": "pnpm run build && pnpm run generate:exports && pnpm run generate:openapi && pnpm run check:openapi-breaking"
   },
   "repository": {
     "type": "git",
@@ -329,6 +330,7 @@
     "@rollup/plugin-typescript": "^12.3.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.0.1",
+    "@types/semver": "^7.7.1",
     "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
     "@typescript-eslint/parser": "^8.49.0",
     "glob": "^13.0.0",
@@ -336,8 +338,8 @@
     "nanoclone": "^1.0.2",
     "rollup": "^4.53.3",
     "rollup-plugin-copy": "^3.5.0",
-    "tsc-alias": "^1.8.10",
     "ts-jest": "^29.4.6",
+    "tsc-alias": "^1.8.10",
     "tsx": "^4.21.0",
     "typescript": "^5.9.2",
     "xlsx-populate": "^1.21.0"
