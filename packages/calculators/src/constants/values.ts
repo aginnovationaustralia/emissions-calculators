@@ -129,7 +129,7 @@ export const sheepConstants: SheepConstants = {
     winter: {
       [STATES.ACT]: 18,
       [STATES.NSW]: 18,
-      [STATES.QLD]: 8,
+      [STATES.QLD]: 7,
       [STATES.SA]: 20,
       [STATES.TAS]: 16,
       [STATES.VIC]: 10,

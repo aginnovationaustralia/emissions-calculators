@@ -158,12 +158,12 @@ const expectations = {
   intensities: {
     woolProducedKg: 100000,
     sheepMeatProducedKg: 20000,
-    sheepMeatBreedingIncludingSequestration: 940.4991179075598,
-    sheepMeatBreedingExcludingSequestration: 940.7993731262188,
-    woolIncludingSequestration: 3396.2468146661886,
-    woolExcludingSequestration: 3397.331069622457,
-    beefIncludingSequestration: 16292.48471930773,
-    beefExcludingSequestration: 16304.155319307729,
+    sheepMeatBreedingIncludingSequestration: 0.5581009187383538,
+    sheepMeatBreedingExcludingSequestration: 0.8583561373972459,
+    woolIncludingSequestration: 2.0153644287773886,
+    woolExcludingSequestration: 3.09961938504561,
+    beefIncludingSequestration: 16282.816607432615,
+    beefExcludingSequestration: 16294.487207432614,
     liveweightBeefProducedKg: 22000,
   },
 

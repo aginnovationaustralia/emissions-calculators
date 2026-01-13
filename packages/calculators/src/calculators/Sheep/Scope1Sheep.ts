@@ -1,5 +1,5 @@
 import { SEASONS } from '@/constants/constants';
-import { Season, SheepClassesAPI, State } from '@/types/enums';
+import { Season, SheepClassesAPI, SheepClassName, State } from '@/types/enums';
 import { Fertiliser } from '@/types/fertiliser.input';
 import { EwesLambing } from '@/types/Sheep/eweslambing.input';
 import {
@@ -12,6 +12,51 @@ import { getOtherFertiliserAmounts } from '../../calculators/common/fertiliser';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForSheepCalculator } from './constants';
 import { getMilkIntake, getNFertiliserUreaOtherIrrigated } from './functions';
+
+const sheepClassMMSColumns: Partial<Record<SheepClassName, string>> = {
+  rams: 'S',
+  maidenBreedingEwes: 'U',
+};
+
+const sheepSeasonMMSFaecalRows: Record<Season, string> = {
+  spring: '45',
+  summer: '46',
+  autumn: '47',
+  winter: '48',
+};
+
+const sheepSeasonMMSUrinaryRows: Record<Season, string> = {
+  spring: '51',
+  summer: '52',
+  autumn: '53',
+  winter: '54',
+};
+
+const sheepClassAgSoilsColumns: Partial<Record<SheepClassName, string>> = {
+  rams: 'D',
+  maidenBreedingEwes: 'F',
+};
+
+const sheepSeasonAgSoilsN2ORows = {
+  spring: '35',
+  summer: '36',
+  autumn: '37',
+  winter: '38',
+};
+
+const sheepSeasonAgSoilsFaecalRows = {
+  spring: '21',
+  summer: '22',
+  autumn: '23',
+  winter: '24',
+};
+
+const sheepSeasonAgSoilsUrinaryRows = {
+  spring: '26',
+  summer: '27',
+  autumn: '28',
+  winter: '29',
+};
 
 /**
  * This calculates intermediary emissions for any type of sheep.
@@ -27,7 +72,7 @@ import { getMilkIntake, getNFertiliserUreaOtherIrrigated } from './functions';
  * @returns
  */
 export function sheepEmissionsForSeason(
-  season: string,
+  season: Season,
   sheepType: (typeof SheepClassesAPI)[number],
   head: number,
   liveweight: number,
@@ -43,6 +88,7 @@ export function sheepEmissionsForSeason(
   proportionLactating: number,
   context: ExecutionContext<ConstantsForSheepCalculator>,
 ): SheepIntermediaryEmissions {
+  const { checkpoint } = context;
   // Enteric sheep D15:D18
   const metabolismOfDiet = 0.00795 * dryMatterDigestibility - 0.0014;
 
@@ -113,6 +159,23 @@ export function sheepEmissionsForSeason(
   const seasonalMethaneProductionManure =
     head * methaneProductionFromManure * 91.25 * 10 ** -6;
 
+  const sheetColumn = sheepClassMMSColumns[sheepType];
+  const sheetRowFaecal = sheepSeasonMMSFaecalRows[season];
+  const sheetRowUrinary = sheepSeasonMMSUrinaryRows[season];
+
+  if (sheetColumn && sheetRowFaecal && sheetRowUrinary) {
+    checkpoint?.('Nitrous Oxide_MMS - sheep', {
+      [`${sheepType}_${season}_faecalNExcreted`]: {
+        cell: sheetColumn + sheetRowFaecal,
+        value: seasonalFaecalNExcreted,
+      },
+      [`${sheepType}_${season}_urinaryNExcreted`]: {
+        cell: sheetColumn + sheetRowUrinary,
+        value: seasonalNitrogenUrinaryExcreted,
+      },
+    });
+  }
+
   return {
     urine: seasonalNitrogenUrinaryExcreted,
     faeces: seasonalFaecalNExcreted,
@@ -163,6 +226,7 @@ export function calculateCompleteSheepEmissions(
   lambingRates: SeasonalLambing,
   context: ExecutionContext<ConstantsForSheepCalculator>,
 ): SheepCompleteEmissions {
+  const { checkpoint } = context;
   const totals: {
     [sheepType in (typeof SheepClassesAPI)[number]]: Record<
       Season,
@@ -251,6 +315,28 @@ export function calculateCompleteSheepEmissions(
         sheepSeasonEmissions.urine *
           constants.SHEEP.EF_URINEDUNGDEPOSITED *
           constants.COMMON.GWP_FACTORSC15;
+
+      const sheetColumn = sheepClassAgSoilsColumns[sheepType];
+      const sheetRowN2O = sheepSeasonAgSoilsN2ORows[season];
+      const sheetRowFaecal = sheepSeasonAgSoilsFaecalRows[season];
+      const sheetRowUrinary = sheepSeasonAgSoilsUrinaryRows[season];
+
+      if (sheetColumn && sheetRowN2O) {
+        checkpoint?.('Agricultural Soils - sheep', {
+          [`urineDungN2O_${sheepType}_${season}`]: {
+            cell: sheetColumn + sheetRowN2O,
+            value: sheepSeasonN2O,
+          },
+          [`faecalN2O_${sheepType}_${season}`]: {
+            cell: sheetColumn + sheetRowFaecal,
+            value: sheepSeasonEmissions.faeces,
+          },
+          [`urinaryN2O_${sheepType}_${season}`]: {
+            cell: sheetColumn + sheetRowUrinary,
+            value: sheepSeasonEmissions.urine,
+          },
+        });
+      }
 
       totals[sheepType] = {
         ...totals[sheepType],
@@ -418,6 +504,14 @@ export function calculateCompleteSheepEmissions(
     (a, b) => a + b.intermediate.seasonalMethaneProduction,
     0,
   ); //  Gg CH4/farm/year
+
+  checkpoint?.('Enteric fermentation - sheep', {
+    totalMethane: {
+      cell: 'Q46',
+      value: totalMethane,
+    },
+  });
+
   const totalMethaneGg = totalMethane * constants.COMMON.GWP_FACTORSC5; // Gg CO2-e/farm/year
   const totalMethaneTonnes = totalMethaneGg * 10 ** 3; // t CO2-e/farm/year
 
