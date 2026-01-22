@@ -2,6 +2,9 @@ import { CropTypes, ProductionSystems, States } from '@/types/enums';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { proportion, singleEnterpriseInput } from '../schemas';
+import Decimal from 'decimal.js-light';
+import { input } from '@/tools/inputs';
+import { realNumber } from '@/tools/units';
 
 export const GrainsCropSchema = singleEnterpriseInput('Grains', {
   type: z.enum(CropTypes).meta({
@@ -61,7 +64,7 @@ export const GrainsCropSchema = singleEnterpriseInput('Grains', {
   }),
   electricityAllocation: proportion(
     'Percentage of electricity use to allocate to this crop, from 0 to 1',
-  ),
+  ).transform((val) => input('electricityAllocation', realNumber(new Decimal(val)))),
   limestone: z.number().min(0).meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
   dieselUse: z.number().min(0).meta({ description: DESCRIPTIONS.DIESEL }),
