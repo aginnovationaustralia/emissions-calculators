@@ -70,3 +70,4 @@ export const GrainsCropSchema = singleEnterpriseInput('Grains', {
 });
 
 export type GrainsCrop = z.infer<typeof GrainsCropSchema>;
+export type GrainsCropTransformed = z.output<typeof GrainsCropSchema>;

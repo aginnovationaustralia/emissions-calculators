@@ -1,7 +1,7 @@
 import { CropVegetation } from '@/types/common/crop-vegetation.input';
 import { State } from '@/types/enums';
-import { GrainsCrop } from '@/types/Grains/crop.input';
-import { GrainsInput } from '@/types/Grains/input';
+import { GrainsCrop, GrainsCropTransformed } from '@/types/Grains/crop.input';
+import { GrainsInput, GrainsInputTransformed } from '@/types/Grains/input';
 import { GrainsOutput } from '@/types/Grains/output';
 import { calculateAllCarbonSequestrationWithKeyProportion } from '../../calculators/common/trees';
 import { calculateElectricityScope2And3 } from '../common-legacy/electricity';
@@ -21,6 +21,9 @@ import { calculateScope1N2O } from './Scope1';
 import { calculateScope1FieldBurning } from './Scope1FieldBurningCH4';
 import { calculateScope1Urea } from './Scope1Urea';
 import { calculateScope3Fertiliser } from './Scope3Fertiliser';
+import { calculateScope1Fuel } from '@/modules/scope1fuel';
+import { calculateScope1FertiliserUse } from '@/modules/scope1FertiliserUse';
+import { calculateScope1ResidueManagement } from '@/modules/scope1ResidueManagement';
 
 function getIntensities(
   netTotal: number,
@@ -40,16 +43,77 @@ function getIntensities(
   };
 }
 
-export function calculateEntireGrains(
-  crops: GrainsCrop[],
-  electricityUse: number,
-  electricityRenewablePercentage: number,
-  state: State,
-  vegetation: CropVegetation[],
+const calculateScope1Grains = (crop: GrainsCropTransformed, context: ExecutionContext<ConstantsForGrainsCalculator>) => {
+  const { fuelCO2, fuelCH4, fuelN2O } = calculateScope1Fuel(crop, context);
+  const { ureaCO2, limeCO2, fertiliserN2O, atmosphericDepositionN2O, leachingAndRunoffN2O } = calculateScope1FertiliserUse(crop, context);
+  const { cropResidueN2O, fieldBurningN2O, fieldBurningCH4 } = calculateScope1ResidueManagement(crop, context);
+
+  return {
+    fuelCO2,
+    fuelCH4,
+    fuelN2O,
+    ureaCO2,
+    limeCO2,
+    fertiliserN2O,
+    atmosphericDepositionN2O,
+    leachingAndRunoffN2O,
+    cropResidueN2O,
+    fieldBurningN2O,
+    fieldBurningCH4,
+  }
+}
+
+// const calculateScope2Grains = (crop: GrainsCropTransformed, context: ExecutionContext<ConstantsForGrainsCalculator>) => {
+
+export function calculateGrains(
+  input: GrainsInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ): GrainsOutput {
+  // tranche 1 modules for grains
+
+  // Scope 1
+
+  // 6.1 Transport fuel
+  // 6.2 Stationary combustion fuel
+  //   fuelCO2, fuelCH4, fuelN2O
+
+  // 6.3 refrigerants
+  // new outputs
+
+
+  // 5.1 Fertiliser use
+  // ureaCO2, limeCO2,  fertiliserN2O, atmosphericDepositionN2O,leachingAndRunoffN2O
+
+  // 5.2 residue management
+  // cropResidueN2O, fieldBurningN2O, fieldBurningCH4
+
+  // Scope 2
+  // 7.1 -electricity scope 2 and 3
+  // electricity (s2), electricity (s3)
+
+  // Scope 3
+
+  // 7.5 Purchased fertiliser
+  // fertiliser
+
+  // 7.6 Purchased herbicides / pesticides
+  // herbicide
+
+  // 7.7 Purchased lime
+  // lime
+
+  // 7.8 well to tank emissions from fuel
+  // fuel
+
+  // 7.10 management of waste
+  // new outputs
+
+  // Carbon sequestration is covered by LULUCF guidance
+
+
+
   const electricity = calculateElectricityScope2And3(
-    state,
+    input.state,
     'State Grid',
     electricityRenewablePercentage,
     electricityUse,
@@ -248,18 +312,4 @@ export function calculateEntireGrains(
       crops: allCrops.map((crop) => crop.net.total),
     },
   };
-}
-
-export function calculateGrains(
-  input: GrainsInput,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) {
-  return calculateEntireGrains(
-    input.crops,
-    input.electricityUse,
-    input.electricityRenewable,
-    input.state,
-    input.vegetation,
-    context,
-  );
 }

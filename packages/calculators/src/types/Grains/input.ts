@@ -17,3 +17,4 @@ export const GrainsInputSchema = singleEnterpriseInput('Grains', {
 });
 
 export type GrainsInput = z.infer<typeof GrainsInputSchema>;
+export type GrainsInputTransformed = z.output<typeof GrainsInputSchema>;
