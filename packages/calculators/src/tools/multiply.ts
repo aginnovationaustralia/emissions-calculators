@@ -16,7 +16,6 @@ import {
   isMass,
   isMassPerMass,
   mass,
-  voidUnit,
 } from './units';
 
 // Helper types to extract substance from origin types
@@ -30,13 +29,20 @@ type ExtractMassPerEnergySubstance<T> = T extends {
 }
   ? S
   : never;
+// Extract the unit type from an origin (for preserving unit when multiplying by RealNumber)
+type ExtractOriginUnit<T> = T extends { unit: infer U extends NumberUnit }
+  ? U
+  : never;
 
 // Multiply by a simple real number, preserving unit
 export function multiply<
-  U extends NumberUnit,
-  UL extends TypedOrigin<U>,
+  UL extends TypedOrigin<NumberUnit>,
   UR extends TypedOrigin<RealNumber>,
->(left: UL, right: UR, baseOrigin?: IntermediateOrNamedOrigin): BinaryOrigin<U>;
+>(
+  left: UL,
+  right: UR,
+  baseOrigin?: IntermediateOrNamedOrigin,
+): BinaryOrigin<ExtractOriginUnit<UL>>;
 
 // kg CO2e per kg Refrigerant * kg Refrigerant = kg CO2e
 export function multiply<
@@ -75,9 +81,13 @@ export function multiply<UL extends NumberUnit, UR extends NumberUnit>(
   baseOrigin?: IntermediateOrNamedOrigin,
 ): BinaryOrigin<NumberUnit> {
   const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
-  let unit: NumberUnit = voidUnit();
+  // Determine the result unit based on the operand types
+  let unit: NumberUnit;
   if (isMassPerMass(left.unit) && isMass(right.unit)) {
     unit = mass(left.unit.snum);
+  } else {
+    // For RealNumber multiplication, preserve the left operand's unit
+    unit = left.unit;
   }
 
   return {

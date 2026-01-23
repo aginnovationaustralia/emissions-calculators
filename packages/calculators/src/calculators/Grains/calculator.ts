@@ -14,27 +14,26 @@ import { Mass } from '@/tools/units';
 import { GrainsCropTransformed } from '@/types/Grains/crop.input';
 import { GrainsInputTransformed } from '@/types/Grains/input';
 import { GrainsOutput } from '@/types/Grains/output';
-import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForGrainsCalculator } from './constants';
 
-function getIntensities(
-  netTotal: number,
-  carbonSequestration: number,
-  grainProducedTonnes: number,
-) {
-  return {
-    grainsExcludingSequestration: divideBySafeFromZero(
-      netTotal + carbonSequestration,
-      grainProducedTonnes,
-    ),
-    grainsIncludingSequestration: divideBySafeFromZero(
-      netTotal,
-      grainProducedTonnes,
-    ),
-    grainProducedTonnes,
-  };
-}
+// function getIntensities(
+//   netTotal: number,
+//   carbonSequestration: number,
+//   grainProducedTonnes: number,
+// ) {
+//   return {
+//     grainsExcludingSequestration: divideBySafeFromZero(
+//       netTotal + carbonSequestration,
+//       grainProducedTonnes,
+//     ),
+//     grainsIncludingSequestration: divideBySafeFromZero(
+//       netTotal,
+//       grainProducedTonnes,
+//     ),
+//     grainProducedTonnes,
+//   };
+// }
 
 const calculateScope1Grains = (
   crop: GrainsCropTransformed,
@@ -128,7 +127,11 @@ const calculateScope3Grains = (
   const { lime } = calculateScope3Lime(crop, context);
 
   return {
-    electricity: multiply(totalElectricity, crop.electricityAllocation),
+    electricity: output(
+      'electricity',
+      3,
+      multiply(totalElectricity, crop.electricityAllocation),
+    ),
     fertiliser,
     herbicide,
     fuel,
@@ -161,13 +164,22 @@ export function calculateGrains(
     // scope1: total.output.scope1,
     // scope2: total.output.scope2,
     // scope3: total.output.scope3,
-    intermediate: cropResults.map((crop) => ({
-      id: crop.meta.id,
-      scope1: addScope1Totals(crop.scope1),
-      scope2: addScope23Totals(crop.scope2),
-      scope3: addScope23Totals(crop.scope3),
-      // net: crop.net,
-    })),
+    intermediate: cropResults.map((crop) => {
+      const scope1 = addScope1Totals(crop.scope1);
+      const scope2 = addScope23Totals(crop.scope2);
+      const scope3 = addScope23Totals(crop.scope3);
+      const net = scope1.total.value
+        .add(scope2.total.value)
+        .add(scope3.total.value);
+      return {
+        id: crop.meta.id,
+        scope1,
+        scope2,
+        scope3,
+        net,
+        // net: crop.net,
+      };
+    }),
     // intensities: allCrops.map((crop) =>
     //   divideBySafeFromZero(crop.net.total, crop.extensions.amountProduced),
     // ),
