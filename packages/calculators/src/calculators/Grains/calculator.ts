@@ -39,22 +39,16 @@ const calculateScope1Grains = (
   crop: GrainsCropTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  // Scope 1
+  // 6.3 refrigerants
+  // new outputs
 
   // 6.1 Transport fuel
   // 6.2 Stationary combustion fuel
   //   fuelCO2, fuelCH4, fuelN2O
-
-  // 6.3 refrigerants
-  // new outputs
+  const { fuelCO2, fuelCH4, fuelN2O } = calculateScope1Fuel(crop, context);
 
   // 5.1 Fertiliser use
   // ureaCO2, limeCO2,  fertiliserN2O, atmosphericDepositionN2O,leachingAndRunoffN2O
-
-  // 5.2 residue management
-  // cropResidueN2O, fieldBurningN2O, fieldBurningCH4
-
-  const { fuelCO2, fuelCH4, fuelN2O } = calculateScope1Fuel(crop, context);
   const {
     ureaCO2,
     limeCO2,
@@ -62,6 +56,9 @@ const calculateScope1Grains = (
     atmosphericDepositionN2O,
     leachingAndRunoffN2O,
   } = calculateScope1FertiliserUse(crop, context);
+
+  // 5.2 residue management
+  // cropResidueN2O, fieldBurningN2O, fieldBurningCH4
   const { cropResidueN2O, fieldBurningN2O, fieldBurningCH4 } =
     calculateScope1ResidueManagement(crop, context);
 
@@ -101,37 +98,34 @@ const calculateScope3Grains = (
   totalElectricity: TypedOrigin<Mass<'CO2e'>>,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  // Scope 2
   // 7.1 -electricity scope 2 and 3
   // electricity (s2), electricity (s3)
-
-  // Scope 3
-
+  const electricity = output(
+    'electricity',
+    3,
+    multiply(totalElectricity, crop.electricityAllocation),
+  );
   // 7.5 Purchased fertiliser
   // fertiliser
+  const { fertiliser } = calculateScope3Fertiliser(crop, context);
 
   // 7.6 Purchased herbicides / pesticides
   // herbicide
+  const { herbicide } = calculateScope3Herbicide(crop, context);
 
   // 7.7 Purchased lime
   // lime
+  const { lime } = calculateScope3Lime(crop, context);
 
   // 7.8 well to tank emissions from fuel
   // fuel
+  const { fuel } = calculateScope3EmissionsFromFuel(crop, context);
 
   // 7.10 management of waste
   // new outputs
-  const { fertiliser } = calculateScope3Fertiliser(crop, context);
-  const { herbicide } = calculateScope3Herbicide(crop, context);
-  const { fuel } = calculateScope3EmissionsFromFuel(crop, context);
-  const { lime } = calculateScope3Lime(crop, context);
 
   return {
-    electricity: output(
-      'electricity',
-      3,
-      multiply(totalElectricity, crop.electricityAllocation),
-    ),
+    electricity,
     fertiliser,
     herbicide,
     fuel,
@@ -179,7 +173,6 @@ export function calculateGrains(
         scope2,
         scope3,
         net,
-        // net: crop.net,
       };
     }),
     // intensities: allCrops.map((crop) =>
