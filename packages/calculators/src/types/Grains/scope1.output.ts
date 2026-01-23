@@ -1,4 +1,4 @@
-import { outputKey } from '@/tools/zod';
+import { outputKey, outputValue } from '@/tools/zod';
 import { z } from 'zod';
 import { OUTPUTDESCRIPTIONS } from '../descriptions.schema';
 
@@ -15,10 +15,10 @@ export const GrainsScope1OutputSchema = z
     cropResidueN2O: outputKey(OUTPUTDESCRIPTIONS.cropResidueN2O),
     fieldBurningN2O: outputKey(OUTPUTDESCRIPTIONS.fieldBurningN2O),
     fieldBurningCH4: outputKey(OUTPUTDESCRIPTIONS.fieldBurningCH4),
-    totalCO2: outputKey(OUTPUTDESCRIPTIONS.scope1TotalCO2),
-    totalCH4: outputKey(OUTPUTDESCRIPTIONS.scope1TotalCH4),
-    totalN2O: outputKey(OUTPUTDESCRIPTIONS.scope1TotalN2O),
-    total: outputKey(OUTPUTDESCRIPTIONS.scope1Total),
+    totalCO2: outputValue(OUTPUTDESCRIPTIONS.scope1TotalCO2),
+    totalCH4: outputValue(OUTPUTDESCRIPTIONS.scope1TotalCH4),
+    totalN2O: outputValue(OUTPUTDESCRIPTIONS.scope1TotalN2O),
+    total: outputValue(OUTPUTDESCRIPTIONS.scope1Total),
   })
   .meta({ description: OUTPUTDESCRIPTIONS.scope1 });
 

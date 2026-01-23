@@ -1,4 +1,8 @@
-import { entriesFromObject } from '@/calculators/common/tools/object';
+import {
+  entriesFromObject,
+  ObjectEntry,
+  objectFromEntries,
+} from '@/calculators/common/tools/object';
 import { Decimal } from 'decimal.js-light';
 import { Output } from './outputs';
 
@@ -14,43 +18,52 @@ const isCO2 = (output: Output<1>): output is Output<1, 'CO2'> => {
   return output.unit.substance === 'CO2';
 };
 
-export const addScope1Totals = <T extends Record<string, Output<1>>>(
+export const addScope1Totals = <
+  T extends Record<string, Output<1>>,
+  K extends keyof T & string,
+  // O extends Record<K, { value: Decimal; reference: string }> = Record<K, { value: Decimal; reference: string }>,
+>(
   outputs: T,
-): T & {
-  totalN2O: { value: Decimal };
-  totalCH4: { value: Decimal };
-  totalCO2: { value: Decimal };
-  total: { value: Decimal };
+): Record<K, { value: number; reference: string }> & {
+  totalN2O: { value: number };
+  totalCH4: { value: number };
+  totalCO2: { value: number };
+  total: { value: number };
 } => {
-  const entries: Output<1>[] = entriesFromObject(outputs).map(
-    ([_, value]) => value,
-  );
-  const outputsN2O = entries.filter(isN2O);
-  const outputsCH4 = entries.filter(isCH4);
-  const outputsCO2 = entries.filter(isCO2);
+  const entries: ObjectEntry<T>[] = entriesFromObject(outputs);
+
+  const foo: ObjectEntry<Record<K, { value: number; reference: string }>>[] =
+    entries.map(([k, value]) => [
+      k as K,
+      { value: value.amountCO2e.toNumber(), reference: value.name },
+    ]);
+
+  const translatedOutputs = objectFromEntries(foo);
+
+  const values: Output<1>[] = entries.map(([_, value]) => value);
+  const outputsN2O = values.filter(isN2O);
+  const outputsCH4 = values.filter(isCH4);
+  const outputsCO2 = values.filter(isCO2);
   const totalN2O = {
-    value: outputsN2O.reduce(
-      (acc, curr) => acc.add(curr.amountCO2e),
-      new Decimal(0),
-    ),
+    value: outputsN2O
+      .reduce((acc, curr) => acc.add(curr.amountCO2e), new Decimal(0))
+      .toNumber(),
   };
   const totalCH4 = {
-    value: outputsCH4.reduce(
-      (acc, curr) => acc.add(curr.amountCO2e),
-      new Decimal(0),
-    ),
+    value: outputsCH4
+      .reduce((acc, curr) => acc.add(curr.amountCO2e), new Decimal(0))
+      .toNumber(),
   };
   const totalCO2 = {
-    value: outputsCO2.reduce(
-      (acc, curr) => acc.add(curr.amountCO2e),
-      new Decimal(0),
-    ),
+    value: outputsCO2
+      .reduce((acc, curr) => acc.add(curr.amountCO2e), new Decimal(0))
+      .toNumber(),
   };
   const total = {
-    value: totalN2O.value.add(totalCH4.value).add(totalCO2.value),
+    value: totalN2O.value + totalCH4.value + totalCO2.value,
   };
   return {
-    ...outputs,
+    ...translatedOutputs,
     totalN2O,
     totalCH4,
     totalCO2,
@@ -58,21 +71,31 @@ export const addScope1Totals = <T extends Record<string, Output<1>>>(
   };
 };
 
-export const addScope23Totals = <T extends Record<string, Output<2 | 3>>>(
+export const addScope23Totals = <
+  T extends Record<string, Output<2 | 3>>,
+  K extends keyof T & string,
+>(
   outputs: T,
-): T & {
-  total: { value: Decimal };
+): Record<K, { value: number; reference: string }> & {
+  total: { value: number };
 } => {
-  const entries: Output<2 | 3>[] = entriesFromObject(outputs).map(
-    ([_, value]) => value,
-  );
+  const entries: ObjectEntry<T>[] = entriesFromObject(outputs);
+
+  const foo: ObjectEntry<Record<K, { value: number; reference: string }>>[] =
+    entries.map(([k, value]) => [
+      k as K,
+      { value: value.amountCO2e.toNumber(), reference: value.name },
+    ]);
+
+  const translatedOutputs = objectFromEntries(foo);
+
+  const values: Output<2 | 3>[] = entries.map(([_, value]) => value);
   return {
-    ...outputs,
+    ...translatedOutputs,
     total: {
-      value: entries.reduce(
-        (acc, curr) => acc.add(curr.amountCO2e),
-        new Decimal(0),
-      ),
+      value: values
+        .reduce((acc, curr) => acc.add(curr.amountCO2e), new Decimal(0))
+        .toNumber(),
     },
   };
 };

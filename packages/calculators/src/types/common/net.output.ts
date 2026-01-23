@@ -1,9 +1,9 @@
-import { outputKey } from '@/tools/zod';
+import { outputValue } from '@/tools/zod';
 import { z } from 'zod';
 
 export const NetOutputSchema = z
   .object({
-    total: outputKey(),
+    total: outputValue(),
   })
   .meta({ description: 'Net emissions for the activity' });
 

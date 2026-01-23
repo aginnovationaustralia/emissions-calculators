@@ -168,9 +168,11 @@ export function calculateGrains(
       const scope1 = addScope1Totals(crop.scope1);
       const scope2 = addScope23Totals(crop.scope2);
       const scope3 = addScope23Totals(crop.scope3);
-      const net = scope1.total.value
-        .add(scope2.total.value)
-        .add(scope3.total.value);
+      const net = {
+        total: {
+          value: scope1.total.value + scope2.total.value + scope3.total.value,
+        },
+      };
       return {
         id: crop.meta.id,
         scope1,

@@ -1,4 +1,4 @@
-type ObjectEntry<T extends object> = [keyof T, T[keyof T]];
+export type ObjectEntry<T extends object> = [keyof T, T[keyof T]];
 
 /**
  * Type-safe version of Object.entries.
