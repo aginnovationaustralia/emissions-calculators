@@ -24,8 +24,8 @@ const convertToCO2e = (
 export interface Output<
   Scope extends 1 | 2 | 3,
   S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e' = 'CO2' | 'CH4' | 'N2O' | 'CO2e',
-> extends HasMetadata,
-  HasDecimalValue {
+>
+  extends HasMetadata, HasDecimalValue {
   amountCO2e: Decimal;
   name: string;
   unit: Mass<S>;
@@ -57,8 +57,9 @@ export const output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
   };
 };
 
-export interface Scope1Output<S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>
-  extends Output<1, S> {
+export interface Scope1Output<
+  S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e',
+> extends Output<1, S> {
   gas: S;
 }
 export const scope1Output = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
