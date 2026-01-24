@@ -151,9 +151,9 @@ export const realNumber = (initialValue?: Decimal): RealNumber => {
   };
 };
 
-// type VoidUnit = {
-//   __unitType: 'Void';
-// };
+export type VoidUnit = {
+  __unitType: 'Void';
+};
 
 export const voidUnit = () => ({
   __unitType: 'Void' as const,
@@ -179,4 +179,4 @@ export const stringUnit = <V extends string = string>(
   return value;
 };
 
-export type AnyUnit = NumberUnit | StringUnit;
+export type AnyUnit = NumberUnit | StringUnit | VoidUnit;

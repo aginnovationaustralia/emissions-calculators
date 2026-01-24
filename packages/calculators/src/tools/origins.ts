@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js-light';
 import { UnitArray } from './sum';
-import { AnyUnit, NumberUnit, StringUnit } from './units';
+import { AnyUnit, NumberUnit, StringUnit, voidUnit, VoidUnit } from './units';
 
 type NamedValueType = 'input' | 'variable' | 'constant' | 'output';
 
@@ -41,7 +41,7 @@ export type ConstantSelectionSource<U extends NumberUnit> = {
 };
 export type ConstantSelectionOrigin<
   U extends NumberUnit,
-// S extends string = string,
+  // S extends string = string,
 > = BaseOrigin<U> & {
   originType: 'constant_selection';
   // sourceName: string;
@@ -61,6 +61,19 @@ export const rootOrigin = <U extends AnyUnit>(
     originType: 'root',
     unit,
     ...baseOrigin,
+  };
+};
+
+export type EmptyOrigin = BaseOrigin<VoidUnit> & {
+  unit: VoidUnit;
+  originType: 'empty';
+};
+export const emptyOrigin = (baseOrigin?: NamedOrigin): EmptyOrigin => {
+  const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
+  return {
+    originType: 'empty',
+    unit: voidUnit(),
+    ...baseOrDefault,
   };
 };
 // export type TransformOrigin<
@@ -102,6 +115,8 @@ export type TypedOrigin<U extends AnyUnit> =
   | BinaryOrigin<U>
   | UnaryOrigin<U>
   | RootOrigin<U>
+  | EmptyOrigin
+  | SummedOrigin<U extends NumberUnit ? U : never>
   | ConstantSelectionOrigin<U extends NumberUnit ? U : never>;
 // | TransformOrigin<U extends StringUnit ? U : never>;
 

@@ -8,9 +8,9 @@ import { calculateScope3Herbicide } from '@/modules/scope3PurchasedHerbicidesPes
 import { calculateScope3Lime } from '@/modules/scope3PurchasedLime';
 import { multiply } from '@/tools/multiply';
 import { TypedOrigin } from '@/tools/origins';
-import { output } from '@/tools/outputs';
+import { output, scope1Output } from '@/tools/outputs';
 import { addScope1Totals, addScope23Totals } from '@/tools/totals';
-import { Mass } from '@/tools/units';
+import { mass, Mass } from '@/tools/units';
 import { GrainsCropTransformed } from '@/types/Grains/crop.input';
 import { GrainsInputTransformed } from '@/types/Grains/input';
 import { GrainsOutput } from '@/types/Grains/output';
@@ -133,6 +133,153 @@ const calculateScope3Grains = (
   };
 };
 
+type Scope1Values = {
+  fuelCO2: TypedOrigin<Mass<'CO2'>>;
+  fuelCH4: TypedOrigin<Mass<'CH4'>>;
+  fuelN2O: TypedOrigin<Mass<'N2O'>>;
+  ureaCO2: TypedOrigin<Mass<'CO2'>>;
+  limeCO2: TypedOrigin<Mass<'CO2'>>;
+  fertiliserN2O: TypedOrigin<Mass<'N2O'>>;
+  atmosphericDepositionN2O: TypedOrigin<Mass<'N2O'>>;
+  leachingAndRunoffN2O: TypedOrigin<Mass<'N2O'>>;
+  cropResidueN2O: TypedOrigin<Mass<'N2O'>>;
+  fieldBurningN2O: TypedOrigin<Mass<'N2O'>>;
+  fieldBurningCH4: TypedOrigin<Mass<'CH4'>>;
+};
+
+type Scope2Values = {
+  electricity: TypedOrigin<Mass<'CO2e'>>;
+};
+
+type Scope3Values = {
+  electricity: TypedOrigin<Mass<'CO2e'>>;
+  fertiliser: TypedOrigin<Mass<'CO2e'>>;
+  herbicide: TypedOrigin<Mass<'CO2e'>>;
+  fuel: TypedOrigin<Mass<'CO2e'>>;
+  lime: TypedOrigin<Mass<'CO2e'>>;
+};
+
+type ScopeValues = {
+  scope1: Scope1Values;
+  scope2: Scope2Values;
+  scope3: Scope3Values;
+};
+
+function createScopeOutputs({ scope1, scope2, scope3 }: ScopeValues) {
+  return {
+    scope1: {
+      fuelCO2: scope1Output('fuelCO2', scope1.fuelCO2),
+      fuelCH4: scope1Output('fuelCH4', scope1.fuelCH4),
+      fuelN2O: scope1Output('fuelN2O', scope1.fuelN2O),
+      ureaCO2: scope1Output('ureaCO2', scope1.ureaCO2),
+      limeCO2: scope1Output('limeCO2', scope1.limeCO2),
+      fertiliserN2O: scope1Output('fertiliserN2O', scope1.fertiliserN2O),
+      atmosphericDepositionN2O: scope1Output(
+        'atmosphericDepositionN2O',
+        scope1.atmosphericDepositionN2O,
+      ),
+      leachingAndRunoffN2O: scope1Output(
+        'leachingAndRunoffN2O',
+        scope1.leachingAndRunoffN2O,
+      ),
+      cropResidueN2O: scope1Output('cropResidueN2O', scope1.cropResidueN2O),
+      fieldBurningN2O: scope1Output('fieldBurningN2O', scope1.fieldBurningN2O),
+      fieldBurningCH4: scope1Output('fieldBurningCH4', scope1.fieldBurningCH4),
+    },
+    scope2: {
+      electricity: output('electricity', 2, scope2.electricity),
+    },
+    scope3: {
+      electricity: output('electricity', 3, scope3.electricity),
+      fertiliser: output('fertiliser', 3, scope3.fertiliser),
+      herbicide: output('herbicide', 3, scope3.herbicide),
+      fuel: output('fuel', 3, scope3.fuel),
+      lime: output('lime', 3, scope3.lime),
+    },
+  };
+}
+
+import { sum } from '@/tools/sum';
+
+function mergeScopeOutputs(scopeOutputs: ScopeValues[]) {
+  return {
+    scope1: {
+      fuelCO2: sum({
+        items: scopeOutputs.map((s) => s.scope1.fuelCO2),
+        unit: mass('CO2'),
+      }),
+      fuelCH4: sum({
+        items: scopeOutputs.map((s) => s.scope1.fuelCH4),
+        unit: mass('CH4'),
+      }),
+      fuelN2O: sum({
+        items: scopeOutputs.map((s) => s.scope1.fuelN2O),
+        unit: mass('N2O'),
+      }),
+      ureaCO2: sum({
+        items: scopeOutputs.map((s) => s.scope1.ureaCO2),
+        unit: mass('CO2'),
+      }),
+      limeCO2: sum({
+        items: scopeOutputs.map((s) => s.scope1.limeCO2),
+        unit: mass('CO2'),
+      }),
+      fertiliserN2O: sum({
+        items: scopeOutputs.map((s) => s.scope1.fertiliserN2O),
+        unit: mass('N2O'),
+      }),
+      atmosphericDepositionN2O: sum({
+        items: scopeOutputs.map((s) => s.scope1.atmosphericDepositionN2O),
+        unit: mass('N2O'),
+      }),
+      leachingAndRunoffN2O: sum({
+        items: scopeOutputs.map((s) => s.scope1.leachingAndRunoffN2O),
+        unit: mass('N2O'),
+      }),
+      cropResidueN2O: sum({
+        items: scopeOutputs.map((s) => s.scope1.cropResidueN2O),
+        unit: mass('N2O'),
+      }),
+      fieldBurningN2O: sum({
+        items: scopeOutputs.map((s) => s.scope1.fieldBurningN2O),
+        unit: mass('N2O'),
+      }),
+      fieldBurningCH4: sum({
+        items: scopeOutputs.map((s) => s.scope1.fieldBurningCH4),
+        unit: mass('CH4'),
+      }),
+    },
+    scope2: {
+      electricity: sum({
+        items: scopeOutputs.map((s) => s.scope2.electricity),
+        unit: mass('CO2e'),
+      }),
+    },
+    scope3: {
+      electricity: sum({
+        items: scopeOutputs.map((s) => s.scope3.electricity),
+        unit: mass('CO2e'),
+      }),
+      fertiliser: sum({
+        items: scopeOutputs.map((s) => s.scope3.fertiliser),
+        unit: mass('CO2e'),
+      }),
+      herbicide: sum({
+        items: scopeOutputs.map((s) => s.scope3.herbicide),
+        unit: mass('CO2e'),
+      }),
+      fuel: sum({
+        items: scopeOutputs.map((s) => s.scope3.fuel),
+        unit: mass('CO2e'),
+      }),
+      lime: sum({
+        items: scopeOutputs.map((s) => s.scope3.lime),
+        unit: mass('CO2e'),
+      }),
+    },
+  };
+}
+
 export function calculateGrains(
   input: GrainsInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
@@ -152,12 +299,28 @@ export function calculateGrains(
     };
   });
 
+  const mergedScopes = createScopeOutputs(mergeScopeOutputs(cropResults));
+
+  const scope1WithTotals = addScope1Totals(mergedScopes.scope1);
+  const scope2WithTotals = addScope23Totals(mergedScopes.scope2);
+  const scope3WithTotals = addScope23Totals(mergedScopes.scope3);
+
+  const net = {
+    total: {
+      value:
+        scope1WithTotals.total.value +
+        scope2WithTotals.total.value +
+        scope3WithTotals.total.value,
+    },
+  };
+
   // Carbon sequestration is covered by LULUCF guidance
 
   return {
-    // scope1: total.output.scope1,
-    // scope2: total.output.scope2,
-    // scope3: total.output.scope3,
+    scope1: scope1WithTotals,
+    scope2: scope2WithTotals,
+    scope3: scope3WithTotals,
+    net,
     intermediate: cropResults.map((crop) => {
       const scope1 = addScope1Totals(crop.scope1);
       const scope2 = addScope23Totals(crop.scope2);
