@@ -2,7 +2,7 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { selectConstant } from '@/tools/constants';
 import { multiply } from '@/tools/multiply';
-import { BinaryOrigin, SummedOrigin, TypedOrigin } from '@/tools/origins';
+import { BinaryOrigin, TypedOrigin } from '@/tools/origins';
 import { sum } from '@/tools/sum';
 import {
   energyPerVolume,
@@ -43,25 +43,32 @@ const emissionsOfGasForFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
 };
 
 const transportEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
-  dieselUse: TypedOrigin<Volume<'Fuel'>>,
-  petrolUse: TypedOrigin<Volume<'Fuel'>>,
-  lpgUse: TypedOrigin<Volume<'Fuel'>>,
+  input: {
+    dieselUse: TypedOrigin<Volume<'Fuel'>>;
+    petrolUse: TypedOrigin<Volume<'Fuel'>>;
+    lpg: TypedOrigin<Volume<'Fuel'>>;
+  },
   constants: ConstantsForGrainsCalculator,
   gasType: GasType,
 ) => {
   const dieselEmissions = emissionsOfGasForFuel(
-    dieselUse,
+    input.dieselUse,
     constants,
     'DIESEL',
     gasType,
   );
   const petrolEmissions = emissionsOfGasForFuel(
-    petrolUse,
+    input.petrolUse,
     constants,
     'PETROL',
     gasType,
   );
-  const lpgEmissions = emissionsOfGasForFuel(lpgUse, constants, 'LPG', gasType);
+  const lpgEmissions = emissionsOfGasForFuel(
+    input.lpg,
+    constants,
+    'LPG',
+    gasType,
+  );
   return sum([dieselEmissions, petrolEmissions, lpgEmissions], {
     name: `EtransGHG${gasType}`,
     valueType: 'variable',
@@ -80,32 +87,14 @@ export const calculateScope1Fuel = (
 
   // 6.1.1
   // Line 55
-  const fuelCO2: SummedOrigin<Mass<'CO2'>> = transportEmissionsForGas(
-    crop.dieselUse,
-    crop.petrolUse,
-    crop.lpg,
-    constants,
-    'CO2',
-  );
+  const transportFuelCO2 = transportEmissionsForGas(crop, constants, 'CO2');
+  const transportFuelCH4 = transportEmissionsForGas(crop, constants, 'CH4');
+  const transportFuelN2O = transportEmissionsForGas(crop, constants, 'N2O');
 
-  const fuelCH4: SummedOrigin<Mass<'CH4'>> = transportEmissionsForGas(
-    crop.dieselUse,
-    crop.petrolUse,
-    crop.lpg,
-    constants,
-    'CH4',
-  );
-
-  const fuelN2O: SummedOrigin<Mass<'N2O'>> = transportEmissionsForGas(
-    crop.dieselUse,
-    crop.petrolUse,
-    crop.lpg,
-    constants,
-    'N2O',
-  );
+  // TODO: Stationary fuel emissions
   return {
-    fuelCO2,
-    fuelCH4,
-    fuelN2O,
+    fuelCO2: sum([transportFuelCO2]),
+    fuelCH4: sum([transportFuelCH4]),
+    fuelN2O: sum([transportFuelN2O]),
   };
 };
