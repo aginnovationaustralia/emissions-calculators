@@ -6,6 +6,7 @@ type NamedValueType = 'input' | 'variable' | 'constant' | 'output';
 export type NamedOrigin = {
   valueType: NamedValueType;
   name: string;
+  references?: string[];
 };
 export type IntermediateOrigin = {
   valueType: 'intermediate';

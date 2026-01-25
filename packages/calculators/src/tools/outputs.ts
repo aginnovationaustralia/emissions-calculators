@@ -2,8 +2,12 @@ import { entriesFromObject } from '@/calculators/common/tools/object';
 import Decimal from 'decimal.js-light';
 import { HasMetadata, ValueMetadata } from './metadata';
 import { Origin } from './origins';
-import { isVoid, mass, Mass, VoidUnit } from './units';
+import { AnyUnit, isVoid, mass, Mass, VoidUnit } from './units';
 import { DecimalValue } from './values';
+
+export const makeUnique = <T>(a: T[]): T[] => {
+  return [...new Set(a)];
+};
 
 type HasDecimalValue = {
   value: Decimal;
@@ -33,8 +37,10 @@ export interface Output<
   from: Origin<Mass<S> | VoidUnit>;
   valueType: 'output';
   originType: 'unary';
+  references: string[];
 }
 
+// TODO: Unify these 2 functions
 export const output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
   name: string,
   scope: Scope,
@@ -54,6 +60,7 @@ export const output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
     from,
     metadata,
     unit: mass(gas),
+    references: makeUnique(collectReferences(from)),
   };
 };
 
@@ -79,6 +86,7 @@ export const scope1Output = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
     amountCO2e,
     from,
     unit: mass(gas),
+    references: makeUnique(collectReferences(from)),
   };
 };
 
@@ -92,4 +100,32 @@ export const outputsToNumbers = <
     key as K,
     value.value().toNumber(),
   ]) as Record<K, number>;
+};
+
+export const collectReferences = <O extends Origin<AnyUnit>>(
+  origin: O,
+): string[] => {
+  const baseResults =
+    origin.valueType === 'intermediate' ? [] : (origin.references ?? []);
+  switch (origin.originType) {
+    case 'unary':
+      return baseResults.concat(collectReferences(origin.from));
+    case 'binary':
+      return baseResults.concat(
+        collectReferences(origin.left),
+        collectReferences(origin.right),
+      );
+    case 'empty':
+      return baseResults;
+    case 'root':
+      return baseResults;
+    case 'sum':
+      return baseResults.concat(origin.from.flatMap(collectReferences));
+    case 'constant_selection':
+      return baseResults.concat(
+        origin.selectors
+          .filter((s) => typeof s !== 'string')
+          .flatMap(collectReferences),
+      );
+  }
 };

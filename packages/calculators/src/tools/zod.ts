@@ -4,7 +4,7 @@ export const outputKey = (description?: string) => {
   return z
     .strictObject({
       value: z.number(),
-      reference: z.string(),
+      references: z.array(z.string()),
     })
     .meta({ description });
 };

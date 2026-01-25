@@ -24,7 +24,7 @@ export const addScope1Totals = <
   // O extends Record<K, { value: Decimal; reference: string }> = Record<K, { value: Decimal; reference: string }>,
 >(
   outputs: T,
-): Record<K, { value: number; reference: string }> & {
+): Record<K, { value: number; references: string[] }> & {
   totalN2O: { value: number };
   totalCH4: { value: number };
   totalCO2: { value: number };
@@ -32,10 +32,10 @@ export const addScope1Totals = <
 } => {
   const entries: ObjectEntry<T>[] = entriesFromObject(outputs);
 
-  const foo: ObjectEntry<Record<K, { value: number; reference: string }>>[] =
+  const foo: ObjectEntry<Record<K, { value: number; references: string[] }>>[] =
     entries.map(([k, value]) => [
       k as K,
-      { value: value.amountCO2e.toNumber(), reference: value.name },
+      { value: value.amountCO2e.toNumber(), references: value.references },
     ]);
 
   const translatedOutputs = objectFromEntries(foo);
@@ -76,15 +76,15 @@ export const addScope23Totals = <
   K extends keyof T & string,
 >(
   outputs: T,
-): Record<K, { value: number; reference: string }> & {
+): Record<K, { value: number; references: string[] }> & {
   total: { value: number };
 } => {
   const entries: ObjectEntry<T>[] = entriesFromObject(outputs);
 
-  const foo: ObjectEntry<Record<K, { value: number; reference: string }>>[] =
+  const foo: ObjectEntry<Record<K, { value: number; references: string[] }>>[] =
     entries.map(([k, value]) => [
       k as K,
-      { value: value.amountCO2e.toNumber(), reference: value.name },
+      { value: value.amountCO2e.toNumber(), references: value.references },
     ]);
 
   const translatedOutputs = objectFromEntries(foo);

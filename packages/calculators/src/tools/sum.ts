@@ -1,4 +1,10 @@
-import { BaseOrigin, Origin, SummedOrigin, TypedOrigin } from './origins';
+import Decimal from 'decimal.js-light';
+import {
+  IntermediateOrNamedOrigin,
+  Origin,
+  SummedOrigin,
+  TypedOrigin,
+} from './origins';
 import { AnyUnit, NumberUnit, voidUnit } from './units';
 
 export type UnitArray<U extends AnyUnit, O extends Origin<U> = Origin<U>> = {
@@ -14,15 +20,22 @@ type ExtractOriginUnit<T> = T extends { unit: infer U extends NumberUnit }
 // Sum function with type inference to preserve specific unit types
 export function sum<U extends TypedOrigin<NumberUnit>>(
   array: U[],
-  baseOrigin?: BaseOrigin<ExtractOriginUnit<U>>,
+  baseOrigin?: IntermediateOrNamedOrigin,
 ): SummedOrigin<ExtractOriginUnit<U>>;
 
 export function sum<N extends NumberUnit, O extends Origin<N>>(
   array: O[],
-  baseOrigin?: BaseOrigin<N>,
+  baseOrigin?: IntermediateOrNamedOrigin,
 ): SummedOrigin<N> {
   const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
-  const unit = array.length > 0 ? array[0].unit : voidUnit();
+  const inheritedUnit = array.length > 0 ? array[0].unit : voidUnit();
+  const unit = {
+    ...inheritedUnit,
+    value: array.reduce(
+      (acc, curr) => acc.add(curr.unit.value),
+      new Decimal(0),
+    ),
+  };
   return {
     originType: 'sum',
     from: array,

@@ -10,7 +10,7 @@ import { multiply } from '@/tools/multiply';
 import { TypedOrigin } from '@/tools/origins';
 import { output, scope1Output } from '@/tools/outputs';
 import { addScope1Totals, addScope23Totals } from '@/tools/totals';
-import { Mass, VoidUnit } from '@/tools/units';
+import { Mass } from '@/tools/units';
 import { GrainsCropTransformed } from '@/types/Grains/crop.input';
 import { GrainsInputTransformed } from '@/types/Grains/input';
 import { GrainsOutput } from '@/types/Grains/output';
@@ -134,29 +134,29 @@ const calculateScope3Grains = (
 };
 
 type Scope1Values = {
-  fuelCO2: TypedOrigin<Mass<'CO2'> | VoidUnit>;
-  fuelCH4: TypedOrigin<Mass<'CH4'> | VoidUnit>;
-  fuelN2O: TypedOrigin<Mass<'N2O'> | VoidUnit>;
-  ureaCO2: TypedOrigin<Mass<'CO2'> | VoidUnit>;
-  limeCO2: TypedOrigin<Mass<'CO2'> | VoidUnit>;
-  fertiliserN2O: TypedOrigin<Mass<'N2O'> | VoidUnit>;
-  atmosphericDepositionN2O: TypedOrigin<Mass<'N2O'> | VoidUnit>;
-  leachingAndRunoffN2O: TypedOrigin<Mass<'N2O'> | VoidUnit>;
-  cropResidueN2O: TypedOrigin<Mass<'N2O'> | VoidUnit>;
-  fieldBurningN2O: TypedOrigin<Mass<'N2O'> | VoidUnit>;
-  fieldBurningCH4: TypedOrigin<Mass<'CH4'> | VoidUnit>;
+  fuelCO2: TypedOrigin<Mass<'CO2'>>;
+  fuelCH4: TypedOrigin<Mass<'CH4'>>;
+  fuelN2O: TypedOrigin<Mass<'N2O'>>;
+  ureaCO2: TypedOrigin<Mass<'CO2'>>;
+  limeCO2: TypedOrigin<Mass<'CO2'>>;
+  fertiliserN2O: TypedOrigin<Mass<'N2O'>>;
+  atmosphericDepositionN2O: TypedOrigin<Mass<'N2O'>>;
+  leachingAndRunoffN2O: TypedOrigin<Mass<'N2O'>>;
+  cropResidueN2O: TypedOrigin<Mass<'N2O'>>;
+  fieldBurningN2O: TypedOrigin<Mass<'N2O'>>;
+  fieldBurningCH4: TypedOrigin<Mass<'CH4'>>;
 };
 
 type Scope2Values = {
-  electricity: TypedOrigin<Mass<'CO2e'> | VoidUnit>;
+  electricity: TypedOrigin<Mass<'CO2e'>>;
 };
 
 type Scope3Values = {
-  electricity: TypedOrigin<Mass<'CO2e'> | VoidUnit>;
-  fertiliser: TypedOrigin<Mass<'CO2e'> | VoidUnit>;
-  herbicide: TypedOrigin<Mass<'CO2e'> | VoidUnit>;
-  fuel: TypedOrigin<Mass<'CO2e'> | VoidUnit>;
-  lime: TypedOrigin<Mass<'CO2e'> | VoidUnit>;
+  electricity: TypedOrigin<Mass<'CO2e'>>;
+  fertiliser: TypedOrigin<Mass<'CO2e'>>;
+  herbicide: TypedOrigin<Mass<'CO2e'>>;
+  fuel: TypedOrigin<Mass<'CO2e'>>;
+  lime: TypedOrigin<Mass<'CO2e'>>;
 };
 
 type ScopeValues = {
@@ -165,6 +165,7 @@ type ScopeValues = {
   scope3: Scope3Values;
 };
 
+// TODO: Implement this using an output schema object that lets us know the names of all the keys to traverse
 function createScopeOutputs({ scope1, scope2, scope3 }: ScopeValues) {
   return {
     scope1: {
@@ -201,6 +202,7 @@ function createScopeOutputs({ scope1, scope2, scope3 }: ScopeValues) {
 
 import { sum } from '@/tools/sum';
 
+// TODO: Implement this using an output schema object that lets us know the names of all the keys to traverse
 function mergeScopeOutputs(scopeOutputs: ScopeValues[]) {
   return {
     scope1: {
@@ -251,6 +253,11 @@ export function calculateGrains(
       },
     };
   });
+
+  // console.dir(
+  //   cropResults.map((c) => c.scope1.fuelCO2),
+  //   { depth: 4 },
+  // );
 
   const mergedScopes = createScopeOutputs(mergeScopeOutputs(cropResults));
 
