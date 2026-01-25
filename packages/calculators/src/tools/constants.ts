@@ -202,7 +202,7 @@ export function selectConstant<
 // Implementation
 
 export function selectConstant<TOut extends NumberUnit>(
-  constants: Record<string, unknown>,
+  constants: Record<string, unknown> & { name: string },
   getValue: (value: unknown) => TOut,
   selector1: string | RootOrigin<StringUnit>,
   selector2?: string | RootOrigin<StringUnit>,
@@ -231,7 +231,7 @@ export function selectConstant<TOut extends NumberUnit>(
 
   return {
     valueType: 'constant',
-    name: selectors.join('.'),
+    name: `${constants.name}[${selectors.join('.')}]`,
     unit: value,
     originType: 'constant_selection',
     selectors,

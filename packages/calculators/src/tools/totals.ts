@@ -4,7 +4,7 @@ import {
   objectFromEntries,
 } from '@/calculators/common/tools/object';
 import { Decimal } from 'decimal.js-light';
-import { Output } from './outputs';
+import { ConstantDefinition, Output } from './outputs';
 
 const isN2O = (output: Output<1>): output is Output<1, 'N2O'> => {
   return output.unit.substance === 'N2O';
@@ -24,7 +24,10 @@ export const addScope1Totals = <
   // O extends Record<K, { value: Decimal; reference: string }> = Record<K, { value: Decimal; reference: string }>,
 >(
   outputs: T,
-): Record<K, { value: number; references: string[] }> & {
+): Record<
+  K,
+  { value: number; references: string[]; constants: ConstantDefinition[] }
+> & {
   totalN2O: { value: number };
   totalCH4: { value: number };
   totalCO2: { value: number };
@@ -32,11 +35,19 @@ export const addScope1Totals = <
 } => {
   const entries: ObjectEntry<T>[] = entriesFromObject(outputs);
 
-  const foo: ObjectEntry<Record<K, { value: number; references: string[] }>>[] =
-    entries.map(([k, value]) => [
-      k as K,
-      { value: value.amountCO2e.toNumber(), references: value.references },
-    ]);
+  const foo: ObjectEntry<
+    Record<
+      K,
+      { value: number; references: string[]; constants: ConstantDefinition[] }
+    >
+  >[] = entries.map(([k, value]) => [
+    k as K,
+    {
+      value: value.amountCO2e.toNumber(),
+      references: value.references,
+      constants: value.constants,
+    },
+  ]);
 
   const translatedOutputs = objectFromEntries(foo);
 
@@ -76,16 +87,27 @@ export const addScope23Totals = <
   K extends keyof T & string,
 >(
   outputs: T,
-): Record<K, { value: number; references: string[] }> & {
+): Record<
+  K,
+  { value: number; references: string[]; constants: ConstantDefinition[] }
+> & {
   total: { value: number };
 } => {
   const entries: ObjectEntry<T>[] = entriesFromObject(outputs);
 
-  const foo: ObjectEntry<Record<K, { value: number; references: string[] }>>[] =
-    entries.map(([k, value]) => [
-      k as K,
-      { value: value.amountCO2e.toNumber(), references: value.references },
-    ]);
+  const foo: ObjectEntry<
+    Record<
+      K,
+      { value: number; references: string[]; constants: ConstantDefinition[] }
+    >
+  >[] = entries.map(([k, value]) => [
+    k as K,
+    {
+      value: value.amountCO2e.toNumber(),
+      references: value.references,
+      constants: value.constants,
+    },
+  ]);
 
   const translatedOutputs = objectFromEntries(foo);
 

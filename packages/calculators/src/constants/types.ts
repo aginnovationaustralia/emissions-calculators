@@ -753,7 +753,11 @@ export type RiceConstants = {
   SF_PRESEASON_WATER_REGIME: Record<RicePreseasonFloodingPeriod, number>;
 };
 
-export type CommonConstants = {
+type NamedConstants = {
+  name: string;
+};
+
+export type CommonConstants = NamedConstants & {
   FEED_PURCHASED: {
     grain: { TotalGHG: number };
     cottonseed: { TotalGHG: number };

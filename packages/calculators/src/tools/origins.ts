@@ -42,12 +42,13 @@ export type ConstantSelectionSource<U extends NumberUnit> = {
 export type ConstantSelectionOrigin<
   U extends NumberUnit,
   // S extends string = string,
-> = BaseOrigin<U> & {
-  originType: 'constant_selection';
-  // sourceName: string;
-  selectors: (TypedOrigin<StringUnit> | string)[];
-  // source: ConstantSelectionSource<U>;
-};
+> = BaseOrigin<U> &
+  NamedOrigin & {
+    originType: 'constant_selection';
+    // sourceName: string;
+    selectors: (TypedOrigin<StringUnit> | string)[];
+    // source: ConstantSelectionSource<U>;
+  };
 
 export type RootOrigin<U extends AnyUnit> = NamedOrigin & {
   unit: U;

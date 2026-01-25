@@ -2,11 +2,19 @@ import { entriesFromObject } from '@/calculators/common/tools/object';
 import Decimal from 'decimal.js-light';
 import { HasMetadata, ValueMetadata } from './metadata';
 import { Origin } from './origins';
-import { AnyUnit, isVoid, mass, Mass, VoidUnit } from './units';
+import { AnyUnit, formatUnit, isVoid, mass, Mass, VoidUnit } from './units';
 import { DecimalValue } from './values';
 
 export const makeUnique = <T>(a: T[]): T[] => {
   return [...new Set(a)];
+};
+export const makeUniqueByName = <T extends { name: string }>(a: T[]): T[] => {
+  return a.filter((v, i, s) => s.findIndex((t) => t.name === v.name) === i);
+};
+
+export type ConstantDefinition = {
+  name: string;
+  value: number;
 };
 
 type HasDecimalValue = {
@@ -38,6 +46,7 @@ export interface Output<
   valueType: 'output';
   originType: 'unary';
   references: string[];
+  constants: ConstantDefinition[];
 }
 
 // TODO: Unify these 2 functions
@@ -61,6 +70,7 @@ export const output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
     metadata,
     unit: mass(gas),
     references: makeUnique(collectReferences(from)),
+    constants: makeUniqueByName(collectConstants(from)),
   };
 };
 
@@ -87,6 +97,7 @@ export const scope1Output = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
     from,
     unit: mass(gas),
     references: makeUnique(collectReferences(from)),
+    constants: makeUniqueByName(collectConstants(from)),
   };
 };
 
@@ -126,6 +137,40 @@ export const collectReferences = <O extends Origin<AnyUnit>>(
         origin.selectors
           .filter((s) => typeof s !== 'string')
           .flatMap(collectReferences),
+      );
+  }
+};
+
+export const collectConstants = <O extends Origin<AnyUnit>>(
+  origin: O,
+): ConstantDefinition[] => {
+  const constants: ConstantDefinition[] = [];
+  if (origin.originType === 'constant_selection') {
+    const currentConstant = {
+      name: origin.name,
+      value: origin.unit.value.toNumber(),
+      units: formatUnit(origin.unit),
+    };
+    constants.push(currentConstant);
+  }
+  switch (origin.originType) {
+    case 'unary':
+      return collectConstants(origin.from);
+    case 'binary':
+      return collectConstants(origin.left).concat(
+        collectConstants(origin.right),
+      );
+    case 'empty':
+      return [];
+    case 'root':
+      return [];
+    case 'sum':
+      return origin.from.flatMap(collectConstants);
+    case 'constant_selection':
+      return constants.concat(
+        origin.selectors
+          .filter((s) => typeof s !== 'string')
+          .flatMap(collectConstants),
       );
   }
 };

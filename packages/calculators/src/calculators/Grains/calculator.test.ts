@@ -20,6 +20,38 @@ describe('Grains Calculator', () => {
 
       expect(fuelCO2.value).toEqual(987.5);
       expect(fuelCO2.references).toEqual(['6.1.1 (55)']);
+      expect(fuelCO2.constants).toEqual([
+        {
+          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.DIESEL.SCOPE1_EF.CO2]',
+          value: 69.9,
+          units: 'Mass(CO2) / Energy',
+        },
+        {
+          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.DIESEL.ENERGY_CONTENT_FACTOR]',
+          value: 38.6,
+          units: 'Energy / Volume(Fuel)',
+        },
+        {
+          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.PETROL.SCOPE1_EF.CO2]',
+          value: 67.4,
+          units: 'Mass(CO2) / Energy',
+        },
+        {
+          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.PETROL.ENERGY_CONTENT_FACTOR]',
+          value: 34.2,
+          units: 'Energy / Volume(Fuel)',
+        },
+        {
+          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.LPG.SCOPE1_EF.CO2]',
+          value: 60.2,
+          units: 'Mass(CO2) / Energy',
+        },
+        {
+          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.LPG.ENERGY_CONTENT_FACTOR]',
+          value: 26.2,
+          units: 'Energy / Volume(Fuel)',
+        },
+      ]);
     });
   });
 });

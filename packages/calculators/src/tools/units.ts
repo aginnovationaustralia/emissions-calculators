@@ -77,6 +77,9 @@ export const volume = <S extends Substance>(
     value: initialValue ?? new Decimal(0),
   };
 };
+export const isVolume = (unit: NumberUnit): unit is Volume<Substance> => {
+  return unit.__unitType === 'Volume';
+};
 
 export type Energy = NumberUnitBase & {
   __unitType: 'Energy';
@@ -86,6 +89,9 @@ export const energy = (initialValue?: Decimal): Energy => {
     __unitType: 'Energy',
     value: initialValue ?? new Decimal(0),
   };
+};
+export const isEnergy = (unit: NumberUnit): unit is Energy => {
+  return unit.__unitType === 'Energy';
 };
 
 export type MassPerEnergy<T extends Substance> = NumberUnitBase & {
@@ -102,6 +108,12 @@ export const massPerEnergy = <S extends Substance>(
     value: initialValue ?? new Decimal(0),
   };
 };
+export const isMassPerEnergy = (
+  unit: NumberUnit,
+): unit is MassPerEnergy<Substance> => {
+  return unit.__unitType === 'MassPerEnergy';
+};
+
 export type EnergyPerVolume<S extends Substance> = NumberUnitBase & {
   __unitType: 'EnergyPerVolume';
   substance: S;
@@ -115,6 +127,11 @@ export const energyPerVolume = <S extends Substance>(
     substance,
     value: initialValue ?? new Decimal(0),
   };
+};
+export const isEnergyPerVolume = (
+  unit: NumberUnit,
+): unit is EnergyPerVolume<Substance> => {
+  return unit.__unitType === 'EnergyPerVolume';
 };
 
 export type MassPerVolume<
@@ -139,6 +156,11 @@ export const massPerVolume = <
     volume,
     value: initialValue ?? new Decimal(0),
   };
+};
+export const isMassPerVolume = (
+  unit: NumberUnit,
+): unit is MassPerVolume<Substance, Substance> => {
+  return unit.__unitType === 'MassPerVolume';
 };
 
 export type RealNumber = NumberUnitBase & {
@@ -188,4 +210,36 @@ export const stringUnit = <V extends string = string>(
   return value;
 };
 
+export const isStringUnit = (unit: AnyUnit): unit is StringUnit => {
+  return typeof unit === 'string';
+};
+
 export type AnyUnit = NumberUnit | StringUnit | VoidUnit;
+
+export function formatUnit(unit: AnyUnit): string {
+  if (isVoid(unit)) {
+    return 'Void';
+  }
+  if (isStringUnit(unit)) {
+    return `string: (${unit})`;
+  }
+
+  switch (unit.__unitType) {
+    case 'MassPerMass':
+      return `Mass(${unit.snum}) / Mass(${unit.sdenom})`;
+    case 'Mass':
+      return `Mass(${unit.substance})`;
+    case 'Volume':
+      return `Volume(${unit.substance})`;
+    case 'Energy':
+      return 'energy';
+    case 'RealNumber':
+      return 'real number';
+    case 'MassPerEnergy':
+      return `Mass(${unit.substance}) / Energy`;
+    case 'EnergyPerVolume':
+      return `Energy / Volume(${unit.substance})`;
+    case 'MassPerVolume':
+      return `Mass(${unit.mass}) / Volume(${unit.volume})`;
+  }
+}

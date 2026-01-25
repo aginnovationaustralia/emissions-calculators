@@ -5,6 +5,7 @@ export const outputKey = (description?: string) => {
     .strictObject({
       value: z.number(),
       references: z.array(z.string()),
+      constants: z.array(z.object({ name: z.string(), value: z.number() })),
     })
     .meta({ description });
 };

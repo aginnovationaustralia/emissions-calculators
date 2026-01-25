@@ -2627,6 +2627,8 @@ export const cropConstants: CropConstants = {
 };
 
 export const commonConstants: CommonConstants = {
+  name: 'COMMON',
+
   /**
    * @description Emissions factor for feed purchased, in kg CO2-e/kg
    * @units kg CO2-e/kg
