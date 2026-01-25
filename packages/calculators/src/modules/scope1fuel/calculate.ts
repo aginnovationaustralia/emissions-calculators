@@ -1,8 +1,8 @@
-import { selectConstant } from '@/calculators/Brocessing/types/constants';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
+import { selectConstant } from '@/tools/constants';
 import { multiply } from '@/tools/multiply';
-import { SummedOrigin, TypedOrigin } from '@/tools/origins';
+import { BinaryOrigin, SummedOrigin, TypedOrigin } from '@/tools/origins';
 import { sum } from '@/tools/sum';
 import {
   energyPerVolume,
@@ -19,7 +19,7 @@ const emissionsOfGasForFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   constants: ConstantsForGrainsCalculator,
   fuelType: 'DIESEL' | 'PETROL' | 'LPG',
   gasType: GasType,
-) => {
+): BinaryOrigin<Mass<GasType>> => {
   const efForFuel = selectConstant(
     constants.COMMON,
     (value) => massPerEnergy(gasType, new Decimal(value)),
