@@ -17,6 +17,6 @@ export const WildCatchFisheryBaitPurchaseSchema = object({
   }),
 });
 
-export type WildCatchFisheryBaitPurchase = z.infer<
+export type WildCatchFisheryBaitPurchase = z.input<
   typeof WildCatchFisheryBaitPurchaseSchema
 >;

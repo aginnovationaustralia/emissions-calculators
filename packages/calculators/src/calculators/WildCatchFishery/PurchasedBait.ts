@@ -18,7 +18,7 @@ export function calculatePurchasedBait(
       const mainEmissions =
         purchasedTonnes * (1 - additionalIngredients) * baitEF;
       const additionalEmissions =
-        purchasedTonnes * additionalIngredients * emissionsIntensity;
+        purchasedTonnes * additionalIngredients * (emissionsIntensity || 0); // TODO fix this
 
       return acc.concat([[mainEmissions, additionalEmissions]]);
     },

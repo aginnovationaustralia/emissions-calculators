@@ -9,4 +9,4 @@ export const ProcessingInputSchema = calculatorInput('Processing', {
   products: z.array(ProductProcessingInputSchema),
 });
 
-export type ProcessingInput = z.infer<typeof ProcessingInputSchema>;
+export type ProcessingInput = z.input<typeof ProcessingInputSchema>;

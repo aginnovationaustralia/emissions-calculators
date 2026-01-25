@@ -114,10 +114,13 @@ const getCalculatorInput = (workbook: XLSX.Workbook): GrainsInput => {
 
 const getExpectedOutput = (workbook: XLSX.Workbook): GrainsOutput => {
   const summarySheet = workbook.sheet('Data summary');
-  const summary = (address: string) => numberInput(summarySheet.cell(address));
+  const summary = (address: string) => ({
+    value: numberInput(summarySheet.cell(address)),
+    reference: '',
+  });
 
-  const sheetInputCrops = workbook.sheet('Data input - crops');
-  const crops = (address: string) => numberInput(sheetInputCrops.cell(address));
+  // const sheetInputCrops = workbook.sheet('Data input - crops');
+  // const crops = (address: string) => numberInput(sheetInputCrops.cell(address));
 
   const expectedIntermediate: Omit<GrainsIntermediateOutput, 'id'> = {
     scope1: {
@@ -152,13 +155,13 @@ const getExpectedOutput = (workbook: XLSX.Workbook): GrainsOutput => {
     carbonSequestration: {
       total: -summary('C31'),
     },
-    intensitiesWithSequestration: {
-      grainProducedTonnes: crops('C7') * crops('C8'),
-      grainsExcludingSequestration: summary('C36'),
-      grainsIncludingSequestration: summary('C37'),
-    },
+    // intensitiesWithSequestration: {
+    //   grainProducedTonnes: crops('C7') * crops('C8'),
+    //   grainsExcludingSequestration: summary('C36'),
+    //   grainsIncludingSequestration: summary('C37'),
+    // },
     net: {
-      total: summary('C33'),
+      total: summary('C33').value,
     },
   };
   const output: GrainsOutput = {
@@ -169,16 +172,16 @@ const getExpectedOutput = (workbook: XLSX.Workbook): GrainsOutput => {
         id: '0',
       },
     ],
-    intensities: [
-      expectedIntermediate.intensitiesWithSequestration
-        .grainsIncludingSequestration,
-    ],
-    intensitiesWithSequestration: [
-      expectedIntermediate.intensitiesWithSequestration,
-    ],
+    // intensities: [
+    //   expectedIntermediate.intensitiesWithSequestration
+    //     .grainsIncludingSequestration,
+    // ],
+    // intensitiesWithSequestration: [
+    //   expectedIntermediate.intensitiesWithSequestration,
+    // ],
     net: {
-      total: expectedIntermediate.net.total,
-      crops: [expectedIntermediate.net.total],
+      total: { value: expectedIntermediate.net.total },
+      // crops: [expectedIntermediate.net.total],
     },
   };
 

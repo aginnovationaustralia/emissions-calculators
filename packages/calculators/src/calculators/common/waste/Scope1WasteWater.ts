@@ -1,14 +1,8 @@
-import { selectConstant } from '@/calculators/Brocessing/types/constants';
-import { multiply } from '@/calculators/Brocessing/types/multiply';
-import { Origin } from '@/calculators/Brocessing/types/origins';
-import { sum } from '@/calculators/Brocessing/types/sum';
-import { mass, Mass, realNumber } from '@/calculators/Brocessing/types/units';
-import { FluidWasteInputTransformed } from '@/types/common/fluid-waste.input';
-import Decimal from 'decimal.js-light';
+import { FluidWasteInput } from '@/types/common/fluid-waste.input';
 import { ExecutionContext } from '../../executionContext';
 
 export function calculateScope1WasteWater(
-  fluidWastes: FluidWasteInputTransformed[],
+  fluidWastes: FluidWasteInput[],
   { constants }: ExecutionContext,
 ) {
   const { WASTEWATER } = constants.COMMON;
@@ -20,7 +14,7 @@ export function calculateScope1WasteWater(
     F_SLUDGE_FRACTION,
   } = WASTEWATER;
 
-  const amounts: Origin<Mass<'CO2e'>>[] = fluidWastes.map((fluidWaste) => {
+  const total = fluidWastes.reduce((acc, fluidWaste) => {
     const {
       averageInletCOD,
       averageOutletCOD,
@@ -29,35 +23,7 @@ export function calculateScope1WasteWater(
       fluidWasteTreatmentType,
     } = fluidWaste;
 
-    // const treatmentEF = TREATMENT_EF[fluidWasteTreatmentType];
-    const treatmentEF = selectConstant(
-      constants.COMMON,
-      (value) => realNumber(new Decimal(value)),
-      'WASTEWATER',
-      'TREATMENT_EF',
-      fluidWasteTreatmentType,
-    );
-
-    const sludgeFraction = selectConstant(
-      constants.COMMON,
-      (value) => realNumber(new Decimal(value)),
-      'WASTEWATER',
-      'F_SLUDGE_FRACTION',
-    );
-
-    const nonSludgeFraction = subtract(
-      realNumber(new Decimal(1)),
-      sludgeFraction,
-    );
-
-    const oxygenPerVolume = subtract(
-      multiply(averageInletCOD, nonSludgeFraction),
-      averageOutletCOD,
-    );
-
-    const emissionsPerVolume = multiply(treatmentEF, oxygenPerVolume);
-
-    const partA = multiply(wasteWaterGenerated, emissionsPerVolume);
+    const treatmentEF = TREATMENT_EF[fluidWasteTreatmentType];
 
     // resulting units is tonnes CO2e
     const subTotal =
@@ -71,8 +37,5 @@ export function calculateScope1WasteWater(
     return acc + subTotal;
   }, 0);
 
-  return sum({
-    items: amounts,
-    unit: mass('CO2e'),
-  });
+  return total;
 }

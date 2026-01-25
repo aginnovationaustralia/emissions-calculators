@@ -7,3 +7,7 @@ export const AquacultureInputSchema = calculatorInput('Aquaculture', {
 });
 
 export type AquacultureInput = z.infer<typeof AquacultureInputSchema>;
+
+export type AquacultureInputTransformed = z.output<
+  typeof AquacultureInputSchema
+>;

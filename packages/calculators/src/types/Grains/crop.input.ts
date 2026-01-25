@@ -86,5 +86,5 @@ export const GrainsCropSchema = singleEnterpriseInput('Grains', {
     .transform((val) => input('lpg', volume('Fuel', new Decimal(val)))),
 });
 
-export type GrainsCrop = z.infer<typeof GrainsCropSchema>;
+export type GrainsCrop = z.input<typeof GrainsCropSchema>;
 export type GrainsCropTransformed = z.output<typeof GrainsCropSchema>;

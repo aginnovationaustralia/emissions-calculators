@@ -160,6 +160,14 @@ export const voidUnit = () => ({
   initialValue: new Decimal(0),
 });
 
+export const isVoid = (unit: AnyUnit): unit is VoidUnit => {
+  return (
+    typeof unit === 'object' &&
+    '__unitType' in unit &&
+    unit.__unitType === 'Void'
+  );
+};
+
 export type NumberUnit =
   | MassPerMass<Substance, Substance>
   | Mass<Substance>

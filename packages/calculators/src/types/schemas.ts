@@ -1,4 +1,5 @@
 import { core, z } from 'zod';
+import { SequestrationTotalOutputSchema } from './sequestration.total.output';
 
 export const deprecated = (description: string, deprecationNote?: string) => {
   return {
@@ -83,7 +84,7 @@ export const intermediateEmissionsOutput = <
       description: `Unique identifier for this ${calculatorName} activity`,
     }),
     ...shape,
-    // carbonSequestration: SequestrationTotalOutputSchema,
+    carbonSequestration: SequestrationTotalOutputSchema,
   }).meta({
     description: `Intermediate emissions calculation output for the ${calculatorName} calculator`,
   });

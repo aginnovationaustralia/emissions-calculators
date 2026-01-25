@@ -16,5 +16,5 @@ export const GrainsInputSchema = singleEnterpriseInput('Grains', {
   vegetation: z.array(CropVegetationSchema),
 });
 
-export type GrainsInput = z.infer<typeof GrainsInputSchema>;
+export type GrainsInput = z.input<typeof GrainsInputSchema>;
 export type GrainsInputTransformed = z.output<typeof GrainsInputSchema>;

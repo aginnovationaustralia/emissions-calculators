@@ -1,6 +1,9 @@
 import { calculateGrains } from '@/calculators/Grains/calculator';
 import { GrainsCrop } from '@/types/Grains/crop.input';
-import { GrainsInput } from '@/types/Grains/input';
+import {
+  GrainsInputSchema,
+  GrainsInputTransformed,
+} from '@/types/Grains/input';
 import { testContext } from '../common/context';
 import { executeEmissionsSpec, KeyValuePairs } from '../common/emissions';
 
@@ -74,15 +77,16 @@ const emptyGrainsCrop: GrainsCrop = {
   lpg: 0,
 };
 
-const emptyInputWithEnterprise: GrainsInput = {
-  state: 'vic',
-  crops: [emptyGrainsCrop],
-  electricityRenewable: 0,
-  electricityUse: 0,
-  vegetation: [],
-};
+const emptyInputWithEnterprise: GrainsInputTransformed =
+  GrainsInputSchema.parse({
+    state: 'vic',
+    crops: [emptyGrainsCrop],
+    electricityRenewable: 0,
+    electricityUse: 0,
+    vegetation: [],
+  });
 
-const emptyInput: GrainsInput = {
+const emptyInput: GrainsInputTransformed = {
   state: 'vic',
   crops: [],
   electricityRenewable: 0,

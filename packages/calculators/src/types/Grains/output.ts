@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { NetOutputSchema } from '../common/net.output';
+import { NetOutputSchema } from '../common/net.output.new';
 import { emissionsOutput } from '../schemas';
 import { GrainsIntermediateOutputSchema } from './intermediate.output';
 import { GrainsScope1OutputSchema } from './scope1.output';

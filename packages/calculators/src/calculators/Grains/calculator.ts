@@ -322,13 +322,12 @@ export function calculateGrains(
     scope3: scope3WithTotals,
     net,
     intermediate: cropResults.map((crop) => {
-      const scope1 = addScope1Totals(crop.scope1);
-      const scope2 = addScope23Totals(crop.scope2);
-      const scope3 = addScope23Totals(crop.scope3);
+      const cropOutputs = createScopeOutputs(crop);
+      const scope1 = addScope1Totals(cropOutputs.scope1);
+      const scope2 = addScope23Totals(cropOutputs.scope2);
+      const scope3 = addScope23Totals(cropOutputs.scope3);
       const net = {
-        total: {
-          value: scope1.total.value + scope2.total.value + scope3.total.value,
-        },
+        total: scope1.total.value + scope2.total.value + scope3.total.value,
       };
       return {
         id: crop.meta.id,
@@ -336,6 +335,9 @@ export function calculateGrains(
         scope2,
         scope3,
         net,
+        carbonSequestration: {
+          total: 0,
+        },
       };
     }),
     // intensities: allCrops.map((crop) =>

@@ -12,10 +12,13 @@ import {
   NumberUnit,
   RealNumber,
   Substance,
+  VoidUnit,
   Volume,
   isMass,
   isMassPerMass,
+  isVoid,
   mass,
+  voidUnit,
 } from './units';
 
 // Helper types to extract substance from origin types
@@ -79,11 +82,13 @@ export function multiply<UL extends NumberUnit, UR extends NumberUnit>(
   left: TypedOrigin<UL>,
   right: TypedOrigin<UR>,
   baseOrigin?: IntermediateOrNamedOrigin,
-): BinaryOrigin<NumberUnit> {
+): BinaryOrigin<NumberUnit | VoidUnit> {
   const baseOrDefault = baseOrigin || { valueType: 'intermediate' };
   // Determine the result unit based on the operand types
-  let unit: NumberUnit;
-  if (isMassPerMass(left.unit) && isMass(right.unit)) {
+  let unit: NumberUnit | VoidUnit;
+  if (isVoid(left.unit) || isVoid(right.unit)) {
+    unit = voidUnit();
+  } else if (isMassPerMass(left.unit) && isMass(right.unit)) {
     unit = mass(left.unit.snum);
   } else {
     // For RealNumber multiplication, preserve the left operand's unit

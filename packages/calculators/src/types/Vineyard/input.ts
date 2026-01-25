@@ -8,4 +8,4 @@ export const VineyardInputSchema = calculatorInput('Vineyard', {
   vegetation: z.array(VineyardVegetationSchema),
 });
 
-export type VineyardInput = z.infer<typeof VineyardInputSchema>;
+export type VineyardInput = z.input<typeof VineyardInputSchema>;

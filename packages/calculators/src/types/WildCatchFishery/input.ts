@@ -6,4 +6,4 @@ export const WildCatchFisheryInputSchema = calculatorInput('WildCatchFishery', {
   enterprises: z.array(WildCatchFisheryEnterpriseInputSchema),
 });
 
-export type WildCatchFisheryInput = z.infer<typeof WildCatchFisheryInputSchema>;
+export type WildCatchFisheryInput = z.input<typeof WildCatchFisheryInputSchema>;

@@ -1,7 +1,4 @@
-import { input } from '@/calculators/Brocessing/types/inputs';
-import { mass } from '@/calculators/Brocessing/types/units';
 import { ElectricitySources } from '@/types/enums';
-import Decimal from 'decimal.js-light';
 import { z } from 'zod';
 import { FluidWasteInputSchema } from '../common/fluid-waste.input';
 import { SolidWasteInputSchema } from '../common/solid-waste.input';
@@ -37,10 +34,10 @@ export const ProductProcessingInputSchema = object({
   purchasedCO2: z
     .number()
     .min(0)
-    .meta({ description: DESCRIPTIONS.PURCHASED_CO2 })
-    .transform((value) =>
-      input('PURCHASED_CO2', mass('CO2', new Decimal(value))),
-    ),
+    .meta({ description: DESCRIPTIONS.PURCHASED_CO2 }),
+  // .transform((value) =>
+  //   input('PURCHASED_CO2', mass('CO2', new Decimal(value))),
+  // ),
   carbonOffsets: z
     .number()
     .min(0)
@@ -50,10 +47,10 @@ export const ProductProcessingInputSchema = object({
   description: 'Input data required for processing a specific product',
 });
 
-export type ProductProcessingInput = z.infer<
+export type ProductProcessingInput = z.input<
   typeof ProductProcessingInputSchema
 >;
 
-export type ProductProcessingInputTransformed = z.infer<
+export type ProductProcessingInputTransformed = z.output<
   typeof ProductProcessingInputSchema
 >;
