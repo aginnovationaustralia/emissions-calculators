@@ -2,12 +2,46 @@ import { selectConstant } from '@/calculators/Brocessing/types/constants';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { multiply } from '@/tools/multiply';
-import { rootOrigin, SummedOrigin } from '@/tools/origins';
+import { rootOrigin, SummedOrigin, TypedOrigin } from '@/tools/origins';
 import { scope1Output, Scope1Output } from '@/tools/outputs';
 import { sum } from '@/tools/sum';
-import { energyPerVolume, Mass, mass, massPerEnergy } from '@/tools/units';
+import {
+  energyPerVolume,
+  Mass,
+  mass,
+  massPerEnergy,
+  Volume,
+} from '@/tools/units';
 import { GrainsCropTransformed } from '@/types/Grains/crop.input';
 import Decimal from 'decimal.js-light';
+
+const emissionsOfGasForFuel = (
+  amountOfFuel: TypedOrigin<Volume<'Fuel'>>,
+  constants: ConstantsForGrainsCalculator,
+) => {
+  const efForFuel = selectConstant(
+    constants.COMMON,
+    (value) => massPerEnergy('CO2', new Decimal(value)),
+    'FUEL_ENERGYGJ',
+    'TRANSPORT',
+    'DIESEL',
+    'SCOPE1_EF',
+    'CO2',
+  );
+  const energyContentFactorForFuel = selectConstant(
+    constants.COMMON,
+    (value) => energyPerVolume('Fuel', new Decimal(value)),
+    'FUEL_ENERGYGJ',
+    'TRANSPORT',
+    'DIESEL',
+    'ENERGY_CONTENT_FACTOR',
+  );
+  const energyFromFuel = multiply(energyContentFactorForFuel, amountOfFuel);
+
+  const gasEmissionsFromFuel = multiply(efForFuel, energyFromFuel);
+
+  return gasEmissionsFromFuel;
+};
 
 // 6.1 Transport fuel
 // 6.2 Stationary combustion fuel
@@ -18,10 +52,10 @@ export const calculateScope1Fuel = (
 ) => {
   const { constants } = context;
 
-  const zeroCO2 = rootOrigin(mass('CO2', new Decimal(0)), {
-    name: 'zero',
-    valueType: 'constant',
-  });
+  //   const zeroCO2 = rootOrigin(mass('CO2', new Decimal(0)), {
+  //     name: 'zero',
+  //     valueType: 'constant',
+  //   });
   const zeroCH4 = rootOrigin(mass('CH4', new Decimal(0)), {
     name: 'zero',
     valueType: 'constant',
@@ -31,31 +65,18 @@ export const calculateScope1Fuel = (
     valueType: 'constant',
   });
 
-  const dieselEF = selectConstant(
-    constants.COMMON,
-    (value) => massPerEnergy('CO2', new Decimal(value)),
-    'FUEL_ENERGYGJ',
-    'TRANSPORT',
-    'DIESEL',
-    'SCOPE1_EF',
-    'CO2',
-  );
-  const dieselEnergyContentFactor = selectConstant(
-    constants.COMMON,
-    (value) => energyPerVolume('Fuel', new Decimal(value)),
-    'FUEL_ENERGYGJ',
-    'TRANSPORT',
-    'DIESEL',
-    'ENERGY_CONTENT_FACTOR',
-  );
-  const energyFromDiesel = multiply(dieselEnergyContentFactor, crop.dieselUse);
+  const dieselCO2 = emissionsOfGasForFuel(crop.dieselUse, constants);
 
-  const transportFuelsCO2 = multiply(dieselEF, energyFromDiesel);
+  // 6.1.1
+  // Line 55
+  const fuelCO2: SummedOrigin<Mass<'CO2'>> = sum(
+    {
+      items: [dieselCO2],
+      unit: mass('CO2'),
+    },
+    { name: 'EtransGHGCO2', valueType: 'variable', unit: mass('CO2') },
+  );
 
-  const fuelCO2: SummedOrigin<Mass<'CO2'>> = sum({
-    items: [transportFuelsCO2],
-    unit: mass('CO2'),
-  });
   const fuelCH4: Scope1Output<'CH4'> = scope1Output('fuelCH4', zeroCH4);
   const fuelN2O: Scope1Output<'N2O'> = scope1Output('fuelN2O', zeroN2O);
   return {
