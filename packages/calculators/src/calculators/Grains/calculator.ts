@@ -10,7 +10,7 @@ import { multiply } from '@/tools/multiply';
 import { TypedOrigin } from '@/tools/origins';
 import { output, scope1Output } from '@/tools/outputs';
 import { addScope1Totals, addScope23Totals } from '@/tools/totals';
-import { mass, Mass } from '@/tools/units';
+import { Mass, VoidUnit } from '@/tools/units';
 import { GrainsCropTransformed } from '@/types/Grains/crop.input';
 import { GrainsInputTransformed } from '@/types/Grains/input';
 import { GrainsOutput } from '@/types/Grains/output';
@@ -134,29 +134,29 @@ const calculateScope3Grains = (
 };
 
 type Scope1Values = {
-  fuelCO2: TypedOrigin<Mass<'CO2'>>;
-  fuelCH4: TypedOrigin<Mass<'CH4'>>;
-  fuelN2O: TypedOrigin<Mass<'N2O'>>;
-  ureaCO2: TypedOrigin<Mass<'CO2'>>;
-  limeCO2: TypedOrigin<Mass<'CO2'>>;
-  fertiliserN2O: TypedOrigin<Mass<'N2O'>>;
-  atmosphericDepositionN2O: TypedOrigin<Mass<'N2O'>>;
-  leachingAndRunoffN2O: TypedOrigin<Mass<'N2O'>>;
-  cropResidueN2O: TypedOrigin<Mass<'N2O'>>;
-  fieldBurningN2O: TypedOrigin<Mass<'N2O'>>;
-  fieldBurningCH4: TypedOrigin<Mass<'CH4'>>;
+  fuelCO2: TypedOrigin<Mass<'CO2'> | VoidUnit>;
+  fuelCH4: TypedOrigin<Mass<'CH4'> | VoidUnit>;
+  fuelN2O: TypedOrigin<Mass<'N2O'> | VoidUnit>;
+  ureaCO2: TypedOrigin<Mass<'CO2'> | VoidUnit>;
+  limeCO2: TypedOrigin<Mass<'CO2'> | VoidUnit>;
+  fertiliserN2O: TypedOrigin<Mass<'N2O'> | VoidUnit>;
+  atmosphericDepositionN2O: TypedOrigin<Mass<'N2O'> | VoidUnit>;
+  leachingAndRunoffN2O: TypedOrigin<Mass<'N2O'> | VoidUnit>;
+  cropResidueN2O: TypedOrigin<Mass<'N2O'> | VoidUnit>;
+  fieldBurningN2O: TypedOrigin<Mass<'N2O'> | VoidUnit>;
+  fieldBurningCH4: TypedOrigin<Mass<'CH4'> | VoidUnit>;
 };
 
 type Scope2Values = {
-  electricity: TypedOrigin<Mass<'CO2e'>>;
+  electricity: TypedOrigin<Mass<'CO2e'> | VoidUnit>;
 };
 
 type Scope3Values = {
-  electricity: TypedOrigin<Mass<'CO2e'>>;
-  fertiliser: TypedOrigin<Mass<'CO2e'>>;
-  herbicide: TypedOrigin<Mass<'CO2e'>>;
-  fuel: TypedOrigin<Mass<'CO2e'>>;
-  lime: TypedOrigin<Mass<'CO2e'>>;
+  electricity: TypedOrigin<Mass<'CO2e'> | VoidUnit>;
+  fertiliser: TypedOrigin<Mass<'CO2e'> | VoidUnit>;
+  herbicide: TypedOrigin<Mass<'CO2e'> | VoidUnit>;
+  fuel: TypedOrigin<Mass<'CO2e'> | VoidUnit>;
+  lime: TypedOrigin<Mass<'CO2e'> | VoidUnit>;
 };
 
 type ScopeValues = {
@@ -204,78 +204,31 @@ import { sum } from '@/tools/sum';
 function mergeScopeOutputs(scopeOutputs: ScopeValues[]) {
   return {
     scope1: {
-      fuelCO2: sum({
-        items: scopeOutputs.map((s) => s.scope1.fuelCO2),
-        unit: mass('CO2'),
-      }),
-      fuelCH4: sum({
-        items: scopeOutputs.map((s) => s.scope1.fuelCH4),
-        unit: mass('CH4'),
-      }),
-      fuelN2O: sum({
-        items: scopeOutputs.map((s) => s.scope1.fuelN2O),
-        unit: mass('N2O'),
-      }),
-      ureaCO2: sum({
-        items: scopeOutputs.map((s) => s.scope1.ureaCO2),
-        unit: mass('CO2'),
-      }),
-      limeCO2: sum({
-        items: scopeOutputs.map((s) => s.scope1.limeCO2),
-        unit: mass('CO2'),
-      }),
-      fertiliserN2O: sum({
-        items: scopeOutputs.map((s) => s.scope1.fertiliserN2O),
-        unit: mass('N2O'),
-      }),
-      atmosphericDepositionN2O: sum({
-        items: scopeOutputs.map((s) => s.scope1.atmosphericDepositionN2O),
-        unit: mass('N2O'),
-      }),
-      leachingAndRunoffN2O: sum({
-        items: scopeOutputs.map((s) => s.scope1.leachingAndRunoffN2O),
-        unit: mass('N2O'),
-      }),
-      cropResidueN2O: sum({
-        items: scopeOutputs.map((s) => s.scope1.cropResidueN2O),
-        unit: mass('N2O'),
-      }),
-      fieldBurningN2O: sum({
-        items: scopeOutputs.map((s) => s.scope1.fieldBurningN2O),
-        unit: mass('N2O'),
-      }),
-      fieldBurningCH4: sum({
-        items: scopeOutputs.map((s) => s.scope1.fieldBurningCH4),
-        unit: mass('CH4'),
-      }),
+      fuelCO2: sum(scopeOutputs.map((s) => s.scope1.fuelCO2)),
+      fuelCH4: sum(scopeOutputs.map((s) => s.scope1.fuelCH4)),
+      fuelN2O: sum(scopeOutputs.map((s) => s.scope1.fuelN2O)),
+      ureaCO2: sum(scopeOutputs.map((s) => s.scope1.ureaCO2)),
+      limeCO2: sum(scopeOutputs.map((s) => s.scope1.limeCO2)),
+      fertiliserN2O: sum(scopeOutputs.map((s) => s.scope1.fertiliserN2O)),
+      atmosphericDepositionN2O: sum(
+        scopeOutputs.map((s) => s.scope1.atmosphericDepositionN2O),
+      ),
+      leachingAndRunoffN2O: sum(
+        scopeOutputs.map((s) => s.scope1.leachingAndRunoffN2O),
+      ),
+      cropResidueN2O: sum(scopeOutputs.map((s) => s.scope1.cropResidueN2O)),
+      fieldBurningN2O: sum(scopeOutputs.map((s) => s.scope1.fieldBurningN2O)),
+      fieldBurningCH4: sum(scopeOutputs.map((s) => s.scope1.fieldBurningCH4)),
     },
     scope2: {
-      electricity: sum({
-        items: scopeOutputs.map((s) => s.scope2.electricity),
-        unit: mass('CO2e'),
-      }),
+      electricity: sum(scopeOutputs.map((s) => s.scope2.electricity)),
     },
     scope3: {
-      electricity: sum({
-        items: scopeOutputs.map((s) => s.scope3.electricity),
-        unit: mass('CO2e'),
-      }),
-      fertiliser: sum({
-        items: scopeOutputs.map((s) => s.scope3.fertiliser),
-        unit: mass('CO2e'),
-      }),
-      herbicide: sum({
-        items: scopeOutputs.map((s) => s.scope3.herbicide),
-        unit: mass('CO2e'),
-      }),
-      fuel: sum({
-        items: scopeOutputs.map((s) => s.scope3.fuel),
-        unit: mass('CO2e'),
-      }),
-      lime: sum({
-        items: scopeOutputs.map((s) => s.scope3.lime),
-        unit: mass('CO2e'),
-      }),
+      electricity: sum(scopeOutputs.map((s) => s.scope3.electricity)),
+      fertiliser: sum(scopeOutputs.map((s) => s.scope3.fertiliser)),
+      herbicide: sum(scopeOutputs.map((s) => s.scope3.herbicide)),
+      fuel: sum(scopeOutputs.map((s) => s.scope3.fuel)),
+      lime: sum(scopeOutputs.map((s) => s.scope3.lime)),
     },
   };
 }

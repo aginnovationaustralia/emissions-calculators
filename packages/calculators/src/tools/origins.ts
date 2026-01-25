@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js-light';
-import { UnitArray } from './sum';
 import { AnyUnit, NumberUnit, StringUnit, voidUnit, VoidUnit } from './units';
 
 type NamedValueType = 'input' | 'variable' | 'constant' | 'output';
@@ -14,7 +13,7 @@ export type IntermediateOrigin = {
 export type IntermediateOrNamedOrigin = NamedOrigin | IntermediateOrigin;
 
 export type BaseOrigin<U extends AnyUnit> = {
-  unit: U;
+  unit: U | VoidUnit;
 } & IntermediateOrNamedOrigin;
 
 export type BinaryOrigin<U extends AnyUnit> = BaseOrigin<U> & {
@@ -32,7 +31,7 @@ export type UnaryOrigin<U extends AnyUnit> = BaseOrigin<U> & {
 };
 export type SummedOrigin<N extends NumberUnit> = BaseOrigin<N> & {
   originType: 'sum';
-  from: UnitArray<NumberUnit>;
+  from: Origin<NumberUnit>[];
   //   unit: NumberUnit;
 };
 export type ConstantSelectionSource<U extends NumberUnit> = {

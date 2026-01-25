@@ -62,13 +62,11 @@ const transportEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     gasType,
   );
   const lpgEmissions = emissionsOfGasForFuel(lpgUse, constants, 'LPG', gasType);
-  return sum(
-    {
-      items: [dieselEmissions, petrolEmissions, lpgEmissions],
-      unit: mass(gasType),
-    },
-    { name: `EtransGHG${gasType}`, valueType: 'variable', unit: mass(gasType) },
-  );
+  return sum([dieselEmissions, petrolEmissions, lpgEmissions], {
+    name: `EtransGHG${gasType}`,
+    valueType: 'variable',
+    unit: mass(gasType),
+  });
 };
 
 // 6.1 Transport fuel

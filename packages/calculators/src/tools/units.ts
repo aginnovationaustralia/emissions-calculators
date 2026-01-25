@@ -153,11 +153,12 @@ export const realNumber = (initialValue?: Decimal): RealNumber => {
 
 export type VoidUnit = {
   __unitType: 'Void';
+  value: Decimal;
 };
 
 export const voidUnit = () => ({
   __unitType: 'Void' as const,
-  initialValue: new Decimal(0),
+  value: new Decimal(0),
 });
 
 export const isVoid = (unit: AnyUnit): unit is VoidUnit => {
@@ -176,7 +177,7 @@ export type NumberUnit =
   | MassPerVolume<Substance, Substance>
   | Volume<Substance>
   | Energy
-  // | VoidUnit
+  | VoidUnit
   | RealNumber;
 
 export type StringUnit<V extends string = string> = V;

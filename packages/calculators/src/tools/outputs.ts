@@ -2,7 +2,7 @@ import { entriesFromObject } from '@/calculators/common/tools/object';
 import Decimal from 'decimal.js-light';
 import { HasMetadata, ValueMetadata } from './metadata';
 import { Origin } from './origins';
-import { isVoid, mass, Mass } from './units';
+import { isVoid, mass, Mass, VoidUnit } from './units';
 import { DecimalValue } from './values';
 
 type HasDecimalValue = {
@@ -30,7 +30,7 @@ export interface Output<
   name: string;
   unit: Mass<S>;
   scope: Scope;
-  from: Origin<Mass<S>>;
+  from: Origin<Mass<S> | VoidUnit>;
   valueType: 'output';
   originType: 'unary';
 }
@@ -38,7 +38,7 @@ export interface Output<
 export const output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
   name: string,
   scope: Scope,
-  from: Origin<Mass<S>>,
+  from: Origin<Mass<S> | VoidUnit>,
   metadata?: ValueMetadata,
 ): Output<Scope, S> => {
   const gasAmountKg = isVoid(from.unit) ? new Decimal(0) : from.unit.value;
@@ -64,7 +64,7 @@ export interface Scope1Output<
 }
 export const scope1Output = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
   name: string,
-  from: Origin<Mass<S>>,
+  from: Origin<Mass<S> | VoidUnit>,
 ): Scope1Output<S> => {
   const gasAmountKg = isVoid(from.unit) ? new Decimal(0) : from.unit.value;
   const gas = isVoid(from.unit) ? ('CO2' as S) : from.unit.substance;
