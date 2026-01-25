@@ -1,10 +1,10 @@
+import { input } from '@/tools/inputs';
+import { realNumber, volume } from '@/tools/units';
 import { CropTypes, ProductionSystems, States } from '@/types/enums';
+import Decimal from 'decimal.js-light';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { proportion, singleEnterpriseInput } from '../schemas';
-import Decimal from 'decimal.js-light';
-import { input } from '@/tools/inputs';
-import { realNumber } from '@/tools/units';
 
 export const GrainsCropSchema = singleEnterpriseInput('Grains', {
   type: z.enum(CropTypes).meta({
@@ -64,12 +64,26 @@ export const GrainsCropSchema = singleEnterpriseInput('Grains', {
   }),
   electricityAllocation: proportion(
     'Percentage of electricity use to allocate to this crop, from 0 to 1',
-  ).transform((val) => input('electricityAllocation', realNumber(new Decimal(val)))),
+  ).transform((val) =>
+    input('electricityAllocation', realNumber(new Decimal(val))),
+  ),
   limestone: z.number().min(0).meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
-  dieselUse: z.number().min(0).meta({ description: DESCRIPTIONS.DIESEL }),
-  petrolUse: z.number().min(0).meta({ description: DESCRIPTIONS.PETROL }),
-  lpg: z.number().min(0).meta({ description: DESCRIPTIONS.LPG }),
+  dieselUse: z
+    .number()
+    .min(0)
+    .meta({ description: DESCRIPTIONS.DIESEL })
+    .transform((val) => input('dieselUse', volume('Fuel', new Decimal(val)))),
+  petrolUse: z
+    .number()
+    .min(0)
+    .meta({ description: DESCRIPTIONS.PETROL })
+    .transform((val) => input('petrolUse', volume('Fuel', new Decimal(val)))),
+  lpg: z
+    .number()
+    .min(0)
+    .meta({ description: DESCRIPTIONS.LPG })
+    .transform((val) => input('lpg', volume('Fuel', new Decimal(val)))),
 });
 
 export type GrainsCrop = z.infer<typeof GrainsCropSchema>;
