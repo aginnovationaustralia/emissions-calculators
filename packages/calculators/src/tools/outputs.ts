@@ -1,9 +1,7 @@
-import { entriesFromObject } from '@/calculators/common/tools/object';
 import Decimal from 'decimal.js-light';
 import { HasMetadata, ValueMetadata } from './metadata';
 import { Origin } from './origins';
 import { AnyUnit, formatUnit, isVoid, mass, Mass, VoidUnit } from './units';
-import { DecimalValue } from './values';
 
 export const makeUnique = <T>(a: T[]): T[] => {
   return [...new Set(a)];
@@ -49,8 +47,10 @@ export interface Output<
   constants: ConstantDefinition[];
 }
 
-// TODO: Unify these 2 functions
-export const output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
+export const output = <
+  Scope extends 1 | 2 | 3,
+  S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e',
+>(
   name: string,
   scope: Scope,
   from: Origin<Mass<S> | VoidUnit>,
@@ -74,6 +74,13 @@ export const output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
   };
 };
 
+export const scope23Output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
+  name: string,
+  scope: Scope,
+  from: Origin<Mass<S> | VoidUnit>,
+  metadata?: ValueMetadata,
+): Output<Scope, S> => output(name, scope, from, metadata);
+
 export interface Scope1Output<
   S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e',
 > extends Output<1, S> {
@@ -83,34 +90,11 @@ export const scope1Output = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
   name: string,
   from: Origin<Mass<S> | VoidUnit>,
 ): Scope1Output<S> => {
-  const gasAmountKg = isVoid(from.unit) ? new Decimal(0) : from.unit.value;
-  const gas = isVoid(from.unit) ? ('CO2' as S) : from.unit.substance;
-  const amountCO2e = convertToCO2e(gasAmountKg, gas);
+  const gas: S = isVoid(from.unit) ? ('CO2' as S) : from.unit.substance;
   return {
-    valueType: 'output',
-    originType: 'unary',
-    name,
-    scope: 1,
+    ...output(name, 1, from),
     gas,
-    value: gasAmountKg,
-    amountCO2e,
-    from,
-    unit: mass(gas),
-    references: makeUnique(collectReferences(from)),
-    constants: makeUniqueByName(collectConstants(from)),
   };
-};
-
-export const outputsToNumbers = <
-  T extends Record<K, DecimalValue>,
-  K extends keyof T & string,
->(
-  t: T,
-): Record<K, number> => {
-  return entriesFromObject(t).map(([key, value]): [K, number] => [
-    key as K,
-    value.value().toNumber(),
-  ]) as Record<K, number>;
 };
 
 export const collectReferences = <O extends Origin<AnyUnit>>(

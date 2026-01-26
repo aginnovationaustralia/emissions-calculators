@@ -116,7 +116,8 @@ const getExpectedOutput = (workbook: XLSX.Workbook): GrainsOutput => {
   const summarySheet = workbook.sheet('Data summary');
   const summary = (address: string) => ({
     value: numberInput(summarySheet.cell(address)),
-    reference: '',
+    references: [],
+    constants: [],
   });
 
   // const sheetInputCrops = workbook.sheet('Data input - crops');

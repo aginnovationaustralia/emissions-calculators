@@ -2,7 +2,13 @@
 export const defaultPrecision = 7;
 
 export type KeyValuePairs = {
-  [key: string]: string | number | number[] | KeyValuePairs | KeyValuePairs[];
+  [key: string]:
+    | string
+    | string[]
+    | number
+    | number[]
+    | KeyValuePairs
+    | KeyValuePairs[];
 };
 
 export type Emissions = KeyValuePairs;
