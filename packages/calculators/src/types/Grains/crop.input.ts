@@ -19,6 +19,9 @@ export const GrainsCropSchema = singleEnterpriseInput('Grains', {
   averageGrainYield: z
     .number()
     .min(0)
+    .transform((val) =>
+      input('averageGrainYield', massPerArea('Yield', new Decimal(val))),
+    )
     .meta({ description: 'Average grain yield, in t/ha (tonnes per hectare)' }),
   areaSown: z
     .number()

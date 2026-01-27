@@ -33,8 +33,8 @@ import {
 } from './units';
 
 // Helper types to extract substance from origin types
-type ExtractMassPerMassNumerator<T> = T extends {
-  unit: MassPerMass<infer SNum, Substance>;
+export type ExtractMassPerMassNumerator<T> = T extends {
+  unit: VoidUnit | MassPerMass<infer SNum, Substance>;
 }
   ? SNum
   : never;
@@ -44,7 +44,9 @@ type ExtractMassPerEnergySubstance<T> = T extends {
   ? S
   : never;
 // Extract the unit type from an origin (for preserving unit when multiplying by RealNumber)
-type ExtractOriginUnit<T> = T extends { unit: infer U extends NumberUnit }
+type ExtractOriginUnit<T> = T extends {
+  unit: infer U extends NumberUnit;
+}
   ? U
   : never;
 type ExtractMassPerAreaSubstance<T> = T extends {
@@ -65,8 +67,10 @@ export function multiply<
 
 // kg CO2e per kg Refrigerant * kg Refrigerant = kg CO2e
 export function multiply<
-  UL extends TypedOrigin<MassPerMass<Substance, Substance>>,
-  UR extends TypedOrigin<Mass<Substance>>,
+  S1 extends Substance,
+  S2 extends Substance,
+  UL extends TypedOrigin<MassPerMass<S1, S2>>,
+  UR extends TypedOrigin<Mass<S2>>,
 >(
   left: UL,
   right: UR,

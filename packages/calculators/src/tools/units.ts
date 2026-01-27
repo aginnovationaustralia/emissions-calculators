@@ -4,12 +4,16 @@ export type Substance =
   | 'CO2'
   | 'CH4'
   | 'N2O'
+  | 'N'
   | 'CO2e'
   | 'Refrigerant'
   | 'Fuel'
   | 'FluidWaste'
   | 'Oxygen'
-  | 'Urea';
+  | 'Urea'
+  | 'DryMatter'
+  | 'CropResidue'
+  | 'Yield';
 
 type NumberUnitBase = { value: Decimal };
 
