@@ -63,9 +63,6 @@ const transportEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     'LPG',
     gasType,
   );
-  // console.log(gasType, dieselEmissions.unit.value.toNumber());
-  // console.log(petrolEmissions.unit.value.toNumber());
-  // console.log(lpgEmissions.unit.value.toNumber());
   return sum([dieselEmissions, petrolEmissions, lpgEmissions], {
     name: `EtransGHG${gasType}`,
     valueType: 'variable',
@@ -87,10 +84,6 @@ export const calculateScope1Fuel = (
   const transportFuelCO2 = transportEmissionsForGas(crop, constants, 'CO2');
   const transportFuelCH4 = transportEmissionsForGas(crop, constants, 'CH4');
   const transportFuelN2O = transportEmissionsForGas(crop, constants, 'N2O');
-
-  // console.log('tfc', transportFuelCO2.unit.value.toNumber());
-  // console.log(transportFuelCH4.unit.value.toNumber());
-  // console.log(transportFuelN2O.unit.value.toNumber());
 
   // TODO: Stationary fuel emissions
   return {

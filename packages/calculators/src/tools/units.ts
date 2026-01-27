@@ -8,7 +8,8 @@ export type Substance =
   | 'Refrigerant'
   | 'Fuel'
   | 'FluidWaste'
-  | 'Oxygen';
+  | 'Oxygen'
+  | 'Urea';
 
 type NumberUnitBase = { value: Decimal };
 
@@ -93,6 +94,18 @@ export const energy = (initialValue?: Decimal): Energy => {
 export const isEnergy = (unit: NumberUnit): unit is Energy => {
   return unit.__unitType === 'Energy';
 };
+export type Area = NumberUnitBase & {
+  __unitType: 'Area';
+};
+export const area = (initialValue?: Decimal): Area => {
+  return {
+    __unitType: 'Area',
+    value: initialValue ?? new Decimal(0),
+  };
+};
+export const isArea = (unit: NumberUnit): unit is Area => {
+  return unit.__unitType === 'Area';
+};
 
 export type MassPerEnergy<T extends Substance> = NumberUnitBase & {
   __unitType: 'MassPerEnergy';
@@ -163,6 +176,26 @@ export const isMassPerVolume = (
   return unit.__unitType === 'MassPerVolume';
 };
 
+export type MassPerArea<S extends Substance> = NumberUnitBase & {
+  __unitType: 'MassPerArea';
+  substance: S;
+};
+export const massPerArea = <S extends Substance>(
+  substance: S,
+  initialValue?: Decimal,
+): MassPerArea<S> => {
+  return {
+    __unitType: 'MassPerArea',
+    substance,
+    value: initialValue ?? new Decimal(0),
+  };
+};
+export const isMassPerArea = (
+  unit: NumberUnit,
+): unit is MassPerArea<Substance> => {
+  return unit.__unitType === 'MassPerArea';
+};
+
 export type RealNumber = NumberUnitBase & {
   __unitType: 'RealNumber';
 };
@@ -171,6 +204,9 @@ export const realNumber = (initialValue?: Decimal): RealNumber => {
     __unitType: 'RealNumber',
     value: initialValue ?? new Decimal(0),
   };
+};
+export const isRealNumber = (unit: NumberUnit): unit is RealNumber => {
+  return unit.__unitType === 'RealNumber';
 };
 
 export type VoidUnit = {
@@ -195,10 +231,12 @@ export type NumberUnit =
   | MassPerMass<Substance, Substance>
   | Mass<Substance>
   | MassPerEnergy<Substance>
-  | EnergyPerVolume<Substance>
   | MassPerVolume<Substance, Substance>
+  | MassPerArea<Substance>
+  | EnergyPerVolume<Substance>
   | Volume<Substance>
   | Energy
+  | Area
   | VoidUnit
   | RealNumber;
 
@@ -241,5 +279,9 @@ export function formatUnit(unit: AnyUnit): string {
       return `Energy / Volume(${unit.substance})`;
     case 'MassPerVolume':
       return `Mass(${unit.mass}) / Volume(${unit.volume})`;
+    case 'MassPerArea':
+      return `Mass(${unit.substance}) / Area`;
+    case 'Area':
+      return 'Area';
   }
 }

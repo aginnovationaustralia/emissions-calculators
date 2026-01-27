@@ -1,5 +1,5 @@
 import { input } from '@/tools/inputs';
-import { realNumber, volume } from '@/tools/units';
+import { area, massPerArea, realNumber, volume } from '@/tools/units';
 import { CropTypes, ProductionSystems, States } from '@/types/enums';
 import Decimal from 'decimal.js-light';
 import { z } from 'zod';
@@ -23,15 +23,22 @@ export const GrainsCropSchema = singleEnterpriseInput('Grains', {
   areaSown: z
     .number()
     .min(0)
+    .transform((val) => input('areaSown', area(new Decimal(val))))
     .meta({ description: 'Area sown, in ha (hectares)' }),
   nonUreaNitrogen: z.number().min(0).meta({
     description:
       'Non-urea nitrogen application, in kg N/ha (kilograms of nitrogen per hectare)',
   }),
-  ureaApplication: z.number().min(0).meta({
-    description:
-      'Urea nitrogen application, in kg Urea/ha (kilograms of urea per hectare)',
-  }),
+  ureaApplication: z
+    .number()
+    .min(0)
+    .transform((val) =>
+      input('ureaApplication', massPerArea('Urea', new Decimal(val))),
+    )
+    .meta({
+      description:
+        'Urea nitrogen application, in kg Urea/ha (kilograms of urea per hectare)',
+    }),
   ureaAmmoniumNitrate: z.number().min(0).meta({
     description:
       'Urea-Ammonium nitrate application, in kg product/ha (kilograms of product per hectare)',

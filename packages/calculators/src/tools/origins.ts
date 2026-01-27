@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js-light';
 import { AnyUnit, NumberUnit, StringUnit, voidUnit, VoidUnit } from './units';
 
-type NamedValueType = 'input' | 'variable' | 'constant' | 'output';
+export type NamedValueType = 'input' | 'variable' | 'constant' | 'output';
 
 export type NamedOrigin = {
   valueType: NamedValueType;
