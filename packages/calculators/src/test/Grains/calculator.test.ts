@@ -1,5 +1,6 @@
 import { calculateGrains } from '@/calculators/Grains/calculator';
 import { GrainsInputSchema } from '@/types/Grains/input';
+import { Decimal } from 'decimal.js-light';
 import clone from 'nanoclone';
 import { testContext } from '../common/context';
 import { executeEmissionsSpec } from '../common/emissions';
@@ -84,25 +85,27 @@ describe('Grains calculator (multi activity)', () => {
   const vegetation = [clone(parsed.vegetation[0])];
   vegetation[0].allocationToCrops = [0.5];
 
-  activityDoubleSaleweight.averageGrainYield *= 2;
+  activityDoubleSaleweight.averageGrainYield.unit.value = new Decimal(
+    activityDoubleSaleweight.averageGrainYield.unit.value.mul(2),
+  );
 
-  const grainsOriginal = {
-    ...parsed,
-    crops: [originalActivity],
-    vegetation,
-  };
+  // const grainsOriginal = {
+  //   ...parsed,
+  //   crops: [originalActivity],
+  //   vegetation,
+  // };
 
-  const grainsDoubleSaleweight = {
-    ...parsed,
-    crops: [activityDoubleSaleweight],
-    vegetation: [],
-  };
+  // const grainsDoubleSaleweight = {
+  //   ...parsed,
+  //   crops: [activityDoubleSaleweight],
+  //   vegetation: [],
+  // };
 
-  const grainsTestDataAllActivities = {
-    ...parsed,
-    crops: [originalActivity, activityDoubleSaleweight],
-    vegetation,
-  };
+  // const grainsTestDataAllActivities = {
+  //   ...parsed,
+  //   crops: [originalActivity, activityDoubleSaleweight],
+  //   vegetation,
+  // };
 
   //   compareEmissionsFrom2Inputs<
   //     GrainsInputTransformed,

@@ -21,7 +21,6 @@ const isCO2 = (output: Output<1>): output is Output<1, 'CO2'> => {
 export const addScope1Totals = <
   T extends Record<string, Output<1>>,
   K extends keyof T & string,
-  // O extends Record<K, { value: Decimal; reference: string }> = Record<K, { value: Decimal; reference: string }>,
 >(
   outputs: T,
 ): Record<

@@ -217,7 +217,6 @@ export function selectConstant<TOut extends NumberUnit>(
     selector4,
     selector5,
   ].filter((s): s is string | RootOrigin<StringUnit> => s !== undefined);
-  // .map((s) => (typeof s === 'string' ? s : s.unit));
 
   // Traverse the constants object using the selectors
   let current: unknown = constants;
