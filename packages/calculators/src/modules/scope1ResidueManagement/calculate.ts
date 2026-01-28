@@ -44,8 +44,6 @@ export const calculateScope1ResidueManagement = (
     𝑁𝐶𝐴𝐺𝑐 = nitrogen content of above-ground crop residue of crop c (kg N/kg DM)
     𝑁𝐶𝐵𝐺𝑐 = nitrogen content of below-ground crop residue of crop c (kg N/kg
     DM)
-
-    
     */
   const ncbgc = selectConstant(
     constants.CROP,
@@ -99,16 +97,22 @@ export const calculateScope1ResidueManagement = (
     'belowAboveResidueRatio',
   );
 
-  const totalResidue = ragc.multiply(pc);
+  /*  448 | 𝑀𝑐 =
+                (𝑃 𝑐 × 𝑅𝐴𝐺𝑐 × (1 − 𝐹 𝑐− 𝐹𝐹𝑂𝐷𝑐) × 𝐷𝑀𝑐 × 𝑁𝐶𝐴𝐺𝑐)
+                  + 
+                (𝑃 𝑐 × 𝑅𝐴𝐺𝑐 × 𝑅𝐵𝐺𝑐 × 𝐷𝑀𝑐 × 𝑁𝐶𝐵𝐺𝑐) (kg N)
+  */
+  const aboveGroundNitrogen = pc
+    .multiply(ragc)
+    .multiply(sum([one, minus(fc), minus(ffodc)]))
+    .multiply(dmc)
+    .multiply(ncagc);
 
-  const unburntResidueProportion = sum([one, minus(fc), minus(ffodc)]);
-  const totalUnburnt = totalResidue.multiply(unburntResidueProportion);
-  const unburntDryWeight = dmc.multiply(totalUnburnt);
-  const aboveGroundNitrogen = ncagc.multiply(unburntDryWeight);
-
-  const totalDryMatter = dmc.multiply(totalResidue);
-  const totalNitrogen = ncbgc.multiply(totalDryMatter);
-  const belowGroundNitrogen = totalNitrogen.multiply(rbgc);
+  const belowGroundNitrogen = pc
+    .multiply(ragc)
+    .multiply(rbgc)
+    .multiply(dmc)
+    .multiply(ncbgc);
 
   const mc = sum([aboveGroundNitrogen, belowGroundNitrogen], { name: 'Mc' });
 
@@ -124,8 +128,8 @@ export const calculateScope1ResidueManagement = (
     'GWP_FACTORSC15',
   );
 
-  const n2o = efni.multiply(mc);
-  const cropResidueN2O = n2o.multiply(cn2o);
+  // 441 | 𝐸 = ∑ (𝑀𝑐 × 𝐸𝐹 𝑁𝑖 × 𝐶𝑁2𝑂 × 10−3) (t N2O)
+  const cropResidueN2O = mc.multiply(efni).multiply(cn2o);
 
   return {
     cropResidueN2O,

@@ -42,14 +42,13 @@ export const calculateScope1FertiliserUse = (
     ),
   );
 
-  const co2FromUrea = efUreaCO2.multiply(mujf, { name: 'CO2 From Urea' });
-
   const cgCO2 = constant(
     'Cg CO2',
     massPerMass('CO2', 'CO2e', new Decimal(constants.COMMON.GWP_FACTORSC13)),
   );
 
-  const ureaCO2 = cgCO2.multiply(co2FromUrea, {
+  // 147: E_j,f,CO2 = MU_j,f × EF_urea,CO2 × Cg,CO2 × 10^-3
+  const ureaCO2 = mujf.multiply(efUreaCO2).multiply(cgCO2, {
     name: 'Urea CO2',
     references: [`5.1.1.1 (147)`],
   });

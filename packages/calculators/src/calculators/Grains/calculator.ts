@@ -86,6 +86,7 @@ const calculateScope2Grains = (
   const allocatedElectricity = totalElectricity.multiply(
     crop.electricityAllocation,
   );
+
   return {
     electricity: allocatedElectricity,
   };
