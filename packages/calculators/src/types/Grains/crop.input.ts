@@ -60,6 +60,7 @@ export const GrainsCropSchema = singleEnterpriseInput('Grains', {
   }),
   rainfallAbove600: z
     .boolean()
+    .transform((val) => input('rainfallAbove600', val ? 'wet' : 'dry'))
     .meta({ description: DESCRIPTIONS.RAINFALLIRRIGATIONABOVE600 }),
   fractionOfAnnualCropBurnt: proportion(
     'Fraction of annual production of crop that is burnt, from 0 to 1',

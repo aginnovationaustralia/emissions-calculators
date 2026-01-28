@@ -1,9 +1,12 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { selectConstant } from '@/tools/constants';
+import { minus } from '@/tools/minus';
 import { multiply } from '@/tools/multiply';
 import { rootOrigin } from '@/tools/origins';
 import { scope1Output, Scope1Output } from '@/tools/outputs';
+import { one } from '@/tools/sentinels';
+import { sum } from '@/tools/sum';
 import { mass, massPerMass, realNumber } from '@/tools/units';
 import { GrainsCropTransformed } from '@/types/Grains/crop.input';
 import Decimal from 'decimal.js-light';
@@ -22,10 +25,6 @@ export const calculateScope1ResidueManagement = (
     name: 'zero',
     valueType: 'constant',
   });
-  const cropResidueN2O: Scope1Output<'N2O'> = scope1Output(
-    'cropResidueN2O',
-    zeroN2O,
-  );
   const fieldBurningN2O: Scope1Output<'N2O'> = scope1Output(
     'fieldBurningN2O',
     zeroN2O,
@@ -77,6 +76,13 @@ export const calculateScope1ResidueManagement = (
     crop.type,
     'dryMatterContent',
   );
+  const fc = selectConstant(
+    constants.CROP,
+    (value) => realNumber(new Decimal(value)),
+    'CROPRESIDUE',
+    crop.type,
+    'fractionBurnt',
+  );
   const ffodc = selectConstant(
     constants.CROP,
     (value) => realNumber(new Decimal(value)),
@@ -99,10 +105,34 @@ export const calculateScope1ResidueManagement = (
     crop.type,
     'belowAboveResidueRatio',
   );
+
   const totalResidue = multiply(ragc, pc);
+
+  const unburntResidueProportion = sum([one, minus(fc), minus(ffodc)]);
+  const totalUnburnt = multiply(totalResidue, unburntResidueProportion);
+  const unburntDryWeight = multiply(dmc, totalUnburnt);
+  const aboveGroundNitrogen = multiply(ncagc, unburntDryWeight);
+
   const totalDryMatter = multiply(dmc, totalResidue);
   const totalNitrogen = multiply(ncbgc, totalDryMatter);
-  const aboveGroundNitrogen = multiply(totalNitrogen, rbgc);
+  const belowGroundNitrogen = multiply(totalNitrogen, rbgc);
+
+  const mc = sum([aboveGroundNitrogen, belowGroundNitrogen], { name: 'Mc' });
+
+  const efni = selectConstant(
+    constants.CROP,
+    (value) => massPerMass('N2O', 'N', new Decimal(value)),
+    'EF_RESIDUES_RETURNED_TO_SOIL',
+    crop.rainfallAbove600,
+  );
+  const cn2o = selectConstant(
+    constants.COMMON,
+    (value) => realNumber(new Decimal(value)),
+    'GWP_FACTORSC15',
+  );
+
+  const n2o = multiply(efni, mc);
+  const cropResidueN2O = multiply(n2o, cn2o);
 
   return {
     cropResidueN2O,

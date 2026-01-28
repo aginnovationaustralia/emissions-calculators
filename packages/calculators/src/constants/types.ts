@@ -666,6 +666,8 @@ export type AquacultureConstants = {
 };
 
 export type CropConstants = {
+  name: string;
+
   FERTILISER_FRACTION_RUNOFF_STATIC: number;
 
   COMPONENTS_ENERGY_EF: {
@@ -741,6 +743,8 @@ export type CropConstants = {
   };
 
   CROP_RESIDUE_N2O_EF: number;
+
+  EF_RESIDUES_RETURNED_TO_SOIL: Record<'wet' | 'dry', number>;
 
   BURNING_EFFICIENCY_RESIDUE: number;
   BURNING_N2O_EF: number;

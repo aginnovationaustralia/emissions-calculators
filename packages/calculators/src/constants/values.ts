@@ -2221,6 +2221,8 @@ export const aquacultureConstants: AquacultureConstants = {
 };
 
 export const cropConstants: CropConstants = {
+  name: 'CROP',
+
   /**
    * @description Efficiency of residue burning
    */
@@ -2619,6 +2621,11 @@ export const cropConstants: CropConstants = {
    * @units kg N2O-e/kg N
    */
   CROP_RESIDUE_N2O_EF: 0.00503,
+
+  EF_RESIDUES_RETURNED_TO_SOIL: {
+    wet: 0.006,
+    dry: 0.005,
+  },
 
   /**
    * @description Fraction of N available for leaching and runoff from fertiliser

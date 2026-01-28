@@ -189,3 +189,20 @@ export type Origin<U extends AnyUnit> =
 //       return evaluateTransform(from);
 //   }
 // };
+
+export const populateBaseOrigin = (
+  baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+): IntermediateOrNamedOrigin => {
+  if (baseOrigin) {
+    if ('name' in baseOrigin && baseOrigin.name) {
+      return {
+        name: baseOrigin.name,
+        valueType: baseOrigin.valueType ?? 'variable',
+        references: baseOrigin.references,
+      };
+    }
+  }
+  return {
+    valueType: 'intermediate',
+  };
+};

@@ -1,22 +1,14 @@
 import {
   BinaryOrigin,
   IntermediateOrNamedOrigin,
+  populateBaseOrigin,
   TypedOrigin,
 } from './origins';
 import {
   Area,
   Energy,
-  EnergyPerVolume,
-  Mass,
-  MassPerArea,
-  MassPerEnergy,
-  MassPerMass,
-  NumberUnit,
-  RealNumber,
-  Substance,
-  VoidUnit,
-  Volume,
   energy,
+  EnergyPerVolume,
   formatUnit,
   isArea,
   isEnergy,
@@ -28,8 +20,17 @@ import {
   isRealNumber,
   isVoid,
   isVolume,
+  Mass,
   mass,
+  MassPerArea,
+  MassPerEnergy,
+  MassPerMass,
+  NumberUnit,
+  RealNumber,
+  Substance,
+  VoidUnit,
   voidUnit,
+  Volume,
 } from './units';
 
 // Helper types to extract substance from origin types
@@ -45,7 +46,7 @@ type ExtractMassPerEnergySubstance<T> = T extends {
   : never;
 // Extract the unit type from an origin (for preserving unit when multiplying by RealNumber)
 type ExtractOriginUnit<T> = T extends {
-  unit: infer U extends NumberUnit;
+  unit: VoidUnit | (infer U extends NumberUnit);
 }
   ? U
   : never;
@@ -149,20 +150,3 @@ export function multiply<UL extends NumberUnit, UR extends NumberUnit>(
     ...baseOrDefault,
   };
 }
-
-const populateBaseOrigin = (
-  baseOrigin?: Partial<IntermediateOrNamedOrigin>,
-): IntermediateOrNamedOrigin => {
-  if (baseOrigin) {
-    if ('name' in baseOrigin && baseOrigin.name) {
-      return {
-        name: baseOrigin.name,
-        valueType: baseOrigin.valueType ?? 'variable',
-        references: baseOrigin.references,
-      };
-    }
-  }
-  return {
-    valueType: 'intermediate',
-  };
-};
