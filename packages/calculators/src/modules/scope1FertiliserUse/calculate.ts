@@ -1,7 +1,6 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { constant } from '@/tools/constants';
-import { multiply } from '@/tools/multiply';
 import { RootContainer } from '@/tools/origins';
 import { mass, massPerMass } from '@/tools/units';
 import { GrainsCropTransformed } from '@/types/Grains/crop.input';
@@ -29,7 +28,7 @@ export const calculateScope1FertiliserUse = (
   // 5.1.1.1
   // ureaCO2
   // 147: E_j,f,CO2 = MU_j,f × EF_urea,CO2 × Cg,CO2 × 10^-3
-  const mujf = multiply(crop.ureaApplication, crop.areaSown, {
+  const mujf = crop.ureaApplication.multiply(crop.areaSown, {
     name: 'MUjf',
     references: [`5.1.1.1 (157)`],
   });
@@ -43,14 +42,14 @@ export const calculateScope1FertiliserUse = (
     ),
   );
 
-  const co2FromUrea = multiply(efUreaCO2, mujf, { name: 'CO2 From Urea' });
+  const co2FromUrea = efUreaCO2.multiply(mujf, { name: 'CO2 From Urea' });
 
   const cgCO2 = constant(
     'Cg CO2',
     massPerMass('CO2', 'CO2e', new Decimal(constants.COMMON.GWP_FACTORSC13)),
   );
 
-  const ureaCO2 = multiply(cgCO2, co2FromUrea, {
+  const ureaCO2 = cgCO2.multiply(co2FromUrea, {
     name: 'Urea CO2',
     references: [`5.1.1.1 (147)`],
   });

@@ -6,8 +6,7 @@ import { calculateScope3EmissionsFromFuel } from '@/modules/scope3EmissionsFromF
 import { calculateScope3Fertiliser } from '@/modules/scope3PurchasedFertiliser';
 import { calculateScope3Herbicide } from '@/modules/scope3PurchasedHerbicidesPesticides';
 import { calculateScope3Lime } from '@/modules/scope3PurchasedLime';
-import { multiply } from '@/tools/multiply';
-import { TypedContainer, TypedOrigin } from '@/tools/origins';
+import { BaseContainer, TypedContainer } from '@/tools/origins';
 import { output, scope1Output } from '@/tools/outputs';
 import { addScope1Totals, addScope23Totals } from '@/tools/totals';
 import { Mass } from '@/tools/units';
@@ -79,13 +78,12 @@ const calculateScope1Grains = (
 
 const calculateScope2Grains = (
   crop: GrainsCropTransformed,
-  totalElectricity: TypedOrigin<Mass<'CO2e'>>,
+  totalElectricity: BaseContainer<Mass<'CO2e'>>,
 ) => {
   // Scope 2
   // 7.1 -electricity scope 2 and 3
   // electricity (s2), electricity (s3)
-  const allocatedElectricity = multiply(
-    totalElectricity,
+  const allocatedElectricity = totalElectricity.multiply(
     crop.electricityAllocation,
   );
   return {
@@ -95,12 +93,12 @@ const calculateScope2Grains = (
 
 const calculateScope3Grains = (
   crop: GrainsCropTransformed,
-  totalElectricity: TypedOrigin<Mass<'CO2e'>>,
+  totalElectricity: BaseContainer<Mass<'CO2e'>>,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   // 7.1 -electricity scope 2 and 3
   // electricity (s2), electricity (s3)
-  const electricity = multiply(totalElectricity, crop.electricityAllocation);
+  const electricity = totalElectricity.multiply(crop.electricityAllocation);
   // 7.5 Purchased fertiliser
   // fertiliser
   const { fertiliser } = calculateScope3Fertiliser(crop, context);

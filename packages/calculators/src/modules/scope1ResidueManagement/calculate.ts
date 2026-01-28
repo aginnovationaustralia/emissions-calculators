@@ -2,7 +2,6 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { selectConstant } from '@/tools/constants';
 import { minus } from '@/tools/minus';
-import { multiply } from '@/tools/multiply';
 import { RootContainer } from '@/tools/origins';
 import { one } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
@@ -100,16 +99,16 @@ export const calculateScope1ResidueManagement = (
     'belowAboveResidueRatio',
   );
 
-  const totalResidue = multiply(ragc, pc);
+  const totalResidue = ragc.multiply(pc);
 
   const unburntResidueProportion = sum([one, minus(fc), minus(ffodc)]);
-  const totalUnburnt = multiply(totalResidue, unburntResidueProportion);
-  const unburntDryWeight = multiply(dmc, totalUnburnt);
-  const aboveGroundNitrogen = multiply(ncagc, unburntDryWeight);
+  const totalUnburnt = totalResidue.multiply(unburntResidueProportion);
+  const unburntDryWeight = dmc.multiply(totalUnburnt);
+  const aboveGroundNitrogen = ncagc.multiply(unburntDryWeight);
 
-  const totalDryMatter = multiply(dmc, totalResidue);
-  const totalNitrogen = multiply(ncbgc, totalDryMatter);
-  const belowGroundNitrogen = multiply(totalNitrogen, rbgc);
+  const totalDryMatter = dmc.multiply(totalResidue);
+  const totalNitrogen = ncbgc.multiply(totalDryMatter);
+  const belowGroundNitrogen = totalNitrogen.multiply(rbgc);
 
   const mc = sum([aboveGroundNitrogen, belowGroundNitrogen], { name: 'Mc' });
 
@@ -125,8 +124,8 @@ export const calculateScope1ResidueManagement = (
     'GWP_FACTORSC15',
   );
 
-  const n2o = multiply(efni, mc);
-  const cropResidueN2O = multiply(n2o, cn2o);
+  const n2o = efni.multiply(mc);
+  const cropResidueN2O = n2o.multiply(cn2o);
 
   return {
     cropResidueN2O,

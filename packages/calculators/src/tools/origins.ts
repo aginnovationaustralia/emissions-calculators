@@ -1,6 +1,6 @@
 import {
-  Area,
   AnyUnit,
+  Area,
   energy,
   Energy,
   EnergyPerVolume,
@@ -29,12 +29,10 @@ import {
 } from './units';
 
 // Helpers for multiply overload return types (extract from container unit)
-type ExtractMassPerEnergySubstance<U> = U extends MassPerEnergy<infer S>
-  ? S
-  : never;
-type ExtractMassPerAreaSubstance<U> = U extends MassPerArea<infer S>
-  ? S
-  : never;
+type ExtractMassPerEnergySubstance<U> =
+  U extends MassPerEnergy<infer S> ? S : never;
+type ExtractMassPerAreaSubstance<U> =
+  U extends MassPerArea<infer S> ? S : never;
 
 export type NamedValueType = 'input' | 'variable' | 'constant' | 'output';
 
@@ -54,7 +52,7 @@ export type IntermediateOrNamedOrigin = NamedOrigin | IntermediateOrigin;
 
 export class BaseContainer<
   U extends AnyUnit,
-  C extends NamedOrigin | IntermediateOrigin = IntermediateOrigin,
+  C extends NamedOrigin | IntermediateOrigin = IntermediateOrNamedOrigin,
 > {
   unit: U;
   // unit: U | VoidUnit;
@@ -297,11 +295,6 @@ export type MultiContainer<U extends NumberUnit = NumberUnit> =
 export type Container<U extends AnyUnit> =
   | TypedContainer<U>
   | MultiContainer<U extends NumberUnit ? U : never>;
-
-/** @deprecated Use TypedContainer. Kept for backward compat during Origin → Container migration. */
-export type TypedOrigin<U extends AnyUnit> = TypedContainer<U>;
-/** @deprecated Use BinaryContainer. Kept for backward compat during Origin → Container migration. */
-export type BinaryOrigin<U extends AnyUnit> = BinaryContainer<U>;
 
 export const populateBaseOriginNonGeneric = (
   baseOrigin?: Partial<NamedOrigin | IntermediateOrigin>,

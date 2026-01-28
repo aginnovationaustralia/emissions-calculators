@@ -1,19 +1,18 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { selectConstant } from '@/tools/constants';
-import { multiply } from '@/tools/multiply';
-import { BinaryOrigin, TypedOrigin } from '@/tools/origins';
+import { BinaryContainer, TypedContainer } from '@/tools/origins';
 import { sum } from '@/tools/sum';
 import { energyPerVolume, Mass, massPerEnergy, Volume } from '@/tools/units';
 import { GrainsCropTransformed } from '@/types/Grains/crop.input';
 import Decimal from 'decimal.js-light';
 
 const emissionsOfGasForFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
-  amountOfFuel: TypedOrigin<Volume<'Fuel'>>,
+  amountOfFuel: TypedContainer<Volume<'Fuel'>>,
   constants: ConstantsForGrainsCalculator,
   fuelType: 'DIESEL' | 'PETROL' | 'LPG',
   gasType: GasType,
-): BinaryOrigin<Mass<GasType>> => {
+): BinaryContainer<Mass<GasType>> => {
   const efForFuel = selectConstant(
     constants.COMMON,
     (value) => massPerEnergy(gasType, new Decimal(value)),
@@ -31,16 +30,16 @@ const emissionsOfGasForFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     fuelType,
     'ENERGY_CONTENT_FACTOR',
   );
-  const energyFromFuel = multiply(energyContentFactorForFuel, amountOfFuel);
+  const energyFromFuel = energyContentFactorForFuel.multiply(amountOfFuel);
 
-  return multiply(efForFuel, energyFromFuel);
+  return efForFuel.multiply(energyFromFuel);
 };
 
 const transportEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   input: {
-    dieselUse: TypedOrigin<Volume<'Fuel'>>;
-    petrolUse: TypedOrigin<Volume<'Fuel'>>;
-    lpg: TypedOrigin<Volume<'Fuel'>>;
+    dieselUse: TypedContainer<Volume<'Fuel'>>;
+    petrolUse: TypedContainer<Volume<'Fuel'>>;
+    lpg: TypedContainer<Volume<'Fuel'>>;
   },
   constants: ConstantsForGrainsCalculator,
   gasType: GasType,
