@@ -1,26 +1,14 @@
 import {
   BinaryOrigin,
+  Container,
   IntermediateOrNamedOrigin,
   TypedOrigin,
 } from './origins';
 import {
   Area,
   Energy,
-  energy,
   EnergyPerVolume,
-  formatUnit,
-  isArea,
-  isEnergy,
-  isEnergyPerVolume,
-  isMass,
-  isMassPerArea,
-  isMassPerEnergy,
-  isMassPerMass,
-  isRealNumber,
-  isVoid,
-  isVolume,
   Mass,
-  mass,
   MassPerArea,
   MassPerEnergy,
   MassPerMass,
@@ -28,7 +16,6 @@ import {
   RealNumber,
   Substance,
   VoidUnit,
-  voidUnit,
   Volume,
 } from './units';
 
@@ -113,39 +100,13 @@ export function multiply<UL extends NumberUnit, UR extends NumberUnit>(
   right: TypedOrigin<UR>,
   baseOrigin?: Partial<IntermediateOrNamedOrigin>,
 ): BinaryOrigin<NumberUnit | VoidUnit> {
-  // const baseOrDefault = populateBaseOrigin(baseOrigin);
-  // Determine the result unit based on the operand types
-  let unit: NumberUnit | VoidUnit;
-  if (isVoid(left.unit) || isVoid(right.unit)) {
-    unit = voidUnit();
-  } else {
-    if (isMassPerMass(left.unit) && isMass(right.unit)) {
-      unit = mass(left.unit.snum);
-    } else if (isMassPerArea(left.unit) && isArea(right.unit)) {
-      unit = mass(left.unit.substance);
-    } else if (isMassPerEnergy(left.unit) && isEnergy(right.unit)) {
-      unit = mass(left.unit.substance);
-    } else if (isEnergyPerVolume(left.unit) && isVolume(right.unit)) {
-      unit = energy();
-    } else {
-      if (!isRealNumber(right.unit)) {
-        // eslint-disable-next-line no-console
-        console.error(
-          `multiply does not support ${formatUnit(left.unit)} * ${formatUnit(right.unit)}`,
-        );
-      }
-      // For RealNumber multiplication, preserve the left operand's unit
-      unit = left.unit;
-    }
-    unit.value = left.unit.value.mul(right.unit.value);
-  }
-
-  return {
-    type: 'multiply',
-    originType: 'binary',
-    left,
-    right,
-    unit,
-    ...baseOrDefault,
+  // Delegate to BaseContainer#multiply. Cast to the implementation signature so overload
+  // resolution succeeds when left is a union (TypedContainer = union of container classes).
+  type MultiplyImpl = {
+    multiply(
+      right: Container<NumberUnit>,
+      baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    ): BinaryOrigin<NumberUnit | VoidUnit>;
   };
+  return (left as MultiplyImpl).multiply(right as Container<NumberUnit>, baseOrigin);
 }

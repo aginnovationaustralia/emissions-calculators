@@ -31,6 +31,6 @@ export function sum<N extends NumberUnit, O extends TypedContainer<N>>(
       (acc, curr) => acc.add(curr.unit.value),
       new Decimal(0),
     ),
-  };
+  } as N;
   return new SummedContainer(unit, array, baseOrigin);
 }

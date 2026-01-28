@@ -256,7 +256,7 @@ export const isStringUnit = (unit: AnyUnit): unit is StringUnit => {
   return typeof unit === 'string';
 };
 
-export type AnyUnit = NumberUnit | StringUnit | VoidUnit;
+export type AnyUnit = NumberUnit | StringUnit;
 
 export function formatUnit(unit: AnyUnit): string {
   if (isVoid(unit)) {

@@ -7,7 +7,7 @@ import { calculateScope3Fertiliser } from '@/modules/scope3PurchasedFertiliser';
 import { calculateScope3Herbicide } from '@/modules/scope3PurchasedHerbicidesPesticides';
 import { calculateScope3Lime } from '@/modules/scope3PurchasedLime';
 import { multiply } from '@/tools/multiply';
-import { TypedOrigin } from '@/tools/origins';
+import { TypedContainer, TypedOrigin } from '@/tools/origins';
 import { output, scope1Output } from '@/tools/outputs';
 import { addScope1Totals, addScope23Totals } from '@/tools/totals';
 import { Mass } from '@/tools/units';
@@ -89,7 +89,7 @@ const calculateScope2Grains = (
     crop.electricityAllocation,
   );
   return {
-    electricity: output('electricity', 2, allocatedElectricity),
+    electricity: allocatedElectricity,
   };
 };
 
@@ -100,11 +100,7 @@ const calculateScope3Grains = (
 ) => {
   // 7.1 -electricity scope 2 and 3
   // electricity (s2), electricity (s3)
-  const electricity = output(
-    'electricity',
-    3,
-    multiply(totalElectricity, crop.electricityAllocation),
-  );
+  const electricity = multiply(totalElectricity, crop.electricityAllocation);
   // 7.5 Purchased fertiliser
   // fertiliser
   const { fertiliser } = calculateScope3Fertiliser(crop, context);
@@ -134,29 +130,29 @@ const calculateScope3Grains = (
 };
 
 type Scope1Values = {
-  fuelCO2: TypedOrigin<Mass<'CO2'>>;
-  fuelCH4: TypedOrigin<Mass<'CH4'>>;
-  fuelN2O: TypedOrigin<Mass<'N2O'>>;
-  ureaCO2: TypedOrigin<Mass<'CO2'>>;
-  limeCO2: TypedOrigin<Mass<'CO2'>>;
-  fertiliserN2O: TypedOrigin<Mass<'N2O'>>;
-  atmosphericDepositionN2O: TypedOrigin<Mass<'N2O'>>;
-  leachingAndRunoffN2O: TypedOrigin<Mass<'N2O'>>;
-  cropResidueN2O: TypedOrigin<Mass<'N2O'>>;
-  fieldBurningN2O: TypedOrigin<Mass<'N2O'>>;
-  fieldBurningCH4: TypedOrigin<Mass<'CH4'>>;
+  fuelCO2: TypedContainer<Mass<'CO2'>>;
+  fuelCH4: TypedContainer<Mass<'CH4'>>;
+  fuelN2O: TypedContainer<Mass<'N2O'>>;
+  ureaCO2: TypedContainer<Mass<'CO2'>>;
+  limeCO2: TypedContainer<Mass<'CO2'>>;
+  fertiliserN2O: TypedContainer<Mass<'N2O'>>;
+  atmosphericDepositionN2O: TypedContainer<Mass<'N2O'>>;
+  leachingAndRunoffN2O: TypedContainer<Mass<'N2O'>>;
+  cropResidueN2O: TypedContainer<Mass<'N2O'>>;
+  fieldBurningN2O: TypedContainer<Mass<'N2O'>>;
+  fieldBurningCH4: TypedContainer<Mass<'CH4'>>;
 };
 
 type Scope2Values = {
-  electricity: TypedOrigin<Mass<'CO2e'>>;
+  electricity: TypedContainer<Mass<'CO2e'>>;
 };
 
 type Scope3Values = {
-  electricity: TypedOrigin<Mass<'CO2e'>>;
-  fertiliser: TypedOrigin<Mass<'CO2e'>>;
-  herbicide: TypedOrigin<Mass<'CO2e'>>;
-  fuel: TypedOrigin<Mass<'CO2e'>>;
-  lime: TypedOrigin<Mass<'CO2e'>>;
+  electricity: TypedContainer<Mass<'CO2e'>>;
+  fertiliser: TypedContainer<Mass<'CO2e'>>;
+  herbicide: TypedContainer<Mass<'CO2e'>>;
+  fuel: TypedContainer<Mass<'CO2e'>>;
+  lime: TypedContainer<Mass<'CO2e'>>;
 };
 
 type ScopeValues = {
