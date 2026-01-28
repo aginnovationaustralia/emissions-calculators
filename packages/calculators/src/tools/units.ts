@@ -17,6 +17,19 @@ export type Substance =
 
 type NumberUnitBase = { value: Decimal };
 
+/* SI unit definitions
+
+Selected base units for storage of values:
+Mass: kilograms (kg)
+Time: seconds (s)
+Length: metres (m)
+Area: square metres (m2)
+Volume: litres (L)
+Energy: joules (J)
+
+See https://en.wikipedia.org/wiki/International_System_of_Units#SI_base_units
+*/
+
 export type MassPerMass<
   SNum extends Substance,
   SDenom extends Substance,
@@ -28,21 +41,21 @@ export type MassPerMass<
 export const massPerMass = <SNum extends Substance, SDenom extends Substance>(
   snum: SNum,
   sdenom: SDenom,
-  initialValue?: Decimal,
+  initialValueRatio?: number | Decimal,
 ): MassPerMass<SNum, SDenom> => {
   return {
     __unitType: 'MassPerMass',
     snum,
     sdenom,
-    value: initialValue ?? new Decimal(0),
+    value: new Decimal(initialValueRatio ?? 0),
   };
 };
 
 export type MassCO2ePerMassRefrigerant = MassPerMass<'CO2e', 'Refrigerant'>;
 export const massCO2ePerMassRefrigerant = (
-  initialValue?: Decimal,
+  initialValueRatio?: number | Decimal,
 ): MassCO2ePerMassRefrigerant => {
-  return massPerMass('CO2e', 'Refrigerant', initialValue);
+  return massPerMass('CO2e', 'Refrigerant', initialValueRatio);
 };
 
 export const isMassPerMass = (
@@ -57,12 +70,12 @@ export type Mass<T extends Substance> = NumberUnitBase & {
 };
 export const mass = <S extends Substance>(
   substance: S,
-  initialValue?: Decimal,
+  initialValueKg?: number | Decimal,
 ): Mass<S> => {
   return {
     __unitType: 'Mass',
     substance,
-    value: initialValue ?? new Decimal(0),
+    value: new Decimal(initialValueKg ?? 0),
   };
 };
 export const isMass = (unit: NumberUnit): unit is Mass<Substance> => {
@@ -74,12 +87,12 @@ export type Volume<S extends Substance> = NumberUnitBase & {
 };
 export const volume = <S extends Substance>(
   substance: S,
-  initialValue?: Decimal,
+  initialValueLitres?: number | Decimal,
 ): Volume<S> => {
   return {
     __unitType: 'Volume',
     substance,
-    value: initialValue ?? new Decimal(0),
+    value: new Decimal(initialValueLitres ?? 0),
   };
 };
 export const isVolume = (unit: NumberUnit): unit is Volume<Substance> => {
@@ -89,10 +102,10 @@ export const isVolume = (unit: NumberUnit): unit is Volume<Substance> => {
 export type Energy = NumberUnitBase & {
   __unitType: 'Energy';
 };
-export const energy = (initialValue?: Decimal): Energy => {
+export const energy = (initialValueJoules?: number | Decimal): Energy => {
   return {
     __unitType: 'Energy',
-    value: initialValue ?? new Decimal(0),
+    value: new Decimal(initialValueJoules ?? 0),
   };
 };
 export const isEnergy = (unit: NumberUnit): unit is Energy => {
@@ -101,10 +114,10 @@ export const isEnergy = (unit: NumberUnit): unit is Energy => {
 export type Area = NumberUnitBase & {
   __unitType: 'Area';
 };
-export const area = (initialValue?: Decimal): Area => {
+export const area = (initialValueMetresSquared?: number | Decimal): Area => {
   return {
     __unitType: 'Area',
-    value: initialValue ?? new Decimal(0),
+    value: new Decimal(initialValueMetresSquared ?? 0),
   };
 };
 export const isArea = (unit: NumberUnit): unit is Area => {
@@ -117,12 +130,12 @@ export type MassPerEnergy<T extends Substance> = NumberUnitBase & {
 };
 export const massPerEnergy = <S extends Substance>(
   substance: S,
-  initialValue?: Decimal,
+  initialValueKgPerJoules?: number | Decimal,
 ): MassPerEnergy<S> => {
   return {
     __unitType: 'MassPerEnergy',
     substance,
-    value: initialValue ?? new Decimal(0),
+    value: new Decimal(initialValueKgPerJoules ?? 0),
   };
 };
 export const isMassPerEnergy = (
@@ -137,12 +150,12 @@ export type EnergyPerVolume<S extends Substance> = NumberUnitBase & {
 };
 export const energyPerVolume = <S extends Substance>(
   substance: S,
-  initialValue?: Decimal,
+  initialValueJoulesPerLitre?: number | Decimal,
 ): EnergyPerVolume<S> => {
   return {
     __unitType: 'EnergyPerVolume',
     substance,
-    value: initialValue ?? new Decimal(0),
+    value: new Decimal(initialValueJoulesPerLitre ?? 0),
   };
 };
 export const isEnergyPerVolume = (
@@ -165,13 +178,13 @@ export const massPerVolume = <
 >(
   mass: SMass,
   volume: SVolume,
-  initialValue?: Decimal,
+  initialValueKgPerLitre?: number | Decimal,
 ): MassPerVolume<SMass, SVolume> => {
   return {
     __unitType: 'MassPerVolume',
     mass,
     volume,
-    value: initialValue ?? new Decimal(0),
+    value: new Decimal(initialValueKgPerLitre ?? 0),
   };
 };
 export const isMassPerVolume = (
@@ -186,12 +199,12 @@ export type MassPerArea<S extends Substance> = NumberUnitBase & {
 };
 export const massPerArea = <S extends Substance>(
   substance: S,
-  initialValue?: Decimal,
+  initialValueKgPerSquareMetre?: number | Decimal,
 ): MassPerArea<S> => {
   return {
     __unitType: 'MassPerArea',
     substance,
-    value: initialValue ?? new Decimal(0),
+    value: new Decimal(initialValueKgPerSquareMetre ?? 0),
   };
 };
 export const isMassPerArea = (
@@ -203,10 +216,10 @@ export const isMassPerArea = (
 export type RealNumber = NumberUnitBase & {
   __unitType: 'RealNumber';
 };
-export const realNumber = (initialValue?: Decimal): RealNumber => {
+export const realNumber = (initialValue?: number | Decimal): RealNumber => {
   return {
     __unitType: 'RealNumber',
-    value: initialValue ?? new Decimal(0),
+    value: new Decimal(initialValue ?? 0),
   };
 };
 export const isRealNumber = (unit: NumberUnit): unit is RealNumber => {
