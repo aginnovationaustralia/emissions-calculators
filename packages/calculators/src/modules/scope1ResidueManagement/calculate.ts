@@ -3,8 +3,7 @@ import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { selectConstant } from '@/tools/constants';
 import { minus } from '@/tools/minus';
 import { multiply } from '@/tools/multiply';
-import { rootOrigin } from '@/tools/origins';
-import { scope1Output, Scope1Output } from '@/tools/outputs';
+import { RootContainer } from '@/tools/origins';
 import { one } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { mass, massPerMass, realNumber } from '@/tools/units';
@@ -17,22 +16,16 @@ export const calculateScope1ResidueManagement = (
 ) => {
   const { constants } = context;
 
-  const zeroCH4 = rootOrigin(mass('CH4', new Decimal(0)), {
+  const zeroCH4 = new RootContainer(mass('CH4', new Decimal(0)), {
     name: 'zero',
     valueType: 'constant',
   });
-  const zeroN2O = rootOrigin(mass('N2O', new Decimal(0)), {
+  const zeroN2O = new RootContainer(mass('N2O', new Decimal(0)), {
     name: 'zero',
     valueType: 'constant',
   });
-  const fieldBurningN2O: Scope1Output<'N2O'> = scope1Output(
-    'fieldBurningN2O',
-    zeroN2O,
-  );
-  const fieldBurningCH4: Scope1Output<'CH4'> = scope1Output(
-    'fieldBurningCH4',
-    zeroCH4,
-  );
+  const fieldBurningN2O = zeroN2O;
+  const fieldBurningCH4 = zeroCH4;
 
   /* cropResidueN2O
     6.1.1.1
@@ -90,7 +83,8 @@ export const calculateScope1ResidueManagement = (
     crop.type,
     'fractionRemoved',
   );
-  const pc = multiply(crop.averageGrainYield, crop.areaSown, { name: 'Pc' });
+
+  const pc = crop.averageGrainYield.multiply(crop.areaSown, { name: 'Pc' });
   const ragc = selectConstant(
     constants.CROP,
     (value) => massPerMass('CropResidue', 'Yield', new Decimal(value)),
