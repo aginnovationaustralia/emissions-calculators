@@ -1,7 +1,6 @@
 import {
   BinaryOrigin,
   IntermediateOrNamedOrigin,
-  populateBaseOrigin,
   TypedOrigin,
 } from './origins';
 import {
@@ -114,7 +113,7 @@ export function multiply<UL extends NumberUnit, UR extends NumberUnit>(
   right: TypedOrigin<UR>,
   baseOrigin?: Partial<IntermediateOrNamedOrigin>,
 ): BinaryOrigin<NumberUnit | VoidUnit> {
-  const baseOrDefault = populateBaseOrigin(baseOrigin);
+  // const baseOrDefault = populateBaseOrigin(baseOrigin);
   // Determine the result unit based on the operand types
   let unit: NumberUnit | VoidUnit;
   if (isVoid(left.unit) || isVoid(right.unit)) {

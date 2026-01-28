@@ -1,9 +1,9 @@
-import { rootOrigin, RootOrigin } from './origins';
+import { RootContainer } from './origins';
 import { AnyUnit } from './units';
 
 export const input = <T extends AnyUnit>(
   name: string,
   value: T,
-): RootOrigin<T> => {
-  return rootOrigin(value, { valueType: 'input', name });
+): RootContainer<T> => {
+  return new RootContainer(value, { valueType: 'input', name });
 };

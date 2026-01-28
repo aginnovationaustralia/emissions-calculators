@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js-light';
 import { HasMetadata, ValueMetadata } from './metadata';
-import { Origin } from './origins';
+import { Container } from './origins';
 import { AnyUnit, formatUnit, isVoid, mass, Mass, VoidUnit } from './units';
 
 export const makeUnique = <T>(a: T[]): T[] => {
@@ -40,7 +40,7 @@ export interface Output<
   name: string;
   unit: Mass<S>;
   scope: Scope;
-  from: Origin<Mass<S> | VoidUnit>;
+  from: Container<Mass<S> | VoidUnit>;
   valueType: 'output';
   originType: 'unary';
   references: string[];
@@ -53,7 +53,7 @@ export const output = <
 >(
   name: string,
   scope: Scope,
-  from: Origin<Mass<S> | VoidUnit>,
+  from: Container<Mass<S> | VoidUnit>,
   metadata?: ValueMetadata,
 ): Output<Scope, S> => {
   const gasAmountKg = isVoid(from.unit) ? new Decimal(0) : from.unit.value;
@@ -77,7 +77,7 @@ export const output = <
 export const scope23Output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
   name: string,
   scope: Scope,
-  from: Origin<Mass<S> | VoidUnit>,
+  from: Container<Mass<S> | VoidUnit>,
   metadata?: ValueMetadata,
 ): Output<Scope, S> => output(name, scope, from, metadata);
 
@@ -88,7 +88,7 @@ export interface Scope1Output<
 }
 export const scope1Output = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
   name: string,
-  from: Origin<Mass<S> | VoidUnit>,
+  from: Container<Mass<S> | VoidUnit>,
 ): Scope1Output<S> => {
   const gas: S = isVoid(from.unit) ? ('CO2' as S) : from.unit.substance;
   return {
@@ -97,41 +97,41 @@ export const scope1Output = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
   };
 };
 
-export const collectReferences = <O extends Origin<AnyUnit>>(
-  origin: O,
+export const collectReferences = <O extends Container<AnyUnit>>(
+  container: O,
 ): string[] => {
   const baseResults =
-    origin.valueType === 'intermediate' ? [] : (origin.references ?? []);
-  switch (origin.originType) {
+    container.core.valueType === 'intermediate'
+      ? []
+      : (container.core.references ?? []);
+  switch (container.originType) {
     case 'unary':
-      return baseResults.concat(collectReferences(origin.from));
+      return baseResults.concat(collectReferences(container.from));
     case 'binary':
       return baseResults.concat(
-        collectReferences(origin.left),
-        collectReferences(origin.right),
+        collectReferences(container.left),
+        collectReferences(container.right),
       );
-    case 'empty':
-      return baseResults;
     case 'root':
       return baseResults;
     case 'sum':
-      return baseResults.concat(origin.from.flatMap(collectReferences));
+      return baseResults.concat(container.from.flatMap(collectReferences));
     case 'constant_selection':
       return baseResults.concat(
-        origin.selectors
+        container.selectors
           .filter((s) => typeof s !== 'string')
           .flatMap(collectReferences),
       );
   }
 };
 
-export const collectConstants = <O extends Origin<AnyUnit>>(
+export const collectConstants = <O extends Container<AnyUnit>>(
   origin: O,
 ): ConstantDefinition[] => {
   const constants: ConstantDefinition[] = [];
   if (origin.originType === 'constant_selection') {
     const currentConstant = {
-      name: origin.name,
+      name: origin.core.name,
       value: origin.unit.value.toNumber(),
       units: formatUnit(origin.unit),
     };
@@ -144,8 +144,6 @@ export const collectConstants = <O extends Origin<AnyUnit>>(
       return collectConstants(origin.left).concat(
         collectConstants(origin.right),
       );
-    case 'empty':
-      return [];
     case 'root':
       return [];
     case 'sum':

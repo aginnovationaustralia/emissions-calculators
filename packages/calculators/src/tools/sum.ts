@@ -1,17 +1,10 @@
 import Decimal from 'decimal.js-light';
 import {
   IntermediateOrNamedOrigin,
-  Origin,
-  populateBaseOrigin,
-  SummedOrigin,
-  TypedOrigin,
+  SummedContainer,
+  TypedContainer,
 } from './origins';
-import { AnyUnit, NumberUnit, VoidUnit, voidUnit } from './units';
-
-export type UnitArray<U extends AnyUnit, O extends Origin<U> = Origin<U>> = {
-  unit: U;
-  items: O[];
-};
+import { NumberUnit, VoidUnit, voidUnit } from './units';
 
 // Extract the unit type from an origin (for preserving unit when summing)
 type ExtractOriginUnit<T> = T extends {
@@ -21,16 +14,16 @@ type ExtractOriginUnit<T> = T extends {
   : never;
 
 // Sum function with type inference to preserve specific unit types
-export function sum<U extends TypedOrigin<NumberUnit>>(
+export function sum<U extends TypedContainer<NumberUnit>>(
   array: U[],
   baseOrigin?: Partial<IntermediateOrNamedOrigin>,
-): SummedOrigin<ExtractOriginUnit<U>>;
+): SummedContainer<ExtractOriginUnit<U>>;
 
-export function sum<N extends NumberUnit, O extends Origin<N>>(
+export function sum<N extends NumberUnit, O extends TypedContainer<N>>(
   array: O[],
   baseOrigin?: Partial<IntermediateOrNamedOrigin>,
-): SummedOrigin<N> {
-  const baseOrDefault = populateBaseOrigin(baseOrigin);
+): SummedContainer<N> {
+  // const baseOrDefault = populateBaseOrigin(baseOrigin);
   const inheritedUnit = array.length > 0 ? array[0].unit : voidUnit();
   const unit = {
     ...inheritedUnit,
@@ -39,10 +32,5 @@ export function sum<N extends NumberUnit, O extends Origin<N>>(
       new Decimal(0),
     ),
   };
-  return {
-    originType: 'sum',
-    from: array,
-    unit,
-    ...baseOrDefault,
-  };
+  return new SummedContainer(unit, array, baseOrigin);
 }

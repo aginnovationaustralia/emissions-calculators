@@ -1,4 +1,4 @@
-import { ConstantSelectionOrigin, RootOrigin } from './origins';
+import { ConstantSelectionContainer, RootContainer } from './origins';
 import { AnyUnit, NumberUnit, StringUnit } from './units';
 
 /*
@@ -21,7 +21,7 @@ The function should have generic constraints on the constantName and keyInRecord
 //   selector: TypedOrigin<StringUnit<KN>>,
 //   firstConstantName: KC1,
 //   secondConstantName: KC2,
-// ): ConstantSelectionOrigin<TSource['unit']>;
+// ): ConstantSelectionContainer<TSource['unit']>;
 
 // // One-level traversal: constants[firstConstantName]
 // export function selectConstant<
@@ -76,13 +76,8 @@ The function should have generic constraints on the constantName and keyInRecord
 export const constant = <U extends AnyUnit>(
   name: string,
   unit: U,
-): RootOrigin<U> => {
-  return {
-    name,
-    unit,
-    originType: 'root',
-    valueType: 'constant',
-  };
+): RootContainer<U> => {
+  return new RootContainer(unit, { valueType: 'constant', name });
 };
 
 /*
@@ -112,7 +107,7 @@ define a function 'selectConstant' that takes these parameters:
 - a function which takes the value at the path specified by the key selectors and returns a value of type T
 - up to 5 key selectors, each of which can be a string or a TypedOrigin
 
-The return value should be of type RootOrigin<T>, with an originType of root and valueType of constant
+The return value should be of type RootContainer<T>, with an originType of root and valueType of constant
 
 */
 
@@ -125,8 +120,8 @@ export function selectConstant<
 >(
   constants: Constants,
   getValue: (value: TConstant) => TOut,
-  selector1: CK1 | RootOrigin<StringUnit<CK1>>,
-): ConstantSelectionOrigin<TOut>;
+  selector1: CK1 | RootContainer<StringUnit<CK1>>,
+): ConstantSelectionContainer<TOut>;
 
 // 2-level: constants[CK1][CK2]
 export function selectConstant<
@@ -138,9 +133,9 @@ export function selectConstant<
 >(
   constants: Constants,
   getValue: (value: TConstant) => TOut,
-  selector1: CK1 | RootOrigin<StringUnit<CK1>>,
-  selector2: CK2 | RootOrigin<StringUnit<CK2>>,
-): ConstantSelectionOrigin<TOut>;
+  selector1: CK1 | RootContainer<StringUnit<CK1>>,
+  selector2: CK2 | RootContainer<StringUnit<CK2>>,
+): ConstantSelectionContainer<TOut>;
 
 // 3-level: constants[CK1][CK2][CK3]
 export function selectConstant<
@@ -153,10 +148,10 @@ export function selectConstant<
 >(
   constants: Constants,
   getValue: (value: TConstant) => TOut,
-  selector1: CK1 | RootOrigin<StringUnit<CK1>>,
-  selector2: CK2 | RootOrigin<StringUnit<CK2>>,
-  selector3: CK3 | RootOrigin<StringUnit<CK3>>,
-): ConstantSelectionOrigin<TOut>;
+  selector1: CK1 | RootContainer<StringUnit<CK1>>,
+  selector2: CK2 | RootContainer<StringUnit<CK2>>,
+  selector3: CK3 | RootContainer<StringUnit<CK3>>,
+): ConstantSelectionContainer<TOut>;
 
 // 4-level: constants[CK1][CK2][CK3][CK4]
 export function selectConstant<
@@ -170,11 +165,11 @@ export function selectConstant<
 >(
   constants: Constants,
   getValue: (value: TConstant) => TOut,
-  selector1: CK1 | RootOrigin<StringUnit<CK1>>,
-  selector2: CK2 | RootOrigin<StringUnit<CK2>>,
-  selector3: CK3 | RootOrigin<StringUnit<CK3>>,
-  selector4: CK4 | RootOrigin<StringUnit<CK4>>,
-): ConstantSelectionOrigin<TOut>;
+  selector1: CK1 | RootContainer<StringUnit<CK1>>,
+  selector2: CK2 | RootContainer<StringUnit<CK2>>,
+  selector3: CK3 | RootContainer<StringUnit<CK3>>,
+  selector4: CK4 | RootContainer<StringUnit<CK4>>,
+): ConstantSelectionContainer<TOut>;
 
 // 5-level: constants[CK1][CK2][CK3][CK4][CK5]
 export function selectConstant<
@@ -192,31 +187,31 @@ export function selectConstant<
 >(
   constants: Constants,
   getValue: (value: TConstant) => TOut,
-  selector1: CK1 | RootOrigin<StringUnit<CK1>>,
-  selector2: CK2 | RootOrigin<StringUnit<CK2>>,
-  selector3: CK3 | RootOrigin<StringUnit<CK3>>,
-  selector4: CK4 | RootOrigin<StringUnit<CK4>>,
-  selector5: CK5 | RootOrigin<StringUnit<CK5>>,
-): ConstantSelectionOrigin<TOut>;
+  selector1: CK1 | RootContainer<StringUnit<CK1>>,
+  selector2: CK2 | RootContainer<StringUnit<CK2>>,
+  selector3: CK3 | RootContainer<StringUnit<CK3>>,
+  selector4: CK4 | RootContainer<StringUnit<CK4>>,
+  selector5: CK5 | RootContainer<StringUnit<CK5>>,
+): ConstantSelectionContainer<TOut>;
 
 // Implementation
 
 export function selectConstant<TOut extends NumberUnit>(
   constants: Record<string, unknown> & { name: string },
   getValue: (value: unknown) => TOut,
-  selector1: string | RootOrigin<StringUnit>,
-  selector2?: string | RootOrigin<StringUnit>,
-  selector3?: string | RootOrigin<StringUnit>,
-  selector4?: string | RootOrigin<StringUnit>,
-  selector5?: string | RootOrigin<StringUnit>,
-): ConstantSelectionOrigin<TOut> {
+  selector1: string | RootContainer<StringUnit>,
+  selector2?: string | RootContainer<StringUnit>,
+  selector3?: string | RootContainer<StringUnit>,
+  selector4?: string | RootContainer<StringUnit>,
+  selector5?: string | RootContainer<StringUnit>,
+): ConstantSelectionContainer<TOut> {
   const selectors = [
     selector1,
     selector2,
     selector3,
     selector4,
     selector5,
-  ].filter((s): s is string | RootOrigin<StringUnit> => s !== undefined);
+  ].filter((s): s is string | RootContainer<StringUnit> => s !== undefined);
 
   // Traverse the constants object using the selectors
   let current: unknown = constants;
@@ -228,11 +223,9 @@ export function selectConstant<TOut extends NumberUnit>(
 
   const value = getValue(current);
 
-  return {
-    valueType: 'constant',
-    name: `${constants.name}[${selectors.join('.')}]`,
-    unit: value,
-    originType: 'constant_selection',
+  return new ConstantSelectionContainer(
+    value,
     selectors,
-  };
+    `${constants.name}[${selectors.join('.')}]`,
+  );
 }
