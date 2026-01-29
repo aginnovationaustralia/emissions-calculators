@@ -1,8 +1,8 @@
 import { input } from '@/tools/inputs';
-import { area, massPerArea } from '@/tools/units';
+import { area, massPerArea, realNumber } from '@/tools/units';
 import { CropTypes } from '@/types';
 import { DESCRIPTIONS } from '@/types/descriptions.schema';
-import { object } from '@/types/schemas';
+import { object, proportion } from '@/types/schemas';
 import Decimal from 'decimal.js-light';
 import { z } from 'zod';
 
@@ -29,6 +29,9 @@ export const CropResidueInputSchema = object({
     .min(0)
     .transform((val) => input('areaSown', area(new Decimal(val))))
     .meta({ description: 'Area sown, in ha (hectares)' }),
+  fractionOfAnnualCropBurnt: proportion(
+    'Fraction of annual production of crop that is burnt, from 0 to 1',
+  ).transform((val) => input('fractionOfAnnualCropBurnt', realNumber(val))),
 });
 
 export type CropResidueInput = z.input<typeof CropResidueInputSchema>;

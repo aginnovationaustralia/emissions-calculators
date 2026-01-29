@@ -1,10 +1,9 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { constant } from '@/tools/constants';
-import { RootContainer } from '@/tools/origins';
-import { oneMinus } from '@/tools/sentinels';
+import { oneMinus, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { mass, massPerMass, realNumber } from '@/tools/units';
+import { massPerMass, realNumber } from '@/tools/units';
 import Decimal from 'decimal.js-light';
 import { CropResidueInputTransformed } from '../scope1ResidueManagement/crop-residue.input';
 import { FertiliserInputTransformed } from './fertiliser.input';
@@ -107,6 +106,35 @@ const calculateScope1FertiliserLimeCO2 = (
   return elime;
 };
 
+const calculateScope1FertiliserLimeN2O = (
+  _input: LimeInputTransformed,
+  _constants: ConstantsForGrainsCalculator,
+) => {
+  /*
+5.1.1.1 Method 1 – Inorganic Fertiliser Application N2O Emissions
+(1) Nitrous oxide emissions from the application of all inorganic fertiliser types f to all
+production systems j, 𝐸𝑁2𝑂 (t N2O), are calculated as:
+𝐸𝑁2𝑂 = ∑ ∑ (𝑀𝑁 𝑗𝑓 × 𝐸𝐹 𝑗,𝑁2𝑂 × 𝐶𝑁2𝑂 × 10−3)
+𝑗
+𝑓
+Where 𝑀𝑁 𝑗𝑓 = mass of nitrogen in inorganic fertiliser type f applied to production
+system j (kg N)
+𝐸𝐹 𝑗,𝑁2𝑂 = emission factor for nitrous oxide for inorganic fertilisers (kg N2O-
+N/kg N applied)
+𝐶𝑁2𝑂 = factor to convert elemental mass of nitrous oxide to molecular mass
+(dimensionless)
+*/
+  // TODO: New fertiliser approach
+  return zeroN2O;
+};
+
+export const calculateScope1FertiliserAtmosphericDepositionN2O = (
+  _input: FertiliserInputTransformed & CropResidueInputTransformed,
+  _constants: ConstantsForGrainsCalculator,
+) => {
+  return zeroN2O;
+};
+
 export const calculateScope1FertiliserUse = (
   input: FertiliserInputTransformed &
     CropResidueInputTransformed &
@@ -115,18 +143,13 @@ export const calculateScope1FertiliserUse = (
 ) => {
   const { constants } = context;
 
-  const zeroN2O = new RootContainer(mass('N2O', new Decimal(0)), {
-    name: 'zero',
-    valueType: 'constant',
-  });
-  const fertiliserN2O = zeroN2O;
   const atmosphericDepositionN2O = zeroN2O;
   const leachingAndRunoffN2O = zeroN2O;
 
   return {
     ureaCO2: calculateScope1FertiliserUreaCO2(input, constants),
     limeCO2: calculateScope1FertiliserLimeCO2(input, constants),
-    fertiliserN2O,
+    fertiliserN2O: calculateScope1FertiliserLimeN2O(input, constants),
     atmosphericDepositionN2O,
     leachingAndRunoffN2O,
   };

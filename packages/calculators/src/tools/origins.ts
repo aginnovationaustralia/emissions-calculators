@@ -72,12 +72,18 @@ export class BaseContainer<
    * with StringUnit (e.g. for constant selection keys) can still extend BaseContainer; consider
    * narrowing to U extends NumberUnit for classes that only ever hold numeric units.
    */
-  // RealNumber * unit → preserve this.unit
+  // unit * RealNumber → preserve this.unit
   multiply<UL extends NumberUnit>(
     this: BaseContainer<UL, C>,
     right: Container<RealNumber>,
     baseOrigin?: Partial<IntermediateOrNamedOrigin>,
   ): BinaryContainer<UL>;
+  // RealNumber * unit → preserve this.unit
+  multiply<UR extends NumberUnit>(
+    this: BaseContainer<RealNumber, C>,
+    right: Container<UR>,
+    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+  ): BinaryContainer<UR>;
   // MassPerMass<S1,S2> * Mass<S2> → Mass<S1>
   multiply<S1 extends Substance, S2 extends Substance>(
     this: BaseContainer<MassPerMass<S1, S2>, C>,

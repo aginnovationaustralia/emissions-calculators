@@ -36,9 +36,6 @@ export const GrainsCropSchema = singleEnterpriseInput('Grains', {
     description:
       'Sulfur application, in kg S/ha (kilograms of sulfur per hectare)',
   }),
-  fractionOfAnnualCropBurnt: proportion(
-    'Fraction of annual production of crop that is burnt, from 0 to 1',
-  ),
   herbicideUse: z.number().min(0).meta({
     description:
       'Total amount of active ingredients from general herbicide/pesticide use, in kg (kilogram)',

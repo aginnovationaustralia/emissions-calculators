@@ -9,23 +9,10 @@ import { mass, massPerMass, realNumber } from '@/tools/units';
 import Decimal from 'decimal.js-light';
 import { CropResidueInputTransformed } from './crop-residue.input';
 
-export const calculateScope1ResidueManagement = (
+const calculateCropResidueN2O = (
   crop: CropResidueInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  constants: ConstantsForGrainsCalculator,
 ) => {
-  const { constants } = context;
-
-  const zeroCH4 = new RootContainer(mass('CH4', new Decimal(0)), {
-    name: 'zero',
-    valueType: 'constant',
-  });
-  const zeroN2O = new RootContainer(mass('N2O', new Decimal(0)), {
-    name: 'zero',
-    valueType: 'constant',
-  });
-  const fieldBurningN2O = zeroN2O;
-  const fieldBurningCH4 = zeroCH4;
-
   /* cropResidueN2O
     6.1.1.1
     441 | 𝐸 = ∑ (𝑀𝑐 × 𝐸𝐹 𝑁𝑖 × 𝐶𝑁2𝑂 × 10−3) (t N2O)
@@ -98,10 +85,10 @@ export const calculateScope1ResidueManagement = (
   );
 
   /*  448 | 𝑀𝑐 =
-                (𝑃 𝑐 × 𝑅𝐴𝐺𝑐 × (1 − 𝐹 𝑐− 𝐹𝐹𝑂𝐷𝑐) × 𝐷𝑀𝑐 × 𝑁𝐶𝐴𝐺𝑐)
-                  + 
-                (𝑃 𝑐 × 𝑅𝐴𝐺𝑐 × 𝑅𝐵𝐺𝑐 × 𝐷𝑀𝑐 × 𝑁𝐶𝐵𝐺𝑐) (kg N)
-  */
+                  (𝑃 𝑐 × 𝑅𝐴𝐺𝑐 × (1 − 𝐹 𝑐− 𝐹𝐹𝑂𝐷𝑐) × 𝐷𝑀𝑐 × 𝑁𝐶𝐴𝐺𝑐)
+                    + 
+                  (𝑃 𝑐 × 𝑅𝐴𝐺𝑐 × 𝑅𝐵𝐺𝑐 × 𝐷𝑀𝑐 × 𝑁𝐶𝐵𝐺𝑐) (kg N)
+    */
   const aboveGroundNitrogen = pc
     .multiply(ragc)
     .multiply(sum([one, minus(fc), minus(ffodc)]))
@@ -131,9 +118,66 @@ export const calculateScope1ResidueManagement = (
   // 441 | 𝐸 = ∑ (𝑀𝑐 × 𝐸𝐹 𝑁𝑖 × 𝐶𝑁2𝑂 × 10−3) (t N2O)
   const cropResidueN2O = mc.multiply(efni).multiply(cn2o);
 
+  return cropResidueN2O;
+};
+
+const calculateFieldBurningN2O = (
+  input: CropResidueInputTransformed,
+  constants: ConstantsForGrainsCalculator,
+) => {
+  /*
+  (2) Nitrous oxide emissions from the burning of crop residue 𝐸𝑁2𝑂 (t N2O), are calculated
+  as:
+  𝐸𝑁2𝑂 = ∑ (𝑀𝑏𝑢𝑟𝑛,𝑐 × 𝑁𝐶𝐴𝐺𝑐 × 𝐸𝐹 𝑁2𝑂 × 𝐶𝑁2𝑂 × 10−3)
+    Where 𝑁𝐶𝐴𝐺𝑐 = nitrogen content in the above-ground residue of crop type c (as
+  defined in Section 6.1)
+  𝐸𝐹 𝑁2𝑂= emission factor for nitrous oxide from burning of crop residues (kg
+  N2O/kg N2O burnt)
+  𝐶𝑁2𝑂 = factor to convert elemental mass of nitrous oxide to molecular mass
+  (dimensionless)
+  */
+  const mburnc = input.fractionOfAnnualCropBurnt
+    .multiply(input.averageGrainYield)
+    .multiply(input.areaSown, { name: 'Mburnc' });
+
+  const ncagc = selectConstant(
+    constants.CROP,
+    (value) => massPerMass('N', 'DryMatter', new Decimal(value)),
+    'CROPRESIDUE',
+    input.type,
+    'aboveGroundN',
+  );
+  const efn2o = selectConstant(
+    constants.CROP,
+    (value) => realNumber(value),
+    'BURNING_N2O_EF',
+  );
+  const cn2o = selectConstant(
+    constants.COMMON,
+    (value) => realNumber(new Decimal(value)),
+    'GWP_FACTORSC15',
+  );
+
+  const fieldBurningN2O = mburnc.multiply(ncagc).multiply(efn2o).multiply(cn2o);
+
+  return fieldBurningN2O;
+};
+
+export const calculateScope1ResidueManagement = (
+  crop: CropResidueInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  const { constants } = context;
+
+  const zeroCH4 = new RootContainer(mass('CH4', new Decimal(0)), {
+    name: 'zero',
+    valueType: 'constant',
+  });
+  const fieldBurningCH4 = zeroCH4;
+
   return {
-    cropResidueN2O,
-    fieldBurningN2O,
+    cropResidueN2O: calculateCropResidueN2O(crop, constants),
+    fieldBurningN2O: calculateFieldBurningN2O(crop, constants),
     fieldBurningCH4,
   };
 };
