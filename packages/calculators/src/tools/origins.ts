@@ -153,6 +153,21 @@ export class BaseContainer<
       baseOrigin,
     );
   }
+
+  // Implement minus operation where this container's unit is a NumberUnit, and also this and right must have identical units.
+  minus<UL extends NumberUnit>(
+    this: BaseContainer<UL, C>,
+    right: Container<UL>,
+    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+  ): BinaryContainer<UL> {
+    return new BinaryContainer(
+      this.unit,
+      'subtract',
+      this as unknown as Container<NumberUnit>,
+      right,
+      baseOrigin,
+    );
+  }
 }
 
 // export type BinaryOrigin<U extends AnyUnit> = BaseOrigin<U> & {

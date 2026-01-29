@@ -13,7 +13,8 @@ export type Substance =
   | 'Urea'
   | 'DryMatter'
   | 'CropResidue'
-  | 'Yield';
+  | 'Yield'
+  | 'Lime';
 
 type NumberUnitBase = { value: Decimal };
 

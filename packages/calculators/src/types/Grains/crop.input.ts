@@ -1,4 +1,5 @@
 import { FertiliserInputSchema } from '@/modules/scope1FertiliserUse/fertiliser.input';
+import { LimeInputSchema } from '@/modules/scope1FertiliserUse/lime.input';
 import { FuelInputSchema } from '@/modules/scope1fuel/fuel.input';
 import { CropResidueInputSchema } from '@/modules/scope1ResidueManagement/crop-residue.input';
 import { input } from '@/tools/inputs';
@@ -51,8 +52,7 @@ export const GrainsCropSchema = singleEnterpriseInput('Grains', {
   ).transform((val) =>
     input('electricityAllocation', realNumber(new Decimal(val))),
   ),
-  limestone: z.number().min(0).meta({ description: DESCRIPTIONS.LIMESTONE }),
-  limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
+  ...LimeInputSchema.shape,
   ...CropResidueInputSchema.shape,
   ...FuelInputSchema.shape,
   ...FertiliserInputSchema.shape,
