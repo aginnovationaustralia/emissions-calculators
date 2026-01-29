@@ -1,6 +1,7 @@
 import { calculateGrains } from '@/calculators/Grains/calculator';
 import { GrainsCrop } from '@/types/Grains/crop.input';
 import {
+  GrainsInput,
   GrainsInputSchema,
   GrainsInputTransformed,
 } from '@/types/Grains/input';
@@ -86,7 +87,7 @@ const emptyInputWithEnterprise: GrainsInputTransformed =
     vegetation: [],
   });
 
-const emptyInput: GrainsInputTransformed = {
+const emptyInput: GrainsInput = {
   state: 'vic',
   crops: [],
   electricityRenewable: 0,
@@ -136,7 +137,10 @@ describe('Grains calculator, empty enterprise', () => {
 
 describe('Grains calculator, no enterprise', () => {
   const context = testContext('Grains');
-  const emissions = calculateGrains(emptyInput, context);
+  const emissions = calculateGrains(
+    GrainsInputSchema.parse(emptyInput),
+    context,
+  );
 
   executeEmissionsSpec(emissions, expectations as unknown as KeyValuePairs);
 });

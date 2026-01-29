@@ -1,3 +1,5 @@
+import { input } from '@/tools/inputs';
+import { electricity } from '@/tools/units';
 import { States } from '@/types/enums';
 import { z } from 'zod';
 import { CropVegetationSchema } from '../common/crop-vegetation.input';
@@ -12,6 +14,7 @@ export const GrainsInputSchema = singleEnterpriseInput('Grains', {
   electricityUse: z
     .number()
     .min(0)
+    .transform((val) => input('electricityUse', electricity(val)))
     .meta({ description: DESCRIPTIONS.ELECTRICITY_USE }),
   vegetation: z.array(CropVegetationSchema),
 });

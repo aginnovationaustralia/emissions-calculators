@@ -2,10 +2,12 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { RootContainer } from '@/tools/origins';
 import { mass } from '@/tools/units';
+import { GrainsCropTransformed } from '@/types/Grains/crop.input';
 import { GrainsInputTransformed } from '@/types/Grains/input';
 import Decimal from 'decimal.js-light';
 
-export const calculateElectricityScope2And3 = (
+export const calculateElectricityScope3 = (
+  crop: GrainsCropTransformed,
   input: GrainsInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
@@ -13,10 +15,6 @@ export const calculateElectricityScope2And3 = (
     name: 'zero',
     valueType: 'constant',
   });
-  const scope2 = zeroCO2;
   const scope3 = zeroCO2;
-  return {
-    scope2,
-    scope3,
-  };
+  return scope3;
 };

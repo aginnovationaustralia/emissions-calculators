@@ -1,6 +1,7 @@
 import {
   AnyUnit,
   Area,
+  Electricity,
   energy,
   Energy,
   EnergyPerVolume,
@@ -18,6 +19,7 @@ import {
   mass,
   Mass,
   MassPerArea,
+  MassPerElectricity,
   MassPerEnergy,
   MassPerMass,
   NumberUnit,
@@ -106,6 +108,12 @@ export class BaseContainer<
     right: Container<Area>,
     baseOrigin?: Partial<IntermediateOrNamedOrigin>,
   ): BinaryContainer<Mass<ExtractMassPerAreaSubstance<UL>>>;
+  // Electricity * MassPerElectricity<S> → Mass<S>
+  multiply<S extends Substance>(
+    this: BaseContainer<Electricity, C>,
+    right: Container<MassPerElectricity<S>>,
+    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+  ): BinaryContainer<Mass<S>>;
   // Fallback implementation
   multiply(
     this: BaseContainer<NumberUnit, C>,

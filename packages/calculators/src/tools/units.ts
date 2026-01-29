@@ -26,6 +26,7 @@ Length: metres (m)
 Area: square metres (m2)
 Volume: litres (L)
 Energy: joules (J)
+Electricity: kilowatt hours (kWh)
 
 See https://en.wikipedia.org/wiki/International_System_of_Units#SI_base_units
 */
@@ -124,6 +125,21 @@ export const isArea = (unit: NumberUnit): unit is Area => {
   return unit.__unitType === 'Area';
 };
 
+export type Electricity = NumberUnitBase & {
+  __unitType: 'Electricity';
+};
+export const electricity = (
+  initialValueKWh?: number | Decimal,
+): Electricity => {
+  return {
+    __unitType: 'Electricity',
+    value: new Decimal(initialValueKWh ?? 0),
+  };
+};
+export const isElectricity = (unit: NumberUnit): unit is Electricity => {
+  return unit.__unitType === 'Electricity';
+};
+
 export type MassPerEnergy<T extends Substance> = NumberUnitBase & {
   __unitType: 'MassPerEnergy';
   substance: T;
@@ -144,6 +160,26 @@ export const isMassPerEnergy = (
   return unit.__unitType === 'MassPerEnergy';
 };
 
+export type MassPerElectricity<S extends Substance> = NumberUnitBase & {
+  __unitType: 'MassPerElectricity';
+  substance: S;
+};
+export const massPerElectricity = <S extends Substance>(
+  substance: S,
+  initialValueKgPerKWh?: number | Decimal,
+): MassPerElectricity<S> => {
+  return {
+    __unitType: 'MassPerElectricity',
+    substance,
+    value: new Decimal(initialValueKgPerKWh ?? 0),
+  };
+};
+
+export const isMassPerElectricity = (
+  unit: NumberUnit,
+): unit is MassPerElectricity<Substance> => {
+  return unit.__unitType === 'MassPerElectricity';
+};
 export type EnergyPerVolume<S extends Substance> = NumberUnitBase & {
   __unitType: 'EnergyPerVolume';
   substance: S;
@@ -250,10 +286,12 @@ export type NumberUnit =
   | MassPerEnergy<Substance>
   | MassPerVolume<Substance, Substance>
   | MassPerArea<Substance>
+  | MassPerElectricity<Substance>
   | EnergyPerVolume<Substance>
   | Volume<Substance>
   | Energy
   | Area
+  | Electricity
   | VoidUnit
   | RealNumber;
 
@@ -300,5 +338,9 @@ export function formatUnit(unit: AnyUnit): string {
       return `Mass(${unit.substance}) / Area`;
     case 'Area':
       return 'Area';
+    case 'Electricity':
+      return 'Electricity';
+    case 'MassPerElectricity':
+      return `Mass(${unit.substance}) / Electricity`;
   }
 }
