@@ -4,8 +4,8 @@ import { selectConstant } from '@/tools/constants';
 import { BinaryContainer, TypedContainer } from '@/tools/origins';
 import { sum } from '@/tools/sum';
 import { energyPerVolume, Mass, massPerEnergy, Volume } from '@/tools/units';
-import { GrainsCropTransformed } from '@/types/Grains/crop.input';
 import Decimal from 'decimal.js-light';
+import { FuelInputTransformed } from './fuel.input';
 
 const emissionsOfGasForFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   amountOfFuel: TypedContainer<Volume<'Fuel'>>,
@@ -36,11 +36,7 @@ const emissionsOfGasForFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
 };
 
 const transportEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
-  input: {
-    dieselUse: TypedContainer<Volume<'Fuel'>>;
-    petrolUse: TypedContainer<Volume<'Fuel'>>;
-    lpg: TypedContainer<Volume<'Fuel'>>;
-  },
+  input: FuelInputTransformed,
   constants: ConstantsForGrainsCalculator,
   gasType: GasType,
 ) => {
@@ -73,16 +69,16 @@ const transportEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
 // 6.2 Stationary combustion fuel
 //   fuelCO2, fuelCH4, fuelN2O
 export const calculateScope1Fuel = (
-  crop: GrainsCropTransformed,
+  input: FuelInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   const { constants } = context;
 
   // 6.1.1
   // Line 55
-  const transportFuelCO2 = transportEmissionsForGas(crop, constants, 'CO2');
-  const transportFuelCH4 = transportEmissionsForGas(crop, constants, 'CH4');
-  const transportFuelN2O = transportEmissionsForGas(crop, constants, 'N2O');
+  const transportFuelCO2 = transportEmissionsForGas(input, constants, 'CO2');
+  const transportFuelCH4 = transportEmissionsForGas(input, constants, 'CH4');
+  const transportFuelN2O = transportEmissionsForGas(input, constants, 'N2O');
 
   // TODO: Stationary fuel emissions
   return {

@@ -3,11 +3,12 @@ import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { constant } from '@/tools/constants';
 import { RootContainer } from '@/tools/origins';
 import { mass, massPerMass } from '@/tools/units';
-import { GrainsCropTransformed } from '@/types/Grains/crop.input';
 import Decimal from 'decimal.js-light';
+import { CropResidueInputTransformed } from '../scope1ResidueManagement/crop-residue.input';
+import { FertiliserInputTransformed } from './fertiliser.input';
 
 export const calculateScope1FertiliserUse = (
-  crop: GrainsCropTransformed,
+  input: FertiliserInputTransformed & CropResidueInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   const { constants } = context;
@@ -28,7 +29,7 @@ export const calculateScope1FertiliserUse = (
   // 5.1.1.1
   // ureaCO2
   // 147: E_j,f,CO2 = MU_j,f × EF_urea,CO2 × Cg,CO2 × 10^-3
-  const mujf = crop.ureaApplication.multiply(crop.areaSown, {
+  const mujf = input.ureaApplication.multiply(input.areaSown, {
     name: 'MUjf',
     references: [`5.1.1.1 (157)`],
   });

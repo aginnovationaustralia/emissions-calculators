@@ -6,11 +6,11 @@ import { RootContainer } from '@/tools/origins';
 import { one } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { mass, massPerMass, realNumber } from '@/tools/units';
-import { GrainsCropTransformed } from '@/types/Grains/crop.input';
 import Decimal from 'decimal.js-light';
+import { CropResidueInputTransformed } from './crop-residue.input';
 
 export const calculateScope1ResidueManagement = (
-  crop: GrainsCropTransformed,
+  crop: CropResidueInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   const { constants } = context;

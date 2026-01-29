@@ -1,47 +1,24 @@
+import { FertiliserInputSchema } from '@/modules/scope1FertiliserUse/fertiliser.input';
+import { FuelInputSchema } from '@/modules/scope1fuel/fuel.input';
+import { CropResidueInputSchema } from '@/modules/scope1ResidueManagement/crop-residue.input';
 import { input } from '@/tools/inputs';
-import { area, massPerArea, realNumber, volume } from '@/tools/units';
-import { CropTypes, ProductionSystems, States } from '@/types/enums';
+import { realNumber } from '@/tools/units';
+import { ProductionSystems, States } from '@/types/enums';
 import Decimal from 'decimal.js-light';
 import { z } from 'zod';
 import { DESCRIPTIONS } from '../descriptions.schema';
 import { proportion, singleEnterpriseInput } from '../schemas';
 
 export const GrainsCropSchema = singleEnterpriseInput('Grains', {
-  type: z.enum(CropTypes).meta({
-    description:
-      "Crop type. Note that the following crop types are now deprecated, the relevant full calculator should be used instead: 'Cotton', 'Rice', 'Sugar Cane'",
-  }),
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   productionSystem: z.enum(ProductionSystems).meta({
     description:
       "Production system of this crop. Note that the following production systems are now deprecated, the relevant full calculator should be used instead: 'Cotton', 'Rice', 'Sugar cane'",
   }),
-  averageGrainYield: z
-    .number()
-    .min(0)
-    .transform((val) =>
-      input('averageGrainYield', massPerArea('Yield', new Decimal(val))),
-    )
-    .meta({ description: 'Average grain yield, in t/ha (tonnes per hectare)' }),
-  areaSown: z
-    .number()
-    .min(0)
-    .transform((val) => input('areaSown', area(new Decimal(val))))
-    .meta({ description: 'Area sown, in ha (hectares)' }),
   nonUreaNitrogen: z.number().min(0).meta({
     description:
       'Non-urea nitrogen application, in kg N/ha (kilograms of nitrogen per hectare)',
   }),
-  ureaApplication: z
-    .number()
-    .min(0)
-    .transform((val) =>
-      input('ureaApplication', massPerArea('Urea', new Decimal(val))),
-    )
-    .meta({
-      description:
-        'Urea nitrogen application, in kg Urea/ha (kilograms of urea per hectare)',
-    }),
   ureaAmmoniumNitrate: z.number().min(0).meta({
     description:
       'Urea-Ammonium nitrate application, in kg product/ha (kilograms of product per hectare)',
@@ -58,10 +35,6 @@ export const GrainsCropSchema = singleEnterpriseInput('Grains', {
     description:
       'Sulfur application, in kg S/ha (kilograms of sulfur per hectare)',
   }),
-  rainfallAbove600: z
-    .boolean()
-    .transform((val) => input('rainfallAbove600', val ? 'wet' : 'dry'))
-    .meta({ description: DESCRIPTIONS.RAINFALLIRRIGATIONABOVE600 }),
   fractionOfAnnualCropBurnt: proportion(
     'Fraction of annual production of crop that is burnt, from 0 to 1',
   ),
@@ -80,21 +53,9 @@ export const GrainsCropSchema = singleEnterpriseInput('Grains', {
   ),
   limestone: z.number().min(0).meta({ description: DESCRIPTIONS.LIMESTONE }),
   limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION),
-  dieselUse: z
-    .number()
-    .min(0)
-    .meta({ description: DESCRIPTIONS.DIESEL })
-    .transform((val) => input('dieselUse', volume('Fuel', new Decimal(val)))),
-  petrolUse: z
-    .number()
-    .min(0)
-    .meta({ description: DESCRIPTIONS.PETROL })
-    .transform((val) => input('petrolUse', volume('Fuel', new Decimal(val)))),
-  lpg: z
-    .number()
-    .min(0)
-    .meta({ description: DESCRIPTIONS.LPG })
-    .transform((val) => input('lpg', volume('Fuel', new Decimal(val)))),
+  ...CropResidueInputSchema.shape,
+  ...FuelInputSchema.shape,
+  ...FertiliserInputSchema.shape,
 });
 
 export type GrainsCrop = z.input<typeof GrainsCropSchema>;
