@@ -7,25 +7,10 @@ import Decimal from 'decimal.js-light';
 import { CropResidueInputTransformed } from '../scope1ResidueManagement/crop-residue.input';
 import { FertiliserInputTransformed } from './fertiliser.input';
 
-export const calculateScope1FertiliserUse = (
+const calculateScope1FertiliserUreaCO2 = (
   input: FertiliserInputTransformed & CropResidueInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  constants: ConstantsForGrainsCalculator,
 ) => {
-  const { constants } = context;
-
-  const zeroCO2 = new RootContainer(mass('CO2', new Decimal(0)), {
-    name: 'zero',
-    valueType: 'constant',
-  });
-  const zeroN2O = new RootContainer(mass('N2O', new Decimal(0)), {
-    name: 'zero',
-    valueType: 'constant',
-  });
-  const limeCO2 = zeroCO2;
-  const fertiliserN2O = zeroN2O;
-  const atmosphericDepositionN2O = zeroN2O;
-  const leachingAndRunoffN2O = zeroN2O;
-
   // 5.1.1.1
   // ureaCO2
   // 147: E_j,f,CO2 = MU_j,f × EF_urea,CO2 × Cg,CO2 × 10^-3
@@ -54,8 +39,30 @@ export const calculateScope1FertiliserUse = (
     references: [`5.1.1.1 (147)`],
   });
 
+  return ureaCO2;
+};
+
+export const calculateScope1FertiliserUse = (
+  input: FertiliserInputTransformed & CropResidueInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  const { constants } = context;
+
+  const zeroCO2 = new RootContainer(mass('CO2', new Decimal(0)), {
+    name: 'zero',
+    valueType: 'constant',
+  });
+  const zeroN2O = new RootContainer(mass('N2O', new Decimal(0)), {
+    name: 'zero',
+    valueType: 'constant',
+  });
+  const limeCO2 = zeroCO2;
+  const fertiliserN2O = zeroN2O;
+  const atmosphericDepositionN2O = zeroN2O;
+  const leachingAndRunoffN2O = zeroN2O;
+
   return {
-    ureaCO2,
+    ureaCO2: calculateScope1FertiliserUreaCO2(input, constants),
     limeCO2,
     fertiliserN2O,
     atmosphericDepositionN2O,
