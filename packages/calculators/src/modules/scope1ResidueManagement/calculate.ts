@@ -2,10 +2,9 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { selectConstant } from '@/tools/constants';
 import { minus } from '@/tools/minus';
-import { RootContainer } from '@/tools/origins';
 import { one } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { mass, massPerMass, realNumber } from '@/tools/units';
+import { massPerMass, realNumber } from '@/tools/units';
 import Decimal from 'decimal.js-light';
 import { CropResidueInputTransformed } from './crop-residue.input';
 
@@ -136,10 +135,50 @@ const calculateFieldBurningN2O = (
   𝐶𝑁2𝑂 = factor to convert elemental mass of nitrous oxide to molecular mass
   (dimensionless)
   */
+  const pc = input.averageGrainYield.multiply(input.areaSown, { name: 'Pc' });
+  const ragc = selectConstant(
+    constants.CROP,
+    (value) => massPerMass('CropResidue', 'Yield', new Decimal(value)),
+    'CROPRESIDUE',
+    input.type,
+    'residueCropRatio',
+  );
+  const sc = selectConstant(
+    constants.CROP,
+    (value) => massPerMass('N', 'CropResidue', new Decimal(value)),
+    'CROPRESIDUE',
+    input.type,
+    'fractionOfResidueAtBurning',
+  );
+  // TODO: I believe this is a new constant
+  const zc = selectConstant(
+    constants.CROP,
+    (value) => realNumber(new Decimal(value)),
+    'CROPRESIDUE',
+    input.type,
+    'fractionBurnt',
+  );
+  const fc = selectConstant(
+    constants.CROP,
+    (value) => realNumber(new Decimal(value)),
+    'CROPRESIDUE',
+    input.type,
+    'fractionRemoved',
+  );
   const mburnc = input.fractionOfAnnualCropBurnt
-    .multiply(input.averageGrainYield)
-    .multiply(input.areaSown, { name: 'Mburnc' });
+    .multiply(pc)
+    .multiply(ragc)
+    .multiply(sc)
+    .multiply(zc)
+    .multiply(fc, { name: 'Mburnc' });
 
+  const dmc = selectConstant(
+    constants.CROP,
+    (value) => massPerMass('DryMatter', 'CropResidue', new Decimal(value)),
+    'CROPRESIDUE',
+    input.type,
+    'dryMatterContent',
+  );
   const ncagc = selectConstant(
     constants.CROP,
     (value) => massPerMass('N', 'DryMatter', new Decimal(value)),
@@ -149,7 +188,7 @@ const calculateFieldBurningN2O = (
   );
   const efn2o = selectConstant(
     constants.CROP,
-    (value) => realNumber(value),
+    (value) => massPerMass('N2O', 'N', new Decimal(value)),
     'BURNING_N2O_EF',
   );
   const cn2o = selectConstant(
@@ -158,9 +197,63 @@ const calculateFieldBurningN2O = (
     'GWP_FACTORSC15',
   );
 
-  const fieldBurningN2O = mburnc.multiply(ncagc).multiply(efn2o).multiply(cn2o);
+  const fieldBurningN2O = mburnc
+    .multiply(dmc)
+    .multiply(ncagc)
+    .multiply(efn2o)
+    .multiply(cn2o);
 
   return fieldBurningN2O;
+};
+
+const calculateFieldBurningCH4 = (
+  input: CropResidueInputTransformed,
+  constants: ConstantsForGrainsCalculator,
+) => {
+  /*
+  6.4.1.1 Method 1 — Burning of Crop Residues CH4 and N2O
+(1) Methane emissions from the burning of crop residues 𝐸𝐶𝐻4 (t CH4), are calculated as𝐸𝐶𝐻4 = ∑ (𝑀𝑏𝑢𝑟𝑛,𝑐 × 𝐶𝐶𝑐 × 𝐸𝐹 𝐶𝐻4 × 𝐶𝐶𝐻4 × 10−3)
+𝑐
+Where 𝑀𝑏𝑢𝑟𝑛,𝑐 = mass of residue burnt for crop type c (kg)
+𝐶𝐶𝑐 = carbon mass fraction in the residues of crop type c (dimensionless)
+𝐸𝐹 𝐶𝐻4= emission factor for methane from burning of crop residues (kg CH4/kg
+residue burnt)
+𝐶𝐶𝐻4 = factor to convert elemental mass of methane to molecular mass
+(dimensionless)
+*/
+  const pc = input.averageGrainYield.multiply(input.areaSown, { name: 'Pc' });
+  const ragc = selectConstant(
+    constants.CROP,
+    (value) => massPerMass('CropResidue', 'Yield', new Decimal(value)),
+    'CROPRESIDUE',
+    input.type,
+    'residueCropRatio',
+  );
+  const mburnc = input.fractionOfAnnualCropBurnt
+    .multiply(pc)
+    .multiply(ragc, { name: 'Mburnc' });
+
+  const ccc = selectConstant(
+    constants.CROP,
+    (value) => realNumber(new Decimal(value)),
+    'CROPRESIDUE',
+    input.type,
+    'carbonMassFraction',
+  );
+  const efch4 = selectConstant(
+    constants.CROP,
+    (value) => massPerMass('CH4', 'CropResidue', new Decimal(value)),
+    'BURNING_METHANE_EF',
+  );
+  const cch4 = selectConstant(
+    constants.COMMON,
+    (value) => realNumber(new Decimal(value)),
+    'GWP_FACTORSC14',
+  );
+
+  const fieldBurningCH4 = mburnc.multiply(ccc).multiply(efch4).multiply(cch4);
+
+  return fieldBurningCH4;
 };
 
 export const calculateScope1ResidueManagement = (
@@ -169,15 +262,9 @@ export const calculateScope1ResidueManagement = (
 ) => {
   const { constants } = context;
 
-  const zeroCH4 = new RootContainer(mass('CH4', new Decimal(0)), {
-    name: 'zero',
-    valueType: 'constant',
-  });
-  const fieldBurningCH4 = zeroCH4;
-
   return {
     cropResidueN2O: calculateCropResidueN2O(crop, constants),
     fieldBurningN2O: calculateFieldBurningN2O(crop, constants),
-    fieldBurningCH4,
+    fieldBurningCH4: calculateFieldBurningCH4(crop, constants),
   };
 };

@@ -90,12 +90,16 @@ export class BaseContainer<
     right: Container<Mass<S2>>,
     baseOrigin?: Partial<IntermediateOrNamedOrigin>,
   ): BinaryContainer<Mass<S1>>;
-  // Mass<S2> * MassPerMass<S1,S2> → Mass<S1>
-  multiply<S1 extends Substance, S2 extends Substance>(
+  // Mass<S2> * MassPerMass<S1,S2> → Mass<S1> (only when right's denominator S2Right equals this's substance S2)
+  multiply<
+    S1 extends Substance,
+    S2 extends Substance,
+    S2Right extends Substance,
+  >(
     this: BaseContainer<Mass<S2>, C>,
-    right: Container<MassPerMass<S1, S2>>,
+    right: Container<MassPerMass<S1, S2Right>>,
     baseOrigin?: Partial<IntermediateOrNamedOrigin>,
-  ): BinaryContainer<Mass<S1>>;
+  ): [S2Right] extends [S2] ? ([S2] extends [S2Right] ? BinaryContainer<Mass<S1>> : never) : never;
   // EnergyPerVolume<S> * Volume<S> → Energy
   multiply<S extends Substance>(
     this: BaseContainer<EnergyPerVolume<S>, C>,
