@@ -901,6 +901,8 @@ export type CommonConstants = NamedConstants & {
     };
   };
 
+  LIME_SCOPE3_EF: number;
+
   // Trees
   TREE_REGIONS: {
     RegionNo: { [treeRegion in TreeRegions]: number };

@@ -2881,6 +2881,8 @@ export const commonConstants: CommonConstants = {
     },
   },
 
+  LIME_SCOPE3_EF: 0.432,
+
   /**
    * @description Scope 1 and Scope 3 factors relating to fuel
    * @reference Table 6 and 7 (Dept of Industry, Science, Energy and Resources 2022)
