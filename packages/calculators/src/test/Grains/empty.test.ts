@@ -68,14 +68,13 @@ const emptyGrainsCrop: GrainsCrop = {
   sulfurApplication: 0,
   rainfallAbove600: false,
   fractionOfAnnualCropBurnt: 0,
-  herbicideUse: 0,
-  glyphosateOtherHerbicideUse: 0,
   electricityAllocation: 0,
   limestone: 0,
   limestoneFraction: 0,
   dieselUse: 0,
   petrolUse: 0,
   lpg: 0,
+  chemicals: [],
 };
 
 const emptyInputWithEnterprise: GrainsInputTransformed =

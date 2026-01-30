@@ -2,6 +2,7 @@ import { FertiliserInputSchema } from '@/modules/scope1FertiliserUse/fertiliser.
 import { LimeInputSchema } from '@/modules/scope1FertiliserUse/lime.input';
 import { FuelInputSchema } from '@/modules/scope1fuel/fuel.input';
 import { CropResidueInputSchema } from '@/modules/scope1ResidueManagement/crop-residue.input';
+import { AgrichemicalsInputSchema } from '@/modules/scope3PurchasedAgrichemicals/agrichemicals.input';
 import { input } from '@/tools/inputs';
 import { realNumber } from '@/tools/units';
 import { ProductionSystems, States } from '@/types/enums';
@@ -36,19 +37,12 @@ export const GrainsCropSchema = singleEnterpriseInput('Grains', {
     description:
       'Sulfur application, in kg S/ha (kilograms of sulfur per hectare)',
   }),
-  herbicideUse: z.number().min(0).meta({
-    description:
-      'Total amount of active ingredients from general herbicide/pesticide use, in kg (kilogram)',
-  }),
-  glyphosateOtherHerbicideUse: z.number().min(0).meta({
-    description:
-      'Total amount of active ingredients from other herbicide use (Paraquat, Diquat, Glyphosate), in kg (kilogram)',
-  }),
   electricityAllocation: proportion(
     'Percentage of electricity use to allocate to this crop, from 0 to 1',
   ).transform((val) =>
     input('electricityAllocation', realNumber(new Decimal(val))),
   ),
+  ...AgrichemicalsInputSchema.shape,
   ...LimeInputSchema.shape,
   ...CropResidueInputSchema.shape,
   ...FuelInputSchema.shape,

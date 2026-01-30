@@ -4,8 +4,8 @@ import { calculateScope1ResidueManagement } from '@/modules/scope1ResidueManagem
 import { calculateElectricityScope2 } from '@/modules/scope2Electricity';
 import { calculateElectricityScope3 } from '@/modules/scope3Electricity';
 import { calculateScope3EmissionsFromFuel } from '@/modules/scope3EmissionsFromFuel';
+import { calculateScope3Agrichemicals } from '@/modules/scope3PurchasedAgrichemicals';
 import { calculateScope3Fertiliser } from '@/modules/scope3PurchasedFertiliser';
-import { calculateScope3Herbicide } from '@/modules/scope3PurchasedHerbicidesPesticides';
 import { calculateScope3Lime } from '@/modules/scope3PurchasedLime';
 import { TypedContainer } from '@/tools/origins';
 import { output, scope1Output } from '@/tools/outputs';
@@ -108,7 +108,7 @@ const calculateScope3Grains = (
 
   // 7.6 Purchased herbicides / pesticides
   // herbicide
-  const { herbicide } = calculateScope3Herbicide(crop, context);
+  const { herbicide } = calculateScope3Agrichemicals(crop, context);
 
   // 7.7 Purchased lime
   // lime

@@ -16,14 +16,22 @@ export const grainWheat: GrainsCrop = {
   sulfurApplication: 0,
   rainfallAbove600: true,
   fractionOfAnnualCropBurnt: 1,
-  herbicideUse: 8.5,
-  glyphosateOtherHerbicideUse: 3.6,
   electricityAllocation: 0.2,
   limestone: 500,
   limestoneFraction: 1,
   dieselUse: 200,
   petrolUse: 500,
   lpg: 100,
+  chemicals: [
+    {
+      type: 'Herbicide',
+      amountKg: 8.5,
+    },
+    {
+      type: 'HerbicideOther',
+      amountKg: 3.6,
+    },
+  ],
 };
 
 export const grainSorghum: GrainsCrop = {
@@ -40,14 +48,22 @@ export const grainSorghum: GrainsCrop = {
   sulfurApplication: 2,
   rainfallAbove600: false,
   fractionOfAnnualCropBurnt: 0.5,
-  herbicideUse: 4.25,
-  glyphosateOtherHerbicideUse: 10.8,
   electricityAllocation: 0.4,
   limestone: 100,
   limestoneFraction: 1,
   dieselUse: 500,
   petrolUse: 250,
   lpg: 110,
+  chemicals: [
+    {
+      type: 'Herbicide',
+      amountKg: 4.25,
+    },
+    {
+      type: 'HerbicideOther',
+      amountKg: 10.8,
+    },
+  ],
 };
 
 export const grainLegume: GrainsCrop = {
@@ -64,14 +80,22 @@ export const grainLegume: GrainsCrop = {
   sulfurApplication: 0,
   rainfallAbove600: false,
   fractionOfAnnualCropBurnt: 0,
-  herbicideUse: 2.12,
-  glyphosateOtherHerbicideUse: 3.6,
   electricityAllocation: 0.2,
   limestone: 250,
   limestoneFraction: 1,
   dieselUse: 600,
   petrolUse: 400,
   lpg: 120,
+  chemicals: [
+    {
+      type: 'Herbicide',
+      amountKg: 2.12,
+    },
+    {
+      type: 'HerbicideOther',
+      amountKg: 3.6,
+    },
+  ],
 };
 
 export const grainGrass: GrainsCrop = {
@@ -88,14 +112,22 @@ export const grainGrass: GrainsCrop = {
   sulfurApplication: 0,
   rainfallAbove600: false,
   fractionOfAnnualCropBurnt: 0,
-  herbicideUse: 4.25,
-  glyphosateOtherHerbicideUse: 18,
   electricityAllocation: 0.1,
   limestone: 400,
   limestoneFraction: 1,
   dieselUse: 150,
   petrolUse: 100,
   lpg: 130,
+  chemicals: [
+    {
+      type: 'Herbicide',
+      amountKg: 4.25,
+    },
+    {
+      type: 'HerbicideOther',
+      amountKg: 18,
+    },
+  ],
 };
 
 export const grainTriticale: GrainsCrop = {
@@ -112,14 +144,22 @@ export const grainTriticale: GrainsCrop = {
   sulfurApplication: 4,
   rainfallAbove600: false,
   fractionOfAnnualCropBurnt: 0,
-  herbicideUse: 8.5,
-  glyphosateOtherHerbicideUse: 5.4,
   electricityAllocation: 0.1,
   limestone: 150,
   limestoneFraction: 1,
   dieselUse: 50,
   petrolUse: 250,
   lpg: 140,
+  chemicals: [
+    {
+      type: 'Herbicide',
+      amountKg: 8.5,
+    },
+    {
+      type: 'HerbicideOther',
+      amountKg: 5.4,
+    },
+  ],
 };
 
 export const grainsTestData: GrainsInput = {
@@ -149,14 +189,22 @@ export const grainsTestData102: GrainsInput = {
       sulfurApplication: 6.6,
       rainfallAbove600: false,
       fractionOfAnnualCropBurnt: 0.1,
-      herbicideUse: 54.504,
-      glyphosateOtherHerbicideUse: 0,
       electricityAllocation: 1,
       limestone: 360,
       limestoneFraction: 0.5,
       dieselUse: 6352,
       petrolUse: 0,
       lpg: 100,
+      chemicals: [
+        {
+          type: 'Herbicide',
+          amountKg: 54.504,
+        },
+        {
+          type: 'HerbicideOther',
+          amountKg: 100,
+        },
+      ],
     },
   ],
   vegetation: [

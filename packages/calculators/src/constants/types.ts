@@ -202,6 +202,16 @@ type CropResidueFactors = {
   fractionRemoved: number;
 };
 
+export const AgrochemicalTypeNames = [
+  'Herbicide',
+  'HerbicideOther',
+  'Insecticide',
+  'Fungicide',
+  'PlantGrowthRegulator',
+];
+
+export type AgrochemicalTypes = (typeof AgrochemicalTypeNames)[number];
+
 export type SheepConstants = {
   FEEDAVAILABILITY: BySeasonAndState;
 
@@ -837,6 +847,8 @@ export type CommonConstants = NamedConstants & {
   };
 
   FERTILISER_EF: number;
+
+  AGROCHEMICAL_FACTORS: Record<AgrochemicalTypes, number>;
 
   AGROCHEMICAL_ENERGY_MANUFACTURE: {
     HERBICIDE_GLYPHOSATE: { TOTAL_ENERGY: number; EF: number };

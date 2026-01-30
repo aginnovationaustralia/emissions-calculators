@@ -3109,6 +3109,14 @@ export const commonConstants: CommonConstants = {
    */
   FERTILISER_EF: 0.2,
 
+  AGROCHEMICAL_FACTORS: {
+    Herbicide: 33,
+    HerbicideOther: 18.6,
+    Insecticide: 18.9,
+    Fungicide: 12.6,
+    PlantGrowthRegulator: 10.5,
+  },
+
   /**
    * @description Energy requirement to manufacture fertiliser components and associated CO2 emissions (EF)
    * @reference (Wells 2001; cited by Saunders et al. 2006)

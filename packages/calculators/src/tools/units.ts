@@ -1,6 +1,7 @@
 import Decimal from 'decimal.js-light';
 
 export type Substance =
+  | 'Chemical'
   | 'CO2'
   | 'CH4'
   | 'N2O'
