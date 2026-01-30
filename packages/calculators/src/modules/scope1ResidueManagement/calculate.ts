@@ -199,6 +199,7 @@ const calculateFieldBurningN2O = (
 
   const fieldBurningN2O = mburnc
     .multiply(dmc)
+    // @ts-expect-error - question on the units
     .multiply(ncagc)
     .multiply(efn2o)
     .multiply(cn2o);

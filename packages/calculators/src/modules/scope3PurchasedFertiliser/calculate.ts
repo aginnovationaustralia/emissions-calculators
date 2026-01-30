@@ -13,6 +13,8 @@ export const calculateScope3Fertiliser = (
     name: 'zero',
     valueType: 'constant',
   });
+
+  // TODO new approach to handle fertiliser inputs
   const fertiliser = zeroCO2;
   return {
     fertiliser,
