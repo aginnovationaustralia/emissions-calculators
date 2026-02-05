@@ -52,6 +52,14 @@ _Before_ submitting a pull request, please make sure the following is done.
     pnpm install
     ```
 
+1.  **Enable commit hooks** (required for conventional commits). After `pnpm install`, run this once to point Git at the husky hooks:
+
+    ```sh
+    git config core.hooksPath .husky
+    ```
+
+    If commit hooks still don't run, ensure this is set in your repo: `git config core.hooksPath` should output `.husky`.
+
 1.  Run `pnpm build` to transpile TypeScript to JavaScript and type check the code
 
     ```sh
