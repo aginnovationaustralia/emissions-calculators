@@ -1,8 +1,12 @@
 import { calculateGrains } from '@/calculators/Grains/calculator';
-import { GrainsCrop } from '@/types/Grains/crop.input';
-import { GrainsInput } from '@/types/Grains/input';
-import { testContext } from '../common/context';
+import {
+  GrainsCrop,
+  GrainsInput,
+  GrainsInputSchema,
+} from '@/calculators/Grains/types';
+import { GrainsInputTransformed } from '@/calculators/Grains/types/input';
 import { executeEmissionsSpec, KeyValuePairs } from '../common/emissions';
+import { testContext } from './context';
 
 const expectedScopes = {
   scope1: {
@@ -53,40 +57,59 @@ const expectations = {
 const emptyGrainsCrop: GrainsCrop = {
   type: 'Wheat',
   state: 'vic',
-  productionSystem: 'Non-irrigated crop',
-  averageGrainYield: 0,
+  averageYield: 0,
   areaSown: 0,
-  nonUreaNitrogen: 0,
-  ureaApplication: 0,
-  ureaAmmoniumNitrate: 0,
-  phosphorusApplication: 0,
-  potassiumApplication: 0,
-  sulfurApplication: 0,
   rainfallAbove600: false,
   fractionOfAnnualCropBurnt: 0,
-  herbicideUse: 0,
-  glyphosateOtherHerbicideUse: 0,
   electricityAllocation: 0,
   limestone: 0,
   limestoneFraction: 0,
-  dieselUse: 0,
-  petrolUse: 0,
-  lpg: 0,
+  chemicals: [],
+  refrigerants: [],
+  inorganicFertilisers: {
+    productionSystem: 'Non-irrigated crops',
+    applications: [],
+    calculationMethodScope1: '1',
+  },
+  organicFertilisers: {
+    applications: [],
+    calculationMethod: '1',
+  },
+  isInLeachingZone: false,
+  transportFuel: [],
+  stationaryFuel: [],
+  naturalGas: 0,
+  cropResidues: {
+    calculationMethod: '1',
+  },
+  services: [],
+  waste: {
+    solidWaste: {
+      landfill: [],
+      incineration: [],
+      composting: [],
+      anaerobicDigestion: [],
+    },
+    offsiteManure: [],
+  },
 };
 
-const emptyInputWithEnterprise: GrainsInput = {
-  state: 'vic',
-  crops: [emptyGrainsCrop],
-  electricityRenewable: 0,
-  electricityUse: 0,
-  vegetation: [],
-};
+const emptyInputWithEnterprise: GrainsInputTransformed =
+  GrainsInputSchema.parse({
+    state: 'vic',
+    crops: [emptyGrainsCrop],
+    electricityRenewable: 0,
+    electricityUse: 0,
+    vegetation: [],
+  });
 
 const emptyInput: GrainsInput = {
   state: 'vic',
   crops: [],
-  electricityRenewable: 0,
-  electricityUse: 0,
+  electricity: {
+    electricityRenewable: 0,
+    electricityUse: 0,
+  },
   vegetation: [],
 };
 
@@ -132,7 +155,10 @@ describe('Grains calculator, empty enterprise', () => {
 
 describe('Grains calculator, no enterprise', () => {
   const context = testContext('Grains');
-  const emissions = calculateGrains(emptyInput, context);
+  const emissions = calculateGrains(
+    GrainsInputSchema.parse(emptyInput),
+    context,
+  );
 
   executeEmissionsSpec(emissions, expectations as unknown as KeyValuePairs);
 });

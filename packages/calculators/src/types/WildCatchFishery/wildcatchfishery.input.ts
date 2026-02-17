@@ -79,6 +79,6 @@ export const WildCatchFisheryEnterpriseInputSchema = singleEnterpriseInput(
   },
 );
 
-export type WildCatchFisheryEnterpriseInput = z.infer<
+export type WildCatchFisheryEnterpriseInput = z.input<
   typeof WildCatchFisheryEnterpriseInputSchema
 >;

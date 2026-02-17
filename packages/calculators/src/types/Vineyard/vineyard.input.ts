@@ -80,4 +80,4 @@ export const VineyardCropSchema = singleEnterpriseInput('Vineyard', {
     .meta({ description: DESCRIPTIONS.TOTAL_COMMERCIAL_FLIGHTS_KM }),
 });
 
-export type VineyardCrop = z.infer<typeof VineyardCropSchema>;
+export type VineyardCrop = z.input<typeof VineyardCropSchema>;

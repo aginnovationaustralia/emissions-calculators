@@ -1,5 +1,9 @@
 import { AllConstants } from '../../constants/types';
-import { AquacultureInput, AquacultureInputSchema, AquacultureOutput } from '../../types/Aquaculture';
+import {
+  AquacultureInput,
+  AquacultureInputSchema,
+  AquacultureOutput,
+} from '../../types/Aquaculture';
 import { executeCalculator } from '../execution/execute';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -20,4 +24,3 @@ function calculateAquaculture(
 
 export { AquacultureInputSchema, calculateAquaculture };
 export type { AllConstants, AquacultureInput, AquacultureOutput };
-

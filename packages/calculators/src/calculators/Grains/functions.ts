@@ -1,6 +1,6 @@
+import { ConstantsForGrainsCalculator } from '@/constants/types';
 import { CropType, State } from '@/types/enums';
 import { ExecutionContext } from '../executionContext';
-import { ConstantsForGrainsCalculator } from './constants';
 
 export function getAnnualN2OProductionEF(
   context: ExecutionContext<ConstantsForGrainsCalculator>,

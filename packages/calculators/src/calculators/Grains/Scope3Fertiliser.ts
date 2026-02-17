@@ -1,5 +1,5 @@
+import { ConstantsForGrainsCalculator } from '@/constants/types';
 import { ExecutionContext } from '../executionContext';
-import { ConstantsForGrainsCalculator } from './constants';
 
 type Scope3GrainInput = {
   ureaApplication: number;

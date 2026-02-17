@@ -1,6 +1,6 @@
-import { GrainsCrop } from '@/types/Grains/crop.input';
+import { ConstantsForGrainsCalculator } from '@/constants/types';
+import { GrainsCrop } from '@/types/Grains';
 import { ExecutionContext } from '../executionContext';
-import { ConstantsForGrainsCalculator } from './constants';
 
 export function calculateScope1FieldBurning(
   crop: GrainsCrop,

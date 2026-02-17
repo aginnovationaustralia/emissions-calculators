@@ -345,6 +345,7 @@
     "xlsx-populate": "^1.21.0"
   },
   "dependencies": {
+    "decimal.js-light": "^2.5.1",
     "mixpanel": "^0.19.1",
     "mixpanel-browser": "^2.72.0",
     "openapi3-ts": "^4.5.0",
@@ -353,7 +354,7 @@
     "ts-deepmerge": "^7.0.3",
     "tslib": "^2.8.1",
     "type-fest": "^5.3.1",
-    "zod": "^4.1.13",
+    "zod": "^4.3.6",
     "zod-openapi": "^5.4.5"
   }
 }

@@ -1,4 +1,4 @@
-import { GrainsInputSchema } from '@/types/Grains/input';
+import { GrainsInputSchema } from '@/calculators/Grains/types';
 import { validateCalculatorInput } from '../../calculators/validate';
 import { grainsTestData } from './grains.data';
 

@@ -272,26 +272,26 @@ export { GoatOutput, GoatOutputSchema } from './Goat/output';
 export { GoatScope1Output, GoatScope1OutputSchema } from './Goat/scope1.output';
 export { GoatScope3Output, GoatScope3OutputSchema } from './Goat/scope3.output';
 export { GoatVegetation } from './Goat/vegetation.input';
-export { GrainsCrop } from './Grains/crop.input';
-export { GrainsInput, GrainsInputSchema } from './Grains/input';
-export {
-  GrainsIntensitiesOutput,
-  GrainsIntensitiesOutputSchema,
-} from './Grains/intensities.output';
-export {
-  GrainsIntermediateOutput,
-  GrainsIntermediateOutputSchema,
-} from './Grains/intermediate.output';
-export { GrainsNetOutput, GrainsNetOutputSchema } from './Grains/net.output';
-export { GrainsOutput, GrainsOutputSchema } from './Grains/output';
-export {
-  GrainsScope1Output,
-  GrainsScope1OutputSchema,
-} from './Grains/scope1.output';
-export {
-  GrainsScope3Output,
-  GrainsScope3OutputSchema,
-} from './Grains/scope3.output';
+// export { GrainsCrop } from './Grains/crop.input';
+// export { GrainsInput, GrainsInputSchema } from './Grains/input';
+// export {
+//   GrainsIntensitiesOutput,
+//   GrainsIntensitiesOutputSchema,
+// } from './Grains/intensities.output';
+// export {
+//   GrainsIntermediateOutput,
+//   GrainsIntermediateOutputSchema,
+// } from './Grains/intermediate.output';
+// export { GrainsNetOutput, GrainsNetOutputSchema } from './Grains/net.output';
+// export { GrainsOutput, GrainsOutputSchema } from './Grains/output';
+// export {
+//   GrainsScope1Output,
+//   GrainsScope1OutputSchema,
+// } from './Grains/scope1.output';
+// export {
+//   GrainsScope3Output,
+//   GrainsScope3OutputSchema,
+// } from './Grains/scope3.output';
 export { HorticultureCrop } from './Horticulture/horticulture.input';
 export {
   HorticultureInput,

@@ -1,7 +1,7 @@
-import { GrainsCrop } from '@/types/Grains/crop.input';
+import { ConstantsForGrainsCalculator } from '@/constants/types';
 import { CropType } from '@/types/enums';
+import { GrainsCrop } from '@/types/Grains';
 import { ExecutionContext } from '../executionContext';
-import { ConstantsForGrainsCalculator } from './constants';
 import {
   getAnnualN2OProductionEF,
   getCropResidueFractionRemoved,

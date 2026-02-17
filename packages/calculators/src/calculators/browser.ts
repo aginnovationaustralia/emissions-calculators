@@ -17,8 +17,8 @@ import {
   FeedlotOutput,
   GoatInputSchema,
   GoatOutput,
-  GrainsInputSchema,
-  GrainsOutput,
+  // GrainsInputSchema,
+  // GrainsOutput,
   HorticultureInputSchema,
   HorticultureOutput,
   PorkInputSchema,
@@ -64,6 +64,7 @@ import {
   calculateWildCatchFishery,
   calculateWildSeaFisheries,
 } from './browser-calculators';
+import { GrainsInputSchema, GrainsOutput } from './Grains';
 import { CalculatorNames } from './strings';
 
 export * from './browser-calculators';
@@ -103,46 +104,46 @@ export const calculateEmissions = <
   O extends N extends 'beef'
     ? BeefOutput
     : N extends 'aquaculture'
-    ? AquacultureOutput
-    : N extends 'buffalo'
-    ? BuffaloOutput
-    : N extends 'cotton'
-    ? CottonOutput
-    : N extends 'dairy'
-    ? DairyOutput
-    : N extends 'deer'
-    ? DeerOutput
-    : N extends 'feedlot'
-    ? FeedlotOutput
-    : N extends 'feedlotbeef'
-    ? FeedlotOutput
-    : N extends 'goat'
-    ? GoatOutput
-    : N extends 'grains'
-    ? GrainsOutput
-    : N extends 'horticulture'
-    ? HorticultureOutput
-    : N extends 'pork'
-    ? PorkOutput
-    : N extends 'poultry'
-    ? PoultryOutput
-    : N extends 'processing'
-    ? ProcessingOutput
-    : N extends 'rice'
-    ? RiceOutput
-    : N extends 'sheep'
-    ? SheepOutput
-    : N extends 'sheepbeef'
-    ? SheepBeefOutput
-    : N extends 'sugar'
-    ? SugarOutput
-    : N extends 'vineyard'
-    ? VineyardOutput
-    : N extends 'wildcatchfishery'
-    ? WildCatchFisheryOutput
-    : N extends 'wildseafisheries'
-    ? WildSeaFisheriesOutput
-    : never,
+      ? AquacultureOutput
+      : N extends 'buffalo'
+        ? BuffaloOutput
+        : N extends 'cotton'
+          ? CottonOutput
+          : N extends 'dairy'
+            ? DairyOutput
+            : N extends 'deer'
+              ? DeerOutput
+              : N extends 'feedlot'
+                ? FeedlotOutput
+                : N extends 'feedlotbeef'
+                  ? FeedlotOutput
+                  : N extends 'goat'
+                    ? GoatOutput
+                    : N extends 'grains'
+                      ? GrainsOutput
+                      : N extends 'horticulture'
+                        ? HorticultureOutput
+                        : N extends 'pork'
+                          ? PorkOutput
+                          : N extends 'poultry'
+                            ? PoultryOutput
+                            : N extends 'processing'
+                              ? ProcessingOutput
+                              : N extends 'rice'
+                                ? RiceOutput
+                                : N extends 'sheep'
+                                  ? SheepOutput
+                                  : N extends 'sheepbeef'
+                                    ? SheepBeefOutput
+                                    : N extends 'sugar'
+                                      ? SugarOutput
+                                      : N extends 'vineyard'
+                                        ? VineyardOutput
+                                        : N extends 'wildcatchfishery'
+                                          ? WildCatchFisheryOutput
+                                          : N extends 'wildseafisheries'
+                                            ? WildSeaFisheriesOutput
+                                            : never,
 >(
   calculatorName: N,
   input: unknown,

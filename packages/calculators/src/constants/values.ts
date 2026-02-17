@@ -1635,7 +1635,7 @@ export const poultryConstants: PoultryConstants = {
   },
 
   /**
-   * @description Meat and layer chickens – Integrated MCFs, by state
+   * @description Meat and layer chickens - Integrated MCFs, by state
    */
   MEATLAYER_EF_IMCF: {
     meat_chickens: {
@@ -1663,7 +1663,7 @@ export const poultryConstants: PoultryConstants = {
   },
 
   /**
-   * @description Meat and layer chickens – Integrated EFs, by state
+   * @description Meat and layer chickens - Integrated EFs, by state
    */
   MEATLAYER_EF: {
     meat_chickens: {
@@ -2106,7 +2106,7 @@ export const livestockConstants: LivestockConstants = {
   METHANE_DENSITY: 0.6784,
 
   /**
-   * @description Other livestock – Allocation of animals to climate regions
+   * @description Other livestock - Allocation of animals to climate regions
    * @inventory2022 Table A5.5.7.3
    */
   OTHERLIVESTOCK_ALLOCATION_CLIMATEREGIONS: {
@@ -2221,6 +2221,8 @@ export const aquacultureConstants: AquacultureConstants = {
 };
 
 export const cropConstants: CropConstants = {
+  name: 'CROP',
+
   /**
    * @description Efficiency of residue burning
    */
@@ -2620,6 +2622,11 @@ export const cropConstants: CropConstants = {
    */
   CROP_RESIDUE_N2O_EF: 0.00503,
 
+  EF_RESIDUES_RETURNED_TO_SOIL: {
+    wet: 0.006,
+    dry: 0.005,
+  },
+
   /**
    * @description Fraction of N available for leaching and runoff from fertiliser
    */
@@ -2627,6 +2634,8 @@ export const cropConstants: CropConstants = {
 };
 
 export const commonConstants: CommonConstants = {
+  name: 'COMMON',
+
   /**
    * @description Emissions factor for feed purchased, in kg CO2-e/kg
    * @units kg CO2-e/kg
@@ -2851,7 +2860,7 @@ export const commonConstants: CommonConstants = {
   /**
    * @description Scope 1 and Scope 3 values relating to liming
    * @inventory2018 3G_1
-   * @reference Mudahar, M.S., Hignett, T.P., 1982. Energy and Fertilizer— Policy Implications and Options for Developing Countries. International Fertilizer Development Center, Muscle Shoals, Alabama
+   * @reference Mudahar, M.S., Hignett, T.P., 1982. Energy and Fertilizer-- Policy Implications and Options for Developing Countries. International Fertilizer Development Center, Muscle Shoals, Alabama
    */
   LIMING: {
     SCOPE1: {
@@ -2871,6 +2880,8 @@ export const commonConstants: CommonConstants = {
       FUEL_SCOPE3_POST_PRODUCTION_DISTILLATE_FUEL: 28.32,
     },
   },
+
+  LIME_SCOPE3_EF: 0.432,
 
   /**
    * @description Scope 1 and Scope 3 factors relating to fuel

@@ -666,6 +666,8 @@ export type AquacultureConstants = {
 };
 
 export type CropConstants = {
+  name: string;
+
   FERTILISER_FRACTION_RUNOFF_STATIC: number;
 
   COMPONENTS_ENERGY_EF: {
@@ -742,6 +744,8 @@ export type CropConstants = {
 
   CROP_RESIDUE_N2O_EF: number;
 
+  EF_RESIDUES_RETURNED_TO_SOIL: Record<'wet' | 'dry', number>;
+
   BURNING_EFFICIENCY_RESIDUE: number;
   BURNING_N2O_EF: number;
   BURNING_METHANE_EF: number;
@@ -753,7 +757,11 @@ export type RiceConstants = {
   SF_PRESEASON_WATER_REGIME: Record<RicePreseasonFloodingPeriod, number>;
 };
 
-export type CommonConstants = {
+type NamedConstants = {
+  name: string;
+};
+
+export type CommonConstants = NamedConstants & {
   FEED_PURCHASED: {
     grain: { TotalGHG: number };
     cottonseed: { TotalGHG: number };
@@ -881,6 +889,8 @@ export type CommonConstants = {
     };
   };
 
+  LIME_SCOPE3_EF: number;
+
   // Trees
   TREE_REGIONS: {
     RegionNo: { [treeRegion in TreeRegions]: number };
@@ -947,4 +957,10 @@ export type AllConstants = {
   SAVANNA: SavannaConstants;
   SHEEP: SheepConstants;
   SUGAR: SugarConstants;
+};
+
+// For legacy only
+export type ConstantsForGrainsCalculator = {
+  COMMON: CommonConstants;
+  CROP: CropConstants;
 };

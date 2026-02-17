@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { DESCRIPTIONS } from './descriptions.schema';
+import { object } from './schemas';
 import { StationaryFuelInputSchema } from './stationaryFuel.input';
 import { TransportFuelInputSchema } from './transportFuel.input';
-import { object } from './schemas';
 
 export const FuelInputSchema = object({
   transportFuel: z
@@ -12,6 +12,8 @@ export const FuelInputSchema = object({
     .array(StationaryFuelInputSchema)
     .meta({ description: DESCRIPTIONS.FUEL_STATIONARY }),
   naturalGas: z.number().min(0).meta({ description: DESCRIPTIONS.NATURAL_GAS }),
+  // .transform((a) => input(`NATURAL_GAS[${a}]`, energy(new Decimal(a)))),
 });
 
-export type FuelInput = z.infer<typeof FuelInputSchema>;
+export type FuelInput = z.input<typeof FuelInputSchema>;
+export type FuelInputTransformed = z.output<typeof FuelInputSchema>;

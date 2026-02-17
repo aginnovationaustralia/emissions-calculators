@@ -4,6 +4,10 @@ import {
   objectFromEntries,
 } from '@/calculators/common/tools/object';
 import { packageVersion } from '@/calculators/execution/version';
+import {
+  GrainsInputSchema,
+  GrainsOutputSchema,
+} from '@/calculators/Grains/types';
 import { OpenAPIObject } from 'openapi3-ts/oas31';
 import * as z from 'zod';
 import {
@@ -20,7 +24,6 @@ import { DairyInputSchema, DairyOutputSchema } from './Dairy';
 import { DeerInputSchema, DeerOutputSchema } from './Deer';
 import { FeedlotInputSchema, FeedlotOutputSchema } from './Feedlot';
 import { GoatInputSchema, GoatOutputSchema } from './Goat';
-import { GrainsInputSchema, GrainsOutputSchema } from './Grains';
 import {
   HorticultureInputSchema,
   HorticultureOutputSchema,
