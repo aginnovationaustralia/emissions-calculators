@@ -1,4 +1,4 @@
-import { TypedContainer } from './origins';
+import { TypedContainer } from './containers';
 import { NumberUnit } from './units';
 
 export function minus<T extends NumberUnit, O extends TypedContainer<T>>(

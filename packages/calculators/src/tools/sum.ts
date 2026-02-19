@@ -3,7 +3,7 @@ import {
   IntermediateOrNamedOrigin,
   SummedContainer,
   TypedContainer,
-} from './origins';
+} from './containers';
 import { NumberUnit, VoidUnit, voidUnit } from './units';
 
 // Extract the unit type from an origin (for preserving unit when summing)

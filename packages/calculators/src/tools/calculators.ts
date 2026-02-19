@@ -13,7 +13,7 @@ import {
   objectFromEntries,
 } from '@/calculators/common/tools/object';
 import z from 'zod';
-import { TypedContainer } from './origins';
+import { TypedContainer } from './containers';
 import { output, Output, scope1Output, Scope1Output } from './outputs';
 import { sum } from './sum';
 import { Mass } from './units';

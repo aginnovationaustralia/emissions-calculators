@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js-light';
+import { Container } from './containers';
 import { HasMetadata, ValueMetadata } from './metadata';
-import { Container } from './origins';
 import { AnyUnit, formatUnit, isVoid, mass, Mass, VoidUnit } from './units';
 
 export const makeUnique = <T>(a: T[]): T[] => {
@@ -105,8 +105,6 @@ export const collectReferences = <O extends Container<AnyUnit>>(
       ? []
       : (container.core.references ?? []);
   switch (container.originType) {
-    case 'unary':
-      return baseResults.concat(collectReferences(container.from));
     case 'binary':
       return baseResults.concat(
         collectReferences(container.left),
@@ -138,8 +136,6 @@ export const collectConstants = <O extends Container<AnyUnit>>(
     constants.push(currentConstant);
   }
   switch (origin.originType) {
-    case 'unary':
-      return collectConstants(origin.from);
     case 'binary':
       return collectConstants(origin.left).concat(
         collectConstants(origin.right),

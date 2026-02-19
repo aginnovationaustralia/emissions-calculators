@@ -2,7 +2,7 @@ import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { TransportFuelType } from '@/calculators/Grains/constants/enums';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { selectConstant } from '@/tools/constants';
-import { BinaryContainer, TypedContainer } from '@/tools/origins';
+import { BinaryContainer, TypedContainer } from '@/tools/containers';
 import { sum } from '@/tools/sum';
 import { energyPerVolume, Mass, massPerEnergy, Volume } from '@/tools/units';
 import Decimal from 'decimal.js-light';

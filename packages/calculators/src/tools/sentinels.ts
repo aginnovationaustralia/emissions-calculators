@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js-light';
-import { RootContainer, TypedContainer } from './origins';
+import { RootContainer, TypedContainer } from './containers';
 import { mass, RealNumber, realNumber } from './units';
 
 export const one = new RootContainer(realNumber(new Decimal(1)), {

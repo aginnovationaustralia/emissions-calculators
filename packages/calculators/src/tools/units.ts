@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js-light';
-import { Container, isPartialNamedOriginWithName } from './origins';
+import { Container, isPartialNamedOriginWithName } from './containers';
 
 export type Substance =
   | 'Chemical'

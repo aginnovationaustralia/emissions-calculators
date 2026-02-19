@@ -348,13 +348,6 @@ export class BaseContainer<
   }
 }
 
-// export type BinaryOrigin<U extends AnyUnit> = BaseOrigin<U> & {
-//   originType: 'binary';
-//   type: 'add' | 'subtract' | 'multiply' | 'divide';
-//   left: Origin<NumberUnit>;
-//   right: Origin<NumberUnit>;
-// };
-
 export class BinaryContainer<U extends AnyUnit> extends BaseContainer<
   U,
   IntermediateOrNamedOrigin
@@ -379,16 +372,6 @@ export class BinaryContainer<U extends AnyUnit> extends BaseContainer<
   }
 }
 
-// export type UnaryOrigin<U extends AnyUnit> = BaseOrigin<U> & {
-//   originType: 'unary';
-//   from: Origin<NumberUnit>;
-// };
-
-// export type SummedOrigin<N extends NumberUnit> = BaseOrigin<N> & {
-//   originType: 'sum';
-//   from: Origin<NumberUnit>[];
-// };
-
 export class SummedContainer<N extends NumberUnit> extends BaseContainer<
   N,
   IntermediateOrNamedOrigin
@@ -407,12 +390,6 @@ export class SummedContainer<N extends NumberUnit> extends BaseContainer<
   }
 }
 
-// export type ConstantSelectionOrigin<U extends NumberUnit> = BaseOrigin<U> &
-//   NamedOrigin & {
-//     originType: 'constant_selection';
-//     selectors: (TypedOrigin<StringUnit> | string)[];
-//   };
-
 export class ConstantSelectionContainer<
   U extends NumberUnit,
 > extends BaseContainer<U, NamedOrigin> {
@@ -429,11 +406,6 @@ export class ConstantSelectionContainer<
     this.selectors = selectors;
   }
 }
-
-// export type RootOrigin<U extends AnyUnit> = NamedOrigin & {
-//   unit: U;
-//   originType: 'root';
-// };
 
 export class RootContainer<U extends AnyUnit> extends BaseContainer<
   U,
@@ -453,39 +425,15 @@ export const num = (value: number): RootContainer<RealNumber> =>
 export const value = <N extends NumberUnit>(v: N): RootContainer<N> =>
   new RootContainer(v, { valueType: 'value' });
 
-// export const rootOrigin = <U extends AnyUnit>(
-//   unit: U,
-//   baseOrigin: NamedOrigin,
-// ): RootOrigin<U> => {
-//   return {
-//     originType: 'root',
-//     unit,
-//     ...baseOrigin,
-//   };
-// };
-
 export type TypedContainer<U extends AnyUnit> =
   | BinaryContainer<U>
   | RootContainer<U>
-  // | RootContainer<U extends string ? U : never>
-  // | EmptyContainer<U>
   | SummedContainer<U extends NumberUnit ? U : never>
   | ConstantSelectionContainer<U extends NumberUnit ? U : never>;
-// export type TypedOrigin<U extends AnyUnit> =
-//   | BinaryOrigin<U>
-//   | UnaryOrigin<U>
-//   | RootOrigin<U>
-//   | EmptyOrigin
-//   | SummedOrigin<U extends NumberUnit ? U : never>
-//   | ConstantSelectionOrigin<U extends NumberUnit ? U : never>;
 
-// export type MultiOrigin<U extends NumberUnit = NumberUnit> = SummedOrigin<U>;
 export type MultiContainer<U extends NumberUnit = NumberUnit> =
   SummedContainer<U>;
 
-// export type Origin<U extends AnyUnit> =
-//   | TypedOrigin<U>
-//   | MultiOrigin<U extends NumberUnit ? U : never>;
 export type Container<U extends AnyUnit> =
   | TypedContainer<U>
   | MultiContainer<U extends NumberUnit ? U : never>;
