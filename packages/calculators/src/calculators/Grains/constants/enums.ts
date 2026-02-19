@@ -51,13 +51,13 @@ export type ExtendedCropProductionSystem =
 
 // Appendix A 2.2.6
 export const InorganicFertiliserTypes = [
-  'Monoammonium phosphate',
-  'Diammonium Phosphate',
+  'Monoammonium Phosphate (MAP)',
+  'Diammonium Phosphate (DAP)',
   'Urea',
-  'Sulphate of Ammonia',
-  'Urea-Ammonium Nitrate',
-  'Ammonium nitrate',
-  'Calcium Ammonium Nitrate',
+  'Sulphate of Ammonia (SOA)',
+  'Urea-Ammonium Nitrate (UAN)',
+  'Ammonium Nitrate (AN)',
+  'Calcium Ammonium Nitrate (CAN)',
 ] as const;
 export type InorganicFertiliserType = (typeof InorganicFertiliserTypes)[number];
 
@@ -88,56 +88,6 @@ export const SwineMMSTypes = [
 ] as const;
 export type SwineMMSType = (typeof SwineMMSTypes)[number];
 
-/*
-Petroleum based oils
-38.8 GJ/kL 13.9 0.0 0.0 13.9 18.0
-Petroleum based greases
-38.8 GJ/kL 3.5 0.0 0.0 3.5 18.0
-Crude oil including crude oil condensates
-45.3 GJ/t 69.6 0.08 0.2 69.88 NE
-Other natural gas liquids
-46.5 GJ/t 61.0 0.08 0.2 61.28 NE
-Automotive gasoline/petrol (other than for use as fuel in an aircraft)
-34.2 GJ/kL 67.4 0.2 0.2 67.80 17.2
-Aviation gasoline
-33.1 GJ/kL 67 0.2 0.2 67.40 18.0
-Kerosene (other than for use as fuel in an aircraft)
-37.5 GJ/kL 68.9 0.01 0.2 69.11 18.0
-Aviation turbine fuel/kerosene
-36.8 GJ/kL 69.6 0.02 0.2 69.82 18.0
-Heating oil
-37.3 GJ/kL 69.5 0.03 0.2 69.73 18.0
-Diesel oil
-38.6 GJ/kL 69.9 0.1 0.2 70.20 17.3
-Fuel oil
-39.7 GJ/kL 73.6 0.04 0.2 73.84 18.0
-Liquefied aromatic hydrocarbons
-34.4 GJ/kL 69.7 0.03 0.2 69.93 18.0
-Solvents: mineral turpentine or white spirits
-34.4 GJ/kL 69.7 0.03 0.2 69.93 18.0
-Liquefied petroleum gas (LPG)
-25.7 GJ/kL 60.2 0.2 0.2 60.60 20.2
-Naphtha
-31.4 GJ/kL 69.8 0.01 0.01 69.82 18.0
-Petroleum coke
-34.2 GJ/t 92.6 0.08 0.2 92.88 18.0
-Refinery gas and liquids
-42.9 GJ/t 54.7 0.03 0.03 54.76 18.0
-Refinery coke
-34.2 GJ/t 92.6 0.08 0.2 92.88 18.0
-Petroleum based products other than mentioned in the items above
-34.4 GJ/kL 69.8 0.02 0.1 69.92 18.0
-Biodiesel
-34.6 GJ/kL 0.0 0.08 0.2 0.28 NE
-Ethanol for use as a fuel in an internal combustion engine
-23.4 GJ/kL 0.0 0.08 0.2 0.28 NE
-Biofuels other than those mentioned in the items above and below
-23.4 GJ/kL 0.0 0.08 0.2 0.28 NE
-Renewable aviation kerosene
-36.8 GJ/kL 0.0 0.02 0.2 0.22 NE
-Renewable diesel
-38.6 GJ/kL 0.0 0.1 0.2 0.30 NE
-*/
 export const StationaryFuelTypes = [
   'petroleum based oils',
   'petroleum based greases',

@@ -2,7 +2,7 @@
   "achilleshr.runonsave": {
     "commands": [
       {
-        "match": "packages/calculators/.*\\.ts$",
+        "match": "packages/calculators/**/.*\\.ts$",
         "cmd": "node ${workspaceFolder}/scripts/normalize-unicode-to-ascii.js ${file} && prettier --write ${file}"
       }
     ]

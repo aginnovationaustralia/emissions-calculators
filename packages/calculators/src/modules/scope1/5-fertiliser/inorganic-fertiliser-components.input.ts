@@ -20,9 +20,7 @@ export const InorganicFertiliserKnownComponentInputSchema = object({
 });
 
 export const isInorganicFertiliserKnownComponent = (
-  component:
-    | InorganicFertiliserKnownComponentInputTransformed
-    | InorganicFertiliserUnknownComponentInputTransformed,
+  component: InorganicFertiliserComponentInputTransformed,
 ): component is InorganicFertiliserKnownComponentInputTransformed => {
   return 'componentType' in component;
 };

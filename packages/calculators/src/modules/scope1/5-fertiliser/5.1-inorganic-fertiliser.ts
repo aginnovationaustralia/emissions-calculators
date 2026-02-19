@@ -2,12 +2,18 @@ import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import { constant, selectConstant } from '@/tools/constants';
+import { input } from '@/tools/inputs';
+import { Container } from '@/tools/origins';
 import { sum } from '@/tools/sum';
-import { massPerMass, realNumber } from '@/tools/units';
+import { MassPerMass, massPerMass, realNumber } from '@/tools/units';
 import Decimal from 'decimal.js-light';
 import { CropResidueInputTransformed } from '../6-residue-mgmt/crop-residue.input';
 import { FertiliserInputTransformed } from './fertiliser.input';
-import { InorganicFertiliserInputTransformed } from './inorganic-fertiliser.input';
+import { isInorganicFertiliserKnownComponent } from './inorganic-fertiliser-components.input';
+import {
+  InorganicFertiliserInputTransformed,
+  isInorganicFertiliserInputScope3Method1,
+} from './inorganic-fertiliser.input';
 
 const getEFjN20ForFertiliser = (
   inorganicFertiliser: InorganicFertiliserInputTransformed,
@@ -68,21 +74,52 @@ export const massNitrogenFromInorganicFertiliserApplied = (
   inorganicFertiliser: InorganicFertiliserInputTransformed,
   constants: ConstantsForGrainsCalculator,
 ) => {
-  const fnInorganicF = selectConstant(
-    constants.CROP,
-    (value) => massPerMass('N', 'Inorganic Fertiliser', value),
-    'INORGANIC_FERTILISER_FRACTIONS',
-    inorganicFertiliser.fertiliserType,
-    'N',
-  );
+  /*
+  See description for FNinorganic,f data source
+  "Default values for common inorganic fertilisers based on average fertiliser composition from [4], or calculated from product label information.
+  Default fraction of nitrogen for common fertiliser types are provided in Table A.2.2.6 of the Appendix.
+  If using product information label, nitrogen content by weight per cent (wt%) fertiliser composition is typically stated in the form of N:P:K (the ratio of nitrogen, phosphorus and potassium nutrients."
+  */
+  let fnInorganicF: Container<MassPerMass<'N', 'Inorganic Fertiliser'>> =
+    selectConstant(
+      constants.CROP,
+      (value) => massPerMass('N', 'Inorganic Fertiliser', value),
+      'INORGANIC_FERTILISER_FRACTIONS',
+      inorganicFertiliser.fertiliserType,
+      'N',
+    );
+
+  if (isInorganicFertiliserInputScope3Method1(inorganicFertiliser)) {
+    const nitrogenComponent = inorganicFertiliser.components?.find(
+      (component) =>
+        isInorganicFertiliserKnownComponent(component) &&
+        component.componentType === 'Nitrogen - Generic',
+    );
+    if (nitrogenComponent) {
+      fnInorganicF = input(
+        'fnInorganicF (custom nitrogen component)',
+        massPerMass(
+          'N',
+          'Inorganic Fertiliser',
+          nitrogenComponent.fractionOfFertiliser.unit.value,
+        ),
+      );
+    }
+  } else {
+    if (inorganicFertiliser.customNitrogenFraction) {
+      fnInorganicF = inorganicFertiliser.customNitrogenFraction;
+    }
+  }
+
   const mnjf = inorganicFertiliser.massAppliedKg.multiply(fnInorganicF);
   return mnjf;
 };
 
 export const calculateInorganicFertiliserN2O = (
   input: FertiliserInputTransformed & BaseGrainsCropTransformed,
-  constants: ConstantsForGrainsCalculator,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
+  const { constants } = context;
   /*
 5.1.1.1 Method 1 - Inorganic Fertiliser Application N2O Emissions
 (1) Nitrous oxide emissions from the application of all inorganic fertiliser types f to all
@@ -119,30 +156,29 @@ CN2O = factor to convert elemental mass of nitrous oxide to molecular mass
   return sum(emissionRecords, { name: 'E n2o' });
 };
 
-const calculateInorganicFertiliserCO2 = (
-  input: FertiliserInputTransformed &
-    CropResidueInputTransformed &
-    BaseGrainsCropTransformed,
-  constants: ConstantsForGrainsCalculator,
+export const calculateInorganicFertiliserCO2 = (
+  input: FertiliserInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
+  const { constants } = context;
   /*
-5.1.1.3 Method 1 - Inorganic Fertiliser Application CO2 Emissions
-Carbon dioxide emissions resulting from the use of inorganic, urea-based fertilisers,
-E jf,CO2 (t CO2), are calculated as:
-E jf,CO2 = MU jf * EF urea,CO2 * CCO2 * 10^-3
-MU jf = mass of urea of inorganic fertiliser type f applied to production system
-j (kg urea)
-EF urea,CO2 = emission factor for carbon emissions from urea-based fertilisers
-(kg C/kg urea)
-CCO2= factor to convert elemental mass of carbon dioxide to molecular mass
-(dimensionless)
+  5.1.1.3 Method 1 - Inorganic Fertiliser Application CO2 Emissions
+  Carbon dioxide emissions resulting from the use of inorganic, urea-based fertilisers,
+  E jf,CO2 (t CO2), are calculated as:
+  E jf,CO2 = MU jf * EF urea,CO2 * CCO2 * 10^-3
+  MU jf = mass of urea of inorganic fertiliser type f applied to production system
+  j (kg urea)
+  EF urea,CO2 = emission factor for carbon emissions from urea-based fertilisers
+  (kg C/kg urea)
+  CCO2= factor to convert elemental mass of carbon dioxide to molecular mass
+  (dimensionless)
 
-Mass of urea applied to production system MU jf is calculated as:
-MU jf = TM jf * FU f
-Where TM jf = the total mass of inorganic fertiliser type f applied to production system
-j (kg)
-FU f = the fraction of urea in fertiliser type f (kg urea/kg)
-*/
+  Mass of urea applied to production system MU jf is calculated as:
+  MU jf = TM jf * FU f
+  Where TM jf = the total mass of inorganic fertiliser type f applied to production system
+  j (kg)
+  FU f = the fraction of urea in fertiliser type f (kg urea/kg)
+  */
   const { applications } = input.inorganicFertilisers;
   const emissionRecords = applications.map((inorganicFertiliser) => {
     const tmjf = inorganicFertiliser.massAppliedKg;
@@ -160,11 +196,7 @@ FU f = the fraction of urea in fertiliser type f (kg urea/kg)
 
     const efUreaCO2 = constant(
       'EF Urea CO2',
-      massPerMass(
-        'CO2e',
-        'Urea',
-        new Decimal(constants.COMMON.UREA_FERTILISER_GHG),
-      ),
+      massPerMass('CO2e', 'Urea', new Decimal(constants.COMMON.EF_UREA_CO2)),
     );
 
     const cgCO2 = constant(
@@ -187,10 +219,8 @@ export const calculate51InorganicFertiliser = (
     BaseGrainsCropTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  const { constants } = context;
-
   return {
-    inorganicFertiliserN2O: calculateInorganicFertiliserN2O(input, constants),
-    inorganicFertiliserCO2: calculateInorganicFertiliserCO2(input, constants),
+    inorganicFertiliserN2O: calculateInorganicFertiliserN2O(input, context),
+    inorganicFertiliserCO2: calculateInorganicFertiliserCO2(input, context),
   };
 };

@@ -31,14 +31,33 @@ const InorganicFertilisersScope1Method2InputSchema = object({
   }),
 });
 
-export const InorganicFertilisersInputSchema = z.xor([
-  InorganicFertilisersScope1Method1InputSchema,
-  InorganicFertilisersScope1Method2InputSchema,
-]);
+export const InorganicFertilisersInputSchema = z.discriminatedUnion(
+  'calculationMethodScope1',
+  [
+    InorganicFertilisersScope1Method1InputSchema,
+    InorganicFertilisersScope1Method2InputSchema,
+  ],
+);
 
 export type InorganicFertilisersInput = z.input<
   typeof InorganicFertilisersInputSchema
 >;
 export type InorganicFertilisersInputTransformed = z.output<
   typeof InorganicFertilisersInputSchema
+>;
+
+export type InorganicFertilisersScope1Method1Input = z.input<
+  typeof InorganicFertilisersScope1Method1InputSchema
+>;
+
+export type InorganicFertilisersScope1Method1InputTransformed = z.output<
+  typeof InorganicFertilisersScope1Method1InputSchema
+>;
+
+export type InorganicFertilisersScope1Method2Input = z.input<
+  typeof InorganicFertilisersScope1Method2InputSchema
+>;
+
+export type InorganicFertilisersScope1Method2InputTransformed = z.output<
+  typeof InorganicFertilisersScope1Method2InputSchema
 >;

@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js-light';
+import { Container, isPartialNamedOriginWithName } from './origins';
 
 export type Substance =
   | 'Chemical'
@@ -389,3 +390,52 @@ export function formatUnit(unit: AnyUnit): string {
       return `Mass(${unit.substance}) / Electricity`;
   }
 }
+
+export const formatValues = (container: Container<AnyUnit>): string => {
+  const lhsUnit = container.unit;
+  let lhs = '';
+  if (isVoid(lhsUnit)) {
+    lhs = 'void(0)';
+  } else if (isStringUnit(lhsUnit)) {
+    lhs = lhsUnit;
+  } else {
+    // console.log(container);
+    lhs = lhsUnit.value.toNumber().toString();
+  }
+
+  const rhs = formatValuesRecursive(container);
+
+  return `${lhs} = ${rhs}`;
+};
+
+const formatUnitValue = (unit: AnyUnit): string => {
+  if (isVoid(unit)) {
+    return 'void(0)';
+  } else if (isStringUnit(unit)) {
+    return unit;
+  } else {
+    return unit.value.toNumber().toString();
+  }
+};
+
+const formatValueAndName = (container: Container<AnyUnit>): string => {
+  const core = container.core;
+  const name = isPartialNamedOriginWithName(core) ? core.name : 'anon';
+
+  return `${name}(${formatUnitValue(container.unit)})`;
+};
+
+const formatValuesRecursive = (container: Container<AnyUnit>): string => {
+  switch (container.originType) {
+    case 'binary':
+      return `${formatValuesRecursive(container.left)} ${container.type === 'add' ? '+' : container.type === 'subtract' ? '-' : container.type === 'multiply' ? '*' : '/'} ${formatValuesRecursive(container.right)}`;
+    case 'root':
+      return formatValueAndName(container);
+    case 'sum':
+      return container.from.map(formatValuesRecursive).join(' + ');
+    case 'constant_selection':
+      return formatValueAndName(container);
+    default:
+      return `Unknown ${container}`;
+  }
+};

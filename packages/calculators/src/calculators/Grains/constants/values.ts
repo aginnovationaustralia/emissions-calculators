@@ -6,6 +6,8 @@ import {
 } from './types';
 
 export const commonConstants: CommonConstants = {
+  name: 'COMMON',
+
   // NGAF 2023 Table 10
   REFRIGERATION_LEAKAGE_RATES: {
     'Domestic refrigerators': 1.7,
@@ -30,7 +32,8 @@ export const commonConstants: CommonConstants = {
    * @description Total GHG (kg CO2-e/kg input)
    * @units kg CO2-e/kg
    */
-  UREA_FERTILISER_GHG: 1.495,
+  // National Inventory Report Volume 1 [6, p. 1]
+  EF_UREA_CO2: 0.2,
 
   /**
    * @description Conversion factor for the global warming potential of N2O, as CO2-e
@@ -46,7 +49,7 @@ export const commonConstants: CommonConstants = {
    */
   GWP_FACTORSC14: 16 / 12,
 
-  GWP_FACTORSC15: 1,
+  GWP_FACTORSC15: 44 / 28,
 
   /**
    * @description Conversion factor for elemental to molecular CO2 from lime
@@ -640,6 +643,8 @@ export const commonConstants: CommonConstants = {
 };
 
 export const cropConstants: CropConstants = {
+  name: 'CROP',
+
   /**
    * @description Fraction of N in inorganic fertiliser types. Table A.2.2.6, A.2.2.7, A.2.2.9
    */
@@ -654,38 +659,38 @@ export const cropConstants: CropConstants = {
 Single Super Phosphate (SSP) 0.26
 */
   INORGANIC_FERTILISER_FRACTIONS: {
-    'Monoammonium phosphate': {
+    'Monoammonium Phosphate (MAP)': {
       N: 0.1,
       Urea: 0,
       Volatilises: 0.08,
       Scope3EF: 0.83,
     },
-    'Diammonium Phosphate': {
+    'Diammonium Phosphate (DAP)': {
       N: 0.18,
       Urea: 0,
       Volatilises: 0.08,
       Scope3EF: 1.0,
     },
     Urea: { N: 0.46, Urea: 1, Volatilises: 0.15, Scope3EF: 1.5 },
-    'Sulphate of Ammonia': {
+    'Sulphate of Ammonia (SOA)': {
       N: 0.21,
       Urea: 0,
       Volatilises: 0.08,
       Scope3EF: 0.75,
     },
-    'Urea-Ammonium Nitrate': {
+    'Urea-Ammonium Nitrate (UAN)': {
       N: 0.32,
       Urea: 0.35,
       Volatilises: 0.05,
       Scope3EF: 1.09,
     },
-    'Ammonium nitrate': {
+    'Ammonium Nitrate (AN)': {
       N: 0.337,
       Urea: 0,
       Volatilises: 0.05,
       Scope3EF: 1.09,
     },
-    'Calcium Ammonium Nitrate': {
+    'Calcium Ammonium Nitrate (CAN)': {
       N: 0.27,
       Urea: 0,
       Volatilises: 0.05,
@@ -1006,6 +1011,8 @@ Single Super Phosphate (SSP) 0.26
 };
 
 export const swineConstants: SwineConstants = {
+  name: 'SWINE',
+
   // A.1.6.2
   // A.1.6.3
   MMS: {

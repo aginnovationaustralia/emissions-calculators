@@ -19,6 +19,10 @@ import {
   TransportFuelType,
 } from './enums';
 
+export type NamedConstants = {
+  name: string;
+};
+
 export const AgrochemicalTypeNames = [
   'Herbicide',
   'HerbicideOther',
@@ -52,8 +56,8 @@ type FuelFactor = {
   SCOPE3_EF: number;
 };
 
-export type CommonConstants = {
-  UREA_FERTILISER_GHG: number;
+export type CommonConstants = NamedConstants & {
+  EF_UREA_CO2: number;
   GWP_FACTORSC6: number;
   GWP_FACTORSC13: number;
   GWP_FACTORSC14: number;
@@ -174,7 +178,7 @@ type OrganicFertiliserFractions = {
   N: number;
 };
 
-export type CropConstants = {
+export type CropConstants = NamedConstants & {
   INORGANIC_FERTILISER_FRACTIONS: Record<
     InorganicFertiliserType,
     InorganicFertiliserFractions
@@ -207,7 +211,7 @@ type MMSFactors = {
   N2O_EF: number;
 };
 
-export type SwineConstants = {
+export type SwineConstants = NamedConstants & {
   MMS: Record<SwineMMSType, MMSFactors>;
 };
 

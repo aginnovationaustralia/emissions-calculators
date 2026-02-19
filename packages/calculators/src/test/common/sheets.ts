@@ -9,6 +9,11 @@ export const getWorkbook = async (filePath: string) => {
   return workbook;
 };
 
+export const getSheet = async (filePath: string, sheetName: string) => {
+  const workbook = await getWorkbook(filePath);
+  return workbook.sheet(sheetName);
+};
+
 export const mapInput =
   <T extends string>(lookup: Record<T, string>) =>
   (input: Cell): T => {

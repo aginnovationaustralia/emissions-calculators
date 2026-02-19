@@ -1,3 +1,4 @@
+import { NamedConstants } from '@/calculators/Grains/constants/types';
 import {
   ConstantSelectionContainer,
   IntermediateOrNamedOrigin,
@@ -124,7 +125,7 @@ The return value should be of type RootContainer<T>, with an originType of root 
 export function selectConstant<
   TOut extends NumberUnit,
   CK1 extends string,
-  Constants extends Record<CK1, unknown>,
+  Constants extends Record<CK1, unknown> & NamedConstants,
   TConstant extends Constants[CK1],
 >(
   constants: Constants,
@@ -137,7 +138,7 @@ export function selectConstant<
   TOut extends NumberUnit,
   CK1 extends string,
   CK2 extends string,
-  Constants extends Record<CK1, Record<CK2, unknown>>,
+  Constants extends Record<CK1, Record<CK2, unknown>> & NamedConstants,
   TConstant extends Constants[CK1][CK2],
 >(
   constants: Constants,
@@ -152,7 +153,8 @@ export function selectConstant<
   CK1 extends string,
   CK2 extends string,
   CK3 extends string,
-  Constants extends Record<CK1, Record<CK2, Record<CK3, unknown>>>,
+  Constants extends Record<CK1, Record<CK2, Record<CK3, unknown>>> &
+    NamedConstants,
   TConstant extends Constants[CK1][CK2][CK3],
 >(
   constants: Constants,
@@ -169,7 +171,11 @@ export function selectConstant<
   CK2 extends string,
   CK3 extends string,
   CK4 extends string,
-  Constants extends Record<CK1, Record<CK2, Record<CK3, Record<CK4, unknown>>>>,
+  Constants extends Record<
+    CK1,
+    Record<CK2, Record<CK3, Record<CK4, unknown>>>
+  > &
+    NamedConstants,
   TConstant extends Constants[CK1][CK2][CK3][CK4],
 >(
   constants: Constants,
@@ -190,7 +196,7 @@ export function selectConstant<
   CK5 extends string,
   Constants extends Record<
     CK1,
-    Record<CK2, Record<CK3, Record<CK4, Record<CK5, unknown>>>>
+    Record<CK2, Record<CK3, Record<CK4, Record<CK5, unknown>>>> & NamedConstants
   >,
   TConstant extends Constants[CK1][CK2][CK3][CK4][CK5],
 >(

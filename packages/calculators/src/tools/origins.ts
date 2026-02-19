@@ -62,7 +62,7 @@ export type IntermediateOrigin = {
 export type IntermediateOrNamedOrigin = NamedOrigin | IntermediateOrigin;
 
 /** Type guard: when C is generic, TS can't narrow C from runtime checks, but we can narrow the *value* to NamedOrigin-like. */
-function isPartialNamedOriginWithName(
+export function isPartialNamedOriginWithName(
   x: Partial<NamedOrigin | IntermediateOrigin> | undefined,
 ): x is Partial<NamedOrigin> & { name: string } {
   return !!x && 'name' in x && !!x.name;
@@ -202,8 +202,11 @@ export class BaseContainer<
     if (isVoid(leftUnit) || isVoid(rightUnit)) {
       unit = voidUnit();
     } else {
+      // REVISIT: data structure and utilities for capturing operations
       if (isMassPerMass(leftUnit) && isMass(rightUnit)) {
         unit = mass(leftUnit.snum);
+      } else if (isMass(leftUnit) && isMassPerMass(rightUnit)) {
+        unit = mass(rightUnit.snum);
       } else if (isMassPerArea(leftUnit) && isArea(rightUnit)) {
         unit = mass(leftUnit.substance);
       } else if (isMassPerEnergy(leftUnit) && isEnergy(rightUnit)) {
@@ -381,24 +384,6 @@ export class BinaryContainer<U extends AnyUnit> extends BaseContainer<
 //   from: Origin<NumberUnit>;
 // };
 
-export class UnaryContainer<U extends AnyUnit> extends BaseContainer<
-  U,
-  IntermediateOrNamedOrigin
-> {
-  originType: 'unary';
-  from: Container<NumberUnit>;
-
-  constructor(
-    unit: U,
-    from: Container<NumberUnit>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
-  ) {
-    super(unit, baseOrigin);
-    this.originType = 'unary';
-    this.from = from;
-  }
-}
-
 // export type SummedOrigin<N extends NumberUnit> = BaseOrigin<N> & {
 //   originType: 'sum';
 //   from: Origin<NumberUnit>[];
@@ -481,7 +466,6 @@ export const value = <N extends NumberUnit>(v: N): RootContainer<N> =>
 
 export type TypedContainer<U extends AnyUnit> =
   | BinaryContainer<U>
-  | UnaryContainer<U>
   | RootContainer<U>
   // | RootContainer<U extends string ? U : never>
   // | EmptyContainer<U>

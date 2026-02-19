@@ -151,7 +151,7 @@ const calculateScope3Grains = (
 
   // 7.7 Purchased lime
   // lime
-  const { lime } = calculateScope3Lime(crop, context);
+  const lime = calculateScope3Lime(crop, context);
 
   // 7.8 well to tank emissions from fuel
   // fuel
