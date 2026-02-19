@@ -55,7 +55,7 @@ export const traverseTree = (
             generator(
               [...path, k1],
               v1 as number,
-              emissions[k1].value as number,
+              (emission as unknown as { value: number }).value,
             ),
           ];
         }
