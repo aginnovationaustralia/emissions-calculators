@@ -39,7 +39,10 @@ export const calculateScope3FertiliserMethod1EmissionsFactor = (
     fertiliser.fertiliserType,
     'Scope3EF',
   );
-  const e = tmjf.multiply(ef).attachContext({ references: ['15.4.1.1 (314)'] });
+  const e = tmjf.multiply(ef, {
+    name: 'E fertiliser',
+    references: ['15.4.1.1 (314)'],
+  });
   return e;
 };
 

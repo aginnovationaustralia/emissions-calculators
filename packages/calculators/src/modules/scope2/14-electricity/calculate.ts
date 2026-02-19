@@ -81,9 +81,10 @@ const calculateLocationBasedElectricityScope2 = (
     'SCOPE2_EF',
   );
 
-  const e2elec = qelec
-    .multiply(ef2elec)
-    .attachContext({ references: ['14.1.1 (73)'] });
+  const e2elec = qelec.multiply(ef2elec, {
+    name: 'e2elec',
+    references: ['14.1.1 (73)'],
+  });
 
   return e2elec;
 };

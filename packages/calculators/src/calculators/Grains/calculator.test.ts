@@ -8,8 +8,16 @@ describe('Grains Calculator', () => {
   describe('summaries', () => {
     let emissions: GrainsOutput;
     beforeEach(() => {
-      const input: GrainsInputTransformed =
-        GrainsInputSchema.parse(grainsTestData);
+      const testData = {
+        ...grainsTestData,
+        crops: [
+          {
+            ...grainsTestData.crops[0],
+            isInLeachingZone: true,
+          },
+        ],
+      };
+      const input: GrainsInputTransformed = GrainsInputSchema.parse(testData);
       const context = testContext('Grains');
       emissions = calculateGrains(input, context);
     });
@@ -25,52 +33,42 @@ describe('Grains Calculator', () => {
 
 
       */
-      expect(fuelTransportCO2.value).toEqual(8.442144 * 1000000);
-      expect(fuelTransportCO2.references).toEqual(['6.1.1 (55)']);
+      expect(fuelTransportCO2.value).toEqual(2698140);
+      expect(fuelTransportCO2.references).toEqual(['8.1.1.1 (62)']);
       expect(fuelTransportCO2.constants).toEqual([
         {
-          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.DIESEL.SCOPE1_EF.CO2]',
+          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.diesel.SCOPE1_EF.CO2]',
           value: 69.9,
           units: 'Mass(CO2) / Energy',
         },
         {
-          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.DIESEL.ENERGY_CONTENT_FACTOR]',
+          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.diesel.ENERGY_CONTENT_FACTOR]',
           value: 38.6,
-          units: 'Energy / Volume(Fuel)',
-        },
-        {
-          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.PETROL.SCOPE1_EF.CO2]',
-          value: 67.4,
-          units: 'Mass(CO2) / Energy',
-        },
-        {
-          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.PETROL.ENERGY_CONTENT_FACTOR]',
-          value: 34.2,
-          units: 'Energy / Volume(Fuel)',
-        },
-        {
-          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.LPG.SCOPE1_EF.CO2]',
-          value: 60.2,
-          units: 'Mass(CO2) / Energy',
-        },
-        {
-          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.LPG.ENERGY_CONTENT_FACTOR]',
-          value: 26.2,
           units: 'Energy / Volume(Fuel)',
         },
       ]);
     });
     it('generates a summary for scope 1 residueLeachingAndRunoffN2O emissions', () => {
       const residueLeachingAndRunoffN2O =
-        emissions.scope1.residueLeachingAndRunoffN2O;
+        emissions.scope1.inorganicFertiliserN2O;
 
-      expect(residueLeachingAndRunoffN2O.value).toEqual(84.524);
-      expect(residueLeachingAndRunoffN2O.references).toEqual(['5.1.1.1 (147)']);
+      expect(residueLeachingAndRunoffN2O.value).toEqual(78.53842857142857);
+      expect(residueLeachingAndRunoffN2O.references).toEqual(['5.1.1.1 (119)']);
       expect(residueLeachingAndRunoffN2O.constants).toEqual([
         {
-          name: 'COMMON[FERTILISER_EF]',
-          value: 0.2,
-          units: 'Mass(CO2) / Mass(Fertiliser)',
+          name: 'CROP[INORGANIC_FERTILISER_FRACTIONS.Urea.N]',
+          value: 0.46,
+          units: 'Mass(N) / Mass(Inorganic Fertiliser)',
+        },
+        {
+          name: 'CROP[EF_N2O_PRODUCTION_SYSTEM.Non-irrigated crops]',
+          value: 0.0041,
+          units: 'Mass(N2O) / Mass(N)',
+        },
+        {
+          name: 'COMMON[GWP_FACTORSC15]',
+          value: 1.5714285714285714,
+          units: 'real number',
         },
       ]);
     });

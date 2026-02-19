@@ -109,7 +109,7 @@ const extractInputsAndOutput = createSheetExtractor(
 describe('5.1.1.1 Inorganic Fertiliser N2O', () => {
   it('method 1 scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/tests/5.1-inorganic-fertiliser.xlsx',
+      './src/modules/test/5.1-inorganic-fertiliser.xlsx',
       '5.1.1.1',
     );
 
@@ -120,7 +120,7 @@ describe('5.1.1.1 Inorganic Fertiliser N2O', () => {
 
   it('method 2 scenarios match spreadsheet results for maize', async () => {
     const workbook = await getSheet(
-      './src/modules/tests/5.1-inorganic-fertiliser.xlsx',
+      './src/modules/test/5.1-inorganic-fertiliser.xlsx',
       '5.1.1.1',
     );
 
@@ -131,7 +131,7 @@ describe('5.1.1.1 Inorganic Fertiliser N2O', () => {
 
   it('method 2 scenarios match spreadsheet results for high rainfall zone', async () => {
     const workbook = await getSheet(
-      './src/modules/tests/5.1-inorganic-fertiliser.xlsx',
+      './src/modules/test/5.1-inorganic-fertiliser.xlsx',
       '5.1.1.1',
     );
 
@@ -142,7 +142,7 @@ describe('5.1.1.1 Inorganic Fertiliser N2O', () => {
 
   it('method 2 scenarios match spreadsheet results for cotton', async () => {
     const workbook = await getSheet(
-      './src/modules/tests/5.1-inorganic-fertiliser.xlsx',
+      './src/modules/test/5.1-inorganic-fertiliser.xlsx',
       '5.1.1.1',
     );
 

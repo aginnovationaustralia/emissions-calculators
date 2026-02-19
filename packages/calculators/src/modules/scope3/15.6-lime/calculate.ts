@@ -23,7 +23,10 @@ export const calculateScope3Lime = (
     (val) => massPerMass('CO2e', 'Lime', val),
     'LIME_SCOPE3_EF',
   );
-  const lime = mlime.multiply(customEmissionsFactor ?? efl);
+  const lime = mlime.multiply(customEmissionsFactor ?? efl, {
+    name: 'E lime',
+    references: ['15.6.1.1 (391)'],
+  });
 
-  return lime.attachContext({ references: ['15.6.1.1 (391)'] });
+  return lime;
 };

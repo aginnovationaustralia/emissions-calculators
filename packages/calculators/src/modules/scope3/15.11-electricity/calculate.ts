@@ -35,9 +35,12 @@ export const calculateElectricityScope3LocationBased = (
     'SCOPE3_EF',
   );
 
-  const e3elec = qelec.multiply(ef3elec);
+  const e3elec = qelec.multiply(ef3elec, {
+    name: 'e3elec',
+    references: ['15.12.1.1 (595)'],
+  });
 
-  return e3elec.attachContext({ references: ['15.12.1.1 (595)'] });
+  return e3elec;
 };
 
 export const calculateElectricityScope3MarketBased = (

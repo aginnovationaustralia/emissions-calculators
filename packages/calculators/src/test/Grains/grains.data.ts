@@ -24,16 +24,32 @@ export const grainWheat: GrainsCrop = {
   refrigerants: [],
   inorganicFertilisers: {
     productionSystem: 'Non-irrigated crops',
-    applications: [],
+    applications: [
+      {
+        massAppliedKg: 100,
+        fertiliserType: 'Urea',
+        calculationMethodScope3: '1',
+      },
+    ],
     calculationMethodScope1: '1',
   },
   organicFertilisers: {
     applications: [],
     calculationMethod: '1',
   },
-  isInLeachingZone: false,
-  transportFuel: [],
-  stationaryFuel: [],
+  isInLeachingZone: true,
+  transportFuel: [
+    {
+      amountLitres: 1000,
+      type: 'diesel',
+    },
+  ],
+  stationaryFuel: [
+    {
+      type: 'automotive petrol',
+      amountLitres: 12000,
+    },
+  ],
   naturalGas: 0,
   cropResidues: {
     calculationMethod: '1',

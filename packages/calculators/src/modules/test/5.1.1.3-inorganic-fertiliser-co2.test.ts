@@ -66,7 +66,7 @@ const extractInputsAndOutput = createSheetExtractor(
 describe('5.1.1.3 Inorganic Fertiliser CO2', () => {
   it('method 1 scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/tests/5.1-inorganic-fertiliser.xlsx',
+      './src/modules/test/5.1-inorganic-fertiliser.xlsx',
       '5.1.1.3',
     );
 

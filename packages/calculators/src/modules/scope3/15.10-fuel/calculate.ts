@@ -32,7 +32,8 @@ const calculateScope3EmissionsFromFuelTransport = (
     const energyFromFuel = ecTransQ.multiply(qTransQ);
     return efTrans3Q.multiply(energyFromFuel);
   });
-  return sum(emissionsRecords).attachContext({
+  return sum(emissionsRecords, {
+    name: 'EWTT,trans,q',
     references: ['15.11.1.1 (551)'],
   });
 };
@@ -63,7 +64,8 @@ const calculateScope3EmissionsFromFuelStationary = (
     const energyFromFuel = ecTransQ.multiply(qTransQ);
     return efTrans3Q.multiply(energyFromFuel);
   });
-  return sum(emissionsRecords).attachContext({
+  return sum(emissionsRecords, {
+    name: 'EWTT,SC,q',
     references: ['15.11.1.1 (561)'],
   });
 };
@@ -99,7 +101,8 @@ export const calculateScope3EmissionsFromFuel = (
     crop,
     context,
   );
-  return transportEmissions
-    .plus(stationaryEmissions)
-    .attachContext({ references: ['15.11.1.1 (547)'] });
+  return transportEmissions.plus(stationaryEmissions, {
+    name: 'E',
+    references: ['15.11.1.1 (547)'],
+  });
 };

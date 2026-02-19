@@ -45,9 +45,20 @@ export const traverseTree = (
         if (emissions === undefined) {
           console.log(path, k1, emissions);
         }
-        return [
-          generator([...path, k1], v1 as number, emissions[k1] as number),
-        ];
+        const emission = emissions[k1];
+        if (typeof emission === 'number') {
+          return [
+            generator([...path, k1], v1 as number, emissions[k1] as number),
+          ];
+        } else {
+          return [
+            generator(
+              [...path, k1],
+              v1 as number,
+              emissions[k1].value as number,
+            ),
+          ];
+        }
       } else if (Array.isArray(v1)) {
         if (typeof v1[0] === 'number') {
           return (v1 as number[]).flatMap((v2, i) => {

@@ -7,10 +7,12 @@ import {
   EnergyPerVolume,
   formatUnit,
   isArea,
+  isElectricity,
   isEnergy,
   isEnergyPerVolume,
   isMass,
   isMassPerArea,
+  isMassPerElectricity,
   isMassPerEnergy,
   isMassPerMass,
   isRealNumber,
@@ -211,6 +213,8 @@ export class BaseContainer<
         unit = mass(leftUnit.substance);
       } else if (isMassPerEnergy(leftUnit) && isEnergy(rightUnit)) {
         unit = mass(leftUnit.substance);
+      } else if (isElectricity(leftUnit) && isMassPerElectricity(rightUnit)) {
+        unit = mass(rightUnit.substance);
       } else if (isEnergyPerVolume(leftUnit) && isVolume(rightUnit)) {
         unit = energy();
       } else {

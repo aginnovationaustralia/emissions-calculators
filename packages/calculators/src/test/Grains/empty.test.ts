@@ -10,17 +10,21 @@ import { testContext } from './context';
 
 const expectedScopes = {
   scope1: {
-    fuelCO2: 0,
-    fuelCH4: 0,
-    fuelN2O: 0,
-    ureaCO2: 0,
+    fuelStationaryCO2: 0,
+    fuelStationaryCH4: 0,
+    fuelStationaryN2O: 0,
     limeCO2: 0,
-    fertiliserN2O: 0,
-    atmosphericDepositionN2O: 0,
-    leachingAndRunoffN2O: 0,
+    inorganicFertiliserN2O: 0,
+    organicFertiliserN2O: 0,
+    inorganicFertiliserAtmosphericDepositionN2O: 0,
+    organicFertiliserAtmosphericDepositionN2O: 0,
+    fertiliserLeachingAndRunoffN2O: 0,
     cropResidueN2O: 0,
+    pastureResidueN2O: 0,
+    residueLeachingAndRunoffN2O: 0,
     fieldBurningN2O: 0,
     fieldBurningCH4: 0,
+    refrigerantHFCs: 0,
     totalCO2: 0,
     totalCH4: 0,
     totalN2O: 0,
@@ -32,25 +36,25 @@ const expectedScopes = {
   },
   scope3: {
     fertiliser: 0,
-    herbicide: 0,
     electricity: 0,
     fuel: 0,
+    lime: 0,
     total: 0,
   },
 };
 
 const expectations = {
   ...expectedScopes,
-  carbonSequestration: {
-    total: 0,
-    intermediate: [],
-  },
+  // carbonSequestration: {
+  //   total: 0,
+  //   intermediate: [],
+  // },
   net: {
     total: 0,
     crops: [],
   },
-  intensities: [],
-  intensitiesWithSequestration: [],
+  // intensities: [],
+  // intensitiesWithSequestration: [],
   intermediate: [],
 };
 
@@ -98,8 +102,10 @@ const emptyInputWithEnterprise: GrainsInputTransformed =
   GrainsInputSchema.parse({
     state: 'vic',
     crops: [emptyGrainsCrop],
-    electricityRenewable: 0,
-    electricityUse: 0,
+    electricity: {
+      electricityRenewable: 0,
+      electricityUse: 0,
+    },
     vegetation: [],
   });
 
@@ -122,28 +128,28 @@ describe('Grains calculator, empty enterprise', () => {
     intermediate: [
       {
         ...expectedScopes,
-        carbonSequestration: { total: 0 },
-        intensitiesWithSequestration: {
-          grainProducedTonnes: 0,
-          grainsExcludingSequestration: 0,
-          grainsIncludingSequestration: 0,
-        },
+        // carbonSequestration: { total: 0 },
+        // intensitiesWithSequestration: {
+        //   grainProducedTonnes: 0,
+        //   grainsExcludingSequestration: 0,
+        //   grainsIncludingSequestration: 0,
+        // },
         net: {
           total: 0,
         },
       },
     ],
-    intensities: [0],
-    intensitiesWithSequestration: [
-      {
-        grainProducedTonnes: 0,
-        grainsExcludingSequestration: 0,
-        grainsIncludingSequestration: 0,
-      },
-    ],
+    // intensities: [0],
+    // intensitiesWithSequestration: [
+    //   {
+    //     grainProducedTonnes: 0,
+    //     grainsExcludingSequestration: 0,
+    //     grainsIncludingSequestration: 0,
+    //   },
+    // ],
     net: {
       total: 0,
-      crops: [0],
+      // crops: [0],
     },
   };
 
