@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
 import { calculateInorganicFertiliserCO2 } from '../scope1/5-fertiliser/5.1-inorganic-fertiliser';
