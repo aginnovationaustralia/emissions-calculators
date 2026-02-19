@@ -205,15 +205,21 @@ const getExpectedOutput = (workbook: XLSX.Workbook): GrainsOutput => {
     carbonSequestration: {
       total: -summary('C31'),
     },
+    intensities: {
+      grainProducedTonnes: summary('C7'),
+      grainsExcludingSequestration: summary('C36'),
+      grainsIncludingSequestration: summary('C37'),
+    },
     // intensitiesWithSequestration: {
     //   grainProducedTonnes: crops('C7') * crops('C8'),
     //   grainsExcludingSequestration: summary('C36'),
     //   grainsIncludingSequestration: summary('C37'),
     // },
     net: {
-      total: summary('C33').value,
+      total: summary('C33'),
     },
   };
+
   const output: GrainsOutput = {
     ...expectedIntermediate,
     intermediate: [
@@ -230,7 +236,7 @@ const getExpectedOutput = (workbook: XLSX.Workbook): GrainsOutput => {
     //   expectedIntermediate.intensitiesWithSequestration,
     // ],
     net: {
-      total: { value: expectedIntermediate.net.total },
+      total: expectedIntermediate.net.total,
       // crops: [expectedIntermediate.net.total],
     },
   };

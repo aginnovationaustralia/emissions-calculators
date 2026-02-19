@@ -25,30 +25,45 @@ import { calculateScope3Agrichemicals } from '@/modules/scope3/15.5-agrichemical
 import { calculateScope3Lime } from '@/modules/scope3/15.6-lime';
 import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { mergeScopeOutputs, wrapScopesAsOutputs } from '@/tools/calculators';
+import { Container } from '@/tools/containers';
+import { sum } from '@/tools/sum';
 import { addScope1Totals, addScope23Totals } from '@/tools/totals';
+import { massInTonnes } from '@/tools/unit-conversion';
+import { Mass } from '@/tools/units';
+import { divideBySafeFromZero } from '../common/tools';
 import { ConstantsForGrainsCalculator } from './constants';
 import { ExecutionContext } from './constants/executionContext';
 import { GrainsOutput, GrainsOutputSchema } from './types';
 import { GrainsCropTransformed } from './types/crop.input';
 import { GrainsInputTransformed } from './types/input';
 
-// function getIntensities(
-//   netTotal: number,
-//   carbonSequestration: number,
-//   grainProducedTonnes: number,
-// ) {
-//   return {
-//     grainsExcludingSequestration: divideBySafeFromZero(
-//       netTotal + carbonSequestration,
-//       grainProducedTonnes,
-//     ),
-//     grainsIncludingSequestration: divideBySafeFromZero(
-//       netTotal,
-//       grainProducedTonnes,
-//     ),
-//     grainProducedTonnes,
-//   };
-// }
+const valueObject = (value: number) => ({
+  value,
+});
+
+function getIntensities(
+  netTotal: number,
+  carbonSequestration: number,
+  grainProduced: Container<Mass<'DryMatter'>>,
+) {
+  const grainProducedTonnes = valueObject(
+    massInTonnes(grainProduced).toNumber(),
+  );
+  const grainsExcludingSequestration = valueObject(
+    divideBySafeFromZero(
+      netTotal + carbonSequestration,
+      grainProducedTonnes.value,
+    ),
+  );
+  const grainsIncludingSequestration = valueObject(
+    divideBySafeFromZero(netTotal, grainProducedTonnes.value),
+  );
+  return {
+    grainsExcludingSequestration,
+    grainsIncludingSequestration,
+    grainProducedTonnes,
+  };
+}
 
 const calculateScope1Grains = (
   crop: GrainsCropTransformed,
@@ -178,8 +193,6 @@ export function calculateGrains(
   input: GrainsInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ): GrainsOutput {
-  // tranche 1 modules for grains
-
   const cropResults = input.crops.map((crop, ix) => {
     return {
       scope1: calculateScope1Grains(crop, context),
@@ -187,6 +200,7 @@ export function calculateGrains(
       scope3: calculateScope3Grains(crop, input, context),
       meta: {
         id: crop.id || 'crop' + ix.toString(),
+        amountProduced: crop.averageYield.multiply(crop.areaSown),
       },
     };
   });
@@ -221,7 +235,9 @@ export function calculateGrains(
       const scope2 = addScope23Totals(cropOutputs.scope2);
       const scope3 = addScope23Totals(cropOutputs.scope3);
       const net = {
-        total: scope1.total.value + scope2.total.value + scope3.total.value,
+        total: {
+          value: scope1.total.value + scope2.total.value + scope3.total.value,
+        },
       };
       return {
         id: crop.meta.id,
@@ -232,25 +248,17 @@ export function calculateGrains(
         carbonSequestration: {
           total: 0,
         },
+        intensities: getIntensities(
+          net.total.value,
+          0,
+          crop.meta.amountProduced,
+        ),
       };
     }),
-    // intensities: allCrops.map((crop) =>
-    //   divideBySafeFromZero(crop.net.total, crop.extensions.amountProduced),
-    // ),
-    // intensitiesWithSequestration: allCrops.map((crop) =>
-    //   getIntensities(
-    //     crop.net.total,
-    //     crop.extensions.carbonSequestration,
-    //     crop.extensions.amountProduced,
-    //   ),
-    // ),
-    // net: {
-    //   total:
-    //     total.output.scope1.total +
-    //     total.output.scope2.total +
-    //     total.output.scope3.total -
-    //     carbonSequestration.total,
-    //   crops: allCrops.map((crop) => crop.net.total),
-    // },
+    intensities: getIntensities(
+      net.total.value,
+      0,
+      sum(cropResults.map((crop) => crop.meta.amountProduced)),
+    ),
   };
 }
