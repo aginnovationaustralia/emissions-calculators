@@ -17,7 +17,7 @@ export const calculateScope3Lime = (
   EF l = emission factor for purchased lime (t CO2e/t)
   */
   const mlime = crop.limestone;
-  const customEmissionsFactor = crop.customEmissionsFactor;
+  const customEmissionsFactor = crop.customScope3EmissionsFactor;
   const efl = selectConstant(
     constants.COMMON,
     (val) => massPerMass('CO2e', 'Lime', val),

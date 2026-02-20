@@ -1,10 +1,14 @@
 import {
   BasicCropProductionSystem,
   BasicCropProductionSystems,
+  ClimateZoneType,
+  ClimateZoneTypes,
   ExtendedCropProductionSystem,
   ExtendedCropProductionSystems,
   InorganicFertiliserType,
   InorganicFertiliserTypes,
+  OrganicFertiliserType,
+  OrganicFertiliserTypes,
 } from '@/calculators/Grains/constants/enums';
 
 export const checkInorganicFertiliserType = (
@@ -38,4 +42,20 @@ export const checkExtendedCropProductionSystem = (
     throw new Error(`Invalid extended crop production system: ${system}`);
   }
   return system as ExtendedCropProductionSystem;
+};
+
+export const checkLivestockManureType = (
+  type: string | undefined,
+): OrganicFertiliserType => {
+  if (!OrganicFertiliserTypes.includes(type as OrganicFertiliserType)) {
+    throw new Error(`Invalid livestock manure type: ${type}`);
+  }
+  return type as OrganicFertiliserType;
+};
+
+export const checkClimate = (climate: string | undefined): ClimateZoneType => {
+  if (!ClimateZoneTypes.includes(climate as ClimateZoneType)) {
+    throw new Error(`Invalid climate: ${climate}`);
+  }
+  return climate as ClimateZoneType;
 };

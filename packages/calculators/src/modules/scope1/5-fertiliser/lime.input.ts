@@ -1,5 +1,4 @@
 import { input } from '@/tools/inputs';
-import { tonnesToKg } from '@/tools/unit-conversion';
 import { mass, massPerMass, realNumber } from '@/tools/units';
 import { DESCRIPTIONS } from '@/types/descriptions.schema';
 import { object, proportion } from '@/types/schemas';
@@ -9,17 +8,20 @@ export const LimeInputSchema = object({
   limestone: z
     .number()
     .min(0)
-    .transform((val) => input('limestone', mass('Lime', tonnesToKg(val))))
-    .meta({ description: DESCRIPTIONS.LIMESTONE }),
+    .transform((val) => input('limestone', mass('Lime', val)))
+    .meta({ description: 'Lime applied in kg' }),
   limestoneFraction: proportion(DESCRIPTIONS.LIMESTONEFRACTION).transform(
     (val) => input('limestoneFraction', realNumber(val)),
   ),
-  customEmissionsFactor: z
+  dolomiteFraction: proportion(
+    'Fraction of lime as dolomite, between 0 and 1',
+  ).transform((val) => input('dolomiteFraction', realNumber(val))),
+  customScope3EmissionsFactor: z
     .number()
     .min(0)
     .optional()
     .transform((val) =>
-      val ? input('lpg', massPerMass('CO2e', 'Lime', val)) : undefined,
+      input('customScope3EmissionsFactor', massPerMass('CO2e', 'Lime', val)),
     ),
 });
 

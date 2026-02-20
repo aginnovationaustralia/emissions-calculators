@@ -170,6 +170,6 @@ export function selectConstant<TOut extends NumberUnit>(
   return new ConstantSelectionContainer(
     value,
     selectors,
-    `${constants.name}[${selectors.join('.')}]`,
+    `${constants.name}[${selectors.map((s) => (typeof s === 'string' ? s : s.unit)).join('.')}]`,
   );
 }

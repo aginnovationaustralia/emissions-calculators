@@ -226,7 +226,7 @@ export class BaseContainer<
             )}`,
           );
         }
-        unit = leftUnit;
+        unit = { ...leftUnit };
       }
       unit.value = leftUnit.value.mul(rightUnit.value);
     }

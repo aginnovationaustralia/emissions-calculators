@@ -48,7 +48,6 @@ const getCalculatorInput = (
       inorganicFertilisers,
       organicFertilisers: {
         applications: [],
-        calculationMethod: '1',
       },
     }),
   };

@@ -68,6 +68,7 @@ const emptyGrainsCrop: GrainsCrop = {
   electricityAllocation: 0,
   limestone: 0,
   limestoneFraction: 0,
+  dolomiteFraction: 0,
   chemicals: [],
   refrigerants: [],
   inorganicFertilisers: {
@@ -77,7 +78,6 @@ const emptyGrainsCrop: GrainsCrop = {
   },
   organicFertilisers: {
     applications: [],
-    calculationMethod: '1',
   },
   isInLeachingZone: false,
   transportFuel: [],

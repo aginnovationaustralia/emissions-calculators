@@ -84,8 +84,8 @@ const calculateScope1Grains = (
     crop,
     context,
   );
-  const { organicFertiliserN2O } = calculate52OrganicFertiliser(crop, context);
-  const { limeCO2 } = calculate53Lime(crop, context);
+  const organicFertiliserN2O = calculate52OrganicFertiliser(crop, context);
+  const limeCO2 = calculate53Lime(crop, context);
   const {
     inorganicFertiliserAtmosphericDepositionN2O,
     organicFertiliserAtmosphericDepositionN2O,

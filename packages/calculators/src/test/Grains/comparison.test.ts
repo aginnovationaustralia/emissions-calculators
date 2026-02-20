@@ -102,6 +102,7 @@ const getCalculatorInput = (workbook: XLSX.Workbook): GrainsInput => {
         areaSown: numberInput(crops('C8')),
         limestone: numberInput(crops('C15')),
         limestoneFraction: numberInput(crops('C16')),
+        dolomiteFraction: numberInput(crops('C16')),
         fractionOfAnnualCropBurnt: numberInput(crops('C17')),
         electricityAllocation: 1,
         chemicals: [],
@@ -113,7 +114,6 @@ const getCalculatorInput = (workbook: XLSX.Workbook): GrainsInput => {
         },
         organicFertilisers: {
           applications: [],
-          calculationMethod: '1',
         },
         isInLeachingZone: false,
         transportFuel: [],

@@ -16,7 +16,7 @@ export const OrganicFertiliserInputSchema = object({
     .transform((val) =>
       input('massAppliedKg', mass('Organic Fertiliser', val)),
     ),
-  origin: z.union([
+  origin: z.discriminatedUnion('origin', [
     OrganicFertiliserLocalInputSchema,
     OrganicFertiliserPurchasedTracedInputSchema,
     OrganicFertiliserPurchasedUntracedInputSchema,

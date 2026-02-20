@@ -11,6 +11,7 @@ export const grainWheat: GrainsCrop = {
   electricityAllocation: 0.2,
   limestone: 500,
   limestoneFraction: 1,
+  dolomiteFraction: 0,
   chemicals: [
     {
       type: 'Herbicide',
@@ -35,7 +36,6 @@ export const grainWheat: GrainsCrop = {
   },
   organicFertilisers: {
     applications: [],
-    calculationMethod: '1',
   },
   isInLeachingZone: true,
   transportFuel: [
@@ -77,6 +77,7 @@ export const grainSorghum: GrainsCrop = {
   electricityAllocation: 0.4,
   limestone: 100,
   limestoneFraction: 1,
+  dolomiteFraction: 0,
   chemicals: [
     {
       type: 'Herbicide',
@@ -95,7 +96,6 @@ export const grainSorghum: GrainsCrop = {
   },
   organicFertilisers: {
     applications: [],
-    calculationMethod: '1',
   },
   transportFuel: [],
   stationaryFuel: [],
@@ -126,6 +126,7 @@ export const grainLegume: GrainsCrop = {
   electricityAllocation: 0.2,
   limestone: 250,
   limestoneFraction: 1,
+  dolomiteFraction: 0,
   chemicals: [
     {
       type: 'Herbicide',
@@ -144,7 +145,6 @@ export const grainLegume: GrainsCrop = {
   },
   organicFertilisers: {
     applications: [],
-    calculationMethod: '1',
   },
   transportFuel: [],
   stationaryFuel: [],
@@ -175,6 +175,7 @@ export const grainGrass: GrainsCrop = {
   electricityAllocation: 0.1,
   limestone: 400,
   limestoneFraction: 1,
+  dolomiteFraction: 0,
   chemicals: [
     {
       type: 'Herbicide',
@@ -193,7 +194,6 @@ export const grainGrass: GrainsCrop = {
   },
   organicFertilisers: {
     applications: [],
-    calculationMethod: '1',
   },
   transportFuel: [],
   stationaryFuel: [],
@@ -224,6 +224,7 @@ export const grainTriticale: GrainsCrop = {
   electricityAllocation: 0.1,
   limestone: 150,
   limestoneFraction: 1,
+  dolomiteFraction: 0,
   chemicals: [
     {
       type: 'Herbicide',
@@ -242,7 +243,6 @@ export const grainTriticale: GrainsCrop = {
   },
   organicFertilisers: {
     applications: [],
-    calculationMethod: '1',
   },
   transportFuel: [],
   stationaryFuel: [],
@@ -290,6 +290,7 @@ export const grainsTestData102: GrainsInput = {
       electricityAllocation: 1,
       limestone: 360,
       limestoneFraction: 0.5,
+      dolomiteFraction: 0.5,
       chemicals: [
         {
           type: 'Herbicide',
@@ -320,7 +321,6 @@ export const grainsTestData102: GrainsInput = {
       },
       organicFertilisers: {
         applications: [],
-        calculationMethod: '1',
       },
       transportFuel: [],
       stationaryFuel: [],

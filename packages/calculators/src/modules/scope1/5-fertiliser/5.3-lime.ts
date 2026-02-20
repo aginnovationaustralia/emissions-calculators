@@ -1,7 +1,6 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { constant } from '@/tools/constants';
-import { oneMinus } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { massPerMass, realNumber } from '@/tools/units';
 import Decimal from 'decimal.js-light';
@@ -9,8 +8,9 @@ import { LimeInputTransformed } from './lime.input';
 
 const calculateLimeCO2 = (
   input: LimeInputTransformed,
-  constants: ConstantsForGrainsCalculator,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
+  const { constants } = context;
   /*
     5.3.1.1 Lime Application CO2 Emissions - Method 1
     (1) The emissions from the application of lime and dolomite to production systems
@@ -41,7 +41,7 @@ const calculateLimeCO2 = (
       new Decimal(constants.COMMON.LIMING.SCOPE1.LIMESTONE_EF),
     ),
   );
-  const fracDol = oneMinus(fracLime);
+  const fracDol = input.dolomiteFraction;
   const pdol = constant(
     'P Dol',
     realNumber(constants.COMMON.LIMING.SCOPE1.DOLOMITE_FRACTIONPURITY),
@@ -54,14 +54,11 @@ const calculateLimeCO2 = (
       new Decimal(constants.COMMON.LIMING.SCOPE1.DOLOMITE_EF),
     ),
   );
-  const cco2 = constant(
-    'C CO2',
-    massPerMass('CO2', 'CO2e', new Decimal(constants.COMMON.GWP_FACTORSC18)),
-  );
-  const elime = sum([
-    mlime.multiply(fracLime).multiply(plime).multiply(efLime),
-    mlime.multiply(fracDol).multiply(pdol).multiply(efDol),
-  ]).multiply(cco2, {
+  const cco2 = constant('C CO2', realNumber(constants.COMMON.GWP_FACTORSC18));
+
+  const limePart = mlime.multiply(fracLime).multiply(plime).multiply(efLime);
+  const dolomitePart = mlime.multiply(fracDol).multiply(pdol).multiply(efDol);
+  const elime = sum([limePart, dolomitePart]).multiply(cco2, {
     name: 'E Lime',
     references: [`5.3.1.1 (279)`],
   });
@@ -73,9 +70,5 @@ export const calculate53Lime = (
   input: LimeInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  const { constants } = context;
-
-  return {
-    limeCO2: calculateLimeCO2(input, constants),
-  };
+  return calculateLimeCO2(input, context);
 };

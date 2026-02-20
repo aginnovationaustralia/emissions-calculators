@@ -85,7 +85,6 @@ const getCalculatorInput = (
       inorganicFertilisers,
       organicFertilisers: {
         applications: [],
-        calculationMethod: '1',
       },
     }),
     ...BaseGrainsCropSchema.parse({

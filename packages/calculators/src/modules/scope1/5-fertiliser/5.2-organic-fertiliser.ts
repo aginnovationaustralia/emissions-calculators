@@ -1,6 +1,5 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
-import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
 import { massPerMass, realNumber } from '@/tools/units';
@@ -26,6 +25,7 @@ export const calculateMNSoilForOrganicFertiliser = (
       constants.SWINE,
     ).scope1;
   } else {
+    const { customNitrogenFraction } = origin;
     const fnOrganicF = selectConstant(
       constants.CROP,
       (value) => massPerMass('N', 'Organic Fertiliser', value),
@@ -33,7 +33,8 @@ export const calculateMNSoilForOrganicFertiliser = (
       origin.organicFertiliserType,
       'N',
     );
-    return application.massAppliedKg.multiply(fnOrganicF);
+    const nitrogenFraction = customNitrogenFraction ?? fnOrganicF;
+    return application.massAppliedKg.multiply(nitrogenFraction);
   }
 };
 
@@ -74,14 +75,10 @@ const calculateOrganicFertiliserN2O = (
 };
 
 export const calculate52OrganicFertiliser = (
-  input: FertiliserInputTransformed &
-    CropResidueInputTransformed &
-    BaseGrainsCropTransformed,
+  input: FertiliserInputTransformed & CropResidueInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   const { constants } = context;
 
-  return {
-    organicFertiliserN2O: calculateOrganicFertiliserN2O(input, constants),
-  };
+  return calculateOrganicFertiliserN2O(input, constants);
 };

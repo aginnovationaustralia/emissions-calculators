@@ -377,3 +377,6 @@ export const SolidWasteByVolumeTypes = [
   'Construction and demolition waste',
 ] as const;
 export type SolidWasteByVolumeType = (typeof SolidWasteByVolumeTypes)[number];
+
+export const ClimateZoneTypes = ['dry', 'wet'] as const;
+export type ClimateZoneType = (typeof ClimateZoneTypes)[number];
