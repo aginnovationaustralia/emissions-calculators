@@ -171,7 +171,7 @@ const getCalculatorInput = (workbook: XLSX.Workbook): BeefInput => {
           cowsGt2: getBeefClass(sheetInputBeef.range('H13:H63')),
           cowsGt2Traded: emptyBeefClass,
           heifers1To2: getBeefClass(sheetInputBeef.range('J13:J63')),
-          heifers1To2Traded: emptyBeefClass,
+          heifers1To2Traded: getBeefClass(sheetInputBeef.range('L13:L63')),
           heifersLt1: getBeefClass(sheetInputBeef.range('I13:I63')),
           heifersLt1Traded: emptyBeefClass,
           steersLt1: getBeefClass(sheetInputBeef.range('E13:E63')),
@@ -181,7 +181,7 @@ const getCalculatorInput = (workbook: XLSX.Workbook): BeefInput => {
           heifersGt2: getBeefClass(sheetInputBeef.range('K13:K63')),
           heifersGt2Traded: emptyBeefClass,
           steersGt2: getBeefClass(sheetInputBeef.range('G13:G63')),
-          steersGt2Traded: getBeefClass(sheetInputBeef.range('L13:L63')),
+          steersGt2Traded: emptyBeefClass,
         },
         cowsCalving: {
           spring: numberInput(beef('D71')),
