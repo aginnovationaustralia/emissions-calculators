@@ -1,3 +1,4 @@
+import { State } from '@/types/enums';
 import {
   CommonConstants,
   CropConstants,
@@ -642,6 +643,32 @@ export const commonConstants: CommonConstants = {
   },
 };
 
+const cropResidueRemovedOtherCropTypes: Record<State, number> = {
+  nsw: 0.05,
+  vic: 0.07,
+  qld: 0.04,
+  sa: 0.09,
+  wa_nw: 0.11,
+  wa_sw: 0.11,
+  tas: 0.16,
+  nt: 0.01,
+  act: 0,
+};
+
+const allStatesWithValue = (value: number): Record<State, number> => {
+  return {
+    nsw: value,
+    vic: value,
+    qld: value,
+    sa: value,
+    wa_nw: value,
+    wa_sw: value,
+    tas: value,
+    nt: value,
+    act: value,
+  };
+};
+
 export const cropConstants: CropConstants = {
   name: 'CROP',
 
@@ -763,10 +790,42 @@ Single Super Phosphate (SSP) 0.26
     dry: 0.005,
   },
 
+  FRACTION_CROP_RESIDUE_REMOVED: {
+    Rice: allStatesWithValue(0.06),
+    'Tubers and Roots': allStatesWithValue(1),
+    Cotton: allStatesWithValue(0),
+    Hops: allStatesWithValue(0),
+    'Forage Crops': allStatesWithValue(0.8),
+    'Sugar Cane': {
+      nsw: 0,
+      qld: 0.03,
+      wa_nw: 0,
+      wa_sw: 0,
+      sa: 0, // N/A
+      vic: 0, // N/A
+      act: 0, // N/A
+      tas: 0, // N/A
+      nt: 0, // N/A
+    },
+    Wheat: cropResidueRemovedOtherCropTypes,
+    'Other Cereals': cropResidueRemovedOtherCropTypes,
+    Barley: cropResidueRemovedOtherCropTypes,
+    Oilseeds: cropResidueRemovedOtherCropTypes,
+    Maize: cropResidueRemovedOtherCropTypes,
+    Oats: cropResidueRemovedOtherCropTypes,
+    Sorghum: cropResidueRemovedOtherCropTypes,
+    Triticale: cropResidueRemovedOtherCropTypes,
+    Peanuts: cropResidueRemovedOtherCropTypes,
+    Pulses: cropResidueRemovedOtherCropTypes,
+    'Other Annual Crops': cropResidueRemovedOtherCropTypes,
+    'Other Perennial Crops': cropResidueRemovedOtherCropTypes,
+  },
+
   /**
    * @description Crop residue parameters for major crop types
    * @inventory2022 A5.5.9.1
    */
+
   CROPRESIDUE: {
     Wheat: {
       residueCropRatio: 1.5,
@@ -776,8 +835,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.006,
       belowGroundN: 0.01,
       fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
+      fractionBurnt: 0.9,
     },
     Barley: {
       residueCropRatio: 1.24,
@@ -787,8 +845,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.007,
       belowGroundN: 0.01,
       fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
+      fractionBurnt: 0.85,
     },
     Maize: {
       residueCropRatio: 0.81,
@@ -798,8 +855,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.005,
       belowGroundN: 0.007,
       fractionOfResidueAtBurning: 1,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
+      fractionBurnt: 0.8,
     },
     Oats: {
       residueCropRatio: 1.42,
@@ -809,8 +865,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.006,
       belowGroundN: 0.01,
       fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
+      fractionBurnt: 0.85,
     },
     Rice: {
       residueCropRatio: 1.31,
@@ -820,8 +875,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.007,
       belowGroundN: 0.01,
       fractionOfResidueAtBurning: 1,
-      fractionBurnt: 0.815,
-      fractionRemoved: 0.06,
+      fractionBurnt: 0.8,
     },
     Sorghum: {
       residueCropRatio: 1.5,
@@ -831,8 +885,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.008,
       belowGroundN: 0.007,
       fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
+      fractionBurnt: 0.85,
     },
     Triticale: {
       residueCropRatio: 1.5,
@@ -842,8 +895,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.006,
       belowGroundN: 0.01,
       fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
+      fractionBurnt: 0.85,
     },
     'Other Cereals': {
       residueCropRatio: 1.46,
@@ -853,8 +905,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.006,
       belowGroundN: 0.01,
       fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
+      fractionBurnt: 0.85,
     },
     Pulses: {
       residueCropRatio: 1.37,
@@ -864,10 +915,9 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.009,
       belowGroundN: 0.01,
       fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
+      fractionBurnt: 0.85,
     },
-    'Tuber and Roots': {
+    'Tubers and Roots': {
       residueCropRatio: 0.34,
       belowAboveResidueRatio: 0.43,
       dryMatterContent: 0.25,
@@ -875,8 +925,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.02,
       belowGroundN: 0.01,
       fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 1,
+      fractionBurnt: 0.85,
     },
     Peanuts: {
       residueCropRatio: 1.07,
@@ -886,8 +935,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.016,
       belowGroundN: 0.014,
       fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
+      fractionBurnt: 0.85,
     },
     'Sugar Cane': {
       residueCropRatio: 0.25,
@@ -897,8 +945,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.005,
       belowGroundN: 0.007,
       fractionOfResidueAtBurning: 1,
-      fractionBurnt: 0.858,
-      fractionRemoved: 0,
+      fractionBurnt: 0.85,
     },
     Cotton: {
       residueCropRatio: 1.9,
@@ -908,8 +955,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.01,
       belowGroundN: 0.01,
       fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
+      fractionBurnt: 0.85,
     },
     Hops: {
       residueCropRatio: 1.5,
@@ -919,8 +965,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.006,
       belowGroundN: 0,
       fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
+      fractionBurnt: 0.85,
     },
     Oilseeds: {
       residueCropRatio: 2.08,
@@ -930,8 +975,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.009,
       belowGroundN: 0.01,
       fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
+      fractionBurnt: 0.85,
     },
     'Forage Crops': {
       residueCropRatio: 1.34,
@@ -941,8 +985,27 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.006,
       belowGroundN: 0.01,
       fractionOfResidueAtBurning: 0,
+      fractionBurnt: 0.85,
+    },
+    'Other Annual Crops': {
+      residueCropRatio: 1.0,
+      belowAboveResidueRatio: 0.22,
+      dryMatterContent: 0.85,
+      carbonMassFraction: 0.4,
+      aboveGroundN: 0.008,
+      belowGroundN: 0.009,
+      fractionOfResidueAtBurning: 0,
       fractionBurnt: 0,
-      fractionRemoved: 0.8,
+    },
+    'Other Perennial Crops': {
+      residueCropRatio: 1.5,
+      belowAboveResidueRatio: 0.29,
+      dryMatterContent: 0.88,
+      carbonMassFraction: 0.4,
+      aboveGroundN: 0.06,
+      belowGroundN: 0,
+      fractionOfResidueAtBurning: 0,
+      fractionBurnt: 0,
     },
   },
 

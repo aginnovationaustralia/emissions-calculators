@@ -217,6 +217,8 @@ export class BaseContainer<
         unit = mass(rightUnit.substance);
       } else if (isEnergyPerVolume(leftUnit) && isVolume(rightUnit)) {
         unit = energy();
+      } else if (isRealNumber(leftUnit)) {
+        unit = rightUnit;
       } else {
         if (!isRealNumber(rightUnit)) {
           // eslint-disable-next-line no-console
@@ -293,8 +295,21 @@ export class BaseContainer<
     right: Container<UL>,
     baseOrigin?: Partial<IntermediateOrNamedOrigin>,
   ): BinaryContainer<UL> {
+    let unit: NumberUnit;
+    if (isVoid(this.unit)) {
+      unit = voidUnit();
+    } else if (isVoid(right.unit)) {
+      unit = this.unit;
+    } else {
+      unit = this.unit;
+    }
+
+    const newUnit = {
+      ...unit,
+      value: this.unit.value.sub(right.unit.value),
+    };
     return new BinaryContainer(
-      this.unit,
+      newUnit as UL,
       'subtract',
       this as unknown as Container<NumberUnit>,
       right,

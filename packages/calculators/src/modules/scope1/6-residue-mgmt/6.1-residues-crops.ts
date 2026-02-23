@@ -3,7 +3,6 @@ import { CropType, isPastureType } from '@/calculators/Grains/constants/enums';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import { selectConstant } from '@/tools/constants';
-import { minus } from '@/tools/minus';
 import { one, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { massPerMass, realNumber } from '@/tools/units';
@@ -38,21 +37,15 @@ export const calculateMassNCropAppliedToSoil = (
     cropType,
     'dryMatterContent',
   );
-  const fc = selectConstant(
-    constants.CROP,
-    (value) => realNumber(new Decimal(value)),
-    'CROPRESIDUE',
-    cropType,
-    'fractionBurnt',
-  );
+  const fc = crop.fractionOfAnnualCropBurnt;
   const ffodc =
     crop.cropResidues.calculationMethod === '1'
       ? selectConstant(
           constants.CROP,
           (value) => realNumber(new Decimal(value)),
-          'CROPRESIDUE',
+          'FRACTION_CROP_RESIDUE_REMOVED',
           cropType,
-          'fractionRemoved',
+          crop.state,
         )
       : crop.cropResidues.fractionCropResidueRemoved;
 
@@ -79,7 +72,7 @@ export const calculateMassNCropAppliedToSoil = (
       */
   const aboveGroundNitrogen = pc
     .multiply(ragc)
-    .multiply(sum([one, minus(fc), minus(ffodc)]))
+    .multiply(one.minus(fc).minus(ffodc))
     .multiply(dmc)
     .multiply(ncagc);
 

@@ -52,9 +52,9 @@ const calculateFieldBurningN2O = (
   const fc = selectConstant(
     constants.CROP,
     (value) => realNumber(new Decimal(value)),
-    'CROPRESIDUE',
+    'FRACTION_CROP_RESIDUE_REMOVED',
     input.type,
-    'fractionRemoved',
+    input.state,
   );
   const mburnc = input.fractionOfAnnualCropBurnt
     .multiply(pc)

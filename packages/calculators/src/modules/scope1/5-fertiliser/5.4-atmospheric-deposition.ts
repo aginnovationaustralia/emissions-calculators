@@ -26,10 +26,11 @@ export const extendedToBaseProductionSystem = (
   return productionSystem;
 };
 
-const calculateInorganicFertiliserAtmosphericDepositionN2O = (
-  input: FertiliserInputTransformed & BaseGrainsCropTransformed,
-  constants: ConstantsForGrainsCalculator,
+export const calculateInorganicFertiliserAtmosphericDepositionN2O = (
+  input: FertiliserInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
+  const { constants } = context;
   /*
     5.4.1.1 Method 1 - Inorganic Fertiliser Atmospheric Deposition N2O Emissions
     Nitrous oxide emissions from atmospheric deposition from all inorganic fertiliser
@@ -144,7 +145,7 @@ export const calculate54AtmosphericDeposition = (
 
   return {
     inorganicFertiliserAtmosphericDepositionN2O:
-      calculateInorganicFertiliserAtmosphericDepositionN2O(input, constants),
+      calculateInorganicFertiliserAtmosphericDepositionN2O(input, context),
     organicFertiliserAtmosphericDepositionN2O:
       calculateOrganicFertiliserAtmosphericDepositionN2O(input, constants),
   };

@@ -1,14 +1,16 @@
 import { calculateGrains, validateCalculatorInput } from '@/calculators';
 import { entriesFromObject } from '@/calculators/common/tools/object';
 
-import { BasicCropProductionSystem } from '@/calculators/Grains/constants/enums';
+import {
+  BasicCropProductionSystem,
+  CropType,
+} from '@/calculators/Grains/constants/enums';
 import {
   GrainsInput,
   GrainsInputSchema,
   GrainsIntermediateOutput,
   GrainsOutput,
 } from '@/calculators/Grains/types';
-import { CropType } from '@/types';
 import XLSX, { Cell } from 'xlsx-populate';
 import { executeTest, traverseExpectations } from '../common/emissions';
 import {
@@ -33,16 +35,13 @@ const mapCropTypeFromNumber = (input: Cell): CropType => {
     Triticale: 6,
     'Other Cereals': 7,
     Pulses: 8,
-    'Tuber and Roots': 9,
+    'Tubers and Roots': 9,
     Peanuts: 10,
     Hops: 11,
     Oilseeds: 12,
     'Forage Crops': 13,
-    Lucerne: 14,
-    'Other legume': 15,
-    'Annual grass': 16,
-    'Grass clover mixture': 17,
-    'Perennial pasture': 18,
+    'Other Annual Crops': 14,
+    'Other Perennial Crops': 15,
   };
   const match = entriesFromObject(lookup).find(([_k, v]) => v === numberValue);
 

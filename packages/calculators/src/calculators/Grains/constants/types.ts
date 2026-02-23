@@ -1,3 +1,4 @@
+import { State } from '@/types/enums';
 import {
   BasicCropProductionSystem,
   CropType,
@@ -141,7 +142,6 @@ type CropResidueFactors = {
   belowGroundN: number;
   fractionOfResidueAtBurning: number;
   fractionBurnt: number;
-  fractionRemoved: number;
 };
 
 type PastureResidueFactors = {
@@ -194,6 +194,8 @@ export type CropConstants = NamedConstants & {
 
   CROPRESIDUE: Record<CropType, CropResidueFactors>;
   PASTURERESIDUE: Record<PastureType, PastureResidueFactors>;
+
+  FRACTION_CROP_RESIDUE_REMOVED: Record<CropType, Record<State, number>>;
 
   BURNING_METHANE_EF: number;
   BURNING_N2O_EF: number;

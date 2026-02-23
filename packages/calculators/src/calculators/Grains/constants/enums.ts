@@ -155,13 +155,15 @@ export const CropTypes = [
   'Triticale',
   'Other Cereals',
   'Pulses',
-  'Tuber and Roots',
+  'Tubers and Roots',
   'Peanuts',
   'Sugar Cane',
   'Cotton',
   'Hops',
   'Oilseeds',
   'Forage Crops',
+  'Other Annual Crops',
+  'Other Perennial Crops',
 ] as const;
 export type CropType = (typeof CropTypes)[number];
 
