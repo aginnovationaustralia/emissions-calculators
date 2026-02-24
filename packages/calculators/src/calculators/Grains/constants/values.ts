@@ -945,7 +945,7 @@ Single Super Phosphate (SSP) 0.26
       aboveGroundN: 0.005,
       belowGroundN: 0.007,
       fractionOfResidueAtBurning: 1,
-      fractionBurnt: 0.85,
+      fractionBurnt: 0.8,
     },
     Cotton: {
       residueCropRatio: 1.9,
@@ -1009,6 +1009,7 @@ Single Super Phosphate (SSP) 0.26
     },
   },
 
+  // Table A.2.1.3
   PASTURERESIDUE: {
     'Annual grass': {
       averageYield: 4.41,

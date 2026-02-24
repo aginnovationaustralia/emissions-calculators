@@ -10,6 +10,13 @@ export const zero = new RootContainer(realNumber(new Decimal(0)), {
   name: 'zero',
   valueType: 'constant',
 });
+export const tenToPowMinus3 = new RootContainer(
+  realNumber(new Decimal(10).pow(-3)),
+  {
+    name: '10^-3',
+    valueType: 'constant',
+  },
+);
 
 export const zeroN2O = new RootContainer(mass('N2O', new Decimal(0)), {
   name: 'zeroN2O',

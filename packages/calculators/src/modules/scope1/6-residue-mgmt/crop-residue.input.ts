@@ -45,6 +45,30 @@ export const CropResidueInputSchema = object({
       ),
     }),
   ]),
+  // REVISIT: crop and pasture inputs, especially around type and residues, probably need to be split up
+  pastureResidues: z
+    .xor([
+      object({
+        calculationMethod: z.literal('1'),
+      }),
+      object({
+        calculationMethod: z.literal('2'),
+        averageYieldPerHectare: z
+          .number()
+          .min(0)
+          .transform((val) =>
+            input(
+              'averageYieldPerHectare',
+              massPerArea('DryMatter', new Decimal(val)),
+            ),
+          )
+          .meta({
+            description:
+              'Custom average pasture yield, in t/ha (tonnes per hectare)',
+          }),
+      }),
+    ])
+    .optional(),
 });
 
 export type CropResidueInput = z.input<typeof CropResidueInputSchema>;

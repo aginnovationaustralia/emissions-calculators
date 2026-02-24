@@ -6,7 +6,7 @@ import {
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import { selectConstant } from '@/tools/constants';
-import { oneMinus, zeroN2O } from '@/tools/sentinels';
+import { oneMinus, tenToPowMinus3, zeroN2O } from '@/tools/sentinels';
 import { massPerMass, realNumber } from '@/tools/units';
 import { CropResidueInputTransformed } from './crop-residue.input';
 
@@ -49,10 +49,15 @@ export const calculateMassNPastureAppliedToSoil = (
   );
 
   const mpAboveGround = yp
+    .multiply(tenToPowMinus3)
     .multiply(ap)
     .multiply(oneMinus(ffodp))
     .multiply(ncagp);
-  const mpBelowGround = yp.multiply(ap).multiply(rbgp).multiply(ncbgp);
+  const mpBelowGround = yp
+    .multiply(tenToPowMinus3)
+    .multiply(ap)
+    .multiply(rbgp)
+    .multiply(ncbgp);
   const mp = mpAboveGround.plus(mpBelowGround);
 
   return mp;

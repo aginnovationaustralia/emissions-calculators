@@ -8,10 +8,12 @@ import { massPerMass, realNumber } from '@/tools/units';
 import Decimal from 'decimal.js-light';
 import { CropResidueInputTransformed } from './crop-residue.input';
 
-const calculateFieldBurningN2O = (
+export const calculateFieldBurningN2O = (
   input: CropResidueInputTransformed & BaseGrainsCropTransformed,
-  constants: ConstantsForGrainsCalculator,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
+  const { constants } = context;
+
   if (isPastureType(input.type)) {
     return zeroN2O;
   }
@@ -36,7 +38,7 @@ const calculateFieldBurningN2O = (
   );
   const sc = selectConstant(
     constants.CROP,
-    (value) => massPerMass('N', 'CropResidue', new Decimal(value)),
+    (value) => realNumber(value),
     'CROPRESIDUE',
     input.type,
     'fractionOfResidueAtBurning',
@@ -49,15 +51,9 @@ const calculateFieldBurningN2O = (
     input.type,
     'fractionBurnt',
   );
-  const fc = selectConstant(
-    constants.CROP,
-    (value) => realNumber(new Decimal(value)),
-    'FRACTION_CROP_RESIDUE_REMOVED',
-    input.type,
-    input.state,
-  );
-  const mburnc = input.fractionOfAnnualCropBurnt
-    .multiply(pc)
+  const fc = input.fractionOfAnnualCropBurnt;
+
+  const mburnc = pc
     .multiply(ragc)
     .multiply(sc)
     .multiply(zc)
@@ -90,7 +86,6 @@ const calculateFieldBurningN2O = (
 
   const fieldBurningN2O = mburnc
     .multiply(dmc)
-    // @ts-expect-error - question on the units
     .multiply(ncagc)
     .multiply(efn2o)
     .multiply(cn2o);
@@ -98,10 +93,12 @@ const calculateFieldBurningN2O = (
   return fieldBurningN2O;
 };
 
-const calculateFieldBurningCH4 = (
+export const calculateFieldBurningCH4 = (
   input: CropResidueInputTransformed & BaseGrainsCropTransformed,
-  constants: ConstantsForGrainsCalculator,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
+  const { constants } = context;
+
   if (isPastureType(input.type)) {
     return zeroCH4;
   }
@@ -115,6 +112,8 @@ const calculateFieldBurningCH4 = (
   residue burnt)
   CCH4 = factor to convert elemental mass of methane to molecular mass
   (dimensionless)
+
+  Mburn,c = Pc * RAGc * Sc * DMc * Zc * Fc
   */
   const pc = input.averageYield.multiply(input.areaSown, { name: 'Pc' });
   const ragc = selectConstant(
@@ -124,9 +123,35 @@ const calculateFieldBurningCH4 = (
     input.type,
     'residueCropRatio',
   );
-  const mburnc = input.fractionOfAnnualCropBurnt
-    .multiply(pc)
-    .multiply(ragc, { name: 'Mburnc' });
+  const sc = selectConstant(
+    constants.CROP,
+    (value) => realNumber(new Decimal(value)),
+    'CROPRESIDUE',
+    input.type,
+    'fractionOfResidueAtBurning',
+  );
+  const dmc = selectConstant(
+    constants.CROP,
+    (value) => massPerMass('DryMatter', 'CropResidue', new Decimal(value)),
+    'CROPRESIDUE',
+    input.type,
+    'dryMatterContent',
+  );
+  const zc = selectConstant(
+    constants.CROP,
+    (value) => realNumber(new Decimal(value)),
+    'CROPRESIDUE',
+    input.type,
+    'fractionBurnt',
+  );
+  const fc = input.fractionOfAnnualCropBurnt;
+
+  const mburnc = pc
+    .multiply(ragc)
+    .multiply(sc)
+    .multiply(dmc)
+    .multiply(zc)
+    .multiply(fc, { name: 'Mburnc' });
 
   const ccc = selectConstant(
     constants.CROP,
@@ -137,7 +162,7 @@ const calculateFieldBurningCH4 = (
   );
   const efch4 = selectConstant(
     constants.CROP,
-    (value) => massPerMass('CH4', 'CropResidue', new Decimal(value)),
+    (value) => massPerMass('CH4', 'DryMatter', new Decimal(value)),
     'BURNING_METHANE_EF',
   );
   const cch4 = selectConstant(
@@ -155,10 +180,8 @@ export const calculate64FieldBurning = (
   crop: CropResidueInputTransformed & BaseGrainsCropTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  const { constants } = context;
-
   return {
-    fieldBurningN2O: calculateFieldBurningN2O(crop, constants),
-    fieldBurningCH4: calculateFieldBurningCH4(crop, constants),
+    fieldBurningN2O: calculateFieldBurningN2O(crop, context),
+    fieldBurningCH4: calculateFieldBurningCH4(crop, context),
   };
 };

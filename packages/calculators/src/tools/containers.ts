@@ -218,7 +218,7 @@ export class BaseContainer<
       } else if (isEnergyPerVolume(leftUnit) && isVolume(rightUnit)) {
         unit = energy();
       } else if (isRealNumber(leftUnit)) {
-        unit = rightUnit;
+        unit = { ...rightUnit };
       } else {
         if (!isRealNumber(rightUnit)) {
           // eslint-disable-next-line no-console
