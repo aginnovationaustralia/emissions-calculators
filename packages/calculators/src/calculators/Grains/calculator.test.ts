@@ -30,19 +30,17 @@ describe('Grains Calculator', () => {
       // = 17,296,309.28
       // energy content factor = GJ / kL
       // ef for fuel = kg CO2 / GJ
-
-
       */
       expect(fuelTransportCO2.value).toEqual(2698140);
       expect(fuelTransportCO2.references).toEqual(['8.1.1.1 (62)']);
       expect(fuelTransportCO2.constants).toEqual([
         {
-          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.diesel.SCOPE1_EF.CO2]',
+          name: 'COMMON[TRANSPORT_FUEL_FACTORS.Cars and light commercial vehicles.Diesel oil.SCOPE1_EF.CO2]',
           value: 69.9,
           units: 'Mass(CO2) / Energy',
         },
         {
-          name: 'COMMON[FUEL_ENERGYGJ.TRANSPORT.diesel.ENERGY_CONTENT_FACTOR]',
+          name: 'COMMON[TRANSPORT_FUEL_FACTORS.Cars and light commercial vehicles.Diesel oil.ENERGY_CONTENT_FACTOR]',
           value: 38.6,
           units: 'Energy / Volume(Fuel)',
         },

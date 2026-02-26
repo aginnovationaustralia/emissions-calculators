@@ -1,11 +1,19 @@
 import { State } from '@/types/enums';
 import {
+  AviationFuelType,
   BasicCropProductionSystem,
+  CarsLightCommercialFuelType,
+  CarsLightCommercialPre2004FuelType,
   CropType,
+  FuelStationaryLiquidType,
+  FuelStationarySolidType,
+  HeavyDutyFuelType,
   InorganicFertiliserComponentOrigin,
   InorganicFertiliserComponentTypeNonRegional,
   InorganicFertiliserComponentTypeRegional,
   InorganicFertiliserType,
+  LightDutyFuelType,
+  OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
   PastureType,
   RefrigerantType,
@@ -17,7 +25,7 @@ import {
   SolidWasteLandfillType,
   StationaryFuelType,
   SwineMMSType,
-  TransportFuelType,
+  VesselFuelType,
 } from './enums';
 
 export type NamedConstants = {
@@ -84,9 +92,43 @@ export type CommonConstants = NamedConstants & {
 
   JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE: number;
 
+  STATIONARY_FUEL_FACTORS: {
+    'Solid fuels': Record<FuelStationarySolidType, FuelFactor>;
+    'Liquid fuels': Record<FuelStationaryLiquidType, FuelFactor>;
+  };
+
+  TRANSPORT_FUEL_FACTORS: {
+    'Cars and light commercial vehicles': Record<
+      CarsLightCommercialFuelType,
+      FuelFactor
+    >;
+    'Cars and light commercial vehicles (pre 2004)': Record<
+      CarsLightCommercialPre2004FuelType,
+      FuelFactor
+    >;
+    'Light duty vehicles': Record<LightDutyFuelType, FuelFactor>;
+    'Heavy duty vehicles': Record<HeavyDutyFuelType, FuelFactor>;
+    Aviation: Record<AviationFuelType, FuelFactor>;
+    Vessel: Record<VesselFuelType, FuelFactor>;
+    'Off-road Agriculture and forestry equipment': Record<
+      OffRoadAgricultureAndForestryEquipmentFuelType,
+      FuelFactor
+    >;
+  };
+
+  NATURAL_GAS_FACTORS: {
+    ENERGY_CONTENT_FACTOR: number;
+    SCOPE1_EF: {
+      CO2: number;
+      CH4: number;
+      N2O: number;
+    };
+    SCOPE3_EF: Record<States, number>;
+  };
+
   FUEL_ENERGYGJ: {
     STATIONARY: Record<StationaryFuelType, FuelFactor>;
-    TRANSPORT: Record<TransportFuelType, FuelFactor>;
+
     NATURAL_GAS: {
       ENERGY_CONTENT_FACTOR: number;
       SCOPE1_EF: {

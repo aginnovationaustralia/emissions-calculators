@@ -116,21 +116,73 @@ export const StationaryFuelTypes = [
 ] as const;
 export type StationaryFuelType = (typeof StationaryFuelTypes)[number];
 
-export const TransportFuelTypes = [
-  'gasoline',
-  'diesel',
-  'lpg',
-  'fuel oil',
-  'ethanol',
-  'biodiesel',
-  'renewable diesel',
-  'other biofuels',
-  'lng',
-  'aviation gasoline',
-  'aviation kerosene',
-  'aviation renewable kerosone',
+export const FuelTransportVehicleTypes = [
+  'Cars and light commercial vehicles',
+  'Cars and light commercial vehicles (pre 2004)',
+  'Light duty vehicles',
+  'Heavy duty vehicles',
+  'Aviation',
+  'Vessel',
+  'Off-road Agriculture and forestry equipment',
 ] as const;
-export type TransportFuelType = (typeof TransportFuelTypes)[number];
+export type FuelTransportVehicleType =
+  (typeof FuelTransportVehicleTypes)[number];
+
+export const CarsLightCommercialFuelTypes = [
+  'Gasoline',
+  'Diesel oil',
+  'Liquefied petroleum gas (LPG)',
+  'Fuel oil',
+  'Ethanol',
+  'Biodiesel',
+  'Renewable diesel',
+  'Other biofuels',
+] as const;
+export type CarsLightCommercialFuelType =
+  (typeof CarsLightCommercialFuelTypes)[number];
+export const CarsLightCommercialPre2004FuelTypes = [
+  'Gasoline',
+  'Diesel oil',
+  'Liquefied petroleum gas (LPG)',
+  'Ethanol',
+  'Renewable diesel',
+] as const;
+export type CarsLightCommercialPre2004FuelType =
+  (typeof CarsLightCommercialPre2004FuelTypes)[number];
+
+export const LightDutyFuelTypes = [
+  'Compressed natural gas',
+  'Liquefied natural gas',
+] as const;
+export type LightDutyFuelType = (typeof LightDutyFuelTypes)[number];
+
+export const HeavyDutyFuelTypes = [
+  'Compressed natural gas',
+  'Liquefied natural gas',
+  'Diesel oil - Euro iv or higher',
+  'Diesel oil - Euro iii',
+  'Diesel oil - Euro i',
+  'Renewable diesel - Euro iv or higher',
+  'Renewable diesel - Euro iii',
+  'Renewable diesel - Euro i',
+] as const;
+export type HeavyDutyFuelType = (typeof HeavyDutyFuelTypes)[number];
+
+export const AviationFuelTypes = [
+  'Gasoline for use as fuel in an aircraft',
+  'Kerosene for use as fuel in an aircraft',
+  'Renewable aviation kerosene',
+] as const;
+export type AviationFuelType = (typeof AviationFuelTypes)[number];
+
+export const VesselFuelTypes = ['Petrol', 'Diesel', 'Fuel Oil'] as const;
+export type VesselFuelType = (typeof VesselFuelTypes)[number];
+
+export const OffRoadAgricultureAndForestryEquipmentFuelTypes = [
+  'Diesel',
+] as const;
+export type OffRoadAgricultureAndForestryEquipmentFuelType =
+  (typeof OffRoadAgricultureAndForestryEquipmentFuelTypes)[number];
 
 export const PastureTypes = [
   'Annual grass',
@@ -382,3 +434,63 @@ export type SolidWasteByVolumeType = (typeof SolidWasteByVolumeTypes)[number];
 
 export const ClimateZoneTypes = ['dry', 'wet'] as const;
 export type ClimateZoneType = (typeof ClimateZoneTypes)[number];
+
+export const FuelStationarySolidTypes = [
+  'Bituminous coal',
+  'Sub-bituminous coal',
+  'Anthracite',
+  'Brown coal (lignite)',
+  'Coking coal',
+  'Coal briquettes',
+  'Coal coke',
+  'Coal tar',
+  'Other solid fossil fuels',
+  'Industrial materials derived from fossil fuels',
+  'Passenger car tyres',
+  'Truck and off-road tyres',
+  'Non-biomass municipal materials',
+  'Dry wood',
+  'Green and air dried wood',
+  'Sulphite lyes',
+  'Bagasse',
+  'Biomass,  municipal and industrial materials',
+  'Charcoal',
+  'Other primary solid biomass fuels',
+] as const;
+export type FuelStationarySolidType = (typeof FuelStationarySolidTypes)[number];
+
+export const FuelStationaryMassBasedLiquidTypes = [
+  'Crude oil and condensates',
+  'Other natural gas liquids',
+  'Petroleum coke',
+  'Refinery gas and liquids',
+  'Refinery coke',
+] as const;
+export type FuelStationaryMassBasedLiquidType =
+  (typeof FuelStationaryMassBasedLiquidTypes)[number];
+
+export const FuelStationaryVolumeBasedLiquidTypes = [
+  'Petroleum based oils other than fuels',
+  'Petroleum based greases',
+  'Automotive gasoline/petrol',
+  'Aviation gasoline',
+  'Kerosene',
+  'Aviation turbine fuel/kerosene',
+  'Heating oil',
+  'Diesel oil',
+  'Fuel oil',
+  'Liquefied aromatic hydrocarbons',
+  'Solvents: mineral turpentine or white spirits',
+  'Liquefied petroleum gas',
+  'Naphtha',
+  'Other petroleum products',
+] as const;
+export type FuelStationaryVolumeBasedLiquidType =
+  (typeof FuelStationaryVolumeBasedLiquidTypes)[number];
+
+export const FuelStationaryLiquidTypes = [
+  ...FuelStationaryMassBasedLiquidTypes,
+  ...FuelStationaryVolumeBasedLiquidTypes,
+] as const;
+export type FuelStationaryLiquidType =
+  (typeof FuelStationaryLiquidTypes)[number];

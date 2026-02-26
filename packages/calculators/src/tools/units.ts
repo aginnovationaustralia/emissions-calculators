@@ -180,6 +180,26 @@ export const isMassPerEnergy = (
   return unit.__unitType === 'MassPerEnergy';
 };
 
+export type EnergyPerMass<T extends Substance> = NumberUnitBase & {
+  __unitType: 'EnergyPerMass';
+  substance: T;
+};
+export const energyPerMass = <S extends Substance>(
+  substance: S,
+  initialValueJoulesPerKg?: number | Decimal,
+): EnergyPerMass<S> => {
+  return {
+    __unitType: 'EnergyPerMass',
+    substance,
+    value: new Decimal(initialValueJoulesPerKg ?? 0),
+  };
+};
+export const isEnergyPerMass = (
+  unit: NumberUnit,
+): unit is EnergyPerMass<Substance> => {
+  return unit.__unitType === 'EnergyPerMass';
+};
+
 export type MassPerElectricity<S extends Substance> = NumberUnitBase & {
   __unitType: 'MassPerElectricity';
   substance: S;
@@ -324,6 +344,7 @@ export type NumberUnit =
   | MassPerMass<Substance, Substance>
   | Mass<Substance>
   | MassPerEnergy<Substance>
+  | EnergyPerMass<Substance>
   | MassPerVolume<Substance, Substance>
   | MassPerArea<Substance>
   | MassPerTime<Substance>
@@ -372,6 +393,8 @@ export function formatUnit(unit: AnyUnit): string {
       return 'real number';
     case 'MassPerEnergy':
       return `Mass(${unit.substance}) / Energy`;
+    case 'EnergyPerMass':
+      return `Energy / Mass(${unit.substance})`;
     case 'EnergyPerVolume':
       return `Energy / Volume(${unit.substance})`;
     case 'MassPerVolume':

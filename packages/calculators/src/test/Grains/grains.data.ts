@@ -41,12 +41,14 @@ export const grainWheat: GrainsCrop = {
   transportFuel: [
     {
       amountLitres: 1000,
-      type: 'diesel',
+      vehicleType: 'Cars and light commercial vehicles',
+      fuelType: 'Diesel oil',
     },
   ],
   stationaryFuel: [
     {
-      type: 'automotive petrol',
+      fuelClass: 'Liquid fuels',
+      fuelType: 'Automotive gasoline/petrol',
       amountLitres: 12000,
     },
   ],

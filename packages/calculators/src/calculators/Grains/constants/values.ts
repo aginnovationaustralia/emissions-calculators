@@ -126,13 +126,683 @@ export const commonConstants: CommonConstants = {
   // https://www.dcceew.gov.au/sites/default/files/documents/national-greenhouse-account-factors-2023.pdf
   JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE: 74.13, // 2023
 
-  /**
-   * @description Scope 1 and Scope 3 factors relating to fuel
-   * @reference Table 6 and 7 (Dept of Industry, Science, Energy and Resources 2022)
-   * @link https://www.dcceew.gov.au/sites/default/files/documents/national-greenhouse-account-factors-2023.pdf
-   */
+  // NGAF 2023 Table 9
+  TRANSPORT_FUEL_FACTORS: {
+    'Cars and light commercial vehicles': {
+      Gasoline: {
+        ENERGY_CONTENT_FACTOR: 34.2,
+        SCOPE1_EF: {
+          CO2: 67.4,
+          CH4: 0.02,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 17.2,
+      },
+      'Diesel oil': {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 69.9,
+          CH4: 0.01,
+          N2O: 0.5,
+        },
+        SCOPE3_EF: 17.3,
+      },
+      'Liquefied petroleum gas (LPG)': {
+        ENERGY_CONTENT_FACTOR: 26.2,
+        SCOPE1_EF: {
+          CO2: 60.2,
+          CH4: 0.5,
+          N2O: 0.3,
+        },
+        SCOPE3_EF: 20.2,
+      },
+      'Fuel oil': {
+        ENERGY_CONTENT_FACTOR: 39.7,
+        SCOPE1_EF: {
+          CO2: 73.6,
+          CH4: 0.08,
+          N2O: 0.5,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      Ethanol: {
+        ENERGY_CONTENT_FACTOR: 23.4,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.2,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0.0, // NE
+      },
+      Biodiesel: {
+        ENERGY_CONTENT_FACTOR: 34.6,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.8,
+          N2O: 1.7,
+        },
+        SCOPE3_EF: 0.0, // NE
+      },
+      'Renewable diesel': {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.01,
+          N2O: 0.5,
+        },
+        SCOPE3_EF: 0.0, // NE
+      },
+      'Other biofuels': {
+        ENERGY_CONTENT_FACTOR: 23.4,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.8,
+          N2O: 1.7,
+        },
+        SCOPE3_EF: 0.0, // NE
+      },
+    },
+    'Cars and light commercial vehicles (pre 2004)': {
+      Gasoline: {
+        ENERGY_CONTENT_FACTOR: 34.2,
+        SCOPE1_EF: {
+          CO2: 67.4,
+          CH4: 0.6,
+          N2O: 1.6,
+        },
+        SCOPE3_EF: 17.2,
+      },
+      'Diesel oil': {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 69.9,
+          CH4: 0.1,
+          N2O: 0.4,
+        },
+        SCOPE3_EF: 17.3,
+      },
+      'Liquefied petroleum gas (LPG)': {
+        ENERGY_CONTENT_FACTOR: 26.2,
+        SCOPE1_EF: {
+          CO2: 60.2,
+          CH4: 0.7,
+          N2O: 0.6,
+        },
+        SCOPE3_EF: 20.2,
+      },
+
+      Ethanol: {
+        ENERGY_CONTENT_FACTOR: 23.4,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.8,
+          N2O: 1.7,
+        },
+        SCOPE3_EF: 0.0, // NE
+      },
+
+      'Renewable diesel': {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.01,
+          N2O: 0.5,
+        },
+        SCOPE3_EF: 0.0, // NE
+      },
+    },
+    'Light duty vehicles': {
+      'Compressed natural gas': {
+        /* REVISIT: NGAF table 9 bullet point states: "For compressed natural gas, emission factors are for gas that has converted to standard conditions."
+         * I believe this implies converting back to GJ/kL */
+        ENERGY_CONTENT_FACTOR: 0.0393 / 1000,
+        SCOPE1_EF: {
+          CO2: 51.4,
+          CH4: 7.3,
+          N2O: 0.3,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Liquefied natural gas': {
+        ENERGY_CONTENT_FACTOR: 25.3,
+        SCOPE1_EF: {
+          CO2: 51.4,
+          CH4: 7.3,
+          N2O: 0.3,
+        },
+        SCOPE3_EF: 18.0,
+      },
+    },
+    'Heavy duty vehicles': {
+      'Compressed natural gas': {
+        /* REVISIT: NGAF table 9 bullet point states: "For compressed natural gas, emission factors are for gas that has converted to standard conditions."
+         * I believe this implies converting back to GJ/kL */
+        ENERGY_CONTENT_FACTOR: 0.0393 / 1000,
+        SCOPE1_EF: {
+          CO2: 51.4,
+          CH4: 2.8,
+          N2O: 0.3,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Liquefied natural gas': {
+        ENERGY_CONTENT_FACTOR: 25.3,
+        SCOPE1_EF: {
+          CO2: 51.4,
+          CH4: 2.8,
+          N2O: 0.3,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Diesel oil - Euro iv or higher': {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 69.9,
+          CH4: 0.07,
+          N2O: 0.4,
+        },
+        SCOPE3_EF: 17.3,
+      },
+      'Diesel oil - Euro iii': {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 69.9,
+          CH4: 0.1,
+          N2O: 0.4,
+        },
+        SCOPE3_EF: 17.3,
+      },
+      'Diesel oil - Euro i': {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 69.9,
+          CH4: 0.2,
+          N2O: 0.4,
+        },
+        SCOPE3_EF: 17.3,
+      },
+      'Renewable diesel - Euro iv or higher': {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.07,
+          N2O: 0.4,
+        },
+        SCOPE3_EF: 0.0, // NE
+      },
+      'Renewable diesel - Euro iii': {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.1,
+          N2O: 0.4,
+        },
+        SCOPE3_EF: 0.0, // NE
+      },
+      'Renewable diesel - Euro i': {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.2,
+          N2O: 0.4,
+        },
+        SCOPE3_EF: 0.0, // NE
+      },
+    },
+    Aviation: {
+      'Gasoline for use as fuel in an aircraft': {
+        ENERGY_CONTENT_FACTOR: 33.1,
+        SCOPE1_EF: {
+          CO2: 67.0,
+          CH4: 0.06,
+          N2O: 0.6,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Kerosene for use as fuel in an aircraft': {
+        ENERGY_CONTENT_FACTOR: 36.8,
+        SCOPE1_EF: {
+          CO2: 69.6,
+          CH4: 0.01,
+          N2O: 0.6,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Renewable aviation kerosene': {
+        ENERGY_CONTENT_FACTOR: 36.8,
+        SCOPE1_EF: {
+          CO2: 0.0,
+          CH4: 0.01,
+          N2O: 0.6,
+        },
+        SCOPE3_EF: 0.0, // NE
+      },
+    },
+    Vessel: {
+      Petrol: {
+        ENERGY_CONTENT_FACTOR: 34.2,
+        SCOPE1_EF: {
+          CO2: 67.4,
+          CH4: 10.1,
+          N2O: 0.3,
+        },
+        SCOPE3_EF: 17.2,
+      },
+      Diesel: {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 69.9,
+          CH4: 0.2,
+          N2O: 0.5,
+        },
+        SCOPE3_EF: 17.3,
+      },
+      'Fuel Oil': {
+        ENERGY_CONTENT_FACTOR: 39.7,
+        SCOPE1_EF: {
+          CO2: 73.6,
+          CH4: 0.2,
+          N2O: 0.5,
+        },
+        SCOPE3_EF: 18.0,
+      },
+    },
+    'Off-road Agriculture and forestry equipment': {
+      Diesel: {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 69.9,
+          CH4: 0.3,
+          N2O: 0.5,
+        },
+        SCOPE3_EF: 17.3,
+      },
+    },
+  },
+
+  // NGAF table 4
+  STATIONARY_FUEL_FACTORS: {
+    'Solid fuels': {
+      'Bituminous coal': {
+        ENERGY_CONTENT_FACTOR: 27,
+        SCOPE1_EF: {
+          CO2: 90,
+          CH4: 0.04,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 3,
+      },
+      'Sub-bituminous coal': {
+        ENERGY_CONTENT_FACTOR: 21,
+        SCOPE1_EF: {
+          CO2: 90,
+          CH4: 0.04,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 2.5,
+      },
+      Anthracite: {
+        ENERGY_CONTENT_FACTOR: 29,
+        SCOPE1_EF: {
+          CO2: 90,
+          CH4: 0.04,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Brown coal (lignite)': {
+        ENERGY_CONTENT_FACTOR: 10.2,
+        SCOPE1_EF: {
+          CO2: 93.5,
+          CH4: 0.02,
+          N2O: 0.3,
+        },
+        SCOPE3_EF: 0.4,
+      },
+      'Coking coal': {
+        ENERGY_CONTENT_FACTOR: 30,
+        SCOPE1_EF: {
+          CO2: 91.8,
+          CH4: 0.03,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 6.4,
+      },
+      'Coal briquettes': {
+        ENERGY_CONTENT_FACTOR: 22.1,
+        SCOPE1_EF: {
+          CO2: 95,
+          CH4: 0.08,
+          N2O: 0.3,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Coal coke': {
+        ENERGY_CONTENT_FACTOR: 27,
+        SCOPE1_EF: {
+          CO2: 107,
+          CH4: 0.03,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Coal tar': {
+        ENERGY_CONTENT_FACTOR: 37.5,
+        SCOPE1_EF: {
+          CO2: 81.8,
+          CH4: 0.03,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Other solid fossil fuels': {
+        ENERGY_CONTENT_FACTOR: 22.1,
+        SCOPE1_EF: {
+          CO2: 95,
+          CH4: 0.08,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Industrial materials derived from fossil fuels': {
+        ENERGY_CONTENT_FACTOR: 26.3,
+        SCOPE1_EF: {
+          CO2: 81.6,
+          CH4: 0.03,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Passenger car tyres': {
+        ENERGY_CONTENT_FACTOR: 32,
+        SCOPE1_EF: {
+          CO2: 62.8,
+          CH4: 0.03,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Truck and off-road tyres': {
+        ENERGY_CONTENT_FACTOR: 27.1,
+        SCOPE1_EF: {
+          CO2: 55.9,
+          CH4: 0.03,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Non-biomass municipal materials': {
+        ENERGY_CONTENT_FACTOR: 10.5,
+        SCOPE1_EF: {
+          CO2: 87.1,
+          CH4: 0.8,
+          N2O: 1,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Dry wood': {
+        ENERGY_CONTENT_FACTOR: 16.2,
+        SCOPE1_EF: {
+          CO2: 0,
+          CH4: 0.1,
+          N2O: 1.1,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Green and air dried wood': {
+        ENERGY_CONTENT_FACTOR: 10.4,
+        SCOPE1_EF: {
+          CO2: 0,
+          CH4: 0.1,
+          N2O: 1.1,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Sulphite lyes': {
+        ENERGY_CONTENT_FACTOR: 12.4,
+        SCOPE1_EF: {
+          CO2: 0,
+          CH4: 0.08,
+          N2O: 0.5,
+        },
+        SCOPE3_EF: 0,
+      },
+      Bagasse: {
+        ENERGY_CONTENT_FACTOR: 9.6,
+        SCOPE1_EF: {
+          CO2: 0,
+          CH4: 0.3,
+          N2O: 1.1,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Biomass,  municipal and industrial materials': {
+        ENERGY_CONTENT_FACTOR: 12.2,
+        SCOPE1_EF: {
+          CO2: 0,
+          CH4: 0.8,
+          N2O: 1,
+        },
+        SCOPE3_EF: 0,
+      },
+      Charcoal: {
+        ENERGY_CONTENT_FACTOR: 31.1,
+        SCOPE1_EF: {
+          CO2: 0,
+          CH4: 5.3,
+          N2O: 1,
+        },
+        SCOPE3_EF: 0,
+      },
+      'Other primary solid biomass fuels': {
+        ENERGY_CONTENT_FACTOR: 12.2,
+        SCOPE1_EF: {
+          CO2: 0,
+          CH4: 0.8,
+          N2O: 1,
+        },
+        SCOPE3_EF: 0,
+      },
+    },
+
+    // NGAF Table 8
+    'Liquid fuels': {
+      'Petroleum based oils other than fuels': {
+        ENERGY_CONTENT_FACTOR: 38.8,
+        SCOPE1_EF: {
+          CO2: 13.9,
+          CH4: 0.0,
+          N2O: 0.0,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Petroleum based greases': {
+        ENERGY_CONTENT_FACTOR: 38.8,
+        SCOPE1_EF: {
+          CO2: 3.5,
+          CH4: 0.0,
+          N2O: 0.0,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Crude oil and condensates': {
+        ENERGY_CONTENT_FACTOR: 45.3,
+        SCOPE1_EF: {
+          CO2: 69.6,
+          CH4: 0.08,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0, // NE
+      },
+      'Other natural gas liquids': {
+        ENERGY_CONTENT_FACTOR: 46.5,
+        SCOPE1_EF: {
+          CO2: 61.0,
+          CH4: 0.08,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 0, // NE
+      },
+      'Automotive gasoline/petrol': {
+        ENERGY_CONTENT_FACTOR: 34.2,
+        SCOPE1_EF: {
+          CO2: 67.4,
+          CH4: 0.2,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 17.2,
+      },
+      'Aviation gasoline': {
+        ENERGY_CONTENT_FACTOR: 33.1,
+        SCOPE1_EF: {
+          CO2: 67.0,
+          CH4: 0.2,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      Kerosene: {
+        ENERGY_CONTENT_FACTOR: 37.5,
+        SCOPE1_EF: {
+          CO2: 68.9,
+          CH4: 0.01,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Aviation turbine fuel/kerosene': {
+        ENERGY_CONTENT_FACTOR: 36.8,
+        SCOPE1_EF: {
+          CO2: 69.6,
+          CH4: 0.02,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Heating oil': {
+        ENERGY_CONTENT_FACTOR: 37.3,
+        SCOPE1_EF: {
+          CO2: 69.5,
+          CH4: 0.03,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Diesel oil': {
+        ENERGY_CONTENT_FACTOR: 38.6,
+        SCOPE1_EF: {
+          CO2: 69.9,
+          CH4: 0.1,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 17.3,
+      },
+      'Fuel oil': {
+        ENERGY_CONTENT_FACTOR: 39.7,
+        SCOPE1_EF: {
+          CO2: 73.6,
+          CH4: 0.04,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Liquefied aromatic hydrocarbons': {
+        ENERGY_CONTENT_FACTOR: 34.4,
+        SCOPE1_EF: {
+          CO2: 69.7,
+          CH4: 0.03,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Solvents: mineral turpentine or white spirits': {
+        ENERGY_CONTENT_FACTOR: 34.4,
+        SCOPE1_EF: {
+          CO2: 69.7,
+          CH4: 0.03,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Liquefied petroleum gas': {
+        ENERGY_CONTENT_FACTOR: 25.7,
+        SCOPE1_EF: {
+          CO2: 60.2,
+          CH4: 0.2,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 20.2,
+      },
+      Naphtha: {
+        ENERGY_CONTENT_FACTOR: 31.4,
+        SCOPE1_EF: {
+          CO2: 69.8,
+          CH4: 0.01,
+          N2O: 0.01,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Petroleum coke': {
+        ENERGY_CONTENT_FACTOR: 34.2,
+        SCOPE1_EF: {
+          CO2: 92.6,
+          CH4: 0.08,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Refinery gas and liquids': {
+        ENERGY_CONTENT_FACTOR: 42.9,
+        SCOPE1_EF: {
+          CO2: 54.7,
+          CH4: 0.03,
+          N2O: 0.03,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Refinery coke': {
+        ENERGY_CONTENT_FACTOR: 34.2,
+        SCOPE1_EF: {
+          CO2: 92.6,
+          CH4: 0.08,
+          N2O: 0.2,
+        },
+        SCOPE3_EF: 18.0,
+      },
+      'Other petroleum products': {
+        ENERGY_CONTENT_FACTOR: 34.4,
+        SCOPE1_EF: {
+          CO2: 69.8,
+          CH4: 0.02,
+          N2O: 0.1,
+        },
+        SCOPE3_EF: 18.0,
+      },
+    },
+  },
+
+  // NGAF Table 5 direct and Table 6 indirect
+  NATURAL_GAS_FACTORS: {
+    ENERGY_CONTENT_FACTOR: 25.3, // GJ/kL
+    SCOPE1_EF: {
+      CO2: 51.4,
+      CH4: 0.1,
+      N2O: 0.03,
+    },
+    // Uses NGAF Table 6 non-metro values
+    SCOPE3_EF: {
+      nsw: 14.0,
+      act: 14.0,
+      vic: 4,
+      qld: 7.9,
+      sa: 10.6,
+      wa_sw: 4.0,
+      wa_nw: 4.0,
+      tas: 4, // based on victoria
+      nt: 4.0, // based on WA
+    },
+  },
   FUEL_ENERGYGJ: {
-    // NGAF 2023 Table 8
     STATIONARY: {
       'petroleum based oils': {
         ENERGY_CONTENT_FACTOR: 38.8,
@@ -351,117 +1021,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: 0.0, // NE
       },
     },
-    // NGAF 2023 Table 9
-    TRANSPORT: {
-      gasoline: {
-        ENERGY_CONTENT_FACTOR: 34.2,
-        SCOPE1_EF: {
-          CO2: 67.4,
-          CH4: 0.02,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 17.2,
-      },
-      diesel: {
-        ENERGY_CONTENT_FACTOR: 38.6,
-        SCOPE1_EF: {
-          CO2: 69.9,
-          CH4: 0.01,
-          N2O: 0.5,
-        },
-        SCOPE3_EF: 17.3,
-      },
-      lpg: {
-        ENERGY_CONTENT_FACTOR: 26.2,
-        SCOPE1_EF: {
-          CO2: 60.2,
-          CH4: 0.5,
-          N2O: 0.3,
-        },
-        SCOPE3_EF: 20.2,
-      },
-      'fuel oil': {
-        ENERGY_CONTENT_FACTOR: 39.7,
-        SCOPE1_EF: {
-          CO2: 73.6,
-          CH4: 0.08,
-          N2O: 0.5,
-        },
-        SCOPE3_EF: 18.0,
-      },
-      ethanol: {
-        ENERGY_CONTENT_FACTOR: 23.4,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.08,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0, // NE
-      },
-      biodiesel: {
-        ENERGY_CONTENT_FACTOR: 34.6,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.08,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0, // NE
-      },
-      'renewable diesel': {
-        ENERGY_CONTENT_FACTOR: 38.6,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.01,
-          N2O: 0.5,
-        },
-        SCOPE3_EF: 0.0, // NE
-      },
-      'other biofuels': {
-        ENERGY_CONTENT_FACTOR: 23.4,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.08,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0, // NE
-      },
-      lng: {
-        ENERGY_CONTENT_FACTOR: 25.3,
-        SCOPE1_EF: {
-          CO2: 51.4,
-          CH4: 7.3,
-          N2O: 0.3,
-        },
-        SCOPE3_EF: 18.0,
-      },
-      'aviation gasoline': {
-        ENERGY_CONTENT_FACTOR: 33.1,
-        SCOPE1_EF: {
-          CO2: 67.0,
-          CH4: 0.06,
-          N2O: 0.6,
-        },
-        SCOPE3_EF: 18.0,
-      },
-      'aviation kerosene': {
-        ENERGY_CONTENT_FACTOR: 36.8,
-        SCOPE1_EF: {
-          CO2: 69.6,
-          CH4: 0.01,
-          N2O: 0.6,
-        },
-        SCOPE3_EF: 18.0,
-      },
-      'aviation renewable kerosone': {
-        ENERGY_CONTENT_FACTOR: 36.8,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.01,
-          N2O: 0.6,
-        },
-        SCOPE3_EF: 0.0, // NE
-      },
-    },
+
     NATURAL_GAS: {
       ENERGY_CONTENT_FACTOR: 1,
       SCOPE1_EF: {

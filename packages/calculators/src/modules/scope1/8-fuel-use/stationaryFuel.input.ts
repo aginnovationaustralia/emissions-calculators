@@ -1,29 +1,33 @@
-import { StationaryFuelTypes } from '@/calculators/Grains/constants/enums';
-import { DESCRIPTIONS } from '@/calculators/Grains/types/descriptions.schema';
-import { input } from '@/tools/inputs';
-import { volume } from '@/tools/units';
-import { object } from '@/types/schemas';
 import { z } from 'zod';
+import {
+  StationaryFuelLiquidInputSchema,
+  StationaryFuelLiquidInputTransformed,
+} from './stationaryFuel-liquid.input';
+import { StationaryFuelNaturalGasInputSchema } from './stationaryFuel-naturalGas.input';
+import {
+  StationaryFuelSolidInputSchema,
+  StationaryFuelSolidInputTransformed,
+} from './stationaryFuel-solid.input';
 
-// const reverseStationaryFuelKeys = swapObjectKeysAndValues(StationaryFuelTypes);
-// const convertStationaryFuelType = (
-//   fuelType: StationaryFuelTypes,
-// ): keyof typeof StationaryFuelTypes => {
-//   return reverseStationaryFuelKeys[fuelType];
-// };
+export const isStationaryFuelSolid = (
+  fuel: StationaryFuelInputTransformed,
+): fuel is StationaryFuelSolidInputTransformed => {
+  return fuel.fuelClass === 'Solid fuels';
+};
 
-export const StationaryFuelInputSchema = object({
-  type: z
-    .enum(StationaryFuelTypes)
-    .meta({ description: DESCRIPTIONS.FUEL_TYPE }),
-  // .transform((t) =>
-  //   input(`STATIONARY_FUEL[${t}]`, convertStationaryFuelType(t)),
-  // ),
-  amountLitres: z
-    .number()
-    .min(0)
-    .meta({ description: DESCRIPTIONS.FUEL_CONSUMPTION })
-    .transform((a) => input(`AMOUNT_VOLUME[${a}]`, volume('Fuel', a))),
-});
+export const isStationaryFuelLiquid = (
+  fuel: StationaryFuelInputTransformed,
+): fuel is StationaryFuelLiquidInputTransformed => {
+  return fuel.fuelClass === 'Liquid fuels';
+};
+
+export const StationaryFuelInputSchema = z.discriminatedUnion('fuelClass', [
+  StationaryFuelSolidInputSchema,
+  StationaryFuelLiquidInputSchema,
+  StationaryFuelNaturalGasInputSchema,
+]);
 
 export type StationaryFuelInput = z.input<typeof StationaryFuelInputSchema>;
+export type StationaryFuelInputTransformed = z.output<
+  typeof StationaryFuelInputSchema
+>;

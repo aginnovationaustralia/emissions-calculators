@@ -4,11 +4,13 @@ import {
   Electricity,
   energy,
   Energy,
+  EnergyPerMass,
   EnergyPerVolume,
   formatUnit,
   isArea,
   isElectricity,
   isEnergy,
+  isEnergyPerMass,
   isEnergyPerVolume,
   isMass,
   isMassPerArea,
@@ -164,6 +166,12 @@ export class BaseContainer<
     right: Container<Energy>,
     baseOrigin?: Partial<IntermediateOrNamedOrigin>,
   ): BinaryContainer<Mass<ExtractMassPerEnergySubstance<UL>>>;
+  // EnergyPerMass * Mass → Energy
+  multiply<S extends Substance, UL extends EnergyPerMass<S>>(
+    this: BaseContainer<UL, C>,
+    right: Container<Mass<S>>,
+    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+  ): BinaryContainer<Energy>;
   // MassPerArea * Area → Mass<substance>
   multiply<UL extends MassPerArea<Substance>>(
     this: BaseContainer<UL, C>,
@@ -213,6 +221,8 @@ export class BaseContainer<
         unit = mass(leftUnit.substance);
       } else if (isMassPerEnergy(leftUnit) && isEnergy(rightUnit)) {
         unit = mass(leftUnit.substance);
+      } else if (isEnergyPerMass(leftUnit) && isMass(rightUnit)) {
+        unit = energy();
       } else if (isElectricity(leftUnit) && isMassPerElectricity(rightUnit)) {
         unit = mass(rightUnit.substance);
       } else if (isEnergyPerVolume(leftUnit) && isVolume(rightUnit)) {

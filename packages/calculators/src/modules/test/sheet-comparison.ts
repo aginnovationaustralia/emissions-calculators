@@ -15,6 +15,10 @@ type ExtractedDetails<
   firstRow: number;
 };
 
+const defaultOutputGetter =
+  (columnName: string) => (sheet: XLSX.Sheet, row: number) =>
+    Number(sheet.cell(`${columnName}${row}`).value());
+
 export const createSheetExtractor =
   <
     Input,
@@ -26,20 +30,24 @@ export const createSheetExtractor =
       row: number,
       method: '1' | '2',
     ) => Input | undefined,
-    getExpectedOutput: (sheet: XLSX.Sheet, row: number) => Output,
+    getExpectedOutput: ((sheet: XLSX.Sheet, row: number) => Output) | string,
   ) =>
   (
     sheet: XLSX.Sheet,
     firstRow: number,
     method: '1' | '2',
   ): { results: Extraction[]; firstRow: number } => {
+    const outputGetter =
+      typeof getExpectedOutput === 'string'
+        ? defaultOutputGetter(getExpectedOutput)
+        : getExpectedOutput;
     let currentRow = firstRow;
     let finished = false;
     const results: Extraction[] = [];
     while (!finished) {
       const input = getCalculatorInput(sheet, currentRow, method);
       if (input) {
-        const output = getExpectedOutput(sheet, currentRow);
+        const output = outputGetter(sheet, currentRow);
         const extraction: Extraction = { input, output } as Extraction;
         results.push(extraction);
       } else {

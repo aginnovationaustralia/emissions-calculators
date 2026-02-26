@@ -1,17 +1,131 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { StationaryFuelType } from '@/calculators/Grains/constants/enums';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { selectConstant } from '@/tools/constants';
-import { BinaryContainer, TypedContainer } from '@/tools/containers';
+import { BinaryContainer } from '@/tools/containers';
 import { sum } from '@/tools/sum';
-import { energyPerVolume, Mass, massPerEnergy, Volume } from '@/tools/units';
-import Decimal from 'decimal.js-light';
+import {
+  energyPerMass,
+  energyPerVolume,
+  Mass,
+  massPerEnergy,
+} from '@/tools/units';
 import { FuelInputTransformed } from './fuel.input';
+import {
+  isStationaryLiquidFuelMassBased,
+  StationaryFuelLiquidInputTransformed,
+} from './stationaryFuel-liquid.input';
+import { StationaryFuelNaturalGasInputTransformed } from './stationaryFuel-naturalGas.input';
+import { StationaryFuelSolidInputTransformed } from './stationaryFuel-solid.input';
+import {
+  isStationaryFuelLiquid,
+  isStationaryFuelSolid,
+  StationaryFuelInputTransformed,
+} from './stationaryFuel.input';
+
+const emissionsOfGasForSolidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+  fuel: StationaryFuelSolidInputTransformed,
+  constants: ConstantsForGrainsCalculator,
+  gasType: GasType,
+): BinaryContainer<Mass<GasType>> => {
+  const qSCq = fuel.amountTonnes;
+  const efSC1qg = selectConstant(
+    constants.COMMON,
+    (value) => massPerEnergy(gasType, value),
+    'STATIONARY_FUEL_FACTORS',
+    'Solid fuels',
+    fuel.fuelType,
+    'SCOPE1_EF',
+    gasType,
+  );
+  const ecSCq = selectConstant(
+    constants.COMMON,
+    // REVISIT: Constant values in table 4 are all in GJ/t, so we need to convert to GJ/kL
+    (value) => energyPerMass('Fuel', value / 1000),
+    'STATIONARY_FUEL_FACTORS',
+    'Solid fuels',
+    fuel.fuelType,
+    'ENERGY_CONTENT_FACTOR',
+  );
+  const energyFromFuel = ecSCq.multiply(qSCq);
+  return efSC1qg.multiply(energyFromFuel);
+};
+
+const emissionsOfGasForLiquidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+  fuel: StationaryFuelLiquidInputTransformed,
+  constants: ConstantsForGrainsCalculator,
+  gasType: GasType,
+): BinaryContainer<Mass<GasType>> => {
+  if (isStationaryLiquidFuelMassBased(fuel)) {
+    const qSCq = fuel.amountTonnes;
+    const efSC1qg = selectConstant(
+      constants.COMMON,
+      (value) => massPerEnergy(gasType, value / 1000),
+      'STATIONARY_FUEL_FACTORS',
+      fuel.fuelClass,
+      fuel.fuelType,
+      'SCOPE1_EF',
+      gasType,
+    );
+    const ecSCq = selectConstant(
+      constants.COMMON,
+      (value) => energyPerMass('Fuel', value),
+      'STATIONARY_FUEL_FACTORS',
+      'Liquid fuels',
+      fuel.fuelType,
+      'ENERGY_CONTENT_FACTOR',
+    );
+    const energyFromFuel = ecSCq.multiply(qSCq);
+    return efSC1qg.multiply(energyFromFuel);
+  }
+
+  const qSCq = fuel.amountLitres;
+  const efSC1qg = selectConstant(
+    constants.COMMON,
+    (value) => massPerEnergy(gasType, value),
+    'STATIONARY_FUEL_FACTORS',
+    'Liquid fuels',
+    fuel.fuelType,
+    'SCOPE1_EF',
+    gasType,
+  );
+  const ecSCq = selectConstant(
+    constants.COMMON,
+    (value) => energyPerVolume('Fuel', value),
+    'STATIONARY_FUEL_FACTORS',
+    'Liquid fuels',
+    fuel.fuelType,
+    'ENERGY_CONTENT_FACTOR',
+  );
+  const energyFromFuel = ecSCq.multiply(qSCq);
+  return efSC1qg.multiply(energyFromFuel);
+};
+
+const emissionsOfGasForNaturalGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+  fuel: StationaryFuelNaturalGasInputTransformed,
+  constants: ConstantsForGrainsCalculator,
+  gasType: GasType,
+): BinaryContainer<Mass<GasType>> => {
+  const qSCq = fuel.amountLitres;
+  const efSC1qg = selectConstant(
+    constants.COMMON,
+    (value) => massPerEnergy(gasType, value),
+    'NATURAL_GAS_FACTORS',
+    'SCOPE1_EF',
+    gasType,
+  );
+  const ecSCq = selectConstant(
+    constants.COMMON,
+    (value) => energyPerVolume('Fuel', value),
+    'NATURAL_GAS_FACTORS',
+    'ENERGY_CONTENT_FACTOR',
+  );
+  const energyFromFuel = ecSCq.multiply(qSCq);
+  return efSC1qg.multiply(energyFromFuel);
+};
 
 const emissionsOfGasForFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
-  amountOfFuel: TypedContainer<Volume<'Fuel'>>,
+  fuel: StationaryFuelInputTransformed,
   constants: ConstantsForGrainsCalculator,
-  fuelType: StationaryFuelType,
   gasType: GasType,
 ): BinaryContainer<Mass<GasType>> => {
   /*
@@ -25,30 +139,12 @@ const emissionsOfGasForFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   EF SC,1,qg = Scope 1 emission factor for stationary combustion for each greenhouse gas g (kg CO2e /GJ)
   */
 
-  const qSCq = amountOfFuel;
-  const efSC1qg = selectConstant(
-    constants.COMMON,
-    (value) => massPerEnergy(gasType, new Decimal(value)),
-    'FUEL_ENERGYGJ',
-    'STATIONARY',
-    fuelType,
-    'SCOPE1_EF',
-    gasType,
-  );
-  const ecSCq = selectConstant(
-    constants.COMMON,
-    (value) => energyPerVolume('Fuel', new Decimal(value)),
-    'FUEL_ENERGYGJ',
-    'STATIONARY',
-    fuelType,
-    'ENERGY_CONTENT_FACTOR',
-  );
-
-  // REVISIT: Ordering is unexpected due to limitations of TypeScript overload resolution. Units and results are still correct though
-  const a = ecSCq.multiply(qSCq);
-  const b = efSC1qg.multiply(a);
-
-  return b;
+  if (isStationaryFuelSolid(fuel)) {
+    return emissionsOfGasForSolidFuel(fuel, constants, gasType);
+  } else if (isStationaryFuelLiquid(fuel)) {
+    return emissionsOfGasForLiquidFuel(fuel, constants, gasType);
+  }
+  return emissionsOfGasForNaturalGas(fuel, constants, gasType);
 };
 
 const stationaryEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
@@ -57,12 +153,7 @@ const stationaryEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   gasType: GasType,
 ) => {
   const stationaryEmissions = input.stationaryFuel.map((fuel) => {
-    return emissionsOfGasForFuel(
-      fuel.amountLitres,
-      constants,
-      fuel.type,
-      gasType,
-    );
+    return emissionsOfGasForFuel(fuel, constants, gasType);
   });
   return sum(stationaryEmissions, {
     name: `EtransGHG${gasType}`,
@@ -71,17 +162,39 @@ const stationaryEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   });
 };
 
+export const stationaryEmissionsForCO2 = (
+  input: FuelInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  const { constants } = context;
+  return stationaryEmissionsForGas(input, constants, 'CO2');
+};
+
+export const stationaryEmissionsForCH4 = (
+  input: FuelInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  const { constants } = context;
+  return stationaryEmissionsForGas(input, constants, 'CH4');
+};
+
+export const stationaryEmissionsForN2O = (
+  input: FuelInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  const { constants } = context;
+  return stationaryEmissionsForGas(input, constants, 'N2O');
+};
+
 // 8.2 Stationary combustion fuel
 //   fuelCO2, fuelCH4, fuelN2O
 export const calculate82StationaryFuel = (
   input: FuelInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  const { constants } = context;
-
-  const fuelStationaryCO2 = stationaryEmissionsForGas(input, constants, 'CO2');
-  const fuelStationaryCH4 = stationaryEmissionsForGas(input, constants, 'CH4');
-  const fuelStationaryN2O = stationaryEmissionsForGas(input, constants, 'N2O');
+  const fuelStationaryCO2 = stationaryEmissionsForCO2(input, context);
+  const fuelStationaryCH4 = stationaryEmissionsForCH4(input, context);
+  const fuelStationaryN2O = stationaryEmissionsForN2O(input, context);
 
   return {
     fuelStationaryCO2,

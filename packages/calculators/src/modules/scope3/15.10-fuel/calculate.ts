@@ -1,35 +1,42 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
+import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
+import {
+  FuelInputTransformed,
+  isStationaryLiquidFuelMassBased,
+  selectTransportFuelConstants,
+  StationaryFuelLiquidInputTransformed,
+  StationaryFuelNaturalGasInputTransformed,
+  StationaryFuelSolidInputTransformed,
+} from '@/modules/scope1/8-fuel-use';
+import {
+  isStationaryFuelLiquid,
+  isStationaryFuelSolid,
+} from '@/modules/scope1/8-fuel-use/stationaryFuel.input';
+import { isTransportFuelCNGBased } from '@/modules/scope1/8-fuel-use/transportFuel.input';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
-import { energyPerVolume, massPerEnergy } from '@/tools/units';
+import { energyPerMass, energyPerVolume, massPerEnergy } from '@/tools/units';
 import Decimal from 'decimal.js-light';
 
-const calculateScope3EmissionsFromFuelTransport = (
-  crop: GrainsCropTransformed,
+export const calculateScope3EmissionsFromFuelTransport = (
+  crop: FuelInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   const { constants } = context;
   const emissionsRecords = crop.transportFuel.map((fuel) => {
-    const qTransQ = fuel.amountLitres;
-    const ecTransQ = selectConstant(
-      constants.COMMON,
-      (value) => energyPerVolume('Fuel', value),
-      'FUEL_ENERGYGJ',
-      'TRANSPORT',
-      fuel.type,
-      'ENERGY_CONTENT_FACTOR',
+    const { ecTransQ, efTrans3Q } = selectTransportFuelConstants(
+      fuel,
+      constants,
+      'CH4', // doesn't affect scope 3 EF
     );
-    const efTrans3Q = selectConstant(
-      constants.COMMON,
-      (value) => massPerEnergy('CO2e', new Decimal(value)),
-      'FUEL_ENERGYGJ',
-      'TRANSPORT',
-      fuel.type,
-      'SCOPE3_EF',
-    );
-    const energyFromFuel = ecTransQ.multiply(qTransQ);
+
+    const qTransTQ = isTransportFuelCNGBased(fuel)
+      ? fuel.amountCubicMetres
+      : fuel.amountLitres;
+
+    const energyFromFuel = ecTransQ.multiply(qTransTQ);
     return efTrans3Q.multiply(energyFromFuel);
   });
   return sum(emissionsRecords, {
@@ -38,31 +45,119 @@ const calculateScope3EmissionsFromFuelTransport = (
   });
 };
 
-const calculateScope3EmissionsFromFuelStationary = (
-  crop: GrainsCropTransformed,
+const calculateScope3EmissionsFromFuelStationarySolid = (
+  fuel: StationaryFuelSolidInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   const { constants } = context;
-  const emissionsRecords = crop.stationaryFuel.map((fuel) => {
-    const qTransQ = fuel.amountLitres;
+  const qTransQ = fuel.amountTonnes;
+  const ecTransQ = selectConstant(
+    constants.COMMON,
+    (value) => energyPerMass('Fuel', value),
+    'STATIONARY_FUEL_FACTORS',
+    'Solid fuels',
+    fuel.fuelType,
+    'ENERGY_CONTENT_FACTOR',
+  );
+  const efTrans3Q = selectConstant(
+    constants.COMMON,
+    // REVISIT: Constant values in table 4 are all in GJ/t, we are converting to GJ/kL
+    (value) => massPerEnergy('CO2e', value / 1000),
+    'STATIONARY_FUEL_FACTORS',
+    'Solid fuels',
+    fuel.fuelType,
+    'SCOPE3_EF',
+  );
+  const energyFromFuel = ecTransQ.multiply(qTransQ);
+  return efTrans3Q.multiply(energyFromFuel);
+};
+
+const calculateScope3EmissionsFromFuelStationaryLiquid = (
+  fuel: StationaryFuelLiquidInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  const { constants } = context;
+  if (isStationaryLiquidFuelMassBased(fuel)) {
+    const qTransQ = fuel.amountTonnes;
     const ecTransQ = selectConstant(
       constants.COMMON,
-      (value) => energyPerVolume('Fuel', value),
-      'FUEL_ENERGYGJ',
-      'STATIONARY',
-      fuel.type,
+      (value) => energyPerMass('Fuel', value),
+      'STATIONARY_FUEL_FACTORS',
+      'Liquid fuels',
+      fuel.fuelType,
       'ENERGY_CONTENT_FACTOR',
     );
     const efTrans3Q = selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy('CO2e', new Decimal(value)),
-      'FUEL_ENERGYGJ',
-      'STATIONARY',
-      fuel.type,
+      (value) => massPerEnergy('CO2e', value / 1000),
+      'STATIONARY_FUEL_FACTORS',
+      'Liquid fuels',
+      fuel.fuelType,
       'SCOPE3_EF',
     );
     const energyFromFuel = ecTransQ.multiply(qTransQ);
     return efTrans3Q.multiply(energyFromFuel);
+  }
+  const qTransQ = fuel.amountLitres;
+  const ecTransQ = selectConstant(
+    constants.COMMON,
+    (value) => energyPerVolume('Fuel', value),
+    'STATIONARY_FUEL_FACTORS',
+    'Liquid fuels',
+    fuel.fuelType,
+    'ENERGY_CONTENT_FACTOR',
+  );
+  const efTrans3Q = selectConstant(
+    constants.COMMON,
+    (value) => massPerEnergy('CO2e', new Decimal(value)),
+    'STATIONARY_FUEL_FACTORS',
+    'Liquid fuels',
+    fuel.fuelType,
+    'SCOPE3_EF',
+  );
+  const energyFromFuel = ecTransQ.multiply(qTransQ);
+  return efTrans3Q.multiply(energyFromFuel);
+};
+
+const calculateScope3EmissionsFromFuelStationaryNaturalGas = (
+  fuel: StationaryFuelNaturalGasInputTransformed,
+  input: BaseGrainsCropTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  const { constants } = context;
+  const qTransQ = fuel.amountLitres;
+  const ecTransQ = selectConstant(
+    constants.COMMON,
+    (value) => energyPerVolume('Fuel', value),
+    'NATURAL_GAS_FACTORS',
+    'ENERGY_CONTENT_FACTOR',
+  );
+  const efTrans3Q = selectConstant(
+    constants.COMMON,
+    (value) => massPerEnergy('CO2e', new Decimal(value)),
+    'NATURAL_GAS_FACTORS',
+    'SCOPE3_EF',
+    input.state,
+  );
+  const energyFromFuel = ecTransQ.multiply(qTransQ);
+  return efTrans3Q.multiply(energyFromFuel);
+};
+
+export const calculateScope3EmissionsFromFuelStationary = (
+  crop: BaseGrainsCropTransformed & FuelInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  const emissionsRecords = crop.stationaryFuel.map((fuel) => {
+    if (isStationaryFuelSolid(fuel)) {
+      return calculateScope3EmissionsFromFuelStationarySolid(fuel, context);
+    } else if (isStationaryFuelLiquid(fuel)) {
+      return calculateScope3EmissionsFromFuelStationaryLiquid(fuel, context);
+    }
+    return calculateScope3EmissionsFromFuelStationaryNaturalGas(
+      fuel,
+      crop,
+      context,
+    );
   });
   return sum(emissionsRecords, {
     name: 'EWTT,SC,q',
