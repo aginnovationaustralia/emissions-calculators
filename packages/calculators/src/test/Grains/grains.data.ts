@@ -267,8 +267,8 @@ export const grainTriticale: GrainsCrop = {
 export const grainsTestData: GrainsInput = {
   crops: [grainWheat, grainSorghum, grainLegume, grainGrass, grainTriticale],
   electricity: {
-    electricityRenewable: 0,
-    electricityUse: 4000,
+    method: 'location',
+    electricityPurchasedKWh: 4000,
   },
   state: 'nsw',
   vegetation: [veg1, veg2, veg3, veg4],
@@ -277,8 +277,8 @@ export const grainsTestData: GrainsInput = {
 export const grainsTestData102: GrainsInput = {
   state: 'nsw',
   electricity: {
-    electricityRenewable: 0,
-    electricityUse: 2650,
+    method: 'location',
+    electricityPurchasedKWh: 2650,
   },
   crops: [
     {

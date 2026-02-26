@@ -103,8 +103,8 @@ const emptyInputWithEnterprise: GrainsInputTransformed =
     state: 'vic',
     crops: [emptyGrainsCrop],
     electricity: {
-      electricityRenewable: 0,
-      electricityUse: 0,
+      method: 'location',
+      electricityPurchasedKWh: 0,
     },
     vegetation: [],
   });
@@ -113,8 +113,8 @@ const emptyInput: GrainsInput = {
   state: 'vic',
   crops: [],
   electricity: {
-    electricityRenewable: 0,
-    electricityUse: 0,
+    method: 'location',
+    electricityPurchasedKWh: 0,
   },
   vegetation: [],
 };

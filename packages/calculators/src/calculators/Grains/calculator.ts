@@ -140,7 +140,7 @@ const calculateScope2Grains = (
   // Scope 2
   // 7.1 -electricity scope 2 and 3
   // electricity (s2), electricity (s3)
-  const electricity = calculateElectricityScope2(crop, input, context);
+  const electricity = calculateElectricityScope2(input, context);
   const allocatedElectricity = electricity.multiply(crop.electricityAllocation);
 
   return {
@@ -155,7 +155,7 @@ const calculateScope3Grains = (
 ) => {
   // 7.1 -electricity scope 2 and 3
   // electricity (s2), electricity (s3)
-  const electricity = calculateElectricityScope3(crop, input, context);
+  const electricity = calculateElectricityScope3(input, context);
   // 7.5 Purchased fertiliser
   // fertiliser
   const fertiliser = calculateScope3Fertiliser(crop, context);

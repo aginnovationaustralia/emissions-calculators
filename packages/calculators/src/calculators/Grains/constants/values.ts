@@ -72,46 +72,47 @@ export const commonConstants: CommonConstants = {
    * @reference Primary data sources comprise National Greenhouse and Energy Reporting (Measurement) Determination 2008 (Schedule 1), Australian Energy Statistics, Clean Energy Regulator, and AEMO data and Department of Climate Change, Energy, the Environment and Water.
    * @units kg CO2-e/kWh
    */
+  // NGAF 2023 Table 1
   ELECTRICITY: {
     [STATES.NSW]: {
-      SCOPE2_EF: 0.66,
-      SCOPE3_EF: 0.04,
-    },
-    [STATES.ACT]: {
-      SCOPE2_EF: 0.66,
-      SCOPE3_EF: 0.04,
-    },
-    [STATES.VIC]: {
-      SCOPE2_EF: 0.77,
-      SCOPE3_EF: 0.09,
-    },
-    [STATES.QLD]: {
-      SCOPE2_EF: 0.71,
-      SCOPE3_EF: 0.1,
-    },
-    [STATES.SA]: {
-      SCOPE2_EF: 0.23,
+      SCOPE2_EF: 0.68,
       SCOPE3_EF: 0.05,
     },
+    [STATES.ACT]: {
+      SCOPE2_EF: 0.68,
+      SCOPE3_EF: 0.05,
+    },
+    [STATES.VIC]: {
+      SCOPE2_EF: 0.79,
+      SCOPE3_EF: 0.07,
+    },
+    [STATES.QLD]: {
+      SCOPE2_EF: 0.73,
+      SCOPE3_EF: 0.15,
+    },
+    [STATES.SA]: {
+      SCOPE2_EF: 0.25,
+      SCOPE3_EF: 0.08,
+    },
     [STATES.WA_SW]: {
-      SCOPE2_EF: 0.51,
-      SCOPE3_EF: 0.06,
+      SCOPE2_EF: 0.53,
+      SCOPE3_EF: 0.04,
     },
     [STATES.WA_NW]: {
-      SCOPE2_EF: 0.61,
-      SCOPE3_EF: 0.09,
+      SCOPE2_EF: 0.62,
+      SCOPE3_EF: 0.07,
     },
     [STATES.TAS]: {
-      SCOPE2_EF: 0.15,
-      SCOPE3_EF: 0.03,
+      SCOPE2_EF: 0.12,
+      SCOPE3_EF: 0.01,
     },
     [STATES.NT]: {
-      SCOPE2_EF: 0.56,
+      SCOPE2_EF: 0.54,
       SCOPE3_EF: 0.07,
     },
     Australia: {
-      SCOPE2_EF: 0.63,
-      SCOPE3_EF: 0.07,
+      SCOPE2_EF: 0.65,
+      SCOPE3_EF: 0.08,
     },
   },
 

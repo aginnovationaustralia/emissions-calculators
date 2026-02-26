@@ -5,6 +5,7 @@ import { object } from '@/types/schemas';
 import { z } from 'zod';
 
 export const MarketBasedElectricityInputsSchema = object({
+  method: z.literal('market'),
   electricityPurchasedKWh: z
     .number()
     .min(0)

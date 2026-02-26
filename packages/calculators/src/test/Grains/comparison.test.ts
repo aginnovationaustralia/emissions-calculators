@@ -134,8 +134,8 @@ const getCalculatorInput = (workbook: XLSX.Workbook): GrainsInput => {
       },
     ],
     electricity: {
-      electricityUse: numberInput(crops('C21')),
-      electricityRenewable: numberInput(crops('C22')),
+      method: 'location',
+      electricityPurchasedKWh: numberInput(crops('C21')),
     },
     vegetation: getCropVegetations(sheetInputVegetation),
   };

@@ -8,9 +8,9 @@ import {
 export const isMarketBasedElectricity = (
   input: ElectricityInputsTransformed,
 ): input is MarketBasedElectricityInputsTransformed =>
-  'recsSurrenderedKWh' in input;
+  input.method === 'market';
 
-export const ElectricityInputsSchema = z.xor([
+export const ElectricityInputsSchema = z.discriminatedUnion('method', [
   LocationBasedElectricityInputsSchema,
   MarketBasedElectricityInputsSchema,
 ]);

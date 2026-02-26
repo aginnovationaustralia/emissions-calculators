@@ -1,17 +1,16 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
-import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
 import { GrainsInputTransformed } from '@/calculators/Grains/types/input';
 import { STATES } from '@/constants/types';
 import { isMarketBasedElectricity } from '@/modules/scope2/14-electricity/electricity.input';
 import { LocationBasedElectricityInputsTransformed } from '@/modules/scope2/14-electricity/location-based.input';
 import { MarketBasedElectricityInputsTransformed } from '@/modules/scope2/14-electricity/market-based.input';
 import { selectConstant } from '@/tools/constants';
-import { oneMinus } from '@/tools/sentinels';
+import { oneMinus, tenToPowMinus3 } from '@/tools/sentinels';
 import { massPerElectricity, realNumber } from '@/tools/units';
 
 export const calculateElectricityScope3LocationBased = (
-  crop: GrainsCropTransformed,
+  crop: GrainsInputTransformed,
   input: LocationBasedElectricityInputsTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
@@ -26,7 +25,7 @@ export const calculateElectricityScope3LocationBased = (
   used in Section 14.1)
   EF3,elec = Scope 3 emission factor for purchased electricity (kg CO2e/kWh)
   */
-  const qelec = input.electricityUse;
+  const qelec = input.electricityPurchasedKWh;
   const ef3elec = selectConstant(
     constants.COMMON,
     (value) => massPerElectricity('CO2e', value),
@@ -44,7 +43,7 @@ export const calculateElectricityScope3LocationBased = (
 };
 
 export const calculateElectricityScope3MarketBased = (
-  crop: GrainsCropTransformed,
+  crop: GrainsInputTransformed,
   input: MarketBasedElectricityInputsTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
@@ -76,7 +75,10 @@ export const calculateElectricityScope3MarketBased = (
   const recSurrendered = input.recsSurrenderedKWh;
   const recOnsite = input.recsOnsiteKWh;
   const nonRenewablesPurchased = qelec.multiply(oneMinus(rpp.plus(jrpp)));
-  const renewableRecs = recSurrendered.minus(recOnsite);
+  const renewableRecs = recSurrendered
+    .minus(recOnsite)
+    // REVISIT: These units really need to be double checked
+    .multiply(tenToPowMinus3);
 
   const efrmf3elec = selectConstant(
     constants.COMMON,
@@ -86,27 +88,19 @@ export const calculateElectricityScope3MarketBased = (
 
   const e3elec = nonRenewablesPurchased
     .minus(renewableRecs)
-    .multiply(efrmf3elec);
+    .multiply(efrmf3elec, { name: 'e3elec', references: ['15.12.1.2 (602)'] });
 
-  return e3elec.attachContext({ references: ['15.12.1.2 (602)'] });
+  return e3elec;
 };
 
 export const calculateElectricityScope3 = (
-  crop: GrainsCropTransformed,
-  input: GrainsInputTransformed,
+  crop: GrainsInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  if (isMarketBasedElectricity(input.electricity)) {
-    return calculateElectricityScope3MarketBased(
-      crop,
-      input.electricity,
-      context,
-    );
+  const electricity = crop.electricity;
+  if (isMarketBasedElectricity(electricity)) {
+    return calculateElectricityScope3MarketBased(crop, electricity, context);
   } else {
-    return calculateElectricityScope3LocationBased(
-      crop,
-      input.electricity,
-      context,
-    );
+    return calculateElectricityScope3LocationBased(crop, electricity, context);
   }
 };

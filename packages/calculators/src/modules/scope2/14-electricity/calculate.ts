@@ -1,10 +1,9 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { STATES } from '@/calculators/Grains/constants/types';
-import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
 import { GrainsInputTransformed } from '@/calculators/Grains/types/input';
 import { selectConstant } from '@/tools/constants';
-import { oneMinus } from '@/tools/sentinels';
+import { oneMinus, tenToPowMinus3 } from '@/tools/sentinels';
 import { massPerElectricity, realNumber } from '@/tools/units';
 import { isMarketBasedElectricity } from './electricity.input';
 import { LocationBasedElectricityInputsTransformed } from './location-based.input';
@@ -47,11 +46,13 @@ const calculateMarketBasedElectricityScope2 = (
   );
 
   const nonRenewablesPurchased = qelec.multiply(oneMinus(rpp.plus(jrpp)));
-  const renewableRecs = recSurrendered.minus(recOnsite);
+  const renewableRecs = recSurrendered
+    .minus(recOnsite)
+    // REVISIT: Is this multiply by 10^3 correct? Should it be shifted to convert in the inputs?
+    .multiply(tenToPowMinus3);
   const e2elec = nonRenewablesPurchased
     .minus(renewableRecs)
-    .multiply(efrmf2elec)
-    .attachContext({ references: ['14.1.2 (88)'] });
+    .multiply(efrmf2elec, { name: 'e2elec', references: ['14.1.2 (88)'] });
 
   return e2elec;
 };
@@ -72,7 +73,7 @@ const calculateLocationBasedElectricityScope2 = (
   EF 2,elec = location-based Scope 2 emission factor for electricity (kg CO2e/kWh)
   */
 
-  const qelec = electricity.electricityUse;
+  const qelec = electricity.electricityPurchasedKWh;
   const ef2elec = selectConstant(
     constants.COMMON,
     (value) => massPerElectricity('CO2e', value),
@@ -90,7 +91,6 @@ const calculateLocationBasedElectricityScope2 = (
 };
 
 export const calculateElectricityScope2 = (
-  crop: GrainsCropTransformed,
   input: GrainsInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
