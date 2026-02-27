@@ -22,7 +22,7 @@ export type Substance =
   | 'Lime'
   | 'Solid Waste';
 
-type NumberUnitBase = { value: Decimal };
+export type NumberUnitBase = { value: Decimal };
 
 /* SI unit definitions
 
