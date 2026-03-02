@@ -1,9 +1,7 @@
 import { CommonConstantsWithNumbers } from './strong-types';
 import { STATES } from './types';
 
-export const commonConstants: CommonConstantsWithNumbers = {
-  //   name: 'COMMON',
-
+export const commonConstantsWithNumbers: CommonConstantsWithNumbers = {
   // NGAF 2023 Table 10
   REFRIGERATION_LEAKAGE_RATES: {
     'Domestic refrigerators': 1.7,

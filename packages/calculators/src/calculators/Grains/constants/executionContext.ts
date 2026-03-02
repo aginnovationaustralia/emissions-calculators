@@ -1,6 +1,6 @@
 import { Environment } from '@/calculators/execution/types';
 import { CalculatorNames } from '@/calculators/strings';
-import { AllConstants, HasCommonConstants } from './types';
+import { AllConstants, CommonConstants } from './strong-types';
 import { commonConstants, cropConstants, swineConstants } from './values';
 
 type ExecutionMetadata = {
@@ -13,6 +13,11 @@ type ExecutionMetadata = {
     data: Record<string, { cell: string; value: number }>,
   ) => void;
 };
+
+export type HasCommonConstants = {
+  COMMON: CommonConstants;
+};
+
 export interface ExecutionContext<
   T extends HasCommonConstants = HasCommonConstants,
 > extends ExecutionMetadata {

@@ -32,15 +32,15 @@ export type NamedConstants = {
   name: string;
 };
 
-export const AgrochemicalTypeNames = [
+export const AgrochemicalTypes = [
   'Herbicide',
   'HerbicideOther',
   'Insecticide',
   'Fungicide',
   'PlantGrowthRegulator',
-];
+] as const;
 
-export type AgrochemicalTypes = (typeof AgrochemicalTypeNames)[number];
+export type AgrochemicalTypes = (typeof AgrochemicalTypes)[number];
 
 export const STATES = {
   NSW: 'nsw',
