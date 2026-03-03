@@ -21,7 +21,12 @@ export const LimeInputSchema = object({
     .min(0)
     .optional()
     .transform((val) =>
-      input('customScope3EmissionsFactor', massPerMass('CO2e', 'Lime', val)),
+      val === undefined
+        ? undefined
+        : input(
+            'customScope3EmissionsFactor',
+            massPerMass('CO2e', 'Lime', val),
+          ),
     ),
 });
 

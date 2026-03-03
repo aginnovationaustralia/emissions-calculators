@@ -57,7 +57,7 @@ describe('15.5.1.1 Agrichemicals', () => {
     compareInputsAndOutputs(inputsAndOutputs, calculateScope3Agrichemicals);
   });
 
-  it('method 1 matches spreadsheet results market-based', async () => {
+  it('method 2 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/15.5-agrichemicals.xlsx',
       '15.5.1.1',
