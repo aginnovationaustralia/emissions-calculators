@@ -6,8 +6,7 @@ import { isMarketBasedElectricity } from '@/modules/scope2/14-electricity/electr
 import { LocationBasedElectricityInputsTransformed } from '@/modules/scope2/14-electricity/location-based.input';
 import { MarketBasedElectricityInputsTransformed } from '@/modules/scope2/14-electricity/market-based.input';
 import { selectConstant } from '@/tools/constants';
-import { oneMinus, tenToPowMinus3 } from '@/tools/sentinels';
-import { massPerElectricity, realNumber } from '@/tools/units';
+import { oneMinus, tenToPowMinus3, zero } from '@/tools/sentinels';
 
 export const calculateElectricityScope3LocationBased = (
   crop: GrainsInputTransformed,
@@ -28,7 +27,6 @@ export const calculateElectricityScope3LocationBased = (
   const qelec = input.electricityPurchasedKWh;
   const ef3elec = selectConstant(
     constants.COMMON,
-    (value) => massPerElectricity('CO2e', value),
     'ELECTRICITY',
     crop.state,
     'SCOPE3_EF',
@@ -62,16 +60,14 @@ export const calculateElectricityScope3MarketBased = (
   REConsite = number eligible Renewable Energy Certificates that have been or will be issued for electricity produced on-site during the year and consumed by the entity equivalent to megawatt hours (MWh)
   */
   const qelec = input.electricityPurchasedKWh;
-  const rpp = selectConstant(
-    constants.COMMON,
-    (value) => realNumber(value / 100),
-    'RENEWABLE_POWER_PERCENTAGE',
-  );
-  const jrpp = selectConstant(
-    constants.COMMON,
-    (value) => realNumber(crop.state === STATES.ACT ? value / 100 : 0),
-    'JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE',
-  );
+  const rpp = selectConstant(constants.COMMON, 'RENEWABLE_POWER_PERCENTAGE');
+  const jrpp =
+    crop.state === STATES.ACT
+      ? selectConstant(
+          constants.COMMON,
+          'JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE',
+        )
+      : zero;
   const recSurrendered = input.recsSurrenderedKWh;
   const recOnsite = input.recsOnsiteKWh;
   const nonRenewablesPurchased = qelec.multiply(oneMinus(rpp.plus(jrpp)));
@@ -82,7 +78,6 @@ export const calculateElectricityScope3MarketBased = (
 
   const efrmf3elec = selectConstant(
     constants.COMMON,
-    (value) => massPerElectricity('CO2e', value),
     'ELECTRICITY_RMF_SCOPE3_EF',
   );
 

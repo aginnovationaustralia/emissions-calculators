@@ -13,6 +13,7 @@ type ExecutionMetadata = {
     data: Record<string, { cell: string; value: number }>,
   ) => void;
 };
+
 export interface ExecutionContext<
   T extends HasCommonConstants = HasCommonConstants,
 > extends ExecutionMetadata {

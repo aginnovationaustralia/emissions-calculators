@@ -1,7 +1,4 @@
-import {
-  AgrochemicalTypeNames,
-  AgrochemicalTypes,
-} from '@/calculators/Grains/constants/types';
+import { AgrochemicalTypes } from '@/calculators/Grains/constants/types';
 import { input } from '@/tools/inputs';
 import { mass, massPerMass } from '@/tools/units';
 import { object } from '@/types/schemas';
@@ -9,7 +6,7 @@ import { z } from 'zod';
 
 export const AgrichemicalInputSchema = object({
   type: z
-    .literal(AgrochemicalTypeNames)
+    .literal(AgrochemicalTypes)
     .transform((val) => input('agrichemical type', val as AgrochemicalTypes)),
   amountKg: z
     .number()

@@ -7,8 +7,6 @@ import { ExecutionContext } from '@/calculators/Grains/constants/executionContex
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
-import { massPerMass, realNumber } from '@/tools/units';
-import Decimal from 'decimal.js-light';
 import { CropResidueInputTransformed } from '../6-residue-mgmt/crop-residue.input';
 import { massNitrogenFromInorganicFertiliserApplied } from './5.1-inorganic-fertiliser';
 import { calculateMNSoilForOrganicFertiliser } from './5.2-organic-fertiliser';
@@ -55,7 +53,6 @@ export const calculateInorganicFertiliserAtmosphericDepositionN2O = (
     );
     const fracGASFf = selectConstant(
       constants.CROP,
-      (value) => massPerMass('Volatilised N', 'N', value),
       'INORGANIC_FERTILISER_FRACTIONS',
       inorganicFertiliser.fertiliserType,
       'Volatilises',
@@ -63,15 +60,10 @@ export const calculateInorganicFertiliserAtmosphericDepositionN2O = (
     const mVolInorganic = mnjf.multiply(fracGASFf);
     const efN2Oj = selectConstant(
       constants.CROP,
-      (value) => massPerMass('N2O', 'Volatilised N', value),
       'EF_N2O_PRODUCTION_SYSTEM',
       baseProductionSystem,
     );
-    const cn2o = selectConstant(
-      constants.COMMON,
-      (value) => realNumber(new Decimal(value)),
-      'GWP_FACTORSC15',
-    );
+    const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
     return mVolInorganic.multiply(efN2Oj).multiply(cn2o);
   });
 
@@ -112,21 +104,15 @@ const calculateOrganicFertiliserAtmosphericDepositionN2O = (
     );
     const fracGASMsoil = selectConstant(
       constants.CROP,
-      (value) => massPerMass('Volatilised N', 'N', value),
       'FRACTION_N_VOLATILISED_ORGANIC_FERTILISER',
     );
     const mVolOrganic = mnSoiljf.multiply(fracGASMsoil);
     const efN2Oj = selectConstant(
       constants.CROP,
-      (value) => massPerMass('N2O', 'Volatilised N', value),
       'EF_N2O_PRODUCTION_SYSTEM',
       baseProductionSystem,
     );
-    const cn2o = selectConstant(
-      constants.COMMON,
-      (value) => realNumber(new Decimal(value)),
-      'GWP_FACTORSC15',
-    );
+    const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
     return mVolOrganic.multiply(efN2Oj).multiply(cn2o);
   });
   return sum(emissionRecords, {

@@ -4,8 +4,6 @@ import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.
 import { selectConstant } from '@/tools/constants';
 import { one, zero } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { massPerMass, realNumber } from '@/tools/units';
-import Decimal from 'decimal.js-light';
 import { massNitrogenFromInorganicFertiliserApplied } from './5.1-inorganic-fertiliser';
 import { calculateMNSoilForOrganicFertiliser } from './5.2-organic-fertiliser';
 import { FertiliserInputTransformed } from './fertiliser.input';
@@ -34,7 +32,6 @@ const calculateLeachingAndRunoffN2O = (
       const fracWetj = input.isInLeachingZone ? one : zero;
       const fracLeach = selectConstant(
         constants.CROP,
-        (value) => realNumber(value),
         'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF',
       );
       return mnjf.multiply(fracWetj).multiply(fracLeach);
@@ -52,7 +49,6 @@ const calculateLeachingAndRunoffN2O = (
       const fracWetj = input.isInLeachingZone ? one : zero;
       const fracLeach = selectConstant(
         constants.CROP,
-        (value) => realNumber(value),
         'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF',
       );
       return mnsoiljf.multiply(fracWetj).multiply(fracLeach);
@@ -62,16 +58,8 @@ const calculateLeachingAndRunoffN2O = (
 
   const massLeached = inorganicMass.plus(organicMass);
 
-  const efLeach = selectConstant(
-    constants.CROP,
-    (value) => massPerMass('N2O', 'N', value),
-    'EF_N2O_LEACHING_AND_RUNOFF',
-  );
-  const cn2o = selectConstant(
-    constants.COMMON,
-    (value) => realNumber(new Decimal(value)),
-    'GWP_FACTORSC15',
-  );
+  const efLeach = selectConstant(constants.CROP, 'EF_N2O_LEACHING_AND_RUNOFF');
+  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
   const eFertLeach = massLeached.multiply(efLeach).multiply(cn2o, {
     name: 'E fert,leach',
     references: [`5.5.1.1 (378)`],

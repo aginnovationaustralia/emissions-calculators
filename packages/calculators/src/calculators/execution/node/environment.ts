@@ -66,6 +66,7 @@ class NodeEnvironment implements Environment {
   }
 
   loadConstants(): AllConstants {
+    // REVISIT: This can be replaced with the mergeConstants function that will take care of units vs numbers
     return merge<AllConstants[]>(
       loadConstants(),
       CalculationEnvironment.getOverrides() as AllConstants,

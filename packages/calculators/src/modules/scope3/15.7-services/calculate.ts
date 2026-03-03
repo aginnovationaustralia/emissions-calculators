@@ -2,7 +2,6 @@ import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
-import { massPerArea, massPerTime } from '@/tools/units';
 import {
   isServiceAreaBased,
   ServiceByAreaInputTransformed,
@@ -18,7 +17,6 @@ const calculateScope3ServiceByArea = (
   const area = service.areaServicedHa;
   const efp = selectConstant(
     constants.COMMON,
-    (val) => massPerArea('CO2e', val),
     'SERVICE_EMISSIONS_BY_AREA',
     service.serviceType,
   );
@@ -33,7 +31,6 @@ const calculateScope3ServiceByHour = (
   const time = service.serviceTimeHours;
   const efp = selectConstant(
     constants.COMMON,
-    (val) => massPerTime('CO2e', val),
     'SERVICE_EMISSIONS_BY_HOUR',
     service.serviceType,
   );

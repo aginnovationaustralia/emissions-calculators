@@ -22,7 +22,7 @@ export type Substance =
   | 'Lime'
   | 'Solid Waste';
 
-type NumberUnitBase = { value: Decimal };
+export type NumberUnitBase = { value: Decimal };
 
 /* SI unit definitions
 
@@ -320,6 +320,9 @@ export const realNumber = (initialValue?: number | Decimal): RealNumber => {
 };
 export const isRealNumber = (unit: NumberUnit): unit is RealNumber => {
   return unit.__unitType === 'RealNumber';
+};
+export const percentage = (initialValue?: number | Decimal): RealNumber => {
+  return realNumber(initialValue ? new Decimal(initialValue).div(100) : 0);
 };
 
 export type VoidUnit = {

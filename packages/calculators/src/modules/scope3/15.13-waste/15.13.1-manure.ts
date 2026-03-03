@@ -10,7 +10,6 @@ import {
 import { selectConstant } from '@/tools/constants';
 import { one, zero } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { massPerMass, realNumber } from '@/tools/units';
 
 const calculateScope3WasteOffsiteManureDirectN2O = (
   input: GrainsCropTransformed & FertiliserInputTransformed,
@@ -43,15 +42,10 @@ const calculateScope3WasteOffsiteManureDirectN2O = (
       ).scope3;
       const efN2Oi = selectConstant(
         constants.CROP,
-        (value) => massPerMass('N2O', 'N', value),
         'EF_RESIDUES_RETURNED_TO_SOIL',
         input.rainfallAbove600,
       );
-      const cn2o = selectConstant(
-        constants.COMMON,
-        (value) => realNumber(value),
-        'GWP_FACTORSC15',
-      );
+      const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
       return mnSoilScope3.multiply(efN2Oi).multiply(cn2o);
     })
     .filter(isDefined);
@@ -98,21 +92,15 @@ export const calculateScope3WasteOffsiteManureAtmosphericDepositionN2O = (
       ).scope3;
       const fracGASMsoil = selectConstant(
         constants.CROP,
-        (value) => massPerMass('Volatilised N', 'N', value),
         'FRACTION_N_VOLATILISED_ORGANIC_FERTILISER',
       );
       const mVolOrganic = mnSoilScope3.multiply(fracGASMsoil);
       const efN2Oj = selectConstant(
         constants.CROP,
-        (value) => massPerMass('N2O', 'Volatilised N', value),
         'EF_N2O_PRODUCTION_SYSTEM',
         baseProductionSystem,
       );
-      const cn2o = selectConstant(
-        constants.COMMON,
-        (value) => realNumber(value),
-        'GWP_FACTORSC15',
-      );
+      const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
       return mVolOrganic.multiply(efN2Oj).multiply(cn2o);
     })
     .filter(isDefined);
@@ -156,23 +144,14 @@ export const calculateScope3WasteOffsiteManureLeachingN2O = (
       const fracWetj = input.isInLeachingZone ? one : zero;
       const fracLeach = selectConstant(
         constants.CROP,
-        (value) => realNumber(value),
         'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF',
       );
       return mnSoilScope3.multiply(fracWetj).multiply(fracLeach);
     })
     .filter(isDefined);
 
-  const efLeach = selectConstant(
-    constants.CROP,
-    (value) => massPerMass('N2O', 'N', value),
-    'EF_N2O_LEACHING_AND_RUNOFF',
-  );
-  const cn2o = selectConstant(
-    constants.COMMON,
-    (value) => realNumber(value),
-    'GWP_FACTORSC15',
-  );
+  const efLeach = selectConstant(constants.CROP, 'EF_N2O_LEACHING_AND_RUNOFF');
+  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
 
   return sum(nitrogenRecords)
     .multiply(efLeach)
@@ -209,11 +188,7 @@ export const calculateScope3WasteOffsiteManure = (
 
   const e = eN2O.plus(eAD).plus(eLeach);
   // REVISIT: This conversion from N2O to CO2e is not mentioned in 15.13.1.1, it has been assumed
-  const efN2O = selectConstant(
-    constants.COMMON,
-    (value) => massPerMass('N2O', 'CO2e', value),
-    'GWP_FACTORSC6',
-  );
+  const efN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC6');
 
   return e.multiply(efN2O);
 };

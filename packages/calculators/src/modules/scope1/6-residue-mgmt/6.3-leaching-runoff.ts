@@ -4,7 +4,6 @@ import { ExecutionContext } from '@/calculators/Grains/constants/executionContex
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import { selectConstant } from '@/tools/constants';
 import { one, zero } from '@/tools/sentinels';
-import { massPerMass, realNumber } from '@/tools/units';
 import { calculateMassNCropAppliedToSoil } from './6.1-residues-crops';
 import { calculateMassNPastureAppliedToSoil } from './6.2-residues-pasture';
 import { CropResidueInputTransformed } from './crop-residue.input';
@@ -37,23 +36,14 @@ export const calculate63ResidueLeachingAndRunoffN2O = (
 
   const fracLeach = selectConstant(
     constants.CROP,
-    (value) => realNumber(value),
     'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF',
   );
 
   const mleachCp = mcp.multiply(fracWetj).multiply(fracLeach);
 
-  const efLeach = selectConstant(
-    constants.CROP,
-    (value) => massPerMass('N2O', 'N', value),
-    'EF_N2O_LEACHING_AND_RUNOFF',
-  );
+  const efLeach = selectConstant(constants.CROP, 'EF_N2O_LEACHING_AND_RUNOFF');
 
-  const cn2o = selectConstant(
-    constants.COMMON,
-    (value) => realNumber(value),
-    'GWP_FACTORSC15',
-  );
+  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
 
   return mleachCp.multiply(efLeach).multiply(cn2o, {
     name: 'En2o',

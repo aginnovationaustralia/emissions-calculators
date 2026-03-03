@@ -9,7 +9,7 @@ import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
 import { input } from '@/tools/inputs';
 import { cubicMetresToLitres, tonnesToKg } from '@/tools/unit-conversion';
-import { Mass, mass, massPerVolume, Volume, volume } from '@/tools/units';
+import { Mass, mass, Volume, volume } from '@/tools/units';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 
@@ -45,7 +45,6 @@ export const convertWasteAmountToMass = (
   }
   const volumeToMassConversionFactor = selectConstant(
     constants,
-    (value) => massPerVolume('Solid Waste', 'Solid Waste', value),
     'SOLID_WASTE_BY_VOLUME_TO_MASS',
     wasteType,
   );

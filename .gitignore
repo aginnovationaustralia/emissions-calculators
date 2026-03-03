@@ -4,3 +4,4 @@
 .npmrc
 **/.DS_Store
 **/~*.xlsx
+playground.ts

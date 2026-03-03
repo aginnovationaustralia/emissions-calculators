@@ -2,7 +2,6 @@ import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
-import { massPerMass } from '@/tools/units';
 import { AgrichemicalsInputTransformed } from './agrichemicals.input';
 
 export const calculateScope3Agrichemicals = (
@@ -23,7 +22,6 @@ EF h = emission factor of purchased agrichemical (kg CO2e/kg)
     const customEmissionsFactor = chemical.customEmissionsFactor;
     const emissionsFactor = selectConstant(
       constants.COMMON,
-      (val) => massPerMass('CO2e', 'Chemical', val),
       'AGROCHEMICAL_FACTORS',
       type,
     );

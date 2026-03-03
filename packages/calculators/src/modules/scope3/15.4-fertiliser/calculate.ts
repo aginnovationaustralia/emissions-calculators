@@ -15,7 +15,6 @@ import {
 } from '@/modules/scope1/5-fertiliser/inorganic-fertiliser.input';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
-import { massPerMass } from '@/tools/units';
 
 export const calculateScope3FertiliserMethod1EmissionsFactor = (
   fertiliser: InorganicFertiliserInputScope3Method1Transformed,
@@ -34,7 +33,6 @@ export const calculateScope3FertiliserMethod1EmissionsFactor = (
   const tmjf = fertiliser.massAppliedKg;
   const ef = selectConstant(
     constants.CROP,
-    (val) => massPerMass('CO2e', 'Inorganic Fertiliser', val),
     'INORGANIC_FERTILISER_FRACTIONS',
     fertiliser.fertiliserType,
     'Scope3EF',
@@ -55,7 +53,6 @@ const emissionsFactorForComponent = (
     if (isInorganicFertiliserComponentTypeRegional(component.componentType)) {
       return selectConstant(
         constants.CROP,
-        (val) => massPerMass('CO2e', 'Inorganic Fertiliser', val),
         'INORGANIC_FERTILISER_FRACTIONS_BY_REGION',
         component.componentType,
         component.componentOrigin,
@@ -63,7 +60,6 @@ const emissionsFactorForComponent = (
     } else {
       return selectConstant(
         constants.CROP,
-        (val) => massPerMass('CO2e', 'Inorganic Fertiliser', val),
         'INORGANIC_FERTILISER_FRACTIONS_BY_NON_REGIONAL',
         component.componentType,
       );

@@ -3,7 +3,6 @@ import { ExecutionContext } from '@/calculators/Grains/constants/executionContex
 import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
-import { massPerMass } from '@/tools/units';
 import { convertWasteAmountToMass } from './solid-waste.input';
 
 export const calculateScope3WasteSolidWaste = (
@@ -34,7 +33,6 @@ export const calculateScope3WasteSolidWaste = (
   const eLandfill = landfill.map((landfill) => {
     const efLandfill = selectConstant(
       constants.COMMON,
-      (value) => massPerMass('CO2e', 'Solid Waste', value),
       'SOLID_WASTE_LANDFILL_EF',
       landfill.type,
     );
@@ -48,7 +46,6 @@ export const calculateScope3WasteSolidWaste = (
   const eIncineration = incineration.map((incineration) => {
     const efIncineration = selectConstant(
       constants.COMMON,
-      (value) => massPerMass('CO2e', 'Solid Waste', value),
       'SOLID_WASTE_INCINERATION_EF',
       incineration.type,
     );
@@ -62,7 +59,6 @@ export const calculateScope3WasteSolidWaste = (
   const eComposting = composting.map((composting) => {
     const efComposting = selectConstant(
       constants.COMMON,
-      (value) => massPerMass('CO2e', 'Solid Waste', value),
       'SOLID_WASTE_COMPOSTING_EF',
     );
     const massWaste = convertWasteAmountToMass(
@@ -75,7 +71,6 @@ export const calculateScope3WasteSolidWaste = (
   const eAnaerobicDigestion = anaerobicDigestion.map((anaerobicDigestion) => {
     const efAnaerobicDigestion = selectConstant(
       constants.COMMON,
-      (value) => massPerMass('CO2e', 'Solid Waste', value),
       'SOLID_WASTE_ANAEROBIC_DIGESTION_EF',
     );
     const massWaste = convertWasteAmountToMass(
