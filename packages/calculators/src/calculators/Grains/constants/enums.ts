@@ -352,6 +352,8 @@ export const ServiceByAreaTypes = [
   'Liming, broadacre crop, pre & post-emergence, conventional',
   'Mulching, cotton',
   'Offset disc harrowing, horticulture',
+  'Pasture establishment, SE Qld',
+  'Pasture establishment, top end, NT',
   'Picking, cotton',
   'Planting, broadacre crop, soil clay content 0 to 10%, controlled traffic',
   'Planting, broadacre crop, soil clay content 0 to 10%, conventional',

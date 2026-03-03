@@ -10,7 +10,7 @@ import { z } from 'zod';
 export const isServiceAreaBased = (
   service: ServiceInputTransformed,
 ): service is ServiceByAreaInputTransformed => {
-  return service.serviceType in ServiceByAreaTypes;
+  return 'areaServicedHa' in service;
 };
 
 export const ServiceByAreaInputSchema = object({

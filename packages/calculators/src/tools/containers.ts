@@ -17,7 +17,9 @@ import {
   isMassPerElectricity,
   isMassPerEnergy,
   isMassPerMass,
+  isMassPerTime,
   isRealNumber,
+  isTime,
   isVoid,
   isVolume,
   mass,
@@ -227,6 +229,8 @@ export class BaseContainer<
         unit = mass(rightUnit.substance);
       } else if (isEnergyPerVolume(leftUnit) && isVolume(rightUnit)) {
         unit = energy();
+      } else if (isMassPerTime(leftUnit) && isTime(rightUnit)) {
+        unit = mass(leftUnit.substance);
       } else if (isRealNumber(leftUnit)) {
         unit = { ...rightUnit };
       } else {

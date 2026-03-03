@@ -41,7 +41,7 @@ const getCalculatorInput = (
 
 const extractInputsAndOutputs = createSheetExtractor(getCalculatorInput, 'D');
 
-describe('15.6.1.1 Agrichemicals', () => {
+describe('15.6.1.1 Purchased Lime', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/15.6-lime.xlsx',
