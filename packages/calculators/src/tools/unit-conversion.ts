@@ -10,3 +10,6 @@ export const cubicMetresToLitres = (cubicMetres: number | Decimal) =>
 
 export const massInTonnes = (mass: Container<Mass<Substance>>) =>
   mass.unit.value.div(1000);
+
+export const gjPerTonneTogjPerKg = (gjPerTonne: number | Decimal) =>
+  new Decimal(gjPerTonne).div(1000);

@@ -61,7 +61,7 @@ describe('Grains Calculator', () => {
         {
           name: 'CROP[EF_N2O_PRODUCTION_SYSTEM.Non-irrigated crops]',
           value: 0.0041,
-          units: 'Mass(N2O) / Mass(N)',
+          units: 'Mass(N2O) / Mass(Volatilised N)',
         },
         {
           name: 'COMMON[GWP_FACTORSC15]',

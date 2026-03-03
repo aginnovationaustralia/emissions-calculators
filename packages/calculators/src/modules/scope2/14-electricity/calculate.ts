@@ -1,8 +1,9 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
+import { STATES } from '@/calculators/Grains/constants/types';
 import { GrainsInputTransformed } from '@/calculators/Grains/types/input';
 import { selectConstant } from '@/tools/constants';
-import { oneMinus, tenToPowMinus3 } from '@/tools/sentinels';
+import { oneMinus, tenToPowMinus3, zero } from '@/tools/sentinels';
 import { isMarketBasedElectricity } from './electricity.input';
 import { LocationBasedElectricityInputsTransformed } from './location-based.input';
 import { MarketBasedElectricityInputsTransformed } from './market-based.input';
@@ -32,10 +33,13 @@ const calculateMarketBasedElectricityScope2 = (
   const recSurrendered = electricity.recsSurrenderedKWh;
   const recOnsite = electricity.recsOnsiteKWh;
   const rpp = selectConstant(constants.COMMON, 'RENEWABLE_POWER_PERCENTAGE');
-  const jrpp = selectConstant(
-    constants.COMMON,
-    'JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE',
-  );
+  const jrpp =
+    input.state === STATES.ACT
+      ? selectConstant(
+          constants.COMMON,
+          'JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE',
+        )
+      : zero;
 
   const nonRenewablesPurchased = qelec.multiply(oneMinus(rpp.plus(jrpp)));
   const renewableRecs = recSurrendered
