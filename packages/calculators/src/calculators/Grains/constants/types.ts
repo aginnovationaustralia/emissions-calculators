@@ -1,3 +1,15 @@
+import {
+  EnergyPerMass,
+  EnergyPerVolume,
+  MassPerArea,
+  MassPerElectricity,
+  MassPerEnergy,
+  MassPerMass,
+  MassPerTime,
+  MassPerVolume,
+  NumberUnitBase,
+  RealNumber,
+} from '@/tools/units';
 import { State } from '@/types/enums';
 import {
   AviationFuelType,
@@ -5,8 +17,9 @@ import {
   CarsLightCommercialFuelType,
   CarsLightCommercialPre2004FuelType,
   CropType,
-  FuelStationaryLiquidType,
+  FuelStationaryMassBasedLiquidType,
   FuelStationarySolidType,
+  FuelStationaryVolumeBasedLiquidType,
   HeavyDutyFuelType,
   InorganicFertiliserComponentOrigin,
   InorganicFertiliserComponentTypeNonRegional,
@@ -23,10 +36,15 @@ import {
   SolidWasteByVolumeType,
   SolidWasteIncinerationType,
   SolidWasteLandfillType,
-  StationaryFuelType,
   SwineMMSType,
   VesselFuelType,
 } from './enums';
+
+export type ReplaceNumberUnits<T> = T extends NumberUnitBase
+  ? number
+  : {
+      [K in keyof T]: ReplaceNumberUnits<T[K]>;
+    };
 
 export type NamedConstants = {
   name: string;
@@ -55,155 +73,146 @@ export const STATES = {
 } as const;
 export type States = (typeof STATES)[keyof typeof STATES];
 
-type FuelFactor = {
-  ENERGY_CONTENT_FACTOR: number;
-  SCOPE1_EF: {
-    CO2: number;
-    CH4: number;
-    N2O: number;
-  };
-  SCOPE3_EF: number;
+export type GasType = 'CO2' | 'CH4' | 'N2O';
+export type FuelFactorByVolume = {
+  ENERGY_CONTENT_FACTOR: EnergyPerVolume<'Fuel'>;
+  SCOPE1_EF: { [G in GasType]: MassPerEnergy<G> };
+  SCOPE3_EF: MassPerEnergy<'CO2e'>;
 };
 
+export type FuelFactorByMass = {
+  ENERGY_CONTENT_FACTOR: EnergyPerMass<'Fuel'>;
+  SCOPE1_EF: { [G in GasType]: MassPerEnergy<G> };
+  SCOPE3_EF: MassPerEnergy<'CO2e'>;
+};
 export type CommonConstants = NamedConstants & {
-  EF_UREA_CO2: number;
-  GWP_FACTORSC6: number;
-  GWP_FACTORSC13: number;
-  GWP_FACTORSC14: number;
+  AGROCHEMICAL_FACTORS: Record<
+    AgrochemicalTypes,
+    MassPerMass<'CO2e', 'Chemical'>
+  >;
 
-  GWP_FACTORSC15: number;
-  GWP_FACTORSC18: number;
+  EF_UREA_CO2: MassPerMass<'CO2e', 'Urea'>;
+  GWP_FACTORSC6: MassPerMass<'N2O', 'CO2e'>;
+  GWP_FACTORSC13: MassPerMass<'CO2', 'CO2e'>;
+  GWP_FACTORSC14: RealNumber;
 
-  LIME_SCOPE3_EF: number;
+  GWP_FACTORSC15: RealNumber;
+  GWP_FACTORSC18: RealNumber;
 
-  AGROCHEMICAL_FACTORS: Record<AgrochemicalTypes, number>;
+  LIME_SCOPE3_EF: MassPerMass<'CO2e', 'Lime'>;
 
   ELECTRICITY: {
     [state in States | 'Australia']: {
-      SCOPE2_EF: number;
-      SCOPE3_EF: number;
+      SCOPE2_EF: MassPerElectricity<'CO2e'>;
+      SCOPE3_EF: MassPerElectricity<'CO2e'>;
     };
   };
 
-  ELECTRICITY_RMF_SCOPE2_EF: number;
-  ELECTRICITY_RMF_SCOPE3_EF: number;
+  ELECTRICITY_RMF_SCOPE2_EF: MassPerElectricity<'CO2e'>;
+  ELECTRICITY_RMF_SCOPE3_EF: MassPerElectricity<'CO2e'>;
 
-  RENEWABLE_POWER_PERCENTAGE: number;
+  RENEWABLE_POWER_PERCENTAGE: RealNumber;
 
-  JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE: number;
+  JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE: RealNumber;
 
-  STATIONARY_FUEL_FACTORS: {
-    'Solid fuels': Record<FuelStationarySolidType, FuelFactor>;
-    'Liquid fuels': Record<FuelStationaryLiquidType, FuelFactor>;
+  STATIONARY_FUEL_FACTORS_BY_MASS: {
+    'Solid fuels': Record<FuelStationarySolidType, FuelFactorByMass>;
+    'Liquid fuels': Record<FuelStationaryMassBasedLiquidType, FuelFactorByMass>;
+  };
+
+  STATIONARY_FUEL_FACTORS_BY_VOLUME: {
+    'Liquid fuels': Record<
+      FuelStationaryVolumeBasedLiquidType,
+      FuelFactorByVolume
+    >;
   };
 
   TRANSPORT_FUEL_FACTORS: {
     'Cars and light commercial vehicles': Record<
       CarsLightCommercialFuelType,
-      FuelFactor
+      FuelFactorByVolume
     >;
     'Cars and light commercial vehicles (pre 2004)': Record<
       CarsLightCommercialPre2004FuelType,
-      FuelFactor
+      FuelFactorByVolume
     >;
-    'Light duty vehicles': Record<LightDutyFuelType, FuelFactor>;
-    'Heavy duty vehicles': Record<HeavyDutyFuelType, FuelFactor>;
-    Aviation: Record<AviationFuelType, FuelFactor>;
-    Vessel: Record<VesselFuelType, FuelFactor>;
+    'Light duty vehicles': Record<LightDutyFuelType, FuelFactorByVolume>;
+    'Heavy duty vehicles': Record<HeavyDutyFuelType, FuelFactorByVolume>;
+    Aviation: Record<AviationFuelType, FuelFactorByVolume>;
+    Vessel: Record<VesselFuelType, FuelFactorByVolume>;
     'Off-road Agriculture and forestry equipment': Record<
       OffRoadAgricultureAndForestryEquipmentFuelType,
-      FuelFactor
+      FuelFactorByVolume
     >;
   };
 
   NATURAL_GAS_FACTORS: {
-    ENERGY_CONTENT_FACTOR: number;
-    SCOPE1_EF: {
-      CO2: number;
-      CH4: number;
-      N2O: number;
-    };
-    SCOPE3_EF: Record<States, number>;
-  };
-
-  FUEL_ENERGYGJ: {
-    STATIONARY: Record<StationaryFuelType, FuelFactor>;
-
-    NATURAL_GAS: {
-      ENERGY_CONTENT_FACTOR: number;
-      SCOPE1_EF: {
-        CO2: number;
-        CH4: number;
-        N2O: number;
-      };
-      SCOPE3_EF: {
-        [state in States]: number;
-      };
-    };
+    ENERGY_CONTENT_FACTOR: EnergyPerVolume<'Fuel'>;
+    SCOPE1_EF: { [G in GasType]: MassPerEnergy<G> };
+    SCOPE3_EF: Record<States, MassPerEnergy<'CO2e'>>;
   };
 
   LIMING: {
-    SCOPE1: {
-      LIMESTONE_FRACTIONPURITY: number;
-      LIMESTONE_EF: number;
-      DOLOMITE_FRACTIONPURITY: number;
-      DOLOMITE_EF: number;
-    };
-    SCOPE3: {
-      FUEL_SCOPE3_PRODUCTION_NATURAL_GAS: number;
-      FUEL_SCOPE3_PRODUCTION_ELECTRICITY: number;
-      FUEL_SCOPE3_PRODUCTION_DISTILLATE_FUEL: number;
-      FUEL_SCOPE3_PRODUCTION_COAL: number;
-      FUEL_SCOPE3_PRODUCTION_GASOLINE: number;
-      FUEL_SCOPE3_POST_PRODUCTION_DISTILLATE_FUEL: number;
-    };
+    LIMESTONE_PURITY: RealNumber;
+    LIMESTONE_EF: MassPerMass<'CO2', 'Lime'>;
+    DOLOMITE_PURITY: RealNumber;
+    DOLOMITE_EF: MassPerMass<'CO2', 'Lime'>;
   };
 
   // NGAF 2023 Table 10
-  REFRIGERATION_LEAKAGE_RATES: Record<RefrigerationType, number>;
-  REFRIGERANT_GWP: Record<RefrigerantType, number>;
+  REFRIGERATION_LEAKAGE_RATES: Record<RefrigerationType, RealNumber>;
+  REFRIGERANT_GWP: Record<RefrigerantType, MassPerMass<'CO2e', 'Refrigerant'>>;
 
-  SERVICE_EMISSIONS_BY_AREA: Record<ServiceByAreaType, number>;
-  SERVICE_EMISSIONS_BY_HOUR: Record<ServiceByHourType, number>;
+  SERVICE_EMISSIONS_BY_AREA: Record<ServiceByAreaType, MassPerArea<'CO2e'>>;
+  SERVICE_EMISSIONS_BY_HOUR: Record<ServiceByHourType, MassPerTime<'CO2e'>>;
 
-  SOLID_WASTE_LANDFILL_EF: Record<SolidWasteLandfillType, number>;
-  SOLID_WASTE_INCINERATION_EF: Record<SolidWasteIncinerationType, number>;
+  SOLID_WASTE_LANDFILL_EF: Record<
+    SolidWasteLandfillType,
+    MassPerMass<'CO2e', 'Solid Waste'>
+  >;
+  SOLID_WASTE_INCINERATION_EF: Record<
+    SolidWasteIncinerationType,
+    MassPerMass<'CO2e', 'Solid Waste'>
+  >;
 
-  SOLID_WASTE_COMPOSTING_EF: number;
-  SOLID_WASTE_ANAEROBIC_DIGESTION_EF: number;
+  SOLID_WASTE_COMPOSTING_EF: MassPerMass<'CO2e', 'Solid Waste'>;
+  SOLID_WASTE_ANAEROBIC_DIGESTION_EF: MassPerMass<'CO2e', 'Solid Waste'>;
 
-  SOLID_WASTE_BY_VOLUME_TO_MASS: Record<SolidWasteByVolumeType, number>;
+  SOLID_WASTE_BY_VOLUME_TO_MASS: Record<
+    SolidWasteByVolumeType,
+    MassPerVolume<'Solid Waste', 'Solid Waste'>
+  >;
 };
 
 type CropResidueFactors = {
-  residueCropRatio: number;
-  belowAboveResidueRatio: number;
-  dryMatterContent: number;
-  carbonMassFraction: number;
-  aboveGroundN: number;
-  belowGroundN: number;
-  fractionOfResidueAtBurning: number;
-  fractionBurnt: number;
+  residueCropRatio: MassPerMass<'CropResidue', 'DryMatter'>;
+  belowAboveResidueRatio: RealNumber;
+  dryMatterContent: MassPerMass<'DryMatter', 'CropResidue'>;
+  carbonMassFraction: RealNumber;
+  aboveGroundN: MassPerMass<'N', 'DryMatter'>;
+  belowGroundN: MassPerMass<'N', 'DryMatter'>;
+  fractionOfResidueAtBurning: RealNumber;
+  fractionBurnt: RealNumber;
 };
 
 type PastureResidueFactors = {
-  averageYield: number;
-  belowAboveResidueRatio: number;
-  aboveGroundN: number;
-  belowGroundN: number;
-  fractionRemoved: number;
+  // averageYield: number;
+  belowAboveResidueRatio: RealNumber;
+  aboveGroundN: MassPerMass<'N', 'DryMatter'>;
+  belowGroundN: MassPerMass<'N', 'DryMatter'>;
+  fractionRemoved: RealNumber;
 };
 
 type InorganicFertiliserFractions = {
-  N: number;
-  Urea: number;
-  Volatilises: number;
-  Scope3EF: number;
+  N: MassPerMass<'N', 'Inorganic Fertiliser'>;
+  Urea: MassPerMass<'Urea', 'Inorganic Fertiliser'>;
+  Volatilises: MassPerMass<'Volatilised N', 'N'>;
+  Scope3EF: MassPerMass<'CO2e', 'Inorganic Fertiliser'>;
 };
 
 type InorganicFertiliserFractionRegions = Record<
   InorganicFertiliserComponentOrigin,
-  number
+  MassPerMass<'CO2e', 'Inorganic Fertiliser'>
 >;
 
 type InorganicFertiliserFractionsByRegion = Record<
@@ -213,11 +222,11 @@ type InorganicFertiliserFractionsByRegion = Record<
 
 type InorganicFertiliserFractionNonRegional = Record<
   InorganicFertiliserComponentTypeNonRegional,
-  number
+  MassPerMass<'CO2e', 'Inorganic Fertiliser'>
 >;
 
 type OrganicFertiliserFractions = {
-  N: number;
+  N: MassPerMass<'N', 'Organic Fertiliser'>;
 };
 
 export type CropConstants = NamedConstants & {
@@ -237,22 +246,26 @@ export type CropConstants = NamedConstants & {
   CROPRESIDUE: Record<CropType, CropResidueFactors>;
   PASTURERESIDUE: Record<PastureType, PastureResidueFactors>;
 
-  FRACTION_CROP_RESIDUE_REMOVED: Record<CropType, Record<State, number>>;
+  FRACTION_CROP_RESIDUE_REMOVED: Record<CropType, Record<State, RealNumber>>;
 
-  BURNING_METHANE_EF: number;
-  BURNING_N2O_EF: number;
-  EF_RESIDUES_RETURNED_TO_SOIL: Record<'wet' | 'dry', number>;
+  BURNING_METHANE_EF: MassPerMass<'CH4', 'DryMatter'>;
+  BURNING_N2O_EF: MassPerMass<'N2O', 'N'>;
+  EF_RESIDUES_RETURNED_TO_SOIL: Record<'wet' | 'dry', MassPerMass<'N2O', 'N'>>;
 
-  EF_N2O_PRODUCTION_SYSTEM: Record<BasicCropProductionSystem, number>;
+  EF_N2O_PRODUCTION_SYSTEM: Record<
+    BasicCropProductionSystem,
+    // MassPerMass<'N2O', 'N'>
+    MassPerMass<'N2O', 'Volatilised N'>
+  >;
 
-  FRACTION_N_VOLATILISED_ORGANIC_FERTILISER: number;
-  FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF: number;
-  EF_N2O_LEACHING_AND_RUNOFF: number;
+  FRACTION_N_VOLATILISED_ORGANIC_FERTILISER: MassPerMass<'Volatilised N', 'N'>;
+  FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF: RealNumber;
+  EF_N2O_LEACHING_AND_RUNOFF: MassPerMass<'N2O', 'N'>;
 };
 
 type MMSFactors = {
-  N_VOLATISED_EF: number;
-  N2O_EF: number;
+  N_VOLATISED_EF: RealNumber;
+  N2O_EF: RealNumber;
 };
 
 export type SwineConstants = NamedConstants & {

@@ -7,7 +7,6 @@ import { ExecutionContext } from '@/calculators/Grains/constants/executionContex
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import { selectConstant } from '@/tools/constants';
 import { oneMinus, tenToPowMinus3, zeroN2O } from '@/tools/sentinels';
-import { massPerMass, realNumber } from '@/tools/units';
 import { CropResidueInputTransformed } from './crop-residue.input';
 
 export const calculateMassNPastureAppliedToSoil = (
@@ -21,28 +20,24 @@ export const calculateMassNPastureAppliedToSoil = (
   const yp = crop.averageYield;
   const ncagp = selectConstant(
     constants.CROP,
-    (value) => massPerMass('N', 'DryMatter', value),
     'PASTURERESIDUE',
     pastureType,
     'aboveGroundN',
   );
   const rbgp = selectConstant(
     constants.CROP,
-    (value) => realNumber(value),
     'PASTURERESIDUE',
     pastureType,
     'belowAboveResidueRatio',
   );
   const ncbgp = selectConstant(
     constants.CROP,
-    (value) => massPerMass('N', 'DryMatter', value),
     'PASTURERESIDUE',
     pastureType,
     'belowGroundN',
   );
   const ffodp = selectConstant(
     constants.CROP,
-    (value) => realNumber(value),
     'PASTURERESIDUE',
     pastureType,
     'fractionRemoved',
@@ -97,15 +92,10 @@ export const calculate62PastureResidueN2O = (
 
   const efni = selectConstant(
     constants.CROP,
-    (value) => massPerMass('N2O', 'N', value),
     'EF_RESIDUES_RETURNED_TO_SOIL',
     crop.rainfallAbove600,
   );
-  const cn2o = selectConstant(
-    constants.COMMON,
-    (value) => realNumber(value),
-    'GWP_FACTORSC15',
-  );
+  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
 
   const pastureResidueN2O = mp.multiply(efni).multiply(cn2o);
 

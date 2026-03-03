@@ -1,9 +1,7 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
-import { constant } from '@/tools/constants';
+import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
-import { massPerMass, realNumber } from '@/tools/units';
-import Decimal from 'decimal.js-light';
 import { LimeInputTransformed } from './lime.input';
 
 const calculateLimeCO2 = (
@@ -29,32 +27,12 @@ const calculateLimeCO2 = (
     */
   const mlime = input.limestone;
   const fracLime = input.limestoneFraction;
-  const plime = constant(
-    'P Lime',
-    realNumber(constants.COMMON.LIMING.SCOPE1.LIMESTONE_FRACTIONPURITY),
-  );
-  const efLime = constant(
-    'EF Lime',
-    massPerMass(
-      'CO2',
-      'Lime',
-      new Decimal(constants.COMMON.LIMING.SCOPE1.LIMESTONE_EF),
-    ),
-  );
+  const plime = selectConstant(constants.COMMON, 'LIMING', 'LIMESTONE_PURITY');
+  const efLime = selectConstant(constants.COMMON, 'LIMING', 'LIMESTONE_EF');
   const fracDol = input.dolomiteFraction;
-  const pdol = constant(
-    'P Dol',
-    realNumber(constants.COMMON.LIMING.SCOPE1.DOLOMITE_FRACTIONPURITY),
-  );
-  const efDol = constant(
-    'EF Dol',
-    massPerMass(
-      'CO2',
-      'Lime',
-      new Decimal(constants.COMMON.LIMING.SCOPE1.DOLOMITE_EF),
-    ),
-  );
-  const cco2 = constant('C CO2', realNumber(constants.COMMON.GWP_FACTORSC18));
+  const pdol = selectConstant(constants.COMMON, 'LIMING', 'DOLOMITE_PURITY');
+  const efDol = selectConstant(constants.COMMON, 'LIMING', 'DOLOMITE_EF');
+  const cco2 = selectConstant(constants.COMMON, 'GWP_FACTORSC18');
 
   const limePart = mlime.multiply(fracLime).multiply(plime).multiply(efLime);
   const dolomitePart = mlime.multiply(fracDol).multiply(pdol).multiply(efDol);

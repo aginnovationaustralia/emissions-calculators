@@ -2,7 +2,6 @@ import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
-import { massPerMass, realNumber } from '@/tools/units';
 import { RefrigerantInputsTransformed } from './refrigerants.input';
 
 export const calculateScope1RefrigerantUse = (
@@ -25,13 +24,11 @@ export const calculateScope1RefrigerantUse = (
     const chargeRa = refrigerant.chargeSize;
     const leakageRatea = selectConstant(
       constants.COMMON,
-      (value) => realNumber(value / 100), // Convert to a percentage
       'REFRIGERATION_LEAKAGE_RATES',
       refrigerant.refrigerationType,
     );
     const gwp = selectConstant(
       constants.COMMON,
-      (value) => massPerMass('CO2e', 'Refrigerant', value),
       'REFRIGERANT_GWP',
       refrigerant.refrigerant,
     );

@@ -5,8 +5,6 @@ import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.
 import { selectConstant } from '@/tools/constants';
 import { one, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { massPerMass, realNumber } from '@/tools/units';
-import Decimal from 'decimal.js-light';
 import { CropResidueInputTransformed } from './crop-residue.input';
 
 export const calculateMassNCropAppliedToSoil = (
@@ -18,21 +16,18 @@ export const calculateMassNCropAppliedToSoil = (
 
   const ncbgc = selectConstant(
     constants.CROP,
-    (value) => massPerMass('N', 'DryMatter', new Decimal(value)),
     'CROPRESIDUE',
     cropType,
     'belowGroundN',
   );
   const ncagc = selectConstant(
     constants.CROP,
-    (value) => massPerMass('N', 'DryMatter', new Decimal(value)),
     'CROPRESIDUE',
     cropType,
     'aboveGroundN',
   );
   const dmc = selectConstant(
     constants.CROP,
-    (value) => massPerMass('DryMatter', 'CropResidue', new Decimal(value)),
     'CROPRESIDUE',
     cropType,
     'dryMatterContent',
@@ -42,7 +37,6 @@ export const calculateMassNCropAppliedToSoil = (
     crop.cropResidues.calculationMethod === '1'
       ? selectConstant(
           constants.CROP,
-          (value) => realNumber(new Decimal(value)),
           'FRACTION_CROP_RESIDUE_REMOVED',
           cropType,
           crop.state,
@@ -52,14 +46,12 @@ export const calculateMassNCropAppliedToSoil = (
   const pc = crop.averageYield.multiply(crop.areaSown, { name: 'Pc' });
   const ragc = selectConstant(
     constants.CROP,
-    (value) => massPerMass('CropResidue', 'DryMatter', value),
     'CROPRESIDUE',
     cropType,
     'residueCropRatio',
   );
   const rbgc = selectConstant(
     constants.CROP,
-    (value) => realNumber(new Decimal(value)),
     'CROPRESIDUE',
     cropType,
     'belowAboveResidueRatio',
@@ -120,15 +112,10 @@ export const calculate61CropResidueN2O = (
 
   const efni = selectConstant(
     constants.CROP,
-    (value) => massPerMass('N2O', 'N', new Decimal(value)),
     'EF_RESIDUES_RETURNED_TO_SOIL',
     crop.rainfallAbove600,
   );
-  const cn2o = selectConstant(
-    constants.COMMON,
-    (value) => realNumber(new Decimal(value)),
-    'GWP_FACTORSC15',
-  );
+  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
 
   // 441 | E = sum (Mc * EF Ni * CN2O * 10^-3) (t N2O)
   const cropResidueN2O = mc.multiply(efni).multiply(cn2o);

@@ -5,8 +5,7 @@ import { constant, selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
 import { input } from '@/tools/inputs';
 import { sum } from '@/tools/sum';
-import { MassPerMass, massPerMass, realNumber } from '@/tools/units';
-import Decimal from 'decimal.js-light';
+import { MassPerMass, massPerMass } from '@/tools/units';
 import { CropResidueInputTransformed } from '../6-residue-mgmt/crop-residue.input';
 import { FertiliserInputTransformed } from './fertiliser.input';
 import { isInorganicFertiliserKnownComponent } from './inorganic-fertiliser-components.input';
@@ -36,15 +35,19 @@ const getEFjN20ForFertiliser = (
     */
     const ef = -0.1474 + applicationRate.unit.value.mul(0.0061).toNumber();
     // const ef =  value(massPerMass('N2O', 'N', -0.1474).plus(applicationRate.multiply(num(0.0061)));
-    return constant('EF jN20 (irrigated maize)', massPerMass('N2O', 'N', ef), {
-      references: [`5.1.1.2 (150)`],
-    });
+    return constant(
+      'EF jN20 (irrigated maize)',
+      massPerMass('N2O', 'Volatilised N', ef),
+      {
+        references: [`5.1.1.2 (150)`],
+      },
+    );
   } else if (system === 'Non-irrigated crop (high rainfall zone)') {
     // EF fj=nonirrigatedgrains,N2O = -0.0781 + (0.0075 * N fj=nonirrigatedgrains)
     const ef = -0.0781 + applicationRate.unit.value.mul(0.0075).toNumber();
     return constant(
       'EF jN20 (non-irrigated high rainfall zone)',
-      massPerMass('N2O', 'N', ef),
+      massPerMass('N2O', 'Volatilised N', ef),
       { references: [`5.1.1.2 (157)`] },
     );
   } else if (
@@ -58,13 +61,16 @@ const getEFjN20ForFertiliser = (
         (0.007 *
           (Math.exp(0.037 * applicationRate.unit.value.toNumber()) - 1)) /
           applicationRate.unit.value.toNumber());
-    return constant('EF jN20 (cotton)', massPerMass('N2O', 'N', ef), {
-      references: [`5.1.1.2 (163)`],
-    });
+    return constant(
+      'EF jN20 (cotton)',
+      massPerMass('N2O', 'Volatilised N', ef),
+      {
+        references: [`5.1.1.2 (163)`],
+      },
+    );
   }
   return selectConstant(
     constants.CROP,
-    (value) => massPerMass('N2O', 'N', value),
     'EF_N2O_PRODUCTION_SYSTEM',
     system,
   ).attachContext({ references: [`5.1.1.1 (119)`] });
@@ -83,7 +89,6 @@ export const massNitrogenFromInorganicFertiliserApplied = (
   let fnInorganicF: Container<MassPerMass<'N', 'Inorganic Fertiliser'>> =
     selectConstant(
       constants.CROP,
-      (value) => massPerMass('N', 'Inorganic Fertiliser', value),
       'INORGANIC_FERTILISER_FRACTIONS',
       inorganicFertiliser.fertiliserType,
       'N',
@@ -140,16 +145,14 @@ CN2O = factor to convert elemental mass of nitrous oxide to molecular mass
     );
 
     // NOTE: Method 2 is implemented in getEFjN20ForFertiliser
+    // An appropriate value for EFjN2O should be selected from A.2.2.3 depending on production
     const efjN20 = getEFjN20ForFertiliser(
       inorganicFertiliser,
       input,
       constants,
     );
-    const cn2o = selectConstant(
-      constants.COMMON,
-      (value) => realNumber(new Decimal(value)),
-      'GWP_FACTORSC15',
-    );
+    const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
+    // @ts-expect-error - unclear if efjN20 is a MassPerMass<'N2O', 'N'> or MassPerMass<'N2O', 'Volatilised N'>
     return mnjf.multiply(efjN20).multiply(cn2o);
   });
 
@@ -184,7 +187,6 @@ export const calculateInorganicFertiliserCO2 = (
     const tmjf = inorganicFertiliser.massAppliedKg;
     const fUf = selectConstant(
       constants.CROP,
-      (value) => massPerMass('Urea', 'Inorganic Fertiliser', value),
       'INORGANIC_FERTILISER_FRACTIONS',
       inorganicFertiliser.fertiliserType,
       'Urea',
@@ -194,15 +196,9 @@ export const calculateInorganicFertiliserCO2 = (
       references: [`5.1.1.3 (184)`],
     });
 
-    const efUreaCO2 = constant(
-      'EF Urea CO2',
-      massPerMass('CO2e', 'Urea', new Decimal(constants.COMMON.EF_UREA_CO2)),
-    );
+    const efUreaCO2 = selectConstant(constants.COMMON, 'EF_UREA_CO2');
 
-    const cgCO2 = constant(
-      'Cg CO2',
-      massPerMass('CO2', 'CO2e', new Decimal(constants.COMMON.GWP_FACTORSC13)),
-    );
+    const cgCO2 = selectConstant(constants.COMMON, 'GWP_FACTORSC13');
 
     return mujf.multiply(efUreaCO2).multiply(cgCO2);
   });

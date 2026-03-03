@@ -1,9 +1,13 @@
 import {
   CommonConstants,
-  commonConstantsWithUnits,
-} from './constants/strong-types';
-import { CropConstants, SwineConstants } from './constants/types';
-import { cropConstants, swineConstants } from './constants/values';
+  CropConstants,
+  SwineConstants,
+} from './constants/types';
+import {
+  commonConstants,
+  cropConstants,
+  swineConstants,
+} from './constants/values';
 
 export type ConstantsForGrainsCalculator = {
   COMMON: CommonConstants;
@@ -12,7 +16,7 @@ export type ConstantsForGrainsCalculator = {
 };
 
 export const constantsForGrainsCalculator: ConstantsForGrainsCalculator = {
-  COMMON: commonConstantsWithUnits,
+  COMMON: commonConstants,
   CROP: cropConstants,
   SWINE: swineConstants,
 };

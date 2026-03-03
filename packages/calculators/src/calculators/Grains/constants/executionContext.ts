@@ -1,6 +1,6 @@
 import { Environment } from '@/calculators/execution/types';
 import { CalculatorNames } from '@/calculators/strings';
-import { AllConstants, CommonConstants } from './strong-types';
+import { AllConstants, CommonConstants } from './types';
 import { commonConstants, cropConstants, swineConstants } from './values';
 
 type ExecutionMetadata = {

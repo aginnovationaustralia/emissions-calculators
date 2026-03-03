@@ -1,9 +1,6 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
-import {
-  commonConstantsWithUnits,
-  GasType,
-} from '@/calculators/Grains/constants/strong-types';
+import { GasType } from '@/calculators/Grains/constants/types';
 import { BinaryContainer } from '@/tools/containers';
 import { selectConstant } from '@/tools/strong-constants';
 import { sum } from '@/tools/sum';
@@ -36,7 +33,7 @@ const emissionsOfGasForSolidFuel = <GT extends GasType>(
     gasType,
   );
   const ecSCq = selectConstant(
-    commonConstantsWithUnits,
+    constants.COMMON,
     // REVISIT: Constant values in table 4 are all in GJ/t, so we need to convert to GJ/kL
     'STATIONARY_FUEL_FACTORS_BY_MASS',
     'Solid fuels',

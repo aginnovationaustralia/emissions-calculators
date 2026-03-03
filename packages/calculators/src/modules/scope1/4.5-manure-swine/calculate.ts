@@ -2,7 +2,7 @@ import { SwineConstants } from '@/calculators/Grains/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { RootContainer } from '@/tools/containers';
 import { one, oneMinus } from '@/tools/sentinels';
-import { mass, realNumber } from '@/tools/units';
+import { mass } from '@/tools/units';
 import { SwineManureInputTransformed } from './swine-manure.input';
 
 export function calculateMassOfNitrogenAppliedToSoils(
@@ -26,17 +26,10 @@ export function calculateMassOfNitrogenAppliedToSoils(
   const mnLeachjm5 = new RootContainer(mass('N', 0)); // TODO
 
   // REVISIT: eFmt has units of kg N2O-N/kg N, but the minus operation is throwing that away
-  const eFmt = selectConstant(
-    constants,
-    (c) => realNumber(c),
-    'MMS',
-    input.mms,
-    'N2O_EF',
-  );
+  const eFmt = selectConstant(constants, 'MMS', input.mms, 'N2O_EF');
   // REVISIT: fracGASM has units of (kg NH3-N + NOx-N)/kg N, but the minus operation is throwing that away
   const fracGASM = selectConstant(
     constants,
-    (c) => realNumber(c),
     'MMS',
     input.mms,
     'N_VOLATISED_EF',

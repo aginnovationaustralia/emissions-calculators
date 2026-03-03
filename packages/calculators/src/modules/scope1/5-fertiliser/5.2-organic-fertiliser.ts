@@ -2,8 +2,6 @@ import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
-import { massPerMass, realNumber } from '@/tools/units';
-import Decimal from 'decimal.js-light';
 import { calculateMassOfNitrogenAppliedToSoils } from '../4.5-manure-swine';
 import { CropResidueInputTransformed } from '../6-residue-mgmt/crop-residue.input';
 import { FertiliserInputTransformed } from './fertiliser.input';
@@ -28,7 +26,6 @@ export const calculateMNSoilForOrganicFertiliser = (
     const { customNitrogenFraction } = origin;
     const fnOrganicF = selectConstant(
       constants.CROP,
-      (value) => massPerMass('N', 'Organic Fertiliser', value),
       'ORGANIC_FERTILISER_FRACTIONS',
       origin.organicFertiliserType,
       'N',
@@ -59,15 +56,10 @@ const calculateOrganicFertiliserN2O = (
     );
     const efN2Oi = selectConstant(
       constants.CROP,
-      (value) => massPerMass('N2O', 'N', value),
       'EF_RESIDUES_RETURNED_TO_SOIL',
       input.rainfallAbove600,
     );
-    const cn2o = selectConstant(
-      constants.COMMON,
-      (value) => realNumber(new Decimal(value)),
-      'GWP_FACTORSC15',
-    );
+    const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
     return mnSoiljf.multiply(efN2Oi).multiply(cn2o);
   });
 

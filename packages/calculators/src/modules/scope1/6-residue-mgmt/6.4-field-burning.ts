@@ -4,8 +4,6 @@ import { ExecutionContext } from '@/calculators/Grains/constants/executionContex
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import { selectConstant } from '@/tools/constants';
 import { zeroCH4, zeroN2O } from '@/tools/sentinels';
-import { massPerMass, realNumber } from '@/tools/units';
-import Decimal from 'decimal.js-light';
 import { CropResidueInputTransformed } from './crop-residue.input';
 
 export const calculateFieldBurningN2O = (
@@ -31,14 +29,12 @@ export const calculateFieldBurningN2O = (
   const pc = input.averageYield.multiply(input.areaSown, { name: 'Pc' });
   const ragc = selectConstant(
     constants.CROP,
-    (value) => massPerMass('CropResidue', 'DryMatter', new Decimal(value)),
     'CROPRESIDUE',
     input.type,
     'residueCropRatio',
   );
   const sc = selectConstant(
     constants.CROP,
-    (value) => realNumber(value),
     'CROPRESIDUE',
     input.type,
     'fractionOfResidueAtBurning',
@@ -46,7 +42,6 @@ export const calculateFieldBurningN2O = (
   // TODO: I believe this is a new constant
   const zc = selectConstant(
     constants.CROP,
-    (value) => realNumber(new Decimal(value)),
     'CROPRESIDUE',
     input.type,
     'fractionBurnt',
@@ -61,28 +56,18 @@ export const calculateFieldBurningN2O = (
 
   const dmc = selectConstant(
     constants.CROP,
-    (value) => massPerMass('DryMatter', 'CropResidue', new Decimal(value)),
     'CROPRESIDUE',
     input.type,
     'dryMatterContent',
   );
   const ncagc = selectConstant(
     constants.CROP,
-    (value) => massPerMass('N', 'DryMatter', new Decimal(value)),
     'CROPRESIDUE',
     input.type,
     'aboveGroundN',
   );
-  const efn2o = selectConstant(
-    constants.CROP,
-    (value) => massPerMass('N2O', 'N', new Decimal(value)),
-    'BURNING_N2O_EF',
-  );
-  const cn2o = selectConstant(
-    constants.COMMON,
-    (value) => realNumber(new Decimal(value)),
-    'GWP_FACTORSC15',
-  );
+  const efn2o = selectConstant(constants.CROP, 'BURNING_N2O_EF');
+  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
 
   const fieldBurningN2O = mburnc
     .multiply(dmc)
@@ -118,28 +103,24 @@ export const calculateFieldBurningCH4 = (
   const pc = input.averageYield.multiply(input.areaSown, { name: 'Pc' });
   const ragc = selectConstant(
     constants.CROP,
-    (value) => massPerMass('CropResidue', 'DryMatter', value),
     'CROPRESIDUE',
     input.type,
     'residueCropRatio',
   );
   const sc = selectConstant(
     constants.CROP,
-    (value) => realNumber(new Decimal(value)),
     'CROPRESIDUE',
     input.type,
     'fractionOfResidueAtBurning',
   );
   const dmc = selectConstant(
     constants.CROP,
-    (value) => massPerMass('DryMatter', 'CropResidue', new Decimal(value)),
     'CROPRESIDUE',
     input.type,
     'dryMatterContent',
   );
   const zc = selectConstant(
     constants.CROP,
-    (value) => realNumber(new Decimal(value)),
     'CROPRESIDUE',
     input.type,
     'fractionBurnt',
@@ -155,21 +136,12 @@ export const calculateFieldBurningCH4 = (
 
   const ccc = selectConstant(
     constants.CROP,
-    (value) => realNumber(new Decimal(value)),
     'CROPRESIDUE',
     input.type,
     'carbonMassFraction',
   );
-  const efch4 = selectConstant(
-    constants.CROP,
-    (value) => massPerMass('CH4', 'DryMatter', new Decimal(value)),
-    'BURNING_METHANE_EF',
-  );
-  const cch4 = selectConstant(
-    constants.COMMON,
-    (value) => realNumber(new Decimal(value)),
-    'GWP_FACTORSC14',
-  );
+  const efch4 = selectConstant(constants.CROP, 'BURNING_METHANE_EF');
+  const cch4 = selectConstant(constants.COMMON, 'GWP_FACTORSC14');
 
   const fieldBurningCH4 = mburnc.multiply(ccc).multiply(efch4).multiply(cch4);
 

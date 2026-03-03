@@ -3,7 +3,7 @@ import { ExecutionContext } from '@/calculators/Grains/constants/executionContex
 import { selectConstant } from '@/tools/constants';
 import { BinaryContainer } from '@/tools/containers';
 import { sum } from '@/tools/sum';
-import { energyPerVolume, Mass, massPerEnergy } from '@/tools/units';
+import { Mass } from '@/tools/units';
 import { FuelInputTransformed } from './fuel.input';
 import {
   isTransportFuelCNGBased,
@@ -26,7 +26,6 @@ const constantsForCarsLightCommercial = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   return {
     ecTransQ: selectConstant(
       constants.COMMON,
-      (value) => energyPerVolume('Fuel', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -34,7 +33,6 @@ const constantsForCarsLightCommercial = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
     efTrans1tqg: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy(gasType, value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -43,7 +41,6 @@ const constantsForCarsLightCommercial = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
     efTrans3Q: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy('CO2e', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -61,7 +58,6 @@ const constantsForCarsLightCommercialPre2004 = <
   return {
     ecTransQ: selectConstant(
       constants.COMMON,
-      (value) => energyPerVolume('Fuel', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -69,7 +65,6 @@ const constantsForCarsLightCommercialPre2004 = <
     ),
     efTrans1tqg: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy(gasType, value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -78,7 +73,6 @@ const constantsForCarsLightCommercialPre2004 = <
     ),
     efTrans3Q: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy('CO2e', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -94,7 +88,6 @@ const constantsForLightDuty = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   return {
     ecTransQ: selectConstant(
       constants.COMMON,
-      (value) => energyPerVolume('Fuel', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -102,7 +95,6 @@ const constantsForLightDuty = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
     efTrans1tqg: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy(gasType, value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -111,7 +103,6 @@ const constantsForLightDuty = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
     efTrans3Q: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy('CO2e', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -127,7 +118,6 @@ const constantsForHeavyDuty = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   return {
     ecTransQ: selectConstant(
       constants.COMMON,
-      (value) => energyPerVolume('Fuel', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -135,7 +125,6 @@ const constantsForHeavyDuty = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
     efTrans1tqg: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy(gasType, value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -144,7 +133,6 @@ const constantsForHeavyDuty = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
     efTrans3Q: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy('CO2e', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -160,7 +148,6 @@ const constantsForAviation = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   return {
     ecTransQ: selectConstant(
       constants.COMMON,
-      (value) => energyPerVolume('Fuel', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -168,7 +155,6 @@ const constantsForAviation = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
     efTrans1tqg: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy(gasType, value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -177,7 +163,6 @@ const constantsForAviation = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
     efTrans3Q: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy('CO2e', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -193,7 +178,6 @@ const constantsForVessel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   return {
     ecTransQ: selectConstant(
       constants.COMMON,
-      (value) => energyPerVolume('Fuel', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -201,7 +185,6 @@ const constantsForVessel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
     efTrans1tqg: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy(gasType, value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -210,7 +193,6 @@ const constantsForVessel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
     efTrans3Q: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy('CO2e', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -228,7 +210,6 @@ const constantsForOffRoadAgricultureAndForestryEquipment = <
   return {
     ecTransQ: selectConstant(
       constants.COMMON,
-      (value) => energyPerVolume('Fuel', value),
 
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
@@ -237,7 +218,6 @@ const constantsForOffRoadAgricultureAndForestryEquipment = <
     ),
     efTrans1tqg: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy(gasType, value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -246,7 +226,6 @@ const constantsForOffRoadAgricultureAndForestryEquipment = <
     ),
     efTrans3Q: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy('CO2e', value),
       'TRANSPORT_FUEL_FACTORS',
       input.vehicleType,
       input.fuelType,
@@ -265,7 +244,6 @@ export const transportFuelConstantsForCNG = <
   return {
     ecTransQ: selectConstant(
       constants.COMMON,
-      (value) => energyPerVolume('Fuel', value),
 
       'TRANSPORT_FUEL_FACTORS',
       vehicleType,
@@ -274,7 +252,6 @@ export const transportFuelConstantsForCNG = <
     ),
     efTrans1tqg: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy(gasType, value),
       'TRANSPORT_FUEL_FACTORS',
       vehicleType,
       'Compressed natural gas',
@@ -283,7 +260,6 @@ export const transportFuelConstantsForCNG = <
     ),
     efTrans3Q: selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy('CO2e', value),
       'TRANSPORT_FUEL_FACTORS',
       vehicleType,
       'Compressed natural gas',

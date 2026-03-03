@@ -17,8 +17,6 @@ import {
 import { isTransportFuelCNGBased } from '@/modules/scope1/8-fuel-use/transportFuel.input';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
-import { energyPerMass, energyPerVolume, massPerEnergy } from '@/tools/units';
-import Decimal from 'decimal.js-light';
 
 export const calculateScope3EmissionsFromFuelTransport = (
   crop: FuelInputTransformed,
@@ -53,8 +51,7 @@ const calculateScope3EmissionsFromFuelStationarySolid = (
   const qTransQ = fuel.amountTonnes;
   const ecTransQ = selectConstant(
     constants.COMMON,
-    (value) => energyPerMass('Fuel', value),
-    'STATIONARY_FUEL_FACTORS',
+    'STATIONARY_FUEL_FACTORS_BY_MASS',
     'Solid fuels',
     fuel.fuelType,
     'ENERGY_CONTENT_FACTOR',
@@ -62,8 +59,7 @@ const calculateScope3EmissionsFromFuelStationarySolid = (
   const efTrans3Q = selectConstant(
     constants.COMMON,
     // REVISIT: Constant values in table 4 are all in GJ/t, we are converting to GJ/kL
-    (value) => massPerEnergy('CO2e', value / 1000),
-    'STATIONARY_FUEL_FACTORS',
+    'STATIONARY_FUEL_FACTORS_BY_MASS',
     'Solid fuels',
     fuel.fuelType,
     'SCOPE3_EF',
@@ -81,16 +77,14 @@ const calculateScope3EmissionsFromFuelStationaryLiquid = (
     const qTransQ = fuel.amountTonnes;
     const ecTransQ = selectConstant(
       constants.COMMON,
-      (value) => energyPerMass('Fuel', value),
-      'STATIONARY_FUEL_FACTORS',
+      'STATIONARY_FUEL_FACTORS_BY_MASS',
       'Liquid fuels',
       fuel.fuelType,
       'ENERGY_CONTENT_FACTOR',
     );
     const efTrans3Q = selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy('CO2e', value / 1000),
-      'STATIONARY_FUEL_FACTORS',
+      'STATIONARY_FUEL_FACTORS_BY_MASS',
       'Liquid fuels',
       fuel.fuelType,
       'SCOPE3_EF',
@@ -101,16 +95,14 @@ const calculateScope3EmissionsFromFuelStationaryLiquid = (
   const qTransQ = fuel.amountLitres;
   const ecTransQ = selectConstant(
     constants.COMMON,
-    (value) => energyPerVolume('Fuel', value),
-    'STATIONARY_FUEL_FACTORS',
+    'STATIONARY_FUEL_FACTORS_BY_VOLUME',
     'Liquid fuels',
     fuel.fuelType,
     'ENERGY_CONTENT_FACTOR',
   );
   const efTrans3Q = selectConstant(
     constants.COMMON,
-    (value) => massPerEnergy('CO2e', new Decimal(value)),
-    'STATIONARY_FUEL_FACTORS',
+    'STATIONARY_FUEL_FACTORS_BY_VOLUME',
     'Liquid fuels',
     fuel.fuelType,
     'SCOPE3_EF',
@@ -128,13 +120,11 @@ const calculateScope3EmissionsFromFuelStationaryNaturalGas = (
   const qTransQ = fuel.amountLitres;
   const ecTransQ = selectConstant(
     constants.COMMON,
-    (value) => energyPerVolume('Fuel', value),
     'NATURAL_GAS_FACTORS',
     'ENERGY_CONTENT_FACTOR',
   );
   const efTrans3Q = selectConstant(
     constants.COMMON,
-    (value) => massPerEnergy('CO2e', new Decimal(value)),
     'NATURAL_GAS_FACTORS',
     'SCOPE3_EF',
     input.state,

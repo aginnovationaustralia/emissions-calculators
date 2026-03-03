@@ -1,7 +1,6 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { selectConstant } from '@/tools/constants';
-import { massPerMass } from '@/tools/units';
 import { LimeInputTransformed } from '../../scope1/5-fertiliser/lime.input';
 
 export const calculateScope3Lime = (
@@ -18,11 +17,7 @@ export const calculateScope3Lime = (
   */
   const mlime = crop.limestone;
   const customEmissionsFactor = crop.customScope3EmissionsFactor;
-  const efl = selectConstant(
-    constants.COMMON,
-    (val) => massPerMass('CO2e', 'Lime', val),
-    'LIME_SCOPE3_EF',
-  );
+  const efl = selectConstant(constants.COMMON, 'LIME_SCOPE3_EF');
   const lime = mlime.multiply(customEmissionsFactor ?? efl, {
     name: 'E lime',
     references: ['15.6.1.1 (391)'],

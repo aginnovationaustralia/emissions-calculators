@@ -3,12 +3,7 @@ import { ExecutionContext } from '@/calculators/Grains/constants/executionContex
 import { selectConstant } from '@/tools/constants';
 import { BinaryContainer } from '@/tools/containers';
 import { sum } from '@/tools/sum';
-import {
-  energyPerMass,
-  energyPerVolume,
-  Mass,
-  massPerEnergy,
-} from '@/tools/units';
+import { Mass } from '@/tools/units';
 import { FuelInputTransformed } from './fuel.input';
 import {
   isStationaryLiquidFuelMassBased,
@@ -30,8 +25,7 @@ const emissionsOfGasForSolidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   const qSCq = fuel.amountTonnes;
   const efSC1qg = selectConstant(
     constants.COMMON,
-    (value) => massPerEnergy(gasType, value),
-    'STATIONARY_FUEL_FACTORS',
+    'STATIONARY_FUEL_FACTORS_BY_MASS',
     'Solid fuels',
     fuel.fuelType,
     'SCOPE1_EF',
@@ -40,8 +34,7 @@ const emissionsOfGasForSolidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   const ecSCq = selectConstant(
     constants.COMMON,
     // REVISIT: Constant values in table 4 are all in GJ/t, so we need to convert to GJ/kL
-    (value) => energyPerMass('Fuel', value / 1000),
-    'STATIONARY_FUEL_FACTORS',
+    'STATIONARY_FUEL_FACTORS_BY_MASS',
     'Solid fuels',
     fuel.fuelType,
     'ENERGY_CONTENT_FACTOR',
@@ -59,8 +52,7 @@ const emissionsOfGasForLiquidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     const qSCq = fuel.amountTonnes;
     const efSC1qg = selectConstant(
       constants.COMMON,
-      (value) => massPerEnergy(gasType, value / 1000),
-      'STATIONARY_FUEL_FACTORS',
+      'STATIONARY_FUEL_FACTORS_BY_MASS',
       fuel.fuelClass,
       fuel.fuelType,
       'SCOPE1_EF',
@@ -68,8 +60,7 @@ const emissionsOfGasForLiquidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     );
     const ecSCq = selectConstant(
       constants.COMMON,
-      (value) => energyPerMass('Fuel', value),
-      'STATIONARY_FUEL_FACTORS',
+      'STATIONARY_FUEL_FACTORS_BY_MASS',
       'Liquid fuels',
       fuel.fuelType,
       'ENERGY_CONTENT_FACTOR',
@@ -81,8 +72,7 @@ const emissionsOfGasForLiquidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   const qSCq = fuel.amountLitres;
   const efSC1qg = selectConstant(
     constants.COMMON,
-    (value) => massPerEnergy(gasType, value),
-    'STATIONARY_FUEL_FACTORS',
+    'STATIONARY_FUEL_FACTORS_BY_VOLUME',
     'Liquid fuels',
     fuel.fuelType,
     'SCOPE1_EF',
@@ -90,8 +80,7 @@ const emissionsOfGasForLiquidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   );
   const ecSCq = selectConstant(
     constants.COMMON,
-    (value) => energyPerVolume('Fuel', value),
-    'STATIONARY_FUEL_FACTORS',
+    'STATIONARY_FUEL_FACTORS_BY_VOLUME',
     'Liquid fuels',
     fuel.fuelType,
     'ENERGY_CONTENT_FACTOR',
@@ -108,14 +97,12 @@ const emissionsOfGasForNaturalGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   const qSCq = fuel.amountLitres;
   const efSC1qg = selectConstant(
     constants.COMMON,
-    (value) => massPerEnergy(gasType, value),
     'NATURAL_GAS_FACTORS',
     'SCOPE1_EF',
     gasType,
   );
   const ecSCq = selectConstant(
     constants.COMMON,
-    (value) => energyPerVolume('Fuel', value),
     'NATURAL_GAS_FACTORS',
     'ENERGY_CONTENT_FACTOR',
   );
