@@ -33,7 +33,6 @@ const emissionsOfGasForSolidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   );
   const ecSCq = selectConstant(
     constants.COMMON,
-    // REVISIT: Constant values in table 4 are all in GJ/t, so we need to convert to GJ/kL
     'STATIONARY_FUEL_FACTORS_BY_MASS',
     'Solid fuels',
     fuel.fuelType,

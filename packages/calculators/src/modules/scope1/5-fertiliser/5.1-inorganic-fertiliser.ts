@@ -145,7 +145,6 @@ CN2O = factor to convert elemental mass of nitrous oxide to molecular mass
     );
 
     // NOTE: Method 2 is implemented in getEFjN20ForFertiliser
-    // An appropriate value for EFjN2O should be selected from A.2.2.3 depending on production
     const efjN20 = getEFjN20ForFertiliser(
       inorganicFertiliser,
       input,

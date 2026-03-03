@@ -154,8 +154,6 @@ export function selectConstant<TOut extends NumberUnit>(
     ];
   }
 
-  // const value = getValue(current);
-
   return new ConstantSelectionContainer(
     current as TOut,
     selectors,
