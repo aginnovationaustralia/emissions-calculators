@@ -162,7 +162,7 @@ const calculateScope3Grains = (
 
   // 7.6 Purchased herbicides / pesticides
   // herbicide
-  const { agrichemicals } = calculateScope3Agrichemicals(crop, context);
+  const agrichemicals = calculateScope3Agrichemicals(crop, context);
 
   // 7.7 Purchased lime
   // lime

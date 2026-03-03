@@ -29,7 +29,5 @@ EF h = emission factor of purchased agrichemical (kg CO2e/kg)
   });
 
   const agrichemicals = sum(emissionsFromPurchases);
-  return {
-    agrichemicals,
-  };
+  return agrichemicals;
 };

@@ -12,6 +12,7 @@ import {
 } from '@/tools/units';
 import { State } from '@/types/enums';
 import {
+  AgrochemicalType,
   AviationFuelType,
   BasicCropProductionSystem,
   CarsLightCommercialFuelType,
@@ -50,16 +51,6 @@ export type NamedConstants = {
   name: string;
 };
 
-export const AgrochemicalTypes = [
-  'Herbicide',
-  'HerbicideOther',
-  'Insecticide',
-  'Fungicide',
-  'PlantGrowthRegulator',
-] as const;
-
-export type AgrochemicalTypes = (typeof AgrochemicalTypes)[number];
-
 export const STATES = {
   NSW: 'nsw',
   VIC: 'vic',
@@ -87,7 +78,7 @@ export type FuelFactorByMass = {
 };
 export type CommonConstants = NamedConstants & {
   AGROCHEMICAL_FACTORS: Record<
-    AgrochemicalTypes,
+    AgrochemicalType,
     MassPerMass<'CO2e', 'Chemical'>
   >;
 

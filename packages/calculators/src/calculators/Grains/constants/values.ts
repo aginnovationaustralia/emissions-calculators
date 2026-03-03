@@ -73,12 +73,17 @@ export const commonConstants: CommonConstants = {
 
   LIME_SCOPE3_EF: massPerMass('CO2e', 'Lime', 0.432),
 
+  // Table A.3.1.5
   AGROCHEMICAL_FACTORS: {
-    Herbicide: massPerMass('CO2e', 'Chemical', 33),
-    HerbicideOther: massPerMass('CO2e', 'Chemical', 18.6),
+    'Herbicide (paraquat, diquat, glyphosate)': massPerMass(
+      'CO2e',
+      'Chemical',
+      33,
+    ),
+    'Other herbicide': massPerMass('CO2e', 'Chemical', 18.6),
     Insecticide: massPerMass('CO2e', 'Chemical', 18.9),
     Fungicide: massPerMass('CO2e', 'Chemical', 12.6),
-    PlantGrowthRegulator: massPerMass('CO2e', 'Chemical', 10.5),
+    'Plant growth regulator': massPerMass('CO2e', 'Chemical', 10.5),
   },
 
   /**

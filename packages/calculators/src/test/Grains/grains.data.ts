@@ -14,11 +14,11 @@ export const grainWheat: GrainsCrop = {
   dolomiteFraction: 0,
   chemicals: [
     {
-      type: 'Herbicide',
+      type: 'Herbicide (paraquat, diquat, glyphosate)',
       amountKg: 8.5,
     },
     {
-      type: 'HerbicideOther',
+      type: 'Other herbicide',
       amountKg: 3.6,
     },
   ],
@@ -82,11 +82,11 @@ export const grainSorghum: GrainsCrop = {
   dolomiteFraction: 0,
   chemicals: [
     {
-      type: 'Herbicide',
+      type: 'Herbicide (paraquat, diquat, glyphosate)',
       amountKg: 4.25,
     },
     {
-      type: 'HerbicideOther',
+      type: 'Other herbicide',
       amountKg: 10.8,
     },
   ],
@@ -131,11 +131,11 @@ export const grainLegume: GrainsCrop = {
   dolomiteFraction: 0,
   chemicals: [
     {
-      type: 'Herbicide',
+      type: 'Herbicide (paraquat, diquat, glyphosate)',
       amountKg: 2.12,
     },
     {
-      type: 'HerbicideOther',
+      type: 'Other herbicide',
       amountKg: 3.6,
     },
   ],
@@ -180,11 +180,11 @@ export const grainGrass: GrainsCrop = {
   dolomiteFraction: 0,
   chemicals: [
     {
-      type: 'Herbicide',
+      type: 'Herbicide (paraquat, diquat, glyphosate)',
       amountKg: 4.25,
     },
     {
-      type: 'HerbicideOther',
+      type: 'Other herbicide',
       amountKg: 18,
     },
   ],
@@ -229,11 +229,11 @@ export const grainTriticale: GrainsCrop = {
   dolomiteFraction: 0,
   chemicals: [
     {
-      type: 'Herbicide',
+      type: 'Herbicide (paraquat, diquat, glyphosate)',
       amountKg: 8.5,
     },
     {
-      type: 'HerbicideOther',
+      type: 'Other herbicide',
       amountKg: 5.4,
     },
   ],
@@ -295,11 +295,11 @@ export const grainsTestData102: GrainsInput = {
       dolomiteFraction: 0.5,
       chemicals: [
         {
-          type: 'Herbicide',
+          type: 'Herbicide (paraquat, diquat, glyphosate)',
           amountKg: 54.504,
         },
         {
-          type: 'HerbicideOther',
+          type: 'Other herbicide',
           amountKg: 100,
         },
       ],

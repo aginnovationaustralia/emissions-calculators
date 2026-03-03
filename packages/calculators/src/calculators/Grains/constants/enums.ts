@@ -494,3 +494,13 @@ export const FuelStationaryLiquidTypes = [
 ] as const;
 export type FuelStationaryLiquidType =
   (typeof FuelStationaryLiquidTypes)[number];
+
+export const AgrochemicalTypes = [
+  'Herbicide (paraquat, diquat, glyphosate)',
+  'Other herbicide',
+  'Insecticide',
+  'Fungicide',
+  'Plant growth regulator',
+] as const;
+
+export type AgrochemicalType = (typeof AgrochemicalTypes)[number];
