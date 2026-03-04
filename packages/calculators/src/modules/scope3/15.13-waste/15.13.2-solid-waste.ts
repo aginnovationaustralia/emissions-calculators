@@ -1,12 +1,12 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
-import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
 import { convertWasteAmountToMass } from './solid-waste.input';
+import { WasteInputTransformed } from './waste.input';
 
 export const calculateScope3WasteSolidWaste = (
-  crop: GrainsCropTransformed,
+  crop: WasteInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   const { constants } = context;
