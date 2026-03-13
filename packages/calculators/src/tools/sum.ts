@@ -1,9 +1,5 @@
 import Decimal from 'decimal.js-light';
-import {
-  IntermediateOrNamedOrigin,
-  SummedContainer,
-  TypedContainer,
-} from './containers';
+import { Metadata, SummedContainer, TypedContainer } from './containers';
 import { NumberUnit, VoidUnit, voidUnit } from './units';
 
 // Extract the unit type from an origin (for preserving unit when summing)
@@ -16,14 +12,13 @@ export type ExtractOriginUnit<T> = T extends {
 // Sum function with type inference to preserve specific unit types
 export function sum<U extends TypedContainer<NumberUnit>>(
   array: U[],
-  baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+  baseOrigin?: Metadata,
 ): SummedContainer<ExtractOriginUnit<U>>;
 
 export function sum<N extends NumberUnit, O extends TypedContainer<N>>(
   array: O[],
-  baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+  baseOrigin?: Metadata,
 ): SummedContainer<N> {
-  // const baseOrDefault = populateBaseOrigin(baseOrigin);
   const inheritedUnit = array.length > 0 ? array[0].unit : voidUnit();
   const unit = {
     ...inheritedUnit,

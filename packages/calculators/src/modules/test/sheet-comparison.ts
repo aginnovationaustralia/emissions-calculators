@@ -3,7 +3,8 @@ import { ExecutionContext } from '@/calculators/Grains/constants/executionContex
 import { AllConstants } from '@/calculators/Grains/constants/types';
 import { testContext } from '@/test/Grains/context';
 import { Container } from '@/tools/containers';
-import { formatValues, NumberUnit } from '@/tools/units';
+import { formatExpression, formatNamedValues } from '@/tools/format';
+import { NumberUnit } from '@/tools/units';
 import XLSX from 'xlsx-populate';
 
 type ExtractedDetails<
@@ -19,6 +20,7 @@ const defaultOutputGetter =
   (columnName: string) => (sheet: XLSX.Sheet, row: number) =>
     Number(sheet.cell(`${columnName}${row}`).value());
 
+type CreateSheetExtractorOptions = { rowInterval?: number };
 export const createSheetExtractor =
   <
     Input,
@@ -31,12 +33,14 @@ export const createSheetExtractor =
       method: '1' | '2',
     ) => Input | undefined,
     getExpectedOutput: ((sheet: XLSX.Sheet, row: number) => Output) | string,
+    options?: CreateSheetExtractorOptions,
   ) =>
   (
     sheet: XLSX.Sheet,
     firstRow: number,
     method: '1' | '2',
   ): { results: Extraction[]; firstRow: number } => {
+    const rowInterval = options?.rowInterval ?? 1;
     const outputGetter =
       typeof getExpectedOutput === 'string'
         ? defaultOutputGetter(getExpectedOutput)
@@ -53,7 +57,7 @@ export const createSheetExtractor =
       } else {
         finished = true;
       }
-      currentRow++;
+      currentRow += rowInterval;
     }
     return { results, firstRow };
   };
@@ -84,7 +88,9 @@ export const compareInputsAndOutputs = <
       const message = e instanceof Error ? e.message : String(e);
       console.error(`Row ${rowIndex} (0-based sheet row): ${message}`);
       if (actual) {
-        console.log(formatValues(actual));
+        console.log(formatExpression(actual));
+        // console.log(formatIntermediates(actual));
+        console.log(formatNamedValues(actual, 9));
       }
       throw e;
     }

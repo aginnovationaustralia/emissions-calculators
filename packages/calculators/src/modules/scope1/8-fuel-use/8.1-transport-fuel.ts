@@ -354,7 +354,6 @@ const transportEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
 
   return sum(transportFuelEmissions, {
     name: `EtransGHG${gasType}`,
-    valueType: 'variable',
     references: [`8.1.1.1 (62)`],
   });
 };

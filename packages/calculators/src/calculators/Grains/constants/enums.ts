@@ -83,8 +83,9 @@ export const SwineMMSTypes = [
   'Deep litter',
   'Stockpile (Solid storage)',
   'Effluent pond (Uncovered anaerobic lagoon)',
-  'Anaerobic digester / Covered lagoon',
+  'Anaerobic digestor / Covered lagoon',
   'Short HRT tank storage < 1 month (pit storage)',
+  'Direct application', // This is not strictly derived from references. It is implicit and added to allow easier data entry
 ] as const;
 export type SwineMMSType = (typeof SwineMMSTypes)[number];
 
@@ -506,3 +507,16 @@ export const AgrochemicalTypes = [
 ] as const;
 
 export type AgrochemicalType = (typeof AgrochemicalTypes)[number];
+
+export const FeedlotMMSTypes = [
+  'Dry lot (Feedpad)',
+  'Solid Storage (Stockpile)',
+  'Composting (Passive Windrow)',
+  'Uncovered anaerobic lagoon (Effluent Pond)',
+  'Direct application', // This is not strictly derived from references. It is implicit and added to allow easier data entry
+] as const;
+export type FeedlotMMSType = (typeof FeedlotMMSTypes)[number];
+
+export const FeedlotDurationTypes = ['0-80 days', '81-200 days', '201+ days'];
+
+export type FeedlotDurationType = (typeof FeedlotDurationTypes)[number];

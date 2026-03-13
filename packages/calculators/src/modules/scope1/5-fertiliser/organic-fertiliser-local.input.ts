@@ -1,10 +1,10 @@
 import { object } from '@/types/schemas';
 import { z } from 'zod';
-import { SwineManureInputSchema } from '../4.5-manure-swine/swine-manure.input';
+import { LivestockManuresInputSchema } from '../4-manure-management/livestock-manures.input';
 
 export const OrganicFertiliserLocalInputSchema = object({
   origin: z.literal('Local'),
-  details: z.union([SwineManureInputSchema]), // TODO: Need to support other types of local organic fertiliser (beef etc)
+  details: LivestockManuresInputSchema,
 });
 
 export type OrganicFertiliserLocalInput = z.input<

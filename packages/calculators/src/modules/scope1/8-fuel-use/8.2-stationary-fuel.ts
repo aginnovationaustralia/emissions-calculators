@@ -143,7 +143,6 @@ const stationaryEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   });
   return sum(stationaryEmissions, {
     name: `EtransGHG${gasType}`,
-    valueType: 'variable',
     references: [`6.1.1 (55)`],
   });
 };

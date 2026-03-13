@@ -44,6 +44,7 @@ const calculateLeachingAndRunoffN2O = (
     (organicFertiliser) => {
       const mnsoiljf = calculateMNSoilForOrganicFertiliser(
         organicFertiliser,
+        input,
         constants,
       );
       const fracWetj = input.isInLeachingZone ? one : zero;

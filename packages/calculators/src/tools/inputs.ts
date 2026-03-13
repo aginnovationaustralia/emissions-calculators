@@ -5,5 +5,5 @@ export const input = <T extends AnyUnit>(
   name: string,
   value: T,
 ): RootContainer<T> => {
-  return new RootContainer(value, { valueType: 'input', name });
+  return new RootContainer(value, { name });
 };

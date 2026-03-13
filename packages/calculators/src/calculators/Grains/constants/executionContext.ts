@@ -1,7 +1,12 @@
 import { Environment } from '@/calculators/execution/types';
 import { CalculatorNames } from '@/calculators/strings';
 import { AllConstants, HasCommonConstants } from './types';
-import { commonConstants, cropConstants, swineConstants } from './values';
+import {
+  commonConstants,
+  cropConstants,
+  feedlotConstants,
+  swineConstants,
+} from './values';
 
 type ExecutionMetadata = {
   calculator: string;
@@ -36,6 +41,7 @@ export const loadConstants = (): AllConstants => {
     COMMON: commonConstants,
     CROP: cropConstants,
     SWINE: swineConstants,
+    FEEDLOT: feedlotConstants,
   };
 };
 

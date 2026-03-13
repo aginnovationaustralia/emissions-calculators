@@ -2,7 +2,7 @@ import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
 import { isDefined } from '@/common/filters';
-import { calculateMassOfNitrogenAppliedToSoils } from '@/modules/scope1/4.5-manure-swine';
+import { calculateMassOfNitrogenAppliedToSoils } from '@/modules/scope1/4-manure-management';
 import {
   extendedToBaseProductionSystem,
   FertiliserInputTransformed,
@@ -38,7 +38,8 @@ const calculateScope3WasteOffsiteManureDirectN2O = (
 
       const mnSoilScope3 = calculateMassOfNitrogenAppliedToSoils(
         origin.details,
-        constants.SWINE,
+        input,
+        constants,
       ).scope3;
       const efN2Oi = selectConstant(
         constants.CROP,
@@ -88,7 +89,8 @@ export const calculateScope3WasteOffsiteManureAtmosphericDepositionN2O = (
 
       const mnSoilScope3 = calculateMassOfNitrogenAppliedToSoils(
         origin.details,
-        constants.SWINE,
+        input,
+        constants,
       ).scope3;
       const fracGASMsoil = selectConstant(
         constants.CROP,
@@ -138,7 +140,8 @@ export const calculateScope3WasteOffsiteManureLeachingN2O = (
 
       const mnSoilScope3 = calculateMassOfNitrogenAppliedToSoils(
         origin.details,
-        constants.SWINE,
+        input,
+        constants,
       ).scope3;
       // REVISIT: This ternary is discarding why 1 or 0 was chosen ie you can't trace to the input.isInLeachingZone
       const fracWetj = input.isInLeachingZone ? one : zero;

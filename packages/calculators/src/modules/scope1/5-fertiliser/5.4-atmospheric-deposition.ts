@@ -100,6 +100,7 @@ const calculateOrganicFertiliserAtmosphericDepositionN2O = (
   const emissionRecords = applications.map((organicFertiliser) => {
     const mnSoiljf = calculateMNSoilForOrganicFertiliser(
       organicFertiliser,
+      input,
       constants,
     );
     const fracGASMsoil = selectConstant(

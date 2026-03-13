@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js-light';
-import { Container, isPartialNamedOriginWithName } from './containers';
 
 export type Substance =
   | 'Chemical'
@@ -17,6 +16,7 @@ export type Substance =
   | 'Oxygen'
   | 'Urea'
   | 'DryMatter'
+  | 'CrudeProtein'
   | 'CropResidue'
   | 'Yield'
   | 'Lime'
@@ -309,6 +309,72 @@ export const isMassPerTime = (
   return unit.__unitType === 'MassPerTime';
 };
 
+export type MassPerHeadPerDay<S extends Substance> = NumberUnitBase & {
+  __unitType: 'MassPerHeadPerDay';
+  substance: S;
+};
+export const massPerHeadPerDay = <S extends Substance>(
+  substance: S,
+  initialValueKgPerHeadPerDay?: number | Decimal,
+): MassPerHeadPerDay<S> => {
+  return {
+    __unitType: 'MassPerHeadPerDay',
+    substance,
+    value: new Decimal(initialValueKgPerHeadPerDay ?? 0),
+  };
+};
+export const isMassPerHeadPerDay = (
+  unit: NumberUnit,
+): unit is MassPerHeadPerDay<Substance> => {
+  return unit.__unitType === 'MassPerHeadPerDay';
+};
+
+export type MassPerDay<S extends Substance> = NumberUnitBase & {
+  __unitType: 'MassPerDay';
+  substance: S;
+};
+export const massPerDay = <S extends Substance>(
+  substance: S,
+  initialValueKgPerDays?: number | Decimal,
+): MassPerDay<S> => {
+  return {
+    __unitType: 'MassPerDay',
+    substance,
+    value: new Decimal(initialValueKgPerDays ?? 0),
+  };
+};
+export const isMassPerDay = (
+  unit: NumberUnit,
+): unit is MassPerDay<Substance> => {
+  return unit.__unitType === 'MassPerDay';
+};
+
+export type Days = NumberUnitBase & {
+  __unitType: 'Days';
+};
+export const days = (initialValueDays?: number | Decimal): Days => {
+  return {
+    __unitType: 'Days',
+    value: new Decimal(initialValueDays ?? 0),
+  };
+};
+export const isDays = (unit: NumberUnit): unit is Days => {
+  return unit.__unitType === 'Days';
+};
+
+export type Head = NumberUnitBase & {
+  __unitType: 'Head';
+};
+export const head = (initialValueHeads?: number | Decimal): Head => {
+  return {
+    __unitType: 'Head',
+    value: new Decimal(initialValueHeads ?? 0),
+  };
+};
+export const isHead = (unit: NumberUnit): unit is Head => {
+  return unit.__unitType === 'Head';
+};
+
 export type RealNumber = NumberUnitBase & {
   __unitType: 'RealNumber';
 };
@@ -352,6 +418,10 @@ export type NumberUnit =
   | MassPerArea<Substance>
   | MassPerTime<Substance>
   | MassPerElectricity<Substance>
+  | MassPerHeadPerDay<Substance>
+  | MassPerDay<Substance>
+  | Days
+  | Head
   | EnergyPerVolume<Substance>
   | Volume<Substance>
   | Energy
@@ -374,94 +444,3 @@ export const isStringUnit = (unit: AnyUnit): unit is StringUnit => {
 };
 
 export type AnyUnit = NumberUnit | StringUnit;
-
-export function formatUnit(unit: AnyUnit): string {
-  if (isVoid(unit)) {
-    return 'Void';
-  }
-  if (isStringUnit(unit)) {
-    return `string: (${unit})`;
-  }
-
-  switch (unit.__unitType) {
-    case 'MassPerMass':
-      return `Mass(${unit.snum}) / Mass(${unit.sdenom})`;
-    case 'Mass':
-      return `Mass(${unit.substance})`;
-    case 'Volume':
-      return `Volume(${unit.substance})`;
-    case 'Energy':
-      return 'energy';
-    case 'RealNumber':
-      return 'real number';
-    case 'MassPerEnergy':
-      return `Mass(${unit.substance}) / Energy`;
-    case 'EnergyPerMass':
-      return `Energy / Mass(${unit.substance})`;
-    case 'EnergyPerVolume':
-      return `Energy / Volume(${unit.substance})`;
-    case 'MassPerVolume':
-      return `Mass(${unit.mass}) / Volume(${unit.volume})`;
-    case 'MassPerArea':
-      return `Mass(${unit.substance}) / Area`;
-    case 'MassPerTime':
-      return `Mass(${unit.substance}) / Time`;
-    case 'Area':
-      return 'Area';
-    case 'Time':
-      return 'Time';
-    case 'Electricity':
-      return 'Electricity';
-    case 'MassPerElectricity':
-      return `Mass(${unit.substance}) / Electricity`;
-  }
-}
-
-export const formatValues = (container: Container<AnyUnit>): string => {
-  const lhsUnit = container.unit;
-  let lhs = '';
-  if (isVoid(lhsUnit)) {
-    lhs = 'void(0)';
-  } else if (isStringUnit(lhsUnit)) {
-    lhs = lhsUnit;
-  } else {
-    // console.log(container);
-    lhs = lhsUnit.value.toNumber().toString();
-  }
-
-  const rhs = formatValuesRecursive(container);
-
-  return `${lhs} = ${rhs}`;
-};
-
-const formatUnitValue = (unit: AnyUnit): string => {
-  if (isVoid(unit)) {
-    return 'void(0)';
-  } else if (isStringUnit(unit)) {
-    return unit;
-  } else {
-    return unit.value.toNumber().toString();
-  }
-};
-
-const formatValueAndName = (container: Container<AnyUnit>): string => {
-  const core = container.core;
-  const name = isPartialNamedOriginWithName(core) ? core.name : 'anon';
-
-  return `${name}(${formatUnitValue(container.unit)})`;
-};
-
-const formatValuesRecursive = (container: Container<AnyUnit>): string => {
-  switch (container.originType) {
-    case 'binary':
-      return `${formatValuesRecursive(container.left)} ${container.type === 'add' ? '+' : container.type === 'subtract' ? '-' : container.type === 'multiply' ? '*' : '/'} ${formatValuesRecursive(container.right)}`;
-    case 'root':
-      return formatValueAndName(container);
-    case 'sum':
-      return container.from.map(formatValuesRecursive).join(' + ');
-    case 'constant_selection':
-      return formatValueAndName(container);
-    default:
-      return `Unknown ${container}`;
-  }
-};

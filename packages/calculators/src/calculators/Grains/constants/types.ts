@@ -4,6 +4,7 @@ import {
   MassPerArea,
   MassPerElectricity,
   MassPerEnergy,
+  MassPerHeadPerDay,
   MassPerMass,
   MassPerTime,
   MassPerVolume,
@@ -18,6 +19,8 @@ import {
   CarsLightCommercialFuelType,
   CarsLightCommercialPre2004FuelType,
   CropType,
+  FeedlotDurationType,
+  FeedlotMMSType,
   FuelStationaryMassBasedLiquidType,
   FuelStationarySolidType,
   FuelStationaryVolumeBasedLiquidType,
@@ -251,6 +254,7 @@ export type CropConstants = NamedConstants & {
 
   FRACTION_N_VOLATILISED_ORGANIC_FERTILISER: MassPerMass<'Volatilised N', 'N'>;
   FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF: RealNumber;
+  FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF_SOLID_STORAGE: RealNumber;
   EF_N2O_LEACHING_AND_RUNOFF: MassPerMass<'N2O', 'N'>;
 };
 
@@ -263,10 +267,23 @@ export type SwineConstants = NamedConstants & {
   MMS: Record<SwineMMSType, MMSFactors>;
 };
 
+type FeedlotFeedFactors = {
+  DRY_MATTER_INTAKE: MassPerHeadPerDay<'DryMatter'>;
+  CRUDE_PROTEIN_CONTENT: MassPerMass<'CrudeProtein', 'DryMatter'>;
+  NITROGEN_RETENTION_FRACTION: RealNumber;
+};
+
+export type FeedlotConstants = NamedConstants & {
+  MMS: Record<FeedlotMMSType, MMSFactors>;
+  FEED: Record<FeedlotDurationType, FeedlotFeedFactors>;
+  CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: MassPerMass<'CrudeProtein', 'N'>;
+};
+
 export type AllConstants = {
   COMMON: CommonConstants;
   CROP: CropConstants;
   SWINE: SwineConstants;
+  FEEDLOT: FeedlotConstants;
 };
 
 export type HasCommonConstants = {

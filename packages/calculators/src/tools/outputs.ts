@@ -1,7 +1,8 @@
 import Decimal from 'decimal.js-light';
 import { Container } from './containers';
+import { formatUnit } from './format';
 import { HasMetadata, ValueMetadata } from './metadata';
-import { AnyUnit, formatUnit, isVoid, mass, Mass, VoidUnit } from './units';
+import { AnyUnit, isVoid, mass, Mass, VoidUnit } from './units';
 
 export const makeUnique = <T>(a: T[]): T[] => {
   return [...new Set(a)];
@@ -100,10 +101,7 @@ export const scope1Output = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
 export const collectReferences = <O extends Container<AnyUnit>>(
   container: O,
 ): string[] => {
-  const baseResults =
-    container.core.valueType === 'intermediate'
-      ? []
-      : (container.core.references ?? []);
+  const baseResults = container.core?.references ?? [];
   switch (container.originType) {
     case 'binary':
       return baseResults.concat(
@@ -112,6 +110,8 @@ export const collectReferences = <O extends Container<AnyUnit>>(
       );
     case 'root':
       return baseResults;
+    case 'bracketed':
+      return baseResults.concat(collectReferences(container.inner));
     case 'sum':
       return baseResults.concat(container.from.flatMap(collectReferences));
     case 'constant_selection':
@@ -142,6 +142,8 @@ export const collectConstants = <O extends Container<AnyUnit>>(
       );
     case 'root':
       return [];
+    case 'bracketed':
+      return collectConstants(origin.inner);
     case 'sum':
       return origin.from.flatMap(collectConstants);
     case 'constant_selection':

@@ -1,7 +1,7 @@
 import { NamedConstants } from '@/calculators/Grains/constants/types';
 import {
   ConstantSelectionContainer,
-  IntermediateOrNamedOrigin,
+  Metadata,
   RootContainer,
 } from './containers';
 import { AnyUnit, NumberUnit, StringUnit } from './units';
@@ -9,12 +9,11 @@ import { AnyUnit, NumberUnit, StringUnit } from './units';
 export const constant = <U extends AnyUnit>(
   name: string,
   unit: U,
-  baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+  baseOrigin?: Metadata,
 ): RootContainer<U> => {
   return new RootContainer(unit, {
-    name,
     ...baseOrigin,
-    valueType: 'constant',
+    name,
   });
 };
 
@@ -50,26 +49,27 @@ The return value should be of type RootContainer<T>, with an originType of root 
 */
 
 // 1-level: constants[CK1]
+// Return type uses Extract<Path, NumberUnit> so we preserve the path's literal type
+// (e.g. MassPerHeadPerDay<'DryMatter'>) instead of inferring an intersection with
+// NumberUnit (e.g. MassPerHeadPerDay<'DryMatter'> & MassPerHeadPerDay<Substance>).
 export function selectConstant<
   CK1 extends string,
   Constants extends Record<CK1, unknown> & NamedConstants,
-  TOut extends Constants[CK1] & NumberUnit,
 >(
   constants: Constants,
   selector1: CK1 | RootContainer<StringUnit<CK1>>,
-): ConstantSelectionContainer<TOut>;
+): ConstantSelectionContainer<Extract<Constants[CK1], NumberUnit>>;
 
 // 2-level: constants[CK1][CK2]
 export function selectConstant<
   CK1 extends string,
   CK2 extends string,
   Constants extends Record<CK1, Record<CK2, unknown>> & NamedConstants,
-  TOut extends Constants[CK1][CK2] & NumberUnit,
 >(
   constants: Constants,
   selector1: CK1 | RootContainer<StringUnit<CK1>>,
   selector2: CK2 | RootContainer<StringUnit<CK2>>,
-): ConstantSelectionContainer<TOut>;
+): ConstantSelectionContainer<Extract<Constants[CK1][CK2], NumberUnit>>;
 
 // 3-level: constants[CK1][CK2][CK3]
 export function selectConstant<
@@ -78,13 +78,12 @@ export function selectConstant<
   CK3 extends string,
   Constants extends Record<CK1, Record<CK2, Record<CK3, unknown>>> &
     NamedConstants,
-  TOut extends Constants[CK1][CK2][CK3] & NumberUnit,
 >(
   constants: Constants,
   selector1: CK1 | RootContainer<StringUnit<CK1>>,
   selector2: CK2 | RootContainer<StringUnit<CK2>>,
   selector3: CK3 | RootContainer<StringUnit<CK3>>,
-): ConstantSelectionContainer<TOut>;
+): ConstantSelectionContainer<Extract<Constants[CK1][CK2][CK3], NumberUnit>>;
 
 // 4-level: constants[CK1][CK2][CK3][CK4]
 export function selectConstant<
@@ -97,14 +96,15 @@ export function selectConstant<
     Record<CK2, Record<CK3, Record<CK4, unknown>>>
   > &
     NamedConstants,
-  TOut extends Constants[CK1][CK2][CK3][CK4] & NumberUnit,
 >(
   constants: Constants,
   selector1: CK1 | RootContainer<StringUnit<CK1>>,
   selector2: CK2 | RootContainer<StringUnit<CK2>>,
   selector3: CK3 | RootContainer<StringUnit<CK3>>,
   selector4: CK4 | RootContainer<StringUnit<CK4>>,
-): ConstantSelectionContainer<TOut>;
+): ConstantSelectionContainer<
+  Extract<Constants[CK1][CK2][CK3][CK4], NumberUnit>
+>;
 
 // 5-level: constants[CK1][CK2][CK3][CK4][CK5]
 export function selectConstant<
@@ -118,7 +118,6 @@ export function selectConstant<
     Record<CK2, Record<CK3, Record<CK4, Record<CK5, unknown>>>>
   > &
     NamedConstants,
-  TConstant extends Constants[CK1][CK2][CK3][CK4][CK5] & NumberUnit,
 >(
   constants: Constants,
   selector1: CK1 | RootContainer<StringUnit<CK1>>,
@@ -126,7 +125,9 @@ export function selectConstant<
   selector3: CK3 | RootContainer<StringUnit<CK3>>,
   selector4: CK4 | RootContainer<StringUnit<CK4>>,
   selector5: CK5 | RootContainer<StringUnit<CK5>>,
-): ConstantSelectionContainer<TConstant>;
+): ConstantSelectionContainer<
+  Extract<Constants[CK1][CK2][CK3][CK4][CK5], NumberUnit>
+>;
 
 // Implementation
 

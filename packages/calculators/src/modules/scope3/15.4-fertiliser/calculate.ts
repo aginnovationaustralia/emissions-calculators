@@ -146,7 +146,7 @@ export const calculateScope3FertiliserMethod2 = (
   */
   const tmjf = fertiliser.massAppliedKg;
   const ef = fertiliser.customScope3EmissionFactor;
-  const e = tmjf.multiply(ef).attachContext({ references: ['15.4.1.2 (342)'] });
+  const e = tmjf.multiply(ef).attach({ references: ['15.4.1.2 (342)'] });
   return e;
 };
 

@@ -1,21 +1,27 @@
+import { formatUnit } from './format';
 import {
   AnyUnit,
   Area,
+  Days,
   Electricity,
   energy,
   Energy,
   EnergyPerMass,
   EnergyPerVolume,
-  formatUnit,
+  Head,
   isArea,
+  isDays,
   isElectricity,
   isEnergy,
   isEnergyPerMass,
   isEnergyPerVolume,
+  isHead,
   isMass,
   isMassPerArea,
+  isMassPerDay,
   isMassPerElectricity,
   isMassPerEnergy,
+  isMassPerHeadPerDay,
   isMassPerMass,
   isMassPerTime,
   isRealNumber,
@@ -26,8 +32,12 @@ import {
   Mass,
   massPerArea,
   MassPerArea,
+  massPerDay,
+  MassPerDay,
   MassPerElectricity,
   MassPerEnergy,
+  massPerHeadPerDay,
+  MassPerHeadPerDay,
   MassPerMass,
   MassPerTime,
   MassPerVolume,
@@ -49,72 +59,52 @@ type ExtractMassPerAreaSubstance<U> =
 type ExtractMassPerTimeSubstance<U> =
   U extends MassPerTime<infer S> ? S : never;
 type ExtractMassSubstance<U> = U extends Mass<infer S> ? S : never;
+type ExtractMassPerHeadPerDaySubstance<U> =
+  U extends MassPerHeadPerDay<infer S> ? S : never;
+type ExtractMassPerDaySubstance<U> = U extends MassPerDay<infer S> ? S : never;
 
-export type NamedValueType =
-  | 'input'
-  | 'variable'
-  | 'constant'
-  | 'output'
-  | 'value';
-
-export type NamedOrigin = {
-  valueType: NamedValueType;
-  name: string;
-  references?: string[];
-};
-export type IntermediateOrigin = {
-  valueType: 'intermediate';
-};
-export type IntermediateOrNamedOrigin = NamedOrigin | IntermediateOrigin;
-
-/** Type guard: when C is generic, TS can't narrow C from runtime checks, but we can narrow the *value* to NamedOrigin-like. */
-export function isPartialNamedOriginWithName(
-  x: Partial<NamedOrigin | IntermediateOrigin> | undefined,
-): x is Partial<NamedOrigin> & { name: string } {
-  return !!x && 'name' in x && !!x.name;
+export function isNamedOrigin(x: Metadata) {
+  return x && 'name' in x && !!x.name;
 }
 
-export const populateBaseOrigin = <C extends NamedOrigin | IntermediateOrigin>(
-  baseOrigin?: Partial<C>,
-): C => {
-  // Cast to union so the type guard can narrow; safe because C extends NamedOrigin | IntermediateOrigin
-  const base = baseOrigin as
-    | Partial<NamedOrigin | IntermediateOrigin>
-    | undefined;
-  if (isPartialNamedOriginWithName(base)) {
-    return {
-      name: base.name,
-      valueType: base.valueType ?? 'variable',
-      references: base.references,
-    } as C;
-  }
-  return { valueType: 'intermediate' } as C;
+export type Metadata =
+  | {
+      name?: string;
+      references?: string[];
+    }
+  | undefined;
+
+type NamedMetadata = Metadata & {
+  name: string;
 };
 
-export class BaseContainer<
-  U extends AnyUnit,
-  C extends NamedOrigin | IntermediateOrigin = IntermediateOrNamedOrigin,
-> {
+export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   unit: U;
   // unit: U | VoidUnit;
-  core: C;
+  core: M;
 
-  constructor(unit: U, baseOrigin?: Partial<C>) {
+  constructor(unit: U, baseOrigin: M) {
     this.unit = unit;
 
-    this.core = populateBaseOrigin(baseOrigin);
+    this.core = baseOrigin;
   }
 
-  attachContext({ references }: { references: string[] }) {
-    if (isPartialNamedOriginWithName(this.core)) {
-      this.core = {
-        ...this.core,
-        references: this.core.references?.concat(references) ?? references,
-      };
-    } else {
-      throw new Error('Cannot attach references to non-named origin');
-    }
+  attach(metadata: Metadata) {
+    this.core = {
+      ...this.core,
+      ...metadata,
+    };
 
+    return this;
+  }
+
+  named(name: string) {
+    this.core = {
+      ...this.core,
+      name,
+    };
+
+    // REVISIT: calling named() mutates this, it has the potential to modify reused containers (like one)
     return this;
   }
 
@@ -126,21 +116,21 @@ export class BaseContainer<
    */
   // unit * RealNumber → preserve this.unit
   multiply<UL extends NumberUnit>(
-    this: BaseContainer<UL, C>,
+    this: BaseContainer<UL>,
     right: Container<RealNumber>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
   // RealNumber * unit → preserve this.unit
   multiply<UR extends NumberUnit>(
-    this: BaseContainer<RealNumber, C>,
+    this: BaseContainer<RealNumber>,
     right: Container<UR>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<UR>;
   // MassPerMass<S1,S2> * Mass<S2> → Mass<S1>
   multiply<S1 extends Substance, S2 extends Substance>(
-    this: BaseContainer<MassPerMass<S1, S2>, C>,
+    this: BaseContainer<MassPerMass<S1, S2>>,
     right: Container<Mass<S2>>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
   // Mass<S2> * MassPerMass<S1,S2> → Mass<S1> (only when right's denominator S2Right equals this's substance S2)
   multiply<
@@ -148,9 +138,9 @@ export class BaseContainer<
     S2 extends Substance,
     S2Right extends Substance,
   >(
-    this: BaseContainer<Mass<S2>, C>,
+    this: BaseContainer<Mass<S2>>,
     right: Container<MassPerMass<S1, S2Right>>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): [S2Right] extends [S2]
     ? [S2] extends [S2Right]
       ? BinaryContainer<Mass<S1>>
@@ -158,33 +148,33 @@ export class BaseContainer<
     : never;
   // EnergyPerVolume<S> * Volume<S> → Energy
   multiply<S extends Substance>(
-    this: BaseContainer<EnergyPerVolume<S>, C>,
+    this: BaseContainer<EnergyPerVolume<S>>,
     right: Container<Volume<S>>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<Energy>;
   // MassPerEnergy * Energy → Mass<substance>
   multiply<UL extends MassPerEnergy<Substance>>(
-    this: BaseContainer<UL, C>,
+    this: BaseContainer<UL>,
     right: Container<Energy>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<Mass<ExtractMassPerEnergySubstance<UL>>>;
   // EnergyPerMass * Mass → Energy
   multiply<S extends Substance, UL extends EnergyPerMass<S>>(
-    this: BaseContainer<UL, C>,
+    this: BaseContainer<UL>,
     right: Container<Mass<S>>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<Energy>;
   // MassPerArea * Area → Mass<substance>
   multiply<UL extends MassPerArea<Substance>>(
-    this: BaseContainer<UL, C>,
+    this: BaseContainer<UL>,
     right: Container<Area>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<Mass<ExtractMassPerAreaSubstance<UL>>>;
   // MassPerTime * Area → Mass<substance>
   multiply<UL extends MassPerTime<Substance>>(
-    this: BaseContainer<UL, C>,
+    this: BaseContainer<UL>,
     right: Container<Time>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<Mass<ExtractMassPerTimeSubstance<UL>>>;
   // MassPerVolume * Volume → Mass<substance>
   multiply<
@@ -192,21 +182,39 @@ export class BaseContainer<
     S2 extends Substance,
     UL extends MassPerVolume<S1, S2>,
   >(
-    this: BaseContainer<UL, C>,
+    this: BaseContainer<UL>,
     right: Container<Volume<S2>>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
   // Electricity * MassPerElectricity<S> → Mass<S>
   multiply<S extends Substance>(
-    this: BaseContainer<Electricity, C>,
+    this: BaseContainer<Electricity>,
     right: Container<MassPerElectricity<S>>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S>>;
+  // MassPerHeadPerDay<S1> * MassPerMass<S2, S1> = MassPerHeadPerDay<S2>
+  multiply<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<MassPerHeadPerDay<S1>>,
+    right: Container<MassPerMass<S2, S1>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerHeadPerDay<S2>>;
+  // MassPerHeadPerDay<S1> * Head = MassPerDay<S1>
+  multiply<S extends Substance, UL extends MassPerHeadPerDay<S>>(
+    this: BaseContainer<UL>,
+    right: Container<Head>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerDay<ExtractMassPerHeadPerDaySubstance<UL>>>;
+  // MassPerDay<S1> * Days = Mass<S1>
+  multiply<S extends Substance, UL extends MassPerDay<S>>(
+    this: BaseContainer<UL>,
+    right: Container<Days>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<Mass<ExtractMassPerDaySubstance<UL>>>;
   // Fallback implementation
   multiply(
-    this: BaseContainer<NumberUnit, C>,
+    this: BaseContainer<NumberUnit>,
     right: Container<NumberUnit>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<NumberUnit> {
     const leftUnit = this.unit;
     const rightUnit = right.unit;
@@ -230,6 +238,12 @@ export class BaseContainer<
       } else if (isEnergyPerVolume(leftUnit) && isVolume(rightUnit)) {
         unit = energy();
       } else if (isMassPerTime(leftUnit) && isTime(rightUnit)) {
+        unit = mass(leftUnit.substance);
+      } else if (isMassPerHeadPerDay(leftUnit) && isMassPerMass(rightUnit)) {
+        unit = massPerHeadPerDay(rightUnit.snum);
+      } else if (isMassPerHeadPerDay(leftUnit) && isHead(rightUnit)) {
+        unit = massPerDay(leftUnit.substance);
+      } else if (isMassPerDay(leftUnit) && isDays(rightUnit)) {
         unit = mass(leftUnit.substance);
       } else if (isRealNumber(leftUnit)) {
         unit = { ...rightUnit };
@@ -257,21 +271,31 @@ export class BaseContainer<
   // Implement divide operation, following the same pattern as multiply
   // start out with an overload for NumberUnit divided by RealNumber → RealNumber and Mass<Substance> divided by Area → MassPerArea<Substance>
   divide<UL extends NumberUnit>(
-    this: BaseContainer<UL, C>,
+    this: BaseContainer<UL>,
     right: Container<RealNumber>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
   divide<UL extends Mass<Substance>>(
-    this: BaseContainer<UL, C>,
+    this: BaseContainer<UL>,
     right: Container<Area>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<MassPerArea<ExtractMassSubstance<UL>>>;
 
+  divide<
+    S1 extends Substance,
+    S2 extends Substance,
+    UL extends MassPerHeadPerDay<S1>,
+  >(
+    this: BaseContainer<UL>,
+    right: Container<MassPerMass<S1, S2>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerHeadPerDay<S2>>;
+
   divide<UL extends NumberUnit>(
-    this: BaseContainer<NumberUnit, C>,
+    this: BaseContainer<NumberUnit>,
     right: Container<NumberUnit>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<UL> {
     const leftUnit = this.unit;
     const rightUnit = right.unit;
@@ -281,6 +305,8 @@ export class BaseContainer<
     } else {
       if (isMass(leftUnit) && isArea(rightUnit)) {
         unit = massPerArea(leftUnit.substance);
+      } else if (isMassPerHeadPerDay(leftUnit) && isMassPerMass(rightUnit)) {
+        unit = massPerHeadPerDay(rightUnit.snum);
       } else {
         if (!isRealNumber(rightUnit)) {
           // eslint-disable-next-line no-console
@@ -305,9 +331,9 @@ export class BaseContainer<
 
   // Implement minus operation where this container's unit is a NumberUnit, and also this and right must have identical units.
   minus<UL extends NumberUnit>(
-    this: BaseContainer<UL, C>,
+    this: BaseContainer<UL>,
     right: Container<UL>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<UL> {
     let unit: NumberUnit;
     if (isVoid(this.unit)) {
@@ -333,27 +359,27 @@ export class BaseContainer<
 
   // add overloads to plus so that a RealNumber can be added to a NumberUnit
   plus<UL extends NumberUnit>(
-    this: BaseContainer<UL, C>,
+    this: BaseContainer<UL>,
     right: Container<RealNumber>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
   plus<UL extends NumberUnit>(
-    this: BaseContainer<RealNumber, C>,
+    this: BaseContainer<RealNumber>,
     right: Container<UL>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
   plus<UL extends NumberUnit>(
-    this: BaseContainer<UL, C>,
+    this: BaseContainer<UL>,
     right: Container<UL>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
   plus<UL extends NumberUnit>(
-    this: BaseContainer<NumberUnit, C>,
+    this: BaseContainer<NumberUnit>,
     right: Container<NumberUnit>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin?: Metadata,
   ): BinaryContainer<UL> {
     const leftUnit = this.unit;
     const rightUnit = right.unit;
@@ -381,10 +407,7 @@ export class BaseContainer<
   }
 }
 
-export class BinaryContainer<U extends AnyUnit> extends BaseContainer<
-  U,
-  IntermediateOrNamedOrigin
-> {
+export class BinaryContainer<U extends AnyUnit> extends BaseContainer<U> {
   originType: 'binary';
   type: 'add' | 'subtract' | 'multiply' | 'divide';
   left: Container<NumberUnit>;
@@ -395,7 +418,7 @@ export class BinaryContainer<U extends AnyUnit> extends BaseContainer<
     type: 'add' | 'subtract' | 'multiply' | 'divide',
     left: Container<NumberUnit>,
     right: Container<NumberUnit>,
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin: Metadata,
   ) {
     super(unit, baseOrigin);
     this.originType = 'binary';
@@ -405,17 +428,14 @@ export class BinaryContainer<U extends AnyUnit> extends BaseContainer<
   }
 }
 
-export class SummedContainer<N extends NumberUnit> extends BaseContainer<
-  N,
-  IntermediateOrNamedOrigin
-> {
+export class SummedContainer<N extends NumberUnit> extends BaseContainer<N> {
   originType: 'sum';
   from: Container<NumberUnit>[];
 
   constructor(
     unit: N,
     from: TypedContainer<NumberUnit>[],
-    baseOrigin?: Partial<IntermediateOrNamedOrigin>,
+    baseOrigin: Metadata,
   ) {
     super(unit, baseOrigin);
     this.originType = 'sum';
@@ -425,7 +445,7 @@ export class SummedContainer<N extends NumberUnit> extends BaseContainer<
 
 export class ConstantSelectionContainer<
   U extends NumberUnit,
-> extends BaseContainer<U, NamedOrigin> {
+> extends BaseContainer<U, NamedMetadata> {
   originType: 'constant_selection';
   selectors: (Container<StringUnit> | string)[];
 
@@ -434,31 +454,43 @@ export class ConstantSelectionContainer<
     selectors: (Container<StringUnit> | string)[],
     name: string,
   ) {
-    super(unit, { name, valueType: 'constant' });
+    super(unit, { name });
     this.originType = 'constant_selection';
     this.selectors = selectors;
   }
 }
 
-export class RootContainer<U extends AnyUnit> extends BaseContainer<
-  U,
-  IntermediateOrNamedOrigin
-> {
+export class RootContainer<U extends AnyUnit> extends BaseContainer<U> {
   originType: 'root';
 
-  constructor(unit: U, baseOrigin?: Partial<IntermediateOrNamedOrigin>) {
+  constructor(unit: U, baseOrigin?: Metadata) {
     super(unit, baseOrigin);
     this.originType = 'root';
   }
 }
 
+export class BracketedContainer<U extends AnyUnit> extends BaseContainer<U> {
+  originType: 'bracketed';
+  inner: Container<AnyUnit>;
+  constructor(unit: U, inner: Container<AnyUnit>, baseOrigin?: Metadata) {
+    super(unit, baseOrigin);
+    this.originType = 'bracketed';
+    this.inner = inner;
+  }
+}
+
+export const br = <U extends AnyUnit>(
+  inner: Container<U>,
+): BracketedContainer<U> => new BracketedContainer(inner.unit, inner);
+
 export const num = (value: number): RootContainer<RealNumber> =>
   new RootContainer(realNumber(value));
 
 export const value = <N extends NumberUnit>(v: N): RootContainer<N> =>
-  new RootContainer(v, { valueType: 'value' });
+  new RootContainer(v);
 
 export type TypedContainer<U extends AnyUnit> =
+  | BracketedContainer<U>
   | BinaryContainer<U>
   | RootContainer<U>
   | SummedContainer<U extends NumberUnit ? U : never>

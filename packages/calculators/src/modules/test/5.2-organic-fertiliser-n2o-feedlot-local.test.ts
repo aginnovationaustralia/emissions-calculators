@@ -16,7 +16,8 @@ import {
   CropResidueInputSchema,
   CropResidueInputTransformed,
 } from '../scope1/6-residue-mgmt/crop-residue.input';
-import { checkClimate, checkLivestockManureType } from './fertiliser-domain';
+import { checkClimate } from './fertiliser-domain';
+import { checkFeedlotMMSType } from './livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
@@ -30,17 +31,29 @@ const getCalculatorInput = (
       CropResidueInputTransformed &
       BaseGrainsCropTransformed)
   | undefined => {
-  const cell = (column: string) =>
-    sheet.cell(`${column}${row}`).value()?.toString();
+  const cell = (column: string, offset: number = 0) =>
+    sheet
+      .cell(`${column}${row + offset}`)
+      .value()
+      ?.toString();
 
   if (cell('B') === undefined) {
     return undefined;
   }
 
-  const massAppliedKg = Number(cell('B'));
-  const livestockManureType = checkLivestockManureType(cell('C'));
-  const customNitrogenFraction = cell('E') ? Number(cell('E')) : undefined;
-  const climate = checkClimate(cell('F'));
+  const totalNitrogenExcreted = Number(cell('K'));
+  const lengthOfStayDays = Number(cell('A'));
+  const numberOfCattle = Number(cell('J'));
+  const dryMatterIntake = cell('C');
+  const crudeProteinContent = cell('E');
+  const fractionAppliedToSoils = Number(cell('M'));
+  const directApplicationStage2 = cell('O') === 'yes';
+  const secondaryMMS = directApplicationStage2
+    ? 'Direct application'
+    : checkFeedlotMMSType(cell('N'));
+  const tertiaryLagoonInUse = cell('P') === 'yes';
+
+  const climate = checkClimate(cell('L'));
 
   const fertiliserInput: FertiliserInput = {
     inorganicFertilisers: {
@@ -51,16 +64,34 @@ const getCalculatorInput = (
     organicFertilisers: {
       applications: [
         {
-          massAppliedKg,
+          massAppliedKg: totalNitrogenExcreted, // TODO: check this
           origin: {
-            origin: 'Purchased_Untraced',
-            organicFertiliserType: livestockManureType,
-            ...(customNitrogenFraction ? { customNitrogenFraction } : {}),
+            origin: 'Local',
+            details: {
+              type: 'feedlot',
+              herds: [
+                {
+                  lengthOfStayDays,
+                  numberOfCattle,
+                  dryMatterIntake: dryMatterIntake
+                    ? Number(dryMatterIntake)
+                    : undefined,
+                  crudeProteinContent: crudeProteinContent
+                    ? Number(crudeProteinContent)
+                    : undefined,
+                },
+              ],
+              fractionAppliedToSoils,
+              secondaryMMS,
+              tertiaryLagoonInUse,
+            },
           },
         },
       ],
     },
   };
+
+  // console.dir(fertiliserInput, { depth: null });
 
   const cropResidueInput: CropResidueInput = {
     rainfallAbove600: climate === 'wet',
@@ -87,7 +118,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`L${row}`).value());
+  return Number(sheet.cell(`AI${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
@@ -95,14 +126,14 @@ const extractInputsAndOutput = createSheetExtractor(
   getExpectedOutput,
 );
 
-describe('5.2.1.1 Organic Fertiliser N2O (purchased_untraced)', () => {
+describe('5.2.1.1 Organic Fertiliser N2O (local feedlot)', () => {
   it('method 1 purchased scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/5.2-organic-fertiliser.xlsx',
-      '5.2.1.1 (purchased_untraced)',
+      '5.2.1.1 (feedlot)',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 17, '1');
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 8, '1');
 
     compareInputsAndOutputs(inputsAndOutputs, calculate52OrganicFertiliser);
   });

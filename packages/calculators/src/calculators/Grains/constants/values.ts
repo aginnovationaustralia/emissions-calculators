@@ -5,6 +5,7 @@ import {
   massPerArea,
   massPerElectricity,
   massPerEnergy,
+  massPerHeadPerDay,
   massPerMass,
   massPerTime,
   massPerVolume,
@@ -16,6 +17,7 @@ import { State } from '@/types/enums';
 import {
   CommonConstants,
   CropConstants,
+  FeedlotConstants,
   STATES,
   SwineConstants,
 } from './types';
@@ -1539,6 +1541,9 @@ Single Super Phosphate (SSP) 0.26
   // FracLeach
   FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF: realNumber(0.24),
 
+  // FracLEACHms
+  FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF_SOLID_STORAGE: realNumber(0.02),
+
   // EF leach
   EF_N2O_LEACHING_AND_RUNOFF: massPerMass('N2O', 'N', 0.011),
 };
@@ -1565,7 +1570,7 @@ export const swineConstants: SwineConstants = {
       N_VOLATISED_EF: realNumber(0.55),
       N2O_EF: realNumber(0),
     },
-    'Anaerobic digester / Covered lagoon': {
+    'Anaerobic digestor / Covered lagoon': {
       N_VOLATISED_EF: realNumber(0),
       N2O_EF: realNumber(0),
     },
@@ -1573,5 +1578,64 @@ export const swineConstants: SwineConstants = {
       N_VOLATISED_EF: realNumber(0.25),
       N2O_EF: realNumber(0.002),
     },
+    'Direct application': {
+      N_VOLATISED_EF: realNumber(0),
+      N2O_EF: realNumber(0),
+    },
   },
+};
+/*
+Dry lot (Feedpad)	0.0054	0.6
+Solid Storage (Stockpile)	0.005	0.25
+Composting (Passive Windrow)	0.01	0.4
+Uncovered anaerobic lagoon (Effluent pond)	0	0.35
+*/
+
+export const feedlotConstants: FeedlotConstants = {
+  name: 'FEEDLOT',
+
+  // A5.5.3.6,7 NIR vol 2
+  MMS: {
+    'Dry lot (Feedpad)': {
+      N_VOLATISED_EF: realNumber(0.6),
+      N2O_EF: realNumber(0.0054),
+    },
+    'Solid Storage (Stockpile)': {
+      N_VOLATISED_EF: realNumber(0.25),
+      N2O_EF: realNumber(0.005),
+    },
+    'Composting (Passive Windrow)': {
+      N_VOLATISED_EF: realNumber(0.4),
+      N2O_EF: realNumber(0.01),
+    },
+    'Uncovered anaerobic lagoon (Effluent Pond)': {
+      N_VOLATISED_EF: realNumber(0.35),
+      N2O_EF: realNumber(0),
+    },
+    'Direct application': {
+      N_VOLATISED_EF: realNumber(0),
+      N2O_EF: realNumber(0),
+    },
+  },
+
+  // Table A5.5.3.1 National Inventory Report Volume 2 [4]
+  FEED: {
+    '0-80 days': {
+      DRY_MATTER_INTAKE: massPerHeadPerDay('DryMatter', 10.4),
+      CRUDE_PROTEIN_CONTENT: massPerMass('CrudeProtein', 'DryMatter', 0.14),
+      NITROGEN_RETENTION_FRACTION: realNumber(0.204),
+    },
+    '81-200 days': {
+      DRY_MATTER_INTAKE: massPerHeadPerDay('DryMatter', 10.8),
+      CRUDE_PROTEIN_CONTENT: massPerMass('CrudeProtein', 'DryMatter', 0.12),
+      NITROGEN_RETENTION_FRACTION: realNumber(0.127),
+    },
+    '201+ days': {
+      DRY_MATTER_INTAKE: massPerHeadPerDay('DryMatter', 8.2),
+      CRUDE_PROTEIN_CONTENT: massPerMass('CrudeProtein', 'DryMatter', 0.12),
+      NITROGEN_RETENTION_FRACTION: realNumber(0.07),
+    },
+  },
+
+  CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: massPerMass('CrudeProtein', 'N', 6.25),
 };

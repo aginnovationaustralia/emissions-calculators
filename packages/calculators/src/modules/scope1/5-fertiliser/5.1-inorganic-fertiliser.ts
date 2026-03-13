@@ -73,7 +73,7 @@ const getEFjN20ForFertiliser = (
     constants.CROP,
     'EF_N2O_PRODUCTION_SYSTEM',
     system,
-  ).attachContext({ references: [`5.1.1.1 (119)`] });
+  ).attach({ references: [`5.1.1.1 (119)`] });
 };
 
 export const massNitrogenFromInorganicFertiliserApplied = (
