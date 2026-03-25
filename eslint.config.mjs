@@ -10,7 +10,7 @@ export default [
     ...js.configs.recommended,
   },
   {
-    files: ['**/*.cjs', '**/*.mjs'],
+    files: ['**/*.cjs', '**/*.mjs', '**/jest.config.js'],
     languageOptions: {
       globals: {
         module: 'readonly',
