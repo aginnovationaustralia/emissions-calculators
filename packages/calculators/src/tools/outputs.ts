@@ -75,7 +75,10 @@ export const output = <
   };
 };
 
-export const scope23Output = <Scope extends 2 | 3, S extends 'CO2' | 'CO2e'>(
+export const scope23Output = <
+  Scope extends 2 | 3,
+  S extends 'CO2' | 'CO2e' | 'N2O',
+>(
   name: string,
   scope: Scope,
   from: Container<Mass<S> | VoidUnit>,

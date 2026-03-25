@@ -35,7 +35,9 @@ type IntermediateScope1<O extends Record<string, unknown>> = {
 };
 
 type IntermediateScope23<O extends Record<string, unknown>> = {
-  [K in Exclude<keyof O, Scope123ExcludedKeys>]: TypedContainer<Mass<'CO2e'>>;
+  [K in Exclude<keyof O, Scope123ExcludedKeys>]: TypedContainer<
+    Mass<'CO2e' | 'N2O'>
+  >;
 };
 
 type ScopeValuesFromOutput<

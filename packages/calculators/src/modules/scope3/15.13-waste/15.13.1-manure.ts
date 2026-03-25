@@ -168,7 +168,6 @@ export const calculateScope3WasteOffsiteManure = (
   crop: GrainsCropTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  const { constants } = context;
   /*
   15.13.1.1 Method 1 - Emissions from Manure Sent Off-Site
   Refer to Chapter 10.1 for estimation methodology from waste management
@@ -190,8 +189,6 @@ export const calculateScope3WasteOffsiteManure = (
   const eLeach = calculateScope3WasteOffsiteManureLeachingN2O(crop, context);
 
   const e = eN2O.plus(eAD).plus(eLeach);
-  // REVISIT: This conversion from N2O to CO2e is not mentioned in 15.13.1.1, it has been assumed
-  const efN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC6');
 
-  return e.multiply(efN2O);
+  return e;
 };
