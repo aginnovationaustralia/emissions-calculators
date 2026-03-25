@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
-import { AllConstants } from '@/calculators/Grains/constants/types';
+import { ExecutionContext } from '@/calculators/executionContext';
+import { AllConstants } from '@/constants/types';
 import { testContext } from '@/test/Grains/context';
 import { Container } from '@/tools/containers';
 import { formatNamedValues } from '@/tools/format';

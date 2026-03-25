@@ -1,7 +1,7 @@
 import {
   InorganicFertiliserComponentOrigins,
   InorganicFertiliserComponentTypes,
-} from '@/calculators/Grains/constants/enums';
+} from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { massPerMass, realNumber } from '@/tools/units';
 import { object, percentage } from '@/types/schemas';

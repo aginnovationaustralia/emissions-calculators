@@ -1,7 +1,4 @@
-import {
-  ServiceByAreaTypes,
-  ServiceByHourTypes,
-} from '@/calculators/Grains/constants/enums';
+import { ServiceByAreaTypes, ServiceByHourTypes } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { area, time } from '@/tools/units';
 import { object } from '@/types/schemas';

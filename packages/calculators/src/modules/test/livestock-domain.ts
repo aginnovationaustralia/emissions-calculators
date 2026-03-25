@@ -5,7 +5,7 @@ import {
   FeedlotMMSTypes,
   SwineMMSType,
   SwineMMSTypes,
-} from '@/calculators/Grains/constants/enums';
+} from '@/constants/enums';
 
 export const checkSwineMMSType = (type: string | undefined): SwineMMSType => {
   if (!SwineMMSTypes.includes(type as SwineMMSType)) {

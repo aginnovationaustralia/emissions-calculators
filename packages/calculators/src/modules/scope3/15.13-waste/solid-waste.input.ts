@@ -3,8 +3,8 @@ import {
   SolidWasteByVolumeType,
   SolidWasteIncinerationTypes,
   SolidWasteLandfillTypes,
-} from '@/calculators/Grains/constants/enums';
-import { CommonConstants } from '@/calculators/Grains/constants/types';
+} from '@/constants/enums';
+import { CommonConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
 import { input } from '@/tools/inputs';

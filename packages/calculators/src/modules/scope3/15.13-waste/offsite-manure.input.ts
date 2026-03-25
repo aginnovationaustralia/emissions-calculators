@@ -1,4 +1,4 @@
-import { SwineMMSTypes } from '@/calculators/Grains/constants/enums';
+import { SwineMMSTypes } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { mass, realNumber } from '@/tools/units';
 import { object, proportion } from '@/types/schemas';

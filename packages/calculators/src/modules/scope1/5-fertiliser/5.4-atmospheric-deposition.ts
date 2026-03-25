@@ -1,10 +1,10 @@
+import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
+import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import {
   BasicCropProductionSystem,
   ExtendedCropProductionSystem,
-} from '@/calculators/Grains/constants/enums';
-import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
-import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
+} from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
 import { CropResidueInputTransformed } from '../6-residue-mgmt/crop-residue.input';

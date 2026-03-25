@@ -9,7 +9,7 @@ import {
   InorganicFertiliserTypes,
   OrganicFertiliserType,
   OrganicFertiliserTypes,
-} from '@/calculators/Grains/constants/enums';
+} from '@/constants/enums';
 
 export const checkInorganicFertiliserType = (
   type: string | undefined,

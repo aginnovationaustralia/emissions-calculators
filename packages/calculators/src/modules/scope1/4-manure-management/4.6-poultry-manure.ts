@@ -1,11 +1,11 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
+import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import {
   PoultryMMS1Type,
   PoultryMMS1TypeWithPasture,
   PoultryMMS2Type,
   PoultryMMS2TypeWithPasture,
-} from '@/calculators/Grains/constants/enums';
-import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
+} from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, num, root } from '@/tools/containers';
 import { oneMinus } from '@/tools/sentinels';

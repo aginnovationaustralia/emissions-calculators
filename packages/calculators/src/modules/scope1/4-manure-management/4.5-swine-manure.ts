@@ -1,6 +1,6 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { SwineMMSType } from '@/calculators/Grains/constants/enums';
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
+import { SwineMMSType } from '@/constants/enums';
 import { constant, selectConstant } from '@/tools/constants';
 import { br, Container, RootContainer } from '@/tools/containers';
 import { one, oneMinus, zero } from '@/tools/sentinels';
@@ -75,7 +75,7 @@ const fractionNitrogenInPrimarySolidsSystem = (
   MMSjm1t1: RootContainer<RealNumber>,
   SNm: RootContainer<RealNumber>,
 ) => {
-  // 𝐹𝑁 𝑗𝑚=4 𝑇=1 = 𝑀𝑀𝑆 𝑗𝑚=4 𝑇=1 + (𝑀𝑀𝑆𝑗𝑚=1,7,9 𝑇=1 × 𝑆𝑁𝑚)
+  // FN jm=4 T=1 = MMS jm=4 T=1 + (MMSjm=1,7,9 T=1 * SNm)
   return MMSjm4t1.plus(br(MMSjm1t1.multiply(SNm))).named('FN jm=4 T=1');
 };
 

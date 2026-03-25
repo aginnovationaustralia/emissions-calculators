@@ -1,7 +1,6 @@
+import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { GrainsInputTransformed } from '@/calculators/Grains/types/input';
-import { STATES } from '@/constants/types';
 import { isMarketBasedElectricity } from '@/modules/scope2/14-electricity/electricity.input';
 import { LocationBasedElectricityInputsTransformed } from '@/modules/scope2/14-electricity/location-based.input';
 import { MarketBasedElectricityInputsTransformed } from '@/modules/scope2/14-electricity/market-based.input';
@@ -62,7 +61,7 @@ export const calculateElectricityScope3MarketBased = (
   const qelec = input.electricityPurchasedKWh;
   const rpp = selectConstant(constants.COMMON, 'RENEWABLE_POWER_PERCENTAGE');
   const jrpp =
-    crop.state === STATES.ACT
+    crop.state === 'act'
       ? selectConstant(
           constants.COMMON,
           'JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE',

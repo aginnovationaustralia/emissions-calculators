@@ -5,7 +5,7 @@ import {
   SolidWasteIncinerationTypes,
   SolidWasteLandfillType,
   SolidWasteLandfillTypes,
-} from '@/calculators/Grains/constants/enums';
+} from '@/constants/enums';
 
 export const checkSolidWasteLandfillType = (
   type: string | undefined,

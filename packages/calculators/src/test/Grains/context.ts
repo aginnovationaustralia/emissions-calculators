@@ -3,8 +3,8 @@ import { entriesFromObject } from '@/calculators/common/tools/object';
 import {
   ExecutionContext,
   loadConstants,
-} from '@/calculators/Grains/constants/executionContext';
-import { AllConstants } from '@/calculators/Grains/constants/types';
+} from '@/calculators/executionContext';
+import { AllConstants } from '@/constants/types';
 import XLSX from 'xlsx-populate';
 import { numberInput } from '../common/sheets';
 

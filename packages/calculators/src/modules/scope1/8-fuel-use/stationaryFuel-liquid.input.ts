@@ -1,8 +1,8 @@
+import { DESCRIPTIONS } from '@/calculators/Grains/types/descriptions.schema';
 import {
   FuelStationaryMassBasedLiquidTypes,
   FuelStationaryVolumeBasedLiquidTypes,
-} from '@/calculators/Grains/constants/enums';
-import { DESCRIPTIONS } from '@/calculators/Grains/types/descriptions.schema';
+} from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { tonnesToKg } from '@/tools/unit-conversion';
 import { mass, volume } from '@/tools/units';

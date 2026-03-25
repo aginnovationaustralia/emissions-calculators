@@ -1,7 +1,7 @@
+import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { isPastureType } from '@/calculators/Grains/constants/enums';
-import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
+import { isPastureType } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { zeroCH4, zeroN2O } from '@/tools/sentinels';
 import { CropResidueInputTransformed } from './crop-residue.input';

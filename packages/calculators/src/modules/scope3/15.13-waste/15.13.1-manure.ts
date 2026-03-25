@@ -1,5 +1,5 @@
+import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
 import { isDefined } from '@/common/filters';
 import { calculateMassOfNitrogenAppliedToSoils } from '@/modules/scope1/4-manure-management';

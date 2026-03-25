@@ -3,7 +3,7 @@ import {
   FuelStationarySolidTypes,
   FuelTransportVehicleType,
   FuelTransportVehicleTypes,
-} from '@/calculators/Grains/constants/enums';
+} from '@/constants/enums';
 
 export const checkVehicleType = (
   type: string | undefined,

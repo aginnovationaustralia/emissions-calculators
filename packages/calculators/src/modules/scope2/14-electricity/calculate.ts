@@ -1,7 +1,7 @@
+import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
-import { STATES } from '@/calculators/Grains/constants/types';
 import { GrainsInputTransformed } from '@/calculators/Grains/types/input';
+import { STATES } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { oneMinus, tenToPowMinus3, zero } from '@/tools/sentinels';
 import { isMarketBasedElectricity } from './electricity.input';

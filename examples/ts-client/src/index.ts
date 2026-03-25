@@ -1,7 +1,7 @@
-import { calculateBeefSimple } from './beef/calculate-emissions';
-import { calculateBeefNestedExport } from './beef/nested-exports';
-import { calculateBeefTopLevel } from './beef/top-level';
+import { calculateGrainsSimple } from './grains/calculate-emissions';
+import { calculateGrainsNestedExport } from './grains/nested-exports';
+import { calculateGrainsTopLevel } from './grains/top-level';
 
-calculateBeefSimple();
-calculateBeefTopLevel();
-calculateBeefNestedExport();
+calculateGrainsSimple();
+calculateGrainsTopLevel();
+calculateGrainsNestedExport();

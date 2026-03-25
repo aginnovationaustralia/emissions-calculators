@@ -24,7 +24,8 @@ export type CalculateEmissionsResult<O extends object> =
 
 export const tryCalculate = <
   S extends object,
-  Z extends ZodType<S>,
+  I extends object,
+  Z extends ZodType<S, I>,
   O extends object,
 >(
   schema: Z,

@@ -1,4 +1,4 @@
-import { PastureCropTypes } from '@/calculators/Grains/constants/enums';
+import { PastureCropTypes } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { massPerArea, realNumber } from '@/tools/units';
 import { DESCRIPTIONS } from '@/types/descriptions.schema';

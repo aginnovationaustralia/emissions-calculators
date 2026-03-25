@@ -1,8 +1,8 @@
-import { NetOutputSchema } from '@/types/common/net.output.new';
 import { emissionsOutput } from '@/types/schemas';
 import { z } from 'zod';
 import { GrainsIntensitiesOutputSchema } from './intensities.output';
 import { GrainsIntermediateOutputSchema } from './intermediate.output';
+import { NetOutputSchema } from './net.output';
 import { GrainsScope1OutputSchema } from './scope1.output';
 import { GrainsScope2OutputSchema } from './scope2.output';
 import { GrainsScope3OutputSchema } from './scope3.output';

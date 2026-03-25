@@ -1,3 +1,4 @@
+import { DESCRIPTIONS } from '@/calculators/Grains/types/descriptions.schema';
 import {
   AviationFuelTypes,
   CarsLightCommercialFuelTypes,
@@ -6,8 +7,7 @@ import {
   LightDutyFuelTypes,
   OffRoadAgricultureAndForestryEquipmentFuelTypes,
   VesselFuelTypes,
-} from '@/calculators/Grains/constants/enums';
-import { DESCRIPTIONS } from '@/calculators/Grains/types/descriptions.schema';
+} from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { cubicMetresToLitres } from '@/tools/unit-conversion';
 import { volume } from '@/tools/units';

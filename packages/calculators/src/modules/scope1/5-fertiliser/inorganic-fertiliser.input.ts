@@ -1,4 +1,4 @@
-import { InorganicFertiliserTypes } from '@/calculators/Grains/constants/enums';
+import { InorganicFertiliserTypes } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { mass, massPerMass } from '@/tools/units';
 import { object, proportion } from '@/types/schemas';

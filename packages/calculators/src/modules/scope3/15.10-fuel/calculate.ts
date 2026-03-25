@@ -1,5 +1,5 @@
+import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
 import {

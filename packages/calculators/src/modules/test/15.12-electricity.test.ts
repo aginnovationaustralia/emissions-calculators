@@ -43,7 +43,6 @@ const getCalculatorInput = (
             recsOnsiteKWh,
           },
     state,
-    vegetation: [],
   };
 
   return GrainsInputSchema.parse(grainsInput);

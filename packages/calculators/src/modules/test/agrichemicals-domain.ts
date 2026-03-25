@@ -1,7 +1,4 @@
-import {
-  AgrochemicalType,
-  AgrochemicalTypes,
-} from '@/calculators/Grains/constants/enums';
+import { AgrochemicalType, AgrochemicalTypes } from '@/constants/enums';
 
 export const checkAgrichemicalType = (
   type: string | undefined,

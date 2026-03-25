@@ -5,7 +5,7 @@ import {
   FeedlotConstants,
   PoultryConstants,
   SwineConstants,
-} from './constants/types';
+} from '@/constants/types';
 import {
   commonConstants,
   cropConstants,
@@ -13,8 +13,9 @@ import {
   feedlotConstants,
   poultryConstants,
   swineConstants,
-} from './constants/values';
+} from '@/constants/values';
 
+// REVISIT: Grains needs most of livestock anyway, for organic manure. We can probably switch back to a single AllConstants for all contexts
 export type ConstantsForGrainsCalculator = {
   DAIRY: DairyConstants;
   POULTRY: PoultryConstants;

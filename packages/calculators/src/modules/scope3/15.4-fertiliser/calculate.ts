@@ -1,7 +1,7 @@
+import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { isInorganicFertiliserComponentTypeRegional } from '@/calculators/Grains/constants/enums';
-import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
+import { isInorganicFertiliserComponentTypeRegional } from '@/constants/enums';
 import {
   InorganicFertiliserComponentInputTransformed,
   InorganicFertiliserKnownComponentInputTransformed,

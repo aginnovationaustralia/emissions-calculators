@@ -1,4 +1,4 @@
-import { DairySystems } from '@/calculators/Grains/constants/enums';
+import { DairySystems } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import {
   head,

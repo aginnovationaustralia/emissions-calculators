@@ -1,5 +1,5 @@
+import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { ExecutionContext } from '@/calculators/Grains/constants/executionContext';
 import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
 import { calculateScope3WasteOffsiteManure } from './15.13.1-manure';
 import { calculateScope3WasteSolidWaste } from './15.13.2-solid-waste';

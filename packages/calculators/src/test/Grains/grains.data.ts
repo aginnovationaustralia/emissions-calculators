@@ -1,5 +1,4 @@
 import { GrainsCrop, GrainsInput } from '@/calculators/Grains/types';
-import { veg1, veg2, veg3, veg4 } from './vegetation.data';
 
 export const grainWheat: GrainsCrop = {
   type: 'Wheat',
@@ -271,7 +270,6 @@ export const grainsTestData: GrainsInput = {
     electricityPurchasedKWh: 4000,
   },
   state: 'nsw',
-  vegetation: [veg1, veg2, veg3, veg4],
 };
 
 export const grainsTestData102: GrainsInput = {
@@ -342,16 +340,16 @@ export const grainsTestData102: GrainsInput = {
       },
     },
   ],
-  vegetation: [
-    {
-      vegetation: {
-        region: 'Central Wheat Belt',
-        treeSpecies: 'Mixed species (Environmental Plantings)',
-        soil: 'Coloured Sands',
-        area: 22,
-        age: 7,
-      },
-      allocationToCrops: [1],
-    },
-  ],
+  // vegetation: [
+  //   {
+  //     vegetation: {
+  //       region: 'Central Wheat Belt',
+  //       treeSpecies: 'Mixed species (Environmental Plantings)',
+  //       soil: 'Coloured Sands',
+  //       area: 22,
+  //       age: 7,
+  //     },
+  //     allocationToCrops: [1],
+  //   },
+  // ],
 };

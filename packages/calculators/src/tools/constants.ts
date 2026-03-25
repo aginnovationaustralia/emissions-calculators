@@ -1,4 +1,4 @@
-import { NamedConstants } from '@/calculators/Grains/constants/types';
+import { NamedConstants } from '@/constants/types';
 import {
   ConstantSelectionContainer,
   Metadata,

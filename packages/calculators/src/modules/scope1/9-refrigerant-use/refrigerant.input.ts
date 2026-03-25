@@ -1,7 +1,4 @@
-import {
-  RefrigerantTypes,
-  RefrigerationTypes,
-} from '@/calculators/Grains/constants/enums';
+import { RefrigerantTypes, RefrigerationTypes } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { mass } from '@/tools/units';
 import { DESCRIPTIONS } from '@/types/descriptions.schema';

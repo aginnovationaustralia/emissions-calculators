@@ -1,4 +1,4 @@
-import { FeedlotMMSTypes } from '@/calculators/Grains/constants/enums';
+import { FeedlotMMSTypes } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import {
   days,

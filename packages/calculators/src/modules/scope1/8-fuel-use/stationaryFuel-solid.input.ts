@@ -1,5 +1,5 @@
-import { FuelStationarySolidTypes } from '@/calculators/Grains/constants/enums';
 import { DESCRIPTIONS } from '@/calculators/Grains/types/descriptions.schema';
+import { FuelStationarySolidTypes } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { tonnesToKg } from '@/tools/unit-conversion';
 import { mass } from '@/tools/units';

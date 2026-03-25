@@ -1,10 +1,10 @@
+import { States } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { area, realNumber } from '@/tools/units';
 import { DESCRIPTIONS } from '@/types/descriptions.schema';
 import { object, proportion } from '@/types/schemas';
 import Decimal from 'decimal.js-light';
 import { z } from 'zod';
-import { States } from '../constants/enums';
 
 export const BaseGrainsCropSchema = object({
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),

@@ -1,10 +1,10 @@
+import { outputValue } from '@/tools/zod';
 import { z } from 'zod';
 
-export const GrainsNetOutputSchema = z
+export const NetOutputSchema = z
   .object({
-    total: z.number(),
-    crops: z.array(z.number()),
+    total: outputValue(),
   })
-  .meta({ description: 'Net emissions for each crop (in order)' });
+  .meta({ description: 'Net emissions for the activity' });
 
-export type GrainsNetOutput = z.infer<typeof GrainsNetOutputSchema>;
+export type NetOutput = z.infer<typeof NetOutputSchema>;

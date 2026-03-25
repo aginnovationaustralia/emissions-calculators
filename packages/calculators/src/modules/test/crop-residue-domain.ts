@@ -3,9 +3,9 @@ import {
   CropTypes,
   PastureType,
   PastureTypes,
+  State,
   States,
-} from '@/calculators/Grains/constants/enums';
-import { State } from '@/types/enums';
+} from '@/constants/enums';
 
 export const checkCropType = (type: string | undefined): CropType => {
   if (!CropTypes.includes(type as CropType)) {

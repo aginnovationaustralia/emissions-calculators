@@ -1,7 +1,4 @@
-import {
-  AgrochemicalType,
-  AgrochemicalTypes,
-} from '@/calculators/Grains/constants/enums';
+import { AgrochemicalType, AgrochemicalTypes } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { mass, massPerMass } from '@/tools/units';
 import { object } from '@/types/schemas';

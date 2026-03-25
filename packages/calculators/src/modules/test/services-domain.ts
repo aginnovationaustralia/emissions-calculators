@@ -3,7 +3,7 @@ import {
   ServiceByAreaTypes,
   ServiceByHourType,
   ServiceByHourTypes,
-} from '@/calculators/Grains/constants/enums';
+} from '@/constants/enums';
 
 export const checkServiceByAreaType = (
   type: string | undefined,

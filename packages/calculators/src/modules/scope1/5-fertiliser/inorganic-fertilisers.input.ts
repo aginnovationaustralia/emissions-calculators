@@ -1,7 +1,7 @@
 import {
   BasicCropProductionSystems,
   ProductionSystemsInorganicFertilisers,
-} from '@/calculators/Grains/constants/enums';
+} from '@/constants/enums';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 import { InorganicFertiliserInputSchema } from './inorganic-fertiliser.input';

@@ -1,15 +1,14 @@
 export { GrainsCrop } from './crop.input';
-export { GrainsInputSchema } from './input';
-export { GrainsInput } from './input';
-export { GrainsIntensitiesOutputSchema } from './intensities.output';
-export { GrainsIntensitiesOutput } from './intensities.output';
-export { GrainsIntermediateOutputSchema } from './intermediate.output';
-export { GrainsIntermediateOutput } from './intermediate.output';
-export { GrainsNetOutputSchema } from './net.output';
-export { GrainsNetOutput } from './net.output';
-export { GrainsOutputSchema } from './output';
-export { GrainsOutput } from './output';
-export { GrainsScope1OutputSchema } from './scope1.output';
-export { GrainsScope1Output } from './scope1.output';
-export { GrainsScope3OutputSchema } from './scope3.output';
-export { GrainsScope3Output } from './scope3.output';
+export { GrainsInput, GrainsInputSchema } from './input';
+export {
+  GrainsIntensitiesOutput,
+  GrainsIntensitiesOutputSchema,
+} from './intensities.output';
+export {
+  GrainsIntermediateOutput,
+  GrainsIntermediateOutputSchema,
+} from './intermediate.output';
+export { NetOutput, NetOutputSchema } from './net.output';
+export { GrainsOutput, GrainsOutputSchema } from './output';
+export { GrainsScope1Output, GrainsScope1OutputSchema } from './scope1.output';
+export { GrainsScope3Output, GrainsScope3OutputSchema } from './scope3.output';
