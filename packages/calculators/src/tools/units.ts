@@ -20,7 +20,10 @@ export type Substance =
   | 'CropResidue'
   | 'Yield'
   | 'Lime'
-  | 'Solid Waste';
+  | 'Solid Waste'
+  | 'Milk'
+  | 'Milk Solids'
+  | 'Liveweight';
 
 export type NumberUnitBase = { value: Decimal };
 
@@ -180,26 +183,6 @@ export const isMassPerEnergy = (
   return unit.__unitType === 'MassPerEnergy';
 };
 
-export type EnergyPerMass<T extends Substance> = NumberUnitBase & {
-  __unitType: 'EnergyPerMass';
-  substance: T;
-};
-export const energyPerMass = <S extends Substance>(
-  substance: S,
-  initialValueJoulesPerKg?: number | Decimal,
-): EnergyPerMass<S> => {
-  return {
-    __unitType: 'EnergyPerMass',
-    substance,
-    value: new Decimal(initialValueJoulesPerKg ?? 0),
-  };
-};
-export const isEnergyPerMass = (
-  unit: NumberUnit,
-): unit is EnergyPerMass<Substance> => {
-  return unit.__unitType === 'EnergyPerMass';
-};
-
 export type MassPerElectricity<S extends Substance> = NumberUnitBase & {
   __unitType: 'MassPerElectricity';
   substance: S;
@@ -238,6 +221,26 @@ export const isEnergyPerVolume = (
   unit: NumberUnit,
 ): unit is EnergyPerVolume<Substance> => {
   return unit.__unitType === 'EnergyPerVolume';
+};
+
+export type EnergyPerMass<S extends Substance> = NumberUnitBase & {
+  __unitType: 'EnergyPerMass';
+  substance: S;
+};
+export const energyPerMass = <S extends Substance>(
+  substance: S,
+  initialValueJoulesPerKg?: number | Decimal,
+): EnergyPerMass<S> => {
+  return {
+    __unitType: 'EnergyPerMass',
+    substance,
+    value: new Decimal(initialValueJoulesPerKg ?? 0),
+  };
+};
+export const isEnergyPerMass = (
+  unit: NumberUnit,
+): unit is EnergyPerMass<Substance> => {
+  return unit.__unitType === 'EnergyPerMass';
 };
 
 export type MassPerVolume<
@@ -327,6 +330,26 @@ export const isMassPerHeadPerDay = (
   unit: NumberUnit,
 ): unit is MassPerHeadPerDay<Substance> => {
   return unit.__unitType === 'MassPerHeadPerDay';
+};
+
+export type VolumePerHeadPerDay<S extends Substance> = NumberUnitBase & {
+  __unitType: 'VolumePerHeadPerDay';
+  substance: S;
+};
+export const volumePerHeadPerDay = <S extends Substance>(
+  substance: S,
+  initialValueLitresPerHeadPerDay?: number | Decimal,
+): VolumePerHeadPerDay<S> => {
+  return {
+    __unitType: 'VolumePerHeadPerDay',
+    substance,
+    value: new Decimal(initialValueLitresPerHeadPerDay ?? 0),
+  };
+};
+export const isVolumePerHeadPerDay = (
+  unit: NumberUnit,
+): unit is VolumePerHeadPerDay<Substance> => {
+  return unit.__unitType === 'VolumePerHeadPerDay';
 };
 
 export type MassPerDay<S extends Substance> = NumberUnitBase & {
@@ -420,6 +443,7 @@ export type NumberUnit =
   | MassPerElectricity<Substance>
   | MassPerHeadPerDay<Substance>
   | MassPerDay<Substance>
+  | VolumePerHeadPerDay<Substance>
   | Days
   | Head
   | EnergyPerVolume<Substance>

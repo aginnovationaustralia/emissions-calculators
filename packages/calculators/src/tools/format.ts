@@ -36,6 +36,8 @@ export function formatUnit(unit: AnyUnit): string {
       return `Mass(${unit.substance}) / Head / Day`;
     case 'MassPerDay':
       return `Mass(${unit.substance}) / Day`;
+    case 'VolumePerHeadPerDay':
+      return `Volume(${unit.substance}) / Head / Day`;
     case 'Days':
       return 'Days';
     case 'Head':
@@ -80,9 +82,25 @@ const formatUnitValue = (unit: AnyUnit): string => {
   }
 };
 
+const formatOperator = (
+  type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power',
+): string => {
+  return type === 'add'
+    ? '+'
+    : type === 'subtract'
+      ? '-'
+      : type === 'multiply'
+        ? '*'
+        : type === 'divide'
+          ? '/'
+          : type === 'power'
+            ? '^'
+            : '';
+};
+
 const formatValueAndName = (container: Container<AnyUnit>): string => {
   const core = container.core;
-  const name = core?.name ?? 'anon';
+  const name = core?.name ?? 'n';
 
   return `${name}(${formatUnitValue(container.unit)})`;
 };
@@ -90,7 +108,7 @@ const formatValueAndName = (container: Container<AnyUnit>): string => {
 const formatExpressionRecursive = (container: Container<AnyUnit>): string => {
   switch (container.originType) {
     case 'binary':
-      return `${formatExpressionRecursive(container.left)} ${container.type === 'add' ? '+' : container.type === 'subtract' ? '-' : container.type === 'multiply' ? '*' : '/'} ${formatExpressionRecursive(container.right)}`;
+      return `${formatExpressionRecursive(container.left)} ${formatOperator(container.type)} ${formatExpressionRecursive(container.right)}`;
     case 'root':
       return formatValueAndName(container);
     case 'sum':
@@ -134,33 +152,53 @@ const formatIntermediatesRecursive = (
 type NamedValuesNode = {
   lhs?: string;
   rhs?: string;
+  name?: string;
   children: NamedValuesNode[];
   depth: number;
 };
 
+type FormatOptions = {
+  maxDepth?: number;
+  focusOn?: string;
+  includeChildren?: boolean;
+};
+
 const collectExpressions = (
   nodes: NamedValuesNode[],
-  maxDepth: number,
+  formatOptions: FormatOptions = {},
 ): string[] => {
+  const { maxDepth = 2, focusOn, includeChildren = true } = formatOptions;
   return nodes.flatMap((node) => {
     if (node.depth >= maxDepth) {
       return [];
     }
-    const children = collectExpressions(node.children, maxDepth);
+    const focusFound = focusOn && node.name?.startsWith(focusOn);
+    const include = (focusOn && focusFound) || includeChildren;
+    const children = collectExpressions(node.children, {
+      focusOn,
+      includeChildren: include,
+      maxDepth,
+    });
     const indent = '  '.repeat(node.depth);
-    const current = node.lhs
-      ? [`${indent}${node.lhs} = ${node.rhs ?? 'rhs'}`]
-      : [];
+    const current =
+      include && node.lhs
+        ? [`${indent}${node.lhs} = ${node.rhs ?? 'rhs'}`]
+        : [];
     return current.concat(children);
   });
 };
 
 export const formatNamedValues = (
   container: Container<AnyUnit>,
-  maxDepth: number,
+  formatOptions: FormatOptions = {},
 ): string => {
+  const { focusOn, includeChildren = true, maxDepth = 2 } = formatOptions;
   const root = formatNamedValuesRecursive(container, 0);
-  const expressions = collectExpressions(root, maxDepth);
+  const expressions = collectExpressions(root, {
+    focusOn,
+    includeChildren: focusOn ? false : includeChildren,
+    maxDepth,
+  });
 
   return expressions.join('\n');
 };
@@ -172,6 +210,7 @@ const formatNamedValuesRecursive = (
 ): NamedValuesNode[] => {
   const isNamed = isNamedOrigin(container.core);
   const lhs = formatValueAndName(container);
+  const name = container.core?.name;
 
   const wrap = bracketWrap ? (s: string) => `(${s})` : (s: string) => s;
 
@@ -188,18 +227,12 @@ const formatNamedValuesRecursive = (
           depth + 1,
         );
         const children = leftResults.concat(rightResults);
-        const op =
-          container.type === 'add'
-            ? ' + '
-            : container.type === 'subtract'
-              ? ' - '
-              : container.type === 'multiply'
-                ? ' * '
-                : ' / ';
+        const op = formatOperator(container.type);
         return [
           {
             lhs,
-            rhs: wrap(children.map((c) => c.lhs ?? c.rhs).join(op)),
+            name,
+            rhs: wrap(children.map((c) => c.lhs ?? c.rhs).join(` ${op} `)),
             children,
             depth,
           },
@@ -212,6 +245,7 @@ const formatNamedValuesRecursive = (
         return [
           {
             lhs,
+            name,
             rhs: wrap(`sum (${children.map((c) => c.lhs).join(' + ')})`),
             // expression: `${children.map((c) => c.expression).join(' + ')}`,
             children,
@@ -223,6 +257,7 @@ const formatNamedValuesRecursive = (
         return [
           {
             lhs,
+            name,
             rhs: 'constant',
             children: [],
             depth,
@@ -232,6 +267,7 @@ const formatNamedValuesRecursive = (
         return [
           {
             lhs,
+            name,
             rhs: 'root',
             children: [],
             depth,
@@ -244,6 +280,7 @@ const formatNamedValuesRecursive = (
         return [
           {
             lhs,
+            name,
             children: [],
             depth: depth + 1,
           },
@@ -252,21 +289,15 @@ const formatNamedValuesRecursive = (
   } else {
     switch (container.originType) {
       case 'binary': {
-        const op =
-          container.type === 'add'
-            ? ' + '
-            : container.type === 'subtract'
-              ? ' - '
-              : container.type === 'multiply'
-                ? ' * '
-                : ' / ';
+        const op = formatOperator(container.type);
         const leftResults = formatNamedValuesRecursive(container.left, depth);
         const rightResults = formatNamedValuesRecursive(container.right, depth);
         const children = leftResults.concat(rightResults);
         return [
           {
             lhs: undefined,
-            rhs: wrap(children.map((c) => c.lhs ?? c.rhs).join(op)),
+            name,
+            rhs: wrap(children.map((c) => c.lhs ?? c.rhs).join(` ${op} `)),
             children,
             depth,
           },
@@ -279,6 +310,7 @@ const formatNamedValuesRecursive = (
         return [
           {
             lhs: undefined,
+            name,
             rhs: wrap(
               `sum (${children.map((c) => c.lhs ?? c.rhs).join(' + ')})`,
             ),
@@ -294,6 +326,7 @@ const formatNamedValuesRecursive = (
         return [
           {
             lhs,
+            name,
             rhs: 'root',
             children: [],
             depth,

@@ -2,6 +2,7 @@ import { gjPerTonneTogjPerKg } from '@/tools/unit-conversion';
 import {
   energyPerMass,
   energyPerVolume,
+  mass,
   massPerArea,
   massPerElectricity,
   massPerEnergy,
@@ -17,7 +18,9 @@ import { State } from '@/types/enums';
 import {
   CommonConstants,
   CropConstants,
+  DairyConstants,
   FeedlotConstants,
+  PoultryConstants,
   STATES,
   SwineConstants,
 } from './types';
@@ -1085,6 +1088,8 @@ export const commonConstants: CommonConstants = {
       0.39,
     ),
   },
+
+  CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: massPerMass('CrudeProtein', 'N', 6.25),
 };
 
 const cropResidueRemovedOtherCropTypes: Record<State, RealNumber> = {
@@ -1638,4 +1643,189 @@ export const feedlotConstants: FeedlotConstants = {
   },
 
   CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: massPerMass('CrudeProtein', 'N', 6.25),
+};
+
+export const dairyConstants: DairyConstants = {
+  name: 'DAIRY',
+
+  CLASS_WEIGHTS: {
+    milkingCows: {
+      liveweight: mass('Liveweight', 550),
+      liveweightGain: massPerHeadPerDay('Liveweight', 0.016),
+      referenceWeight: mass('Liveweight', 590),
+    },
+    heifersGt1: {
+      liveweight: mass('Liveweight', 370),
+      liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
+      referenceWeight: mass('Liveweight', 590),
+    },
+    heifersLt1: {
+      liveweight: mass('Liveweight', 179),
+      liveweightGain: massPerHeadPerDay('Liveweight', 0.57),
+      referenceWeight: mass('Liveweight', 590),
+    },
+    bullsGt1: {
+      liveweight: mass('Liveweight', 600),
+      liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+      referenceWeight: mass('Liveweight', 770),
+    },
+    bullsLt1: {
+      liveweight: mass('Liveweight', 225),
+      liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+      referenceWeight: mass('Liveweight', 770),
+    },
+  },
+
+  CRUDE_PROTEIN_CONTENT_OF_FEED: realNumber(0.2),
+
+  DRY_MATTER_DIGESTIBILITY: realNumber(0.75),
+
+  // Ch 3.3 line 281
+  EFFICIENCY_OF_MILK_PRODUCTION: realNumber(0.6),
+
+  // Ch 3.3 line 270
+  FAT_CONTENT: percentage(4.0),
+
+  // Ch 4.2 line 952
+  FracLEACH: realNumber(0.02),
+
+  // Ch 3 line 279
+  GROSS_ENERGY_CONTENT: energyPerMass('DryMatter', 18.4),
+
+  // Ch 3.3 line 276
+  INCREASE_METABOLIC_RATE_FOR_MILK: {
+    milkingCows: massPerHeadPerDay('DryMatter', 1.1),
+    others: massPerHeadPerDay('DryMatter', 1.0),
+  },
+
+  // Ch 4.2 line 950
+  MMS: {
+    anaerobicLagoon: {
+      EFm: realNumber(0),
+      FracGASM: realNumber(0.35),
+    },
+    sumpDispersal: {
+      EFm: realNumber(0),
+      FracGASM: realNumber(0.07),
+    },
+    drainToPaddock: {
+      EFm: realNumber(0),
+      FracGASM: realNumber(0.2),
+    },
+    solidStorage: {
+      EFm: realNumber(0.005),
+      FracGASM: realNumber(0.3),
+    },
+    pastureRangeAndPaddock: {
+      EFm: realNumber(0),
+      FracGASM: realNumber(0),
+    },
+  },
+
+  // Ch 3.3 line 278
+  NET_ENERGY_FOR_MILK_PRODUCTION: energyPerMass('Milk', 3.054),
+
+  // Ch 4.2 line 930, 931
+  PRE_WEANED_CLASSES: {
+    bullsLt1: {
+      urinaryN: massPerHeadPerDay('N', 0.0042),
+      faecalN: massPerHeadPerDay('N', 0.005),
+    },
+    heifersLt1: {
+      urinaryN: massPerHeadPerDay('N', 0.0082),
+      faecalN: massPerHeadPerDay('N', 0.0055),
+    },
+  },
+
+  // Ch 3.3 line 270
+  PROTEIN_CONTENT: percentage(3.3),
+
+  // Ch 4.2 line 902
+  TIME_IN_LOCATIONS: {
+    'Grazed only': {
+      feedPad: realNumber(0),
+      milkingShed: realNumber(0.11),
+      pasture: realNumber(0.89),
+    },
+    'Limited feedpad': {
+      feedPad: realNumber(0.1),
+      milkingShed: realNumber(0.11),
+      pasture: realNumber(0.79),
+    },
+    'Limited grazing': {
+      feedPad: realNumber(0.356),
+      milkingShed: realNumber(0.11),
+      pasture: realNumber(0.534),
+    },
+    'Zero grazing': {
+      feedPad: realNumber(0.89),
+      milkingShed: realNumber(0.11),
+      pasture: realNumber(0),
+    },
+  },
+};
+
+export const poultryConstants: PoultryConstants = {
+  name: 'POULTRY',
+  CLASSES: {
+    layers: {
+      dryMatterIntake: massPerHeadPerDay('DryMatter', 0.086),
+      dryMatterDigestibility: realNumber(0.8),
+      crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.19),
+      nitrogenRetentionRate: realNumber(0.35),
+      manureAsh: realNumber(0.18),
+    },
+    meatChickenGrowers: {
+      dryMatterIntake: massPerHeadPerDay('DryMatter', 0.093),
+      dryMatterDigestibility: realNumber(0.8),
+      crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.23),
+      nitrogenRetentionRate: realNumber(0.47),
+      manureAsh: realNumber(0.15),
+    },
+    meatChickenBreeder: {
+      dryMatterIntake: massPerHeadPerDay('DryMatter', 0.103),
+      dryMatterDigestibility: realNumber(0.8),
+      crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.19),
+      nitrogenRetentionRate: realNumber(0.32),
+      manureAsh: realNumber(0.18),
+    },
+    meatOther: {
+      dryMatterIntake: massPerHeadPerDay('DryMatter', 0.093),
+      dryMatterDigestibility: realNumber(0.8),
+      crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.23),
+      nitrogenRetentionRate: realNumber(0.47),
+      manureAsh: realNumber(0.15),
+    },
+  },
+
+  MMS: {
+    manureWithLitter: {
+      FracGASM: realNumber(0.3),
+      EFm: realNumber(0.001),
+    },
+    beltManureRemoval: {
+      FracGASM: realNumber(0.05),
+      EFm: realNumber(0.001),
+    },
+    manureStoredInHouse: {
+      FracGASM: realNumber(0.4),
+      EFm: realNumber(0.02),
+    },
+    solidStorage: {
+      FracGASM: realNumber(0.2),
+      EFm: realNumber(0.005),
+    },
+    composting: {
+      FracGASM: realNumber(0.2),
+      EFm: realNumber(0.01),
+    },
+    directProcessing: {
+      FracGASM: realNumber(0),
+      EFm: realNumber(0),
+    },
+    digester: {
+      FracGASM: realNumber(0),
+      EFm: realNumber(0),
+    },
+  },
 };

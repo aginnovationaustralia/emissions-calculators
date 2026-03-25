@@ -1,8 +1,16 @@
 import { z } from 'zod';
 import {
+  DairyManureInputSchema,
+  DairyManureInputTransformed,
+} from './dairy-manure.input';
+import {
   FeedlotManureInputSchema,
   FeedlotManureInputTransformed,
 } from './feedlot-manure.input';
+import {
+  PoultryManureInputSchema,
+  PoultryManureInputTransformed,
+} from './poultry-manure.input';
 import { SwineManureInputSchema } from './swine-manure.input';
 
 export const livestockManureIsSwine = (
@@ -17,15 +25,29 @@ export const livestockManureIsFeedlot = (
   return input.type === 'feedlot';
 };
 
+export const livestockManureIsDairy = (
+  input: LivestockManuresInputTransformed,
+): input is DairyManureInputTransformed => {
+  return input.type === 'dairy';
+};
+
+export const livestockManureIsPoultry = (
+  input: LivestockManuresInputTransformed,
+): input is PoultryManureInputTransformed => {
+  return input.type === 'poultry';
+};
+
 export type SwineManureInput = z.input<typeof SwineManureInputSchema>;
 export type SwineManureInputTransformed = z.output<
   typeof SwineManureInputSchema
 >;
 
-export const LivestockManuresInputSchema = z.union([
+export const LivestockManuresInputSchema = z.discriminatedUnion('type', [
   SwineManureInputSchema,
+  DairyManureInputSchema,
   FeedlotManureInputSchema,
-]); // TODO: Need to support other types of local organic fertiliser (beef etc)
+  PoultryManureInputSchema,
+]);
 
 export type LivestockManuresInput = z.input<typeof LivestockManuresInputSchema>;
 export type LivestockManuresInputTransformed = z.output<

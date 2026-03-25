@@ -29,6 +29,7 @@
     "node": ">=22.19.0"
   },
   "devDependencies": {
+    "data-entry": "workspace:*",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
     "eslint-plugin-jest": "^29.5.0",

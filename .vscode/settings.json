@@ -3,6 +3,7 @@
     "commands": [
       {
         "match": ".*\\.ts$",
+        "notMatch": "excelExport.ts",
         "cmd": "node ${workspaceFolder}/scripts/normalize-unicode-to-ascii.js ${file} && ${workspaceFolder}/node_modules/.bin/prettier --write ${file}"
       }
     ]
@@ -10,9 +11,11 @@
   "cSpell.language": "en-GB",
   "cSpell.words": [
     "AEMO",
+    "AFMMS",
     "aginnovationaustralia",
     "Agrichemicals",
     "ATMOSPHERICNDEPOSITION",
+    "AUMMS",
     "AVGAS",
     "Bagasse",
     "baitpurchase",
@@ -154,6 +157,7 @@
     "mineralblock",
     "Mleach",
     "mlime",
+    "Mmms",
     "MMSC",
     "MMSD",
     "MMSG",
@@ -228,6 +232,7 @@
     "Sjmt",
     "snum",
     "Soiljf",
+    "Soilm",
     "Soilscope",
     "SOUTHOFTROPIC",
     "STANDARDWEIGHT",
@@ -256,5 +261,5 @@
     "Windrowing"
   ],
   "editor.formatOnSave": true,
-  "conventionalCommits.scopes": ["calculators"]
+  "conventionalCommits.scopes": ["calculators", "data-entry"]
 }

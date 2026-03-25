@@ -520,3 +520,78 @@ export type FeedlotMMSType = (typeof FeedlotMMSTypes)[number];
 export const FeedlotDurationTypes = ['0-80 days', '81-200 days', '201+ days'];
 
 export type FeedlotDurationType = (typeof FeedlotDurationTypes)[number];
+
+export const DairySystems = [
+  'Grazed only',
+  'Limited feedpad',
+  'Limited grazing',
+  'Zero grazing',
+] as const;
+export type DairySystem = (typeof DairySystems)[number];
+
+export const DairyClasses = [
+  'milkingCows',
+  'heifersGt1',
+  'heifersLt1',
+  'bullsGt1',
+  'bullsLt1',
+] as const;
+export type DairyClass = (typeof DairyClasses)[number];
+
+export const DairyMMSTypes = [
+  'anaerobicLagoon',
+  'sumpDispersal',
+  'drainToPaddock',
+  'solidStorage',
+  'pastureRangeAndPaddock',
+] as const;
+export type DairyMMSType = (typeof DairyMMSTypes)[number];
+
+export const PoultryClasses = [
+  'layers',
+  'meatChickenGrowers',
+  'meatChickenBreeder',
+  'meatOther',
+] as const;
+export type PoultryClass = (typeof PoultryClasses)[number];
+
+export const PoultryMMS1Types = [
+  'manureWithLitter',
+  'beltManureRemoval',
+  'manureStoredInHouse',
+] as const;
+export type PoultryMMS1Type = (typeof PoultryMMS1Types)[number];
+export const PoultryMMS1TypesWithPasture = [
+  ...PoultryMMS1Types,
+  'pastureRangeAndPaddock',
+] as const;
+export type PoultryMMS1TypeWithPasture =
+  (typeof PoultryMMS1TypesWithPasture)[number];
+
+export const PoultryMMS2Types = [
+  'solidStorage',
+  'composting',
+  'digester',
+  'directProcessing',
+] as const;
+export type PoultryMMS2Type = (typeof PoultryMMS2Types)[number];
+
+export const PoultryMMS2TypesWithPasture = [
+  ...PoultryMMS2Types,
+  'directApplication',
+] as const;
+export type PoultryMMS2TypeWithPasture =
+  (typeof PoultryMMS2TypesWithPasture)[number];
+
+export const PoultryMMSTypes = [
+  ...PoultryMMS1Types,
+  ...PoultryMMS2Types,
+] as const;
+export type PoultryMMSType = (typeof PoultryMMSTypes)[number];
+
+export const PoultryMMSTypesWithPasture = [
+  ...PoultryMMS1TypesWithPasture,
+  ...PoultryMMS2TypesWithPasture,
+] as const;
+export type PoultryMMSTypeWithPasture =
+  (typeof PoultryMMSTypesWithPasture)[number];

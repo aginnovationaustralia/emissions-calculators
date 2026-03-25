@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js-light';
-import { RootContainer, TypedContainer } from './containers';
-import { mass, RealNumber, realNumber } from './units';
+import { num, root, RootContainer, TypedContainer } from './containers';
+import { days, mass, RealNumber, realNumber } from './units';
 
 export const one = new RootContainer(realNumber(new Decimal(1)), {
   name: 'one',
@@ -12,6 +12,12 @@ export const tenToPowMinus3 = new RootContainer(
   realNumber(new Decimal(10).pow(-3)),
   {
     name: '10^-3',
+  },
+);
+export const tenToPowMinus4 = new RootContainer(
+  realNumber(new Decimal(10).pow(-4)),
+  {
+    name: '10^-4',
   },
 );
 
@@ -32,3 +38,10 @@ export const zeroN = new RootContainer(mass('N', new Decimal(0)), {
 });
 
 export const oneMinus = (x: TypedContainer<RealNumber>) => one.minus(x);
+export const onePlus = (x: TypedContainer<RealNumber>) => one.plus(x);
+
+export const daysInYear = root(days(365));
+export const daysPostWeaning = root(days(281));
+export const daysPreWeaning = root(days(84));
+
+export const e = num(Math.E).named('e');

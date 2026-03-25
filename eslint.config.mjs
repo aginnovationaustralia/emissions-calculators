@@ -4,7 +4,7 @@ import tseslint from 'typescript-eslint';
 
 export default [
   {
-    ignores: ['**/dist/**', '**/node_modules/**'],
+    ignores: ['**/dist/**', '**/node_modules/**', '**/out/**'],
   },
   {
     ...js.configs.recommended,
@@ -62,6 +62,12 @@ export default [
   },
   {
     files: ['examples/ts-client/**'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+  {
+    files: ['packages/data-entry/**'],
     rules: {
       'no-console': 'off',
     },

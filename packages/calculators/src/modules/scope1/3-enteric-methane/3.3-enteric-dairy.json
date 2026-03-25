@@ -1,0 +1,137 @@
+{
+  "records": [
+    {
+      "symbol": "Wj",
+      "name": "liveweight",
+      "units": "kg",
+      "type": "constant",
+      "expression": "",
+      "line": "266",
+      "notes": "Table A5.5.1.1 National Inventory Report, Volume 2, method 2 allows it to be an input"
+    },
+    {
+      "symbol": "LWGj",
+      "name": "liveweight gain",
+      "units": "kg / head / day",
+      "type": "constant",
+      "expression": "",
+      "line": "267",
+      "notes": "Table 5.5.1.2 National Inventory Report, Volume 2, can also be supplied as an input"
+    },
+    {
+      "symbol": "MRj",
+      "name": "increase in metabolic rate when producing milk (dimensionless)",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "275",
+      "notes": "",
+      "values": "class 1 = 1.1, other classes = 1.0"
+    },
+    {
+      "symbol": "MIj",
+      "name": "additional intake required for milk production (kgDM/head/day)",
+      "units": "kg DM / head / day",
+      "type": "expression",
+      "expression": "(MPj * 1.03 * NE) / (GEC * k * qmj)",
+      "line": "234",
+      "notes": ""
+    },
+    {
+      "symbol": "Ij",
+      "name": "feed intake",
+      "units": "kg DM / head / day",
+      "type": "expression",
+      "expression": "(1.185 + 0.00454 * Wj- 0.0000026 * Wj^2 + 0.315 * LWGj)^2 * MRj + MIj",
+      "line": "226",
+      "notes": ""
+    },
+    {
+      "symbol": "MPj",
+      "name": "milk production",
+      "units": "L / head / day",
+      "type": "expression",
+      "expression": "MSj / (0.01 * (FCj + PCj))",
+      "line": "245",
+      "notes": "Can also be supplied as a direct input (l258)"
+    },
+    {
+      "symbol": "NE",
+      "name": "net energy",
+      "units": "MJ net energy / kg milk",
+      "type": "constant",
+      "expression": "",
+      "line": "278",
+      "notes": "",
+      "values": "3.054"
+    },
+    {
+      "symbol": "GEC",
+      "name": "gross energy content",
+      "units": "MJ / kg DM",
+      "type": "constant",
+      "expression": "",
+      "line": "279",
+      "notes": "",
+      "values": "18.4"
+    },
+    {
+      "symbol": "k",
+      "name": "efficiency of use of metabolizable energy for milk production",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "281",
+      "notes": "",
+      "values": "0.6"
+    },
+    {
+      "symbol": "qmj",
+      "name": "metabolisability of the diet",
+      "units": "d",
+      "type": "expression",
+      "expression": "0.795 * DMDj- 0.0014",
+      "line": "253",
+      "notes": ""
+    },
+    {
+      "symbol": "MSj",
+      "name": "daily production of milk solids",
+      "units": "kg MS / head / day",
+      "type": "input",
+      "expression": "",
+      "line": "259",
+      "notes": "only required where MPj is not known"
+    },
+    {
+      "symbol": "FCj",
+      "name": "fat content in fat and protein corrected milk",
+      "units": "percent",
+      "type": "constant",
+      "expression": "",
+      "line": "270",
+      "notes": "can also be supplied as an input",
+      "values": "4.0"
+    },
+    {
+      "symbol": "PCj",
+      "name": "protein content in fat and milk corrected milk",
+      "units": "percent",
+      "type": "constant",
+      "expression": "",
+      "line": "271",
+      "notes": "can also be supplied a an input",
+      "values": "3.3"
+    },
+    {
+      "symbol": "DMDj",
+      "name": "dry matter digestibility",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "269",
+      "notes": "can also be supplied as an input",
+      "values": "0.75"
+    }
+  ]
+}

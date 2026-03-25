@@ -4,7 +4,9 @@ import { AllConstants, HasCommonConstants } from './types';
 import {
   commonConstants,
   cropConstants,
+  dairyConstants,
   feedlotConstants,
+  poultryConstants,
   swineConstants,
 } from './values';
 
@@ -42,6 +44,8 @@ export const loadConstants = (): AllConstants => {
     CROP: cropConstants,
     SWINE: swineConstants,
     FEEDLOT: feedlotConstants,
+    DAIRY: dairyConstants,
+    POULTRY: poultryConstants,
   };
 };
 

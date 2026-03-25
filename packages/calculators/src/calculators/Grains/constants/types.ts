@@ -1,6 +1,7 @@
 import {
   EnergyPerMass,
   EnergyPerVolume,
+  Mass,
   MassPerArea,
   MassPerElectricity,
   MassPerEnergy,
@@ -19,6 +20,9 @@ import {
   CarsLightCommercialFuelType,
   CarsLightCommercialPre2004FuelType,
   CropType,
+  DairyClass,
+  DairyMMSType,
+  DairySystem,
   FeedlotDurationType,
   FeedlotMMSType,
   FuelStationaryMassBasedLiquidType,
@@ -33,6 +37,8 @@ import {
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
   PastureType,
+  PoultryClass,
+  PoultryMMSType,
   RefrigerantType,
   RefrigerationType,
   ServiceByAreaType,
@@ -176,6 +182,8 @@ export type CommonConstants = NamedConstants & {
     SolidWasteByVolumeType,
     MassPerVolume<'Solid Waste', 'Solid Waste'>
   >;
+
+  CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: MassPerMass<'CrudeProtein', 'N'>;
 };
 
 type CropResidueFactors = {
@@ -279,11 +287,75 @@ export type FeedlotConstants = NamedConstants & {
   CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: MassPerMass<'CrudeProtein', 'N'>;
 };
 
+type TimeInLocations = {
+  pasture: RealNumber;
+  milkingShed: RealNumber;
+  feedPad: RealNumber;
+};
+
+type ClassWeights = {
+  liveweight: Mass<'Liveweight'>;
+  referenceWeight: Mass<'Liveweight'>;
+  liveweightGain: MassPerHeadPerDay<'Liveweight'>;
+};
+
+type DairyMMSFactors = {
+  EFm: RealNumber; // MassPerMass<'N2O', 'N'>;
+  FracGASM: RealNumber; // MassPerMass<'Volatilised N', 'N'>;
+};
+
+type PreWeanedFactors = {
+  urinaryN: MassPerHeadPerDay<'N'>;
+  faecalN: MassPerHeadPerDay<'N'>;
+};
+
+export type DairyConstants = NamedConstants & {
+  TIME_IN_LOCATIONS: Record<DairySystem, TimeInLocations>;
+  FAT_CONTENT: RealNumber;
+  PROTEIN_CONTENT: RealNumber;
+  NET_ENERGY_FOR_MILK_PRODUCTION: EnergyPerMass<'Milk'>;
+  GROSS_ENERGY_CONTENT: EnergyPerMass<'DryMatter'>;
+  EFFICIENCY_OF_MILK_PRODUCTION: RealNumber;
+  CRUDE_PROTEIN_CONTENT_OF_FEED: RealNumber;
+  CLASS_WEIGHTS: Record<DairyClass, ClassWeights>;
+  INCREASE_METABOLIC_RATE_FOR_MILK: {
+    milkingCows: MassPerHeadPerDay<'DryMatter'>;
+    others: MassPerHeadPerDay<'DryMatter'>;
+  };
+  DRY_MATTER_DIGESTIBILITY: RealNumber;
+  PRE_WEANED_CLASSES: {
+    heifersLt1: PreWeanedFactors;
+    bullsLt1: PreWeanedFactors;
+  };
+  MMS: Record<DairyMMSType, DairyMMSFactors>;
+  FracLEACH: RealNumber;
+};
+
+type PoultryClassFactors = {
+  dryMatterIntake: MassPerHeadPerDay<'DryMatter'>;
+  dryMatterDigestibility: RealNumber;
+  crudeProtein: MassPerMass<'CrudeProtein', 'DryMatter'>;
+  nitrogenRetentionRate: RealNumber;
+  manureAsh: RealNumber;
+};
+
+type PoultryMMSFactors = {
+  EFm: RealNumber; // MassPerMass<'N2O', 'N'>;
+  FracGASM: RealNumber; // MassPerMass<'Volatilised N', 'N'>;
+};
+
+export type PoultryConstants = NamedConstants & {
+  CLASSES: Record<PoultryClass, PoultryClassFactors>;
+  MMS: Record<PoultryMMSType, PoultryMMSFactors>;
+};
+
 export type AllConstants = {
   COMMON: CommonConstants;
   CROP: CropConstants;
   SWINE: SwineConstants;
   FEEDLOT: FeedlotConstants;
+  DAIRY: DairyConstants;
+  POULTRY: PoultryConstants;
 };
 
 export type HasCommonConstants = {

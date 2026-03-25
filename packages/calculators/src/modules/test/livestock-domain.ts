@@ -1,4 +1,6 @@
 import {
+  DairySystem,
+  DairySystems,
   FeedlotMMSType,
   FeedlotMMSTypes,
   SwineMMSType,
@@ -19,4 +21,11 @@ export const checkFeedlotMMSType = (
     throw new Error(`Invalid feedlot MMS type: ${type}`);
   }
   return type as FeedlotMMSType;
+};
+
+export const checkDairySystem = (system: string | undefined): DairySystem => {
+  if (!DairySystems.includes(system as DairySystem)) {
+    throw new Error(`Invalid dairy system: ${system}`);
+  }
+  return system as DairySystem;
 };

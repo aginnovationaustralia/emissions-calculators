@@ -114,6 +114,12 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
    * with StringUnit (e.g. for constant selection keys) can still extend BaseContainer; consider
    * narrowing to U extends NumberUnit for classes that only ever hold numeric units.
    */
+  // RealNumber * RealNumber → RealNumber
+  multiply<UL extends RealNumber>(
+    this: BaseContainer<UL>,
+    right: Container<RealNumber>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<UL>;
   // unit * RealNumber → preserve this.unit
   multiply<UL extends NumberUnit>(
     this: BaseContainer<UL>,
@@ -204,6 +210,12 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<Head>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerDay<ExtractMassPerHeadPerDaySubstance<UL>>>;
+  // MassPerEnergy<S1> * EnergyPerMass<S1> = RealNumber
+  multiply<S extends Substance>(
+    this: BaseContainer<MassPerEnergy<S>>,
+    right: Container<EnergyPerMass<S>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<RealNumber>;
   // MassPerDay<S1> * Days = Mass<S1>
   multiply<S extends Substance, UL extends MassPerDay<S>>(
     this: BaseContainer<UL>,
@@ -245,6 +257,10 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerDay(leftUnit.substance);
       } else if (isMassPerDay(leftUnit) && isDays(rightUnit)) {
         unit = mass(leftUnit.substance);
+      } else if (isMassPerHeadPerDay(leftUnit) && isEnergyPerMass(rightUnit)) {
+        unit = massPerDay(leftUnit.substance);
+      } else if (isMassPerEnergy(leftUnit) && isEnergyPerMass(rightUnit)) {
+        unit = realNumber();
       } else if (isRealNumber(leftUnit)) {
         unit = { ...rightUnit };
       } else {
@@ -270,12 +286,21 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   }
   // Implement divide operation, following the same pattern as multiply
   // start out with an overload for NumberUnit divided by RealNumber → RealNumber and Mass<Substance> divided by Area → MassPerArea<Substance>
+  // NumberUnit / RealNumber → NumberUnit
   divide<UL extends NumberUnit>(
     this: BaseContainer<UL>,
     right: Container<RealNumber>,
     baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
+  // NumberUnit / NumberUnit → RealNumber
+  divide<UL extends NumberUnit>(
+    this: BaseContainer<UL>,
+    right: Container<UL>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<RealNumber>;
+
+  // Mass<Substance> / Area → MassPerArea<Substance>
   divide<UL extends Mass<Substance>>(
     this: BaseContainer<UL>,
     right: Container<Area>,
@@ -307,6 +332,8 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerArea(leftUnit.substance);
       } else if (isMassPerHeadPerDay(leftUnit) && isMassPerMass(rightUnit)) {
         unit = massPerHeadPerDay(rightUnit.snum);
+      } else if (leftUnit.__unitType === rightUnit.__unitType) {
+        unit = realNumber();
       } else {
         if (!isRealNumber(rightUnit)) {
           // eslint-disable-next-line no-console
@@ -316,7 +343,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
             )}`,
           );
         }
-        unit = leftUnit;
+        unit = { ...leftUnit };
       }
       unit.value = leftUnit.value.div(rightUnit.value);
     }
@@ -391,6 +418,8 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = rightUnit;
       } else if (!isRealNumber(leftUnit) && isRealNumber(rightUnit)) {
         unit = leftUnit;
+      } else if (leftUnit.__unitType === rightUnit.__unitType) {
+        unit = { ...leftUnit };
       } else {
         unit = realNumber(leftUnit.value.add(rightUnit.value));
       }
@@ -405,17 +434,55 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
       baseOrigin,
     );
   }
+
+  power<UL extends NumberUnit>(
+    this: BaseContainer<UL>,
+    right: Container<RealNumber>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<RealNumber> {
+    const leftUnit = this.unit;
+    const rightUnit = right.unit;
+
+    const unit = realNumber(leftUnit.value.pow(rightUnit.value));
+
+    return new BinaryContainer(
+      unit,
+      'power',
+      this as unknown as Container<RealNumber>,
+      right,
+      baseOrigin,
+    );
+  }
+
+  squared<UL extends NumberUnit>(
+    this: BaseContainer<UL>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<UL> {
+    const unit = {
+      ...this.unit,
+      value: this.unit.value.pow(2),
+    };
+    const right = num(2);
+
+    return new BinaryContainer(
+      unit,
+      'power',
+      this as unknown as Container<UL>,
+      right,
+      baseOrigin,
+    );
+  }
 }
 
 export class BinaryContainer<U extends AnyUnit> extends BaseContainer<U> {
   originType: 'binary';
-  type: 'add' | 'subtract' | 'multiply' | 'divide';
+  type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power';
   left: Container<NumberUnit>;
   right: Container<NumberUnit>;
 
   constructor(
     unit: U,
-    type: 'add' | 'subtract' | 'multiply' | 'divide',
+    type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power',
     left: Container<NumberUnit>,
     right: Container<NumberUnit>,
     baseOrigin: Metadata,
@@ -425,6 +492,16 @@ export class BinaryContainer<U extends AnyUnit> extends BaseContainer<U> {
     this.type = type;
     this.left = left;
     this.right = right;
+  }
+
+  switchUnit<UN extends U extends NumberUnit ? U : never, V extends NumberUnit>(
+    converter: (from: UN) => V,
+  ): BinaryContainer<V> {
+    const newUnit = converter(this.unit as unknown as UN);
+    //@ts-expect-error Force switch of units
+    this.unit = newUnit;
+
+    return this as unknown as BinaryContainer<V>;
   }
 }
 
@@ -440,6 +517,16 @@ export class SummedContainer<N extends NumberUnit> extends BaseContainer<N> {
     super(unit, baseOrigin);
     this.originType = 'sum';
     this.from = from;
+  }
+
+  switchUnit<UN extends N extends NumberUnit ? N : never, V extends NumberUnit>(
+    converter: (from: UN) => V,
+  ): SummedContainer<V> {
+    const newUnit = converter(this.unit as unknown as UN);
+    //@ts-expect-error Force switch of units
+    this.unit = newUnit;
+
+    return this as unknown as SummedContainer<V>;
   }
 }
 
@@ -458,6 +545,16 @@ export class ConstantSelectionContainer<
     this.originType = 'constant_selection';
     this.selectors = selectors;
   }
+
+  switchUnit<UN extends U extends NumberUnit ? U : never, V extends NumberUnit>(
+    converter: (from: UN) => V,
+  ): ConstantSelectionContainer<V> {
+    const newUnit = converter(this.unit as unknown as UN);
+    //@ts-expect-error Force switch of units
+    this.unit = newUnit;
+
+    return this as unknown as ConstantSelectionContainer<V>;
+  }
 }
 
 export class RootContainer<U extends AnyUnit> extends BaseContainer<U> {
@@ -467,7 +564,22 @@ export class RootContainer<U extends AnyUnit> extends BaseContainer<U> {
     super(unit, baseOrigin);
     this.originType = 'root';
   }
+
+  switchUnit<UN extends U extends NumberUnit ? U : never, V extends NumberUnit>(
+    converter: (from: UN) => V,
+  ): RootContainer<V> {
+    const newUnit = converter(this.unit as unknown as UN);
+    //@ts-expect-error Force switch of units
+    this.unit = newUnit;
+
+    return this as unknown as RootContainer<V>;
+  }
 }
+
+export const root = <U extends AnyUnit>(
+  unit: U,
+  baseOrigin?: Metadata,
+): RootContainer<U> => new RootContainer(unit, baseOrigin);
 
 export class BracketedContainer<U extends AnyUnit> extends BaseContainer<U> {
   originType: 'bracketed';
@@ -476,6 +588,16 @@ export class BracketedContainer<U extends AnyUnit> extends BaseContainer<U> {
     super(unit, baseOrigin);
     this.originType = 'bracketed';
     this.inner = inner;
+  }
+
+  switchUnit<UN extends U extends NumberUnit ? U : never, V extends NumberUnit>(
+    converter: (from: UN) => V,
+  ): BracketedContainer<V> {
+    const newUnit = converter(this.unit as unknown as UN);
+    //@ts-expect-error Force switch of units
+    this.unit = newUnit;
+
+    return this as unknown as BracketedContainer<V>;
   }
 }
 

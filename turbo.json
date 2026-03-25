@@ -15,6 +15,9 @@
     },
     "examples-ts-client#build": {
       "dependsOn": ["@aginnovationaustralia/emissions-calculators#build"]
+    },
+    "data-entry#build": {
+      "outputs": ["dist/**"]
     }
   }
 }
