@@ -303,7 +303,7 @@ export const grainsTestData102: GrainsInput = {
       ],
       refrigerants: [
         {
-          refrigerant: 'R22',
+          refrigerant: 'HCFC-141b (R-141b)',
           chargeSize: 100,
           refrigerationType: 'Domestic refrigerators',
         },

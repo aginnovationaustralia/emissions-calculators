@@ -21,7 +21,7 @@ export const calculateScope1RefrigerantUse = (
   // REVISIT: The guidelines are returning tonnes of gas R, not tonnes of CO2e. I have doen rhe obvious thing
   // and included gwp of the refrigerant. This needs to be reviewed.
   const emissionsRecords = input.refrigerants.map((refrigerant) => {
-    const chargeRa = refrigerant.chargeSize;
+    const chargeRa = refrigerant.chargeSize.named('chargeRa');
     const leakageRatea = selectConstant(
       constants.COMMON,
       'REFRIGERATION_LEAKAGE_RATES',

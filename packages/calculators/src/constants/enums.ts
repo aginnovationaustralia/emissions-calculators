@@ -236,15 +236,6 @@ export const RefrigerationTypes = [
 ] as const;
 export type RefrigerationType = (typeof RefrigerationTypes)[number];
 
-export const RefrigerantTypes = [
-  'R22',
-  'R32',
-  'R134A',
-  'R410A',
-  'R404A',
-] as const;
-export type RefrigerantType = (typeof RefrigerantTypes)[number];
-
 export const InorganicFertiliserComponentOrigins = [
   'Unspecified',
   'China',
@@ -597,3 +588,72 @@ export const PoultryMMSTypesWithPasture = [
 ] as const;
 export type PoultryMMSTypeWithPasture =
   (typeof PoultryMMSTypesWithPasture)[number];
+
+export const RefrigerantTypes = [
+  'R-400 50/50',
+  'R-400 60/40',
+  'R-400 80/20',
+  'HFC-23 (R-23)',
+  'HFC-32 (R-32)',
+  'HFC-41 (R-41)',
+  'HFC-43-10mee (R-4310mee)',
+  'HFC-125 (R-125)',
+  'HFC-134 (R-134)',
+  'HFC-134a (R-134a)',
+  'HFC-143 (R-143)',
+  'HFC-143a (R-143a)',
+  'HFC-152a (R-152a)',
+  'HFC-227ea (R-227ea)',
+  'HFC-236fa (R-236fa)',
+  'HFC-245ca (R-245ca)',
+  'HFC-245fa (R-245fa)',
+  'HFC-365mfc (R-365mfc)',
+  'HCFC-22 (R-22)',
+  'HCFC-123 (R-123)',
+  'HCFC-124 (R-124)',
+  'HCFC-141b (R-141b)',
+  'HCFC-142b (R-142b)',
+  'HCFC-225ca (R-225ca)',
+  'HCFC-225cb (R-225cb)',
+  'PFC-14 Perfluoromethane (tetrafluoromethane)',
+  'PFC-116 Perfluoroethane (hexafluoroethane)',
+  'PFC-218 Perfluoropropane',
+  'PFC-31-10 Perfluorobutane',
+  'PFC-318 Perfluorocyclobutane',
+  'PFC-41-12 Perfluoropentane',
+  'PFC-51-14 Perfluorohexane',
+  'PFC-91-18 Perflunafene',
+  'R-401A',
+  'R-401B',
+  'R-401C',
+  'R-404A',
+  'R-405A',
+  'R-407A',
+  'R-407B',
+  'R-407C',
+  'R-407D',
+  'R-407E',
+  'R-408A',
+  'R-409A',
+  'R-409B',
+  'R-410A',
+  'R-410B',
+  'R-412A',
+  'R-415A',
+  'R-415B',
+  'R-420A',
+  'R-421A',
+  'R-422A',
+  'R-422B',
+  'R-422C',
+  'R-500',
+  'R-501',
+  'R-502',
+  'R-503',
+  'R-504',
+  'R-507A',
+  'R-508A',
+  'R-508B',
+  'R-509A',
+] as const;
+export type RefrigerantType = (typeof RefrigerantTypes)[number];

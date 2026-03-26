@@ -91,6 +91,8 @@ export const compareInputsAndOutputs = <
     let actual: Actual | undefined = undefined;
     try {
       actual = calcModule(input, context);
+      // TODO: Why does toEqual not work? Shouldn't decimal.js have fixed that?
+      // NOTE: divide by 1000 is because mass units are stored in kg, but module results are always in tonnes
       expect(actual.unit.value.div(1000).toNumber()).toBeCloseTo(output, 8);
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
