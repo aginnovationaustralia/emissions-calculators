@@ -27,6 +27,7 @@ export const calculateScope1RefrigerantUse = (
       'REFRIGERATION_LEAKAGE_RATES',
       refrigerant.refrigerationType,
     );
+    // NOTE: the current guidelines don't convert to CO2e using GWP. We have assumed this is an oversight, and have done the conversion
     const gwp = selectConstant(
       constants.COMMON,
       'REFRIGERANT_GWP',
