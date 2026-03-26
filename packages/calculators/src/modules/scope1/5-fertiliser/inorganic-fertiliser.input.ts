@@ -31,7 +31,7 @@ export const InorganicFertiliserInputScope3Method1Schema = object({
     }),
   calculationMethodScope3: z.literal('1').meta({
     description:
-      'Choosing method 2 for calculating scope 3 emissions for this fertiliser',
+      'Choosing method 1 for calculating scope 3 emissions for this fertiliser',
   }),
 });
 

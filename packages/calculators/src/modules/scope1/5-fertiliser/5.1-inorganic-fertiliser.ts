@@ -76,7 +76,7 @@ const getEFjN20ForFertiliser = (
   ).attach({ references: [`5.1.1.1 (119)`] });
 };
 
-export const massNitrogenFromInorganicFertiliserApplied = (
+export const massNitrogenFromInorganicFertiliserAppliedMNjf = (
   inorganicFertiliser: InorganicFertiliserInputTransformed,
   constants: ConstantsForGrainsCalculator,
 ) => {
@@ -116,7 +116,9 @@ export const massNitrogenFromInorganicFertiliserApplied = (
     }
   }
 
-  const mnjf = inorganicFertiliser.massAppliedKg.multiply(fnInorganicF);
+  const TMjf = inorganicFertiliser.massAppliedKg.named('TMjf');
+
+  const mnjf = TMjf.multiply(fnInorganicF.named('FNinorganicf')).named('MNjf');
   return mnjf;
 };
 
@@ -139,7 +141,7 @@ CN2O = factor to convert elemental mass of nitrous oxide to molecular mass
 */
   const { applications } = input.inorganicFertilisers;
   const emissionRecords = applications.map((inorganicFertiliser) => {
-    const mnjf = massNitrogenFromInorganicFertiliserApplied(
+    const mnjf = massNitrogenFromInorganicFertiliserAppliedMNjf(
       inorganicFertiliser,
       constants,
     );

@@ -4,7 +4,7 @@ import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.
 import { selectConstant } from '@/tools/constants';
 import { one, zero } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { massNitrogenFromInorganicFertiliserApplied } from './5.1-inorganic-fertiliser';
+import { massNitrogenFromInorganicFertiliserAppliedMNjf } from './5.1-inorganic-fertiliser';
 import { calculateMNSoilForOrganicFertiliser } from './5.2-organic-fertiliser';
 import { FertiliserInputTransformed } from './fertiliser.input';
 
@@ -25,7 +25,7 @@ const calculateLeachingAndRunoffN2O = (
   const { organicFertilisers, inorganicFertilisers } = input;
   const inorganicEmissions = inorganicFertilisers.applications.map(
     (inorganicFertiliser) => {
-      const mnjf = massNitrogenFromInorganicFertiliserApplied(
+      const mnjf = massNitrogenFromInorganicFertiliserAppliedMNjf(
         inorganicFertiliser,
         constants,
       );

@@ -54,7 +54,7 @@ describe('Grains Calculator', () => {
       expect(residueLeachingAndRunoffN2O.references).toEqual(['5.1.1.1 (119)']);
       expect(residueLeachingAndRunoffN2O.constants).toEqual([
         {
-          name: 'CROP[INORGANIC_FERTILISER_FRACTIONS.Urea.N]',
+          name: 'FNinorganicf',
           value: 0.46,
           units: 'Mass(N) / Mass(Inorganic Fertiliser)',
         },

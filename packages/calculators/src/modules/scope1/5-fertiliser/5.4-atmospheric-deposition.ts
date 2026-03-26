@@ -8,7 +8,7 @@ import {
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
 import { CropResidueInputTransformed } from '../6-residue-mgmt/crop-residue.input';
-import { massNitrogenFromInorganicFertiliserApplied } from './5.1-inorganic-fertiliser';
+import { massNitrogenFromInorganicFertiliserAppliedMNjf } from './5.1-inorganic-fertiliser';
 import { calculateMNSoilForOrganicFertiliser } from './5.2-organic-fertiliser';
 import { FertiliserInputTransformed } from './fertiliser.input';
 
@@ -47,7 +47,7 @@ export const calculateInorganicFertiliserAtmosphericDepositionN2O = (
     input.inorganicFertilisers.productionSystem,
   );
   const emissionRecords = applications.map((inorganicFertiliser) => {
-    const mnjf = massNitrogenFromInorganicFertiliserApplied(
+    const mnjf = massNitrogenFromInorganicFertiliserAppliedMNjf(
       inorganicFertiliser,
       constants,
     );
