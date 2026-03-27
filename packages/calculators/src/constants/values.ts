@@ -1159,6 +1159,1367 @@ export const commonConstants: CommonConstants = {
   },
 
   CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: massPerMass('CrudeProtein', 'N', 6.25),
+
+  // Appendix A1 Table A.3.1.2
+  PURCHASED_FEED_FACTORS: {
+    'Meat Meal': massPerMass('CO2e', 'Purchased Feed', 0.386),
+    'Blood Meal': massPerMass('CO2e', 'Purchased Feed', 1.9),
+    Millrun: massPerMass('CO2e', 'Purchased Feed', 0.3),
+    'Whole Sardines': massPerMass('CO2e', 'Purchased Feed', 0.3),
+    'Low Animal Protein': massPerMass('CO2e', 'Purchased Feed', 2.2),
+    'Formulated Feed': massPerMass('CO2e', 'Purchased Feed', 2.2),
+    Squid: massPerMass('CO2e', 'Purchased Feed', 0.3),
+    'Whole Fish': massPerMass('CO2e', 'Purchased Feed', 0.3),
+    'Custom Bait': massPerMass('CO2e', 'Purchased Feed', 0.08),
+    'Almond hulls and shells, at huller and sheller ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.016265082,
+    ),
+    'Animal feed, meat chickens , meat chicken feed production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.59376877,
+    ),
+    'Animal feed, pigs , pig feed production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.40287848,
+    ),
+    'Animal protein meal , dry rendering': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.39104334,
+    ),
+    'Animal protein meal , market for meat meal': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.40808088,
+    ),
+    'Bagasse, surplus at mill gate , AU-QLD, sugarcane milling': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.034101696,
+    ),
+    'Barley straw , AU-NSW, market for barley straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.043891082,
+    ),
+    'Barley straw , AU-NT, market for barley straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.050814396,
+    ),
+    'Barley straw , AU-QLD, market for barley straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.04540232,
+    ),
+    'Barley straw , AU-SA, market for barley straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.04015343,
+    ),
+    'Barley straw , AU-TAS, market for barley straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.052039382,
+    ),
+    'Barley straw , AU-VIC, market for barley straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.04161249,
+    ),
+    'Barley straw , AU-WA, market for barley straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.041766341,
+    ),
+    'Barley straw , market for barley straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.042029926,
+    ),
+    'Barley straw, dryland, Brisbane , AU-QLD, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.046331353),
+    'Barley straw, dryland, C Highlands , AU-QLD, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.039602821),
+    'Barley straw, dryland, Central Plains , AU-NSW, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.036197421),
+    'Barley straw, dryland, Darling D , AU-QLD, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.036930181),
+    'Barley straw, dryland, Dawson , AU-QLD, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.033795412),
+    'Barley straw, dryland, Desserts , AU-SA, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.042549304),
+    'Barley straw, dryland, Goldfields , AU-SA, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.042988877),
+    'Barley straw, dryland, Granite Belt , AU-NSW, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.048758852),
+    'Barley straw, dryland, Lower SW , AU-WA, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.054133878),
+    'Barley straw, dryland, Mallee , AU-SA, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.031827994),
+    'Barley straw, dryland, Maranoa , AU-QLD, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.039390732),
+    'Barley straw, dryland, Melbourne , AU-VIC, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.044963459),
+    'Barley straw, dryland, N Central , AU-TAS, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.04377429),
+    'Barley straw, dryland, Riverina , AU-VIC, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.031079262),
+    'Barley straw, dryland, S Coast , AU-SA, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.030706476),
+    'Barley straw, dryland, S Highland and Gippsland , AU-NSW, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.045634808),
+    'Barley straw, dryland, SE Vic Coast , AU-VIC, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.040108979),
+    'Barley straw, dryland, South West , AU-WA, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.033342735),
+    'Barley straw, dryland, W Downs , AU-NSW, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.036363837),
+    'Barley straw, dryland, W Wheatbelt , AU-WA, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.033436965),
+    'Barley straw, dryland, WB Burnett , AU-QLD, barley grain production':
+      massPerMass('CO2e', 'Purchased Feed', 0.043990047),
+    'Beef pet food, hot standard carcase weight , cattle processing':
+      massPerMass('CO2e', 'Purchased Feed', 5.5488189),
+    'Blood meal , dry rendering': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.39104334,
+    ),
+    'Blood meal , market for meat meal': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.40808088,
+    ),
+    'Canola straw , AU-NSW, market for canola straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.037257415,
+    ),
+    'Canola straw , AU-NT, market for canola straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.046843625,
+    ),
+    'Canola straw , AU-QLD, market for canola straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.037712368,
+    ),
+    'Canola straw , AU-SA, market for canola straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.033060852,
+    ),
+    'Canola straw , AU-TAS, market for canola straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.045624885,
+    ),
+    'Canola straw , AU-VIC, market for canola straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.036704736,
+    ),
+    'Canola straw , AU-WA, market for canola straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.036844846,
+    ),
+    'Canola straw , market for canola straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.036557904,
+    ),
+    'Canola straw, dryland, Central Plains , AU-NSW, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.029209237),
+    'Canola straw, dryland, Desserts , AU-SA, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.038578533),
+    'Canola straw, dryland, Goldfields , AU-SA, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.031788102),
+    'Canola straw, dryland, Granite Belt , AU-NSW, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.038162133),
+    'Canola straw, dryland, Mallee , AU-SA, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.024185029),
+    'Canola straw, dryland, Melbourne , AU-VIC, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.03598532),
+    'Canola straw, dryland, N Central , AU-TAS, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.037359792),
+    'Canola straw, dryland, Riverina , AU-VIC, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.024992554),
+    'Canola straw, dryland, S Coast , AU-SA, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.025540921),
+    'Canola straw, dryland, S Highland and Gippsland , AU-NSW, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.037261456),
+    'Canola straw, dryland, SE Vic Coast , AU-VIC, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.035046524),
+    'Canola straw, dryland, South West , AU-WA, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.028806464),
+    'Canola straw, dryland, W Downs , AU-NSW, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.028269153),
+    'Canola straw, dryland, W Wheatbelt , AU-WA, canola seed production':
+      massPerMass('CO2e', 'Purchased Feed', 0.028454205),
+    'Cereal hay , AU-NSW, market for cereal hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.19339005,
+    ),
+    'Cereal hay , AU-QLD, market for cereal hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.18856305,
+    ),
+    'Cereal hay , AU-SA, market for cereal hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.1949643,
+    ),
+    'Cereal hay , AU-TAS, market for cereal hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.2674033,
+    ),
+    'Cereal hay , AU-VIC, market for cereal hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.20422468,
+    ),
+    'Cereal hay , AU-WA, market for cereal hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.21914021,
+    ),
+    'Cereal hay , market for cereal hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.20352754,
+    ),
+    'Cereal hay and silage, dryland, Central, NSW, at farm ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.27247982,
+    ),
+    'Cereal hay and silage, dryland, Northern Rivers and Mid-north Coast, NSW, at farm ':
+      massPerMass('CO2e', 'Purchased Feed', 0.30001686),
+    'Cereal hay, dryland, Brisbane , AU-QLD, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.22629807),
+    'Cereal hay, dryland, Central Plains , AU-NSW, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.1720438),
+    'Cereal hay, dryland, Darling D , AU-QLD, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.17916052),
+    'Cereal hay, dryland, Dawson , AU-QLD, cereal hay production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.17139496,
+    ),
+    'Cereal hay, dryland, Goldfields , AU-SA, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.17595092),
+    'Cereal hay, dryland, Granite Belt , AU-NSW, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.20587695),
+    'Cereal hay, dryland, Lower SW , AU-WA, cereal hay production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.25687063,
+    ),
+    'Cereal hay, dryland, Mallee , AU-SA, cereal hay production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.16842486,
+    ),
+    'Cereal hay, dryland, Maranoa , AU-QLD, cereal hay production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.15776704,
+    ),
+    'Cereal hay, dryland, Melbourne , AU-VIC, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.21953066),
+    'Cereal hay, dryland, N Central , AU-TAS, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.2615926),
+    'Cereal hay, dryland, Riverina , AU-VIC, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.178704),
+    'Cereal hay, dryland, S Coast , AU-SA, cereal hay production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.20352552,
+    ),
+    'Cereal hay, dryland, S Highland and Gippsland , AU-NSW, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.23161237),
+    'Cereal hay, dryland, SE Vic Coast , AU-VIC, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.23491504),
+    'Cereal hay, dryland, South West , AU-WA, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.20018474),
+    'Cereal hay, dryland, Tas Forest , AU-TAS, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.26026109),
+    'Cereal hay, dryland, W Downs , AU-NSW, cereal hay production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.16708157,
+    ),
+    'Cereal hay, dryland, W Wheatbelt , AU-WA, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.16449494),
+    'Cereal hay, dryland, WB Burnett , AU-QLD, cereal hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.1962563),
+    'Cereal silage , AU-NSW, market for cereal silage': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.19797507,
+    ),
+    'Cereal silage , AU-QLD, market for cereal silage': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.19579885,
+    ),
+    'Cereal silage , AU-SA, market for cereal silage': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.1950142,
+    ),
+    'Cereal silage , AU-TAS, market for cereal silage': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.27684085,
+    ),
+    'Cereal silage , AU-VIC, market for cereal silage': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.2139011,
+    ),
+    'Cereal silage , market for cereal silage': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.20709738,
+    ),
+    'Cereal silage, dryland, Central Plains , AU-NSW, cereal silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.17506255),
+    'Cereal silage, dryland, Dawson , AU-QLD, cereal silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.17207212),
+    'Cereal silage, dryland, Melbourne , AU-VIC, cereal silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.22662455),
+    'Cereal silage, dryland, Riverina , AU-VIC, cereal silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.18227025),
+    'Cereal silage, dryland, S Highland and Gippsland , AU-NSW, cereal silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.2397376),
+    'Cereal silage, dryland, SE Vic Coast , AU-VIC, cereal silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.24371749),
+    'Cereal silage, dryland, Tas Forest , AU-TAS, cereal silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.27100198),
+    'Cereal silage, dryland, WB Burnett , AU-QLD, cereal silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.19955813),
+    'Chicken feed , market for chicken feed': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.59376877,
+    ),
+    'Chicken pet food , chicken meat processing': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      1.6100318,
+    ),
+    'Chickpea straw, dryland, Brisbane , AU-QLD, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.016321379),
+    'Chickpea straw, dryland, Burdekin , AU-QLD, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0087918569),
+    'Chickpea straw, dryland, Burnett , AU-QLD, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0093616269),
+    'Chickpea straw, dryland, C Highlands , AU-QLD, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.013585483),
+    'Chickpea straw, dryland, C QLD Coast , AU-QLD, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.011472937),
+    'Chickpea straw, dryland, Central Plains , AU-NSW, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.011138223),
+    'Chickpea straw, dryland, Darling D , AU-QLD, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.012828125),
+    'Chickpea straw, dryland, Dawson , AU-QLD, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.010702237),
+    'Chickpea straw, dryland, Desserts , AU-SA, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.017403924),
+    'Chickpea straw, dryland, Goldfields , AU-SA, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.014377397),
+    'Chickpea straw, dryland, Granite Belt , AU-NSW, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.014479326),
+    'Chickpea straw, dryland, Mallee , AU-SA, chickpea production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.016976816,
+    ),
+    'Chickpea straw, dryland, Maranoa , AU-QLD, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.013687657),
+    'Chickpea straw, dryland, Riverina , AU-VIC, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.013313506),
+    'Chickpea straw, dryland, S Coast , AU-SA, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0092447063),
+    'Chickpea straw, dryland, South West , AU-WA, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.021067416),
+    'Chickpea straw, dryland, W Downs , AU-NSW, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.011095756),
+    'Chickpea straw, dryland, W Wheatbelt , AU-WA, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.02452217),
+    'Chickpea straw, dryland, WB Burnett , AU-QLD, chickpea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.019509207),
+    'Cottonseed hulls, at mill ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.12595695,
+    ),
+    'Dairy calf feed , market for dairy calf feed': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.41923505,
+    ),
+    'Dairy calf feed, concentrate meal , AU-VIC, Production of dairy calf feed':
+      massPerMass('CO2e', 'Purchased Feed', 0.41923505),
+    'Dairy cow feed , market for dairy cow feed': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.33263165,
+    ),
+    'Dairy cow feed, concentrate meal , AU-VIC, Production of dairy cow feed':
+      massPerMass('CO2e', 'Purchased Feed', 0.33263165),
+    'Dry season mix, 30% urea, 5,4% P, with protein meal, at production ':
+      massPerMass('CO2e', 'Purchased Feed', 0.85514885),
+    'Dry season mix, 30% urea, 5.5% P, at production ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.85514885,
+    ),
+    'Dry season mix, 8% urea, 2,8% P, with protein meal, at production ':
+      massPerMass('CO2e', 'Purchased Feed', 0.43866332),
+    'Faba bean straw, dryland, Brisbane , AU-QLD, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0063836382),
+    'Faba bean straw, dryland, Burdekin , AU-QLD, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0061290691),
+    'Faba bean straw, dryland, Burnett , AU-QLD, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0059221243),
+    'Faba bean straw, dryland, C Highlands , AU-QLD, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.007268761),
+    'Faba bean straw, dryland, C QLD Coast , AU-QLD, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0075941246),
+    'Faba bean straw, dryland, Darling D , AU-QLD, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0068457017),
+    'Faba bean straw, dryland, Dawson , AU-QLD, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0075503452),
+    'Faba bean straw, dryland, Desserts , AU-SA, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.017665864),
+    'Faba bean straw, dryland, Goldfields , AU-SA, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.01769888),
+    'Faba bean straw, dryland, Granite Belt , AU-NSW, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.012924077),
+    'Faba bean straw, dryland, Mallee , AU-SA, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.01071914),
+    'Faba bean straw, dryland, Maranoa , AU-QLD, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0076199661),
+    'Faba bean straw, dryland, Riverina , AU-VIC, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0073062099),
+    'Faba bean straw, dryland, S Coast , AU-SA, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0072188529),
+    'Faba bean straw, dryland, SE Vic Coast , AU-VIC, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0081912732),
+    'Faba bean straw, dryland, South West , AU-WA, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0069915251),
+    'Faba bean straw, dryland, W Wheatbelt , AU-WA, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.010415913),
+    'Faba bean straw, dryland, WB Burnett , AU-QLD, faba bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0067654442),
+    'Field bean straw, dryland, S Coast , AU-SA, field bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.011605078),
+    'Field pea straw, dryland, Central Plains , AU-NSW, field pea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0096415249),
+    'Field pea straw, dryland, Desserts , AU-SA, field pea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.017864322),
+    'Field pea straw, dryland, Goldfields , AU-SA, field pea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.01789773),
+    'Field pea straw, dryland, Mallee , AU-SA, field pea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.011699957),
+    'Field pea straw, dryland, Riverina , AU-VIC, field pea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0094605215),
+    'Field pea straw, dryland, S Highland and Gippsland , AU-NSW, field pea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.010069627),
+    'Field pea straw, dryland, SE Vic Coast , AU-VIC, field pea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.010751629),
+    'Field pea straw, dryland, South West , AU-WA, field pea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0090271893),
+    'Field pea straw, dryland, W Downs , AU-NSW, field pea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.012389435),
+    'Field pea straw, dryland, W Wheatbelt , AU-WA, field pea production':
+      massPerMass('CO2e', 'Purchased Feed', 0.011321718),
+
+    'Forage sorghum , market for forage sorghum': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.0065451362,
+    ),
+    'Forage sorghum, dryland, Darling D , AU-QLD, forage sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.16100172),
+    'Forage sorghum, dryland, Maranoa , AU-QLD, forage sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.14039598),
+    'Forage sorghum, dryland, Riverina , AU-VIC, forage sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.14214559),
+    'Forage sorghum, irrigated, Darling Downs QLD ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.35826409,
+    ),
+    'Forage sorghum, irrigated, northern Victoria ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.28511728,
+    ),
+    'Health treatment and growth promotant, per feeder steer, NT ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.0075847023,
+    ),
+    'Lamb pet food, hot standard carcase weight , lamb processing': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      2.3749148,
+    ),
+    'Lentil straw, dryland, Brisbane , AU-QLD, lentils production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.0072995421,
+    ),
+    'Lentil straw, dryland, Central Plains , AU-NSW, lentils production':
+      massPerMass('CO2e', 'Purchased Feed', 0.0087664923),
+    'Lentil straw, dryland, Goldfields , AU-SA, lentils production':
+      massPerMass('CO2e', 'Purchased Feed', 0.014830761),
+    'Lentil straw, dryland, Granite Belt , AU-NSW, lentils production':
+      massPerMass('CO2e', 'Purchased Feed', 0.043073211),
+    'Lentil straw, dryland, Mallee , AU-SA, lentils production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.0075259506,
+    ),
+    'Lentil straw, dryland, Riverina , AU-VIC, lentils production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.0074192446,
+    ),
+    'Lentil straw, dryland, S Coast , AU-SA, lentils production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.0068024323,
+    ),
+    'Lentil straw, dryland, South West , AU-WA, lentils production':
+      massPerMass('CO2e', 'Purchased Feed', 0.014403723),
+    'Lentil straw, dryland, W Downs , AU-NSW, lentils production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.026547032,
+    ),
+    'Lentil straw, dryland, W Wheatbelt , AU-WA, lentils production':
+      massPerMass('CO2e', 'Purchased Feed', 0.015988999),
+    'Lucerne hay, dryland, Brisbane , AU-QLD, lucerne production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.13766596,
+    ),
+    'Lucerne hay, dryland, Granite Belt , AU-NSW, lucerne production':
+      massPerMass('CO2e', 'Purchased Feed', 0.10077933),
+    'Lucerne hay, dryland, Melbourne , AU-VIC, lucerne production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.098619417,
+    ),
+    'Lucerne hay, dryland, N Central , AU-TAS, lucerne production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.10503604,
+    ),
+    'Lucerne hay, dryland, Riverina , AU-VIC, lucerne production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.096325272,
+    ),
+    'Lucerne hay, dryland, SE Vic Coast , AU-VIC, lucerne production':
+      massPerMass('CO2e', 'Purchased Feed', 0.10097292),
+    'Lucerne hay, dryland, Sydney , AU-NSW, lucerne production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.11145957,
+    ),
+    'Lucerne hay, dryland, WB Burnett , AU-QLD, lucerne production':
+      massPerMass('CO2e', 'Purchased Feed', 0.14612827),
+    'Lucerne hay, irrigated, Brisbane , AU-QLD, lucerne production':
+      massPerMass('CO2e', 'Purchased Feed', 0.22997643),
+    'Lucerne hay, irrigated, Granite Belt , AU-NSW, lucerne production':
+      massPerMass('CO2e', 'Purchased Feed', 0.16731529),
+    'Lucerne hay, irrigated, Melbourne , AU-VIC, lucerne production':
+      massPerMass('CO2e', 'Purchased Feed', 0.16666902),
+    'Lucerne hay, irrigated, N Central , AU-TAS, lucerne production':
+      massPerMass('CO2e', 'Purchased Feed', 0.17087221),
+    'Lucerne hay, irrigated, Riverina , AU-VIC, lucerne production':
+      massPerMass('CO2e', 'Purchased Feed', 0.1626109),
+    'Lucerne hay, irrigated, SE Vic Coast , AU-VIC, lucerne production':
+      massPerMass('CO2e', 'Purchased Feed', 0.1641657),
+    'Lucerne hay, irrigated, Sydney , AU-NSW, lucerne production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.18075626,
+    ),
+    'Lucerne hay, irrigated, WB Burnett , AU-QLD, lucerne production':
+      massPerMass('CO2e', 'Purchased Feed', 0.23211696),
+    'Lupin straw, dryland, Central Plains , AU-NSW, lupin production':
+      massPerMass('CO2e', 'Purchased Feed', 0.015883415),
+    'Lupin straw, dryland, Darling D , AU-QLD, lupin production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.056500774,
+    ),
+    'Lupin straw, dryland, Dawson , AU-QLD, lupin production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.015382481,
+    ),
+    'Lupin straw, dryland, Goldfields , AU-SA, lupin production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.040509822,
+    ),
+    'Lupin straw, dryland, Granite Belt , AU-NSW, lupin production':
+      massPerMass('CO2e', 'Purchased Feed', 0.020400654),
+    'Lupin straw, dryland, Mallee , AU-SA, lupin production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.019675356,
+    ),
+    'Lupin straw, dryland, Riverina , AU-VIC, lupin production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.015937191,
+    ),
+    'Lupin straw, dryland, S Coast , AU-SA, lupin production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.012832636,
+    ),
+    'Lupin straw, dryland, S Highland and Gippsland , AU-NSW, lupin production':
+      massPerMass('CO2e', 'Purchased Feed', 0.013753236),
+    'Lupin straw, dryland, SE Vic Coast , AU-VIC, lupin production':
+      massPerMass('CO2e', 'Purchased Feed', 0.011462087),
+    'Lupin straw, dryland, South West , AU-WA, lupin production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.015423703,
+    ),
+    'Lupin straw, dryland, W Downs , AU-NSW, lupin production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.023541146,
+    ),
+    'Lupin straw, dryland, W Wheatbelt , AU-WA, lupin production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.017475024,
+    ),
+    'Maize silage , AU-VIC, market for maize silage': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.32773087,
+    ),
+    'Maize silage, irrigated, Central Plains , AU-NSW, maize silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.28911074),
+    'Maize silage, irrigated, Darling D , AU-QLD, maize silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.26529526),
+    'Maize silage, irrigated, Dawson , AU-QLD, maize silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.25619788),
+    'Maize silage, irrigated, Granite Belt , AU-NSW, maize silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.31724664),
+    'Maize silage, irrigated, N Rivers , AU-NSW, maize silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.34362881),
+    'Maize silage, irrigated, Riverina , AU-VIC, maize silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.29758874),
+    'Maize silage, irrigated, S Highland and Gippsland , AU-NSW, maize silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.35193313),
+    'Maize silage, irrigated, W Downs , AU-NSW, maize silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.2695911),
+    'Maize silage, irrigated, WB Burnett , AU-QLD, maize silage production':
+      massPerMass('CO2e', 'Purchased Feed', 0.28709365),
+    'Maize straw , AU-NSW, market for maize straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.032210199,
+    ),
+    'Maize straw , AU-NT, market for maize straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.04488673,
+    ),
+    'Maize straw , AU-QLD, market for maize straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.035320471,
+    ),
+    'Maize straw , AU-SA, market for maize straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.033834682,
+    ),
+    'Maize straw , AU-VIC, market for maize straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.031185489,
+    ),
+    'Maize straw , AU-WA, market for maize straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.045456878,
+    ),
+    'Maize straw , market for maize straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.034020681,
+    ),
+    'Maize straw, dryland, Brisbane , AU-QLD, maize production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.031986897,
+    ),
+    'Maize straw, dryland, Burnett , AU-QLD, maize production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.031958901,
+    ),
+    'Maize straw, dryland, Central Plains , AU-NSW, maize production':
+      massPerMass('CO2e', 'Purchased Feed', 0.022895401),
+    'Maize straw, dryland, Darling D , AU-QLD, maize production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.026119354,
+    ),
+    'Maize straw, dryland, Dawson , AU-QLD, maize production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.022183951,
+    ),
+    'Maize straw, dryland, Goldfields , AU-SA, maize production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.056209095,
+    ),
+    'Maize straw, dryland, Granite Belt , AU-NSW, maize production':
+      massPerMass('CO2e', 'Purchased Feed', 0.034201222),
+    'Maize straw, dryland, Kimberly , AU-WA, maize production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.036621638,
+    ),
+    'Maize straw, dryland, Riverina , AU-VIC, maize production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.019265152,
+    ),
+    'Maize straw, dryland, S Highland and Gippsland , AU-NSW, maize production':
+      massPerMass('CO2e', 'Purchased Feed', 0.031257509),
+    'Maize straw, dryland, W Downs , AU-NSW, maize production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.022853425,
+    ),
+    'Maize straw, dryland, WB Burnett , AU-QLD, maize production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.034394157,
+    ),
+    'Maize, silage irrigated, northern Victoria ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.47817094,
+    ),
+    'Mineral block, 30% urea 3,6% P, at production ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.65186503,
+    ),
+    'Molasses, C-grade, at mill gate, , AU-QLD, sugarcane milling': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.17050848,
+    ),
+    'Mung bean straw, dryland, Brisbane , AU-QLD, mung bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.034990386),
+    'Mung bean straw, dryland, Burdekin , AU-QLD, mung bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.033606869),
+    'Mung bean straw, dryland, Burnett , AU-QLD, mung bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.034149533),
+    'Mung bean straw, dryland, C Highlands , AU-QLD, mung bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.039008201),
+    'Mung bean straw, dryland, C QLD Coast , AU-QLD, mung bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.041747978),
+    'Mung bean straw, dryland, Darling D , AU-QLD, mung bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.040006249),
+    'Mung bean straw, dryland, Dawson , AU-QLD, mung bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.041407234),
+    'Mung bean straw, dryland, Granite Belt , AU-NSW, mung bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.014378951),
+    'Mung bean straw, dryland, Maranoa , AU-QLD, mung bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.034871107),
+    'Mung bean straw, dryland, WB Burnett , AU-QLD, mung bean production':
+      massPerMass('CO2e', 'Purchased Feed', 0.042196094),
+    'Native Pasture hay, Northern Australia ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.035076163,
+    ),
+    'Oat hay , AU-NSW, market for oat hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.20239497,
+    ),
+    'Oat hay , AU-QLD, market for oat hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.19079891,
+    ),
+    'Oat hay , AU-SA, market for oat hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.20261497,
+    ),
+    'Oat hay , AU-VIC, market for oat hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.21470326,
+    ),
+    'Oat hay , AU-WA, market for oat hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.22816499,
+    ),
+    'Oat hay , market for oat hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.21383072,
+    ),
+    'Oat straw , AU-NSW, market for oat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.057090096,
+    ),
+    'Oat straw , AU-QLD, market for oat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.076714067,
+    ),
+    'Oat straw , AU-SA, market for oat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.043877018,
+    ),
+    'Oat straw , AU-TAS, market for oat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.053194282,
+    ),
+    'Oat straw , AU-VIC, market for oat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.049221442,
+    ),
+    'Oat straw , AU-WA, market for oat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.043368094,
+    ),
+    'Oat straw , market for oat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.048253579,
+    ),
+    'Oat straw, dryland, Central Plains , AU-NSW, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.046025941,
+    ),
+    'Oat straw, dryland, Chanel , AU-QLD, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.062788837,
+    ),
+    'Oat straw, dryland, Darling D , AU-QLD, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.09748197,
+    ),
+    'Oat straw, dryland, Dawson , AU-QLD, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.060293159,
+    ),
+    'Oat straw, dryland, Goldfields , AU-SA, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.070717142,
+    ),
+    'Oat straw, dryland, Granite Belt , AU-NSW, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.079776521,
+    ),
+    'Oat straw, dryland, Lower SW , AU-WA, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.049296666,
+    ),
+    'Oat straw, dryland, Mallee , AU-SA, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.034542714,
+    ),
+    'Oat straw, dryland, Maranoa , AU-QLD, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.06054084,
+    ),
+    'Oat straw, dryland, N Central , AU-TAS, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.04492919,
+    ),
+    'Oat straw, dryland, N Rivers , AU-NSW, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.053472525,
+    ),
+    'Oat straw, dryland, Riverina , AU-VIC, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.033510931,
+    ),
+    'Oat straw, dryland, S Coast , AU-SA, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.032231334,
+    ),
+    'Oat straw, dryland, S Highland and Gippsland , AU-NSW, oats production':
+      massPerMass('CO2e', 'Purchased Feed', 0.053039409),
+    'Oat straw, dryland, SE Vic Coast , AU-VIC, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.044150607,
+    ),
+    'Oat straw, dryland, South West , AU-WA, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.034070438,
+    ),
+    'Oat straw, dryland, W Downs , AU-NSW, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.066998169,
+    ),
+    'Oat straw, dryland, W Wheatbelt , AU-WA, oats production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.035931076,
+    ),
+    'Oaten hay for export, dryland, Central Plains , AU-NSW, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.17904521),
+    'Oaten hay for export, dryland, Goldfields , AU-SA, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.18530001),
+    'Oaten hay for export, dryland, Granite Belt , AU-NSW, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.21967506),
+    'Oaten hay for export, dryland, Lower SW , AU-WA, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.2696275),
+    'Oaten hay for export, dryland, Mallee , AU-SA, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.17377555),
+    'Oaten hay for export, dryland, Melbourne , AU-VIC, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.23125476),
+    'Oaten hay for export, dryland, Riverina , AU-VIC, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.18566637),
+    'Oaten hay for export, dryland, S Coast , AU-SA, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.21241556),
+    'Oaten hay for export, dryland, S Highland and Gippsland , AU-NSW, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.24405757),
+    'Oaten hay for export, dryland, SE Vic Coast , AU-VIC, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.2508174),
+    'Oaten hay for export, dryland, South West , AU-WA, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.2089084),
+    'Oaten hay for export, dryland, W Downs , AU-NSW, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.17268604),
+    'Oaten hay for export, dryland, W Wheatbelt , AU-WA, oat hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.16956969),
+    'Oaten hay, export, medium rainfall zone SA ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.079559326,
+    ),
+    'Pasture establishment, SE Qld ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      430.78824,
+    ),
+    'Pasture establishment, top end, NT ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      50.27388,
+    ),
+    'Pasture hay , AU-NSW, market for pasture hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.31127977,
+    ),
+    'Pasture hay , AU-QLD, market for pasture hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.25416992,
+    ),
+    'Pasture hay , AU-SA, market for pasture hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.31312471,
+    ),
+    'Pasture hay , AU-TAS, market for pasture hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.39818974,
+    ),
+    'Pasture hay , AU-VIC, market for pasture hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.34480165,
+    ),
+    'Pasture hay , AU-WA, market for pasture hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.36828613,
+    ),
+    'Pasture hay , market for pasture hay': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.33910067,
+    ),
+    'Pasture hay, dryland, Central Plains , AU-NSW, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.25832582),
+    'Pasture hay, dryland, Dawson , AU-QLD, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.25274291),
+    'Pasture hay, dryland, Lower SW , AU-WA, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.39082938),
+    'Pasture hay, dryland, Maranoa , AU-QLD, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.22827874),
+    'Pasture hay, dryland, Melbourne , AU-VIC, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.33466773),
+    'Pasture hay, dryland, N Central , AU-TAS, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.3856249),
+    'Pasture hay, dryland, N Rivers , AU-NSW, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.3879855),
+    'Pasture hay, dryland, Riverina , AU-VIC, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.26805701),
+    'Pasture hay, dryland, S Highland and Gippsland , AU-NSW, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.35439228),
+    'Pasture hay, dryland, SE Vic Coast , AU-VIC, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.36200106),
+    'Pasture hay, dryland, South West , AU-WA, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.30139181),
+    'Pasture hay, dryland, Sydney , AU-NSW, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.38437977),
+    'Pasture hay, dryland, Tas Forest , AU-TAS, pasture hay production':
+      massPerMass('CO2e', 'Purchased Feed', 0.39556733),
+    'Pet food, beef , market for pet food from beef processing': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      5.5658564,
+    ),
+    'Pet food, lamb , market for pet food from lamb processing': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      2.3919523,
+    ),
+    'Pet food, pork , market for pet food from pork processing': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      1.6441321,
+    ),
+    'Pig feed , market for pig feed': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.40287848,
+    ),
+    'Pork pet food, hot standard carcase weight , pork processing': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      1.6270946,
+    ),
+    'Rice husk, Riverina , AU-NSW, rice processing': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.25530631,
+    ),
+    'Sorghum straw , AU-NSW, market for sorghum straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.038105811,
+    ),
+    'Sorghum straw , AU-QLD, market for sorghum straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.037776189,
+    ),
+    'Sorghum straw , AU-SA, market for sorghum straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.036441867,
+    ),
+    'Sorghum straw , AU-VIC, market for sorghum straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.04010387,
+    ),
+    'Sorghum straw , market for sorghum straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.037895283,
+    ),
+    'Sorghum straw, dryland, Brisbane , AU-QLD, sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.035624365),
+    'Sorghum straw, dryland, Burdekin , AU-QLD, sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.033863382),
+    'Sorghum straw, dryland, Burnett , AU-QLD, sorghum production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.045125321,
+    ),
+    'Sorghum straw, dryland, C Highlands , AU-QLD, sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.029723718),
+    'Sorghum straw, dryland, C QLD Coast , AU-QLD, sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.040306661),
+    'Sorghum straw, dryland, Cape York , AU-QLD, sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.087330811),
+    'Sorghum straw, dryland, Central Plains , AU-NSW, sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.030648266),
+    'Sorghum straw, dryland, Darling D , AU-QLD, sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.028141457),
+    'Sorghum straw, dryland, Dawson , AU-QLD, sorghum production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.030137735,
+    ),
+    'Sorghum straw, dryland, Granite Belt , AU-NSW, sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.040895676),
+    'Sorghum straw, dryland, Maranoa , AU-QLD, sorghum production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.031901226,
+    ),
+    'Sorghum straw, dryland, Riverina , AU-VIC, sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.028176775),
+    'Sorghum straw, dryland, S Highland and Gippsland , AU-NSW, sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.045352666),
+    'Sorghum straw, dryland, W Downs , AU-NSW, sorghum production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.028037204,
+    ),
+    'Sorghum straw, dryland, WB Burnett , AU-QLD, sorghum production':
+      massPerMass('CO2e', 'Purchased Feed', 0.032225268),
+    'Sunflower straw, dryland, Burdekin , AU-QLD, sunflower production':
+      massPerMass('CO2e', 'Purchased Feed', 0.01974335),
+    'Sunflower straw, dryland, C QLD Coast , AU-QLD, sunflower production':
+      massPerMass('CO2e', 'Purchased Feed', 0.026444845),
+    'Sunflower straw, dryland, Central Plains , AU-NSW, sunflower production':
+      massPerMass('CO2e', 'Purchased Feed', 0.019437443),
+    'Sunflower straw, dryland, Darling D , AU-QLD, sunflower production':
+      massPerMass('CO2e', 'Purchased Feed', 0.019601403),
+    'Sunflower straw, dryland, Dawson , AU-QLD, sunflower production':
+      massPerMass('CO2e', 'Purchased Feed', 0.026351749),
+    'Sunflower straw, dryland, Granite Belt , AU-NSW, sunflower production':
+      massPerMass('CO2e', 'Purchased Feed', 0.024930742),
+    'Sunflower straw, dryland, N Rivers , AU-NSW, sunflower production':
+      massPerMass('CO2e', 'Purchased Feed', 0.030460417),
+    'Sunflower straw, dryland, Riverina , AU-VIC, sunflower production':
+      massPerMass('CO2e', 'Purchased Feed', 0.016551909),
+    'Sunflower straw, dryland, W Downs , AU-NSW, sunflower production':
+      massPerMass('CO2e', 'Purchased Feed', 0.022622555),
+    'Sunflower straw, dryland, WB Burnett , AU-QLD, sunflower production':
+      massPerMass('CO2e', 'Purchased Feed', 0.022623357),
+    'Tallow , dry rendering': massPerMass('CO2e', 'Purchased Feed', 0.8156093),
+    'Tallow , market for tallow': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.83264684,
+    ),
+    'Vaccination and anthelmintic, herd requirement per breeder, northern cattle ':
+      massPerMass('CO2e', 'Purchased Feed', 0.019906016),
+    'Weaner Block, 7,1% Urea 0,5% P, at production ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.21043393,
+    ),
+    'Wet season mix, 0% N 21% P, at production ': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.77953974,
+    ),
+    'Wet season mix, 20% GranAm, 40% Kynofos, 40% Salt, at production ':
+      massPerMass('CO2e', 'Purchased Feed', 0.77953974),
+    'Wheat straw , AU-NSW, market for wheat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.041040352,
+    ),
+    'Wheat straw , AU-NT, market for wheat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.050001029,
+    ),
+    'Wheat straw , AU-QLD, market for wheat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.042966983,
+    ),
+    'Wheat straw , AU-SA, market for wheat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.036850359,
+    ),
+    'Wheat straw , AU-TAS, market for wheat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.048527048,
+    ),
+    'Wheat straw , AU-VIC, market for wheat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.039159202,
+    ),
+    'Wheat straw , AU-WA, market for wheat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.039089168,
+    ),
+    'Wheat straw , market for wheat straw': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.039614762,
+    ),
+    'Wheat straw, dryland, Brisbane , AU-QLD, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.043914012,
+    ),
+    'Wheat straw, dryland, Burnett , AU-QLD, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.043691546,
+    ),
+    'Wheat straw, dryland, C Highlands , AU-QLD, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.038713879,
+    ),
+    'Wheat straw, dryland, C QLD Coast , AU-QLD, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.058629047,
+    ),
+    'Wheat straw, dryland, Central Plains , AU-NSW, wheat production':
+      massPerMass('CO2e', 'Purchased Feed', 0.032731287),
+    'Wheat straw, dryland, Chanel , AU-QLD, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.038114289,
+    ),
+    'Wheat straw, dryland, Darling D , AU-QLD, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.035018461,
+    ),
+    'Wheat straw, dryland, Dawson , AU-QLD, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.035543037,
+    ),
+    'Wheat straw, dryland, Desserts , AU-SA, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.041735936,
+    ),
+    'Wheat straw, dryland, Gascoyne , AU-WA, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.048141547,
+    ),
+    'Wheat straw, dryland, Goldfields , AU-SA, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.041613707,
+    ),
+    'Wheat straw, dryland, Granite Belt , AU-NSW, wheat production':
+      massPerMass('CO2e', 'Purchased Feed', 0.043445104),
+    'Wheat straw, dryland, Lower SW , AU-WA, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.053665693,
+    ),
+    'Wheat straw, dryland, Mallee , AU-SA, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.027900226,
+    ),
+    'Wheat straw, dryland, Maranoa , AU-QLD, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.034215409,
+    ),
+    'Wheat straw, dryland, Melbourne , AU-VIC, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.03910777,
+    ),
+    'Wheat straw, dryland, N Central , AU-TAS, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.039739969,
+    ),
+    'Wheat straw, dryland, N Rivers , AU-NSW, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.060144081,
+    ),
+    'Wheat straw, dryland, Riverina , AU-VIC, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.028105828,
+    ),
+    'Wheat straw, dryland, S Coast , AU-SA, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.028165819,
+    ),
+    'Wheat straw, dryland, S Highland and Gippsland , AU-NSW, wheat production':
+      massPerMass('CO2e', 'Purchased Feed', 0.041293643),
+    'Wheat straw, dryland, SE Vic Coast , AU-VIC, wheat production':
+      massPerMass('CO2e', 'Purchased Feed', 0.036837202),
+    'Wheat straw, dryland, South West , AU-WA, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.031424098,
+    ),
+    'Wheat straw, dryland, Tas Forest , AU-TAS, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.041388943,
+    ),
+    'Wheat straw, dryland, W Downs , AU-NSW, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.033669156,
+    ),
+    'Wheat straw, dryland, W Wheatbelt , AU-WA, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.030459715,
+    ),
+    'Wheat straw, dryland, WB Burnett , AU-QLD, wheat production': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      0.045029242,
+    ),
+  },
 };
 
 const cropResidueRemovedOtherCropTypes: Record<State, RealNumber> = {

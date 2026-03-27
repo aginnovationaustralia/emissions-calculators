@@ -23,7 +23,8 @@ export type Substance =
   | 'Solid Waste'
   | 'Milk'
   | 'Milk Solids'
-  | 'Liveweight';
+  | 'Liveweight'
+  | 'Purchased Feed';
 
 export type NumberUnitBase = { value: Decimal };
 

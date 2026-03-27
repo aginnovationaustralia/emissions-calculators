@@ -38,6 +38,7 @@ import {
   PastureType,
   PoultryClass,
   PoultryMMSType,
+  PurchasedFeedType,
   RefrigerantType,
   RefrigerationType,
   ServiceByAreaType,
@@ -184,6 +185,11 @@ export type CommonConstants = NamedConstants & {
   >;
 
   CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: MassPerMass<'CrudeProtein', 'N'>;
+
+  PURCHASED_FEED_FACTORS: Record<
+    PurchasedFeedType,
+    MassPerMass<'CO2e', 'Purchased Feed'>
+  >;
 };
 
 type CropResidueFactors = {
