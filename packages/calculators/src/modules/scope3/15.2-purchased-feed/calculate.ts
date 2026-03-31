@@ -3,9 +3,10 @@ import { PurchasedFeedsInputTransformed } from './purchased-feeds.input';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
+import { purchasedFeedIsMethod1 } from './purchased-feed.input';
 
 export const calculatePurchasedFeed = (
-  livestock: PurchasedFeedsInputTransformed,
+  { purchasedFeed }: PurchasedFeedsInputTransformed,
   // TODO: Relocate purchased feed constants
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
@@ -15,11 +16,10 @@ export const calculatePurchasedFeed = (
    * (1) Emissions from purchased feed 𝐸 (t CO2e) are calculated as:
    * 𝐸 = ∑ 𝑄𝑗 × 𝐸𝐹 𝑗
    */
-  const emissionsFromPurchases = livestock.purchasedFeed.map((feed) => {
-    const type = feed.type;
-    const emissionsFactor =
-      feed.customEmissionsFactor ??
-      selectConstant(constants.COMMON, 'PURCHASED_FEED_FACTORS', type);
+  const emissionsFromPurchases = purchasedFeed.map((feed) => {
+    const emissionsFactor = purchasedFeedIsMethod1(feed)
+      ? selectConstant(constants.COMMON, 'PURCHASED_FEED_FACTORS', feed.type)
+      : feed.customEmissionsFactor;
     return feed.amount.multiply(emissionsFactor);
   });
 
