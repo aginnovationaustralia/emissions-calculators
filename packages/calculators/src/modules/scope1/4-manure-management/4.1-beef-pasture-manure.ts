@@ -1,4 +1,13 @@
-import { BeefClassSeasonInputTransformed } from '@/calculators/Beef/types/beef-class-season.input';
+import {
+  BeefClassSeasonInputTransformed,
+  BeefClassWithCalvesSeasonInputTransformed,
+  isSeasonInputWithCalves,
+} from '@/calculators/Beef/types/beef-class-season.input';
+import {
+  BeefClassInputTransformed,
+  BeefClassWithCalvesInputTransformed,
+  isBeefClassWithCalves,
+} from '@/calculators/Beef/types/beef-class.input';
 import { BeefHerdInputTransformed } from '@/calculators/Beef/types/beef-herd.input';
 import { BeefInputTransformed } from '@/calculators/Beef/types/input';
 import { ExecutionContext } from '@/calculators/executionContext';
@@ -17,9 +26,58 @@ import { sum } from '@/tools/sum';
 import { mass, massPerHeadPerDay } from '@/tools/units';
 import { calculateDryMatterIntakeIijkln } from '../3-enteric-methane/3.2-beef-pasture';
 
+const getProportionCowsGt2InCalfLC = (
+  season:
+    | BeefClassSeasonInputTransformed
+    | BeefClassWithCalvesSeasonInputTransformed,
+) => {
+  if (isSeasonInputWithCalves(season)) {
+    return season.proportionCowsGt2InCalf.named('LCijkl=5');
+  }
+  return num(0).named('LC (0)');
+};
+
+const getPreviousSeason = (seasonName: Season) => {
+  if (seasonName === 'spring') {
+    return 'winter';
+  }
+  if (seasonName === 'summer') {
+    return 'spring';
+  }
+  if (seasonName === 'winter') {
+    return 'summer';
+  }
+  return 'spring';
+};
+
+const getFeedAdjustmentForCowsGt2FA = (
+  classInput: BeefClassInputTransformed | BeefClassWithCalvesInputTransformed,
+  seasonName: Season,
+) => {
+  if (!isBeefClassWithCalves(classInput)) {
+    return num(1).named('FA (1)');
+  }
+
+  const season = classInput[seasonName];
+  const LC = season.proportionCowsGt2InCalf.unit.value;
+
+  if (LC.eq(0)) {
+    const previousSeason = classInput[getPreviousSeason(seasonName)];
+
+    const previousSeasonLC = previousSeason.proportionCowsGt2InCalf.unit.value;
+    if (previousSeasonLC.gt(0)) {
+      return num(previousSeasonLC.mul(0.1).plus(1)).named('FAijkl');
+    } else {
+      return num(1).named('FAijkl');
+    }
+  } else {
+    return num(LC.mul(0.3).plus(1)).named('FAijkl');
+  }
+};
+
 const calculateTotalMethaneFromClassSeasonMmmSeason = (
   input: BeefInputTransformed,
-  season: BeefClassSeasonInputTransformed,
+  classInput: BeefClassInputTransformed | BeefClassWithCalvesInputTransformed,
   seasonName: Season,
   className: BeefClass,
   limitedRegion: Region,
@@ -28,6 +86,8 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
 ) => {
   const { constants } = context;
   const { climateZone } = input;
+
+  const season = classInput[seasonName];
 
   const Nkln = season.head;
 
@@ -55,6 +115,8 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
     input,
     className,
     seasonName,
+    getProportionCowsGt2InCalfLC(season),
+    getFeedAdjustmentForCowsGt2FA(classInput, seasonName),
     context,
   );
 
@@ -92,11 +154,11 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
   const Mmm1 = dailyMethanePerHeadMm1
     .multiply(Nkln)
     .multiply(daysInSeason)
-    .named('Mmm=1');
+    .named(`Mmm=1 (${className}, ${seasonName})`);
   const Mmm14 = dailyMethanePerHeadMm14
     .multiply(Nkln)
     .multiply(daysInSeason)
-    .named('Mmm=14');
+    .named(`Mmm=14 (${className}, ${seasonName})`);
 
   return sum([Mmm1, Mmm14], { name: 'Mmm' });
 };
@@ -119,7 +181,7 @@ export const calculateManureManagementCH4ForClass = (
   const totalMethaneFromClassMmmSpring =
     calculateTotalMethaneFromClassSeasonMmmSeason(
       input,
-      classInput.spring,
+      classInput,
       'spring',
       className,
       limitedRegion,
@@ -129,7 +191,7 @@ export const calculateManureManagementCH4ForClass = (
   const totalMethaneFromClassMmmSummer =
     calculateTotalMethaneFromClassSeasonMmmSeason(
       input,
-      classInput.summer,
+      classInput,
       'summer',
       className,
       limitedRegion,
@@ -139,7 +201,7 @@ export const calculateManureManagementCH4ForClass = (
   const totalMethaneFromClassMmmAutumn =
     calculateTotalMethaneFromClassSeasonMmmSeason(
       input,
-      classInput.autumn,
+      classInput,
       'autumn',
       className,
       limitedRegion,
@@ -149,7 +211,7 @@ export const calculateManureManagementCH4ForClass = (
   const totalMethaneFromClassMmmWinter =
     calculateTotalMethaneFromClassSeasonMmmSeason(
       input,
-      classInput.winter,
+      classInput,
       'winter',
       className,
       limitedRegion,

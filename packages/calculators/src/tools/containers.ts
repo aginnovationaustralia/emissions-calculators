@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js-light';
 import { formatUnit } from './format';
 import {
   AnyUnit,
@@ -631,7 +632,7 @@ export const br = <U extends AnyUnit>(
   inner: Container<U>,
 ): BracketedContainer<U> => new BracketedContainer(inner.unit, inner);
 
-export const num = (value: number): RootContainer<RealNumber> =>
+export const num = (value: number | Decimal): RootContainer<RealNumber> =>
   new RootContainer(realNumber(value));
 
 export const value = <N extends NumberUnit>(v: N): RootContainer<N> =>

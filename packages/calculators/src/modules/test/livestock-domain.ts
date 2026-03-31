@@ -3,6 +3,8 @@ import {
   ClimateZones,
   DairySystem,
   DairySystems,
+  ExtendedRegion,
+  ExtendedRegions,
   FeedlotMMSType,
   FeedlotMMSTypes,
   Region,
@@ -46,4 +48,13 @@ export const checkRegion = (region: string | undefined): Region => {
     throw new Error(`Invalid region: ${region}`);
   }
   return region as Region;
+};
+
+export const checkExtendedRegion = (
+  region: string | undefined,
+): ExtendedRegion => {
+  if (!ExtendedRegions.includes(region as ExtendedRegion)) {
+    throw new Error(`Invalid extended region: ${region}`);
+  }
+  return region as ExtendedRegion;
 };

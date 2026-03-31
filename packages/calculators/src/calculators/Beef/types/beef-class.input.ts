@@ -3,6 +3,7 @@ import { z } from 'zod';
 import {
   BeefClassSeasonInputSchema,
   BeefClassWithCalvesSeasonInputSchema,
+  isSeasonInputWithCalves,
 } from './beef-class-season.input';
 
 export const BeefClassInputSchema = object({
@@ -19,7 +20,11 @@ export const BeefClassWithCalvesInputSchema = object({
   winter: BeefClassWithCalvesSeasonInputSchema,
 });
 
-// export const isBeefClassWithCalves
+export const isBeefClassWithCalves = (
+  cls: BeefClassInputTransformed | BeefClassWithCalvesInputTransformed,
+): cls is BeefClassWithCalvesInputTransformed => {
+  return 'spring' in cls && isSeasonInputWithCalves(cls.spring);
+};
 
 export type BeefClassInput = z.input<typeof BeefClassInputSchema>;
 export type BeefClassInputTransformed = z.output<typeof BeefClassInputSchema>;

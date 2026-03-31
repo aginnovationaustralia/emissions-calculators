@@ -3,21 +3,23 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { BeefClass, Season } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
-import { br, num } from '@/tools/containers';
-import { oneMinus, zeroCH4 } from '@/tools/sentinels';
-import { massPerHeadPerDay, realNumber } from '@/tools/units';
+import { br, Container, num } from '@/tools/containers';
+import { oneMinus } from '@/tools/sentinels';
+import { massPerHeadPerDay, RealNumber, realNumber } from '@/tools/units';
 
 export const calculateDryMatterIntakeIijkln = (
   input: BeefInputTransformed,
   className: BeefClass,
   season: Season,
+  proportionCowsCalvingLC: Container<RealNumber>,
+  feedAdjustmentForCowsGt2: Container<RealNumber>,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   /*
     MAijkl=5 = (LCijkl=5 * FAijkl=5) + (1 - LCijkl=5 ) -- line 143
     */
-  const LC = num(0).named('LCijkl=5'); // TODO: handle calving classes
-  const FC = num(1).named('FCijkl=5'); // TODO: handle calving classes
+  const LC = proportionCowsCalvingLC.named('LCijkl=5');
+  const FC = feedAdjustmentForCowsGt2.named('FCijkl=5');
   const MAijkl = br(LC.multiply(FC))
     .plus(br(oneMinus(LC)))
     .switchUnit((u) => massPerHeadPerDay('DryMatter', u.value))
@@ -46,7 +48,6 @@ export const calculateDryMatterIntakeIijkln = (
     'liveweightGain',
   );
 
-  // target unit kg DM / head / day
   const Iijkln = br(
     num(1.185)
       .plus(num(0.00454).multiply(Wijkln))
@@ -60,14 +61,4 @@ export const calculateDryMatterIntakeIijkln = (
     .named('Iijkln');
 
   return Iijkln;
-};
-
-export const calculateBeefPastureEntericMethane = (
-  input: BeefInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) => {
-  const { constants } = context;
-  const { region } = input;
-
-  return zeroCH4;
 };
