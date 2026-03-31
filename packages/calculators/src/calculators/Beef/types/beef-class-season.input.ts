@@ -1,5 +1,5 @@
 import { input } from '@/tools/inputs';
-import { head, realNumber } from '@/tools/units';
+import { head, mass, massPerHeadPerDay, realNumber } from '@/tools/units';
 import { object, proportion } from '@/types/schemas';
 import { z } from 'zod';
 
@@ -9,6 +9,22 @@ export const BeefClassSeasonInputSchema = object({
     .min(0)
     .meta({ description: 'Number of head for this class for this season' })
     .transform((val) => input('Nkln', head(val))),
+  method2Liveweight: z
+    .number()
+    .min(0)
+    .optional()
+    .transform((val) =>
+      val === undefined ? undefined : input('Wijkln', mass('Liveweight', val)),
+    ),
+  method2LiveweightGain: z
+    .number()
+    .min(0)
+    .optional()
+    .transform((val) =>
+      val === undefined
+        ? undefined
+        : input('LWGijkln', massPerHeadPerDay('Liveweight', val)),
+    ),
 });
 
 export const BeefClassWithCalvesSeasonInputSchema =
