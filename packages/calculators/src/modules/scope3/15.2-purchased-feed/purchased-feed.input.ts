@@ -33,7 +33,9 @@ export const PurchasedFeedMethod2InputSchema = object({
   amount: z
     .number()
     .min(0)
-    .transform((val) => input('feed quantity', mass('Purchased Feed', val))),
+    .transform((val) =>
+      input('feed quantity', mass('Purchased Feed', val * 1000)),
+    ),
   customEmissionsFactor: z
     .number()
     .min(0)
