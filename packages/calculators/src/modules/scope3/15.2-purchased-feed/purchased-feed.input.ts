@@ -1,6 +1,3 @@
-import { input } from '@/tools/inputs';
-import { mass, massPerMass } from '@/tools/units';
-import { object } from '@/types/schemas';
 import { z } from 'zod';
 import {
   PurchasedFeedLivestockInputSchema,
@@ -16,6 +13,10 @@ import {
   PurchasedFeedLivestockType,
   PurchasedFeedLivestockTypes,
 } from '@/constants/enums';
+import {
+  PurchasedFeedMethod2InputSchema,
+  PurchasedFeedMethod2InputTransformed,
+} from './method2-purchased-feed';
 
 export const PurchasedFeedMethod1InputSchema = z.discriminatedUnion('type', [
   PurchasedFeedLivestockInputSchema,
@@ -27,31 +28,6 @@ export type PurchasedFeedMethod1Input = z.input<
 >;
 export type PurchasedFeedMethod1InputTransformed = z.output<
   typeof PurchasedFeedMethod1InputSchema
->;
-
-export const PurchasedFeedMethod2InputSchema = object({
-  amount: z
-    .number()
-    .min(0)
-    .transform((val) =>
-      input('feed quantity', mass('Purchased Feed', val * 1000)),
-    ),
-  customEmissionsFactor: z
-    .number()
-    .min(0)
-    .transform((val) =>
-      input(
-        'custom emissions factor',
-        massPerMass('CO2e', 'Purchased Feed', val),
-      ),
-    ),
-});
-
-export type PurchasedFeedMethod2Input = z.input<
-  typeof PurchasedFeedMethod2InputSchema
->;
-export type PurchasedFeedMethod2InputTransformed = z.output<
-  typeof PurchasedFeedMethod2InputSchema
 >;
 
 export const PurchasedFeedInputSchema = z.xor([
