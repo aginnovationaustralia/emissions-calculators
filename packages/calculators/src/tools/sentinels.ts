@@ -43,5 +43,6 @@ export const onePlus = (x: TypedContainer<RealNumber>) => one.plus(x);
 export const daysInYear = root(days(365));
 export const daysPostWeaning = root(days(281));
 export const daysPreWeaning = root(days(84));
+export const daysInSeason = root(days(91.25)).named('daysInSeason');
 
 export const e = num(Math.E).named('e');

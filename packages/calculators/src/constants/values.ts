@@ -13,9 +13,11 @@ import {
   percentage,
   RealNumber,
   realNumber,
+  volumePerMass,
 } from '@/tools/units';
 import { State } from './enums';
 import {
+  BeefPastureConstants,
   CommonConstants,
   CropConstants,
   DairyConstants,
@@ -144,6 +146,16 @@ export const commonConstants: CommonConstants = {
    * @description Conversion factor for elemental to molecular CO2 from lime
    */
   GWP_FACTORSC18: realNumber(44 / 12),
+
+  GWP_CH4: massPerMass('CO2e', 'CH4', 28),
+
+  EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: volumePerMass(
+    'CH4',
+    'Volatile Solids',
+    0.19,
+  ),
+
+  DENSITY_OF_METHANE: massPerVolume('CH4', 'CH4', 0.6784),
 
   LIME_SCOPE3_EF: massPerMass('CO2e', 'Lime', 0.432),
 
@@ -1159,6 +1171,8 @@ export const commonConstants: CommonConstants = {
   },
 
   CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: massPerMass('CrudeProtein', 'N', 6.25),
+
+  ASH_CONTENT_OF_MANURE: realNumber(0.16),
 };
 
 const cropResidueRemovedOtherCropTypes: Record<State, RealNumber> = {
@@ -1895,6 +1909,2638 @@ export const poultryConstants: PoultryConstants = {
     digester: {
       FracGASM: realNumber(0),
       EFm: realNumber(0),
+    },
+  },
+};
+
+/*
+
+*/
+
+export const beefPastureConstants: BeefPastureConstants = {
+  name: 'BEEF_PASTURE',
+
+  DMD: {
+    'ACT/NSW': {
+      spring: realNumber(0.55),
+      summer: realNumber(0.65),
+      autumn: realNumber(0.6),
+      winter: realNumber(0.5),
+    },
+    NT: {
+      spring: realNumber(0.55),
+      summer: realNumber(0.61),
+      autumn: realNumber(0.57),
+      winter: realNumber(0.54),
+    },
+    QLD: {
+      spring: realNumber(0.53),
+      summer: realNumber(0.57),
+      autumn: realNumber(0.55),
+      winter: realNumber(0.51),
+    },
+    SA: {
+      spring: realNumber(0.7),
+      summer: realNumber(0.55),
+      autumn: realNumber(0.55),
+      winter: realNumber(0.75),
+    },
+    TAS: {
+      spring: realNumber(0.75),
+      summer: realNumber(0.6),
+      autumn: realNumber(0.7),
+      winter: realNumber(0.75),
+    },
+    VIC: {
+      spring: realNumber(0.8),
+      summer: realNumber(0.55),
+      autumn: realNumber(0.6),
+      winter: realNumber(0.76),
+    },
+    'WA - South West': {
+      spring: realNumber(0.8),
+      summer: realNumber(0.58),
+      autumn: realNumber(0.5),
+      winter: realNumber(0.75),
+    },
+    'WA - Pilbara': {
+      spring: realNumber(0.4),
+      summer: realNumber(0.65),
+      autumn: realNumber(0.55),
+      winter: realNumber(0.45),
+    },
+    'WA - Kimberley': {
+      spring: realNumber(0.4),
+      summer: realNumber(0.65),
+      autumn: realNumber(0.55),
+      winter: realNumber(0.45),
+    },
+  },
+
+  MCF_PASTURE: realNumber(0.0046),
+  MCF_LAGOON: {
+    'Cool temperate moist': realNumber(0.006),
+    'Cool temperate dry': realNumber(0.0067),
+    'Boreal moist': realNumber(0.005),
+    'Boreal dry': realNumber(0.0049),
+    'Warm temperate moist': realNumber(0.0073),
+    'Warm temperate dry': realNumber(0.0076),
+    'Tropical montane': realNumber(0.0076),
+    'Tropical wet': realNumber(0.008),
+    'Tropical moist': realNumber(0.008),
+    'Tropical dry': realNumber(0.008),
+  },
+  LIVEWEIGHT: {
+    'ACT/NSW': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 80),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 240),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 280),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 520),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 560),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 75),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 160),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.9),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 410),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 75),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 160),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.9),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+      },
+    },
+    SA: {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 320),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 80),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.9),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 160),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.88),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 800),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 800),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 700),
+          liveweightGain: massPerHeadPerDay('Liveweight', -1.1),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 700),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.88),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 280),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 70),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 350),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 230),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.88),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 290),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 75),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.82),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+    },
+    TAS: {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 105),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.82),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 700),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 750),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 725),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 700),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.27),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 85),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.71),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 200),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 210),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 350),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 530),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 530),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 90),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 160),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 215),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 230),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+      },
+    },
+    VIC: {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 280),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 100),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 820),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 850),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 700),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 720),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 240),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 95),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 410),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 320),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 560),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.1),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 560),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.1),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 240),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 270),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 95),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 510),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 520),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 410),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 510),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 520),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 410),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 510),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 520),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 410),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+      },
+    },
+    'WA - South West': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.64),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 100),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 190),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 800),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 780),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 680),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 700),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.21),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 80),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 320),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 330),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 530),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 530),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.42),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 100),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.11),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.11),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.11),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+      },
+    },
+    'WA - Pilbara': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 80),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 230),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.88),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 70),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.88),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 240),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 310),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 330),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 80),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 230),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.88),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 370),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 370),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 370),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+      },
+    },
+    'WA - Kimberley': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 110),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 200),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 600),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 180),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 90),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 270),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 280),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 320),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 350),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 320),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 350),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 210),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 100),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 160),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 190),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 430),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 430),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 430),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+      },
+    },
+    'NT - Alice Springs': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 110),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 200),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 706),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.23),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 703),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 721),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 727),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.8),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 208),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 112),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.62),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 169),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.54),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 211),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 323),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.17),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 256),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.54),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 306),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.45),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 338),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.09),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 415),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.18),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 368),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.38),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 392),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.35),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 432),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 467),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.28),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 465),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 464),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.15),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 492),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 223),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.32),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 108),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.75),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 176),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.63),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 222),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 371),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.24),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 280),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.64),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 339),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.54),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 377),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.18),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 493),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 421),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.42),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 498),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 585),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 543),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.48),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 580),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.26),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 590),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.03),
+        },
+      },
+    },
+    'NT - Barkly': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 110),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 200),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 620),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 650),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 670),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 660),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.27),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 227),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 108),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.68),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.64),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 225),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.31),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 319),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.21),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 262),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 266),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 307),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.29),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 398),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.18),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 346),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.24),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 363),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.29),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 398),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.19),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 452),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.01),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 430),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 444),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 452),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.04),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 216),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 111),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.64),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 169),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.57),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 214),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.26),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 334),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.09),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 236),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.37),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 282),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 326),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.28),
+        },
+      },
+      // NOT VALID
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+      // NOT VALID
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+    },
+    'NT - Northern': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 110),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 200),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 620),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 650),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 670),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 660),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.27),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 177),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 102),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.79),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 173),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 202),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 267),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.15),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 203),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.38),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 272),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.09),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 365),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.08),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 299),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.38),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 336),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.36),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 365),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 406),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.17),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 414),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.06),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.04),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 231),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.06),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 102),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 175),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.58),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 208),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.21),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 249),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 218),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 243),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.23),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.03),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 324),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.14),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 263),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 304),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 337),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      // NOT VALID
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+    },
+    'QLD - High': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 153),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 168),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.45),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 235),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.51),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 705),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.19),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 703),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 718),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 722),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.07),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 215),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.38),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 118),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 191),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 207),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 302),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 277),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.57),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 319),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.41),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 352),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.09),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 416),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.07),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 397),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.76),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.13),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 519),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 483),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 506),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.17),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 514),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.07),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 234),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.52),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 111),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.84),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 188),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.54),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 209),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 455),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 304),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.51),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 326),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.64),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 421),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.71),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 551),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.19),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 521),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.36),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 520),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 512),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.17),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 660),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 547),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.17),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 582),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.32),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 605),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.43),
+        },
+      },
+    },
+    'QLD - Moderate/High': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 230),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.12),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 113),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.65),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 172),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 241),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.32),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 674),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.19),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 669),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.19),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 685),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 692),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.06),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 217),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.41),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 113),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.65),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 172),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.52),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 208),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 344),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.09),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 283),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.51),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 309),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.34),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 344),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.19),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 357),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.41),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 361),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.18),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 376),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 364),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.1),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 467),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.19),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 477),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.63),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 471),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.04),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 484),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.02),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 242),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.07),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 120),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.3),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 238),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 370),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.07),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 273),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.48),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 329),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.42),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 350),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.23),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.08),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 545),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.12),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 573),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 567),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.13),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 620),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 553),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.38),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 620),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.74),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 620),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+    },
+    'QLD - Moderate/Low': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 236),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.62),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 120),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 125),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 180),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.61),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 674),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.19),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 669),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.19),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 685),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 692),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.06),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 178),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.37),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 112),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.31),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.39),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 183),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.21),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 310),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.41),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.54),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 277),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.36),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 316),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.18),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 428),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.06),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.53),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 407),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.26),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 438),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 466),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.02),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 448),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.15),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 455),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 468),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.06),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 193),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.47),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 115),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.28),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 141),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 189),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.29),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 370),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 273),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.57),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 296),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 354),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.41),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 519),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 433),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.42),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 445),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.37),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.41),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 565),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 556),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 593),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.01),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 553),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.15),
+        },
+      },
+    },
+    'QLD - Low': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 190),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.2),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 119),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.62),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 175),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 192),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.08),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 617),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 591),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.21),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 610),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 615),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.04),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 174),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.24),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 163),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 162),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.06),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 265),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 205),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.32),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 232),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 255),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.18),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 371),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.23),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 310),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.47),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 351),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 364),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 415),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 405),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.31),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 427),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.08),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.07),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.34),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 133),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.14),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 146),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 157),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 272),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 218),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 242),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.24),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 261),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 392),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.57),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 315),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.26),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 320),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.15),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 342),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 531),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.52),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 445),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.43),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 471),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.21),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 484),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+      },
     },
   },
 };
