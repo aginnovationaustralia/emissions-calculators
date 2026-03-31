@@ -186,11 +186,6 @@ export type CommonConstants = NamedConstants & {
   >;
 
   CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: MassPerMass<'CrudeProtein', 'N'>;
-
-  PURCHASED_FEED_FACTORS: Record<
-    PurchasedFeedAquacultureType | PurchasedFeedLivestockType,
-    MassPerMass<'CO2e', 'Purchased Feed'>
-  >;
 };
 
 type CropResidueFactors = {
@@ -356,6 +351,13 @@ export type PoultryConstants = NamedConstants & {
   MMS: Record<PoultryMMSType, PoultryMMSFactors>;
 };
 
+export type LivestockConstants = NamedConstants & {
+  PURCHASED_FEED_FACTORS: Record<
+    PurchasedFeedAquacultureType | PurchasedFeedLivestockType,
+    MassPerMass<'CO2e', 'Purchased Feed'>
+  >;
+};
+
 export type AllConstants = {
   COMMON: CommonConstants;
   CROP: CropConstants;
@@ -363,6 +365,7 @@ export type AllConstants = {
   FEEDLOT: FeedlotConstants;
   DAIRY: DairyConstants;
   POULTRY: PoultryConstants;
+  LIVESTOCK: LivestockConstants;
 };
 
 export type HasCommonConstants = {

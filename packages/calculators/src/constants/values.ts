@@ -20,6 +20,7 @@ import {
   CropConstants,
   DairyConstants,
   FeedlotConstants,
+  LivestockConstants,
   PoultryConstants,
   STATES,
   SwineConstants,
@@ -1159,22 +1160,6 @@ export const commonConstants: CommonConstants = {
   },
 
   CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: massPerMass('CrudeProtein', 'N', 6.25),
-
-  // Appendix A1 Table A.3.1.2
-  PURCHASED_FEED_FACTORS: {
-    'Meat Meal': massPerMass('CO2e', 'Purchased Feed', 0.386),
-    'Blood Meal': massPerMass('CO2e', 'Purchased Feed', 1.9),
-    Millrun: massPerMass('CO2e', 'Purchased Feed', 0.3),
-    'Whole Sardines': massPerMass('CO2e', 'Purchased Feed', 0.3),
-    'Low Animal Protein Formulated Feed': massPerMass(
-      'CO2e',
-      'Purchased Feed',
-      2.2,
-    ),
-    Squid: massPerMass('CO2e', 'Purchased Feed', 0.3),
-    'Whole Fish': massPerMass('CO2e', 'Purchased Feed', 0.3),
-    'Custom Bait': massPerMass('CO2e', 'Purchased Feed', 0.08),
-  },
 };
 
 const cropResidueRemovedOtherCropTypes: Record<State, RealNumber> = {
@@ -1912,5 +1897,24 @@ export const poultryConstants: PoultryConstants = {
       FracGASM: realNumber(0),
       EFm: realNumber(0),
     },
+  },
+};
+
+export const livestockConstants: LivestockConstants = {
+  name: 'LIVESTOCK',
+  // Appendix A1 Table A.3.1.2
+  PURCHASED_FEED_FACTORS: {
+    'Meat Meal': massPerMass('CO2e', 'Purchased Feed', 0.386),
+    'Blood Meal': massPerMass('CO2e', 'Purchased Feed', 1.9),
+    Millrun: massPerMass('CO2e', 'Purchased Feed', 0.3),
+    'Whole Sardines': massPerMass('CO2e', 'Purchased Feed', 0.3),
+    'Low Animal Protein Formulated Feed': massPerMass(
+      'CO2e',
+      'Purchased Feed',
+      2.2,
+    ),
+    Squid: massPerMass('CO2e', 'Purchased Feed', 0.3),
+    'Whole Fish': massPerMass('CO2e', 'Purchased Feed', 0.3),
+    'Custom Bait': massPerMass('CO2e', 'Purchased Feed', 0.08),
   },
 };
