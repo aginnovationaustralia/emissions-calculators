@@ -287,7 +287,6 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerHeadPerDay(rightUnit.mass);
       } else if (isMassPerEnergy(leftUnit) && isEnergyPerMass(rightUnit)) {
         unit = realNumber();
-        // } else if (isMassPer
       } else if (isRealNumber(leftUnit)) {
         unit = { ...rightUnit };
       } else {

@@ -13,13 +13,20 @@ export const BeefClassSeasonInputSchema = object({
     .number()
     .min(0)
     .optional()
+    .meta({
+      description:
+        'Method 2: supply an exact value for liveweight for this class for this season based on farm records',
+    })
     .transform((val) =>
       val === undefined ? undefined : input('Wijkln', mass('Liveweight', val)),
     ),
   method2LiveweightGain: z
     .number()
-    .min(0)
     .optional()
+    .meta({
+      description:
+        'Method 2: supply an exact value for liveweight gain for this class for this season based on farm records',
+    })
     .transform((val) =>
       val === undefined
         ? undefined

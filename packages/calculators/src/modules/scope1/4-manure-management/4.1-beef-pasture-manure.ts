@@ -57,7 +57,6 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
   const Iijkln = calculateDryMatterIntakeIijkln(
     input,
     classInput,
-    className,
     seasonName,
     context,
   );
@@ -104,7 +103,7 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
     .multiply(daysInSeason)
     .named(`Mmm=14 (${className}, ${seasonName})`);
 
-  return sum([Mmm1, Mmm14], { name: 'Mmm' });
+  return sum([Mmm1, Mmm14], { name: `Mmm (${className}, ${seasonName})` });
 };
 
 export const calculateManureManagementCH4ForClass = (
@@ -120,48 +119,18 @@ export const calculateManureManagementCH4ForClass = (
     return root(mass('CH4', 0)).named(`Mmm ${className} (empty)`);
   }
 
-  const totalMethaneFromClassMmmSpring =
+  const seasons = ['spring', 'summer', 'autumn', 'winter'] as const;
+  const totalMethaneFromClassMmmPerSeason = seasons.map((seasonName) =>
     calculateTotalMethaneFromClassSeasonMmmSeason(
       input,
       herd,
-      'spring',
+      seasonName,
       className,
       context,
-    ).named(`Mmm ${className} Spring`);
-  const totalMethaneFromClassMmmSummer =
-    calculateTotalMethaneFromClassSeasonMmmSeason(
-      input,
-      herd,
-      'summer',
-      className,
-      context,
-    ).named(`Mmm ${className} Summer`);
-  const totalMethaneFromClassMmmAutumn =
-    calculateTotalMethaneFromClassSeasonMmmSeason(
-      input,
-      herd,
-      'autumn',
-      className,
-      context,
-    ).named(`Mmm ${className} Autumn`);
-  const totalMethaneFromClassMmmWinter =
-    calculateTotalMethaneFromClassSeasonMmmSeason(
-      input,
-      herd,
-      'winter',
-      className,
-      context,
-    ).named(`Mmm ${className} Winter`);
-
-  return sum(
-    [
-      totalMethaneFromClassMmmSpring,
-      totalMethaneFromClassMmmSummer,
-      totalMethaneFromClassMmmAutumn,
-      totalMethaneFromClassMmmWinter,
-    ],
-    { name: `Mmm ${className}` },
+    ),
   );
+
+  return sum(totalMethaneFromClassMmmPerSeason, { name: `Mmm ${className}` });
 };
 
 export const calculateManureManagementCH4ForHerd = (
@@ -172,7 +141,6 @@ export const calculateManureManagementCH4ForHerd = (
   const classResults = BeefClasses.map((className) =>
     calculateManureManagementCH4ForClass(input, herd, className, context),
   );
-  // TODO: Calving classes
 
   return sum(classResults, { name: 'Mmm (all classes)' });
 };

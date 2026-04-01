@@ -10,21 +10,33 @@ export const BeefHerdInputSchema = object({
     .boolean()
     .meta({
       description:
-        'Whether animals have access to unfenced natural water. If animals are on bore or reticulated water systems where water is provided in troughs (i.e. no unfenced natural water sources) then set to false',
+        'Method 2: Whether animals have access to unfenced natural water. If animals are on bore or reticulated water systems where water is provided in troughs (i.e. no unfenced natural water sources) then set to false',
     })
     .optional(),
   method2Dmd: object({
     spring: proportion()
-      .meta({ description: 'Dry matter digestibility in spring' })
+      .meta({
+        description:
+          'Method 2: Specific dry matter digestibility in spring, based on farm records',
+      })
       .transform((val) => input('DMDijk=spring', realNumber(val))),
     summer: proportion()
-      .meta({ description: 'Dry matter digestibility in summer' })
+      .meta({
+        description:
+          'Method 2: Specific dry matter digestibility in summer, based on farm records',
+      })
       .transform((val) => input('DMDijk=summer', realNumber(val))),
     autumn: proportion()
-      .meta({ description: 'Dry matter digestibility in autumn' })
+      .meta({
+        description:
+          'Method 2: Specific dry matter digestibility in autumn, based on farm records',
+      })
       .transform((val) => input('DMDijk=autumn', realNumber(val))),
     winter: proportion()
-      .meta({ description: 'Dry matter digestibility in winter' })
+      .meta({
+        description:
+          'Method 2: Specific dry matter digestibility in winter, based on farm records',
+      })
       .transform((val) => input('DMDijk=winter', realNumber(val))),
   }).optional(),
 });

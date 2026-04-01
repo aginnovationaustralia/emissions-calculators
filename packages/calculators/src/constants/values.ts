@@ -1913,10 +1913,6 @@ export const poultryConstants: PoultryConstants = {
   },
 };
 
-/*
-
-*/
-
 export const beefPastureConstants: BeefPastureConstants = {
   name: 'BEEF_PASTURE',
 

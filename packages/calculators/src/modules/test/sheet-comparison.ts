@@ -106,10 +106,8 @@ export const compareInputsAndOutputs = <
           // formatNamedValues(actual, { maxDepth: 8, focusOn: 'CPIj=' }),
           // formatNamedValues(actual, { maxDepth: 7, focusOn: 'AUmms,m=3a' }),
           formatNamedValues(actual, {
-            maxDepth: 12,
-            // focusOn: 'MMSm',
-            // focusOn: 'MAijkl',
-            focusOn: 'MAijkl=5 (cows2To3Years',
+            maxDepth: 5,
+            // focusOn: 'NIj=1',
           }),
         );
       }

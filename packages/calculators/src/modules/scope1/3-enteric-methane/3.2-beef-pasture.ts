@@ -4,10 +4,11 @@ import {
   BeefClassWithCalvesInputTransformed,
   isBeefClassWithCalves,
 } from '@/calculators/Beef/types/beef-class.input';
+import { BeefSpecificClassInputTransformed } from '@/calculators/Beef/types/beef-classes.input';
 import { BeefInputTransformed } from '@/calculators/Beef/types/input';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { BeefClass, Season } from '@/constants/enums';
+import { Season } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { br, num } from '@/tools/containers';
 import { one, oneMinus } from '@/tools/sentinels';
@@ -73,14 +74,14 @@ const getFeedAdjustmentForCowsGt2FA = (
 
 export const calculateDryMatterIntakeIijkln = (
   input: BeefInputTransformed,
-  classInput: BeefClassInputTransformed | BeefClassWithCalvesInputTransformed,
-  className: BeefClass,
+  classInput: BeefSpecificClassInputTransformed,
   seasonName: Season,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   /*
     MAijkl=5 = (LCijkl=5 * FAijkl=5) + (1 - LCijkl=5 ) -- line 143
     */
+  const className = classInput.name;
   const season = classInput[seasonName];
   const LC = getProportionCowsGt2InCalfLC(classInput, seasonName);
   const FA = getFeedAdjustmentForCowsGt2FA(classInput, seasonName);
