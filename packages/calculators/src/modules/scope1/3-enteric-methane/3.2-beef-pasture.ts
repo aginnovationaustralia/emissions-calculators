@@ -1,8 +1,4 @@
-import {
-  BeefClassSeasonInputTransformed,
-  BeefClassWithCalvesSeasonInputTransformed,
-  isSeasonInputWithCalves,
-} from '@/calculators/Beef/types/beef-class-season.input';
+import { isSeasonInputWithCalves } from '@/calculators/Beef/types/beef-class-season.input';
 import {
   BeefClassInputTransformed,
   BeefClassWithCalvesInputTransformed,
@@ -14,18 +10,25 @@ import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { BeefClass, Season } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { br, num } from '@/tools/containers';
-import { oneMinus } from '@/tools/sentinels';
+import { one, oneMinus } from '@/tools/sentinels';
 import { massPerHeadPerDay, realNumber } from '@/tools/units';
 
 const getProportionCowsGt2InCalfLC = (
-  season:
-    | BeefClassSeasonInputTransformed
-    | BeefClassWithCalvesSeasonInputTransformed,
+  classInput: BeefClassInputTransformed | BeefClassWithCalvesInputTransformed,
+  seasonName: Season,
 ) => {
-  if (isSeasonInputWithCalves(season)) {
-    return season.proportionCowsGt2InCalf.named('LCijkl=5');
+  const currentSeason = classInput[seasonName];
+  const previousSeason = classInput[getPreviousSeason(seasonName)];
+  if (
+    !isSeasonInputWithCalves(currentSeason) ||
+    !isSeasonInputWithCalves(previousSeason)
+  ) {
+    return num(0).named('LC (0)');
   }
-  return num(0).named('LC (0)');
+
+  return currentSeason.proportionCowsGt2ThisSeasonInCalf
+    .plus(previousSeason.proportionCowsGt2ThisSeasonInCalf)
+    .named('LCijkl=5');
 };
 
 const getPreviousSeason = (seasonName: Season) => {
@@ -35,10 +38,10 @@ const getPreviousSeason = (seasonName: Season) => {
   if (seasonName === 'summer') {
     return 'spring';
   }
-  if (seasonName === 'winter') {
+  if (seasonName === 'autumn') {
     return 'summer';
   }
-  return 'spring';
+  return 'autumn';
 };
 
 const getFeedAdjustmentForCowsGt2FA = (
@@ -49,21 +52,23 @@ const getFeedAdjustmentForCowsGt2FA = (
     return num(1).named('FA (1)');
   }
 
-  const season = classInput[seasonName];
-  const LC = season.proportionCowsGt2InCalf.unit.value;
+  const currentSeason = classInput[seasonName];
+  const currentSeasonInCalf =
+    currentSeason.proportionCowsGt2ThisSeasonInCalf.named(
+      `Cows calving (${seasonName})`,
+    );
 
-  if (LC.eq(0)) {
-    const previousSeason = classInput[getPreviousSeason(seasonName)];
+  const previousSeasonName = getPreviousSeason(seasonName);
+  const previousSeason = classInput[previousSeasonName];
+  const previousSeasonInCalf =
+    previousSeason.proportionCowsGt2ThisSeasonInCalf.named(
+      `Cows calving (${previousSeasonName})`,
+    );
 
-    const previousSeasonLC = previousSeason.proportionCowsGt2InCalf.unit.value;
-    if (previousSeasonLC.gt(0)) {
-      return num(previousSeasonLC.mul(0.1).plus(1)).named('FAijkl');
-    } else {
-      return num(1).named('FAijkl');
-    }
-  } else {
-    return num(LC.mul(0.3).plus(1)).named('FAijkl');
-  }
+  return one
+    .plus(num(0.3).multiply(currentSeasonInCalf))
+    .plus(num(0.1).multiply(previousSeasonInCalf))
+    .named('FAijkl=5 (${seasonName})');
 };
 
 export const calculateDryMatterIntakeIijkln = (
@@ -77,14 +82,12 @@ export const calculateDryMatterIntakeIijkln = (
     MAijkl=5 = (LCijkl=5 * FAijkl=5) + (1 - LCijkl=5 ) -- line 143
     */
   const season = classInput[seasonName];
-  const LC = getProportionCowsGt2InCalfLC(season).named('LCijkl=5');
-  const FC = getFeedAdjustmentForCowsGt2FA(classInput, seasonName).named(
-    'FCijkl=5',
-  );
-  const MAijkl = br(LC.multiply(FC))
+  const LC = getProportionCowsGt2InCalfLC(classInput, seasonName);
+  const FA = getFeedAdjustmentForCowsGt2FA(classInput, seasonName);
+  const MAijkl = br(LC.multiply(FA))
     .plus(br(oneMinus(LC)))
     .switchUnit((u) => massPerHeadPerDay('DryMatter', u.value))
-    .named('MAijkl=5');
+    .named(`MAijkl=5 (${className}, ${seasonName})`);
 
   /*
     Iijkln = (1.185 + 0.00454 * Wijkln - 0.0000026 * Wijkln ^ 2 + 0.315 * LWGijkln) ^ 2 * MAijkl=5 -- line 136

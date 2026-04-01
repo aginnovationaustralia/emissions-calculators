@@ -29,12 +29,14 @@ export const BeefClassSeasonInputSchema = object({
 
 export const BeefClassWithCalvesSeasonInputSchema =
   BeefClassSeasonInputSchema.extend({
-    proportionCowsGt2InCalf: proportion()
+    proportionCowsGt2ThisSeasonInCalf: proportion()
       .meta({
         description:
-          'Proportion of cows > 2 years in calf in the season of calving and the season immediately after calving',
+          'Proportion of cows > 2 years in calf in this season. Do not include cows that were in calf in the previous season.',
       })
-      .transform((val) => input('LCijkl=5', realNumber(val))),
+      .transform((val) =>
+        input('Cows > 2 years calving this season', realNumber(val)),
+      ),
   });
 
 export const isSeasonInputWithCalves = (
@@ -42,7 +44,7 @@ export const isSeasonInputWithCalves = (
     | BeefClassSeasonInputTransformed
     | BeefClassWithCalvesSeasonInputTransformed,
 ): season is BeefClassWithCalvesSeasonInputTransformed => {
-  return 'proportionCowsGt2InCalf' in season;
+  return 'proportionCowsGt2ThisSeasonInCalf' in season;
 };
 
 export type BeefClassSeasonInput = z.input<typeof BeefClassSeasonInputSchema>;

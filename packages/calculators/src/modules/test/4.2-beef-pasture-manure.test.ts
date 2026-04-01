@@ -123,25 +123,25 @@ const getCalculatorInput = (
     return {
       spring: {
         head: springHead,
-        proportionCowsGt2InCalf: springProportionCowsGt2InCalf,
+        proportionCowsGt2ThisSeasonInCalf: springProportionCowsGt2InCalf,
         method2Liveweight: springLiveweight,
         method2LiveweightGain: springLiveweightGain,
       },
       summer: {
         head: summerHead,
-        proportionCowsGt2InCalf: summerProportionCowsGt2InCalf,
+        proportionCowsGt2ThisSeasonInCalf: summerProportionCowsGt2InCalf,
         method2Liveweight: summerLiveweight,
         method2LiveweightGain: summerLiveweightGain,
       },
       autumn: {
         head: autumnHead,
-        proportionCowsGt2InCalf: autumnProportionCowsGt2InCalf,
+        proportionCowsGt2ThisSeasonInCalf: autumnProportionCowsGt2InCalf,
         method2Liveweight: autumnLiveweight,
         method2LiveweightGain: autumnLiveweightGain,
       },
       winter: {
         head: winterHead,
-        proportionCowsGt2InCalf: winterProportionCowsGt2InCalf,
+        proportionCowsGt2ThisSeasonInCalf: winterProportionCowsGt2InCalf,
         method2Liveweight: winterLiveweight,
         method2LiveweightGain: winterLiveweightGain,
       },
@@ -156,7 +156,7 @@ const getCalculatorInput = (
   // const state = checkState(cell('C'));
   const region = checkExtendedRegion(cell('D'));
 
-  const unfencedWater = cell('W') === 'yes';
+  const unfencedWater = cell('Y') === 'yes';
 
   const herd: BeefHerdInput = {
     method2NoUnfencedNaturalWater: method === '1' ? undefined : !unfencedWater,
@@ -176,10 +176,10 @@ const getCalculatorInput = (
       method === '1'
         ? undefined
         : {
-            spring: Number(cell('S')),
-            summer: Number(cell('T')),
-            autumn: Number(cell('U')),
-            winter: Number(cell('V')),
+            spring: Number(cell('U')),
+            summer: Number(cell('V')),
+            autumn: Number(cell('W')),
+            winter: Number(cell('X')),
           },
   };
 
@@ -201,7 +201,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`AG${row}`).value());
+  return Number(sheet.cell(`AI${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
