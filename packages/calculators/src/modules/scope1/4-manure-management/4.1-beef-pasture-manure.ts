@@ -1,13 +1,9 @@
+import { BeefSpecificClassInputTransformed } from '@/calculators/Beef/types/beef-classes.input';
 import { BeefHerdInputTransformed } from '@/calculators/Beef/types/beef-herd.input';
 import { BeefInputTransformed } from '@/calculators/Beef/types/input';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import {
-  BeefClass,
-  BeefClasses,
-  extendedRegionToRegion,
-  Season,
-} from '@/constants/enums';
+import { BeefClasses, extendedRegionToRegion, Season } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { br, num, root } from '@/tools/containers';
 import { daysInSeason, oneMinus } from '@/tools/sentinels';
@@ -19,19 +15,15 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
   input: BeefInputTransformed,
   herd: BeefHerdInputTransformed,
   seasonName: Season,
-  className: BeefClass,
+  classInput: BeefSpecificClassInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   const { constants } = context;
   const { climateZone, region } = input;
   const limitedRegion = extendedRegionToRegion(region);
 
-  const { classes, method2Dmd, method2NoUnfencedNaturalWater } = herd;
-  const classInput = classes[className];
-
-  if (classInput === undefined) {
-    return root(mass('CH4', 0)).named(`Mmm ${className} (empty)`);
-  }
+  const { method2Dmd, method2NoUnfencedNaturalWater } = herd;
+  const className = classInput.name;
 
   const season = classInput[seasonName];
 
@@ -70,7 +62,6 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
     .multiply(oneMinus(ashContentOfManureA))
     .named('VSijkln');
 
-  // Mmijklnm = VSijkln * BO * MMSm * MCF m * 𝜌 -- line 405
   const Bo = selectConstant(
     constants.COMMON,
     'EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4',
@@ -82,6 +73,7 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
     climateZone,
   );
 
+  // Mmijklnm = VSijkln * BO * MMSm * MCF m * 𝜌 -- line 405
   const dailyMethanePerHeadMm1 = VSijkln.multiply(Bo)
     .multiply(MMSm1)
     .multiply(MCFm1)
@@ -94,6 +86,16 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
     .multiply(p)
     .named(`Mmijklnm=14 (${className}, ${seasonName})`);
 
+  /*
+    Line 396:
+    The methane production from the manure management MMM of pasture-based beef cattle is
+    calculated as:
+    MMM = SUM SUM SUM SUM SUM ( Nkln * Mmijklnm * 91.25)
+    Nkln = number of pasture beef cattle per class (head)
+    Mmijklnm = daily methane production from manure each season per head
+    and MMS(kg/head/day)
+    91.25 = number of days in each season
+  */
   const Mmm1 = dailyMethanePerHeadMm1
     .multiply(Nkln)
     .multiply(daysInSeason)
@@ -109,15 +111,10 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
 export const calculateManureManagementCH4ForClass = (
   input: BeefInputTransformed,
   herd: BeefHerdInputTransformed,
-  className: BeefClass,
+  classInput: BeefSpecificClassInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  const { classes } = herd;
-  const classInput = classes[className];
-
-  if (classInput === undefined) {
-    return root(mass('CH4', 0)).named(`Mmm ${className} (empty)`);
-  }
+  const className = classInput.name;
 
   const seasons = ['spring', 'summer', 'autumn', 'winter'] as const;
   const totalMethaneFromClassMmmPerSeason = seasons.map((seasonName) =>
@@ -125,7 +122,7 @@ export const calculateManureManagementCH4ForClass = (
       input,
       herd,
       seasonName,
-      className,
+      classInput,
       context,
     ),
   );
@@ -138,17 +135,35 @@ export const calculateManureManagementCH4ForHerd = (
   herd: BeefHerdInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  const classResults = BeefClasses.map((className) =>
-    calculateManureManagementCH4ForClass(input, herd, className, context),
-  );
+  const { classes } = herd;
+  const classResults = BeefClasses.map((className) => {
+    const classInput = classes[className];
+    if (classInput === undefined) {
+      return root(mass('CH4', 0)).named(`Mmm ${className} (empty)`);
+    }
+    return calculateManureManagementCH4ForClass(
+      input,
+      herd,
+      classInput,
+      context,
+    );
+  });
 
-  return sum(classResults, { name: 'Mmm (all classes)' });
+  return sum(classResults, { name: 'Mmm (all classes in herd)' });
 };
 
 export const calculateManureManagementCH4 = (
   input: BeefInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
+  /*
+    Line 390:
+    Total annual methane emissions from manure management EMCH4 is calculated as:
+    EMCH4 = MMM * GWPCH4 * 10^-3
+    Mmm = total methane production from manure management (kgCH4)
+    GWPCH4 = GWP of methane to convert tCH4 to tCO2e
+  */
+
   const { constants } = context;
 
   const { herds } = input;

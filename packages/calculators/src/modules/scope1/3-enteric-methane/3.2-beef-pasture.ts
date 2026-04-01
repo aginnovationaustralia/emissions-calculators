@@ -14,6 +14,19 @@ import { br, num } from '@/tools/containers';
 import { one, oneMinus } from '@/tools/sentinels';
 import { massPerHeadPerDay, realNumber } from '@/tools/units';
 
+const getPreviousSeason = (seasonName: Season) => {
+  if (seasonName === 'spring') {
+    return 'winter';
+  }
+  if (seasonName === 'summer') {
+    return 'spring';
+  }
+  if (seasonName === 'autumn') {
+    return 'summer';
+  }
+  return 'autumn';
+};
+
 const getProportionCowsGt2InCalfLC = (
   classInput: BeefClassInputTransformed | BeefClassWithCalvesInputTransformed,
   seasonName: Season,
@@ -30,19 +43,6 @@ const getProportionCowsGt2InCalfLC = (
   return currentSeason.proportionCowsGt2ThisSeasonInCalf
     .plus(previousSeason.proportionCowsGt2ThisSeasonInCalf)
     .named('LCijkl=5');
-};
-
-const getPreviousSeason = (seasonName: Season) => {
-  if (seasonName === 'spring') {
-    return 'winter';
-  }
-  if (seasonName === 'summer') {
-    return 'spring';
-  }
-  if (seasonName === 'autumn') {
-    return 'summer';
-  }
-  return 'autumn';
 };
 
 const getFeedAdjustmentForCowsGt2FA = (
@@ -78,21 +78,18 @@ export const calculateDryMatterIntakeIijkln = (
   seasonName: Season,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  /*
-    MAijkl=5 = (LCijkl=5 * FAijkl=5) + (1 - LCijkl=5 ) -- line 143
-    */
   const className = classInput.name;
   const season = classInput[seasonName];
   const LC = getProportionCowsGt2InCalfLC(classInput, seasonName);
   const FA = getFeedAdjustmentForCowsGt2FA(classInput, seasonName);
+  /*
+    MAijkl=5 = (LCijkl=5 * FAijkl=5) + (1 - LCijkl=5 ) -- line 143
+  */
   const MAijkl = br(LC.multiply(FA))
     .plus(br(oneMinus(LC)))
     .switchUnit((u) => massPerHeadPerDay('DryMatter', u.value))
     .named(`MAijkl=5 (${className}, ${seasonName})`);
 
-  /*
-    Iijkln = (1.185 + 0.00454 * Wijkln - 0.0000026 * Wijkln ^ 2 + 0.315 * LWGijkln) ^ 2 * MAijkl=5 -- line 136
-*/
   const { constants } = context;
   const { region } = input;
 
@@ -117,6 +114,9 @@ export const calculateDryMatterIntakeIijkln = (
       'liveweightGain',
     );
 
+  /*
+    Iijkln = (1.185 + 0.00454 * Wijkln - 0.0000026 * Wijkln ^ 2 + 0.315 * LWGijkln) ^ 2 * MAijkl=5 -- line 136
+  */
   const Iijkln = br(
     num(1.185)
       .plus(num(0.00454).multiply(Wijkln))
