@@ -53,6 +53,7 @@ const getFeedAdjustmentForCowsGt2FA = (
     return num(1).named('FA (1)');
   }
 
+  // REVISIT: We need to review the logic used to calculate FA. There is an example in the test sheet showing why it is probably incorrect
   const currentSeason = classInput[seasonName];
   const currentSeasonInCalf =
     currentSeason.proportionCowsGt2ThisSeasonInCalf.named(
