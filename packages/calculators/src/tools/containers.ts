@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js-light';
 import { formatUnit } from './format';
 import {
   AnyUnit,
@@ -24,10 +25,13 @@ import {
   isMassPerHeadPerDay,
   isMassPerMass,
   isMassPerTime,
+  isMassPerVolume,
   isRealNumber,
   isTime,
   isVoid,
   isVolume,
+  isVolumePerHeadPerDay,
+  isVolumePerMass,
   mass,
   Mass,
   massPerArea,
@@ -49,6 +53,9 @@ import {
   Time,
   voidUnit,
   Volume,
+  volumePerHeadPerDay,
+  VolumePerHeadPerDay,
+  VolumePerMass,
 } from './units';
 
 // Helpers for multiply overload return types (extract from container unit)
@@ -222,6 +229,18 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<Days>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<ExtractMassPerDaySubstance<UL>>>;
+  // MassPerHeadPerDay<S1> * VolumePerMass<S2, S1> = VolumePerHeadPerDay<S2>
+  multiply<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<MassPerHeadPerDay<S1>>,
+    right: Container<VolumePerMass<S2, S1>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<VolumePerHeadPerDay<S2>>;
+  // VolumePerHeadPerDay<S1> * MassPerVolume<S2, S1> = MassPerHeadPerDay<S2>
+  multiply<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<VolumePerHeadPerDay<S1>>,
+    right: Container<MassPerVolume<S2, S1>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerHeadPerDay<S2>>;
   // Fallback implementation
   multiply(
     this: BaseContainer<NumberUnit>,
@@ -259,6 +278,13 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = mass(leftUnit.substance);
       } else if (isMassPerHeadPerDay(leftUnit) && isEnergyPerMass(rightUnit)) {
         unit = massPerDay(leftUnit.substance);
+      } else if (isMassPerHeadPerDay(leftUnit) && isVolumePerMass(rightUnit)) {
+        unit = volumePerHeadPerDay(leftUnit.substance);
+      } else if (
+        isVolumePerHeadPerDay(leftUnit) &&
+        isMassPerVolume(rightUnit)
+      ) {
+        unit = massPerHeadPerDay(rightUnit.mass);
       } else if (isMassPerEnergy(leftUnit) && isEnergyPerMass(rightUnit)) {
         unit = realNumber();
       } else if (isRealNumber(leftUnit)) {
@@ -605,7 +631,7 @@ export const br = <U extends AnyUnit>(
   inner: Container<U>,
 ): BracketedContainer<U> => new BracketedContainer(inner.unit, inner);
 
-export const num = (value: number): RootContainer<RealNumber> =>
+export const num = (value: number | Decimal): RootContainer<RealNumber> =>
   new RootContainer(realNumber(value));
 
 export const value = <N extends NumberUnit>(v: N): RootContainer<N> =>

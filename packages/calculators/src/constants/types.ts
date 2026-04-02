@@ -11,17 +11,21 @@ import {
   MassPerVolume,
   NumberUnitBase,
   RealNumber,
+  VolumePerMass,
 } from '@/tools/units';
 import {
   AgrochemicalType,
   AviationFuelType,
   BasicCropProductionSystem,
+  BeefClass,
   CarsLightCommercialFuelType,
   CarsLightCommercialPre2004FuelType,
+  ClimateZone,
   CropType,
   DairyClass,
   DairyMMSType,
   DairySystem,
+  ExtendedRegion,
   FeedlotDurationType,
   FeedlotMMSType,
   FuelStationaryMassBasedLiquidType,
@@ -40,6 +44,8 @@ import {
   PoultryMMSType,
   RefrigerantType,
   RefrigerationType,
+  Region,
+  Season,
   ServiceByAreaType,
   ServiceByHourType,
   SolidWasteByVolumeType,
@@ -98,6 +104,14 @@ export type CommonConstants = NamedConstants & {
 
   GWP_FACTORSC15: RealNumber;
   GWP_FACTORSC18: RealNumber;
+
+  GWP_CH4: MassPerMass<'CO2e', 'CH4'>;
+  EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: VolumePerMass<
+    'CH4',
+    'Volatile Solids'
+  >;
+
+  DENSITY_OF_METHANE: MassPerVolume<'CH4', 'CH4'>;
 
   LIME_SCOPE3_EF: MassPerMass<'CO2e', 'Lime'>;
 
@@ -184,6 +198,9 @@ export type CommonConstants = NamedConstants & {
   >;
 
   CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: MassPerMass<'CrudeProtein', 'N'>;
+
+  // REVISIT: Could move to the common livestock area
+  ASH_CONTENT_OF_MANURE: RealNumber;
 };
 
 type CropResidueFactors = {
@@ -349,6 +366,25 @@ export type PoultryConstants = NamedConstants & {
   MMS: Record<PoultryMMSType, PoultryMMSFactors>;
 };
 
+type SeasonalFactors = Record<Season, RealNumber>;
+type WeightFactorsByClass = Record<
+  BeefClass,
+  Record<
+    Season,
+    {
+      liveweight: Mass<'Liveweight'>;
+      liveweightGain: MassPerHeadPerDay<'Liveweight'>;
+    }
+  >
+>;
+
+export type BeefPastureConstants = NamedConstants & {
+  DMD: Record<Region, SeasonalFactors>;
+  MCF_PASTURE: RealNumber;
+  MCF_LAGOON: Record<ClimateZone, RealNumber>;
+  LIVEWEIGHT: Record<ExtendedRegion, WeightFactorsByClass>;
+};
+
 export type AllConstants = {
   COMMON: CommonConstants;
   CROP: CropConstants;
@@ -356,6 +392,7 @@ export type AllConstants = {
   FEEDLOT: FeedlotConstants;
   DAIRY: DairyConstants;
   POULTRY: PoultryConstants;
+  BEEF_PASTURE: BeefPastureConstants;
 };
 
 export type HasCommonConstants = {
