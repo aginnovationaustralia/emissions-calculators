@@ -1,0 +1,319 @@
+{
+  "records": [
+    {
+      "symbol": "Nkln",
+      "name": "number of beef cattle by class and subclass",
+      "units": "head",
+      "type": "input",
+      "expression": "",
+      "line": "548",
+      "notes": ""
+    },
+    {
+      "symbol": "Wijkln",
+      "name": "liveweight",
+      "units": "kg / head",
+      "type": "constant",
+      "expression": "",
+      "line": "567",
+      "notes": "method 2 allows user input"
+    },
+    {
+      "symbol": "LWGijkln",
+      "name": "liveweight gain as calculated for enteric methane",
+      "units": "kg / head / day",
+      "type": "constant",
+      "expression": "",
+      "line": "568",
+      "notes": "method 2 allows user input"
+    },
+    {
+      "symbol": "WRil",
+      "name": "reference weight",
+      "units": "kg",
+      "type": "constant",
+      "expression": "",
+      "line": "593",
+      "notes": ""
+    },
+    {
+      "symbol": "Zijkln",
+      "name": "relative size",
+      "units": "d",
+      "type": "expression",
+      "expression": "Wijkln / WRil",
+      "line": "521",
+      "notes": ""
+    },
+    {
+      "symbol": "Iijkln",
+      "name": "dry matter intake (as calculated for enteric methane)",
+      "units": "kg DM / head / day",
+      "type": "unknown",
+      "expression": "",
+      "line": "",
+      "notes": "see ch 3.2"
+    },
+    {
+      "symbol": "MAijkl=5",
+      "name": "additional intake for milk production in cows >2 years",
+      "units": "kg / head / day",
+      "type": "unknown",
+      "expression": "",
+      "line": "",
+      "notes": "see ch 3.2"
+    },
+    {
+      "symbol": "LCijkl=5",
+      "name": "proportion of cows > 2 years (l=5) lactating for the season of calving and season after calving",
+      "units": "d",
+      "type": "input",
+      "expression": "",
+      "line": "",
+      "notes": ""
+    },
+    {
+      "symbol": "MCijkl=5",
+      "name": "",
+      "units": "",
+      "type": "unknown",
+      "expression": "",
+      "line": "",
+      "notes": "see ch 3.2"
+    },
+    {
+      "symbol": "MCijkl=236",
+      "name": "milk intake",
+      "units": "kg / head / day",
+      "type": "constant",
+      "expression": "",
+      "line": "590",
+      "notes": ""
+    },
+    {
+      "symbol": "Lijkln",
+      "name": "intake relative to that needed for maintenance",
+      "units": "d",
+      "type": "expression",
+      "expression": "Iijkln / (1.185 + 0.00454 * Wijkln - 0.0000026 * Wijkln ^ 2 ) ^ 2 * MAijkl=5",
+      "line": "514",
+      "notes": ""
+    },
+    {
+      "symbol": "DMPijkl=5",
+      "name": "daily milk production",
+      "units": "kg / head / day",
+      "type": "constant",
+      "expression": "",
+      "line": "549",
+      "notes": ""
+    },
+    {
+      "symbol": "MPijkl=5",
+      "name": "milk production",
+      "units": "kg / head / day",
+      "type": "expression",
+      "expression": "LCijkl=5 * DMPijkl=5",
+      "line": "503",
+      "notes": ""
+    },
+    {
+      "symbol": "MEijkl",
+      "name": "metabolizable energy",
+      "units": "MJ / kgDM",
+      "type": "expression",
+      "expression": "0.1604 * DMDijk- 1.037",
+      "line": "475",
+      "notes": ""
+    },
+    {
+      "symbol": "NRijkln",
+      "name": "the amount of nitrogen retained by the body",
+      "units": "kg N / head / day",
+      "type": "expression",
+      "expression": "(0.032 * MPijkl=5 /6.38) + {{0.212 - 0.008 * (Lijkln - 2) - [0.140 - 0.008 * (Lijkln - 2) / 1 + e  ^ (-6 * Zijkln - 0.4)]} * (LWGijkln * 0.92)} / 6.25",
+      "line": "492",
+      "notes": ""
+    },
+    {
+      "symbol": "CPijkln",
+      "name": "crude protein content of feed dry matter",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "554",
+      "notes": "method 2 allows user input"
+    },
+    {
+      "symbol": "Fijkln",
+      "name": "nitrogen excreted in faeces each season per head ",
+      "units": "kg N / head / day",
+      "type": "expression",
+      "expression": "[{0.3 * Iijkln * CPijkln * (1 - (DMDijk + 0.1)) + (0.105 * MEijkl * Iijkln * 0.008) + (0.0152 * Iijkln)} / 6.25] + (0.08 * 0.032 * MCijkl=236 / 6.38)",
+      "line": "464",
+      "notes": ""
+    },
+    {
+      "symbol": "Uijkln",
+      "name": "nitrogen excreted in urine per season and head",
+      "units": "kg N / head / day",
+      "type": "expression",
+      "expression": "(Iijkln * CPijkln / 6.25) + (0.032 * MCijkl=5 / 6.38) - NRijkln - Fijkln - [(1.1 * 10 ^ -4 * Wijkln ^ 0.75) / 6.25]",
+      "line": "486",
+      "notes": ""
+    },
+    {
+      "symbol": "AUi",
+      "name": "total mass of urinary nitrogen excreted on pasture",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "SUM SUM SUM SUM (Nkln * Uijkln * 91.25)",
+      "line": "478",
+      "notes": ""
+    },
+    {
+      "symbol": "AFi",
+      "name": "total mass of faecal nitrogen excreted on pasture",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "SUM SUM SUM SUM (Nkln * Fijkln * 91.25)",
+      "line": "454",
+      "notes": ""
+    },
+    {
+      "symbol": "DMDijk",
+      "name": "dry matter digestibility",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "551",
+      "notes": "method 2 allows user input"
+    },
+    {
+      "symbol": "EFPRP",
+      "name": "emission factor for nitrous oxide emissions per amount of urine and dung deposited ",
+      "units": "kg N2O / kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "587",
+      "notes": "method 2 allows input for climate zone"
+    },
+    {
+      "symbol": "Cg,N2O",
+      "name": "factor to convert elemental mass of nitrous oxide to molecular mass",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "328",
+      "notes": "(missed in the beef chapter)"
+    },
+    {
+      "symbol": "GWPN2O",
+      "name": "GWP of nitrous oxide to convert tN2O to tCO2e",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "589",
+      "notes": ""
+    },
+    {
+      "symbol": "EN2O,dir",
+      "name": "direct nitrous oxide emissions on pasture",
+      "units": "t co2e",
+      "type": "expression",
+      "expression": "{(AFi * EFPRP * Cg,N2O) + (AUi * EFPRP * Cg,N2O)} * GWPN2O * 10^-3",
+      "line": "442",
+      "notes": ""
+    },
+    {
+      "symbol": "FracGASMsoil",
+      "name": "fraction of nitrogen volatilised from urine and faeces deposited on pasture",
+      "units": "kg volatilised N / kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "595",
+      "notes": ""
+    },
+    {
+      "symbol": "Mvol",
+      "name": "mass of nitrogen volatilised from urine and faeces deposited on pasture",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "(AUi + AFi) * FracGASMsoil",
+      "line": "530",
+      "notes": ""
+    },
+    {
+      "symbol": "EFad",
+      "name": "emission factor for atmospheric deposition",
+      "units": "kg N2O-N / kg N",
+      "type": "unknown",
+      "expression": "",
+      "line": "575",
+      "notes": "method 2 allows rainfall zone input"
+    },
+    {
+      "symbol": "EN2O,ad",
+      "name": "atmospheric deposition nitrous oxide emissions on pasture",
+      "units": "t co2e",
+      "type": "expression",
+      "expression": "Mvol * EFad * Cg,N2O * 10^-3",
+      "line": "524",
+      "notes": ""
+    },
+    {
+      "symbol": "EFleach",
+      "name": "emission factor for leaching and runoff",
+      "units": "kg N2O / kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "597",
+      "notes": ""
+    },
+    {
+      "symbol": "FracWET,soil,i,j",
+      "name": "fraction of organic N that is available for leaching and runoff",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "570",
+      "notes": "method 2 allows user input"
+    },
+    {
+      "symbol": "FracLEACH",
+      "name": "fraction of all N that is lost through leaching and runoff",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "596",
+      "notes": ""
+    },
+    {
+      "symbol": "Mleach",
+      "name": "mass of nitrogen lost to leaching and runoff",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "(AUi + AFi) * FracWET,soil,i,j * FracLEACH",
+      "line": "540",
+      "notes": ""
+    },
+    {
+      "symbol": "EN2O,leach",
+      "name": "leaching and runoff nitrous oxide emissions on pasture",
+      "units": "t co2e",
+      "type": "expression",
+      "expression": "Mleach * EFleach * Cg,N2O * 10^-3",
+      "line": "535",
+      "notes": ""
+    },
+    {
+      "symbol": "EMN2O",
+      "name": "total nitrous oxide emissions from manure management",
+      "units": "t co2e",
+      "type": "expression",
+      "expression": "EN2O,dir + EN2O,ad + EN2O,leach",
+      "line": "436",
+      "notes": ""
+    }
+  ]
+}

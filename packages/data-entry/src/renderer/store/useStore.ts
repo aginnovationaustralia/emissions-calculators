@@ -105,20 +105,20 @@ export const useStore = create<AppState & AppActions>((set, get) => ({
   addExpressionFromPaste: (text, line) => {
     const { symbol, expression } = parseExpressionLine(text);
     const state = get();
-    const records = [...state.records];
+    let records = [...state.records];
 
     const expr = symbol && expression ? expression : text;
     const symbols = extractSymbols(expr);
 
-    // Add missing dependent symbols first (so they appear above the expression record)
+    const newRows: SymbolRecord[] = [];
+    // Missing dependencies first, then the expression row — prepended so new rows appear at the top
     for (const sym of symbols) {
       if (findRecordBySymbol(records, sym)) continue;
-      records.push(createEmptyRecord(sym, 'unknown'));
+      newRows.push(createEmptyRecord(sym, 'unknown'));
     }
 
     const lineValue = (line ?? '').trim();
 
-    // Then add or update the expression record at the end (match existing by symbol, case-insensitive)
     if (symbol && expression) {
       const existing = findRecordBySymbol(records, symbol);
       if (existing) {
@@ -130,12 +130,16 @@ export const useStore = create<AppState & AppActions>((set, get) => ({
           ...(lineValue !== '' && { line: lineValue }),
         };
       } else {
-        records.push({
+        newRows.push({
           ...createEmptyRecord(symbol, 'expression'),
           expression,
           ...(lineValue !== '' && { line: lineValue }),
         });
       }
+    }
+
+    if (newRows.length > 0) {
+      records = [...newRows, ...records];
     }
 
     set({ records, dirty: true });

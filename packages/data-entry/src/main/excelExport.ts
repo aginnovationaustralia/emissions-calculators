@@ -33,7 +33,7 @@ export interface SymbolRecord {
 
 /** Extract symbol tokens from an expression (matches shared/expressionParser logic). */
 function extractSymbols(expression: string): string[] {
-  const BOUNDARY_CHARS = /^[\s()+\-×*/]+|[\s()+\-×*/]+$/g;
+  const BOUNDARY_CHARS = /^[\s()\[\]{}+\-×*/]+|[\s()\[\]{}+\-×*/]+$/g;
   const TRAILING_EXPONENT = /\^[-]?\d*\.?\d+$/;
   const IGNORED = ['SUM'];
   const isNumeric = (s: string) => /^\d*\.?\d+$/.test(s);
