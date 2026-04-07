@@ -30,34 +30,31 @@ const getCalculatorInput = (
 
   const readBeefClass = (offset: number): BeefClassInput | undefined => {
     const offsetRows = offset * 4;
-    const springHeadRaw = cell('G', offsetRows);
-
+    const springHeadRaw = cell('J', offsetRows);
     if (springHeadRaw === undefined) {
       return undefined;
     }
-
     const springHead = Number(springHeadRaw);
-    const summerHead = Number(cell('G', offsetRows + 1));
-    const autumnHead = Number(cell('G', offsetRows + 2));
-    const winterHead = Number(cell('G', offsetRows + 3));
-
+    const summerHead = Number(cell('J', offsetRows + 1));
+    const autumnHead = Number(cell('J', offsetRows + 2));
+    const winterHead = Number(cell('J', offsetRows + 3));
     const springLiveweight =
-      method === '1' ? undefined : Number(cell('H', offsetRows));
+      method === '1' ? undefined : Number(cell('K', offsetRows));
     const summerLiveweight =
-      method === '1' ? undefined : Number(cell('H', offsetRows + 1));
+      method === '1' ? undefined : Number(cell('K', offsetRows + 1));
     const autumnLiveweight =
-      method === '1' ? undefined : Number(cell('H', offsetRows + 2));
+      method === '1' ? undefined : Number(cell('K', offsetRows + 2));
     const winterLiveweight =
-      method === '1' ? undefined : Number(cell('H', offsetRows + 3));
+      method === '1' ? undefined : Number(cell('K', offsetRows + 3));
 
     const springLiveweightGain =
-      method === '1' ? undefined : Number(cell('I', offsetRows));
+      method === '1' ? undefined : Number(cell('L', offsetRows));
     const summerLiveweightGain =
-      method === '1' ? undefined : Number(cell('I', offsetRows + 1));
+      method === '1' ? undefined : Number(cell('L', offsetRows + 1));
     const autumnLiveweightGain =
-      method === '1' ? undefined : Number(cell('I', offsetRows + 2));
+      method === '1' ? undefined : Number(cell('L', offsetRows + 2));
     const winterLiveweightGain =
-      method === '1' ? undefined : Number(cell('I', offsetRows + 3));
+      method === '1' ? undefined : Number(cell('L', offsetRows + 3));
 
     return {
       spring: {
@@ -87,36 +84,36 @@ const getCalculatorInput = (
     offset: number,
   ): BeefClassWithCalvesInput | undefined => {
     const offsetRows = offset * 4;
-    const springHeadRaw = cell('G', offsetRows);
+    const springHeadRaw = cell('J', offsetRows);
     if (springHeadRaw === undefined) {
       return undefined;
     }
     const springHead = Number(springHeadRaw);
-    const springProportionCowsGt2InCalf = Number(cell('J', offsetRows));
-    const summerHead = Number(cell('G', offsetRows + 1));
-    const summerProportionCowsGt2InCalf = Number(cell('J', offsetRows + 1));
-    const autumnHead = Number(cell('G', offsetRows + 2));
-    const autumnProportionCowsGt2InCalf = Number(cell('J', offsetRows + 2));
-    const winterHead = Number(cell('G', offsetRows + 3));
-    const winterProportionCowsGt2InCalf = Number(cell('J', offsetRows + 3));
+    const springProportionCowsGt2InCalf = Number(cell('O', offsetRows));
+    const summerHead = Number(cell('J', offsetRows + 1));
+    const summerProportionCowsGt2InCalf = Number(cell('O', offsetRows + 1));
+    const autumnHead = Number(cell('J', offsetRows + 2));
+    const autumnProportionCowsGt2InCalf = Number(cell('O', offsetRows + 2));
+    const winterHead = Number(cell('J', offsetRows + 3));
+    const winterProportionCowsGt2InCalf = Number(cell('O', offsetRows + 3));
 
     const springLiveweight =
-      method === '1' ? undefined : Number(cell('H', offsetRows));
+      method === '1' ? undefined : Number(cell('K', offsetRows));
     const summerLiveweight =
-      method === '1' ? undefined : Number(cell('H', offsetRows + 1));
+      method === '1' ? undefined : Number(cell('K', offsetRows + 1));
     const autumnLiveweight =
-      method === '1' ? undefined : Number(cell('H', offsetRows + 2));
+      method === '1' ? undefined : Number(cell('K', offsetRows + 2));
     const winterLiveweight =
-      method === '1' ? undefined : Number(cell('H', offsetRows + 3));
+      method === '1' ? undefined : Number(cell('K', offsetRows + 3));
 
     const springLiveweightGain =
-      method === '1' ? undefined : Number(cell('I', offsetRows));
+      method === '1' ? undefined : Number(cell('L', offsetRows));
     const summerLiveweightGain =
-      method === '1' ? undefined : Number(cell('I', offsetRows + 1));
+      method === '1' ? undefined : Number(cell('L', offsetRows + 1));
     const autumnLiveweightGain =
-      method === '1' ? undefined : Number(cell('I', offsetRows + 2));
+      method === '1' ? undefined : Number(cell('L', offsetRows + 2));
     const winterLiveweightGain =
-      method === '1' ? undefined : Number(cell('I', offsetRows + 3));
+      method === '1' ? undefined : Number(cell('L', offsetRows + 3));
 
     return {
       spring: {
@@ -152,7 +149,7 @@ const getCalculatorInput = (
 
   const climateZone = checkClimateZone(cell('B'));
   // const state = checkState(cell('C'));
-  const region = checkExtendedRegion(cell('D'));
+  const region = checkExtendedRegion(cell('F'));
 
   const unfencedWater = cell('Y') === 'yes';
 
@@ -174,10 +171,10 @@ const getCalculatorInput = (
       method === '1'
         ? undefined
         : {
-            spring: Number(cell('U')),
-            summer: Number(cell('V')),
-            autumn: Number(cell('W')),
-            winter: Number(cell('X')),
+            spring: Number(cell('AJ')),
+            summer: Number(cell('AK')),
+            autumn: Number(cell('AL')),
+            winter: Number(cell('AM')),
           },
   };
 
@@ -199,7 +196,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`AI${row}`).value());
+  return Number(sheet.cell(`BR${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(

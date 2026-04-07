@@ -70,7 +70,7 @@ const getFeedAdjustmentForCowsGt2FA = (
   return one
     .plus(num(0.3).multiply(currentSeasonInCalf))
     .plus(num(0.1).multiply(previousSeasonInCalf))
-    .named('FAijkl=5 (${seasonName})');
+    .named(`FAijkl=5 (${seasonName})`);
 };
 
 export const calculateDryMatterIntakeIijkln = (

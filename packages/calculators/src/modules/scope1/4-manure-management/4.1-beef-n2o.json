@@ -70,16 +70,16 @@
       "type": "input",
       "expression": "",
       "line": "",
-      "notes": ""
+      "notes": "see ch 3.2"
     },
     {
       "symbol": "MCijkl=5",
-      "name": "",
-      "units": "",
-      "type": "unknown",
+      "name": "milk intake",
+      "units": "kg / head / day",
+      "type": "constant",
       "expression": "",
-      "line": "",
-      "notes": "see ch 3.2"
+      "line": "590",
+      "notes": ""
     },
     {
       "symbol": "MCijkl=236",
@@ -105,7 +105,7 @@
       "units": "kg / head / day",
       "type": "constant",
       "expression": "",
-      "line": "549",
+      "line": "592",
       "notes": ""
     },
     {
@@ -158,7 +158,7 @@
       "name": "nitrogen excreted in urine per season and head",
       "units": "kg N / head / day",
       "type": "expression",
-      "expression": "(Iijkln * CPijkln / 6.25) + (0.032 * MCijkl=5 / 6.38) - NRijkln - Fijkln - [(1.1 * 10 ^ -4 * Wijkln ^ 0.75) / 6.25]",
+      "expression": "(Iijkln * CPijkln / 6.25) + (0.032 * MCijkl=236 / 6.38) - NRijkln - Fijkln - [(1.1 * 10 ^ -4 * Wijkln ^ 0.75) / 6.25]",
       "line": "486",
       "notes": ""
     },
