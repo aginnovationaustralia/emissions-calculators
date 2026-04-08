@@ -5,12 +5,16 @@ import {
   PurchasedFeedsInputTransformed,
 } from '../scope3/15.2-purchased-feed/purchased-feeds.input';
 import { PurchasedFeedInput } from '../scope3/15.2-purchased-feed/purchased-feed.input';
-import { checkPurchasedFeedType } from './purchased-feed-domain';
+import {
+  checkPurchasedFeedRegion,
+  checkPurchasedFeedTypeInRegion,
+} from './purchased-feed-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from './sheet-comparison';
 import { calculatePurchasedFeed } from '../scope3/15.2-purchased-feed';
+import { PurchasedFeedLivestockRegionlessType } from '@/constants/enums';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -32,7 +36,9 @@ const getCalculatorInput = (
   const purchasedFeed: PurchasedFeedInput =
     method === '1'
       ? {
-          type: checkPurchasedFeedType(cell('A')),
+          type: checkPurchasedFeedTypeInRegion(
+            cell('A'),
+          ) as PurchasedFeedLivestockRegionlessType,
           amount,
         }
       : {

@@ -39,7 +39,9 @@ import {
   PoultryClass,
   PoultryMMSType,
   PurchasedFeedAquacultureType,
-  PurchasedFeedLivestockType,
+  PurchasedFeedLivestockRegionalType,
+  PurchasedFeedLivestockRegionlessType,
+  PurchasedFeedRegion,
   RefrigerantType,
   RefrigerationType,
   ServiceByAreaType,
@@ -352,10 +354,20 @@ export type PoultryConstants = NamedConstants & {
 };
 
 export type LivestockConstants = NamedConstants & {
-  PURCHASED_FEED_FACTORS: Record<
-    PurchasedFeedAquacultureType | PurchasedFeedLivestockType,
-    MassPerMass<'CO2e', 'Purchased Feed'>
-  >;
+  PURCHASED_FEED_FACTORS: {
+    regionless: Record<
+      PurchasedFeedAquacultureType | PurchasedFeedLivestockRegionlessType,
+      MassPerMass<'CO2e', 'Purchased Feed'>
+    >;
+    regional: {
+      [R in PurchasedFeedRegion]: {
+        [T in PurchasedFeedLivestockRegionalType<R>]: MassPerMass<
+          'CO2e',
+          'Purchased Feed'
+        >;
+      };
+    };
+  };
 };
 
 export type AllConstants = {

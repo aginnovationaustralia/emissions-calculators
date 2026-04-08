@@ -1,22 +1,52 @@
 import {
   PurchasedFeedAquacultureType,
   PurchasedFeedAquacultureTypes,
+  PurchasedFeedLivestockRegionalType,
+  PurchasedFeedLivestockRegionlessType,
+  PurchasedFeedLivestockRegionlessTypes,
   PurchasedFeedLivestockType,
-  PurchasedFeedLivestockTypes,
+  PurchasedFeedLivestockTypesPerRegion,
+  PurchasedFeedRegion,
+  PurchasedFeedRegions,
 } from '@/constants/enums';
 
-export const checkPurchasedFeedType = (
-  type: string | undefined,
-): PurchasedFeedAquacultureType | PurchasedFeedLivestockType => {
+export const checkPurchasedFeedRegion = (
+  region: string | undefined,
+): PurchasedFeedRegion | undefined => {
   if (
-    !(
+    region !== undefined &&
+    !PurchasedFeedRegions.includes(region as PurchasedFeedRegion)
+  ) {
+    throw new Error(`Invalid purchased feed region: "${region}"`);
+  }
+  return region as PurchasedFeedRegion;
+};
+
+export const checkPurchasedFeedTypeInRegion = (
+  type: string | undefined,
+  region?: PurchasedFeedRegion,
+): PurchasedFeedAquacultureType | PurchasedFeedLivestockType => {
+  if (region === undefined) {
+    if (
       PurchasedFeedAquacultureTypes.includes(
         type as PurchasedFeedAquacultureType,
       ) ||
-      PurchasedFeedLivestockTypes.includes(type as PurchasedFeedLivestockType)
-    )
+      PurchasedFeedLivestockRegionlessTypes.includes(
+        type as PurchasedFeedLivestockRegionlessType,
+      )
+    ) {
+      return type as
+        | PurchasedFeedAquacultureType
+        | PurchasedFeedLivestockRegionlessType;
+    }
+  } else if (
+    (
+      PurchasedFeedLivestockTypesPerRegion[
+        region
+      ] as readonly PurchasedFeedLivestockRegionalType[]
+    ).includes(type as PurchasedFeedLivestockRegionalType)
   ) {
-    throw new Error(`Invalid purchased feed type: "${type}"`);
+    return type as PurchasedFeedLivestockRegionalType;
   }
-  return type as PurchasedFeedAquacultureType | PurchasedFeedLivestockType;
+  throw new Error(`Invalid purchased feed type: "${type}"`);
 };
