@@ -611,11 +611,6 @@ export const PurchasedFeedLivestockTypesPerRegion = {
   ] as const,
 } as const;
 
-export const PurchasedFeedWheatAndBarleyTypes = [] as const;
-
-/**
- * TODO: Explain why these are 'regionless'
- */
 export const PurchasedFeedLivestockRegionlessTypes = [
   'Lick block, dry season mix',
   'Lick block, weaner',
