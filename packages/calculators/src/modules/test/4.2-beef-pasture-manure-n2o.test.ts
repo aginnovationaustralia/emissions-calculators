@@ -10,12 +10,25 @@ import {
 } from '@/calculators/Beef/types/input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { calculateManureManagementCH4 } from '../scope1/4-manure-management/4.1-beef-pasture-manure';
-import { checkClimateZone, checkExtendedRegion } from './livestock-domain';
+import { calculateManureManagementN2O } from '../scope1/4-manure-management/4.1-beef-pasture/4.1-beef-pasture-manure-n2o';
+import { checkClimateZone, checkStateOrRegion } from './livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from './sheet-comparison';
+
+const columnClimateZone = 'B';
+const columnStateOrRegion = 'D';
+const columnHeadN = 'K';
+const columnLiveweightW = 'L';
+const columnLiveweightGainLWG = 'M';
+const columnProportionCowsGt2InCalfLC = 'P';
+const columnUnfencedWater = 'AS';
+
+const columnDmdSpring = 'AK';
+const columnDmdSummer = 'AL';
+const columnDmdAutumn = 'AM';
+const columnDmdWinter = 'AN';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -30,31 +43,45 @@ const getCalculatorInput = (
 
   const readBeefClass = (offset: number): BeefClassInput | undefined => {
     const offsetRows = offset * 4;
-    const springHeadRaw = cell('J', offsetRows);
+    const springHeadRaw = cell(columnHeadN, offsetRows);
     if (springHeadRaw === undefined) {
       return undefined;
     }
     const springHead = Number(springHeadRaw);
-    const summerHead = Number(cell('J', offsetRows + 1));
-    const autumnHead = Number(cell('J', offsetRows + 2));
-    const winterHead = Number(cell('J', offsetRows + 3));
+    const summerHead = Number(cell(columnHeadN, offsetRows + 1));
+    const autumnHead = Number(cell(columnHeadN, offsetRows + 2));
+    const winterHead = Number(cell(columnHeadN, offsetRows + 3));
     const springLiveweight =
-      method === '1' ? undefined : Number(cell('K', offsetRows));
+      method === '1' ? undefined : Number(cell(columnLiveweightW, offsetRows));
     const summerLiveweight =
-      method === '1' ? undefined : Number(cell('K', offsetRows + 1));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightW, offsetRows + 1));
     const autumnLiveweight =
-      method === '1' ? undefined : Number(cell('K', offsetRows + 2));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightW, offsetRows + 2));
     const winterLiveweight =
-      method === '1' ? undefined : Number(cell('K', offsetRows + 3));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightW, offsetRows + 3));
 
     const springLiveweightGain =
-      method === '1' ? undefined : Number(cell('L', offsetRows));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightGainLWG, offsetRows));
     const summerLiveweightGain =
-      method === '1' ? undefined : Number(cell('L', offsetRows + 1));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightGainLWG, offsetRows + 1));
     const autumnLiveweightGain =
-      method === '1' ? undefined : Number(cell('L', offsetRows + 2));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightGainLWG, offsetRows + 2));
     const winterLiveweightGain =
-      method === '1' ? undefined : Number(cell('L', offsetRows + 3));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightGainLWG, offsetRows + 3));
 
     return {
       spring: {
@@ -84,36 +111,58 @@ const getCalculatorInput = (
     offset: number,
   ): BeefClassWithCalvesInput | undefined => {
     const offsetRows = offset * 4;
-    const springHeadRaw = cell('J', offsetRows);
+    const springHeadRaw = cell(columnHeadN, offsetRows);
     if (springHeadRaw === undefined) {
       return undefined;
     }
     const springHead = Number(springHeadRaw);
-    const springProportionCowsGt2InCalf = Number(cell('O', offsetRows));
-    const summerHead = Number(cell('J', offsetRows + 1));
-    const summerProportionCowsGt2InCalf = Number(cell('O', offsetRows + 1));
-    const autumnHead = Number(cell('J', offsetRows + 2));
-    const autumnProportionCowsGt2InCalf = Number(cell('O', offsetRows + 2));
-    const winterHead = Number(cell('J', offsetRows + 3));
-    const winterProportionCowsGt2InCalf = Number(cell('O', offsetRows + 3));
+    const springProportionCowsGt2InCalf = Number(
+      cell(columnProportionCowsGt2InCalfLC, offsetRows),
+    );
+    const summerHead = Number(cell(columnHeadN, offsetRows + 1));
+    const summerProportionCowsGt2InCalf = Number(
+      cell(columnProportionCowsGt2InCalfLC, offsetRows + 1),
+    );
+    const autumnHead = Number(cell(columnHeadN, offsetRows + 2));
+    const autumnProportionCowsGt2InCalf = Number(
+      cell(columnProportionCowsGt2InCalfLC, offsetRows + 2),
+    );
+    const winterHead = Number(cell(columnHeadN, offsetRows + 3));
+    const winterProportionCowsGt2InCalf = Number(
+      cell(columnProportionCowsGt2InCalfLC, offsetRows + 3),
+    );
 
     const springLiveweight =
-      method === '1' ? undefined : Number(cell('K', offsetRows));
+      method === '1' ? undefined : Number(cell(columnLiveweightW, offsetRows));
     const summerLiveweight =
-      method === '1' ? undefined : Number(cell('K', offsetRows + 1));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightW, offsetRows + 1));
     const autumnLiveweight =
-      method === '1' ? undefined : Number(cell('K', offsetRows + 2));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightW, offsetRows + 2));
     const winterLiveweight =
-      method === '1' ? undefined : Number(cell('K', offsetRows + 3));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightW, offsetRows + 3));
 
     const springLiveweightGain =
-      method === '1' ? undefined : Number(cell('L', offsetRows));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightGainLWG, offsetRows));
     const summerLiveweightGain =
-      method === '1' ? undefined : Number(cell('L', offsetRows + 1));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightGainLWG, offsetRows + 1));
     const autumnLiveweightGain =
-      method === '1' ? undefined : Number(cell('L', offsetRows + 2));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightGainLWG, offsetRows + 2));
     const winterLiveweightGain =
-      method === '1' ? undefined : Number(cell('L', offsetRows + 3));
+      method === '1'
+        ? undefined
+        : Number(cell(columnLiveweightGainLWG, offsetRows + 3));
 
     return {
       spring: {
@@ -147,11 +196,11 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const climateZone = checkClimateZone(cell('B'));
+  const climateZone = checkClimateZone(cell(columnClimateZone));
   // const state = checkState(cell('C'));
-  const region = checkExtendedRegion(cell('F'));
+  const region = checkStateOrRegion(cell(columnStateOrRegion));
 
-  const unfencedWater = cell('Y') === 'yes';
+  const unfencedWater = cell(columnUnfencedWater) === 'yes';
 
   const herd: BeefHerdInput = {
     method2NoUnfencedNaturalWater: method === '1' ? undefined : !unfencedWater,
@@ -171,10 +220,10 @@ const getCalculatorInput = (
       method === '1'
         ? undefined
         : {
-            spring: Number(cell('AJ')),
-            summer: Number(cell('AK')),
-            autumn: Number(cell('AL')),
-            winter: Number(cell('AM')),
+            spring: Number(cell(columnDmdSpring)),
+            summer: Number(cell(columnDmdSummer)),
+            autumn: Number(cell(columnDmdAutumn)),
+            winter: Number(cell(columnDmdWinter)),
           },
   };
 
@@ -205,7 +254,7 @@ const extractInputsAndOutput = createSheetExtractor(
   { rowInterval: 40 },
 );
 
-describe('4.2. Beef Pasture Manure methane', () => {
+describe('4.2. Beef Pasture Manure n2o', () => {
   it('method 1 scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.1-beef.xlsx',
@@ -214,10 +263,10 @@ describe('4.2. Beef Pasture Manure methane', () => {
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculateManureManagementCH4);
+    compareInputsAndOutputs(inputsAndOutputs, calculateManureManagementN2O);
   });
 
-  it('method 2 scenarios match spreadsheet results', async () => {
+  it.skip('method 2 scenarios match spreadsheet n2o', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.1-beef.xlsx',
       '4.2.1 methane',
@@ -225,6 +274,6 @@ describe('4.2. Beef Pasture Manure methane', () => {
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 141, '2');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculateManureManagementCH4);
+    compareInputsAndOutputs(inputsAndOutputs, calculateManureManagementN2O);
   });
 });

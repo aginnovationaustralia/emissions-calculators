@@ -37,14 +37,15 @@ import {
   InorganicFertiliserComponentTypeRegional,
   InorganicFertiliserType,
   LightDutyFuelType,
+  LimitedRegion,
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
   PastureType,
   PoultryClass,
   PoultryMMSType,
+  PureState,
   RefrigerantType,
   RefrigerationType,
-  Region,
   Season,
   ServiceByAreaType,
   ServiceByHourType,
@@ -98,7 +99,7 @@ export type CommonConstants = NamedConstants & {
   >;
 
   EF_UREA_CO2: MassPerMass<'CO2e', 'Urea'>;
-  GWP_FACTORSC6: MassPerMass<'N2O', 'CO2e'>;
+  GWP_FACTORSC6: MassPerMass<'CO2e', 'N2O'>;
   GWP_FACTORSC13: MassPerMass<'CO2', 'CO2e'>;
   GWP_FACTORSC14: RealNumber;
 
@@ -379,10 +380,17 @@ type WeightFactorsByClass = Record<
 >;
 
 export type BeefPastureConstants = NamedConstants & {
-  DMD: Record<Region, SeasonalFactors>;
+  DMD: Record<LimitedRegion, SeasonalFactors>;
+  CP: Record<LimitedRegion, SeasonalFactors>;
+  REFERENCE_WEIGHT: Record<PureState, Record<BeefClass, Mass<'Liveweight'>>>;
   MCF_PASTURE: RealNumber;
   MCF_LAGOON: Record<ClimateZone, RealNumber>;
   LIVEWEIGHT: Record<ExtendedRegion, WeightFactorsByClass>;
+  EFPRP: Record<'wet' | 'dry', MassPerMass<'N2O', 'N'>>;
+  MILK_INTAKE: Record<
+    LimitedRegion,
+    Record<'calving' | 'afterCalving', MassPerHeadPerDay<'Milk'>>
+  >;
 };
 
 export type AllConstants = {

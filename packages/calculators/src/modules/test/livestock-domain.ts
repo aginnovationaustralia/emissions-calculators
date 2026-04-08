@@ -7,8 +7,10 @@ import {
   ExtendedRegions,
   FeedlotMMSType,
   FeedlotMMSTypes,
-  Region,
-  Regions,
+  LimitedRegion,
+  LimitedRegions,
+  StateOrRegion,
+  StateOrRegions,
   SwineMMSType,
   SwineMMSTypes,
 } from '@/constants/enums';
@@ -43,11 +45,13 @@ export const checkClimateZone = (region: string | undefined): ClimateZone => {
   return region as ClimateZone;
 };
 
-export const checkRegion = (region: string | undefined): Region => {
-  if (!Regions.includes(region as Region)) {
+export const checkLimitedRegion = (
+  region: string | undefined,
+): LimitedRegion => {
+  if (!LimitedRegions.includes(region as LimitedRegion)) {
     throw new Error(`Invalid region: ${region}`);
   }
-  return region as Region;
+  return region as LimitedRegion;
 };
 
 export const checkExtendedRegion = (
@@ -57,4 +61,13 @@ export const checkExtendedRegion = (
     throw new Error(`Invalid extended region: ${region}`);
   }
   return region as ExtendedRegion;
+};
+
+export const checkStateOrRegion = (
+  stateOrRegion: string | undefined,
+): StateOrRegion => {
+  if (!StateOrRegions.includes(stateOrRegion as StateOrRegion)) {
+    throw new Error(`Invalid state or region: ${stateOrRegion}`);
+  }
+  return stateOrRegion as StateOrRegion;
 };

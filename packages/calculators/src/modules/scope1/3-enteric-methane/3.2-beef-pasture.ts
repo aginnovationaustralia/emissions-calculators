@@ -8,9 +8,14 @@ import { BeefSpecificClassInputTransformed } from '@/calculators/Beef/types/beef
 import { BeefInputTransformed } from '@/calculators/Beef/types/input';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { Season } from '@/constants/enums';
+import {
+  BeefClass,
+  LimitedRegion,
+  Season,
+  stateOrRegionToExtendedRegion,
+} from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
-import { br, num } from '@/tools/containers';
+import { br, num, root } from '@/tools/containers';
 import { one, oneMinus } from '@/tools/sentinels';
 import { massPerHeadPerDay, realNumber } from '@/tools/units';
 
@@ -27,7 +32,49 @@ const getPreviousSeason = (seasonName: Season) => {
   return 'autumn';
 };
 
-const getProportionCowsGt2InCalfLC = (
+export const getMilkIntakeMC236 = (
+  calvingClassInput: BeefClassWithCalvesInputTransformed | undefined,
+  seasonName: Season,
+  region: LimitedRegion,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  if (!calvingClassInput) {
+    return root(massPerHeadPerDay('Milk', 0)).named(
+      `MCijkl=236 (${seasonName} no calving class)`,
+    );
+  }
+
+  const { constants } = context;
+  const previousSeasonName = getPreviousSeason(seasonName);
+
+  const currentSeasonCalvingRate =
+    calvingClassInput[seasonName].proportionCowsGt2ThisSeasonInCalf;
+
+  if (currentSeasonCalvingRate.unit.value.gt(0)) {
+    return selectConstant(
+      constants.BEEF_PASTURE,
+      'MILK_INTAKE',
+      region,
+      'calving',
+    ).named(`MCijkl=236 (${seasonName} calving)`);
+  }
+  const previousSeasonCalvingRate =
+    calvingClassInput[previousSeasonName].proportionCowsGt2ThisSeasonInCalf;
+  if (previousSeasonCalvingRate.unit.value.gt(0)) {
+    return selectConstant(
+      constants.BEEF_PASTURE,
+      'MILK_INTAKE',
+      region,
+      'afterCalving',
+    ).named(`MCijkl=236 (${seasonName} after calving)`);
+  }
+
+  return root(massPerHeadPerDay('Milk', 0)).named(
+    `MCijkl=236 (${seasonName} no calving)`,
+  );
+};
+
+export const getProportionCowsGt2InCalfLC = (
   classInput: BeefClassInputTransformed | BeefClassWithCalvesInputTransformed,
   seasonName: Season,
 ) => {
@@ -73,6 +120,22 @@ const getFeedAdjustmentForCowsGt2FA = (
     .named(`FAijkl=5 (${seasonName})`);
 };
 
+export const calculateAdditionalIntakeForMilkProductionMAijkl = (
+  classInput: BeefSpecificClassInputTransformed,
+  className: BeefClass,
+  seasonName: Season,
+) => {
+  /*
+    MAijkl=5 = (LCijkl=5 * FAijkl=5) + (1 - LCijkl=5 ) -- line 143
+  */
+  const LC = getProportionCowsGt2InCalfLC(classInput, seasonName);
+  const FA = getFeedAdjustmentForCowsGt2FA(classInput, seasonName);
+  return br(LC.multiply(FA))
+    .plus(br(oneMinus(LC)))
+    .switchUnit((u) => massPerHeadPerDay('DryMatter', u.value))
+    .named(`MAijkl=5 (${className}, ${seasonName})`);
+};
+
 export const calculateDryMatterIntakeIijkln = (
   input: BeefInputTransformed,
   classInput: BeefSpecificClassInputTransformed,
@@ -81,25 +144,24 @@ export const calculateDryMatterIntakeIijkln = (
 ) => {
   const className = classInput.name;
   const season = classInput[seasonName];
-  const LC = getProportionCowsGt2InCalfLC(classInput, seasonName);
-  const FA = getFeedAdjustmentForCowsGt2FA(classInput, seasonName);
-  /*
-    MAijkl=5 = (LCijkl=5 * FAijkl=5) + (1 - LCijkl=5 ) -- line 143
-  */
-  const MAijkl = br(LC.multiply(FA))
-    .plus(br(oneMinus(LC)))
-    .switchUnit((u) => massPerHeadPerDay('DryMatter', u.value))
-    .named(`MAijkl=5 (${className}, ${seasonName})`);
+
+  const MAijkl = calculateAdditionalIntakeForMilkProductionMAijkl(
+    classInput,
+    className,
+    seasonName,
+  );
 
   const { constants } = context;
   const { region } = input;
+
+  const extendedRegion = stateOrRegionToExtendedRegion(region);
 
   const Wijkln =
     season.method2Liveweight ??
     selectConstant(
       constants.BEEF_PASTURE,
       'LIVEWEIGHT',
-      region,
+      extendedRegion,
       className,
       seasonName,
       'liveweight',
@@ -109,7 +171,7 @@ export const calculateDryMatterIntakeIijkln = (
     selectConstant(
       constants.BEEF_PASTURE,
       'LIVEWEIGHT',
-      region,
+      extendedRegion,
       className,
       seasonName,
       'liveweightGain',

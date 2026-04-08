@@ -658,18 +658,35 @@ export const RefrigerantTypes = [
 ] as const;
 export type RefrigerantType = (typeof RefrigerantTypes)[number];
 
-export const ClimateZones = [
-  'Cool temperate moist',
-  'Cool temperate dry',
-  'Boreal moist',
-  'Boreal dry',
-  'Warm temperate moist',
-  'Warm temperate dry',
+export const WetClimateZones = [
   'Tropical montane',
   'Tropical wet',
   'Tropical moist',
-  'Tropical dry',
+  'Warm temperate moist',
+  'Cool temperate moist',
+  'Boreal moist',
 ] as const;
+export type WetClimateZone = (typeof WetClimateZones)[number];
+export const isWetClimateZone = (
+  climateZone: ClimateZone,
+): climateZone is WetClimateZone => {
+  return WetClimateZones.includes(climateZone as WetClimateZone);
+};
+
+export const DryClimateZones = [
+  'Tropical dry',
+  'Warm temperate dry',
+  'Cool temperate dry',
+  'Boreal dry',
+] as const;
+export type DryClimateZone = (typeof DryClimateZones)[number];
+export const isDryClimateZone = (
+  climateZone: ClimateZone,
+): climateZone is DryClimateZone => {
+  return DryClimateZones.includes(climateZone as DryClimateZone);
+};
+
+export const ClimateZones = [...WetClimateZones, ...DryClimateZones] as const;
 export type ClimateZone = (typeof ClimateZones)[number];
 
 const WARegions = [
@@ -677,7 +694,7 @@ const WARegions = [
   'WA - Pilbara',
   'WA - Kimberley',
 ] as const;
-export const Regions = [
+export const LimitedRegions = [
   'ACT/NSW',
   'NT',
   'QLD',
@@ -686,7 +703,7 @@ export const Regions = [
   'VIC',
   ...WARegions,
 ] as const;
-export type Region = (typeof Regions)[number];
+export type LimitedRegion = (typeof LimitedRegions)[number];
 
 const NTRegions = [
   'NT - Alice Springs',
@@ -694,7 +711,7 @@ const NTRegions = [
   'NT - Northern',
 ] as const;
 type NTRegion = (typeof NTRegions)[number];
-const isNTRegion = (region: ExtendedRegion): region is NTRegion => {
+const isNTRegion = (region: StateOrRegion): region is NTRegion => {
   return NTRegions.includes(region as NTRegion);
 };
 
@@ -705,7 +722,7 @@ const QLDRegions = [
   'QLD - Low',
 ] as const;
 type QLDRegion = (typeof QLDRegions)[number];
-const isQLDRegion = (region: ExtendedRegion): region is QLDRegion => {
+const isQLDRegion = (region: StateOrRegion): region is QLDRegion => {
   return QLDRegions.includes(region as QLDRegion);
 };
 
@@ -720,17 +737,41 @@ export const ExtendedRegions = [
 ] as const;
 export type ExtendedRegion = (typeof ExtendedRegions)[number];
 
-export const extendedRegionToRegion = (
-  extendedRegion: ExtendedRegion,
-): Region => {
-  if (isNTRegion(extendedRegion)) {
-    return 'NT';
-  } else if (isQLDRegion(extendedRegion)) {
-    return 'QLD';
+export const stateOrRegionToExtendedRegion = (
+  stateOrRegion: StateOrRegion,
+): ExtendedRegion => {
+  if (stateOrRegion === 'ACT' || stateOrRegion === 'NSW') {
+    return 'ACT/NSW';
   } else {
-    return extendedRegion;
+    return stateOrRegion;
   }
 };
+
+export const stateOrRegionToLimitedRegion = (
+  stateOrRegion: StateOrRegion,
+): LimitedRegion => {
+  if (isNTRegion(stateOrRegion)) {
+    return 'NT';
+  } else if (isQLDRegion(stateOrRegion)) {
+    return 'QLD';
+  } else if (stateOrRegion === 'ACT' || stateOrRegion === 'NSW') {
+    return 'ACT/NSW';
+  } else {
+    return stateOrRegion;
+  }
+};
+
+export const StateOrRegions = [
+  'ACT',
+  'NSW',
+  'SA',
+  'TAS',
+  'VIC',
+  ...WARegions,
+  ...NTRegions,
+  ...QLDRegions,
+] as const;
+export type StateOrRegion = (typeof StateOrRegions)[number];
 
 export const Seasons = ['spring', 'summer', 'autumn', 'winter'] as const;
 export type Season = (typeof Seasons)[number];
@@ -752,3 +793,32 @@ export type BeefClass = (typeof BeefClasses)[number];
 
 export const BeefClassesWithCalves = ['cows2To3Years', 'cowsGt3Years'] as const;
 export type BeefClassWithCalves = (typeof BeefClassesWithCalves)[number];
+
+export const PureStates = [
+  'ACT',
+  'NSW',
+  'VIC',
+  'QLD',
+  'SA',
+  'TAS',
+  'NT',
+  'WA',
+] as const;
+export type PureState = (typeof PureStates)[number];
+export const isPureState = (state: string): state is PureState => {
+  return PureStates.includes(state as PureState);
+};
+
+export const stateOrRegionToPureState = (
+  stateOrRegion: StateOrRegion,
+): PureState => {
+  if (isPureState(stateOrRegion)) {
+    return stateOrRegion;
+  } else if (isNTRegion(stateOrRegion)) {
+    return 'NT';
+  } else if (isQLDRegion(stateOrRegion)) {
+    return 'QLD';
+  } else {
+    return 'WA';
+  }
+};
