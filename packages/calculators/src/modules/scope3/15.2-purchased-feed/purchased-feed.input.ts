@@ -1,22 +1,36 @@
 import { z } from 'zod';
 import {
-  PurchasedFeedLivestockInputSchema,
-  PurchasedFeedLivestockInputTransformed,
-} from './livestock-purchased-feed';
+  PurchasedFeedLivestockRegionlessInputSchema,
+  PurchasedFeedLivestockRegionlessInputTransformed,
+} from './livestock-regionless-purchased-feed';
 import {
   PurchasedFeedAquacultureInputTransformed,
   PurchasedFeedAquacultureInputSchema,
-} from './aquaculture-purchased-feed';
+} from './aquaculture-purchased-feed.input';
 import {
   PurchasedFeedAquacultureType,
   PurchasedFeedAquacultureTypes,
-  PurchasedFeedLivestockType,
-  PurchasedFeedLivestockTypes,
 } from '@/constants/enums';
 import {
   PurchasedFeedMethod2InputSchema,
   PurchasedFeedMethod2InputTransformed,
 } from './method2-purchased-feed';
+import {
+  PurchasedFeedLivestockRegionalInputSchema,
+  PurchasedFeedLivestockRegionalInputTransformed,
+} from './livestock-regional-purchased-feed';
+
+export const PurchasedFeedLivestockInputSchema = z.discriminatedUnion('type', [
+  PurchasedFeedLivestockRegionlessInputSchema,
+  PurchasedFeedLivestockRegionalInputSchema,
+]);
+
+export type PurchasedFeedLivestockInput = z.input<
+  typeof PurchasedFeedLivestockInputSchema
+>;
+export type PurchasedFeedLivestockInputransformed = z.output<
+  typeof PurchasedFeedLivestockInputSchema
+>;
 
 export const PurchasedFeedMethod1InputSchema = z.discriminatedUnion('type', [
   PurchasedFeedLivestockInputSchema,
@@ -40,6 +54,26 @@ export type PurchasedFeedInputTransformed = z.output<
   typeof PurchasedFeedInputSchema
 >;
 
+export const purchasedFeedIsRegionless = (
+  feed: PurchasedFeedInputTransformed,
+): feed is
+  | PurchasedFeedAquacultureInputTransformed
+  | PurchasedFeedLivestockRegionlessInputTransformed => {
+  return (
+    (feed as PurchasedFeedLivestockRegionalInputTransformed).region ===
+    undefined
+  );
+};
+
+export const purchasedFeedIsRegional = (
+  feed: PurchasedFeedInputTransformed,
+): feed is PurchasedFeedLivestockRegionalInputTransformed => {
+  return (
+    (feed as PurchasedFeedLivestockRegionalInputTransformed).region !==
+    undefined
+  );
+};
+
 export const purchasedFeedIsAquaculture = (
   feed: PurchasedFeedMethod1InputTransformed,
 ): feed is PurchasedFeedAquacultureInputTransformed => {
@@ -50,10 +84,8 @@ export const purchasedFeedIsAquaculture = (
 
 export const purchasedFeedIsLivestock = (
   feed: PurchasedFeedMethod1InputTransformed,
-): feed is PurchasedFeedLivestockInputTransformed => {
-  return PurchasedFeedLivestockTypes.includes(
-    feed.type.unit as PurchasedFeedLivestockType,
-  );
+): feed is PurchasedFeedLivestockInputransformed => {
+  return !purchasedFeedIsAquaculture(feed);
 };
 
 export const purchasedFeedIsMethod1 = (
