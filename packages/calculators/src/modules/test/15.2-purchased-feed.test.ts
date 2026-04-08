@@ -4,7 +4,6 @@ import {
   PurchasedFeedsInputSchema,
   PurchasedFeedsInputTransformed,
 } from '../scope3/15.2-purchased-feed/purchased-feeds.input';
-import { PurchasedFeedInput } from '../scope3/15.2-purchased-feed/purchased-feed.input';
 import {
   checkPurchasedFeedRegion,
   checkPurchasedFeedTypeInRegion,
@@ -14,7 +13,6 @@ import {
   createSheetExtractor,
 } from './sheet-comparison';
 import { calculatePurchasedFeed } from '../scope3/15.2-purchased-feed';
-import { PurchasedFeedLivestockRegionlessType } from '@/constants/enums';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -27,32 +25,40 @@ const getCalculatorInput = (
   if (method === '1' && cell('A') === undefined) {
     return undefined;
   }
-  if (method === '2' && cell('B') === undefined) {
+  if (method === '2' && cell('C') === undefined) {
     return undefined;
   }
 
-  const amount = Number(cell('B'));
+  const amount = Number(cell('C'));
+  const region = checkPurchasedFeedRegion(cell('B')?.trim() || undefined);
 
-  const purchasedFeed: PurchasedFeedInput =
-    method === '1'
+  if (method === '2')
+    return PurchasedFeedsInputSchema.parse({
+      purchasedFeed: [
+        {
+          amount,
+          customEmissionsFactor: Number(cell('D')),
+        },
+      ],
+    });
+
+  const purchasedFeed =
+    region === undefined
       ? {
-          type: checkPurchasedFeedTypeInRegion(
-            cell('A'),
-          ) as PurchasedFeedLivestockRegionlessType,
+          type: checkPurchasedFeedTypeInRegion(cell('A')),
           amount,
         }
       : {
           amount,
-          customEmissionsFactor: Number(cell('C')),
+          type: checkPurchasedFeedTypeInRegion(cell('A'), region),
+          region,
         };
-
-  // eslint-disable-next-line no-console
-  console.log(cell('D'));
-
-  return PurchasedFeedsInputSchema.parse({ purchasedFeed: [purchasedFeed] });
+  return PurchasedFeedsInputSchema.parse({
+    purchasedFeed: [purchasedFeed],
+  });
 };
 
-const extractInputsAndOutputs = createSheetExtractor(getCalculatorInput, 'D');
+const extractInputsAndOutputs = createSheetExtractor(getCalculatorInput, 'E');
 
 describe('15.2.1 Purchased Feed', () => {
   it('Method 1 matches spreadsheet results', async () => {
@@ -71,7 +77,7 @@ describe('15.2.1 Purchased Feed', () => {
       '15.2.1',
     );
 
-    const inputsAndOutputs = extractInputsAndOutputs(sheet, 24, '2');
+    const inputsAndOutputs = extractInputsAndOutputs(sheet, 98, '2');
 
     compareInputsAndOutputs(inputsAndOutputs, calculatePurchasedFeed);
   });
