@@ -177,6 +177,12 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<Mass<S>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Energy>;
+  // MassPerEnergy<S1> * EnergyPerVolume<S2> = MassPerVolume<S1, S2> TODO: Ask Eddie if this is possible
+  // multiply<UL extends MassPerEnergy<Substance>, S2 extends Substance>(
+  //   this: BaseContainer<UL>,
+  //   right: Container<EnergyPerVolume<S2>>,
+  //   baseOrigin?: Metadata,
+  // ): MassPerVolume<ExtractMassPerEnergySubstance<UL>, S2>;
   // MassPerArea * Area → Mass<substance>
   multiply<UL extends MassPerArea<Substance>>(
     this: BaseContainer<UL>,
@@ -193,9 +199,9 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   multiply<
     S1 extends Substance,
     S2 extends Substance,
-    UL extends MassPerVolume<S1, S2>,
+    // UL extends MassPerVolume<S1, S2>, // TODO: CHECK THAT THIS WORKED
   >(
-    this: BaseContainer<UL>,
+    this: BaseContainer<MassPerVolume<S1, S2>>,
     right: Container<Volume<S2>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
@@ -287,6 +293,8 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerHeadPerDay(rightUnit.mass);
       } else if (isMassPerEnergy(leftUnit) && isEnergyPerMass(rightUnit)) {
         unit = realNumber();
+        // } else if (isMassPerEnergy(leftUnit) && isEnergyPerVolume(rightUnit)) {
+        //   unit = massPerVolume(leftUnit.substance, rightUnit.substance); // TODO: Ask Eddie for help
       } else if (isRealNumber(leftUnit)) {
         unit = { ...rightUnit };
       } else {

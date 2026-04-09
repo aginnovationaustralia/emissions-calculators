@@ -24,7 +24,8 @@ export type Substance =
   | 'Milk'
   | 'Milk Solids'
   | 'Liveweight'
-  | 'Volatile Solids';
+  | 'Volatile Solids'
+  | 'COD';
 
 export type NumberUnitBase = { value: Decimal };
 

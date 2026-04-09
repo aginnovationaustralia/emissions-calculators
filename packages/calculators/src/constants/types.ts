@@ -54,6 +54,7 @@ import {
   State,
   SwineMMSType,
   VesselFuelType,
+  WastewaterFacilityType,
 } from './enums';
 
 export type ReplaceNumberUnits<T> = T extends NumberUnitBase
@@ -385,6 +386,24 @@ export type BeefPastureConstants = NamedConstants & {
   LIVEWEIGHT: Record<ExtendedRegion, WeightFactorsByClass>;
 };
 
+export type AquacultureConstants = NamedConstants & {
+  WASTEWATER_TREATMENT: {
+    WASTEWATER_METHANE_CORRECTION_FACTORS: Record<
+      WastewaterFacilityType,
+      RealNumber
+    >;
+    SLUDGE_METHANE_CORRECTION_FACTORS: Record<
+      WastewaterFacilityType,
+      RealNumber
+    >;
+    WASTEWATER_EF: MassPerMass<'CH4', 'COD'>;
+    SLUDGE_EF: MassPerMass<'CH4', 'COD'>;
+    SLUDGE_BIOGAS_ENERGY_CONTENT: EnergyPerVolume<'CH4'>;
+    SLUDGE_BIOGAS_CH4_EF: MassPerEnergy<'CH4'>;
+    SLUDGE_BIOGAS_N2O_EF: MassPerEnergy<'N2O'>;
+  };
+};
+
 export type AllConstants = {
   COMMON: CommonConstants;
   CROP: CropConstants;
@@ -393,6 +412,7 @@ export type AllConstants = {
   DAIRY: DairyConstants;
   POULTRY: PoultryConstants;
   BEEF_PASTURE: BeefPastureConstants;
+  AQUACULTURE: AquacultureConstants;
 };
 
 export type HasCommonConstants = {

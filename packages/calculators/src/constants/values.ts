@@ -17,6 +17,7 @@ import {
 } from '@/tools/units';
 import { State } from './enums';
 import {
+  AquacultureConstants,
   BeefPastureConstants,
   CommonConstants,
   CropConstants,
@@ -4538,5 +4539,52 @@ export const beefPastureConstants: BeefPastureConstants = {
         },
       },
     },
+  },
+};
+
+export const aquacultureConstants: AquacultureConstants = {
+  name: 'AQUACULTURE',
+  WASTEWATER_TREATMENT: {
+    // A.4.1.3
+    WASTEWATER_METHANE_CORRECTION_FACTORS: {
+      'Managed aerobic treatment': realNumber(0),
+      'Unmanaged aerobic treatment': realNumber(0.3),
+      'Anaerobic digestor/reactor': realNumber(0.8),
+      'Shallow anaerobic lagoon': realNumber(0.2),
+      'Deep anaerobic lagoon': realNumber(0.8),
+    },
+    // A.4.1.4
+    SLUDGE_METHANE_CORRECTION_FACTORS: {
+      'Managed aerobic treatment': realNumber(0),
+      'Unmanaged aerobic treatment': realNumber(0.3),
+      'Anaerobic digestor/reactor': realNumber(0.8),
+      'Shallow anaerobic lagoon': realNumber(0.2),
+      'Deep anaerobic lagoon': realNumber(0.8),
+    },
+    // Chapter 11.2.3, line 217
+    WASTEWATER_EF: massPerMass('CH4', 'COD', 0.25),
+    // Chapter 11.2.3, line 218
+    SLUDGE_EF: massPerMass('CH4', 'COD', 0.25),
+    /**
+     * Chapter 11.2.3 line 221
+     * This is listed as GJ/m^3, dividing by 10^9 converts it to J/L -
+     * dividing by 10^6 to convert to J/m^3, then by 10^3 to convert to J/L
+     * (in order to fit with the expected unit for `energyPerVolume`)
+     */
+    SLUDGE_BIOGAS_ENERGY_CONTENT: energyPerVolume('CH4', 0.0377 / 10 ** 9),
+    /**
+     * Chapter 11.2.3 line 222
+     * This is listed in kg CH4/GJ, multiplied here by 10^6 to convert to kg CH4/J,
+     * to be compatible with massPerEnergy
+     */
+    SLUDGE_BIOGAS_CH4_EF: massPerEnergy('CH4', 0.2289 * 10 ** 6),
+    /**
+     * Chapter 11.2.3 line 223
+     * This is listed in kg N2O/GJ, multiplied here by 10^6 to convert to kg CH4/J,
+     * to be compatible with massPerEnergy
+     * NOTE: The value is originally given as 1.132 * 10^-4. It has been expanded here
+     * before multiplying it again to convert units.
+     */
+    SLUDGE_BIOGAS_N2O_EF: massPerEnergy('N2O', 0.0001132 * 10 ** 6),
   },
 };
