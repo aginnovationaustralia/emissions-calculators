@@ -1,9 +1,10 @@
 import { AllConstants } from '@/constants/types';
 import { WastewaterTreatmentInputTransformed } from './wastewater-treatment.input';
 import { ExecutionContext } from '@/calculators/executionContext';
-import { num, value } from '@/tools/containers';
+import { value } from '@/tools/containers';
 import { selectConstant } from '@/tools/constants';
 import { massPerVolume } from '@/tools/units';
+import { oneMinus } from '@/tools/sentinels';
 
 export const calculateScope1WastewaterCH4 = (
   wastewater: WastewaterTreatmentInputTransformed,
@@ -12,62 +13,66 @@ export const calculateScope1WastewaterCH4 = (
   const { constants } = context;
 
   const facilityWastewaterMethaneCorrectionFactor = selectConstant(
-    constants.AQUACULTURE,
+    constants.COMMON,
     'WASTEWATER_TREATMENT',
     'WASTEWATER_METHANE_CORRECTION_FACTORS',
     wastewater.facilityType,
   );
   const wastewaterEF = selectConstant(
-    constants.AQUACULTURE,
+    constants.COMMON,
     'WASTEWATER_TREATMENT',
     'WASTEWATER_EF',
   );
 
   /**
-   * 𝐶𝑂𝐷𝑖𝑛 × (1 − 𝐹𝑠𝑙𝑢𝑑𝑔𝑒) − 𝐶𝑂𝐷𝑜𝑢𝑡
+   * CODin * (1 - Fsludge) - CODout
    */
-  const codTreatedAtFacility = num(1)
-    .minus(wastewater.fractionSludge)
+  const codTreatedAtFacility = oneMinus(wastewater.fractionSludge)
     .named('1 - F_sludge')
     .multiply(wastewater.inletCOD)
     .minus(wastewater.outletCOD);
 
   /**
-   * {𝑊𝑡 × [𝐶𝑂𝐷𝑖𝑛 × (1 − 𝐹𝑠𝑙𝑢𝑑𝑔𝑒 ) − 𝐶𝑂𝐷𝑜𝑢𝑡 ] × 𝐶𝐹𝑤𝑤,𝑡 × 𝐸𝐹𝑤𝑤}
+   * Wt * [CODin * (1 - Fsludge ) - CODout ] * CFww,t * EFww
    */
   const methaneFromWastewaterTreatedAtFacility = codTreatedAtFacility
     .multiply(wastewater.wastewaterVolume)
     .multiply(facilityWastewaterMethaneCorrectionFactor)
-    .multiply(wastewaterEF);
+    .multiply(wastewaterEF)
+    .named('methaneFromWastewaterTreatedAtFacility');
 
   const facilitySludgeMethaneCorrectionFactor = selectConstant(
-    constants.AQUACULTURE,
+    constants.COMMON,
     'WASTEWATER_TREATMENT',
     'SLUDGE_METHANE_CORRECTION_FACTORS',
     wastewater.facilityType,
   );
   const sludgeEF = selectConstant(
-    constants.AQUACULTURE,
+    constants.COMMON,
     'WASTEWATER_TREATMENT',
     'SLUDGE_EF',
   );
 
   /**
-   * 𝐶𝑂𝐷𝑖𝑛 × (𝐹𝑠𝑙𝑢𝑑𝑔𝑒 − 𝐹𝑟𝑒𝑚𝑜𝑣𝑒𝑑)
+   * CODin * (Fsludge - Fremoved)
    */
   const codSludge = wastewater.inletCOD.multiply(
     wastewater.fractionSludge.minus(wastewater.fractionRemoved),
   );
 
+  /**
+   * Wt * [CODin * (Fsludge - Fremoved)] * CFsludge,t * EFsludge
+   */
   const methaneFromSludgeTreatedAtFacility = codSludge
     .multiply(wastewater.wastewaterVolume)
     .multiply(facilitySludgeMethaneCorrectionFactor)
-    .multiply(sludgeEF);
+    .multiply(sludgeEF)
+    .named('methaneFromSludgeTreatedAtFacility');
 
   /**
    * This value comes from the [National Greenhouse and Energy Reporting (Measurement) Determination 2008](https://www.legislation.gov.au/F2008L02309/latest/text),
    * Chapter 5, Section 5.4:
-   * > *"γ is the factor **6.784 × 10^‑4** × GWPmethane converting cubic metres of methane
+   * > *"γ is the factor **6.784 * 10^‑4** * GWPmethane converting cubic metres of methane
    * > at standard conditions to CO2‑e tonnes."*
    *
    * Omitting the 'GWPmethane' factor, the unit of this value is t CH4/m^3, which is equivalent to
@@ -77,40 +82,55 @@ export const calculateScope1WastewaterCH4 = (
     massPerVolume('CH4', 'CH4', 6.784 * 10 ** -4),
   );
 
-  const totalMethaneVolume = wastewater.methaneCaptured
-    .plus(wastewater.methaneFlared)
-    .plus(wastewater.methaneOut);
-
   /**
-   * 6.784 × 10^−4 × [𝑄𝑐𝑎𝑝 + 𝑄𝑓𝑙𝑎𝑟𝑒𝑑 + 𝑄𝑜𝑢𝑡]
+   * 6.784 * 10^-4 * [Qcap + Qflared + Qout]
    */
-  const totalMethaneMass =
-    methaneVolumeConversionFactor.multiply(totalMethaneVolume);
+  const totalMethaneMass = methaneVolumeConversionFactor
+    .multiply(
+      wastewater.methaneCaptured
+        .plus(wastewater.methaneFlared)
+        .plus(wastewater.methaneOut),
+    )
+    .named('Total methane mass');
 
   const sludgeBiogasEnergyContentFlared = selectConstant(
-    constants.AQUACULTURE,
+    constants.COMMON,
     'WASTEWATER_TREATMENT',
     'SLUDGE_BIOGAS_ENERGY_CONTENT',
   );
 
   const sludgeBiogasEFCH4 = selectConstant(
-    constants.AQUACULTURE,
+    constants.COMMON,
     'WASTEWATER_TREATMENT',
     'SLUDGE_BIOGAS_CH4_EF',
   );
 
   /**
-   * 𝑄𝑓𝑙𝑎𝑟𝑒𝑑 × [𝐸𝐶𝑓𝑙𝑎𝑟𝑒𝑑 × 𝐸𝐹𝑓𝑙𝑎𝑟𝑒𝑑,𝐶𝐻4]
+   * Qflared * [ECflared * EFflared,CH4]
    */
   const methaneFromFlaredSludge = sludgeBiogasEFCH4.multiply(
     sludgeBiogasEnergyContentFlared.multiply(wastewater.methaneFlared),
   );
 
+  // eslint-disable-next-line no-console
+  console.dir({
+    methaneFromWastewaterTreatedAtFacility:
+      methaneFromWastewaterTreatedAtFacility.unit.value.toString(),
+    methaneFromSludgeTreatedAtFacility:
+      methaneFromSludgeTreatedAtFacility.unit.value.toString(),
+    totalMethaneMass: totalMethaneMass.unit.value.toString(),
+    methaneVolumeConversionFactor:
+      methaneVolumeConversionFactor.unit.value.toString(),
+    methaneFromFlaredSludge: methaneFromFlaredSludge.unit.value.toString(),
+  });
+
   /**
-   * {𝑊𝑡 × [𝐶𝑂𝐷𝑖𝑛 × (1 − 𝐹𝑠𝑙𝑢𝑑𝑔𝑒 ) − 𝐶𝑂𝐷𝑜𝑢𝑡] × 𝐶𝐹𝑤𝑤,𝑡 × 𝐸𝐹𝑤𝑤} +
-   * {𝑊𝑡 × [𝐶𝑂𝐷𝑖𝑛 × (𝐹𝑠𝑙𝑢𝑑𝑔𝑒− 𝐹𝑟𝑒𝑚𝑜𝑣𝑒𝑑)] × 𝐶𝐹𝑠𝑙𝑢𝑑𝑔𝑒,𝑡 × 𝐸𝐹𝑠𝑙𝑢𝑑𝑔𝑒} -
-   * {6.784 × 10−4 × [𝑄𝑐𝑎𝑝 + 𝑄𝑓𝑙𝑎𝑟𝑒𝑑 + 𝑄𝑜𝑢𝑡]} + {𝑄𝑓𝑙𝑎𝑟𝑒𝑑 × [𝐸𝐶 𝑓𝑙𝑎𝑟𝑒𝑑 × 𝐸𝐹 𝑓𝑙𝑎𝑟𝑒𝑑,𝐶𝐻4]}
+   * (Wt * [CODin * (1 - Fsludge ) - CODout] * CFww,t * EFww) +
+   * (Wt * [CODin * (Fsludge- Fremoved)] * CFsludge,t * EFsludge) -
+   * (6.784 * 10^-4 * [Qcap + Qflared + Qout]) +
+   * (Qflared * [EC flared * EF flared,CH4])
    */
+
   const wastewaterCH4 = methaneFromWastewaterTreatedAtFacility
     .plus(methaneFromSludgeTreatedAtFacility)
     .minus(totalMethaneMass)
@@ -123,20 +143,20 @@ export const calculateScope1WastewaterN2O = (
   context: ExecutionContext<AllConstants>,
 ) => {
   /**
-   * 11.1.3 Method 1 – Nitrous oxide emissions from onsite Wastewater Management
-   * 𝑄𝑓𝑙𝑎𝑟𝑒𝑑/1000 × [𝐸𝐶𝑓𝑙𝑎𝑟𝑒𝑑 × 𝐸𝐹𝑓𝑙𝑎𝑟𝑒𝑑,𝑁2𝑂]
+   * 11.1.3 Method 1 - Nitrous oxide emissions from onsite Wastewater Management
+   * Qflared/1000 * (ECflared * EFflared,N2O)
    * NOTE: The division by 1000 is accounted for by the containers.
    */
   const { constants } = context;
 
   const sludgeBiogasEnergyContentFlared = selectConstant(
-    constants.AQUACULTURE,
+    constants.COMMON,
     'WASTEWATER_TREATMENT',
     'SLUDGE_BIOGAS_ENERGY_CONTENT',
   );
 
   const sludgeBiogasEFN2O = selectConstant(
-    constants.AQUACULTURE,
+    constants.COMMON,
     'WASTEWATER_TREATMENT',
     'SLUDGE_BIOGAS_N2O_EF',
   );

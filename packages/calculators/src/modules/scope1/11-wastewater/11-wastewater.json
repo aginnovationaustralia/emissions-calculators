@@ -1,0 +1,164 @@
+{
+  "records": [
+    {
+      "symbol": "Wt",
+      "name": "quantity of wastewater treated at facility type t",
+      "units": "m3",
+      "type": "input",
+      "expression": "",
+      "line": "164",
+      "notes": ""
+    },
+    {
+      "symbol": "CODin",
+      "name": "average inlet COD concentration of wastewater",
+      "units": "kg COD/m3",
+      "type": "input",
+      "expression": "",
+      "line": "165",
+      "notes": ""
+    },
+    {
+      "symbol": "Fsludge",
+      "name": "fraction of COD removed from wastewater as sludge",
+      "units": "",
+      "type": "input",
+      "expression": "",
+      "line": "166",
+      "notes": ""
+    },
+    {
+      "symbol": "CODout",
+      "name": "average outlet COD concentration of wastewater",
+      "units": "kg COD/m3",
+      "type": "input",
+      "expression": "",
+      "line": "168",
+      "notes": ""
+    },
+    {
+      "symbol": "CFww,t",
+      "name": "methane correction factor for facility type t used to treat wastewater",
+      "units": "",
+      "type": "constant",
+      "expression": "",
+      "line": "169",
+      "notes": "",
+      "values": "0,0.3,0.8,0.2,0.8"
+    },
+    {
+      "symbol": "EFww",
+      "name": "methane emission factor for wastewater",
+      "units": "kg CH4/kg COD",
+      "type": "constant",
+      "expression": "",
+      "line": "171",
+      "notes": "",
+      "values": "0.25"
+    },
+    {
+      "symbol": "Fremoved",
+      "name": "fraction of COD removed from the wastewater treatment facility and transferred to landfill, biochar production, or other site",
+      "units": "",
+      "type": "input",
+      "expression": "",
+      "line": "172",
+      "notes": ""
+    },
+    {
+      "symbol": "CFsludge,t",
+      "name": "methane correction factor for facility type t used to treat sludge",
+      "units": "",
+      "type": "constant",
+      "expression": "",
+      "line": "174",
+      "notes": "",
+      "values": "0,0.3,0.8,0.2,0.8"
+    },
+    {
+      "symbol": "EFsludge",
+      "name": "methane emission factor for sludge",
+      "units": "kg CH4/kg COD",
+      "type": "constant",
+      "expression": "",
+      "line": "176",
+      "notes": "",
+      "values": "0.25"
+    },
+    {
+      "symbol": "Qcap",
+      "name": "methane in sludge biogas captured",
+      "units": "m3 CH4",
+      "type": "input",
+      "expression": "",
+      "line": "177",
+      "notes": ""
+    },
+    {
+      "symbol": "Qflared",
+      "name": "methane in sludge biogas flared",
+      "units": "m3 CH4",
+      "type": "input",
+      "expression": "",
+      "line": "179",
+      "notes": ""
+    },
+    {
+      "symbol": "Qout",
+      "name": "methane in sludge biogas transferred",
+      "units": "m3 CH4",
+      "type": "input",
+      "expression": "",
+      "line": "181",
+      "notes": ""
+    },
+    {
+      "symbol": "ECflared",
+      "name": "energy content factor of methane in sludge biogas flared",
+      "units": "GJ/m3",
+      "type": "constant",
+      "expression": "",
+      "line": "183",
+      "notes": "",
+      "values": "0.0377"
+    },
+    {
+      "symbol": "EFflared,CH4",
+      "name": "methane emission factor for sludge biogas flared",
+      "units": "kg CH4/GJ",
+      "type": "constant",
+      "expression": "",
+      "line": "184",
+      "notes": "",
+      "values": "0.2289"
+    },
+    {
+      "symbol": "ECH4",
+      "name": "Scope 1 CH4",
+      "units": "t CH4",
+      "type": "expression",
+      "expression": "((Wt * (CODin * (1 - Fsludge ) - CODout) * CFww,t * EFww) + (Wt * (CODin * (Fsludge - Fremoved)) * CFsludge,t * EFsludge) - (6.784 * (10 ** -4) * (Qcap + Qflared + Qout)) +(Qflared * (ECflared * EFflared,CH4))) / 1000",
+      "line": "161",
+      "notes": ""
+    },
+    {
+      "symbol": "EFflared,N2O",
+      "name": "nitrous oxide emission factor for sludge biogas flared",
+      "units": "kg N2O/GJ",
+      "type": "constant",
+      "expression": "",
+      "line": "198",
+      "notes": "",
+      "values": "0.0001132"
+    },
+    {
+      "symbol": "EN2O",
+      "name": "Scope 1 N2O",
+      "units": "t N2O",
+      "type": "expression",
+      "expression": "(Qflared / 1000) * (ECflared * EFflared,N2O)",
+      "line": "197",
+      "notes": ""
+    }
+  ]
+}
