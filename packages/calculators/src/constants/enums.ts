@@ -51,6 +51,36 @@ export const ExtendedCropProductionSystems = [
 export type ExtendedCropProductionSystem =
   (typeof ExtendedCropProductionSystems)[number];
 
+export const GrazingProductionSystems = [
+  'Non-irrigated pasture',
+  'Irrigated pasture',
+  'Irrigated crop',
+  'Non-irrigated pasture',
+  'Non-irrigated crop',
+] as const;
+export type GrazingProductionSystem = (typeof GrazingProductionSystems)[number];
+export const GrazingProductionSystemsWithRainfall = [
+  'Non-irrigated pasture',
+  'Irrigated pasture',
+  'Irrigated crop',
+  'Non-irrigated pasture',
+  'Non-irrigated crop (low rainfall)',
+  'Non-irrigated crop (high rainfall)',
+] as const;
+export type GrazingProductionSystemsWithRainfall =
+  (typeof GrazingProductionSystemsWithRainfall)[number];
+export const addRainfallToGrazingProductionSystem = (
+  system: GrazingProductionSystem,
+  highRainfallZone: boolean,
+): GrazingProductionSystemsWithRainfall => {
+  if (system === 'Non-irrigated crop') {
+    return highRainfallZone
+      ? 'Non-irrigated crop (high rainfall)'
+      : 'Non-irrigated crop (low rainfall)';
+  }
+  return system;
+};
+
 // Appendix A 2.2.6
 export const InorganicFertiliserTypes = [
   'Monoammonium Phosphate (MAP)',

@@ -4740,4 +4740,58 @@ export const beefPastureConstants: BeefPastureConstants = {
       afterCalving: massPerHeadPerDay('Milk', 3),
     },
   },
+
+  EF_ATMOSPHERIC_DEPOSITION: {
+    'Non-irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0018),
+    'Irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0059),
+    'Irrigated crop': massPerMass('N2O', 'Volatilised N', 0.007),
+    'Non-irrigated crop (low rainfall)': massPerMass(
+      'N2O',
+      'Volatilised N',
+      0.0029,
+    ),
+    'Non-irrigated crop (high rainfall)': massPerMass(
+      'N2O',
+      'Volatilised N',
+      0.008,
+    ),
+  },
+  /*
+  ACT	0.87
+NSW	0.54
+NT average	0.51
+Alice Springs	0.03
+Barkly	0.07
+Northern	0.92
+QLD average	0.22
+High	0.18
+Moderate/High	0.64
+Moderate/Low	0.07
+Low	0.18
+SA	0.22
+TAS	0.71
+VIC	0.56
+average	0.51
+South West	0.89
+Pilbara	0.28
+Kimberley	0.3
+*/
+
+  FRAC_WET_SOIL: {
+    ACT: realNumber(0.87),
+    NSW: realNumber(0.54),
+    'NT - Alice Springs': realNumber(0.03),
+    'NT - Barkly': realNumber(0.07),
+    'NT - Northern': realNumber(0.92),
+    'QLD - High': realNumber(0.18),
+    'QLD - Moderate/High': realNumber(0.64),
+    'QLD - Moderate/Low': realNumber(0.07),
+    'QLD - Low': realNumber(0.18),
+    SA: realNumber(0.22),
+    TAS: realNumber(0.71),
+    VIC: realNumber(0.56),
+    'WA - South West': realNumber(0.89),
+    'WA - Pilbara': realNumber(0.28),
+    'WA - Kimberley': realNumber(0.3),
+  },
 };

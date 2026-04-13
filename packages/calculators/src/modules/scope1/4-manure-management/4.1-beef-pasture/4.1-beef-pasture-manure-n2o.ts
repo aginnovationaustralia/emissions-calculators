@@ -8,6 +8,7 @@ import { BeefInputTransformed } from '@/calculators/Beef/types/input';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import {
+  addRainfallToGrazingProductionSystem,
   BeefClasses,
   isWetClimateZone,
   Season,
@@ -22,9 +23,7 @@ import {
   e,
   oneMinus,
   onePlus,
-  tenToPowMinus3,
   tenToPowMinus4,
-  zeroCO2e,
 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
@@ -45,6 +44,7 @@ import {
 
 const calculateFaecalNitrogenExcretedFijkln = (
   input: BeefInputTransformed,
+  herd: BeefHerdInputTransformed,
   classInput: BeefSpecificClassInputTransformed,
   calvingClassInput: BeefClassWithCalvesInputTransformed | undefined,
   seasonName: Season,
@@ -61,18 +61,22 @@ const calculateFaecalNitrogenExcretedFijkln = (
     seasonName,
     context,
   );
-  const CPijkln = selectConstant(
-    constants.BEEF_PASTURE,
-    'CP',
-    limitedRegion,
-    seasonName,
-  ).named(`CPijkln ${seasonName}`);
-  const DMDijk = selectConstant(
-    constants.BEEF_PASTURE,
-    'DMD',
-    limitedRegion,
-    seasonName,
-  ).named(`DMDijk ${seasonName}`);
+  const CPijkln =
+    herd.method2CrudeProteinContent?.[seasonName] ??
+    selectConstant(
+      constants.BEEF_PASTURE,
+      'CP',
+      limitedRegion,
+      seasonName,
+    ).named(`CPijkln ${seasonName}`);
+  const DMDijk =
+    herd.method2Dmd?.[seasonName] ??
+    selectConstant(
+      constants.BEEF_PASTURE,
+      'DMD',
+      limitedRegion,
+      seasonName,
+    ).named(`DMDijk ${seasonName}`);
   const MEijkl = num(0.1604)
     .multiply(DMDijk)
     .multiply(num(100))
@@ -173,6 +177,7 @@ const calculateIntakeRelativeToMaintenanceLj = (
 
 const calculateUrinaryNitrogenExcretedUijkln = (
   input: BeefInputTransformed,
+  herd: BeefHerdInputTransformed,
   classInput: BeefSpecificClassInputTransformed,
   calvingClassInput: BeefClassWithCalvesInputTransformed | undefined,
   seasonName: Season,
@@ -212,12 +217,14 @@ const calculateUrinaryNitrogenExcretedUijkln = (
     seasonName,
     context,
   );
-  const CPijkl = selectConstant(
-    constants.BEEF_PASTURE,
-    'CP',
-    limitedRegion,
-    seasonName,
-  ).named(`CPijkl ${seasonName}`);
+  const CPijkl =
+    herd.method2CrudeProteinContent?.[seasonName] ??
+    selectConstant(
+      constants.BEEF_PASTURE,
+      'CP',
+      limitedRegion,
+      seasonName,
+    ).named(`CPijkl ${seasonName}`);
   const MCijkl = getMilkIntakeMC236(
     calvingClassInput,
     seasonName,
@@ -254,6 +261,7 @@ const calculateUrinaryNitrogenExcretedUijkln = (
   ).named(`NRijkln (${className}, ${seasonName})`);
   const Fijkln = calculateFaecalNitrogenExcretedFijkln(
     input,
+    herd,
     classInput,
     calvingClassInput,
     seasonName,
@@ -303,6 +311,7 @@ const calculateExcretedNitrogenForClass = (
 
     const AFi = calculateFaecalNitrogenExcretedFijkln(
       input,
+      herd,
       classInput,
       calvingClassInput,
       seasonName,
@@ -310,6 +319,7 @@ const calculateExcretedNitrogenForClass = (
     );
     const AUi = calculateUrinaryNitrogenExcretedUijkln(
       input,
+      herd,
       classInput,
       calvingClassInput,
       seasonName,
@@ -379,46 +389,94 @@ const calculateManureManagementN2ODirectForHerd = (
     `EFPRP ${wetOrDry}`,
   );
 
-  const GWPN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC6').named(
-    'GWPN2O',
-  );
+  // const GWPN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC6').named(
+  //   'GWPN2O',
+  // );
   const cgn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named(
     'Cg,N2O',
   );
 
   const EMN2Odir = AFi.multiply(EFPRP)
     .multiply(cgn2o)
-    .plus(AUi.multiply(EFPRP).multiply(cgn2o))
-    .multiply(GWPN2O)
-    .multiply(tenToPowMinus3);
+    .plus(AUi.multiply(EFPRP).multiply(cgn2o));
+  // .multiply(GWPN2O)
+  // .multiply(tenToPowMinus3);
   return EMN2Odir;
 };
 
-const calculateManureManagementN2OAtmosphericDeposition = (
+const calculateManureManagementN2OAtmosphericDepositionForHerd = (
   input: BeefInputTransformed,
+  herd: BeefHerdInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
+  const { constants } = context;
   /*
     line 524
     EN2O,ad = Mvol * EFad * Cg,N2O * 10^-3
     Mvol = mass of nitrogen volatilised from urine and faeces deposited on pasture (kgN)
     EFad = emission factor for atmospheric deposition (kgN2O-N/kgN)
 */
-  return zeroCO2e;
+  const { AFi, AUi } = calculateExcretedNitrogenForHerd(input, herd, context);
+  const fracGASMsoil = selectConstant(
+    constants.CROP,
+    'FRACTION_N_VOLATILISED_ORGANIC_FERTILISER',
+  );
+  // line 530
+  const Mvol = AUi.plus(AFi).multiply(fracGASMsoil).named('Mvol');
+  const cgn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named(
+    'Cg,N2O',
+  );
+  const EFad = selectConstant(
+    constants.BEEF_PASTURE,
+    'EF_ATMOSPHERIC_DEPOSITION',
+    addRainfallToGrazingProductionSystem(
+      input.grazingSystem,
+      input.rainfallAbove600,
+    ),
+  ).named(
+    `EFad ${input.grazingSystem} ${input.rainfallAbove600 ? 'high rainfall' : 'low rainfall'}`,
+  );
+  return Mvol.multiply(EFad).multiply(cgn2o); //.multiply(tenToPowMinus3);
 };
 
-const calculateManureManagementN2OLeachingAndRunoff = (
+const calculateManureManagementN2OLeachingAndRunoffForHerd = (
   input: BeefInputTransformed,
   herd: BeefHerdInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
+  const { constants } = context;
+  const { AFi, AUi } = calculateExcretedNitrogenForHerd(input, herd, context);
+  const fracWetSoil = selectConstant(
+    constants.BEEF_PASTURE,
+    'FRAC_WET_SOIL',
+    input.region,
+  ).named('FracWETSoil');
+  const fracLeach = selectConstant(
+    constants.CROP,
+    'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF',
+  ).named('FracLeach');
+  const Mleach = AUi.plus(AFi)
+    .multiply(fracWetSoil)
+    .multiply(fracLeach)
+    .named('Mleach');
+  const EFleach = selectConstant(
+    constants.CROP,
+    'EF_N2O_LEACHING_AND_RUNOFF',
+  ).named('EFleach');
+  const cgn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named(
+    'Cg,N2O',
+  );
   /*
     line 535
     EN2O,leach = Mleach * EFleach * Cg,N2O * 10^-3
     Mleach = mass of nitrogen lost to leaching and runoff (kgN)
     EFleach = emission factor for leaching and runoff (kgN2O-N/kgN)
 */
-  return zeroCO2e;
+  const EN2Oleach = Mleach.multiply(EFleach)
+    .multiply(cgn2o)
+    // .multiply(tenToPowMinus3)
+    .named('EN2O,leach');
+  return EN2Oleach;
 };
 
 export const calculateManureManagementN2OForHerd = (
@@ -438,11 +496,12 @@ export const calculateManureManagementN2OForHerd = (
     herd,
     context,
   ).named('EN2O,dir');
-  const EN2Oad = calculateManureManagementN2OAtmosphericDeposition(
+  const EN2Oad = calculateManureManagementN2OAtmosphericDepositionForHerd(
     input,
+    herd,
     context,
   ).named('EN2O,ad');
-  const EN2Oleach = calculateManureManagementN2OLeachingAndRunoff(
+  const EN2Oleach = calculateManureManagementN2OLeachingAndRunoffForHerd(
     input,
     herd,
     context,

@@ -31,6 +31,7 @@ import {
   FuelStationaryMassBasedLiquidType,
   FuelStationarySolidType,
   FuelStationaryVolumeBasedLiquidType,
+  GrazingProductionSystemsWithRainfall,
   HeavyDutyFuelType,
   InorganicFertiliserComponentOrigin,
   InorganicFertiliserComponentTypeNonRegional,
@@ -53,6 +54,7 @@ import {
   SolidWasteIncinerationType,
   SolidWasteLandfillType,
   State,
+  StateOrRegion,
   SwineMMSType,
   VesselFuelType,
 } from './enums';
@@ -391,6 +393,13 @@ export type BeefPastureConstants = NamedConstants & {
     LimitedRegion,
     Record<'calving' | 'afterCalving', MassPerHeadPerDay<'Milk'>>
   >;
+
+  EF_ATMOSPHERIC_DEPOSITION: Record<
+    GrazingProductionSystemsWithRainfall,
+    MassPerMass<'N2O', 'Volatilised N'>
+  >;
+
+  FRAC_WET_SOIL: Record<StateOrRegion, RealNumber>;
 };
 
 export type AllConstants = {

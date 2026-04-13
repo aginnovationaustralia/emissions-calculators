@@ -50,14 +50,8 @@ export const getMilkIntakeMC236 = (
   const currentSeasonCalvingRate =
     calvingClassInput[seasonName].proportionCowsGt2ThisSeasonInCalf;
 
-  if (currentSeasonCalvingRate.unit.value.gt(0)) {
-    return selectConstant(
-      constants.BEEF_PASTURE,
-      'MILK_INTAKE',
-      region,
-      'calving',
-    ).named(`MCijkl=236 (${seasonName} calving)`);
-  }
+  // REVISIT: need to investigate handling partial calving, and multiple calving seasons. At the moment any amount of calving
+
   const previousSeasonCalvingRate =
     calvingClassInput[previousSeasonName].proportionCowsGt2ThisSeasonInCalf;
   if (previousSeasonCalvingRate.unit.value.gt(0)) {
@@ -67,6 +61,15 @@ export const getMilkIntakeMC236 = (
       region,
       'afterCalving',
     ).named(`MCijkl=236 (${seasonName} after calving)`);
+  }
+
+  if (currentSeasonCalvingRate.unit.value.gt(0)) {
+    return selectConstant(
+      constants.BEEF_PASTURE,
+      'MILK_INTAKE',
+      region,
+      'calving',
+    ).named(`MCijkl=236 (${seasonName} calving)`);
   }
 
   return root(massPerHeadPerDay('Milk', 0)).named(

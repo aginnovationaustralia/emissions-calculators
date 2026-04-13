@@ -8,40 +8,32 @@ import {
   BeefInputSchema,
   BeefInputTransformed,
 } from '@/calculators/Beef/types/input';
-import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { calculateManureManagementN2O } from '../scope1/4-manure-management/4.1-beef-pasture/4.1-beef-pasture-manure-n2o';
-import { checkClimateZone, checkStateOrRegion } from './livestock-domain';
 import {
-  compareInputsAndOutputs,
-  createSheetExtractor,
-} from './sheet-comparison';
+  checkClimateZone,
+  checkGrazingSystem,
+  checkStateOrRegion,
+} from '../livestock-domain';
 
-const columnClimateZone = 'B';
-const columnStateOrRegion = 'D';
-const columnHeadN = 'K';
-const columnLiveweightW = 'L';
-const columnLiveweightGainLWG = 'M';
-const columnProportionCowsGt2InCalfLC = 'P';
-const columnUnfencedWater = 'AS';
+export const columnClimateZone = 'B';
+export const columnStateOrRegion = 'D';
+const columnGrazingSystem = 'H';
+const columnRainfall = 'I';
+export const columnHeadN = 'M';
+export const columnLiveweightW = 'N';
+export const columnLiveweightGainLWG = 'O';
+export const columnProportionCowsGt2InCalfLC = 'R';
 
-const columnDmdSpring = 'AK';
-const columnDmdSummer = 'AL';
-const columnDmdAutumn = 'AM';
-const columnDmdWinter = 'AN';
+export const columnUnfencedWater = 'AU';
 
-const getCalculatorInput = (
-  sheet: XLSX.Sheet,
-  row: number,
-  method: '1' | '2',
-): BeefInputTransformed | undefined => {
-  const cell = (column: string, offset: number = 0) =>
-    sheet
-      .cell(`${column}${row + offset}`)
-      .value()
-      ?.toString();
+export const columnDmd = 'AM';
+export const columnCrudeProteinContent = 'AN';
 
-  const readBeefClass = (offset: number): BeefClassInput | undefined => {
+type CellFn = (column: string, offset?: number) => string | undefined;
+
+export const readBeefClassFn =
+  (cell: CellFn, method: '1' | '2') =>
+  (offset: number): BeefClassInput | undefined => {
     const offsetRows = offset * 4;
     const springHeadRaw = cell(columnHeadN, offsetRows);
     if (springHeadRaw === undefined) {
@@ -107,9 +99,9 @@ const getCalculatorInput = (
     };
   };
 
-  const readBeefClassWithCalves = (
-    offset: number,
-  ): BeefClassWithCalvesInput | undefined => {
+export const readBeefClassWithCalvesFn =
+  (cell: CellFn, method: '1' | '2') =>
+  (offset: number): BeefClassWithCalvesInput | undefined => {
     const offsetRows = offset * 4;
     const springHeadRaw = cell(columnHeadN, offsetRows);
     if (springHeadRaw === undefined) {
@@ -192,6 +184,20 @@ const getCalculatorInput = (
     };
   };
 
+export const getCalculatorInput = (
+  sheet: XLSX.Sheet,
+  row: number,
+  method: '1' | '2',
+): BeefInputTransformed | undefined => {
+  const cell = (column: string, offset: number = 0) =>
+    sheet
+      .cell(`${column}${row + offset}`)
+      .value()
+      ?.toString();
+
+  const readBeefClass = readBeefClassFn(cell, method);
+  const readBeefClassWithCalves = readBeefClassWithCalvesFn(cell, method);
+
   if (cell('A') === undefined) {
     return undefined;
   }
@@ -199,6 +205,9 @@ const getCalculatorInput = (
   const climateZone = checkClimateZone(cell(columnClimateZone));
   // const state = checkState(cell('C'));
   const region = checkStateOrRegion(cell(columnStateOrRegion));
+
+  const grazingSystem = checkGrazingSystem(cell(columnGrazingSystem));
+  const highRainfall = cell(columnRainfall) === 'high';
 
   const unfencedWater = cell(columnUnfencedWater) === 'yes';
 
@@ -220,16 +229,27 @@ const getCalculatorInput = (
       method === '1'
         ? undefined
         : {
-            spring: Number(cell(columnDmdSpring)),
-            summer: Number(cell(columnDmdSummer)),
-            autumn: Number(cell(columnDmdAutumn)),
-            winter: Number(cell(columnDmdWinter)),
+            spring: Number(cell(columnDmd)),
+            summer: Number(cell(columnDmd, 1)),
+            autumn: Number(cell(columnDmd, 2)),
+            winter: Number(cell(columnDmd, 3)),
+          },
+    method2CrudeProteinContent:
+      method === '1'
+        ? undefined
+        : {
+            spring: Number(cell(columnCrudeProteinContent)),
+            summer: Number(cell(columnCrudeProteinContent, 1)),
+            autumn: Number(cell(columnCrudeProteinContent, 2)),
+            winter: Number(cell(columnCrudeProteinContent, 3)),
           },
   };
 
   const beefInput: BeefInput = {
     region,
     climateZone,
+    grazingSystem,
+    rainfallAbove600: highRainfall,
     herds: [herd],
     electricity: {
       method: 'location',
@@ -237,43 +257,9 @@ const getCalculatorInput = (
     },
   };
 
-  // console.dir(beefInput, { depth: null });
+  //   console.dir(beefInput, { depth: null });
 
   return {
     ...BeefInputSchema.parse(beefInput),
   };
 };
-
-const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`BR${row}`).value());
-};
-
-const extractInputsAndOutput = createSheetExtractor(
-  getCalculatorInput,
-  getExpectedOutput,
-  { rowInterval: 40 },
-);
-
-describe('4.2. Beef Pasture Manure n2o', () => {
-  it('method 1 scenarios match spreadsheet results', async () => {
-    const sheet = await getSheet(
-      './src/modules/test/4.1-beef.xlsx',
-      '4.2.1 methane',
-    );
-
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
-
-    compareInputsAndOutputs(inputsAndOutputs, calculateManureManagementN2O);
-  });
-
-  it.skip('method 2 scenarios match spreadsheet n2o', async () => {
-    const sheet = await getSheet(
-      './src/modules/test/4.1-beef.xlsx',
-      '4.2.1 methane',
-    );
-
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 141, '2');
-
-    compareInputsAndOutputs(inputsAndOutputs, calculateManureManagementN2O);
-  });
-});

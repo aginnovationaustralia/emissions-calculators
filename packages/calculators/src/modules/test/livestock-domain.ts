@@ -7,6 +7,8 @@ import {
   ExtendedRegions,
   FeedlotMMSType,
   FeedlotMMSTypes,
+  GrazingProductionSystem,
+  GrazingProductionSystems,
   LimitedRegion,
   LimitedRegions,
   StateOrRegion,
@@ -70,4 +72,13 @@ export const checkStateOrRegion = (
     throw new Error(`Invalid state or region: ${stateOrRegion}`);
   }
   return stateOrRegion as StateOrRegion;
+};
+
+export const checkGrazingSystem = (
+  system: string | undefined,
+): GrazingProductionSystem => {
+  if (!GrazingProductionSystems.includes(system as GrazingProductionSystem)) {
+    throw new Error(`Invalid grazing system: ${system}`);
+  }
+  return system as GrazingProductionSystem;
 };
