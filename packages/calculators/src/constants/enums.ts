@@ -640,9 +640,6 @@ export const PurchasedFeedLivestockTypesPerRegion = {
 } as const;
 
 export const PurchasedFeedLivestockRegionlessTypes = [
-  'Lick block, dry season mix',
-  'Lick block, weaner',
-  'Lick block, mineral',
   'Bentonite',
   'Meat Meal',
   'Blood Meal',
@@ -658,6 +655,14 @@ export type PurchasedFeedLivestockRegionalType<
 export type PurchasedFeedLivestockType =
   | PurchasedFeedLivestockRegionlessType
   | PurchasedFeedLivestockRegionalType;
+
+export const PurchasedMineralSupplementTypes = [
+  'Lick block, dry season mix',
+  'Lick block, weaner',
+  'Lick block, mineral',
+] as const;
+export type PurchasedMineralSupplementType =
+  (typeof PurchasedMineralSupplementTypes)[number];
 
 export const FeedlotMMSTypes = [
   'Dry lot (Feedpad)',

@@ -48,6 +48,7 @@ import {
   PurchasedFeedLivestockRegionalType,
   PurchasedFeedLivestockRegionlessType,
   PurchasedFeedRegion,
+  PurchasedMineralSupplementType,
   PureState,
   RefrigerantType,
   RefrigerationType,
@@ -388,6 +389,11 @@ export type LivestockConstants = NamedConstants & {
       };
     };
   };
+
+  PURCHASED_MINERAL_SUPPLEMENT_FACTORS: Record<
+    PurchasedMineralSupplementType,
+    MassPerMass<'CO2e', 'Purchased Mineral Supplement'>
+  >;
 };
 
 type SeasonalFactors = Record<Season, RealNumber>;

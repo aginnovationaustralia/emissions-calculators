@@ -17,7 +17,7 @@ import {
   purchasedFeedIsTAS,
   purchasedFeedIsVIC,
   purchasedFeedIsWA,
-} from './livestock-regional-purchased-feed';
+} from './livestock-regional-purchased-feed.input';
 
 export const calculatePurchasedFeed = (
   { purchasedFeed }: PurchasedFeedsInputTransformed,

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import {
   PurchasedFeedLivestockRegionlessInputSchema,
   PurchasedFeedLivestockRegionlessInputTransformed,
-} from './livestock-regionless-purchased-feed';
+} from './livestock-regionless-purchased-feed.input';
 import {
   PurchasedFeedAquacultureInputTransformed,
   PurchasedFeedAquacultureInputSchema,
@@ -14,11 +14,11 @@ import {
 import {
   PurchasedFeedMethod2InputSchema,
   PurchasedFeedMethod2InputTransformed,
-} from './method2-purchased-feed';
+} from './method2-purchased-feed.input';
 import {
   PurchasedFeedLivestockRegionalInputSchema,
   PurchasedFeedLivestockRegionalInputTransformed,
-} from './livestock-regional-purchased-feed';
+} from './livestock-regional-purchased-feed.input';
 
 export const PurchasedFeedLivestockInputSchema = z.discriminatedUnion('type', [
   PurchasedFeedLivestockRegionlessInputSchema,

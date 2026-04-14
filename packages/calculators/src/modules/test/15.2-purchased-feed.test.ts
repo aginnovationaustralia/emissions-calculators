@@ -77,7 +77,7 @@ describe('15.2.1 Purchased Feed', () => {
       '15.2.1',
     );
 
-    const inputsAndOutputs = extractInputsAndOutputs(sheet, 98, '2');
+    const inputsAndOutputs = extractInputsAndOutputs(sheet, 95, '2');
 
     compareInputsAndOutputs(inputsAndOutputs, calculatePurchasedFeed);
   });
