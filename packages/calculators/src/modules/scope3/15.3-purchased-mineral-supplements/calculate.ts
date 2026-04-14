@@ -8,9 +8,12 @@ import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
 
 export const calculatePurchasedMineralSupplements = (
-  input: PurchasedMineralSupplementsInputTransformed, // TODO: Relocate purchased feed constants
+  input: PurchasedMineralSupplementsInputTransformed,
   context: ExecutionContext<AllConstants>,
 ) => {
+  /**
+   * E = SUM Qm * EFm
+   */
   const { constants } = context;
   const mineralEmissions = input.purchasedMineralSupplements.map((mineral) => {
     const emissionsFactor = purchasedMineralSupplementIsMethod1(mineral)
