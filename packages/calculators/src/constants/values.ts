@@ -2027,6 +2027,8 @@ export const livestockConstants: LivestockConstants = {
       },
     },
   },
+};
+
 export const beefPastureConstants: BeefPastureConstants = {
   name: 'BEEF_PASTURE',
 
