@@ -39,6 +39,32 @@ export const BeefHerdInputSchema = object({
       })
       .transform((val) => input('DMDijk=winter', realNumber(val))),
   }).optional(),
+  method2CrudeProteinContent: object({
+    spring: proportion()
+      .meta({
+        description:
+          'Method 2: Specific crude protein content in spring, based on farm records',
+      })
+      .transform((val) => input('CPijk=spring', realNumber(val))),
+    summer: proportion()
+      .meta({
+        description:
+          'Method 2: Specific crude protein content in summer, based on farm records',
+      })
+      .transform((val) => input('CPijk=summer', realNumber(val))),
+    autumn: proportion()
+      .meta({
+        description:
+          'Method 2: Specific crude protein content in autumn, based on farm records',
+      })
+      .transform((val) => input('CPijk=autumn', realNumber(val))),
+    winter: proportion()
+      .meta({
+        description:
+          'Method 2: Specific dry matter digestibility in winter, based on farm records',
+      })
+      .transform((val) => input('CPijk=winter', realNumber(val))),
+  }).optional(),
 });
 
 export type BeefHerdInput = z.input<typeof BeefHerdInputSchema>;

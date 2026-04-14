@@ -1,4 +1,8 @@
-import { extractSymbols, parseExpressionLine } from './expressionParser';
+import {
+  extractPastedLineTokens,
+  extractSymbols,
+  parseExpressionLine,
+} from './expressionParser';
 
 describe('parseExpressionLine', () => {
   it('splits symbol and expression on =', () => {
@@ -17,6 +21,27 @@ describe('parseExpressionLine', () => {
     const result = parseExpressionLine('A + B');
     expect(result.symbol).toBe('');
     expect(result.expression).toBe('A + B');
+  });
+
+  it('splits on spaced = when LHS contains =', () => {
+    const result = parseExpressionLine('AUmmsm=1-13 = (AUPRP + AFPRP)');
+    expect(result.symbol).toBe('AUmmsm=1-13');
+    expect(result.expression).toBe('(AUPRP + AFPRP)');
+  });
+
+  it('splits on last = when multiple unspaced and no spaced assignment', () => {
+    const result = parseExpressionLine('AUmmsm=1-13=(AUPRP+AFPRP)');
+    expect(result.symbol).toBe('AUmmsm=1-13');
+    expect(result.expression).toBe('(AUPRP+AFPRP)');
+  });
+});
+
+describe('extractPastedLineTokens', () => {
+  it('includes LHS so it can match existing records when LHS contains =', () => {
+    const tokens = extractPastedLineTokens('AUmmsm=1-13 = A + B');
+    expect(tokens[0]).toBe('AUmmsm=1-13');
+    expect(tokens).toContain('A');
+    expect(tokens).toContain('B');
   });
 });
 
@@ -54,5 +79,9 @@ describe('extractSymbols', () => {
     expect(symbols).toContain('AUPRP');
     expect(symbols).toContain('AFPRP');
     expect(symbols).toHaveLength(3);
+  });
+
+  it('strips curly and square brackets from token edges', () => {
+    expect(extractSymbols('{Foo} + [Bar] × (Baz)')).toEqual(['Foo', 'Bar', 'Baz']);
   });
 });

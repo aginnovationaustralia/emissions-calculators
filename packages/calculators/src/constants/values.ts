@@ -129,7 +129,7 @@ export const commonConstants: CommonConstants = {
   /**
    * @description Conversion factor for the global warming potential of N2O, as CO2-e
    */
-  GWP_FACTORSC6: massPerMass('N2O', 'CO2e', 265),
+  GWP_FACTORSC6: massPerMass('CO2e', 'N2O', 265),
 
   /**
    * @description Conversion factor for elemental to molecular CO2
@@ -140,6 +140,7 @@ export const commonConstants: CommonConstants = {
    */
   GWP_FACTORSC14: realNumber(16 / 12),
 
+  // Factor to convert elemental mass of nitrous oxide to molecular mass.
   GWP_FACTORSC15: realNumber(44 / 28),
 
   /**
@@ -1715,12 +1716,6 @@ export const swineConstants: SwineConstants = {
     },
   },
 };
-/*
-Dry lot (Feedpad)	0.0054	0.6
-Solid Storage (Stockpile)	0.005	0.25
-Composting (Passive Windrow)	0.01	0.4
-Uncovered anaerobic lagoon (Effluent pond)	0	0.35
-*/
 
 export const feedlotConstants: FeedlotConstants = {
   name: 'FEEDLOT',
@@ -2016,6 +2011,162 @@ export const beefPastureConstants: BeefPastureConstants = {
     },
   },
 
+  CP: {
+    'ACT/NSW': {
+      spring: realNumber(0.07),
+      summer: realNumber(0.13),
+      autumn: realNumber(0.1),
+      winter: realNumber(0.06),
+    },
+    NT: {
+      spring: realNumber(0.058),
+      summer: realNumber(0.092),
+      autumn: realNumber(0.075),
+      winter: realNumber(0.053),
+    },
+    QLD: {
+      spring: realNumber(0.072),
+      summer: realNumber(0.099),
+      autumn: realNumber(0.078),
+      winter: realNumber(0.059),
+    },
+    SA: {
+      spring: realNumber(0.16),
+      summer: realNumber(0.07),
+      autumn: realNumber(0.09),
+      winter: realNumber(0.2),
+    },
+    TAS: {
+      spring: realNumber(0.2),
+      summer: realNumber(0.1),
+      autumn: realNumber(0.16),
+      winter: realNumber(0.2),
+    },
+    VIC: {
+      spring: realNumber(0.25),
+      summer: realNumber(0.07),
+      autumn: realNumber(0.1),
+      winter: realNumber(0.21),
+    },
+    'WA - South West': {
+      spring: realNumber(0.2),
+      summer: realNumber(0.09),
+      autumn: realNumber(0.06),
+      winter: realNumber(0.2),
+    },
+    'WA - Pilbara': {
+      spring: realNumber(0.04),
+      summer: realNumber(0.12),
+      autumn: realNumber(0.09),
+      winter: realNumber(0.06),
+    },
+    'WA - Kimberley': {
+      spring: realNumber(0.04),
+      summer: realNumber(0.12),
+      autumn: realNumber(0.09),
+      winter: realNumber(0.06),
+    },
+  },
+
+  REFERENCE_WEIGHT: {
+    ACT: {
+      bullsLt1: mass('Liveweight', 700),
+      bullsGt1: mass('Liveweight', 700),
+      cowsLt1: mass('Liveweight', 600),
+      cows1To2Years: mass('Liveweight', 500),
+      cows2To3Years: mass('Liveweight', 500),
+      cowsGt3Years: mass('Liveweight', 500),
+      steersLt1: mass('Liveweight', 500),
+      steers1To2Years: mass('Liveweight', 600),
+      steers2To3Years: mass('Liveweight', 600),
+      steersGt3Years: mass('Liveweight', 600),
+    },
+    NSW: {
+      // duplicate of ACT
+      bullsLt1: mass('Liveweight', 700),
+      bullsGt1: mass('Liveweight', 700),
+      cowsLt1: mass('Liveweight', 600),
+      cows1To2Years: mass('Liveweight', 500),
+      cows2To3Years: mass('Liveweight', 500),
+      cowsGt3Years: mass('Liveweight', 500),
+      steersLt1: mass('Liveweight', 500),
+      steers1To2Years: mass('Liveweight', 600),
+      steers2To3Years: mass('Liveweight', 600),
+      steersGt3Years: mass('Liveweight', 600),
+    },
+    NT: {
+      bullsLt1: mass('Liveweight', 770),
+      bullsGt1: mass('Liveweight', 770),
+      cowsLt1: mass('Liveweight', 660),
+      cows1To2Years: mass('Liveweight', 550),
+      cows2To3Years: mass('Liveweight', 550),
+      cowsGt3Years: mass('Liveweight', 550),
+      steersLt1: mass('Liveweight', 550),
+      steers1To2Years: mass('Liveweight', 660),
+      steers2To3Years: mass('Liveweight', 660),
+      steersGt3Years: mass('Liveweight', 660),
+    },
+    QLD: {
+      bullsLt1: mass('Liveweight', 770),
+      bullsGt1: mass('Liveweight', 770),
+      cowsLt1: mass('Liveweight', 660),
+      cows1To2Years: mass('Liveweight', 550),
+      cows2To3Years: mass('Liveweight', 550),
+      cowsGt3Years: mass('Liveweight', 550),
+      steersLt1: mass('Liveweight', 550),
+      steers1To2Years: mass('Liveweight', 660),
+      steers2To3Years: mass('Liveweight', 660),
+      steersGt3Years: mass('Liveweight', 660),
+    },
+    SA: {
+      bullsLt1: mass('Liveweight', 770),
+      bullsGt1: mass('Liveweight', 770),
+      cowsLt1: mass('Liveweight', 660),
+      cows1To2Years: mass('Liveweight', 550),
+      cows2To3Years: mass('Liveweight', 550),
+      cowsGt3Years: mass('Liveweight', 550),
+      steersLt1: mass('Liveweight', 550),
+      steers1To2Years: mass('Liveweight', 660),
+      steers2To3Years: mass('Liveweight', 660),
+      steersGt3Years: mass('Liveweight', 660),
+    },
+    TAS: {
+      bullsLt1: mass('Liveweight', 770),
+      bullsGt1: mass('Liveweight', 770),
+      cowsLt1: mass('Liveweight', 660),
+      cows1To2Years: mass('Liveweight', 550),
+      cows2To3Years: mass('Liveweight', 550),
+      cowsGt3Years: mass('Liveweight', 550),
+      steersLt1: mass('Liveweight', 550),
+      steers1To2Years: mass('Liveweight', 660),
+      steers2To3Years: mass('Liveweight', 660),
+      steersGt3Years: mass('Liveweight', 660),
+    },
+    VIC: {
+      bullsLt1: mass('Liveweight', 770),
+      bullsGt1: mass('Liveweight', 770),
+      cowsLt1: mass('Liveweight', 660),
+      cows1To2Years: mass('Liveweight', 550),
+      cows2To3Years: mass('Liveweight', 550),
+      cowsGt3Years: mass('Liveweight', 550),
+      steersLt1: mass('Liveweight', 550),
+      steers1To2Years: mass('Liveweight', 660),
+      steers2To3Years: mass('Liveweight', 660),
+      steersGt3Years: mass('Liveweight', 660),
+    },
+    WA: {
+      bullsLt1: mass('Liveweight', 770),
+      bullsGt1: mass('Liveweight', 770),
+      cowsLt1: mass('Liveweight', 660),
+      cows1To2Years: mass('Liveweight', 550),
+      cows2To3Years: mass('Liveweight', 550),
+      cowsGt3Years: mass('Liveweight', 550),
+      steersLt1: mass('Liveweight', 550),
+      steers1To2Years: mass('Liveweight', 660),
+      steers2To3Years: mass('Liveweight', 660),
+      steersGt3Years: mass('Liveweight', 660),
+    },
+  },
   MCF_PASTURE: realNumber(0.0046),
   MCF_LAGOON: {
     'Cool temperate moist': realNumber(0.006),
@@ -4581,5 +4732,83 @@ export const beefPastureConstants: BeefPastureConstants = {
         },
       },
     },
+  },
+
+  EFPRP: {
+    wet: massPerMass('N2O', 'N', 0.006),
+    dry: massPerMass('N2O', 'N', 0.002),
+  },
+
+  MILK_INTAKE: {
+    'ACT/NSW': {
+      calving: massPerHeadPerDay('Milk', 6),
+      afterCalving: massPerHeadPerDay('Milk', 4),
+    },
+    NT: {
+      calving: massPerHeadPerDay('Milk', 4),
+      afterCalving: massPerHeadPerDay('Milk', 3),
+    },
+    QLD: {
+      calving: massPerHeadPerDay('Milk', 4),
+      afterCalving: massPerHeadPerDay('Milk', 3),
+    },
+    SA: {
+      calving: massPerHeadPerDay('Milk', 6),
+      afterCalving: massPerHeadPerDay('Milk', 4),
+    },
+    TAS: {
+      calving: massPerHeadPerDay('Milk', 6),
+      afterCalving: massPerHeadPerDay('Milk', 4),
+    },
+    VIC: {
+      calving: massPerHeadPerDay('Milk', 6),
+      afterCalving: massPerHeadPerDay('Milk', 4),
+    },
+    'WA - South West': {
+      calving: massPerHeadPerDay('Milk', 6),
+      afterCalving: massPerHeadPerDay('Milk', 4),
+    },
+    'WA - Pilbara': {
+      calving: massPerHeadPerDay('Milk', 4),
+      afterCalving: massPerHeadPerDay('Milk', 3),
+    },
+    'WA - Kimberley': {
+      calving: massPerHeadPerDay('Milk', 4),
+      afterCalving: massPerHeadPerDay('Milk', 3),
+    },
+  },
+
+  EF_ATMOSPHERIC_DEPOSITION: {
+    'Non-irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0018),
+    'Irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0059),
+    'Irrigated crop': massPerMass('N2O', 'Volatilised N', 0.007),
+    'Non-irrigated crop (low rainfall)': massPerMass(
+      'N2O',
+      'Volatilised N',
+      0.0029,
+    ),
+    'Non-irrigated crop (high rainfall)': massPerMass(
+      'N2O',
+      'Volatilised N',
+      0.008,
+    ),
+  },
+
+  FRAC_WET_SOIL: {
+    ACT: realNumber(0.87),
+    NSW: realNumber(0.54),
+    'NT - Alice Springs': realNumber(0.03),
+    'NT - Barkly': realNumber(0.07),
+    'NT - Northern': realNumber(0.92),
+    'QLD - High': realNumber(0.18),
+    'QLD - Moderate/High': realNumber(0.64),
+    'QLD - Moderate/Low': realNumber(0.07),
+    'QLD - Low': realNumber(0.18),
+    SA: realNumber(0.22),
+    TAS: realNumber(0.71),
+    VIC: realNumber(0.56),
+    'WA - South West': realNumber(0.89),
+    'WA - Pilbara': realNumber(0.28),
+    'WA - Kimberley': realNumber(0.3),
   },
 };

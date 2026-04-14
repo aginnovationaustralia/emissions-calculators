@@ -27,26 +27,34 @@ const BeefCows1To2YearsInputSchema = BeefClassInputSchema.transform((val) => ({
   number: '4' as const,
 }));
 const BeefCows2To3YearsInputSchema = BeefClassWithCalvesInputSchema.transform(
-  (val) => ({ ...val, name: 'cows2To3Years' as const, number: '5' as const }),
+  (val) => ({ ...val, name: 'cows2To3Years' as const, number: '5a' as const }),
 );
 const BeefCowsGt3YearsInputSchema = BeefClassWithCalvesInputSchema.transform(
-  (val) => ({ ...val, name: 'cowsGt3Years' as const, number: '6' as const }),
+  (val) => ({ ...val, name: 'cowsGt3Years' as const, number: '5b' as const }),
 );
 const BeefSteersLt1InputSchema = BeefClassInputSchema.transform((val) => ({
   ...val,
   name: 'steersLt1' as const,
-  number: '7' as const,
+  number: '6' as const,
 }));
 const BeefSteers1To2YearsInputSchema = BeefClassInputSchema.transform(
-  (val) => ({ ...val, name: 'steers1To2Years' as const, number: '8' as const }),
+  (val) => ({
+    ...val,
+    name: 'steers1To2Years' as const,
+    number: '7a' as const,
+  }),
 );
 const BeefSteers2To3YearsInputSchema = BeefClassInputSchema.transform(
-  (val) => ({ ...val, name: 'steers2To3Years' as const, number: '9' as const }),
+  (val) => ({
+    ...val,
+    name: 'steers2To3Years' as const,
+    number: '7b' as const,
+  }),
 );
 const BeefSteersGt3YearsInputSchema = BeefClassInputSchema.transform((val) => ({
   ...val,
   name: 'steersGt3Years' as const,
-  number: '10' as const,
+  number: '7c' as const,
 }));
 
 export const BeefClassesInputSchema = object({
