@@ -24,7 +24,8 @@ export type Substance =
   | 'Milk'
   | 'Milk Solids'
   | 'Liveweight'
-  | 'Purchased Feed';
+  | 'Purchased Feed'
+  | 'Volatile Solids';
 
 export type NumberUnitBase = { value: Decimal };
 
@@ -353,6 +354,32 @@ export const isVolumePerHeadPerDay = (
   return unit.__unitType === 'VolumePerHeadPerDay';
 };
 
+export type VolumePerMass<
+  SV extends Substance,
+  SM extends Substance,
+> = NumberUnitBase & {
+  __unitType: 'VolumePerMass';
+  volume: SV;
+  mass: SM;
+};
+export const volumePerMass = <SV extends Substance, SM extends Substance>(
+  volume: SV,
+  mass: SM,
+  initialValueLitresPerKg?: number | Decimal,
+): VolumePerMass<SV, SM> => {
+  return {
+    __unitType: 'VolumePerMass',
+    volume,
+    mass,
+    value: new Decimal(initialValueLitresPerKg ?? 0),
+  };
+};
+export const isVolumePerMass = (
+  unit: NumberUnit,
+): unit is VolumePerMass<Substance, Substance> => {
+  return unit.__unitType === 'VolumePerMass';
+};
+
 export type MassPerDay<S extends Substance> = NumberUnitBase & {
   __unitType: 'MassPerDay';
   substance: S;
@@ -445,6 +472,7 @@ export type NumberUnit =
   | MassPerHeadPerDay<Substance>
   | MassPerDay<Substance>
   | VolumePerHeadPerDay<Substance>
+  | VolumePerMass<Substance, Substance>
   | Days
   | Head
   | EnergyPerVolume<Substance>

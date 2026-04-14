@@ -11,28 +11,34 @@ import {
   MassPerVolume,
   NumberUnitBase,
   RealNumber,
+  VolumePerMass,
 } from '@/tools/units';
 import {
   AgrochemicalType,
   AviationFuelType,
   BasicCropProductionSystem,
+  BeefClass,
   CarsLightCommercialFuelType,
   CarsLightCommercialPre2004FuelType,
+  ClimateZone,
   CropType,
   DairyClass,
   DairyMMSType,
   DairySystem,
+  ExtendedRegion,
   FeedlotDurationType,
   FeedlotMMSType,
   FuelStationaryMassBasedLiquidType,
   FuelStationarySolidType,
   FuelStationaryVolumeBasedLiquidType,
+  GrazingProductionSystemsWithRainfall,
   HeavyDutyFuelType,
   InorganicFertiliserComponentOrigin,
   InorganicFertiliserComponentTypeNonRegional,
   InorganicFertiliserComponentTypeRegional,
   InorganicFertiliserType,
   LightDutyFuelType,
+  LimitedRegion,
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
   PastureType,
@@ -42,14 +48,17 @@ import {
   PurchasedFeedLivestockRegionalType,
   PurchasedFeedLivestockRegionlessType,
   PurchasedFeedRegion,
+  PureState,
   RefrigerantType,
   RefrigerationType,
+  Season,
   ServiceByAreaType,
   ServiceByHourType,
   SolidWasteByVolumeType,
   SolidWasteIncinerationType,
   SolidWasteLandfillType,
   State,
+  StateOrRegion,
   SwineMMSType,
   VesselFuelType,
 } from './enums';
@@ -96,12 +105,20 @@ export type CommonConstants = NamedConstants & {
   >;
 
   EF_UREA_CO2: MassPerMass<'CO2e', 'Urea'>;
-  GWP_FACTORSC6: MassPerMass<'N2O', 'CO2e'>;
+  GWP_FACTORSC6: MassPerMass<'CO2e', 'N2O'>;
   GWP_FACTORSC13: MassPerMass<'CO2', 'CO2e'>;
   GWP_FACTORSC14: RealNumber;
 
   GWP_FACTORSC15: RealNumber;
   GWP_FACTORSC18: RealNumber;
+
+  GWP_CH4: MassPerMass<'CO2e', 'CH4'>;
+  EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: VolumePerMass<
+    'CH4',
+    'Volatile Solids'
+  >;
+
+  DENSITY_OF_METHANE: MassPerVolume<'CH4', 'CH4'>;
 
   LIME_SCOPE3_EF: MassPerMass<'CO2e', 'Lime'>;
 
@@ -188,6 +205,9 @@ export type CommonConstants = NamedConstants & {
   >;
 
   CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: MassPerMass<'CrudeProtein', 'N'>;
+
+  // REVISIT: Could move to the common livestock area
+  ASH_CONTENT_OF_MANURE: RealNumber;
 };
 
 type CropResidueFactors = {
@@ -370,6 +390,39 @@ export type LivestockConstants = NamedConstants & {
   };
 };
 
+type SeasonalFactors = Record<Season, RealNumber>;
+type WeightFactorsByClass = Record<
+  BeefClass,
+  Record<
+    Season,
+    {
+      liveweight: Mass<'Liveweight'>;
+      liveweightGain: MassPerHeadPerDay<'Liveweight'>;
+    }
+  >
+>;
+
+export type BeefPastureConstants = NamedConstants & {
+  DMD: Record<LimitedRegion, SeasonalFactors>;
+  CP: Record<LimitedRegion, SeasonalFactors>;
+  REFERENCE_WEIGHT: Record<PureState, Record<BeefClass, Mass<'Liveweight'>>>;
+  MCF_PASTURE: RealNumber;
+  MCF_LAGOON: Record<ClimateZone, RealNumber>;
+  LIVEWEIGHT: Record<ExtendedRegion, WeightFactorsByClass>;
+  EFPRP: Record<'wet' | 'dry', MassPerMass<'N2O', 'N'>>;
+  MILK_INTAKE: Record<
+    LimitedRegion,
+    Record<'calving' | 'afterCalving', MassPerHeadPerDay<'Milk'>>
+  >;
+
+  EF_ATMOSPHERIC_DEPOSITION: Record<
+    GrazingProductionSystemsWithRainfall,
+    MassPerMass<'N2O', 'Volatilised N'>
+  >;
+
+  FRAC_WET_SOIL: Record<StateOrRegion, RealNumber>;
+};
+
 export type AllConstants = {
   COMMON: CommonConstants;
   CROP: CropConstants;
@@ -378,6 +431,7 @@ export type AllConstants = {
   DAIRY: DairyConstants;
   POULTRY: PoultryConstants;
   LIVESTOCK: LivestockConstants;
+  BEEF_PASTURE: BeefPastureConstants;
 };
 
 export type HasCommonConstants = {

@@ -51,6 +51,34 @@ export const ExtendedCropProductionSystems = [
 export type ExtendedCropProductionSystem =
   (typeof ExtendedCropProductionSystems)[number];
 
+export const GrazingProductionSystems = [
+  'Non-irrigated pasture',
+  'Irrigated pasture',
+  'Irrigated crop',
+  'Non-irrigated crop',
+] as const;
+export type GrazingProductionSystem = (typeof GrazingProductionSystems)[number];
+export const GrazingProductionSystemsWithRainfall = [
+  'Non-irrigated pasture',
+  'Irrigated pasture',
+  'Irrigated crop',
+  'Non-irrigated crop (low rainfall)',
+  'Non-irrigated crop (high rainfall)',
+] as const;
+export type GrazingProductionSystemsWithRainfall =
+  (typeof GrazingProductionSystemsWithRainfall)[number];
+export const addRainfallToGrazingProductionSystem = (
+  system: GrazingProductionSystem,
+  highRainfallZone: boolean,
+): GrazingProductionSystemsWithRainfall => {
+  if (system === 'Non-irrigated crop') {
+    return highRainfallZone
+      ? 'Non-irrigated crop (high rainfall)'
+      : 'Non-irrigated crop (low rainfall)';
+  }
+  return system;
+};
+
 // Appendix A 2.2.6
 export const InorganicFertiliserTypes = [
   'Monoammonium Phosphate (MAP)',
@@ -787,3 +815,168 @@ export const RefrigerantTypes = [
   'R-509A',
 ] as const;
 export type RefrigerantType = (typeof RefrigerantTypes)[number];
+
+export const WetClimateZones = [
+  'Tropical montane',
+  'Tropical wet',
+  'Tropical moist',
+  'Warm temperate moist',
+  'Cool temperate moist',
+  'Boreal moist',
+] as const;
+export type WetClimateZone = (typeof WetClimateZones)[number];
+export const isWetClimateZone = (
+  climateZone: ClimateZone,
+): climateZone is WetClimateZone => {
+  return WetClimateZones.includes(climateZone as WetClimateZone);
+};
+
+export const DryClimateZones = [
+  'Tropical dry',
+  'Warm temperate dry',
+  'Cool temperate dry',
+  'Boreal dry',
+] as const;
+export type DryClimateZone = (typeof DryClimateZones)[number];
+export const isDryClimateZone = (
+  climateZone: ClimateZone,
+): climateZone is DryClimateZone => {
+  return DryClimateZones.includes(climateZone as DryClimateZone);
+};
+
+export const ClimateZones = [...WetClimateZones, ...DryClimateZones] as const;
+export type ClimateZone = (typeof ClimateZones)[number];
+
+const WARegions = [
+  'WA - South West',
+  'WA - Pilbara',
+  'WA - Kimberley',
+] as const;
+export const LimitedRegions = [
+  'ACT/NSW',
+  'NT',
+  'QLD',
+  'SA',
+  'TAS',
+  'VIC',
+  ...WARegions,
+] as const;
+export type LimitedRegion = (typeof LimitedRegions)[number];
+
+const NTRegions = [
+  'NT - Alice Springs',
+  'NT - Barkly',
+  'NT - Northern',
+] as const;
+type NTRegion = (typeof NTRegions)[number];
+const isNTRegion = (region: StateOrRegion): region is NTRegion => {
+  return NTRegions.includes(region as NTRegion);
+};
+
+const QLDRegions = [
+  'QLD - High',
+  'QLD - Moderate/High',
+  'QLD - Moderate/Low',
+  'QLD - Low',
+] as const;
+type QLDRegion = (typeof QLDRegions)[number];
+const isQLDRegion = (region: StateOrRegion): region is QLDRegion => {
+  return QLDRegions.includes(region as QLDRegion);
+};
+
+export const ExtendedRegions = [
+  'ACT/NSW',
+  'SA',
+  'TAS',
+  'VIC',
+  ...WARegions,
+  ...NTRegions,
+  ...QLDRegions,
+] as const;
+export type ExtendedRegion = (typeof ExtendedRegions)[number];
+
+export const stateOrRegionToExtendedRegion = (
+  stateOrRegion: StateOrRegion,
+): ExtendedRegion => {
+  if (stateOrRegion === 'ACT' || stateOrRegion === 'NSW') {
+    return 'ACT/NSW';
+  } else {
+    return stateOrRegion;
+  }
+};
+
+export const stateOrRegionToLimitedRegion = (
+  stateOrRegion: StateOrRegion,
+): LimitedRegion => {
+  if (isNTRegion(stateOrRegion)) {
+    return 'NT';
+  } else if (isQLDRegion(stateOrRegion)) {
+    return 'QLD';
+  } else if (stateOrRegion === 'ACT' || stateOrRegion === 'NSW') {
+    return 'ACT/NSW';
+  } else {
+    return stateOrRegion;
+  }
+};
+
+export const StateOrRegions = [
+  'ACT',
+  'NSW',
+  'SA',
+  'TAS',
+  'VIC',
+  ...WARegions,
+  ...NTRegions,
+  ...QLDRegions,
+] as const;
+export type StateOrRegion = (typeof StateOrRegions)[number];
+
+export const Seasons = ['spring', 'summer', 'autumn', 'winter'] as const;
+export type Season = (typeof Seasons)[number];
+
+export const BeefClasses = [
+  'bullsLt1',
+  'bullsGt1',
+  'cowsLt1',
+  'cows1To2Years',
+  'cows2To3Years',
+  'cowsGt3Years',
+  'steersLt1',
+  'steers1To2Years',
+  'steers2To3Years',
+  'steersGt3Years',
+] as const;
+
+export type BeefClass = (typeof BeefClasses)[number];
+
+export const BeefClassesWithCalves = ['cows2To3Years', 'cowsGt3Years'] as const;
+export type BeefClassWithCalves = (typeof BeefClassesWithCalves)[number];
+
+export const PureStates = [
+  'ACT',
+  'NSW',
+  'VIC',
+  'QLD',
+  'SA',
+  'TAS',
+  'NT',
+  'WA',
+] as const;
+export type PureState = (typeof PureStates)[number];
+export const isPureState = (state: string): state is PureState => {
+  return PureStates.includes(state as PureState);
+};
+
+export const stateOrRegionToPureState = (
+  stateOrRegion: StateOrRegion,
+): PureState => {
+  if (isPureState(stateOrRegion)) {
+    return stateOrRegion;
+  } else if (isNTRegion(stateOrRegion)) {
+    return 'NT';
+  } else if (isQLDRegion(stateOrRegion)) {
+    return 'QLD';
+  } else {
+    return 'WA';
+  }
+};

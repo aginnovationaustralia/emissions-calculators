@@ -1,8 +1,18 @@
 import {
+  ClimateZone,
+  ClimateZones,
   DairySystem,
   DairySystems,
+  ExtendedRegion,
+  ExtendedRegions,
   FeedlotMMSType,
   FeedlotMMSTypes,
+  GrazingProductionSystem,
+  GrazingProductionSystems,
+  LimitedRegion,
+  LimitedRegions,
+  StateOrRegion,
+  StateOrRegions,
   SwineMMSType,
   SwineMMSTypes,
 } from '@/constants/enums';
@@ -28,4 +38,47 @@ export const checkDairySystem = (system: string | undefined): DairySystem => {
     throw new Error(`Invalid dairy system: ${system}`);
   }
   return system as DairySystem;
+};
+
+export const checkClimateZone = (region: string | undefined): ClimateZone => {
+  if (!ClimateZones.includes(region as ClimateZone)) {
+    throw new Error(`Invalid climate region: ${region}`);
+  }
+  return region as ClimateZone;
+};
+
+export const checkLimitedRegion = (
+  region: string | undefined,
+): LimitedRegion => {
+  if (!LimitedRegions.includes(region as LimitedRegion)) {
+    throw new Error(`Invalid region: ${region}`);
+  }
+  return region as LimitedRegion;
+};
+
+export const checkExtendedRegion = (
+  region: string | undefined,
+): ExtendedRegion => {
+  if (!ExtendedRegions.includes(region as ExtendedRegion)) {
+    throw new Error(`Invalid extended region: ${region}`);
+  }
+  return region as ExtendedRegion;
+};
+
+export const checkStateOrRegion = (
+  stateOrRegion: string | undefined,
+): StateOrRegion => {
+  if (!StateOrRegions.includes(stateOrRegion as StateOrRegion)) {
+    throw new Error(`Invalid state or region: ${stateOrRegion}`);
+  }
+  return stateOrRegion as StateOrRegion;
+};
+
+export const checkGrazingSystem = (
+  system: string | undefined,
+): GrazingProductionSystem => {
+  if (!GrazingProductionSystems.includes(system as GrazingProductionSystem)) {
+    throw new Error(`Invalid grazing system: ${system}`);
+  }
+  return system as GrazingProductionSystem;
 };
