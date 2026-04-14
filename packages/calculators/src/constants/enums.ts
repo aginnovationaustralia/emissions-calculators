@@ -55,7 +55,6 @@ export const GrazingProductionSystems = [
   'Non-irrigated pasture',
   'Irrigated pasture',
   'Irrigated crop',
-  'Non-irrigated pasture',
   'Non-irrigated crop',
 ] as const;
 export type GrazingProductionSystem = (typeof GrazingProductionSystems)[number];
@@ -63,7 +62,6 @@ export const GrazingProductionSystemsWithRainfall = [
   'Non-irrigated pasture',
   'Irrigated pasture',
   'Irrigated crop',
-  'Non-irrigated pasture',
   'Non-irrigated crop (low rainfall)',
   'Non-irrigated crop (high rainfall)',
 ] as const;
