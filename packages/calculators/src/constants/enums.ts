@@ -787,3 +787,98 @@ export const RefrigerantTypes = [
   'R-509A',
 ] as const;
 export type RefrigerantType = (typeof RefrigerantTypes)[number];
+
+export const ClimateZones = [
+  'Cool temperate moist',
+  'Cool temperate dry',
+  'Boreal moist',
+  'Boreal dry',
+  'Warm temperate moist',
+  'Warm temperate dry',
+  'Tropical montane',
+  'Tropical wet',
+  'Tropical moist',
+  'Tropical dry',
+] as const;
+export type ClimateZone = (typeof ClimateZones)[number];
+
+const WARegions = [
+  'WA - South West',
+  'WA - Pilbara',
+  'WA - Kimberley',
+] as const;
+export const Regions = [
+  'ACT/NSW',
+  'NT',
+  'QLD',
+  'SA',
+  'TAS',
+  'VIC',
+  ...WARegions,
+] as const;
+export type Region = (typeof Regions)[number];
+
+const NTRegions = [
+  'NT - Alice Springs',
+  'NT - Barkly',
+  'NT - Northern',
+] as const;
+type NTRegion = (typeof NTRegions)[number];
+const isNTRegion = (region: ExtendedRegion): region is NTRegion => {
+  return NTRegions.includes(region as NTRegion);
+};
+
+const QLDRegions = [
+  'QLD - High',
+  'QLD - Moderate/High',
+  'QLD - Moderate/Low',
+  'QLD - Low',
+] as const;
+type QLDRegion = (typeof QLDRegions)[number];
+const isQLDRegion = (region: ExtendedRegion): region is QLDRegion => {
+  return QLDRegions.includes(region as QLDRegion);
+};
+
+export const ExtendedRegions = [
+  'ACT/NSW',
+  'SA',
+  'TAS',
+  'VIC',
+  ...WARegions,
+  ...NTRegions,
+  ...QLDRegions,
+] as const;
+export type ExtendedRegion = (typeof ExtendedRegions)[number];
+
+export const extendedRegionToRegion = (
+  extendedRegion: ExtendedRegion,
+): Region => {
+  if (isNTRegion(extendedRegion)) {
+    return 'NT';
+  } else if (isQLDRegion(extendedRegion)) {
+    return 'QLD';
+  } else {
+    return extendedRegion;
+  }
+};
+
+export const Seasons = ['spring', 'summer', 'autumn', 'winter'] as const;
+export type Season = (typeof Seasons)[number];
+
+export const BeefClasses = [
+  'bullsLt1',
+  'bullsGt1',
+  'cowsLt1',
+  'cows1To2Years',
+  'cows2To3Years',
+  'cowsGt3Years',
+  'steersLt1',
+  'steers1To2Years',
+  'steers2To3Years',
+  'steersGt3Years',
+] as const;
+
+export type BeefClass = (typeof BeefClasses)[number];
+
+export const BeefClassesWithCalves = ['cows2To3Years', 'cowsGt3Years'] as const;
+export type BeefClassWithCalves = (typeof BeefClassesWithCalves)[number];
