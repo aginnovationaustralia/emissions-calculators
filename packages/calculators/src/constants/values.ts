@@ -1911,8 +1911,13 @@ export const poultryConstants: PoultryConstants = {
 
 export const livestockConstants: LivestockConstants = {
   name: 'LIVESTOCK',
-  // Appendix A1 Table A.3.1.2
+  /**
+   * Appendix A1 Table A.3.1.2 & AusLCI
+   */
   PURCHASED_FEED_FACTORS: {
+    /**
+     * Appendix A1 Table A.3.1.2 (except for `Bentonite`, which comes from AusLCI)
+     */
     regionless: {
       'Meat Meal': massPerMass('CO2e', 'Purchased Feed', 0.386),
       'Blood Meal': massPerMass('CO2e', 'Purchased Feed', 1.9),
@@ -1926,6 +1931,7 @@ export const livestockConstants: LivestockConstants = {
       Squid: massPerMass('CO2e', 'Purchased Feed', 0.3),
       'Whole Fish': massPerMass('CO2e', 'Purchased Feed', 0.3),
       'Custom Bait': massPerMass('CO2e', 'Purchased Feed', 0.08),
+
       'Lick block, dry season mix': massPerMass(
         'CO2e',
         'Purchased Feed',
@@ -1935,6 +1941,9 @@ export const livestockConstants: LivestockConstants = {
       'Lick block, mineral': massPerMass('CO2e', 'Purchased Feed', 0.677),
       Bentonite: massPerMass('CO2e', 'Purchased Feed', 0.0652),
     },
+    /**
+     * AusLCI
+     */
     regional: {
       Australia: {
         'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.239),

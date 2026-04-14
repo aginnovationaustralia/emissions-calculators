@@ -4,20 +4,34 @@ import { BasePurchasedFeedInputSchema } from './base-purchased-feed.input';
 import {
   PurchasedFeedLivestockTypesPerRegion,
   PurchasedFeedLivestockRegionalType,
+  PurchasedFeedRegion,
 } from '@/constants/enums';
 
-export const PurchasedFeedBrazilInputSchema =
+export const createPurchasedFeedInputSchemaForRegion = <
+  R extends PurchasedFeedRegion,
+>(
+  region: R,
+) =>
   BasePurchasedFeedInputSchema.extend({
     type: z
-      .literal(PurchasedFeedLivestockTypesPerRegion.Brazil)
-      .transform((val) => input('purchased feed type', val))
+      .literal(PurchasedFeedLivestockTypesPerRegion[region])
+      .transform((val) =>
+        input(
+          'purchased feed type',
+          val as PurchasedFeedLivestockRegionalType<R>,
+        ),
+      )
       .meta({
         description: 'The type of feed purchased.',
       }),
     region: z
-      .literal(['Brazil'])
-      .transform((val) => input('region of origin of purchased feed', val)),
+      .literal([region])
+      .transform((val) => input('region of origin of purchased feed', val))
+      .meta({ description: 'The region of origin of the purchased feed' }),
   });
+
+export const PurchasedFeedBrazilInputSchema =
+  createPurchasedFeedInputSchemaForRegion('Brazil');
 export type PurchasedFeedBrazilianInput = z.input<
   typeof PurchasedFeedBrazilInputSchema
 >;
@@ -26,22 +40,7 @@ export type PurchasedFeedBrazilianTransformed = z.output<
 >;
 
 export const PurchasedFeedAustralianInputSchema =
-  BasePurchasedFeedInputSchema.extend({
-    type: z
-      .literal(PurchasedFeedLivestockTypesPerRegion.Australia)
-      .transform((val) =>
-        input(
-          'purchased feed type',
-          val as PurchasedFeedLivestockRegionalType<'Australia'>,
-        ),
-      )
-      .meta({
-        description: 'The type of feed purchased.',
-      }),
-    region: z
-      .literal(['Australia'])
-      .transform((val) => input('region of origin of purchased feed', val)),
-  });
+  createPurchasedFeedInputSchemaForRegion('Australia');
 export type PurchasedFeedAustralianInput = z.input<
   typeof PurchasedFeedAustralianInputSchema
 >;
@@ -49,148 +48,50 @@ export type PurchasedFeedAustraliaTransformed = z.output<
   typeof PurchasedFeedAustralianInputSchema
 >;
 
-export const PurchasedFeedNSWInputSchema = BasePurchasedFeedInputSchema.extend({
-  type: z
-    .literal(PurchasedFeedLivestockTypesPerRegion.NSW)
-    .transform((val) =>
-      input(
-        'purchased feed type',
-        val as PurchasedFeedLivestockRegionalType<'NSW'>,
-      ),
-    )
-    .meta({
-      description: 'The type of feed purchased.',
-    }),
-  region: z
-    .literal(['NSW'])
-    .transform((val) => input('region of origin of purchased feed', val)),
-});
+export const PurchasedFeedNSWInputSchema =
+  createPurchasedFeedInputSchemaForRegion('NSW');
 export type PurchasedFeedNSWInput = z.input<typeof PurchasedFeedNSWInputSchema>;
 export type PurchasedFeedNSWInputTransformed = z.output<
   typeof PurchasedFeedNSWInputSchema
 >;
 
-export const PurchasedFeedNTInputSchema = BasePurchasedFeedInputSchema.extend({
-  type: z
-    .literal(PurchasedFeedLivestockTypesPerRegion.NT)
-    .transform((val) =>
-      input(
-        'purchased feed type',
-        val as PurchasedFeedLivestockRegionalType<'NT'>,
-      ),
-    )
-    .meta({
-      description: 'The type of feed purchased.',
-    }),
-  region: z
-    .literal(['NT'])
-    .transform((val) => input('region of origin of purchased feed', val)),
-});
+export const PurchasedFeedNTInputSchema =
+  createPurchasedFeedInputSchemaForRegion('NT');
 export type PurchasedFeedNTInput = z.input<typeof PurchasedFeedNTInputSchema>;
 export type PurchasedFeedNTInputTransformed = z.output<
   typeof PurchasedFeedNTInputSchema
 >;
 
-export const PurchasedFeedQLDInputSchema = BasePurchasedFeedInputSchema.extend({
-  type: z
-    .literal(PurchasedFeedLivestockTypesPerRegion.QLD)
-    .transform((val) =>
-      input(
-        'purchased feed type',
-        val as PurchasedFeedLivestockRegionalType<'QLD'>,
-      ),
-    )
-    .meta({
-      description: 'The type of feed purchased.',
-    }),
-  region: z
-    .literal(['QLD'])
-    .transform((val) => input('region of origin of purchased feed', val)),
-});
+export const PurchasedFeedQLDInputSchema =
+  createPurchasedFeedInputSchemaForRegion('QLD');
 export type PurchasedFeedQLDInput = z.input<typeof PurchasedFeedQLDInputSchema>;
 export type PurchasedFeedQLDInputTransformed = z.output<
   typeof PurchasedFeedQLDInputSchema
 >;
 
-export const PurchasedFeedSAInputSchema = BasePurchasedFeedInputSchema.extend({
-  type: z
-    .literal(PurchasedFeedLivestockTypesPerRegion.SA)
-    .transform((val) =>
-      input(
-        'purchased feed type',
-        val as PurchasedFeedLivestockRegionalType<'SA'>,
-      ),
-    )
-    .meta({
-      description: 'The type of feed purchased.',
-    }),
-  region: z
-    .literal(['SA'])
-    .transform((val) => input('region of origin of purchased feed', val)),
-});
+export const PurchasedFeedSAInputSchema =
+  createPurchasedFeedInputSchemaForRegion('SA');
 export type PurchasedFeedSAInput = z.input<typeof PurchasedFeedSAInputSchema>;
 export type PurchasedFeedSAInputTransformed = z.output<
   typeof PurchasedFeedSAInputSchema
 >;
 
-export const PurchasedFeedTASInputSchema = BasePurchasedFeedInputSchema.extend({
-  type: z
-    .literal(PurchasedFeedLivestockTypesPerRegion.TAS)
-    .transform((val) =>
-      input(
-        'purchased feed type',
-        val as PurchasedFeedLivestockRegionalType<'TAS'>,
-      ),
-    )
-    .meta({
-      description: 'The type of feed purchased.',
-    }),
-  region: z
-    .literal(['TAS'])
-    .transform((val) => input('region of origin of purchased feed', val)),
-});
+export const PurchasedFeedTASInputSchema =
+  createPurchasedFeedInputSchemaForRegion('TAS');
 export type PurchasedFeedTASInput = z.input<typeof PurchasedFeedTASInputSchema>;
 export type PurchasedFeedTASInputTransformed = z.output<
   typeof PurchasedFeedTASInputSchema
 >;
 
-export const PurchasedFeedVICInputSchema = BasePurchasedFeedInputSchema.extend({
-  type: z
-    .literal(PurchasedFeedLivestockTypesPerRegion.VIC)
-    .transform((val) =>
-      input(
-        'purchased feed type',
-        val as PurchasedFeedLivestockRegionalType<'VIC'>,
-      ),
-    )
-    .meta({
-      description: 'The type of feed purchased.',
-    }),
-  region: z
-    .literal(['VIC'])
-    .transform((val) => input('region of origin of purchased feed', val)),
-});
+export const PurchasedFeedVICInputSchema =
+  createPurchasedFeedInputSchemaForRegion('VIC');
 export type PurchasedFeedVICInput = z.input<typeof PurchasedFeedVICInputSchema>;
 export type PurchasedFeedVICInputTransformed = z.output<
   typeof PurchasedFeedVICInputSchema
 >;
 
-export const PurchasedFeedWAInputSchema = BasePurchasedFeedInputSchema.extend({
-  type: z
-    .literal(PurchasedFeedLivestockTypesPerRegion.WA)
-    .transform((val) =>
-      input(
-        'purchased feed type',
-        val as PurchasedFeedLivestockRegionalType<'WA'>,
-      ),
-    )
-    .meta({
-      description: 'The type of feed purchased.',
-    }),
-  region: z
-    .literal(['WA'])
-    .transform((val) => input('region of origin of purchased feed', val)),
-});
+export const PurchasedFeedWAInputSchema =
+  createPurchasedFeedInputSchemaForRegion('WA');
 export type PurchasedFeedWAInput = z.input<typeof PurchasedFeedWAInputSchema>;
 export type PurchasedFeedWAInputTransformed = z.output<
   typeof PurchasedFeedWAInputSchema

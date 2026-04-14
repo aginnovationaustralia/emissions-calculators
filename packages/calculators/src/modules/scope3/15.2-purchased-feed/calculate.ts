@@ -17,11 +17,10 @@ import {
   purchasedFeedIsTAS,
   purchasedFeedIsVIC,
   purchasedFeedIsWA,
-} from './livestock-regional-purchased-feed';
+} from './livestock-regional-purchased-feed.input';
 
 export const calculatePurchasedFeed = (
   { purchasedFeed }: PurchasedFeedsInputTransformed,
-  // TODO: Relocate purchased feed constants
   context: ExecutionContext<AllConstants>,
 ) => {
   const { constants } = context;
