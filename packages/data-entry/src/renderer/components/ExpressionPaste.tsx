@@ -1,34 +1,24 @@
-import { extractSymbols, parseExpressionLine } from '@/shared/expressionParser';
+import {
+  extractPastedLineTokens,
+  parseExpressionLine,
+} from '@/shared/expressionParser';
 import { normalize } from '@/shared/normalizeUnicode';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useStore } from '../store/useStore';
 import { buildHighlightSegments } from '../utils/expressionHighlight';
 
-function getTokensFromText(text: string): string[] {
-  const trimmed = text.trim();
-  if (!trimmed) return [];
-  const { symbol, expression } = parseExpressionLine(trimmed);
-  const expr = symbol && expression ? expression : trimmed;
-  return extractSymbols(expr);
-}
-
 function getMergeRange(
   text: string,
   records: { symbol: string }[],
 ): { start: number; end: number } | null {
-  const eqIdx = text.indexOf('=');
-  if (eqIdx < 0) return null;
-  const beforeEq = text.slice(0, eqIdx);
-  const lhsTrimmed = beforeEq.trim();
-  if (!lhsTrimmed) return null;
-  const lower = lhsTrimmed.toLowerCase();
-  const hasMatch = records.some(
-    (r) => r.symbol.toLowerCase() === lower,
-  );
+  const { symbol, expression } = parseExpressionLine(text.trim());
+  if (!symbol || !expression) return null;
+  const lower = symbol.toLowerCase();
+  const hasMatch = records.some((r) => r.symbol.toLowerCase() === lower);
   if (!hasMatch) return null;
-  const mergeStart = beforeEq.indexOf(lhsTrimmed);
-  if (mergeStart < 0) return null;
-  return { start: mergeStart, end: mergeStart + lhsTrimmed.length };
+  const idx = text.indexOf(symbol);
+  if (idx < 0) return null;
+  return { start: idx, end: idx + symbol.length };
 }
 
 export function ExpressionPaste() {
@@ -39,7 +29,7 @@ export function ExpressionPaste() {
   const addExpressionFromPaste = useStore((s) => s.addExpressionFromPaste);
   const records = useStore((s) => s.records);
 
-  const tokens = useMemo(() => getTokensFromText(text), [text]);
+  const tokens = useMemo(() => extractPastedLineTokens(text), [text]);
   const existingSymbolsSet = useMemo(
     () => new Set(records.map((r) => r.symbol.toLowerCase())),
     [records],

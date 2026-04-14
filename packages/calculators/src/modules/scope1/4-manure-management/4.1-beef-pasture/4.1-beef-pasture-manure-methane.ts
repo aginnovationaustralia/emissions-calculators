@@ -3,13 +3,17 @@ import { BeefHerdInputTransformed } from '@/calculators/Beef/types/beef-herd.inp
 import { BeefInputTransformed } from '@/calculators/Beef/types/input';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { BeefClasses, extendedRegionToRegion, Season } from '@/constants/enums';
+import {
+  BeefClasses,
+  Season,
+  stateOrRegionToLimitedRegion,
+} from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { br, num, root } from '@/tools/containers';
 import { daysInSeason, oneMinus } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { mass, massPerHeadPerDay } from '@/tools/units';
-import { calculateDryMatterIntakeIijkln } from '../3-enteric-methane/3.2-beef-pasture';
+import { calculateDryMatterIntakeIijkln } from '../../3-enteric-methane/3.2-beef-pasture';
 
 const calculateTotalMethaneFromClassSeasonMmmSeason = (
   input: BeefInputTransformed,
@@ -20,7 +24,7 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
 ) => {
   const { constants } = context;
   const { climateZone, region } = input;
-  const limitedRegion = extendedRegionToRegion(region);
+  const limitedRegion = stateOrRegionToLimitedRegion(region);
 
   const { method2Dmd, method2NoUnfencedNaturalWater } = herd;
   const className = classInput.name;
@@ -178,13 +182,4 @@ export const calculateManureManagementCH4 = (
   const EMch4 = Mmm.multiply(GWPch4, { name: 'EMch4' });
 
   return EMch4;
-};
-
-export const calculate41BeefPastureManure = (
-  input: BeefInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) => {
-  return {
-    manureManagementCH4: calculateManureManagementCH4(input, context),
-  };
 };
