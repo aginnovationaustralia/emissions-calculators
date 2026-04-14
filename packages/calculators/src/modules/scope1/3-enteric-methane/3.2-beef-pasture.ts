@@ -50,7 +50,7 @@ export const getMilkIntakeMC236 = (
   const currentSeasonCalvingRate =
     calvingClassInput[seasonName].proportionCowsGt2ThisSeasonInCalf;
 
-  // REVISIT: need to investigate handling partial calving, and multiple calving seasons. At the moment any amount of calving
+  // REVISIT: need to investigate handling partial calving, and multiple calving seasons. At the moment any amount of calving is treated as full calving.
 
   const previousSeasonCalvingRate =
     calvingClassInput[previousSeasonName].proportionCowsGt2ThisSeasonInCalf;

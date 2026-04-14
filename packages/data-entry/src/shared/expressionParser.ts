@@ -33,7 +33,7 @@ export function parseExpressionLine(line: string): { symbol: string; expression:
 }
 
 /** Characters that separate tokens when they appear at the start/end of a whitespace-separated part. */
-const BOUNDARY_CHARS = /^[\s()\[\]{}+\-×*/]+|[\s()\[\]{}+\-×*/]+$/g;
+const BOUNDARY_CHARS = /^[\s()[\]{}+\-×*/]+|[\s()[\]{}+\-×*/]+$/g;
 
 /** Trailing exponent (e.g. ^2.5 or ^-1); strip so Wj^2.5 → Wj for symbol extraction. */
 const TRAILING_EXPONENT = /\^[-]?\d*\.?\d+$/;

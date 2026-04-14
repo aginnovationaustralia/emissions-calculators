@@ -1673,12 +1673,6 @@ export const swineConstants: SwineConstants = {
     },
   },
 };
-/*
-Dry lot (Feedpad)	0.0054	0.6
-Solid Storage (Stockpile)	0.005	0.25
-Composting (Passive Windrow)	0.01	0.4
-Uncovered anaerobic lagoon (Effluent pond)	0	0.35
-*/
 
 export const feedlotConstants: FeedlotConstants = {
   name: 'FEEDLOT',
@@ -4756,26 +4750,6 @@ export const beefPastureConstants: BeefPastureConstants = {
       0.008,
     ),
   },
-  /*
-  ACT	0.87
-NSW	0.54
-NT average	0.51
-Alice Springs	0.03
-Barkly	0.07
-Northern	0.92
-QLD average	0.22
-High	0.18
-Moderate/High	0.64
-Moderate/Low	0.07
-Low	0.18
-SA	0.22
-TAS	0.71
-VIC	0.56
-average	0.51
-South West	0.89
-Pilbara	0.28
-Kimberley	0.3
-*/
 
   FRAC_WET_SOIL: {
     ACT: realNumber(0.87),

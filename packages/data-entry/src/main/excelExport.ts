@@ -9,6 +9,8 @@
 
 import * as XLSX from 'xlsx';
 
+import { extractSymbols } from '../shared/expressionParser';
+
 /** 1-based row index for expression as text. */
 const EXPRESSION_ROW = 5;
 /** 1-based row index for line number. */
@@ -29,41 +31,6 @@ export interface SymbolRecord {
   line: string;
   notes: string;
   values?: string;
-}
-
-/** Extract symbol tokens from an expression (matches shared/expressionParser logic). */
-function extractSymbols(expression: string): string[] {
-  const BOUNDARY_CHARS = /^[\s()\[\]{}+\-×*/]+|[\s()\[\]{}+\-×*/]+$/g;
-  const TRAILING_EXPONENT = /\^[-]?\d*\.?\d+$/;
-  const IGNORED = ['SUM'];
-  const isNumeric = (s: string) => /^\d*\.?\d+$/.test(s);
-  const rawParts = expression
-    .split(/\s+/)
-    .map((s) => s.trim())
-    .filter(Boolean);
-  const parts: string[] = [];
-  for (let i = 0; i < rawParts.length; i++) {
-    const p = rawParts[i];
-    if (p.endsWith(',') && i + 1 < rawParts.length) {
-      parts.push(p + rawParts[i + 1]);
-      i++;
-    } else {
-      parts.push(p);
-    }
-  }
-  const seen = new Set<string>();
-  const result: string[] = [];
-  for (const p of parts) {
-    const withoutExponent = p.replace(TRAILING_EXPONENT, '');
-    const token = withoutExponent.replace(BOUNDARY_CHARS, '').trim();
-    if (!token) continue;
-    if (IGNORED.some((i) => token.includes(i))) continue;
-    if (isNumeric(token)) continue;
-    if (seen.has(token)) continue;
-    seen.add(token);
-    result.push(token);
-  }
-  return result;
 }
 
 function findRecordBySymbol(

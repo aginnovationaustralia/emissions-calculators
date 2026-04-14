@@ -203,7 +203,6 @@ export const getCalculatorInput = (
   }
 
   const climateZone = checkClimateZone(cell(columnClimateZone));
-  // const state = checkState(cell('C'));
   const region = checkStateOrRegion(cell(columnStateOrRegion));
 
   const grazingSystem = checkGrazingSystem(cell(columnGrazingSystem));
