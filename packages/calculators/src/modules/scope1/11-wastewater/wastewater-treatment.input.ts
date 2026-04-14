@@ -3,6 +3,10 @@ import {
   WastewaterFacilityTypes,
 } from '@/constants/enums';
 import { input } from '@/tools/inputs';
+import {
+  kgPerCubicMetresToKgPerLitres,
+  tonnesToKg,
+} from '@/tools/unit-conversion';
 import { massPerVolume, realNumber, volume } from '@/tools/units';
 import { object, proportion } from '@/types/schemas';
 import z from 'zod';
@@ -26,7 +30,7 @@ export const WastewaterTreatmentInputSchema = object({
       description: 'The volume of wastewater treated, in cubic metres (m^3).',
     })
     .transform((val) =>
-      input('volume of wastewater', volume('FluidWaste', val * 1000)),
+      input('volume of wastewater', volume('FluidWaste', tonnesToKg(val))),
     ),
   inletCOD: z
     .number()
@@ -35,19 +39,24 @@ export const WastewaterTreatmentInputSchema = object({
       description: 'Average inlet COD concentration of wastewater (kg COD/m^3)',
     })
     .transform((val) =>
-      // kg/m^3 => kg/L
-      input('inlet COD', massPerVolume('COD', 'FluidWaste', val / 1000)),
+      input(
+        'inlet COD',
+        massPerVolume('COD', 'FluidWaste', kgPerCubicMetresToKgPerLitres(val)),
+      ),
     ),
   outletCOD: z
     .number()
     // REVISIT: Check if zod has a way to constrain this to be less than `inletCOD`
     .min(0)
     .meta({
-      description: 'TODO',
+      description:
+        'Average outlet COD concentration of wastewater (kg COD/m^3)',
     })
     .transform((val) =>
-      // kg/m^3 => kg/L
-      input('outlet COD', massPerVolume('COD', 'FluidWaste', val / 1000)),
+      input(
+        'outlet COD',
+        massPerVolume('COD', 'FluidWaste', kgPerCubicMetresToKgPerLitres(val)),
+      ),
     ),
   /**
    * REVISIT(?):
@@ -73,7 +82,7 @@ export const WastewaterTreatmentInputSchema = object({
     })
     // Converted from cubic meters to litres
     .transform((val) =>
-      input('captured methane volume', volume('CH4', val * 1000)),
+      input('captured methane volume', volume('CH4', tonnesToKg(val))),
     ),
   methaneFlared: z
     .number()
@@ -84,7 +93,7 @@ export const WastewaterTreatmentInputSchema = object({
     })
     // Converted from cubic meters to litres
     .transform((val) =>
-      input('flared methane volume', volume('CH4', val * 1000)),
+      input('flared methane volume', volume('CH4', tonnesToKg(val))),
     ),
   methaneOut: z
     .number()
@@ -95,7 +104,7 @@ export const WastewaterTreatmentInputSchema = object({
     })
     // Converted from cubic meters to litres
     .transform((val) =>
-      input('transferred methane volume', volume('CH4', val * 1000)),
+      input('transferred methane volume', volume('CH4', tonnesToKg(val))),
     ),
 });
 

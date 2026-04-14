@@ -79,7 +79,7 @@ export const calculateScope1WastewaterCH4 = (
    * kg/L.
    */
   const methaneVolumeConversionFactor = value(
-    massPerVolume('CH4', 'CH4', 6.784 * 10 ** -4),
+    massPerVolume('CH4', 'CH4', 6.784e-4),
   );
 
   /**
@@ -111,18 +111,6 @@ export const calculateScope1WastewaterCH4 = (
   const methaneFromFlaredSludge = sludgeBiogasEFCH4.multiply(
     sludgeBiogasEnergyContentFlared.multiply(wastewater.methaneFlared),
   );
-
-  // eslint-disable-next-line no-console
-  console.dir({
-    methaneFromWastewaterTreatedAtFacility:
-      methaneFromWastewaterTreatedAtFacility.unit.value.toString(),
-    methaneFromSludgeTreatedAtFacility:
-      methaneFromSludgeTreatedAtFacility.unit.value.toString(),
-    totalMethaneMass: totalMethaneMass.unit.value.toString(),
-    methaneVolumeConversionFactor:
-      methaneVolumeConversionFactor.unit.value.toString(),
-    methaneFromFlaredSludge: methaneFromFlaredSludge.unit.value.toString(),
-  });
 
   /**
    * (Wt * [CODin * (1 - Fsludge ) - CODout] * CFww,t * EFww) +

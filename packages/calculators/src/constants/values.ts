@@ -1,4 +1,8 @@
-import { gjPerTonneTogjPerKg } from '@/tools/unit-conversion';
+import {
+  gjPerCubicMetreToJPerLitre,
+  gjPerTonneTogjPerKg,
+  kgPerGjToKgPerJ,
+} from '@/tools/unit-conversion';
 import {
   energyPerMass,
   energyPerVolume,
@@ -1198,25 +1202,22 @@ export const commonConstants: CommonConstants = {
     SLUDGE_EF: massPerMass('CH4', 'COD', 0.25),
     /**
      * Chapter 11.2.3 line 221
-     * This is listed as GJ/m^3, dividing by 10^9 converts it to J/L -
-     * dividing by 10^6 to convert to J/m^3, then by 10^3 to convert to J/L
-     * (in order to fit with the expected unit for `energyPerVolume`)
+     * Originally expressed in GJ/m^3
      */
-    SLUDGE_BIOGAS_ENERGY_CONTENT: energyPerVolume('CH4', 0.0377 * 10 ** -9),
+    SLUDGE_BIOGAS_ENERGY_CONTENT: energyPerVolume(
+      'CH4',
+      gjPerCubicMetreToJPerLitre(0.0377),
+    ),
     /**
      * Chapter 11.2.3 line 222
-     * This is listed in kg CH4/GJ, multiplied here by 10^6 to convert to kg CH4/J,
-     * to be compatible with massPerEnergy
+     * Originally expressed in kg CH4/GJ
      */
-    SLUDGE_BIOGAS_CH4_EF: massPerEnergy('CH4', 0.2289 * 10 ** 6),
+    SLUDGE_BIOGAS_CH4_EF: massPerEnergy('CH4', kgPerGjToKgPerJ(0.2289)),
     /**
      * Chapter 11.2.3 line 223
-     * This is listed in kg N2O/GJ, multiplied here by 10^6 to convert to kg CH4/J,
-     * to be compatible with massPerEnergy
-     * NOTE: The value is originally given as 1.132 * 10^-4. It has been expanded here
-     * before multiplying it again to convert units.
+     * Originally expressed in kg N2O/GJ
      */
-    SLUDGE_BIOGAS_N2O_EF: massPerEnergy('N2O', 0.0001132 * 10 ** 6),
+    SLUDGE_BIOGAS_N2O_EF: massPerEnergy('N2O', kgPerGjToKgPerJ(1.132e-4)),
   },
 };
 
