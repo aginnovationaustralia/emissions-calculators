@@ -26,9 +26,9 @@ export const calculatePurchasedFeed = (
 ) => {
   const { constants } = context;
   /**
-   * 15.2.1.1 Method 1 — Purchased Feed
-   * (1) Emissions from purchased feed 𝐸 (t CO2e) are calculated as:
-   * 𝐸 = ∑ 𝑄𝑗 × 𝐸𝐹𝑗
+   * 15.2.1.1 Method 1 -- Purchased Feed
+   * (1) Emissions from purchased feed E (t CO2e) are calculated as:
+   * E = SUM Qj * EFj
    */
   const emissionsFromPurchases = purchasedFeed.map((feed) => {
     if (purchasedFeedIsMethod2(feed)) {
