@@ -190,12 +190,8 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<ExtractMassPerTimeSubstance<UL>>>;
   // MassPerVolume * Volume → Mass<substance>
-  multiply<
-    S1 extends Substance,
-    S2 extends Substance,
-    // UL extends MassPerVolume<S1, S2>, // TODO: CHECK THAT THIS WORKED
-  >(
-    this: BaseContainer<MassPerVolume<S1, S2>>, // BaseContainer<UL>,
+  multiply<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<MassPerVolume<S1, S2>>,
     right: Container<Volume<S2>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
