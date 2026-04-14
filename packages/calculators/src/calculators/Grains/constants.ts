@@ -1,5 +1,4 @@
 import {
-  BeefPastureConstants,
   CommonConstants,
   CropConstants,
   DairyConstants,
@@ -8,7 +7,6 @@ import {
   SwineConstants,
 } from '@/constants/types';
 import {
-  beefPastureConstants,
   commonConstants,
   cropConstants,
   dairyConstants,
@@ -25,7 +23,6 @@ export type ConstantsForGrainsCalculator = {
   CROP: CropConstants;
   SWINE: SwineConstants;
   FEEDLOT: FeedlotConstants;
-  BEEF_PASTURE: BeefPastureConstants;
 };
 
 export const constantsForGrainsCalculator: ConstantsForGrainsCalculator = {
@@ -35,5 +32,4 @@ export const constantsForGrainsCalculator: ConstantsForGrainsCalculator = {
   CROP: cropConstants,
   SWINE: swineConstants,
   FEEDLOT: feedlotConstants,
-  BEEF_PASTURE: beefPastureConstants,
 };

@@ -2,7 +2,6 @@ import { Environment } from '@/calculators/execution/types';
 import { CalculatorNames } from '@/calculators/strings';
 import { AllConstants, HasCommonConstants } from '@/constants/types';
 import {
-  beefPastureConstants,
   commonConstants,
   cropConstants,
   dairyConstants,
@@ -49,7 +48,6 @@ export const loadConstants = (): AllConstants => {
     DAIRY: dairyConstants,
     POULTRY: poultryConstants,
     LIVESTOCK: livestockConstants,
-    BEEF_PASTURE: beefPastureConstants,
   };
 };
 

@@ -1,14 +1,8 @@
 import {
-  ClimateZone,
-  ClimateZones,
   DairySystem,
   DairySystems,
-  ExtendedRegion,
-  ExtendedRegions,
   FeedlotMMSType,
   FeedlotMMSTypes,
-  Region,
-  Regions,
   SwineMMSType,
   SwineMMSTypes,
 } from '@/constants/enums';
@@ -34,27 +28,4 @@ export const checkDairySystem = (system: string | undefined): DairySystem => {
     throw new Error(`Invalid dairy system: ${system}`);
   }
   return system as DairySystem;
-};
-
-export const checkClimateZone = (region: string | undefined): ClimateZone => {
-  if (!ClimateZones.includes(region as ClimateZone)) {
-    throw new Error(`Invalid climate region: ${region}`);
-  }
-  return region as ClimateZone;
-};
-
-export const checkRegion = (region: string | undefined): Region => {
-  if (!Regions.includes(region as Region)) {
-    throw new Error(`Invalid region: ${region}`);
-  }
-  return region as Region;
-};
-
-export const checkExtendedRegion = (
-  region: string | undefined,
-): ExtendedRegion => {
-  if (!ExtendedRegions.includes(region as ExtendedRegion)) {
-    throw new Error(`Invalid extended region: ${region}`);
-  }
-  return region as ExtendedRegion;
 };

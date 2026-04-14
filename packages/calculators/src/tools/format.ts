@@ -38,8 +38,6 @@ export function formatUnit(unit: AnyUnit): string {
       return `Mass(${unit.substance}) / Day`;
     case 'VolumePerHeadPerDay':
       return `Volume(${unit.substance}) / Head / Day`;
-    case 'VolumePerMass':
-      return `Volume(${unit.volume}) / Mass(${unit.mass})`;
     case 'Days':
       return 'Days';
     case 'Head':
