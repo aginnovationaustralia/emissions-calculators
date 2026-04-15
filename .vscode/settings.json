@@ -8,6 +8,15 @@
       }
     ]
   },
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": ".*\\.ts$",
+        "notMatch": "excelExport.ts",
+        "cmd": "node ${workspaceFolder}/scripts/normalize-unicode-to-ascii.js ${file} && ${workspaceFolder}/node_modules/.bin/prettier --write ${file}"
+      }
+    ]
+  },
   "cSpell.language": "en-GB",
   "cSpell.words": [
     "AEMO",
@@ -81,6 +90,7 @@
     "EMCH",
     "EMISSIONFACTOR",
     "ENERGYGJ",
+    "Etotal",
     "Etrans",
     "eucalypt",
     "Eucla",
@@ -168,6 +178,7 @@
     "mburnc",
     "MEATLAYER",
     "Melaleuca",
+    "Menteric",
     "metabolisable",
     "mgmt",
     "mineralblock",

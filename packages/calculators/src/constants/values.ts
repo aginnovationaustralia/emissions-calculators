@@ -1,4 +1,8 @@
-import { gjPerTonneTogjPerKg } from '@/tools/unit-conversion';
+import {
+  gjPerCubicMetreToJPerLitre,
+  gjPerTonneTogjPerKg,
+  kgPerGjToKgPerJ,
+} from '@/tools/unit-conversion';
 import {
   energyPerMass,
   energyPerVolume,
@@ -22,6 +26,7 @@ import {
   CropConstants,
   DairyConstants,
   FeedlotConstants,
+  LivestockConstants,
   PoultryConstants,
   STATES,
   SwineConstants,
@@ -1174,6 +1179,61 @@ export const commonConstants: CommonConstants = {
   CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: massPerMass('CrudeProtein', 'N', 6.25),
 
   ASH_CONTENT_OF_MANURE: realNumber(0.16),
+
+  WASTEWATER_TREATMENT: {
+    // A.4.1.3
+    WASTEWATER_METHANE_CORRECTION_FACTORS: {
+      'Managed aerobic treatment': realNumber(0),
+      'Unmanaged aerobic treatment': realNumber(0.3),
+      'Anaerobic digestor/reactor': realNumber(0.8),
+      'Shallow anaerobic lagoon': realNumber(0.2),
+      'Deep anaerobic lagoon': realNumber(0.8),
+    },
+    // A.4.1.4
+    SLUDGE_METHANE_CORRECTION_FACTORS: {
+      'Managed aerobic treatment': realNumber(0),
+      'Unmanaged aerobic treatment': realNumber(0.3),
+      'Anaerobic digestor/reactor': realNumber(0.8),
+      'Shallow anaerobic lagoon': realNumber(0.2),
+      'Deep anaerobic lagoon': realNumber(0.8),
+    },
+    // Chapter 11.2.3, line 217
+    WASTEWATER_EF: massPerMass('CH4', 'COD', 0.25),
+    // Chapter 11.2.3, line 218
+    SLUDGE_EF: massPerMass('CH4', 'COD', 0.25),
+    /**
+     * Chapter 11.2.3 line 221
+     * Originally expressed in GJ/m^3
+     */
+    SLUDGE_BIOGAS_ENERGY_CONTENT: energyPerVolume(
+      'CH4',
+      gjPerCubicMetreToJPerLitre(0.0377),
+    ),
+    /**
+     * Chapter 11.2.3 line 222
+     * Originally expressed in kg CH4/GJ
+     */
+    SLUDGE_BIOGAS_CH4_EF: massPerEnergy('CH4', kgPerGjToKgPerJ(0.2289)),
+    /**
+     * Chapter 11.2.3 line 223
+     * Originally expressed in kg N2O/GJ
+     */
+    SLUDGE_BIOGAS_N2O_EF: massPerEnergy('N2O', kgPerGjToKgPerJ(1.132e-4)),
+  },
+
+  /**
+   * Appendix A.3.1.6 (except for "Plastic crate polypropylene", which comes from AusLCI)
+   * REVISIT: There are more packaging emissions factors in the AusLCI set, but they're
+   * expressed in kg packaging/kg CO2-e, could we include them if we accepted packaging
+   * input by weight?
+   */
+  PURCHASED_PACKAGING_FACTORS: {
+    '1 tonne polypropylene bag': mass('CO2e', 6.04),
+    '25 kg polypropylene bag': mass('CO2e', 0.9),
+    '20L high density polyethylene (HDPE) container': mass('CO2e', 3.41),
+    '1000L intermediate bulk containers': mass('CO2e', 190.15),
+    'Plastic crate polypropylene': mass('CO2e', 3.99),
+  },
 };
 
 const cropResidueRemovedOtherCropTypes: Record<State, RealNumber> = {
@@ -1626,7 +1686,6 @@ Single Super Phosphate (SSP) 0.26
     'N',
     0.21,
   ),
-
   // FracLeach
   FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF: realNumber(0.24),
 
@@ -1707,16 +1766,22 @@ export const feedlotConstants: FeedlotConstants = {
       DRY_MATTER_INTAKE: massPerHeadPerDay('DryMatter', 10.4),
       CRUDE_PROTEIN_CONTENT: massPerMass('CrudeProtein', 'DryMatter', 0.14),
       NITROGEN_RETENTION_FRACTION: realNumber(0.204),
+      NEUTRAL_DETERGENT_FIBRE_PERCENTAGE: percentage(22),
+      ETHER_EXTRACT_PERCENTAGE: percentage(4.8),
     },
     '81-200 days': {
       DRY_MATTER_INTAKE: massPerHeadPerDay('DryMatter', 10.8),
       CRUDE_PROTEIN_CONTENT: massPerMass('CrudeProtein', 'DryMatter', 0.12),
       NITROGEN_RETENTION_FRACTION: realNumber(0.127),
+      NEUTRAL_DETERGENT_FIBRE_PERCENTAGE: percentage(22),
+      ETHER_EXTRACT_PERCENTAGE: percentage(5),
     },
     '201+ days': {
       DRY_MATTER_INTAKE: massPerHeadPerDay('DryMatter', 8.2),
       CRUDE_PROTEIN_CONTENT: massPerMass('CrudeProtein', 'DryMatter', 0.12),
       NITROGEN_RETENTION_FRACTION: realNumber(0.07),
+      NEUTRAL_DETERGENT_FIBRE_PERCENTAGE: percentage(24),
+      ETHER_EXTRACT_PERCENTAGE: percentage(5.5),
     },
   },
 
@@ -1905,6 +1970,147 @@ export const poultryConstants: PoultryConstants = {
       FracGASM: realNumber(0),
       EFm: realNumber(0),
     },
+  },
+};
+
+export const livestockConstants: LivestockConstants = {
+  name: 'LIVESTOCK',
+  /**
+   * Appendix A1 Table A.3.1.2 & AusLCI
+   */
+  PURCHASED_FEED_FACTORS: {
+    /**
+     * Appendix A1 Table A.3.1.2 (except for `Bentonite`, which comes from AusLCI)
+     */
+    regionless: {
+      'Meat Meal': massPerMass('CO2e', 'Purchased Feed', 0.386),
+      'Blood Meal': massPerMass('CO2e', 'Purchased Feed', 1.9),
+      Millrun: massPerMass('CO2e', 'Purchased Feed', 0.3),
+      'Whole Sardines': massPerMass('CO2e', 'Purchased Feed', 0.3),
+      'Low Animal Protein Formulated Feed': massPerMass(
+        'CO2e',
+        'Purchased Feed',
+        2.2,
+      ),
+      Squid: massPerMass('CO2e', 'Purchased Feed', 0.3),
+      'Whole Fish': massPerMass('CO2e', 'Purchased Feed', 0.3),
+      'Custom Bait': massPerMass('CO2e', 'Purchased Feed', 0.08),
+      Bentonite: massPerMass('CO2e', 'Purchased Feed', 0.0652),
+    },
+    /**
+     * AusLCI
+     */
+    regional: {
+      Australia: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.239),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.181),
+        'Sorghum grain': massPerMass('CO2e', 'Purchased Feed', 0.232),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.268),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.117),
+        'Cereal silage': massPerMass('CO2e', 'Purchased Feed', 0.0744),
+        'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.117),
+        'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.12),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.339),
+        'Wheat bran': massPerMass('CO2e', 'Purchased Feed', 0.196),
+        'Canola meal': massPerMass('CO2e', 'Purchased Feed', 0.244),
+        'Feed for chickens': massPerMass('CO2e', 'Purchased Feed', 0.594),
+        'Feed for pigs': massPerMass('CO2e', 'Purchased Feed', 0.403),
+        'Feed for dairy calves': massPerMass('CO2e', 'Purchased Feed', 0.419),
+        'Feed for dairy cows': massPerMass('CO2e', 'Purchased Feed', 0.333),
+        'Canola oil': massPerMass('CO2e', 'Purchased Feed', 0.87),
+        'Cotton seed': massPerMass('CO2e', 'Purchased Feed', 0.197),
+      },
+      NSW: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.256),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.169),
+        'Sorghum grain': massPerMass('CO2e', 'Purchased Feed', 0.232),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.282),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.116),
+        'Cereal silage': massPerMass('CO2e', 'Purchased Feed', 0.0744),
+        'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.113),
+        'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.119),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.311),
+      },
+      NT: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.332),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.256),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.385),
+      },
+      QLD: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.269),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.186),
+        'Sorghum grain': massPerMass('CO2e', 'Purchased Feed', 0.231),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.296),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.118),
+        'Cereal silage': massPerMass('CO2e', 'Purchased Feed', 0.079),
+        'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.143),
+        'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.117),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.254),
+        Molasses: massPerMass('CO2e', 'Purchased Feed', 0.184),
+      },
+      SA: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.223),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.176),
+        'Sorghum grain': massPerMass('CO2e', 'Purchased Feed', 0.218),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.241),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.111),
+        'Cereal silage': massPerMass('CO2e', 'Purchased Feed', 0.0706),
+        'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.106),
+        'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.114),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.313),
+      },
+      TAS: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.307),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.338),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.139),
+        'Cereal silage': massPerMass('CO2e', 'Purchased Feed', 0.0808),
+        'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.113),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.398),
+      },
+      VIC: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.241),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.159),
+        'Sorghum grain': massPerMass('CO2e', 'Purchased Feed', 0.246),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.266),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.116),
+        'Cereal silage': massPerMass('CO2e', 'Purchased Feed', 0.0736),
+        'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.106),
+        'Maize silage': massPerMass('CO2e', 'Purchased Feed', 0.163),
+        'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.118),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.345),
+      },
+      WA: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.236),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.285),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.261),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.122),
+        'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.124),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.368),
+      },
+      Brazil: {
+        'Soybean meal': massPerMass('CO2e', 'Purchased Feed', 1.23),
+      },
+    },
+  },
+  /**
+   * AusLCI
+   */
+  PURCHASED_MINERAL_SUPPLEMENT_FACTORS: {
+    'Lick block, dry season mix': massPerMass(
+      'CO2e',
+      'Purchased Mineral Supplement',
+      0.881,
+    ),
+    'Lick block, weaner': massPerMass(
+      'CO2e',
+      'Purchased Mineral Supplement',
+      0.231,
+    ),
+    'Lick block, mineral': massPerMass(
+      'CO2e',
+      'Purchased Mineral Supplement',
+      0.677,
+    ),
   },
 };
 

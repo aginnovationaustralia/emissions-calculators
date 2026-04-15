@@ -24,7 +24,11 @@ export type Substance =
   | 'Milk'
   | 'Milk Solids'
   | 'Liveweight'
-  | 'Volatile Solids';
+  | 'Purchased Feed'
+  | 'Purchased Mineral Supplement'
+  | 'Volatile Solids'
+  | 'COD'
+  | 'Packaging';
 
 export type NumberUnitBase = { value: Decimal };
 

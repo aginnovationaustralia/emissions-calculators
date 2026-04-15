@@ -7,6 +7,7 @@ import {
   cropConstants,
   dairyConstants,
   feedlotConstants,
+  livestockConstants,
   poultryConstants,
   swineConstants,
 } from '@/constants/values';
@@ -48,6 +49,7 @@ export const loadConstants = (): AllConstants => {
     DAIRY: dairyConstants,
     POULTRY: poultryConstants,
     BEEF_PASTURE: beefPastureConstants,
+    LIVESTOCK: livestockConstants,
   };
 };
 

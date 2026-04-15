@@ -44,6 +44,12 @@ import {
   PastureType,
   PoultryClass,
   PoultryMMSType,
+  PurchasedFeedAquacultureType,
+  PurchasedFeedLivestockRegionalType,
+  PurchasedFeedLivestockRegionlessType,
+  PurchasedFeedRegion,
+  PurchasedMineralSupplementType,
+  PurchasedPackagingType,
   PureState,
   RefrigerantType,
   RefrigerationType,
@@ -57,6 +63,7 @@ import {
   StateOrRegion,
   SwineMMSType,
   VesselFuelType,
+  WastewaterFacilityType,
 } from './enums';
 
 export type ReplaceNumberUnits<T> = T extends NumberUnitBase
@@ -204,6 +211,24 @@ export type CommonConstants = NamedConstants & {
 
   // REVISIT: Could move to the common livestock area
   ASH_CONTENT_OF_MANURE: RealNumber;
+
+  WASTEWATER_TREATMENT: {
+    WASTEWATER_METHANE_CORRECTION_FACTORS: Record<
+      WastewaterFacilityType,
+      RealNumber
+    >;
+    SLUDGE_METHANE_CORRECTION_FACTORS: Record<
+      WastewaterFacilityType,
+      RealNumber
+    >;
+    WASTEWATER_EF: MassPerMass<'CH4', 'COD'>;
+    SLUDGE_EF: MassPerMass<'CH4', 'COD'>;
+    SLUDGE_BIOGAS_ENERGY_CONTENT: EnergyPerVolume<'CH4'>;
+    SLUDGE_BIOGAS_CH4_EF: MassPerEnergy<'CH4'>;
+    SLUDGE_BIOGAS_N2O_EF: MassPerEnergy<'N2O'>;
+  };
+
+  PURCHASED_PACKAGING_FACTORS: Record<PurchasedPackagingType, Mass<'CO2e'>>;
 };
 
 type CropResidueFactors = {
@@ -299,6 +324,8 @@ type FeedlotFeedFactors = {
   DRY_MATTER_INTAKE: MassPerHeadPerDay<'DryMatter'>;
   CRUDE_PROTEIN_CONTENT: MassPerMass<'CrudeProtein', 'DryMatter'>;
   NITROGEN_RETENTION_FRACTION: RealNumber;
+  NEUTRAL_DETERGENT_FIBRE_PERCENTAGE: RealNumber;
+  ETHER_EXTRACT_PERCENTAGE: RealNumber;
 };
 
 export type FeedlotConstants = NamedConstants & {
@@ -369,6 +396,28 @@ export type PoultryConstants = NamedConstants & {
   MMS: Record<PoultryMMSType, PoultryMMSFactors>;
 };
 
+export type LivestockConstants = NamedConstants & {
+  PURCHASED_FEED_FACTORS: {
+    regionless: Record<
+      PurchasedFeedAquacultureType | PurchasedFeedLivestockRegionlessType,
+      MassPerMass<'CO2e', 'Purchased Feed'>
+    >;
+    regional: {
+      [R in PurchasedFeedRegion]: {
+        [T in PurchasedFeedLivestockRegionalType<R>]: MassPerMass<
+          'CO2e',
+          'Purchased Feed'
+        >;
+      };
+    };
+  };
+
+  PURCHASED_MINERAL_SUPPLEMENT_FACTORS: Record<
+    PurchasedMineralSupplementType,
+    MassPerMass<'CO2e', 'Purchased Mineral Supplement'>
+  >;
+};
+
 type SeasonalFactors = Record<Season, RealNumber>;
 type WeightFactorsByClass = Record<
   BeefClass,
@@ -409,6 +458,7 @@ export type AllConstants = {
   FEEDLOT: FeedlotConstants;
   DAIRY: DairyConstants;
   POULTRY: PoultryConstants;
+  LIVESTOCK: LivestockConstants;
   BEEF_PASTURE: BeefPastureConstants;
 };
 

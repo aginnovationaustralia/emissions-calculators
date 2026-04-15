@@ -529,6 +529,141 @@ export const AgrochemicalTypes = [
 
 export type AgrochemicalType = (typeof AgrochemicalTypes)[number];
 
+export const PurchasedFeedRegions = [
+  'Australia',
+  'NSW',
+  'NT',
+  'QLD',
+  'SA',
+  'TAS',
+  'VIC',
+  'WA',
+  'Brazil',
+] as const;
+export type PurchasedFeedRegion = (typeof PurchasedFeedRegions)[number];
+
+export const PurchasedFeedAquacultureTypes = [
+  'Whole Sardines',
+  'Low Animal Protein Formulated Feed',
+  'Squid',
+  'Whole Fish', // listed as 'Whole fish' in Appendix A1 A.3.1.2, capitalised for consistency.
+  'Custom Bait',
+] as const;
+
+export type PurchasedFeedAquacultureType =
+  (typeof PurchasedFeedAquacultureTypes)[number];
+
+export const PurchasedFeedLivestockTypesPerRegion = {
+  Brazil: ['Soybean meal'] as const,
+  Australia: [
+    'Barley grain',
+    'Maize grain',
+    'Sorghum grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Cereal silage',
+    'Lucerne hay',
+    'Oaten hay',
+    'Pasture hay',
+    'Wheat bran',
+    'Canola meal',
+    'Feed for chickens',
+    'Feed for pigs',
+    'Feed for dairy calves',
+    'Feed for dairy cows',
+    'Canola oil',
+    'Cotton seed',
+  ] as const,
+  NSW: [
+    'Barley grain',
+    'Maize grain',
+    'Sorghum grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Cereal silage',
+    'Lucerne hay',
+    'Oaten hay',
+    'Pasture hay',
+  ] as const,
+  NT: ['Barley grain', 'Maize grain', 'Wheat grain'] as const,
+  QLD: [
+    'Barley grain',
+    'Maize grain',
+    'Sorghum grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Cereal silage',
+    'Lucerne hay',
+    'Oaten hay',
+    'Pasture hay',
+    'Molasses',
+  ] as const,
+  SA: [
+    'Barley grain',
+    'Maize grain',
+    'Sorghum grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Cereal silage',
+    'Lucerne hay',
+    'Oaten hay',
+    'Pasture hay',
+  ] as const,
+  TAS: [
+    'Barley grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Cereal silage',
+    'Lucerne hay',
+    'Pasture hay',
+  ] as const,
+  VIC: [
+    'Barley grain',
+    'Maize grain',
+    'Sorghum grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Cereal silage',
+    'Lucerne hay',
+    'Maize silage',
+    'Oaten hay',
+    'Pasture hay',
+  ] as const,
+  WA: [
+    'Barley grain',
+    'Maize grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Oaten hay',
+    'Pasture hay',
+  ] as const,
+} as const;
+
+export const PurchasedFeedLivestockRegionlessTypes = [
+  'Bentonite',
+  'Meat Meal',
+  'Blood Meal',
+  'Millrun',
+] as const;
+export type PurchasedFeedLivestockRegionlessType =
+  (typeof PurchasedFeedLivestockRegionlessTypes)[number];
+
+export type PurchasedFeedLivestockRegionalType<
+  R extends PurchasedFeedRegion = PurchasedFeedRegion,
+> = (typeof PurchasedFeedLivestockTypesPerRegion)[R][number];
+
+export type PurchasedFeedLivestockType =
+  | PurchasedFeedLivestockRegionlessType
+  | PurchasedFeedLivestockRegionalType;
+
+export const PurchasedMineralSupplementTypes = [
+  'Lick block, dry season mix',
+  'Lick block, weaner',
+  'Lick block, mineral',
+] as const;
+export type PurchasedMineralSupplementType =
+  (typeof PurchasedMineralSupplementTypes)[number];
+
 export const FeedlotMMSTypes = [
   'Dry lot (Feedpad)',
   'Solid Storage (Stockpile)',
@@ -541,6 +676,18 @@ export type FeedlotMMSType = (typeof FeedlotMMSTypes)[number];
 export const FeedlotDurationTypes = ['0-80 days', '81-200 days', '201+ days'];
 
 export type FeedlotDurationType = (typeof FeedlotDurationTypes)[number];
+
+export const groupDurationToDurationType = (
+  duration: number,
+): FeedlotDurationType => {
+  if (duration <= 80) {
+    return '0-80 days';
+  } else if (duration <= 200) {
+    return '81-200 days';
+  } else {
+    return '201+ days';
+  }
+};
 
 export const DairySystems = [
   'Grazed only',
@@ -686,6 +833,15 @@ export const RefrigerantTypes = [
 ] as const;
 export type RefrigerantType = (typeof RefrigerantTypes)[number];
 
+export const PurchasedPackagingTypes = [
+  '1 tonne polypropylene bag',
+  '25 kg polypropylene bag',
+  '20L high density polyethylene (HDPE) container',
+  '1000L intermediate bulk containers',
+  'Plastic crate polypropylene',
+] as const;
+export type PurchasedPackagingType = (typeof PurchasedPackagingTypes)[number];
+
 export const WetClimateZones = [
   'Tropical montane',
   'Tropical wet',
@@ -822,6 +978,14 @@ export type BeefClass = (typeof BeefClasses)[number];
 export const BeefClassesWithCalves = ['cows2To3Years', 'cowsGt3Years'] as const;
 export type BeefClassWithCalves = (typeof BeefClassesWithCalves)[number];
 
+export const WastewaterFacilityTypes = [
+  'Managed aerobic treatment',
+  'Unmanaged aerobic treatment',
+  'Anaerobic digestor/reactor',
+  'Shallow anaerobic lagoon', // ≤ 2m
+  'Deep anaerobic lagoon', // > 2m
+] as const;
+export type WastewaterFacilityType = (typeof WastewaterFacilityTypes)[number];
 export const PureStates = [
   'ACT',
   'NSW',

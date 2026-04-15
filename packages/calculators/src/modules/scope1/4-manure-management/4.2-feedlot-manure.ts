@@ -1,5 +1,6 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
+import { groupDurationToDurationType } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { br, num } from '@/tools/containers';
 import { one, oneMinus, zero } from '@/tools/sentinels';
@@ -80,12 +81,9 @@ export function calculateMassOfNitrogenAppliedToSoilsForFeedlot(
 
   const herdRecords = herds.map((herd) => {
     const Lj = herd.lengthOfStayDays;
-    const herdDurationType =
-      Lj.unit.value.toNumber() <= 80
-        ? '0-80 days'
-        : Lj.unit.value.toNumber() <= 200
-          ? '81-200 days'
-          : '201+ days';
+    const herdDurationType = groupDurationToDurationType(
+      Lj.unit.value.toNumber(),
+    );
     const Nj = herd.numberOfCattle;
 
     const Ij = herd.dryMatterIntake
