@@ -952,6 +952,14 @@ export type BeefClass = (typeof BeefClasses)[number];
 export const BeefClassesWithCalves = ['cows2To3Years', 'cowsGt3Years'] as const;
 export type BeefClassWithCalves = (typeof BeefClassesWithCalves)[number];
 
+export const WastewaterFacilityTypes = [
+  'Managed aerobic treatment',
+  'Unmanaged aerobic treatment',
+  'Anaerobic digestor/reactor',
+  'Shallow anaerobic lagoon', // ≤ 2m
+  'Deep anaerobic lagoon', // > 2m
+] as const;
+export type WastewaterFacilityType = (typeof WastewaterFacilityTypes)[number];
 export const PureStates = [
   'ACT',
   'NSW',
