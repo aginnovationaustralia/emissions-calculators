@@ -27,7 +27,8 @@ export type Substance =
   | 'Purchased Feed'
   | 'Purchased Mineral Supplement'
   | 'Volatile Solids'
-  | 'COD';
+  | 'COD'
+  | 'Packaging';
 
 export type NumberUnitBase = { value: Decimal };
 
