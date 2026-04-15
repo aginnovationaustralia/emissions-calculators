@@ -7,7 +7,7 @@ import {
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
 
-export const calculatePurchasedPackagings = (
+export const calculatePurchasedPackaging = (
   input: PurchasedPackagingsInputTransformed,
   context: ExecutionContext<AllConstants>,
 ) => {
