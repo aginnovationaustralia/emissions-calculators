@@ -321,6 +321,8 @@ type FeedlotFeedFactors = {
   DRY_MATTER_INTAKE: MassPerHeadPerDay<'DryMatter'>;
   CRUDE_PROTEIN_CONTENT: MassPerMass<'CrudeProtein', 'DryMatter'>;
   NITROGEN_RETENTION_FRACTION: RealNumber;
+  NEUTRAL_DETERGENT_FIBRE_PERCENTAGE: RealNumber;
+  ETHER_EXTRACT_PERCENTAGE: RealNumber;
 };
 
 export type FeedlotConstants = NamedConstants & {

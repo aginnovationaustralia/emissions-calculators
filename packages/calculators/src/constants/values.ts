@@ -1752,16 +1752,22 @@ export const feedlotConstants: FeedlotConstants = {
       DRY_MATTER_INTAKE: massPerHeadPerDay('DryMatter', 10.4),
       CRUDE_PROTEIN_CONTENT: massPerMass('CrudeProtein', 'DryMatter', 0.14),
       NITROGEN_RETENTION_FRACTION: realNumber(0.204),
+      NEUTRAL_DETERGENT_FIBRE_PERCENTAGE: percentage(22),
+      ETHER_EXTRACT_PERCENTAGE: percentage(4.8),
     },
     '81-200 days': {
       DRY_MATTER_INTAKE: massPerHeadPerDay('DryMatter', 10.8),
       CRUDE_PROTEIN_CONTENT: massPerMass('CrudeProtein', 'DryMatter', 0.12),
       NITROGEN_RETENTION_FRACTION: realNumber(0.127),
+      NEUTRAL_DETERGENT_FIBRE_PERCENTAGE: percentage(22),
+      ETHER_EXTRACT_PERCENTAGE: percentage(5),
     },
     '201+ days': {
       DRY_MATTER_INTAKE: massPerHeadPerDay('DryMatter', 8.2),
       CRUDE_PROTEIN_CONTENT: massPerMass('CrudeProtein', 'DryMatter', 0.12),
       NITROGEN_RETENTION_FRACTION: realNumber(0.07),
+      NEUTRAL_DETERGENT_FIBRE_PERCENTAGE: percentage(24),
+      ETHER_EXTRACT_PERCENTAGE: percentage(5.5),
     },
   },
 
