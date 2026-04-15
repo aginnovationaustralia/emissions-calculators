@@ -1,4 +1,8 @@
-import { gjPerTonneTogjPerKg } from '@/tools/unit-conversion';
+import {
+  gjPerCubicMetreToJPerLitre,
+  gjPerTonneTogjPerKg,
+  kgPerGjToKgPerJ,
+} from '@/tools/unit-conversion';
 import {
   energyPerMass,
   energyPerVolume,
@@ -1174,6 +1178,47 @@ export const commonConstants: CommonConstants = {
   CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: massPerMass('CrudeProtein', 'N', 6.25),
 
   ASH_CONTENT_OF_MANURE: realNumber(0.16),
+
+  WASTEWATER_TREATMENT: {
+    // A.4.1.3
+    WASTEWATER_METHANE_CORRECTION_FACTORS: {
+      'Managed aerobic treatment': realNumber(0),
+      'Unmanaged aerobic treatment': realNumber(0.3),
+      'Anaerobic digestor/reactor': realNumber(0.8),
+      'Shallow anaerobic lagoon': realNumber(0.2),
+      'Deep anaerobic lagoon': realNumber(0.8),
+    },
+    // A.4.1.4
+    SLUDGE_METHANE_CORRECTION_FACTORS: {
+      'Managed aerobic treatment': realNumber(0),
+      'Unmanaged aerobic treatment': realNumber(0.3),
+      'Anaerobic digestor/reactor': realNumber(0.8),
+      'Shallow anaerobic lagoon': realNumber(0.2),
+      'Deep anaerobic lagoon': realNumber(0.8),
+    },
+    // Chapter 11.2.3, line 217
+    WASTEWATER_EF: massPerMass('CH4', 'COD', 0.25),
+    // Chapter 11.2.3, line 218
+    SLUDGE_EF: massPerMass('CH4', 'COD', 0.25),
+    /**
+     * Chapter 11.2.3 line 221
+     * Originally expressed in GJ/m^3
+     */
+    SLUDGE_BIOGAS_ENERGY_CONTENT: energyPerVolume(
+      'CH4',
+      gjPerCubicMetreToJPerLitre(0.0377),
+    ),
+    /**
+     * Chapter 11.2.3 line 222
+     * Originally expressed in kg CH4/GJ
+     */
+    SLUDGE_BIOGAS_CH4_EF: massPerEnergy('CH4', kgPerGjToKgPerJ(0.2289)),
+    /**
+     * Chapter 11.2.3 line 223
+     * Originally expressed in kg N2O/GJ
+     */
+    SLUDGE_BIOGAS_N2O_EF: massPerEnergy('N2O', kgPerGjToKgPerJ(1.132e-4)),
+  },
 };
 
 const cropResidueRemovedOtherCropTypes: Record<State, RealNumber> = {
@@ -1626,7 +1671,6 @@ Single Super Phosphate (SSP) 0.26
     'N',
     0.21,
   ),
-
   // FracLeach
   FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF: realNumber(0.24),
 
