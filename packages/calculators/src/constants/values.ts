@@ -2072,6 +2072,9 @@ export const livestockConstants: LivestockConstants = {
       },
     },
   },
+  /**
+   * AusLCI
+   */
   PURCHASED_MINERAL_SUPPLEMENT_FACTORS: {
     'Lick block, dry season mix': massPerMass(
       'CO2e',
