@@ -850,3 +850,18 @@ export const stateOrRegionToPureState = (
     return 'WA';
   }
 };
+
+export const RiceCultivationUplandWaterRegimeTypes = [
+  'Paddy rotation',
+  'Fallow without flooding in previous year',
+] as const;
+export const RiceCultivationIrrigatedWaterRegimeTypes = [
+  'Continuously flooded',
+  'Single drainage period',
+  'Multiple drainage periods',
+] as const;
+export const RiceCultivationRainfedAndDeepWaterRegimeTypes = [
+  'Regular rainfed',
+  'Drought prone',
+  'Deep water',
+];
