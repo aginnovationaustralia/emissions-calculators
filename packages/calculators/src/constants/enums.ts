@@ -821,6 +821,15 @@ export const RefrigerantTypes = [
 ] as const;
 export type RefrigerantType = (typeof RefrigerantTypes)[number];
 
+export const PurchasedPackagingTypes = [
+  '1 tonne polypropylene bag',
+  '25 kg polypropylene bag',
+  '20L high density polyethylene (HDPE) container',
+  '1000L intermediate bulk containers',
+  'Plastic crate polypropylene',
+] as const;
+export type PurchasedPackagingType = (typeof PurchasedPackagingTypes)[number];
+
 export const WetClimateZones = [
   'Tropical montane',
   'Tropical wet',

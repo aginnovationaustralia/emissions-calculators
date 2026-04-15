@@ -1220,6 +1220,20 @@ export const commonConstants: CommonConstants = {
      */
     SLUDGE_BIOGAS_N2O_EF: massPerEnergy('N2O', kgPerGjToKgPerJ(1.132e-4)),
   },
+
+  /**
+   * Appendix A.3.1.6 (except for "Plastic crate polypropylene", which comes from AusLCI)
+   * REVISIT: There are more packaging emissions factors in the AusLCI set, but they're
+   * expressed in kg packaging/kg CO2-e, could we include them if we accepted packaging
+   * input by weight?
+   */
+  PURCHASED_PACKAGING_FACTORS: {
+    '1 tonne polypropylene bag': mass('CO2e', 6.04),
+    '25 kg polypropylene bag': mass('CO2e', 0.9),
+    '20L high density polyethylene (HDPE) container': mass('CO2e', 3.41),
+    '1000L intermediate bulk containers': mass('CO2e', 190.15),
+    'Plastic crate polypropylene': mass('CO2e', 3.99),
+  },
 };
 
 const cropResidueRemovedOtherCropTypes: Record<State, RealNumber> = {

@@ -49,6 +49,7 @@ import {
   PurchasedFeedLivestockRegionlessType,
   PurchasedFeedRegion,
   PurchasedMineralSupplementType,
+  PurchasedPackagingType,
   PureState,
   RefrigerantType,
   RefrigerationType,
@@ -226,6 +227,8 @@ export type CommonConstants = NamedConstants & {
     SLUDGE_BIOGAS_CH4_EF: MassPerEnergy<'CH4'>;
     SLUDGE_BIOGAS_N2O_EF: MassPerEnergy<'N2O'>;
   };
+
+  PURCHASED_PACKAGING_FACTORS: Record<PurchasedPackagingType, Mass<'CO2e'>>;
 };
 
 type CropResidueFactors = {
