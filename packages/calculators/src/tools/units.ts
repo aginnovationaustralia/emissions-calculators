@@ -24,6 +24,7 @@ export type Substance =
   | 'Milk'
   | 'Milk Solids'
   | 'Liveweight'
+  | 'Purchased Feed'
   | 'Volatile Solids'
   | 'COD';
 

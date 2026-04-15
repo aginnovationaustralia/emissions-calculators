@@ -44,6 +44,10 @@ import {
   PastureType,
   PoultryClass,
   PoultryMMSType,
+  PurchasedFeedAquacultureType,
+  PurchasedFeedLivestockRegionalType,
+  PurchasedFeedLivestockRegionlessType,
+  PurchasedFeedRegion,
   PureState,
   RefrigerantType,
   RefrigerationType,
@@ -386,6 +390,23 @@ export type PoultryConstants = NamedConstants & {
   MMS: Record<PoultryMMSType, PoultryMMSFactors>;
 };
 
+export type LivestockConstants = NamedConstants & {
+  PURCHASED_FEED_FACTORS: {
+    regionless: Record<
+      PurchasedFeedAquacultureType | PurchasedFeedLivestockRegionlessType,
+      MassPerMass<'CO2e', 'Purchased Feed'>
+    >;
+    regional: {
+      [R in PurchasedFeedRegion]: {
+        [T in PurchasedFeedLivestockRegionalType<R>]: MassPerMass<
+          'CO2e',
+          'Purchased Feed'
+        >;
+      };
+    };
+  };
+};
+
 type SeasonalFactors = Record<Season, RealNumber>;
 type WeightFactorsByClass = Record<
   BeefClass,
@@ -426,6 +447,7 @@ export type AllConstants = {
   FEEDLOT: FeedlotConstants;
   DAIRY: DairyConstants;
   POULTRY: PoultryConstants;
+  LIVESTOCK: LivestockConstants;
   BEEF_PASTURE: BeefPastureConstants;
 };
 

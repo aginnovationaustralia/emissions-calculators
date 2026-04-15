@@ -529,6 +529,136 @@ export const AgrochemicalTypes = [
 
 export type AgrochemicalType = (typeof AgrochemicalTypes)[number];
 
+export const PurchasedFeedRegions = [
+  'Australia',
+  'NSW',
+  'NT',
+  'QLD',
+  'SA',
+  'TAS',
+  'VIC',
+  'WA',
+  'Brazil',
+] as const;
+export type PurchasedFeedRegion = (typeof PurchasedFeedRegions)[number];
+
+export const PurchasedFeedAquacultureTypes = [
+  'Whole Sardines',
+  'Low Animal Protein Formulated Feed',
+  'Squid',
+  'Whole Fish', // listed as 'Whole fish' in Appendix A1 A.3.1.2, capitalised for consistency.
+  'Custom Bait',
+] as const;
+
+export type PurchasedFeedAquacultureType =
+  (typeof PurchasedFeedAquacultureTypes)[number];
+
+export const PurchasedFeedLivestockTypesPerRegion = {
+  Brazil: ['Soybean meal'] as const,
+  Australia: [
+    'Barley grain',
+    'Maize grain',
+    'Sorghum grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Cereal silage',
+    'Lucerne hay',
+    'Oaten hay',
+    'Pasture hay',
+    'Wheat bran',
+    'Canola meal',
+    'Feed for chickens',
+    'Feed for pigs',
+    'Feed for dairy calves',
+    'Feed for dairy cows',
+    'Canola oil',
+    'Cotton seed',
+  ] as const,
+  NSW: [
+    'Barley grain',
+    'Maize grain',
+    'Sorghum grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Cereal silage',
+    'Lucerne hay',
+    'Oaten hay',
+    'Pasture hay',
+  ] as const,
+  NT: ['Barley grain', 'Maize grain', 'Wheat grain'] as const,
+  QLD: [
+    'Barley grain',
+    'Maize grain',
+    'Sorghum grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Cereal silage',
+    'Lucerne hay',
+    'Oaten hay',
+    'Pasture hay',
+    'Molasses',
+  ] as const,
+  SA: [
+    'Barley grain',
+    'Maize grain',
+    'Sorghum grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Cereal silage',
+    'Lucerne hay',
+    'Oaten hay',
+    'Pasture hay',
+  ] as const,
+  TAS: [
+    'Barley grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Cereal silage',
+    'Lucerne hay',
+    'Pasture hay',
+  ] as const,
+  VIC: [
+    'Barley grain',
+    'Maize grain',
+    'Sorghum grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Cereal silage',
+    'Lucerne hay',
+    'Maize silage',
+    'Oaten hay',
+    'Pasture hay',
+  ] as const,
+  WA: [
+    'Barley grain',
+    'Maize grain',
+    'Wheat grain',
+    'Cereal hay',
+    'Oaten hay',
+    'Pasture hay',
+  ] as const,
+} as const;
+
+export const PurchasedFeedLivestockRegionlessTypes = [
+  'Lick block, dry season mix',
+  'Lick block, weaner',
+  'Lick block, mineral',
+  'Bentonite',
+  'Meat Meal',
+  'Blood Meal',
+  'Millrun',
+] as const;
+export type PurchasedFeedLivestockRegionlessType =
+  (typeof PurchasedFeedLivestockRegionlessTypes)[number];
+
+export type PurchasedFeedLivestockRegionalType<
+  R extends PurchasedFeedRegion = PurchasedFeedRegion,
+> = (typeof PurchasedFeedLivestockTypesPerRegion)[R][number];
+
+export type PurchasedFeedLivestockType =
+  | PurchasedFeedLivestockRegionlessType
+  | PurchasedFeedLivestockRegionalType;
+
 export const FeedlotMMSTypes = [
   'Dry lot (Feedpad)',
   'Solid Storage (Stockpile)',

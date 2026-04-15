@@ -11,13 +11,14 @@ export const AgrichemicalInputSchema = object({
   amountKg: z
     .number()
     .min(0)
-    .transform((val) => input('petrolUse', mass('Chemical', val))),
+    // TODO: check what these strings should be
+    .transform((val) => input('agrichemical amount', mass('Chemical', val))),
   customEmissionsFactor: z
     .number()
     .min(0)
     .optional()
     .transform((val) =>
-      val ? input('lpg', massPerMass('CO2e', 'Chemical', val)) : undefined,
+      val ? input('EF', massPerMass('CO2e', 'Chemical', val)) : undefined,
     ),
 });
 
