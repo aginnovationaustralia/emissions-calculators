@@ -1975,14 +1975,6 @@ export const livestockConstants: LivestockConstants = {
       Squid: massPerMass('CO2e', 'Purchased Feed', 0.3),
       'Whole Fish': massPerMass('CO2e', 'Purchased Feed', 0.3),
       'Custom Bait': massPerMass('CO2e', 'Purchased Feed', 0.08),
-
-      'Lick block, dry season mix': massPerMass(
-        'CO2e',
-        'Purchased Feed',
-        0.881,
-      ),
-      'Lick block, weaner': massPerMass('CO2e', 'Purchased Feed', 0.231),
-      'Lick block, mineral': massPerMass('CO2e', 'Purchased Feed', 0.677),
       Bentonite: massPerMass('CO2e', 'Purchased Feed', 0.0652),
     },
     /**
@@ -2079,6 +2071,26 @@ export const livestockConstants: LivestockConstants = {
         'Soybean meal': massPerMass('CO2e', 'Purchased Feed', 1.23),
       },
     },
+  },
+  /**
+   * AusLCI
+   */
+  PURCHASED_MINERAL_SUPPLEMENT_FACTORS: {
+    'Lick block, dry season mix': massPerMass(
+      'CO2e',
+      'Purchased Mineral Supplement',
+      0.881,
+    ),
+    'Lick block, weaner': massPerMass(
+      'CO2e',
+      'Purchased Mineral Supplement',
+      0.231,
+    ),
+    'Lick block, mineral': massPerMass(
+      'CO2e',
+      'Purchased Mineral Supplement',
+      0.677,
+    ),
   },
 };
 
