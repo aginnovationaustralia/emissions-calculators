@@ -8,7 +8,7 @@
       }
     ]
   },
-  "emeraldwalk.runonsave":{
+  "emeraldwalk.runonsave": {
     "commands": [
       {
         "match": ".*\\.ts$",
@@ -90,6 +90,7 @@
     "EMCH",
     "EMISSIONFACTOR",
     "ENERGYGJ",
+    "Etotal",
     "Etrans",
     "eucalypt",
     "Eucla",
@@ -177,6 +178,7 @@
     "mburnc",
     "MEATLAYER",
     "Melaleuca",
+    "Menteric",
     "metabolisable",
     "mgmt",
     "mineralblock",

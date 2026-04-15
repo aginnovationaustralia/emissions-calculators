@@ -677,6 +677,18 @@ export const FeedlotDurationTypes = ['0-80 days', '81-200 days', '201+ days'];
 
 export type FeedlotDurationType = (typeof FeedlotDurationTypes)[number];
 
+export const groupDurationToDurationType = (
+  duration: number,
+): FeedlotDurationType => {
+  if (duration <= 80) {
+    return '0-80 days';
+  } else if (duration <= 200) {
+    return '81-200 days';
+  } else {
+    return '201+ days';
+  }
+};
+
 export const DairySystems = [
   'Grazed only',
   'Limited feedpad',

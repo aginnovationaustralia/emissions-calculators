@@ -7,7 +7,7 @@ export const FeedlotGroupInputSchema = object({
   head: z
     .number()
     .min(0)
-    .meta({ description: 'Number of heads in group' })
+    .meta({ description: 'Number of animals in group' })
     .transform((val) => input('Nj', head(val))),
   averageLengthOfStayDays: z
     .number()

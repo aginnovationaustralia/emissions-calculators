@@ -93,4 +93,18 @@ describe('3.1.1 Beef feedlot enteric methane', () => {
       calculate31BeefFeedlotEntericMethane,
     );
   });
+
+  it('method 2 matches spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/3.1-beef-feedlot-enteric.xlsx',
+      '3.1.1',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 31, '2');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculate31BeefFeedlotEntericMethane,
+    );
+  });
 });
