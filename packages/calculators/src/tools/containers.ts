@@ -190,12 +190,8 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<ExtractMassPerTimeSubstance<UL>>>;
   // MassPerVolume * Volume → Mass<substance>
-  multiply<
-    S1 extends Substance,
-    S2 extends Substance,
-    UL extends MassPerVolume<S1, S2>,
-  >(
-    this: BaseContainer<UL>,
+  multiply<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<MassPerVolume<S1, S2>>,
     right: Container<Volume<S2>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
@@ -287,6 +283,8 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerHeadPerDay(rightUnit.mass);
       } else if (isMassPerEnergy(leftUnit) && isEnergyPerMass(rightUnit)) {
         unit = realNumber();
+      } else if (isMassPerVolume(leftUnit) && isVolume(rightUnit)) {
+        unit = mass(leftUnit.mass);
       } else if (isRealNumber(leftUnit)) {
         unit = { ...rightUnit };
       } else {

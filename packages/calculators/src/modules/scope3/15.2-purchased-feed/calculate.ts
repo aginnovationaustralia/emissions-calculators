@@ -21,7 +21,6 @@ import {
 
 export const calculatePurchasedFeed = (
   { purchasedFeed }: PurchasedFeedsInputTransformed,
-  // TODO: Relocate purchased feed constants
   context: ExecutionContext<AllConstants>,
 ) => {
   const { constants } = context;
@@ -36,7 +35,7 @@ export const calculatePurchasedFeed = (
     }
     if (!purchasedFeedIsRegionless(feed)) {
       /**
-       * REVISIT: Typescript can't tell that the feed type is properly constrained for each region
+       * NOTE: Typescript can't tell that the feed type is properly constrained for each region
        * already, to do this without ignoring type checking we have to do this one region at a time
        */
       if (purchasedFeedIsBrazilian(feed)) {

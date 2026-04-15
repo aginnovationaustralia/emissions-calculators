@@ -26,7 +26,8 @@ export type Substance =
   | 'Liveweight'
   | 'Purchased Feed'
   | 'Purchased Mineral Supplement'
-  | 'Volatile Solids';
+  | 'Volatile Solids'
+  | 'COD';
 
 export type NumberUnitBase = { value: Decimal };
 

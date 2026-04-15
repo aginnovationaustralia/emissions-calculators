@@ -8,7 +8,7 @@
       }
     ]
   },
-    "emeraldwalk.runonsave":{
+  "emeraldwalk.runonsave":{
     "commands": [
       {
         "match": ".*\\.ts$",
