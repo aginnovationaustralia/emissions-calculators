@@ -3,7 +3,7 @@ import {
   LULUCFInputSchema,
   LULUCFInputTransformed,
 } from '@/modules/lulucf/input';
-import { LandUserChangeActivityInput } from '@/modules/lulucf/land-user-change-activity-input';
+import { LandUseChangeActivityInput } from '@/modules/lulucf/land-user-change-activity-input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
 import {
@@ -31,13 +31,13 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const activity: LandUserChangeActivityInput = {
+  const activity: LandUseChangeActivityInput = {
+    type: 'humanInducedNationalRegeneration',
     carbonMassInTreesCurrentYear: Number(cell(columnMassTreesY)),
     carbonMassInTreesPreviousYear: Number(cell(columnMassTreesYMinus1)),
     carbonMassInDebrisCurrentYear: Number(cell(columnMassDebrisY)),
     carbonMassInDebrisPreviousYear: Number(cell(columnMassDebrisYMinus1)),
     ghgMassFromBiomassBurningPerHectare: 0,
-    region: 'Arnhem Coast',
     areaBurnt: 0,
     activityArea: Number(cell(columnActivityArea)),
   };

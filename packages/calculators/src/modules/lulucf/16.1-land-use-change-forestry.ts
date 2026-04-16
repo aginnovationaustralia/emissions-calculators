@@ -4,6 +4,7 @@ import { selectConstant } from '@/tools/constants';
 import { br, num } from '@/tools/containers';
 import { sum } from '@/tools/sum';
 import { LULUCFInputTransformed } from './input';
+import { isLandClearingActivity } from './land-user-change-activity-input';
 
 export const calculate_16_1_1_2_ChangesInWoodyCarbonStocks = (
   input: LULUCFInputTransformed,
@@ -75,17 +76,19 @@ export const calculate_16_1_1_5_SoilOrganicStockLosses = (
   const { activities } = input;
   const CgCO2 = selectConstant(constants.COMMON, 'CG_CO2');
 
-  const soilLosses = activities.map((activity) => {
-    const { region, activityArea } = activity;
+  const soilLosses = activities
+    .filter(isLandClearingActivity)
+    .map((activity) => {
+      const { region, activityArea } = activity;
 
-    const Or = selectConstant(
-      constants.LULUCF,
-      'ORGANIC_STOCK_LOSS_FACTORS',
-      region,
-    );
+      const Or = selectConstant(
+        constants.LULUCF,
+        'ORGANIC_STOCK_LOSS_FACTORS',
+        region,
+      );
 
-    return Or.multiply(activityArea);
-  });
+      return Or.multiply(activityArea);
+    });
 
   return sum(soilLosses).multiply(CgCO2).multiply(num(-1));
 };

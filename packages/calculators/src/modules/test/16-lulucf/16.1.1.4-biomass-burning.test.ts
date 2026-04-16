@@ -3,7 +3,7 @@ import {
   LULUCFInputSchema,
   LULUCFInputTransformed,
 } from '@/modules/lulucf/input';
-import { LandUserChangeActivityInput } from '@/modules/lulucf/land-user-change-activity-input';
+import { LandUseChangeActivityInput } from '@/modules/lulucf/land-user-change-activity-input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
 import {
@@ -31,7 +31,8 @@ const getCalculatorInput = (
   const massPerHectare = Number(cell(columnMassPerHectare));
   const areaBurnt = Number(cell(columnAreaBurnt));
 
-  const activity: LandUserChangeActivityInput = {
+  const activity: LandUseChangeActivityInput = {
+    type: 'landClearingForestToGrassland',
     carbonMassInTreesCurrentYear: 0,
     carbonMassInTreesPreviousYear: 0,
     carbonMassInDebrisCurrentYear: 0,

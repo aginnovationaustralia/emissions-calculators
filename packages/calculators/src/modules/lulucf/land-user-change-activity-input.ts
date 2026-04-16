@@ -8,7 +8,14 @@ import { area, massPerArea } from '@/tools/units';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 
-export const LandUserChangeActivityInputSchema = object({
+export const LandUseChangeActivityBaseInputSchema = object({
+  activityArea: z
+    .number()
+    .min(0)
+    .meta({ description: 'Area of the activity' })
+    .transform((val) =>
+      input('ActivityArea', area(hectaresToSquareMetres(val))),
+    ),
   carbonMassInTreesCurrentYear: z
     .number()
     .min(0)
@@ -71,31 +78,141 @@ export const LandUserChangeActivityInputSchema = object({
     .transform((val) =>
       input(
         'Eg,i,j,y',
-        massPerArea('CO2e', tonnesPerHectareToKgPerSqMetre(val)),
+        massPerArea('CO2e', tonnesPerHectareToKgPerSquareMetres(val)),
       ),
     ),
-  region: z.enum(IBRA7Regions).meta({
-    description: 'IBRA7 region of the activity area',
-  }),
+
   areaBurnt: z
     .number()
     .min(0)
     .meta({
       description: 'Area burnt. Derived from FullCAM output.',
     })
-    .transform((val) => input('ag,i,j,y', area(hectaresToSqMetres(val)))),
-  activityArea: z
-    .number()
-    .min(0)
-    .meta({ description: 'Area of the activity' })
-    .transform((val) =>
-      input('ActivityArea', area(hectaresToSquareMetres(val))),
-    ),
+    .transform((val) => input('ag,i,j,y', area(hectaresToSquareMetres(val)))),
 });
 
-export type LandUserChangeActivityInput = z.input<
-  typeof LandUserChangeActivityInputSchema
+const LandUseLandClearingBaseInputSchema =
+  LandUseChangeActivityBaseInputSchema.extend({
+    region: z.enum(IBRA7Regions).meta({
+      description: 'IBRA7 region of the activity area',
+    }),
+  });
+
+const ForestryActivityBaseInputSchema =
+  LandUseChangeActivityBaseInputSchema.extend({});
+
+/*
+1 = Land clearing (forest to cropland)
+2 = Land clearing (forest to grassland)
+3 = Land clearing (forest to settlements)
+4 = Revegetation by planting
+5 = Human-induced national regeneration
+6 = Farm forestry
+7 = Plantation forestry
+*/
+
+const LandClearingForestToCroplandInputSchema =
+  LandUseLandClearingBaseInputSchema.extend({
+    type: z.literal('landClearingForestToCropland'),
+  }).transform((val) => ({
+    ...val,
+    number: 1 as const,
+  }));
+
+const LandClearingForestToGrasslandInputSchema =
+  LandUseLandClearingBaseInputSchema.extend({
+    type: z.literal('landClearingForestToGrassland'),
+  }).transform((val) => ({
+    ...val,
+    number: 2 as const,
+  }));
+
+const LandClearingForestToSettlementsInputSchema =
+  LandUseLandClearingBaseInputSchema.extend({
+    type: z.literal('landClearingForestToSettlements'),
+  }).transform((val) => ({
+    ...val,
+    number: 3 as const,
+  }));
+
+const RevegetationByPlantingInputSchema =
+  LandUseChangeActivityBaseInputSchema.extend({
+    type: z.literal('revegetationByPlanting'),
+  }).transform((val) => ({
+    ...val,
+    number: 4 as const,
+  }));
+
+const HumanInducedNationalRegenerationInputSchema =
+  LandUseChangeActivityBaseInputSchema.extend({
+    type: z.literal('humanInducedNationalRegeneration'),
+  }).transform((val) => ({
+    ...val,
+    number: 5 as const,
+  }));
+
+const FarmForestryInputSchema = ForestryActivityBaseInputSchema.extend({
+  type: z.literal('farmForestry'),
+}).transform((val) => ({
+  ...val,
+  number: 6 as const,
+}));
+
+const PlantationForestryInputSchema = ForestryActivityBaseInputSchema.extend({
+  type: z.literal('plantationForestry'),
+}).transform((val) => ({
+  ...val,
+  number: 7 as const,
+}));
+
+export const LandUseChangeActivityInputSchema = z.discriminatedUnion('type', [
+  LandClearingForestToCroplandInputSchema,
+  LandClearingForestToGrasslandInputSchema,
+  LandClearingForestToSettlementsInputSchema,
+  RevegetationByPlantingInputSchema,
+  HumanInducedNationalRegenerationInputSchema,
+  FarmForestryInputSchema,
+  PlantationForestryInputSchema,
+]);
+
+export type LandClearingForestToCroplandInputTransformed = z.output<
+  typeof LandClearingForestToCroplandInputSchema
 >;
-export type LandUserChangeActivityInputTransformed = z.output<
-  typeof LandUserChangeActivityInputSchema
+export type LandClearingForestToGrasslandInputTransformed = z.output<
+  typeof LandClearingForestToGrasslandInputSchema
+>;
+export type LandClearingForestToSettlementsInputTransformed = z.output<
+  typeof LandClearingForestToSettlementsInputSchema
+>;
+export type RevegetationByPlantingInputTransformed = z.output<
+  typeof RevegetationByPlantingInputSchema
+>;
+export type HumanInducedNationalRegenerationInputTransformed = z.output<
+  typeof HumanInducedNationalRegenerationInputSchema
+>;
+export type FarmForestryInputTransformed = z.output<
+  typeof FarmForestryInputSchema
+>;
+export type PlantationForestryInputTransformed = z.output<
+  typeof PlantationForestryInputSchema
+>;
+
+export const isLandClearingActivity = (
+  activity: LandUseChangeActivityInputTransformed,
+): activity is
+  | LandClearingForestToCroplandInputTransformed
+  | LandClearingForestToGrasslandInputTransformed
+  | LandClearingForestToSettlementsInputTransformed => {
+  return (
+    activity.type === 'landClearingForestToCropland' ||
+    activity.type === 'landClearingForestToGrassland' ||
+    activity.type === 'landClearingForestToSettlements'
+  );
+};
+
+export type LandUseChangeActivityInput = z.input<
+  typeof LandUseChangeActivityInputSchema
+>;
+export type LandUseChangeActivityInputTransformed = z.output<
+  typeof LandUseChangeActivityInputSchema
 >;

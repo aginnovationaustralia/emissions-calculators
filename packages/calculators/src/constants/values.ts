@@ -2,7 +2,7 @@ import {
   gjPerCubicMetreToJPerLitre,
   gjPerTonneTogjPerKg,
   kgPerGjToKgPerJ,
-  tonnesPerHectareToKgPerSqMetre,
+  tonnesPerHectareToKgPerSquareMetres,
 } from '@/tools/unit-conversion';
 import {
   energyPerMass,
@@ -4981,7 +4981,7 @@ export const beefPastureConstants: BeefPastureConstants = {
 };
 
 const tonnesCarbonPerHectare = (tonnes: number) =>
-  massPerArea('Carbon', tonnesPerHectareToKgPerSqMetre(tonnes));
+  massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(tonnes));
 
 export const lulucfConstants: LULUCFConstants = {
   name: 'LULUCF',

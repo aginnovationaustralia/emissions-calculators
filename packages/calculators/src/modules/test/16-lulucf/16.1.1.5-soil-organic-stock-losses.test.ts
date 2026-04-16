@@ -3,7 +3,7 @@ import {
   LULUCFInputSchema,
   LULUCFInputTransformed,
 } from '@/modules/lulucf/input';
-import { LandUserChangeActivityInput } from '@/modules/lulucf/land-user-change-activity-input';
+import { LandUseChangeActivityInput } from '@/modules/lulucf/land-user-change-activity-input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
 import {
@@ -32,7 +32,8 @@ const getCalculatorInput = (
   const region = checkIBRA7Region(cell(columnRegion));
   const activityArea = Number(cell(columnActivityArea));
 
-  const activity: LandUserChangeActivityInput = {
+  const activity: LandUseChangeActivityInput = {
+    type: 'landClearingForestToCropland',
     carbonMassInTreesCurrentYear: 0,
     carbonMassInTreesPreviousYear: 0,
     carbonMassInDebrisCurrentYear: 0,
