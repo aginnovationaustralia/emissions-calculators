@@ -116,6 +116,9 @@ export type CommonConstants = NamedConstants & {
   GWP_FACTORSC18: RealNumber;
 
   GWP_CH4: MassPerMass<'CO2e', 'CH4'>;
+
+  CG_CO2: MassPerMass<'CO2', 'Carbon'>;
+
   EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: VolumePerMass<
     'CH4',
     'Volatile Solids'

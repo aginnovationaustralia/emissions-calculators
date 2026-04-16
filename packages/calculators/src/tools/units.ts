@@ -1,6 +1,7 @@
 import Decimal from 'decimal.js-light';
 
 export type Substance =
+  | 'Carbon'
   | 'Chemical'
   | 'Inorganic Fertiliser'
   | 'Organic Fertiliser'

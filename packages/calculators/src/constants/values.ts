@@ -155,6 +155,8 @@ export const commonConstants: CommonConstants = {
 
   GWP_CH4: massPerMass('CO2e', 'CH4', 28),
 
+  CG_CO2: massPerMass('CO2', 'Carbon', 3.67),
+
   EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: volumePerMass(
     'CH4',
     'Volatile Solids',
