@@ -33,6 +33,7 @@ import {
   FuelStationaryVolumeBasedLiquidType,
   GrazingProductionSystemsWithRainfall,
   HeavyDutyFuelType,
+  IBRA7Region,
   InorganicFertiliserComponentOrigin,
   InorganicFertiliserComponentTypeNonRegional,
   InorganicFertiliserComponentTypeRegional,
@@ -454,6 +455,10 @@ export type BeefPastureConstants = NamedConstants & {
   FRAC_WET_SOIL: Record<StateOrRegion, RealNumber>;
 };
 
+export type LULUCFConstants = NamedConstants & {
+  ORGANIC_STOCK_LOSS_FACTORS: Record<IBRA7Region, MassPerArea<'Carbon'>>;
+};
+
 export type AllConstants = {
   COMMON: CommonConstants;
   CROP: CropConstants;
@@ -463,6 +468,7 @@ export type AllConstants = {
   POULTRY: PoultryConstants;
   LIVESTOCK: LivestockConstants;
   BEEF_PASTURE: BeefPastureConstants;
+  LULUCF: LULUCFConstants;
 };
 
 export type HasCommonConstants = {

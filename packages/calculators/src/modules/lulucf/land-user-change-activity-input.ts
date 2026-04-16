@@ -1,3 +1,4 @@
+import { IBRA7Regions } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import {
   hectaresToSquareMetres,
@@ -73,6 +74,9 @@ export const LandUserChangeActivityInputSchema = object({
         massPerArea('CO2e', tonnesPerHectareToKgPerSqMetre(val)),
       ),
     ),
+  region: z.enum(IBRA7Regions).meta({
+    description: 'IBRA7 region of the activity area',
+  }),
   areaBurnt: z
     .number()
     .min(0)

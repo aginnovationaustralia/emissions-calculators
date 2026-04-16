@@ -62,3 +62,30 @@ export const calculate_16_1_1_4_BiomassBurning = (
 
   return sum(ghgFromBurnings);
 };
+
+export const calculate_16_1_1_5_SoilOrganicStockLosses = (
+  input: LULUCFInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  const { constants } = context;
+  /*
+  SLUC,j=1-3,y = SUM ∆Si,j=1-3,y * Cg,CO2
+  ∆Si,j=1-3,y = Or * ai,j=1-3,y
+  */
+  const { activities } = input;
+  const CgCO2 = selectConstant(constants.COMMON, 'CG_CO2');
+
+  const soilLosses = activities.map((activity) => {
+    const { region, activityArea } = activity;
+
+    const Or = selectConstant(
+      constants.LULUCF,
+      'ORGANIC_STOCK_LOSS_FACTORS',
+      region,
+    );
+
+    return Or.multiply(activityArea);
+  });
+
+  return sum(soilLosses).multiply(CgCO2).multiply(num(-1));
+};

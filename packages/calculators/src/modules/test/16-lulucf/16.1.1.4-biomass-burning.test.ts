@@ -38,6 +38,7 @@ const getCalculatorInput = (
     carbonMassInDebrisPreviousYear: 0,
     ghgMassFromBiomassBurningPerHectare: massPerHectare,
     areaBurnt,
+    region: 'Arnhem Coast',
     activityArea: 100,
   };
 
