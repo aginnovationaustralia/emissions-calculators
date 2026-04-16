@@ -5,7 +5,7 @@ import { br, num } from '@/tools/containers';
 import { sum } from '@/tools/sum';
 import { LULUCFInputTransformed } from './input';
 
-export const calculate_16_1_1_ChangesInWoodyCarbonStocks = (
+export const calculate_16_1_1_2_ChangesInWoodyCarbonStocks = (
   input: LULUCFInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
@@ -43,4 +43,22 @@ export const calculate_16_1_1_ChangesInWoodyCarbonStocks = (
     return netChange;
   });
   return sum(netChangeInActivities).multiply(CgCO2).multiply(num(-1));
+};
+
+export const calculate_16_1_1_4_BiomassBurning = (
+  input: LULUCFInputTransformed,
+  _context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  /*
+  ELUC,g,j,y = SUM (Eg,i,j,y * ag,i,j,y)
+  */
+  const { activities } = input;
+
+  const ghgFromBurnings = activities.map((activity) => {
+    const { ghgMassFromBiomassBurningPerHectare, areaBurnt } = activity;
+
+    return ghgMassFromBiomassBurningPerHectare.multiply(areaBurnt);
+  });
+
+  return sum(ghgFromBurnings);
 };

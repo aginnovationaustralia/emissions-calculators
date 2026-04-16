@@ -1,4 +1,4 @@
-import { calculate_16_1_1_2_ChangesInWoodyCarbonStocks } from '@/modules/lulucf/16.1-land-use-change-forestry';
+import { calculate_16_1_1_4_BiomassBurning } from '@/modules/lulucf/16.1-land-use-change-forestry';
 import {
   LULUCFInputSchema,
   LULUCFInputTransformed,
@@ -11,11 +11,8 @@ import {
   createSheetExtractor,
 } from '../sheet-comparison';
 
-const columnMassTreesY = 'B';
-const columnMassTreesYMinus1 = 'C';
-const columnMassDebrisY = 'E';
-const columnMassDebrisYMinus1 = 'F';
-const columnActivityArea = 'H';
+const columnMassPerHectare = 'B';
+const columnAreaBurnt = 'C';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -31,14 +28,17 @@ const getCalculatorInput = (
     return undefined;
   }
 
+  const massPerHectare = Number(cell(columnMassPerHectare));
+  const areaBurnt = Number(cell(columnAreaBurnt));
+
   const activity: LandUserChangeActivityInput = {
-    carbonMassInTreesCurrentYear: Number(cell(columnMassTreesY)),
-    carbonMassInTreesPreviousYear: Number(cell(columnMassTreesYMinus1)),
-    carbonMassInDebrisCurrentYear: Number(cell(columnMassDebrisY)),
-    carbonMassInDebrisPreviousYear: Number(cell(columnMassDebrisYMinus1)),
-    ghgMassFromBiomassBurningPerHectare: 0,
-    areaBurnt: 0,
-    activityArea: Number(cell(columnActivityArea)),
+    carbonMassInTreesCurrentYear: 0,
+    carbonMassInTreesPreviousYear: 0,
+    carbonMassInDebrisCurrentYear: 0,
+    carbonMassInDebrisPreviousYear: 0,
+    ghgMassFromBiomassBurningPerHectare: massPerHectare,
+    areaBurnt,
+    activityArea: 100,
   };
 
   return LULUCFInputSchema.parse({
@@ -47,7 +47,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`K${row}`).value());
+  return Number(sheet.cell(`D${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
@@ -55,18 +55,18 @@ const extractInputsAndOutput = createSheetExtractor(
   getExpectedOutput,
 );
 
-describe('16.1.1.2 Woody Carbon Stocks', () => {
+describe('16.1.1.4 Biomass Burning', () => {
   it('method 2 scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/16-lulucf/16-lulucf.xlsx',
-      '16.1.1.2',
+      '16.1.1.4',
     );
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
-      calculate_16_1_1_2_ChangesInWoodyCarbonStocks,
+      calculate_16_1_1_4_BiomassBurning,
     );
   });
 });
