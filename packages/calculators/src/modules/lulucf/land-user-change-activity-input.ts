@@ -211,6 +211,23 @@ export type PlantationForestryInputTransformed = z.output<
   typeof PlantationForestryInputSchema
 >;
 
+export const isLandClearingForestToCropland = (
+  activity: LandUseChangeActivityInputTransformed,
+): activity is LandClearingForestToCroplandInputTransformed => {
+  return activity.type === 'landClearingForestToCropland';
+};
+
+export const isLandClearingToGrasslandOrSettlements = (
+  activity: LandUseChangeActivityInputTransformed,
+): activity is
+  | LandClearingForestToGrasslandInputTransformed
+  | LandClearingForestToSettlementsInputTransformed => {
+  return (
+    activity.type === 'landClearingForestToGrassland' ||
+    activity.type === 'landClearingForestToSettlements'
+  );
+};
+
 export const isLandClearingActivity = (
   activity: LandUseChangeActivityInputTransformed,
 ): activity is
@@ -218,9 +235,8 @@ export const isLandClearingActivity = (
   | LandClearingForestToGrasslandInputTransformed
   | LandClearingForestToSettlementsInputTransformed => {
   return (
-    activity.type === 'landClearingForestToCropland' ||
-    activity.type === 'landClearingForestToGrassland' ||
-    activity.type === 'landClearingForestToSettlements'
+    isLandClearingForestToCropland(activity) ||
+    isLandClearingToGrasslandOrSettlements(activity)
   );
 };
 

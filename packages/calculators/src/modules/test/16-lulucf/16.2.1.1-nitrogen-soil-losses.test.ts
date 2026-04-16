@@ -1,4 +1,4 @@
-import { calculate_16_1_1_4_BiomassBurning } from '@/modules/lulucf/16.1-land-use-change-forestry';
+import { calculate_16_2_1_1_NitrogenMineralisationSoilLosses } from '@/modules/lulucf/16.2-nitrogen-soil-losses';
 import {
   LULUCFInputSchema,
   LULUCFInputTransformed,
@@ -10,9 +10,11 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from '../sheet-comparison';
+import { checkIBRA7Region } from './lulucf-domain';
 
-const columnMassPerHectare = 'B';
-const columnAreaBurnt = 'C';
+const columnClearingType = 'A';
+const columnRegion = 'B';
+const columnActivityArea = 'D';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -28,19 +30,28 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const massPerHectare = Number(cell(columnMassPerHectare));
-  const areaBurnt = Number(cell(columnAreaBurnt));
+  const region = checkIBRA7Region(cell(columnRegion));
+  const activityArea = Number(cell(columnActivityArea));
+
+  const clearingType = cell(columnClearingType);
+
+  const type =
+    clearingType === 'crop'
+      ? 'landClearingForestToCropland'
+      : clearingType === 'grassland'
+        ? 'landClearingForestToGrassland'
+        : 'landClearingForestToSettlements';
 
   const activity: LandUseChangeActivityInput = {
-    type: 'landClearingForestToGrassland',
+    type,
     carbonMassInTreesCurrentYear: 0,
     carbonMassInTreesPreviousYear: 0,
     carbonMassInDebrisCurrentYear: 0,
     carbonMassInDebrisPreviousYear: 0,
-    ghgMassFromBiomassBurningPerHectare: massPerHectare,
-    areaBurnt,
-    region: 'Arnhem Coast',
-    activityArea: 100,
+    ghgMassFromBiomassBurningPerHectare: 0,
+    region,
+    areaBurnt: 0,
+    activityArea,
   };
 
   return LULUCFInputSchema.parse({
@@ -49,7 +60,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`D${row}`).value());
+  return Number(sheet.cell(`O${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
@@ -57,18 +68,18 @@ const extractInputsAndOutput = createSheetExtractor(
   getExpectedOutput,
 );
 
-describe('16.1.1.4 Biomass Burning', () => {
+describe('16.2.1.1 Nitrogen Mineralisation from Soil Losses', () => {
   it('method 2 scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/16-lulucf/16.1-lulucf.xlsx',
-      '16.1.1.4',
+      './src/modules/test/16-lulucf/16.2-lulucf.xlsx',
+      '16.2.1.1',
     );
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
-      calculate_16_1_1_4_BiomassBurning,
+      calculate_16_2_1_1_NitrogenMineralisationSoilLosses,
     );
   });
 });

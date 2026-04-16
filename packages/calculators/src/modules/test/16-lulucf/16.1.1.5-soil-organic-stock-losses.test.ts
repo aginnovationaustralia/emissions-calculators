@@ -61,7 +61,7 @@ const extractInputsAndOutput = createSheetExtractor(
 describe('16.1.1.5 Soil Organic Stock Losses', () => {
   it('method 2 scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/16-lulucf/16-lulucf.xlsx',
+      './src/modules/test/16-lulucf/16.1-lulucf.xlsx',
       '16.1.1.5',
     );
 

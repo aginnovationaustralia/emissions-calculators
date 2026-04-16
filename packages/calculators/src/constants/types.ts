@@ -457,6 +457,7 @@ export type BeefPastureConstants = NamedConstants & {
 
 export type LULUCFConstants = NamedConstants & {
   ORGANIC_STOCK_LOSS_FACTORS: Record<IBRA7Region, MassPerArea<'Carbon'>>;
+  CARBON_TO_NITROGEN_RATIO: RealNumber;
 };
 
 export type AllConstants = {

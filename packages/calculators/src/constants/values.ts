@@ -5072,4 +5072,6 @@ export const lulucfConstants: LULUCFConstants = {
     'Wet Tropics': tonnesCarbonPerHectare(-0.67),
     Yalgoo: tonnesCarbonPerHectare(-0.05),
   },
+
+  CARBON_TO_NITROGEN_RATIO: realNumber(18),
 };
