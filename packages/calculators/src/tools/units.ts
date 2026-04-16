@@ -28,7 +28,8 @@ export type Substance =
   | 'Purchased Mineral Supplement'
   | 'Volatile Solids'
   | 'COD'
-  | 'Packaging';
+  | 'Packaging'
+  | 'Organic Amendment';
 
 export type NumberUnitBase = { value: Decimal };
 
