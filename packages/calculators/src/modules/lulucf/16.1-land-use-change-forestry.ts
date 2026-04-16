@@ -4,7 +4,10 @@ import { selectConstant } from '@/tools/constants';
 import { br, num } from '@/tools/containers';
 import { sum } from '@/tools/sum';
 import { LULUCFInputTransformed } from './input';
-import { isLandClearingActivity } from './land-user-change-activity-input';
+import {
+  isForestryActivity,
+  isLandClearingActivity,
+} from './land-user-change-activity-input';
 
 export const calculate_16_1_1_2_ChangesInWoodyCarbonStocks = (
   input: LULUCFInputTransformed,
@@ -91,4 +94,27 @@ export const calculate_16_1_1_5_SoilOrganicStockLosses = (
     });
 
   return sum(soilLosses).multiply(CgCO2).multiply(num(-1));
+};
+
+export const calculate_16_1_1_7_HarvestedWoodProducts = (
+  input: LULUCFInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  /*
+  CHWP,j=6-7,y = SUM (Cp,i,j=6-7,y * ai,j=6-7,y) * Cg,CO2 * -1
+  */
+  const { constants } = context;
+  const { activities } = input;
+
+  const CgCO2 = selectConstant(constants.COMMON, 'CG_CO2');
+  const harvestedWoodEmissions = activities
+    .filter(isForestryActivity)
+    .map((activity) => {
+      const { carbonMassOfWoodProductsHarvestedPerHectare, activityArea } =
+        activity;
+
+      return carbonMassOfWoodProductsHarvestedPerHectare.multiply(activityArea);
+    });
+
+  return sum(harvestedWoodEmissions).multiply(CgCO2).multiply(num(-1));
 };

@@ -99,7 +99,21 @@ const LandUseLandClearingBaseInputSchema =
   });
 
 const ForestryActivityBaseInputSchema =
-  LandUseChangeActivityBaseInputSchema.extend({});
+  LandUseChangeActivityBaseInputSchema.extend({
+    carbonMassOfWoodProductsHarvestedPerHectare: z
+      .number()
+      .min(0)
+      .meta({
+        description:
+          'Carbon mass of wood products harvested per hectare. Derived from FullCAM output.',
+      })
+      .transform((val) =>
+        input(
+          'Cp,i,j,y',
+          massPerArea('Carbon', tonnesPerHectareToKgPerSqMetre(val)),
+        ),
+      ),
+  });
 
 /*
 1 = Land clearing (forest to cropland)
@@ -207,6 +221,16 @@ export const isLandClearingActivity = (
     activity.type === 'landClearingForestToCropland' ||
     activity.type === 'landClearingForestToGrassland' ||
     activity.type === 'landClearingForestToSettlements'
+  );
+};
+
+export const isForestryActivity = (
+  activity: LandUseChangeActivityInputTransformed,
+): activity is
+  | FarmForestryInputTransformed
+  | PlantationForestryInputTransformed => {
+  return (
+    activity.type === 'farmForestry' || activity.type === 'plantationForestry'
   );
 };
 
