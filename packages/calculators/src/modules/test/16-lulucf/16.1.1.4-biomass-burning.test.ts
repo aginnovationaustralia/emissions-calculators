@@ -1,5 +1,6 @@
 import { calculate_16_1_1_4_BiomassBurning } from '@/modules/lulucf/16.1-land-use-change-forestry';
 import {
+  LULUCFInput,
   LULUCFInputSchema,
   LULUCFInputTransformed,
 } from '@/modules/lulucf/input';
@@ -43,9 +44,12 @@ const getCalculatorInput = (
     activityArea: 100,
   };
 
-  return LULUCFInputSchema.parse({
+  const lulucfInput: LULUCFInput = {
+    isInLeachingZone: false,
     activities: [activity],
-  });
+  };
+
+  return LULUCFInputSchema.parse(lulucfInput);
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {

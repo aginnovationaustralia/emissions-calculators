@@ -1,4 +1,4 @@
-import { calculate_16_1_1_7_HarvestedWoodProducts } from '@/modules/lulucf/16.1-land-use-change-forestry';
+import { calculate_16_3_1_1_NitrogenLeachingAndRunoff } from '@/modules/lulucf/16.3-nitrogen-leaching-runoff';
 import {
   LULUCFInput,
   LULUCFInputSchema,
@@ -11,9 +11,12 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from '../sheet-comparison';
+import { checkIBRA7Region } from './lulucf-domain';
 
-const columnCarbonMass = 'A';
-const columnActivityArea = 'B';
+const columnClearingType = 'A';
+const columnRegion = 'B';
+const columnIsInLeachingZone = 'D';
+const columnActivityArea = 'E';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -29,25 +32,32 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const carbonMassOfWoodProductsHarvestedPerHectare = Number(
-    cell(columnCarbonMass),
-  );
+  const region = checkIBRA7Region(cell(columnRegion));
   const activityArea = Number(cell(columnActivityArea));
 
+  const clearingType = cell(columnClearingType);
+
+  const type =
+    clearingType === 'crop'
+      ? 'landClearingForestToCropland'
+      : clearingType === 'grassland'
+        ? 'landClearingForestToGrassland'
+        : 'landClearingForestToSettlements';
+
   const activity: LandUseChangeActivityInput = {
-    type: 'plantationForestry',
+    type,
     carbonMassInTreesCurrentYear: 0,
     carbonMassInTreesPreviousYear: 0,
     carbonMassInDebrisCurrentYear: 0,
     carbonMassInDebrisPreviousYear: 0,
     ghgMassFromBiomassBurningPerHectare: 0,
+    region,
     areaBurnt: 0,
-    carbonMassOfWoodProductsHarvestedPerHectare,
     activityArea,
   };
 
   const lulucfInput: LULUCFInput = {
-    isInLeachingZone: false,
+    isInLeachingZone: cell(columnIsInLeachingZone) === 'yes',
     activities: [activity],
   };
 
@@ -55,7 +65,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`D${row}`).value());
+  return Number(sheet.cell(`R${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
@@ -63,18 +73,18 @@ const extractInputsAndOutput = createSheetExtractor(
   getExpectedOutput,
 );
 
-describe('16.1.1.7 Harvested Wood Products', () => {
+describe('16.3.1.1 Nitrogen Leaching and Runoff', () => {
   it('method 1 scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/16-lulucf/16.1-lulucf.xlsx',
-      '16.1.1.7',
+      './src/modules/test/16-lulucf/16.2-lulucf.xlsx',
+      '16.2.1.1',
     );
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
-      calculate_16_1_1_7_HarvestedWoodProducts,
+      calculate_16_3_1_1_NitrogenLeachingAndRunoff,
     );
   });
 });

@@ -1,5 +1,6 @@
 import { calculate_16_1_1_2_ChangesInWoodyCarbonStocks } from '@/modules/lulucf/16.1-land-use-change-forestry';
 import {
+  LULUCFInput,
   LULUCFInputSchema,
   LULUCFInputTransformed,
 } from '@/modules/lulucf/input';
@@ -42,9 +43,12 @@ const getCalculatorInput = (
     activityArea: Number(cell(columnActivityArea)),
   };
 
-  return LULUCFInputSchema.parse({
+  const lulucfInput: LULUCFInput = {
+    isInLeachingZone: false,
     activities: [activity],
-  });
+  };
+
+  return LULUCFInputSchema.parse(lulucfInput);
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {

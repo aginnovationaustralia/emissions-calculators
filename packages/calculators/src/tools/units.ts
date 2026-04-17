@@ -10,6 +10,7 @@ export type Substance =
   | 'N2O'
   | 'N'
   | 'Volatilised N'
+  | 'Mineralised N'
   | 'CO2e'
   | 'Refrigerant'
   | 'Fuel'

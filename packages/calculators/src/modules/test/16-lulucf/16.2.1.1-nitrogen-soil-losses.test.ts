@@ -1,5 +1,6 @@
 import { calculate_16_2_1_1_NitrogenMineralisationSoilLosses } from '@/modules/lulucf/16.2-nitrogen-soil-losses';
 import {
+  LULUCFInput,
   LULUCFInputSchema,
   LULUCFInputTransformed,
 } from '@/modules/lulucf/input';
@@ -14,7 +15,7 @@ import { checkIBRA7Region } from './lulucf-domain';
 
 const columnClearingType = 'A';
 const columnRegion = 'B';
-const columnActivityArea = 'D';
+const columnActivityArea = 'E';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -54,13 +55,16 @@ const getCalculatorInput = (
     activityArea,
   };
 
-  return LULUCFInputSchema.parse({
+  const lulucfInput: LULUCFInput = {
+    isInLeachingZone: false,
     activities: [activity],
-  });
+  };
+
+  return LULUCFInputSchema.parse(lulucfInput);
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`M${row}`).value());
+  return Number(sheet.cell(`Q${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
