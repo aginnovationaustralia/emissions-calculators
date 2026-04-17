@@ -3,7 +3,7 @@ import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
 import { isPastureType, PastureType } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
-import { oneMinus, tenToPowMinus3, zeroN2O } from '@/tools/sentinels';
+import { oneMinus, zeroN2O } from '@/tools/sentinels';
 import { CropResidueInputTransformed } from './crop-residue.input';
 
 export const calculateMassNPastureAppliedToSoil = (
@@ -15,6 +15,7 @@ export const calculateMassNPastureAppliedToSoil = (
 
   const ap = crop.areaSown;
   const yp = crop.averageYield;
+
   const ncagp = selectConstant(
     constants.CROP,
     'PASTURERESIDUE',
@@ -40,16 +41,21 @@ export const calculateMassNPastureAppliedToSoil = (
     'fractionRemoved',
   );
 
+  /**
+   * (Ap * (Yp * 10^-3) * (1 - FFODp) * NCAGp)
+   *
+   * NOTE: We've already converted the area and yield to
+   * kg & kg/m^2 respectively, so we don't need to convert it again
+   * by multiplying by a power of 10
+   */
   const mpAboveGround = yp
-    .multiply(tenToPowMinus3)
     .multiply(ap)
     .multiply(oneMinus(ffodp))
     .multiply(ncagp);
-  const mpBelowGround = yp
-    .multiply(tenToPowMinus3)
-    .multiply(ap)
-    .multiply(rbgp)
-    .multiply(ncbgp);
+  /**
+   * (Ap * (Yp * 10^-3) * RBGp * NCBGp)
+   */
+  const mpBelowGround = yp.multiply(ap).multiply(rbgp).multiply(ncbgp);
   const mp = mpAboveGround.plus(mpBelowGround);
 
   return mp;

@@ -1,9 +1,9 @@
 import { PastureCropTypes } from '@/constants/enums';
 import { input } from '@/tools/inputs';
+import { tonnesPerHectareToKgPerSquareMetres } from '@/tools/unit-conversion';
 import { massPerArea, realNumber } from '@/tools/units';
 import { DESCRIPTIONS } from '@/types/descriptions.schema';
 import { object, proportion } from '@/types/schemas';
-import Decimal from 'decimal.js-light';
 import { z } from 'zod';
 
 export const CropResidueInputSchema = object({
@@ -23,7 +23,10 @@ export const CropResidueInputSchema = object({
     .number()
     .min(0)
     .transform((val) =>
-      input('averageYield', massPerArea('DryMatter', new Decimal(val))),
+      input(
+        'averageYield',
+        massPerArea('DryMatter', tonnesPerHectareToKgPerSquareMetres(val)),
+      ),
     )
     .meta({
       description: 'Average crop yield, in t/ha (tonnes per hectare)',
@@ -59,7 +62,10 @@ export const CropResidueInputSchema = object({
           .transform((val) =>
             input(
               'averageYieldPerHectare',
-              massPerArea('DryMatter', new Decimal(val)),
+              massPerArea(
+                'DryMatter',
+                tonnesPerHectareToKgPerSquareMetres(val),
+              ),
             ),
           )
           .meta({
