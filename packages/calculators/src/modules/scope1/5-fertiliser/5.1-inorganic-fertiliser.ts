@@ -5,7 +5,7 @@ import { constant, selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
 import { input } from '@/tools/inputs';
 import { sum } from '@/tools/sum';
-import { MassPerMass, massPerMass } from '@/tools/units';
+import { Mass, MassPerMass, massPerMass } from '@/tools/units';
 import { CropResidueInputTransformed } from '../6-residue-mgmt/crop-residue.input';
 import { FertiliserInputTransformed } from './fertiliser.input';
 import { isInorganicFertiliserKnownComponent } from './inorganic-fertiliser-components.input';
@@ -13,40 +13,58 @@ import {
   InorganicFertiliserInputTransformed,
   isInorganicFertiliserInputScope3Method1,
 } from './inorganic-fertiliser.input';
+import Decimal from 'decimal.js-light';
 
-const getEFjN20ForFertiliser = (
-  inorganicFertiliser: InorganicFertiliserInputTransformed,
+const getEFjN2OForFertiliser = (
+  inorganicFertiliserMassN: Container<Mass<'N'>>,
   baseCrop: BaseGrainsCropTransformed & FertiliserInputTransformed,
   constants: ConstantsForGrainsCalculator,
 ) => {
   const system = baseCrop.inorganicFertilisers.productionSystem;
 
-  const applicationRate = inorganicFertiliser.massAppliedKg.divide(
-    baseCrop.areaSown,
-  );
+  /**
+   * NOTE: This value is in kg N/m^2, NOT kg N/ha, and hence must be converted
+   * before calculating the relevant emissions factor.
+   */
+  const applicationRate = inorganicFertiliserMassN.divide(baseCrop.areaSown);
+
+  const applicationRateKgPerHectare = applicationRate.unit.value.mul(1e4);
 
   // NOTE: These special cases implement 5.1.1.2 method 2
   if (system === 'Irrigated crop (maize)') {
     // REVISIT: This is jumping down to raw numbers instead of using containers. We won't track that the applicationRate input was used, for example
     // The problem in this case is that a linear regression is used, and it is leapfrogging across units
-    /* For irrigated maize, the emission factor EF j=irrigatedmaize,N2O can be estimated based
-      on the linear regression developed by [2] as:
-        EF fj=irrigatedmaize,N2O = -0.1474 + (0.0061 * N fj=irrigatedmaize )
-    */
-    const ef = -0.1474 + applicationRate.unit.value.mul(0.0061).toNumber();
+
+    /**
+     * For irrigated maize, the emission factor EF j=irrigatedmaize,N2O can be estimated based
+     * on the linear regression developed by [[2]](https://connectsci.au/sr/article/62/1/SR23070/47290/Revised-emission-factors-for-estimating-direct) as:
+     * > EF fj=irrigatedmaize,N2O = (-0.1474 + (0.0061 * N fj=irrigatedmaize)) * 10^-2
+     */
+    const ef = new Decimal(-0.1474)
+      .plus(applicationRateKgPerHectare.mul(0.0061))
+      .mul(1e-2)
+      .toNumber();
     // const ef =  value(massPerMass('N2O', 'N', -0.1474).plus(applicationRate.multiply(num(0.0061)));
     return constant(
-      'EF jN20 (irrigated maize)',
+      'EF jN2O (irrigated maize)',
       massPerMass('N2O', 'Volatilised N', ef),
       {
         references: [`5.1.1.2 (150)`],
       },
     );
   } else if (system === 'Non-irrigated crop (high rainfall zone)') {
-    // EF fj=nonirrigatedgrains,N2O = -0.0781 + (0.0075 * N fj=nonirrigatedgrains)
-    const ef = -0.0781 + applicationRate.unit.value.mul(0.0075).toNumber();
+    /**
+     * for non-irrigated grains in high rainfall zone, a value for
+     * EFj=nonirrigatedgrains,N2O may be estimated based on the linear regression developed
+     * by [[2]](https://connectsci.au/sr/article/62/1/SR23070/47290/Revised-emission-factors-for-estimating-direct) as:
+     * > EF fj=nonirrigatedgrains,N2O = (0.0781 + (0.0075 * N fj=nonirrigatedgrains)) * 10^-2
+     */
+    const ef = new Decimal(0.0781)
+      .plus(applicationRateKgPerHectare.mul(0.0075))
+      .mul(1e-2)
+      .toNumber();
     return constant(
-      'EF jN20 (non-irrigated high rainfall zone)',
+      'EF jN2O (non-irrigated high rainfall zone)',
       massPerMass('N2O', 'Volatilised N', ef),
       { references: [`5.1.1.2 (157)`] },
     );
@@ -54,16 +72,22 @@ const getEFjN20ForFertiliser = (
     system === 'Cotton' &&
     baseCrop.inorganicFertilisers.calculationMethodScope1 === '2'
   ) {
-    // EF fj=cotton,N2O = 0.01 * (0.29 + (0.007(e0.037*Nfj=cotton- 1)N fj=cotton ))
+    /**
+     * In equation 5.1.1.1 (1) for cotton, an entity-specific value for EFj=cotton,N2O may be
+     * estimated based on the two-component model developed by [[3]](https://connectsci.au/sr/article/54/5/598/46814/Emission-factors-for-estimating-fertiliser-induced) as:
+     * > EF fj=cotton,N2O = (0.29 + (0.007 * (e^(0.037 * Nfj=cotton - 1)) / Nfj=cotton)) * 10^-2
+     *
+     * This is capped at a maximum of 0.0183 kg CO2e/kg N, equivalent to N application rates of ~300 kg N/ha.
+     */
     const ef =
-      0.01 *
       (0.29 +
         (0.007 *
-          (Math.exp(0.037 * applicationRate.unit.value.toNumber()) - 1)) /
-          applicationRate.unit.value.toNumber());
+          (Math.exp(0.037 * applicationRateKgPerHectare.toNumber()) - 1)) /
+          applicationRateKgPerHectare.toNumber()) *
+      1e-2;
     return constant(
-      'EF jN20 (cotton)',
-      massPerMass('N2O', 'Volatilised N', ef),
+      'EF jN2O (cotton)',
+      massPerMass('N2O', 'Volatilised N', Math.min(ef, 0.0183)),
       {
         references: [`5.1.1.2 (163)`],
       },
@@ -146,15 +170,12 @@ CN2O = factor to convert elemental mass of nitrous oxide to molecular mass
       constants,
     );
 
-    // NOTE: Method 2 is implemented in getEFjN20ForFertiliser
-    const efjN20 = getEFjN20ForFertiliser(
-      inorganicFertiliser,
-      input,
-      constants,
-    );
+    // NOTE: Method 2 is implemented in getEFjN2OForFertiliser
+    const efjN2O = getEFjN2OForFertiliser(mnjf, input, constants);
+
     const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
-    // @ts-expect-error - unclear if efjN20 is a MassPerMass<'N2O', 'N'> or MassPerMass<'N2O', 'Volatilised N'>
-    return mnjf.multiply(efjN20).multiply(cn2o);
+    // @ts-expect-error - unclear if efjN2O is a MassPerMass<'N2O', 'N'> or MassPerMass<'N2O', 'Volatilised N'>
+    return mnjf.multiply(efjN2O).multiply(cn2o);
   });
 
   return sum(emissionRecords, { name: 'E n2o' });
