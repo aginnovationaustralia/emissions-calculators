@@ -89,7 +89,7 @@ export const calculateFieldBurningCH4 = (
   }
   /*
     6.4.1.1 Method 1 -- Burning of Crop Residues CH4 and N2O
-  (1) Methane emissions from the burning of crop residues ECH4 (t CH4), are calculated asECH4 = sum (Mburn,c * CCc * EF CH4 * CCH4 * 10^-3)
+  (1) Methane emissions from the burning of crop residues ECH4 (t CH4), are calculated as ECH4 = sum (Mburn,c * CCc * EF CH4 * CCH4 * 10^-3)
   c
   Where Mburn,c = mass of residue burnt for crop type c (kg)
   CCc = carbon mass fraction in the residues of crop type c (dimensionless)
