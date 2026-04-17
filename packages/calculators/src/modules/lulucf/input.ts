@@ -1,5 +1,6 @@
 import { object } from '@/types/schemas';
 import { z } from 'zod';
+import { BurningInputSchema } from './burning-input';
 import { LandUseChangeActivityInputSchema } from './land-user-change-activity-input';
 
 export const LULUCFInputSchema = object({
@@ -11,6 +12,7 @@ export const LULUCFInputSchema = object({
     description: 'Whether the activity is in a leaching zone.',
   }),
   activities: z.array(LandUseChangeActivityInputSchema),
+  burning: z.array(BurningInputSchema).optional(),
 });
 
 export type LULUCFInput = z.input<typeof LULUCFInputSchema>;
