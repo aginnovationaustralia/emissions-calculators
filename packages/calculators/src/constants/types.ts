@@ -1,4 +1,5 @@
 import {
+  CountPerArea,
   EnergyPerMass,
   EnergyPerVolume,
   Mass,
@@ -12,6 +13,7 @@ import {
   NumberUnitBase,
   RealNumber,
   VolumePerMass,
+  Years,
 } from '@/tools/units';
 import {
   AgrochemicalType,
@@ -43,6 +45,8 @@ import {
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
   PastureType,
+  PerennialWoodyCropFull,
+  PerennialWoodyCropPartial,
   PoultryClass,
   PoultryMMSType,
   PurchasedFeedAquacultureType,
@@ -455,12 +459,31 @@ export type BeefPastureConstants = NamedConstants & {
   FRAC_WET_SOIL: Record<StateOrRegion, RealNumber>;
 };
 
+type WoodyPerennialCropsPartialConstants = {
+  BAMc: MassPerArea<'Carbon'>;
+  Mc: Years;
+  BARc: MassPerArea<'Carbon'>;
+};
+
+type WoodyPerennialCropsFullConstants = WoodyPerennialCropsPartialConstants & {
+  STEM_DENSITY: CountPerArea<'Trees'>;
+};
+
 export type LULUCFConstants = NamedConstants & {
   ORGANIC_STOCK_LOSS_FACTORS: Record<IBRA7Region, MassPerArea<'Carbon'>>;
   CARBON_TO_NITROGEN_RATIO: MassPerMass<'Carbon', 'N'>;
 
   EF_CROP: MassPerMass<'N2O', 'N'>;
   EF_PASTURE: MassPerMass<'N2O', 'N'>;
+
+  WOODY_PERENNIAL_CROPS_FULL: Record<
+    PerennialWoodyCropFull,
+    WoodyPerennialCropsFullConstants
+  >;
+  WOODY_PERENNIAL_CROPS_PARTIAL: Record<
+    PerennialWoodyCropPartial,
+    WoodyPerennialCropsPartialConstants
+  >;
 };
 
 export type AllConstants = {

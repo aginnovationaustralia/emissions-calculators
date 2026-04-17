@@ -42,6 +42,11 @@ export function formatUnit(unit: AnyUnit): string {
       return `Volume(${unit.volume}) / Mass(${unit.mass})`;
     case 'Days':
       return 'Days';
+    case 'Years':
+      return 'Years';
+    case 'CountPerArea':
+      return 'Count / Area';
+
     case 'Head':
       return 'Head';
     case 'Area':

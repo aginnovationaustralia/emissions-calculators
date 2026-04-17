@@ -1102,3 +1102,25 @@ export const IBRA7Regions = [
   'Yalgoo',
 ] as const;
 export type IBRA7Region = (typeof IBRA7Regions)[number];
+
+export const PerennialWoodyCropsFull = [
+  'Oranges',
+  'Macadamias',
+  'Almonds',
+  'Apples',
+  'Peaches',
+  'Olives',
+  'Avocados',
+  'Mangoes',
+] as const;
+export type PerennialWoodyCropFull = (typeof PerennialWoodyCropsFull)[number];
+
+export const PerennialWoodyCropsPartial = ['Grapes', 'Kiwifruits'] as const;
+export type PerennialWoodyCropPartial =
+  (typeof PerennialWoodyCropsPartial)[number];
+
+export const isPerennialWoodyCropFull = (
+  crop: PerennialWoodyCropFull | PerennialWoodyCropPartial,
+): crop is PerennialWoodyCropFull => {
+  return PerennialWoodyCropsFull.includes(crop as PerennialWoodyCropFull);
+};

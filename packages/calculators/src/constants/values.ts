@@ -2,9 +2,11 @@ import {
   gjPerCubicMetreToJPerLitre,
   gjPerTonneTogjPerKg,
   kgPerGjToKgPerJ,
+  perHectareToPerSqMetre,
   tonnesPerHectareToKgPerSquareMetres,
 } from '@/tools/unit-conversion';
 import {
+  countPerArea,
   energyPerMass,
   energyPerVolume,
   mass,
@@ -19,6 +21,7 @@ import {
   RealNumber,
   realNumber,
   volumePerMass,
+  years,
 } from '@/tools/units';
 import { State } from './enums';
 import {
@@ -157,7 +160,7 @@ export const commonConstants: CommonConstants = {
 
   GWP_CH4: massPerMass('CO2e', 'CH4', 28),
 
-  CG_CO2: massPerMass('CO2', 'Carbon', 3.67),
+  CG_CO2: massPerMass('CO2', 'Carbon', 44 / 12),
 
   EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: volumePerMass(
     'CH4',
@@ -5077,4 +5080,67 @@ export const lulucfConstants: LULUCFConstants = {
 
   EF_CROP: massPerMass('N2O', 'N', 0.0041),
   EF_PASTURE: massPerMass('N2O', 'N', 0.0018),
+
+  WOODY_PERENNIAL_CROPS_FULL: {
+    Oranges: {
+      BAMc: tonnesCarbonPerHectare(5),
+      Mc: years(10),
+      BARc: tonnesCarbonPerHectare(0.5),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(417)),
+    },
+    Macadamias: {
+      BAMc: tonnesCarbonPerHectare(45),
+      Mc: years(15),
+      BARc: tonnesCarbonPerHectare(0.82),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(312)),
+    },
+    Almonds: {
+      BAMc: tonnesCarbonPerHectare(9.6),
+      Mc: years(8),
+      BARc: tonnesCarbonPerHectare(1.2),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(222)),
+    },
+    Apples: {
+      BAMc: tonnesCarbonPerHectare(4.9),
+      Mc: years(7),
+      BARc: tonnesCarbonPerHectare(0.7),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(1500)),
+    },
+    Peaches: {
+      BAMc: tonnesCarbonPerHectare(5.2),
+      Mc: years(4),
+      BARc: tonnesCarbonPerHectare(1.3),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(740)),
+    },
+    Olives: {
+      BAMc: tonnesCarbonPerHectare(6.7),
+      Mc: years(10),
+      BARc: tonnesCarbonPerHectare(0.67),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(250)),
+    },
+    Avocados: {
+      BAMc: tonnesCarbonPerHectare(6.0),
+      Mc: years(10),
+      BARc: tonnesCarbonPerHectare(0.6),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(210)),
+    },
+    Mangoes: {
+      BAMc: tonnesCarbonPerHectare(13.0),
+      Mc: years(10),
+      BARc: tonnesCarbonPerHectare(1.3),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(185)),
+    },
+  },
+  WOODY_PERENNIAL_CROPS_PARTIAL: {
+    Grapes: {
+      BAMc: tonnesCarbonPerHectare(1.2),
+      Mc: years(4),
+      BARc: tonnesCarbonPerHectare(0.3),
+    },
+    Kiwifruits: {
+      BAMc: tonnesCarbonPerHectare(1.5),
+      Mc: years(5),
+      BARc: tonnesCarbonPerHectare(0.3),
+    },
+  },
 };

@@ -2,6 +2,7 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { selectConstant } from '@/tools/constants';
 import { br } from '@/tools/containers';
+import { zeroN } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { LULUCFInputTransformed } from './input';
 import {
@@ -18,6 +19,10 @@ export const calculateMineralisedNitrogenFromClearingToCrops = (
   const R = selectConstant(constants.LULUCF, 'CARBON_TO_NITROGEN_RATIO');
 
   const { activities } = input;
+
+  if (!activities) {
+    return zeroN.named('Ni,j=1,y');
+  }
 
   const activityRecords = activities
     .filter(isLandClearingForestToCropland)
@@ -47,6 +52,10 @@ export const calculateMineralisedNitrogenFromClearingToOpen = (
   const R = selectConstant(constants.LULUCF, 'CARBON_TO_NITROGEN_RATIO');
 
   const { activities } = input;
+
+  if (!activities) {
+    return zeroN.named('Ni,j=2-3,y');
+  }
 
   const activityRecords = activities
     .filter(isLandClearingToGrasslandOrSettlements)

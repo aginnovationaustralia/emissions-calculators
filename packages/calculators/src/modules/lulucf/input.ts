@@ -2,6 +2,7 @@ import { object } from '@/types/schemas';
 import { z } from 'zod';
 import { BurningInputSchema } from './burning-input';
 import { LandUseChangeActivityInputSchema } from './land-user-change-activity-input';
+import { PerennialCropInputSchema } from './perennial-crops-input';
 
 export const LULUCFInputSchema = object({
   /* REVISIT: When we create full calculator inputs, we will probably want to move this input.
@@ -11,8 +12,9 @@ export const LULUCFInputSchema = object({
   isInLeachingZone: z.boolean().meta({
     description: 'Whether the activity is in a leaching zone.',
   }),
-  activities: z.array(LandUseChangeActivityInputSchema),
+  activities: z.array(LandUseChangeActivityInputSchema).optional(),
   burning: z.array(BurningInputSchema).optional(),
+  perennialCrops: z.array(PerennialCropInputSchema).optional(),
 });
 
 export type LULUCFInput = z.input<typeof LULUCFInputSchema>;

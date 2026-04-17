@@ -110,7 +110,7 @@ const ForestryActivityBaseInputSchema =
       .transform((val) =>
         input(
           'Cp,i,j,y',
-          massPerArea('Carbon', tonnesPerHectareToKgPerSqMetre(val)),
+          massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
         ),
       ),
   });

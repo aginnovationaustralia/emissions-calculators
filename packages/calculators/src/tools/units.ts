@@ -30,7 +30,8 @@ export type Substance =
   | 'Purchased Mineral Supplement'
   | 'Volatile Solids'
   | 'COD'
-  | 'Packaging';
+  | 'Packaging'
+  | 'Trees';
 
 export type NumberUnitBase = { value: Decimal };
 
@@ -418,6 +419,39 @@ export const isDays = (unit: NumberUnit): unit is Days => {
   return unit.__unitType === 'Days';
 };
 
+export type Years = NumberUnitBase & {
+  __unitType: 'Years';
+};
+export const years = (initialValueYears?: number | Decimal): Years => {
+  return {
+    __unitType: 'Years',
+    value: new Decimal(initialValueYears ?? 0),
+  };
+};
+export const isYears = (unit: NumberUnit): unit is Years => {
+  return unit.__unitType === 'Years';
+};
+
+export type CountPerArea<S extends Substance> = NumberUnitBase & {
+  __unitType: 'CountPerArea';
+  substance: S;
+};
+export const countPerArea = <S extends Substance>(
+  substance: S,
+  initialValueCountPerSqMetre?: number | Decimal,
+): CountPerArea<S> => {
+  return {
+    __unitType: 'CountPerArea',
+    substance,
+    value: new Decimal(initialValueCountPerSqMetre ?? 0),
+  };
+};
+export const isCountPerArea = (
+  unit: NumberUnit,
+): unit is CountPerArea<Substance> => {
+  return unit.__unitType === 'CountPerArea';
+};
+
 export type Head = NumberUnitBase & {
   __unitType: 'Head';
 };
@@ -478,7 +512,9 @@ export type NumberUnit =
   | MassPerDay<Substance>
   | VolumePerHeadPerDay<Substance>
   | VolumePerMass<Substance, Substance>
+  | CountPerArea<Substance>
   | Days
+  | Years
   | Head
   | EnergyPerVolume<Substance>
   | Volume<Substance>
