@@ -331,6 +331,13 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerArea<ExtractMassSubstance<UL>>>;
 
+  // Mass<S1> / MassPerMass<S1, S2> = Mass<S2>
+  divide<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<Mass<S1>>,
+    right: Container<MassPerMass<S1, S2>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<Mass<S2>>;
+
   divide<
     S1 extends Substance,
     S2 extends Substance,
@@ -356,6 +363,8 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerArea(leftUnit.substance);
       } else if (isMassPerHeadPerDay(leftUnit) && isMassPerMass(rightUnit)) {
         unit = massPerHeadPerDay(rightUnit.snum);
+      } else if (isMass(leftUnit) && isMassPerMass(rightUnit)) {
+        unit = mass(rightUnit.sdenom);
       } else if (leftUnit.__unitType === rightUnit.__unitType) {
         unit = realNumber();
       } else {
@@ -435,7 +444,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     const leftUnit = this.unit;
     const rightUnit = right.unit;
     let unit: NumberUnit;
-    if (isVoid(leftUnit) || isVoid(rightUnit)) {
+    if (isVoid(leftUnit) && isVoid(rightUnit)) {
       unit = voidUnit();
     } else {
       if (isRealNumber(leftUnit) && !isRealNumber(rightUnit)) {

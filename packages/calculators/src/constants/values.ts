@@ -5073,5 +5073,8 @@ export const lulucfConstants: LULUCFConstants = {
     Yalgoo: tonnesCarbonPerHectare(-0.05),
   },
 
-  CARBON_TO_NITROGEN_RATIO: realNumber(18),
+  CARBON_TO_NITROGEN_RATIO: massPerMass('Carbon', 'Volatilised N', 18),
+
+  EF_CROP: massPerMass('N2O', 'Volatilised N', 0.0041),
+  EF_PASTURE: massPerMass('N2O', 'Volatilised N', 0.0018),
 };

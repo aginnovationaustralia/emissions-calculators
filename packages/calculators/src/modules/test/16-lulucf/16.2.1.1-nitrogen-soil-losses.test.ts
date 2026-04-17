@@ -60,7 +60,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`O${row}`).value());
+  return Number(sheet.cell(`M${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(

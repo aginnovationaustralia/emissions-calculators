@@ -24,6 +24,10 @@ export const calculate_16_2_1_1_NitrogenMineralisationSoilLosses = (
 
   const { activities } = input;
 
+  const EFcrop = selectConstant(constants.LULUCF, 'EF_CROP');
+  const EFpasture = selectConstant(constants.LULUCF, 'EF_PASTURE');
+  const CgN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
+
   const mineralisedNitrogenFromCropClearing = activities
     .filter(isLandClearingForestToCropland)
     .map((activity) => {
@@ -35,7 +39,7 @@ export const calculate_16_2_1_1_NitrogenMineralisationSoilLosses = (
         region,
       );
 
-      const organicCarbonChange = Or.multiply(activityArea);
+      const organicCarbonChange = Or.multiply(activityArea).named('∆Si,j=1,y');
 
       return organicCarbonChange.divide(R);
     });
@@ -51,15 +55,16 @@ export const calculate_16_2_1_1_NitrogenMineralisationSoilLosses = (
         region,
       );
 
-      const organicCarbonChange = Or.multiply(activityArea);
+      const organicCarbonChange =
+        Or.multiply(activityArea).named('∆Si,j=2-3,y');
 
       return organicCarbonChange.divide(R);
     });
 
-  return br(
-    sum(mineralisedNitrogenFromCropClearing)
-      .multiply(EFcrop)
-      .plus(sum(mineralisedNitrogenFromPastureClearing).multiply(EFpasture))
-      .multiply(CgN2O),
-  );
+  const Nij1y = sum(mineralisedNitrogenFromCropClearing).named('Nij1y');
+  const Nij23y = sum(mineralisedNitrogenFromPastureClearing).named('Nij23y');
+
+  return br(Nij1y.multiply(EFcrop).plus(Nij23y.multiply(EFpasture)))
+    .multiply(CgN2O)
+    .named('ELUC,i,j=1-3,y');
 };
