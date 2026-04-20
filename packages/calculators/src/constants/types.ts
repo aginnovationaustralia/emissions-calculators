@@ -53,6 +53,9 @@ import {
   PureState,
   RefrigerantType,
   RefrigerationType,
+  RiceCultivationOrganicAmendmentType,
+  RiceCultivationPreSeasonWaterRegimeType,
+  RiceCultivationSeasonWaterRegimeType,
   Season,
   ServiceByAreaType,
   ServiceByHourType,
@@ -451,6 +454,21 @@ export type BeefPastureConstants = NamedConstants & {
   FRAC_WET_SOIL: Record<StateOrRegion, RealNumber>;
 };
 
+export type RiceConstants = NamedConstants & {
+  WATER_REGIME_SCALING_FACTORS: Record<
+    RiceCultivationSeasonWaterRegimeType,
+    RealNumber
+  >;
+  PRE_SEASON_WATER_REGIME_SCALING_FACTORS: Record<
+    RiceCultivationPreSeasonWaterRegimeType,
+    RealNumber
+  >;
+  ORGANIC_AMENDMENT_SCALING_FACTORS: Record<
+    RiceCultivationOrganicAmendmentType,
+    RealNumber
+  >;
+};
+
 export type AllConstants = {
   COMMON: CommonConstants;
   CROP: CropConstants;
@@ -460,6 +478,7 @@ export type AllConstants = {
   POULTRY: PoultryConstants;
   LIVESTOCK: LivestockConstants;
   BEEF_PASTURE: BeefPastureConstants;
+  RICE: RiceConstants;
 };
 
 export type HasCommonConstants = {

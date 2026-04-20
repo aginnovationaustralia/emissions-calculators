@@ -9,7 +9,7 @@ import { object } from '@/types/schemas';
 import z from 'zod';
 import { RiceCultivationOrganicAmendmentInputSchema } from './organic-amendment.input';
 
-export const RiceCultivationPeriodInputSchema = object({
+export const RiceCultivationInputSchema = object({
   preSeasonWaterRegimeType: z
     .literal(RiceCultivationPreSeasonWaterRegimeTypes)
     .transform((val) =>
@@ -31,9 +31,7 @@ export const RiceCultivationPeriodInputSchema = object({
     .meta({ description: 'TODO' }),
 });
 
-export type RiceCultivationPeriodInput = z.input<
-  typeof RiceCultivationPeriodInputSchema
->;
-export type RiceCultivationPeriodInputTransformed = z.output<
-  typeof RiceCultivationPeriodInputSchema
+export type RiceCultivationInput = z.input<typeof RiceCultivationInputSchema>;
+export type RiceCultivationInputTransformed = z.output<
+  typeof RiceCultivationInputSchema
 >;

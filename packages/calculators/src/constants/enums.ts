@@ -1033,7 +1033,7 @@ export const RiceCultivationPreSeasonWaterRegimeTypes = [
   'Non flooded pre-season >180 days',
   'Non-flooded pre-season >365 days',
   'Flooded pre-season >30 days',
-];
+] as const;
 export type RiceCultivationPreSeasonWaterRegimeType =
   (typeof RiceCultivationPreSeasonWaterRegimeTypes)[number];
 
