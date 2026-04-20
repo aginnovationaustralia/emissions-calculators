@@ -1119,6 +1119,12 @@ export const PerennialWoodyCropsPartial = ['Grapes', 'Kiwifruits'] as const;
 export type PerennialWoodyCropPartial =
   (typeof PerennialWoodyCropsPartial)[number];
 
+export const PerennialWoodyCrops = [
+  ...PerennialWoodyCropsFull,
+  ...PerennialWoodyCropsPartial,
+] as const;
+export type PerennialWoodyCrop = (typeof PerennialWoodyCrops)[number];
+
 export const isPerennialWoodyCropFull = (
   crop: PerennialWoodyCropFull | PerennialWoodyCropPartial,
 ): crop is PerennialWoodyCropFull => {

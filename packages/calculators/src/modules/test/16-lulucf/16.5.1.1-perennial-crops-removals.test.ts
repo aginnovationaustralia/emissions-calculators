@@ -1,11 +1,15 @@
-import { isPerennialWoodyCropFull } from '@/constants/enums';
+import {
+  isPerennialWoodyCropFull,
+  PerennialWoodyCropFull,
+  PerennialWoodyCropPartial,
+} from '@/constants/enums';
 import { calculate_16_5_1_1_RemovalsFromPerennialCrops } from '@/modules/lulucf/16.5-perennial-crops';
 import {
   LULUCFInput,
   LULUCFInputSchema,
   LULUCFInputTransformed,
 } from '@/modules/lulucf/input';
-import { PerennialCropPlantingFullInput } from '@/modules/lulucf/perennial-crop-planting-input';
+import { PerennialCropPlantingInput } from '@/modules/lulucf/perennial-crop-planting-input';
 import { PerennialCropInput } from '@/modules/lulucf/perennial-crops-input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
@@ -20,6 +24,49 @@ const columnAreaPlanted = 'B';
 const columnYearsSincePlanting = 'C';
 const columnActualStemDensity = 'I';
 const columnCustomBAMc = 'L';
+
+const createPerennialCropInput = (
+  cropType: PerennialWoodyCropFull | PerennialWoodyCropPartial,
+  plantings: PerennialCropPlantingInput[],
+  method2ActualStemDensity?: number,
+  method2BiomassAtMaturity?: number,
+): PerennialCropInput => {
+  if (isPerennialWoodyCropFull(cropType)) {
+    if (method2ActualStemDensity !== undefined) {
+      return {
+        cropType,
+        plantings,
+        clearings: [],
+        calculationMethod: '2 (stem density)',
+        method2ActualStemDensity,
+      };
+    }
+
+    if (method2BiomassAtMaturity !== undefined) {
+      return {
+        cropType,
+        plantings,
+        clearings: [],
+        calculationMethod: '2 (BAM)',
+        method2BiomassAtMaturity,
+      };
+    }
+
+    return {
+      cropType,
+      plantings,
+      clearings: [],
+      calculationMethod: '1',
+    };
+  }
+
+  return {
+    cropType,
+    plantings,
+    clearings: [],
+    calculationMethod: '1',
+  };
+};
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -36,9 +83,7 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const readFullCropPlanting = (
-    offset: number,
-  ): PerennialCropPlantingFullInput => {
+  const readFullCropPlanting = (offset: number): PerennialCropPlantingInput => {
     const areaPlanted = Number(cell(columnAreaPlanted, offset));
     const yearsSincePlanting = Number(cell(columnYearsSincePlanting, offset));
 
@@ -66,17 +111,12 @@ const getCalculatorInput = (
   const cropPlanting2 = readFullCropPlanting(1);
   const cropPlanting3 = readFullCropPlanting(2);
 
-  const crop1: PerennialCropInput = isPerennialWoodyCropFull(cropType)
-    ? {
-        cropType,
-        plantings: [cropPlanting1, cropPlanting2, cropPlanting3],
-        method2ActualStemDensity,
-        method2BiomassAtMaturity,
-      }
-    : {
-        cropType,
-        plantings: [cropPlanting1, cropPlanting2, cropPlanting3],
-      };
+  const crop1: PerennialCropInput = createPerennialCropInput(
+    cropType,
+    [cropPlanting1, cropPlanting2, cropPlanting3],
+    method2ActualStemDensity,
+    method2BiomassAtMaturity,
+  );
 
   const lulucfInput: LULUCFInput = {
     isInLeachingZone: false,
@@ -98,7 +138,7 @@ const extractInputsAndOutput = createSheetExtractor(
   { rowInterval: 5 },
 );
 
-describe('16.5.1 Removals from Perennial Crops', () => {
+describe('16.5.1.1 Removals from Perennial Crops', () => {
   it('method 1 scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/16-lulucf/16.5-lulucf.xlsx',

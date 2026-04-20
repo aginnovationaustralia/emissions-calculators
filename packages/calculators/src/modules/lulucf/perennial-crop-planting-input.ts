@@ -4,7 +4,7 @@ import { area, years } from '@/tools/units';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 
-export const PerennialCropPlantingBaseInputSchema = object({
+export const PerennialCropPlantingInputSchema = object({
   areaPlanted: z
     .number()
     .min(0)
@@ -21,26 +21,9 @@ export const PerennialCropPlantingBaseInputSchema = object({
     .transform((val) => input('t', years(val))),
 });
 
-export const PerennialCropPlantingFullInputSchema =
-  PerennialCropPlantingBaseInputSchema.extend({});
-
-export type PerennialCropPlantingFullInput = z.input<
-  typeof PerennialCropPlantingFullInputSchema
+export type PerennialCropPlantingInput = z.input<
+  typeof PerennialCropPlantingInputSchema
 >;
-export type PerennialCropPlantingFullInputTransformed = z.output<
-  typeof PerennialCropPlantingFullInputSchema
+export type PerennialCropPlantingInputTransformed = z.output<
+  typeof PerennialCropPlantingInputSchema
 >;
-
-export const PerennialCropPlantingPartialInputSchema =
-  PerennialCropPlantingBaseInputSchema.extend({});
-
-export type PerennialCropPlantingPartialInput = z.input<
-  typeof PerennialCropPlantingPartialInputSchema
->;
-export type PerennialCropPlantingPartialInputTransformed = z.output<
-  typeof PerennialCropPlantingPartialInputSchema
->;
-
-export type PerennialCropPlantingInputTransformed =
-  | PerennialCropPlantingFullInputTransformed
-  | PerennialCropPlantingPartialInputTransformed;
