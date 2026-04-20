@@ -1,3 +1,4 @@
+import { isPerennialWoodyCropFull } from '@/constants/enums';
 import { calculate_16_5_1_1_RemovalsFromPerennialCrops } from '@/modules/lulucf/16.5-perennial-crops';
 import {
   LULUCFInput,
@@ -17,10 +18,13 @@ import { checkPerennialWoodyCropType } from './lulucf-domain';
 const columnCropType = 'A';
 const columnAreaPlanted = 'B';
 const columnYearsSincePlanting = 'C';
+const columnActualStemDensity = 'I';
+const columnCustomBAMc = 'L';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
+  method: '1' | '2',
 ): LULUCFInputTransformed | undefined => {
   const cell = (column: string, offset: number = 0) =>
     sheet
@@ -44,16 +48,35 @@ const getCalculatorInput = (
     };
   };
 
+  const actualStemDensity = cell(columnActualStemDensity);
+  const biomassAtMaturity = cell(columnCustomBAMc);
+
+  const method2ActualStemDensity =
+    method === '1' || actualStemDensity === undefined
+      ? undefined
+      : Number(actualStemDensity);
+  const method2BiomassAtMaturity =
+    method === '1' || biomassAtMaturity === undefined
+      ? undefined
+      : Number(biomassAtMaturity);
+
   const cropType = checkPerennialWoodyCropType(cell(columnCropType));
 
   const cropPlanting1 = readFullCropPlanting(0);
   const cropPlanting2 = readFullCropPlanting(1);
   const cropPlanting3 = readFullCropPlanting(2);
 
-  const crop1: PerennialCropInput = {
-    cropType,
-    plantings: [cropPlanting1, cropPlanting2, cropPlanting3],
-  };
+  const crop1: PerennialCropInput = isPerennialWoodyCropFull(cropType)
+    ? {
+        cropType,
+        plantings: [cropPlanting1, cropPlanting2, cropPlanting3],
+        method2ActualStemDensity,
+        method2BiomassAtMaturity,
+      }
+    : {
+        cropType,
+        plantings: [cropPlanting1, cropPlanting2, cropPlanting3],
+      };
 
   const lulucfInput: LULUCFInput = {
     isInLeachingZone: false,
@@ -66,7 +89,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`O${row}`).value());
+  return Number(sheet.cell(`P${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
@@ -96,7 +119,7 @@ describe('16.5.1 Removals from Perennial Crops', () => {
       '16.5.1.1',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 51, '1');
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 71, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,

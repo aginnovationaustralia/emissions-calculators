@@ -4,6 +4,7 @@ import {
   EnergyPerVolume,
   Mass,
   MassPerArea,
+  MassPerAreaPerYear,
   MassPerElectricity,
   MassPerEnergy,
   MassPerHeadPerDay,
@@ -462,7 +463,7 @@ export type BeefPastureConstants = NamedConstants & {
 type WoodyPerennialCropsPartialConstants = {
   BAMc: MassPerArea<'Carbon'>;
   Mc: Years;
-  BARc: MassPerArea<'Carbon'>;
+  BARc: MassPerAreaPerYear<'Carbon'>;
 };
 
 type WoodyPerennialCropsFullConstants = WoodyPerennialCropsPartialConstants & {

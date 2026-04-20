@@ -300,6 +300,47 @@ export const isMassPerArea = (
   return unit.__unitType === 'MassPerArea';
 };
 
+export type MassPerAreaPerYear<S extends Substance> = NumberUnitBase & {
+  __unitType: 'MassPerAreaPerYear';
+  substance: S;
+};
+export const massPerAreaPerYear = <S extends Substance>(
+  substance: S,
+  initialValueKgPerSquareMetrePerYear?: number | Decimal,
+): MassPerAreaPerYear<S> => {
+  return {
+    __unitType: 'MassPerAreaPerYear',
+    substance,
+    value: new Decimal(initialValueKgPerSquareMetrePerYear ?? 0),
+  };
+};
+export const isMassPerAreaPerYear = (
+  unit: NumberUnit,
+): unit is MassPerAreaPerYear<Substance> => {
+  return unit.__unitType === 'MassPerAreaPerYear';
+};
+
+// NOTE: Technically this overlaps with MassPerTime, but tracking Years as their own unit helps to simplify things
+export type MassPerYear<S extends Substance> = NumberUnitBase & {
+  __unitType: 'MassPerYear';
+  substance: S;
+};
+export const massPerYear = <S extends Substance>(
+  substance: S,
+  initialValueKgPerYear?: number | Decimal,
+): MassPerYear<S> => {
+  return {
+    __unitType: 'MassPerYear',
+    substance,
+    value: new Decimal(initialValueKgPerYear ?? 0),
+  };
+};
+export const isMassPerYear = (
+  unit: NumberUnit,
+): unit is MassPerYear<Substance> => {
+  return unit.__unitType === 'MassPerYear';
+};
+
 export type MassPerTime<S extends Substance> = NumberUnitBase & {
   __unitType: 'MassPerTime';
   substance: S;
@@ -506,6 +547,8 @@ export type NumberUnit =
   | EnergyPerMass<Substance>
   | MassPerVolume<Substance, Substance>
   | MassPerArea<Substance>
+  | MassPerAreaPerYear<Substance>
+  | MassPerYear<Substance>
   | MassPerTime<Substance>
   | MassPerElectricity<Substance>
   | MassPerHeadPerDay<Substance>

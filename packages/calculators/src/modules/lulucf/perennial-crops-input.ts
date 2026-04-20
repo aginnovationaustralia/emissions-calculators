@@ -4,6 +4,12 @@ import {
   PerennialWoodyCropsFull,
   PerennialWoodyCropsPartial,
 } from '@/constants/enums';
+import { input } from '@/tools/inputs';
+import {
+  perHectareToPerSqMetre,
+  tonnesPerHectareToKgPerSquareMetres,
+} from '@/tools/unit-conversion';
+import { countPerArea, massPerArea } from '@/tools/units';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 import {
@@ -14,6 +20,28 @@ import {
 export const PerennialCropFullInputSchema = object({
   cropType: z.enum(PerennialWoodyCropsFull),
   plantings: z.array(PerennialCropPlantingFullInputSchema),
+  method2ActualStemDensity: z
+    .number()
+    .optional()
+    .transform((value) =>
+      value === undefined
+        ? undefined
+        : input(
+            'Actual stem density',
+            countPerArea('Trees', perHectareToPerSqMetre(value)),
+          ),
+    ),
+  method2BiomassAtMaturity: z
+    .number()
+    .optional()
+    .transform((value) =>
+      value === undefined
+        ? undefined
+        : input(
+            'Biomass at maturity',
+            massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(value)),
+          ),
+    ),
 });
 
 export const PerennialCropPartialInputSchema = object({
@@ -45,7 +73,7 @@ export type PerennialCropPartialInputTransformed = z.output<
   typeof PerennialCropPartialInputSchema
 >;
 
-export const isPerennialCropFull = (
+export const isPerennialCropInputFull = (
   crop: PerennialCropInputTransformed,
 ): crop is PerennialCropFullInputTransformed => {
   return PerennialWoodyCropsFull.includes(
@@ -53,7 +81,7 @@ export const isPerennialCropFull = (
   );
 };
 
-export const isPerennialCropPartial = (
+export const isPerennialCropInputPartial = (
   crop: PerennialCropInputTransformed,
 ): crop is PerennialCropPartialInputTransformed => {
   return PerennialWoodyCropsPartial.includes(
