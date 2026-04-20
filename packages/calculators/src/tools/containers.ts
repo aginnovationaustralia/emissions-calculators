@@ -36,6 +36,7 @@ import {
   Mass,
   massPerArea,
   MassPerArea,
+  MassPerAreaPerDay,
   massPerDay,
   MassPerDay,
   MassPerElectricity,
@@ -237,6 +238,20 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<MassPerVolume<S2, S1>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S2>>;
+  // MassPerAreaPerDay<S> * Days = MassPerArea<S>
+  // TODO: Implement
+  multiply<S extends Substance>(
+    this: BaseContainer<MassPerAreaPerDay<S>>,
+    right: Container<Days>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerArea<S>>;
+  // MassPerAreaPerDay<S> * Area = MassPerDay<S>
+  // TODO: Implement
+  multiply<S extends Substance>(
+    this: BaseContainer<MassPerAreaPerDay<S>>,
+    right: Container<Area>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerDay<S>>;
   // Fallback implementation
   multiply(
     this: BaseContainer<NumberUnit>,

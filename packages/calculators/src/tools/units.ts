@@ -430,6 +430,26 @@ export const isHead = (unit: NumberUnit): unit is Head => {
   return unit.__unitType === 'Head';
 };
 
+export type MassPerAreaPerDay<S extends Substance> = NumberUnitBase & {
+  __unitType: 'MassPerAreaPerDay';
+  substance: S;
+};
+export const massPerAreaPerDay = <S extends Substance>(
+  substance: S,
+  initialValueKgPerSquareMetrePerDay?: number | Decimal,
+): MassPerAreaPerDay<S> => {
+  return {
+    __unitType: 'MassPerAreaPerDay',
+    value: new Decimal(initialValueKgPerSquareMetrePerDay ?? 0),
+    substance,
+  };
+};
+export const isMassPerAreaPerDay = (
+  unit: NumberUnit,
+): unit is MassPerAreaPerDay<Substance> => {
+  return unit.__unitType === 'MassPerAreaPerDay';
+};
+
 export type RealNumber = NumberUnitBase & {
   __unitType: 'RealNumber';
 };
@@ -471,6 +491,7 @@ export type NumberUnit =
   | EnergyPerMass<Substance>
   | MassPerVolume<Substance, Substance>
   | MassPerArea<Substance>
+  | MassPerAreaPerDay<Substance>
   | MassPerTime<Substance>
   | MassPerElectricity<Substance>
   | MassPerHeadPerDay<Substance>

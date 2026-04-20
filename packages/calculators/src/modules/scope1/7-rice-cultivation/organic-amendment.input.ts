@@ -23,7 +23,12 @@ export const RiceCultivationOrganicAmendmentInputSchema = object({
   rateOfApplication: z
     .number()
     .min(0)
-    .transform((val) => massPerArea('Organic Amendment', tonnesToKg(val)))
+    .transform((val) =>
+      input(
+        'rate of application',
+        massPerArea('Organic Amendment', tonnesToKg(val)),
+      ),
+    )
     .meta({
       description: 'TODO',
     }),

@@ -3,6 +3,7 @@ import {
   EnergyPerVolume,
   Mass,
   MassPerArea,
+  MassPerAreaPerDay,
   MassPerElectricity,
   MassPerEnergy,
   MassPerHeadPerDay,
@@ -467,6 +468,8 @@ export type RiceConstants = NamedConstants & {
     RiceCultivationOrganicAmendmentType,
     RealNumber
   >;
+  // TODO: Build unit
+  BASELINE_CONTINUOUSLY_FLOODED_EF: MassPerAreaPerDay<'CH4'>;
 };
 
 export type AllConstants = {

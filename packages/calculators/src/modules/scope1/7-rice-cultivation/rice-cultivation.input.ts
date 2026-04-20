@@ -8,6 +8,7 @@ import { input } from '@/tools/inputs';
 import { object } from '@/types/schemas';
 import z from 'zod';
 import { RiceCultivationOrganicAmendmentInputSchema } from './organic-amendment.input';
+import { days } from '@/tools/units';
 
 export const RiceCultivationInputSchema = object({
   preSeasonWaterRegimeType: z
@@ -29,6 +30,11 @@ export const RiceCultivationInputSchema = object({
   organicAmendments: z
     .array(RiceCultivationOrganicAmendmentInputSchema)
     .meta({ description: 'TODO' }),
+
+  cultivationPeriodDays: z
+    .number()
+    .min(1)
+    .transform((val) => input('days in cultivation period', days(val))),
 });
 
 export type RiceCultivationInput = z.input<typeof RiceCultivationInputSchema>;

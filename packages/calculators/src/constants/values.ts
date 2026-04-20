@@ -2,12 +2,14 @@ import {
   gjPerCubicMetreToJPerLitre,
   gjPerTonneTogjPerKg,
   kgPerGjToKgPerJ,
+  kgPerHectaresToKgPerSquareMetres,
 } from '@/tools/unit-conversion';
 import {
   energyPerMass,
   energyPerVolume,
   mass,
   massPerArea,
+  massPerAreaPerDay,
   massPerElectricity,
   massPerEnergy,
   massPerHeadPerDay,
@@ -5002,4 +5004,8 @@ export const riceConstants: RiceConstants = {
     'Farm yard manure': realNumber(0.21),
     'Green manure': realNumber(0.45),
   },
+  BASELINE_CONTINUOUSLY_FLOODED_EF: massPerAreaPerDay(
+    'CH4',
+    kgPerHectaresToKgPerSquareMetres(1.19),
+  ),
 };
