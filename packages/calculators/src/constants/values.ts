@@ -5021,6 +5021,7 @@ export const lulucfConstants: LULUCFConstants = {
     'Einasleigh Uplands': tonnesCarbonPerHectare(-0.24),
     'Esperance Plains': tonnesCarbonPerHectare(-0.17),
     'Eyre Yorke Block': tonnesCarbonPerHectare(-0.03),
+    Finke: tonnesCarbonPerHectare(-0.06),
     'Flinders Lofty Block': tonnesCarbonPerHectare(-0.02),
     Furneaux: tonnesCarbonPerHectare(-0.43),
     Gascoyne: tonnesCarbonPerHectare(-0.14),
@@ -5082,7 +5083,10 @@ export const lulucfConstants: LULUCFConstants = {
 
   CARBON_TO_NITROGEN_RATIO: massPerMass('Carbon', 'N', 18),
 
-  EF_CROP: massPerMass('N2O', 'N', 0.0041),
+  EF_CROP: {
+    high: massPerMass('N2O', 'N', 0.008),
+    low: massPerMass('N2O', 'N', 0.0029),
+  },
   EF_PASTURE: massPerMass('N2O', 'N', 0.0018),
 
   WOODY_PERENNIAL_CROPS_FULL: {
@@ -5093,7 +5097,7 @@ export const lulucfConstants: LULUCFConstants = {
       STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(417)),
     },
     Macadamias: {
-      BAMc: tonnesCarbonPerHectare(45),
+      BAMc: tonnesCarbonPerHectare(12.3),
       Mc: years(15),
       BARc: tonnesCarbonPerHectarePerYear(0.82),
       STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(312)),

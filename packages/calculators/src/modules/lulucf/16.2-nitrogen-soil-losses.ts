@@ -87,8 +87,13 @@ export const calculate_16_2_1_1_NitrogenMineralisationSoilLosses = (
   */
 
   const { constants } = context;
+  const { rainfallAbove600 } = input;
 
-  const EFcrop = selectConstant(constants.LULUCF, 'EF_CROP');
+  const EFcrop = selectConstant(
+    constants.LULUCF,
+    'EF_CROP',
+    rainfallAbove600 ? 'high' : 'low',
+  );
   const EFpasture = selectConstant(constants.LULUCF, 'EF_PASTURE');
   const CgN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
 

@@ -12,6 +12,9 @@ export const LULUCFInputSchema = object({
   isInLeachingZone: z.boolean().meta({
     description: 'Whether the activity is in a leaching zone.',
   }),
+  rainfallAbove600: z.boolean().meta({
+    description: 'Whether the activity is in a rainfall above 600mm zone.',
+  }),
   activities: z.array(LandUseChangeActivityInputSchema).optional(),
   burning: z.array(BurningInputSchema).optional(),
   perennialCrops: z.array(PerennialCropInputSchema).optional(),

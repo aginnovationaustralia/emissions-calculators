@@ -48,6 +48,7 @@ const getCalculatorInput = (
 
   const lulucfInput: LULUCFInput = {
     isInLeachingZone: false,
+    rainfallAbove600: false,
     activities: [activity],
   };
 

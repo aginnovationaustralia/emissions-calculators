@@ -16,8 +16,9 @@ import { checkIBRA7Region } from './lulucf-domain';
 const columnClearingType = 'A';
 const columnRegion = 'B';
 const columnIsInLeachingZone = 'D';
-const columnActivityArea = 'E';
-
+const columnRainfallAbove600 = 'E';
+const columnActivityArea = 'F';
+const columnExpectedOutput = 'S';
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
@@ -34,6 +35,7 @@ const getCalculatorInput = (
 
   const region = checkIBRA7Region(cell(columnRegion));
   const activityArea = Number(cell(columnActivityArea));
+  const rainfallAbove600 = cell(columnRainfallAbove600) === 'yes';
 
   const clearingType = cell(columnClearingType);
 
@@ -58,6 +60,7 @@ const getCalculatorInput = (
 
   const lulucfInput: LULUCFInput = {
     isInLeachingZone: cell(columnIsInLeachingZone) === 'yes',
+    rainfallAbove600,
     activities: [activity],
   };
 
@@ -65,7 +68,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`R${row}`).value());
+  return Number(sheet.cell(`${columnExpectedOutput}${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(

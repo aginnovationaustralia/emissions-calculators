@@ -17,8 +17,8 @@ export const calculate_16_1_1_2_ChangesInWoodyCarbonStocks = (
   /*
     CLUC,j,y = SUM ∆Ci,j,y * Cg,CO2 * -1
     ∆Ci,j,y = (∆Ct,i,j,y + ∆Cd,i,j,y) * ai,j,y
-    ∆Ct,i,j,y = Ct,i,j,y- Ct,i,j,y-1
-    ∆Cd,i,j,y = Cd,i,j,y- Cd,i,j,y-1
+    ∆Ct,i,j,y = Ct,i,j,y - Ct,i,j,y-1
+    ∆Cd,i,j,y = Cd,i,j,y - Cd,i,j,y-1
 */
   const { constants } = context;
   const { activities } = input;

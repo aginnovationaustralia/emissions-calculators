@@ -1043,6 +1043,7 @@ export const IBRA7Regions = [
   'Einasleigh Uplands',
   'Esperance Plains',
   'Eyre Yorke Block',
+  'Finke',
   'Flinders Lofty Block',
   'Furneaux',
   'Gascoyne',
