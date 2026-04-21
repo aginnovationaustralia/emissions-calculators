@@ -1,7 +1,7 @@
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 import { BurningInputSchema } from './burning-input';
-import { LandUseChangeActivityInputSchema } from './land-user-change-activity-input';
+import { LandUseChangeActivityInputSchema } from './land-use-change-activity-input';
 import { PerennialCropInputSchema } from './perennial-crops-input';
 
 export const LULUCFInputSchema = object({

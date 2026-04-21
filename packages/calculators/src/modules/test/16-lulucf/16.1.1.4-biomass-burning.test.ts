@@ -4,7 +4,7 @@ import {
   LULUCFInputSchema,
   LULUCFInputTransformed,
 } from '@/modules/lulucf/input';
-import { LandUseChangeActivityInput } from '@/modules/lulucf/land-user-change-activity-input';
+import { LandUseChangeActivityInput } from '@/modules/lulucf/land-use-change-activity-input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
 import {

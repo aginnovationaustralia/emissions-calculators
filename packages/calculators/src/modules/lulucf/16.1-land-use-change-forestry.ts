@@ -8,7 +8,7 @@ import { LULUCFInputTransformed } from './input';
 import {
   isForestryActivity,
   isLandClearingActivity,
-} from './land-user-change-activity-input';
+} from './land-use-change-activity-input';
 
 export const calculate_16_1_1_2_ChangesInWoodyCarbonStocks = (
   input: LULUCFInputTransformed,

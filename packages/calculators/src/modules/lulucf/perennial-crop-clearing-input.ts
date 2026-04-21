@@ -28,7 +28,7 @@ export const PerennialCropClearingMethod2InputSchema =
       .min(0)
       .meta({
         description:
-          'Years since original planting. THis must be less than the maturity age for the crop type',
+          'Years since original planting when clearing occurs. This must be less than the maturity age for the crop type',
       })
       .transform((val) => input('t', years(val))),
   });

@@ -316,9 +316,9 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
       } else if (isMassPerVolume(leftUnit) && isVolume(rightUnit)) {
         unit = mass(leftUnit.mass);
       } else if (isMassPerAreaPerYear(leftUnit) && isYears(rightUnit)) {
-        unit = massPerYear(leftUnit.substance);
+        unit = massPerArea(leftUnit.substance);
       } else if (isMassPerAreaPerYear(leftUnit) && isMassPerMass(rightUnit)) {
-        unit = massPerYear(rightUnit.snum);
+        unit = massPerAreaPerYear(rightUnit.snum);
       } else if (isMassPerYear(leftUnit) && isYears(rightUnit)) {
         unit = mass(leftUnit.substance);
       } else if (isMassPerAreaPerYear(leftUnit) && isArea(rightUnit)) {

@@ -8,7 +8,7 @@ import { LULUCFInputTransformed } from './input';
 import {
   isLandClearingForestToCropland,
   isLandClearingToGrasslandOrSettlements,
-} from './land-user-change-activity-input';
+} from './land-use-change-activity-input';
 
 export const calculateMineralisedNitrogenFromClearingToCrops = (
   input: LULUCFInputTransformed,
