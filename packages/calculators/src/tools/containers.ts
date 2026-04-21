@@ -20,6 +20,7 @@ import {
   isMass,
   isMassPerArea,
   isMassPerAreaPerDay,
+  isMassPerAreaPerYear,
   isMassPerDay,
   isMassPerElectricity,
   isMassPerEnergy,
@@ -27,17 +28,21 @@ import {
   isMassPerMass,
   isMassPerTime,
   isMassPerVolume,
+  isMassPerYear,
   isRealNumber,
   isTime,
   isVoid,
   isVolume,
   isVolumePerHeadPerDay,
   isVolumePerMass,
+  isYears,
   mass,
   Mass,
   massPerArea,
   MassPerArea,
   MassPerAreaPerDay,
+  massPerAreaPerYear,
+  MassPerAreaPerYear,
   massPerDay,
   MassPerDay,
   MassPerElectricity,
@@ -47,6 +52,8 @@ import {
   MassPerMass,
   MassPerTime,
   MassPerVolume,
+  massPerYear,
+  MassPerYear,
   NumberUnit,
   realNumber,
   RealNumber,
@@ -58,6 +65,7 @@ import {
   volumePerHeadPerDay,
   VolumePerHeadPerDay,
   VolumePerMass,
+  Years,
 } from './units';
 
 // Helpers for multiply overload return types (extract from container unit)
@@ -253,6 +261,27 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<Area>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerDay<S>>;
+  // MassPerAreaPerYear<S1> * Area → MassPerYear<S1>
+  multiply<S extends Substance>(
+    this: BaseContainer<MassPerAreaPerYear<S>>,
+    right: Container<Area>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerYear<S>>;
+
+  // MassPerYear<S1> * <MassPerMass<S2, S1>> = MassPerYear<S2>
+  multiply<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<MassPerYear<S1>>,
+    right: Container<MassPerMass<S2, S1>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerYear<S2>>;
+
+  // MassPerYear<S1> * Years = MassPerYear<S1>
+  multiply<S1 extends Substance>(
+    this: BaseContainer<MassPerYear<S1>>,
+    right: Container<Years>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<Mass<S1>>;
+
   // Fallback implementation
   multiply(
     this: BaseContainer<NumberUnit>,
@@ -305,6 +334,16 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = realNumber();
       } else if (isMassPerVolume(leftUnit) && isVolume(rightUnit)) {
         unit = mass(leftUnit.mass);
+      } else if (isMassPerAreaPerYear(leftUnit) && isYears(rightUnit)) {
+        unit = massPerArea(leftUnit.substance);
+      } else if (isMassPerAreaPerYear(leftUnit) && isMassPerMass(rightUnit)) {
+        unit = massPerAreaPerYear(rightUnit.snum);
+      } else if (isMassPerYear(leftUnit) && isYears(rightUnit)) {
+        unit = mass(leftUnit.substance);
+      } else if (isMassPerAreaPerYear(leftUnit) && isArea(rightUnit)) {
+        unit = massPerYear(leftUnit.substance);
+      } else if (isMassPerYear(leftUnit) && isMassPerMass(rightUnit)) {
+        unit = massPerYear(rightUnit.snum);
       } else if (isRealNumber(leftUnit)) {
         unit = { ...rightUnit };
       } else {
@@ -351,6 +390,20 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerArea<ExtractMassSubstance<UL>>>;
 
+  // Mass<S1> / MassPerMass<S1, S2> = Mass<S2>
+  divide<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<Mass<S1>>,
+    right: Container<MassPerMass<S1, S2>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<Mass<S2>>;
+
+  // MassPerArea<S1> / Years = MassPerAreaPerYear<S1>
+  divide<S extends Substance>(
+    this: BaseContainer<MassPerArea<S>>,
+    right: Container<Years>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerAreaPerYear<S>>;
+
   divide<
     S1 extends Substance,
     S2 extends Substance,
@@ -376,8 +429,12 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerArea(leftUnit.substance);
       } else if (isMassPerHeadPerDay(leftUnit) && isMassPerMass(rightUnit)) {
         unit = massPerHeadPerDay(rightUnit.snum);
+      } else if (isMass(leftUnit) && isMassPerMass(rightUnit)) {
+        unit = mass(rightUnit.sdenom);
       } else if (leftUnit.__unitType === rightUnit.__unitType) {
         unit = realNumber();
+      } else if (isMassPerArea(leftUnit) && isYears(rightUnit)) {
+        unit = massPerAreaPerYear(leftUnit.substance);
       } else {
         if (!isRealNumber(rightUnit)) {
           // eslint-disable-next-line no-console
@@ -455,7 +512,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     const leftUnit = this.unit;
     const rightUnit = right.unit;
     let unit: NumberUnit;
-    if (isVoid(leftUnit) || isVoid(rightUnit)) {
+    if (isVoid(leftUnit) && isVoid(rightUnit)) {
       unit = voidUnit();
     } else {
       if (isRealNumber(leftUnit) && !isRealNumber(rightUnit)) {

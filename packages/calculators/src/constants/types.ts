@@ -1,9 +1,11 @@
 import {
+  CountPerArea,
   EnergyPerMass,
   EnergyPerVolume,
   Mass,
   MassPerArea,
   MassPerAreaPerDay,
+  MassPerAreaPerYear,
   MassPerElectricity,
   MassPerEnergy,
   MassPerHeadPerDay,
@@ -13,6 +15,7 @@ import {
   NumberUnitBase,
   RealNumber,
   VolumePerMass,
+  Years,
 } from '@/tools/units';
 import {
   AgrochemicalType,
@@ -34,6 +37,7 @@ import {
   FuelStationaryVolumeBasedLiquidType,
   GrazingProductionSystemsWithRainfall,
   HeavyDutyFuelType,
+  IBRA7Region,
   InorganicFertiliserComponentOrigin,
   InorganicFertiliserComponentTypeNonRegional,
   InorganicFertiliserComponentTypeRegional,
@@ -43,6 +47,8 @@ import {
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
   PastureType,
+  PerennialWoodyCropFull,
+  PerennialWoodyCropPartial,
   PoultryClass,
   PoultryMMSType,
   PurchasedFeedAquacultureType,
@@ -120,6 +126,9 @@ export type CommonConstants = NamedConstants & {
   GWP_FACTORSC18: RealNumber;
 
   GWP_CH4: MassPerMass<'CO2e', 'CH4'>;
+
+  CG_CO2: MassPerMass<'CO2', 'Carbon'>;
+
   EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: VolumePerMass<
     'CH4',
     'Volatile Solids'
@@ -470,6 +479,32 @@ export type RiceConstants = NamedConstants & {
   >;
   BASELINE_CONTINUOUSLY_FLOODED_EF: MassPerAreaPerDay<'CH4'>;
 };
+type WoodyPerennialCropsPartialConstants = {
+  BAMc: MassPerArea<'Carbon'>;
+  Mc: Years;
+  BARc: MassPerAreaPerYear<'Carbon'>;
+};
+
+type WoodyPerennialCropsFullConstants = WoodyPerennialCropsPartialConstants & {
+  STEM_DENSITY: CountPerArea<'Trees'>;
+};
+
+export type LULUCFConstants = NamedConstants & {
+  ORGANIC_STOCK_LOSS_FACTORS: Record<IBRA7Region, MassPerArea<'Carbon'>>;
+  CARBON_TO_NITROGEN_RATIO: MassPerMass<'Carbon', 'N'>;
+
+  EF_CROP: Record<'high' | 'low', MassPerMass<'N2O', 'N'>>;
+  EF_PASTURE: MassPerMass<'N2O', 'N'>;
+
+  WOODY_PERENNIAL_CROPS_FULL: Record<
+    PerennialWoodyCropFull,
+    WoodyPerennialCropsFullConstants
+  >;
+  WOODY_PERENNIAL_CROPS_PARTIAL: Record<
+    PerennialWoodyCropPartial,
+    WoodyPerennialCropsPartialConstants
+  >;
+};
 
 export type AllConstants = {
   COMMON: CommonConstants;
@@ -481,6 +516,7 @@ export type AllConstants = {
   LIVESTOCK: LivestockConstants;
   BEEF_PASTURE: BeefPastureConstants;
   RICE: RiceConstants;
+  LULUCF: LULUCFConstants;
 };
 
 export type HasCommonConstants = {
