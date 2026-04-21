@@ -30,6 +30,10 @@ export function formatUnit(unit: AnyUnit): string {
       return `Mass(${unit.mass}) / Volume(${unit.volume})`;
     case 'MassPerArea':
       return `Mass(${unit.substance}) / Area`;
+    case 'MassPerAreaPerYear':
+      return `Mass(${unit.substance}) / Area / Year`;
+    case 'MassPerYear':
+      return `Mass(${unit.substance}) / Year`;
     case 'MassPerTime':
       return `Mass(${unit.substance}) / Time`;
     case 'MassPerHeadPerDay':
@@ -42,6 +46,11 @@ export function formatUnit(unit: AnyUnit): string {
       return `Volume(${unit.volume}) / Mass(${unit.mass})`;
     case 'Days':
       return 'Days';
+    case 'Years':
+      return 'Years';
+    case 'CountPerArea':
+      return 'Count / Area';
+
     case 'Head':
       return 'Head';
     case 'Area':

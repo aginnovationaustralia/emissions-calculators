@@ -4,6 +4,7 @@ import {
   CropConstants,
   DairyConstants,
   FeedlotConstants,
+  LULUCFConstants,
   PoultryConstants,
   SwineConstants,
 } from '@/constants/types';
@@ -13,6 +14,7 @@ import {
   cropConstants,
   dairyConstants,
   feedlotConstants,
+  lulucfConstants,
   poultryConstants,
   swineConstants,
 } from '@/constants/values';
@@ -26,6 +28,7 @@ export type ConstantsForGrainsCalculator = {
   SWINE: SwineConstants;
   FEEDLOT: FeedlotConstants;
   BEEF_PASTURE: BeefPastureConstants;
+  LULUCF: LULUCFConstants;
 };
 
 export const constantsForGrainsCalculator: ConstantsForGrainsCalculator = {
@@ -36,4 +39,5 @@ export const constantsForGrainsCalculator: ConstantsForGrainsCalculator = {
   SWINE: swineConstants,
   FEEDLOT: feedlotConstants,
   BEEF_PASTURE: beefPastureConstants,
+  LULUCF: lulucfConstants,
 };

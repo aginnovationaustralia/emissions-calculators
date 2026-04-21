@@ -1014,3 +1014,120 @@ export const stateOrRegionToPureState = (
     return 'WA';
   }
 };
+
+export const IBRA7Regions = [
+  'Arnhem Coast',
+  'Arnhem Plateau',
+  'Australian Alps',
+  'Avon Wheatbelt',
+  'Brigalow Belt North',
+  'Brigalow Belt South',
+  'Ben Lomond',
+  'Broken Hill Complex',
+  'Burt Plain',
+  'Carnarvon',
+  'Central Arnhem',
+  'Central Kimberley',
+  'Central Ranges',
+  'Channel Country',
+  'Central Mackay Coast',
+  'Coolgardie',
+  'Cobar Peneplain',
+  'Cape York Peninsula',
+  'Daly Basin',
+  'Darwin Coastal',
+  'Dampierland',
+  'Desert Uplands',
+  'Davenport Murchison Ranges',
+  'Darling Riverine Plains',
+  'Einasleigh Uplands',
+  'Esperance Plains',
+  'Eyre Yorke Block',
+  'Finke',
+  'Flinders Lofty Block',
+  'Furneaux',
+  'Gascoyne',
+  'Gawler',
+  'Geraldton Sandplains',
+  'Gulf Fall and Uplands',
+  'Gibson Desert',
+  'Great Sandy Desert',
+  'Gulf Coastal',
+  'Gulf Plains',
+  'Great Victoria Desert',
+  'Hampton',
+  'Jarrah Forest',
+  'Kanmantoo',
+  'King',
+  'Little Sandy Desert',
+  'MacDonnell Ranges',
+  'Mallee',
+  'Murray Darling Depression',
+  'Mitchell Grass Downs',
+  'Mount Isa Inlier',
+  'Mulga Lands',
+  'Murchison',
+  'Nandewar',
+  'Naracoorte Coastal Plain',
+  'New England Tablelands',
+  'NSW North Coast',
+  'Northern Kimberley',
+  'NSW South Western Slopes',
+  'Nullarbor',
+  'Ord Victoria Plain',
+  'Pine Creek',
+  'Pilbara',
+  'Riverina',
+  'South East Coastal Plain',
+  'South East Corner',
+  'South Eastern Highlands',
+  'South Eastern Queensland',
+  'Simpson Strzelecki Dunefields',
+  'Stony Plains',
+  'Sturt Plateau',
+  'Southern Volcanic Plain',
+  'Swan Coastal Plain',
+  'Sydney Basin',
+  'Tanami',
+  'Tasmanian Central Highlands',
+  'Tiwi Cobourg',
+  'Tasmanian Northern Midlands',
+  'Tasmanian Northern Slopes',
+  'Tasmanian South East',
+  'Tasmanian Southern Ranges',
+  'Tasmanian West',
+  'Victoria Bonaparte',
+  'Victorian Midlands',
+  'Warren',
+  'Wet Tropics',
+  'Yalgoo',
+] as const;
+export type IBRA7Region = (typeof IBRA7Regions)[number];
+
+export const PerennialWoodyCropsFull = [
+  'Oranges',
+  'Macadamias',
+  'Almonds',
+  'Apples',
+  'Peaches',
+  'Olives',
+  'Avocados',
+  'Mangoes',
+] as const;
+export type PerennialWoodyCropFull = (typeof PerennialWoodyCropsFull)[number];
+
+export const PerennialWoodyCropsPartial = ['Grapes', 'Kiwifruits'] as const;
+export type PerennialWoodyCropPartial =
+  (typeof PerennialWoodyCropsPartial)[number];
+
+export const PerennialWoodyCrops = [
+  ...PerennialWoodyCropsFull,
+  ...PerennialWoodyCropsPartial,
+] as const;
+export type PerennialWoodyCrop = (typeof PerennialWoodyCrops)[number];
+
+export const isPerennialWoodyCropFull = (
+  crop: PerennialWoodyCropFull | PerennialWoodyCropPartial,
+): crop is PerennialWoodyCropFull => {
+  return PerennialWoodyCropsFull.includes(crop as PerennialWoodyCropFull);
+};

@@ -30,3 +30,6 @@ export const hectaresToSquareMetres = (hectares: number | Decimal) =>
 export const tonnesPerHectareToKgPerSquareMetres = (
   tonnesPerHectare: number | Decimal,
 ) => new Decimal(tonnesPerHectare).div(10);
+
+export const perHectareToPerSqMetre = (perHectare: number | Decimal) =>
+  new Decimal(perHectare).div(1e4);
