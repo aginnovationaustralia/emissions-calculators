@@ -5013,7 +5013,7 @@ export const riceConstants: RiceConstants = {
   },
   BASELINE_CONTINUOUSLY_FLOODED_EF: massPerAreaPerDay(
     'CH4',
-    kgPerHectaresToKgPerSquareMetres(1.19),
+    perHectareToPerSqMetre(1.19),
   ),
 };
 const tonnesCarbonPerHectare = (tonnes: number) =>
