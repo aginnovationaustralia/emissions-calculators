@@ -248,14 +248,12 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S2>>;
   // MassPerAreaPerDay<S> * Days = MassPerArea<S>
-  // TODO: Implement
   multiply<S extends Substance>(
     this: BaseContainer<MassPerAreaPerDay<S>>,
     right: Container<Days>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerArea<S>>;
   // MassPerAreaPerDay<S> * Area = MassPerDay<S>
-  // TODO: Implement
   multiply<S extends Substance>(
     this: BaseContainer<MassPerAreaPerDay<S>>,
     right: Container<Area>,
