@@ -468,7 +468,6 @@ export type RiceConstants = NamedConstants & {
     RiceCultivationOrganicAmendmentType,
     RealNumber
   >;
-  // TODO: Build unit
   BASELINE_CONTINUOUSLY_FLOODED_EF: MassPerAreaPerDay<'CH4'>;
 };
 

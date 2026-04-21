@@ -19,6 +19,7 @@ import {
   isHead,
   isMass,
   isMassPerArea,
+  isMassPerAreaPerDay,
   isMassPerDay,
   isMassPerElectricity,
   isMassPerEnergy,
@@ -291,6 +292,10 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerDay(leftUnit.substance);
       } else if (isMassPerHeadPerDay(leftUnit) && isVolumePerMass(rightUnit)) {
         unit = volumePerHeadPerDay(leftUnit.substance);
+      } else if (isMassPerAreaPerDay(leftUnit) && isDays(rightUnit)) {
+        unit = massPerArea(leftUnit.substance);
+      } else if (isMassPerAreaPerDay(leftUnit) && isArea(rightUnit)) {
+        unit = massPerDay(leftUnit.substance);
       } else if (
         isVolumePerHeadPerDay(leftUnit) &&
         isMassPerVolume(rightUnit)

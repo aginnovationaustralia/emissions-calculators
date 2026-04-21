@@ -4994,8 +4994,8 @@ export const riceConstants: RiceConstants = {
   PRE_SEASON_WATER_REGIME_SCALING_FACTORS: {
     'Non flooded pre-season <180 days': realNumber(1),
     'Non flooded pre-season >180 days': realNumber(0.89),
-    'Non-flooded pre-season >365 days': realNumber(2.41),
-    'Flooded pre-season >30 days': realNumber(0.59),
+    'Non-flooded pre-season >365 days': realNumber(0.59),
+    'Flooded pre-season >30 days': realNumber(2.41),
   },
   ORGANIC_AMENDMENT_SCALING_FACTORS: {
     'Straw incorporated shortly (<30 days) before cultivation': realNumber(1),

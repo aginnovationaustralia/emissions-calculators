@@ -3,7 +3,7 @@ import {
   RiceCultivationOrganicAmendmentTypes,
 } from '@/constants/enums';
 import { input } from '@/tools/inputs';
-import { tonnesToKg } from '@/tools/unit-conversion';
+import { tonnesPerHectareToKgPerSquareMetres } from '@/tools/unit-conversion';
 import { massPerArea } from '@/tools/units';
 import { object } from '@/types/schemas';
 import z from 'zod';
@@ -26,7 +26,10 @@ export const RiceCultivationOrganicAmendmentInputSchema = object({
     .transform((val) =>
       input(
         'rate of application',
-        massPerArea('Organic Amendment', tonnesToKg(val)),
+        massPerArea(
+          'Organic Amendment',
+          tonnesPerHectareToKgPerSquareMetres(val),
+        ),
       ),
     )
     .meta({

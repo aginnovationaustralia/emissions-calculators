@@ -2,9 +2,9 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForRiceCalculator } from '@/calculators/Rice/constants';
 import { RiceCropTransformed } from '@/calculators/Rice/types';
 import { selectConstant } from '@/tools/constants';
-import { num } from '@/tools/containers';
-import { one } from '@/tools/sentinels';
+import { num, value } from '@/tools/containers';
 import { sum } from '@/tools/sum';
+import { massPerArea } from '@/tools/units';
 
 const calculateSpecificRiceCultivationEmissionsFactor = (
   crop: RiceCropTransformed,
@@ -28,22 +28,31 @@ const calculateSpecificRiceCultivationEmissionsFactor = (
 
   /**
    * SFo = (1 + SUMo ROAo * CFOAo) ^ 0.59
+   *
+   * NOTE: The 1 here is included in the list of summed totals as a shortcut
+   * way of telling the sum function what the unit of this total should be.
+   * This handles the scenario
    */
-  const cumulativeOrganicAmendmentsScalingFactor = one
-    .plus(
-      sum(
-        organicAmendments.map((amendment) => {
-          const conversionFactor = selectConstant(
-            constants.RICE,
-            'ORGANIC_AMENDMENT_SCALING_FACTORS',
-            amendment.type,
-          );
+  const cumulativeOrganicAmendmentsScalingFactor = sum([
+    value(massPerArea('Organic Amendment', 1)),
+    ...organicAmendments.map((amendment) => {
+      const conversionFactor = selectConstant(
+        constants.RICE,
+        'ORGANIC_AMENDMENT_SCALING_FACTORS',
+        amendment.type,
+      );
 
-          return amendment.rateOfApplication.multiply(conversionFactor);
-        }),
-      ),
-    )
-    .power(num(0.59));
+      /**
+       * We have the rate of application in kg/m^2 and need to convert
+       * back to t/ha (by multiplying by 10) before raising adding to the 1 and raising to the power.
+       */
+      const roaTonnesPerHectare = amendment.rateOfApplication.multiply(num(10));
+
+      return roaTonnesPerHectare.multiply(conversionFactor);
+    }),
+  ])
+    .power(num(0.59))
+    .named('SFo');
 
   const waterRegimeScalingFactor = selectConstant(
     constants.RICE,
@@ -82,7 +91,7 @@ export const calculateScope1RiceCultivation = (
   );
 
   /**
-   * Erice = SUMw SUMp SUMo (Arice,wpo * EFrice,wpo * trice,wpo) * 10^-3
+   * Erice = SUMw SUMp SUMo (Arice,wpo * EFrice,wpo * trice,wpo)
    */
   return riceEmissionsFactor
     .multiply(crop.areaSown)
