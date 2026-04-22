@@ -18,7 +18,7 @@ export const RiceCultivationOrganicAmendmentInputSchema = object({
       ),
     )
     .meta({
-      description: 'TODO',
+      description: 'The type of organic amendment applied.',
     }),
   rateOfApplication: z
     .number()
@@ -33,7 +33,8 @@ export const RiceCultivationOrganicAmendmentInputSchema = object({
       ),
     )
     .meta({
-      description: 'TODO',
+      description:
+        'The rate of application of this organic amendment, in tonnes per hectare. For straw, this should be measured in dry weight. Everything else should be given in terms of fresh weight.',
     }),
 });
 

@@ -61,8 +61,8 @@ export function formatUnit(unit: AnyUnit): string {
       return 'Electricity';
     case 'MassPerElectricity':
       return `Mass(${unit.substance}) / Electricity`;
-    default:
-      return '';
+    case 'MassPerAreaPerDay':
+      return `Mass(${unit.substance}) / Area / Day`;
   }
 }
 

@@ -19,17 +19,28 @@ export const RiceCultivationInputSchema = object({
         val as RiceCultivationPreSeasonWaterRegimeType,
       ),
     )
-    .meta({ description: 'TODO' }),
+    .meta({
+      description: 'The type of pre-season water regime for this rice crop.',
+    }),
   waterRegimeType: z
     .literal(RiceCultivationSeasonWaterRegimeTypes)
     .transform((val) =>
       input('water regime type', val as RiceCultivationSeasonWaterRegimeType),
     )
-    .meta({ description: 'TODO' }),
+    .meta({ description: 'The type of water regime for this rice crop' }),
 
   organicAmendments: z
     .array(RiceCultivationOrganicAmendmentInputSchema)
-    .meta({ description: 'TODO' }),
+    .optional()
+    .meta({
+      /**
+       * REVISIT:
+       * Do we want to put a warning here about remembering to 'reflect' any organic fertilisers in this input array as well? Looking at
+       * the organic fertiliser input types, I'm not too sure if each possible input reflects an option here or vice versa.
+       */
+      description:
+        'Any organic amendments that were applied to this rice crop. This can be ommitted if only inorganic fertilisers were applied to the crop.',
+    }),
 
   cultivationPeriodDays: z
     .number()

@@ -2,9 +2,8 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForRiceCalculator } from '@/calculators/Rice/constants';
 import { RiceCropTransformed } from '@/calculators/Rice/types';
 import { selectConstant } from '@/tools/constants';
-import { num, value } from '@/tools/containers';
+import { num } from '@/tools/containers';
 import { sum } from '@/tools/sum';
-import { massPerArea } from '@/tools/units';
 
 const calculateSpecificRiceCultivationEmissionsFactor = (
   crop: RiceCropTransformed,
@@ -27,32 +26,35 @@ const calculateSpecificRiceCultivationEmissionsFactor = (
   const { preSeasonWaterRegimeType, waterRegimeType, organicAmendments } = crop;
 
   /**
-   * SFo = (1 + SUMo ROAo * CFOAo) ^ 0.59
+   * SFo = (1 + SUMo(ROAo * CFOAo)) ^ 0.59
    *
-   * NOTE: The 1 here is included in the list of summed totals as a shortcut
-   * way of telling the sum function what the unit of this total should be.
-   * This handles the scenario
+   * NOTE: We have the rate of application in kg/m^2, but the original equation expects
+   * this value to be in t/ha (1 kg/m^2 = 10 t/ha). Hence, we have to make a few
+   * modifications to calculate the correct scaling factor. Instead of violating the
+   * expected unit of our `MassPerArea` type, we can factorise the 10 out (which means
+   * that we add everything to 0.1, NOT 1.)
+   *
+   * The result of the sum *shouldn't* be considered a `MassPerArea`. As a shortcut, we
+   * can tell the code that the result of the sum is a `RealNumber` unit by making
+   * the first element of the array a `RealNumber`. Once we raise it to the power,
+   * Typescript will know it's a real (dimensionless) number.
    */
-  const cumulativeOrganicAmendmentsScalingFactor = sum([
-    value(massPerArea('Organic Amendment', 1)),
-    ...organicAmendments.map((amendment) => {
-      const conversionFactor = selectConstant(
-        constants.RICE,
-        'ORGANIC_AMENDMENT_SCALING_FACTORS',
-        amendment.type,
-      );
-
-      /**
-       * We have the rate of application in kg/m^2 and need to convert
-       * back to t/ha (by multiplying by 10) before raising adding to the 1 and raising to the power.
-       */
-      const roaTonnesPerHectare = amendment.rateOfApplication.multiply(num(10));
-
-      return roaTonnesPerHectare.multiply(conversionFactor);
-    }),
-  ])
-    .power(num(0.59))
-    .named('SFo');
+  const cumulativeOrganicAmendmentsScalingFactor = !organicAmendments
+    ? num(1)
+    : sum([
+        num(0.1),
+        ...organicAmendments.map((amendment) => {
+          const conversionFactor = selectConstant(
+            constants.RICE,
+            'ORGANIC_AMENDMENT_SCALING_FACTORS',
+            amendment.type,
+          );
+          return amendment.rateOfApplication.multiply(conversionFactor);
+        }),
+      ])
+        .multiply(num(10))
+        .power(num(0.59))
+        .named('SFo');
 
   const waterRegimeScalingFactor = selectConstant(
     constants.RICE,
@@ -91,7 +93,7 @@ export const calculateScope1RiceCultivation = (
   );
 
   /**
-   * Erice = SUMw SUMp SUMo (Arice,wpo * EFrice,wpo * trice,wpo)
+   * Erice,wpo = Arice,wpo * EFrice,wpo * trice,wpo
    */
   return riceEmissionsFactor
     .multiply(crop.areaSown)
