@@ -2,12 +2,12 @@ import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
 import { executeCalculator } from '../executionContext';
 import { calculateGrains as calculateGrainsInternal } from './calculator';
-import { GrainsOutput } from './types';
 import {
+  GrainsOutput,
   GrainsInput,
   GrainsInputSchema,
   GrainsInputTransformed,
-} from './types/input';
+} from './types';
 
 function calculateGrains(
   input: GrainsInputTransformed,

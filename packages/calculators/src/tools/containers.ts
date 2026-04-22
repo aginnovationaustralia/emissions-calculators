@@ -19,6 +19,7 @@ import {
   isHead,
   isMass,
   isMassPerArea,
+  isMassPerAreaPerDay,
   isMassPerAreaPerYear,
   isMassPerDay,
   isMassPerElectricity,
@@ -39,6 +40,7 @@ import {
   Mass,
   massPerArea,
   MassPerArea,
+  MassPerAreaPerDay,
   massPerAreaPerYear,
   MassPerAreaPerYear,
   massPerDay,
@@ -245,7 +247,18 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<MassPerVolume<S2, S1>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S2>>;
-
+  // MassPerAreaPerDay<S> * Days = MassPerArea<S>
+  multiply<S extends Substance>(
+    this: BaseContainer<MassPerAreaPerDay<S>>,
+    right: Container<Days>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerArea<S>>;
+  // MassPerAreaPerDay<S> * Area = MassPerDay<S>
+  multiply<S extends Substance>(
+    this: BaseContainer<MassPerAreaPerDay<S>>,
+    right: Container<Area>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerDay<S>>;
   // MassPerAreaPerYear<S1> * Area → MassPerYear<S1>
   multiply<S extends Substance>(
     this: BaseContainer<MassPerAreaPerYear<S>>,
@@ -306,6 +319,10 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerDay(leftUnit.substance);
       } else if (isMassPerHeadPerDay(leftUnit) && isVolumePerMass(rightUnit)) {
         unit = volumePerHeadPerDay(leftUnit.substance);
+      } else if (isMassPerAreaPerDay(leftUnit) && isDays(rightUnit)) {
+        unit = massPerArea(leftUnit.substance);
+      } else if (isMassPerAreaPerDay(leftUnit) && isArea(rightUnit)) {
+        unit = massPerDay(leftUnit.substance);
       } else if (
         isVolumePerHeadPerDay(leftUnit) &&
         isMassPerVolume(rightUnit)

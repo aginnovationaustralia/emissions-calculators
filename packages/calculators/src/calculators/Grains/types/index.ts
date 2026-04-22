@@ -1,5 +1,9 @@
 export { GrainsCrop } from './crop.input';
-export { GrainsInput, GrainsInputSchema } from './input';
+export {
+  GrainsInput,
+  GrainsInputTransformed,
+  GrainsInputSchema,
+} from './input';
 export {
   GrainsIntensitiesOutput,
   GrainsIntensitiesOutputSchema,

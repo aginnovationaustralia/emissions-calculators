@@ -11,6 +11,7 @@ import {
   energyPerVolume,
   mass,
   massPerArea,
+  massPerAreaPerDay,
   massPerAreaPerYear,
   massPerElectricity,
   massPerEnergy,
@@ -34,6 +35,7 @@ import {
   LivestockConstants,
   LULUCFConstants,
   PoultryConstants,
+  RiceConstants,
   STATES,
   SwineConstants,
 } from './types';
@@ -4984,6 +4986,36 @@ export const beefPastureConstants: BeefPastureConstants = {
   },
 };
 
+export const riceConstants: RiceConstants = {
+  name: 'RICE',
+  WATER_REGIME_SCALING_FACTORS: {
+    'Paddy rotation': realNumber(0),
+    'Fallow without flooding in previous year': realNumber(0),
+    'Continuously flooded': realNumber(1),
+    'Single drainage period': realNumber(0.71),
+    'Multiple drainage periods': realNumber(0.55),
+    'Regular rainfed': realNumber(0.54),
+    'Drought prone': realNumber(0.16),
+    'Deep water': realNumber(0.06),
+  },
+  PRE_SEASON_WATER_REGIME_SCALING_FACTORS: {
+    'Non flooded pre-season <180 days': realNumber(1),
+    'Non flooded pre-season >180 days': realNumber(0.89),
+    'Non-flooded pre-season >365 days': realNumber(0.59),
+    'Flooded pre-season >30 days': realNumber(2.41),
+  },
+  ORGANIC_AMENDMENT_SCALING_FACTORS: {
+    'Straw incorporated shortly (<30 days) before cultivation': realNumber(1),
+    'Straw incorporated long (>30 days) before cultivation': realNumber(0.19),
+    Compost: realNumber(0.17),
+    'Farm yard manure': realNumber(0.21),
+    'Green manure': realNumber(0.45),
+  },
+  BASELINE_CONTINUOUSLY_FLOODED_EF: massPerAreaPerDay(
+    'CH4',
+    perHectareToPerSqMetre(1.19),
+  ),
+};
 const tonnesCarbonPerHectare = (tonnes: number) =>
   massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(tonnes));
 

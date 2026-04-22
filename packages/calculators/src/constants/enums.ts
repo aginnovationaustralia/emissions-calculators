@@ -1015,6 +1015,37 @@ export const stateOrRegionToPureState = (
   }
 };
 
+export const RiceCultivationSeasonWaterRegimeTypes = [
+  'Paddy rotation',
+  'Fallow without flooding in previous year',
+  'Continuously flooded',
+  'Single drainage period',
+  'Multiple drainage periods',
+  'Regular rainfed',
+  'Drought prone',
+  'Deep water',
+] as const;
+export type RiceCultivationSeasonWaterRegimeType =
+  (typeof RiceCultivationSeasonWaterRegimeTypes)[number];
+
+export const RiceCultivationPreSeasonWaterRegimeTypes = [
+  'Non flooded pre-season <180 days',
+  'Non flooded pre-season >180 days',
+  'Non-flooded pre-season >365 days',
+  'Flooded pre-season >30 days',
+] as const;
+export type RiceCultivationPreSeasonWaterRegimeType =
+  (typeof RiceCultivationPreSeasonWaterRegimeTypes)[number];
+
+export const RiceCultivationOrganicAmendmentTypes = [
+  'Straw incorporated shortly (<30 days) before cultivation',
+  'Straw incorporated long (>30 days) before cultivation',
+  'Compost',
+  'Farm yard manure',
+  'Green manure',
+] as const;
+export type RiceCultivationOrganicAmendmentType =
+  (typeof RiceCultivationOrganicAmendmentTypes)[number];
 export const IBRA7Regions = [
   'Arnhem Coast',
   'Arnhem Plateau',

@@ -4,6 +4,7 @@ import {
   EnergyPerVolume,
   Mass,
   MassPerArea,
+  MassPerAreaPerDay,
   MassPerAreaPerYear,
   MassPerElectricity,
   MassPerEnergy,
@@ -59,6 +60,9 @@ import {
   PureState,
   RefrigerantType,
   RefrigerationType,
+  RiceCultivationOrganicAmendmentType,
+  RiceCultivationPreSeasonWaterRegimeType,
+  RiceCultivationSeasonWaterRegimeType,
   Season,
   ServiceByAreaType,
   ServiceByHourType,
@@ -460,6 +464,21 @@ export type BeefPastureConstants = NamedConstants & {
   FRAC_WET_SOIL: Record<StateOrRegion, RealNumber>;
 };
 
+export type RiceConstants = NamedConstants & {
+  WATER_REGIME_SCALING_FACTORS: Record<
+    RiceCultivationSeasonWaterRegimeType,
+    RealNumber
+  >;
+  PRE_SEASON_WATER_REGIME_SCALING_FACTORS: Record<
+    RiceCultivationPreSeasonWaterRegimeType,
+    RealNumber
+  >;
+  ORGANIC_AMENDMENT_SCALING_FACTORS: Record<
+    RiceCultivationOrganicAmendmentType,
+    RealNumber
+  >;
+  BASELINE_CONTINUOUSLY_FLOODED_EF: MassPerAreaPerDay<'CH4'>;
+};
 type WoodyPerennialCropsPartialConstants = {
   BAMc: MassPerArea<'Carbon'>;
   Mc: Years;
@@ -496,6 +515,7 @@ export type AllConstants = {
   POULTRY: PoultryConstants;
   LIVESTOCK: LivestockConstants;
   BEEF_PASTURE: BeefPastureConstants;
+  RICE: RiceConstants;
   LULUCF: LULUCFConstants;
 };
 
