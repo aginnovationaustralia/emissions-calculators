@@ -2,6 +2,7 @@ import {
   gjPerCubicMetreToJPerLitre,
   gjPerTonneTogjPerKg,
   kgPerGjToKgPerJ,
+  perCubicMetresToPerLitres,
   perHectareToPerSqMetre,
   tonnesPerHectareToKgPerSquareMetres,
 } from '@/tools/unit-conversion';
@@ -1250,7 +1251,11 @@ export const commonConstants: CommonConstants = {
       PLACEHOLDER_MASS_TYPE: massPerMass('CO2e', 'Grow Media', 1),
     },
     byVolume: {
-      PLACEHOLDER_VOLUME_TYPE: massPerVolume('CO2e', 'Grow Media', 1),
+      PLACEHOLDER_VOLUME_TYPE: massPerVolume(
+        'CO2e',
+        'Grow Media',
+        perCubicMetresToPerLitres(1),
+      ),
     },
   },
 };
