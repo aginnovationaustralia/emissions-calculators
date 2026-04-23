@@ -1244,6 +1244,15 @@ export const commonConstants: CommonConstants = {
     '1000L intermediate bulk containers': mass('CO2e', 190.15),
     'Plastic crate polypropylene': mass('CO2e', 3.99),
   },
+
+  PURCHASED_GROW_MEDIA_FACTORS: {
+    byMass: {
+      PLACEHOLDER_MASS_TYPE: massPerMass('CO2e', 'Grow Media', 1),
+    },
+    byVolume: {
+      PLACEHOLDER_VOLUME_TYPE: massPerVolume('CO2e', 'Grow Media', 1),
+    },
+  },
 };
 
 const cropResidueRemovedOtherCropTypes: Record<State, RealNumber> = {

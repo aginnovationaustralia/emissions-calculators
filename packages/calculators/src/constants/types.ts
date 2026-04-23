@@ -55,6 +55,8 @@ import {
   PurchasedFeedLivestockRegionalType,
   PurchasedFeedLivestockRegionlessType,
   PurchasedFeedRegion,
+  PurchasedGrowMediaByMassType,
+  PurchasedGrowMediaByVolumeType,
   PurchasedMineralSupplementType,
   PurchasedPackagingType,
   PureState,
@@ -242,6 +244,17 @@ export type CommonConstants = NamedConstants & {
   };
 
   PURCHASED_PACKAGING_FACTORS: Record<PurchasedPackagingType, Mass<'CO2e'>>;
+
+  PURCHASED_GROW_MEDIA_FACTORS: {
+    byVolume: Record<
+      PurchasedGrowMediaByVolumeType,
+      MassPerVolume<'CO2e', 'Grow Media'>
+    >;
+    byMass: Record<
+      PurchasedGrowMediaByMassType,
+      MassPerMass<'CO2e', 'Grow Media'>
+    >;
+  };
 };
 
 type CropResidueFactors = {

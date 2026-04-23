@@ -3,10 +3,7 @@ import {
   WastewaterFacilityTypes,
 } from '@/constants/enums';
 import { input } from '@/tools/inputs';
-import {
-  kgPerCubicMetresToKgPerLitres,
-  tonnesToKg,
-} from '@/tools/unit-conversion';
+import { perCubicMetresToPerLitres, tonnesToKg } from '@/tools/unit-conversion';
 import { massPerVolume, realNumber, volume } from '@/tools/units';
 import { object, proportion } from '@/types/schemas';
 import z from 'zod';
@@ -41,7 +38,7 @@ export const WastewaterTreatmentInputSchema = object({
     .transform((val) =>
       input(
         'inlet COD',
-        massPerVolume('COD', 'FluidWaste', kgPerCubicMetresToKgPerLitres(val)),
+        massPerVolume('COD', 'FluidWaste', perCubicMetresToPerLitres(val)),
       ),
     ),
   outletCOD: z
@@ -55,7 +52,7 @@ export const WastewaterTreatmentInputSchema = object({
     .transform((val) =>
       input(
         'outlet COD',
-        massPerVolume('COD', 'FluidWaste', kgPerCubicMetresToKgPerLitres(val)),
+        massPerVolume('COD', 'FluidWaste', perCubicMetresToPerLitres(val)),
       ),
     ),
   /**
