@@ -32,6 +32,7 @@ export type Substance =
   | 'COD'
   | 'Packaging'
   | 'Organic Amendment'
+  | 'Grow Media'
   | 'Trees';
 
 export type NumberUnitBase = { value: Decimal };

@@ -842,6 +842,32 @@ export const PurchasedPackagingTypes = [
 ] as const;
 export type PurchasedPackagingType = (typeof PurchasedPackagingTypes)[number];
 
+export const PurchasedGrowMediaByVolumeTypes = [
+  'PLACEHOLDER_VOLUME_TYPE',
+] as const;
+export type PurchasedGrowMediaByVolumeType =
+  (typeof PurchasedGrowMediaByVolumeTypes)[number];
+
+export const PurchasedGrowMediaByMassTypes = ['PLACEHOLDER_MASS_TYPE'] as const;
+export type PurchasedGrowMediaByMassType =
+  (typeof PurchasedGrowMediaByMassTypes)[number];
+
+export const isPurchasedGrowMediaByVolume = (
+  growMedia: PurchasedGrowMediaByVolumeType | PurchasedGrowMediaByMassType,
+): growMedia is PurchasedGrowMediaByVolumeType => {
+  return PurchasedGrowMediaByVolumeTypes.includes(
+    growMedia as PurchasedGrowMediaByVolumeType,
+  );
+};
+
+export const isPurchasedGrowMediaByMass = (
+  growMedia: PurchasedGrowMediaByVolumeType | PurchasedGrowMediaByMassType,
+): growMedia is PurchasedGrowMediaByMassType => {
+  return PurchasedGrowMediaByMassTypes.includes(
+    growMedia as PurchasedGrowMediaByMassType,
+  );
+};
+
 export const WetClimateZones = [
   'Tropical montane',
   'Tropical wet',
