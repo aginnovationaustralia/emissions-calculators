@@ -16,79 +16,6 @@ export const LandUseChangeActivityBaseInputSchema = object({
     .transform((val) =>
       input('ActivityArea', area(hectaresToSquareMetres(val))),
     ),
-  carbonMassInTreesCurrentYear: z
-    .number()
-    .min(0)
-    .meta({
-      description:
-        'Carbon mass per hectare in trees in current year. Derived from FullCAM output.',
-    })
-    .transform((val) =>
-      input(
-        'Ctijy',
-        massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
-      ),
-    ),
-  carbonMassInTreesPreviousYear: z
-    .number()
-    .min(0)
-    .meta({
-      description:
-        'Carbon mass per hectare in trees in previous year. Derived from FullCAM output.',
-    })
-    .transform((val) =>
-      input(
-        'Ctijy-1',
-        massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
-      ),
-    ),
-  carbonMassInDebrisCurrentYear: z
-    .number()
-    .min(0)
-    .meta({
-      description:
-        'Carbon mass per hectare in debris in current year. Derived from FullCAM output.',
-    })
-    .transform((val) =>
-      input(
-        'Cdijy',
-        massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
-      ),
-    ),
-  carbonMassInDebrisPreviousYear: z
-    .number()
-    .min(0)
-    .meta({
-      description:
-        'Carbon mass per hectare in debris in previous year. Derived from FullCAM output.',
-    })
-    .transform((val) =>
-      input(
-        'Cdijy-1',
-        massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
-      ),
-    ),
-  ghgMassFromBiomassBurningPerHectare: z
-    .number()
-    .min(0)
-    .meta({
-      description:
-        'GHG mass per hectare from biomass burning. Derived from FullCAM output.',
-    })
-    .transform((val) =>
-      input(
-        'Eg,i,j,y',
-        massPerArea('CO2e', tonnesPerHectareToKgPerSquareMetres(val)),
-      ),
-    ),
-
-  areaBurnt: z
-    .number()
-    .min(0)
-    .meta({
-      description: 'Area burnt. Derived from FullCAM output.',
-    })
-    .transform((val) => input('ag,i,j,y', area(hectaresToSquareMetres(val)))),
 });
 
 const LandUseLandClearingBaseInputSchema =
@@ -96,6 +23,92 @@ const LandUseLandClearingBaseInputSchema =
     region: z.enum(IBRA7Regions).meta({
       description: 'IBRA7 region of the activity area',
     }),
+    carbonMassInTreesCurrentYear: z
+      .number()
+      .min(0)
+      .meta({
+        description:
+          'Carbon mass per hectare in trees in current year. Derived from FullCAM output.',
+      })
+      .transform((val) =>
+        input(
+          'Ctijy',
+          massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
+        ),
+      ),
+    carbonMassInTreesPreviousYear: z
+      .number()
+      .min(0)
+      .meta({
+        description:
+          'Carbon mass per hectare in trees in previous year. Derived from FullCAM output.',
+      })
+      .transform((val) =>
+        input(
+          'Ctijy-1',
+          massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
+        ),
+      ),
+    carbonMassInDebrisCurrentYear: z
+      .number()
+      .min(0)
+      .meta({
+        description:
+          'Carbon mass per hectare in debris in current year. Derived from FullCAM output.',
+      })
+      .transform((val) =>
+        input(
+          'Cdijy',
+          massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
+        ),
+      ),
+    carbonMassInDebrisPreviousYear: z
+      .number()
+      .min(0)
+      .meta({
+        description:
+          'Carbon mass per hectare in debris in previous year. Derived from FullCAM output.',
+      })
+      .transform((val) =>
+        input(
+          'Cdijy-1',
+          massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
+        ),
+      ),
+    massCH4FromBiomassBurningPerHectare: z
+      .number()
+      .min(0)
+      .meta({
+        description:
+          'Mass CH4 per hectare from biomass burning. Derived from FullCAM output.',
+      })
+      .transform((val) =>
+        input(
+          'Eg=ch4,i,j,y',
+          massPerArea('CH4', tonnesPerHectareToKgPerSquareMetres(val)),
+        ),
+      ),
+    massN2OFromBiomassBurningPerHectare: z
+      .number()
+      .min(0)
+      .meta({
+        description:
+          'Mass N2O per hectare from biomass burning. Derived from FullCAM output.',
+      })
+      .transform((val) =>
+        input(
+          'Eg=n2o,i,j,y',
+          massPerArea('N2O', tonnesPerHectareToKgPerSquareMetres(val)),
+        ),
+      ),
+
+    areaBurnt: z
+      .number()
+      .min(0)
+      .meta({
+        description: 'Area burnt. Derived from FullCAM output.',
+      })
+      .transform((val) => input('ag,i,j,y', area(hectaresToSquareMetres(val)))),
   });
 
 const ForestryActivityBaseInputSchema =

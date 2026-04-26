@@ -6,6 +6,7 @@ import { CalculatorNames } from './strings';
 
 export * from './calculators';
 export { CalculatorOptions } from './execution/types';
+export { loadConstants } from './executionContext';
 export { CalculatorNames, isValidCalculatorName } from './strings';
 export { validateCalculatorInput } from './validate';
 

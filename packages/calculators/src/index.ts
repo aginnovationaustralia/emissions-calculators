@@ -3,4 +3,5 @@ export {
   CalculateEmissionsStatus,
 } from './calculate';
 export * from './calculators';
-// export * from './constants';
+export * from './constants';
+export * from './modules';

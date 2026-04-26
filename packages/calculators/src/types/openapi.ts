@@ -41,7 +41,7 @@ const endpoints: Record<
 export const openapiSchemas = () =>
   entriesFromObject(endpoints).map(([name, endpoint]) => ({
     name,
-    inputSchema: createSchema(endpoint.inputSchema).schema,
+    inputSchema: createSchema(endpoint.inputSchema, { io: 'input' }).schema,
     outputSchema: createSchema(endpoint.outputSchema).schema,
   }));
 
