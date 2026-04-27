@@ -1026,6 +1026,7 @@ export const WastewaterFacilityTypes = [
   'Deep anaerobic lagoon', // > 2m
 ] as const;
 export type WastewaterFacilityType = (typeof WastewaterFacilityTypes)[number];
+
 export const PureStates = [
   'ACT',
   'NSW',

@@ -19,6 +19,8 @@ import {
   LimitedRegions,
   OtherLivestockType,
   OtherLivestockTypes,
+  PureState,
+  PureStates,
   StateOrRegion,
   StateOrRegions,
   SwineMMSType,
@@ -119,4 +121,11 @@ export const checkDeerClass = (cls: string | undefined): DeerClass => {
     throw new Error(`Invalid deer class: ${cls}`);
   }
   return cls as DeerClass;
+};
+
+export const checkPureState = (state: string | undefined): PureState => {
+  if (!PureStates.includes(state as PureState)) {
+    throw new Error(`Invalid pure state: ${state}`);
+  }
+  return state as PureState;
 };

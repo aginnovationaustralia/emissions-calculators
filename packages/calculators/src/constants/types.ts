@@ -428,6 +428,12 @@ export type PoultryConstants = NamedConstants & {
   MMS: Record<PoultryMMSType, PoultryMMSFactors>;
 };
 
+type OtherLivestockFactors = {
+  ENTERIC: MassPerHead<'CH4'>;
+  VOLATILE_SOLIDS: MassPerHeadPerDay<'Volatile Solids'>;
+  NITROGEN_EXCRETED: MassPerHeadPerDay<'N2O'>;
+};
+
 export type LivestockConstants = NamedConstants & {
   PURCHASED_FEED_FACTORS: {
     regionless: Record<
@@ -449,10 +455,14 @@ export type LivestockConstants = NamedConstants & {
     MassPerMass<'CO2e', 'Purchased Mineral Supplement'>
   >;
 
-  OTHER_LIVESTOCK_ENTERIC_METHANE_EMISSION_FACTORS: Record<
+  OTHER_LIVESTOCK_EMISSION_FACTORS: Record<
     OtherLivestockType,
-    MassPerHead<'CH4'>
+    OtherLivestockFactors
   >;
+
+  METHANE_CONVERSION_BY_STATE: Record<PureState, RealNumber>;
+
+  METHANE_CONVERSION_PASTURE: RealNumber;
 };
 
 type SeasonalFactors = Record<Season, RealNumber>;
