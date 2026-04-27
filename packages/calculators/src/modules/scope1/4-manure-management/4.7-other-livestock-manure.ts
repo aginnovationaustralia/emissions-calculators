@@ -14,7 +14,7 @@ const calculateManureMethaneForHerd = (
 ) => {
   const { constants } = context;
   const { excludedFromWater, classes } = herd;
-  const { state } = input;
+  const { state, method2MeanAnnualTemperature } = input;
 
   const MMSm1 = excludedFromWater ? num(0) : num(0.05);
   const MMSm14 = excludedFromWater ? num(1) : num(0.95);
@@ -24,7 +24,6 @@ const calculateManureMethaneForHerd = (
 
     const Nj = head.named(`Nj=${type}`);
 
-    // M jm = VS j * BO * MMSm * MCF im * 𝜌 -- 1704
     const VSj = selectConstant(
       constants.LIVESTOCK,
       'OTHER_LIVESTOCK_EMISSION_FACTORS',
@@ -37,11 +36,17 @@ const calculateManureMethaneForHerd = (
       'EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4',
     ).named('BO');
 
-    const MCFim1 = selectConstant(
-      constants.LIVESTOCK,
-      'METHANE_CONVERSION_BY_STATE',
-      state,
-    ).named(`MCFim=1 (${state})`);
+    const MCFim1 = method2MeanAnnualTemperature
+      ? selectConstant(
+          constants.LIVESTOCK,
+          'METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE',
+          method2MeanAnnualTemperature,
+        ).named(`MCFim=1 (${method2MeanAnnualTemperature})`)
+      : selectConstant(
+          constants.LIVESTOCK,
+          'METHANE_CONVERSION_BY_STATE',
+          state,
+        ).named(`MCFim=1 (${state})`);
 
     const MCFim14 = selectConstant(
       constants.LIVESTOCK,
@@ -50,6 +55,7 @@ const calculateManureMethaneForHerd = (
 
     const p = selectConstant(constants.COMMON, 'DENSITY_OF_METHANE').named('p');
 
+    // M jm = VS j * BO * MMSm * MCF im * 𝜌 -- 1704
     const Mjm1 = VSj.multiply(Bo)
       .multiply(MMSm1)
       .multiply(MCFim1)

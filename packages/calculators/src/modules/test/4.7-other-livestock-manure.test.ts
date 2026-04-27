@@ -15,6 +15,7 @@ import {
   checkBuffaloClass,
   checkDeerClass,
   checkGoatClass,
+  checkMeanAnnualTemperature,
   checkOtherLivestockClass,
   checkPureState,
 } from './livestock-domain';
@@ -26,6 +27,7 @@ import {
 const columnLivestockType = 'A';
 const columnLivestockClass = 'B';
 const columnHead = 'C';
+const columnMeanAnnualTemperature = 'F';
 const columnState = 'H';
 const columnExcludedFromWater = 'K';
 
@@ -70,6 +72,7 @@ const getOtherLivestockInput = (
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
+  method: '1' | '2',
 ): OtherLivestockInputTransformed | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
@@ -77,6 +80,8 @@ const getCalculatorInput = (
   if (cell('A') === undefined) {
     return undefined;
   }
+
+  const method2MeanAnnualTemperature = cell(columnMeanAnnualTemperature);
 
   const head = Number(cell(columnHead));
   const type = checkOtherLivestockClass(cell(columnLivestockType));
@@ -89,6 +94,10 @@ const getCalculatorInput = (
   const input: OtherLivestockInput = {
     herds: [{ classes: [otherLivestockClassInput], excludedFromWater }],
     state,
+    method2MeanAnnualTemperature:
+      method === '1'
+        ? undefined
+        : checkMeanAnnualTemperature(method2MeanAnnualTemperature),
   };
 
   // console.log(input);
@@ -105,7 +114,7 @@ const extractInputsAndOutput = createSheetExtractor(
   getExpectedOutput,
 );
 
-describe('3.6.1.1 Other livestock enteric methane', () => {
+describe('4.7.1.1 Other livestock manure methane', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.7-other-livestock-manure.xlsx',
@@ -113,6 +122,20 @@ describe('3.6.1.1 Other livestock enteric methane', () => {
     );
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculate_4_7_1_1_OtherLivestockManureMethane,
+    );
+  });
+
+  it('method 2 matches spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/4.7-other-livestock-manure.xlsx',
+      '4.7.1.1',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 41, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,

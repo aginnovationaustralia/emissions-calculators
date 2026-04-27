@@ -26,8 +26,9 @@ export function calculate36OtherLivestockEntericMethane(
       const { head, type } = livestockClass;
       const Mj = selectConstant(
         constants.LIVESTOCK,
-        'OTHER_LIVESTOCK_ENTERIC_METHANE_EMISSION_FACTORS',
+        'OTHER_LIVESTOCK_EMISSION_FACTORS',
         type,
+        'ENTERIC',
       );
       return head.multiply(Mj);
     });

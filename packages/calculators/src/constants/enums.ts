@@ -1265,3 +1265,26 @@ export const OtherLivestockTypes = [
   ...OtherLivestockClasslessTypes,
 ] as const;
 export type OtherLivestockType = (typeof OtherLivestockTypes)[number];
+
+export const MeanAnnualTemperatures = [
+  '10 or below',
+  '11',
+  '12',
+  '13',
+  '14',
+  '15',
+  '16',
+  '17',
+  '18',
+  '19',
+  '20',
+  '21',
+  '22',
+  '23',
+  '24',
+  '25',
+  '26',
+  '27',
+  '28 or above',
+] as const;
+export type MeanAnnualTemperature = (typeof MeanAnnualTemperatures)[number];

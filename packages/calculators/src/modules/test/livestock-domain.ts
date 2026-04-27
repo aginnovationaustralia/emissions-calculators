@@ -17,6 +17,8 @@ import {
   GrazingProductionSystems,
   LimitedRegion,
   LimitedRegions,
+  MeanAnnualTemperature,
+  MeanAnnualTemperatures,
   OtherLivestockType,
   OtherLivestockTypes,
   PureState,
@@ -128,4 +130,13 @@ export const checkPureState = (state: string | undefined): PureState => {
     throw new Error(`Invalid pure state: ${state}`);
   }
   return state as PureState;
+};
+
+export const checkMeanAnnualTemperature = (
+  temperature: string | undefined,
+): MeanAnnualTemperature => {
+  if (!MeanAnnualTemperatures.includes(temperature as MeanAnnualTemperature)) {
+    throw new Error(`Invalid mean annual temperature: ${temperature}`);
+  }
+  return temperature as MeanAnnualTemperature;
 };

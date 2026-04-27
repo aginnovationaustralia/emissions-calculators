@@ -25,6 +25,7 @@ import {
 const columnLivestockType = 'A';
 const columnLivestockClass = 'B';
 const columnHead = 'C';
+const columnResult = 'E';
 
 const getOtherLivestockInput = (
   type: OtherLivestockType,
@@ -82,7 +83,8 @@ const getCalculatorInput = (
   const otherLivestockClassInput = getOtherLivestockInput(type, cls, head);
 
   const input: OtherLivestockInput = {
-    herds: [{ classes: [otherLivestockClassInput] }],
+    herds: [{ classes: [otherLivestockClassInput], excludedFromWater: false }],
+    state: 'NSW',
   };
 
   // console.log(input);
@@ -91,7 +93,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`E${row}`).value());
+  return Number(sheet.cell(`${columnResult}${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(

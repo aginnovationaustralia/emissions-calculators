@@ -46,6 +46,7 @@ import {
   InorganicFertiliserType,
   LightDutyFuelType,
   LimitedRegion,
+  MeanAnnualTemperature,
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
   OtherLivestockType,
@@ -461,6 +462,11 @@ export type LivestockConstants = NamedConstants & {
   >;
 
   METHANE_CONVERSION_BY_STATE: Record<PureState, RealNumber>;
+
+  METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE: Record<
+    MeanAnnualTemperature,
+    RealNumber
+  >;
 
   METHANE_CONVERSION_PASTURE: RealNumber;
 };

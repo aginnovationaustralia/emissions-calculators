@@ -2264,6 +2264,28 @@ export const livestockConstants: LivestockConstants = {
     },
   },
 
+  METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE: {
+    '10 or below': realNumber(0.66),
+    '11': realNumber(0.68),
+    '12': realNumber(0.7),
+    '13': realNumber(0.71),
+    '14': realNumber(0.73),
+    '15': realNumber(0.74),
+    '16': realNumber(0.75),
+    '17': realNumber(0.76),
+    '18': realNumber(0.77),
+    '19': realNumber(0.77),
+    '20': realNumber(0.78),
+    '21': realNumber(0.78),
+    '22': realNumber(0.78),
+    '23': realNumber(0.79),
+    '24': realNumber(0.79),
+    '25': realNumber(0.79),
+    '26': realNumber(0.79),
+    '27': realNumber(0.8),
+    '28 or above': realNumber(0.8),
+  },
+
   METHANE_CONVERSION_BY_STATE: {
     ACT: realNumber(0.71),
     NSW: realNumber(0.75),

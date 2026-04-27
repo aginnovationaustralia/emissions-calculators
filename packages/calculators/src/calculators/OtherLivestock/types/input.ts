@@ -1,4 +1,4 @@
-import { PureStates } from '@/constants/enums';
+import { MeanAnnualTemperatures, PureStates } from '@/constants/enums';
 import { singleEnterpriseInput } from '@/types/schemas';
 import { z } from 'zod';
 import { OtherLivestockHerdInputSchema } from './herd.input';
@@ -8,6 +8,7 @@ export const OtherLivestockInputSchema = singleEnterpriseInput(
   {
     herds: z.array(OtherLivestockHerdInputSchema),
     state: z.enum(PureStates),
+    method2MeanAnnualTemperature: z.enum(MeanAnnualTemperatures).optional(),
   },
 );
 
