@@ -2225,42 +2225,42 @@ export const livestockConstants: LivestockConstants = {
     'Emus/ostriches': {
       ENTERIC: massPerHead('CH4', 5),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.34),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N2O', 7),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 7),
     },
     'Mules/asses': {
       ENTERIC: massPerHead('CH4', 10),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.91),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N2O', 13.2),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 13.2),
     },
     Alpacas: {
       ENTERIC: massPerHead('CH4', 8),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.34),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N2O', 7),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 7),
     },
     Horses: {
       ENTERIC: massPerHead('CH4', 18),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 2.73),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N2O', 39.5),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 39.5),
     },
     Camels: {
       ENTERIC: massPerHead('CH4', 46),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 2.73),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N2O', 39.5),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 39.5),
     },
     Buffalo: {
       ENTERIC: massPerHead('CH4', 68),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 2.73),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N2O', 39.5),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 39.5),
     },
     Goats: {
       ENTERIC: massPerHead('CH4', 5),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.34),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N2O', 7),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 7),
     },
     Deer: {
       ENTERIC: massPerHead('CH4', 20),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.91),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N2O', 13.2),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 13.2),
     },
   },
 
@@ -2298,6 +2298,11 @@ export const livestockConstants: LivestockConstants = {
   },
 
   METHANE_CONVERSION_PASTURE: realNumber(0.0047),
+
+  EFPRP: {
+    wet: massPerMass('N2O', 'N', 0.006),
+    dry: massPerMass('N2O', 'N', 0.002),
+  },
 };
 
 export const beefPastureConstants: BeefPastureConstants = {
@@ -5081,11 +5086,6 @@ export const beefPastureConstants: BeefPastureConstants = {
         },
       },
     },
-  },
-
-  EFPRP: {
-    wet: massPerMass('N2O', 'N', 0.006),
-    dry: massPerMass('N2O', 'N', 0.002),
   },
 
   MILK_INTAKE: {

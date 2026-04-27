@@ -432,7 +432,7 @@ export type PoultryConstants = NamedConstants & {
 type OtherLivestockFactors = {
   ENTERIC: MassPerHead<'CH4'>;
   VOLATILE_SOLIDS: MassPerHeadPerDay<'Volatile Solids'>;
-  NITROGEN_EXCRETED: MassPerHeadPerDay<'N2O'>;
+  NITROGEN_EXCRETED: MassPerHeadPerDay<'N'>;
 };
 
 export type LivestockConstants = NamedConstants & {
@@ -469,6 +469,8 @@ export type LivestockConstants = NamedConstants & {
   >;
 
   METHANE_CONVERSION_PASTURE: RealNumber;
+
+  EFPRP: Record<'wet' | 'dry', MassPerMass<'N2O', 'N'>>;
 };
 
 type SeasonalFactors = Record<Season, RealNumber>;
@@ -490,7 +492,6 @@ export type BeefPastureConstants = NamedConstants & {
   MCF_PASTURE: RealNumber;
   MCF_LAGOON: Record<ClimateZone, RealNumber>;
   LIVEWEIGHT: Record<ExtendedRegion, WeightFactorsByClass>;
-  EFPRP: Record<'wet' | 'dry', MassPerMass<'N2O', 'N'>>;
   MILK_INTAKE: Record<
     LimitedRegion,
     Record<'calving' | 'afterCalving', MassPerHeadPerDay<'Milk'>>
