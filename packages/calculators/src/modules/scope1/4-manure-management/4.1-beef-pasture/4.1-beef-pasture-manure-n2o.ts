@@ -427,7 +427,7 @@ const calculateManureManagementN2OAtmosphericDepositionForHerd = (
     'Cg,N2O',
   );
   const EFad = selectConstant(
-    constants.BEEF_PASTURE,
+    constants.LIVESTOCK,
     'EF_ATMOSPHERIC_DEPOSITION',
     addRainfallToGrazingProductionSystem(
       input.grazingSystem,

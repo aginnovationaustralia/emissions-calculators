@@ -471,6 +471,11 @@ export type LivestockConstants = NamedConstants & {
   METHANE_CONVERSION_PASTURE: RealNumber;
 
   EFPRP: Record<'wet' | 'dry', MassPerMass<'N2O', 'N'>>;
+
+  EF_ATMOSPHERIC_DEPOSITION: Record<
+    GrazingProductionSystemsWithRainfall,
+    MassPerMass<'N2O', 'Volatilised N'>
+  >;
 };
 
 type SeasonalFactors = Record<Season, RealNumber>;
@@ -495,11 +500,6 @@ export type BeefPastureConstants = NamedConstants & {
   MILK_INTAKE: Record<
     LimitedRegion,
     Record<'calving' | 'afterCalving', MassPerHeadPerDay<'Milk'>>
-  >;
-
-  EF_ATMOSPHERIC_DEPOSITION: Record<
-    GrazingProductionSystemsWithRainfall,
-    MassPerMass<'N2O', 'Volatilised N'>
   >;
 
   FRAC_WET_SOIL: Record<StateOrRegion, RealNumber>;

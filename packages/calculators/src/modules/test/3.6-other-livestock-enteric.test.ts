@@ -86,6 +86,7 @@ const getCalculatorInput = (
     herds: [{ classes: [otherLivestockClassInput], excludedFromWater: false }],
     state: 'NSW',
     climateZone: 'Boreal dry',
+    productionSystem: 'Non-irrigated pasture',
   };
 
   // console.log(input);

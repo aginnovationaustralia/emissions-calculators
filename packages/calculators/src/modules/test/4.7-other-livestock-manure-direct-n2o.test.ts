@@ -103,6 +103,7 @@ const getCalculatorInput = (
         ? undefined
         : checkMeanAnnualTemperature(method2MeanAnnualTemperature),
     climateZone,
+    productionSystem: 'Non-irrigated pasture',
   };
 
   // console.log(input);

@@ -90,7 +90,7 @@ export function calculate_4_7_1_1_OtherLivestockManureMethane(
   return sum(emissionsFromHerds, { name: 'EMCH4' });
 }
 
-const calculateManureDirectN2OForHerd = (
+const calculateNitrousEmissionsFromHerd = (
   herd: OtherLivestockHerdInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
@@ -117,6 +117,19 @@ const calculateManureDirectN2OForHerd = (
   return nitrogenExcreted;
 };
 
+const calculateNitrousEmissionsFromHerdsAE = (
+  input: OtherLivestockInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  const { herds } = input;
+
+  const emissionsFromHerds = herds.map((herd) => {
+    return calculateNitrousEmissionsFromHerd(herd, context);
+  });
+
+  return sum(emissionsFromHerds, { name: 'AE' });
+};
+
 export function calculate_4_7_1_3_OtherLivestockManureDirectN2O(
   input: OtherLivestockInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
@@ -130,14 +143,10 @@ export function calculate_4_7_1_3_OtherLivestockManureDirectN2O(
     CN2O = factor to convert elemental mass of nitrous oxide to molecular mass (dimensionless)
 */
 
-  const { herds, climateZone } = input;
+  const { climateZone } = input;
   const wetOrDry = isWetClimateZone(climateZone) ? 'wet' : 'dry';
 
-  const emissionsFromHerds = herds.map((herd) => {
-    return calculateManureDirectN2OForHerd(herd, context);
-  });
-
-  const AE = sum(emissionsFromHerds, { name: 'AE' });
+  const AE = calculateNitrousEmissionsFromHerdsAE(input, context);
 
   const EFprp = selectConstant(constants.LIVESTOCK, 'EFPRP', wetOrDry).named(
     'EF PRP',
@@ -145,4 +154,40 @@ export function calculate_4_7_1_3_OtherLivestockManureDirectN2O(
   const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
 
   return AE.multiply(EFprp).multiply(cn2o).named('EN2O,dir');
+}
+
+export function calculate_4_7_1_5_OtherLivestockManureDepositionN2O(
+  input: OtherLivestockInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
+  const { constants } = context;
+
+  /*
+  EN2O,ad = Mvol * EF N2O * CN2O * 10^-3
+
+  Mvol = AE * FracGASMsoil
+  */
+
+  const { productionSystem } = input;
+
+  const AE = calculateNitrousEmissionsFromHerdsAE(input, context);
+
+  const fracGASMsoil = selectConstant(
+    constants.CROP,
+    'FRACTION_N_VOLATILISED_ORGANIC_FERTILISER',
+  ).named('FracGASMsoil');
+
+  const Mvol = AE.multiply(fracGASMsoil).named('Mvol');
+
+  const EFn2o = selectConstant(
+    constants.LIVESTOCK,
+    'EF_ATMOSPHERIC_DEPOSITION',
+    productionSystem,
+  );
+
+  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+
+  const En2oad = Mvol.multiply(EFn2o).multiply(cn2o).named('EN2O,ad');
+
+  return En2oad;
 }

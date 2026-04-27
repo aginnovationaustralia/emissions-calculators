@@ -15,6 +15,7 @@ import {
   GoatClasses,
   GrazingProductionSystem,
   GrazingProductionSystems,
+  GrazingProductionSystemsWithRainfall,
   LimitedRegion,
   LimitedRegions,
   MeanAnnualTemperature,
@@ -139,4 +140,19 @@ export const checkMeanAnnualTemperature = (
     throw new Error(`Invalid mean annual temperature: ${temperature}`);
   }
   return temperature as MeanAnnualTemperature;
+};
+
+export const checkGrazingProductionSystemsWithRainfall = (
+  system: string | undefined,
+): GrazingProductionSystemsWithRainfall => {
+  if (
+    !GrazingProductionSystemsWithRainfall.includes(
+      system as GrazingProductionSystemsWithRainfall,
+    )
+  ) {
+    throw new Error(
+      `Invalid grazing production system with rainfall: ${system}`,
+    );
+  }
+  return system as GrazingProductionSystemsWithRainfall;
 };

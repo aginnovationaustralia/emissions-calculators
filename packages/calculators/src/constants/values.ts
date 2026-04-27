@@ -2303,6 +2303,22 @@ export const livestockConstants: LivestockConstants = {
     wet: massPerMass('N2O', 'N', 0.006),
     dry: massPerMass('N2O', 'N', 0.002),
   },
+
+  EF_ATMOSPHERIC_DEPOSITION: {
+    'Non-irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0018),
+    'Irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0059),
+    'Irrigated crop': massPerMass('N2O', 'Volatilised N', 0.007),
+    'Non-irrigated crop (low rainfall)': massPerMass(
+      'N2O',
+      'Volatilised N',
+      0.0029,
+    ),
+    'Non-irrigated crop (high rainfall)': massPerMass(
+      'N2O',
+      'Volatilised N',
+      0.008,
+    ),
+  },
 };
 
 export const beefPastureConstants: BeefPastureConstants = {
@@ -5125,22 +5141,6 @@ export const beefPastureConstants: BeefPastureConstants = {
       calving: massPerHeadPerDay('Milk', 4),
       afterCalving: massPerHeadPerDay('Milk', 3),
     },
-  },
-
-  EF_ATMOSPHERIC_DEPOSITION: {
-    'Non-irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0018),
-    'Irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0059),
-    'Irrigated crop': massPerMass('N2O', 'Volatilised N', 0.007),
-    'Non-irrigated crop (low rainfall)': massPerMass(
-      'N2O',
-      'Volatilised N',
-      0.0029,
-    ),
-    'Non-irrigated crop (high rainfall)': massPerMass(
-      'N2O',
-      'Volatilised N',
-      0.008,
-    ),
   },
 
   FRAC_WET_SOIL: {

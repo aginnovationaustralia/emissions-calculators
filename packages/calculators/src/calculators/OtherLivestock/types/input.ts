@@ -1,5 +1,6 @@
 import {
   ClimateZones,
+  GrazingProductionSystemsWithRainfall,
   MeanAnnualTemperatures,
   PureStates,
 } from '@/constants/enums';
@@ -14,6 +15,7 @@ export const OtherLivestockInputSchema = singleEnterpriseInput(
     state: z.enum(PureStates),
     method2MeanAnnualTemperature: z.enum(MeanAnnualTemperatures).optional(),
     climateZone: z.enum(ClimateZones),
+    productionSystem: z.enum(GrazingProductionSystemsWithRainfall),
   },
 );
 

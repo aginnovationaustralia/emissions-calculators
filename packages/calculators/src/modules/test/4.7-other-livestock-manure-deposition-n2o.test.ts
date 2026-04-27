@@ -10,11 +10,13 @@ import {
 } from '@/constants/enums';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { calculate_4_7_1_1_OtherLivestockManureMethane } from '../scope1/4-manure-management/4.7-other-livestock-manure';
+import { calculate_4_7_1_5_OtherLivestockManureDepositionN2O } from '../scope1/4-manure-management/4.7-other-livestock-manure';
 import {
   checkBuffaloClass,
+  checkClimateZone,
   checkDeerClass,
   checkGoatClass,
+  checkGrazingProductionSystemsWithRainfall,
   checkMeanAnnualTemperature,
   checkOtherLivestockClass,
   checkPureState,
@@ -27,10 +29,12 @@ import {
 const columnLivestockType = 'A';
 const columnLivestockClass = 'B';
 const columnHead = 'C';
+const columnProductionSystem = 'E';
 const columnMeanAnnualTemperature = 'F';
+const columnClimateZone = 'G';
 const columnState = 'I';
 const columnExcludedFromWater = 'L';
-const columnOutput = 'AD';
+const columnOutput = 'AH';
 
 const getOtherLivestockInput = (
   type: OtherLivestockType,
@@ -87,8 +91,12 @@ const getCalculatorInput = (
   const head = Number(cell(columnHead));
   const type = checkOtherLivestockClass(cell(columnLivestockType));
   const cls = cell(columnLivestockClass);
+  const climateZone = checkClimateZone(cell(columnClimateZone));
   const excludedFromWater = cell(columnExcludedFromWater) === 'yes';
   const state = checkPureState(cell(columnState));
+  const productionSystem = checkGrazingProductionSystemsWithRainfall(
+    cell(columnProductionSystem),
+  );
 
   const otherLivestockClassInput = getOtherLivestockInput(type, cls, head);
 
@@ -99,8 +107,8 @@ const getCalculatorInput = (
       method === '1'
         ? undefined
         : checkMeanAnnualTemperature(method2MeanAnnualTemperature),
-    climateZone: 'Boreal dry',
-    productionSystem: 'Non-irrigated pasture',
+    climateZone,
+    productionSystem,
   };
 
   // console.log(input);
@@ -117,7 +125,7 @@ const extractInputsAndOutput = createSheetExtractor(
   getExpectedOutput,
 );
 
-describe('4.7.1.1 Other livestock manure methane', () => {
+describe('4.7.1.5 Other livestock manure deposition N2O', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.7-other-livestock-manure.xlsx',
@@ -128,21 +136,7 @@ describe('4.7.1.1 Other livestock manure methane', () => {
 
     compareInputsAndOutputs(
       inputsAndOutputs,
-      calculate_4_7_1_1_OtherLivestockManureMethane,
-    );
-  });
-
-  it('method 2 matches spreadsheet results', async () => {
-    const sheet = await getSheet(
-      './src/modules/test/4.7-other-livestock-manure.xlsx',
-      '4.7.1.1',
-    );
-
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 41, '2');
-
-    compareInputsAndOutputs(
-      inputsAndOutputs,
-      calculate_4_7_1_1_OtherLivestockManureMethane,
+      calculate_4_7_1_5_OtherLivestockManureDepositionN2O,
     );
   });
 });
