@@ -16,6 +16,7 @@ import {
   massPerAreaPerYear,
   massPerElectricity,
   massPerEnergy,
+  massPerHead,
   massPerHeadPerDay,
   massPerMass,
   massPerTime,
@@ -2217,6 +2218,18 @@ export const livestockConstants: LivestockConstants = {
       'Purchased Mineral Supplement',
       0.677,
     ),
+  },
+
+  // Appendix A.1.5.1
+  OTHER_LIVESTOCK_ENTERIC_METHANE_EMISSION_FACTORS: {
+    Buffalo: massPerHead('CH4', 68),
+    Goats: massPerHead('CH4', 5),
+    Deer: massPerHead('CH4', 20),
+    Camels: massPerHead('CH4', 46),
+    Alpacas: massPerHead('CH4', 8),
+    Horses: massPerHead('CH4', 18),
+    'Mules/asses': massPerHead('CH4', 10),
+    'Emus/ostriches': massPerHead('CH4', 5),
   },
 };
 

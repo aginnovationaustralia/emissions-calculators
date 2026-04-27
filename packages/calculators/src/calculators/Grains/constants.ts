@@ -4,6 +4,7 @@ import {
   CropConstants,
   DairyConstants,
   FeedlotConstants,
+  LivestockConstants,
   LULUCFConstants,
   PoultryConstants,
   SwineConstants,
@@ -14,6 +15,7 @@ import {
   cropConstants,
   dairyConstants,
   feedlotConstants,
+  livestockConstants,
   lulucfConstants,
   poultryConstants,
   swineConstants,
@@ -21,6 +23,7 @@ import {
 
 // REVISIT: Grains needs most of livestock anyway, for organic manure. We can probably switch back to a single AllConstants for all contexts
 export type ConstantsForGrainsCalculator = {
+  LIVESTOCK: LivestockConstants;
   DAIRY: DairyConstants;
   POULTRY: PoultryConstants;
   COMMON: CommonConstants;
@@ -32,6 +35,7 @@ export type ConstantsForGrainsCalculator = {
 };
 
 export const constantsForGrainsCalculator: ConstantsForGrainsCalculator = {
+  LIVESTOCK: livestockConstants,
   DAIRY: dairyConstants,
   POULTRY: poultryConstants,
   COMMON: commonConstants,

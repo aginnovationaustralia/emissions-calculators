@@ -403,6 +403,26 @@ export const isVolumePerHeadPerDay = (
   return unit.__unitType === 'VolumePerHeadPerDay';
 };
 
+export type MassPerHead<S extends Substance> = NumberUnitBase & {
+  __unitType: 'MassPerHead';
+  substance: S;
+};
+export const massPerHead = <S extends Substance>(
+  substance: S,
+  initialValueKgPerHead?: number | Decimal,
+): MassPerHead<S> => {
+  return {
+    __unitType: 'MassPerHead',
+    substance,
+    value: new Decimal(initialValueKgPerHead ?? 0),
+  };
+};
+export const isMassPerHead = (
+  unit: NumberUnit,
+): unit is MassPerHead<Substance> => {
+  return unit.__unitType === 'MassPerHead';
+};
+
 export type VolumePerMass<
   SV extends Substance,
   SM extends Substance,
@@ -577,6 +597,7 @@ export type NumberUnit =
   | MassPerHeadPerDay<Substance>
   | MassPerDay<Substance>
   | VolumePerHeadPerDay<Substance>
+  | MassPerHead<Substance>
   | VolumePerMass<Substance, Substance>
   | CountPerArea<Substance>
   | Days

@@ -8,6 +8,7 @@ import {
   MassPerAreaPerYear,
   MassPerElectricity,
   MassPerEnergy,
+  MassPerHead,
   MassPerHeadPerDay,
   MassPerMass,
   MassPerTime,
@@ -47,6 +48,7 @@ import {
   LimitedRegion,
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
+  OtherLivestockType,
   PastureType,
   PerennialWoodyCropFull,
   PerennialWoodyCropPartial,
@@ -445,6 +447,11 @@ export type LivestockConstants = NamedConstants & {
   PURCHASED_MINERAL_SUPPLEMENT_FACTORS: Record<
     PurchasedMineralSupplementType,
     MassPerMass<'CO2e', 'Purchased Mineral Supplement'>
+  >;
+
+  OTHER_LIVESTOCK_ENTERIC_METHANE_EMISSION_FACTORS: Record<
+    OtherLivestockType,
+    MassPerHead<'CH4'>
   >;
 };
 
