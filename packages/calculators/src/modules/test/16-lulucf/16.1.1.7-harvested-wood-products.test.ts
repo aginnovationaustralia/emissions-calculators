@@ -36,12 +36,6 @@ const getCalculatorInput = (
 
   const activity: LandUseChangeActivityInput = {
     type: 'plantationForestry',
-    carbonMassInTreesCurrentYear: 0,
-    carbonMassInTreesPreviousYear: 0,
-    carbonMassInDebrisCurrentYear: 0,
-    carbonMassInDebrisPreviousYear: 0,
-    ghgMassFromBiomassBurningPerHectare: 0,
-    areaBurnt: 0,
     carbonMassOfWoodProductsHarvestedPerHectare,
     activityArea,
   };

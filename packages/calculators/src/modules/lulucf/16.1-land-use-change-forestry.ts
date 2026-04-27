@@ -58,7 +58,7 @@ export const calculate_16_1_1_2_ChangesInWoodyCarbonStocks = (
     .named('CLUC,j,y');
 };
 
-export const calculate_16_1_1_4_BiomassBurning = (
+export const calculate_16_1_1_4_BiomassBurningCH4 = (
   input: LULUCFInputTransformed,
   _context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
@@ -68,16 +68,42 @@ export const calculate_16_1_1_4_BiomassBurning = (
   const { activities } = input;
 
   if (!activities) {
-    return zeroCO2e.named('ELUC,g,j,y');
+    return zeroCO2e.named('ELUC,g=ch4,j,y');
   }
 
-  const ghgFromBurnings = activities.map((activity) => {
-    const { ghgMassFromBiomassBurningPerHectare, areaBurnt } = activity;
+  const ch4FromBurnings = activities
+    .filter(isLandClearingActivity)
+    .map((activity) => {
+      const { massCH4FromBiomassBurningPerHectare, areaBurnt } = activity;
 
-    return ghgMassFromBiomassBurningPerHectare.multiply(areaBurnt);
-  });
+      return massCH4FromBiomassBurningPerHectare.multiply(areaBurnt);
+    });
 
-  return sum(ghgFromBurnings).named('ELUC,g,j,y');
+  return sum(ch4FromBurnings).named('ELUC,g=ch4,j,y');
+};
+
+export const calculate_16_1_1_4_BiomassBurningN2O = (
+  input: LULUCFInputTransformed,
+  _context: ExecutionContext<ConstantsForGrainsCalculator>,
+) => {
+  /*
+  ELUC,g,j,y = SUM (Eg,i,j,y * ag,i,j,y)
+  */
+  const { activities } = input;
+
+  if (!activities) {
+    return zeroCO2e.named('ELUC,g=n2o,j,y');
+  }
+
+  const n2oFromBurnings = activities
+    .filter(isLandClearingActivity)
+    .map((activity) => {
+      const { massN2OFromBiomassBurningPerHectare, areaBurnt } = activity;
+
+      return massN2OFromBiomassBurningPerHectare.multiply(areaBurnt);
+    });
+
+  return sum(n2oFromBurnings).named('ELUC,g=n2o,j,y');
 };
 
 export const calculate_16_1_1_5_SoilOrganicStockLosses = (

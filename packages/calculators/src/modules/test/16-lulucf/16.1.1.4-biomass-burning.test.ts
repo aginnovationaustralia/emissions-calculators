@@ -1,4 +1,7 @@
-import { calculate_16_1_1_4_BiomassBurning } from '@/modules/lulucf/16.1-land-use-change-forestry';
+import {
+  calculate_16_1_1_4_BiomassBurningCH4,
+  calculate_16_1_1_4_BiomassBurningN2O,
+} from '@/modules/lulucf/16.1-land-use-change-forestry';
 import {
   LULUCFInput,
   LULUCFInputSchema,
@@ -12,8 +15,9 @@ import {
   createSheetExtractor,
 } from '../sheet-comparison';
 
-const columnMassPerHectare = 'B';
-const columnAreaBurnt = 'C';
+const columnMassCH4PerHectare = 'B';
+const columnMassN2OPerHectare = 'C';
+const columnAreaBurnt = 'D';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -29,7 +33,8 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const massPerHectare = Number(cell(columnMassPerHectare));
+  const massCH4PerHectare = Number(cell(columnMassCH4PerHectare));
+  const massN2OPerHectare = Number(cell(columnMassN2OPerHectare));
   const areaBurnt = Number(cell(columnAreaBurnt));
 
   const activity: LandUseChangeActivityInput = {
@@ -38,7 +43,8 @@ const getCalculatorInput = (
     carbonMassInTreesPreviousYear: 0,
     carbonMassInDebrisCurrentYear: 0,
     carbonMassInDebrisPreviousYear: 0,
-    ghgMassFromBiomassBurningPerHectare: massPerHectare,
+    massCH4FromBiomassBurningPerHectare: massCH4PerHectare,
+    massN2OFromBiomassBurningPerHectare: massN2OPerHectare,
     areaBurnt,
     region: 'Arnhem Coast',
     activityArea: 100,
@@ -53,27 +59,50 @@ const getCalculatorInput = (
   return LULUCFInputSchema.parse(lulucfInput);
 };
 
-const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`D${row}`).value());
+const getExpectedOutputCH4 = (sheet: XLSX.Sheet, row: number): number => {
+  return Number(sheet.cell(`E${row}`).value());
 };
 
-const extractInputsAndOutput = createSheetExtractor(
+const getExpectedOutputN2O = (sheet: XLSX.Sheet, row: number): number => {
+  return Number(sheet.cell(`F${row}`).value());
+};
+
+const extractInputsAndOutputCH4 = createSheetExtractor(
   getCalculatorInput,
-  getExpectedOutput,
+  getExpectedOutputCH4,
+);
+
+const extractInputsAndOutputN2O = createSheetExtractor(
+  getCalculatorInput,
+  getExpectedOutputN2O,
 );
 
 describe('16.1.1.4 Biomass Burning', () => {
-  it('method 2 scenarios match spreadsheet results', async () => {
+  it('method 2 scenarios match spreadsheet results for CH4', async () => {
     const sheet = await getSheet(
       './src/modules/test/16-lulucf/16.1-lulucf.xlsx',
       '16.1.1.4',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
+    const inputsAndOutputs = extractInputsAndOutputCH4(sheet, 11, '1');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
-      calculate_16_1_1_4_BiomassBurning,
+      calculate_16_1_1_4_BiomassBurningCH4,
+    );
+  });
+
+  it('method 2 scenarios match spreadsheet results for N2O', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/16-lulucf/16.1-lulucf.xlsx',
+      '16.1.1.4',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutputN2O(sheet, 11, '1');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculate_16_1_1_4_BiomassBurningN2O,
     );
   });
 });

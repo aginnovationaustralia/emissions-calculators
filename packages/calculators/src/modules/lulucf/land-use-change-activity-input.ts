@@ -170,9 +170,9 @@ const RevegetationByPlantingInputSchema =
     number: 4 as const,
   }));
 
-const HumanInducedNationalRegenerationInputSchema =
+const HumanInducedNaturalRegenerationInputSchema =
   LandUseChangeActivityBaseInputSchema.extend({
-    type: z.literal('humanInducedNationalRegeneration'),
+    type: z.literal('humanInducedNaturalRegeneration'),
   }).transform((val) => ({
     ...val,
     number: 5 as const,
@@ -197,7 +197,7 @@ export const LandUseChangeActivityInputSchema = z.discriminatedUnion('type', [
   LandClearingForestToGrasslandInputSchema,
   LandClearingForestToSettlementsInputSchema,
   RevegetationByPlantingInputSchema,
-  HumanInducedNationalRegenerationInputSchema,
+  HumanInducedNaturalRegenerationInputSchema,
   FarmForestryInputSchema,
   PlantationForestryInputSchema,
 ]);
@@ -215,7 +215,7 @@ export type RevegetationByPlantingInputTransformed = z.output<
   typeof RevegetationByPlantingInputSchema
 >;
 export type HumanInducedNationalRegenerationInputTransformed = z.output<
-  typeof HumanInducedNationalRegenerationInputSchema
+  typeof HumanInducedNaturalRegenerationInputSchema
 >;
 export type FarmForestryInputTransformed = z.output<
   typeof FarmForestryInputSchema
