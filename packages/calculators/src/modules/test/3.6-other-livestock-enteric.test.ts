@@ -87,6 +87,7 @@ const getCalculatorInput = (
     state: 'NSW',
     climateZone: 'Boreal dry',
     productionSystem: 'Non-irrigated pasture',
+    isInLeachingZone: false,
   };
 
   // console.log(input);

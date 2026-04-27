@@ -5,7 +5,7 @@ import { OtherLivestockInputTransformed } from '@/calculators/OtherLivestock/typ
 import { isWetClimateZone } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { num } from '@/tools/containers';
-import { daysInYear } from '@/tools/sentinels';
+import { daysInYear, one, zero } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 
 const calculateManureMethaneForHerd = (
@@ -190,4 +190,35 @@ export function calculate_4_7_1_5_OtherLivestockManureDepositionN2O(
   const En2oad = Mvol.multiply(EFn2o).multiply(cn2o).named('EN2O,ad');
 
   return En2oad;
+}
+
+export function calculate_4_7_1_7_OtherLivestockManureLeachingRunoffN2O(
+  input: OtherLivestockInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
+  /*
+    EN2O,leach = Mleach * EF leach * CN2O * 10^-3
+
+    Mleach = AE * FracWet * FracLEACH
+  */
+
+  const { constants } = context;
+
+  const AE = calculateNitrousEmissionsFromHerdsAE(input, context);
+
+  const FracWET = (input.isInLeachingZone ? one : zero).named('FracWET');
+  const FracLEACH = selectConstant(
+    constants.CROP,
+    'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF',
+  ).named('FracLEACH');
+  const EFleach = selectConstant(
+    constants.CROP,
+    'EF_N2O_LEACHING_AND_RUNOFF',
+  ).named('EFleach');
+  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+
+  const Mleach = AE.multiply(FracWET).multiply(FracLEACH).named('Mleach');
+  const En2oleach = Mleach.multiply(EFleach).multiply(cn2o).named('EN2O,leach');
+
+  return En2oleach;
 }

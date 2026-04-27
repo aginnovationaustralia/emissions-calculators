@@ -101,6 +101,7 @@ const getCalculatorInput = (
         : checkMeanAnnualTemperature(method2MeanAnnualTemperature),
     climateZone: 'Boreal dry',
     productionSystem: 'Non-irrigated pasture',
+    isInLeachingZone: false,
   };
 
   // console.log(input);

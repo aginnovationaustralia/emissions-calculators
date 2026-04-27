@@ -16,6 +16,7 @@ export const OtherLivestockInputSchema = singleEnterpriseInput(
     method2MeanAnnualTemperature: z.enum(MeanAnnualTemperatures).optional(),
     climateZone: z.enum(ClimateZones),
     productionSystem: z.enum(GrazingProductionSystemsWithRainfall),
+    isInLeachingZone: z.boolean(),
   },
 );
 

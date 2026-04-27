@@ -109,6 +109,7 @@ const getCalculatorInput = (
         : checkMeanAnnualTemperature(method2MeanAnnualTemperature),
     climateZone,
     productionSystem,
+    isInLeachingZone: false,
   };
 
   // console.log(input);
