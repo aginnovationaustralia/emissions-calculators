@@ -8,7 +8,7 @@ export const OtherLivestockBaseInputSchema = object({
   head: z
     .number()
     .min(0)
-    .meta({ description: 'Number of head' })
+    .meta({ description: 'Number of head in this class' })
     .transform((val) => input('Nj', head(val))),
 });
 
