@@ -4,9 +4,9 @@ import { OtherLivestockClassInputSchema } from './class.input';
 
 export const OtherLivestockHerdInputSchema = object({
   classes: z.array(OtherLivestockClassInputSchema),
-  excludedFromWater: z.boolean().meta({
+  excludedFromNaturalWater: z.boolean().meta({
     description:
-      'Whether the herd is excluded from water use (i.e. on bore or reticulated water systems where water is provided in troughs)',
+      'Whether the herd is excluded from natural water use (i.e. on bore or reticulated water systems where water is provided in troughs)',
   }),
 });
 

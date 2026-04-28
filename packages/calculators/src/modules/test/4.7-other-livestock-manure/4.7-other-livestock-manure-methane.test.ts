@@ -1,74 +1,34 @@
-import { OtherLivestockClassInput } from '@/calculators/OtherLivestock/types/class.input';
 import {
   OtherLivestockInput,
   OtherLivestockInputSchema,
   OtherLivestockInputTransformed,
 } from '@/calculators/OtherLivestock/types/input';
-import {
-  isOtherLivestockClasslessType,
-  OtherLivestockType,
-} from '@/constants/enums';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { calculate_4_7_1_1_OtherLivestockManureMethane } from '../scope1/4-manure-management/4.7-other-livestock-manure';
+import { calculate_4_7_1_1_OtherLivestockManureMethane } from '../../scope1/4-manure-management/4.7-other-livestock-manure';
 import {
-  checkBuffaloClass,
-  checkDeerClass,
-  checkGoatClass,
   checkMeanAnnualTemperature,
   checkOtherLivestockClass,
   checkPureState,
-} from './livestock-domain';
+} from '../livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
-} from './sheet-comparison';
+} from '../sheet-comparison';
+import {
+  getOtherLivestockInput,
+  otherLivestockManureSheetColumns,
+} from './4.7-other-livestock-manure-helpers';
 
-const columnLivestockType = 'A';
-const columnLivestockClass = 'B';
-const columnHead = 'C';
-const columnMeanAnnualTemperature = 'F';
-const columnState = 'I';
-const columnExcludedFromWater = 'L';
-const columnOutput = 'AD';
-
-const getOtherLivestockInput = (
-  type: OtherLivestockType,
-  cls: string | undefined,
-  head: number,
-): OtherLivestockClassInput => {
-  if (type === 'Buffalo') {
-    const buffaloClass = checkBuffaloClass(cls);
-    return {
-      type,
-      class: buffaloClass,
-      head,
-    };
-  }
-  if (type === 'Goats') {
-    const goatClass = checkGoatClass(cls);
-    return {
-      type,
-      class: goatClass,
-      head,
-    };
-  }
-  if (type === 'Deer') {
-    const deerClass = checkDeerClass(cls);
-    return {
-      type,
-      class: deerClass,
-      head,
-    };
-  }
-  if (isOtherLivestockClasslessType(type)) {
-    return {
-      type,
-      head,
-    };
-  }
-  throw new Error(`Invalid other livestock type: ${type} with class: ${cls}`);
-};
+const {
+  columnLivestockType,
+  columnLivestockClass,
+  columnHead,
+  columnMeanAnnualTemperature,
+  columnState,
+  columnExcludedFromWater,
+  columnOutputMethane: columnOutput,
+} = otherLivestockManureSheetColumns;
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -87,13 +47,13 @@ const getCalculatorInput = (
   const head = Number(cell(columnHead));
   const type = checkOtherLivestockClass(cell(columnLivestockType));
   const cls = cell(columnLivestockClass);
-  const excludedFromWater = cell(columnExcludedFromWater) === 'yes';
+  const excludedFromNaturalWater = cell(columnExcludedFromWater) === 'yes';
   const state = checkPureState(cell(columnState));
 
   const otherLivestockClassInput = getOtherLivestockInput(type, cls, head);
 
   const input: OtherLivestockInput = {
-    herds: [{ classes: [otherLivestockClassInput], excludedFromWater }],
+    herds: [{ classes: [otherLivestockClassInput], excludedFromNaturalWater }],
     state,
     method2MeanAnnualTemperature:
       method === '1'
@@ -121,7 +81,7 @@ const extractInputsAndOutput = createSheetExtractor(
 describe('4.7.1.1 Other livestock manure methane', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/4.7-other-livestock-manure.xlsx',
+      './src/modules/test/4.7-other-livestock-manure/4.7-other-livestock-manure.xlsx',
       '4.7.1.1',
     );
 
@@ -135,7 +95,7 @@ describe('4.7.1.1 Other livestock manure methane', () => {
 
   it('method 2 matches spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/4.7-other-livestock-manure.xlsx',
+      './src/modules/test/4.7-other-livestock-manure/4.7-other-livestock-manure.xlsx',
       '4.7.1.1',
     );
 

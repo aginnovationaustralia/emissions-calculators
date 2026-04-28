@@ -83,7 +83,9 @@ const getCalculatorInput = (
   const otherLivestockClassInput = getOtherLivestockInput(type, cls, head);
 
   const input: OtherLivestockInput = {
-    herds: [{ classes: [otherLivestockClassInput], excludedFromWater: false }],
+    herds: [
+      { classes: [otherLivestockClassInput], excludedFromNaturalWater: false },
+    ],
     state: 'NSW',
     climateZone: 'Boreal dry',
     productionSystem: 'Non-irrigated pasture',

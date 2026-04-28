@@ -14,11 +14,11 @@ const calculateManureMethaneForHerd = (
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   const { constants } = context;
-  const { excludedFromWater, classes } = herd;
+  const { excludedFromNaturalWater, classes } = herd;
   const { state, method2MeanAnnualTemperature } = input;
 
-  const MMSm1 = excludedFromWater ? num(0) : num(0.05);
-  const MMSm14 = excludedFromWater ? num(1) : num(0.95);
+  const MMSm1 = excludedFromNaturalWater ? num(0) : num(0.05);
+  const MMSm14 = excludedFromNaturalWater ? num(1) : num(0.95);
 
   const emissionsFromClasses = classes.map((cls) => {
     const { head, type, number } = cls;

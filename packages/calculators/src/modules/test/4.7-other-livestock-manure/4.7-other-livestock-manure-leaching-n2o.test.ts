@@ -1,76 +1,39 @@
-import { OtherLivestockClassInput } from '@/calculators/OtherLivestock/types/class.input';
 import {
   OtherLivestockInput,
   OtherLivestockInputSchema,
   OtherLivestockInputTransformed,
 } from '@/calculators/OtherLivestock/types/input';
-import {
-  isOtherLivestockClasslessType,
-  OtherLivestockType,
-} from '@/constants/enums';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { calculate_4_7_1_3_OtherLivestockManureDirectN2O } from '../scope1/4-manure-management/4.7-other-livestock-manure';
+import { calculate_4_7_1_7_OtherLivestockManureLeachingRunoffN2O } from '../../scope1/4-manure-management/4.7-other-livestock-manure';
 import {
-  checkBuffaloClass,
   checkClimateZone,
-  checkDeerClass,
-  checkGoatClass,
+  checkGrazingProductionSystemsWithRainfall,
   checkMeanAnnualTemperature,
   checkOtherLivestockClass,
   checkPureState,
-} from './livestock-domain';
+} from '../livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
-} from './sheet-comparison';
+} from '../sheet-comparison';
+import {
+  getOtherLivestockInput,
+  otherLivestockManureSheetColumns,
+} from './4.7-other-livestock-manure-helpers';
 
-const columnLivestockType = 'A';
-const columnLivestockClass = 'B';
-const columnHead = 'C';
-const columnMeanAnnualTemperature = 'F';
-const columnClimateZone = 'G';
-const columnState = 'I';
-const columnExcludedFromWater = 'L';
-const columnOutput = 'AF';
-
-const getOtherLivestockInput = (
-  type: OtherLivestockType,
-  cls: string | undefined,
-  head: number,
-): OtherLivestockClassInput => {
-  if (type === 'Buffalo') {
-    const buffaloClass = checkBuffaloClass(cls);
-    return {
-      type,
-      class: buffaloClass,
-      head,
-    };
-  }
-  if (type === 'Goats') {
-    const goatClass = checkGoatClass(cls);
-    return {
-      type,
-      class: goatClass,
-      head,
-    };
-  }
-  if (type === 'Deer') {
-    const deerClass = checkDeerClass(cls);
-    return {
-      type,
-      class: deerClass,
-      head,
-    };
-  }
-  if (isOtherLivestockClasslessType(type)) {
-    return {
-      type,
-      head,
-    };
-  }
-  throw new Error(`Invalid other livestock type: ${type} with class: ${cls}`);
-};
+const {
+  columnLivestockType,
+  columnLivestockClass,
+  columnHead,
+  columnIsInLeachingZone,
+  columnProductionSystem,
+  columnMeanAnnualTemperature,
+  columnClimateZone,
+  columnState,
+  columnExcludedFromWater,
+  columnOutputLeachingN2o: columnOutput,
+} = otherLivestockManureSheetColumns;
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -90,21 +53,25 @@ const getCalculatorInput = (
   const type = checkOtherLivestockClass(cell(columnLivestockType));
   const cls = cell(columnLivestockClass);
   const climateZone = checkClimateZone(cell(columnClimateZone));
-  const excludedFromWater = cell(columnExcludedFromWater) === 'yes';
+  const isInLeachingZone = cell(columnIsInLeachingZone) === 'yes';
+  const excludedFromNaturalWater = cell(columnExcludedFromWater) === 'yes';
   const state = checkPureState(cell(columnState));
+  const productionSystem = checkGrazingProductionSystemsWithRainfall(
+    cell(columnProductionSystem),
+  );
 
   const otherLivestockClassInput = getOtherLivestockInput(type, cls, head);
 
   const input: OtherLivestockInput = {
-    herds: [{ classes: [otherLivestockClassInput], excludedFromWater }],
+    herds: [{ classes: [otherLivestockClassInput], excludedFromNaturalWater }],
     state,
     method2MeanAnnualTemperature:
       method === '1'
         ? undefined
         : checkMeanAnnualTemperature(method2MeanAnnualTemperature),
     climateZone,
-    productionSystem: 'Non-irrigated pasture',
-    isInLeachingZone: false,
+    productionSystem,
+    isInLeachingZone,
   };
 
   // console.log(input);
@@ -121,10 +88,10 @@ const extractInputsAndOutput = createSheetExtractor(
   getExpectedOutput,
 );
 
-describe('4.7.1.3 Other livestock manure direct N2O', () => {
+describe('4.7.1.7 Other livestock manure leaching N2O', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/4.7-other-livestock-manure.xlsx',
+      './src/modules/test/4.7-other-livestock-manure/4.7-other-livestock-manure.xlsx',
       '4.7.1.1',
     );
 
@@ -132,7 +99,7 @@ describe('4.7.1.3 Other livestock manure direct N2O', () => {
 
     compareInputsAndOutputs(
       inputsAndOutputs,
-      calculate_4_7_1_3_OtherLivestockManureDirectN2O,
+      calculate_4_7_1_7_OtherLivestockManureLeachingRunoffN2O,
     );
   });
 });

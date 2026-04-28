@@ -13,10 +13,24 @@ export const OtherLivestockInputSchema = singleEnterpriseInput(
   {
     herds: z.array(OtherLivestockHerdInputSchema),
     state: z.enum(PureStates),
-    method2MeanAnnualTemperature: z.enum(MeanAnnualTemperatures).optional(),
-    climateZone: z.enum(ClimateZones),
-    productionSystem: z.enum(GrazingProductionSystemsWithRainfall),
-    isInLeachingZone: z.boolean(),
+    method2MeanAnnualTemperature: z
+      .enum(MeanAnnualTemperatures)
+      .optional()
+      .meta({
+        description: `What is the mean annual temperature of the herd's location?`,
+      }),
+    climateZone: z.enum(ClimateZones).meta({
+      description:
+        'What is the climate zone of the herd? (see Chapter 1 section 1.8.2)',
+    }),
+    productionSystem: z.enum(GrazingProductionSystemsWithRainfall).meta({
+      description:
+        'What is the production system used for the primary grazing area of the herd?',
+    }),
+    isInLeachingZone: z.boolean().meta({
+      description:
+        'Is the herd located in a leaching zone? (see Chapter 1 section 1.8.2)',
+    }),
   },
 );
 
