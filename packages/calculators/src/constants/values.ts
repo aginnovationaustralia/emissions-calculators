@@ -187,6 +187,19 @@ export const commonConstants: CommonConstants = {
     Insecticide: massPerMass('CO2e', 'Chemical', 18.9),
     Fungicide: massPerMass('CO2e', 'Chemical', 12.6),
     'Plant growth regulator': massPerMass('CO2e', 'Chemical', 10.5),
+    // AusLCI Lifecycles GHG Emission Intensities for Material Inputs to AUS Ag Fisheries Forestry V48 (March 2026)
+    '2,4-D': massPerMass('CO2e', 'Chemical', 5.2),
+    Atrazine: massPerMass('CO2e', 'Chemical', 8.38),
+    Diuron: massPerMass('CO2e', 'Chemical', 8.8),
+    // Glyphosate: massPerMass('CO2e', 'Chemical', 10.3),
+    Mancozeb: massPerMass('CO2e', 'Chemical', 4.55),
+    MCPA: massPerMass('CO2e', 'Chemical', 5.6),
+    Metolachlor: massPerMass('CO2e', 'Chemical', 8.06),
+    'Metsulfuron-methyl': massPerMass('CO2e', 'Chemical', 8.8),
+    'Pesticides (generic)': massPerMass('CO2e', 'Chemical', 9.16),
+    'Tri-allate': massPerMass('CO2e', 'Chemical', 8.57),
+    'Tribenuron methyl': massPerMass('CO2e', 'Chemical', 8.8),
+    Trifluralin: massPerMass('CO2e', 'Chemical', 6.16),
   },
 
   /**
@@ -1348,48 +1361,47 @@ Single Super Phosphate (SSP) 0.26
     },
   },
 
-  // TODO: Waiting on data from CRC
+  // Lifecycles GHG Emission Intensities for Material Inputs to AUS Ag Fisheries Forestry V48 (March 2026)
   INORGANIC_FERTILISER_FRACTIONS_BY_REGION: {
     Ammonia: {
-      China: massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-      Yemen: massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-      Canada: massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-      Unspecified: massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
+      China: massPerMass('CO2e', 'Inorganic Fertiliser', 4.17),
+      Yemen: massPerMass('CO2e', 'Inorganic Fertiliser', 2.26),
+      Canada: massPerMass('CO2e', 'Inorganic Fertiliser', 2.12),
+      Unspecified: massPerMass('CO2e', 'Inorganic Fertiliser', 2.32),
     },
     Urea: {
-      China: massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-      Yemen: massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-      Canada: massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-      Unspecified: massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
+      China: massPerMass('CO2e', 'Inorganic Fertiliser', 2.09),
+      Yemen: massPerMass('CO2e', 'Inorganic Fertiliser', 0.963),
+      Canada: massPerMass('CO2e', 'Inorganic Fertiliser', 0.823),
+      Unspecified: massPerMass('CO2e', 'Inorganic Fertiliser', 0.968),
     },
   },
   INORGANIC_FERTILISER_FRACTIONS_BY_NON_REGIONAL: {
-    // TODO: Waiting on data from CRC
-    'Monoammonium phosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Diammonium Phosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Urea-Ammonium Nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Ammonium Nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
+    // Lifecycles GHG Emission Intensities for Material Inputs to AUS Ag Fisheries Forestry V48 (March 2026)
+    'Monoammonium phosphate': massPerMass(
+      'CO2e',
+      'Inorganic Fertiliser',
+      0.827,
+    ),
+    'Diammonium Phosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 1.34),
+    'Urea-Ammonium Nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 1.75),
+    'Ammonium Nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 2.21),
     'Calcium Ammonium Nitrate': massPerMass(
       'CO2e',
       'Inorganic Fertiliser',
-      0.0,
+      1.15,
     ),
-    'Sulphate of Ammonia': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Nitrogen - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Nitrogen - Nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Nitrogen - Ammonia': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Muriate of Potash': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Single superphosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Double Superphosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Phosphorus - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Potassium - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Sulfur - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Zinc - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 0.0),
-    'Calcium - Generic lime as proxy': massPerMass(
-      'CO2e',
-      'Inorganic Fertiliser',
-      0.0,
-    ),
+    'Sulphate of Ammonia': massPerMass('CO2e', 'Inorganic Fertiliser', 0.865),
+    'Nitrogen - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 4.2),
+    'Nitrogen - Nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 5.47),
+    'Nitrogen - Ammonia': massPerMass('CO2e', 'Inorganic Fertiliser', 2.83),
+    'Muriate of Potash': massPerMass('CO2e', 'Inorganic Fertiliser', 0.549),
+    'Single superphosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.227),
+    'Double Superphosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.392),
+    'Phosphorus - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 3.96),
+    'Potassium - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 0.909),
+    'Sulfur - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 2.5),
+    'Zinc - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 4.82),
   },
 
   ORGANIC_FERTILISER_FRACTIONS: {

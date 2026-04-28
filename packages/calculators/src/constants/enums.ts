@@ -297,7 +297,7 @@ export const InorganicFertiliserComponentTypesNonRegional = [
   'Potassium - Generic',
   'Sulfur - Generic',
   'Zinc - Generic',
-  'Calcium - Generic lime as proxy',
+  // 'Calcium - Generic lime as proxy', // not included in AusLCI April dataset
 ] as const;
 export type InorganicFertiliserComponentTypeNonRegional =
   (typeof InorganicFertiliserComponentTypesNonRegional)[number];
@@ -520,11 +520,25 @@ export type FuelStationaryLiquidType =
   (typeof FuelStationaryLiquidTypes)[number];
 
 export const AgrochemicalTypes = [
+  // Guidelines appendix
   'Herbicide (paraquat, diquat, glyphosate)',
   'Other herbicide',
   'Insecticide',
   'Fungicide',
   'Plant growth regulator',
+  // AusLCI
+  '2,4-D',
+  'Atrazine',
+  'Diuron',
+  // 'Glyphosate', AusLCI includes a value for glyphosate, but the guidelines already supplies a value for generic herbicides including glyphosate
+  'Mancozeb',
+  'MCPA',
+  'Metolachlor',
+  'Metsulfuron-methyl',
+  'Pesticides (generic)',
+  'Tri-allate',
+  'Tribenuron methyl',
+  'Trifluralin',
 ] as const;
 
 export type AgrochemicalType = (typeof AgrochemicalTypes)[number];
