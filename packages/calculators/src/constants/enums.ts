@@ -297,7 +297,7 @@ export const InorganicFertiliserComponentTypesNonRegional = [
   'Potassium - Generic',
   'Sulfur - Generic',
   'Zinc - Generic',
-  'Calcium - Generic lime as proxy',
+  // 'Calcium - Generic lime as proxy', // not included in AusLCI April dataset
 ] as const;
 export type InorganicFertiliserComponentTypeNonRegional =
   (typeof InorganicFertiliserComponentTypesNonRegional)[number];
