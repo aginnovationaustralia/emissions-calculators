@@ -187,6 +187,19 @@ export const commonConstants: CommonConstants = {
     Insecticide: massPerMass('CO2e', 'Chemical', 18.9),
     Fungicide: massPerMass('CO2e', 'Chemical', 12.6),
     'Plant growth regulator': massPerMass('CO2e', 'Chemical', 10.5),
+    // AusLCI Lifecycles GHG Emission Intensities for Material Inputs to AUS Ag Fisheries Forestry V48 (March 2026)
+    '2,4-D': massPerMass('CO2e', 'Chemical', 5.2),
+    Atrazine: massPerMass('CO2e', 'Chemical', 8.38),
+    Diuron: massPerMass('CO2e', 'Chemical', 8.8),
+    // Glyphosate: massPerMass('CO2e', 'Chemical', 10.3),
+    Mancozeb: massPerMass('CO2e', 'Chemical', 4.55),
+    MCPA: massPerMass('CO2e', 'Chemical', 5.6),
+    Metolachlor: massPerMass('CO2e', 'Chemical', 8.06),
+    'Metsulfuron-methyl': massPerMass('CO2e', 'Chemical', 8.8),
+    'Pesticides (generic)': massPerMass('CO2e', 'Chemical', 9.16),
+    'Tri-allate': massPerMass('CO2e', 'Chemical', 8.57),
+    'Tribenuron methyl': massPerMass('CO2e', 'Chemical', 8.8),
+    Trifluralin: massPerMass('CO2e', 'Chemical', 6.16),
   },
 
   /**

@@ -520,11 +520,25 @@ export type FuelStationaryLiquidType =
   (typeof FuelStationaryLiquidTypes)[number];
 
 export const AgrochemicalTypes = [
+  // Guidelines appendix
   'Herbicide (paraquat, diquat, glyphosate)',
   'Other herbicide',
   'Insecticide',
   'Fungicide',
   'Plant growth regulator',
+  // AusLCI
+  '2,4-D',
+  'Atrazine',
+  'Diuron',
+  // 'Glyphosate',
+  'Mancozeb',
+  'MCPA',
+  'Metolachlor',
+  'Metsulfuron-methyl',
+  'Pesticides (generic)',
+  'Tri-allate',
+  'Tribenuron methyl',
+  'Trifluralin',
 ] as const;
 
 export type AgrochemicalType = (typeof AgrochemicalTypes)[number];
