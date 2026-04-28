@@ -530,7 +530,7 @@ export const AgrochemicalTypes = [
   '2,4-D',
   'Atrazine',
   'Diuron',
-  // 'Glyphosate',
+  // 'Glyphosate', AusLCI includes a value for glyphosate, but the guidelines already supplies a value for generic herbicides including glyphosate
   'Mancozeb',
   'MCPA',
   'Metolachlor',
