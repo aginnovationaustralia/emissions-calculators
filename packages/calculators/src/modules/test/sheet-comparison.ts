@@ -102,7 +102,8 @@ export const compareInputsAndOutputs = <
         // console.log(formatIntermediates(actual));
         console.log(
           formatNamedValues(actual, {
-            maxDepth: 5,
+            maxDepth: 7,
+            focusOn: 'Eenteric,j=heifersGt1',
             // focusOn: 'EN2O,leach',
             // focusOn: 'NRijkln (bullsLt1, spring)',
             // focusOn: 'MAijkl=5 (cows2To3Years, summer)',

@@ -366,7 +366,7 @@ type TimeInLocations = {
   feedPad: RealNumber;
 };
 
-type ClassWeights = {
+type DairyClassFactors = {
   liveweight: Mass<'Liveweight'>;
   referenceWeight: Mass<'Liveweight'>;
   liveweightGain: MassPerHeadPerDay<'Liveweight'>;
@@ -380,6 +380,7 @@ type DairyMMSFactors = {
 type PreWeanedFactors = {
   urinaryN: MassPerHeadPerDay<'N'>;
   faecalN: MassPerHeadPerDay<'N'>;
+  methaneProduction: MassPerHeadPerDay<'CH4'>;
 };
 
 export type DairyConstants = NamedConstants & {
@@ -390,7 +391,7 @@ export type DairyConstants = NamedConstants & {
   GROSS_ENERGY_CONTENT: EnergyPerMass<'DryMatter'>;
   EFFICIENCY_OF_MILK_PRODUCTION: RealNumber;
   CRUDE_PROTEIN_CONTENT_OF_FEED: RealNumber;
-  CLASS_WEIGHTS: Record<DairyClass, ClassWeights>;
+  DAIRY_CLASS_FACTORS: Record<DairyClass, DairyClassFactors>;
   INCREASE_METABOLIC_RATE_FOR_MILK: {
     milkingCows: MassPerHeadPerDay<'DryMatter'>;
     others: MassPerHeadPerDay<'DryMatter'>;

@@ -1827,7 +1827,7 @@ export const feedlotConstants: FeedlotConstants = {
 export const dairyConstants: DairyConstants = {
   name: 'DAIRY',
 
-  CLASS_WEIGHTS: {
+  DAIRY_CLASS_FACTORS: {
     milkingCows: {
       liveweight: mass('Liveweight', 550),
       liveweightGain: massPerHeadPerDay('Liveweight', 0.016),
@@ -1909,10 +1909,12 @@ export const dairyConstants: DairyConstants = {
     bullsLt1: {
       urinaryN: massPerHeadPerDay('N', 0.0042),
       faecalN: massPerHeadPerDay('N', 0.005),
+      methaneProduction: massPerHeadPerDay('CH4', 0.024),
     },
     heifersLt1: {
       urinaryN: massPerHeadPerDay('N', 0.0082),
       faecalN: massPerHeadPerDay('N', 0.0055),
+      methaneProduction: massPerHeadPerDay('CH4', 0.0176),
     },
   },
 
