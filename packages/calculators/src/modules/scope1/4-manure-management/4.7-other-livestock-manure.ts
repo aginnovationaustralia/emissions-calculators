@@ -17,6 +17,8 @@ const calculateManureMethaneForHerd = (
   const { excludedFromNaturalWater, classes } = herd;
   const { state, method2MeanAnnualTemperature } = input;
 
+  // REVISIT: These values have been based on how the runoff percentage was calculated for beef on pasture in an older draft document.
+  // This can be updated once we receive some feedback
   const MMSm1 = excludedFromNaturalWater ? num(0) : num(0.05);
   const MMSm14 = excludedFromNaturalWater ? num(1) : num(0.95);
 
@@ -45,13 +47,13 @@ const calculateManureMethaneForHerd = (
         ).named(`MCFim=1 (${method2MeanAnnualTemperature})`)
       : selectConstant(
           constants.LIVESTOCK,
-          'METHANE_CONVERSION_BY_STATE',
+          'OTHER_LIVESTOCK_METHANE_CONVERSION_BY_STATE',
           state,
         ).named(`MCFim=1 (${state})`);
 
     const MCFim14 = selectConstant(
       constants.LIVESTOCK,
-      'METHANE_CONVERSION_PASTURE',
+      'OTHER_LIVESTOCK_METHANE_CONVERSION_PASTURE',
     ).named('MCFim=14 (pasture)');
 
     const p = selectConstant(constants.COMMON, 'DENSITY_OF_METHANE').named('p');

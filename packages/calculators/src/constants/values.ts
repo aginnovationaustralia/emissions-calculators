@@ -2286,7 +2286,7 @@ export const livestockConstants: LivestockConstants = {
     '28 or above': realNumber(0.8),
   },
 
-  METHANE_CONVERSION_BY_STATE: {
+  OTHER_LIVESTOCK_METHANE_CONVERSION_BY_STATE: {
     ACT: realNumber(0.71),
     NSW: realNumber(0.75),
     NT: realNumber(0.8),
@@ -2297,7 +2297,7 @@ export const livestockConstants: LivestockConstants = {
     WA: realNumber(0.76),
   },
 
-  METHANE_CONVERSION_PASTURE: realNumber(0.0047),
+  OTHER_LIVESTOCK_METHANE_CONVERSION_PASTURE: realNumber(0.0047),
 
   EFPRP: {
     wet: massPerMass('N2O', 'N', 0.006),

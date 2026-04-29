@@ -1224,8 +1224,7 @@ export type BuffaloClass = (typeof BuffaloClasses)[number];
 export const GoatClasses = [
   'Bucks/Billy',
   'Wethers',
-  'Maiden breeding',
-  'does/nannies',
+  'Maiden breeding does/nannies',
   'Breeding does/nannies',
   'Other',
   'Kids',

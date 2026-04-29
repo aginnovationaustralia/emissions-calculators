@@ -461,14 +461,14 @@ export type LivestockConstants = NamedConstants & {
     OtherLivestockFactors
   >;
 
-  METHANE_CONVERSION_BY_STATE: Record<PureState, RealNumber>;
+  OTHER_LIVESTOCK_METHANE_CONVERSION_BY_STATE: Record<PureState, RealNumber>;
 
   METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE: Record<
     MeanAnnualTemperature,
     RealNumber
   >;
 
-  METHANE_CONVERSION_PASTURE: RealNumber;
+  OTHER_LIVESTOCK_METHANE_CONVERSION_PASTURE: RealNumber;
 
   EFPRP: Record<'wet' | 'dry', MassPerMass<'N2O', 'N'>>;
 
