@@ -18,4 +18,5 @@ export const columnFmFeedpadProportion = 'AZ';
 export const columnMilkingShedMMS = 'BE';
 export const columnFeedPadMMS = 'BF';
 export const columnScenarioKey = 'B';
-export const columnExpectedResult = 'BU';
+export const columnExpectedResultLocal = 'BU';
+export const columnExpectedResultPurchasedTraced = 'BV';

@@ -28,7 +28,7 @@ import {
   columnCustomDryMatterDigestibility,
   columnCustomLiveweight,
   columnCustomLiveweightGain,
-  columnExpectedResult,
+  columnExpectedResultLocal,
   columnFatContent,
   columnFeedPadMMS,
   columnFmFeedpadProportion,
@@ -276,7 +276,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`${columnExpectedResult}${row}`).value());
+  return Number(sheet.cell(`${columnExpectedResultLocal}${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
