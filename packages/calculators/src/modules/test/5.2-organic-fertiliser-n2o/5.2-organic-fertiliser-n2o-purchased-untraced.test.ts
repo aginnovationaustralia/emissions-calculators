@@ -5,22 +5,23 @@ import {
 } from '@/calculators/Grains/types/base-crop.input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { calculate52OrganicFertiliser } from '../scope1/5-fertiliser/5.2-organic-fertiliser';
+import { calculate52OrganicFertiliser } from '../../scope1/5-fertiliser/5.2-organic-fertiliser';
 import {
   FertiliserInput,
   FertiliserInputSchema,
   FertiliserInputTransformed,
-} from '../scope1/5-fertiliser/fertiliser.input';
+} from '../../scope1/5-fertiliser/fertiliser.input';
 import {
   CropResidueInput,
   CropResidueInputSchema,
   CropResidueInputTransformed,
-} from '../scope1/6-residue-mgmt/crop-residue.input';
-import { checkClimate, checkLivestockManureType } from './fertiliser-domain';
+} from '../../scope1/6-residue-mgmt/crop-residue.input';
+import { checkClimate, checkLivestockManureType } from '../fertiliser-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
-} from './sheet-comparison';
+} from '../sheet-comparison';
+import * as col from './purchased-untraced';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -33,14 +34,18 @@ const getCalculatorInput = (
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
-  if (cell('B') === undefined) {
+  if (cell(col.columnScenarioKey) === undefined) {
     return undefined;
   }
 
-  const massAppliedKg = Number(cell('B'));
-  const livestockManureType = checkLivestockManureType(cell('C'));
-  const customNitrogenFraction = cell('E') ? Number(cell('E')) : undefined;
-  const climate = checkClimate(cell('F'));
+  const massAppliedKg = Number(cell(col.columnMassAppliedKg));
+  const livestockManureType = checkLivestockManureType(
+    cell(col.columnLivestockManureType),
+  );
+  const customNitrogenFraction = cell(col.columnCustomNitrogenFraction)
+    ? Number(cell(col.columnCustomNitrogenFraction))
+    : undefined;
+  const climate = checkClimate(cell(col.columnClimate));
 
   const fertiliserInput: FertiliserInput = {
     inorganicFertilisers: {
@@ -87,7 +92,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`L${row}`).value());
+  return Number(sheet.cell(`${col.columnExpectedResult}${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
@@ -98,7 +103,7 @@ const extractInputsAndOutput = createSheetExtractor(
 describe('5.2.1.1 Organic Fertiliser N2O (purchased_untraced)', () => {
   it('method 1 purchased scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/5.2-organic-fertiliser.xlsx',
+      './src/modules/test/5.2-organic-fertiliser-n2o/5.2-organic-fertiliser.xlsx',
       '5.2.1.1 (purchased_untraced)',
     );
 

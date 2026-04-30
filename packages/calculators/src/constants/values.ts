@@ -1829,29 +1829,97 @@ export const dairyConstants: DairyConstants = {
 
   DAIRY_CLASS_FACTORS: {
     milkingCows: {
-      liveweight: mass('Liveweight', 550),
       liveweightGain: massPerHeadPerDay('Liveweight', 0.016),
       referenceWeight: mass('Liveweight', 590),
     },
     heifersGt1: {
-      liveweight: mass('Liveweight', 370),
       liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
       referenceWeight: mass('Liveweight', 590),
     },
     heifersLt1: {
-      liveweight: mass('Liveweight', 179),
       liveweightGain: massPerHeadPerDay('Liveweight', 0.57),
       referenceWeight: mass('Liveweight', 590),
     },
     bullsGt1: {
-      liveweight: mass('Liveweight', 600),
       liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
       referenceWeight: mass('Liveweight', 770),
     },
     bullsLt1: {
-      liveweight: mass('Liveweight', 225),
       liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
       referenceWeight: mass('Liveweight', 770),
+    },
+  },
+
+  LIVEWEIGHTS_BY_BREED: {
+    'Medium Friesian': {
+      milkingCows: mass('Liveweight', 550),
+      heifersGt1: mass('Liveweight', 380),
+      heifersLt1: mass('Liveweight', 155),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    'Large Friesian': {
+      milkingCows: mass('Liveweight', 600),
+      heifersGt1: mass('Liveweight', 415),
+      heifersLt1: mass('Liveweight', 170),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    'Holstein-Friesian': {
+      milkingCows: mass('Liveweight', 650),
+      heifersGt1: mass('Liveweight', 450),
+      heifersLt1: mass('Liveweight', 185),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    'Friesian crossbred': {
+      milkingCows: mass('Liveweight', 500),
+      heifersGt1: mass('Liveweight', 350),
+      heifersLt1: mass('Liveweight', 145),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    Jersey: {
+      milkingCows: mass('Liveweight', 400),
+      heifersGt1: mass('Liveweight', 275),
+      heifersLt1: mass('Liveweight', 115),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    'Jersey crossbred': {
+      milkingCows: mass('Liveweight', 450),
+      heifersGt1: mass('Liveweight', 315),
+      heifersLt1: mass('Liveweight', 130),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    Ayrshire: {
+      milkingCows: mass('Liveweight', 540),
+      heifersGt1: mass('Liveweight', 375),
+      heifersLt1: mass('Liveweight', 150),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    Guernsey: {
+      milkingCows: mass('Liveweight', 480),
+      heifersGt1: mass('Liveweight', 335),
+      heifersLt1: mass('Liveweight', 140),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    'Brown Swiss': {
+      milkingCows: mass('Liveweight', 600),
+      heifersGt1: mass('Liveweight', 415),
+      heifersLt1: mass('Liveweight', 170),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    'Illawarra/Aussie Red': {
+      milkingCows: mass('Liveweight', 550),
+      heifersGt1: mass('Liveweight', 375),
+      heifersLt1: mass('Liveweight', 150),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
     },
   },
 
@@ -1909,7 +1977,7 @@ export const dairyConstants: DairyConstants = {
     bullsLt1: {
       urinaryN: massPerHeadPerDay('N', 0.0042),
       faecalN: massPerHeadPerDay('N', 0.005),
-      methaneProduction: massPerHeadPerDay('CH4', 0.024),
+      methaneProduction: massPerHeadPerDay('CH4', 0.0204),
     },
     heifersLt1: {
       urinaryN: massPerHeadPerDay('N', 0.0082),

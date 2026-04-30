@@ -6,11 +6,13 @@ import {
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
 import { calculate33DairyEntericMethane } from '../scope1/3-enteric-methane/3.3-dairy-enteric';
+import { checkDairyBreed } from './dairy-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from './sheet-comparison';
 
+const columnBreed = 'C';
 const columnHead = 'E';
 const columnMilkProduction = 'L';
 const columnOutput = 'AA';
@@ -43,6 +45,7 @@ const getCalculatorInput = (
         milkProduction: {
           litresPerHeadPerDay: Number(cell(columnMilkProduction, 0)),
         },
+        breed: checkDairyBreed(cell(columnBreed, 0)),
         classes: {
           milkingCows: readDairyClass(0),
           heifersGt1: readDairyClass(1),

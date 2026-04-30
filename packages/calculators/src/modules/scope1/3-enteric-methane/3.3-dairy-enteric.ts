@@ -29,16 +29,16 @@ const calculateEntericMethaneForClass = (
   classInput: DairyClassInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  const { milkProduction } = herd;
+  const { breed, milkProduction } = herd;
   const { head, className, weanedName } = classInput;
   const { constants } = context;
 
   const Nj = head.named(`Nj=${weanedName}`);
   const Wj = selectConstant(
     constants.DAIRY,
-    'DAIRY_CLASS_FACTORS',
+    'LIVEWEIGHTS_BY_BREED',
+    breed,
     className,
-    'liveweight',
   ).named(`Wj=${weanedName}`);
   const LWGj = selectConstant(
     constants.DAIRY,
@@ -132,5 +132,5 @@ export function calculate33DairyEntericMethane(
   const emissionsFromHerds = herds.map((herd) =>
     calculateEntericMethaneForHerd(herd, context),
   );
-  return sum(emissionsFromHerds).multiply(tenToPowMinus3).named('Eenteric');
+  return sum(emissionsFromHerds).named('Eenteric');
 }

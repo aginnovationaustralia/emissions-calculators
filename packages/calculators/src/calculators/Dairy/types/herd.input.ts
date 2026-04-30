@@ -1,3 +1,4 @@
+import { DairyCattleBreeds } from '@/constants/enums';
 import {
   DairyMilkSolidsInputSchema,
   DairyMilkVolumeInputSchema,
@@ -12,6 +13,7 @@ export const DairyHerdInputSchema = object({
     DairyMilkVolumeInputSchema,
     DairyMilkSolidsInputSchema,
   ]),
+  breed: z.enum(DairyCattleBreeds),
 });
 
 export type DairyHerdInput = z.input<typeof DairyHerdInputSchema>;

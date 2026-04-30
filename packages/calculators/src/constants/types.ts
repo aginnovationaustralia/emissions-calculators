@@ -26,6 +26,7 @@ import {
   CarsLightCommercialPre2004FuelType,
   ClimateZone,
   CropType,
+  DairyCattleBreed,
   DairyClass,
   DairyMMSType,
   DairySystem,
@@ -367,7 +368,6 @@ type TimeInLocations = {
 };
 
 type DairyClassFactors = {
-  liveweight: Mass<'Liveweight'>;
   referenceWeight: Mass<'Liveweight'>;
   liveweightGain: MassPerHeadPerDay<'Liveweight'>;
 };
@@ -382,6 +382,8 @@ type PreWeanedFactors = {
   faecalN: MassPerHeadPerDay<'N'>;
   methaneProduction: MassPerHeadPerDay<'CH4'>;
 };
+
+type BreedWeights = Record<DairyClass, Mass<'Liveweight'>>;
 
 export type DairyConstants = NamedConstants & {
   TIME_IN_LOCATIONS: Record<DairySystem, TimeInLocations>;
@@ -403,6 +405,7 @@ export type DairyConstants = NamedConstants & {
   };
   MMS: Record<DairyMMSType, DairyMMSFactors>;
   FracLEACH: RealNumber;
+  LIVEWEIGHTS_BY_BREED: Record<DairyCattleBreed, BreedWeights>;
 };
 
 type PoultryClassFactors = {

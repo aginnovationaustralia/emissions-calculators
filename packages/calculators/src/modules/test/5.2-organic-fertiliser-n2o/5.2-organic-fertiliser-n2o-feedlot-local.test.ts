@@ -5,23 +5,24 @@ import {
 } from '@/calculators/Grains/types/base-crop.input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { calculate52OrganicFertiliser } from '../scope1/5-fertiliser/5.2-organic-fertiliser';
+import { calculate52OrganicFertiliser } from '../../scope1/5-fertiliser/5.2-organic-fertiliser';
 import {
   FertiliserInput,
   FertiliserInputSchema,
   FertiliserInputTransformed,
-} from '../scope1/5-fertiliser/fertiliser.input';
+} from '../../scope1/5-fertiliser/fertiliser.input';
 import {
   CropResidueInput,
   CropResidueInputSchema,
   CropResidueInputTransformed,
-} from '../scope1/6-residue-mgmt/crop-residue.input';
-import { checkClimate } from './fertiliser-domain';
-import { checkFeedlotMMSType } from './livestock-domain';
+} from '../../scope1/6-residue-mgmt/crop-residue.input';
+import { checkClimate } from '../fertiliser-domain';
+import { checkFeedlotMMSType } from '../livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
-} from './sheet-comparison';
+} from '../sheet-comparison';
+import * as col from './feedlot';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -37,23 +38,23 @@ const getCalculatorInput = (
       .value()
       ?.toString();
 
-  if (cell('B') === undefined) {
+  if (cell(col.columnScenarioKey) === undefined) {
     return undefined;
   }
 
-  const totalNitrogenExcreted = Number(cell('K'));
-  const lengthOfStayDays = Number(cell('A'));
-  const numberOfCattle = Number(cell('J'));
-  const dryMatterIntake = cell('C');
-  const crudeProteinContent = cell('E');
-  const fractionAppliedToSoils = Number(cell('M'));
-  const directApplicationStage2 = cell('O') === 'yes';
+  const totalNitrogenExcreted = Number(cell(col.columnTotalNitrogenExcreted));
+  const lengthOfStayDays = Number(cell(col.columnLengthOfStayDays));
+  const numberOfCattle = Number(cell(col.columnNumberOfCattle));
+  const dryMatterIntake = cell(col.columnDryMatterIntake);
+  const crudeProteinContent = cell(col.columnCrudeProteinContent);
+  const fractionAppliedToSoils = Number(cell(col.columnFractionAppliedToSoils));
+  const directApplicationStage2 = cell(col.columnDirectApplicationStage2) === 'yes';
   const secondaryMMS = directApplicationStage2
     ? 'Direct application'
-    : checkFeedlotMMSType(cell('N'));
-  const tertiaryLagoonInUse = cell('P') === 'yes';
+    : checkFeedlotMMSType(cell(col.columnSecondaryMMS));
+  const tertiaryLagoonInUse = cell(col.columnTertiaryLagoonInUse) === 'yes';
 
-  const climate = checkClimate(cell('L'));
+  const climate = checkClimate(cell(col.columnClimate));
 
   const fertiliserInput: FertiliserInput = {
     inorganicFertilisers: {
@@ -118,7 +119,9 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`AI${row}`).value());
+  return Number(
+    sheet.cell(`${col.columnExpectedResultLocal}${row}`).value(),
+  );
 };
 
 const extractInputsAndOutput = createSheetExtractor(
@@ -129,7 +132,7 @@ const extractInputsAndOutput = createSheetExtractor(
 describe('5.2.1.1 Organic Fertiliser N2O (local feedlot)', () => {
   it('method 1 purchased scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/5.2-organic-fertiliser.xlsx',
+      './src/modules/test/5.2-organic-fertiliser-n2o/5.2-organic-fertiliser.xlsx',
       '5.2.1.1 (feedlot)',
     );
 

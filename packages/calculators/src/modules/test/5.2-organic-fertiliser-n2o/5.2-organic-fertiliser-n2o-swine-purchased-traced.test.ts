@@ -5,24 +5,25 @@ import {
 } from '@/calculators/Grains/types/base-crop.input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { SwineMMSInput } from '../scope1/4-manure-management/swine-manure.input';
-import { calculate52OrganicFertiliser } from '../scope1/5-fertiliser/5.2-organic-fertiliser';
+import { SwineMMSInput } from '../../scope1/4-manure-management/swine-manure.input';
+import { calculate52OrganicFertiliser } from '../../scope1/5-fertiliser/5.2-organic-fertiliser';
 import {
   FertiliserInput,
   FertiliserInputSchema,
   FertiliserInputTransformed,
-} from '../scope1/5-fertiliser/fertiliser.input';
+} from '../../scope1/5-fertiliser/fertiliser.input';
 import {
   CropResidueInput,
   CropResidueInputSchema,
   CropResidueInputTransformed,
-} from '../scope1/6-residue-mgmt/crop-residue.input';
-import { checkClimate } from './fertiliser-domain';
-import { checkSwineMMSType } from './livestock-domain';
+} from '../../scope1/6-residue-mgmt/crop-residue.input';
+import { checkClimate } from '../fertiliser-domain';
+import { checkSwineMMSType } from '../livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
-} from './sheet-comparison';
+} from '../sheet-comparison';
+import * as col from './swine';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -38,29 +39,43 @@ const getCalculatorInput = (
       .value()
       ?.toString();
 
-  if (cell('B') === undefined) {
+  if (cell(col.columnScenarioKey) === undefined) {
     return undefined;
   }
 
-  const totalNitrogenExcreted = Number(cell('A'));
-  const climate = checkClimate(cell('C'));
-  const isInLeachingZone = cell('D') === 'yes';
-  const fractionAppliedToSoils = Number(cell('E'));
-  const fractionOfManureToLiquidsMMS = Number(cell('J'));
-  const fractionOfManureToSolidsMMS = Number(cell('K', 1));
-  const fractionOfNitrogenSeparatedToSolidStorage = Number(cell('I'));
-  const liquidsStage2DirectApplication = cell('H') === 'yes';
-  const solidsStage2DirectApplication = cell('H', 1) === 'yes';
-  const liquidsSystem1 = checkSwineMMSType(cell('F'));
-  const solidsSystem1 = checkSwineMMSType(cell('F', 1));
+  const totalNitrogenExcreted = Number(cell(col.columnTotalNitrogenExcreted));
+  const climate = checkClimate(cell(col.columnClimate));
+  const isInLeachingZone = cell(col.columnIsInLeachingZone) === 'yes';
+  const fractionAppliedToSoils = Number(cell(col.columnFractionAppliedToSoils));
+  const fractionOfManureToLiquidsMMS = Number(cell(col.columnFractionOfManureToLiquidsMMS));
+  const fractionOfManureToSolidsMMS = Number(
+    cell(col.columnFractionOfManureToSolidsMMS, 1),
+  );
+  const fractionOfNitrogenSeparatedToSolidStorage = Number(
+    cell(col.columnFractionOfNitrogenSeparatedToSolidStorage),
+  );
+  const liquidsStage2DirectApplication =
+    cell(col.columnStage2DirectApplication) === 'yes';
+  const solidsStage2DirectApplication =
+    cell(col.columnStage2DirectApplication, 1) === 'yes';
+  const liquidsSystem1 = checkSwineMMSType(
+    cell(col.columnLiquidsSolidsSystem1),
+  );
+  const solidsSystem1 = checkSwineMMSType(
+    cell(col.columnLiquidsSolidsSystem1, 1),
+  );
   const liquidsSystem2 = liquidsStage2DirectApplication
     ? 'Direct application'
-    : checkSwineMMSType(cell('G'));
+    : checkSwineMMSType(cell(col.columnLiquidsSolidsSystem2));
   const solidsSystem2 = solidsStage2DirectApplication
     ? 'Direct application'
-    : checkSwineMMSType(cell('G', 1));
-  const fractionOfManureFromLiquidsStage1to2 = Number(cell('T'));
-  const fractionOfManureFromSolidsStage1to2 = Number(cell('T', 1));
+    : checkSwineMMSType(cell(col.columnLiquidsSolidsSystem2, 1));
+  const fractionOfManureFromLiquidsStage1to2 = Number(
+    cell(col.columnFractionStage1to2),
+  );
+  const fractionOfManureFromSolidsStage1to2 = Number(
+    cell(col.columnFractionStage1to2, 1),
+  );
 
   const mms: SwineMMSInput = {
     liquids: {
@@ -127,7 +142,9 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`AF${row}`).value());
+  return Number(
+    sheet.cell(`${col.columnExpectedResultPurchasedTraced}${row}`).value(),
+  );
 };
 
 const extractInputsAndOutput = createSheetExtractor(
@@ -139,7 +156,7 @@ const extractInputsAndOutput = createSheetExtractor(
 describe('5.2.1.1 Organic Fertiliser N2O (purchased_traced)', () => {
   it('method 1 purchased scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/5.2-organic-fertiliser.xlsx',
+      './src/modules/test/5.2-organic-fertiliser-n2o/5.2-organic-fertiliser.xlsx',
       '5.2.1.1 (swine)',
     );
 

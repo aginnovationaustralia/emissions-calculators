@@ -1,5 +1,6 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
+import { DairyCattleBreed } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, num, root } from '@/tools/containers';
 import {
@@ -158,6 +159,7 @@ const calculateForClass = (
   dairyClass: DairySpecificClassInput | undefined,
   MIj: Container<MassPerHeadPerDay<'DryMatter'>>,
   MPj: Container<VolumePerHeadPerDay<'Milk'>>,
+  breed: DairyCattleBreed,
   constants: ConstantsForGrainsCalculator,
 ): DairyClassResult => {
   if (!dairyClass) {
@@ -175,9 +177,9 @@ const calculateForClass = (
     dairyClass.method2Liveweight ??
     selectConstant(
       constants.DAIRY,
-      'DAIRY_CLASS_FACTORS',
+      'LIVEWEIGHTS_BY_BREED',
+      breed,
       className,
-      'liveweight',
     ).named(`Wj=${classNumber}`);
 
   const LWGj =
@@ -296,6 +298,7 @@ export function calculateMassOfNitrogenAppliedToSoilsForDairy(
    */
   const {
     classes,
+    breed,
     fractionAppliedToSoils,
     milkProduction,
     system,
@@ -351,30 +354,35 @@ export function calculateMassOfNitrogenAppliedToSoilsForDairy(
     classes.milkingCows,
     MIj,
     MPj,
+    breed,
     constants,
   );
   const heifersGt1Results2 = calculateForClass(
     classes.heifersGt1,
     MIj0,
     MPj0,
+    breed,
     constants,
   );
   const heifersLt1Results3 = calculateForClass(
     classes.heifersLt1,
     MIj0,
     MPj0,
+    breed,
     constants,
   );
   const bullsGt1Results4 = calculateForClass(
     classes.bullsGt1,
     MIj0,
     MPj0,
+    breed,
     constants,
   );
   const bullsLt1Results5 = calculateForClass(
     classes.bullsLt1,
     MIj0,
     MPj0,
+    breed,
     constants,
   );
 

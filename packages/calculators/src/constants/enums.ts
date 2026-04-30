@@ -1202,3 +1202,17 @@ export const isPerennialWoodyCropFull = (
 ): crop is PerennialWoodyCropFull => {
   return PerennialWoodyCropsFull.includes(crop as PerennialWoodyCropFull);
 };
+
+export const DairyCattleBreeds = [
+  'Medium Friesian',
+  'Large Friesian',
+  'Holstein-Friesian',
+  'Friesian crossbred',
+  'Jersey',
+  'Jersey crossbred',
+  'Ayrshire',
+  'Guernsey',
+  'Brown Swiss',
+  'Illawarra/Aussie Red',
+] as const;
+export type DairyCattleBreed = (typeof DairyCattleBreeds)[number];

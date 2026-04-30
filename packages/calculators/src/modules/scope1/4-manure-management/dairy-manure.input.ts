@@ -1,4 +1,4 @@
-import { DairySystems } from '@/constants/enums';
+import { DairyCattleBreeds, DairySystems } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { head, mass, massPerHeadPerDay, realNumber } from '@/tools/units';
 import { object, proportion } from '@/types/schemas';
@@ -124,6 +124,7 @@ export const DairyManureInputSchema = object({
     DairyMilkVolumeInputSchema,
     DairyMilkSolidsInputSchema,
   ]),
+  breed: z.enum(DairyCattleBreeds),
   milkingShedMMSAllocation: MMSAllocationSchema,
   feedPadMMSAllocation: MMSAllocationSchema,
 }).superRefine((refinement, context) => {
