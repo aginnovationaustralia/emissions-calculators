@@ -81,17 +81,6 @@ const calculateEntericMethaneForClass = (
     `MPj=${weanedName}`,
   );
 
-  const findDurationDays = (classInput: DairyClassInputTransformed) => {
-    return (
-      classInput.method2DurationDays ??
-      (isClassMature(classInput)
-        ? daysInYear
-        : isClassPreWeaned(classInput)
-          ? daysPreWeaning
-          : daysPostWeaning)
-    );
-  };
-
   const MIj: Container<MassPerHeadPerDay<'DryMatter'>> =
     calculateExtraIntakeForMilkProductionMIj(MPj, DMDj, constants).named(
       `MIj=${weanedName}`,
