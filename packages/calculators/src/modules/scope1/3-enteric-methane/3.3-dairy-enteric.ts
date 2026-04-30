@@ -24,6 +24,17 @@ import {
   calculateMilkProduction,
 } from '../shared/dairy/calculate';
 
+const findDurationDays = (classInput: DairyClassInputTransformed) => {
+  return (
+    classInput.method2DurationDays ??
+    (isClassMature(classInput)
+      ? daysInYear
+      : isClassPreWeaned(classInput)
+        ? daysPreWeaning
+        : daysPostWeaning)
+  );
+};
+
 const calculateEntericMethaneForClass = (
   herd: DairyHerdInputTransformed,
   classInput: DairyClassInputTransformed,
@@ -70,17 +81,6 @@ const calculateEntericMethaneForClass = (
     `MPj=${weanedName}`,
   );
 
-  const findDurationDays = (classInput: DairyClassInputTransformed) => {
-    return (
-      classInput.method2DurationDays ??
-      (isClassMature(classInput)
-        ? daysInYear
-        : isClassPreWeaned(classInput)
-          ? daysPreWeaning
-          : daysPostWeaning)
-    );
-  };
-
   const MIj: Container<MassPerHeadPerDay<'DryMatter'>> =
     calculateExtraIntakeForMilkProductionMIj(MPj, DMDj, constants).named(
       `MIj=${weanedName}`,
@@ -116,6 +116,7 @@ const calculateEntericMethaneForClass = (
 
   const preWeaned = MPWenteric.multiply(Nj).multiply(Dj);
 
+  // Line 192 - this appears a much simpler expression but is correctly implementing the inner part of the sum operation
   const Eenteric = NMD.plus(preWeaned);
 
   return Eenteric.named(`Eenteric,j=${weanedName}`);
@@ -138,6 +139,7 @@ export function calculate33DairyEntericMethane(
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) {
   /*
+    Chapter 3.3 line 192
     Eenteric = SUM ((N j=1,2,4 * M j=1,2,4 * D j=1,2,4) + (N j=3,5 * M j=3,5 * D j=3,5) + (N j=3,5 * MPW ENTERIC,j=3,5 * D j=3,5)) * 10^-3
     */
 

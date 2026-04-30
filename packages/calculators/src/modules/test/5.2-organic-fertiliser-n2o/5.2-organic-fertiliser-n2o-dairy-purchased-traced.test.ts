@@ -22,28 +22,7 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from '../sheet-comparison';
-import {
-  columnBreed,
-  columnCustomCrudeProtein,
-  columnCustomDryMatterDigestibility,
-  columnCustomLiveweight,
-  columnCustomLiveweightGain,
-  columnExpectedResultPurchasedTraced,
-  columnFatContent,
-  columnFeedPadMMS,
-  columnFmFeedpadProportion,
-  columnFmMilkingShedProportion,
-  columnFmPastureProportion,
-  columnFractionAppliedToSoils,
-  columnHead,
-  columnIsInLeachingZone,
-  columnMilkingShedMMS,
-  columnMilkProductionLitresPerHead,
-  columnMilkSolids,
-  columnProteinContent,
-  columnRainfallAbove600,
-  columnSystem,
-} from './dairy';
+import * as col from './dairy-tab';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -59,62 +38,80 @@ const getCalculatorInput = (
       .value()
       ?.toString();
 
-  if (cell(columnBreed) === undefined) {
+  if (cell(col.columnBreed) === undefined) {
     return undefined;
   }
-  const headMilkingCows = Number(cell(columnHead));
-  const headHeifersGt1 = Number(cell(columnHead, 1));
-  const headHeifersLt1 = Number(cell(columnHead, 2));
-  const headBullsGt1 = Number(cell(columnHead, 3));
-  const headBullsLt1 = Number(cell(columnHead, 4));
-  const customLiveweightWjMilkingCows = cell(columnCustomLiveweight);
-  const customLiveweightWjHeifersGt1 = cell(columnCustomLiveweight, 1);
-  const customLiveweightWjHeifersLt1 = cell(columnCustomLiveweight, 2);
-  const customLiveweightWjBullsGt1 = cell(columnCustomLiveweight, 3);
-  const customLiveweightWjBullsLt1 = cell(columnCustomLiveweight, 4);
-  const customLiveweightGainLWGjMilkingCows = cell(columnCustomLiveweightGain);
+  const headMilkingCows = Number(cell(col.columnHead));
+  const headHeifersGt1 = Number(cell(col.columnHead, 1));
+  const headHeifersLt1 = Number(cell(col.columnHead, 2));
+  const headBullsGt1 = Number(cell(col.columnHead, 3));
+  const headBullsLt1 = Number(cell(col.columnHead, 4));
+  const customLiveweightWjMilkingCows = cell(col.columnCustomLiveweight);
+  const customLiveweightWjHeifersGt1 = cell(col.columnCustomLiveweight, 1);
+  const customLiveweightWjHeifersLt1 = cell(col.columnCustomLiveweight, 2);
+  const customLiveweightWjBullsGt1 = cell(col.columnCustomLiveweight, 3);
+  const customLiveweightWjBullsLt1 = cell(col.columnCustomLiveweight, 4);
+  const customLiveweightGainLWGjMilkingCows = cell(
+    col.columnCustomLiveweightGain,
+  );
   const customLiveweightGainLWGjHeifersGt1 = cell(
-    columnCustomLiveweightGain,
+    col.columnCustomLiveweightGain,
     1,
   );
   const customLiveweightGainLWGjHeifersLt1 = cell(
-    columnCustomLiveweightGain,
+    col.columnCustomLiveweightGain,
     2,
   );
-  const customLiveweightGainLWGjBullsGt1 = cell(columnCustomLiveweightGain, 3);
-  const customLiveweightGainLWGjBullsLt1 = cell(columnCustomLiveweightGain, 4);
-  const customCrudeProteinCPjMilkingCows = cell(columnCustomCrudeProtein);
-  const customCrudeProteinCPjHeifersGt1 = cell(columnCustomCrudeProtein, 1);
-  const customCrudeProteinCPjHeifersLt1 = cell(columnCustomCrudeProtein, 2);
-  const customCrudeProteinCPjBullsGt1 = cell(columnCustomCrudeProtein, 3);
-  const customCrudeProteinCPjBullsLt1 = cell(columnCustomCrudeProtein, 4);
-  const customDMDDjMilkingCows = cell(columnCustomDryMatterDigestibility);
-  const customDMDDjHeifersGt1 = cell(columnCustomDryMatterDigestibility, 1);
-  const customDMDDjHeifersLt1 = cell(columnCustomDryMatterDigestibility, 2);
-  const customDMDDjBullsGt1 = cell(columnCustomDryMatterDigestibility, 3);
-  const customDMDDjBullsLt1 = cell(columnCustomDryMatterDigestibility, 4);
-  const litresPerHeadPerDay = Number(cell(columnMilkProductionLitresPerHead)); // MPj
+  const customLiveweightGainLWGjBullsGt1 = cell(
+    col.columnCustomLiveweightGain,
+    3,
+  );
+  const customLiveweightGainLWGjBullsLt1 = cell(
+    col.columnCustomLiveweightGain,
+    4,
+  );
+  const customCrudeProteinCPjMilkingCows = cell(col.columnCustomCrudeProtein);
+  const customCrudeProteinCPjHeifersGt1 = cell(col.columnCustomCrudeProtein, 1);
+  const customCrudeProteinCPjHeifersLt1 = cell(col.columnCustomCrudeProtein, 2);
+  const customCrudeProteinCPjBullsGt1 = cell(col.columnCustomCrudeProtein, 3);
+  const customCrudeProteinCPjBullsLt1 = cell(col.columnCustomCrudeProtein, 4);
+  const customDMDDjMilkingCows = cell(col.columnCustomDryMatterDigestibility);
+  const customDMDDjHeifersGt1 = cell(col.columnCustomDryMatterDigestibility, 1);
+  const customDMDDjHeifersLt1 = cell(col.columnCustomDryMatterDigestibility, 2);
+  const customDMDDjBullsGt1 = cell(col.columnCustomDryMatterDigestibility, 3);
+  const customDMDDjBullsLt1 = cell(col.columnCustomDryMatterDigestibility, 4);
+  const litresPerHeadPerDay = Number(
+    cell(col.columnMilkProductionLitresPerHead),
+  ); // MPj
 
-  const milkSolids = cell(columnMilkSolids); // MSj
-  const fractionAppliedToSoils = Number(cell(columnFractionAppliedToSoils)); // PF
-  const isInLeachingZone = cell(columnIsInLeachingZone) === 'yes';
-  const rainfallAbove600 = cell(columnRainfallAbove600) === 'wet';
-  const fatContent = cell(columnFatContent); // FCj
-  const proteinContent = cell(columnProteinContent); // PCj
+  const milkSolids = cell(col.columnMilkSolids); // MSj
+  const fractionAppliedToSoils = Number(cell(col.columnFractionAppliedToSoils)); // PF
+  const isInLeachingZone = cell(col.columnIsInLeachingZone) === 'yes';
+  const rainfallAbove600 = cell(col.columnRainfallAbove600) === 'wet';
+  const fatContent = cell(col.columnFatContent); // FCj
+  const proteinContent = cell(col.columnProteinContent); // PCj
 
-  const system = checkDairySystem(cell(columnSystem));
-  const customFmPastureProportion = cell(columnFmPastureProportion);
-  const customFmMilkingShedProportion = cell(columnFmMilkingShedProportion);
-  const customFmFeedpadProportion = cell(columnFmFeedpadProportion);
+  const system = checkDairySystem(cell(col.columnSystem));
+  const customFmPastureProportion = cell(col.columnFmPastureProportion);
+  const customFmMilkingShedProportion = cell(col.columnFmMilkingShedProportion);
+  const customFmFeedpadProportion = cell(col.columnFmFeedpadProportion);
 
-  const milkingShedAnaerobicLagoon = Number(cell(columnMilkingShedMMS) ?? 0);
-  const milkingShedSumpDispersal = Number(cell(columnMilkingShedMMS, 1) ?? 0);
-  const milkingShedDrainToPaddock = Number(cell(columnMilkingShedMMS, 2) ?? 0);
-  const milkingShedSolidStorage = Number(cell(columnMilkingShedMMS, 3) ?? 0);
-  const feedPadAnaerobicLagoon = Number(cell(columnFeedPadMMS) ?? 0);
-  const feedPadSumpDispersal = Number(cell(columnFeedPadMMS, 1) ?? 0);
-  const feedPadDrainToPaddock = Number(cell(columnFeedPadMMS, 2) ?? 0);
-  const feedPadSolidStorage = Number(cell(columnFeedPadMMS, 3) ?? 0);
+  const milkingShedAnaerobicLagoon = Number(
+    cell(col.columnMilkingShedMMS) ?? 0,
+  );
+  const milkingShedSumpDispersal = Number(
+    cell(col.columnMilkingShedMMS, 1) ?? 0,
+  );
+  const milkingShedDrainToPaddock = Number(
+    cell(col.columnMilkingShedMMS, 2) ?? 0,
+  );
+  const milkingShedSolidStorage = Number(
+    cell(col.columnMilkingShedMMS, 3) ?? 0,
+  );
+  const feedPadAnaerobicLagoon = Number(cell(col.columnFeedPadMMS) ?? 0);
+  const feedPadSumpDispersal = Number(cell(col.columnFeedPadMMS, 1) ?? 0);
+  const feedPadDrainToPaddock = Number(cell(col.columnFeedPadMMS, 2) ?? 0);
+  const feedPadSolidStorage = Number(cell(col.columnFeedPadMMS, 3) ?? 0);
 
   const totalNitrogenExcreted = 0; // TODO: check this
 
@@ -220,7 +217,7 @@ const getCalculatorInput = (
                     : undefined,
                 },
               },
-              breed: checkDairyBreed(cell(columnBreed)),
+              breed: checkDairyBreed(cell(col.columnBreed)),
               milkProduction: milkSolids
                 ? {
                     kgSolidsPerHeadPerDay: Number(milkSolids),
@@ -276,7 +273,7 @@ const getCalculatorInput = (
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
   return Number(
-    sheet.cell(`${columnExpectedResultPurchasedTraced}${row}`).value(),
+    sheet.cell(`${col.columnExpectedResultPurchasedTraced}${row}`).value(),
   );
 };
 

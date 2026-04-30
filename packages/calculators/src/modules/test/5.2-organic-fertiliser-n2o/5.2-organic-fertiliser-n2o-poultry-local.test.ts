@@ -25,7 +25,7 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from '../sheet-comparison';
-import * as col from './poultry';
+import * as col from './poultry-tab';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -114,13 +114,21 @@ const getCalculatorInput = (
   const mms2M11aSolidStorage = Number(cell(col.columnMms2M11aBlock) ?? 0);
   const mms2M11aComposting = Number(cell(col.columnMms2M11aBlock, 1) ?? 0);
   const mms2M11aDigester = Number(cell(col.columnMms2M11aBlock, 2) ?? 0);
-  const mms2M11aDirectProcessing = Number(cell(col.columnMms2M11aBlock, 3) ?? 0);
-  const mms2M11aDirectApplication = Number(cell(col.columnMms2M11aBlock, 4) ?? 0);
+  const mms2M11aDirectProcessing = Number(
+    cell(col.columnMms2M11aBlock, 3) ?? 0,
+  );
+  const mms2M11aDirectApplication = Number(
+    cell(col.columnMms2M11aBlock, 4) ?? 0,
+  );
   const mms2M11bSolidStorage = Number(cell(col.columnMms2M11bBlock) ?? 0);
   const mms2M11bComposting = Number(cell(col.columnMms2M11bBlock, 1) ?? 0);
   const mms2M11bDigester = Number(cell(col.columnMms2M11bBlock, 2) ?? 0);
-  const mms2M11bDirectProcessing = Number(cell(col.columnMms2M11bBlock, 3) ?? 0);
-  const mms2M11bDirectApplication = Number(cell(col.columnMms2M11bBlock, 4) ?? 0);
+  const mms2M11bDirectProcessing = Number(
+    cell(col.columnMms2M11bBlock, 3) ?? 0,
+  );
+  const mms2M11bDirectApplication = Number(
+    cell(col.columnMms2M11bBlock, 4) ?? 0,
+  );
 
   const mms1To2Allocation: PoultryMMS1To2AllocationInput = {
     manureWithLitter: {
@@ -270,9 +278,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(
-    sheet.cell(`${col.columnExpectedResultLocal}${row}`).value(),
-  );
+  return Number(sheet.cell(`${col.columnExpectedResultLocal}${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(

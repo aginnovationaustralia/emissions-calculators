@@ -104,10 +104,6 @@ const getCalculatorInput = (
         },
       },
     ],
-    // electricity: {
-    //   method: 'location',
-    //   electricityPurchasedKWh: 0,
-    // },
   };
 
   // console.dir(dairyInput, { depth: null });

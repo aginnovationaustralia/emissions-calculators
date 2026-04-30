@@ -23,7 +23,7 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from '../sheet-comparison';
-import * as col from './swine';
+import * as col from './swine-tab';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -47,7 +47,9 @@ const getCalculatorInput = (
   const climate = checkClimate(cell(col.columnClimate));
   const isInLeachingZone = cell(col.columnIsInLeachingZone) === 'yes';
   const fractionAppliedToSoils = Number(cell(col.columnFractionAppliedToSoils));
-  const fractionOfManureToLiquidsMMS = Number(cell(col.columnFractionOfManureToLiquidsMMS));
+  const fractionOfManureToLiquidsMMS = Number(
+    cell(col.columnFractionOfManureToLiquidsMMS),
+  );
   const fractionOfManureToSolidsMMS = Number(
     cell(col.columnFractionOfManureToSolidsMMS, 1),
   );

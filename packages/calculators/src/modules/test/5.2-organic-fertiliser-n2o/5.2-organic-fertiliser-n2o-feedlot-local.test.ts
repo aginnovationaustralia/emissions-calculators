@@ -22,7 +22,7 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from '../sheet-comparison';
-import * as col from './feedlot';
+import * as col from './feedlot-tab';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -48,7 +48,8 @@ const getCalculatorInput = (
   const dryMatterIntake = cell(col.columnDryMatterIntake);
   const crudeProteinContent = cell(col.columnCrudeProteinContent);
   const fractionAppliedToSoils = Number(cell(col.columnFractionAppliedToSoils));
-  const directApplicationStage2 = cell(col.columnDirectApplicationStage2) === 'yes';
+  const directApplicationStage2 =
+    cell(col.columnDirectApplicationStage2) === 'yes';
   const secondaryMMS = directApplicationStage2
     ? 'Direct application'
     : checkFeedlotMMSType(cell(col.columnSecondaryMMS));
@@ -119,9 +120,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(
-    sheet.cell(`${col.columnExpectedResultLocal}${row}`).value(),
-  );
+  return Number(sheet.cell(`${col.columnExpectedResultLocal}${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
