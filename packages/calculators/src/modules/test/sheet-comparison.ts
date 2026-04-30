@@ -103,11 +103,6 @@ export const compareInputsAndOutputs = <
         console.log(
           formatNamedValues(actual, {
             maxDepth: 5,
-            // focusOn: 'Eenteric,j=bullsGt1',
-            // focusOn: 'MNSoil,m=3a',
-            // focusOn: 'CPIj=1',
-            // focusOn: 'Eenteric,j=bullsLt1PreWeaned',
-            // focusOn: 'Eenteric,j=heifersGt1',
             // focusOn: 'EN2O,leach',
             // focusOn: 'NRijkln (bullsLt1, spring)',
             // focusOn: 'MAijkl=5 (cows2To3Years, summer)',
