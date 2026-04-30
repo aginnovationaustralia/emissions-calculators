@@ -29,37 +29,57 @@ const calculateEntericMethaneForClass = (
   classInput: DairyClassInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  const { breed, milkProduction } = herd;
-  const { head, className, weanedName } = classInput;
+  const { breed, milkProduction, method2DryMatterDigestibility } = herd;
+  const {
+    head,
+    className,
+    weanedName,
+    method2Liveweight,
+    method2LiveweightGain,
+  } = classInput;
   const { constants } = context;
 
   const Nj = head.named(`Nj=${weanedName}`);
-  const Wj = selectConstant(
-    constants.DAIRY,
-    'LIVEWEIGHTS_BY_BREED',
-    breed,
-    className,
-  ).named(`Wj=${weanedName}`);
-  const LWGj = selectConstant(
-    constants.DAIRY,
-    'DAIRY_CLASS_FACTORS',
-    className,
-    'liveweightGain',
-  ).named(`LWGj=${weanedName}`);
+  const Wj =
+    method2Liveweight ??
+    selectConstant(
+      constants.DAIRY,
+      'LIVEWEIGHTS_BY_BREED',
+      breed,
+      className,
+    ).named(`Wj=${weanedName}`);
+  const LWGj =
+    method2LiveweightGain ??
+    selectConstant(
+      constants.DAIRY,
+      'DAIRY_CLASS_FACTORS',
+      className,
+      'liveweightGain',
+    ).named(`LWGj=${weanedName}`);
   const MRj = selectConstant(
     constants.DAIRY,
     'INCREASE_METABOLIC_RATE_FOR_MILK',
     className === 'milkingCows' ? 'milkingCows' : 'others',
   ).named('MRj');
 
-  const DMDj = selectConstant(
-    constants.DAIRY,
-    'DRY_MATTER_DIGESTIBILITY',
-  ).named('DMDj');
+  const DMDj =
+    method2DryMatterDigestibility ??
+    selectConstant(constants.DAIRY, 'DRY_MATTER_DIGESTIBILITY').named('DMDj');
 
   const MPj = calculateMilkProduction(milkProduction).named(
     `MPj=${weanedName}`,
   );
+
+  const findDurationDays = (classInput: DairyClassInputTransformed) => {
+    return (
+      classInput.method2DurationDays ??
+      (isClassMature(classInput)
+        ? daysInYear
+        : isClassPreWeaned(classInput)
+          ? daysPreWeaning
+          : daysPostWeaning)
+    );
+  };
 
   const MIj: Container<MassPerHeadPerDay<'DryMatter'>> =
     calculateExtraIntakeForMilkProductionMIj(MPj, DMDj, constants).named(
@@ -79,13 +99,7 @@ const calculateEntericMethaneForClass = (
     .switchUnit((r) => massPerHeadPerDay('CH4', r.value))
     .named(`Mj=${weanedName}`);
 
-  const Dj = (
-    isClassMature(classInput)
-      ? daysInYear
-      : isClassPreWeaned(classInput)
-        ? daysPreWeaning
-        : daysPostWeaning
-  ).named(`Dj=${weanedName}`);
+  const Dj = findDurationDays(classInput).named(`Dj=${weanedName}`);
 
   const NMD = Mj.multiply(Nj).multiply(Dj);
 

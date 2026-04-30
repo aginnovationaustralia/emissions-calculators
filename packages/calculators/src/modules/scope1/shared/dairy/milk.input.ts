@@ -26,3 +26,15 @@ export const DairyMilkSolidsInputSchema = object({
     'Protein content percentage in fat and protein corrected milk',
   ).transform((val) => input('PCj', realNumber(val))),
 });
+
+export const DairyMilkProductionInputSchema = z.union([
+  DairyMilkVolumeInputSchema,
+  DairyMilkSolidsInputSchema,
+]);
+
+export type DairyMilkProductionInput = z.input<
+  typeof DairyMilkProductionInputSchema
+>;
+export type DairyMilkProductionInputTransformed = z.output<
+  typeof DairyMilkProductionInputSchema
+>;

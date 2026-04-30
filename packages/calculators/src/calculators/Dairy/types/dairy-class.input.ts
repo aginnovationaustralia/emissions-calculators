@@ -1,5 +1,5 @@
 import { input } from '@/tools/inputs';
-import { head } from '@/tools/units';
+import { days, head, mass, massPerHeadPerDay } from '@/tools/units';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 
@@ -8,6 +8,27 @@ export const DairyClassBaseInputSchema = object({
     .number()
     .gt(0)
     .transform((val) => input('Nj', head(val))),
+  method2Liveweight: z
+    .number()
+    .gt(0)
+    .optional()
+    .transform((val) =>
+      val === undefined ? undefined : input('Wj', mass('Liveweight', val)),
+    ),
+  method2LiveweightGain: z
+    .number()
+    .optional()
+    .transform((val) =>
+      val === undefined
+        ? undefined
+        : input('LWGj', massPerHeadPerDay('Liveweight', val)),
+    ),
+  method2DurationDays: z
+    .number()
+    .optional()
+    .transform((val) =>
+      val === undefined ? undefined : input('Dj', days(val)),
+    ),
 });
 
 export const DairyClassMilkingCowsInputSchema =
