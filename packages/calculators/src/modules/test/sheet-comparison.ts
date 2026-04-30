@@ -102,8 +102,8 @@ export const compareInputsAndOutputs = <
         // console.log(formatIntermediates(actual));
         console.log(
           formatNamedValues(actual, {
-            maxDepth: 9,
-            focusOn: 'AUmms,m=3a',
+            maxDepth: 5,
+            // focusOn: 'Eenteric,j=bullsGt1',
             // focusOn: 'MNSoil,m=3a',
             // focusOn: 'CPIj=1',
             // focusOn: 'Eenteric,j=bullsLt1PreWeaned',
