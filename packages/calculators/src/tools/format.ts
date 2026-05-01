@@ -103,19 +103,17 @@ const formatUnitValue = (unit: AnyUnit): string => {
 };
 
 const formatOperator = (
-  type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power',
+  type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'limitedTo',
 ): string => {
-  return type === 'add'
-    ? '+'
-    : type === 'subtract'
-      ? '-'
-      : type === 'multiply'
-        ? '*'
-        : type === 'divide'
-          ? '/'
-          : type === 'power'
-            ? '^'
-            : '';
+  const operatorMap = {
+    add: '+',
+    subtract: '-',
+    multiply: '*',
+    divide: '/',
+    power: '^',
+    limitedTo: 'min',
+  };
+  return operatorMap[type];
 };
 
 const formatValueAndName = (container: Container<AnyUnit>): string => {
@@ -128,6 +126,9 @@ const formatValueAndName = (container: Container<AnyUnit>): string => {
 const formatExpressionRecursive = (container: Container<AnyUnit>): string => {
   switch (container.originType) {
     case 'binary':
+      if (container.type === 'limitedTo') {
+        return `${formatOperator(container.type)}(${formatExpressionRecursive(container.left)}, ${formatExpressionRecursive(container.right)})`;
+      }
       return `${formatExpressionRecursive(container.left)} ${formatOperator(container.type)} ${formatExpressionRecursive(container.right)}`;
     case 'root':
       return formatValueAndName(container);

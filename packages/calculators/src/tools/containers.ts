@@ -610,17 +610,36 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
       baseOrigin,
     );
   }
+
+  limitedTo<UL extends NumberUnit>(
+    this: BaseContainer<UL>,
+    right: number,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<UL> {
+    const limit = new Decimal(right);
+    const unit = {
+      ...this.unit,
+      value: this.unit.value.gt(limit) ? limit : this.unit.value,
+    };
+    return new BinaryContainer(
+      unit,
+      'limitedTo',
+      this as unknown as Container<UL>,
+      num(right),
+      baseOrigin,
+    );
+  }
 }
 
 export class BinaryContainer<U extends AnyUnit> extends BaseContainer<U> {
   originType: 'binary';
-  type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power';
+  type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'limitedTo';
   left: Container<NumberUnit>;
   right: Container<NumberUnit>;
 
   constructor(
     unit: U,
-    type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power',
+    type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'limitedTo',
     left: Container<NumberUnit>,
     right: Container<NumberUnit>,
     baseOrigin: Metadata,
