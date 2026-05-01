@@ -7,6 +7,8 @@ export interface SymbolRecord {
   type: RecordType;
   expression: string;
   line: string;
+  /** Persisted as `method2Input` in JSON; defaults to false when absent. */
+  method2Input: boolean;
   notes: string;
   values?: string;
 }

@@ -12,11 +12,15 @@ import * as XLSX from 'xlsx';
 import { extractSymbols } from '../shared/expressionParser';
 
 /** 1-based row index for expression as text. */
-const EXPRESSION_ROW = 5;
+const EXPRESSION_ROW = 2;
 /** 1-based row index for line number. */
-const LINE_ROW = 6;
+const LINE_ROW = 3;
 /** 1-based row index for record type. */
-const TYPE_ROW = 7;
+const METHOD_1_ROW = 4;
+const METHOD_2_ROW = 5;
+
+const UNIT_ROW = 8;
+const NAME_ROW = 9;
 /** 1-based row index for headers (symbol names). */
 const HEADER_ROW = 10;
 /** 1-based row index for the formula. */
@@ -29,6 +33,7 @@ export interface SymbolRecord {
   type: string;
   expression: string;
   line: string;
+  method2Input?: boolean;
   notes: string;
   values?: string;
 }
@@ -166,8 +171,11 @@ function readHeaderRow(sheet: XLSX.WorkSheet): Map<string, number> {
     if (!parsed || parsed.row !== HEADER_ROW) continue;
     const cell = sheet[key as keyof XLSX.WorkSheet];
     if (!cell || typeof cell !== 'object') continue;
-    const raw = (cell as { v?: unknown; w?: string }).v ?? (cell as { v?: unknown; w?: string }).w;
-    const text = typeof raw === 'string' ? raw.trim() : String(raw ?? '').trim();
+    const raw =
+      (cell as { v?: unknown; w?: string }).v ??
+      (cell as { v?: unknown; w?: string }).w;
+    const text =
+      typeof raw === 'string' ? raw.trim() : String(raw ?? '').trim();
     if (text) headerToCol.set(text, parsed.col);
   }
   return headerToCol;
@@ -218,10 +226,13 @@ function unionSheetRefWithRange(
       maxC = Math.max(maxC, brP.col);
     }
   }
-  (sheet as { '!ref': string })['!ref'] = `${ref(minR, minC)}:${ref(maxR, maxC)}`;
+  (sheet as { '!ref': string })['!ref'] =
+    `${ref(minR, minC)}:${ref(maxR, maxC)}`;
 }
 
-function minMaxCol(cols: Iterable<number>): { min: number; max: number } | null {
+function minMaxCol(
+  cols: Iterable<number>,
+): { min: number; max: number } | null {
   let min = Infinity;
   let max = -Infinity;
   for (const c of cols) {
@@ -310,7 +321,10 @@ export function exportRowToSheet(
     const lineVal = rec?.line?.trim() ?? '';
     const typeVal = rec?.type ?? 'unknown';
     writeCell(sheet, LINE_ROW, col, lineVal);
-    writeCell(sheet, TYPE_ROW, col, typeVal);
+    writeCell(sheet, METHOD_1_ROW, col, typeVal);
+    writeCell(sheet, METHOD_2_ROW, col, rec?.method2Input ? 'input' : '');
+    writeCell(sheet, UNIT_ROW, col, rec?.units?.trim() ?? '');
+    writeCell(sheet, NAME_ROW, col, rec?.name?.trim() ?? '');
   }
 
   for (const sym of orderedSymbols) {
@@ -385,7 +399,10 @@ export function exportAllRecordsToSheet(
     const rec = records[i];
     writeCell(sheet, HEADER_ROW, col, rec.symbol.trim());
     writeCell(sheet, LINE_ROW, col, rec.line?.trim() ?? '');
-    writeCell(sheet, TYPE_ROW, col, rec.type ?? 'unknown');
+    writeCell(sheet, METHOD_1_ROW, col, rec.type ?? 'unknown');
+    writeCell(sheet, METHOD_2_ROW, col, rec.method2Input ? 'input' : '');
+    writeCell(sheet, UNIT_ROW, col, rec.units?.trim() ?? '');
+    writeCell(sheet, NAME_ROW, col, rec.name?.trim() ?? '');
     if (rec.type === 'expression' && rec.expression.trim()) {
       const exprText = rec.expression.trim();
       writeCell(sheet, EXPRESSION_ROW, col, exprText);
