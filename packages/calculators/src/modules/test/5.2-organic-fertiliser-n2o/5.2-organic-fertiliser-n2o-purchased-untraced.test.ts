@@ -34,7 +34,7 @@ const getCalculatorInput = (
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
-  if (cell(col.columnScenarioKey) === undefined) {
+  if (cell(col.columnMassAppliedKg) === undefined) {
     return undefined;
   }
 

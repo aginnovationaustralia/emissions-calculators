@@ -1,5 +1,4 @@
 /** Column letters for sheet `5.2.1.1 (purchased_untraced)` */
-export const columnScenarioKey = 'B';
 export const columnMassAppliedKg = 'B';
 export const columnLivestockManureType = 'C';
 export const columnCustomNitrogenFraction = 'E';
