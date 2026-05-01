@@ -40,6 +40,7 @@ import {
   LULUCFConstants,
   PoultryConstants,
   RiceConstants,
+  SheepConstants,
   STATES,
   SwineConstants,
 } from './types';
@@ -5220,6 +5221,818 @@ const tonnesCarbonPerHectare = (tonnes: number) =>
 
 const tonnesCarbonPerHectarePerYear = (tonnes: number) =>
   massPerAreaPerYear('Carbon', tonnesPerHectareToKgPerSquareMetres(tonnes));
+
+export const sheepConstants: SheepConstants = {
+  name: 'SHEEP',
+  SEASONAL_FACTORS: {
+    'ACT/NSW': {
+      rams: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 75),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.61),
+          liveweight: mass('Liveweight', 75),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.6),
+          dryMatterDigestibility: realNumber(0.64),
+          liveweight: mass('Liveweight', 69),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.72),
+          liveweight: mass('Liveweight', 69),
+        },
+      },
+      wethers: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 62),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.61),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.6),
+          dryMatterDigestibility: realNumber(0.64),
+          liveweight: mass('Liveweight', 55),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.72),
+          liveweight: mass('Liveweight', 55),
+        },
+      },
+      maidenEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 44),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.61),
+          liveweight: mass('Liveweight', 42),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.6),
+          dryMatterDigestibility: realNumber(0.64),
+          liveweight: mass('Liveweight', 43),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.72),
+          liveweight: mass('Liveweight', 45),
+        },
+      },
+      breedingEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 54),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.61),
+          liveweight: mass('Liveweight', 49),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.6),
+          dryMatterDigestibility: realNumber(0.64),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.72),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      otherEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 56),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.61),
+          liveweight: mass('Liveweight', 51),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.6),
+          dryMatterDigestibility: realNumber(0.64),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.72),
+          liveweight: mass('Liveweight', 51),
+        },
+      },
+      lambsHoggets: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 20),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.61),
+          liveweight: mass('Liveweight', 27),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.6),
+          dryMatterDigestibility: realNumber(0.64),
+          liveweight: mass('Liveweight', 32),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.72),
+          liveweight: mass('Liveweight', 34),
+        },
+      },
+    },
+    VIC: {
+      rams: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.2),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 70),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 3),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 65),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.8),
+          dryMatterDigestibility: realNumber(0.65),
+          liveweight: mass('Liveweight', 65),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1),
+          dryMatterDigestibility: realNumber(0.6),
+          liveweight: mass('Liveweight', 60),
+        },
+      },
+      wethers: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.2),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 60),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 3),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.8),
+          dryMatterDigestibility: realNumber(0.65),
+          liveweight: mass('Liveweight', 52),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1),
+          dryMatterDigestibility: realNumber(0.6),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      maidenEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.2),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 50),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 3),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 45),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.8),
+          dryMatterDigestibility: realNumber(0.65),
+          liveweight: mass('Liveweight', 43),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1),
+          dryMatterDigestibility: realNumber(0.6),
+          liveweight: mass('Liveweight', 40),
+        },
+      },
+      breedingEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.2),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 55),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 3),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.8),
+          dryMatterDigestibility: realNumber(0.65),
+          liveweight: mass('Liveweight', 48),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1),
+          dryMatterDigestibility: realNumber(0.6),
+          liveweight: mass('Liveweight', 45),
+        },
+      },
+      otherEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.2),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 50),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 3),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.8),
+          dryMatterDigestibility: realNumber(0.65),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1),
+          dryMatterDigestibility: realNumber(0.6),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      lambsHoggets: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.2),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 22),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 3),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 28),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.8),
+          dryMatterDigestibility: realNumber(0.65),
+          liveweight: mass('Liveweight', 33),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1),
+          dryMatterDigestibility: realNumber(0.6),
+          liveweight: mass('Liveweight', 35),
+        },
+      },
+    },
+    QLD: {
+      rams: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.51),
+          liveweight: mass('Liveweight', 58),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 61),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.2),
+          dryMatterDigestibility: realNumber(0.59),
+          liveweight: mass('Liveweight', 63),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.58),
+          liveweight: mass('Liveweight', 60),
+        },
+      },
+      wethers: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.51),
+          liveweight: mass('Liveweight', 50),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.2),
+          dryMatterDigestibility: realNumber(0.59),
+          liveweight: mass('Liveweight', 55),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.58),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      maidenEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.51),
+          liveweight: mass('Liveweight', 35),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 40),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.2),
+          dryMatterDigestibility: realNumber(0.59),
+          liveweight: mass('Liveweight', 40),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.58),
+          liveweight: mass('Liveweight', 35),
+        },
+      },
+      breedingEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.51),
+          liveweight: mass('Liveweight', 40),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 45),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.2),
+          dryMatterDigestibility: realNumber(0.59),
+          liveweight: mass('Liveweight', 45),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.58),
+          liveweight: mass('Liveweight', 42),
+        },
+      },
+      otherEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.51),
+          liveweight: mass('Liveweight', 45),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.2),
+          dryMatterDigestibility: realNumber(0.59),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.58),
+          liveweight: mass('Liveweight', 48),
+        },
+      },
+      lambsHoggets: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.51),
+          liveweight: mass('Liveweight', 20),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 25),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.2),
+          dryMatterDigestibility: realNumber(0.59),
+          liveweight: mass('Liveweight', 20),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.58),
+          liveweight: mass('Liveweight', 25),
+        },
+      },
+    },
+    SA: {
+      rams: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 4),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 80),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 70),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 70),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 70),
+        },
+      },
+      wethers: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 4),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 70),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 65),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 60),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 60),
+        },
+      },
+      maidenEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 4),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 52),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 52),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 52),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 52),
+        },
+      },
+      breedingEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 4),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 55),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 55),
+        },
+      },
+      otherEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 4),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 55),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 55),
+        },
+      },
+      lambsHoggets: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 4),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 40),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 45),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 20),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 30),
+        },
+      },
+    },
+    TAS: {
+      rams: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 90),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 90),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.3),
+          dryMatterDigestibility: realNumber(0.67),
+          liveweight: mass('Liveweight', 75),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.8),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 75),
+        },
+      },
+      wethers: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 55),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.3),
+          dryMatterDigestibility: realNumber(0.67),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.8),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 45),
+        },
+      },
+      maidenEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 45),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 45),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.3),
+          dryMatterDigestibility: realNumber(0.67),
+          liveweight: mass('Liveweight', 45),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.8),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      breedingEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 50),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.3),
+          dryMatterDigestibility: realNumber(0.67),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.8),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 55),
+        },
+      },
+      otherEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 50),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.3),
+          dryMatterDigestibility: realNumber(0.67),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.8),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      lambsHoggets: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 14),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 24),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.3),
+          dryMatterDigestibility: realNumber(0.67),
+          liveweight: mass('Liveweight', 36),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.8),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 42),
+        },
+      },
+    },
+    WA: {
+      rams: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.5),
+          dryMatterDigestibility: realNumber(0.73),
+          liveweight: mass('Liveweight', 75),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 65),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.5),
+          liveweight: mass('Liveweight', 65),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.2),
+          dryMatterDigestibility: realNumber(0.76),
+          liveweight: mass('Liveweight', 65),
+        },
+      },
+      wethers: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.5),
+          dryMatterDigestibility: realNumber(0.73),
+          liveweight: mass('Liveweight', 60),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.5),
+          liveweight: mass('Liveweight', 48),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.2),
+          dryMatterDigestibility: realNumber(0.76),
+          liveweight: mass('Liveweight', 48),
+        },
+      },
+      maidenEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.5),
+          dryMatterDigestibility: realNumber(0.73),
+          liveweight: mass('Liveweight', 50),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 45),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 40),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.2),
+          dryMatterDigestibility: realNumber(0.76),
+          liveweight: mass('Liveweight', 45),
+        },
+      },
+      breedingEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.5),
+          dryMatterDigestibility: realNumber(0.73),
+          liveweight: mass('Liveweight', 55),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 45),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.2),
+          dryMatterDigestibility: realNumber(0.76),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      otherEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.5),
+          dryMatterDigestibility: realNumber(0.73),
+          liveweight: mass('Liveweight', 55),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.5),
+          liveweight: mass('Liveweight', 45),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.2),
+          dryMatterDigestibility: realNumber(0.76),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      lambsHoggets: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.5),
+          dryMatterDigestibility: realNumber(0.73),
+          liveweight: mass('Liveweight', 30),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 30),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 10),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.2),
+          dryMatterDigestibility: realNumber(0.76),
+          liveweight: mass('Liveweight', 20),
+        },
+      },
+    },
+  },
+
+  FEED_ADJUSTMENT: realNumber(1.3),
+};
 
 export const lulucfConstants: LULUCFConstants = {
   name: 'LULUCF',

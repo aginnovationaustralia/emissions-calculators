@@ -7,6 +7,7 @@ import {
   LivestockConstants,
   LULUCFConstants,
   PoultryConstants,
+  SheepConstants,
   SwineConstants,
 } from '@/constants/types';
 import {
@@ -18,6 +19,7 @@ import {
   livestockConstants,
   lulucfConstants,
   poultryConstants,
+  sheepConstants,
   swineConstants,
 } from '@/constants/values';
 
@@ -25,6 +27,7 @@ import {
 export type ConstantsForGrainsCalculator = {
   LIVESTOCK: LivestockConstants;
   DAIRY: DairyConstants;
+  SHEEP: SheepConstants;
   POULTRY: PoultryConstants;
   COMMON: CommonConstants;
   CROP: CropConstants;
@@ -37,6 +40,7 @@ export type ConstantsForGrainsCalculator = {
 export const constantsForGrainsCalculator: ConstantsForGrainsCalculator = {
   LIVESTOCK: livestockConstants,
   DAIRY: dairyConstants,
+  SHEEP: sheepConstants,
   POULTRY: poultryConstants,
   COMMON: commonConstants,
   CROP: cropConstants,

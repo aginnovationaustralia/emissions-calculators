@@ -1,4 +1,5 @@
 import {
+  AnyUnit,
   CountPerArea,
   EnergyPerMass,
   EnergyPerVolume,
@@ -48,6 +49,7 @@ import {
   InorganicFertiliserType,
   LightDutyFuelType,
   LimitedRegion,
+  LimitedState,
   MeanAnnualTemperature,
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
@@ -74,6 +76,7 @@ import {
   Season,
   ServiceByAreaType,
   ServiceByHourType,
+  SheepClass,
   SolidWasteByVolumeType,
   SolidWasteIncinerationType,
   SolidWasteLandfillType,
@@ -485,7 +488,8 @@ export type LivestockConstants = NamedConstants & {
   >;
 };
 
-type SeasonalFactors = Record<Season, RealNumber>;
+type SeasonalFactors<F extends AnyUnit = RealNumber> = Record<Season, F>;
+
 type WeightFactorsByClass = Record<
   BeefClass,
   Record<
@@ -554,6 +558,21 @@ export type LULUCFConstants = NamedConstants & {
   >;
 };
 
+type SeasonalSheepFactors = {
+  dryMatterAvailability: MassPerArea<'DryMatter'>;
+  dryMatterDigestibility: RealNumber;
+  liveweight: Mass<'Liveweight'>;
+};
+
+export type SheepConstants = NamedConstants & {
+  SEASONAL_FACTORS: Record<
+    LimitedState,
+    Record<SheepClass, Record<Season, SeasonalSheepFactors>>
+  >;
+
+  FEED_ADJUSTMENT: RealNumber;
+};
+
 export type AllConstants = {
   COMMON: CommonConstants;
   CROP: CropConstants;
@@ -563,6 +582,7 @@ export type AllConstants = {
   POULTRY: PoultryConstants;
   LIVESTOCK: LivestockConstants;
   BEEF_PASTURE: BeefPastureConstants;
+  SHEEP: SheepConstants;
   RICE: RiceConstants;
   LULUCF: LULUCFConstants;
 };

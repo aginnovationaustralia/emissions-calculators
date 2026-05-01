@@ -18,6 +18,8 @@ import {
   GrazingProductionSystemsWithRainfall,
   LimitedRegion,
   LimitedRegions,
+  LimitedState,
+  LimitedStates,
   MeanAnnualTemperature,
   MeanAnnualTemperatures,
   OtherLivestockType,
@@ -85,6 +87,13 @@ export const checkStateOrRegion = (
     throw new Error(`Invalid state or region: ${stateOrRegion}`);
   }
   return stateOrRegion as StateOrRegion;
+};
+
+export const checkLimitedState = (state: string | undefined): LimitedState => {
+  if (!LimitedStates.includes(state as LimitedState)) {
+    throw new Error(`Invalid state: ${state}`);
+  }
+  return state as LimitedState;
 };
 
 export const checkGrazingSystem = (
