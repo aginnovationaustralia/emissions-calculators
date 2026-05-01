@@ -5,24 +5,24 @@ import {
 } from '@/calculators/Grains/types/base-crop.input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { SwineMMSInput } from '../scope1/4-manure-management/swine-manure.input';
-import { calculate52OrganicFertiliser } from '../scope1/5-fertiliser/5.2-organic-fertiliser';
+import { calculate52OrganicFertiliser } from '../../scope1/5-fertiliser/5.2-organic-fertiliser';
 import {
   FertiliserInput,
   FertiliserInputSchema,
   FertiliserInputTransformed,
-} from '../scope1/5-fertiliser/fertiliser.input';
+} from '../../scope1/5-fertiliser/fertiliser.input';
 import {
   CropResidueInput,
   CropResidueInputSchema,
   CropResidueInputTransformed,
-} from '../scope1/6-residue-mgmt/crop-residue.input';
-import { checkClimate } from './fertiliser-domain';
-import { checkSwineMMSType } from './livestock-domain';
+} from '../../scope1/6-residue-mgmt/crop-residue.input';
+import { checkClimate } from '../fertiliser-domain';
+import { checkFeedlotMMSType } from '../livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
-} from './sheet-comparison';
+} from '../sheet-comparison';
+import * as col from './feedlot-tab';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -38,45 +38,24 @@ const getCalculatorInput = (
       .value()
       ?.toString();
 
-  if (cell('B') === undefined) {
+  if (cell(col.columnScenarioKey) === undefined) {
     return undefined;
   }
 
-  const totalNitrogenExcreted = Number(cell('A'));
-  const climate = checkClimate(cell('C'));
-  const isInLeachingZone = cell('D') === 'yes';
-  const fractionAppliedToSoils = Number(cell('E'));
-  const fractionOfManureToLiquidsMMS = Number(cell('J'));
-  const fractionOfManureToSolidsMMS = Number(cell('K', 1));
-  const fractionOfNitrogenSeparatedToSolidStorage = Number(cell('I'));
-  const liquidsStage2DirectApplication = cell('H') === 'yes';
-  const solidsStage2DirectApplication = cell('H', 1) === 'yes';
-  const liquidsSystem1 = checkSwineMMSType(cell('F'));
-  const solidsSystem1 = checkSwineMMSType(cell('F', 1));
-  const liquidsSystem2 = liquidsStage2DirectApplication
+  const totalNitrogenExcreted = Number(cell(col.columnTotalNitrogenExcreted));
+  const lengthOfStayDays = Number(cell(col.columnLengthOfStayDays));
+  const numberOfCattle = Number(cell(col.columnNumberOfCattle));
+  const dryMatterIntake = cell(col.columnDryMatterIntake);
+  const crudeProteinContent = cell(col.columnCrudeProteinContent);
+  const fractionAppliedToSoils = Number(cell(col.columnFractionAppliedToSoils));
+  const directApplicationStage2 =
+    cell(col.columnDirectApplicationStage2) === 'yes';
+  const secondaryMMS = directApplicationStage2
     ? 'Direct application'
-    : checkSwineMMSType(cell('G'));
-  const solidsSystem2 = solidsStage2DirectApplication
-    ? 'Direct application'
-    : checkSwineMMSType(cell('G', 1));
-  const fractionOfManureFromLiquidsStage1to2 = Number(cell('T'));
-  const fractionOfManureFromSolidsStage1to2 = Number(cell('T', 1));
+    : checkFeedlotMMSType(cell(col.columnSecondaryMMS));
+  const tertiaryLagoonInUse = cell(col.columnTertiaryLagoonInUse) === 'yes';
 
-  const mms: SwineMMSInput = {
-    liquids: {
-      liquidsSystem1,
-      fractionOfManureToLiquidsMMS,
-      fractionOfManureFromLiquidsStage1to2,
-      liquidsSystem2,
-    },
-    solids: {
-      fractionOfNitrogenSeparatedToSolidStorage,
-      solidsSystem1,
-      fractionOfManureToSolidsMMS,
-      fractionOfManureFromSolidsStage1to2,
-      solidsSystem2,
-    },
-  };
+  const climate = checkClimate(cell(col.columnClimate));
 
   const fertiliserInput: FertiliserInput = {
     inorganicFertilisers: {
@@ -91,16 +70,30 @@ const getCalculatorInput = (
           origin: {
             origin: 'Purchased_Traced',
             details: {
-              type: 'swine',
-              mms,
-              totalNitrogenExcreted,
+              type: 'feedlot',
+              herds: [
+                {
+                  lengthOfStayDays,
+                  numberOfCattle,
+                  dryMatterIntake: dryMatterIntake
+                    ? Number(dryMatterIntake)
+                    : undefined,
+                  crudeProteinContent: crudeProteinContent
+                    ? Number(crudeProteinContent)
+                    : undefined,
+                },
+              ],
               fractionAppliedToSoils,
+              secondaryMMS,
+              tertiaryLagoonInUse,
             },
           },
         },
       ],
     },
   };
+
+  // console.dir(fertiliserInput, { depth: null });
 
   const cropResidueInput: CropResidueInput = {
     rainfallAbove600: climate === 'wet',
@@ -115,7 +108,7 @@ const getCalculatorInput = (
   const baseCrop: BaseGrainsCrop = {
     state: 'vic',
     areaSown: 100,
-    isInLeachingZone,
+    isInLeachingZone: false,
     electricityAllocation: 0,
   };
 
@@ -127,20 +120,21 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`AF${row}`).value());
+  return Number(
+    sheet.cell(`${col.columnExpectedResultPurchasedTraced}${row}`).value(),
+  );
 };
 
 const extractInputsAndOutput = createSheetExtractor(
   getCalculatorInput,
   getExpectedOutput,
-  { rowInterval: 2 },
 );
 
-describe('5.2.1.1 Organic Fertiliser N2O (purchased_traced)', () => {
+describe('5.2.1.1 Organic Fertiliser N2O (purchased traced feedlot)', () => {
   it('method 1 purchased scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/5.2-organic-fertiliser.xlsx',
-      '5.2.1.1 (swine)',
+      './src/modules/test/5.2-organic-fertiliser-n2o/5.2-organic-fertiliser.xlsx',
+      '5.2.1.1 (feedlot)',
     );
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 8, '1');

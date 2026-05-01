@@ -1,14 +1,12 @@
-import { DairySystems } from '@/constants/enums';
+import { DairyCattleBreeds, DairySystems } from '@/constants/enums';
 import { input } from '@/tools/inputs';
-import {
-  head,
-  mass,
-  massPerHeadPerDay,
-  realNumber,
-  volumePerHeadPerDay,
-} from '@/tools/units';
-import { object, percentage, proportion } from '@/types/schemas';
+import { head, mass, massPerHeadPerDay, realNumber } from '@/tools/units';
+import { object, proportion } from '@/types/schemas';
 import { z } from 'zod';
+import {
+  DairyMilkSolidsInputSchema,
+  DairyMilkVolumeInputSchema,
+} from '../shared/dairy/milk.input';
 
 const DairyManureClassInputSchema = object({
   head: z
@@ -61,26 +59,6 @@ const DairyBullsGt1InputSchema = DairyManureClassInputSchema.transform(
 const DairyBullsLt1InputSchema = DairyManureClassInputSchema.transform(
   (val) => ({ ...val, name: 'bullsLt1' as const, number: 5 as const }),
 );
-
-const DairyMilkVolumeInputSchema = object({
-  litresPerHeadPerDay: z
-    .number()
-    .gt(0)
-    .transform((val) => input('MPj', volumePerHeadPerDay('Milk', val))),
-});
-
-const DairyMilkSolidsInputSchema = object({
-  kgSolidsPerHeadPerDay: z
-    .number()
-    .gt(0)
-    .transform((val) => input('MSj', massPerHeadPerDay('Milk Solids', val))),
-  fatContent: percentage(
-    'Fat content percentage in fat and protein corrected milk',
-  ).transform((val) => input('FCj', realNumber(val))),
-  proteinContent: percentage(
-    'Protein content percentage in fat and protein corrected milk',
-  ).transform((val) => input('PCj', realNumber(val))),
-});
 
 type DairyMilkVolumeInputTransformed = z.output<
   typeof DairyMilkVolumeInputSchema
@@ -146,6 +124,7 @@ export const DairyManureInputSchema = object({
     DairyMilkVolumeInputSchema,
     DairyMilkSolidsInputSchema,
   ]),
+  breed: z.enum(DairyCattleBreeds),
   milkingShedMMSAllocation: MMSAllocationSchema,
   feedPadMMSAllocation: MMSAllocationSchema,
 }).superRefine((refinement, context) => {

@@ -1,5 +1,6 @@
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
+import { DairyCattleBreed } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, num, root } from '@/tools/containers';
 import {
@@ -19,7 +20,6 @@ import {
   head,
   mass,
   Mass,
-  massPerEnergy,
   MassPerHeadPerDay,
   massPerHeadPerDay,
   realNumber,
@@ -28,10 +28,13 @@ import {
   VolumePerHeadPerDay,
 } from '@/tools/units';
 import {
+  calculateExtraIntakeForMilkProductionMIj,
+  calculateFeedIntakeIj,
+  calculateMilkProduction,
+} from '../shared/dairy/calculate';
+import {
   DairyManureInputTransformed,
-  DairyMilkInputTransformed,
   DairySpecificClassInput,
-  isMilkVolumeBased,
 } from './dairy-manure.input';
 
 const mmsSystems = [
@@ -40,24 +43,6 @@ const mmsSystems = [
   { name: 'drainToPaddock', m: '3b' },
   { name: 'solidStorage', m: '4' },
 ] as const;
-
-const calculateMilkProduction = (
-  input: DairyMilkInputTransformed,
-): Container<VolumePerHeadPerDay<'Milk'>> => {
-  if (isMilkVolumeBased(input)) {
-    return input.litresPerHeadPerDay;
-  }
-
-  const { kgSolidsPerHeadPerDay, fatContent, proteinContent } = input;
-
-  //@ts-expect-error Erasure of units
-  const litresPerHeadPerDay: Container<VolumePerHeadPerDay<'Milk'>> =
-    kgSolidsPerHeadPerDay.divide(
-      num(0.01).multiply(fatContent.plus(proteinContent)),
-    );
-
-  return litresPerHeadPerDay;
-};
 
 const calculateIntakeRelativeToMaintenanceLj = (
   Ij: Container<MassPerHeadPerDay<'DryMatter'>>,
@@ -86,31 +71,6 @@ type DairyClassResult = {
   F: Container<MassPerHeadPerDay<'N'>>;
   U: Container<MassPerHeadPerDay<'N'>>;
   N: Container<Head>;
-};
-
-const calculateFeedIntakeIj = (
-  Wj: Container<Mass<'Liveweight'>>,
-  LWGj: Container<MassPerHeadPerDay<'Liveweight'>>,
-  MRj: Container<MassPerHeadPerDay<'DryMatter'>>,
-  MIj: Container<MassPerHeadPerDay<'DryMatter'>>,
-): Container<MassPerHeadPerDay<'DryMatter'>> => {
-  // Ij: Ch 3.3 line 226
-
-  const intakeForWeightGain: Container<MassPerHeadPerDay<'DryMatter'>> = br(
-    num(1.185)
-      .plus(num(0.00454).multiply(Wj))
-      .minus(num(0.0000026).multiply(Wj.squared()))
-      //@ts-expect-error Erasure of units, converting liveweight and liveweight gain to intake of dry matter
-      .plus(num(0.315).multiply(LWGj)),
-  )
-    .squared()
-    .switchUnit((r) => realNumber(r.value))
-    .multiply(MRj);
-
-  const Ij: Container<MassPerHeadPerDay<'DryMatter'>> =
-    intakeForWeightGain.plus(MIj);
-
-  return Ij;
 };
 
 const calculateNitrogenRetainedByBodyNRj = (
@@ -199,6 +159,7 @@ const calculateForClass = (
   dairyClass: DairySpecificClassInput | undefined,
   MIj: Container<MassPerHeadPerDay<'DryMatter'>>,
   MPj: Container<VolumePerHeadPerDay<'Milk'>>,
+  breed: DairyCattleBreed,
   constants: ConstantsForGrainsCalculator,
 ): DairyClassResult => {
   if (!dairyClass) {
@@ -216,23 +177,23 @@ const calculateForClass = (
     dairyClass.method2Liveweight ??
     selectConstant(
       constants.DAIRY,
-      'CLASS_WEIGHTS',
+      'LIVEWEIGHTS_BY_BREED',
+      breed,
       className,
-      'liveweight',
     ).named(`Wj=${classNumber}`);
 
   const LWGj =
     dairyClass.method2LiveweightGain ??
     selectConstant(
       constants.DAIRY,
-      'CLASS_WEIGHTS',
+      'DAIRY_CLASS_FACTORS',
       className,
       'liveweightGain',
     ).named(`LWGj=${classNumber}`);
 
   const WRj = selectConstant(
     constants.DAIRY,
-    'CLASS_WEIGHTS',
+    'DAIRY_CLASS_FACTORS',
     className,
     'referenceWeight',
   ).named(`WRj=${classNumber}`);
@@ -299,41 +260,6 @@ const calculateForClass = (
   };
 };
 
-const calculateExtraIntakeForMilkProductionMIj = (
-  MPj: Container<VolumePerHeadPerDay<'Milk'>>,
-  DMDj: Container<RealNumber>,
-  constants: ConstantsForGrainsCalculator,
-): Container<MassPerHeadPerDay<'DryMatter'>> => {
-  // Ch 3.3 line 234
-  // line 278
-  const NE = selectConstant(
-    constants.DAIRY,
-    'NET_ENERGY_FOR_MILK_PRODUCTION',
-  ).named('NE');
-  // line 279
-  const GEC = selectConstant(constants.DAIRY, 'GROSS_ENERGY_CONTENT').named(
-    'GEC',
-  );
-  // line 281
-  const k = selectConstant(
-    constants.DAIRY,
-    'EFFICIENCY_OF_MILK_PRODUCTION',
-  ).named('k');
-
-  const qmj = num(0.795).multiply(DMDj).minus(num(0.0014)).named('qmj');
-
-  return MPj.multiply(num(1.03))
-    .switchUnit((r) => massPerEnergy('Milk', r.value))
-    .multiply(NE)
-    .divide(
-      GEC.multiply(k)
-        .multiply(qmj)
-        .switchUnit((r) => realNumber(r.value)),
-    )
-    .switchUnit((r) => massPerHeadPerDay('DryMatter', r.value))
-    .named('MIj');
-};
-
 const sumNValues = (results: DairyClassResult[]): Container<Head> => {
   const nValues = results.map((result) => result.N);
   return sum(nValues);
@@ -372,6 +298,7 @@ export function calculateMassOfNitrogenAppliedToSoilsForDairy(
    */
   const {
     classes,
+    breed,
     fractionAppliedToSoils,
     milkProduction,
     system,
@@ -427,30 +354,35 @@ export function calculateMassOfNitrogenAppliedToSoilsForDairy(
     classes.milkingCows,
     MIj,
     MPj,
+    breed,
     constants,
   );
   const heifersGt1Results2 = calculateForClass(
     classes.heifersGt1,
     MIj0,
     MPj0,
+    breed,
     constants,
   );
   const heifersLt1Results3 = calculateForClass(
     classes.heifersLt1,
     MIj0,
     MPj0,
+    breed,
     constants,
   );
   const bullsGt1Results4 = calculateForClass(
     classes.bullsGt1,
     MIj0,
     MPj0,
+    breed,
     constants,
   );
   const bullsLt1Results5 = calculateForClass(
     classes.bullsLt1,
     MIj0,
     MPj0,
+    breed,
     constants,
   );
 

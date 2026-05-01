@@ -5,22 +5,24 @@ import {
 } from '@/calculators/Grains/types/base-crop.input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { calculate52OrganicFertiliser } from '../scope1/5-fertiliser/5.2-organic-fertiliser';
+import { calculate52OrganicFertiliser } from '../../scope1/5-fertiliser/5.2-organic-fertiliser';
 import {
   FertiliserInput,
   FertiliserInputSchema,
   FertiliserInputTransformed,
-} from '../scope1/5-fertiliser/fertiliser.input';
+} from '../../scope1/5-fertiliser/fertiliser.input';
 import {
   CropResidueInput,
   CropResidueInputSchema,
   CropResidueInputTransformed,
-} from '../scope1/6-residue-mgmt/crop-residue.input';
-import { checkDairySystem } from './livestock-domain';
+} from '../../scope1/6-residue-mgmt/crop-residue.input';
+import { checkDairyBreed } from '../dairy-domain';
+import { checkDairySystem } from '../livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
-} from './sheet-comparison';
+} from '../sheet-comparison';
+import * as col from './dairy-tab';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -36,56 +38,80 @@ const getCalculatorInput = (
       .value()
       ?.toString();
 
-  if (cell('B') === undefined) {
+  if (cell(col.columnScenarioKey) === undefined) {
     return undefined;
   }
-  const headMilkingCows = Number(cell('C'));
-  const headHeifersGt1 = Number(cell('C', 1));
-  const headHeifersLt1 = Number(cell('C', 2));
-  const headBullsGt1 = Number(cell('C', 3));
-  const headBullsLt1 = Number(cell('C', 4));
-  const customLiveweightWjMilkingCows = cell('D');
-  const customLiveweightWjHeifersGt1 = cell('D', 1);
-  const customLiveweightWjHeifersLt1 = cell('D', 2);
-  const customLiveweightWjBullsGt1 = cell('D', 3);
-  const customLiveweightWjBullsLt1 = cell('D', 4);
-  const customLiveweightGainLWGjMilkingCows = cell('H');
-  const customLiveweightGainLWGjHeifersGt1 = cell('H', 1);
-  const customLiveweightGainLWGjHeifersLt1 = cell('H', 2);
-  const customLiveweightGainLWGjBullsGt1 = cell('H', 3);
-  const customLiveweightGainLWGjBullsLt1 = cell('H', 4);
-  const customCrudeProteinCPjMilkingCows = cell('N');
-  const customCrudeProteinCPjHeifersGt1 = cell('N', 1);
-  const customCrudeProteinCPjHeifersLt1 = cell('N', 2);
-  const customCrudeProteinCPjBullsGt1 = cell('N', 3);
-  const customCrudeProteinCPjBullsLt1 = cell('N', 4);
-  const customDMDDjMilkingCows = cell('Q');
-  const customDMDDjHeifersGt1 = cell('Q', 1);
-  const customDMDDjHeifersLt1 = cell('Q', 2);
-  const customDMDDjBullsGt1 = cell('Q', 3);
-  const customDMDDjBullsLt1 = cell('Q', 4);
-  const litresPerHeadPerDay = Number(cell('Y')); // MPj
+  const headMilkingCows = Number(cell(col.columnHead));
+  const headHeifersGt1 = Number(cell(col.columnHead, 1));
+  const headHeifersLt1 = Number(cell(col.columnHead, 2));
+  const headBullsGt1 = Number(cell(col.columnHead, 3));
+  const headBullsLt1 = Number(cell(col.columnHead, 4));
+  const customLiveweightWjMilkingCows = cell(col.columnCustomLiveweight);
+  const customLiveweightWjHeifersGt1 = cell(col.columnCustomLiveweight, 1);
+  const customLiveweightWjHeifersLt1 = cell(col.columnCustomLiveweight, 2);
+  const customLiveweightWjBullsGt1 = cell(col.columnCustomLiveweight, 3);
+  const customLiveweightWjBullsLt1 = cell(col.columnCustomLiveweight, 4);
+  const customLiveweightGainLWGjMilkingCows = cell(
+    col.columnCustomLiveweightGain,
+  );
+  const customLiveweightGainLWGjHeifersGt1 = cell(
+    col.columnCustomLiveweightGain,
+    1,
+  );
+  const customLiveweightGainLWGjHeifersLt1 = cell(
+    col.columnCustomLiveweightGain,
+    2,
+  );
+  const customLiveweightGainLWGjBullsGt1 = cell(
+    col.columnCustomLiveweightGain,
+    3,
+  );
+  const customLiveweightGainLWGjBullsLt1 = cell(
+    col.columnCustomLiveweightGain,
+    4,
+  );
+  const customCrudeProteinCPjMilkingCows = cell(col.columnCustomCrudeProtein);
+  const customCrudeProteinCPjHeifersGt1 = cell(col.columnCustomCrudeProtein, 1);
+  const customCrudeProteinCPjHeifersLt1 = cell(col.columnCustomCrudeProtein, 2);
+  const customCrudeProteinCPjBullsGt1 = cell(col.columnCustomCrudeProtein, 3);
+  const customCrudeProteinCPjBullsLt1 = cell(col.columnCustomCrudeProtein, 4);
+  const customDMDDjMilkingCows = cell(col.columnCustomDryMatterDigestibility);
+  const customDMDDjHeifersGt1 = cell(col.columnCustomDryMatterDigestibility, 1);
+  const customDMDDjHeifersLt1 = cell(col.columnCustomDryMatterDigestibility, 2);
+  const customDMDDjBullsGt1 = cell(col.columnCustomDryMatterDigestibility, 3);
+  const customDMDDjBullsLt1 = cell(col.columnCustomDryMatterDigestibility, 4);
+  const litresPerHeadPerDay = Number(
+    cell(col.columnMilkProductionLitresPerHead),
+  ); // MPj
 
-  const milkSolids = cell('AF'); // MSj
-  const fractionAppliedToSoils = Number(cell('AG')); // PF
-  const isInLeachingZone = cell('AH') === 'yes';
-  const rainfallAbove600 = cell('AI') === 'wet';
-  const fatContent = cell('AJ'); // FCj
-  const proteinContent = cell('AK'); // PCj
+  const milkSolids = cell(col.columnMilkSolids); // MSj
+  const fractionAppliedToSoils = Number(cell(col.columnFractionAppliedToSoils)); // PF
+  const isInLeachingZone = cell(col.columnIsInLeachingZone) === 'yes';
+  const rainfallAbove600 = cell(col.columnRainfallAbove600) === 'wet';
+  const fatContent = cell(col.columnFatContent); // FCj
+  const proteinContent = cell(col.columnProteinContent); // PCj
 
-  const system = checkDairySystem(cell('AV'));
-  const customFmPastureProportion = cell('AW');
-  const customFmMilkingShedProportion = cell('AX');
-  const customFmFeedpadProportion = cell('AY');
+  const system = checkDairySystem(cell(col.columnSystem));
+  const customFmPastureProportion = cell(col.columnFmPastureProportion);
+  const customFmMilkingShedProportion = cell(col.columnFmMilkingShedProportion);
+  const customFmFeedpadProportion = cell(col.columnFmFeedpadProportion);
 
-  const milkingShedAnaerobicLagoon = Number(cell('BD') ?? 0);
-  const milkingShedSumpDispersal = Number(cell('BD', 1) ?? 0);
-  const milkingShedDrainToPaddock = Number(cell('BD', 2) ?? 0);
-  const milkingShedSolidStorage = Number(cell('BD', 3) ?? 0);
-  const feedPadAnaerobicLagoon = Number(cell('BE') ?? 0);
-  const feedPadSumpDispersal = Number(cell('BE', 1) ?? 0);
-  const feedPadDrainToPaddock = Number(cell('BE', 2) ?? 0);
-  const feedPadSolidStorage = Number(cell('BE', 3) ?? 0);
+  const milkingShedAnaerobicLagoon = Number(
+    cell(col.columnMilkingShedMMS) ?? 0,
+  );
+  const milkingShedSumpDispersal = Number(
+    cell(col.columnMilkingShedMMS, 1) ?? 0,
+  );
+  const milkingShedDrainToPaddock = Number(
+    cell(col.columnMilkingShedMMS, 2) ?? 0,
+  );
+  const milkingShedSolidStorage = Number(
+    cell(col.columnMilkingShedMMS, 3) ?? 0,
+  );
+  const feedPadAnaerobicLagoon = Number(cell(col.columnFeedPadMMS) ?? 0);
+  const feedPadSumpDispersal = Number(cell(col.columnFeedPadMMS, 1) ?? 0);
+  const feedPadDrainToPaddock = Number(cell(col.columnFeedPadMMS, 2) ?? 0);
+  const feedPadSolidStorage = Number(cell(col.columnFeedPadMMS, 3) ?? 0);
 
   const totalNitrogenExcreted = 0; // TODO: check this
 
@@ -191,6 +217,7 @@ const getCalculatorInput = (
                     : undefined,
                 },
               },
+              breed: checkDairyBreed(cell(col.columnBreed)),
               milkProduction: milkSolids
                 ? {
                     kgSolidsPerHeadPerDay: Number(milkSolids),
@@ -245,7 +272,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`BT${row}`).value());
+  return Number(sheet.cell(`${col.columnExpectedResultLocal}${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
@@ -257,7 +284,7 @@ const extractInputsAndOutput = createSheetExtractor(
 describe('5.2.1.1 dairy Organic Fertiliser N2O (local)', () => {
   it('method 1 purchased scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/5.2-organic-fertiliser.xlsx',
+      './src/modules/test/5.2-organic-fertiliser-n2o/5.2-organic-fertiliser.xlsx',
       '5.2.1.1 (dairy)',
     );
 

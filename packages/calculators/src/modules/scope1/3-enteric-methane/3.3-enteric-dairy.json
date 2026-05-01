@@ -1,6 +1,69 @@
 {
   "records": [
     {
+      "symbol": "Nj=1,2,4",
+      "name": "number of dairy cattle in each class",
+      "units": "head",
+      "type": "input",
+      "expression": "",
+      "line": "242",
+      "notes": ""
+    },
+    {
+      "symbol": "Mj=1,2,4",
+      "name": "daily enteric methane production",
+      "units": "kg CH4/head/day",
+      "type": "expression",
+      "expression": "",
+      "line": "204",
+      "notes": ""
+    },
+    {
+      "symbol": "Dj=1,2,4",
+      "name": "Duration of stay on the farm (days)",
+      "units": "days",
+      "type": "constant",
+      "expression": "",
+      "line": "246",
+      "notes": "can also be supplied as an input"
+    },
+    {
+      "symbol": "Nj=3,5",
+      "name": "number of dairy cattle in each class",
+      "units": "head",
+      "type": "input",
+      "expression": "",
+      "line": "242",
+      "notes": ""
+    },
+    {
+      "symbol": "Mj=3,5",
+      "name": "daily enteric methane production",
+      "units": "kg CH4/head/day",
+      "type": "expression",
+      "expression": "",
+      "line": "204",
+      "notes": ""
+    },
+    {
+      "symbol": "Dj=3,5",
+      "name": "Duration of stay on the farm (days)",
+      "units": "days",
+      "type": "constant",
+      "expression": "",
+      "line": "246",
+      "notes": "can also be supplied as an input"
+    },
+    {
+      "symbol": "MSj",
+      "name": "daily production of milk solids",
+      "units": "kg MS / head / day",
+      "type": "input",
+      "expression": "",
+      "line": "259",
+      "notes": "only required where MPj is not known"
+    },
+    {
       "symbol": "Wj",
       "name": "liveweight",
       "units": "kg",
@@ -29,51 +92,23 @@
       "values": "class 1 = 1.1, other classes = 1.0"
     },
     {
-      "symbol": "MIj",
-      "name": "additional intake required for milk production (kgDM/head/day)",
-      "units": "kg DM / head / day",
-      "type": "expression",
-      "expression": "(MPj * 1.03 * NE) / (GEC * k * qmj)",
-      "line": "234",
-      "notes": ""
-    },
-    {
-      "symbol": "Ij",
-      "name": "feed intake",
-      "units": "kg DM / head / day",
-      "type": "expression",
-      "expression": "(1.185 + 0.00454 * Wj- 0.0000026 * Wj^2 + 0.315 * LWGj)^2 * MRj + MIj",
-      "line": "226",
-      "notes": ""
-    },
-    {
-      "symbol": "MPj",
-      "name": "milk production",
-      "units": "L / head / day",
-      "type": "expression",
-      "expression": "MSj / (0.01 * (FCj + PCj))",
-      "line": "245",
-      "notes": "Can also be supplied as a direct input (l258)"
-    },
-    {
-      "symbol": "NE",
-      "name": "net energy",
-      "units": "MJ net energy / kg milk",
+      "symbol": "DMDj",
+      "name": "dry matter digestibility",
+      "units": "d",
       "type": "constant",
       "expression": "",
-      "line": "278",
-      "notes": "",
-      "values": "3.054"
+      "line": "269",
+      "notes": "can also be supplied as an input",
+      "values": "0.75"
     },
     {
-      "symbol": "GEC",
-      "name": "gross energy content",
-      "units": "MJ / kg DM",
-      "type": "constant",
-      "expression": "",
-      "line": "279",
-      "notes": "",
-      "values": "18.4"
+      "symbol": "qmj",
+      "name": "metabolisability of the diet",
+      "units": "d",
+      "type": "expression",
+      "expression": "0.795 * DMDj- 0.0014",
+      "line": "253",
+      "notes": ""
     },
     {
       "symbol": "k",
@@ -86,22 +121,24 @@
       "values": "0.6"
     },
     {
-      "symbol": "qmj",
-      "name": "metabolisability of the diet",
-      "units": "d",
-      "type": "expression",
-      "expression": "0.795 * DMDj- 0.0014",
-      "line": "253",
-      "notes": ""
+      "symbol": "GEC",
+      "name": "gross energy content",
+      "units": "MJ / kg DM",
+      "type": "constant",
+      "expression": "",
+      "line": "279",
+      "notes": "",
+      "values": "18.4"
     },
     {
-      "symbol": "MSj",
-      "name": "daily production of milk solids",
-      "units": "kg MS / head / day",
-      "type": "input",
+      "symbol": "NE",
+      "name": "net energy",
+      "units": "MJ net energy / kg milk",
+      "type": "constant",
       "expression": "",
-      "line": "259",
-      "notes": "only required where MPj is not known"
+      "line": "278",
+      "notes": "",
+      "values": "3.054"
     },
     {
       "symbol": "FCj",
@@ -124,14 +161,58 @@
       "values": "3.3"
     },
     {
-      "symbol": "DMDj",
-      "name": "dry matter digestibility",
-      "units": "d",
+      "symbol": "MPj",
+      "name": "milk production",
+      "units": "L / head / day",
+      "type": "expression",
+      "expression": "MSj / (0.01 * (FCj + PCj))",
+      "line": "245",
+      "notes": "Can also be supplied as a direct input (l258)"
+    },
+    {
+      "symbol": "MIj",
+      "name": "additional intake required for milk production (kgDM/head/day)",
+      "units": "kg DM / head / day",
+      "type": "expression",
+      "expression": "(MPj * 1.03 * NE) / (GEC * k * qmj)",
+      "line": "234",
+      "notes": ""
+    },
+    {
+      "symbol": "Ij",
+      "name": "feed intake",
+      "units": "kg DM / head / day",
+      "type": "expression",
+      "expression": "(1.185 + 0.00454 * Wj- 0.0000026 * Wj^2 + 0.315 * LWGj)^2 * MRj + MIj",
+      "line": "226",
+      "notes": ""
+    },
+    {
+      "symbol": "Mj",
+      "name": "daily enteric methane production",
+      "units": "kg CH4/head/day",
+      "type": "expression",
+      "expression": "20.7 * Ij * 10^-3",
+      "line": "204",
+      "notes": ""
+    },
+    {
+      "symbol": "MPWenteric,j=3,5",
+      "name": "daily methane production for pre-weaned heifer and bulls calves (<1 year)",
+      "units": "kg CH4/head/day",
       "type": "constant",
       "expression": "",
-      "line": "269",
-      "notes": "can also be supplied as an input",
-      "values": "0.75"
+      "line": "255",
+      "notes": "Table A.1.3.9"
+    },
+    {
+      "symbol": "Eenteric",
+      "name": "Annual methane production",
+      "units": "t CH4",
+      "type": "expression",
+      "expression": "SUM (( Nj=1,2,4 * Mj=1,2,4 * Dj=1,2,4) + (Nj=3,5 * Mj=3,5 * Dj=3,5)+ (Nj=3,5 * MPWenteric,j=3,5 * Dj=3,5)) * 10^-3",
+      "line": "192",
+      "notes": ""
     }
   ]
 }

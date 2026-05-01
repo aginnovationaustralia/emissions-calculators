@@ -82,7 +82,7 @@
       "notes": ""
     },
     {
-      "symbol": "EFjm=1-13",
+      "symbol": "EFm=1-13",
       "name": "Emissions factor for nitrous oxide emissions per MMS",
       "units": "kg N2O-N/kg N",
       "type": "constant",
@@ -91,7 +91,7 @@
       "notes": ""
     },
     {
-      "symbol": "FracGASMjm-1-13",
+      "symbol": "FracGASMm=1-13",
       "name": "Fraction of nitrous oxide volatilised from each MMS",
       "units": "kg volatile N / kg N",
       "type": "constant",
@@ -113,7 +113,7 @@
       "name": "Mass of nitrogen applied to soil",
       "units": "Mass N",
       "type": "expression",
-      "expression": "SUM SUM (AUMMS + AFMMS) * (1 - EFjm=1-13- FracGASMjm-1-13)- Mleach,MMS) * PF",
+      "expression": "SUM SUM (MNjm=1-13 * (1 - EFm=1-13- FracGASMm=1-13) - MNLeachjM) * PF",
       "line": "866",
       "notes": ""
     },

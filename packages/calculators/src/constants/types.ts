@@ -26,6 +26,7 @@ import {
   CarsLightCommercialPre2004FuelType,
   ClimateZone,
   CropType,
+  DairyCattleBreed,
   DairyClass,
   DairyMMSType,
   DairySystem,
@@ -366,8 +367,7 @@ type TimeInLocations = {
   feedPad: RealNumber;
 };
 
-type ClassWeights = {
-  liveweight: Mass<'Liveweight'>;
+type DairyClassFactors = {
   referenceWeight: Mass<'Liveweight'>;
   liveweightGain: MassPerHeadPerDay<'Liveweight'>;
 };
@@ -380,7 +380,10 @@ type DairyMMSFactors = {
 type PreWeanedFactors = {
   urinaryN: MassPerHeadPerDay<'N'>;
   faecalN: MassPerHeadPerDay<'N'>;
+  methaneProduction: MassPerHeadPerDay<'CH4'>;
 };
+
+type BreedWeights = Record<DairyClass, Mass<'Liveweight'>>;
 
 export type DairyConstants = NamedConstants & {
   TIME_IN_LOCATIONS: Record<DairySystem, TimeInLocations>;
@@ -390,7 +393,7 @@ export type DairyConstants = NamedConstants & {
   GROSS_ENERGY_CONTENT: EnergyPerMass<'DryMatter'>;
   EFFICIENCY_OF_MILK_PRODUCTION: RealNumber;
   CRUDE_PROTEIN_CONTENT_OF_FEED: RealNumber;
-  CLASS_WEIGHTS: Record<DairyClass, ClassWeights>;
+  DAIRY_CLASS_FACTORS: Record<DairyClass, DairyClassFactors>;
   INCREASE_METABOLIC_RATE_FOR_MILK: {
     milkingCows: MassPerHeadPerDay<'DryMatter'>;
     others: MassPerHeadPerDay<'DryMatter'>;
@@ -402,6 +405,7 @@ export type DairyConstants = NamedConstants & {
   };
   MMS: Record<DairyMMSType, DairyMMSFactors>;
   FracLEACH: RealNumber;
+  LIVEWEIGHTS_BY_BREED: Record<DairyCattleBreed, BreedWeights>;
 };
 
 type PoultryClassFactors = {
