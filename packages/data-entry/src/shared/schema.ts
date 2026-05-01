@@ -10,6 +10,7 @@ export const symbolRecordSchema = z.object({
   type: recordTypeSchema,
   expression: z.string(),
   line: z.string(),
+  method2Input: z.boolean().default(false),
   notes: z.string(),
   values: z.string().optional(),
 });
@@ -38,6 +39,7 @@ export function createEmptyRecord(symbol: string, type: SymbolRecord['type']): S
     type,
     expression: '',
     line: '',
+    method2Input: false,
     notes: '',
     ...(type === 'constant' ? { values: '' } : {}),
   };
