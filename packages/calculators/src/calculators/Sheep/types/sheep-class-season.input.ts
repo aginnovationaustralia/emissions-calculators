@@ -1,5 +1,5 @@
 import { input } from '@/tools/inputs';
-import { head, mass, massPerHeadPerDay, realNumber } from '@/tools/units';
+import { head, mass, massPerArea, realNumber } from '@/tools/units';
 import { object, percentage } from '@/types/schemas';
 import { z } from 'zod';
 
@@ -20,17 +20,27 @@ export const SheepClassSeasonInputSchema = object({
     .transform((val) =>
       val === undefined ? undefined : input('Wijkln', mass('Liveweight', val)),
     ),
-  method2LiveweightGain: z
+  method2DryMatterAvailability: z
     .number()
     .optional()
     .meta({
       description:
-        'Method 2: supply an exact value for liveweight gain for this class for this season based on farm records',
+        'Method 2: supply an exact value for dry matter availability for this class for this season based on farm records',
     })
     .transform((val) =>
       val === undefined
         ? undefined
-        : input('LWGijkln', massPerHeadPerDay('Liveweight', val)),
+        : input('DMAjk', massPerArea('DryMatter', val)),
+    ),
+  method2DryMatterDigestibility: z
+    .number()
+    .optional()
+    .meta({
+      description:
+        'Method 2: supply an exact value for dry matter digestibility for this class for this season based on farm records',
+    })
+    .transform((val) =>
+      val === undefined ? undefined : input('DMDjk', realNumber(val)),
     ),
 });
 
