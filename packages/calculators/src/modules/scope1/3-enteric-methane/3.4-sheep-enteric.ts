@@ -59,33 +59,46 @@ function calculateDailyFeedIntakeIjk(
   */
 
   const { name } = classInput;
+  const {
+    method2Liveweight,
+    method2DryMatterAvailability,
+    method2DryMatterDigestibility,
+  } = classInput[seasonName];
 
-  const DMAjk = selectConstant(
-    constants.SHEEP,
-    'SEASONAL_FACTORS',
-    input.state,
-    name,
-    seasonName,
-    'dryMatterAvailability',
+  const DMAjk = (
+    method2DryMatterAvailability ??
+    selectConstant(
+      constants.SHEEP,
+      'SEASONAL_FACTORS',
+      input.state,
+      name,
+      seasonName,
+      'dryMatterAvailability',
+    )
   ).named(`DMAjk=${name}k=${seasonName}`);
 
-  const DMDjk = selectConstant(
-    constants.SHEEP,
-    'SEASONAL_FACTORS',
-    input.state,
-    name,
-    seasonName,
-    'dryMatterDigestibility',
+  const DMDjk = (
+    method2DryMatterDigestibility ??
+    selectConstant(
+      constants.SHEEP,
+      'SEASONAL_FACTORS',
+      input.state,
+      name,
+      seasonName,
+      'dryMatterDigestibility',
+    )
   ).named(`DMDjk=${name}k=${seasonName}`);
 
-  const Wjk = selectConstant(
-    constants.SHEEP,
-    'SEASONAL_FACTORS',
-    input.state,
-    name,
-    seasonName,
-    'liveweight',
-  ).named(`Wj=${name},k=${seasonName}`);
+  const Wjk =
+    method2Liveweight ??
+    selectConstant(
+      constants.SHEEP,
+      'SEASONAL_FACTORS',
+      input.state,
+      name,
+      seasonName,
+      'liveweight',
+    ).named(`Wj=${name},k=${seasonName}`);
 
   const qmjk = num(0.795)
     .multiply(DMDjk)
