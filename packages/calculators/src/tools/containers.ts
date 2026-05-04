@@ -24,6 +24,7 @@ import {
   isMassPerDay,
   isMassPerElectricity,
   isMassPerEnergy,
+  isMassPerHead,
   isMassPerHeadPerDay,
   isMassPerMass,
   isMassPerTime,
@@ -47,6 +48,7 @@ import {
   MassPerDay,
   MassPerElectricity,
   MassPerEnergy,
+  MassPerHead,
   massPerHeadPerDay,
   MassPerHeadPerDay,
   MassPerMass,
@@ -223,6 +225,13 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<Head>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerDay<ExtractMassPerHeadPerDaySubstance<UL>>>;
+  // Head * MassPerHead<S> = Mass<S>
+  multiply<S extends Substance>(
+    this: BaseContainer<Head>,
+    right: Container<MassPerHead<S>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<Mass<S>>;
+
   // MassPerEnergy<S1> * EnergyPerMass<S1> = RealNumber
   multiply<S extends Substance>(
     this: BaseContainer<MassPerEnergy<S>>,
@@ -328,6 +337,8 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         isMassPerVolume(rightUnit)
       ) {
         unit = massPerHeadPerDay(rightUnit.mass);
+      } else if (isHead(leftUnit) && isMassPerHead(rightUnit)) {
+        unit = mass(rightUnit.substance);
       } else if (isMassPerEnergy(leftUnit) && isEnergyPerMass(rightUnit)) {
         unit = realNumber();
       } else if (isMassPerVolume(leftUnit) && isVolume(rightUnit)) {

@@ -1,16 +1,29 @@
 import {
+  BuffaloClass,
+  BuffaloClasses,
   ClimateZone,
   ClimateZones,
   DairySystem,
   DairySystems,
+  DeerClass,
+  DeerClasses,
   ExtendedRegion,
   ExtendedRegions,
   FeedlotMMSType,
   FeedlotMMSTypes,
+  GoatClass,
+  GoatClasses,
   GrazingProductionSystem,
   GrazingProductionSystems,
+  GrazingProductionSystemsWithRainfall,
   LimitedRegion,
   LimitedRegions,
+  MeanAnnualTemperature,
+  MeanAnnualTemperatures,
+  OtherLivestockType,
+  OtherLivestockTypes,
+  PureState,
+  PureStates,
   StateOrRegion,
   StateOrRegions,
   SwineMMSType,
@@ -81,4 +94,65 @@ export const checkGrazingSystem = (
     throw new Error(`Invalid grazing system: ${system}`);
   }
   return system as GrazingProductionSystem;
+};
+
+export const checkOtherLivestockClass = (
+  type: string | undefined,
+): OtherLivestockType => {
+  if (!OtherLivestockTypes.includes(type as OtherLivestockType)) {
+    throw new Error(`Invalid other livestock class: ${type}`);
+  }
+  return type as OtherLivestockType;
+};
+
+export const checkBuffaloClass = (cls: string | undefined): BuffaloClass => {
+  if (!BuffaloClasses.includes(cls as BuffaloClass)) {
+    throw new Error(`Invalid buffalo class: ${cls}`);
+  }
+  return cls as BuffaloClass;
+};
+
+export const checkGoatClass = (cls: string | undefined): GoatClass => {
+  if (!GoatClasses.includes(cls as GoatClass)) {
+    throw new Error(`Invalid goat class: ${cls}`);
+  }
+  return cls as GoatClass;
+};
+
+export const checkDeerClass = (cls: string | undefined): DeerClass => {
+  if (!DeerClasses.includes(cls as DeerClass)) {
+    throw new Error(`Invalid deer class: ${cls}`);
+  }
+  return cls as DeerClass;
+};
+
+export const checkPureState = (state: string | undefined): PureState => {
+  if (!PureStates.includes(state as PureState)) {
+    throw new Error(`Invalid pure state: ${state}`);
+  }
+  return state as PureState;
+};
+
+export const checkMeanAnnualTemperature = (
+  temperature: string | undefined,
+): MeanAnnualTemperature => {
+  if (!MeanAnnualTemperatures.includes(temperature as MeanAnnualTemperature)) {
+    throw new Error(`Invalid mean annual temperature: ${temperature}`);
+  }
+  return temperature as MeanAnnualTemperature;
+};
+
+export const checkGrazingProductionSystemsWithRainfall = (
+  system: string | undefined,
+): GrazingProductionSystemsWithRainfall => {
+  if (
+    !GrazingProductionSystemsWithRainfall.includes(
+      system as GrazingProductionSystemsWithRainfall,
+    )
+  ) {
+    throw new Error(
+      `Invalid grazing production system with rainfall: ${system}`,
+    );
+  }
+  return system as GrazingProductionSystemsWithRainfall;
 };

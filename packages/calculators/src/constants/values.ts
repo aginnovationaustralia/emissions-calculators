@@ -16,6 +16,7 @@ import {
   massPerAreaPerYear,
   massPerElectricity,
   massPerEnergy,
+  massPerHead,
   massPerHeadPerDay,
   massPerMass,
   massPerTime,
@@ -2216,6 +2217,106 @@ export const livestockConstants: LivestockConstants = {
       'CO2e',
       'Purchased Mineral Supplement',
       0.677,
+    ),
+  },
+
+  // Appendix A.1.5.1
+  OTHER_LIVESTOCK_EMISSION_FACTORS: {
+    'Emus/ostriches': {
+      ENTERIC: massPerHead('CH4', 5),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.34),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 7),
+    },
+    'Mules/asses': {
+      ENTERIC: massPerHead('CH4', 10),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.91),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 13.2),
+    },
+    Alpacas: {
+      ENTERIC: massPerHead('CH4', 8),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.34),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 7),
+    },
+    Horses: {
+      ENTERIC: massPerHead('CH4', 18),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 2.73),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 39.5),
+    },
+    Camels: {
+      ENTERIC: massPerHead('CH4', 46),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 2.73),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 39.5),
+    },
+    Buffalo: {
+      ENTERIC: massPerHead('CH4', 68),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 2.73),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 39.5),
+    },
+    Goats: {
+      ENTERIC: massPerHead('CH4', 5),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.34),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 7),
+    },
+    Deer: {
+      ENTERIC: massPerHead('CH4', 20),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.91),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 13.2),
+    },
+  },
+
+  METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE: {
+    '10 or below': realNumber(0.66),
+    '11': realNumber(0.68),
+    '12': realNumber(0.7),
+    '13': realNumber(0.71),
+    '14': realNumber(0.73),
+    '15': realNumber(0.74),
+    '16': realNumber(0.75),
+    '17': realNumber(0.76),
+    '18': realNumber(0.77),
+    '19': realNumber(0.77),
+    '20': realNumber(0.78),
+    '21': realNumber(0.78),
+    '22': realNumber(0.78),
+    '23': realNumber(0.79),
+    '24': realNumber(0.79),
+    '25': realNumber(0.79),
+    '26': realNumber(0.79),
+    '27': realNumber(0.8),
+    '28 or above': realNumber(0.8),
+  },
+
+  OTHER_LIVESTOCK_METHANE_CONVERSION_BY_STATE: {
+    ACT: realNumber(0.71),
+    NSW: realNumber(0.75),
+    NT: realNumber(0.8),
+    QLD: realNumber(0.78),
+    SA: realNumber(0.74),
+    TAS: realNumber(0.7),
+    VIC: realNumber(0.74),
+    WA: realNumber(0.76),
+  },
+
+  OTHER_LIVESTOCK_METHANE_CONVERSION_PASTURE: realNumber(0.0047),
+
+  EFPRP: {
+    wet: massPerMass('N2O', 'N', 0.006),
+    dry: massPerMass('N2O', 'N', 0.002),
+  },
+
+  EF_ATMOSPHERIC_DEPOSITION: {
+    'Non-irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0018),
+    'Irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0059),
+    'Irrigated crop': massPerMass('N2O', 'Volatilised N', 0.007),
+    'Non-irrigated crop (low rainfall)': massPerMass(
+      'N2O',
+      'Volatilised N',
+      0.0029,
+    ),
+    'Non-irrigated crop (high rainfall)': massPerMass(
+      'N2O',
+      'Volatilised N',
+      0.008,
     ),
   },
 };
@@ -5003,11 +5104,6 @@ export const beefPastureConstants: BeefPastureConstants = {
     },
   },
 
-  EFPRP: {
-    wet: massPerMass('N2O', 'N', 0.006),
-    dry: massPerMass('N2O', 'N', 0.002),
-  },
-
   MILK_INTAKE: {
     'ACT/NSW': {
       calving: massPerHeadPerDay('Milk', 6),
@@ -5045,22 +5141,6 @@ export const beefPastureConstants: BeefPastureConstants = {
       calving: massPerHeadPerDay('Milk', 4),
       afterCalving: massPerHeadPerDay('Milk', 3),
     },
-  },
-
-  EF_ATMOSPHERIC_DEPOSITION: {
-    'Non-irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0018),
-    'Irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0059),
-    'Irrigated crop': massPerMass('N2O', 'Volatilised N', 0.007),
-    'Non-irrigated crop (low rainfall)': massPerMass(
-      'N2O',
-      'Volatilised N',
-      0.0029,
-    ),
-    'Non-irrigated crop (high rainfall)': massPerMass(
-      'N2O',
-      'Volatilised N',
-      0.008,
-    ),
   },
 
   FRAC_WET_SOIL: {

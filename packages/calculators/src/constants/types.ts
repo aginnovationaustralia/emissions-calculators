@@ -8,6 +8,7 @@ import {
   MassPerAreaPerYear,
   MassPerElectricity,
   MassPerEnergy,
+  MassPerHead,
   MassPerHeadPerDay,
   MassPerMass,
   MassPerTime,
@@ -45,8 +46,10 @@ import {
   InorganicFertiliserType,
   LightDutyFuelType,
   LimitedRegion,
+  MeanAnnualTemperature,
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
+  OtherLivestockType,
   PastureType,
   PerennialWoodyCropFull,
   PerennialWoodyCropPartial,
@@ -426,6 +429,12 @@ export type PoultryConstants = NamedConstants & {
   MMS: Record<PoultryMMSType, PoultryMMSFactors>;
 };
 
+type OtherLivestockFactors = {
+  ENTERIC: MassPerHead<'CH4'>;
+  VOLATILE_SOLIDS: MassPerHeadPerDay<'Volatile Solids'>;
+  NITROGEN_EXCRETED: MassPerHeadPerDay<'N'>;
+};
+
 export type LivestockConstants = NamedConstants & {
   PURCHASED_FEED_FACTORS: {
     regionless: Record<
@@ -445,6 +454,27 @@ export type LivestockConstants = NamedConstants & {
   PURCHASED_MINERAL_SUPPLEMENT_FACTORS: Record<
     PurchasedMineralSupplementType,
     MassPerMass<'CO2e', 'Purchased Mineral Supplement'>
+  >;
+
+  OTHER_LIVESTOCK_EMISSION_FACTORS: Record<
+    OtherLivestockType,
+    OtherLivestockFactors
+  >;
+
+  OTHER_LIVESTOCK_METHANE_CONVERSION_BY_STATE: Record<PureState, RealNumber>;
+
+  METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE: Record<
+    MeanAnnualTemperature,
+    RealNumber
+  >;
+
+  OTHER_LIVESTOCK_METHANE_CONVERSION_PASTURE: RealNumber;
+
+  EFPRP: Record<'wet' | 'dry', MassPerMass<'N2O', 'N'>>;
+
+  EF_ATMOSPHERIC_DEPOSITION: Record<
+    GrazingProductionSystemsWithRainfall,
+    MassPerMass<'N2O', 'Volatilised N'>
   >;
 };
 
@@ -467,15 +497,9 @@ export type BeefPastureConstants = NamedConstants & {
   MCF_PASTURE: RealNumber;
   MCF_LAGOON: Record<ClimateZone, RealNumber>;
   LIVEWEIGHT: Record<ExtendedRegion, WeightFactorsByClass>;
-  EFPRP: Record<'wet' | 'dry', MassPerMass<'N2O', 'N'>>;
   MILK_INTAKE: Record<
     LimitedRegion,
     Record<'calving' | 'afterCalving', MassPerHeadPerDay<'Milk'>>
-  >;
-
-  EF_ATMOSPHERIC_DEPOSITION: Record<
-    GrazingProductionSystemsWithRainfall,
-    MassPerMass<'N2O', 'Volatilised N'>
   >;
 
   FRAC_WET_SOIL: Record<StateOrRegion, RealNumber>;

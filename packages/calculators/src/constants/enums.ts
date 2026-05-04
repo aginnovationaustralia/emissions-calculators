@@ -1026,6 +1026,7 @@ export const WastewaterFacilityTypes = [
   'Deep anaerobic lagoon', // > 2m
 ] as const;
 export type WastewaterFacilityType = (typeof WastewaterFacilityTypes)[number];
+
 export const PureStates = [
   'ACT',
   'NSW',
@@ -1216,3 +1217,73 @@ export const DairyCattleBreeds = [
   'Illawarra/Aussie Red',
 ] as const;
 export type DairyCattleBreed = (typeof DairyCattleBreeds)[number];
+
+export const BuffaloClasses = ['Bulls', 'Cows', 'Steers', 'Calves'] as const;
+export type BuffaloClass = (typeof BuffaloClasses)[number];
+
+export const GoatClasses = [
+  'Bucks/Billy',
+  'Wethers',
+  'Maiden breeding does/nannies',
+  'Breeding does/nannies',
+  'Other',
+  'Kids',
+] as const;
+export type GoatClass = (typeof GoatClasses)[number];
+
+export const DeerClasses = [
+  'Bucks',
+  'Breeding Does',
+  'Other Does',
+  'Fawn',
+] as const;
+export type DeerClass = (typeof DeerClasses)[number];
+
+export const OtherLivestockClasslessTypes = [
+  'Camels',
+  'Alpacas',
+  'Horses',
+  'Mules/asses',
+  'Emus/ostriches',
+] as const;
+export type OtherLivestockClasslessType =
+  (typeof OtherLivestockClasslessTypes)[number];
+
+export const isOtherLivestockClasslessType = (
+  type: string,
+): type is OtherLivestockClasslessType => {
+  return OtherLivestockClasslessTypes.includes(
+    type as OtherLivestockClasslessType,
+  );
+};
+
+export const OtherLivestockTypes = [
+  'Buffalo',
+  'Goats',
+  'Deer',
+  ...OtherLivestockClasslessTypes,
+] as const;
+export type OtherLivestockType = (typeof OtherLivestockTypes)[number];
+
+export const MeanAnnualTemperatures = [
+  '10 or below',
+  '11',
+  '12',
+  '13',
+  '14',
+  '15',
+  '16',
+  '17',
+  '18',
+  '19',
+  '20',
+  '21',
+  '22',
+  '23',
+  '24',
+  '25',
+  '26',
+  '27',
+  '28 or above',
+] as const;
+export type MeanAnnualTemperature = (typeof MeanAnnualTemperatures)[number];
