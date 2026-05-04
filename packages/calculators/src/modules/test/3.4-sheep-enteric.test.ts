@@ -3,6 +3,7 @@ import {
   SheepInputSchema,
   SheepInputTransformed,
 } from '@/calculators/Sheep/types/input';
+import type { SheepClassSeasonInput } from '@/calculators/Sheep/types/sheep-class-season.input';
 import {
   SheepClassInput,
   SheepClassWithLambingInput,
@@ -41,125 +42,45 @@ const getCalculatorInput = (
     return undefined;
   }
 
+  const readSheepClassSeason = (
+    offsetRows: number,
+  ): SheepClassSeasonInput => {
+    const customLiveweight = cell(columnCustomLiveweight, offsetRows);
+    const customDryMatterAvailability = cell(
+      columnCustomDryMatterAvailability,
+      offsetRows,
+    );
+    const customDryMatterDigestibility = cell(
+      columnCustomDryMatterDigestibility,
+      offsetRows,
+    );
+    return {
+      head: Number(cell(columnHead, offsetRows)),
+      method2Liveweight:
+        method === '2' && customLiveweight
+          ? Number(customLiveweight)
+          : undefined,
+      method2DryMatterAvailability:
+        method === '2' && customDryMatterAvailability
+          ? Number(customDryMatterAvailability)
+          : undefined,
+      method2DryMatterDigestibility:
+        method === '2' && customDryMatterDigestibility
+          ? Number(customDryMatterDigestibility)
+          : undefined,
+    };
+  };
+
   const readSheepClass = (offset: number): SheepClassInput | undefined => {
     const offsetRows = offset * 4;
-    const springHeadRaw = cell(columnHead, offsetRows);
-    if (springHeadRaw === undefined) {
+    if (cell(columnHead, offsetRows) === undefined) {
       return undefined;
     }
-    const springHead = Number(springHeadRaw);
-    const summerHead = Number(cell(columnHead, offsetRows + 1));
-    const autumnHead = Number(cell(columnHead, offsetRows + 2));
-    const winterHead = Number(cell(columnHead, offsetRows + 3));
-    const springCustomLiveweight = cell(columnCustomLiveweight, offsetRows);
-    const summerCustomLiveweight = cell(columnCustomLiveweight, offsetRows + 1);
-    const autumnCustomLiveweight = cell(columnCustomLiveweight, offsetRows + 2);
-    const winterCustomLiveweight = cell(columnCustomLiveweight, offsetRows + 3);
-    const springCustomDryMatterAvailability = cell(
-      columnCustomDryMatterAvailability,
-      offsetRows,
-    );
-    const summerCustomDryMatterAvailability = cell(
-      columnCustomDryMatterAvailability,
-      offsetRows + 1,
-    );
-    const autumnCustomDryMatterAvailability = cell(
-      columnCustomDryMatterAvailability,
-      offsetRows + 2,
-    );
-    const winterCustomDryMatterAvailability = cell(
-      columnCustomDryMatterAvailability,
-      offsetRows + 3,
-    );
-    const springCustomDryMatterDigestibility = cell(
-      columnCustomDryMatterDigestibility,
-      offsetRows,
-    );
-    const summerCustomDryMatterDigestibility = cell(
-      columnCustomDryMatterDigestibility,
-      offsetRows + 1,
-    );
-    const autumnCustomDryMatterDigestibility = cell(
-      columnCustomDryMatterDigestibility,
-      offsetRows + 2,
-    );
-    const winterCustomDryMatterDigestibility = cell(
-      columnCustomDryMatterDigestibility,
-      offsetRows + 3,
-    );
-    const springLiveweight =
-      method === '2' && springCustomLiveweight
-        ? Number(springCustomLiveweight)
-        : undefined;
-    const summerLiveweight =
-      method === '2' && summerCustomLiveweight
-        ? Number(summerCustomLiveweight)
-        : undefined;
-    const autumnLiveweight =
-      method === '2' && autumnCustomLiveweight
-        ? Number(autumnCustomLiveweight)
-        : undefined;
-    const winterLiveweight =
-      method === '2' && winterCustomLiveweight
-        ? Number(winterCustomLiveweight)
-        : undefined;
-    const springDryMatterAvailability =
-      method === '2' && springCustomDryMatterAvailability
-        ? Number(springCustomDryMatterAvailability)
-        : undefined;
-    const summerDryMatterAvailability =
-      method === '2' && summerCustomDryMatterAvailability
-        ? Number(summerCustomDryMatterAvailability)
-        : undefined;
-    const autumnDryMatterAvailability =
-      method === '2' && autumnCustomDryMatterAvailability
-        ? Number(autumnCustomDryMatterAvailability)
-        : undefined;
-    const winterDryMatterAvailability =
-      method === '2' && winterCustomDryMatterAvailability
-        ? Number(winterCustomDryMatterAvailability)
-        : undefined;
-    const springDryMatterDigestibility =
-      method === '2' && springCustomDryMatterDigestibility
-        ? Number(springCustomDryMatterDigestibility)
-        : undefined;
-    const summerDryMatterDigestibility =
-      method === '2' && summerCustomDryMatterDigestibility
-        ? Number(summerCustomDryMatterDigestibility)
-        : undefined;
-    const autumnDryMatterDigestibility =
-      method === '2' && autumnCustomDryMatterDigestibility
-        ? Number(autumnCustomDryMatterDigestibility)
-        : undefined;
-    const winterDryMatterDigestibility =
-      method === '2' && winterCustomDryMatterDigestibility
-        ? Number(winterCustomDryMatterDigestibility)
-        : undefined;
     return {
-      spring: {
-        head: springHead,
-        method2Liveweight: springLiveweight,
-        method2DryMatterAvailability: springDryMatterAvailability,
-        method2DryMatterDigestibility: springDryMatterDigestibility,
-      },
-      summer: {
-        head: summerHead,
-        method2Liveweight: summerLiveweight,
-        method2DryMatterAvailability: summerDryMatterAvailability,
-        method2DryMatterDigestibility: summerDryMatterDigestibility,
-      },
-      autumn: {
-        head: autumnHead,
-        method2Liveweight: autumnLiveweight,
-        method2DryMatterAvailability: autumnDryMatterAvailability,
-        method2DryMatterDigestibility: autumnDryMatterDigestibility,
-      },
-      winter: {
-        head: winterHead,
-        method2Liveweight: winterLiveweight,
-        method2DryMatterAvailability: winterDryMatterAvailability,
-        method2DryMatterDigestibility: winterDryMatterDigestibility,
-      },
+      spring: readSheepClassSeason(offsetRows),
+      summer: readSheepClassSeason(offsetRows + 1),
+      autumn: readSheepClassSeason(offsetRows + 2),
+      winter: readSheepClassSeason(offsetRows + 3),
     };
   };
 
@@ -167,152 +88,29 @@ const getCalculatorInput = (
     offset: number,
   ): SheepClassWithLambingInput | undefined => {
     const offsetRows = offset * 4;
-    const springHeadRaw = cell(columnHead, offsetRows);
-    if (springHeadRaw === undefined) {
+    if (cell(columnHead, offsetRows) === undefined) {
       return undefined;
     }
-    const springHead = Number(springHeadRaw);
-    const summerHead = Number(cell(columnHead, offsetRows + 1));
-    const autumnHead = Number(cell(columnHead, offsetRows + 2));
-    const winterHead = Number(cell(columnHead, offsetRows + 3));
-    const springCustomLiveweight = cell(columnCustomLiveweight, offsetRows);
-    const summerCustomLiveweight = cell(columnCustomLiveweight, offsetRows + 1);
-    const autumnCustomLiveweight = cell(columnCustomLiveweight, offsetRows + 2);
-    const winterCustomLiveweight = cell(columnCustomLiveweight, offsetRows + 3);
-    const springCustomDryMatterAvailability = cell(
-      columnCustomDryMatterAvailability,
-      offsetRows,
-    );
-    const summerCustomDryMatterAvailability = cell(
-      columnCustomDryMatterAvailability,
-      offsetRows + 1,
-    );
-    const autumnCustomDryMatterAvailability = cell(
-      columnCustomDryMatterAvailability,
-      offsetRows + 2,
-    );
-    const winterCustomDryMatterAvailability = cell(
-      columnCustomDryMatterAvailability,
-      offsetRows + 3,
-    );
-    const springCustomDryMatterDigestibility = cell(
-      columnCustomDryMatterDigestibility,
-      offsetRows,
-    );
-    const summerCustomDryMatterDigestibility = cell(
-      columnCustomDryMatterDigestibility,
-      offsetRows + 1,
-    );
-    const autumnCustomDryMatterDigestibility = cell(
-      columnCustomDryMatterDigestibility,
-      offsetRows + 2,
-    );
-    const winterCustomDryMatterDigestibility = cell(
-      columnCustomDryMatterDigestibility,
-      offsetRows + 3,
-    );
-    const springPercentLambing = Number(cell(columnLambingRate, offsetRows));
-    const summerPercentLambing = Number(
-      cell(columnLambingRate, offsetRows + 1),
-    );
-    const autumnPercentLambing = Number(
-      cell(columnLambingRate, offsetRows + 2),
-    );
-    const winterPercentLambing = Number(
-      cell(columnLambingRate, offsetRows + 3),
-    );
-    const springPercentLambMarking = Number(
-      cell(columnMarkingRate, offsetRows),
-    );
-    const summerPercentLambMarking = Number(
-      cell(columnMarkingRate, offsetRows + 1),
-    );
-    const autumnPercentLambMarking = Number(
-      cell(columnMarkingRate, offsetRows + 2),
-    );
-    const winterPercentLambMarking = Number(
-      cell(columnMarkingRate, offsetRows + 3),
-    );
-    const springLiveweight =
-      method === '2' && springCustomLiveweight
-        ? Number(springCustomLiveweight)
-        : undefined;
-    const summerLiveweight =
-      method === '2' && summerCustomLiveweight
-        ? Number(summerCustomLiveweight)
-        : undefined;
-    const autumnLiveweight =
-      method === '2' && autumnCustomLiveweight
-        ? Number(autumnCustomLiveweight)
-        : undefined;
-    const winterLiveweight =
-      method === '2' && winterCustomLiveweight
-        ? Number(winterCustomLiveweight)
-        : undefined;
-    const springDryMatterAvailability =
-      method === '2' && springCustomDryMatterAvailability
-        ? Number(springCustomDryMatterAvailability)
-        : undefined;
-    const summerDryMatterAvailability =
-      method === '2' && summerCustomDryMatterAvailability
-        ? Number(summerCustomDryMatterAvailability)
-        : undefined;
-    const autumnDryMatterAvailability =
-      method === '2' && autumnCustomDryMatterAvailability
-        ? Number(autumnCustomDryMatterAvailability)
-        : undefined;
-    const winterDryMatterAvailability =
-      method === '2' && winterCustomDryMatterAvailability
-        ? Number(winterCustomDryMatterAvailability)
-        : undefined;
-    const springDryMatterDigestibility =
-      method === '2' && springCustomDryMatterDigestibility
-        ? Number(springCustomDryMatterDigestibility)
-        : undefined;
-    const summerDryMatterDigestibility =
-      method === '2' && summerCustomDryMatterDigestibility
-        ? Number(summerCustomDryMatterDigestibility)
-        : undefined;
-    const autumnDryMatterDigestibility =
-      method === '2' && autumnCustomDryMatterDigestibility
-        ? Number(autumnCustomDryMatterDigestibility)
-        : undefined;
-    const winterDryMatterDigestibility =
-      method === '2' && winterCustomDryMatterDigestibility
-        ? Number(winterCustomDryMatterDigestibility)
-        : undefined;
     return {
       spring: {
-        head: springHead,
-        method2Liveweight: springLiveweight,
-        method2DryMatterAvailability: springDryMatterAvailability,
-        method2DryMatterDigestibility: springDryMatterDigestibility,
-        percentLambing: springPercentLambing,
-        percentLambMarking: springPercentLambMarking,
+        ...readSheepClassSeason(offsetRows),
+        percentLambing: Number(cell(columnLambingRate, offsetRows)),
+        percentLambMarking: Number(cell(columnMarkingRate, offsetRows)),
       },
       summer: {
-        head: summerHead,
-        method2Liveweight: summerLiveweight,
-        method2DryMatterAvailability: summerDryMatterAvailability,
-        method2DryMatterDigestibility: summerDryMatterDigestibility,
-        percentLambing: summerPercentLambing,
-        percentLambMarking: summerPercentLambMarking,
+        ...readSheepClassSeason(offsetRows + 1),
+        percentLambing: Number(cell(columnLambingRate, offsetRows + 1)),
+        percentLambMarking: Number(cell(columnMarkingRate, offsetRows + 1)),
       },
       autumn: {
-        head: autumnHead,
-        method2Liveweight: autumnLiveweight,
-        method2DryMatterAvailability: autumnDryMatterAvailability,
-        method2DryMatterDigestibility: autumnDryMatterDigestibility,
-        percentLambing: autumnPercentLambing,
-        percentLambMarking: autumnPercentLambMarking,
+        ...readSheepClassSeason(offsetRows + 2),
+        percentLambing: Number(cell(columnLambingRate, offsetRows + 2)),
+        percentLambMarking: Number(cell(columnMarkingRate, offsetRows + 2)),
       },
       winter: {
-        head: winterHead,
-        method2Liveweight: winterLiveweight,
-        method2DryMatterAvailability: winterDryMatterAvailability,
-        method2DryMatterDigestibility: winterDryMatterDigestibility,
-        percentLambing: winterPercentLambing,
-        percentLambMarking: winterPercentLambMarking,
+        ...readSheepClassSeason(offsetRows + 3),
+        percentLambing: Number(cell(columnLambingRate, offsetRows + 3)),
+        percentLambMarking: Number(cell(columnMarkingRate, offsetRows + 3)),
       },
     };
   };
