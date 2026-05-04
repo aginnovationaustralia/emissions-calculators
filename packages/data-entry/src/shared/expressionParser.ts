@@ -35,12 +35,12 @@ export function parseExpressionLine(line: string): {
 }
 
 /** Characters that separate tokens when they appear at the start/end of a whitespace-separated part. */
-const BOUNDARY_CHARS = /^[\s()[\]{}+\-**/]+|[\s()[\]{}+\-**/]+$/g;
+const BOUNDARY_CHARS = /^[\s()[\]{}+\-x*/]+|[\s()[\]{}+\-x*/]+$/g;
 
 /** Trailing exponent (e.g. ^2.5 or ^-1); strip so Wj^2.5 → Wj for symbol extraction. */
 const TRAILING_EXPONENT = /\^[-]?\d*\.?\d+$/;
 
-const IGNORED_SYMBOLS = ['SUM', '^', 'e'];
+const IGNORED_SYMBOLS = ['SUM', '^', 'e', '*'];
 
 const ignoreSymbol = (symbol: string): boolean =>
   IGNORED_SYMBOLS.some((i) => symbol.includes(i));
@@ -72,10 +72,12 @@ export function extractSymbols(expression: string): string[] {
     const withoutExponent = p.replace(TRAILING_EXPONENT, '');
     const token = withoutExponent.replace(BOUNDARY_CHARS, '').trim();
     if (!token) continue;
+    console.log('token', token);
     if (ignoreSymbol(token)) continue;
     if (isNumeric(token)) continue;
     if (seen.has(token)) continue;
     seen.add(token);
+    console.log('adding token', token);
     result.push(token);
   }
   return result;
