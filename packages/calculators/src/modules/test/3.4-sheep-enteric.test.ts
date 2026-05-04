@@ -17,7 +17,6 @@ import {
   createSheetExtractor,
 } from './sheet-comparison';
 
-// const columnScenario = 'A';
 const columnState = 'B';
 const columnLambingRate = 'E';
 const columnMarkingRate = 'F';
@@ -42,9 +41,7 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const readSheepClassSeason = (
-    offsetRows: number,
-  ): SheepClassSeasonInput => {
+  const readSheepClassSeason = (offsetRows: number): SheepClassSeasonInput => {
     const customLiveweight = cell(columnCustomLiveweight, offsetRows);
     const customDryMatterAvailability = cell(
       columnCustomDryMatterAvailability,
@@ -151,7 +148,7 @@ const extractInputsAndOutput = createSheetExtractor(
 );
 
 describe('3.4.1.1 Sheep enteric methane', () => {
-  it.skip('method 1 matches spreadsheet results', async () => {
+  it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/3.4-sheep-enteric.xlsx',
       '3.4.1.1',

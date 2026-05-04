@@ -611,6 +611,14 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     );
   }
 
+  /**
+   * Implement an operation that limits the value of a unit. You would normally express this as min(n1, n2) but limitedTo is more clear
+   * given the object dot notation needed here
+   * @param this the unit being limited
+   * @param right the limit value
+   * @param baseOrigin the base origin of the new container
+   * @returns a new container with the limited value
+   */
   limitedTo<UL extends NumberUnit>(
     this: BaseContainer<UL>,
     right: number,
