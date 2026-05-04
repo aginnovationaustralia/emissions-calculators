@@ -6,9 +6,11 @@ import {
 
 describe('parseExpressionLine', () => {
   it('splits symbol and expression on =', () => {
-    const result = parseExpressionLine('𝑀𝑙𝑒𝑎𝑐ℎ,𝑃𝑅𝑃 = (𝐴𝑈𝑃𝑅𝑃 + 𝐴𝐹𝑃𝑅𝑃) × 𝐹𝑟𝑎𝑐𝐿𝐸𝐴𝐶𝐻');
-    expect(result.symbol).toBe('𝑀𝑙𝑒𝑎𝑐ℎ,𝑃𝑅𝑃');
-    expect(result.expression).toBe('(𝐴𝑈𝑃𝑅𝑃 + 𝐴𝐹𝑃𝑅𝑃) × 𝐹𝑟𝑎𝑐𝐿𝐸𝐴𝐶𝐻');
+    const result = parseExpressionLine(
+      'Mleach,PRP = (AUPRP + AFPRP) * FracLEACH',
+    );
+    expect(result.symbol).toBe('Mleach,PRP');
+    expect(result.expression).toBe('(AUPRP + AFPRP) * FracLEACH');
   });
 
   it('trims spaces around =', () => {
@@ -47,19 +49,23 @@ describe('extractPastedLineTokens', () => {
 
 describe('extractSymbols', () => {
   it('extracts symbols from expression', () => {
-    const symbols = extractSymbols('(𝐴𝑈𝑃𝑅𝑃 + 𝐴𝐹𝑃𝑅𝑃) × 𝐹𝑟𝑎𝑐𝑊𝐸𝑇,𝑠𝑜𝑖𝑙 × 𝐹𝑟𝑎𝑐𝐿𝐸𝐴𝐶𝐻');
-    expect(symbols).toContain('𝐴𝑈𝑃𝑅𝑃');
-    expect(symbols).toContain('𝐴𝐹𝑃𝑅𝑃');
-    expect(symbols).toContain('𝐹𝑟𝑎𝑐𝑊𝐸𝑇,𝑠𝑜𝑖𝑙');
-    expect(symbols).toContain('𝐹𝑟𝑎𝑐𝐿𝐸𝐴𝐶𝐻');
+    const symbols = extractSymbols(
+      '(AUPRP + AFPRP) * FracWET,soil * FracLEACH',
+    );
+    expect(symbols).toContain('AUPRP');
+    expect(symbols).toContain('AFPRP');
+    expect(symbols).toContain('FracWET,soil');
+    expect(symbols).toContain('FracLEACH');
     expect(symbols).toHaveLength(4);
   });
 
   it('merges token ending with comma and next token (e.g. FracWET, soil → one symbol)', () => {
-    const symbols = extractSymbols('(𝐴𝑈𝑃𝑅𝑃 + 𝐴𝐹𝑃𝑅𝑃) × 𝐹𝑟𝑎𝑐𝑊𝐸𝑇, 𝑠𝑜𝑖𝑙 × 𝐹𝑟𝑎𝑐𝐿𝐸𝐴𝐶𝐻');
-    expect(symbols).toContain('𝐹𝑟𝑎𝑐𝑊𝐸𝑇,𝑠𝑜𝑖𝑙');
-    expect(symbols).not.toContain('𝐹𝑟𝑎𝑐𝑊𝐸𝑇,');
-    expect(symbols).not.toContain('𝑠𝑜𝑖𝑙');
+    const symbols = extractSymbols(
+      '(AUPRP + AFPRP) * FracWET, soil * FracLEACH',
+    );
+    expect(symbols).toContain('FracWET,soil');
+    expect(symbols).not.toContain('FracWET,');
+    expect(symbols).not.toContain('soil');
     expect(symbols).toHaveLength(4);
   });
 
@@ -74,7 +80,7 @@ describe('extractSymbols', () => {
   });
 
   it('allows - and = inside symbols (e.g. AUmmsm=1-13)', () => {
-    const symbols = extractSymbols('(AUPRP + AFPRP) × AUmmsm=1-13');
+    const symbols = extractSymbols('(AUPRP + AFPRP) * AUmmsm=1-13');
     expect(symbols).toContain('AUmmsm=1-13');
     expect(symbols).toContain('AUPRP');
     expect(symbols).toContain('AFPRP');
@@ -82,6 +88,10 @@ describe('extractSymbols', () => {
   });
 
   it('strips curly and square brackets from token edges', () => {
-    expect(extractSymbols('{Foo} + [Bar] × (Baz)')).toEqual(['Foo', 'Bar', 'Baz']);
+    expect(extractSymbols('{Foo} + [Bar] * (Baz)')).toEqual([
+      'Foo',
+      'Bar',
+      'Baz',
+    ]);
   });
 });
