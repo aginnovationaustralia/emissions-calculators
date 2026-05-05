@@ -28,7 +28,7 @@ const monthSeasonMap: Record<Month, Season> = {
   september: 'spring',
   october: 'spring',
   november: 'spring',
-  december: 'winter',
+  december: 'summer',
 };
 
 const monthDurationMap: Record<Month, number> = {

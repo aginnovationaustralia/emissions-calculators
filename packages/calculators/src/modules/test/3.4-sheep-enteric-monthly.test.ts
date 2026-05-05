@@ -78,7 +78,7 @@ const getCalculatorInput = (
   };
 
   const readSheepClass = (offset: number): SheepClassInput | undefined => {
-    const offsetRows = offset * 4;
+    const offsetRows = offset * 12;
     if (cell(columnHead, offsetRows) === undefined) {
       return undefined;
     }
@@ -101,7 +101,7 @@ const getCalculatorInput = (
   const readSheepClassWithLambing = (
     offset: number,
   ): SheepClassWithLambingInput | undefined => {
-    const offsetRows = offset * 4;
+    const offsetRows = offset * 12;
     if (cell(columnHead, offsetRows) === undefined) {
       return undefined;
     }
@@ -180,10 +180,8 @@ const getCalculatorInput = (
         classes: {
           rams: readSheepClass(0),
           wethers: readSheepClass(1),
-          maidenEwes: readSheepClassWithLambing(2),
-          breedingEwes: readSheepClassWithLambing(3),
-          otherEwes: readSheepClass(4),
-          lambsHoggets: readSheepClass(5),
+          breedingEwes: readSheepClassWithLambing(2),
+          lambsHoggets: readSheepClass(3),
         },
       },
     ],
