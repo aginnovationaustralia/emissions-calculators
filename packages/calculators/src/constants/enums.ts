@@ -1007,6 +1007,22 @@ export type StateOrRegion = (typeof StateOrRegions)[number];
 export const Seasons = ['spring', 'summer', 'autumn', 'winter'] as const;
 export type Season = (typeof Seasons)[number];
 
+export const Months = [
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'december',
+] as const;
+export type Month = (typeof Months)[number];
+
 export const BeefClasses = [
   'bullsLt1',
   'bullsGt1',

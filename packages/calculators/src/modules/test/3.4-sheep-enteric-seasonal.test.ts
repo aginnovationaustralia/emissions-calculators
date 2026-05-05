@@ -3,7 +3,7 @@ import {
   SheepInputSchema,
   SheepInputTransformed,
 } from '@/calculators/Sheep/types/input';
-import type { SheepClassSeasonInput } from '@/calculators/Sheep/types/sheep-class-season.input';
+import type { SheepClassPeriodInput } from '@/calculators/Sheep/types/sheep-class-period.input';
 import {
   SheepClassInput,
   SheepClassWithLambingInput,
@@ -18,13 +18,13 @@ import {
 } from './sheet-comparison';
 
 const columnState = 'B';
-const columnLambingRate = 'E';
-const columnMarkingRate = 'F';
-const columnCustomLiveweight = 'N';
-const columnCustomDryMatterAvailability = 'I';
-const columnCustomDryMatterDigestibility = 'K';
-const columnHead = 'T';
-const columnOutput = 'X';
+const columnLambingRate = 'F';
+const columnMarkingRate = 'G';
+const columnCustomLiveweight = 'O';
+const columnCustomDryMatterAvailability = 'J';
+const columnCustomDryMatterDigestibility = 'L';
+const columnHead = 'U';
+const columnOutput = 'Z';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -41,7 +41,7 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const readSheepClassSeason = (offsetRows: number): SheepClassSeasonInput => {
+  const readSheepClassPeriod = (offsetRows: number): SheepClassPeriodInput => {
     const customLiveweight = cell(columnCustomLiveweight, offsetRows);
     const customDryMatterAvailability = cell(
       columnCustomDryMatterAvailability,
@@ -74,10 +74,10 @@ const getCalculatorInput = (
       return undefined;
     }
     return {
-      spring: readSheepClassSeason(offsetRows),
-      summer: readSheepClassSeason(offsetRows + 1),
-      autumn: readSheepClassSeason(offsetRows + 2),
-      winter: readSheepClassSeason(offsetRows + 3),
+      spring: readSheepClassPeriod(offsetRows),
+      summer: readSheepClassPeriod(offsetRows + 1),
+      autumn: readSheepClassPeriod(offsetRows + 2),
+      winter: readSheepClassPeriod(offsetRows + 3),
     };
   };
 
@@ -90,22 +90,22 @@ const getCalculatorInput = (
     }
     return {
       spring: {
-        ...readSheepClassSeason(offsetRows),
+        ...readSheepClassPeriod(offsetRows),
         percentLambing: Number(cell(columnLambingRate, offsetRows)),
         percentLambMarking: Number(cell(columnMarkingRate, offsetRows)),
       },
       summer: {
-        ...readSheepClassSeason(offsetRows + 1),
+        ...readSheepClassPeriod(offsetRows + 1),
         percentLambing: Number(cell(columnLambingRate, offsetRows + 1)),
         percentLambMarking: Number(cell(columnMarkingRate, offsetRows + 1)),
       },
       autumn: {
-        ...readSheepClassSeason(offsetRows + 2),
+        ...readSheepClassPeriod(offsetRows + 2),
         percentLambing: Number(cell(columnLambingRate, offsetRows + 2)),
         percentLambMarking: Number(cell(columnMarkingRate, offsetRows + 2)),
       },
       winter: {
-        ...readSheepClassSeason(offsetRows + 3),
+        ...readSheepClassPeriod(offsetRows + 3),
         percentLambing: Number(cell(columnLambingRate, offsetRows + 3)),
         percentLambMarking: Number(cell(columnMarkingRate, offsetRows + 3)),
       },
@@ -147,7 +147,7 @@ const extractInputsAndOutput = createSheetExtractor(
   { rowInterval: 30 },
 );
 
-describe('3.4.1.1 Sheep enteric methane', () => {
+describe('3.4.1.1 Sheep enteric methane seasonal', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/3.4-sheep-enteric.xlsx',

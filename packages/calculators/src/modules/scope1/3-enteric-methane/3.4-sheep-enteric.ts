@@ -2,50 +2,85 @@ import { entriesFromObject } from '@/calculators/common/tools';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { SheepInputTransformed } from '@/calculators/Sheep/types/input';
-import { isSheepClassWithLambing } from '@/calculators/Sheep/types/sheep-class.input';
-import { SheepSpecificClassInputTransformed } from '@/calculators/Sheep/types/sheep-classes.input';
+import { SheepClassPeriodsInputTransformed } from '@/calculators/Sheep/types/sheep-class-period.input';
+import {
+  isSheepClassSeasonal,
+  isSheepPeriodWithLambing,
+} from '@/calculators/Sheep/types/sheep-class.input';
 import { SheepFlockInputTransformed } from '@/calculators/Sheep/types/sheep-flock.input';
 import { isDefined } from '@/common/filters';
-import { Season } from '@/constants/enums';
+import { Month, Months, Season, Seasons, SheepClass } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
-import { br, num } from '@/tools/containers';
+import { br, Container, num, root } from '@/tools/containers';
 import { daysInSeason, e, oneMinus, tenToPowMinus3 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { massPerHeadPerDay, realNumber } from '@/tools/units';
+import { days, Days, massPerHeadPerDay, realNumber } from '@/tools/units';
+
+const monthSeasonMap: Record<Month, Season> = {
+  january: 'summer',
+  february: 'summer',
+  march: 'autumn',
+  april: 'autumn',
+  may: 'autumn',
+  june: 'winter',
+  july: 'winter',
+  august: 'winter',
+  september: 'spring',
+  october: 'spring',
+  november: 'spring',
+  december: 'winter',
+};
+
+const monthDurationMap: Record<Month, number> = {
+  january: 31,
+  february: 28,
+  march: 31,
+  april: 30,
+  may: 31,
+  june: 30,
+  july: 31,
+  august: 31,
+  september: 30,
+  october: 31,
+  november: 30,
+  december: 31,
+};
 
 function calculateAdditionalIntakeForMilkProductionMAjk(
   input: SheepInputTransformed,
-  classInput: SheepSpecificClassInputTransformed,
-  seasonName: Season,
+  className: SheepClass,
+  periodInput: SheepClassPeriodsInputTransformed,
+  periodName: string,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) {
-  if (!isSheepClassWithLambing(classInput)) {
+  if (!isSheepPeriodWithLambing(periodInput)) {
     return num(1);
   }
 
-  const { name } = classInput;
   const { constants } = context;
-  const { percentLambing, percentLambMarking } = classInput[seasonName];
+  const { percentLambing, percentLambMarking } = periodInput;
 
-  const LRjk = percentLambing.named(`LRjk=${name}k=${seasonName}`);
-  const LMRjk = percentLambMarking.named(`LMRjk=${name}k=${seasonName}`);
+  const LRjk = percentLambing.named(`LRj=${periodName},k=${className}`);
+  const LMRjk = percentLambMarking.named(`LMRj=${periodName},k=${className}`);
 
   const LEjk = LRjk.divide(num(100))
     .multiply(LMRjk.limitedTo(100).divide(num(100)))
-    .named(`LEjk=${name}k=${seasonName}`);
+    .named(`LEj=${periodName},k=${className}`);
 
   const FAk = selectConstant(constants.SHEEP, 'FEED_ADJUSTMENT').named(
-    `FAk=${name}k=${seasonName}`,
+    `FAj=${periodName},k=${className}`,
   );
 
   return LEjk.multiply(FAk)
     .plus(oneMinus(LEjk))
-    .named(`MAjk=${name}k=${seasonName}`);
+    .named(`MAj=${periodName},k=${className}`);
 }
 
 function calculateDailyFeedIntakeIjk(
   input: SheepInputTransformed,
-  classInput: SheepSpecificClassInputTransformed,
+  className: SheepClass,
+  periodInput: SheepClassPeriodsInputTransformed,
+  periodName: string,
   seasonName: Season,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) {
@@ -58,12 +93,11 @@ function calculateDailyFeedIntakeIjk(
   MAjk=3,4 = (LEjk=3,4 * FAk=3,4) + (1 - LEjk=3,4)
   */
 
-  const { name } = classInput;
   const {
     method2Liveweight,
     method2DryMatterAvailability,
     method2DryMatterDigestibility,
-  } = classInput[seasonName];
+  } = periodInput;
 
   const DMAjk = (
     method2DryMatterAvailability ??
@@ -71,11 +105,11 @@ function calculateDailyFeedIntakeIjk(
       constants.SHEEP,
       'SEASONAL_FACTORS',
       input.state,
-      name,
+      className,
       seasonName,
       'dryMatterAvailability',
     )
-  ).named(`DMAjk=${name}k=${seasonName}`);
+  ).named(`DMAj=${periodName},k=${className}`);
 
   const DMDjk = (
     method2DryMatterDigestibility ??
@@ -83,11 +117,11 @@ function calculateDailyFeedIntakeIjk(
       constants.SHEEP,
       'SEASONAL_FACTORS',
       input.state,
-      name,
+      className,
       seasonName,
       'dryMatterDigestibility',
     )
-  ).named(`DMDjk=${name}k=${seasonName}`);
+  ).named(`DMDj=${periodName},k=${className}`);
 
   const Wjk =
     method2Liveweight ??
@@ -95,15 +129,15 @@ function calculateDailyFeedIntakeIjk(
       constants.SHEEP,
       'SEASONAL_FACTORS',
       input.state,
-      name,
+      className,
       seasonName,
       'liveweight',
-    ).named(`Wj=${name},k=${seasonName}`);
+    ).named(`Wj=${periodName},k=${className}`);
 
   const qmjk = num(0.795)
     .multiply(DMDjk)
     .minus(num(0.0014))
-    .named(`qmj=${name},k=${seasonName}`);
+    .named(`qmj=${periodName},k=${className}`);
 
   // PIjk = (104.7 * qmjk + 0.307 * Wjk - 15) * Wjk * 10^-3 line 296
   const PIjk = br(
@@ -116,7 +150,7 @@ function calculateDailyFeedIntakeIjk(
     .multiply(Wjk.power(num(0.75)))
     .switchUnit((r) => massPerHeadPerDay('DryMatter', r.value))
     .multiply(tenToPowMinus3)
-    .named(`PIj=${name},k=${seasonName}`);
+    .named(`PIj=${periodName},k=${className}`);
 
   const RIjk = oneMinus(
     e
@@ -125,44 +159,53 @@ function calculateDailyFeedIntakeIjk(
           DMAjk.squared().switchUnit((r) => realNumber(r.value)),
         ),
       )
-      .named(`RIjk=${name}k=${seasonName}`),
+      .named(`RIj=${periodName},k=${className}`),
   );
 
   const MAjk = calculateAdditionalIntakeForMilkProductionMAjk(
     input,
-    classInput,
-    seasonName,
+    className,
+    periodInput,
+    periodName,
     context,
-  ).named(`MAjk=${name}k=${seasonName}`);
+  ).named(`MAj=${periodName},k=${className}`);
 
-  return PIjk.multiply(RIjk).multiply(MAjk).named(`Ijk=${name}k=${seasonName}`);
+  return PIjk.multiply(RIjk)
+    .multiply(MAjk)
+    .named(`Ij=${periodName},k=${className}`);
 }
 
-function calculateClassMethaneForSeason(
+function calculateClassMethaneForPeriod(
   input: SheepInputTransformed,
-  classInput: SheepSpecificClassInputTransformed,
+  className: SheepClass,
+  periodInput: SheepClassPeriodsInputTransformed,
+  periodName: string,
+  periodDuration: Container<Days>,
   seasonName: Season,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) {
-  const { name } = classInput;
-  const { head } = classInput[seasonName];
-  const Nj = head.named(`Nj=${name}k=${seasonName}`);
-  const Dj = daysInSeason.named(`Dj=${name}k=${seasonName}`);
+  const { head, method2AverageDurationDays } = periodInput;
+  const Nj = head.named(`Nj=${periodName}k=${className}`);
+  const Dj =
+    method2AverageDurationDays ??
+    periodDuration.named(`Dj=${periodName}k=${className}`);
 
   const Ijk = calculateDailyFeedIntakeIjk(
     input,
-    classInput,
+    className,
+    periodInput,
+    periodName,
     seasonName,
     context,
-  ).named(`Ij=${name},k=${seasonName}`);
+  ).named(`Ij=${periodName},k=${className}`);
   const Mijk = num(0.0188)
     .multiply(Ijk)
     .plus(num(0.00158))
-    .named(`Mj=${name},k=${seasonName}`);
+    .named(`Mj=${periodName},k=${className}`);
 
   return Mijk.multiply(Nj)
     .multiply(Dj)
-    .named(`Eenteric,j=${name},k=${seasonName}`);
+    .named(`Eenteric,j=${periodName},k=${className}`);
 }
 
 function calculateEntericMethaneForFlock(
@@ -184,36 +227,37 @@ function calculateEntericMethaneForFlock(
       if (!classInput) {
         return undefined;
       }
-      const springMethane = calculateClassMethaneForSeason(
-        input,
-        classInput,
-        'spring',
-        context,
-      );
-      const summerMethane = calculateClassMethaneForSeason(
-        input,
-        classInput,
-        'summer',
-        context,
-      );
-      const autumnMethane = calculateClassMethaneForSeason(
-        input,
-        classInput,
-        'autumn',
-        context,
-      );
-      const winterMethane = calculateClassMethaneForSeason(
-        input,
-        classInput,
-        'winter',
-        context,
-      );
-      return sum([
-        springMethane,
-        summerMethane,
-        autumnMethane,
-        winterMethane,
-      ]).named(`Eenteric=${className}`);
+
+      if (isSheepClassSeasonal(classInput)) {
+        const seasonalResults = Seasons.map((seasonName) => {
+          const seasonalMethane = calculateClassMethaneForPeriod(
+            input,
+            className,
+            classInput[seasonName],
+            seasonName,
+            daysInSeason,
+            seasonName,
+            context,
+          );
+          return seasonalMethane;
+        });
+        return sum(seasonalResults).named(`Eenteric=${className}`);
+      }
+
+      const monthlyResults = Months.map((monthName) => {
+        const monthDuration = root(days(monthDurationMap[monthName]));
+        const monthlyMethane = calculateClassMethaneForPeriod(
+          input,
+          className,
+          classInput[monthName],
+          monthName,
+          monthDuration,
+          monthSeasonMap[monthName],
+          context,
+        );
+        return monthlyMethane;
+      });
+      return sum(monthlyResults).named(`Eenteric=${className}`);
     })
     .filter(isDefined);
   return sum(classResults).named('Eenteric (flock)');

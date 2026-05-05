@@ -1,9 +1,9 @@
 import { input } from '@/tools/inputs';
-import { head, mass, massPerArea, realNumber } from '@/tools/units';
+import { days, head, mass, massPerArea, realNumber } from '@/tools/units';
 import { object, percentage } from '@/types/schemas';
 import { z } from 'zod';
 
-export const SheepClassSeasonInputSchema = object({
+export const SheepClassPeriodInputSchema = object({
   head: z
     .number()
     .min(0)
@@ -25,7 +25,7 @@ export const SheepClassSeasonInputSchema = object({
     .optional()
     .meta({
       description:
-        'Method 2: supply an exact value for dry matter availability for this class for this season based on farm records',
+        'Method 2: supply an exact value for dry matter availability for this class for this period based on farm records',
     })
     .transform((val) =>
       val === undefined
@@ -37,15 +37,23 @@ export const SheepClassSeasonInputSchema = object({
     .optional()
     .meta({
       description:
-        'Method 2: supply an exact value for dry matter digestibility for this class for this season based on farm records',
+        'Method 2: supply an exact value for dry matter digestibility for this class for this period based on farm records',
     })
     .transform((val) =>
       val === undefined ? undefined : input('DMDjk', realNumber(val)),
     ),
+  method2AverageDurationDays: z
+    .number()
+    .optional()
+    .meta({
+      description:
+        'Method 2: supply an exact value for average duration days for this class for this period based on farm records',
+    })
+    .transform((val) => input('Dj', days(val))),
 });
 
-export const SheepClassWithLambingSeasonInputSchema =
-  SheepClassSeasonInputSchema.extend({
+export const SheepClassWithLambingPeriodInputSchema =
+  SheepClassPeriodInputSchema.extend({
     percentLambing: percentage()
       .meta({
         description: 'Percentage of ewes lambing in this season.',
@@ -59,21 +67,25 @@ export const SheepClassWithLambingSeasonInputSchema =
   });
 
 export const isSeasonInputWithLambing = (
-  season:
-    | SheepClassSeasonInputTransformed
-    | SheepClassWithLambingSeasonInputTransformed,
-): season is SheepClassWithLambingSeasonInputTransformed => {
-  return 'percentLambing' in season;
+  period:
+    | SheepClassPeriodInputTransformed
+    | SheepClassWithLambingPeriodInputTransformed,
+): period is SheepClassWithLambingPeriodInputTransformed => {
+  return 'percentLambing' in period;
 };
 
-export type SheepClassSeasonInput = z.input<typeof SheepClassSeasonInputSchema>;
-export type SheepClassSeasonInputTransformed = z.output<
-  typeof SheepClassSeasonInputSchema
+export type SheepClassPeriodInput = z.input<typeof SheepClassPeriodInputSchema>;
+export type SheepClassPeriodInputTransformed = z.output<
+  typeof SheepClassPeriodInputSchema
 >;
 
-export type SheepClassWithLambingSeasonInput = z.input<
-  typeof SheepClassWithLambingSeasonInputSchema
+export type SheepClassWithLambingPeriodInput = z.input<
+  typeof SheepClassWithLambingPeriodInputSchema
 >;
-export type SheepClassWithLambingSeasonInputTransformed = z.output<
-  typeof SheepClassWithLambingSeasonInputSchema
+export type SheepClassWithLambingPeriodInputTransformed = z.output<
+  typeof SheepClassWithLambingPeriodInputSchema
 >;
+
+export type SheepClassPeriodsInputTransformed =
+  | SheepClassPeriodInputTransformed
+  | SheepClassWithLambingPeriodInputTransformed;
