@@ -254,6 +254,23 @@ export const isEnergyPerMass = (
   return unit.__unitType === 'EnergyPerMass';
 };
 
+export type EnergyPerHeadPerDay = NumberUnitBase & {
+  __unitType: 'EnergyPerHeadPerDay';
+};
+export const energyPerHeadPerDay = (
+  initialValueJoulesPerHeadPerDay?: number | Decimal,
+): EnergyPerHeadPerDay => {
+  return {
+    __unitType: 'EnergyPerHeadPerDay',
+    value: new Decimal(initialValueJoulesPerHeadPerDay ?? 0),
+  };
+};
+export const isEnergyPerHeadPerDay = (
+  unit: NumberUnit,
+): unit is EnergyPerHeadPerDay => {
+  return unit.__unitType === 'EnergyPerHeadPerDay';
+};
+
 export type MassPerVolume<
   SMass extends Substance,
   SVolume extends Substance,
@@ -650,6 +667,7 @@ export type NumberUnit =
   | Mass<Substance>
   | MassPerEnergy<Substance>
   | EnergyPerMass<Substance>
+  | EnergyPerHeadPerDay
   | MassPerVolume<Substance, Substance>
   | MassPerArea<Substance>
   | MassPerAreaPerDay<Substance>

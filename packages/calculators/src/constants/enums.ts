@@ -1329,3 +1329,11 @@ export const SheepClasses = [
   'lambsHoggets',
 ] as const;
 export type SheepClass = (typeof SheepClasses)[number];
+
+export const SwineClasses = [
+  'boars',
+  'sows',
+  'gilts',
+  'slaughterPigs',
+] as const;
+export type SwineClass = (typeof SwineClasses)[number];

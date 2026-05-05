@@ -70,6 +70,8 @@ export function formatUnit(unit: AnyUnit): string {
       return `Mass-Distance(${unit.substance})`;
     case 'MassPerMassDistance':
       return `Mass(${unit.snum}) / Mass-Distance(${unit.sdenom})`;
+    case 'EnergyPerHeadPerDay':
+      return `Energy / Head / Day`;
   }
 }
 

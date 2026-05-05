@@ -82,6 +82,7 @@ import {
   SolidWasteLandfillType,
   State,
   StateOrRegion,
+  SwineClass,
   SwineMMSType,
   VesselFuelType,
   WastewaterFacilityType,
@@ -356,8 +357,15 @@ type MMSFactors = {
   N2O_EF: RealNumber;
 };
 
+type SwineClassFactors = {
+  FEED_INTAKE: MassPerHeadPerDay<'DryMatter'>;
+};
+
 export type SwineConstants = NamedConstants & {
   MMS: Record<SwineMMSType, MMSFactors>;
+  GROSS_ENERGY_CONTENT_OF_FEED: EnergyPerMass<'DryMatter'>;
+  ENERGY_PER_MASS_METHANE: EnergyPerMass<'CH4'>;
+  SWINE_CLASS_FACTORS: Record<SwineClass, SwineClassFactors>;
 };
 
 type FeedlotFeedFactors = {
