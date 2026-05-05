@@ -21,7 +21,9 @@
     "declaration": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "zod": ["./node_modules/zod"],
+      "zod-openapi": ["./node_modules/zod-openapi"]
     },
     "outDir": "./dist",
     "noEmit": false

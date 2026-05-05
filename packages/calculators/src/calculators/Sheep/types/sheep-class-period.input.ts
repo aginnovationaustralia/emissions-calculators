@@ -1,6 +1,7 @@
 import { input } from '@/tools/inputs';
 import { days, head, mass, massPerArea, realNumber } from '@/tools/units';
 import { object, percentage } from '@/types/schemas';
+import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 
 export const SheepClassPeriodInputSchema = object({
@@ -17,8 +18,8 @@ export const SheepClassPeriodInputSchema = object({
       description:
         'Method 2: supply an exact value for liveweight for this class for this season based on farm records',
     })
-    .transform((val) =>
-      val === undefined ? undefined : input('Wijkln', mass('Liveweight', val)),
+    .transform(
+      mapOptional((val) => input('Wijkln', mass('Liveweight', val))),
     ),
   method2DryMatterAvailability: z
     .number()
@@ -27,10 +28,8 @@ export const SheepClassPeriodInputSchema = object({
       description:
         'Method 2: supply an exact value for dry matter availability for this class for this period based on farm records',
     })
-    .transform((val) =>
-      val === undefined
-        ? undefined
-        : input('DMAjk', massPerArea('DryMatter', val)),
+    .transform(
+      mapOptional((val) => input('DMAjk', massPerArea('DryMatter', val))),
     ),
   method2DryMatterDigestibility: z
     .number()
@@ -39,8 +38,8 @@ export const SheepClassPeriodInputSchema = object({
       description:
         'Method 2: supply an exact value for dry matter digestibility for this class for this period based on farm records',
     })
-    .transform((val) =>
-      val === undefined ? undefined : input('DMDjk', realNumber(val)),
+    .transform(
+      mapOptional((val) => input('DMDjk', realNumber(val))),
     ),
   method2AverageDurationDays: z
     .number()
@@ -49,7 +48,7 @@ export const SheepClassPeriodInputSchema = object({
       description:
         'Method 2: supply an exact value for average duration days for this class for this period based on farm records',
     })
-    .transform((val) => input('Dj', days(val))),
+    .transform(mapOptional((val) => input('Dj', days(val)))),
 });
 
 export const SheepClassWithLambingPeriodInputSchema =

@@ -342,7 +342,8 @@
     "tsc-alias": "^1.8.10",
     "tsx": "^4.21.0",
     "typescript": "^5.9.2",
-    "xlsx-populate": "^1.21.0"
+    "xlsx-populate": "^1.21.0",
+    "@aginnovationaustralia/eslint-plugin-emissions-calculators": "workspace:*"
   },
   "dependencies": {
     "decimal.js-light": "^2.5.1",

@@ -1,6 +1,7 @@
 import { InorganicFertiliserTypes } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { mass, massPerMass } from '@/tools/units';
+import { mapOptional } from '@/tools/zod';
 import { object, proportion } from '@/types/schemas';
 import { z } from 'zod';
 import { InorganicFertiliserComponentInputSchema } from './inorganic-fertiliser-components.input';
@@ -57,19 +58,18 @@ export const InorganicFertiliserInputScope3Method2Schema = object({
   customNitrogenFraction: proportion(
     'Custom nitrogen fraction for the fertiliser',
   )
-    .optional() // TODO: Need a linter rule or something to ensure the transform function handles optional / undefined cases
-    .transform((val) =>
-      val
-        ? input(
-            'customNitrogenFraction',
-            massPerMass('N', 'Inorganic Fertiliser', val),
-          )
-        : undefined,
+    .optional()
+    .transform(
+      mapOptional((val) =>
+        input(
+          'customNitrogenFraction',
+          massPerMass('N', 'Inorganic Fertiliser', val),
+        ),
+      ),
     ),
   customScope3EmissionFactor: z
     .number()
     .min(0)
-    .optional()
     .meta({
       description:
         'Custom scope 3 emission factor for this fertiliser, in kg CO2e/kg',

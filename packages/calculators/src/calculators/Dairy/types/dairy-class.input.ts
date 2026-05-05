@@ -1,6 +1,7 @@
 import { input } from '@/tools/inputs';
 import { days, head, mass, massPerHeadPerDay } from '@/tools/units';
 import { object } from '@/types/schemas';
+import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 
 export const DairyClassBaseInputSchema = object({
@@ -12,22 +13,20 @@ export const DairyClassBaseInputSchema = object({
     .number()
     .gt(0)
     .optional()
-    .transform((val) =>
-      val === undefined ? undefined : input('Wj', mass('Liveweight', val)),
+    .transform(
+      mapOptional((val) => input('Wj', mass('Liveweight', val))),
     ),
   method2LiveweightGain: z
     .number()
     .optional()
-    .transform((val) =>
-      val === undefined
-        ? undefined
-        : input('LWGj', massPerHeadPerDay('Liveweight', val)),
+    .transform(
+      mapOptional((val) => input('LWGj', massPerHeadPerDay('Liveweight', val))),
     ),
   method2DurationDays: z
     .number()
     .optional()
-    .transform((val) =>
-      val === undefined ? undefined : input('Dj', days(val)),
+    .transform(
+      mapOptional((val) => input('Dj', days(val))),
     ),
 });
 

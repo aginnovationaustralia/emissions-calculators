@@ -2,6 +2,7 @@ import { AgrochemicalType, AgrochemicalTypes } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { mass, massPerMass } from '@/tools/units';
 import { object } from '@/types/schemas';
+import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 
 export const AgrichemicalInputSchema = object({
@@ -17,8 +18,10 @@ export const AgrichemicalInputSchema = object({
     .number()
     .min(0)
     .optional()
-    .transform((val) =>
-      val ? input('EF', massPerMass('CO2e', 'Chemical', val)) : undefined,
+    .transform(
+      mapOptional((val) =>
+        val ? input('EF', massPerMass('CO2e', 'Chemical', val)) : undefined,
+      ),
     ),
 });
 

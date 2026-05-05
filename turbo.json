@@ -2,22 +2,36 @@
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
     "build": {
-      "outputs": ["dist/**"],
-      "dependsOn": ["^build"]
+      "outputs": [
+        "dist/**"
+      ],
+      "dependsOn": [
+        "^build"
+      ]
     },
     "test": {},
     "lint": {
-      "inputs": ["eslint.config.mjs"]
+      "inputs": [
+        "eslint.config.mjs",
+        "packages/eslint-plugin-emissions-calculators/**"
+      ],
+      "dependsOn": [
+        "^build"
+      ]
     },
     "check:types": {},
     "clean": {
       "cache": false
     },
     "examples-ts-client#build": {
-      "dependsOn": ["@aginnovationaustralia/emissions-calculators#build"]
+      "dependsOn": [
+        "@aginnovationaustralia/emissions-calculators#build"
+      ]
     },
     "data-entry#build": {
-      "outputs": ["dist/**"]
+      "outputs": [
+        "dist/**"
+      ]
     }
   }
 }

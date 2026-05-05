@@ -1,6 +1,7 @@
 import { input } from '@/tools/inputs';
 import { head, mass, massPerHeadPerDay, realNumber } from '@/tools/units';
 import { object, proportion } from '@/types/schemas';
+import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 
 export const BeefClassSeasonInputSchema = object({
@@ -17,8 +18,8 @@ export const BeefClassSeasonInputSchema = object({
       description:
         'Method 2: supply an exact value for liveweight for this class for this season based on farm records',
     })
-    .transform((val) =>
-      val === undefined ? undefined : input('Wijkln', mass('Liveweight', val)),
+    .transform(
+      mapOptional((val) => input('Wijkln', mass('Liveweight', val))),
     ),
   method2LiveweightGain: z
     .number()
@@ -27,10 +28,10 @@ export const BeefClassSeasonInputSchema = object({
       description:
         'Method 2: supply an exact value for liveweight gain for this class for this season based on farm records',
     })
-    .transform((val) =>
-      val === undefined
-        ? undefined
-        : input('LWGijkln', massPerHeadPerDay('Liveweight', val)),
+    .transform(
+      mapOptional((val) =>
+        input('LWGijkln', massPerHeadPerDay('Liveweight', val)),
+      ),
     ),
 });
 
