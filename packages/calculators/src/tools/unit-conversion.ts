@@ -35,3 +35,6 @@ export const perHectareToPerSqMetre = (perHectare: number | Decimal) =>
 
 export const kilometresToMetres = (kilometres: number | Decimal) =>
   new Decimal(kilometres).mul(1000);
+
+export const perKilometreToPerMetre = (perKilometre: number | Decimal) =>
+  new Decimal(perKilometre).div(1000);

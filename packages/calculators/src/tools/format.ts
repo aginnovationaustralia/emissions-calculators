@@ -52,7 +52,6 @@ export function formatUnit(unit: AnyUnit): string {
       return 'Years';
     case 'CountPerArea':
       return 'Count / Area';
-
     case 'Head':
       return 'Head';
     case 'Area':
@@ -65,6 +64,12 @@ export function formatUnit(unit: AnyUnit): string {
       return `Mass(${unit.substance}) / Electricity`;
     case 'MassPerAreaPerDay':
       return `Mass(${unit.substance}) / Area / Day`;
+    case 'Distance':
+      return 'Disance';
+    case 'MassDistance':
+      return `Mass-Distance(${unit.substance})`;
+    case 'MassPerMassDistance':
+      return `Mass(${unit.snum}) / Mass-Distance(${unit.sdenom})`;
   }
 }
 

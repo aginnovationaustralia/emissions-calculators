@@ -4,6 +4,7 @@ import {
   AnyUnit,
   Area,
   Days,
+  Distance,
   Electricity,
   energy,
   Energy,
@@ -12,12 +13,14 @@ import {
   Head,
   isArea,
   isDays,
+  isDistance,
   isElectricity,
   isEnergy,
   isEnergyPerMass,
   isEnergyPerVolume,
   isHead,
   isMass,
+  isMassDistance,
   isMassPerArea,
   isMassPerAreaPerDay,
   isMassPerAreaPerYear,
@@ -27,6 +30,7 @@ import {
   isMassPerHead,
   isMassPerHeadPerDay,
   isMassPerMass,
+  isMassPerMassDistance,
   isMassPerTime,
   isMassPerVolume,
   isMassPerYear,
@@ -39,6 +43,8 @@ import {
   isYears,
   mass,
   Mass,
+  massDistance,
+  MassDistance,
   massPerArea,
   MassPerArea,
   MassPerAreaPerDay,
@@ -51,7 +57,9 @@ import {
   MassPerHead,
   massPerHeadPerDay,
   MassPerHeadPerDay,
+  massPerMass,
   MassPerMass,
+  MassPerMassDistance,
   MassPerTime,
   MassPerVolume,
   massPerYear,
@@ -231,7 +239,6 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<MassPerHead<S>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S>>;
-
   // MassPerEnergy<S1> * EnergyPerMass<S1> = RealNumber
   multiply<S extends Substance>(
     this: BaseContainer<MassPerEnergy<S>>,
@@ -274,21 +281,36 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<Area>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerYear<S>>;
-
   // MassPerYear<S1> * <MassPerMass<S2, S1>> = MassPerYear<S2>
   multiply<S1 extends Substance, S2 extends Substance>(
     this: BaseContainer<MassPerYear<S1>>,
     right: Container<MassPerMass<S2, S1>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerYear<S2>>;
-
   // MassPerYear<S1> * Years = MassPerYear<S1>
   multiply<S1 extends Substance>(
     this: BaseContainer<MassPerYear<S1>>,
     right: Container<Years>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
-
+  // Mass<S> * Distance = MassDistance<S>
+  multiply<S extends Substance>(
+    this: BaseContainer<Mass<S>>,
+    right: Container<Distance>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassDistance<S>>;
+  // MassPerMassDistance<S1, S2> * Distance = MassPerMass<S1, S2>
+  multiply<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<MassPerMassDistance<S1, S2>>,
+    right: Container<Distance>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerMass<S1, S2>>;
+  // MassPerMassDistance<S1, S2> * MassDistance<S2> = Mass<S1>
+  multiply<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<MassPerMassDistance<S1, S2>>,
+    right: Container<MassDistance<S2>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<Mass<S1>>;
   // Fallback implementation
   multiply(
     this: BaseContainer<NumberUnit>,
@@ -353,6 +375,12 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerYear(leftUnit.substance);
       } else if (isMassPerYear(leftUnit) && isMassPerMass(rightUnit)) {
         unit = massPerYear(rightUnit.snum);
+      } else if (isMass(leftUnit) && isDistance(rightUnit)) {
+        unit = massDistance(leftUnit.substance);
+      } else if (isMassPerMassDistance(leftUnit) && isDistance(rightUnit)) {
+        unit = massPerMass(leftUnit.snum, leftUnit.sdenom);
+      } else if (isMassPerMassDistance(leftUnit) && isMassDistance(rightUnit)) {
+        unit = mass(leftUnit.snum);
       } else if (isRealNumber(leftUnit)) {
         unit = { ...rightUnit };
       } else {

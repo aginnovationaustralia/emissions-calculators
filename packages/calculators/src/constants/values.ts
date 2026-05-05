@@ -5,6 +5,7 @@ import {
   perCubicMetresToPerLitres,
   perHectareToPerSqMetre,
   tonnesPerHectareToKgPerSquareMetres,
+  perKilometreToPerMetre,
 } from '@/tools/unit-conversion';
 import {
   countPerArea,
@@ -925,10 +926,25 @@ export const commonConstants: CommonConstants = {
     },
   },
 
+  /**
+   * Temporary placeholder values taken (loosely!) from AusLCI V47
+   */
   FREIGHT_EMISSIONS: {
-    PLACEHOLDER_TRAIN: massPerMassDistance('CO2e', 'Freight Goods', 0),
-    PLACEHOLDER_TRUCK: massPerMassDistance('CO2e', 'Freight Goods', 0),
-    PLACEHOLDER_AVIATION: massPerMassDistance('CO2e', 'Freight Goods', 0),
+    PLACEHOLDER_TRAIN: massPerMassDistance(
+      'CO2e',
+      'Freight Goods',
+      perKilometreToPerMetre(0.27),
+    ),
+    PLACEHOLDER_TRUCK: massPerMassDistance(
+      'CO2e',
+      'Freight Goods',
+      perKilometreToPerMetre(0.09),
+    ),
+    PLACEHOLDER_AVIATION: massPerMassDistance(
+      'CO2e',
+      'Freight Goods',
+      perKilometreToPerMetre(1.96),
+    ),
   },
 
   // NGAF Table 5 direct and Table 6 indirect
