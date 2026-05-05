@@ -8,6 +8,8 @@ import {
   Electricity,
   energy,
   Energy,
+  energyPerHeadPerDay,
+  EnergyPerHeadPerDay,
   EnergyPerMass,
   EnergyPerVolume,
   Head,
@@ -16,6 +18,7 @@ import {
   isDistance,
   isElectricity,
   isEnergy,
+  isEnergyPerHeadPerDay,
   isEnergyPerMass,
   isEnergyPerVolume,
   isHead,
@@ -311,6 +314,12 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<MassDistance<S2>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
+  // MassPerHeadPerDay<S> * EnergyPerMass<S> = EnergyPerHeadPerDay
+  multiply<S extends Substance>(
+    this: BaseContainer<MassPerHeadPerDay<S>>,
+    right: Container<EnergyPerMass<S>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<EnergyPerHeadPerDay>;
   // Fallback implementation
   multiply(
     this: BaseContainer<NumberUnit>,
@@ -338,6 +347,8 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = mass(rightUnit.substance);
       } else if (isEnergyPerVolume(leftUnit) && isVolume(rightUnit)) {
         unit = energy();
+      } else if (isMassPerHeadPerDay(leftUnit) && isEnergyPerMass(rightUnit)) {
+        unit = energyPerHeadPerDay();
       } else if (isMassPerTime(leftUnit) && isTime(rightUnit)) {
         unit = mass(leftUnit.substance);
       } else if (isMassPerHeadPerDay(leftUnit) && isMassPerMass(rightUnit)) {
@@ -346,8 +357,6 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerDay(leftUnit.substance);
       } else if (isMassPerDay(leftUnit) && isDays(rightUnit)) {
         unit = mass(leftUnit.substance);
-      } else if (isMassPerHeadPerDay(leftUnit) && isEnergyPerMass(rightUnit)) {
-        unit = massPerDay(leftUnit.substance);
       } else if (isMassPerHeadPerDay(leftUnit) && isVolumePerMass(rightUnit)) {
         unit = volumePerHeadPerDay(leftUnit.substance);
       } else if (isMassPerAreaPerDay(leftUnit) && isDays(rightUnit)) {
@@ -441,6 +450,13 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerAreaPerYear<S>>;
 
+  // EnergyPerHeadPerDay<S> / EnergyPerMass<S> = MassPerHeadPerDay<S>
+  divide<S extends Substance>(
+    this: BaseContainer<EnergyPerHeadPerDay>,
+    right: Container<EnergyPerMass<S>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerHeadPerDay<S>>;
+
   divide<
     S1 extends Substance,
     S2 extends Substance,
@@ -466,6 +482,11 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerArea(leftUnit.substance);
       } else if (isMassPerHeadPerDay(leftUnit) && isMassPerMass(rightUnit)) {
         unit = massPerHeadPerDay(rightUnit.snum);
+      } else if (
+        isEnergyPerHeadPerDay(leftUnit) &&
+        isEnergyPerMass(rightUnit)
+      ) {
+        unit = massPerHeadPerDay(rightUnit.substance);
       } else if (isMass(leftUnit) && isMassPerMass(rightUnit)) {
         unit = mass(rightUnit.sdenom);
       } else if (leftUnit.__unitType === rightUnit.__unitType) {
