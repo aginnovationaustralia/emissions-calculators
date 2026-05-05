@@ -23,19 +23,29 @@ function calculateEntericMethaneForClass(
   const { head, averageNumberOfDays, method2AverageFeedIntake } = classInput;
   const Nj = head.named(`Nj=${className}`);
   const Dj = averageNumberOfDays.named(`Dj=${className}`);
-  const Ij = selectConstant(
+  const Ij =
+    method2AverageFeedIntake ??
+    selectConstant(
+      constants.SWINE,
+      'SWINE_CLASS_FACTORS',
+      className,
+      'FEED_INTAKE',
+    ).named(`Ij=${className}`);
+  const GE = selectConstant(
     constants.SWINE,
-    'SWINE_CLASS_FACTORS',
-    className,
-    'FEED_INTAKE',
+    'GROSS_ENERGY_CONTENT_OF_FEED',
+  ).named(`GE`);
+  const F = selectConstant(constants.SWINE, 'ENERGY_PER_MASS_METHANE').named(
+    `F`,
   );
-  const GE = selectConstant(constants.SWINE, 'GROSS_ENERGY_CONTENT_OF_FEED');
-  const F = selectConstant(constants.SWINE, 'ENERGY_PER_MASS_METHANE');
 
   const Mj: Container<MassPerHeadPerDay<'CH4'>> = Ij.multiply(GE)
     .multiply(num(0.007))
-    .divide(F);
-  const Eenteric = Mj.multiply(Nj).multiply(Dj);
+    .divide(F)
+    .named(`Mj=${className}`);
+  const Eenteric = Mj.multiply(Nj)
+    .multiply(Dj)
+    .named(`Eenteric,j=${className}`);
   return Eenteric;
 }
 

@@ -35,10 +35,14 @@ const getCalculatorInput = (
     if (cell(columnHead, offset) === undefined) {
       return undefined;
     }
+
+    const customFeedIntake = cell(columnCustomFeedIntake, offset);
+    const method2AverageFeedIntake =
+      method === '2' && customFeedIntake ? Number(customFeedIntake) : undefined;
     return {
       head: Number(cell(columnHead, offset)),
       averageNumberOfDays: Number(cell(columnAverageDuration, offset)),
-      method2AverageFeedIntake: 0,
+      method2AverageFeedIntake,
     };
   };
 
