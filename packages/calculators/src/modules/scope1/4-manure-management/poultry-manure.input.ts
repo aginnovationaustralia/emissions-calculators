@@ -1,6 +1,7 @@
 import { input } from '@/tools/inputs';
 import { days, head, massPerHeadPerDay, realNumber } from '@/tools/units';
 import { object, proportion } from '@/types/schemas';
+import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 
 const createPoultryManureClassInputSchema = <
@@ -21,17 +22,17 @@ const createPoultryManureClassInputSchema = <
       .transform((val) => input(`Dj=${j}`, days(val))),
     method2NitrogenRetentionRate: proportion('Nitrogen retention rate')
       .optional()
-      .transform((val) =>
-        val === undefined ? undefined : input(`NRj=${j}`, realNumber(val)),
+      .transform(
+        mapOptional((val) => input(`NRj=${j}`, realNumber(val))),
       ),
     method2DryMatterIntake: z
       .number()
       .gt(0)
       .optional()
-      .transform((val) =>
-        val === undefined
-          ? undefined
-          : input(`Ij=${j}`, massPerHeadPerDay('DryMatter', val)),
+      .transform(
+        mapOptional((val) =>
+          input(`Ij=${j}`, massPerHeadPerDay('DryMatter', val)),
+        ),
       ),
 
     manureAllocation: object({

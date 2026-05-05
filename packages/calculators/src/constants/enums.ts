@@ -1007,6 +1007,22 @@ export type StateOrRegion = (typeof StateOrRegions)[number];
 export const Seasons = ['spring', 'summer', 'autumn', 'winter'] as const;
 export type Season = (typeof Seasons)[number];
 
+export const Months = [
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'december',
+] as const;
+export type Month = (typeof Months)[number];
+
 export const BeefClasses = [
   'bullsLt1',
   'bullsGt1',
@@ -1062,6 +1078,16 @@ export const stateOrRegionToPureState = (
     return 'WA';
   }
 };
+
+export const LimitedStates = [
+  'ACT/NSW',
+  'VIC',
+  'QLD',
+  'SA',
+  'TAS',
+  'WA',
+] as const;
+export type LimitedState = (typeof LimitedStates)[number];
 
 export const RiceCultivationSeasonWaterRegimeTypes = [
   'Paddy rotation',
@@ -1294,3 +1320,12 @@ export const MeanAnnualTemperatures = [
   '28 or above',
 ] as const;
 export type MeanAnnualTemperature = (typeof MeanAnnualTemperatures)[number];
+export const SheepClasses = [
+  'rams',
+  'wethers',
+  'maidenEwes',
+  'breedingEwes',
+  'otherEwes',
+  'lambsHoggets',
+] as const;
+export type SheepClass = (typeof SheepClasses)[number];

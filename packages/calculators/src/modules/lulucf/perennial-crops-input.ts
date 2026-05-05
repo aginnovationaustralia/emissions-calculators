@@ -10,6 +10,7 @@ import {
 } from '@/tools/unit-conversion';
 import { countPerArea, massPerArea } from '@/tools/units';
 import { object } from '@/types/schemas';
+import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 import {
   PerennialCropClearingMethod1InputSchema,
@@ -22,24 +23,24 @@ export const PerennialCropFullBaseInputSchema = object({
   method2ActualStemDensity: z
     .number()
     .optional()
-    .transform((value) =>
-      value === undefined
-        ? undefined
-        : input(
-            'Actual stem density',
-            countPerArea('Trees', perHectareToPerSqMetre(value)),
-          ),
+    .transform(
+      mapOptional((value) =>
+        input(
+          'Actual stem density',
+          countPerArea('Trees', perHectareToPerSqMetre(value)),
+        ),
+      ),
     ),
   method2BiomassAtMaturity: z
     .number()
     .optional()
-    .transform((value) =>
-      value === undefined
-        ? undefined
-        : input(
-            'Biomass at maturity',
-            massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(value)),
-          ),
+    .transform(
+      mapOptional((value) =>
+        input(
+          'Biomass at maturity',
+          massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(value)),
+        ),
+      ),
     ),
   plantings: z.array(PerennialCropPlantingInputSchema),
 });

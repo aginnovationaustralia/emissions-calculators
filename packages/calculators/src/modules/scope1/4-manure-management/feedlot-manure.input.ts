@@ -8,6 +8,7 @@ import {
   realNumber,
 } from '@/tools/units';
 import { object, proportion } from '@/types/schemas';
+import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 
 export const FeedlotManureHerdInputSchema = object({
@@ -21,23 +22,22 @@ export const FeedlotManureHerdInputSchema = object({
     .min(0)
     .optional()
     .meta({ description: 'Dry matter intake in kg/head/day' })
-    .transform((val) =>
-      val === undefined
-        ? undefined
-        : input('Ij custom', massPerHeadPerDay('DryMatter', val)),
+    .transform(
+      mapOptional((val) =>
+        input('Ij custom', massPerHeadPerDay('DryMatter', val))),
     ),
   crudeProteinContent: z
     .number()
     .min(0)
     .optional()
     .meta({ description: 'Crude protein content in %' })
-    .transform((val) =>
-      val === undefined
-        ? undefined
-        : input(
-            'CPj custom',
-            massPerMass('CrudeProtein', 'DryMatter', val / 100), // REVISIT: handle inputs as percentage
-          ),
+    .transform(
+      mapOptional((val) =>
+        input(
+          'CPj custom',
+          massPerMass('CrudeProtein', 'DryMatter', val / 100), // REVISIT: handle inputs as percentage
+        ),
+      ),
     ),
   numberOfCattle: z
     .number()

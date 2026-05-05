@@ -6,6 +6,7 @@ import {
 import { input } from '@/tools/inputs';
 import { realNumber } from '@/tools/units';
 import { object } from '@/types/schemas';
+import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 import { DairyClassesInputSchema } from './dairy-classes.input';
 
@@ -19,8 +20,8 @@ export const DairyHerdInputSchema = object({
   method2DryMatterDigestibility: z
     .number()
     .optional()
-    .transform((val) =>
-      val === undefined ? undefined : input('DMDj', realNumber(val)),
+    .transform(
+      mapOptional((val) => input('DMDj', realNumber(val))),
     ),
 });
 

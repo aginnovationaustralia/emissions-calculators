@@ -610,17 +610,44 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
       baseOrigin,
     );
   }
+
+  /**
+   * Implement an operation that limits the value of a unit. You would normally express this as min(n1, n2) but limitedTo is more clear
+   * given the object dot notation needed here
+   * @param this the unit being limited
+   * @param right the limit value
+   * @param baseOrigin the base origin of the new container
+   * @returns a new container with the limited value
+   */
+  limitedTo<UL extends NumberUnit>(
+    this: BaseContainer<UL>,
+    right: number,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<UL> {
+    const limit = new Decimal(right);
+    const unit = {
+      ...this.unit,
+      value: this.unit.value.gt(limit) ? limit : this.unit.value,
+    };
+    return new BinaryContainer(
+      unit,
+      'limitedTo',
+      this as unknown as Container<UL>,
+      num(right),
+      baseOrigin,
+    );
+  }
 }
 
 export class BinaryContainer<U extends AnyUnit> extends BaseContainer<U> {
   originType: 'binary';
-  type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power';
+  type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'limitedTo';
   left: Container<NumberUnit>;
   right: Container<NumberUnit>;
 
   constructor(
     unit: U,
-    type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power',
+    type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'limitedTo',
     left: Container<NumberUnit>,
     right: Container<NumberUnit>,
     baseOrigin: Metadata,

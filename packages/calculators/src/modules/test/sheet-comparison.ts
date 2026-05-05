@@ -103,6 +103,8 @@ export const compareInputsAndOutputs = <
         console.log(
           formatNamedValues(actual, {
             maxDepth: 5,
+            // focusOn: 'Mj=january,k=rams',
+            // focusOn: 'PIj=january,k=rams',
             // focusOn: 'EN2O,leach',
             // focusOn: 'NRijkln (bullsLt1, spring)',
             // focusOn: 'MAijkl=5 (cows2To3Years, summer)',

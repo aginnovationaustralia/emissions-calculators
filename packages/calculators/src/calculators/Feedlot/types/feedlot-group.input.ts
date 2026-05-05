@@ -1,6 +1,7 @@
 import { input } from '@/tools/inputs';
 import { days, head, massPerHeadPerDay, percentage } from '@/tools/units';
 import { object, percentage as percentageSchema } from '@/types/schemas';
+import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 
 export const FeedlotGroupInputSchema = object({
@@ -19,17 +20,15 @@ export const FeedlotGroupInputSchema = object({
     .min(0)
     .meta({ description: 'Method 2: Average dry matter intake in kg/head/day' })
     .optional()
-    .transform((val) =>
-      val === undefined
-        ? undefined
-        : input('Ij', massPerHeadPerDay('DryMatter', val)),
+    .transform(
+      mapOptional((val) => input('Ij', massPerHeadPerDay('DryMatter', val))),
     ),
   method2AverageNeutralDetergentFibrePercentage: percentageSchema(
     'Method 2: Average neutral detergent fibre as a percentage of feed intake',
   )
     .optional()
-    .transform((val) =>
-      val === undefined ? undefined : input('NDFj', percentage(val)),
+    .transform(
+      mapOptional((val) => input('NDFj', percentage(val))),
     ),
 });
 

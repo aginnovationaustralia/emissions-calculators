@@ -1,4 +1,6 @@
 {
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
   "achilleshr.runonsave": {
     "commands": [
       {
@@ -219,6 +221,7 @@
     "Metsulfuron",
     "mgmt",
     "Millrun",
+    "Mijk",
     "mineralblock",
     "Mleach",
     "mlime",
@@ -283,6 +286,7 @@
     "perfluoropentane",
     "perfluoropropane",
     "petrolk",
+    "Pijk",
     "Pijkl",
     "Pijkln",
     "Pilbara",
@@ -293,6 +297,7 @@
     "PROPORTIONBURNT",
     "PURCHASELIVESTOCK",
     "qelec",
+    "qmjk",
     "RA",
     "Radiata",
     "ragc",
@@ -355,6 +360,7 @@
     "weanerblock",
     "Wenteric",
     "Wethers",
+    "wethers",
     "Wetj",
     "WETMMS",
     "Wheatbelt",

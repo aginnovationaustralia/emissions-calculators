@@ -2,6 +2,7 @@ import { OrganicFertiliserTypes } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { massPerMass } from '@/tools/units';
 import { object, proportion } from '@/types/schemas';
+import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 
 export const OrganicFertiliserPurchasedUntracedInputSchema = object({
@@ -14,13 +15,13 @@ export const OrganicFertiliserPurchasedUntracedInputSchema = object({
     .meta({
       description: 'Custom nitrogen fraction for the organic fertiliser',
     })
-    .transform((val) =>
-      val === undefined
-        ? undefined
-        : input(
-            'customNitrogenFraction',
-            massPerMass('N', 'Organic Fertiliser', val),
-          ),
+    .transform(
+      mapOptional((val) =>
+        input(
+          'customNitrogenFraction',
+          massPerMass('N', 'Organic Fertiliser', val),
+        ),
+      ),
     ),
 });
 

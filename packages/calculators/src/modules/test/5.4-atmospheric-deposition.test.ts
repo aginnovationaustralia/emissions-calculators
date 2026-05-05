@@ -39,6 +39,7 @@ const getCalculatorInput = (
           fertiliserType,
           massAppliedKg,
           ...(customNitrogenFraction ? { customNitrogenFraction } : {}),
+          customScope3EmissionFactor: 0,
         },
       ],
       calculationMethodScope1: '1',

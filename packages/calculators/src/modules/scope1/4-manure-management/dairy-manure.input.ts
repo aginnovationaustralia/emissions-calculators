@@ -2,6 +2,7 @@ import { DairyCattleBreeds, DairySystems } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { head, mass, massPerHeadPerDay, realNumber } from '@/tools/units';
 import { object, proportion } from '@/types/schemas';
+import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 import {
   DairyMilkSolidsInputSchema,
@@ -17,26 +18,24 @@ const DairyManureClassInputSchema = object({
     .number()
     .gt(0)
     .optional()
-    .transform((val) =>
-      val === undefined ? undefined : input('Wj', mass('Liveweight', val)),
+    .transform(
+      mapOptional((val) => input('Wj', mass('Liveweight', val))),
     ),
   method2LiveweightGain: z
     .number()
     .optional()
-    .transform((val) =>
-      val === undefined
-        ? undefined
-        : input('LWGj', massPerHeadPerDay('Liveweight', val)),
+    .transform(
+      mapOptional((val) => input('LWGj', massPerHeadPerDay('Liveweight', val))),
     ),
   method2CrudeProteinContent: proportion()
     .optional()
-    .transform((val) =>
-      val === undefined ? undefined : input('CPj', realNumber(val)),
+    .transform(
+      mapOptional((val) => input('CPj', realNumber(val))),
     ),
   method2DryMatterDigestibility: proportion()
     .optional()
-    .transform((val) =>
-      val === undefined ? undefined : input('DMDj', realNumber(val)),
+    .transform(
+      mapOptional((val) => input('DMDj', realNumber(val))),
     ),
 });
 
@@ -100,18 +99,18 @@ export const DairyManureInputSchema = object({
   system: z.enum(DairySystems),
   method2TimeSpentOnPasture: proportion()
     .optional()
-    .transform((val) =>
-      val === undefined ? undefined : input('fmPasture', realNumber(val)),
+    .transform(
+      mapOptional((val) => input('fmPasture', realNumber(val))),
     ),
   method2TimeSpentOnFeedpad: proportion()
     .optional()
-    .transform((val) =>
-      val === undefined ? undefined : input('fmFeedpad', realNumber(val)),
+    .transform(
+      mapOptional((val) => input('fmFeedpad', realNumber(val))),
     ),
   method2TimeSpentOnMilkingShed: proportion()
     .optional()
-    .transform((val) =>
-      val === undefined ? undefined : input('fmMilkingShed', realNumber(val)),
+    .transform(
+      mapOptional((val) => input('fmMilkingShed', realNumber(val))),
     ),
   classes: object({
     milkingCows: DairyMilkingCowsInputSchema,

@@ -2,6 +2,7 @@ import { input } from '@/tools/inputs';
 import { mass, massPerMass, realNumber } from '@/tools/units';
 import { DESCRIPTIONS } from '@/types/descriptions.schema';
 import { object, proportion } from '@/types/schemas';
+import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 
 export const LimeInputSchema = object({
@@ -20,13 +21,13 @@ export const LimeInputSchema = object({
     .number()
     .min(0)
     .optional()
-    .transform((val) =>
-      val === undefined
-        ? undefined
-        : input(
-            'customScope3EmissionsFactor',
-            massPerMass('CO2e', 'Lime', val),
-          ),
+    .transform(
+      mapOptional((val) =>
+        input(
+          'customScope3EmissionsFactor',
+          massPerMass('CO2e', 'Lime', val),
+        ),
+      ),
     ),
 });
 

@@ -15,8 +15,8 @@ import { buildHighlightSegments } from '../utils/expressionHighlight';
 
 const TYPES: RecordType[] = ['expression', 'constant', 'input', 'unknown'];
 
-/** Navigable column indices: Symbol=0, Name=1, Units=2, Type=3, Expression=4, Line=5, Notes=6, Values=7 */
-const NUM_NAV_COLS = 8;
+/** Navigable column indices: Symbol=0, Name=1, Units=2, Type=3, Expression=4, Line=5, Method 2=6, Notes=7, Values=8 */
+const NUM_NAV_COLS = 9;
 
 type FocusableEl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
@@ -106,7 +106,9 @@ export function RecordsGrid() {
     (e, row, col) => {
       const target = e.target as FocusableEl;
       const isSelect = target instanceof HTMLSelectElement;
-      const start = isSelect ? 0 : (target as HTMLInputElement).selectionStart ?? 0;
+      const isCheckbox =
+        target instanceof HTMLInputElement && target.type === 'checkbox';
+      const start = isSelect || isCheckbox ? 0 : (target as HTMLInputElement).selectionStart ?? 0;
       const len = (target as HTMLInputElement).value?.length ?? 0;
 
       if (e.key === 'ArrowLeft') {
@@ -117,7 +119,7 @@ export function RecordsGrid() {
         return;
       }
       if (e.key === 'ArrowRight') {
-        if ((isSelect || start === len) && col < NUM_NAV_COLS - 1) {
+        if ((isSelect || isCheckbox || start === len) && col < NUM_NAV_COLS - 1) {
           e.preventDefault();
           focusCell(row, col + 1);
         }
@@ -163,6 +165,7 @@ export function RecordsGrid() {
               <th>Type</th>
               <th className="col-expression">Expression</th>
               <th className="col-line">Line</th>
+              <th className="col-method2">Method 2 input</th>
               <th>Notes</th>
               <th>Values</th>
               <th></th>
@@ -457,24 +460,35 @@ function RecordRow({
           onKeyDown={gridNav ? (e) => gridNav.handleKeyDown(e, index, 5) : undefined}
         />
       </td>
-      <td>
+      <td className="col-method2">
         <input
           ref={(el) => gridNav?.registerCell(index, 6, el)}
-          type="text"
-          value={record.notes}
-          onChange={(e) => onUpdate({ notes: e.target.value })}
+          type="checkbox"
+          checked={record.method2Input}
+          onChange={(e) => onUpdate({ method2Input: e.target.checked })}
           onKeyDown={gridNav ? (e) => gridNav.handleKeyDown(e, index, 6) : undefined}
+          title="Method 2 input"
+          aria-label="Method 2 input"
         />
       </td>
       <td>
         <input
           ref={(el) => gridNav?.registerCell(index, 7, el)}
           type="text"
+          value={record.notes}
+          onChange={(e) => onUpdate({ notes: e.target.value })}
+          onKeyDown={gridNav ? (e) => gridNav.handleKeyDown(e, index, 7) : undefined}
+        />
+      </td>
+      <td>
+        <input
+          ref={(el) => gridNav?.registerCell(index, 8, el)}
+          type="text"
           value={record.values ?? ''}
           onChange={(e) => onUpdate({ values: e.target.value })}
           disabled={!isConstant}
           className={isConstant ? '' : 'cell-disabled'}
-          onKeyDown={gridNav ? (e) => gridNav.handleKeyDown(e, index, 7) : undefined}
+          onKeyDown={gridNav ? (e) => gridNav.handleKeyDown(e, index, 8) : undefined}
         />
       </td>
       <td>
