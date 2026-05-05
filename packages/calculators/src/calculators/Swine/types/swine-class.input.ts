@@ -1,5 +1,6 @@
 import { input } from '@/tools/inputs';
 import { days, head, massPerHeadPerDay } from '@/tools/units';
+import { mapOptional } from '@/tools/zod';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 
@@ -19,10 +20,8 @@ export const SwineClassInputSchema = object({
     .min(0)
     .optional()
     .meta({ description: 'Average feed intake per head per class' })
-    .transform((val) =>
-      val === undefined
-        ? undefined
-        : input('Ij', massPerHeadPerDay('DryMatter', val)),
+    .transform(
+      mapOptional((val) => input('Ij', massPerHeadPerDay('DryMatter', val))),
     ),
 });
 

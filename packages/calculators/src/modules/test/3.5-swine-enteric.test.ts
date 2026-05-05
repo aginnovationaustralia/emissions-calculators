@@ -69,7 +69,7 @@ const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
 const extractInputsAndOutput = createSheetExtractor(
   getCalculatorInput,
   getExpectedOutput,
-  { rowInterval: 30 },
+  { rowInterval: 5 },
 );
 
 describe('3.5.1.1 Swine enteric methane', () => {
@@ -79,7 +79,7 @@ describe('3.5.1.1 Swine enteric methane', () => {
       '3.5.1.1',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1', 2);
 
     compareInputsAndOutputs(inputsAndOutputs, calculate35SwineEntericMethane);
   });
@@ -90,7 +90,7 @@ describe('3.5.1.1 Swine enteric methane', () => {
       '3.5.1.1',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 31, '2');
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 31, '2', 1);
 
     compareInputsAndOutputs(inputsAndOutputs, calculate35SwineEntericMethane);
   });

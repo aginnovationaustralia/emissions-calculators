@@ -43,6 +43,7 @@ export const createSheetExtractor =
     sheet: XLSX.Sheet,
     firstRow: number,
     method: '1' | '2',
+    expectedTests?: number,
   ): { results: Extraction[]; firstRow: number } => {
     const rowInterval = options?.rowInterval ?? 1;
     const outputGetter =
@@ -66,6 +67,11 @@ export const createSheetExtractor =
         finished = true;
       }
       currentRow += rowInterval;
+    }
+    if (expectedTests && results.length !== expectedTests) {
+      throw new Error(
+        `Expected to discover ${expectedTests} test cases, but got ${results.length}`,
+      );
     }
     return { results, firstRow };
   };
