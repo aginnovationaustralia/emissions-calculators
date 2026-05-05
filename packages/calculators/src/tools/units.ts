@@ -33,7 +33,8 @@ export type Substance =
   | 'Packaging'
   | 'Organic Amendment'
   | 'Grow Media'
-  | 'Trees';
+  | 'Trees'
+  | 'Freight Goods';
 
 export type NumberUnitBase = { value: Decimal };
 
@@ -42,7 +43,7 @@ export type NumberUnitBase = { value: Decimal };
 Selected base units for storage of values:
 Mass: kilograms (kg)
 Time: seconds (s)
-Length: metres (m)
+Distance: metres (m)
 Area: square metres (m2)
 Volume: litres (L)
 Energy: joules (J)
@@ -548,6 +549,68 @@ export const isMassPerAreaPerDay = (
   return unit.__unitType === 'MassPerAreaPerDay';
 };
 
+export type Distance = NumberUnitBase & {
+  __unitType: 'Distance';
+};
+export const distance = (initialValueMetres?: number | Decimal): Distance => {
+  return {
+    __unitType: 'Distance',
+    value: new Decimal(initialValueMetres ?? 0),
+  };
+};
+export const isDistance = (unit: NumberUnit): unit is Distance => {
+  return unit.__unitType === 'Distance';
+};
+
+export type MassDistance<S extends Substance> = NumberUnitBase & {
+  __unitType: 'MassDistance';
+  substance: S;
+};
+export const massDistance = <S extends Substance>(
+  substance: S,
+  initialValueKgMetres?: number | Decimal,
+): MassDistance<S> => {
+  return {
+    __unitType: 'MassDistance',
+    substance,
+    value: new Decimal(initialValueKgMetres ?? 0),
+  };
+};
+export const isMassDistance = (
+  unit: NumberUnit,
+): unit is MassDistance<Substance> => {
+  return unit.__unitType === 'MassDistance';
+};
+
+export type MassPerMassDistance<
+  SNum extends Substance,
+  SDenom extends Substance,
+> = NumberUnitBase & {
+  __unitType: 'MassPerMassDistance';
+  snum: SNum;
+  sdenom: SDenom;
+};
+export const massPerMassDistance = <
+  SNum extends Substance,
+  SDenom extends Substance,
+>(
+  snum: SNum,
+  sdenom: SDenom,
+  initialValueKgPerKgMetres?: number | Decimal,
+): MassPerMassDistance<SNum, SDenom> => {
+  return {
+    __unitType: 'MassPerMassDistance',
+    snum,
+    sdenom,
+    value: new Decimal(initialValueKgPerKgMetres ?? 0),
+  };
+};
+export const isMassPerMassDistance = (
+  unit: NumberUnit,
+): unit is MassPerMassDistance<Substance, Substance> => {
+  return unit.__unitType === 'MassPerMassDistance';
+};
+
 export type RealNumber = NumberUnitBase & {
   __unitType: 'RealNumber';
 };
@@ -609,6 +672,9 @@ export type NumberUnit =
   | Area
   | Electricity
   | Time
+  | Distance
+  | MassDistance<Substance>
+  | MassPerMassDistance<Substance, Substance>
   | VoidUnit
   | RealNumber;
 
