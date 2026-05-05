@@ -11,13 +11,13 @@ export const cubicMetresToLitres = (cubicMetres: number | Decimal) =>
 export const massInTonnes = (mass: Container<Mass<Substance>>) =>
   mass.unit.value.div(1000);
 
-export const gjPerTonneTogjPerKg = (gjPerTonne: number | Decimal) =>
+export const perTonneToPerKg = (gjPerTonne: number | Decimal) =>
   new Decimal(gjPerTonne).div(1000);
 
 export const perCubicMetresToPerLitres = (perCubicMetres: number | Decimal) =>
   new Decimal(perCubicMetres).div(1000);
 
-export const kgPerGjToKgPerJ = (kgPerGj: number | Decimal) =>
+export const perGjToPerJ = (kgPerGj: number | Decimal) =>
   new Decimal(kgPerGj).mul(1e6);
 
 export const gjPerCubicMetreToJPerLitre = (gjPerCubicMetre: number | Decimal) =>
@@ -32,3 +32,6 @@ export const tonnesPerHectareToKgPerSquareMetres = (
 
 export const perHectareToPerSqMetre = (perHectare: number | Decimal) =>
   new Decimal(perHectare).div(1e4);
+
+export const kilometresToMetres = (kilometres: number | Decimal) =>
+  new Decimal(kilometres).mul(1000);

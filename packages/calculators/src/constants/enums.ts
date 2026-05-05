@@ -866,6 +866,13 @@ export const PurchasedGrowMediaByMassTypes = ['PLACEHOLDER_MASS_TYPE'] as const;
 export type PurchasedGrowMediaByMassType =
   (typeof PurchasedGrowMediaByMassTypes)[number];
 
+export const FreightTypes = [
+  'PLACEHOLDER_TRAIN',
+  'PLACEHOLDER_TRUCK',
+  'PLACEHOLDER_AVIATION',
+] as const;
+export type FreightType = (typeof FreightTypes)[number];
+
 export const isPurchasedGrowMediaByVolume = (
   growMedia: PurchasedGrowMediaByVolumeType | PurchasedGrowMediaByMassType,
 ): growMedia is PurchasedGrowMediaByVolumeType => {

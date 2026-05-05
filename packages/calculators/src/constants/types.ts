@@ -11,6 +11,7 @@ import {
   MassPerHead,
   MassPerHeadPerDay,
   MassPerMass,
+  MassPerMassDistance,
   MassPerTime,
   MassPerVolume,
   NumberUnitBase,
@@ -34,6 +35,7 @@ import {
   ExtendedRegion,
   FeedlotDurationType,
   FeedlotMMSType,
+  FreightType,
   FuelStationaryMassBasedLiquidType,
   FuelStationarySolidType,
   FuelStationaryVolumeBasedLiquidType,
@@ -194,6 +196,11 @@ export type CommonConstants = NamedConstants & {
     SCOPE1_EF: { [G in GasType]: MassPerEnergy<G> };
     SCOPE3_EF: Record<States, MassPerEnergy<'CO2e'>>;
   };
+
+  FREIGHT_EMISSIONS: Record<
+    FreightType,
+    MassPerMassDistance<'CO2e', 'Freight Goods'>
+  >;
 
   LIMING: {
     LIMESTONE_PURITY: RealNumber;

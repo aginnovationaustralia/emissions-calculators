@@ -1,7 +1,7 @@
 import {
   gjPerCubicMetreToJPerLitre,
-  gjPerTonneTogjPerKg,
-  kgPerGjToKgPerJ,
+  perTonneToPerKg,
+  perGjToPerJ,
   perCubicMetresToPerLitres,
   perHectareToPerSqMetre,
   tonnesPerHectareToKgPerSquareMetres,
@@ -19,6 +19,7 @@ import {
   massPerHead,
   massPerHeadPerDay,
   massPerMass,
+  massPerMassDistance,
   massPerTime,
   massPerVolume,
   percentage,
@@ -561,7 +562,7 @@ export const commonConstants: CommonConstants = {
   STATIONARY_FUEL_FACTORS_BY_MASS: {
     'Solid fuels': {
       'Bituminous coal': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(27)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(27)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 90),
           CH4: massPerEnergy('CH4', 0.04),
@@ -570,7 +571,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 3),
       },
       'Sub-bituminous coal': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(21)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(21)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 90),
           CH4: massPerEnergy('CH4', 0.04),
@@ -579,7 +580,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 2.5),
       },
       Anthracite: {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(29)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(29)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 90),
           CH4: massPerEnergy('CH4', 0.04),
@@ -588,7 +589,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Brown coal (lignite)': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(10.2)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(10.2)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 93.5),
           CH4: massPerEnergy('CH4', 0.02),
@@ -597,7 +598,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0.4),
       },
       'Coking coal': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(30)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(30)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 91.8),
           CH4: massPerEnergy('CH4', 0.03),
@@ -606,7 +607,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 6.4),
       },
       'Coal briquettes': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(22.1)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(22.1)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 95),
           CH4: massPerEnergy('CH4', 0.08),
@@ -615,7 +616,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Coal coke': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(27)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(27)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 107),
           CH4: massPerEnergy('CH4', 0.03),
@@ -624,7 +625,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Coal tar': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(37.5)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(37.5)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 81.8),
           CH4: massPerEnergy('CH4', 0.03),
@@ -633,7 +634,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Other solid fossil fuels': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(22.1)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(22.1)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 95),
           CH4: massPerEnergy('CH4', 0.08),
@@ -642,7 +643,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Industrial materials derived from fossil fuels': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(26.3)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(26.3)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 81.6),
           CH4: massPerEnergy('CH4', 0.03),
@@ -651,7 +652,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Passenger car tyres': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(32)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(32)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 62.8),
           CH4: massPerEnergy('CH4', 0.03),
@@ -660,7 +661,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Truck and off-road tyres': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(27.1)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(27.1)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 55.9),
           CH4: massPerEnergy('CH4', 0.03),
@@ -669,7 +670,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Non-biomass municipal materials': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(10.5)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(10.5)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 87.1),
           CH4: massPerEnergy('CH4', 0.8),
@@ -678,7 +679,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Dry wood': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(16.2)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(16.2)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 0),
           CH4: massPerEnergy('CH4', 0.1),
@@ -687,7 +688,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Green and air dried wood': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(10.4)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(10.4)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 0),
           CH4: massPerEnergy('CH4', 0.1),
@@ -696,7 +697,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Sulphite lyes': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(12.4)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(12.4)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 0),
           CH4: massPerEnergy('CH4', 0.08),
@@ -705,7 +706,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       Bagasse: {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(9.6)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(9.6)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 0),
           CH4: massPerEnergy('CH4', 0.3),
@@ -714,7 +715,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Biomass,  municipal and industrial materials': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(12.2)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(12.2)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 0),
           CH4: massPerEnergy('CH4', 0.8),
@@ -723,7 +724,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       Charcoal: {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(31.1)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(31.1)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 0),
           CH4: massPerEnergy('CH4', 5.3),
@@ -732,7 +733,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0),
       },
       'Other primary solid biomass fuels': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(12.2)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(12.2)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 0),
           CH4: massPerEnergy('CH4', 0.8),
@@ -745,7 +746,7 @@ export const commonConstants: CommonConstants = {
     // NGAF Table 8
     'Liquid fuels': {
       'Crude oil and condensates': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(45.3)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(45.3)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 69.6),
           CH4: massPerEnergy('CH4', 0.08),
@@ -754,7 +755,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 0), // N)E
       },
       'Other natural gas liquids': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(46.5)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(46.5)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 61.0),
           CH4: massPerEnergy('CH4', 0.08),
@@ -764,7 +765,7 @@ export const commonConstants: CommonConstants = {
       },
 
       'Petroleum coke': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(34.2)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(34.2)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 92.6),
           CH4: massPerEnergy('CH4', 0.08),
@@ -773,7 +774,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 18.0),
       },
       'Refinery gas and liquids': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(42.9)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(42.9)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 54.7),
           CH4: massPerEnergy('CH4', 0.03),
@@ -782,7 +783,7 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 18.0),
       },
       'Refinery coke': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneTogjPerKg(34.2)),
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(34.2)),
         SCOPE1_EF: {
           CO2: massPerEnergy('CO2', 92.6),
           CH4: massPerEnergy('CH4', 0.08),
@@ -922,6 +923,12 @@ export const commonConstants: CommonConstants = {
         SCOPE3_EF: massPerEnergy('CO2e', 20.2),
       },
     },
+  },
+
+  FREIGHT_EMISSIONS: {
+    PLACEHOLDER_TRAIN: massPerMassDistance('CO2e', 'Freight Goods', 0),
+    PLACEHOLDER_TRUCK: massPerMassDistance('CO2e', 'Freight Goods', 0),
+    PLACEHOLDER_AVIATION: massPerMassDistance('CO2e', 'Freight Goods', 0),
   },
 
   // NGAF Table 5 direct and Table 6 indirect
@@ -1238,12 +1245,12 @@ export const commonConstants: CommonConstants = {
      * Chapter 11.2.3 line 222
      * Originally expressed in kg CH4/GJ
      */
-    SLUDGE_BIOGAS_CH4_EF: massPerEnergy('CH4', kgPerGjToKgPerJ(0.2289)),
+    SLUDGE_BIOGAS_CH4_EF: massPerEnergy('CH4', perGjToPerJ(0.2289)),
     /**
      * Chapter 11.2.3 line 223
      * Originally expressed in kg N2O/GJ
      */
-    SLUDGE_BIOGAS_N2O_EF: massPerEnergy('N2O', kgPerGjToKgPerJ(1.132e-4)),
+    SLUDGE_BIOGAS_N2O_EF: massPerEnergy('N2O', perGjToPerJ(1.132e-4)),
   },
 
   /**
