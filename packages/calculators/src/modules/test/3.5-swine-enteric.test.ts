@@ -57,8 +57,6 @@ const getCalculatorInput = (
     ],
   };
 
-  // console.dir(swineInput, { depth: null });
-
   return SwineInputSchema.parse(swineInput);
 };
 

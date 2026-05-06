@@ -23,6 +23,9 @@ export const perGjToPerJ = (kgPerGj: number | Decimal) =>
 export const gjPerCubicMetreToJPerLitre = (gjPerCubicMetre: number | Decimal) =>
   new Decimal(gjPerCubicMetre).mul(1e-9);
 
+export const megaJoulesToJoules = (megaJoules: number | Decimal) =>
+  new Decimal(megaJoules).mul(1e6);
+
 export const hectaresToSquareMetres = (hectares: number | Decimal) =>
   new Decimal(hectares).mul(1e4);
 

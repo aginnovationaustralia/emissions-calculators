@@ -366,6 +366,7 @@ export type SwineConstants = NamedConstants & {
   GROSS_ENERGY_CONTENT_OF_FEED: EnergyPerMass<'DryMatter'>;
   ENERGY_PER_MASS_METHANE: EnergyPerMass<'CH4'>;
   SWINE_CLASS_FACTORS: Record<SwineClass, SwineClassFactors>;
+  FRACTION_INTAKE_CONVERTED_TO_METHANE: RealNumber;
 };
 
 type FeedlotFeedFactors = {

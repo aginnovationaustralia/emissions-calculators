@@ -1,6 +1,7 @@
 import {
   cubicMetresToLitres,
   gjPerCubicMetreToJPerLitre,
+  megaJoulesToJoules,
   perCubicMetresToPerLitres,
   perGjToPerJ,
   perHectareToPerSqMetre,
@@ -1798,9 +1799,14 @@ export const swineConstants: SwineConstants = {
     },
   },
 
-  ENERGY_PER_MASS_METHANE: energyPerMass('CH4', 55.22),
+  ENERGY_PER_MASS_METHANE: energyPerMass('CH4', megaJoulesToJoules(55.22)),
 
-  GROSS_ENERGY_CONTENT_OF_FEED: energyPerMass('DryMatter', 18.6),
+  GROSS_ENERGY_CONTENT_OF_FEED: energyPerMass(
+    'DryMatter',
+    megaJoulesToJoules(18.6),
+  ),
+
+  FRACTION_INTAKE_CONVERTED_TO_METHANE: realNumber(0.007),
 
   SWINE_CLASS_FACTORS: {
     boars: {

@@ -38,9 +38,13 @@ function calculateEntericMethaneForClass(
   const F = selectConstant(constants.SWINE, 'ENERGY_PER_MASS_METHANE').named(
     `F`,
   );
+  const FRACTION_INTAKE_CONVERTED_TO_METHANE = selectConstant(
+    constants.SWINE,
+    'FRACTION_INTAKE_CONVERTED_TO_METHANE',
+  ).named(`FRACTION_INTAKE_CONVERTED_TO_METHANE`);
 
   const Mj: Container<MassPerHeadPerDay<'CH4'>> = Ij.multiply(GE)
-    .multiply(num(0.007))
+    .multiply(FRACTION_INTAKE_CONVERTED_TO_METHANE)
     .divide(F)
     .named(`Mj=${className}`);
   const Eenteric = Mj.multiply(Nj)
