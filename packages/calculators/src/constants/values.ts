@@ -6,6 +6,7 @@ import {
   perHectareToPerSqMetre,
   tonnesPerHectareToKgPerSquareMetres,
   perKilometreToPerMetre,
+  cubicMetresToLitres,
 } from '@/tools/unit-conversion';
 import {
   countPerArea,
@@ -173,10 +174,14 @@ export const commonConstants: CommonConstants = {
   EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: volumePerMass(
     'CH4',
     'Volatile Solids',
-    0.19,
+    cubicMetresToLitres(0.19),
   ),
 
-  DENSITY_OF_METHANE: massPerVolume('CH4', 'CH4', 0.6784),
+  DENSITY_OF_METHANE: massPerVolume(
+    'CH4',
+    'CH4',
+    perCubicMetresToPerLitres(0.6784),
+  ),
 
   LIME_SCOPE3_EF: massPerMass('CO2e', 'Lime', 0.432),
 

@@ -1,9 +1,7 @@
 import { AllConstants } from '@/constants/types';
 import { WastewaterTreatmentInputTransformed } from './wastewater-treatment.input';
 import { ExecutionContext } from '@/calculators/executionContext';
-import { value } from '@/tools/containers';
 import { selectConstant } from '@/tools/constants';
-import { massPerVolume } from '@/tools/units';
 import { oneMinus } from '@/tools/sentinels';
 
 export const calculateScope1WastewaterCH4 = (
@@ -70,16 +68,21 @@ export const calculateScope1WastewaterCH4 = (
     .named('methaneFromSludgeTreatedAtFacility');
 
   /**
-   * This value comes from the [National Greenhouse and Energy Reporting (Measurement) Determination 2008](https://www.legislation.gov.au/F2008L02309/latest/text),
+   * This value comes from the [National Greenhouse and Energy Reporting (Measurement)
+   * Determination 2008](https://www.legislation.gov.au/F2008L02309/latest/text),
    * Chapter 5, Section 5.4:
-   * > *"γ is the factor **6.784 * 10^‑4** * GWPmethane converting cubic metres of methane
-   * > at standard conditions to CO2‑e tonnes."*
+   * > *"γ is the factor **6.784 * 10^‑4** * GWPmethane converting cubic metres of
+   * > methane at standard conditions to CO2‑e tonnes."*
    *
-   * Omitting the 'GWPmethane' factor, the unit of this value is t CH4/m^3, which is equivalent to
-   * kg/L.
+   * Omitting the 'GWPmethane' factor, the unit of this value is t CH4/m^3, which is
+   * equivalent to kg/L.
+   *
+   * NOTE: This value gets defined properly in another chapter, so we can actually just
+   * use the constant here.
    */
-  const methaneVolumeConversionFactor = value(
-    massPerVolume('CH4', 'CH4', 6.784e-4),
+  const methaneVolumeConversionFactor = selectConstant(
+    constants.COMMON,
+    'DENSITY_OF_METHANE',
   );
 
   /**
