@@ -172,12 +172,6 @@ export const commonConstants: CommonConstants = {
 
   CG_CO2: massPerMass('CO2', 'Carbon', 44 / 12),
 
-  EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: volumePerMass(
-    'CH4',
-    'Volatile Solids',
-    cubicMetresToLitres(0.19),
-  ),
-
   DENSITY_OF_METHANE: massPerVolume(
     'CH4',
     'CH4',
@@ -2537,6 +2531,13 @@ export const livestockConstants: LivestockConstants = {
     Horses: massPerHead('Liveweight', 550),
     'Mules/asses': massPerHead('Liveweight', 245),
     'Emus/ostriches': massPerHead('Liveweight', 120),
+  },
+
+  EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: {
+    general: volumePerMass('CH4', 'Volatile Solids', 0.19),
+    dairy: volumePerMass('CH4', 'Volatile Solids', 0.24),
+    // REVISIT: Tranche 2 docs have a value of 0.24, but source IPCC (2019), Chapter 10 [3] appears to have 0.19 for sheep
+    sheep: volumePerMass('CH4', 'Volatile Solids', 0.19),
   },
 };
 
@@ -6227,6 +6228,50 @@ export const sheepConstants: SheepConstants = {
   },
 
   FEED_ADJUSTMENT: realNumber(1.3),
+
+  ASH_CONTENT_OF_MANURE: realNumber(0.08),
+
+  MMS: {
+    ACT: {
+      PRP: percentage(99.25),
+      Lagoon: percentage(0.75),
+    },
+    NSW: {
+      PRP: percentage(99.55),
+      Lagoon: percentage(0.45),
+    },
+    QLD: {
+      PRP: percentage(99.91),
+      Lagoon: percentage(0.09),
+    },
+    SA: {
+      PRP: percentage(99.74),
+      Lagoon: percentage(0.26),
+    },
+    TAS: {
+      PRP: percentage(99.5),
+      Lagoon: percentage(0.5),
+    },
+    VIC: {
+      PRP: percentage(99.17),
+      Lagoon: percentage(0.83),
+    },
+    WA: {
+      PRP: percentage(99.59),
+      Lagoon: percentage(0.41),
+    },
+  },
+
+  MCF_PRP: realNumber(0.0047),
+  MCF_LAGOON: {
+    ACT: realNumber(0.72),
+    NSW: realNumber(0.75),
+    QLD: realNumber(0.78),
+    SA: realNumber(0.74),
+    TAS: realNumber(0.69),
+    VIC: realNumber(0.73),
+    WA: realNumber(0.76),
+  },
 };
 
 export const lulucfConstants: LULUCFConstants = {

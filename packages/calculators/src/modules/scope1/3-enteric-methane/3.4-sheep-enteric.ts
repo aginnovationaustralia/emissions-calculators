@@ -9,7 +9,14 @@ import {
 } from '@/calculators/Sheep/types/sheep-class.input';
 import { SheepFlockInputTransformed } from '@/calculators/Sheep/types/sheep-flock.input';
 import { isDefined } from '@/common/filters';
-import { Month, Months, Season, Seasons, SheepClass } from '@/constants/enums';
+import {
+  Month,
+  Months,
+  pureStateWithoutNTToLimitedState,
+  Season,
+  Seasons,
+  SheepClass,
+} from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, num, root } from '@/tools/containers';
 import { daysInSeason, e, oneMinus, tenToPowMinus3 } from '@/tools/sentinels';
@@ -76,7 +83,7 @@ function calculateAdditionalIntakeForMilkProductionMAjk(
     .named(`MAj=${periodName},k=${className}`);
 }
 
-function calculateDailyFeedIntakeIjk(
+export function calculateDailyFeedIntakeIjk(
   input: SheepInputTransformed,
   className: SheepClass,
   periodInput: SheepClassPeriodsInputTransformed,
@@ -99,12 +106,14 @@ function calculateDailyFeedIntakeIjk(
     method2DryMatterDigestibility,
   } = periodInput;
 
+  const limitedState = pureStateWithoutNTToLimitedState(input.state);
+
   const DMAjk = (
     method2DryMatterAvailability ??
     selectConstant(
       constants.SHEEP,
       'SEASONAL_FACTORS',
-      input.state,
+      limitedState,
       className,
       seasonName,
       'dryMatterAvailability',
@@ -116,7 +125,7 @@ function calculateDailyFeedIntakeIjk(
     selectConstant(
       constants.SHEEP,
       'SEASONAL_FACTORS',
-      input.state,
+      limitedState,
       className,
       seasonName,
       'dryMatterDigestibility',
@@ -128,7 +137,7 @@ function calculateDailyFeedIntakeIjk(
     selectConstant(
       constants.SHEEP,
       'SEASONAL_FACTORS',
-      input.state,
+      limitedState,
       className,
       seasonName,
       'liveweight',

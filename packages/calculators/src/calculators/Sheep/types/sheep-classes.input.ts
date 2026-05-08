@@ -42,12 +42,12 @@ const SheepLambsHoggetsInputSchema = SheepClassInputSchema.transform((val) => ({
 }));
 
 export const SheepClassesInputSchema = object({
+  breedingEwes: SheepBreedingEwesInputSchema.optional(),
+  lambsHoggets: SheepLambsHoggetsInputSchema.optional(),
+  maidenEwes: SheepMaidenEwesInputSchema.optional(),
+  otherEwes: SheepOtherEwesInputSchema.optional(),
   rams: SheepRamsInputSchema.optional(),
   wethers: SheepWethersInputSchema.optional(),
-  maidenEwes: SheepMaidenEwesInputSchema.optional(),
-  breedingEwes: SheepBreedingEwesInputSchema.optional(),
-  otherEwes: SheepOtherEwesInputSchema.optional(),
-  lambsHoggets: SheepLambsHoggetsInputSchema.optional(),
 });
 
 export type SheepRamsInputTransformed = z.output<typeof SheepRamsInputSchema>;

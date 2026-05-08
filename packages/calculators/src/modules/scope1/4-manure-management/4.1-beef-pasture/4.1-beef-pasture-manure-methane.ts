@@ -67,8 +67,9 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
     .named('VSijkln');
 
   const Bo = selectConstant(
-    constants.COMMON,
+    constants.LIVESTOCK,
     'EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4',
+    'general',
   );
   const p = selectConstant(constants.COMMON, 'DENSITY_OF_METHANE');
   const MCFm1 = selectConstant(

@@ -71,6 +71,7 @@ import {
   PurchasedMineralSupplementType,
   PurchasedPackagingType,
   PureState,
+  PureStateWithoutNT,
   RefrigerantType,
   RefrigerationType,
   RiceCultivationOrganicAmendmentType,
@@ -143,11 +144,6 @@ export type CommonConstants = NamedConstants & {
   GWP_CH4: MassPerMass<'CO2e', 'CH4'>;
 
   CG_CO2: MassPerMass<'CO2', 'Carbon'>;
-
-  EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: VolumePerMass<
-    'CH4',
-    'Volatile Solids'
-  >;
 
   DENSITY_OF_METHANE: MassPerVolume<'CH4', 'CH4'>;
 
@@ -543,6 +539,11 @@ export type LivestockConstants = NamedConstants & {
     GrazingProductionSystemsWithRainfall,
     MassPerMass<'N2O', 'Volatilised N'>
   >;
+
+  EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: Record<
+    'general' | 'sheep' | 'dairy',
+    VolumePerMass<'CH4', 'Volatile Solids'>
+  >;
 };
 
 type SeasonalFactors<F extends AnyUnit = RealNumber> = Record<Season, F>;
@@ -628,6 +629,13 @@ export type SheepConstants = NamedConstants & {
   >;
 
   FEED_ADJUSTMENT: RealNumber;
+
+  ASH_CONTENT_OF_MANURE: RealNumber;
+
+  MMS: Record<PureStateWithoutNT, Record<'PRP' | 'Lagoon', RealNumber>>;
+
+  MCF_PRP: RealNumber;
+  MCF_LAGOON: Record<PureStateWithoutNT, RealNumber>;
 };
 
 export type AllConstants = {

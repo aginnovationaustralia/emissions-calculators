@@ -10,21 +10,21 @@ import {
 } from '@/calculators/Sheep/types/sheep-class.input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { calculate34SheepEntericMethane } from '../scope1/3-enteric-methane/3.4-sheep-enteric';
-import { checkLimitedState } from './livestock-domain';
+import { calculate34SheepEntericMethane } from '../../scope1/3-enteric-methane/3.4-sheep-enteric';
+import { checkPureStateWithoutNT } from '../livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
-} from './sheet-comparison';
+} from '../sheet-comparison';
 
 const columnState = 'B';
-const columnLambingRate = 'F';
-const columnMarkingRate = 'G';
-const columnCustomLiveweight = 'O';
-const columnCustomDryMatterAvailability = 'J';
-const columnCustomDryMatterDigestibility = 'L';
-const columnHead = 'U';
-const columnOutput = 'Z';
+const columnLambingRate = 'G';
+const columnMarkingRate = 'H';
+const columnCustomLiveweight = 'P';
+const columnCustomDryMatterAvailability = 'K';
+const columnCustomDryMatterDigestibility = 'M';
+const columnHead = 'V';
+const columnOutput = 'AA';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -113,13 +113,14 @@ const getCalculatorInput = (
   };
 
   const sheepInput: SheepInput = {
-    state: checkLimitedState(cell(columnState)),
+    state: checkPureStateWithoutNT(cell(columnState)),
     electricity: {
       method: 'location',
       electricityPurchasedKWh: 0,
     },
     flocks: [
       {
+        noUnfencedNaturalWater: false,
         classes: {
           rams: readSheepClass(0),
           wethers: readSheepClass(1),
@@ -150,7 +151,7 @@ const extractInputsAndOutput = createSheetExtractor(
 describe('3.4.1.1 Sheep enteric methane seasonal', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/3.4-sheep-enteric.xlsx',
+      './src/modules/test/3.4-sheep-enteric/3.4-sheep-enteric.xlsx',
       '3.4.1.1',
     );
 
@@ -161,7 +162,7 @@ describe('3.4.1.1 Sheep enteric methane seasonal', () => {
 
   it('method 2 matches spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/3.4-sheep-enteric.xlsx',
+      './src/modules/test/3.4-sheep-enteric/3.4-sheep-enteric.xlsx',
       '3.4.1.1',
     );
 

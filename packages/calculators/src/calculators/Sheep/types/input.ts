@@ -1,4 +1,4 @@
-import { LimitedStates } from '@/constants/enums';
+import { PureStatesWithoutNT } from '@/constants/enums';
 import { ElectricityInputsSchema } from '@/modules/scope2/14-electricity/electricity.input';
 import { singleEnterpriseInput } from '@/types/schemas';
 import { z } from 'zod';
@@ -6,7 +6,7 @@ import { SheepFlockInputSchema } from './sheep-flock.input';
 
 export const SheepInputSchema = singleEnterpriseInput('Sheep', {
   state: z
-    .enum(LimitedStates)
+    .enum(PureStatesWithoutNT)
     .meta({ description: 'The state the enterprise is located in' }),
   flocks: z.array(SheepFlockInputSchema),
   electricity: ElectricityInputsSchema,
