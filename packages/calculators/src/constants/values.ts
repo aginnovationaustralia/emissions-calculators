@@ -1,12 +1,13 @@
 import {
-  gjPerCubicMetreToJPerLitre,
-  perTonneToPerKg,
-  perGjToPerJ,
-  perCubicMetresToPerLitres,
-  perHectareToPerSqMetre,
-  tonnesPerHectareToKgPerSquareMetres,
-  perKilometreToPerMetre,
   cubicMetresToLitres,
+  gjPerCubicMetreToJPerLitre,
+  megaJoulesToJoules,
+  perCubicMetresToPerLitres,
+  perGjToPerJ,
+  perHectareToPerSqMetre,
+  perKilometreToPerMetre,
+  perTonneToPerKg,
+  tonnesPerHectareToKgPerSquareMetres,
 } from '@/tools/unit-conversion';
 import {
   countPerArea,
@@ -1795,6 +1796,30 @@ export const swineConstants: SwineConstants = {
     'Direct application': {
       N_VOLATISED_EF: realNumber(0),
       N2O_EF: realNumber(0),
+    },
+  },
+
+  ENERGY_PER_MASS_METHANE: energyPerMass('CH4', megaJoulesToJoules(55.22)),
+
+  GROSS_ENERGY_CONTENT_OF_FEED: energyPerMass(
+    'DryMatter',
+    megaJoulesToJoules(18.6),
+  ),
+
+  FRACTION_INTAKE_CONVERTED_TO_METHANE: realNumber(0.007),
+
+  SWINE_CLASS_FACTORS: {
+    boars: {
+      FEED_INTAKE: massPerHeadPerDay('DryMatter', 2.62),
+    },
+    sows: {
+      FEED_INTAKE: massPerHeadPerDay('DryMatter', 2.3),
+    },
+    gilts: {
+      FEED_INTAKE: massPerHeadPerDay('DryMatter', 2.5),
+    },
+    slaughterPigs: {
+      FEED_INTAKE: massPerHeadPerDay('DryMatter', 1.71),
     },
   },
 };
