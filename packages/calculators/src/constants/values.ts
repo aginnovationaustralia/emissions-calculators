@@ -2386,7 +2386,6 @@ export const livestockConstants: LivestockConstants = {
    * Values are taken from the national averages for sheep and beef,
    * depending on which of the two the guidelines advises is the most similar
    * for each livestock type.
-   * There is a specified factor for purchased chickens.
    */
   OTHER_PURCHASED_LIVESTOCK_FACTORS: {
     Buffalo: massPerMass('CO2e', 'Liveweight', 12.4),
@@ -2399,7 +2398,8 @@ export const livestockConstants: LivestockConstants = {
     'Emus/ostriches': massPerMass('CO2e', 'Liveweight', 5.44),
   },
   /**
-   * REVISIT: The table given in A.1.5.4 is
+   * REVISIT: The table given in A.1.5.4 is not formatted very well; some of these
+   * numbers may need to be revised later.
    */
   OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS: {
     Buffalo: massPerHead('Liveweight', 336),
