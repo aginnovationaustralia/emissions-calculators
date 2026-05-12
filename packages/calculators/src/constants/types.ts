@@ -482,6 +482,20 @@ export type LivestockConstants = NamedConstants & {
 
   OTHER_LIVESTOCK_METHANE_CONVERSION_BY_STATE: Record<PureState, RealNumber>;
 
+  /**
+   * REVISIT: The current draft does not factor in region for these
+   * livestock types. We should check back here when the first complete
+   * version of the guidelines is published.
+   */
+  OTHER_PURCHASED_LIVESTOCK_FACTORS: Record<
+    OtherLivestockType,
+    MassPerMass<'CO2e', 'Liveweight'>
+  >;
+  OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS: Record<
+    OtherLivestockType,
+    MassPerHead<'Liveweight'>
+  >;
+
   METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE: Record<
     MeanAnnualTemperature,
     RealNumber

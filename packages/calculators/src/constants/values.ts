@@ -2067,6 +2067,14 @@ export const dairyConstants: DairyConstants = {
       pasture: realNumber(0),
     },
   },
+
+  // PURCHASED_LIVESTOCK_FACTORS: {
+  //   milkingCows: undefined,
+  //   heifersGt1: undefined,
+  //   heifersLt1: undefined,
+  //   bullsGt1: undefined,
+  //   bullsLt1: undefined
+  // }
 };
 
 export const poultryConstants: PoultryConstants = {
@@ -2372,6 +2380,36 @@ export const livestockConstants: LivestockConstants = {
       'Volatilised N',
       0.008,
     ),
+  },
+
+  /**
+   * Values are taken from the national averages for sheep and beef,
+   * depending on which of the two the guidelines advises is the most similar
+   * for each livestock type.
+   */
+  OTHER_PURCHASED_LIVESTOCK_FACTORS: {
+    Buffalo: massPerMass('CO2e', 'Liveweight', 12.4),
+    Goats: massPerMass('CO2e', 'Liveweight', 5.44),
+    Deer: massPerMass('CO2e', 'Liveweight', 5.44),
+    Camels: massPerMass('CO2e', 'Liveweight', 12.4),
+    Alpacas: massPerMass('CO2e', 'Liveweight', 5.44),
+    Horses: massPerMass('CO2e', 'Liveweight', 12.4),
+    'Mules/asses': massPerMass('CO2e', 'Liveweight', 5.44),
+    'Emus/ostriches': massPerMass('CO2e', 'Liveweight', 5.44),
+  },
+  /**
+   * REVISIT: The table given in A.1.5.4 is not formatted very well; some of these
+   * numbers may need to be revised later.
+   */
+  OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS: {
+    Buffalo: massPerHead('Liveweight', 336),
+    Goats: massPerHead('Liveweight', 50),
+    Deer: massPerHead('Liveweight', 120),
+    Camels: massPerHead('Liveweight', 570),
+    Alpacas: massPerHead('Liveweight', 65),
+    Horses: massPerHead('Liveweight', 550),
+    'Mules/asses': massPerHead('Liveweight', 245),
+    'Emus/ostriches': massPerHead('Liveweight', 120),
   },
 };
 
