@@ -5,11 +5,11 @@ import { object } from '@/types/schemas';
 import z from 'zod';
 
 export const BasePurchasedLivestockMethod1InputSchema = object({
+  calculationMethod: z.literal('1'),
   headPurchased: z
     .number()
     .min(0)
     .transform((val) => input('head purchased', head(val))),
-
   averageLiveweight: z
     .number()
     .min(0)
@@ -22,6 +22,7 @@ export const BasePurchasedLivestockMethod1InputSchema = object({
 });
 
 export const BasePurchasedLivestockMethod2InputSchema = object({
+  calculationMethod: z.literal('2'),
   headPurchased: z
     .number()
     .min(0)

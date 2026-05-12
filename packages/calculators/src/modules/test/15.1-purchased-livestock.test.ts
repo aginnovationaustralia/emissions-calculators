@@ -33,6 +33,7 @@ const getCalculatorInput = (
     return OtherPurchasedLivestocksInputSchema.parse({
       livestockPurchases: [
         {
+          calculationMethod: method,
           type: livestockType,
           headPurchased,
           averageLiveweight,
@@ -45,6 +46,7 @@ const getCalculatorInput = (
   return OtherPurchasedLivestocksInputSchema.parse({
     livestockPurchases: [
       {
+        calculationMethod: method,
         type: livestockType,
         headPurchased,
         averageLiveweight,

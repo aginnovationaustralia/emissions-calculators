@@ -48,18 +48,12 @@ export type OtherPurchasedLivestockInputTransformed = z.output<
 export const otherPurchasedLivestockIsMethod1 = (
   purchase: OtherPurchasedLivestockInputTransformed,
 ): purchase is OtherPurchasedLivestockMethod1InputTransformed => {
-  return (
-    (purchase as OtherPurchasedLivestockMethod2InputTransformed)
-      .emissionsFactor === undefined
-  );
+  return purchase.calculationMethod === '1';
 };
 export const otherPurchasedLivestockIsMethod2 = (
   purchase: OtherPurchasedLivestockInputTransformed,
 ): purchase is OtherPurchasedLivestockMethod2InputTransformed => {
-  return (
-    (purchase as OtherPurchasedLivestockMethod2InputTransformed)
-      .emissionsFactor !== undefined
-  );
+  return purchase.calculationMethod === '2';
 };
 
 export const OtherPurchasedLivestocksInputSchema = object({
