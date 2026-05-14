@@ -44,7 +44,6 @@ const getCalculatorInput = (
   } as unknown as StationaryFuelInput;
 
   const fuelInput: FuelInput = {
-    naturalGas: 0,
     stationaryFuel: [stationaryFuelRecord],
     transportFuel: [],
   };

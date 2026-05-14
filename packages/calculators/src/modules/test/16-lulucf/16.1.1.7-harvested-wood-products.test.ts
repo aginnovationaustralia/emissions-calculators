@@ -38,6 +38,10 @@ const getCalculatorInput = (
     type: 'plantationForestry',
     carbonMassOfWoodProductsHarvestedPerHectare,
     activityArea,
+    carbonMassInTreesCurrentYear: 0,
+    carbonMassInTreesPreviousYear: 0,
+    carbonMassInDebrisCurrentYear: 0,
+    carbonMassInDebrisPreviousYear: 0,
   };
 
   const lulucfInput: LULUCFInput = {
