@@ -50,7 +50,7 @@ const getCalculatorInput = (
 
   const baseGrainsCrop: BaseGrainsCrop = {
     state,
-    areaSown: 0,
+    areaSown: 1,
     isInLeachingZone: false,
     electricityAllocation: 0,
   };
