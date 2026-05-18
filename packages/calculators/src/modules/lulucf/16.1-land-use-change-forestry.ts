@@ -35,7 +35,7 @@ export const calculate_16_1_1_2_ChangesInWoodyCarbonStocks = (
       carbonMassInTreesPreviousYear,
       carbonMassInDebrisCurrentYear,
       carbonMassInDebrisPreviousYear,
-      activityArea,
+      activityAreaHectares,
     } = activity;
 
     const changeInTrees = carbonMassInTreesCurrentYear.minus(
@@ -47,7 +47,7 @@ export const calculate_16_1_1_2_ChangesInWoodyCarbonStocks = (
     );
 
     const netChange = br(changeInTrees.plus(changeInDebris)).multiply(
-      activityArea,
+      activityAreaHectares,
     );
 
     return netChange;
@@ -126,7 +126,7 @@ export const calculate_16_1_1_5_SoilOrganicStockLosses = (
   const soilLosses = activities
     .filter(isLandClearingActivity)
     .map((activity) => {
-      const { region, activityArea } = activity;
+      const { region, activityAreaHectares } = activity;
 
       const Or = selectConstant(
         constants.LULUCF,
@@ -134,7 +134,7 @@ export const calculate_16_1_1_5_SoilOrganicStockLosses = (
         region,
       );
 
-      return Or.multiply(activityArea);
+      return Or.multiply(activityAreaHectares);
     });
 
   return sum(soilLosses)
@@ -161,10 +161,14 @@ export const calculate_16_1_1_7_HarvestedWoodProducts = (
   const harvestedWoodEmissions = activities
     .filter(isForestryActivity)
     .map((activity) => {
-      const { carbonMassOfWoodProductsHarvestedPerHectare, activityArea } =
-        activity;
+      const {
+        carbonMassOfWoodProductsHarvestedPerHectare,
+        activityAreaHectares,
+      } = activity;
 
-      return carbonMassOfWoodProductsHarvestedPerHectare.multiply(activityArea);
+      return carbonMassOfWoodProductsHarvestedPerHectare.multiply(
+        activityAreaHectares,
+      );
     });
 
   return sum(harvestedWoodEmissions)

@@ -1,6 +1,6 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -290,6 +290,20 @@
         "browser": "./dist/calculators/WildSeaFisheries/browser.cjs",
         "types": "./dist/calculators/WildSeaFisheries/index.d.ts",
         "default": "./dist/calculators/WildSeaFisheries/index.cjs"
+      }
+    },
+    "./fullcam": {
+      "import": {
+        "browser": "./dist/fullcam/index.mjs",
+        "types": "./dist/fullcam/index.d.ts",
+        "default": "./dist/fullcam/index.mjs"
+      }
+    },
+    "./openapi": {
+      "import": {
+        "browser": "./dist/types/openapi.mjs",
+        "types": "./dist/types/openapi.d.ts",
+        "default": "./dist/types/openapi.mjs"
       }
     }
   },

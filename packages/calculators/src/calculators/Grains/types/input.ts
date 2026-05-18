@@ -10,6 +10,7 @@ export const GrainsInputSchema = singleEnterpriseInput('Grains', {
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   crops: z.array(GrainsCropSchema),
   electricity: ElectricityInputsSchema,
+  // TODO: Upgrade this to an array of areas? Each one then has its own leaching zone input.
   landUse: LULUCFInputSchema.optional(),
 });
 

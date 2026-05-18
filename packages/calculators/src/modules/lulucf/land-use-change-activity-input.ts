@@ -9,10 +9,10 @@ import { object } from '@/types/schemas';
 import { z } from 'zod';
 
 export const LandUseChangeActivityBaseInputSchema = object({
-  activityArea: z
+  activityAreaHectares: z
     .number()
     .min(0)
-    .meta({ description: 'Area of the activity' })
+    .meta({ description: 'Area of the activity in hectares' })
     .transform((val) =>
       input('ActivityArea', area(hectaresToSquareMetres(val))),
     ),

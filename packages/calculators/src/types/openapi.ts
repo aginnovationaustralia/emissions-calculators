@@ -4,10 +4,8 @@ import {
   objectFromEntries,
 } from '@/calculators/common/tools/object';
 import { packageVersion } from '@/calculators/execution/version';
-import {
-  GrainsInputSchema,
-  GrainsOutputSchema,
-} from '@/calculators/Grains/types';
+import { GrainsOutputSchema } from '@/calculators/Grains/types';
+import { GrainsInputWithFullCAMSchema } from '@/fullcam/calculators';
 import { OpenAPIObject } from 'openapi3-ts/oas31';
 import * as z from 'zod';
 import {
@@ -30,7 +28,7 @@ const endpoints: Record<
   Endpoint<z.core.$ZodLooseShape, z.core.$ZodLooseShape>
 > = {
   grains: {
-    inputSchema: GrainsInputSchema,
+    inputSchema: GrainsInputWithFullCAMSchema,
     outputSchema: GrainsOutputSchema,
   },
 };

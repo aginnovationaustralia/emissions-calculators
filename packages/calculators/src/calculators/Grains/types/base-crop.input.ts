@@ -10,7 +10,7 @@ export const BaseGrainsCropSchema = object({
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   areaSown: z
     .number()
-    .min(0)
+    .gt(0)
     .transform((val) => input('areaSown', area(hectaresToSquareMetres(val))))
     .meta({ description: 'Area sown, in ha (hectares)' }),
   // NOTE: See Chapter 1 section 1.8.2 on leaching zones
