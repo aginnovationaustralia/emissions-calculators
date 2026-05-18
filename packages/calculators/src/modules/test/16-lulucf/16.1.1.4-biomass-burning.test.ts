@@ -47,7 +47,7 @@ const getCalculatorInput = (
     massN2OFromBiomassBurningPerHectare: massN2OPerHectare,
     areaBurnt,
     region: 'Arnhem Coast',
-    activityArea: 100,
+    activityAreaHectares: 100,
   };
 
   const lulucfInput: LULUCFInput = {

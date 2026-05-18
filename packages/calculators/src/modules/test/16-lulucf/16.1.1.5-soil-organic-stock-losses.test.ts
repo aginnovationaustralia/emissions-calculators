@@ -31,7 +31,7 @@ const getCalculatorInput = (
   }
 
   const region = checkIBRA7Region(cell(columnRegion));
-  const activityArea = Number(cell(columnActivityArea));
+  const activityAreaHectares = Number(cell(columnActivityArea));
 
   const activity: LandUseChangeActivityInput = {
     type: 'landClearingForestToCropland',
@@ -43,7 +43,7 @@ const getCalculatorInput = (
     massN2OFromBiomassBurningPerHectare: 0,
     region,
     areaBurnt: 0,
-    activityArea,
+    activityAreaHectares,
   };
 
   const lulucfInput: LULUCFInput = {

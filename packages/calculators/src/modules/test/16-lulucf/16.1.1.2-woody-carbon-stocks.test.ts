@@ -42,7 +42,7 @@ const getCalculatorInput = (
     massN2OFromBiomassBurningPerHectare: 0,
     region: 'Arnhem Coast',
     areaBurnt: 0,
-    activityArea: Number(cell(columnActivityArea)),
+    activityAreaHectares: Number(cell(columnActivityArea)),
   };
 
   const lulucfInput: LULUCFInput = {
