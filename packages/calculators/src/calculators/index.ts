@@ -65,6 +65,3 @@ export const calculateEmissions = <
 };
 
 export type { CalculateEmissionsResult } from '../calculate';
-
-// Node only exports
-export { CalculationEnvironment } from './execution/node/environment';

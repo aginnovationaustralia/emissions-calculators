@@ -1,17 +1,11 @@
 {
   "include": ["."],
   "exclude": ["dist", "build", "node_modules", "src/_raw"],
-  
+
   "compilerOptions": {
     "target": "es2017",
-    "lib": [
-      "es2019",
-      "DOM"
-    ],
-    "types": [
-      "node",
-      "jest"
-    ],
+    "lib": ["es2019", "DOM"],
+    "types": ["node", "jest"],
     "strict": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -21,9 +15,7 @@
     "declaration": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "zod": ["./node_modules/zod"],
-      "zod-openapi": ["./node_modules/zod-openapi"]
+      "@/*": ["src/*"]
     },
     "outDir": "./dist",
     "noEmit": false
