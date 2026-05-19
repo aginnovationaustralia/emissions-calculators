@@ -1,16 +1,22 @@
+import emissions from '@aginnovationaustralia/eslint-plugin-emissions-calculators';
 import js from '@eslint/js';
 import jest from 'eslint-plugin-jest';
 import tseslint from 'typescript-eslint';
 
 export default [
   {
-    ignores: ['**/dist/**', '**/node_modules/**'],
+    ignores: [
+      '**/dist/**',
+      '**/node_modules/**',
+      '**/out/**',
+      '**/playground.ts',
+    ],
   },
   {
     ...js.configs.recommended,
   },
   {
-    files: ['**/*.cjs', '**/*.mjs'],
+    files: ['**/*.cjs', '**/*.mjs', '**/jest.config.js'],
     languageOptions: {
       globals: {
         module: 'readonly',
@@ -64,6 +70,25 @@ export default [
     files: ['examples/ts-client/**'],
     rules: {
       'no-console': 'off',
+    },
+  },
+  {
+    files: ['packages/data-entry/**'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+  {
+    files: [
+      'packages/calculators/**/*.input.ts',
+      'packages/calculators/src/modules/lulucf/perennial-crops-input.ts',
+    ],
+    plugins: { emissions },
+    rules: {
+      'emissions/require-optional-zod-transform-guard': [
+        'error',
+        { helperNames: ['mapOptional'] },
+      ],
     },
   },
 ];

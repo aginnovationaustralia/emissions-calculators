@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noEmit": false,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "jsx": "preserve"
+  },
+  "include": ["src/shared/normalizeUnicode.ts"],
+  "exclude": ["node_modules"]
+}

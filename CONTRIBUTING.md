@@ -66,6 +66,12 @@ _Before_ submitting a pull request, please make sure the following is done.
     pnpm build
     ```
 
+1.  _(Optional)_ If you work with ODS spreadsheets and want readable diffs in `git diff` and pull requests, run once:
+
+    ```sh
+    bash scripts/setup-ods-diff.sh
+    ```
+
 1.  If you've added code that should be tested, add tests.
 
     ```sh

@@ -1,0 +1,121 @@
+{
+  "records": [
+    {
+      "symbol": "Arice,wpo",
+      "name": "Area of rice cultivation under conditions w, p, o",
+      "units": "ha",
+      "type": "input",
+      "expression": "",
+      "line": "668",
+      "notes": ""
+    },
+    {
+      "symbol": "trice,wpo",
+      "name": "Number of days in rice cultivation season under conditions w, p, o",
+      "units": "days",
+      "type": "input",
+      "expression": "",
+      "line": "673",
+      "notes": ""
+    },
+    {
+      "symbol": "Erice",
+      "name": "CH4 emissions from rice cultivation",
+      "units": "t CH4",
+      "type": "expression",
+      "expression": "SUM SUM SUM (Arice,wpo * EFrice,wpo * trice,wpo) * 10^-3",
+      "line": "667",
+      "notes": ""
+    },
+    {
+      "symbol": "ROAo",
+      "name": "Rate of application of organic amendment type o",
+      "units": "tonnes/ha",
+      "type": "input",
+      "expression": "",
+      "line": "691",
+      "notes": ""
+    },
+    {
+      "symbol": "CFOAo",
+      "name": "conversion factor of organic amendment o",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "690",
+      "notes": ""
+    },
+    {
+      "symbol": "EFc",
+      "name": "baseline emission factor for continuously flooded fields without organic amendments",
+      "units": "kg CH4/ha/day",
+      "type": "constant",
+      "expression": "",
+      "line": "678",
+      "notes": ""
+    },
+    {
+      "symbol": "SFw",
+      "name": "scaling factor for water regime employed during the growing season cultivation period",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "680",
+      "notes": ""
+    },
+    {
+      "symbol": "SFp",
+      "name": "scaling factor for water regime employed in the pre-season before the cultivation period",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "682",
+      "notes": ""
+    },
+    {
+      "symbol": "SFo",
+      "name": "scaling factor for the type and amount of organic amendments applied.",
+      "units": "fraction",
+      "type": "expression",
+      "expression": "(1 + SUM ROAo * CFOAo)^0.59",
+      "line": "684",
+      "notes": ""
+    },
+    {
+      "symbol": "EFrice,wpo",
+      "name": "Adjusted daily emissions factor for rice",
+      "units": "kg CH4/ha/day",
+      "type": "expression",
+      "expression": "EFc * SFw * SFp * SFo",
+      "line": "677",
+      "notes": ""
+    },
+    {
+      "symbol": "w",
+      "name": "Cultivation season water regime type",
+      "units": "",
+      "type": "input",
+      "expression": "",
+      "line": "",
+      "notes": ""
+    },
+    {
+      "symbol": "p",
+      "name": "Pre-season water regime type",
+      "units": "",
+      "type": "input",
+      "expression": "",
+      "line": "",
+      "notes": ""
+    },
+    {
+      "symbol": "o",
+      "name": "Organic amendment type",
+      "units": "",
+      "type": "input",
+      "expression": "",
+      "line": "",
+      "notes": ""
+    }
+  ]
+}

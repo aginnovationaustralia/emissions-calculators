@@ -1,4 +1,5 @@
-import { AllConstants, loadConstants } from '@/constants';
+import { AllConstants } from '@/calculators/Grains/browser';
+import { loadConstants } from '@/calculators/executionContext';
 import { CALCULATOR_VERSION } from '../constants';
 import { CalculatorOptions, Environment } from '../types';
 import { packageVersion } from '../version';

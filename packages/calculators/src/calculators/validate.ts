@@ -17,9 +17,10 @@ export type ValidationIssue = {
   message: string;
 };
 
-export type ValidationResult<T extends object> =
+export type ValidationResult<T extends object, O extends object> =
   | {
       valid: true;
+      original: O;
       result: T;
     }
   | {
@@ -27,15 +28,16 @@ export type ValidationResult<T extends object> =
       issues: ValidationIssue[];
       message: string;
     };
-export function validateCalculatorInput<T extends object>(
-  schema: ZodType<T>,
+export function validateCalculatorInput<T extends object, I extends object>(
+  schema: ZodType<T, I>,
   input: unknown,
-): ValidationResult<T> {
+): ValidationResult<T, I> {
   const parseResult = schema.safeParse(input);
 
   if (parseResult.success) {
     return {
       valid: true,
+      original: input as I,
       result: parseResult.data,
     };
   } else {

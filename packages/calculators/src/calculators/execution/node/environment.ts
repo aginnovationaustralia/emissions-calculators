@@ -1,4 +1,4 @@
-import { loadConstants } from '@/constants';
+import { loadConstants } from '@/calculators/executionContext';
 import { AllConstants } from '@/constants/types';
 import { AsyncLocalStorage } from 'async_hooks';
 import { merge } from 'ts-deepmerge';
@@ -66,6 +66,7 @@ class NodeEnvironment implements Environment {
   }
 
   loadConstants(): AllConstants {
+    // REVISIT: This can be replaced with the mergeConstants function that will take care of units vs numbers
     return merge<AllConstants[]>(
       loadConstants(),
       CalculationEnvironment.getOverrides() as AllConstants,

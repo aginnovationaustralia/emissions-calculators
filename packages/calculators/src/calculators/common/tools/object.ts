@@ -2,12 +2,18 @@ export type ObjectEntry<T extends object> = [keyof T, T[keyof T]];
 
 /**
  * Type-safe version of Object.entries.
- * @param object The object to get entries from.
- * @returns The entries of the object.
+ * When T has string keys (Record<string, unknown>), returns [string, T[string]][]
+ * so keys are correctly typed as string rather than string | number | symbol.
  */
+export function entriesFromObject<T extends Record<string, unknown>>(
+  object: T,
+): [keyof T & string, T[keyof T]][];
 export function entriesFromObject<T extends object>(
   object: T,
-): ObjectEntry<T>[] {
+): ObjectEntry<T>[];
+export function entriesFromObject<T extends object>(
+  object: T,
+): ObjectEntry<T>[] | [keyof T & string, T[keyof T]][] {
   return Object.entries(object) as ObjectEntry<T>[];
 }
 

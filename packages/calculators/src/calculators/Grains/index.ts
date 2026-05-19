@@ -1,13 +1,16 @@
-import { AllConstants } from '../../constants/types';
-import { GrainsInput, GrainsInputSchema, GrainsOutput } from '../../types/Grains';
-import { executeCalculator } from '../execution/execute';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
+import { executeCalculator } from '../executionContext';
 import { calculateGrains as calculateGrainsInternal } from './calculator';
-export * from '../../types/Grains';
+import {
+  GrainsOutput,
+  GrainsInput,
+  GrainsInputSchema,
+  GrainsInputTransformed,
+} from './types';
 
 function calculateGrains(
-  input: GrainsInput,
+  input: GrainsInputTransformed,
   options?: CalculatorOptions,
 ): GrainsOutput {
   return executeCalculator(
@@ -18,6 +21,5 @@ function calculateGrains(
   );
 }
 
-export { GrainsInputSchema, calculateGrains };
-export type { AllConstants, GrainsInput, GrainsOutput };
-
+export { calculateGrains, GrainsInputSchema };
+export type { GrainsInput, GrainsInputTransformed, GrainsOutput };

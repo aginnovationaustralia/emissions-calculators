@@ -5,7 +5,7 @@
   "scripts": {
     "test": "turbo test",
     "build": "turbo build",
-    "lint": "turbo lint",
+    "lint": "pnpm --filter @aginnovationaustralia/eslint-plugin-emissions-calculators build && turbo lint",
     "clean": "turbo clean",
     "prepare": "husky",
     "commitlint": "commitlint --edit",
@@ -29,11 +29,15 @@
     "node": ">=22.19.0"
   },
   "devDependencies": {
+    "data-entry": "workspace:*",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
     "eslint-plugin-jest": "^29.5.0",
     "husky": "^9.1.7",
+    "prettier": "^3.8.1",
     "turbo": "^2.6.3",
-    "typescript-eslint": "^8.49.0"
+    "typescript-eslint": "^8.49.0",
+    "@aginnovationaustralia/eslint-plugin-emissions-calculators": "workspace:*",
+    "typescript": "^5.9.2"
   }
 }

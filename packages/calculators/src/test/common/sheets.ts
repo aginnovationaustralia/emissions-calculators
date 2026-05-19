@@ -1,12 +1,16 @@
 import { entriesFromObject } from '@/calculators/common/tools/object';
 import { States } from '@/constants/types';
-import { CropVegetation, RainfallRegion, SoilType, TreeType } from '@/types';
 import XLSX, { Cell } from 'xlsx-populate';
 
 export const getWorkbook = async (filePath: string) => {
   // log the current working directory
   const workbook = await XLSX.fromFileAsync(filePath);
   return workbook;
+};
+
+export const getSheet = async (filePath: string, sheetName: string) => {
+  const workbook = await getWorkbook(filePath);
+  return workbook.sheet(sheetName);
 };
 
 export const mapInput =
@@ -117,35 +121,4 @@ export const calculateElectricity = (
     electricityUse: total,
     electricityRenewable: total <= 0 ? 0 : (renewable ?? 0) / total,
   } as const;
-};
-
-export const getCropVegetation = (
-  details: XLSX.Range,
-  allocations: XLSX.Range,
-): CropVegetation => {
-  const soilTypeRaw = stringInput(details.cell(2, 0));
-  // The spreadsheet dropdown uses quotes, but the API and validation does not
-  const soil =
-    soilTypeRaw === '"Other Soils"' ? 'Other Soils' : (soilTypeRaw as SoilType);
-  return {
-    allocationToCrops: allocations
-      .cells()[0]
-      .map((allocation) => numberInput(allocation)),
-    vegetation: {
-      region: stringInput(details.cell(0, 0)) as RainfallRegion,
-      treeSpecies: stringInput(details.cell(1, 0)) as TreeType,
-      soil,
-      area: numberInput(details.cell(3, 0)),
-      age: numberInput(details.cell(4, 0)),
-    },
-  };
-};
-
-export const getCropVegetations = (sheet: XLSX.Sheet): CropVegetation[] => {
-  return [
-    getCropVegetation(sheet.range('E3:E7'), sheet.range('E9:E13')),
-    getCropVegetation(sheet.range('E16:E20'), sheet.range('E22:E26')),
-    getCropVegetation(sheet.range('E29:E33'), sheet.range('E35:E39')),
-    getCropVegetation(sheet.range('E42:E46'), sheet.range('E48:E52')),
-  ];
 };

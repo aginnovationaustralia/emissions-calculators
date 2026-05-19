@@ -1,3757 +1,6266 @@
 import {
-  AquacultureBait,
-  FluidWasteTreatmentType,
-  FreightTypes,
-} from '@/types/enums';
+  cubicMetresToLitres,
+  gjPerCubicMetreToJPerLitre,
+  megaJoulesToJoules,
+  perCubicMetresToPerLitres,
+  perGjToPerJ,
+  perHectareToPerSqMetre,
+  perKilometreToPerMetre,
+  perTonneToPerKg,
+  tonnesPerHectareToKgPerSquareMetres,
+} from '@/tools/unit-conversion';
 import {
-  AllConstants,
-  AquacultureConstants,
-  BeefConstants,
-  BuffaloConstants,
+  countPerArea,
+  energyPerMass,
+  energyPerVolume,
+  mass,
+  massPerArea,
+  massPerAreaPerDay,
+  massPerAreaPerYear,
+  massPerElectricity,
+  massPerEnergy,
+  massPerHead,
+  massPerHeadPerDay,
+  massPerMass,
+  massPerMassDistance,
+  massPerTime,
+  massPerVolume,
+  percentage,
+  RealNumber,
+  realNumber,
+  volumePerMass,
+  years,
+} from '@/tools/units';
+import { State } from './enums';
+import {
+  BeefPastureConstants,
   CommonConstants,
-  CottonConstants,
   CropConstants,
   DairyConstants,
-  DeerConstants,
   FeedlotConstants,
-  FisheriesConstants,
-  GoatConstants,
-  LIVESTOCK_SOURCE_LOCATION,
   LivestockConstants,
-  PorkConstants,
+  LULUCFConstants,
   PoultryConstants,
   RiceConstants,
-  SavannaConstants,
   SheepConstants,
   STATES,
-  SugarConstants,
+  SwineConstants,
 } from './types';
 
-export const REGIONS = {
-  SOUTHWEST: 'southwest',
-  PILBARA: 'pilbara',
-  KIMBERLEY: 'kimberley',
-};
-
-export const sheepConstants: SheepConstants = {
-  /**
-   * @description Feed availability rate for sheep across seasons and states, in tonnes per hectare
-   * @inventory2018 Appendix 5.D.3
-   * @units t/ha
-   */
-  FEEDAVAILABILITY: {
-    spring: {
-      [STATES.ACT]: 2.9,
-      [STATES.NSW]: 2.9,
-      [STATES.QLD]: 1.5,
-      [STATES.SA]: 4,
-      [STATES.TAS]: 2.5,
-      [STATES.VIC]: 3.2,
-      [STATES.WA_SW]: 3.5,
-      [STATES.WA_NW]: 3.5,
-      [STATES.NT]: 1.5,
-    },
-    summer: {
-      [STATES.ACT]: 2.5,
-      [STATES.NSW]: 2.5,
-      [STATES.QLD]: 2.0,
-      [STATES.SA]: 2.5,
-      [STATES.TAS]: 2.5,
-      [STATES.VIC]: 3,
-      [STATES.WA_SW]: 1.5,
-      [STATES.WA_NW]: 1.5,
-      [STATES.NT]: 2,
-    },
-    autumn: {
-      [STATES.ACT]: 1.6,
-      [STATES.NSW]: 1.6,
-      [STATES.QLD]: 2.2,
-      [STATES.SA]: 0.7,
-      [STATES.TAS]: 1.3,
-      [STATES.VIC]: 1.8,
-      [STATES.WA_SW]: 0.7,
-      [STATES.WA_NW]: 0.7,
-      [STATES.NT]: 2.2,
-    },
-    winter: {
-      [STATES.ACT]: 1.7,
-      [STATES.NSW]: 1.7,
-      [STATES.QLD]: 1.7,
-      [STATES.SA]: 0.9,
-      [STATES.TAS]: 0.8,
-      [STATES.VIC]: 1.0,
-      [STATES.WA_SW]: 1.2,
-      [STATES.WA_NW]: 1.2,
-      [STATES.NT]: 1.7,
-    },
-  },
-
-  /**
-   * @description Crude protein content for sheep across seasons and states, as percentage
-   * @inventory2018 Appendix 5.D.4
-   * @units %
-   * @type Percentage
-   */
-  CRUDEPROTEIN: {
-    spring: {
-      [STATES.ACT]: 20,
-      [STATES.NSW]: 20,
-      [STATES.QLD]: 8,
-      [STATES.SA]: 16,
-      [STATES.TAS]: 20,
-      [STATES.VIC]: 16,
-      [STATES.WA_SW]: 18,
-      [STATES.WA_NW]: 18,
-      [STATES.NT]: 7,
-    },
-    summer: {
-      [STATES.ACT]: 10,
-      [STATES.NSW]: 10,
-      [STATES.QLD]: 10,
-      [STATES.SA]: 7,
-      [STATES.TAS]: 7,
-      [STATES.VIC]: 7,
-      [STATES.WA_SW]: 6,
-      [STATES.WA_NW]: 6,
-      [STATES.NT]: 13,
-    },
-    autumn: {
-      [STATES.ACT]: 12,
-      [STATES.NSW]: 12,
-      [STATES.QLD]: 9,
-      [STATES.SA]: 9,
-      [STATES.TAS]: 14,
-      [STATES.VIC]: 13,
-      [STATES.WA_SW]: 6,
-      [STATES.WA_NW]: 6,
-      [STATES.NT]: 10,
-    },
-    winter: {
-      [STATES.ACT]: 18,
-      [STATES.NSW]: 18,
-      [STATES.QLD]: 8,
-      [STATES.SA]: 20,
-      [STATES.TAS]: 16,
-      [STATES.VIC]: 10,
-      [STATES.WA_SW]: 21,
-      [STATES.WA_NW]: 21,
-      [STATES.NT]: 6,
-    },
-  },
-
-  /**
-   * @description Dry matter digestibility for sheep across seasons and states, as percentage
-   * @inventory2018 Appendix 5.D.2
-   * @units %
-   * @type Percentage
-   */
-  DRYMATTERDIGESTIBILITY: {
-    spring: {
-      [STATES.ACT]: 75,
-      [STATES.NSW]: 75,
-      [STATES.QLD]: 51,
-      [STATES.SA]: 70,
-      [STATES.TAS]: 75,
-      [STATES.VIC]: 70,
-      [STATES.WA_SW]: 73,
-      [STATES.WA_NW]: 73,
-      [STATES.NT]: 55,
-    },
-    summer: {
-      [STATES.ACT]: 61,
-      [STATES.NSW]: 61,
-      [STATES.QLD]: 55,
-      [STATES.SA]: 55,
-      [STATES.TAS]: 55,
-      [STATES.VIC]: 55,
-      [STATES.WA_SW]: 55,
-      [STATES.WA_NW]: 55,
-      [STATES.NT]: 61,
-    },
-    autumn: {
-      [STATES.ACT]: 64,
-      [STATES.NSW]: 64,
-      [STATES.QLD]: 59,
-      [STATES.SA]: 55,
-      [STATES.TAS]: 67,
-      [STATES.VIC]: 65,
-      [STATES.WA_SW]: 50,
-      [STATES.WA_NW]: 50,
-      [STATES.NT]: 57,
-    },
-    winter: {
-      [STATES.ACT]: 72,
-      [STATES.NSW]: 72,
-      [STATES.QLD]: 58,
-      [STATES.SA]: 75,
-      [STATES.TAS]: 70,
-      [STATES.VIC]: 60,
-      [STATES.WA_SW]: 76,
-      [STATES.WA_NW]: 76,
-      [STATES.NT]: 54,
-    },
-  },
-
-  /**
-   * @description Standard reference weight for sheep across seasons and states, in kilograms
-   * @inventory2018 Appendix 5.D.7
-   * @units kg
-   */
-  STANDARDWEIGHT: {
-    rams: {
-      [STATES.ACT]: 78,
-      [STATES.NSW]: 78,
-      [STATES.TAS]: 77,
-      [STATES.WA_SW]: 84,
-      [STATES.SA]: 84,
-      [STATES.VIC]: 70,
-      [STATES.QLD]: 70,
-      [STATES.NT]: 70,
-      [STATES.WA_NW]: 70,
-    },
-    tradeRams: {
-      [STATES.ACT]: 78,
-      [STATES.NSW]: 78,
-      [STATES.TAS]: 77,
-      [STATES.WA_SW]: 84,
-      [STATES.SA]: 84,
-      [STATES.VIC]: 70,
-      [STATES.QLD]: 70,
-      [STATES.NT]: 70,
-      [STATES.WA_NW]: 70,
-    },
-    wethers: {
-      [STATES.ACT]: 62,
-      [STATES.NSW]: 62,
-      [STATES.TAS]: 66,
-      [STATES.WA_SW]: 72,
-      [STATES.SA]: 72,
-      [STATES.VIC]: 60,
-      [STATES.QLD]: 60,
-      [STATES.NT]: 60,
-      [STATES.WA_NW]: 60,
-    },
-    maidenBreedingEwes: {
-      [STATES.ACT]: 57,
-      [STATES.NSW]: 57,
-      [STATES.TAS]: 55,
-      [STATES.WA_SW]: 60,
-      [STATES.SA]: 60,
-      [STATES.VIC]: 50,
-      [STATES.QLD]: 50,
-      [STATES.NT]: 50,
-      [STATES.WA_NW]: 50,
-    },
-    tradeMaidenBreedingEwes: {
-      [STATES.ACT]: 57,
-      [STATES.NSW]: 57,
-      [STATES.TAS]: 55,
-      [STATES.WA_SW]: 60,
-      [STATES.SA]: 60,
-      [STATES.VIC]: 50,
-      [STATES.QLD]: 50,
-      [STATES.NT]: 50,
-      [STATES.WA_NW]: 50,
-    },
-    breedingEwes: {
-      [STATES.ACT]: 57,
-      [STATES.NSW]: 57,
-      [STATES.TAS]: 55,
-      [STATES.WA_SW]: 60,
-      [STATES.SA]: 60,
-      [STATES.VIC]: 50,
-      [STATES.QLD]: 50,
-      [STATES.NT]: 50,
-      [STATES.WA_NW]: 50,
-    },
-    tradeBreedingEwes: {
-      [STATES.ACT]: 57,
-      [STATES.NSW]: 57,
-      [STATES.TAS]: 55,
-      [STATES.WA_SW]: 60,
-      [STATES.SA]: 60,
-      [STATES.VIC]: 50,
-      [STATES.QLD]: 50,
-      [STATES.NT]: 50,
-      [STATES.WA_NW]: 50,
-    },
-    otherEwes: {
-      [STATES.ACT]: 57,
-      [STATES.NSW]: 57,
-      [STATES.TAS]: 55,
-      [STATES.WA_SW]: 60,
-      [STATES.SA]: 60,
-      [STATES.VIC]: 50,
-      [STATES.QLD]: 50,
-      [STATES.NT]: 50,
-      [STATES.WA_NW]: 50,
-    },
-    tradeOtherEwes: {
-      [STATES.ACT]: 57,
-      [STATES.NSW]: 57,
-      [STATES.TAS]: 55,
-      [STATES.WA_SW]: 60,
-      [STATES.SA]: 60,
-      [STATES.VIC]: 50,
-      [STATES.QLD]: 50,
-      [STATES.NT]: 50,
-      [STATES.WA_NW]: 50,
-    },
-    eweLambs: {
-      [STATES.ACT]: 60,
-      [STATES.NSW]: 60,
-      [STATES.TAS]: 60,
-      [STATES.WA_SW]: 66,
-      [STATES.SA]: 66,
-      [STATES.VIC]: 55,
-      [STATES.QLD]: 55,
-      [STATES.NT]: 55,
-      [STATES.WA_NW]: 55,
-    },
-    tradeEweLambs: {
-      [STATES.ACT]: 60,
-      [STATES.NSW]: 60,
-      [STATES.TAS]: 60,
-      [STATES.WA_SW]: 66,
-      [STATES.SA]: 66,
-      [STATES.VIC]: 55,
-      [STATES.QLD]: 55,
-      [STATES.NT]: 55,
-      [STATES.WA_NW]: 55,
-    },
-    wetherLambs: {
-      [STATES.ACT]: 60,
-      [STATES.NSW]: 60,
-      [STATES.TAS]: 60,
-      [STATES.WA_SW]: 66,
-      [STATES.SA]: 66,
-      [STATES.VIC]: 55,
-      [STATES.QLD]: 55,
-      [STATES.NT]: 55,
-      [STATES.WA_NW]: 55,
-    },
-    tradeWetherLambs: {
-      [STATES.ACT]: 60,
-      [STATES.NSW]: 60,
-      [STATES.TAS]: 60,
-      [STATES.WA_SW]: 66,
-      [STATES.SA]: 66,
-      [STATES.VIC]: 55,
-      [STATES.QLD]: 55,
-      [STATES.NT]: 55,
-      [STATES.WA_NW]: 55,
-    },
-    tradeWethers: {
-      [STATES.ACT]: 62,
-      [STATES.NSW]: 62,
-      [STATES.TAS]: 66,
-      [STATES.WA_SW]: 72,
-      [STATES.SA]: 72,
-      [STATES.VIC]: 60,
-      [STATES.QLD]: 60,
-      [STATES.NT]: 60,
-      [STATES.WA_NW]: 60,
-    },
-  },
-
-  /**
-   * @description Emission factors for purchased sheep by breed, in kg CO2-e/kg liveweight
-   * @reference Wiedemann et al. (2016)
-   * @units kg CO2-e/kg
-   */
-  EMISSIONFACTOR: {
-    MERINO: 9.3,
-    CROSSBRED: 6.9,
-  },
-
-  /**
-   * @description Urine and dung deposited during grazing
-   */
-  EF_URINEDUNGDEPOSITED: 0.004,
-};
-
-export const beefConstants: BeefConstants = {
-  /**
-   * @description Dry matter digestibility for beef across seasons and states, as percentage
-   * @inventory2018 Appendix 5.B.3
-   * @units %
-   * @type Percentage
-   */
-  DRYMATTERDIGESTIBILITY: {
-    spring: {
-      [STATES.ACT]: 55,
-      [STATES.NSW]: 55,
-      [STATES.NT]: 55,
-      [STATES.QLD]: 53,
-      [STATES.SA]: 70,
-      [STATES.TAS]: 75,
-      [STATES.VIC]: 80,
-      [STATES.WA_SW]: 80,
-      [STATES.WA_NW]: 40,
-    },
-    summer: {
-      [STATES.ACT]: 65,
-      [STATES.NSW]: 65,
-      [STATES.NT]: 61,
-      [STATES.QLD]: 57,
-      [STATES.SA]: 55,
-      [STATES.TAS]: 60,
-      [STATES.VIC]: 55,
-      [STATES.WA_SW]: 58,
-      [STATES.WA_NW]: 65,
-    },
-    autumn: {
-      [STATES.ACT]: 60,
-      [STATES.NSW]: 60,
-      [STATES.NT]: 57,
-      [STATES.QLD]: 55,
-      [STATES.SA]: 55,
-      [STATES.TAS]: 70,
-      [STATES.VIC]: 60,
-      [STATES.WA_SW]: 50,
-      [STATES.WA_NW]: 55,
-    },
-    winter: {
-      [STATES.ACT]: 50,
-      [STATES.NSW]: 50,
-      [STATES.NT]: 54,
-      [STATES.QLD]: 51,
-      [STATES.SA]: 75,
-      [STATES.TAS]: 75,
-      [STATES.VIC]: 76,
-      [STATES.WA_SW]: 75,
-      [STATES.WA_NW]: 45,
-    },
-  },
-
-  /**
-   * @description Crude protein content for beef across seasons and states, as percentage
-   * @inventory2018 Appendix 5.B.4
-   * @units %
-   * @type Percentage
-   */
-  CRUDEPROTEIN: {
-    spring: {
-      [STATES.ACT]: 7,
-      [STATES.NSW]: 7,
-      [STATES.NT]: 5.8,
-      [STATES.QLD]: 7,
-      [STATES.SA]: 7.2,
-      [STATES.TAS]: 16,
-      [STATES.VIC]: 20,
-      [STATES.WA_SW]: 25,
-      [STATES.WA_NW]: 4,
-    },
-    summer: {
-      [STATES.ACT]: 13,
-      [STATES.NSW]: 13,
-      [STATES.NT]: 9.2,
-      [STATES.QLD]: 13,
-      [STATES.SA]: 9.9,
-      [STATES.TAS]: 7,
-      [STATES.VIC]: 10,
-      [STATES.WA_SW]: 7,
-      [STATES.WA_NW]: 12,
-    },
-    autumn: {
-      [STATES.ACT]: 10,
-      [STATES.NSW]: 10,
-      [STATES.NT]: 7.5,
-      [STATES.QLD]: 10,
-      [STATES.SA]: 7.8,
-      [STATES.TAS]: 9,
-      [STATES.VIC]: 16,
-      [STATES.WA_SW]: 10,
-      [STATES.WA_NW]: 9,
-    },
-    winter: {
-      [STATES.ACT]: 6,
-      [STATES.NSW]: 6,
-      [STATES.NT]: 5.3,
-      [STATES.QLD]: 6,
-      [STATES.SA]: 5.9,
-      [STATES.TAS]: 20,
-      [STATES.VIC]: 20,
-      [STATES.WA_SW]: 21,
-      [STATES.WA_NW]: 6,
-    },
-  },
-  /**
-   * @description Amount of nitrogen excreted by beef cattle across class and state, in kilograms per year
-   * @units kg/year
-   */
-  NITROGENEXCRETEDNUMBER: {
-    bullsGt1: {
-      [STATES.ACT]: 700,
-      [STATES.NSW]: 700,
-      [STATES.TAS]: 770,
-      [STATES.WA_SW]: 770,
-      [STATES.SA]: 770,
-      [STATES.VIC]: 770,
-      [STATES.QLD]: 770,
-      [STATES.NT]: 770,
-      [REGIONS.KIMBERLEY]: 770,
-      [STATES.WA_NW]: 770,
-    },
-    bullsGt1Traded: {
-      [STATES.ACT]: 700,
-      [STATES.NSW]: 700,
-      [STATES.TAS]: 770,
-      [STATES.WA_SW]: 770,
-      [STATES.SA]: 770,
-      [STATES.VIC]: 770,
-      [STATES.QLD]: 770,
-      [STATES.NT]: 770,
-      [REGIONS.KIMBERLEY]: 770,
-      [STATES.WA_NW]: 770,
-    },
-    steersLt1: {
-      [STATES.ACT]: 500,
-      [STATES.NSW]: 500,
-      [STATES.TAS]: 550,
-      [STATES.WA_SW]: 550,
-      [STATES.SA]: 550,
-      [STATES.VIC]: 550,
-      [STATES.QLD]: 550,
-      [STATES.NT]: 550,
-      [REGIONS.KIMBERLEY]: 550,
-      [STATES.WA_NW]: 550,
-    },
-    steers1To2: {
-      [STATES.ACT]: 600,
-      [STATES.NSW]: 600,
-      [STATES.TAS]: 660,
-      [STATES.WA_SW]: 660,
-      [STATES.SA]: 660,
-      [STATES.VIC]: 660,
-      [STATES.QLD]: 660,
-      [STATES.NT]: 660,
-      [REGIONS.KIMBERLEY]: 660,
-      [STATES.WA_NW]: 660,
-    },
-    steersGt2: {
-      [STATES.ACT]: 600,
-      [STATES.NSW]: 600,
-      [STATES.TAS]: 660,
-      [STATES.WA_SW]: 660,
-      [STATES.SA]: 660,
-      [STATES.VIC]: 660,
-      [STATES.QLD]: 660,
-      [STATES.NT]: 660,
-      [REGIONS.KIMBERLEY]: 660,
-      [STATES.WA_NW]: 660,
-    },
-    cowsGt2: {
-      [STATES.ACT]: 500,
-      [STATES.NSW]: 500,
-      [STATES.TAS]: 550,
-      [STATES.WA_SW]: 550,
-      [STATES.SA]: 550,
-      [STATES.VIC]: 550,
-      [STATES.QLD]: 550,
-      [STATES.NT]: 550,
-      [REGIONS.KIMBERLEY]: 550,
-      [STATES.WA_NW]: 550,
-    },
-    cowsGt2Traded: {
-      [STATES.ACT]: 500,
-      [STATES.NSW]: 500,
-      [STATES.TAS]: 550,
-      [STATES.WA_SW]: 550,
-      [STATES.SA]: 550,
-      [STATES.VIC]: 550,
-      [STATES.QLD]: 550,
-      [STATES.NT]: 550,
-      [REGIONS.KIMBERLEY]: 550,
-      [STATES.WA_NW]: 550,
-    },
-    heifersLt1: {
-      [STATES.ACT]: 500,
-      [STATES.NSW]: 500,
-      [STATES.TAS]: 550,
-      [STATES.WA_SW]: 550,
-      [STATES.SA]: 550,
-      [STATES.VIC]: 550,
-      [STATES.QLD]: 550,
-      [STATES.NT]: 550,
-      [REGIONS.KIMBERLEY]: 550,
-      [STATES.WA_NW]: 550,
-    },
-    heifersLt1Traded: {
-      [STATES.ACT]: 500,
-      [STATES.NSW]: 500,
-      [STATES.TAS]: 550,
-      [STATES.WA_SW]: 550,
-      [STATES.SA]: 550,
-      [STATES.VIC]: 550,
-      [STATES.QLD]: 550,
-      [STATES.NT]: 550,
-      [REGIONS.KIMBERLEY]: 550,
-      [STATES.WA_NW]: 550,
-    },
-    heifers1To2: {
-      [STATES.ACT]: 500,
-      [STATES.NSW]: 500,
-      [STATES.TAS]: 550,
-      [STATES.WA_SW]: 550,
-      [STATES.SA]: 550,
-      [STATES.VIC]: 550,
-      [STATES.QLD]: 550,
-      [STATES.NT]: 550,
-      [REGIONS.KIMBERLEY]: 550,
-      [STATES.WA_NW]: 550,
-    },
-    heifers1To2Traded: {
-      [STATES.ACT]: 500,
-      [STATES.NSW]: 500,
-      [STATES.TAS]: 550,
-      [STATES.WA_SW]: 550,
-      [STATES.SA]: 550,
-      [STATES.VIC]: 550,
-      [STATES.QLD]: 550,
-      [STATES.NT]: 550,
-      [REGIONS.KIMBERLEY]: 550,
-      [STATES.WA_NW]: 550,
-    },
-    heifersGt2: {
-      [STATES.ACT]: 500,
-      [STATES.NSW]: 500,
-      [STATES.TAS]: 550,
-      [STATES.WA_SW]: 550,
-      [STATES.SA]: 550,
-      [STATES.VIC]: 550,
-      [STATES.QLD]: 550,
-      [STATES.NT]: 550,
-      [REGIONS.KIMBERLEY]: 550,
-      [STATES.WA_NW]: 550,
-    },
-    heifersGt2Traded: {
-      [STATES.ACT]: 500,
-      [STATES.NSW]: 500,
-      [STATES.TAS]: 550,
-      [STATES.WA_SW]: 550,
-      [STATES.SA]: 550,
-      [STATES.VIC]: 550,
-      [STATES.QLD]: 550,
-      [STATES.NT]: 550,
-      [REGIONS.KIMBERLEY]: 550,
-      [STATES.WA_NW]: 550,
-    },
-    steersGt2Traded: {
-      [STATES.ACT]: 600,
-      [STATES.NSW]: 600,
-      [STATES.TAS]: 660,
-      [STATES.WA_SW]: 660,
-      [STATES.SA]: 660,
-      [STATES.VIC]: 660,
-      [STATES.QLD]: 660,
-      [STATES.NT]: 660,
-      [REGIONS.KIMBERLEY]: 660,
-      [STATES.WA_NW]: 660,
-    },
-    steers1To2Traded: {
-      [STATES.ACT]: 600,
-      [STATES.NSW]: 600,
-      [STATES.TAS]: 660,
-      [STATES.WA_SW]: 660,
-      [STATES.SA]: 660,
-      [STATES.VIC]: 660,
-      [STATES.QLD]: 660,
-      [STATES.NT]: 660,
-      [REGIONS.KIMBERLEY]: 660,
-      [STATES.WA_NW]: 660,
-    },
-    steersLt1Traded: {
-      [STATES.ACT]: 500,
-      [STATES.NSW]: 500,
-      [STATES.TAS]: 550,
-      [STATES.WA_SW]: 550,
-      [STATES.SA]: 550,
-      [STATES.VIC]: 550,
-      [STATES.QLD]: 550,
-      [STATES.NT]: 550,
-      [REGIONS.KIMBERLEY]: 550,
-      [STATES.WA_NW]: 550,
-    },
-  },
-
-  /**
-   * @description Urine and dung deposited during grazing
-   */
-  EF_URINEDUNGDEPOSITED: 0.004,
-
-  /**
-   * @description Emission factors for purchased cattle by region, in kg CO2-e/kg liveweight
-   * @reference Wiedemann et al. (2016); Christie (2022)
-   * @units kg CO2-e/kg
-   */
-  LIVESTOCK_SOURCE_EMISSIONFACTOR: {
-    [LIVESTOCK_SOURCE_LOCATION['Dairy origin']]: 4.4,
-    [LIVESTOCK_SOURCE_LOCATION['nth/sth/central QLD']]: 12.4,
-    [LIVESTOCK_SOURCE_LOCATION['nth/sth NSW/VIC/sth SA']]: 11.7,
-    [LIVESTOCK_SOURCE_LOCATION['NSW/SA pastoral zone']]: 12.4,
-    [LIVESTOCK_SOURCE_LOCATION['sw WA']]: 11.7,
-    [LIVESTOCK_SOURCE_LOCATION['WA pastoral']]: 12.4,
-    [LIVESTOCK_SOURCE_LOCATION.TAS]: 11.7,
-    [LIVESTOCK_SOURCE_LOCATION.NT]: 12.4,
-  },
-
-  /**
-   * @description Milk intake of cows, in kg / day
-   * @inventory2018 5.B.5
-   * @units kg / day
-   */
-  MILK_INTAKE: {
-    NORTHOFTROPIC: {
-      CALVING_SEASON: 4,
-      SEASON_AFTER_CALVING: 3,
-    },
-    SOUTHOFTROPIC: {
-      CALVING_SEASON: 6,
-      SEASON_AFTER_CALVING: 4,
-    },
-  },
-
-  /**
-   * @description Feed adjustment factor for cows
-   * @inventory2018 5.B.5
-   */
-  FEED_ADJUSTMENT: {
-    CALVING_SEASON: 1.3,
-    SEASON_AFTER_CALVING: 1.1,
-  },
-};
-
-export const savannaConstants: SavannaConstants = {
-  /**
-   * @description Static lookup for savannah coarse fuel, by region
-   */
-  FUELCOARSE: {
-    'Combined Ref': {
-      Qld1: '71',
-      Qld2: '72',
-      Qld3: '73',
-      Qld4: '74',
-      Qld5: '75',
-      Qld6: '76',
-      Qld7: '77',
-      Qld8: '78',
-      Qld9: '79',
-      Qld10: '710',
-      NT1: '81',
-      NT2: '82',
-      NT3: '83',
-      NT4: '84',
-      NT5: '85',
-      NT6: '86',
-      NT7: '87',
-      NT8: '88',
-      NT9: '89',
-      NT10: '810',
-      Kimberley1: '91',
-      Kimberley2: '92',
-      Kimberley3: '93',
-      Kimberley4: '94',
-      Kimberley5: '95',
-      Kimberley6: '96',
-      Kimberley7: '97',
-      Kimberley8: '98',
-      Kimberley9: '99',
-      Kimberley10: '910',
-      Pilbara1: '101',
-      Pilbara2: '102',
-      Pilbara3: '103',
-      Pilbara4: '104',
-      Pilbara5: '105',
-      Pilbara6: '106',
-      Pilbara7: '107',
-      Pilbara8: '108',
-      Pilbara9: '109',
-      Pilbara10: '1010',
-    },
-    Yo: {
-      Qld1: 5.97818,
-      Qld2: 5.4075,
-      Qld3: 4.96198,
-      Qld4: 4.96198,
-      Qld5: 5.21557,
-      Qld6: 8.55158,
-      Qld7: 8.14308,
-      Qld8: 7.97898,
-      Qld9: 7.8505,
-      Qld10: 7.48462,
-      NT1: 5.97818,
-      NT2: 5.4075,
-      NT3: 4.96198,
-      NT4: 4.96198,
-      NT5: 5.21557,
-      NT6: 8.55158,
-      NT7: 8.14308,
-      NT8: 7.97898,
-      NT9: 7.8505,
-      NT10: 7.48462,
-      Kimberley1: 5.97818,
-      Kimberley2: 5.4075,
-      Kimberley3: 4.96198,
-      Kimberley4: 4.96198,
-      Kimberley5: 5.21557,
-      Kimberley6: 8.55158,
-      Kimberley7: 8.14308,
-      Kimberley8: 7.97898,
-      Kimberley9: 7.8505,
-      Kimberley10: 7.48462,
-      Pilbara1: 5.97818,
-      Pilbara2: 5.4075,
-      Pilbara3: 4.96198,
-      Pilbara4: 4.96198,
-      Pilbara5: 5.21557,
-      Pilbara6: 8.55158,
-      Pilbara7: 8.14308,
-      Pilbara8: 7.97898,
-      Pilbara9: 7.8505,
-      Pilbara10: 7.48462,
-    },
-    L: {
-      Qld1: 0.05888,
-      Qld2: 0.24606,
-      Qld3: 0.18948,
-      Qld4: 0.18948,
-      Qld5: 0.21756,
-      Qld6: 0.0722,
-      Qld7: 0.22387,
-      Qld8: 0.12031,
-      Qld9: 0.12056,
-      Qld10: 0.2044,
-      NT1: 0.05888,
-      NT2: 0.24606,
-      NT3: 0.18948,
-      NT4: 0.18948,
-      NT5: 0.21756,
-      NT6: 0.0722,
-      NT7: 0.22387,
-      NT8: 0.12031,
-      NT9: 0.12056,
-      NT10: 0.2044,
-      Kimberley1: 0.05888,
-      Kimberley2: 0.24606,
-      Kimberley3: 0.18948,
-      Kimberley4: 0.18948,
-      Kimberley5: 0.21756,
-      Kimberley6: 0.0722,
-      Kimberley7: 0.22387,
-      Kimberley8: 0.12031,
-      Kimberley9: 0.12056,
-      Kimberley10: 0.2044,
-      Pilbara1: 0.05888,
-      Pilbara2: 0.24606,
-      Pilbara3: 0.18948,
-      Pilbara4: 0.18948,
-      Pilbara5: 0.21756,
-      Pilbara6: 0.0722,
-      Pilbara7: 0.22387,
-      Pilbara8: 0.12031,
-      Pilbara9: 0.12056,
-      Pilbara10: 0.2044,
-    },
-    D: {
-      Qld1: 0.072,
-      Qld2: 0.072,
-      Qld3: 0.072,
-      Qld4: 0.072,
-      Qld5: 0.072,
-      Qld6: 0.072,
-      Qld7: 0.072,
-      Qld8: 0.072,
-      Qld9: 0.072,
-      Qld10: 0.072,
-      NT1: 0.072,
-      NT2: 0.072,
-      NT3: 0.072,
-      NT4: 0.072,
-      NT5: 0.072,
-      NT6: 0.072,
-      NT7: 0.072,
-      NT8: 0.072,
-      NT9: 0.072,
-      NT10: 0.072,
-      Kimberley1: 0.072,
-      Kimberley2: 0.072,
-      Kimberley3: 0.072,
-      Kimberley4: 0.072,
-      Kimberley5: 0.072,
-      Kimberley6: 0.072,
-      Kimberley7: 0.072,
-      Kimberley8: 0.072,
-      Kimberley9: 0.072,
-      Kimberley10: 0.072,
-      Pilbara1: 0.072,
-      Pilbara2: 0.072,
-      Pilbara3: 0.072,
-      Pilbara4: 0.072,
-      Pilbara5: 0.072,
-      Pilbara6: 0.072,
-      Pilbara7: 0.072,
-      Pilbara8: 0.072,
-      Pilbara9: 0.072,
-      Pilbara10: 0.072,
-    },
-  },
-
-  /**
-   * @description Static lookup for savannah fine fuel, by region
-   */
-  FUELFINE: {
-    'Combined Ref': {
-      Qld1: '71',
-      Qld2: '72',
-      Qld3: '73',
-      Qld4: '74',
-      Qld5: '75',
-      Qld6: '76',
-      Qld7: '77',
-      Qld8: '78',
-      Qld9: '79',
-      Qld10: '710',
-      NT1: '81',
-      NT2: '82',
-      NT3: '83',
-      NT4: '84',
-      NT5: '85',
-      NT6: '86',
-      NT7: '87',
-      NT8: '88',
-      NT9: '89',
-      NT10: '810',
-      Kimberley1: '91',
-      Kimberley2: '92',
-      Kimberley3: '93',
-      Kimberley4: '94',
-      Kimberley5: '95',
-      Kimberley6: '96',
-      Kimberley7: '97',
-      Kimberley8: '98',
-      Kimberley9: '99',
-      Kimberley10: '910',
-      Pilbara1: '101',
-      Pilbara2: '102',
-      Pilbara3: '103',
-      Pilbara4: '104',
-      Pilbara5: '105',
-      Pilbara6: '106',
-      Pilbara7: '107',
-      Pilbara8: '108',
-      Pilbara9: '109',
-      Pilbara10: '1010',
-    },
-    Yo: {
-      Qld1: 0.40885,
-      Qld2: 0.37206,
-      Qld3: 0.37352,
-      Qld4: 0.37352,
-      Qld5: 0.34846,
-      Qld6: 0.26884,
-      Qld7: 0.25533,
-      Qld8: 0.25396,
-      Qld9: 0.24826,
-      Qld10: 0.25508,
-      NT1: 0.40885,
-      NT2: 0.37206,
-      NT3: 0.37352,
-      NT4: 0.37352,
-      NT5: 0.34846,
-      NT6: 0.26884,
-      NT7: 0.25533,
-      NT8: 0.25396,
-      NT9: 0.24826,
-      NT10: 0.25508,
-      Kimberley1: 0.40885,
-      Kimberley2: 0.37206,
-      Kimberley3: 0.37352,
-      Kimberley4: 0.37352,
-      Kimberley5: 0.34846,
-      Kimberley6: 0.26884,
-      Kimberley7: 0.25533,
-      Kimberley8: 0.25396,
-      Kimberley9: 0.24826,
-      Kimberley10: 0.25508,
-      Pilbara1: 0.40885,
-      Pilbara2: 0.37206,
-      Pilbara3: 0.37352,
-      Pilbara4: 0.37352,
-      Pilbara5: 0.34846,
-      Pilbara6: 0.26884,
-      Pilbara7: 0.25533,
-      Pilbara8: 0.25396,
-      Pilbara9: 0.24826,
-      Pilbara10: 0.25508,
-    },
-    L: {
-      Qld1: 5.2189,
-      Qld2: 3.85447,
-      Qld3: 3.46804,
-      Qld4: 4.2354,
-      Qld5: 4.94919,
-      Qld6: 2.67616,
-      Qld7: 2.55178,
-      Qld8: 2.34277,
-      Qld9: 2.45375,
-      Qld10: 2.43343,
-      NT1: 4.02581,
-      NT2: 3.96032,
-      NT3: 2.7036,
-      NT4: 3.99075,
-      NT5: 4.25842,
-      NT6: 2.35541,
-      NT7: 2.70701,
-      NT8: 2.47525,
-      NT9: 2.61767,
-      NT10: 2.9654,
-      Kimberley1: 3.9053,
-      Kimberley2: 3.83521,
-      Kimberley3: 2.4142,
-      Kimberley4: 3.6844,
-      Kimberley5: 3.99772,
-      Kimberley6: 2.46568,
-      Kimberley7: 2.72722,
-      Kimberley8: 2.5792,
-      Kimberley9: 2.89562,
-      Kimberley10: 2.9491,
-      Pilbara1: 3.9053,
-      Pilbara2: 3.83521,
-      Pilbara3: 2.4142,
-      Pilbara4: 3.6844,
-      Pilbara5: 3.99772,
-      Pilbara6: 2.46568,
-      Pilbara7: 2.72722,
-      Pilbara8: 2.5792,
-      Pilbara9: 2.89562,
-      Pilbara10: 2.9491,
-    },
-    D: {
-      Qld1: 0.8,
-      Qld2: 0.8,
-      Qld3: 0.8,
-      Qld4: 0.8,
-      Qld5: 0.8,
-      Qld6: 0.8,
-      Qld7: 0.8,
-      Qld8: 0.8,
-      Qld9: 0.8,
-      Qld10: 0.8,
-      NT1: 0.8,
-      NT2: 0.8,
-      NT3: 0.8,
-      NT4: 0.8,
-      NT5: 0.8,
-      NT6: 0.8,
-      NT7: 0.8,
-      NT8: 0.8,
-      NT9: 0.8,
-      NT10: 0.8,
-      Kimberley1: 0.8,
-      Kimberley2: 0.8,
-      Kimberley3: 0.8,
-      Kimberley4: 0.8,
-      Kimberley5: 0.8,
-      Kimberley6: 0.8,
-      Kimberley7: 0.8,
-      Kimberley8: 0.8,
-      Kimberley9: 0.8,
-      Kimberley10: 0.8,
-      Pilbara1: 0.8,
-      Pilbara2: 0.8,
-      Pilbara3: 0.8,
-      Pilbara4: 0.8,
-      Pilbara5: 0.8,
-      Pilbara6: 0.8,
-      Pilbara7: 0.8,
-      Pilbara8: 0.8,
-      Pilbara9: 0.8,
-      Pilbara10: 0.8,
-    },
-    Gc: {
-      Qld1: 1.33,
-      Qld2: 1.2,
-      Qld3: 1.33,
-      Qld4: 1.15,
-      Qld5: 1.25,
-      Qld6: 1.4,
-      Qld7: 1.7,
-      Qld8: 1.4,
-      Qld9: 1,
-      Qld10: 1.8,
-      NT1: 1.33,
-      NT2: 1.2,
-      NT3: 1.33,
-      NT4: 1.15,
-      NT5: 1.25,
-      NT6: 1.4,
-      NT7: 1.7,
-      NT8: 1.4,
-      NT9: 1,
-      NT10: 1.8,
-      Kimberley1: 1.33,
-      Kimberley2: 1.2,
-      Kimberley3: 1.33,
-      Kimberley4: 1.15,
-      Kimberley5: 1.25,
-      Kimberley6: 1.4,
-      Kimberley7: 1.7,
-      Kimberley8: 1.4,
-      Kimberley9: 1,
-      Kimberley10: 1.8,
-      Pilbara1: 1.33,
-      Pilbara2: 1.2,
-      Pilbara3: 1.33,
-      Pilbara4: 1.15,
-      Pilbara5: 1.25,
-      Pilbara6: 1.4,
-      Pilbara7: 1.7,
-      Pilbara8: 1.4,
-      Pilbara9: 1,
-      Pilbara10: 1.8,
-    },
-  },
-
-  /**
-   * @description State lookup values for using other savannah lookup constants
-   */
-  FUEL_STATEREF: {
-    wa_nw: 0,
-    act: 1,
-    nsw: 2,
-    tas: 3,
-    wa_sw: 4,
-    sa: 5,
-    vic: 6,
-    qld: 7,
-    nt: 8,
-    kimberley: 9,
-    pilbara: 10,
-  },
-
-  /**
-   * @description Patchiness values for savannah burning by season
-   * @type Proportion
-   */
-  BURN_PATCHINESS: {
-    'early dry season': { high: 0.709, low: 0.79 },
-    'late dry season': { high: 0.889, low: 0.97 },
-  },
-
-  /**
-   * @description Completeness of combustion values for savannah burning by fuel and season
-   * @type Proportion
-   */
-  BURN_COMPLETENESSOFCOMBUSTION: {
-    low: {
-      fine: { 'early dry season': 0.7992, 'late dry season': 0.8328 },
-      coarse: { 'early dry season': 0.109, 'late dry season': 0.2016 },
-    },
-    high: {
-      fine: { 'early dry season': 0.7444, 'late dry season': 0.8604 },
-      coarse: { 'early dry season': 0.1464, 'late dry season': 0.3571 },
-    },
-  },
-
-  /**
-   * @description Carbon Mass Fraction Burnt in Fuel Burnt
-   * @units Proportion
-   */
-  FUELBURNT_VEGETATION_CARBONFRACTION: {
-    fine: {
-      'Shrubland hummock': 0.46,
-      'Woodland Hummock': 0.46,
-      'Melaleuca woodland': 0.46,
-      'Woodland Mixed': 0.46,
-      'Open forest mixed': 0.46,
-      'Shrubland (heath) with hummock grass': 0.398,
-      'Woodland with hummock grass': 0.397,
-      'Open woodland with mixed grass': 0.399,
-      'Woodland with mixed grass': 0.41,
-      'Woodland with tussock grass': 0.397,
-    },
-    coarse: {
-      'Shrubland hummock': 0.46,
-      'Woodland Hummock': 0.46,
-      'Melaleuca woodland': 0.46,
-      'Woodland Mixed': 0.46,
-      'Open forest mixed': 0.46,
-      'Shrubland (heath) with hummock grass': 0.482,
-      'Woodland with hummock grass': 0.482,
-      'Open woodland with mixed grass': 0.482,
-      'Woodland with mixed grass': 0.482,
-      'Woodland with tussock grass': 0.482,
-    },
-  },
-
-  /**
-   * @description Methane emissions factor for savannah burning
-   * @units Gg CH$-C / Gg C
-   */
-  FUELBURNT_VEGETATION_EF_CH4: {
-    fine: {
-      'Shrubland hummock': 0.0031,
-      'Woodland Hummock': 0.0015,
-      'Melaleuca woodland': 0.0031,
-      'Woodland Mixed': 0.0031,
-      'Open forest mixed': 0.0031,
-      'Shrubland (heath) with hummock grass': 0.0013,
-      'Woodland with hummock grass': 0.0017,
-      'Open woodland with mixed grass': 0.0012,
-      'Woodland with mixed grass': 0.0016,
-      'Woodland with tussock grass': 0.0015,
-    },
-    coarse: {
-      'Shrubland hummock': 0.0031,
-      'Woodland Hummock': 0.0015,
-      'Melaleuca woodland': 0.0031,
-      'Woodland Mixed': 0.0031,
-      'Open forest mixed': 0.0031,
-      'Shrubland (heath) with hummock grass': 0.0013,
-      'Woodland with hummock grass': 0.0017,
-      'Open woodland with mixed grass': 0.0012,
-      'Woodland with mixed grass': 0.0016,
-      'Woodland with tussock grass': 0.0015,
-    },
-  },
-
-  /**
-   * @description Nitrogen to Carbon ratio in fuel burnt
-   */
-  FUELBURNT_VEGETATION_NITROGENCARBONRATIO: {
-    fine: {
-      'Shrubland hummock': 0.0096,
-      'Woodland Hummock': 0.0096,
-      'Melaleuca woodland': 0.0096,
-      'Woodland Mixed': 0.0096,
-      'Open forest mixed': 0.0096,
-      'Shrubland (heath) with hummock grass': 0.0107,
-      'Woodland with hummock grass': 0.0118,
-      'Open woodland with mixed grass': 0.0102,
-      'Woodland with mixed grass': 0.0105,
-      'Woodland with tussock grass': 0.0113,
-    },
-    coarse: {
-      'Shrubland hummock': 0.0081,
-      'Woodland Hummock': 0.0081,
-      'Melaleuca woodland': 0.0081,
-      'Woodland Mixed': 0.0081,
-      'Open forest mixed': 0.0081,
-      'Shrubland (heath) with hummock grass': 0.00389,
-      'Woodland with hummock grass': 0.00389,
-      'Open woodland with mixed grass': 0.00389,
-      'Woodland with mixed grass': 0.00389,
-      'Woodland with tussock grass': 0.00389,
-    },
-  },
-
-  /**
-   * @description N2O emissions factor for savannah burning
-   * @units Gg N2O-N/Gg N
-   */
-  FUELBURNT_VEGETATION_N2O: {
-    fine: {
-      'Shrubland hummock': 0.0075,
-      'Woodland Hummock': 0.0066,
-      'Melaleuca woodland': 0.0075,
-      'Woodland Mixed': 0.0075,
-      'Open forest mixed': 0.0075,
-      'Shrubland (heath) with hummock grass': 0.0059,
-      'Woodland with hummock grass': 0.006,
-      'Open woodland with mixed grass': 0.006,
-      'Woodland with mixed grass': 0.012,
-      'Woodland with tussock grass': 0.006,
-    },
-    coarse: {
-      'Shrubland hummock': 0.0075,
-      'Woodland Hummock': 0.0066,
-      'Melaleuca woodland': 0.0075,
-      'Woodland Mixed': 0.0075,
-      'Open forest mixed': 0.0075,
-      'Shrubland (heath) with hummock grass': 0.0059,
-      'Woodland with hummock grass': 0.006,
-      'Open woodland with mixed grass': 0.006,
-      'Woodland with mixed grass': 0.012,
-      'Woodland with tussock grass': 0.006,
-    },
-  },
-};
-
-export const feedlotConstants: FeedlotConstants = {
-  /**
-   * @description Leaching and runoff mass for feedlot
-   * @inventory2022 3.D.A_3
-   */
-  MN_LEACH: 0,
-
-  /**
-   * @description mass of urinary N excretion on pasture
-   * @inventory2022 3.D.B_2
-   */
-  UN_SOIL: 0,
-
-  /**
-   * @description mass of faecal N excretion on pasture
-   * @inventory2022 3.D.B_2
-   */
-  FN_SOIL: 0,
-
-  /**
-   * @description FracGASM value for feedlot
-   * @inventory2022 3.D.B_2
-   */
-  AG_SOILS: 0.21,
-
-  /**
-   * @description Emissions factor for amount of N deposited on pasture, weighted average calculated from IPCC 2019
-   * @inventory2022 3.D.A_4
-   */
-  ANNUAL_N2O_EF: 0.00503,
-
-  /**
-   * @description integrated N2O emission factor for each feedlot class and state
-   * @inventory2022 3.B.1c_7
-   */
-  I_NOF: 0.01942,
-
-  /**
-   * @description integrated fraction of N volatilised from feedlot cattle
-   * @inventory2022 3.B.5c_1
-   */
-  I_FRACGASM: 0.71116,
-
-  /**
-   * @description Inorganic fertiliser EF for non-irrigated cropping
-   * @inventory2022 3.B.5c_2
-   */
-  INDIRECT_EF: 0.0041,
-
-  /**
-   * @description Ash content expressed as a fraction of manure
-   * @inventory2022 3.B.1 c_1
-   */
-  ASH_CONTENT: 0.16,
-
-  /**
-   * @description Methane emissions potential for feedlot
-   * @inventory2022 3.B.1 c_1
-   * @units m3 CH4/kg
-   */
-  EMISSION_POTENTIAL: 0.19,
-
-  /**
-   * @description Manure emission factors for each feedlot manure processing system
-   * @inventory2022 Table A5.5.3.6, A5.5.3.7
-   */
-  MANURE_EF: {
-    Drylot: {
-      EF: 0.0054,
-      FracGASM: 0.6,
-    },
-    'Solid Storage': {
-      EF: 0.005,
-      FracGASM: 0.25,
-    },
-    Composting: {
-      EF: 0.01,
-      FracGASM: 0.4,
-    },
-    'Uncovered anaerobic lagoon': {
-      EF: 0,
-      FracGASM: 0.35,
-    },
-  },
-
-  /**
-   * @description Integrated EF for feedlot by state
-   * @inventory2022 A5.5.3.3
-   */
-  INTEGRATED_EF: {
-    act: 0.0323,
-    nsw: 0.0323,
-    tas: 0,
-    wa_sw: 0.0327,
-    sa: 0.0323,
-    vic: 0.0323,
-    qld: 0.04023,
-    nt: 0,
-    wa_nw: 0,
-  },
-
-  /**
-   * @description Emissions factors for purchased live stock, in kg CO2-e/kg liveweight
-   * @reference Wiedemann et al. (2015b)
-   * @units kg CO2-e/kg
-   */
-  PURCHASELIVESTOCK_EF: {
-    NT: 12.4,
-    'nth QLD': 12.4,
-    'sth/central QLD': 12.4,
-    'nth NSW': 11.7,
-    'sth NSW/VIC/sth SA': 11.7,
-    'NSW/SA pastoral zone': 12.4,
-    'sw WA': 11.7,
-    'WA pastoral': 12.4,
-    TAS: 11.7,
-  },
-};
-
-export const porkConstants: PorkConstants = {
-  /**
-   * @description Methane emission potential for pork, in m3 CH4/kg
-   * @inventory2018 Appendix 5.E.4
-   * @units m3 CH4/kg
-   */
-  METHANE_EMISSION_POTENTIAL: 0.45,
-
-  /**
-   * @description Emission factor for bedding for pork, in kg CO2-e/kg
-   * @reference (Christie et al., 2012)
-   * @units kg CO2-e/kg
-   */
-  EF_BEDDING: 0.225,
-
-  /**
-   * @description Nitrogen content of swine manure, by class
-   * @inventory2022 Table A5.5.5.4
-   * @units kg N/head/year
-   */
-  MANURE_NITROGEN: {
-    boars: 16.93,
-    sows: 17.91,
-    gilts: 16.7,
-    slaughter_pigs: 11.4,
-  },
-
-  /**
-   * @description Volatile solids content of swine manure, by class
-   * @inventory2022 Table A5.5.5.4
-   * @units kg / head / day
-   */
-  MANURE_CHARACTERISTICS: {
-    boars: 0.4,
-    sows: 0.46,
-    gilts: 0.55,
-    slaughter_pigs: 0.39,
-  },
-
-  /**
-   * @description Feed intake of swine, by class
-   * @inventory2022 Table A5.5.5.2
-   * @units kg / head / day
-   */
-  HERD_FEEDINTAKE: {
-    boars: 2.3,
-    sows: 2.62,
-    gilts: 2.5,
-    slaughter_pigs: 1.71,
-  },
-
-  /**
-   * @description Integrated emissions factors for swine, by state
-   * @inventory2022 Table A5.5.5.5
-   */
-  INTEGRATED_EF: {
-    [STATES.ACT]: {
-      iMCF: 0,
-      iFracGasm: 0,
-      iNOF: 0,
-    },
-    [STATES.NSW]: {
-      iMCF: 0.44174,
-      iFracGasm: 0.45946,
-      iNOF: 0.00517,
-    },
-    [STATES.TAS]: {
-      iMCF: 0.5243,
-      iFracGasm: 0.4786,
-      iNOF: 0.00343,
-    },
-    [STATES.WA_SW]: {
-      iMCF: 0.52871,
-      iFracGasm: 0.46465,
-      iNOF: 0.00498,
-    },
-    [STATES.SA]: {
-      iMCF: 0.5608,
-      iFracGasm: 0.4786,
-      iNOF: 0.00343,
-    },
-    [STATES.VIC]: {
-      iMCF: 0.45067,
-      iFracGasm: 0.45279,
-      iNOF: 0.00533,
-    },
-    [STATES.QLD]: {
-      iMCF: 0.6199,
-      iFracGasm: 0.50371,
-      iNOF: 0.00243,
-    },
-    [STATES.WA_NW]: {
-      iMCF: 0.52871,
-      iFracGasm: 0.46465,
-      iNOF: 0.00498,
-    },
-    [STATES.NT]: {
-      iMCF: 0.64598,
-      iFracGasm: 0.50406,
-      iNOF: 0.00225,
-    },
-  },
-
-  /**
-   * @description Fraction of animal waste available for leaching and runoff (FracWET)
-   * @inventory2022 Table A5.5.10.2
-   * @type Proportion
-   */
-  FRACWET: {
-    [STATES.ACT]: 0.5,
-    [STATES.NSW]: 0.5,
-    [STATES.TAS]: 1,
-    [STATES.WA_SW]: 0.4,
-    [STATES.SA]: 0.75,
-    [STATES.VIC]: 0.5,
-    [STATES.QLD]: 0.25,
-    [STATES.WA_NW]: 0.4,
-    [STATES.NT]: 0,
-  },
-
-  /**
-   * @description Allocation of waste to MMS
-   * @inventory2022 Table A5.5.5.6
-   * @type Proportion
-   */
-  WASTE_MMS: {
-    [STATES.ACT]: 0.5,
-    [STATES.NSW]: 0.06,
-    [STATES.TAS]: 0.02,
-    [STATES.WA_SW]: 0.1,
-    [STATES.SA]: 0.02,
-    [STATES.VIC]: 0.06,
-    [STATES.QLD]: 0.03,
-    [STATES.WA_NW]: 0.1,
-    [STATES.NT]: 0.02,
-  },
-
-  /**
-   * @description Emissions factors for swine feed ingredients, by ingredient
-   * @reference (Wiedemann et al., 2021), (Reckmann et al., 2016)
-   * @units kg CO2-e / kg ingredient
-   */
-  FEED_INGREDIENT_EF: {
-    wheat: 0.252,
-    barley: 0.341,
-    wheyPowder: 0,
-    canolaMeal: 0.284,
-    soybeanMeal: 0.633,
-    meatMeal: 0.386,
-    bloodMeal: 1.9,
-    fishmeal: 0,
-    tallow: 0,
-    wheatBran: 0.547,
-    beetPulp: 0.704,
-    millMix: 0,
-  },
-
-  /**
-   * @description Methane Conversion Factors (MCF) and Nitrous Oxide Fractions (NOF) for manure management systems
-   */
-  MMS: {
-    deepLitter: {
-      MCF: 0.04,
-      FracGASM: 0.125,
-      NOF: 0.01,
-    },
-    coveredAnaerobicPond: {
-      MCF: 0.1,
-      FracGASM: 0,
-      NOF: 0,
-    },
-    outdoorSystems: {
-      MCF: 0.01,
-      FracGASM: 0.3,
-      NOF: 0.02,
-    },
-    uncoveredAnaerobicPond: {
-      MCF: 0.75,
-      FracGASM: 0.55,
-      NOF: 0,
-    },
-  },
-};
-
-export const poultryConstants: PoultryConstants = {
-  /**
-   * @description Diet properties for poultry, by class
-   * @inventory2022 Table A5.5.6.1
-   */
-  DIET_PROPERTIES: {
-    layers: {
-      dryMatterIntake: 0.086,
-      dryMatterDigestibility: 0.8,
-      crudeProtein: 0.19,
-      nitrogenRetentionRate: 0.35,
-      manureAsh: 0.18,
-    },
-    meat_chicken_growers: {
-      dryMatterIntake: 0.093,
-      dryMatterDigestibility: 0.8,
-      crudeProtein: 0.23,
-      nitrogenRetentionRate: 0.47,
-      manureAsh: 0.15,
-    },
-    meat_chicken_layers: {
-      dryMatterIntake: 0.103,
-      dryMatterDigestibility: 0.8,
-      crudeProtein: 0.19,
-      nitrogenRetentionRate: 0.32,
-      manureAsh: 0.18,
-    },
-    meat_other: {
-      dryMatterIntake: 0.093,
-      dryMatterDigestibility: 0.8,
-      crudeProtein: 0.23,
-      nitrogenRetentionRate: 0.47,
-      manureAsh: 0.15,
-    },
-  },
-
-  /**
-   * @description MCFs Pasture range and paddock
-   * @inventory2022 Table A5.5.6.5
-   * @type Proportion
-   */
-  WASTE_MMS: {
-    [STATES.ACT]: 0.01,
-    [STATES.NSW]: 0.01,
-    [STATES.NT]: 0.03,
-    [STATES.QLD]: 0.03,
-    [STATES.SA]: 0.01,
-    [STATES.TAS]: 0.01,
-    [STATES.VIC]: 0.01,
-    [STATES.WA_SW]: 0.01,
-    [STATES.WA_NW]: 0.01,
-  },
-
-  /**
-   * @description Meat and layer chickens – Integrated MCFs, by state
-   */
-  MEATLAYER_EF_IMCF: {
-    meat_chickens: {
-      [STATES.ACT]: 0.024414,
-      [STATES.NSW]: 0.024414,
-      [STATES.NT]: 0.025014,
-      [STATES.QLD]: 0.025014,
-      [STATES.SA]: 0.024414,
-      [STATES.TAS]: 0.23425,
-      [STATES.VIC]: 0.024414,
-      [STATES.WA_SW]: 0.024414,
-      [STATES.WA_NW]: 0.024414,
-    },
-    layer_chickens: {
-      [STATES.ACT]: 0.031702,
-      [STATES.NSW]: 0.031702,
-      [STATES.NT]: 0.03193,
-      [STATES.QLD]: 0.03193,
-      [STATES.SA]: 0.031702,
-      [STATES.TAS]: 0.031011,
-      [STATES.VIC]: 0.031702,
-      [STATES.WA_SW]: 0.031702,
-      [STATES.WA_NW]: 0.031702,
-    },
-  },
-
-  /**
-   * @description Meat and layer chickens – Integrated EFs, by state
-   */
-  MEATLAYER_EF: {
-    meat_chickens: {
-      iFracGASM: 0.385924,
-      iNOF: 0.004157,
-    },
-    layer_chickens: {
-      iFracGASM: 0.315956,
-      iNOF: 0.004728,
-    },
-  },
-
-  /**
-   * @description Emissions factors for poultry feed ingredients, by ingredient
-   * @reference (Christie et al., 2012), (Maraseni & Cockfield, 2011), (Castanheira & Freire, 2013), (O'Halloran et al., 2008)
-   * @units kg CO2-e / kg ingredient
-   */
-  FEED_INGREDIENTS_GHG: {
-    wheat: 0.3,
-    barley: 0.11,
-    soybean: 0.165,
-    sorghum: 0.3,
-    millrun: 0.3,
-  },
-};
-
-export const dairyConstants: DairyConstants = {
-  /**
-   * @description Dairy cattle - Nitrous oxide EFs and fraction of N volatilised by manure management system
-   * @inventory2022 Table A5.5.1.9
-   */
-  MANURE_MANAGEMENT: {
-    PASTURE_EF: 0,
-    ANAEROBIC_EF: 0,
-    SUMP_EF: 0,
-    DRAIN_EF: 0,
-    SOLID_EF: 0.005,
-    PASTURE_FRACGASM: 0,
-    ANAEROBIC_FRACGASM: 0.35,
-    SUMP_FRACGASM: 0.07,
-    DRAIN_FRACGASM: 0.2,
-    SOLID_FRACGASM: 0.3,
-  },
-
-  /**
-   * @description Standard reference weights for dairy cattle, by class
-   * @inventory2022 Table A5.5.1.3
-   * @units kg
-   */
-  CATTLE_STANDARD_REFERENCE_WEIGHTS: {
-    milkingCows: 580.7142857143,
-    heifersLt1: 580.7142857143,
-    heifersGt1: 580.7142857143,
-    dairyBullsLt1: 770,
-    dairyBullsGt1: 770,
-  },
-
-  /**
-   * @description N2O oxide emission factors and fraction of N volatilised by manure management system
-   * @inventory2022 Table A5.5.1.9
-   */
-  CATTLE_N2O_MMS: {
-    void_at_pasture: { EF: 0, FracGASM: 0 },
-    anaerobic_lagoon: { EF: 0, FracGASM: 0.35 },
-    daily_spread: { EF: 0, FracGASM: 0.2 },
-    solid_storage: { EF: 0.005, FracGASM: 0.3 },
-  },
-
-  /**
-   * @description Mass of N volatilised from manure management system
-   * @inventory2022 Table 3.D.A_6
-   * @units Gg N2O-N / Gg N
-   */
-  MASS_N_VOLATISED_EF: 0.004,
-
-  /**
-   * @description Mass of N volatilised from manure applied to soils
-   * @inventory2022 Table 3.D.A_4
-   * @units Gg N2O-N / Gg N
-   */
-  MMS_EF: 0.00503,
-
-  /**
-   * @description Methane production from pre weaned calves, by class
-   * @inventory2022 Table A5.5.1.5
-   * @units Gg CH4-C / Gg N
-   */
-  METHANE_MPW: {
-    milkingCows: 0,
-    heifersLt1: 0.01825,
-    heifersGt1: 0,
-    dairyBullsLt1: 0.02081,
-    dairyBullsGt1: 0,
-  },
-
-  /**
-   * @description Nitrous oxide EFs for inorganic fertiliser, based on rainfall and crop type
-   * @inventory2022 Table 5.21
-   * @units Gg N2O-N / Gg N
-   */
-  PRODUCTIONSYSTEM_EF: {
-    RAINFALL_LT_600: {
-      'Non-irrigated Crop': 0.0029,
-      'Irrigated Crop': 0.007,
-      'Irrigated Pasture': 0.0059,
-      'Non-irrigated Pasture': 0.0018,
-    },
-    RAINFALL_GT_600: {
-      'Non-irrigated Crop': 0.008,
-      'Irrigated Crop': 0.007,
-      'Irrigated Pasture': 0.0059,
-      'Non-irrigated Pasture': 0.0018,
-    },
-  },
-
-  /**
-   * @description Dairy Cattle - Methane Conversion Factors (MCF)
-   * @inventory2022 Table 5.A.7
-   */
-  METHANE_CONVERSION_FACTOR: {
-    [STATES.ACT]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.73,
-      'Sump and dispersal systems': 0.005,
-      'Drains to paddock': 0.15,
-      'Solid Storage': 0.02,
-    },
-    [STATES.NSW]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.75,
-      'Sump and dispersal systems': 0.005,
-      'Drains to paddock': 0.18,
-      'Solid Storage': 0.02,
-    },
-    [STATES.NT]: {
-      Pasture: 0.02,
-      'Anaerobic lagoon': 0.8,
-      'Sump and dispersal systems': 0.01,
-      'Drains to paddock': 0.5,
-      'Solid Storage': 0.02,
-    },
-    [STATES.QLD]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.77,
-      'Sump and dispersal systems': 0.005,
-      'Drains to paddock': 0.24,
-      'Solid Storage': 0.02,
-    },
-    [STATES.SA]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.74,
-      'Sump and dispersal systems': 0.005,
-      'Drains to paddock': 0.17,
-      'Solid Storage': 0.02,
-    },
-    [STATES.TAS]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.7,
-      'Sump and dispersal systems': 0.001,
-      'Drains to paddock': 0.13,
-      'Solid Storage': 0.02,
-    },
-    [STATES.VIC]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.74,
-      'Sump and dispersal systems': 0.005,
-      'Drains to paddock': 0.17,
-      'Solid Storage': 0.02,
-    },
-    [STATES.WA_SW]: {
-      Pasture: 0.01,
-      'Anaerobic lagoon': 0.75,
-      'Sump and dispersal systems': 0.005,
-      'Drains to paddock': 0.18,
-      'Solid Storage': 0.02,
-    },
-    [STATES.WA_NW]: {
-      Pasture: 0.02,
-      'Anaerobic lagoon': 0.8,
-      'Sump and dispersal systems': 0.01,
-      'Drains to paddock': 0.5,
-      'Solid Storage': 0.02,
-    },
-  },
-
-  /**
-   * @description Ash content as a proportion of faecal DM
-   * @inventory2018 3B.1a_1
-   * @type Proportion
-   */
-  ASH_CONTENT: 0.08,
-};
-
-export const goatConstants: GoatConstants = {
-  /**
-   * @description Enteric fermentation emission factor for goat, in kg CH4/head/year
-   * @reference IPCC (2006)
-   * @units kg CH4/head/year
-   */
-  EF: 5,
-
-  /**
-   * @description Manure production for goat, in kg DM/head/year
-   * @reference Expert working group assumption - equivalent to one sheep
-   * @units kg DM/head/year
-   */
-  MANUREPRODUCTION: 114,
-};
-
-export const buffaloConstants: BuffaloConstants = {
-  /**
-   * @description Nitrogen excreted for buffalo, in kg N/head/year
-   * @reference Expert working group assumption - equivalent to beef cattle - pasture
-   * @units kg N/head/year
-   */
-  NITROGEN_EXCRETED_FACTOR: 39.5,
-
-  /**
-   * @description Faecal nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
-   * @type Proportion
-   */
-  FAECALN_PMF: 0.29,
-
-  /**
-   * @description Seasonal urinary nitrogen proportion for buffalo, as a proportion of total nitrogen excreted
-   * @inventory2018 3B.4_5
-   * @type Proportion
-   */
-  SEASONALURINE_PMU: 0.71,
-
-  /**
-   * @description Manure production for buffalo, in kg DM/head/year
-   * @reference Expert working group assumption - equivalent to beef cattle - pasture
-   * @units kg DM/head/year
-   */
-  MANUREPRODUCTION: 957,
-
-  /**
-   * @description Enteric fermentation emission factor for buffalo, in kg CH4/head/year
-   * @reference IPCC (2006)
-   * @units kg CH4/head/year
-   */
-  ENTERIC_EF: 76,
-};
-
-export const deerConstants: DeerConstants = {
-  /**
-   * @description Manure production for deer, in kg DM/head/year
-   * @reference Expert working group assumption - equivalent to one sheep
-   * @units kg DM/head/year
-   */
-  MANUREPRODUCTION: 319,
-
-  /**
-   * @description Enteric fermentation emission factor for deer, in kg CH4/head/year
-   * @reference IPCC (2006)
-   * @units kg CH4/head/year
-   */
-  ENTERIC_EF: 20,
-
-  /**
-   * @description Nitrogen excreted for deer, in kg N/head/year
-   * @reference Expert working group assumption - equivalent to one sheep
-   * @units kg N/head/year
-   */
-  NITROGEN_EXCRETED_FACTOR: 13.2,
-
-  /**
-   * @description Faecal nitrogen proportion for deer, as a proportion
-   * @type Proportion
-   */
-  FAECALN_PMF: 0.29,
-};
-
-export const fisheriesConstants: FisheriesConstants = {
-  /**
-   * @description Coefficients for Rural fuel consumption model (litres per 1 Km)
-   * @inventory2022 Table 56
-   * @units litres / Km
-   */
-  TRANSPORT_FUEL_USAGE: {
-    None: 0,
-    'Small Car': 0.06419556,
-    'Medium Car': 0.07771756,
-    'Large Car': 0.09826507,
-    'Courier Van-Utility': 0.07609467,
-    '4WD Mid Size': 0.1024522,
-    'Light Rigid': 0.08085994,
-    'Medium Rigid': 0.1245859,
-    'Heavy Rigid': 0.2322869,
-    'Heavy Bus': 0.2333246,
-  },
-
-  /**
-   * @description Direct (Scope 1) and indirect (Scope 3) emissions factors for the consumptions of transport fuels in different transport equipment
-   * @inventory2022 Table 9
-   * @units kg CO2-e / GJ
-   */
-  TRANSPORT_FUEL_EF: {
-    Gasoline: { CO2: 67.4, CH4: 0.02, N2O: 0.2, SCOPE3: 17.2 },
-    'Diesel oil': { CO2: 69.9, CH4: 0.01, N2O: 0.5, SCOPE3: 17.3 },
-    'Liquefied petroleum gas (LPG)': {
-      CO2: 60.2,
-      CH4: 0.5,
-      N2O: 0.3,
-      SCOPE3: 20.2,
-    },
-    'Fuel oil': { CO2: 73.6, CH4: 0.08, N2O: 0.5, SCOPE3: 18 },
-    Ethanol: { CO2: 0, CH4: 0.2, N2O: 0.2, SCOPE3: 0 },
-    Biodiesel: { CO2: 0, CH4: 0.8, N2O: 1.7, SCOPE3: 0 },
-    'Renewable diesel': { CO2: 0, CH4: 0.01, N2O: 0.5, SCOPE3: 0 },
-    'Other biofuels': { CO2: 0, CH4: 0.8, N2O: 1.7, SCOPE3: 0 },
-    'Liquified natural gas': { CO2: 51.4, CH4: 7.3, N2O: 0.3, SCOPE3: 18 },
-  },
-
-  /**
-   * @description Emissions factors for bait
-   * @reference FRDC - Data extracted/reverse-engineered by Blueshift/Dan from Seafish Calculator (UK/European numbers).
-   * @units kg CO2-e / kg bait
-   */
-  BAIT_EF: {
-    'Fish Frames': 0.098,
-    'Fish Heads': 0.098,
-    Sardines: 0.05,
-    Squid: 0.192,
-    'Whole Fish': 0.098,
-  },
-};
-
-export const riceConstants: RiceConstants = {
-  /**
-   * @description Emissions factor for permanently flooded fields
-   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
-   */
-  EF_FLOODED_FIELDS: 1.19,
-
-  /**
-   * @description Default CH4 emissions scaling factors for water regimes during the cultivation period relative to continuously flooded fields
-   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
-   */
-  SF_CULTIVATION_WATER_REGIME: {
-    'Continuously flooded': 1,
-    'Single drainage period': 0.71,
-    'Multiple drainage periods': 0.55,
-    'Regular rainfed': 0.54,
-    'Drought prone': 0.16,
-    'Deep water': 0.06,
-    'Paddy rotation': 0,
-    'Fallow without flooding in previous year': 0,
-  },
-
-  /**
-   * @description Default CH4 emissions scaling factors for water regimes before the cultivation period
-   * @reference https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch05_Cropland.pdf
-   */
-  SF_PRESEASON_WATER_REGIME: {
-    'Non flooded pre-season < 180 days': 1,
-    'Non flooded pre-season > 180 days': 0.89,
-    'Flooded pre-season > 30 days': 2.41,
-    'Non-flooded pre-season > 365 days': 0.59,
-  },
-};
-
-export const livestockConstants: LivestockConstants = {
-  /**
-   * @description Energy required to manufacture herbicides and insecticides
-   * @reference O'Halloran, N., Fisher, P., Rab, A., & Victoria, D. P. I. (2008). Preliminary estimation of the carbon footprint of the Australian vegetable industry (pp. 1-39). Discussion paper 4. Vegetable Industry Carbon Footprint Scoping Study. 2008, Horticulture Australia Ltd. Table 7
-   */
-  ENERGY_TO_MANUFACTURE: {
-    /** @units MJ/kg */
-    HERBICIDE_ENERGY: 550,
-    /** @units MJ/kg */
-    HERBICIDEGENERAL_ENERGY: 310,
-    /** @units MJ/kg */
-    INSECTICIDE_ENERGY: 315,
-    /** @units kg CO2-e/MJ */
-    HERBICIDE_EF: 0.06,
-    /** @units kg CO2-e/MJ */
-    HERBICIDEGENERAL_EF: 0.06,
-    /** @units kg CO2-e/MJ */
-    INSECTICIDE_EF: 0.06,
-  },
-
-  /**
-   * @description Relative amount of CO2, CH4, and N2O emitted by herbicides
-   * @type Proportion
-   */
-  EMISSION_BREAKDOWN: {
-    HERBICIDE: { CO2: 1.0, CH4: 0.0, N2O: 0.0 },
-  },
-
-  /**
-   * @description Emission factors for purchased livestock, in kg CO2-e/kg liveweight
-   * @reference Wiedemann et al. (2015b)
-   * @units kg CO2-e/kg
-   */
-  PURCHASED_LIVESTOCK_EF: {
-    BUFFALO: 12,
-    DEER: 8.1,
-    GOAT: 23.8,
-    PORK: 3.6,
-    POULTRY_CONVENTIONAL: 2,
-    POULTRY_FREE_RANGE: 1.8,
-  },
-
-  /**
-   * @description Emissions factors for each agricultural soil type, in Gg N2O-N/Gg N
-   * @inventory2022 Table 5.21
-   * @units Gg N2O-N/Gg N
-   */
-  AGRICULTURAL_SOILS: {
-    EF_IRRIGATEDPASTURE: 0.0059,
-    EF_IRRIGATEDCROP: 0.007,
-    EF_NONIRRIGATEDCROP: 0.0041,
-    EF_NONIRRIGATEDPASTURE: 0.0018,
-  },
-
-  /**
-   * @description Methane emission factor for warm climate
-   */
-  METHANE_WARM_EF: 0.012,
-
-  /**
-   * @description Methane emission factor for temperate climate
-   */
-  METHANE_TEMPERATE_EF: 0.003,
-
-  /**
-   * @description Methane emission potential, in m3 CH4/kg
-   * @inventory2018 3B.1a_2
-   * @units m3 CH4/kg
-   */
-  METHANE_EMISSION_POTENTIAL: 0.24,
-
-  /**
-   * @description Methane density, in kg CH4/m3
-   * @inventory2018 3B.1a_2
-   * @units kg CH4/m3
-   */
-  METHANE_DENSITY: 0.6784,
-
-  /**
-   * @description Other livestock – Allocation of animals to climate regions
-   * @inventory2022 Table A5.5.7.3
-   */
-  OTHERLIVESTOCK_ALLOCATION_CLIMATEREGIONS: {
-    [STATES.ACT]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.NT]: {
-      warm: 1,
-      temperate: 0,
-    },
-    [STATES.NSW]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.QLD]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.SA]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.TAS]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.VIC]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.WA_NW]: {
-      warm: 0,
-      temperate: 1,
-    },
-    [STATES.WA_SW]: {
-      warm: 0,
-      temperate: 1,
-    },
-  },
-
-  /**
-   * @description Urine and dung emission factor
-   * @inventory2022 3.D.A_6
-   */
-  URINEDUNG_EF: 0.004,
-
-  /**
-   * @description Default emission factor for Urea
-   * @reference IPCC (2006)
-   */
-  CARBON_FRACTION_OF_UREA: 0.2,
-
-  /**
-   * @description Proportion of gas volatilised from manure
-   * @inventory2018 3DB_2
-   */
-  FRAC_GASM: 0.21,
-
-  /**
-   * @description Atmospheric N deposition of inorganic fertiliser
-   * @inventory2018 3DB_1
-   */
-  INOGRANICFERTILISER_ATMOSPHERIC_N: 0.11,
-
-  /**
-   * @description Leaching and runoff of inorganic fertiliser
-   * @inventory2018 3B.5a_4
-   */
-  LEECHING_AND_RUNOFF: 0.011,
-};
-
-export const sugarConstants: SugarConstants = {
-  /**
-   * @description Emissions factor for annual N2O production from sugar cane
-   */
-  SUGAR_ANNUAL_N2O_PRODUCTION_EF: 0.00503,
-
-  /**
-   * @description Default percent of sugar yield from total harvest, if no value is supplied in inputs
-   * @type Proportion
-   */
-  SUGAR_YIELD: 0.1188625,
-};
-
-export const cottonConstants: CottonConstants = {
-  /**
-   * @description Intensity of economic allocation for cotton co-products, by type
-   * @reference https://www.sciencedirect.com/science/article/abs/pii/S0959652618335935
-   * @type Proportion
-   */
-  COTTON_INTENSITY_ECONOMIC_ALLOCATION: {
-    LINT: 0.86,
-    SEED: 0.14,
-  },
-};
-
-export const aquacultureConstants: AquacultureConstants = {
-  /**
-   * @description Emissions factors for aquaculture bait
-   * @reference Blueshift estimates
-   * @units kg CO2-e / kg feed
-   */
-  AQUACULTURE_BAIT_EF: {
-    [AquacultureBait.SARDINES]: 0.3,
-    [AquacultureBait.LOW_ANIMAL_PROTEIN]: 1,
-    [AquacultureBait.HIGH_ANIMAL_PROTEIN]: 2.2,
-    [AquacultureBait.CEREAL]: 0.5,
-    [AquacultureBait.SQUID]: 0.3,
-    [AquacultureBait.FISH]: 0.3,
-  },
-};
-
-export const cropConstants: CropConstants = {
-  /**
-   * @description Efficiency of residue burning
-   */
-  BURNING_EFFICIENCY_RESIDUE: 0.96,
-
-  /**
-   * @description N2O emissions factor for savannah burning
-   * @inventory2022 Table 5.31
-   * @units Gg element / Gg burnt
-   */
-  BURNING_N2O_EF: 0.0076,
-
-  /**
-   * @description Methane emissions factor for savannah burning
-   * @inventory2022 Table 5.31
-   * @units Gg element / Gg burnt
-   */
-  BURNING_METHANE_EF: 0.0035,
-
-  COMPONENTS_ENERGY_EF: {
-    N: { TOTAL_ENERGY: 65, EF: 0.05 },
-    P: { TOTAL_ENERGY: 15, EF: 0.06 },
-    K: { TOTAL_ENERGY: 10, EF: 0.06 },
-    S: { TOTAL_ENERGY: 5, EF: 0.06 },
-  },
-
-  /**
-   * @description NO2 emissions factors for synthetic fertilisers
-   * @inventory2018 Table 5.23
-   */
-  PRODUCTIONSYSTEM_EF: {
-    RAINFALL_LT_600: {
-      'Non-irrigated crop': 0.0029,
-      'Irrigated crop': 0.007,
-      'Sugar cane': 0.0199,
-      Cotton: 0.0053,
-      Horticulture: 0.0064,
-    },
-    RAINFALL_GT_600: {
-      'Non-irrigated crop': 0.008,
-      'Irrigated crop': 0.007,
-      'Sugar cane': 0.0199,
-      Cotton: 0.0053,
-      Horticulture: 0.0064,
-    },
-  },
-
-  /**
-   * @description Attributes of major pasture types
-   * @inventory2022 A5.5.9.2
-   */
-  PASTURE_ATTRIBUTES: {
-    'Annual grass': {
-      FRACRENEWED_INTENSIVE: 0.1,
-      FRACRENEWED_OTHER: 0.03,
-      AVERAGE_YIELD: 4.41,
-      BELOW_ABOVE_RATIO: 0.4,
-      NCONTENT_ABOVEGROUND: 0.015,
-      NCONTENT_BELOWGROUND: 0.012,
-      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.8,
-    },
-    'Grass clover mixture': {
-      FRACRENEWED_INTENSIVE: 0.1,
-      FRACRENEWED_OTHER: 0.03,
-      AVERAGE_YIELD: 8.34,
-      BELOW_ABOVE_RATIO: 0.8,
-      NCONTENT_ABOVEGROUND: 0.025,
-      NCONTENT_BELOWGROUND: 0.016,
-      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.8,
-    },
-    Lucerne: {
-      FRACRENEWED_INTENSIVE: 0.1,
-      FRACRENEWED_OTHER: 0.03,
-      AVERAGE_YIELD: 8.62,
-      BELOW_ABOVE_RATIO: 0.4,
-      NCONTENT_ABOVEGROUND: 0.027,
-      NCONTENT_BELOWGROUND: 0.019,
-      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.8,
-    },
-    'Other legume': {
-      FRACRENEWED_INTENSIVE: 0.1,
-      FRACRENEWED_OTHER: 0.03,
-      AVERAGE_YIELD: 5.62,
-      BELOW_ABOVE_RATIO: 0.4,
-      NCONTENT_ABOVEGROUND: 0.027,
-      NCONTENT_BELOWGROUND: 0.022,
-      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.8,
-    },
-    'Perennial pasture': {
-      FRACRENEWED_INTENSIVE: 0.1,
-      FRACRENEWED_OTHER: 0.03,
-      AVERAGE_YIELD: 8.35,
-      BELOW_ABOVE_RATIO: 0.8,
-      NCONTENT_ABOVEGROUND: 0.015,
-      NCONTENT_BELOWGROUND: 0.012,
-      NCONTENT_ABOVEGROUND_RESIDUE_REMOVED: 0.8,
-    },
-  },
-
-  /**
-   * @description Proportion of crop residue burnt by state
-   * @inventory2018 5.I.3
-   * @type Proportion
-   */
-  CROPRESIDUE_PROPORTIONBURNT: {
-    [STATES.NSW]: { burnt: 0.22, removed: 0.05 },
-    [STATES.VIC]: { burnt: 0.21, removed: 0.07 },
-    [STATES.QLD]: { burnt: 0.06, removed: 0.04 },
-    [STATES.SA]: { burnt: 0.12, removed: 0.09 },
-    [STATES.WA_SW]: { burnt: 0.06, removed: 0.11 },
-    [STATES.WA_NW]: { burnt: 0.06, removed: 0.11 },
-    [STATES.TAS]: { burnt: 0.09, removed: 0.16 },
-    [STATES.NT]: { burnt: 0.23, removed: 0.01 },
-    [STATES.ACT]: { burnt: 0, removed: 0 },
-  },
-
-  /**
-   * @description Proportion of sugar cane residue burnt by state
-   * @inventory2018 5.I.4
-   * @type Proportion
-   */
-  CROPRESIDUE_FRACTIONSUGARCANEBURNT: {
-    [STATES.NSW]: { burnt: 0.898, removed: 0 },
-    [STATES.VIC]: { burnt: 0, removed: 0 },
-    [STATES.QLD]: { burnt: 0.275, removed: 0.03 },
-    [STATES.SA]: { burnt: 0, removed: 0 },
-    [STATES.WA_SW]: { burnt: 1, removed: 0 },
-    [STATES.WA_NW]: { burnt: 1, removed: 0 },
-    [STATES.TAS]: { burnt: 0, removed: 0 },
-    [STATES.NT]: { burnt: 0, removed: 0 },
-    [STATES.ACT]: { burnt: 0, removed: 0 },
-  },
-
-  /**
-   * @description Crop residue parameters for major crop types
-   * @inventory2022 A5.5.9.1
-   */
-  CROPRESIDUE: {
-    Wheat: {
-      residueCropRatio: 1.5,
-      belowAboveResidueRatio: 0.29,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    Barley: {
-      residueCropRatio: 1.24,
-      belowAboveResidueRatio: 0.32,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.007,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    Maize: {
-      residueCropRatio: 0.81,
-      belowAboveResidueRatio: 0.39,
-      dryMatterContent: 0.85,
-      carbonMassFraction: 0.42,
-      aboveGroundN: 0.005,
-      belowGroundN: 0.007,
-      fractionOfResidueAtBurning: 1,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    Oats: {
-      residueCropRatio: 1.42,
-      belowAboveResidueRatio: 0.43,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    Rice: {
-      residueCropRatio: 1.31,
-      belowAboveResidueRatio: 0.16,
-      dryMatterContent: 0.8,
-      carbonMassFraction: 0.42,
-      aboveGroundN: 0.007,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 1,
-      fractionBurnt: 0.815,
-      fractionRemoved: 0.06,
-    },
-    Sorghum: {
-      residueCropRatio: 1.5,
-      belowAboveResidueRatio: 0.22,
-      dryMatterContent: 0.8,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.008,
-      belowGroundN: 0.007,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    Triticale: {
-      residueCropRatio: 1.5,
-      belowAboveResidueRatio: 0.42,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    'Other Cereals': {
-      residueCropRatio: 1.46,
-      belowAboveResidueRatio: 0.36,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    Pulses: {
-      residueCropRatio: 1.37,
-      belowAboveResidueRatio: 0.51,
-      dryMatterContent: 0.87,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.009,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    'Tuber and Roots': {
-      residueCropRatio: 0.34,
-      belowAboveResidueRatio: 0.43,
-      dryMatterContent: 0.25,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.02,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 1,
-    },
-    Peanuts: {
-      residueCropRatio: 1.07,
-      belowAboveResidueRatio: 0.2,
-      dryMatterContent: 0.8,
-      carbonMassFraction: 0.42,
-      aboveGroundN: 0.016,
-      belowGroundN: 0.014,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    'Sugar Cane': {
-      residueCropRatio: 0.25,
-      belowAboveResidueRatio: 0.45,
-      dryMatterContent: 0.2,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.005,
-      belowGroundN: 0.007,
-      fractionOfResidueAtBurning: 1,
-      fractionBurnt: 0.858,
-      fractionRemoved: 0,
-    },
-    Cotton: {
-      residueCropRatio: 1.9,
-      belowAboveResidueRatio: 0.3,
-      dryMatterContent: 0.9,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.01,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    Hops: {
-      residueCropRatio: 1.5,
-      belowAboveResidueRatio: 0.29,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    Oilseeds: {
-      residueCropRatio: 2.08,
-      belowAboveResidueRatio: 0.33,
-      dryMatterContent: 0.96,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.009,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0.5,
-      fractionBurnt: 0.22,
-      fractionRemoved: 0.05,
-    },
-    'Forage Crops': {
-      residueCropRatio: 1.34,
-      belowAboveResidueRatio: 0.37,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0.8,
-    },
-    Lucerne: {
-      residueCropRatio: 0,
-      belowAboveResidueRatio: 0,
-      dryMatterContent: 0,
-      carbonMassFraction: 0,
-      aboveGroundN: 0,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    'Other legume': {
-      residueCropRatio: 0,
-      belowAboveResidueRatio: 0,
-      dryMatterContent: 0,
-      carbonMassFraction: 0,
-      aboveGroundN: 0,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    'Annual grass': {
-      residueCropRatio: 0,
-      belowAboveResidueRatio: 0,
-      dryMatterContent: 0,
-      carbonMassFraction: 0,
-      aboveGroundN: 0,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    'Grass clover mixture': {
-      residueCropRatio: 0,
-      belowAboveResidueRatio: 0,
-      dryMatterContent: 0,
-      carbonMassFraction: 0,
-      aboveGroundN: 0,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    'Perennial pasture': {
-      residueCropRatio: 0,
-      belowAboveResidueRatio: 0,
-      dryMatterContent: 0,
-      carbonMassFraction: 0,
-      aboveGroundN: 0,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    'Perennial Hort': {
-      residueCropRatio: 1.7,
-      belowAboveResidueRatio: 0.5,
-      dryMatterContent: 0.8,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.006,
-      belowGroundN: 0,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-    'Annual Hort': {
-      residueCropRatio: 1.5,
-      belowAboveResidueRatio: 0.3,
-      dryMatterContent: 0.88,
-      carbonMassFraction: 0.4,
-      aboveGroundN: 0.02,
-      belowGroundN: 0.01,
-      fractionOfResidueAtBurning: 0,
-      fractionBurnt: 0,
-      fractionRemoved: 0,
-    },
-  },
-
-  /**
-   * @description Emissions factor for annual N2O production from crop residue
-   * @units kg N2O-e/kg N
-   */
-  CROP_RESIDUE_N2O_EF: 0.00503,
-
-  /**
-   * @description Fraction of N available for leaching and runoff from fertiliser
-   */
-  FERTILISER_FRACTION_RUNOFF_STATIC: 1,
-};
-
 export const commonConstants: CommonConstants = {
+  name: 'COMMON',
+
+  // NGAF 2023 Table 10
+  REFRIGERATION_LEAKAGE_RATES: {
+    'Domestic refrigerators': percentage(1.7),
+    'Transport refrigeration': percentage(15.7),
+    'Domestic A/C portable': percentage(2.5),
+    'Domestic A/C split': percentage(3.5),
+    'Domestic A/C packaged': percentage(2.5),
+    'Light vehicle A/C': percentage(6.7),
+    'Heavy vehicle A/C': percentage(10.8),
+  },
+
+  // NGAF 2023 Table 23 and 24. See GWP sheet of workbook 9-refrigerant-use.xlsx for details of how these were calculated.
+  // Some blends from table 24 were not included if some components had GWP values that could not be found in other references.
+  REFRIGERANT_GWP: {
+    'R-400 50/50': massPerMass('CO2e', 'Refrigerant', 9395),
+    'R-400 60/40': massPerMass('CO2e', 'Refrigerant', 9556),
+    'R-400 80/20': massPerMass('CO2e', 'Refrigerant', 9878),
+    'HFC-23 (R-23)': massPerMass('CO2e', 'Refrigerant', 12400),
+    'HFC-32 (R-32)': massPerMass('CO2e', 'Refrigerant', 677),
+    'HFC-41 (R-41)': massPerMass('CO2e', 'Refrigerant', 116),
+    'HFC-43-10mee (R-4310mee)': massPerMass('CO2e', 'Refrigerant', 1650),
+    'HFC-125 (R-125)': massPerMass('CO2e', 'Refrigerant', 3170),
+    'HFC-134 (R-134)': massPerMass('CO2e', 'Refrigerant', 1120),
+    'HFC-134a (R-134a)': massPerMass('CO2e', 'Refrigerant', 1300),
+    'HFC-143 (R-143)': massPerMass('CO2e', 'Refrigerant', 328),
+    'HFC-143a (R-143a)': massPerMass('CO2e', 'Refrigerant', 4800),
+    'HFC-152a (R-152a)': massPerMass('CO2e', 'Refrigerant', 138),
+    'HFC-227ea (R-227ea)': massPerMass('CO2e', 'Refrigerant', 3350),
+    'HFC-236fa (R-236fa)': massPerMass('CO2e', 'Refrigerant', 8060),
+    'HFC-245ca (R-245ca)': massPerMass('CO2e', 'Refrigerant', 716),
+    'HFC-245fa (R-245fa)': massPerMass('CO2e', 'Refrigerant', 858),
+    'HFC-365mfc (R-365mfc)': massPerMass('CO2e', 'Refrigerant', 804),
+    'HCFC-22 (R-22)': massPerMass('CO2e', 'Refrigerant', 1760),
+    'HCFC-123 (R-123)': massPerMass('CO2e', 'Refrigerant', 79),
+    'HCFC-124 (R-124)': massPerMass('CO2e', 'Refrigerant', 527),
+    'HCFC-141b (R-141b)': massPerMass('CO2e', 'Refrigerant', 782),
+    'HCFC-142b (R-142b)': massPerMass('CO2e', 'Refrigerant', 1980),
+    'HCFC-225ca (R-225ca)': massPerMass('CO2e', 'Refrigerant', 127),
+    'HCFC-225cb (R-225cb)': massPerMass('CO2e', 'Refrigerant', 525),
+    'PFC-14 Perfluoromethane (tetrafluoromethane)': massPerMass(
+      'CO2e',
+      'Refrigerant',
+      6630,
+    ),
+    'PFC-116 Perfluoroethane (hexafluoroethane)': massPerMass(
+      'CO2e',
+      'Refrigerant',
+      11100,
+    ),
+    'PFC-218 Perfluoropropane': massPerMass('CO2e', 'Refrigerant', 8900),
+    'PFC-31-10 Perfluorobutane': massPerMass('CO2e', 'Refrigerant', 9200),
+    'PFC-318 Perfluorocyclobutane': massPerMass('CO2e', 'Refrigerant', 9540),
+    'PFC-41-12 Perfluoropentane': massPerMass('CO2e', 'Refrigerant', 8550),
+    'PFC-51-14 Perfluorohexane': massPerMass('CO2e', 'Refrigerant', 7910),
+    'PFC-91-18 Perflunafene': massPerMass('CO2e', 'Refrigerant', 7190),
+    'R-401A': massPerMass('CO2e', 'Refrigerant', 1129.92),
+    'R-401B': massPerMass('CO2e', 'Refrigerant', 1236.34),
+    'R-401C': massPerMass('CO2e', 'Refrigerant', 875.54),
+    'R-404A': massPerMass('CO2e', 'Refrigerant', 3942.8),
+    'R-405A': massPerMass('CO2e', 'Refrigerant', 4965.06),
+    'R-407A': massPerMass('CO2e', 'Refrigerant', 1923.4),
+    'R-407B': massPerMass('CO2e', 'Refrigerant', 2546.7),
+    'R-407C': massPerMass('CO2e', 'Refrigerant', 1624.21),
+    'R-407D': massPerMass('CO2e', 'Refrigerant', 1487.05),
+    'R-407E': massPerMass('CO2e', 'Refrigerant', 1424.75),
+    'R-408A': massPerMass('CO2e', 'Refrigerant', 3257.1),
+    'R-409A': massPerMass('CO2e', 'Refrigerant', 1484.75),
+    'R-409B': massPerMass('CO2e', 'Refrigerant', 1473.75),
+    'R-410A': massPerMass('CO2e', 'Refrigerant', 1923.5),
+    'R-410B': massPerMass('CO2e', 'Refrigerant', 2048.15),
+    'R-412A': massPerMass('CO2e', 'Refrigerant', 2172),
+    'R-415A': massPerMass('CO2e', 'Refrigerant', 1468.04),
+    'R-415B': massPerMass('CO2e', 'Refrigerant', 543.5),
+    'R-420A': massPerMass('CO2e', 'Refrigerant', 1381.6),
+    'R-421A': massPerMass('CO2e', 'Refrigerant', 2384.6),
+    'R-422A': massPerMass('CO2e', 'Refrigerant', 2847.17),
+    'R-422B': massPerMass('CO2e', 'Refrigerant', 2289.5),
+    'R-422C': massPerMass('CO2e', 'Refrigerant', 2794.4),
+    'R-500': massPerMass('CO2e', 'Refrigerant', 7563.756),
+    'R-501': massPerMass('CO2e', 'Refrigerant', 3870),
+    'R-502': massPerMass('CO2e', 'Refrigerant', 4785.92),
+    'R-503': massPerMass('CO2e', 'Refrigerant', 13298.5),
+    'R-504': massPerMass('CO2e', 'Refrigerant', 4299.374),
+    'R-507A': massPerMass('CO2e', 'Refrigerant', 3985),
+    'R-508A': massPerMass('CO2e', 'Refrigerant', 11607),
+    'R-508B': massPerMass('CO2e', 'Refrigerant', 11698),
+    'R-509A': massPerMass('CO2e', 'Refrigerant', 5758.4),
+  },
+
   /**
-   * @description Emissions factor for feed purchased, in kg CO2-e/kg
+   * @description Total GHG (kg CO2-e/kg input)
    * @units kg CO2-e/kg
    */
-  FEED_PURCHASED: {
-    grain: { TotalGHG: 0.3 },
-    cottonseed: { TotalGHG: 1.1 },
-    /** @description Average of 0.25 and 0.2 */
-    hay: { TotalGHG: 0.225 },
-  },
+  // National Inventory Report Volume 1 [6, p. 1]
+  EF_UREA_CO2: massPerMass('CO2e', 'Urea', 0.2),
 
   /**
-   * @description N, P, K and S content in each fertiliser type
-   * @type Proportion
+   * @description Conversion factor for the global warming potential of N2O, as CO2-e
    */
-  FERTILISER_CONTENT: {
-    MAP: { N: 0.11, P: 0.219, K: 0, S: 0 },
-    DAP: { N: 0.18, P: 0.2, K: 0, S: 0 },
-    SSP: { N: 0, P: 0.088, K: 0, S: 0.11 },
-    UREA: { N: 0.46, P: 0, K: 0, S: 0 },
-    TSP: { N: 0, P: 0.202, K: 0, S: 0.01 },
-    UAN: { N: 0.32, P: 0, K: 0, S: 0 },
-    SP11: { N: 0, P: 0.044, K: 0.25, S: 0.055 },
-    SP21: { N: 0, P: 0.059, K: 0.165, S: 0.074 },
-    SP31: { N: 0, P: 0.066, K: 0.127, S: 0.082 },
-    SP41: { N: 0, P: 0.07, K: 0.1, S: 0.088 },
-    SP51: { N: 0, P: 0.074, K: 0.08, S: 0.092 },
-    MURIATE_OF_POTASH: { N: 0, P: 0, K: 0.5, S: 0 },
-    SULPHATE_OF_POTASH: { N: 0, P: 0, K: 0.41, S: 0.17 },
-    SULPHATE_OF_AMMONIA: { N: 0.21, P: 0, K: 0, S: 0.24 },
-    AN: { N: 0.35, P: 0, K: 0, S: 0 },
-    CAN: { N: 0.265, P: 0, K: 0, S: 0 },
-  },
+  GWP_FACTORSC6: massPerMass('CO2e', 'N2O', 265),
 
   /**
-   * @description Emissions factors for commercial flights
-   * @units kg CO2-e / PAX km
+   * @description Conversion factor for elemental to molecular CO2
    */
-  COMMERCIALFLIGHT_EF: 0.101,
+  GWP_FACTORSC13: massPerMass('CO2', 'CO2e', 44 / 12),
+  /**
+   * @description Conversion factor for elemental to molecular CH4
+   */
+  GWP_FACTORSC14: realNumber(16 / 12),
+
+  // Factor to convert elemental mass of nitrous oxide to molecular mass.
+  GWP_FACTORSC15: realNumber(44 / 28),
+
+  /**
+   * @description Conversion factor for elemental to molecular CO2 from lime
+   */
+  GWP_FACTORSC18: realNumber(44 / 12),
+
+  GWP_CH4: massPerMass('CO2e', 'CH4', 28),
+
+  CG_CO2: massPerMass('CO2', 'Carbon', 44 / 12),
+
+  EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: volumePerMass(
+    'CH4',
+    'Volatile Solids',
+    cubicMetresToLitres(0.19),
+  ),
+
+  DENSITY_OF_METHANE: massPerVolume(
+    'CH4',
+    'CH4',
+    perCubicMetresToPerLitres(0.6784),
+  ),
+
+  LIME_SCOPE3_EF: massPerMass('CO2e', 'Lime', 0.432),
+
+  // Table A.3.1.5
+  AGROCHEMICAL_FACTORS: {
+    'Herbicide (paraquat, diquat, glyphosate)': massPerMass(
+      'CO2e',
+      'Chemical',
+      33,
+    ),
+    'Other herbicide': massPerMass('CO2e', 'Chemical', 18.6),
+    Insecticide: massPerMass('CO2e', 'Chemical', 18.9),
+    Fungicide: massPerMass('CO2e', 'Chemical', 12.6),
+    'Plant growth regulator': massPerMass('CO2e', 'Chemical', 10.5),
+    // AusLCI Lifecycles GHG Emission Intensities for Material Inputs to AUS Ag Fisheries Forestry V48 (March 2026)
+    '2,4-D': massPerMass('CO2e', 'Chemical', 5.2),
+    Atrazine: massPerMass('CO2e', 'Chemical', 8.38),
+    Diuron: massPerMass('CO2e', 'Chemical', 8.8),
+    // Glyphosate: massPerMass('CO2e', 'Chemical', 10.3),
+    Mancozeb: massPerMass('CO2e', 'Chemical', 4.55),
+    MCPA: massPerMass('CO2e', 'Chemical', 5.6),
+    Metolachlor: massPerMass('CO2e', 'Chemical', 8.06),
+    'Metsulfuron-methyl': massPerMass('CO2e', 'Chemical', 8.8),
+    'Pesticides (generic)': massPerMass('CO2e', 'Chemical', 9.16),
+    'Tri-allate': massPerMass('CO2e', 'Chemical', 8.57),
+    'Tribenuron methyl': massPerMass('CO2e', 'Chemical', 8.8),
+    Trifluralin: massPerMass('CO2e', 'Chemical', 6.16),
+  },
 
   /**
    * @description Electricity emission factors for each state and Australia, in kg CO2-e/kWh
    * @reference Primary data sources comprise National Greenhouse and Energy Reporting (Measurement) Determination 2008 (Schedule 1), Australian Energy Statistics, Clean Energy Regulator, and AEMO data and Department of Climate Change, Energy, the Environment and Water.
    * @units kg CO2-e/kWh
    */
+  // NGAF 2023 Table 1
   ELECTRICITY: {
     [STATES.NSW]: {
-      SCOPE2_EF: 0.66,
-      SCOPE3_EF: 0.04,
+      SCOPE2_EF: massPerElectricity('CO2e', 0.68),
+      SCOPE3_EF: massPerElectricity('CO2e', 0.05),
     },
     [STATES.ACT]: {
-      SCOPE2_EF: 0.66,
-      SCOPE3_EF: 0.04,
+      SCOPE2_EF: massPerElectricity('CO2e', 0.68),
+      SCOPE3_EF: massPerElectricity('CO2e', 0.05),
     },
     [STATES.VIC]: {
-      SCOPE2_EF: 0.77,
-      SCOPE3_EF: 0.09,
+      SCOPE2_EF: massPerElectricity('CO2e', 0.79),
+      SCOPE3_EF: massPerElectricity('CO2e', 0.07),
     },
     [STATES.QLD]: {
-      SCOPE2_EF: 0.71,
-      SCOPE3_EF: 0.1,
+      SCOPE2_EF: massPerElectricity('CO2e', 0.73),
+      SCOPE3_EF: massPerElectricity('CO2e', 0.15),
     },
     [STATES.SA]: {
-      SCOPE2_EF: 0.23,
-      SCOPE3_EF: 0.05,
+      SCOPE2_EF: massPerElectricity('CO2e', 0.25),
+      SCOPE3_EF: massPerElectricity('CO2e', 0.08),
     },
     [STATES.WA_SW]: {
-      SCOPE2_EF: 0.51,
-      SCOPE3_EF: 0.06,
+      SCOPE2_EF: massPerElectricity('CO2e', 0.53),
+      SCOPE3_EF: massPerElectricity('CO2e', 0.04),
     },
     [STATES.WA_NW]: {
-      SCOPE2_EF: 0.61,
-      SCOPE3_EF: 0.09,
+      SCOPE2_EF: massPerElectricity('CO2e', 0.62),
+      SCOPE3_EF: massPerElectricity('CO2e', 0.07),
     },
     [STATES.TAS]: {
-      SCOPE2_EF: 0.15,
-      SCOPE3_EF: 0.03,
+      SCOPE2_EF: massPerElectricity('CO2e', 0.12),
+      SCOPE3_EF: massPerElectricity('CO2e', 0.01),
     },
     [STATES.NT]: {
-      SCOPE2_EF: 0.56,
-      SCOPE3_EF: 0.07,
+      SCOPE2_EF: massPerElectricity('CO2e', 0.54),
+      SCOPE3_EF: massPerElectricity('CO2e', 0.07),
     },
     Australia: {
-      SCOPE2_EF: 0.63,
-      SCOPE3_EF: 0.07,
+      SCOPE2_EF: massPerElectricity('CO2e', 0.65),
+      SCOPE3_EF: massPerElectricity('CO2e', 0.08),
+    },
+  },
+
+  // https://www.dcceew.gov.au/sites/default/files/documents/national-greenhouse-account-factors-2023.pdf
+  // Table 2a kg CO2e/kWh
+  ELECTRICITY_RMF_SCOPE2_EF: massPerElectricity('CO2e', 0.81),
+  ELECTRICITY_RMF_SCOPE3_EF: massPerElectricity('CO2e', 0.1),
+
+  // https://cer.gov.au/schemes/renewable-energy-target/renewable-energy-target-liability-and-exemptions/renewable-power-percentage
+  RENEWABLE_POWER_PERCENTAGE: percentage(16.67), // 2026
+
+  // https://www.dcceew.gov.au/sites/default/files/documents/national-greenhouse-account-factors-2023.pdf
+  JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE: percentage(74.13), // 2023
+
+  // NGAF 2023 Table 9
+  TRANSPORT_FUEL_FACTORS: {
+    'Cars and light commercial vehicles': {
+      Gasoline: {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 34.2),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 67.4),
+          CH4: massPerEnergy('CH4', 0.02),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 17.2),
+      },
+      'Diesel oil': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.9),
+          CH4: massPerEnergy('CH4', 0.01),
+          N2O: massPerEnergy('N2O', 0.5),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 17.3),
+      },
+      'Liquefied petroleum gas (LPG)': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 26.2),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 60.2),
+          CH4: massPerEnergy('CH4', 0.5),
+          N2O: massPerEnergy('N2O', 0.3),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 20.2),
+      },
+      'Fuel oil': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 39.7),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 73.6),
+          CH4: massPerEnergy('CH4', 0.08),
+          N2O: massPerEnergy('N2O', 0.5),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      Ethanol: {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 23.4),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0.0),
+          CH4: massPerEnergy('CH4', 0.2),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0.0), // NE
+      },
+      Biodiesel: {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 34.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0.0),
+          CH4: massPerEnergy('CH4', 0.8),
+          N2O: massPerEnergy('N2O', 1.7),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0.0), // NE
+      },
+      'Renewable diesel': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0.0),
+          CH4: massPerEnergy('CH4', 0.01),
+          N2O: massPerEnergy('N2O', 0.5),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0.0), // NE
+      },
+      'Other biofuels': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 23.4),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0.0),
+          CH4: massPerEnergy('CH4', 0.8),
+          N2O: massPerEnergy('N2O', 1.7),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0.0), // NE
+      },
+    },
+    'Cars and light commercial vehicles (pre 2004)': {
+      Gasoline: {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 34.2),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 67.4),
+          CH4: massPerEnergy('CH4', 0.6),
+          N2O: massPerEnergy('N2O', 1.6),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 17.2),
+      },
+      'Diesel oil': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.9),
+          CH4: massPerEnergy('CH4', 0.1),
+          N2O: massPerEnergy('N2O', 0.4),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 17.3),
+      },
+      'Liquefied petroleum gas (LPG)': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 26.2),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 60.2),
+          CH4: massPerEnergy('CH4', 0.7),
+          N2O: massPerEnergy('N2O', 0.6),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 20.2),
+      },
+
+      Ethanol: {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 23.4),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0.0),
+          CH4: massPerEnergy('CH4', 0.8),
+          N2O: massPerEnergy('N2O', 1.7),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0.0), // NE
+      },
+
+      'Renewable diesel': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0.0),
+          CH4: massPerEnergy('CH4', 0.01),
+          N2O: massPerEnergy('N2O', 0.5),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0.0), // NE
+      },
+    },
+    'Light duty vehicles': {
+      'Compressed natural gas': {
+        /* REVISIT: NGAF table 9 bullet point states: "For compressed natural gas, emission factors are for gas that has converted to standard conditions."
+         * I believe this implies converting back to GJ/kL */
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 0.0393 / 1000),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 51.4),
+          CH4: massPerEnergy('CH4', 7.3),
+          N2O: massPerEnergy('N2O', 0.3),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Liquefied natural gas': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 25.3),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 51.4),
+          CH4: massPerEnergy('CH4', 7.3),
+          N2O: massPerEnergy('N2O', 0.3),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+    },
+    'Heavy duty vehicles': {
+      'Compressed natural gas': {
+        /* REVISIT: NGAF table 9 bullet point states: "For compressed natural gas, emission factors are for gas that has converted to standard conditions."
+         * I believe this implies converting back to GJ/kL */
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 0.0393 / 1000),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 51.4),
+          CH4: massPerEnergy('CH4', 2.8),
+          N2O: massPerEnergy('N2O', 0.3),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Liquefied natural gas': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 25.3),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 51.4),
+          CH4: massPerEnergy('CH4', 2.8),
+          N2O: massPerEnergy('N2O', 0.3),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Diesel oil - Euro iv or higher': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.9),
+          CH4: massPerEnergy('CH4', 0.07),
+          N2O: massPerEnergy('N2O', 0.4),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 17.3),
+      },
+      'Diesel oil - Euro iii': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.9),
+          CH4: massPerEnergy('CH4', 0.1),
+          N2O: massPerEnergy('N2O', 0.4),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 17.3),
+      },
+      'Diesel oil - Euro i': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.9),
+          CH4: massPerEnergy('CH4', 0.2),
+          N2O: massPerEnergy('N2O', 0.4),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 17.3),
+      },
+      'Renewable diesel - Euro iv or higher': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0.0),
+          CH4: massPerEnergy('CH4', 0.07),
+          N2O: massPerEnergy('N2O', 0.4),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0.0), // NE
+      },
+      'Renewable diesel - Euro iii': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0.0),
+          CH4: massPerEnergy('CH4', 0.1),
+          N2O: massPerEnergy('N2O', 0.4),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0.0), // NE
+      },
+      'Renewable diesel - Euro i': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0.0),
+          CH4: massPerEnergy('CH4', 0.2),
+          N2O: massPerEnergy('N2O', 0.4),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0.0), // NE
+      },
+    },
+    Aviation: {
+      'Gasoline for use as fuel in an aircraft': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 33.1),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 67.0),
+          CH4: massPerEnergy('CH4', 0.06),
+          N2O: massPerEnergy('N2O', 0.6),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Kerosene for use as fuel in an aircraft': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 36.8),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.6),
+          CH4: massPerEnergy('CH4', 0.01),
+          N2O: massPerEnergy('N2O', 0.6),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Renewable aviation kerosene': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 36.8),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0.0),
+          CH4: massPerEnergy('CH4', 0.01),
+          N2O: massPerEnergy('N2O', 0.6),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0.0), // NE
+      },
+    },
+    Vessel: {
+      Petrol: {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 34.2),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 67.4),
+          CH4: massPerEnergy('CH4', 10.1),
+          N2O: massPerEnergy('N2O', 0.3),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 17.2),
+      },
+      Diesel: {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.9),
+          CH4: massPerEnergy('CH4', 0.2),
+          N2O: massPerEnergy('N2O', 0.5),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 17.3),
+      },
+      'Fuel Oil': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 39.7),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 73.6),
+          CH4: massPerEnergy('CH4', 0.2),
+          N2O: massPerEnergy('N2O', 0.5),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+    },
+    'Off-road Agriculture and forestry equipment': {
+      Diesel: {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.9),
+          CH4: massPerEnergy('CH4', 0.3),
+          N2O: massPerEnergy('N2O', 0.5),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 17.3),
+      },
+    },
+  },
+
+  // NGAF table 4
+  STATIONARY_FUEL_FACTORS_BY_MASS: {
+    'Solid fuels': {
+      'Bituminous coal': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(27)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 90),
+          CH4: massPerEnergy('CH4', 0.04),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 3),
+      },
+      'Sub-bituminous coal': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(21)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 90),
+          CH4: massPerEnergy('CH4', 0.04),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 2.5),
+      },
+      Anthracite: {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(29)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 90),
+          CH4: massPerEnergy('CH4', 0.04),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Brown coal (lignite)': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(10.2)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 93.5),
+          CH4: massPerEnergy('CH4', 0.02),
+          N2O: massPerEnergy('N2O', 0.3),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0.4),
+      },
+      'Coking coal': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(30)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 91.8),
+          CH4: massPerEnergy('CH4', 0.03),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 6.4),
+      },
+      'Coal briquettes': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(22.1)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 95),
+          CH4: massPerEnergy('CH4', 0.08),
+          N2O: massPerEnergy('N2O', 0.3),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Coal coke': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(27)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 107),
+          CH4: massPerEnergy('CH4', 0.03),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Coal tar': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(37.5)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 81.8),
+          CH4: massPerEnergy('CH4', 0.03),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Other solid fossil fuels': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(22.1)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 95),
+          CH4: massPerEnergy('CH4', 0.08),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Industrial materials derived from fossil fuels': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(26.3)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 81.6),
+          CH4: massPerEnergy('CH4', 0.03),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Passenger car tyres': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(32)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 62.8),
+          CH4: massPerEnergy('CH4', 0.03),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Truck and off-road tyres': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(27.1)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 55.9),
+          CH4: massPerEnergy('CH4', 0.03),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Non-biomass municipal materials': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(10.5)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 87.1),
+          CH4: massPerEnergy('CH4', 0.8),
+          N2O: massPerEnergy('N2O', 1),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Dry wood': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(16.2)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0),
+          CH4: massPerEnergy('CH4', 0.1),
+          N2O: massPerEnergy('N2O', 1.1),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Green and air dried wood': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(10.4)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0),
+          CH4: massPerEnergy('CH4', 0.1),
+          N2O: massPerEnergy('N2O', 1.1),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Sulphite lyes': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(12.4)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0),
+          CH4: massPerEnergy('CH4', 0.08),
+          N2O: massPerEnergy('N2O', 0.5),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      Bagasse: {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(9.6)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0),
+          CH4: massPerEnergy('CH4', 0.3),
+          N2O: massPerEnergy('N2O', 1.1),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Biomass,  municipal and industrial materials': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(12.2)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0),
+          CH4: massPerEnergy('CH4', 0.8),
+          N2O: massPerEnergy('N2O', 1),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      Charcoal: {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(31.1)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0),
+          CH4: massPerEnergy('CH4', 5.3),
+          N2O: massPerEnergy('N2O', 1),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+      'Other primary solid biomass fuels': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(12.2)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 0),
+          CH4: massPerEnergy('CH4', 0.8),
+          N2O: massPerEnergy('N2O', 1),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0),
+      },
+    },
+
+    // NGAF Table 8
+    'Liquid fuels': {
+      'Crude oil and condensates': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(45.3)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.6),
+          CH4: massPerEnergy('CH4', 0.08),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0), // N)E
+      },
+      'Other natural gas liquids': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(46.5)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 61.0),
+          CH4: massPerEnergy('CH4', 0.08),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 0), // N)E
+      },
+
+      'Petroleum coke': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(34.2)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 92.6),
+          CH4: massPerEnergy('CH4', 0.08),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Refinery gas and liquids': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(42.9)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 54.7),
+          CH4: massPerEnergy('CH4', 0.03),
+          N2O: massPerEnergy('N2O', 0.03),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Refinery coke': {
+        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', perTonneToPerKg(34.2)),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 92.6),
+          CH4: massPerEnergy('CH4', 0.08),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+    },
+  },
+
+  STATIONARY_FUEL_FACTORS_BY_VOLUME: {
+    'Liquid fuels': {
+      Naphtha: {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 31.4),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.8),
+          CH4: massPerEnergy('CH4', 0.01),
+          N2O: massPerEnergy('N2O', 0.01),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Other petroleum products': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 34.4),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.8),
+          CH4: massPerEnergy('CH4', 0.02),
+          N2O: massPerEnergy('N2O', 0.1),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Petroleum based oils other than fuels': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.8),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 13.9),
+          CH4: massPerEnergy('CH4', 0.0),
+          N2O: massPerEnergy('N2O', 0.0),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Petroleum based greases': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.8),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 3.5),
+          CH4: massPerEnergy('CH4', 0.0),
+          N2O: massPerEnergy('N2O', 0.0),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Automotive gasoline/petrol': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 34.2),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 67.4),
+          CH4: massPerEnergy('CH4', 0.2),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 17.2),
+      },
+      'Aviation gasoline': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 33.1),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 67.0),
+          CH4: massPerEnergy('CH4', 0.2),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      Kerosene: {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 37.5),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 68.9),
+          CH4: massPerEnergy('CH4', 0.01),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Aviation turbine fuel/kerosene': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 36.8),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.6),
+          CH4: massPerEnergy('CH4', 0.02),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Heating oil': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 37.3),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.5),
+          CH4: massPerEnergy('CH4', 0.03),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Diesel oil': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 38.6),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.9),
+          CH4: massPerEnergy('CH4', 0.1),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 17.3),
+      },
+      'Fuel oil': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 39.7),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 73.6),
+          CH4: massPerEnergy('CH4', 0.04),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Liquefied aromatic hydrocarbons': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 34.4),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.7),
+          CH4: massPerEnergy('CH4', 0.03),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Solvents: mineral turpentine or white spirits': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 34.4),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 69.7),
+          CH4: massPerEnergy('CH4', 0.03),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 18.0),
+      },
+      'Liquefied petroleum gas': {
+        ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 25.7),
+        SCOPE1_EF: {
+          CO2: massPerEnergy('CO2', 60.2),
+          CH4: massPerEnergy('CH4', 0.2),
+          N2O: massPerEnergy('N2O', 0.2),
+        },
+        SCOPE3_EF: massPerEnergy('CO2e', 20.2),
+      },
     },
   },
 
   /**
-   * @description Material breakdown for supplementation, in kg CO2-e/kg product
-   * @reference AusLCI Published Processes
-   * @link https://www.auslci.com.au/index.php/EmissionFactors
-   * @units kg CO2-e/kg product
+   * Temporary placeholder values taken (loosely!) from AusLCI V47
    */
-  MATERIAL_BREAKDOWN_SUPPLEMENTATION: {
-    mineralblock: {
-      CO2: 0.98,
-      CH4: 0.0154,
-      N2O: 0.00456826192856515,
-      KG_CO2: 0.89448581,
-      FRACTION_OF_UREA: 0.3,
-    },
-    weanerblock: {
-      CO2: 0.98,
-      CH4: 0.0154,
-      N2O: 0.00456826192856515,
-      KG_CO2: 0.17767843,
-      FRACTION_OF_UREA: 0.071,
-    },
-    dryseasonmix: {
-      CO2: 0.98,
-      CH4: 0.0154,
-      N2O: 0.00456826192856515,
-      KG_CO2: 1.0057536, // kg CO2-e/kg Product
-      FRACTION_OF_UREA: 0.3,
-    },
+  FREIGHT_EMISSIONS: {
+    PLACEHOLDER_TRAIN: massPerMassDistance(
+      'CO2e',
+      'Freight Goods',
+      perKilometreToPerMetre(0.27),
+    ),
+    PLACEHOLDER_TRUCK: massPerMassDistance(
+      'CO2e',
+      'Freight Goods',
+      perKilometreToPerMetre(0.09),
+    ),
+    PLACEHOLDER_AVIATION: massPerMassDistance(
+      'CO2e',
+      'Freight Goods',
+      perKilometreToPerMetre(1.96),
+    ),
   },
 
-  /**
-   * @description Customized fertilizer emission factors, in kg CO2-e/kg product
-   * @reference (Wood & Cowie, 2004; Davis & Haglund,1999) Table 5, Table 6, and Table 7.
-   * @units kg CO2-e/kg
-   */
-  CUSTOMIZED_FERTILIZER: {
-    'Monoammonium phosphate (MAP)': {
-      TotalGHG: 703.2 / 1000,
+  // NGAF Table 5 direct and Table 6 indirect
+  NATURAL_GAS_FACTORS: {
+    ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', 25.3), // GJ/kL
+    SCOPE1_EF: {
+      CO2: massPerEnergy('CO2', 51.4),
+      CH4: massPerEnergy('CH4', 0.1),
+      N2O: massPerEnergy('N2O', 0.03),
     },
-    'Diammonium Phosphate (DAP)': {
-      TotalGHG: 866.2 / 1000,
-    },
-    'Urea-Ammonium Nitrate (UAN)': {
-      TotalGHG: 1173.8 / 1000,
-    },
-    'Ammonium Nitrate (AN)': {
-      TotalGHG: 2460.8 / 1000,
-    },
-    'Calcium Ammonium Nitrate (CAN)': {
-      TotalGHG: 2336.9 / 1000,
-    },
-    'Triple Superphosphate (TSP)': {
-      TotalGHG: 0.1848,
-    },
-    'Super Potash 1:1': {
-      TotalGHG: 0.2061,
-    },
-    'Super Potash 2:1': {
-      TotalGHG: 0.1743,
-    },
-    'Super Potash 3:1': {
-      TotalGHG: 0.1602,
-    },
-    'Super Potash 4:1': {
-      TotalGHG: 0.0894,
-    },
-    'Super Potash 5:1': {
-      TotalGHG: 0.1422,
-    },
-    'Muriate of Potash': {
-      TotalGHG: 0.3,
-    },
-    'Sulphate of Potash': {
-      TotalGHG: 0.3,
-    },
-    'Sulphate of Ammonia': {
-      TotalGHG: 0.7545,
+    // Uses NGAF Table 6 non-metro values
+    SCOPE3_EF: {
+      nsw: massPerEnergy('CO2e', 14.0),
+      act: massPerEnergy('CO2e', 14.0),
+      vic: massPerEnergy('CO2e', 4),
+      qld: massPerEnergy('CO2e', 7.9),
+      sa: massPerEnergy('CO2e', 10.6),
+      wa_sw: massPerEnergy('CO2e', 4.0),
+      wa_nw: massPerEnergy('CO2e', 4.0),
+      tas: massPerEnergy('CO2e', 4), // based on victoria
+      nt: massPerEnergy('CO2e', 4.0), // based on WA
     },
   },
-
-  /**
-   * @description Temperate emission factor, for sheep manure management
-   */
-  EF_TEMPERATURE: 0.003,
-
-  /**
-   * @description Conversion factor for elemental to molecular N2O
-   */
-  GWP_FACTORSC15: 44 / 28,
-
-  /**
-   * @description Conversion factor for elemental to molecular CO2 from lime
-   */
-  GWP_FACTORSC18: 44 / 12,
-
-  /**
-   * @description Conversion factor for elemental to molecular CO2
-   */
-  GWP_FACTORSC13: 44 / 12,
-
-  /**
-   * @description Conversion factor for elemental to molecular CH4
-   */
-  GWP_FACTORSC14: 16 / 12,
-
-  /**
-   * @description Conversion factor for elemental to molecular Nox
-   */
-  GWP_FACTORSC16: 46 / 14,
-
-  /**
-   * @description Proportion of Urea in UAN
-   * @link http://sds.simplot.com/datasheets/12101.pdf?_gl=1*1j8hnbm*_ga*NDgxMDE2MzQ2LjE2ODUzMzY4ODk.*_ga_NVEQ5HDZCN*MTY4NTMzNjg5MC4xLjEuMTY4NTMzNzExOC4wLjAuMA..&_ga=2.215359572.234437473.1685336889-481016346.1685336889
-   * @type Proportion
-   */
-  GWP_FACTORSC22: 0.35,
-
-  /**
-   * @description Proportion of gas volatilised from fertiliser
-   * @inventory2018 3DB_1
-   */
-  FRAC_GASF: 0.11,
-
-  /**
-   * @description Conversion factor for the global warming potential of CH4, as CO2-e
-   */
-  GWP_FACTORSC5: 28,
-
-  /**
-   * @description Conversion factor for the global warming potential of N2O, as CO2-e
-   */
-  GWP_FACTORSC6: 265,
 
   /**
    * @description Scope 1 and Scope 3 values relating to liming
    * @inventory2018 3G_1
-   * @reference Mudahar, M.S., Hignett, T.P., 1982. Energy and Fertilizer— Policy Implications and Options for Developing Countries. International Fertilizer Development Center, Muscle Shoals, Alabama
+   * @reference Mudahar, M.S., Hignett, T.P., 1982. Energy and Fertilizer-- Policy Implications and Options for Developing Countries. International Fertilizer Development Center, Muscle Shoals, Alabama
    */
   LIMING: {
-    SCOPE1: {
-      /** @type Proportion */
-      LIMESTONE_FRACTIONPURITY: 0.9,
-      LIMESTONE_EF: 0.12,
-      /** @type Proportion */
-      DOLOMITE_FRACTIONPURITY: 0.95,
-      DOLOMITE_EF: 0.13,
-    },
-    SCOPE3: {
-      FUEL_SCOPE3_PRODUCTION_NATURAL_GAS: 0.09,
-      FUEL_SCOPE3_PRODUCTION_ELECTRICITY: 6.43,
-      FUEL_SCOPE3_PRODUCTION_DISTILLATE_FUEL: 0.72,
-      FUEL_SCOPE3_PRODUCTION_COAL: 0.08,
-      FUEL_SCOPE3_PRODUCTION_GASOLINE: 0.09,
-      FUEL_SCOPE3_POST_PRODUCTION_DISTILLATE_FUEL: 28.32,
-    },
+    /** @type Proportion */
+    LIMESTONE_PURITY: realNumber(0.9),
+    LIMESTONE_EF: massPerMass('CO2', 'Lime', 0.12),
+    /** @type Proportion */
+    DOLOMITE_PURITY: realNumber(0.95),
+    DOLOMITE_EF: massPerMass('CO2', 'Lime', 0.13),
   },
 
-  /**
-   * @description Scope 1 and Scope 3 factors relating to fuel
-   * @reference Table 6 and 7 (Dept of Industry, Science, Energy and Resources 2022)
-   */
-  FUEL_ENERGYGJ: {
-    STATIONARY: {
-      DIESEL: {
-        ENERGY_CONTENT_FACTOR: 38.6,
-        SCOPE1_EF: {
-          CO2: 69.9,
-          CH4: 0.1,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 17.3,
-      },
-      PETROL: {
-        ENERGY_CONTENT_FACTOR: 34.2,
-        SCOPE1_EF: {
-          CO2: 67.4,
-          CH4: 0.2,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 17.2,
-      },
-      LPG: {
-        ENERGY_CONTENT_FACTOR: 25.7,
-        SCOPE1_EF: {
-          CO2: 60.2,
-          CH4: 0.2,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 20.2,
-      },
-      ETHANOL: {
-        ENERGY_CONTENT_FACTOR: 23.4,
-        SCOPE1_EF: {
-          CO2: 0,
-          CH4: 0.08,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      BIODIESEL: {
-        ENERGY_CONTENT_FACTOR: 34.6,
-        SCOPE1_EF: {
-          CO2: 0,
-          CH4: 0.08,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      RENEWABLE_DIESEL: {
-        ENERGY_CONTENT_FACTOR: 38.6,
-        SCOPE1_EF: {
-          CO2: 0,
-          CH4: 0.1,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      OTHER_BIOFUELS: {
-        ENERGY_CONTENT_FACTOR: 23.4,
-        SCOPE1_EF: {
-          CO2: 0,
-          CH4: 0.08,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      LNG: {
-        ENERGY_CONTENT_FACTOR: 25.3,
-        SCOPE1_EF: {
-          CO2: 51.4,
-          CH4: 7.3,
-          N2O: 0.3,
-        },
-        SCOPE3_EF: 18.0,
-      },
-    },
-    TRANSPORT: {
-      DIESEL: {
-        ENERGY_CONTENT_FACTOR: 38.6,
-        SCOPE1_EF: {
-          CO2: 69.9,
-          CH4: 0.01,
-          N2O: 0.5,
-        },
-        SCOPE3_EF: 17.3,
-      },
-      PETROL: {
-        ENERGY_CONTENT_FACTOR: 34.2,
-        SCOPE1_EF: {
-          CO2: 67.4,
-          CH4: 0.02,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 17.2,
-      },
-      LPG: {
-        ENERGY_CONTENT_FACTOR: 26.2,
-        SCOPE1_EF: {
-          CO2: 60.2,
-          CH4: 0.5,
-          N2O: 0.3,
-        },
-        SCOPE3_EF: 20.2,
-      },
-      FUEL_OIL: {
-        ENERGY_CONTENT_FACTOR: 39.7,
-        SCOPE1_EF: {
-          CO2: 73.6,
-          CH4: 0.08,
-          N2O: 0.5,
-        },
-        SCOPE3_EF: 18.0,
-      },
-      ETHANOL: {
-        ENERGY_CONTENT_FACTOR: 23.4,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.2,
-          N2O: 0.2,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      BIODIESEL: {
-        ENERGY_CONTENT_FACTOR: 34.6,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.8,
-          N2O: 1.7,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      RENEWABLE_DIESEL: {
-        ENERGY_CONTENT_FACTOR: 38.6,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.01,
-          N2O: 0.5,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      OTHER_BIOFUELS: {
-        ENERGY_CONTENT_FACTOR: 23.4,
-        SCOPE1_EF: {
-          CO2: 0.0,
-          CH4: 0.8,
-          N2O: 1.7,
-        },
-        SCOPE3_EF: 0.0,
-      },
-      LNG: {
-        ENERGY_CONTENT_FACTOR: 25.3,
-        SCOPE1_EF: {
-          CO2: 51.4,
-          CH4: 7.3,
-          N2O: 0.3,
-        },
-        SCOPE3_EF: 18.0,
-      },
-      JET_A1: {
-        ENERGY_CONTENT_FACTOR: 36.8,
-        SCOPE1_EF: {
-          CO2: 69.6,
-          CH4: 0.01,
-          N2O: 0.6,
-        },
-        SCOPE3_EF: 18.0,
-      },
-      JET_B: {
-        ENERGY_CONTENT_FACTOR: 36.8,
-        SCOPE1_EF: {
-          CO2: 69.6,
-          CH4: 0.01,
-          N2O: 0.6,
-        },
-        SCOPE3_EF: 18.0,
-      },
-      AVGAS: {
-        ENERGY_CONTENT_FACTOR: 33.1,
-        SCOPE1_EF: {
-          CO2: 67.0,
-          CH4: 0.06,
-          N2O: 0.6,
-        },
-        SCOPE3_EF: 18.0,
-      },
-    },
-    NATURAL_GAS: {
-      ENERGY_CONTENT_FACTOR: 1,
-      SCOPE1_EF: {
-        CO2: 51.4,
-        CH4: 0.1,
-        N2O: 0.03,
-      },
-      SCOPE3_EF: {
-        nsw: 13.1,
-        act: 13.1,
-        vic: 4,
-        qld: 8.8,
-        sa: 10.7,
-        wa_sw: 4.1,
-        wa_nw: 4.1,
-        tas: 0,
-        nt: 0,
-      },
-    },
+  // Taken from AusLCI CEF V47 2026
+  SERVICE_EMISSIONS_BY_AREA: {
+    'Air blast spraying, orchards': massPerArea('CO2e', 37.882938),
+    'Bed forming, cotton': massPerArea('CO2e', 26.584518),
+    'Bed forming, horticulture': massPerArea('CO2e', 38.547551),
+    'Boom spraying, cotton': massPerArea('CO2e', 2.3261453),
+    'Boom spraying, horticulture': massPerArea('CO2e', 8.3076618),
+    'Control of brigalow suckers, graslan aerial application': massPerArea(
+      'CO2e',
+      35.456609,
+    ),
+    'Cultivating, broadacre crop, controlled traffic': massPerArea(
+      'CO2e',
+      28.923955,
+    ),
+    'Cultivating, broadacre crop, conventional': massPerArea('CO2e', 45.19368),
+    'Cultivating, cotton': massPerArea('CO2e', 16.615324),
+    'Cultivating, large implement, horticulture': massPerArea(
+      'CO2e',
+      61.476697,
+    ),
+    'Cultivating, medium implement, horticulture': massPerArea(
+      'CO2e',
+      32.898341,
+    ),
+    'Disc ploughing, broadacre crop, controlled traffic': massPerArea(
+      'CO2e',
+      29.115364,
+    ),
+    'Disc ploughing, broadacre crop, conventional': massPerArea(
+      'CO2e',
+      45.492756,
+    ),
+    'Discing, cotton': massPerArea('CO2e', 31.569115),
+    'Fertiliser application, cotton': massPerArea('CO2e', 19.606082),
+    'Fertiliser side dressing, horticulture': massPerArea('CO2e', 13.956872),
+    'Fertiliser spreading, cotton': massPerArea('CO2e', 7.6430488),
+    'Fertiliser spreading, horticulture': massPerArea('CO2e', 6.6461294),
+    'Fertilizing, broadacre crop, pre & post-emergence, controlled traffic':
+      massPerArea('CO2e', 1.744609),
+    'Fertilizing, broadacre crop, pre & post-emergence, conventional':
+      massPerArea('CO2e', 2.3261453),
+    'Grader operation, broadacre crop, medium load factor, controlled traffic':
+      massPerArea('CO2e', 52.362173),
+    'Grader operation, broadacre crop, medium load factor, conventional':
+      massPerArea('CO2e', 67.731347),
+    'Grain collection, broadacre, in-field with tractor and bin, controlled traffic':
+      massPerArea('CO2e', 5.2338269),
+    'Grain collection, broadacre, in-field with tractor and bin, conventional':
+      massPerArea('CO2e', 6.9784359),
+    'Harrowing, horticulture': massPerArea('CO2e', 9.3045812),
+    'Harvesting, broadacre crop, combine less than 200kW, controlled traffic':
+      massPerArea('CO2e', 26.71744),
+    'Harvesting, broadacre crop, combine less than 200kW, conventional':
+      massPerArea('CO2e', 39.876776),
+    'Harvesting, cotton': massPerArea('CO2e', 132.92259),
+    'Harvesting, specialised machine, horticulture, 150 kW combine':
+      massPerArea('CO2e', 365.53712),
+    'Hay baling, large square bales, broadacre crop, controlled traffic':
+      massPerArea('CO2e', 5.7821326),
+    'Hay baling, large square bales, broadacre crop, conventional': massPerArea(
+      'CO2e',
+      7.7095101,
+    ),
+    'Hay baling, round bales, broadacre crop, controlled traffic': massPerArea(
+      'CO2e',
+      6.3055153,
+    ),
+    'Hay baling, round bales, broadacre crop, conventional': massPerArea(
+      'CO2e',
+      8.4073537,
+    ),
+    'Hay baling, small square bales, broadacre crop, controlled traffic':
+      massPerArea('CO2e', 5.2587499),
+    'Hay baling, small square bales, broadacre crop, conventional': massPerArea(
+      'CO2e',
+      7.0116665,
+    ),
+    'Hay mowing, broadacre crop, controlled traffic': massPerArea(
+      'CO2e',
+      11.414727,
+    ),
+    'Hay mowing, broadacre crop, conventional': massPerArea('CO2e', 15.219636),
+    'Hay raking, broadacre crop, controlled traffic': massPerArea(
+      'CO2e',
+      1.0218424,
+    ),
+    'Hay raking, broadacre crop, conventional': massPerArea('CO2e', 1.3624565),
+    // 'Hose move sprinkler irrigation syster, production,': massPerArea('CO2e', per ha 	x),
+    'Inter-row cultivation, horticulture': massPerArea('CO2e', 29.907582),
+    'Inter-row tractor, horticulture': massPerArea('CO2e', 29.907582),
+    'Irrigation, centre pivot irrigation system': massPerArea(
+      'CO2e',
+      0.14106261,
+    ),
+    'Irrigation, hose move sprinkler system': massPerArea('CO2e', 0.14106261),
+    'Irrigation, pipe irrigation system': massPerArea('CO2e', 0.14106261),
+    'Irrigation, solid set irrigation system': massPerArea('CO2e', 0.14106261),
+    'Irrigation, travel spray boom irrigation system': massPerArea(
+      'CO2e',
+      0.14106264,
+    ),
+    'Irrigation, under tree irrigation system': massPerArea('CO2e', 0.14106261),
+    'Irrigation,flood or furrow irrigation': massPerArea('CO2e', 0.04220012),
+    'Irrigation,travelling gun irrigation system': massPerArea(
+      'CO2e',
+      0.14106261,
+    ),
+    'Levelling, cotton': massPerArea('CO2e', 146.21485),
+    'Liming, broadacre crop, pre & post-emergence, controlled traffic':
+      massPerArea('CO2e', 2.8661433),
+    'Liming, broadacre crop, pre & post-emergence, conventional': massPerArea(
+      'CO2e',
+      3.8215244,
+    ),
+    'Mulching, cotton': massPerArea('CO2e', 25.587598),
+    'Offset disc harrowing, horticulture': massPerArea('CO2e', 57.156713),
+    'Pasture establishment, SE Qld': massPerArea('CO2e', 430.78824),
+    'Pasture establishment, top end, NT': massPerArea('CO2e', 50.27388),
+    'Picking, cotton': massPerArea('CO2e', 72.442811),
+    'Planting, broadacre crop, soil clay content 0 to 10%, controlled traffic':
+      massPerArea('CO2e', 8.473815),
+    'Planting, broadacre crop, soil clay content 0 to 10%, conventional':
+      massPerArea('CO2e', 11.29842),
+    'Planting, broadacre crop, soil clay content 10 to 20%, controlled traffic':
+      massPerArea('CO2e', 7.8956017),
+    'Planting, broadacre crop, soil clay content 10 to 20%, conventional':
+      massPerArea('CO2e', 14.621485),
+    'Planting, broadacre crop, soil clay content greater than 20%, controlled traffic':
+      massPerArea('CO2e', 11.125621),
+    'Planting, broadacre crop, soil clay content greater than 20%, conventional':
+      massPerArea('CO2e', 20.603001),
+    'Planting, cotton': massPerArea('CO2e', 11.630726),
+    'Precision planting, horticulture': massPerArea('CO2e', 69.119746),
+    'Ripping, large implement, horticulture': massPerArea('CO2e', 112.9842),
+    'Ripping, medium implement, horticulture': massPerArea('CO2e', 69.784359),
+    'Rolling, cotton': massPerArea('CO2e', 10.301501),
+    'Root cutting, cotton': massPerArea('CO2e', 11.29842),
+    'Rotary hoeing, medium implement, horticulture': massPerArea(
+      'CO2e',
+      154.85482,
+    ),
+    'Savanna burning, northern Australia woodland, Qld & NT': massPerArea(
+      'CO2e',
+      418.58351,
+    ),
+    'Savanna burning, open eucalypt woodland, late dry season, Qld & NT':
+      massPerArea('CO2e', 335.32068),
+    'Scarifiying, broadacre crop, controlled traffic': massPerArea(
+      'CO2e',
+      16.997476,
+    ),
+    'Scarifiying, broadacre crop, conventional': massPerArea('CO2e', 22.663301),
+    'Seedling transplanting, horticulture': massPerArea('CO2e', 54.165955),
+    'Spraying, aerial, broadacre crop': massPerArea('CO2e', 5.8381701),
+    'Spraying, aerial, cotton': massPerArea('CO2e', 4.8580474),
+    'Spraying, aerial, rice': massPerArea('CO2e', 30.610946),
+    'Spraying, broadacre crop, pre & post-emergence, controlled traffic':
+      massPerArea('CO2e', 1.744609),
+    'Spraying, broadacre crop, pre & post-emergence, conventional': massPerArea(
+      'CO2e',
+      2.3261453,
+    ),
+    'Windrowing, broadacre crop, controlled traffic': massPerArea(
+      'CO2e',
+      11.963033,
+    ),
+    'Windrowing, broadacre crop, conventional': massPerArea('CO2e', 15.950711),
+  },
+  SERVICE_EMISSIONS_BY_HOUR: {
+    'Bulldozer operation, medium load factor': massPerTime('CO2e', 96.742751),
   },
 
-  /**
-   * @description Total GHG (kg CO2-e/kg input)
-   * @units kg CO2-e/kg
-   */
-  UREA_FERTILISER_GHG: 1.495,
-
-  /**
-   * @description Total GHG (kg CO2-e/kg input)
-   * @units kg CO2-e/kg
-   */
-  SUPERPHOSPHATE_GHG: 0.1122,
-
-  /**
-   * @description Emissions factor for mass of Urea applied to soils
-   * @inventory2018 3H_1
-   */
-  FERTILISER_EF: 0.2,
-
-  /**
-   * @description Energy requirement to manufacture fertiliser components and associated CO2 emissions (EF)
-   * @reference (Wells 2001; cited by Saunders et al. 2006)
-   */
-  AGROCHEMICAL_ENERGY_MANUFACTURE: {
-    HERBICIDE_GLYPHOSATE: { TOTAL_ENERGY: 550, EF: 0.06 },
-    HERBICIDE_GENERAL: { TOTAL_ENERGY: 310, EF: 0.06 },
-    INSECTICIDE: { TOTAL_ENERGY: 315, EF: 0.06 },
+  // Appendix A1 Table A.4.1.1
+  SOLID_WASTE_LANDFILL_EF: {
+    'Food waste': massPerMass('CO2e', 'Solid Waste', 2.1),
+    'Paper and cardboard': massPerMass('CO2e', 'Solid Waste', 3.3),
+    'Green waste': massPerMass('CO2e', 'Solid Waste', 1.6),
+    Wood: massPerMass('CO2e', 'Solid Waste', 0.7),
+    Textiles: massPerMass('CO2e', 'Solid Waste', 2.0),
+    Sludge: massPerMass('CO2e', 'Solid Waste', 0.4),
+    'Rubber and leather': massPerMass('CO2e', 'Solid Waste', 3.3),
+    'Inert waste (including concrete, metal, plastic or glass)': massPerMass(
+      'CO2e',
+      'Solid Waste',
+      0,
+    ),
+    'Municipal solid waste': massPerMass('CO2e', 'Solid Waste', 1.6),
+    'Commercial waste': massPerMass('CO2e', 'Solid Waste', 1.3),
+    'Industrial waste': massPerMass('CO2e', 'Solid Waste', 1.3),
+    'Construction and demolition waste': massPerMass(
+      'CO2e',
+      'Solid Waste',
+      0.2,
+    ),
   },
 
-  /**
-   * @description Leaching and runoff parameters
-   * @inventory2022 3.B.5
-   */
-  LEACHING: {
-    FRACLEACH: 0.02,
-    FRACLEACH_MMS: 0.24,
-    FRACLEACH_FERTILISER_SOILS: 0.24,
+  // Appendix A1 Table A.4.1.1
+  SOLID_WASTE_INCINERATION_EF: {
+    'Food waste': massPerMass('CO2e', 'Solid Waste', 0),
+    'Green waste': massPerMass('CO2e', 'Solid Waste', 0),
+    Wood: massPerMass('CO2e', 'Solid Waste', 0),
+    Sludge: massPerMass('CO2e', 'Solid Waste', 0),
+    'Paper and cardboard': massPerMass('CO2e', 'Solid Waste', 0.0169),
+    Textiles: massPerMass('CO2e', 'Solid Waste', 0.3667),
+    'Rubber and leather': massPerMass('CO2e', 'Solid Waste', 0.4919),
+    'Inert waste (including concrete, metal, plastic or glass)': massPerMass(
+      'CO2e',
+      'Solid Waste',
+      0.11,
+    ),
+    'Municipal solid waste': massPerMass('CO2e', 'Solid Waste', 0.0537),
+    'Industrial waste': massPerMass('CO2e', 'Solid Waste', 1.649),
+  },
+  SOLID_WASTE_COMPOSTING_EF: massPerMass('CO2e', 'Solid Waste', 0.046),
+  SOLID_WASTE_ANAEROBIC_DIGESTION_EF: massPerMass('CO2e', 'Solid Waste', 0.028),
+
+  // Appendix A1 Table A.4.1.2
+  SOLID_WASTE_BY_VOLUME_TO_MASS: {
+    'Food waste': massPerVolume('Solid Waste', 'Solid Waste', 0.5),
+    'Paper and cardboard': massPerVolume('Solid Waste', 'Solid Waste', 0.09),
+    'Green waste': massPerVolume('Solid Waste', 'Solid Waste', 0.24),
+    Wood: massPerVolume('Solid Waste', 'Solid Waste', 0.15),
+    Textiles: massPerVolume('Solid Waste', 'Solid Waste', 0.14),
+    Sludge: massPerVolume('Solid Waste', 'Solid Waste', 0.72),
+    'Rubber and leather': massPerVolume('Solid Waste', 'Solid Waste', 0.14),
+    'Inert waste (including concrete, metal, plastic or glass)': massPerVolume(
+      'Solid Waste',
+      'Solid Waste',
+      0.42,
+    ),
+    'Municipal solid waste': massPerVolume('Solid Waste', 'Solid Waste', 0.36),
+    'Commercial waste': massPerVolume('Solid Waste', 'Solid Waste', 0.33),
+    'Industrial waste': massPerVolume('Solid Waste', 'Solid Waste', 0.33),
+    'Construction and demolition waste': massPerVolume(
+      'Solid Waste',
+      'Solid Waste',
+      0.39,
+    ),
+  },
+
+  CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: massPerMass('CrudeProtein', 'N', 6.25),
+
+  ASH_CONTENT_OF_MANURE: realNumber(0.16),
+
+  WASTEWATER_TREATMENT: {
+    // A.4.1.3
+    WASTEWATER_METHANE_CORRECTION_FACTORS: {
+      'Managed aerobic treatment': realNumber(0),
+      'Unmanaged aerobic treatment': realNumber(0.3),
+      'Anaerobic digestor/reactor': realNumber(0.8),
+      'Shallow anaerobic lagoon': realNumber(0.2),
+      'Deep anaerobic lagoon': realNumber(0.8),
+    },
+    // A.4.1.4
+    SLUDGE_METHANE_CORRECTION_FACTORS: {
+      'Managed aerobic treatment': realNumber(0),
+      'Unmanaged aerobic treatment': realNumber(0.3),
+      'Anaerobic digestor/reactor': realNumber(0.8),
+      'Shallow anaerobic lagoon': realNumber(0.2),
+      'Deep anaerobic lagoon': realNumber(0.8),
+    },
+    // Chapter 11.2.3, line 217
+    WASTEWATER_EF: massPerMass('CH4', 'COD', 0.25),
+    // Chapter 11.2.3, line 218
+    SLUDGE_EF: massPerMass('CH4', 'COD', 0.25),
     /**
-     * @description Added new key due to difference in value between layers and broilers
+     * Chapter 11.2.3 line 221
+     * Originally expressed in GJ/m^3
      */
-    FRACLEACH_BROILER: 0.24,
-    FRACWET: 1,
-    FERT_N_FRACLEACH: 0.24,
-    FERT_N_FRACWET: 1,
-    STORAGE_FRACLEACH: 0.02,
-    STORAGE_FRACWET: 1,
-    STORAGE_EF: 0.011,
-    N2O_EF: 0.011,
+    SLUDGE_BIOGAS_ENERGY_CONTENT: energyPerVolume(
+      'CH4',
+      gjPerCubicMetreToJPerLitre(0.0377),
+    ),
+    /**
+     * Chapter 11.2.3 line 222
+     * Originally expressed in kg CH4/GJ
+     */
+    SLUDGE_BIOGAS_CH4_EF: massPerEnergy('CH4', perGjToPerJ(0.2289)),
+    /**
+     * Chapter 11.2.3 line 223
+     * Originally expressed in kg N2O/GJ
+     */
+    SLUDGE_BIOGAS_N2O_EF: massPerEnergy('N2O', perGjToPerJ(1.132e-4)),
   },
 
   /**
-   * @description Fuel usage for each truck type, in litres / km
-   * @units litres / km
+   * Appendix A.3.1.6 (except for "Plastic crate polypropylene", which comes from AusLCI)
+   * REVISIT: There are more packaging emissions factors in the AusLCI set, but they're
+   * expressed in kg packaging/kg CO2-e, could we include them if we accepted packaging
+   * input by weight?
    */
-  TRANSPORT_FUEL_USAGE: {
-    '4 Deck Trailer': 0.785,
-    '6 Deck Trailer': 1.11,
-    'B-Double': 0.625,
+  PURCHASED_PACKAGING_FACTORS: {
+    '1 tonne polypropylene bag': mass('CO2e', 6.04),
+    '25 kg polypropylene bag': mass('CO2e', 0.9),
+    '20L high density polyethylene (HDPE) container': mass('CO2e', 3.41),
+    '1000L intermediate bulk containers': mass('CO2e', 190.15),
+    'Plastic crate polypropylene': mass('CO2e', 3.99),
   },
 
-  /**
-   * @description Emissions factor for each gas, in kg CO2-e / GJ
-   * @reference Department of Industry, Science, Energy and Resources 2021
-   * @units kg CO2-e / GJ
-   */
-  TRANSPORT_ECF: {
-    CO2: 69.9,
-    CH4: 0.1,
-    N2O: 0.2,
-  },
-
-  /**
-   * @description Static lookup tree values for soil type and species, by region
-   */
-  TREE_REGIONS: {
-    RegionNo: {
-      'South West': 1,
-      Pilbara: 2,
-      Kimberley: 3,
-      'Central West': 4,
-      'South Coastal': 5,
-      'Goldfields/Eucla': 6,
-      Gascoyne: 7,
-      'Central Wheat Belt': 8,
-      Interior: 9,
-      'North Coast': 10,
-      'South Coast': 11,
-      'Northern Tablelands': 12,
-      'Southern Tablelands': 13,
-      'Northern Wheat/Sheep': 14,
-      'Southern Wheat/Sheep': 15,
-      Western: 16,
-      'North East': 17,
-      'East Coast': 18,
-      'Central North/Midlands/South East': 19,
-      'Central Plateau/Derwent Valley': 20,
-      'West/South Coast': 21,
-      'North West': 22,
-      'South East': 23,
-      Murray: 24,
-      'Mid-North/Flinders': 25,
-      Pastoral: 26,
-      'West Coast/Eyre': 27,
-      Mallee: 28,
-      Wimmera: 29,
-      'Northern Country': 30,
-      'North East Vic': 31,
-      'East Gippsland': 32,
-      'West/South Gippsland': 33,
-      Central: 34,
-      'South West Vic': 35,
-      'Central Highlands/Northern': 36,
-      'Central West/Flinders': 37,
-      'Channel Country': 38,
-      'Maranoa/Warrego': 39,
-      'Darling Downs/Burnett': 40,
-      'North West/Gulf': 41,
-      'Darwin-Daly': 42,
-      'Arnhem-Roper': 43,
-      'Victoria River-TennantCreek': 44,
-      'Alice Springs': 45,
+  PURCHASED_GROW_MEDIA_FACTORS: {
+    byMass: {
+      PLACEHOLDER_MASS_TYPE: massPerMass('CO2e', 'Grow Media', 1),
     },
-    SoilType1: {
-      'South West': 'Loams & Clays',
-      Pilbara: 'No Soil / Tree data available',
-      Kimberley: 'No Soil / Tree data available',
-      'Central West': 'Coloured Sands',
-      'South Coastal': 'Loams & Clays',
-      'Goldfields/Eucla': 'No Soil / Tree data available',
-      Gascoyne: 'No Soil / Tree data available',
-      'Central Wheat Belt': 'Coloured Sands',
-      Interior: 'No Soil / Tree data available',
-      'North Coast': 'Duplex',
-      'South Coast': 'Clay',
-      'Northern Tablelands': 'Clay',
-      'Southern Tablelands': 'Clay',
-      'Northern Wheat/Sheep': 'Clay',
-      'Southern Wheat/Sheep': 'Clay',
-      Western: 'Clay',
-      'North East': 'Other Soils',
-      'East Coast': 'Other Soils',
-      'Central North/Midlands/South East': 'Other Soils',
-      'Central Plateau/Derwent Valley': 'Other Soils',
-      'West/South Coast': 'Other Soils',
-      'North West': 'Other Soils',
-      'South East': 'Duplex Soils',
-      Murray: 'Duplex Soils',
-      'Mid-North/Flinders': 'Sandy Soils',
-      Pastoral: 'Sandy Soils',
-      'West Coast/Eyre': 'Sandy Soils',
-      Mallee: 'Calcarosols',
-      Wimmera: 'Calcarosols',
-      'Northern Country': 'Grey Cracking Clays',
-      'North East Vic': 'Grey Cracking Clays',
-      'East Gippsland': 'Red Earths',
-      'West/South Gippsland': 'Non-cracking Clays',
-      Central: 'Red Duplex',
-      'South West Vic': 'Cracking Clays',
-      'Central Highlands/Northern': 'Clays',
-      'Central West/Flinders': 'Clay Gidgee',
-      'Channel Country': 'Clay Gidgee',
-      'Maranoa/Warrego': 'Clay',
-      'Darling Downs/Burnett': 'Clay (Brigalo and Belah)',
-      'North West/Gulf': 'Duplex',
-      'Darwin-Daly': 'Kandosols',
-      'Arnhem-Roper': 'Kandosols',
-      'Victoria River-TennantCreek': 'Kandosols',
-      'Alice Springs': 'Kandosols',
+    byVolume: {
+      PLACEHOLDER_VOLUME_TYPE: massPerVolume(
+        'CO2e',
+        'Grow Media',
+        perCubicMetresToPerLitres(1),
+      ),
     },
-    SoilType2: {
-      'South West': 'Sandy Duplexes',
-      Pilbara: 'No Soil / Tree data available',
-      Kimberley: 'No Soil / Tree data available',
-      'Central West': 'Loams & Clays',
-      'South Coastal': 'Sandy Duplexes',
-      'Goldfields/Eucla': 'No Soil / Tree data available',
-      Gascoyne: 'No Soil / Tree data available',
-      'Central Wheat Belt': 'Loams & Clays',
-      Interior: 'No Soil / Tree data available',
-      'North Coast': 'Clay & Red Loam',
-      'South Coast': 'Loam',
-      'Northern Tablelands': 'Loam',
-      'Southern Tablelands': 'Loam',
-      'Northern Wheat/Sheep': 'Loam',
-      'Southern Wheat/Sheep': 'Loam',
-      Western: 'Loam',
-      'North East': 'Structured Earths',
-      'East Coast': 'Structured Earths',
-      'Central North/Midlands/South East': 'Structured Earths',
-      'Central Plateau/Derwent Valley': 'Structured Earths',
-      'West/South Coast': 'Structured Earths',
-      'North West': 'Structured Earths',
-      'South East': 'Cracking Clays',
-      Murray: 'Cracking Clays',
-      'Mid-North/Flinders': 'Loamy Soils',
-      Pastoral: 'Cracking Clays',
-      'West Coast/Eyre': 'Loamy Soils',
-      Mallee: 'Yellow Duplex',
-      Wimmera: 'Yellow Duplex',
-      'Northern Country': 'Red Duplex',
-      'North East Vic': 'Red Duplex',
-      'East Gippsland': 'Yellow Duplex',
-      'West/South Gippsland': 'Gradational soils',
-      Central: 'Yellow Duplex',
-      'South West Vic': 'Red Duplex',
-      'Central Highlands/Northern': 'Duplex',
-      'Central West/Flinders': 'Open Downs',
-      'Channel Country': 'Open Downs',
-      'Maranoa/Warrego': 'Gradational soils',
-      'Darling Downs/Burnett': 'Duplex Woodland',
-      'North West/Gulf': 'Earths',
-      'Darwin-Daly': 'Tenosols',
-      'Arnhem-Roper': 'Tenosols',
-      'Victoria River-TennantCreek': 'Tenosols',
-      'Alice Springs': 'Tenosols',
-    },
-    TreeSpecies1: {
-      'South West': 'Mixed species (Environmental Plantings)',
-      Pilbara: 'No tree data available',
-      Kimberley: 'Mixed species (Environmental Plantings)',
-      'Central West': 'Mixed species (Environmental Plantings)',
-      'South Coastal': 'Mixed species (Environmental Plantings)',
-      'Goldfields/Eucla': 'Mixed species (Environmental Plantings)',
-      Gascoyne: 'Mixed species (Environmental Plantings)',
-      'Central Wheat Belt': 'Mixed species (Environmental Plantings)',
-      Interior: 'No tree data available',
-      'North Coast': 'Mixed species (Environmental Plantings)',
-      'South Coast': 'Mixed species (Environmental Plantings)',
-      'Northern Tablelands': 'Mixed species (Environmental Plantings)',
-      'Southern Tablelands': 'Mixed species (Environmental Plantings)',
-      'Northern Wheat/Sheep': 'Mixed species (Environmental Plantings)',
-      'Southern Wheat/Sheep': 'Mixed species (Environmental Plantings)',
-      Western: 'Mixed species (Environmental Plantings)',
-      'North East': 'Mixed species (Environmental Plantings)',
-      'East Coast': 'Mixed species (Environmental Plantings)',
-      'Central North/Midlands/South East':
-        'Mixed species (Environmental Plantings)',
-      'Central Plateau/Derwent Valley':
-        'Mixed species (Environmental Plantings)',
-      'West/South Coast': 'Mixed species (Environmental Plantings)',
-      'North West': 'Mixed species (Environmental Plantings)',
-      'South East': 'Mixed species (Environmental Plantings)',
-      Murray: 'Mixed species (Environmental Plantings)',
-      'Mid-North/Flinders': 'Mixed species (Environmental Plantings)',
-      Pastoral: 'Mixed species (Environmental Plantings)',
-      'West Coast/Eyre': 'Mixed species (Environmental Plantings)',
-      Mallee: 'Mixed species (Environmental Plantings)',
-      Wimmera: 'Mixed species (Environmental Plantings)',
-      'Northern Country': 'Mixed species (Environmental Plantings)',
-      'North East Vic': 'Mixed species (Environmental Plantings)',
-      'East Gippsland': 'Mixed species (Environmental Plantings)',
-      'West/South Gippsland': 'Mixed species (Environmental Plantings)',
-      Central: 'Mixed species (Environmental Plantings)',
-      'South West Vic': 'Mixed species (Environmental Plantings)',
-      'Central Highlands/Northern': 'Mixed species (Environmental Plantings)',
-      'Central West/Flinders': 'Mixed species (Environmental Plantings)',
-      'Channel Country': 'Mixed species (Environmental Plantings)',
-      'Maranoa/Warrego': 'Mixed species (Environmental Plantings)',
-      'Darling Downs/Burnett': 'Mixed species (Environmental Plantings)',
-      'North West/Gulf': 'Mixed species (Environmental Plantings)',
-      'Darwin-Daly': 'Mixed species (Environmental Plantings)',
-      'Arnhem-Roper': 'Mixed species (Environmental Plantings)',
-      'Victoria River-TennantCreek': 'Mixed species (Environmental Plantings)',
-      'Alice Springs': 'Mixed species (Environmental Plantings)',
-    },
-    TreeSpecies2: {
-      'South West': 'Tasmanian Blue Gum',
-      Pilbara: 'No tree data available',
-      Kimberley: 'No tree data available',
-      'Central West': 'No tree data available',
-      'South Coastal': 'No tree data available',
-      'Goldfields/Eucla': 'No tree data available',
-      Gascoyne: 'No tree data available',
-      'Central Wheat Belt': 'No tree data available',
-      Interior: 'No tree data available',
-      'North Coast': 'Spotted Gum',
-      'South Coast': 'Sugar Gum',
-      'Northern Tablelands': 'Sugar Gum',
-      'Southern Tablelands': 'Sugar Gum',
-      'Northern Wheat/Sheep': 'Sugar Gum',
-      'Southern Wheat/Sheep': 'Sugar Gum',
-      Western: 'Sugar Gum',
-      'North East': 'Tasmanian Blue Gum',
-      'East Coast': 'Tasmanian Blue Gum',
-      'Central North/Midlands/South East': 'Tasmanian Blue Gum',
-      'Central Plateau/Derwent Valley': 'Tasmanian Blue Gum',
-      'West/South Coast': 'Tasmanian Blue Gum',
-      'North West': 'Tasmanian Blue Gum',
-      'South East': 'Tasmanian Blue Gum',
-      Murray: 'Tasmanian Blue Gum',
-      'Mid-North/Flinders': 'Tasmanian Blue Gum',
-      Pastoral: 'Tasmanian Blue Gum',
-      'West Coast/Eyre': 'Tasmanian Blue Gum',
-      Mallee: 'Sugar Gum',
-      Wimmera: 'Sugar Gum',
-      'Northern Country': 'Sugar Gum',
-      'North East Vic': 'Sugar Gum',
-      'East Gippsland': 'Tasmanian Blue Gum',
-      'West/South Gippsland': 'Tasmanian Blue Gum',
-      Central: 'Sugar Gum',
-      'South West Vic': 'Sugar Gum',
-      'Central Highlands/Northern': 'Hoop Pine',
-      'Central West/Flinders': 'Hoop Pine',
-      'Channel Country': 'Hoop Pine',
-      'Maranoa/Warrego': 'Hoop Pine',
-      'Darling Downs/Burnett': 'Hoop Pine',
-      'North West/Gulf': 'Hoop Pine',
-      'Darwin-Daly': 'No tree data available',
-      'Arnhem-Roper': 'No tree data available',
-      'Victoria River-TennantCreek': 'No tree data available',
-      'Alice Springs': 'No tree data available',
-    },
-    TreeSpecies3: {
-      'South West': 'Sydney Blue Gum',
-      Pilbara: 'No tree data available',
-      Kimberley: 'No tree data available',
-      'Central West': 'No tree data available',
-      'South Coastal': 'No tree data available',
-      'Goldfields/Eucla': 'No tree data available',
-      Gascoyne: 'No tree data available',
-      'Central Wheat Belt': 'No tree data available',
-      Interior: 'No tree data available',
-      'North Coast': "Dunn's White Gum",
-      'South Coast': 'Tasmanian Blue Gum',
-      'Northern Tablelands': 'Tasmanian Blue Gum',
-      'Southern Tablelands': 'Tasmanian Blue Gum',
-      'Northern Wheat/Sheep': 'Tasmanian Blue Gum',
-      'Southern Wheat/Sheep': 'Tasmanian Blue Gum',
-      Western: 'Tasmanian Blue Gum',
-      'North East': 'Shining Gum',
-      'East Coast': 'Shining Gum',
-      'Central North/Midlands/South East': 'Shining Gum',
-      'Central Plateau/Derwent Valley': 'Shining Gum',
-      'West/South Coast': 'Shining Gum',
-      'North West': 'Shining Gum',
-      'South East': 'Pinus Radiata',
-      Murray: 'Pinus Radiata',
-      'Mid-North/Flinders': 'Pinus Radiata',
-      Pastoral: 'Pinus Radiata',
-      'West Coast/Eyre': 'Pinus Radiata',
-      Mallee: 'Tasmanian Blue Gum',
-      Wimmera: 'Tasmanian Blue Gum',
-      'Northern Country': 'Tasmanian Blue Gum',
-      'North East Vic': 'Tasmanian Blue Gum',
-      'East Gippsland': 'Shining Gum',
-      'West/South Gippsland': 'Shining Gum',
-      Central: 'Tasmanian Blue Gum',
-      'South West Vic': 'Tasmanian Blue Gum',
-      'Central Highlands/Northern': 'Lemon-scented Gum',
-      'Central West/Flinders': 'Lemon-scented Gum',
-      'Channel Country': 'Lemon-scented Gum',
-      'Maranoa/Warrego': 'Lemon-scented Gum',
-      'Darling Downs/Burnett': 'Lemon-scented Gum',
-      'North West/Gulf': 'Lemon-scented Gum',
-      'Darwin-Daly': 'No tree data available',
-      'Arnhem-Roper': 'No tree data available',
-      'Victoria River-TennantCreek': 'No tree data available',
-      'Alice Springs': 'No tree data available',
-    },
-    TreeSpecies4: {
-      'South West': 'Maritime Pine',
-      Pilbara: 'No tree data available',
-      Kimberley: 'No tree data available',
-      'Central West': 'No tree data available',
-      'South Coastal': 'No tree data available',
-      'Goldfields/Eucla': 'No tree data available',
-      Gascoyne: 'No tree data available',
-      'Central Wheat Belt': 'No tree data available',
-      Interior: 'No tree data available',
-      'North Coast': 'Flooded Gum',
-      'South Coast': 'Red Ironbark',
-      'Northern Tablelands': 'Red Ironbark',
-      'Southern Tablelands': 'Red Ironbark',
-      'Northern Wheat/Sheep': 'Red Ironbark',
-      'Southern Wheat/Sheep': 'Red Ironbark',
-      Western: 'Red Ironbark',
-      'North East': 'Radiata Pine (low input)',
-      'East Coast': 'Radiata Pine (low input)',
-      'Central North/Midlands/South East': 'Radiata Pine (low input)',
-      'Central Plateau/Derwent Valley': 'Radiata Pine (low input)',
-      'West/South Coast': 'Radiata Pine (low input)',
-      'North West': 'Radiata Pine (low input)',
-      'South East': 'No tree data available',
-      Murray: 'No tree data available',
-      'Mid-North/Flinders': 'No tree data available',
-      Pastoral: 'No tree data available',
-      'West Coast/Eyre': 'No tree data available',
-      Mallee: 'Shining Gum',
-      Wimmera: 'Shining Gum',
-      'Northern Country': 'Shining Gum',
-      'North East Vic': 'Shining Gum',
-      'East Gippsland': 'Pinus Radiata',
-      'West/South Gippsland': 'Mountain Ash',
-      Central: 'Shining Gum',
-      'South West Vic': 'Shining Gum',
-      'Central Highlands/Northern': 'Western White Gum',
-      'Central West/Flinders': 'Western White Gum',
-      'Channel Country': 'Western White Gum',
-      'Maranoa/Warrego': 'Western White Gum',
-      'Darling Downs/Burnett': 'Western White Gum',
-      'North West/Gulf': 'Western White Gum',
-      'Darwin-Daly': 'No tree data available',
-      'Arnhem-Roper': 'No tree data available',
-      'Victoria River-TennantCreek': 'No tree data available',
-      'Alice Springs': 'No tree data available',
-    },
-    TreeSpecies5: {
-      'South West': 'Pinus Radiata',
-      Pilbara: 'No tree data available',
-      Kimberley: 'No tree data available',
-      'Central West': 'No tree data available',
-      'South Coastal': 'No tree data available',
-      'Goldfields/Eucla': 'No tree data available',
-      Gascoyne: 'No tree data available',
-      'Central Wheat Belt': 'No tree data available',
-      Interior: 'No tree data available',
-      'North Coast': 'Slash Pine',
-      'South Coast': 'Radiata Pine (low input)',
-      'Northern Tablelands': 'Radiata Pine (low input)',
-      'Southern Tablelands': 'Radiata Pine (low input)',
-      'Northern Wheat/Sheep': 'Radiata Pine (low input)',
-      'Southern Wheat/Sheep': 'Radiata Pine (low input)',
-      Western: 'Radiata Pine (low input)',
-      'North East': 'Radiata Pine (high input)',
-      'East Coast': 'Radiata Pine (high input)',
-      'Central North/Midlands/South East': 'Radiata Pine (high input)',
-      'Central Plateau/Derwent Valley': 'Radiata Pine (high input)',
-      'West/South Coast': 'Radiata Pine (high input)',
-      'North West': 'Radiata Pine (high input)',
-      'South East': 'No tree data available',
-      Murray: 'No tree data available',
-      'Mid-North/Flinders': 'No tree data available',
-      Pastoral: 'No tree data available',
-      'West Coast/Eyre': 'No tree data available',
-      Mallee: 'Pinus Radiata (low input)',
-      Wimmera: 'Pinus Radiata (low input)',
-      'Northern Country': 'Pinus Radiata',
-      'North East Vic': 'Pinus Radiata',
-      'East Gippsland': 'No tree data available',
-      'West/South Gippsland': 'Pinus Radiata',
-      Central: 'Pinus Radiata',
-      'South West Vic': 'Pinus Radiata',
-      'Central Highlands/Northern': 'Blackbutt',
-      'Central West/Flinders': 'Blackbutt',
-      'Channel Country': 'Blackbutt',
-      'Maranoa/Warrego': 'Blackbutt',
-      'Darling Downs/Burnett': 'Blackbutt',
-      'North West/Gulf': 'Blackbutt',
-      'Darwin-Daly': 'No tree data available',
-      'Arnhem-Roper': 'No tree data available',
-      'Victoria River-TennantCreek': 'No tree data available',
-      'Alice Springs': 'No tree data available',
-    },
-    TreeSpecies6: {
-      'South West': 'No tree data available',
-      Pilbara: 'No tree data available',
-      Kimberley: 'No tree data available',
-      'Central West': 'No tree data available',
-      'South Coastal': 'No tree data available',
-      'Goldfields/Eucla': 'No tree data available',
-      Gascoyne: 'No tree data available',
-      'Central Wheat Belt': 'No tree data available',
-      Interior: 'No tree data available',
-      'North Coast': 'Loblolly Pine',
-      'South Coast': 'Radiata Pine (high input)',
-      'Northern Tablelands': 'Radiata Pine (high input)',
-      'Southern Tablelands': 'Radiata Pine (high input)',
-      'Northern Wheat/Sheep': 'Radiata Pine (high input)',
-      'Southern Wheat/Sheep': 'Radiata Pine (high input)',
-      Western: 'Radiata Pine (high input)',
-      'North East': 'No tree data available',
-      'East Coast': 'No tree data available',
-      'Central North/Midlands/South East': 'No tree data available',
-      'Central Plateau/Derwent Valley': 'No tree data available',
-      'West/South Coast': 'No tree data available',
-      'North West': 'No tree data available',
-      'South East': 'No tree data available',
-      Murray: 'No tree data available',
-      'Mid-North/Flinders': 'No tree data available',
-      Pastoral: 'No tree data available',
-      'West Coast/Eyre': 'No tree data available',
-      Mallee: 'Pinus Radiata (high input)',
-      Wimmera: 'Pinus Radiata (high input)',
-      'Northern Country': 'No tree data available',
-      'North East Vic': 'No tree data available',
-      'East Gippsland': 'No tree data available',
-      'West/South Gippsland': 'No tree data available',
-      Central: 'No tree data available',
-      'South West Vic': 'No tree data available',
-      'Central Highlands/Northern': 'Pinus Hybrids',
-      'Central West/Flinders': 'Pinus Hybrids',
-      'Channel Country': 'Pinus Hybrids',
-      'Maranoa/Warrego': 'Pinus Hybrids',
-      'Darling Downs/Burnett': 'Pinus Hybrids',
-      'North West/Gulf': 'Pinus Hybrids',
-      'Darwin-Daly': 'No tree data available',
-      'Arnhem-Roper': 'No tree data available',
-      'Victoria River-TennantCreek': 'No tree data available',
-      'Alice Springs': 'No tree data available',
-    },
-  },
-
-  /**
-   * @description Nitrogen content of swine manure, by class
-   * @inventory2022 Table A5.5.5.4
-   * @units kg N/head/year
-   */
-
-  /**
-   * @description Global warming potentials for refrigerants
-   * @reference NGAF 2022 Table 23
-   * @units kg CO2-e / kg refrigerant
-   */
-  REFRIGERANT_GWP: {
-    'HFC-23': 12400,
-    'HFC-32': 677,
-    'HFC-41': 116,
-    'HFC-43-10mee': 1650,
-    'HFC-125': 3170,
-    'HFC-134': 1120,
-    'HFC-134a': 1300,
-    'HFC-143': 328,
-    'HFC-143a': 4800,
-    'HFC-152a': 138,
-    'HFC-227ea': 3350,
-    'HFC-236fa': 8060,
-    'HFC-245ca': 716,
-    'HFC-245fa': 858,
-    'HFC-365mfc': 804,
-    R438A: 2432,
-    R448A: 1497,
-    'R-22': 1810,
-    'Ammonia (R-717)': 0,
-    'R-11': 4750,
-    'R-12': 10900,
-    'R-13': 14400,
-    'R-23': 14800,
-    'R-32': 675,
-    'R-113': 6130,
-    'R-114': 10000,
-    'R-115': 7370,
-    'R-116': 12200,
-    'R-123': 77,
-    'R-124': 609,
-    'R-125': 3500,
-    'R-134a': 1430,
-    'R-141b': 725,
-    'R-142b': 2310,
-    'R-143a': 4470,
-    'R-152a': 124,
-    'R-218': 8830,
-    'R-227ea': 3220,
-    'R-236fa': 9810,
-    'R-245ca': 693,
-    'R-245fa': 1030,
-    'R-C318': 10300,
-    'R-401A': 1200,
-    'R-401B': 1300,
-    'R-401C': 930,
-    'R-402A': 2800,
-    'R-402B': 2400,
-    'R-403A': 3100,
-    'R-403B': 4500,
-    'R-404A': 3900,
-    'R-405A': 5300,
-    'R-406A': 1900,
-    'R-407A': 2100,
-    'R-407B': 2800,
-    'R-407C': 1800,
-    'R-407D': 1600,
-    'R-407E': 1600,
-    'R-408A': 3200,
-    'R-409A': 1600,
-    'R-409B': 1600,
-    'R-410A': 2100,
-    'R-411A': 1600,
-    'R-411B': 1700,
-    'R-412A': 2300,
-    'R-413A': 2100,
-    'R-414A': 1500,
-    'R-414B': 1400,
-    'R-415A': 1500,
-    'R-415B': 550,
-    'R-416A': 1100,
-    'R-417A': 2300,
-    'R-418A': 1700,
-    'R-419A': 3000,
-    'R-420A': 1500,
-    'R-421A': 2600,
-    'R-421B': 3200,
-    'R-422A': 3100,
-    'R-422B': 2500,
-    'R-422C': 3100,
-    'R-422D': 2700,
-    'R-423A': 2300,
-    'R-424A': 2400,
-    'R-425A': 1500,
-    'R-426A': 1500,
-    'R-427A': 2100,
-    'R-428A': 3600,
-    'R-500': 8100,
-    'R-502': 4700,
-    'R-503': 15000,
-    'R-507A': 4000,
-    'R-508A': 13000,
-    'R-508B': 13000,
-    'R-509A': 5700,
-  },
-
-  /**
-   * @description Emissions factors for wastewater treatment
-   */
-  WASTEWATER: {
-    TREATMENT_EF: {
-      [FluidWasteTreatmentType.MANAGED_AEROBIC]: 0,
-      [FluidWasteTreatmentType.UNMANAGED_AEROBIC]: 0.3,
-      [FluidWasteTreatmentType.ANAEROBIC_DIGESTER_REACTOR]: 0.8,
-      [FluidWasteTreatmentType.SHALLOW_ANAEROBIC_LAGOON_LT_2M]: 0.2,
-      [FluidWasteTreatmentType.DEEP_ANAEROBIC_LAGOON_GT_2M]: 0.8,
-    },
-    F_SLUDGE_FRACTION: 0.15,
-    EF_COD: (6.3 / 25) * 28,
-    METHANE_PRODUCTION: 0.65,
-    FLARE_EF: (0.00581193271889401 / 25) * 34,
-  },
-
-  /**
-   * @description Emissions factors for composting
-   * @reference NGA factors (2023)
-   * @units t/t
-   */
-  COMPOSTING_EF: 0.046,
-
-  /**
-   * @description Emissions factors for municipal solid waste
-   * @units t CO2-e/t
-   */
-  MUNICIPAL_SOLID_WASTE_EF: 1.6,
-
-  /**
-   * @description Emissions factors for freight, in kg CO2-e / tonne-km
-   * @reference EUROPEAN CHEMICAL TRANSPORT ASSOCIATION, European Chemical Industry Council, CTA-CEFIC-GUIDELINE-FOR-MEASURING-AND-MANAGING-CO2.
-   * @units kg CO2-e / tonne-km
-   */
-  FREIGHT_KG_TONNE_EF: {
-    [FreightTypes.TRUCK]: 0.079875,
-    [FreightTypes.RAIL]: 0.038,
-    [FreightTypes.LONG_HAUL_FLIGHT]: 0.633,
-    [FreightTypes.MEDIUM_HAUL_FLIGHT]: 0.8,
-    [FreightTypes.SMALL_CONTAINER_SHIP]: 0.0135,
-    [FreightTypes.LARGE_CONTAINER_SHIP]: 0.0115,
   },
 };
 
-export const allConstants: AllConstants = {
-  COMMON: commonConstants,
-  CROP: cropConstants,
-  FISHERIES: fisheriesConstants,
-  RICE: riceConstants,
-  AQUACULTURE: aquacultureConstants,
-  BEEF: beefConstants,
-  BUFFALO: buffaloConstants,
-  COTTON: cottonConstants,
-  DAIRY: dairyConstants,
-  DEER: deerConstants,
-  FEEDLOT: feedlotConstants,
-  GOAT: goatConstants,
-  LIVESTOCK: livestockConstants,
-  PORK: porkConstants,
-  POULTRY: poultryConstants,
-  SAVANNA: savannaConstants,
-  SHEEP: sheepConstants,
-  SUGAR: sugarConstants,
+const cropResidueRemovedOtherCropTypes: Record<State, RealNumber> = {
+  nsw: realNumber(0.05),
+  vic: realNumber(0.07),
+  qld: realNumber(0.04),
+  sa: realNumber(0.09),
+  wa_nw: realNumber(0.11),
+  wa_sw: realNumber(0.11),
+  tas: realNumber(0.16),
+  nt: realNumber(0.01),
+  act: realNumber(0),
+};
+
+const allStatesWithValue = (rawValue: number): Record<State, RealNumber> => {
+  const value = realNumber(rawValue);
+  return {
+    nsw: value,
+    vic: value,
+    qld: value,
+    sa: value,
+    wa_nw: value,
+    wa_sw: value,
+    tas: value,
+    nt: value,
+    act: value,
+  };
+};
+
+export const cropConstants: CropConstants = {
+  name: 'CROP',
+
+  /**
+   * @description Fraction of N in inorganic fertiliser types. Table A.2.2.6, A.2.2.7, A.2.2.9
+   */
+  /*
+  Volatilises
+  Fertiliser type f FracGASFf
+  Other fertilisers 0.11 // TODO: There aren't any other fertilisers in the other lists of fertiliser types
+  */
+  /*
+ // REVISIT: Appendix Table 3.1 includes SSP but this is not in other fertiliser tables
+ Scope 3 EF
+Single Super Phosphate (SSP) 0.26
+*/
+  INORGANIC_FERTILISER_FRACTIONS: {
+    'Monoammonium Phosphate (MAP)': {
+      N: massPerMass('N', 'Inorganic Fertiliser', 0.1),
+      Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
+      Volatilises: massPerMass('Volatilised N', 'N', 0.08),
+      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.83),
+    },
+    'Diammonium Phosphate (DAP)': {
+      N: massPerMass('N', 'Inorganic Fertiliser', 0.18),
+      Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
+      Volatilises: massPerMass('Volatilised N', 'N', 0.08),
+      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 1.0),
+    },
+    Urea: {
+      N: massPerMass('N', 'Inorganic Fertiliser', 0.46),
+      Urea: massPerMass('Urea', 'Inorganic Fertiliser', 1),
+      Volatilises: massPerMass('Volatilised N', 'N', 0.15),
+      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 1.5),
+    },
+    'Sulphate of Ammonia (SOA)': {
+      N: massPerMass('N', 'Inorganic Fertiliser', 0.21),
+      Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
+      Volatilises: massPerMass('Volatilised N', 'N', 0.08),
+      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.75),
+    },
+    'Urea-Ammonium Nitrate (UAN)': {
+      N: massPerMass('N', 'Inorganic Fertiliser', 0.32),
+      Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0.35),
+      Volatilises: massPerMass('Volatilised N', 'N', 0.05),
+      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 1.09),
+    },
+    'Ammonium Nitrate (AN)': {
+      N: massPerMass('N', 'Inorganic Fertiliser', 0.337),
+      Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
+      Volatilises: massPerMass('Volatilised N', 'N', 0.05),
+      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 1.09),
+    },
+    'Calcium Ammonium Nitrate (CAN)': {
+      N: massPerMass('N', 'Inorganic Fertiliser', 0.27),
+      Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
+      Volatilises: massPerMass('Volatilised N', 'N', 0.05),
+      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.88),
+    },
+  },
+
+  // Lifecycles GHG Emission Intensities for Material Inputs to AUS Ag Fisheries Forestry V48 (March 2026)
+  INORGANIC_FERTILISER_FRACTIONS_BY_REGION: {
+    Ammonia: {
+      China: massPerMass('CO2e', 'Inorganic Fertiliser', 4.17),
+      Yemen: massPerMass('CO2e', 'Inorganic Fertiliser', 2.26),
+      Canada: massPerMass('CO2e', 'Inorganic Fertiliser', 2.12),
+      Unspecified: massPerMass('CO2e', 'Inorganic Fertiliser', 2.32),
+    },
+    Urea: {
+      China: massPerMass('CO2e', 'Inorganic Fertiliser', 2.09),
+      Yemen: massPerMass('CO2e', 'Inorganic Fertiliser', 0.963),
+      Canada: massPerMass('CO2e', 'Inorganic Fertiliser', 0.823),
+      Unspecified: massPerMass('CO2e', 'Inorganic Fertiliser', 0.968),
+    },
+  },
+  INORGANIC_FERTILISER_FRACTIONS_BY_NON_REGIONAL: {
+    // Lifecycles GHG Emission Intensities for Material Inputs to AUS Ag Fisheries Forestry V48 (March 2026)
+    'Monoammonium phosphate': massPerMass(
+      'CO2e',
+      'Inorganic Fertiliser',
+      0.827,
+    ),
+    'Diammonium Phosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 1.34),
+    'Urea-Ammonium Nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 1.75),
+    'Ammonium Nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 2.21),
+    'Calcium Ammonium Nitrate': massPerMass(
+      'CO2e',
+      'Inorganic Fertiliser',
+      1.15,
+    ),
+    'Sulphate of Ammonia': massPerMass('CO2e', 'Inorganic Fertiliser', 0.865),
+    'Nitrogen - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 4.2),
+    'Nitrogen - Nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 5.47),
+    'Nitrogen - Ammonia': massPerMass('CO2e', 'Inorganic Fertiliser', 2.83),
+    'Muriate of Potash': massPerMass('CO2e', 'Inorganic Fertiliser', 0.549),
+    'Single superphosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.227),
+    'Double Superphosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.392),
+    'Phosphorus - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 3.96),
+    'Potassium - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 0.909),
+    'Sulfur - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 2.5),
+    'Zinc - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 4.82),
+  },
+
+  ORGANIC_FERTILISER_FRACTIONS: {
+    'Dairy cattle': { N: massPerMass('N', 'Organic Fertiliser', 0.029) },
+    'Beef cattle': { N: massPerMass('N', 'Organic Fertiliser', 0.023) },
+    Poultry: { N: massPerMass('N', 'Organic Fertiliser', 0.51) },
+    Swine: { N: massPerMass('N', 'Organic Fertiliser', 0.41) },
+    Sheep: { N: massPerMass('N', 'Organic Fertiliser', 0.033) },
+    'Horses/Mules': { N: massPerMass('N', 'Organic Fertiliser', 0.013) },
+  },
+
+  /**
+   * @description Methane emissions factor for savannah burning
+   * @inventory2022 Table 5.31
+   * @units Gg element / Gg burnt
+   */
+  BURNING_METHANE_EF: massPerMass('CH4', 'DryMatter', 0.0035),
+
+  /**
+   * @description N2O emissions factor for savannah burning
+   * @inventory2022 Table 5.31
+   * @units Gg element / Gg burnt
+   */
+  BURNING_N2O_EF: massPerMass('N2O', 'N', 0.0076),
+
+  // A.2.1.4
+  EF_RESIDUES_RETURNED_TO_SOIL: {
+    wet: massPerMass('N2O', 'N', 0.006),
+    dry: massPerMass('N2O', 'N', 0.005),
+  },
+
+  FRACTION_CROP_RESIDUE_REMOVED: {
+    Rice: allStatesWithValue(0.06),
+    'Tubers and Roots': allStatesWithValue(1),
+    Cotton: allStatesWithValue(0),
+    Hops: allStatesWithValue(0),
+    'Forage Crops': allStatesWithValue(0.8),
+    'Sugar Cane': {
+      nsw: realNumber(0),
+      qld: realNumber(0.03),
+      wa_nw: realNumber(0),
+      wa_sw: realNumber(0),
+      sa: realNumber(0), // N/A
+      vic: realNumber(0), // N/A
+      act: realNumber(0), // N/A
+      tas: realNumber(0), // N/A
+      nt: realNumber(0), // N/A
+    },
+    Wheat: cropResidueRemovedOtherCropTypes,
+    'Other Cereals': cropResidueRemovedOtherCropTypes,
+    Barley: cropResidueRemovedOtherCropTypes,
+    Oilseeds: cropResidueRemovedOtherCropTypes,
+    Maize: cropResidueRemovedOtherCropTypes,
+    Oats: cropResidueRemovedOtherCropTypes,
+    Sorghum: cropResidueRemovedOtherCropTypes,
+    Triticale: cropResidueRemovedOtherCropTypes,
+    Peanuts: cropResidueRemovedOtherCropTypes,
+    Pulses: cropResidueRemovedOtherCropTypes,
+    'Other Annual Crops': cropResidueRemovedOtherCropTypes,
+    'Other Perennial Crops': cropResidueRemovedOtherCropTypes,
+  },
+
+  /**
+   * @description Crop residue parameters for major crop types
+   * @inventory2022 A5.5.9.1
+   */
+
+  CROPRESIDUE: {
+    Wheat: {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.5),
+      belowAboveResidueRatio: realNumber(0.29),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.88),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.006),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.01),
+      fractionOfResidueAtBurning: realNumber(0.5),
+      fractionBurnt: realNumber(0.9),
+    },
+    Barley: {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.24),
+      belowAboveResidueRatio: realNumber(0.32),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.88),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.007),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.01),
+      fractionOfResidueAtBurning: realNumber(0.5),
+      fractionBurnt: realNumber(0.85),
+    },
+    Maize: {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 0.81),
+      belowAboveResidueRatio: realNumber(0.39),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.85),
+      carbonMassFraction: realNumber(0.42),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.005),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.007),
+      fractionOfResidueAtBurning: realNumber(1),
+      fractionBurnt: realNumber(0.8),
+    },
+    Oats: {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.42),
+      belowAboveResidueRatio: realNumber(0.43),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.88),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.006),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.01),
+      fractionOfResidueAtBurning: realNumber(0.5),
+      fractionBurnt: realNumber(0.85),
+    },
+    Rice: {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.31),
+      belowAboveResidueRatio: realNumber(0.16),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.8),
+      carbonMassFraction: realNumber(0.42),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.007),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.01),
+      fractionOfResidueAtBurning: realNumber(1),
+      fractionBurnt: realNumber(0.8),
+    },
+    Sorghum: {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.5),
+      belowAboveResidueRatio: realNumber(0.22),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.8),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.008),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.007),
+      fractionOfResidueAtBurning: realNumber(0.5),
+      fractionBurnt: realNumber(0.85),
+    },
+    Triticale: {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.5),
+      belowAboveResidueRatio: realNumber(0.42),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.88),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.006),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.01),
+      fractionOfResidueAtBurning: realNumber(0.5),
+      fractionBurnt: realNumber(0.85),
+    },
+    'Other Cereals': {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.46),
+      belowAboveResidueRatio: realNumber(0.36),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.88),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.006),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.01),
+      fractionOfResidueAtBurning: realNumber(0.5),
+      fractionBurnt: realNumber(0.85),
+    },
+    Pulses: {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.37),
+      belowAboveResidueRatio: realNumber(0.51),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.87),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.009),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.01),
+      fractionOfResidueAtBurning: realNumber(0.5),
+      fractionBurnt: realNumber(0.85),
+    },
+    'Tubers and Roots': {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 0.34),
+      belowAboveResidueRatio: realNumber(0.43),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.25),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.02),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.01),
+      fractionOfResidueAtBurning: realNumber(0),
+      fractionBurnt: realNumber(0.85),
+    },
+    Peanuts: {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.07),
+      belowAboveResidueRatio: realNumber(0.2),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.8),
+      carbonMassFraction: realNumber(0.42),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.016),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.014),
+      fractionOfResidueAtBurning: realNumber(0.5),
+      fractionBurnt: realNumber(0.85),
+    },
+    'Sugar Cane': {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 0.25),
+      belowAboveResidueRatio: realNumber(0.45),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.2),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.005),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.007),
+      fractionOfResidueAtBurning: realNumber(1),
+      fractionBurnt: realNumber(0.8),
+    },
+    Cotton: {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.9),
+      belowAboveResidueRatio: realNumber(0.3),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.9),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.01),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.01),
+      fractionOfResidueAtBurning: realNumber(0),
+      fractionBurnt: realNumber(0.85),
+    },
+    Hops: {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.5),
+      belowAboveResidueRatio: realNumber(0.29),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.88),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.006),
+      belowGroundN: massPerMass('N', 'DryMatter', 0),
+      fractionOfResidueAtBurning: realNumber(0),
+      fractionBurnt: realNumber(0.85),
+    },
+    Oilseeds: {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 2.08),
+      belowAboveResidueRatio: realNumber(0.33),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.96),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.009),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.01),
+      fractionOfResidueAtBurning: realNumber(0.5),
+      fractionBurnt: realNumber(0.85),
+    },
+    'Forage Crops': {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.34),
+      belowAboveResidueRatio: realNumber(0.37),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.88),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.006),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.01),
+      fractionOfResidueAtBurning: realNumber(0),
+      fractionBurnt: realNumber(0.85),
+    },
+    'Other Annual Crops': {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.0),
+      belowAboveResidueRatio: realNumber(0.22),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.85),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.008),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.009),
+      fractionOfResidueAtBurning: realNumber(0),
+      fractionBurnt: realNumber(0),
+    },
+    'Other Perennial Crops': {
+      residueCropRatio: massPerMass('CropResidue', 'DryMatter', 1.5),
+      belowAboveResidueRatio: realNumber(0.29),
+      dryMatterContent: massPerMass('DryMatter', 'CropResidue', 0.88),
+      carbonMassFraction: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.06),
+      belowGroundN: massPerMass('N', 'DryMatter', 0),
+      fractionOfResidueAtBurning: realNumber(0),
+      fractionBurnt: realNumber(0),
+    },
+  },
+
+  // Table A.2.1.3
+  PASTURERESIDUE: {
+    'Annual grass': {
+      // averageYield: 4.41,
+      belowAboveResidueRatio: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.015),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.012),
+      fractionRemoved: realNumber(0.8),
+    },
+    'Grass clover mixture': {
+      // averageYield: 8.34,
+      belowAboveResidueRatio: realNumber(0.8),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.025),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.016),
+      fractionRemoved: realNumber(0.8),
+    },
+    Lucerne: {
+      // averageYield: 8.62,
+      belowAboveResidueRatio: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.027),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.019),
+      fractionRemoved: realNumber(0.8),
+    },
+    'Other legume': {
+      // averageYield: 5.62,
+      belowAboveResidueRatio: realNumber(0.4),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.027),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.022),
+      fractionRemoved: realNumber(0.8),
+    },
+    'Perennial pasture': {
+      // averageYield: 8.35,
+      belowAboveResidueRatio: realNumber(0.8),
+      aboveGroundN: massPerMass('N', 'DryMatter', 0.015),
+      belowGroundN: massPerMass('N', 'DryMatter', 0.012),
+      fractionRemoved: realNumber(0.8),
+    },
+  },
+
+  EF_N2O_PRODUCTION_SYSTEM: {
+    'Irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0059),
+    'Irrigated crop (low rainfall)': massPerMass(
+      'N2O',
+      'Volatilised N',
+      0.0029,
+    ),
+    'Irrigated crop (high rainfall)': massPerMass(
+      'N2O',
+      'Volatilised N',
+      0.008,
+    ),
+    'Irrigated crop': massPerMass('N2O', 'Volatilised N', 0.007),
+    'Non-irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0018),
+    'Non-irrigated crops': massPerMass('N2O', 'Volatilised N', 0.0041),
+    Sugar: massPerMass('N2O', 'Volatilised N', 0.0199),
+    Cotton: massPerMass('N2O', 'Volatilised N', 0.0053),
+    'Horticultural crops': massPerMass('N2O', 'Volatilised N', 0.0064),
+    'Rice (continuous flooding)': massPerMass('N2O', 'Volatilised N', 0.003),
+    'Rice (single and multiple drainage, or alternate wetting and drying)':
+      massPerMass('N2O', 'Volatilised N', 0.005),
+    Aquaculture: massPerMass('N2O', 'Volatilised N', 0.0026),
+    Forestry: massPerMass('N2O', 'Volatilised N', 0.0018),
+  },
+
+  // FracGASMsoil
+  FRACTION_N_VOLATILISED_ORGANIC_FERTILISER: massPerMass(
+    'Volatilised N',
+    'N',
+    0.21,
+  ),
+  // FracLeach
+  FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF: realNumber(0.24),
+
+  // FracLEACHms
+  FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF_SOLID_STORAGE: realNumber(0.02),
+
+  // EF leach
+  EF_N2O_LEACHING_AND_RUNOFF: massPerMass('N2O', 'N', 0.011),
+};
+
+export const swineConstants: SwineConstants = {
+  name: 'SWINE',
+
+  // A.1.6.2
+  // A.1.6.3
+  MMS: {
+    'Outdoor (Dry lot)': {
+      N_VOLATISED_EF: realNumber(0.3),
+      N2O_EF: realNumber(0.02),
+    },
+    'Deep litter': {
+      N_VOLATISED_EF: realNumber(0.125),
+      N2O_EF: realNumber(0.01),
+    },
+    'Stockpile (Solid storage)': {
+      N_VOLATISED_EF: realNumber(0.2),
+      N2O_EF: realNumber(0.005),
+    },
+    'Effluent pond (Uncovered anaerobic lagoon)': {
+      N_VOLATISED_EF: realNumber(0.55),
+      N2O_EF: realNumber(0),
+    },
+    'Anaerobic digestor / Covered lagoon': {
+      N_VOLATISED_EF: realNumber(0),
+      N2O_EF: realNumber(0),
+    },
+    'Short HRT tank storage < 1 month (pit storage)': {
+      N_VOLATISED_EF: realNumber(0.25),
+      N2O_EF: realNumber(0.002),
+    },
+    'Direct application': {
+      N_VOLATISED_EF: realNumber(0),
+      N2O_EF: realNumber(0),
+    },
+  },
+
+  ENERGY_PER_MASS_METHANE: energyPerMass('CH4', megaJoulesToJoules(55.22)),
+
+  GROSS_ENERGY_CONTENT_OF_FEED: energyPerMass(
+    'DryMatter',
+    megaJoulesToJoules(18.6),
+  ),
+
+  FRACTION_INTAKE_CONVERTED_TO_METHANE: realNumber(0.007),
+
+  SWINE_CLASS_FACTORS: {
+    boars: {
+      FEED_INTAKE: massPerHeadPerDay('DryMatter', 2.62),
+    },
+    sows: {
+      FEED_INTAKE: massPerHeadPerDay('DryMatter', 2.3),
+    },
+    gilts: {
+      FEED_INTAKE: massPerHeadPerDay('DryMatter', 2.5),
+    },
+    slaughterPigs: {
+      FEED_INTAKE: massPerHeadPerDay('DryMatter', 1.71),
+    },
+  },
+};
+
+export const feedlotConstants: FeedlotConstants = {
+  name: 'FEEDLOT',
+
+  // A5.5.3.6,7 NIR vol 2
+  MMS: {
+    'Dry lot (Feedpad)': {
+      N_VOLATISED_EF: realNumber(0.6),
+      N2O_EF: realNumber(0.0054),
+    },
+    'Solid Storage (Stockpile)': {
+      N_VOLATISED_EF: realNumber(0.25),
+      N2O_EF: realNumber(0.005),
+    },
+    'Composting (Passive Windrow)': {
+      N_VOLATISED_EF: realNumber(0.4),
+      N2O_EF: realNumber(0.01),
+    },
+    'Uncovered anaerobic lagoon (Effluent Pond)': {
+      N_VOLATISED_EF: realNumber(0.35),
+      N2O_EF: realNumber(0),
+    },
+    'Direct application': {
+      N_VOLATISED_EF: realNumber(0),
+      N2O_EF: realNumber(0),
+    },
+  },
+
+  // Table A5.5.3.1 National Inventory Report Volume 2 [4]
+  FEED: {
+    '0-80 days': {
+      DRY_MATTER_INTAKE: massPerHeadPerDay('DryMatter', 10.4),
+      CRUDE_PROTEIN_CONTENT: massPerMass('CrudeProtein', 'DryMatter', 0.14),
+      NITROGEN_RETENTION_FRACTION: realNumber(0.204),
+      NEUTRAL_DETERGENT_FIBRE_PERCENTAGE: percentage(22),
+      ETHER_EXTRACT_PERCENTAGE: percentage(4.8),
+    },
+    '81-200 days': {
+      DRY_MATTER_INTAKE: massPerHeadPerDay('DryMatter', 10.8),
+      CRUDE_PROTEIN_CONTENT: massPerMass('CrudeProtein', 'DryMatter', 0.12),
+      NITROGEN_RETENTION_FRACTION: realNumber(0.127),
+      NEUTRAL_DETERGENT_FIBRE_PERCENTAGE: percentage(22),
+      ETHER_EXTRACT_PERCENTAGE: percentage(5),
+    },
+    '201+ days': {
+      DRY_MATTER_INTAKE: massPerHeadPerDay('DryMatter', 8.2),
+      CRUDE_PROTEIN_CONTENT: massPerMass('CrudeProtein', 'DryMatter', 0.12),
+      NITROGEN_RETENTION_FRACTION: realNumber(0.07),
+      NEUTRAL_DETERGENT_FIBRE_PERCENTAGE: percentage(24),
+      ETHER_EXTRACT_PERCENTAGE: percentage(5.5),
+    },
+  },
+
+  CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: massPerMass('CrudeProtein', 'N', 6.25),
+};
+
+export const dairyConstants: DairyConstants = {
+  name: 'DAIRY',
+
+  DAIRY_CLASS_FACTORS: {
+    milkingCows: {
+      liveweightGain: massPerHeadPerDay('Liveweight', 0.016),
+      referenceWeight: mass('Liveweight', 590),
+    },
+    heifersGt1: {
+      liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
+      referenceWeight: mass('Liveweight', 590),
+    },
+    heifersLt1: {
+      liveweightGain: massPerHeadPerDay('Liveweight', 0.57),
+      referenceWeight: mass('Liveweight', 590),
+    },
+    bullsGt1: {
+      liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+      referenceWeight: mass('Liveweight', 770),
+    },
+    bullsLt1: {
+      liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+      referenceWeight: mass('Liveweight', 770),
+    },
+  },
+
+  LIVEWEIGHTS_BY_BREED: {
+    'Medium Friesian': {
+      milkingCows: mass('Liveweight', 550),
+      heifersGt1: mass('Liveweight', 380),
+      heifersLt1: mass('Liveweight', 155),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    'Large Friesian': {
+      milkingCows: mass('Liveweight', 600),
+      heifersGt1: mass('Liveweight', 415),
+      heifersLt1: mass('Liveweight', 170),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    'Holstein-Friesian': {
+      milkingCows: mass('Liveweight', 650),
+      heifersGt1: mass('Liveweight', 450),
+      heifersLt1: mass('Liveweight', 185),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    'Friesian crossbred': {
+      milkingCows: mass('Liveweight', 500),
+      heifersGt1: mass('Liveweight', 350),
+      heifersLt1: mass('Liveweight', 145),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    Jersey: {
+      milkingCows: mass('Liveweight', 400),
+      heifersGt1: mass('Liveweight', 275),
+      heifersLt1: mass('Liveweight', 115),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    'Jersey crossbred': {
+      milkingCows: mass('Liveweight', 450),
+      heifersGt1: mass('Liveweight', 315),
+      heifersLt1: mass('Liveweight', 130),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    Ayrshire: {
+      milkingCows: mass('Liveweight', 540),
+      heifersGt1: mass('Liveweight', 375),
+      heifersLt1: mass('Liveweight', 150),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    Guernsey: {
+      milkingCows: mass('Liveweight', 480),
+      heifersGt1: mass('Liveweight', 335),
+      heifersLt1: mass('Liveweight', 140),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    'Brown Swiss': {
+      milkingCows: mass('Liveweight', 600),
+      heifersGt1: mass('Liveweight', 415),
+      heifersLt1: mass('Liveweight', 170),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+    'Illawarra/Aussie Red': {
+      milkingCows: mass('Liveweight', 550),
+      heifersGt1: mass('Liveweight', 375),
+      heifersLt1: mass('Liveweight', 150),
+      bullsGt1: mass('Liveweight', 600),
+      bullsLt1: mass('Liveweight', 225),
+    },
+  },
+
+  CRUDE_PROTEIN_CONTENT_OF_FEED: realNumber(0.2),
+
+  DRY_MATTER_DIGESTIBILITY: realNumber(0.75),
+
+  // Ch 3.3 line 281
+  EFFICIENCY_OF_MILK_PRODUCTION: realNumber(0.6),
+
+  // Ch 3.3 line 270
+  FAT_CONTENT: percentage(4.0),
+
+  // Ch 4.2 line 952
+  FracLEACH: realNumber(0.02),
+
+  // Ch 3 line 279
+  GROSS_ENERGY_CONTENT: energyPerMass('DryMatter', 18.4),
+
+  // Ch 3.3 line 276
+  INCREASE_METABOLIC_RATE_FOR_MILK: {
+    milkingCows: massPerHeadPerDay('DryMatter', 1.1),
+    others: massPerHeadPerDay('DryMatter', 1.0),
+  },
+
+  // Ch 4.2 line 950
+  MMS: {
+    anaerobicLagoon: {
+      EFm: realNumber(0),
+      FracGASM: realNumber(0.35),
+    },
+    sumpDispersal: {
+      EFm: realNumber(0),
+      FracGASM: realNumber(0.07),
+    },
+    drainToPaddock: {
+      EFm: realNumber(0),
+      FracGASM: realNumber(0.2),
+    },
+    solidStorage: {
+      EFm: realNumber(0.005),
+      FracGASM: realNumber(0.3),
+    },
+    pastureRangeAndPaddock: {
+      EFm: realNumber(0),
+      FracGASM: realNumber(0),
+    },
+  },
+
+  // Ch 3.3 line 278
+  NET_ENERGY_FOR_MILK_PRODUCTION: energyPerMass('Milk', 3.054),
+
+  // Ch 4.2 line 930, 931
+  PRE_WEANED_CLASSES: {
+    bullsLt1: {
+      urinaryN: massPerHeadPerDay('N', 0.0042),
+      faecalN: massPerHeadPerDay('N', 0.005),
+      methaneProduction: massPerHeadPerDay('CH4', 0.0204),
+    },
+    heifersLt1: {
+      urinaryN: massPerHeadPerDay('N', 0.0082),
+      faecalN: massPerHeadPerDay('N', 0.0055),
+      methaneProduction: massPerHeadPerDay('CH4', 0.0176),
+    },
+  },
+
+  // Ch 3.3 line 270
+  PROTEIN_CONTENT: percentage(3.3),
+
+  // Ch 4.2 line 902
+  TIME_IN_LOCATIONS: {
+    'Grazed only': {
+      feedPad: realNumber(0),
+      milkingShed: realNumber(0.11),
+      pasture: realNumber(0.89),
+    },
+    'Limited feedpad': {
+      feedPad: realNumber(0.1),
+      milkingShed: realNumber(0.11),
+      pasture: realNumber(0.79),
+    },
+    'Limited grazing': {
+      feedPad: realNumber(0.356),
+      milkingShed: realNumber(0.11),
+      pasture: realNumber(0.534),
+    },
+    'Zero grazing': {
+      feedPad: realNumber(0.89),
+      milkingShed: realNumber(0.11),
+      pasture: realNumber(0),
+    },
+  },
+
+  // PURCHASED_LIVESTOCK_FACTORS: {
+  //   milkingCows: undefined,
+  //   heifersGt1: undefined,
+  //   heifersLt1: undefined,
+  //   bullsGt1: undefined,
+  //   bullsLt1: undefined
+  // }
+};
+
+export const poultryConstants: PoultryConstants = {
+  name: 'POULTRY',
+  CLASSES: {
+    layers: {
+      dryMatterIntake: massPerHeadPerDay('DryMatter', 0.086),
+      dryMatterDigestibility: realNumber(0.8),
+      crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.19),
+      nitrogenRetentionRate: realNumber(0.35),
+      manureAsh: realNumber(0.18),
+    },
+    meatChickenGrowers: {
+      dryMatterIntake: massPerHeadPerDay('DryMatter', 0.093),
+      dryMatterDigestibility: realNumber(0.8),
+      crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.23),
+      nitrogenRetentionRate: realNumber(0.47),
+      manureAsh: realNumber(0.15),
+    },
+    meatChickenBreeder: {
+      dryMatterIntake: massPerHeadPerDay('DryMatter', 0.103),
+      dryMatterDigestibility: realNumber(0.8),
+      crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.19),
+      nitrogenRetentionRate: realNumber(0.32),
+      manureAsh: realNumber(0.18),
+    },
+    meatOther: {
+      dryMatterIntake: massPerHeadPerDay('DryMatter', 0.093),
+      dryMatterDigestibility: realNumber(0.8),
+      crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.23),
+      nitrogenRetentionRate: realNumber(0.47),
+      manureAsh: realNumber(0.15),
+    },
+  },
+
+  MMS: {
+    manureWithLitter: {
+      FracGASM: realNumber(0.3),
+      EFm: realNumber(0.001),
+    },
+    beltManureRemoval: {
+      FracGASM: realNumber(0.05),
+      EFm: realNumber(0.001),
+    },
+    manureStoredInHouse: {
+      FracGASM: realNumber(0.4),
+      EFm: realNumber(0.02),
+    },
+    solidStorage: {
+      FracGASM: realNumber(0.2),
+      EFm: realNumber(0.005),
+    },
+    composting: {
+      FracGASM: realNumber(0.2),
+      EFm: realNumber(0.01),
+    },
+    directProcessing: {
+      FracGASM: realNumber(0),
+      EFm: realNumber(0),
+    },
+    digester: {
+      FracGASM: realNumber(0),
+      EFm: realNumber(0),
+    },
+  },
+};
+
+export const livestockConstants: LivestockConstants = {
+  name: 'LIVESTOCK',
+  /**
+   * Appendix A1 Table A.3.1.2 & AusLCI
+   */
+  PURCHASED_FEED_FACTORS: {
+    /**
+     * Appendix A1 Table A.3.1.2 (except for `Bentonite`, which comes from AusLCI)
+     */
+    regionless: {
+      'Meat Meal': massPerMass('CO2e', 'Purchased Feed', 0.386),
+      'Blood Meal': massPerMass('CO2e', 'Purchased Feed', 1.9),
+      Millrun: massPerMass('CO2e', 'Purchased Feed', 0.3),
+      'Whole Sardines': massPerMass('CO2e', 'Purchased Feed', 0.3),
+      'Low Animal Protein Formulated Feed': massPerMass(
+        'CO2e',
+        'Purchased Feed',
+        2.2,
+      ),
+      Squid: massPerMass('CO2e', 'Purchased Feed', 0.3),
+      'Whole Fish': massPerMass('CO2e', 'Purchased Feed', 0.3),
+      'Custom Bait': massPerMass('CO2e', 'Purchased Feed', 0.08),
+      Bentonite: massPerMass('CO2e', 'Purchased Feed', 0.0652),
+    },
+    /**
+     * AusLCI
+     */
+    regional: {
+      Australia: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.239),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.181),
+        'Sorghum grain': massPerMass('CO2e', 'Purchased Feed', 0.232),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.268),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.117),
+        'Cereal silage': massPerMass('CO2e', 'Purchased Feed', 0.0744),
+        'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.117),
+        'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.12),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.339),
+        'Wheat bran': massPerMass('CO2e', 'Purchased Feed', 0.196),
+        'Canola meal': massPerMass('CO2e', 'Purchased Feed', 0.244),
+        'Feed for chickens': massPerMass('CO2e', 'Purchased Feed', 0.594),
+        'Feed for pigs': massPerMass('CO2e', 'Purchased Feed', 0.403),
+        'Feed for dairy calves': massPerMass('CO2e', 'Purchased Feed', 0.419),
+        'Feed for dairy cows': massPerMass('CO2e', 'Purchased Feed', 0.333),
+        'Canola oil': massPerMass('CO2e', 'Purchased Feed', 0.87),
+        'Cotton seed': massPerMass('CO2e', 'Purchased Feed', 0.197),
+      },
+      NSW: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.256),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.169),
+        'Sorghum grain': massPerMass('CO2e', 'Purchased Feed', 0.232),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.282),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.116),
+        'Cereal silage': massPerMass('CO2e', 'Purchased Feed', 0.0744),
+        'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.113),
+        'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.119),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.311),
+      },
+      NT: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.332),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.256),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.385),
+      },
+      QLD: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.269),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.186),
+        'Sorghum grain': massPerMass('CO2e', 'Purchased Feed', 0.231),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.296),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.118),
+        'Cereal silage': massPerMass('CO2e', 'Purchased Feed', 0.079),
+        'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.143),
+        'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.117),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.254),
+        Molasses: massPerMass('CO2e', 'Purchased Feed', 0.184),
+      },
+      SA: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.223),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.176),
+        'Sorghum grain': massPerMass('CO2e', 'Purchased Feed', 0.218),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.241),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.111),
+        'Cereal silage': massPerMass('CO2e', 'Purchased Feed', 0.0706),
+        'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.106),
+        'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.114),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.313),
+      },
+      TAS: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.307),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.338),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.139),
+        'Cereal silage': massPerMass('CO2e', 'Purchased Feed', 0.0808),
+        'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.113),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.398),
+      },
+      VIC: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.241),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.159),
+        'Sorghum grain': massPerMass('CO2e', 'Purchased Feed', 0.246),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.266),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.116),
+        'Cereal silage': massPerMass('CO2e', 'Purchased Feed', 0.0736),
+        'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.106),
+        'Maize silage': massPerMass('CO2e', 'Purchased Feed', 0.163),
+        'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.118),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.345),
+      },
+      WA: {
+        'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.236),
+        'Maize grain': massPerMass('CO2e', 'Purchased Feed', 0.285),
+        'Wheat grain': massPerMass('CO2e', 'Purchased Feed', 0.261),
+        'Cereal hay': massPerMass('CO2e', 'Purchased Feed', 0.122),
+        'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.124),
+        'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.368),
+      },
+      Brazil: {
+        'Soybean meal': massPerMass('CO2e', 'Purchased Feed', 1.23),
+      },
+    },
+  },
+  /**
+   * AusLCI
+   */
+  PURCHASED_MINERAL_SUPPLEMENT_FACTORS: {
+    'Lick block, dry season mix': massPerMass(
+      'CO2e',
+      'Purchased Mineral Supplement',
+      0.881,
+    ),
+    'Lick block, weaner': massPerMass(
+      'CO2e',
+      'Purchased Mineral Supplement',
+      0.231,
+    ),
+    'Lick block, mineral': massPerMass(
+      'CO2e',
+      'Purchased Mineral Supplement',
+      0.677,
+    ),
+  },
+
+  // Appendix A.1.5.1
+  OTHER_LIVESTOCK_EMISSION_FACTORS: {
+    'Emus/ostriches': {
+      ENTERIC: massPerHead('CH4', 5),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.34),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 7),
+    },
+    'Mules/asses': {
+      ENTERIC: massPerHead('CH4', 10),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.91),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 13.2),
+    },
+    Alpacas: {
+      ENTERIC: massPerHead('CH4', 8),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.34),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 7),
+    },
+    Horses: {
+      ENTERIC: massPerHead('CH4', 18),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 2.73),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 39.5),
+    },
+    Camels: {
+      ENTERIC: massPerHead('CH4', 46),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 2.73),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 39.5),
+    },
+    Buffalo: {
+      ENTERIC: massPerHead('CH4', 68),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 2.73),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 39.5),
+    },
+    Goats: {
+      ENTERIC: massPerHead('CH4', 5),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.34),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 7),
+    },
+    Deer: {
+      ENTERIC: massPerHead('CH4', 20),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.91),
+      NITROGEN_EXCRETED: massPerHeadPerDay('N', 13.2),
+    },
+  },
+
+  METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE: {
+    '10 or below': realNumber(0.66),
+    '11': realNumber(0.68),
+    '12': realNumber(0.7),
+    '13': realNumber(0.71),
+    '14': realNumber(0.73),
+    '15': realNumber(0.74),
+    '16': realNumber(0.75),
+    '17': realNumber(0.76),
+    '18': realNumber(0.77),
+    '19': realNumber(0.77),
+    '20': realNumber(0.78),
+    '21': realNumber(0.78),
+    '22': realNumber(0.78),
+    '23': realNumber(0.79),
+    '24': realNumber(0.79),
+    '25': realNumber(0.79),
+    '26': realNumber(0.79),
+    '27': realNumber(0.8),
+    '28 or above': realNumber(0.8),
+  },
+
+  OTHER_LIVESTOCK_METHANE_CONVERSION_BY_STATE: {
+    ACT: realNumber(0.71),
+    NSW: realNumber(0.75),
+    NT: realNumber(0.8),
+    QLD: realNumber(0.78),
+    SA: realNumber(0.74),
+    TAS: realNumber(0.7),
+    VIC: realNumber(0.74),
+    WA: realNumber(0.76),
+  },
+
+  OTHER_LIVESTOCK_METHANE_CONVERSION_PASTURE: realNumber(0.0047),
+
+  EFPRP: {
+    wet: massPerMass('N2O', 'N', 0.006),
+    dry: massPerMass('N2O', 'N', 0.002),
+  },
+
+  EF_ATMOSPHERIC_DEPOSITION: {
+    'Non-irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0018),
+    'Irrigated pasture': massPerMass('N2O', 'Volatilised N', 0.0059),
+    'Irrigated crop': massPerMass('N2O', 'Volatilised N', 0.007),
+    'Non-irrigated crop (low rainfall)': massPerMass(
+      'N2O',
+      'Volatilised N',
+      0.0029,
+    ),
+    'Non-irrigated crop (high rainfall)': massPerMass(
+      'N2O',
+      'Volatilised N',
+      0.008,
+    ),
+  },
+
+  /**
+   * Values are taken from the national averages for sheep and beef,
+   * depending on which of the two the guidelines advises is the most similar
+   * for each livestock type.
+   */
+  OTHER_PURCHASED_LIVESTOCK_FACTORS: {
+    Buffalo: massPerMass('CO2e', 'Liveweight', 12.4),
+    Goats: massPerMass('CO2e', 'Liveweight', 5.44),
+    Deer: massPerMass('CO2e', 'Liveweight', 5.44),
+    Camels: massPerMass('CO2e', 'Liveweight', 12.4),
+    Alpacas: massPerMass('CO2e', 'Liveweight', 5.44),
+    Horses: massPerMass('CO2e', 'Liveweight', 12.4),
+    'Mules/asses': massPerMass('CO2e', 'Liveweight', 5.44),
+    'Emus/ostriches': massPerMass('CO2e', 'Liveweight', 5.44),
+  },
+  /**
+   * REVISIT: The table given in A.1.5.4 is not formatted very well; some of these
+   * numbers may need to be revised later.
+   */
+  OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS: {
+    Buffalo: massPerHead('Liveweight', 336),
+    Goats: massPerHead('Liveweight', 50),
+    Deer: massPerHead('Liveweight', 120),
+    Camels: massPerHead('Liveweight', 570),
+    Alpacas: massPerHead('Liveweight', 65),
+    Horses: massPerHead('Liveweight', 550),
+    'Mules/asses': massPerHead('Liveweight', 245),
+    'Emus/ostriches': massPerHead('Liveweight', 120),
+  },
+};
+
+export const beefPastureConstants: BeefPastureConstants = {
+  name: 'BEEF_PASTURE',
+
+  DMD: {
+    'ACT/NSW': {
+      spring: realNumber(0.55),
+      summer: realNumber(0.65),
+      autumn: realNumber(0.6),
+      winter: realNumber(0.5),
+    },
+    NT: {
+      spring: realNumber(0.55),
+      summer: realNumber(0.61),
+      autumn: realNumber(0.57),
+      winter: realNumber(0.54),
+    },
+    QLD: {
+      spring: realNumber(0.53),
+      summer: realNumber(0.57),
+      autumn: realNumber(0.55),
+      winter: realNumber(0.51),
+    },
+    SA: {
+      spring: realNumber(0.7),
+      summer: realNumber(0.55),
+      autumn: realNumber(0.55),
+      winter: realNumber(0.75),
+    },
+    TAS: {
+      spring: realNumber(0.75),
+      summer: realNumber(0.6),
+      autumn: realNumber(0.7),
+      winter: realNumber(0.75),
+    },
+    VIC: {
+      spring: realNumber(0.8),
+      summer: realNumber(0.55),
+      autumn: realNumber(0.6),
+      winter: realNumber(0.76),
+    },
+    'WA - South West': {
+      spring: realNumber(0.8),
+      summer: realNumber(0.58),
+      autumn: realNumber(0.5),
+      winter: realNumber(0.75),
+    },
+    'WA - Pilbara': {
+      spring: realNumber(0.4),
+      summer: realNumber(0.65),
+      autumn: realNumber(0.55),
+      winter: realNumber(0.45),
+    },
+    'WA - Kimberley': {
+      spring: realNumber(0.4),
+      summer: realNumber(0.65),
+      autumn: realNumber(0.55),
+      winter: realNumber(0.45),
+    },
+  },
+
+  CP: {
+    'ACT/NSW': {
+      spring: realNumber(0.07),
+      summer: realNumber(0.13),
+      autumn: realNumber(0.1),
+      winter: realNumber(0.06),
+    },
+    NT: {
+      spring: realNumber(0.058),
+      summer: realNumber(0.092),
+      autumn: realNumber(0.075),
+      winter: realNumber(0.053),
+    },
+    QLD: {
+      spring: realNumber(0.072),
+      summer: realNumber(0.099),
+      autumn: realNumber(0.078),
+      winter: realNumber(0.059),
+    },
+    SA: {
+      spring: realNumber(0.16),
+      summer: realNumber(0.07),
+      autumn: realNumber(0.09),
+      winter: realNumber(0.2),
+    },
+    TAS: {
+      spring: realNumber(0.2),
+      summer: realNumber(0.1),
+      autumn: realNumber(0.16),
+      winter: realNumber(0.2),
+    },
+    VIC: {
+      spring: realNumber(0.25),
+      summer: realNumber(0.07),
+      autumn: realNumber(0.1),
+      winter: realNumber(0.21),
+    },
+    'WA - South West': {
+      spring: realNumber(0.2),
+      summer: realNumber(0.09),
+      autumn: realNumber(0.06),
+      winter: realNumber(0.2),
+    },
+    'WA - Pilbara': {
+      spring: realNumber(0.04),
+      summer: realNumber(0.12),
+      autumn: realNumber(0.09),
+      winter: realNumber(0.06),
+    },
+    'WA - Kimberley': {
+      spring: realNumber(0.04),
+      summer: realNumber(0.12),
+      autumn: realNumber(0.09),
+      winter: realNumber(0.06),
+    },
+  },
+
+  REFERENCE_WEIGHT: {
+    ACT: {
+      bullsLt1: mass('Liveweight', 700),
+      bullsGt1: mass('Liveweight', 700),
+      cowsLt1: mass('Liveweight', 600),
+      cows1To2Years: mass('Liveweight', 500),
+      cows2To3Years: mass('Liveweight', 500),
+      cowsGt3Years: mass('Liveweight', 500),
+      steersLt1: mass('Liveweight', 500),
+      steers1To2Years: mass('Liveweight', 600),
+      steers2To3Years: mass('Liveweight', 600),
+      steersGt3Years: mass('Liveweight', 600),
+    },
+    NSW: {
+      // duplicate of ACT
+      bullsLt1: mass('Liveweight', 700),
+      bullsGt1: mass('Liveweight', 700),
+      cowsLt1: mass('Liveweight', 600),
+      cows1To2Years: mass('Liveweight', 500),
+      cows2To3Years: mass('Liveweight', 500),
+      cowsGt3Years: mass('Liveweight', 500),
+      steersLt1: mass('Liveweight', 500),
+      steers1To2Years: mass('Liveweight', 600),
+      steers2To3Years: mass('Liveweight', 600),
+      steersGt3Years: mass('Liveweight', 600),
+    },
+    NT: {
+      bullsLt1: mass('Liveweight', 770),
+      bullsGt1: mass('Liveweight', 770),
+      cowsLt1: mass('Liveweight', 660),
+      cows1To2Years: mass('Liveweight', 550),
+      cows2To3Years: mass('Liveweight', 550),
+      cowsGt3Years: mass('Liveweight', 550),
+      steersLt1: mass('Liveweight', 550),
+      steers1To2Years: mass('Liveweight', 660),
+      steers2To3Years: mass('Liveweight', 660),
+      steersGt3Years: mass('Liveweight', 660),
+    },
+    QLD: {
+      bullsLt1: mass('Liveweight', 770),
+      bullsGt1: mass('Liveweight', 770),
+      cowsLt1: mass('Liveweight', 660),
+      cows1To2Years: mass('Liveweight', 550),
+      cows2To3Years: mass('Liveweight', 550),
+      cowsGt3Years: mass('Liveweight', 550),
+      steersLt1: mass('Liveweight', 550),
+      steers1To2Years: mass('Liveweight', 660),
+      steers2To3Years: mass('Liveweight', 660),
+      steersGt3Years: mass('Liveweight', 660),
+    },
+    SA: {
+      bullsLt1: mass('Liveweight', 770),
+      bullsGt1: mass('Liveweight', 770),
+      cowsLt1: mass('Liveweight', 660),
+      cows1To2Years: mass('Liveweight', 550),
+      cows2To3Years: mass('Liveweight', 550),
+      cowsGt3Years: mass('Liveweight', 550),
+      steersLt1: mass('Liveweight', 550),
+      steers1To2Years: mass('Liveweight', 660),
+      steers2To3Years: mass('Liveweight', 660),
+      steersGt3Years: mass('Liveweight', 660),
+    },
+    TAS: {
+      bullsLt1: mass('Liveweight', 770),
+      bullsGt1: mass('Liveweight', 770),
+      cowsLt1: mass('Liveweight', 660),
+      cows1To2Years: mass('Liveweight', 550),
+      cows2To3Years: mass('Liveweight', 550),
+      cowsGt3Years: mass('Liveweight', 550),
+      steersLt1: mass('Liveweight', 550),
+      steers1To2Years: mass('Liveweight', 660),
+      steers2To3Years: mass('Liveweight', 660),
+      steersGt3Years: mass('Liveweight', 660),
+    },
+    VIC: {
+      bullsLt1: mass('Liveweight', 770),
+      bullsGt1: mass('Liveweight', 770),
+      cowsLt1: mass('Liveweight', 660),
+      cows1To2Years: mass('Liveweight', 550),
+      cows2To3Years: mass('Liveweight', 550),
+      cowsGt3Years: mass('Liveweight', 550),
+      steersLt1: mass('Liveweight', 550),
+      steers1To2Years: mass('Liveweight', 660),
+      steers2To3Years: mass('Liveweight', 660),
+      steersGt3Years: mass('Liveweight', 660),
+    },
+    WA: {
+      bullsLt1: mass('Liveweight', 770),
+      bullsGt1: mass('Liveweight', 770),
+      cowsLt1: mass('Liveweight', 660),
+      cows1To2Years: mass('Liveweight', 550),
+      cows2To3Years: mass('Liveweight', 550),
+      cowsGt3Years: mass('Liveweight', 550),
+      steersLt1: mass('Liveweight', 550),
+      steers1To2Years: mass('Liveweight', 660),
+      steers2To3Years: mass('Liveweight', 660),
+      steersGt3Years: mass('Liveweight', 660),
+    },
+  },
+  MCF_PASTURE: realNumber(0.0046),
+  MCF_LAGOON: {
+    'Cool temperate moist': realNumber(0.006),
+    'Cool temperate dry': realNumber(0.0067),
+    'Boreal moist': realNumber(0.005),
+    'Boreal dry': realNumber(0.0049),
+    'Warm temperate moist': realNumber(0.0073),
+    'Warm temperate dry': realNumber(0.0076),
+    'Tropical montane': realNumber(0.0076),
+    'Tropical wet': realNumber(0.008),
+    'Tropical moist': realNumber(0.008),
+    'Tropical dry': realNumber(0.008),
+  },
+  LIVEWEIGHT: {
+    'ACT/NSW': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 80),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 240),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 280),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 520),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 560),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 75),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 160),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.9),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 410),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 75),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 160),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.9),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+      },
+    },
+    SA: {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 320),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 80),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.9),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 160),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.88),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 800),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 800),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 700),
+          liveweightGain: massPerHeadPerDay('Liveweight', -1.1),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 700),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.88),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 280),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 70),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 350),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 230),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.88),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 290),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 75),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.82),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+    },
+    TAS: {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 105),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.82),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 700),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 750),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 725),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 700),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.27),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 85),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.71),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 200),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 210),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 350),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 530),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 530),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 90),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 160),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 215),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 230),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 460),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+      },
+    },
+    VIC: {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 280),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 100),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 820),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 850),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 700),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 720),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 240),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 95),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 410),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 320),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 560),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.1),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 560),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.1),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 240),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 270),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 95),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 510),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 520),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 410),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 510),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 520),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 410),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 510),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 520),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 410),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+      },
+    },
+    'WA - South West': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.64),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 100),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 190),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 800),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 780),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 680),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 700),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.21),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 80),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.99),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 320),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 330),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 530),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 530),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 490),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.42),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 100),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.11),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.11),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 480),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.1),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.11),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+      },
+    },
+    'WA - Pilbara': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 80),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 230),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.88),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 450),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 70),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.88),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 240),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 310),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 330),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 360),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 80),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 230),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.88),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 370),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 370),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 370),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+      },
+    },
+    'WA - Kimberley': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 110),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 200),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 600),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 180),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 90),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 150),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 300),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 270),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 280),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 320),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 350),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 320),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.33),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 350),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 210),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 100),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 160),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 190),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 430),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 430),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 340),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 430),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 400),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.55),
+        },
+      },
+    },
+    'NT - Alice Springs': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 110),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 200),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 706),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.23),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 703),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 721),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 727),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.8),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 208),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 112),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.62),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 169),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.54),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 211),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 323),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.17),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 256),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.54),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 306),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.45),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 338),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.09),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 415),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.18),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 368),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.38),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 392),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.35),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 432),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 467),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.28),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 465),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 464),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.15),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 492),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 223),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.32),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 108),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.75),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 176),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.63),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 222),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 371),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.24),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 280),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.64),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 339),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.54),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 377),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.18),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 493),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 421),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.42),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 498),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 585),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 543),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.48),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 580),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.26),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 590),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.03),
+        },
+      },
+    },
+    'NT - Barkly': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 110),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 200),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 620),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 650),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 670),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 660),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.27),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 227),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 108),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.68),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.64),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 225),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.31),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 319),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.21),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 262),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 266),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 307),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.29),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 398),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.18),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 346),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.24),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 363),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.29),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 398),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.19),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 452),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.01),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 430),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 444),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 452),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.04),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 216),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 111),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.64),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 169),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.57),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 214),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.26),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 334),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.09),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 236),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.37),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 282),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 326),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.28),
+        },
+      },
+      // NOT VALID
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+      // NOT VALID
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+    },
+    'NT - Northern': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 220),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 110),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.66),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 200),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 620),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.44),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 650),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.22),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 670),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 660),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.27),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 177),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 102),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.79),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 173),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 202),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 267),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.15),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 203),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.38),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 272),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.09),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 365),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.08),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 299),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.38),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 336),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.36),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 365),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 406),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.17),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 380),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 414),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.06),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.04),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 231),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.06),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 102),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 175),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.58),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 208),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.21),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 249),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 218),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 243),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.23),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.03),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 324),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.14),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 263),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 304),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 337),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      // NOT VALID
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 0),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+    },
+    'QLD - High': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 153),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 168),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.45),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 235),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.51),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 705),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.19),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 703),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 718),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.1),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 722),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.07),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 215),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.38),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 118),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.8),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 191),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 207),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 302),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 277),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.57),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 319),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.41),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 352),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.09),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 416),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.07),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 397),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.76),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 440),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 470),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.13),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 519),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 483),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.49),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 506),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.17),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 514),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.07),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 234),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.52),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 111),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.84),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 188),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.54),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 209),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 455),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.55),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 304),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.51),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 326),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.64),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 421),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.71),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 551),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.19),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 521),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.36),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 520),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 512),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.17),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 660),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.6),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 547),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.17),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 582),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.32),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 605),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.43),
+        },
+      },
+    },
+    'QLD - Moderate/High': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 230),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.12),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 113),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.65),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 172),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.7),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 241),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.32),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 674),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.19),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 669),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.19),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 685),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 692),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.06),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 217),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.41),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 113),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.65),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 172),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.52),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 208),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 344),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.09),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 283),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.51),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 309),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.34),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 344),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.19),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 357),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.41),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 361),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.18),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 376),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 364),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.1),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 467),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.19),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 477),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.63),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 471),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.04),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 484),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.02),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 242),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.07),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 120),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.3),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 238),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.77),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 260),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 370),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.07),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 273),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.48),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 329),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.42),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 350),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.23),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 550),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.08),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 545),
+          liveweightGain: massPerHeadPerDay('Liveweight', 1.12),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 573),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 567),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.13),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 620),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 553),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.38),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 620),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.74),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 620),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0),
+        },
+      },
+    },
+    'QLD - Moderate/Low': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 236),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.62),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 120),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 125),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 180),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.61),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 674),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.19),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 669),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.19),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 685),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 692),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.06),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 178),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.37),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 112),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.31),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.39),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 183),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.21),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 310),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.41),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 250),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.54),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 277),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.36),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 316),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.18),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 428),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.06),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 390),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.53),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 407),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.26),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 438),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 466),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.02),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 448),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.15),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 455),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 468),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.06),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 193),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.47),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 115),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.28),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 141),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 189),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.29),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 370),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 273),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.57),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 296),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.44),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 354),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.41),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 519),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 433),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.42),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 445),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.37),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 500),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.41),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 565),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 556),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 593),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.01),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 553),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.15),
+        },
+      },
+    },
+    'QLD - Low': {
+      bullsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 190),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.2),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 119),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.62),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 175),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 192),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.08),
+        },
+      },
+      bullsGt1: {
+        spring: {
+          liveweight: mass('Liveweight', 617),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 591),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.21),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 610),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 615),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.04),
+        },
+      },
+      cowsLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 174),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.24),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 140),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 163),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.12),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 162),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.06),
+        },
+      },
+      cows1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 265),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 205),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.32),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 232),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.27),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 255),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.18),
+        },
+      },
+      cows2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 371),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.23),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 310),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.47),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 351),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 364),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
+        },
+      },
+      cowsGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 415),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 405),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.31),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 427),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.08),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 420),
+          liveweightGain: massPerHeadPerDay('Liveweight', -0.07),
+        },
+      },
+      steersLt1: {
+        spring: {
+          liveweight: mass('Liveweight', 170),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.34),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 133),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.14),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 146),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 157),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
+        },
+      },
+      steers1To2Years: {
+        spring: {
+          liveweight: mass('Liveweight', 272),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 218),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 242),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.24),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 261),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
+        },
+      },
+      steers2To3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 392),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.57),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 315),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.26),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 320),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.15),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 342),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.4),
+        },
+      },
+      steersGt3Years: {
+        spring: {
+          liveweight: mass('Liveweight', 531),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.52),
+        },
+        summer: {
+          liveweight: mass('Liveweight', 445),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.43),
+        },
+        autumn: {
+          liveweight: mass('Liveweight', 471),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.21),
+        },
+        winter: {
+          liveweight: mass('Liveweight', 484),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.33),
+        },
+      },
+    },
+  },
+
+  MILK_INTAKE: {
+    'ACT/NSW': {
+      calving: massPerHeadPerDay('Milk', 6),
+      afterCalving: massPerHeadPerDay('Milk', 4),
+    },
+    NT: {
+      calving: massPerHeadPerDay('Milk', 4),
+      afterCalving: massPerHeadPerDay('Milk', 3),
+    },
+    QLD: {
+      calving: massPerHeadPerDay('Milk', 4),
+      afterCalving: massPerHeadPerDay('Milk', 3),
+    },
+    SA: {
+      calving: massPerHeadPerDay('Milk', 6),
+      afterCalving: massPerHeadPerDay('Milk', 4),
+    },
+    TAS: {
+      calving: massPerHeadPerDay('Milk', 6),
+      afterCalving: massPerHeadPerDay('Milk', 4),
+    },
+    VIC: {
+      calving: massPerHeadPerDay('Milk', 6),
+      afterCalving: massPerHeadPerDay('Milk', 4),
+    },
+    'WA - South West': {
+      calving: massPerHeadPerDay('Milk', 6),
+      afterCalving: massPerHeadPerDay('Milk', 4),
+    },
+    'WA - Pilbara': {
+      calving: massPerHeadPerDay('Milk', 4),
+      afterCalving: massPerHeadPerDay('Milk', 3),
+    },
+    'WA - Kimberley': {
+      calving: massPerHeadPerDay('Milk', 4),
+      afterCalving: massPerHeadPerDay('Milk', 3),
+    },
+  },
+
+  FRAC_WET_SOIL: {
+    ACT: realNumber(0.87),
+    NSW: realNumber(0.54),
+    'NT - Alice Springs': realNumber(0.03),
+    'NT - Barkly': realNumber(0.07),
+    'NT - Northern': realNumber(0.92),
+    'QLD - High': realNumber(0.18),
+    'QLD - Moderate/High': realNumber(0.64),
+    'QLD - Moderate/Low': realNumber(0.07),
+    'QLD - Low': realNumber(0.18),
+    SA: realNumber(0.22),
+    TAS: realNumber(0.71),
+    VIC: realNumber(0.56),
+    'WA - South West': realNumber(0.89),
+    'WA - Pilbara': realNumber(0.28),
+    'WA - Kimberley': realNumber(0.3),
+  },
+};
+
+export const riceConstants: RiceConstants = {
+  name: 'RICE',
+  WATER_REGIME_SCALING_FACTORS: {
+    'Paddy rotation': realNumber(0),
+    'Fallow without flooding in previous year': realNumber(0),
+    'Continuously flooded': realNumber(1),
+    'Single drainage period': realNumber(0.71),
+    'Multiple drainage periods': realNumber(0.55),
+    'Regular rainfed': realNumber(0.54),
+    'Drought prone': realNumber(0.16),
+    'Deep water': realNumber(0.06),
+  },
+  PRE_SEASON_WATER_REGIME_SCALING_FACTORS: {
+    'Non flooded pre-season <180 days': realNumber(1),
+    'Non flooded pre-season >180 days': realNumber(0.89),
+    'Non-flooded pre-season >365 days': realNumber(0.59),
+    'Flooded pre-season >30 days': realNumber(2.41),
+  },
+  ORGANIC_AMENDMENT_SCALING_FACTORS: {
+    'Straw incorporated shortly (<30 days) before cultivation': realNumber(1),
+    'Straw incorporated long (>30 days) before cultivation': realNumber(0.19),
+    Compost: realNumber(0.17),
+    'Farm yard manure': realNumber(0.21),
+    'Green manure': realNumber(0.45),
+  },
+  BASELINE_CONTINUOUSLY_FLOODED_EF: massPerAreaPerDay(
+    'CH4',
+    perHectareToPerSqMetre(1.19),
+  ),
+};
+const tonnesCarbonPerHectare = (tonnes: number) =>
+  massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(tonnes));
+
+const tonnesCarbonPerHectarePerYear = (tonnes: number) =>
+  massPerAreaPerYear('Carbon', tonnesPerHectareToKgPerSquareMetres(tonnes));
+
+export const sheepConstants: SheepConstants = {
+  name: 'SHEEP',
+  SEASONAL_FACTORS: {
+    'ACT/NSW': {
+      rams: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 75),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.61),
+          liveweight: mass('Liveweight', 75),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.6),
+          dryMatterDigestibility: realNumber(0.64),
+          liveweight: mass('Liveweight', 69),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.72),
+          liveweight: mass('Liveweight', 69),
+        },
+      },
+      wethers: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 62),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.61),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.6),
+          dryMatterDigestibility: realNumber(0.64),
+          liveweight: mass('Liveweight', 55),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.72),
+          liveweight: mass('Liveweight', 55),
+        },
+      },
+      maidenEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 44),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.61),
+          liveweight: mass('Liveweight', 42),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.6),
+          dryMatterDigestibility: realNumber(0.64),
+          liveweight: mass('Liveweight', 43),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.72),
+          liveweight: mass('Liveweight', 45),
+        },
+      },
+      breedingEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 54),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.61),
+          liveweight: mass('Liveweight', 49),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.6),
+          dryMatterDigestibility: realNumber(0.64),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.72),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      otherEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 56),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.61),
+          liveweight: mass('Liveweight', 51),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.6),
+          dryMatterDigestibility: realNumber(0.64),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.72),
+          liveweight: mass('Liveweight', 51),
+        },
+      },
+      lambsHoggets: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 20),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.61),
+          liveweight: mass('Liveweight', 27),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.6),
+          dryMatterDigestibility: realNumber(0.64),
+          liveweight: mass('Liveweight', 32),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.72),
+          liveweight: mass('Liveweight', 34),
+        },
+      },
+    },
+    VIC: {
+      rams: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.2),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 70),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 3),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 65),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.8),
+          dryMatterDigestibility: realNumber(0.65),
+          liveweight: mass('Liveweight', 65),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1),
+          dryMatterDigestibility: realNumber(0.6),
+          liveweight: mass('Liveweight', 60),
+        },
+      },
+      wethers: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.2),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 60),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 3),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.8),
+          dryMatterDigestibility: realNumber(0.65),
+          liveweight: mass('Liveweight', 52),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1),
+          dryMatterDigestibility: realNumber(0.6),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      maidenEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.2),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 50),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 3),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 45),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.8),
+          dryMatterDigestibility: realNumber(0.65),
+          liveweight: mass('Liveweight', 43),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1),
+          dryMatterDigestibility: realNumber(0.6),
+          liveweight: mass('Liveweight', 40),
+        },
+      },
+      breedingEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.2),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 55),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 3),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.8),
+          dryMatterDigestibility: realNumber(0.65),
+          liveweight: mass('Liveweight', 48),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1),
+          dryMatterDigestibility: realNumber(0.6),
+          liveweight: mass('Liveweight', 45),
+        },
+      },
+      otherEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.2),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 50),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 3),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.8),
+          dryMatterDigestibility: realNumber(0.65),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1),
+          dryMatterDigestibility: realNumber(0.6),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      lambsHoggets: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.2),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 22),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 3),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 28),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.8),
+          dryMatterDigestibility: realNumber(0.65),
+          liveweight: mass('Liveweight', 33),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1),
+          dryMatterDigestibility: realNumber(0.6),
+          liveweight: mass('Liveweight', 35),
+        },
+      },
+    },
+    QLD: {
+      rams: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.51),
+          liveweight: mass('Liveweight', 58),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 61),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.2),
+          dryMatterDigestibility: realNumber(0.59),
+          liveweight: mass('Liveweight', 63),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.58),
+          liveweight: mass('Liveweight', 60),
+        },
+      },
+      wethers: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.51),
+          liveweight: mass('Liveweight', 50),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.2),
+          dryMatterDigestibility: realNumber(0.59),
+          liveweight: mass('Liveweight', 55),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.58),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      maidenEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.51),
+          liveweight: mass('Liveweight', 35),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 40),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.2),
+          dryMatterDigestibility: realNumber(0.59),
+          liveweight: mass('Liveweight', 40),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.58),
+          liveweight: mass('Liveweight', 35),
+        },
+      },
+      breedingEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.51),
+          liveweight: mass('Liveweight', 40),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 45),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.2),
+          dryMatterDigestibility: realNumber(0.59),
+          liveweight: mass('Liveweight', 45),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.58),
+          liveweight: mass('Liveweight', 42),
+        },
+      },
+      otherEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.51),
+          liveweight: mass('Liveweight', 45),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.2),
+          dryMatterDigestibility: realNumber(0.59),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.58),
+          liveweight: mass('Liveweight', 48),
+        },
+      },
+      lambsHoggets: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.51),
+          liveweight: mass('Liveweight', 20),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 25),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.2),
+          dryMatterDigestibility: realNumber(0.59),
+          liveweight: mass('Liveweight', 20),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.7),
+          dryMatterDigestibility: realNumber(0.58),
+          liveweight: mass('Liveweight', 25),
+        },
+      },
+    },
+    SA: {
+      rams: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 4),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 80),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 70),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 70),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 70),
+        },
+      },
+      wethers: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 4),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 70),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 65),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 60),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 60),
+        },
+      },
+      maidenEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 4),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 52),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 52),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 52),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 52),
+        },
+      },
+      breedingEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 4),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 55),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 55),
+        },
+      },
+      otherEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 4),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 55),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 55),
+        },
+      },
+      lambsHoggets: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 4),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 40),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 45),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 20),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.9),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 30),
+        },
+      },
+    },
+    TAS: {
+      rams: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 90),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 90),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.3),
+          dryMatterDigestibility: realNumber(0.67),
+          liveweight: mass('Liveweight', 75),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.8),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 75),
+        },
+      },
+      wethers: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 55),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.3),
+          dryMatterDigestibility: realNumber(0.67),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.8),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 45),
+        },
+      },
+      maidenEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 45),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 45),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.3),
+          dryMatterDigestibility: realNumber(0.67),
+          liveweight: mass('Liveweight', 45),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.8),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      breedingEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 50),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.3),
+          dryMatterDigestibility: realNumber(0.67),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.8),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 55),
+        },
+      },
+      otherEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 50),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.3),
+          dryMatterDigestibility: realNumber(0.67),
+          liveweight: mass('Liveweight', 50),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.8),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      lambsHoggets: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.75),
+          liveweight: mass('Liveweight', 14),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 2.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 24),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.3),
+          dryMatterDigestibility: realNumber(0.67),
+          liveweight: mass('Liveweight', 36),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.8),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 42),
+        },
+      },
+    },
+    WA: {
+      rams: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.5),
+          dryMatterDigestibility: realNumber(0.73),
+          liveweight: mass('Liveweight', 75),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 65),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.5),
+          liveweight: mass('Liveweight', 65),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.2),
+          dryMatterDigestibility: realNumber(0.76),
+          liveweight: mass('Liveweight', 65),
+        },
+      },
+      wethers: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.5),
+          dryMatterDigestibility: realNumber(0.73),
+          liveweight: mass('Liveweight', 60),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 55),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.5),
+          liveweight: mass('Liveweight', 48),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.2),
+          dryMatterDigestibility: realNumber(0.76),
+          liveweight: mass('Liveweight', 48),
+        },
+      },
+      maidenEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.5),
+          dryMatterDigestibility: realNumber(0.73),
+          liveweight: mass('Liveweight', 50),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 45),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 40),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.2),
+          dryMatterDigestibility: realNumber(0.76),
+          liveweight: mass('Liveweight', 45),
+        },
+      },
+      breedingEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.5),
+          dryMatterDigestibility: realNumber(0.73),
+          liveweight: mass('Liveweight', 55),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 45),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.2),
+          dryMatterDigestibility: realNumber(0.76),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      otherEwes: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.5),
+          dryMatterDigestibility: realNumber(0.73),
+          liveweight: mass('Liveweight', 55),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 50),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.5),
+          liveweight: mass('Liveweight', 45),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.2),
+          dryMatterDigestibility: realNumber(0.76),
+          liveweight: mass('Liveweight', 50),
+        },
+      },
+      lambsHoggets: {
+        spring: {
+          dryMatterAvailability: massPerArea('DryMatter', 3.5),
+          dryMatterDigestibility: realNumber(0.73),
+          liveweight: mass('Liveweight', 30),
+        },
+        summer: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.5),
+          dryMatterDigestibility: realNumber(0.55),
+          liveweight: mass('Liveweight', 30),
+        },
+        autumn: {
+          dryMatterAvailability: massPerArea('DryMatter', 0.7),
+          dryMatterDigestibility: realNumber(0.7),
+          liveweight: mass('Liveweight', 10),
+        },
+        winter: {
+          dryMatterAvailability: massPerArea('DryMatter', 1.2),
+          dryMatterDigestibility: realNumber(0.76),
+          liveweight: mass('Liveweight', 20),
+        },
+      },
+    },
+  },
+
+  FEED_ADJUSTMENT: realNumber(1.3),
+};
+
+export const lulucfConstants: LULUCFConstants = {
+  name: 'LULUCF',
+
+  ORGANIC_STOCK_LOSS_FACTORS: {
+    'Arnhem Coast': tonnesCarbonPerHectare(-0.12),
+    'Arnhem Plateau': tonnesCarbonPerHectare(-0.39),
+    'Australian Alps': tonnesCarbonPerHectare(-0.09),
+    'Avon Wheatbelt': tonnesCarbonPerHectare(-0.09),
+    'Brigalow Belt North': tonnesCarbonPerHectare(-0.13),
+    'Brigalow Belt South': tonnesCarbonPerHectare(-0.13),
+    'Ben Lomond': tonnesCarbonPerHectare(-0.55),
+    'Broken Hill Complex': tonnesCarbonPerHectare(-0.01),
+    'Burt Plain': tonnesCarbonPerHectare(-0.07),
+    Carnarvon: tonnesCarbonPerHectare(-0.06),
+    'Central Arnhem': tonnesCarbonPerHectare(-0.09),
+    'Central Kimberley': tonnesCarbonPerHectare(-0.19),
+    'Central Ranges': tonnesCarbonPerHectare(-0.13),
+    'Channel Country': tonnesCarbonPerHectare(-0.04),
+    'Central Mackay Coast': tonnesCarbonPerHectare(-0.4),
+    Coolgardie: tonnesCarbonPerHectare(-0.09),
+    'Cobar Peneplain': tonnesCarbonPerHectare(0),
+    'Cape York Peninsula': tonnesCarbonPerHectare(-0.44),
+    'Daly Basin': tonnesCarbonPerHectare(-0.21),
+    'Darwin Coastal': tonnesCarbonPerHectare(-0.21),
+    Dampierland: tonnesCarbonPerHectare(0),
+    'Desert Uplands': tonnesCarbonPerHectare(-0.04),
+    'Davenport Murchison Ranges': tonnesCarbonPerHectare(-0.07),
+    'Darling Riverine Plains': tonnesCarbonPerHectare(-0.04),
+    'Einasleigh Uplands': tonnesCarbonPerHectare(-0.24),
+    'Esperance Plains': tonnesCarbonPerHectare(-0.17),
+    'Eyre Yorke Block': tonnesCarbonPerHectare(-0.03),
+    Finke: tonnesCarbonPerHectare(-0.06),
+    'Flinders Lofty Block': tonnesCarbonPerHectare(-0.02),
+    Furneaux: tonnesCarbonPerHectare(-0.43),
+    Gascoyne: tonnesCarbonPerHectare(-0.14),
+    Gawler: tonnesCarbonPerHectare(0),
+    'Geraldton Sandplains': tonnesCarbonPerHectare(-0.12),
+    'Gulf Fall and Uplands': tonnesCarbonPerHectare(-0.13),
+    'Gibson Desert': tonnesCarbonPerHectare(-0.16),
+    'Great Sandy Desert': tonnesCarbonPerHectare(-0.09),
+    'Gulf Coastal': tonnesCarbonPerHectare(0),
+    'Gulf Plains': tonnesCarbonPerHectare(-0.04),
+    'Great Victoria Desert': tonnesCarbonPerHectare(-0.03),
+    Hampton: tonnesCarbonPerHectare(-0.14),
+    'Jarrah Forest': tonnesCarbonPerHectare(-0.31),
+    Kanmantoo: tonnesCarbonPerHectare(-0.23),
+    King: tonnesCarbonPerHectare(-0.17),
+    'Little Sandy Desert': tonnesCarbonPerHectare(-0.17),
+    'MacDonnell Ranges': tonnesCarbonPerHectare(-0.08),
+    Mallee: tonnesCarbonPerHectare(-0.11),
+    'Murray Darling Depression': tonnesCarbonPerHectare(0),
+    'Mitchell Grass Downs': tonnesCarbonPerHectare(-0.02),
+    'Mount Isa Inlier': tonnesCarbonPerHectare(-0.08),
+    'Mulga Lands': tonnesCarbonPerHectare(-0.06),
+    Murchison: tonnesCarbonPerHectare(-0.12),
+    Nandewar: tonnesCarbonPerHectare(-0.07),
+    'Naracoorte Coastal Plain': tonnesCarbonPerHectare(-0.13),
+    'New England Tablelands': tonnesCarbonPerHectare(0),
+    'NSW North Coast': tonnesCarbonPerHectare(-0.24),
+    'Northern Kimberley': tonnesCarbonPerHectare(-0.32),
+    'NSW South Western Slopes': tonnesCarbonPerHectare(0),
+    Nullarbor: tonnesCarbonPerHectare(0),
+    'Ord Victoria Plain': tonnesCarbonPerHectare(-0.1),
+    'Pine Creek': tonnesCarbonPerHectare(-0.33),
+    Pilbara: tonnesCarbonPerHectare(0),
+    Riverina: tonnesCarbonPerHectare(-0.05),
+    'South East Coastal Plain': tonnesCarbonPerHectare(-0.26),
+    'South East Corner': tonnesCarbonPerHectare(-0.26),
+    'South Eastern Highlands': tonnesCarbonPerHectare(-0.03),
+    'South Eastern Queensland': tonnesCarbonPerHectare(-0.37),
+    'Simpson Strzelecki Dunefields': tonnesCarbonPerHectare(-0.01),
+    'Stony Plains': tonnesCarbonPerHectare(-0.03),
+    'Sturt Plateau': tonnesCarbonPerHectare(-0.1),
+    'Southern Volcanic Plain': tonnesCarbonPerHectare(-0.25),
+    'Swan Coastal Plain': tonnesCarbonPerHectare(-0.27),
+    'Sydney Basin': tonnesCarbonPerHectare(-0.18),
+    Tanami: tonnesCarbonPerHectare(-0.12),
+    'Tasmanian Central Highlands': tonnesCarbonPerHectare(-0.22),
+    'Tiwi Cobourg': tonnesCarbonPerHectare(-0.2),
+    'Tasmanian Northern Midlands': tonnesCarbonPerHectare(-0.18),
+    'Tasmanian Northern Slopes': tonnesCarbonPerHectare(-0.4),
+    'Tasmanian South East': tonnesCarbonPerHectare(-0.21),
+    'Tasmanian Southern Ranges': tonnesCarbonPerHectare(-0.39),
+    'Tasmanian West': tonnesCarbonPerHectare(-0.69),
+    'Victoria Bonaparte': tonnesCarbonPerHectare(0),
+    'Victorian Midlands': tonnesCarbonPerHectare(-0.07),
+    Warren: tonnesCarbonPerHectare(-0.57),
+    'Wet Tropics': tonnesCarbonPerHectare(-0.67),
+    Yalgoo: tonnesCarbonPerHectare(-0.05),
+  },
+
+  CARBON_TO_NITROGEN_RATIO: massPerMass('Carbon', 'N', 18),
+
+  EF_CROP: {
+    high: massPerMass('N2O', 'N', 0.008),
+    low: massPerMass('N2O', 'N', 0.0029),
+  },
+  EF_PASTURE: massPerMass('N2O', 'N', 0.0018),
+
+  WOODY_PERENNIAL_CROPS_FULL: {
+    Oranges: {
+      BAMc: tonnesCarbonPerHectare(5),
+      Mc: years(10),
+      BARc: tonnesCarbonPerHectarePerYear(0.5),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(417)),
+    },
+    Macadamias: {
+      BAMc: tonnesCarbonPerHectare(12.3),
+      Mc: years(15),
+      BARc: tonnesCarbonPerHectarePerYear(0.82),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(312)),
+    },
+    Almonds: {
+      BAMc: tonnesCarbonPerHectare(9.6),
+      Mc: years(8),
+      BARc: tonnesCarbonPerHectarePerYear(1.2),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(222)),
+    },
+    Apples: {
+      BAMc: tonnesCarbonPerHectare(4.9),
+      Mc: years(7),
+      BARc: tonnesCarbonPerHectarePerYear(0.7),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(1500)),
+    },
+    Peaches: {
+      BAMc: tonnesCarbonPerHectare(5.2),
+      Mc: years(4),
+      BARc: tonnesCarbonPerHectarePerYear(1.3),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(740)),
+    },
+    Olives: {
+      BAMc: tonnesCarbonPerHectare(6.7),
+      Mc: years(10),
+      BARc: tonnesCarbonPerHectarePerYear(0.67),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(250)),
+    },
+    Avocados: {
+      BAMc: tonnesCarbonPerHectare(6.0),
+      Mc: years(10),
+      BARc: tonnesCarbonPerHectarePerYear(0.6),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(210)),
+    },
+    Mangoes: {
+      BAMc: tonnesCarbonPerHectare(13.0),
+      Mc: years(10),
+      BARc: tonnesCarbonPerHectarePerYear(1.3),
+      STEM_DENSITY: countPerArea('Trees', perHectareToPerSqMetre(185)),
+    },
+  },
+  WOODY_PERENNIAL_CROPS_PARTIAL: {
+    Grapes: {
+      BAMc: tonnesCarbonPerHectare(1.2),
+      Mc: years(4),
+      BARc: tonnesCarbonPerHectarePerYear(0.3),
+    },
+    Kiwifruits: {
+      BAMc: tonnesCarbonPerHectare(1.5),
+      Mc: years(5),
+      BARc: tonnesCarbonPerHectarePerYear(0.3),
+    },
+  },
 };

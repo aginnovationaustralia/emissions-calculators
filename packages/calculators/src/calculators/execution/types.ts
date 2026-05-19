@@ -1,4 +1,4 @@
-import { AllConstants } from '@/constants';
+import { AllConstants } from '@/constants/types';
 
 export type MetricsProperties = {
   calculator: string;

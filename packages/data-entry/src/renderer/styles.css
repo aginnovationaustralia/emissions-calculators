@@ -1,0 +1,537 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  font-size: 14px;
+}
+
+.app {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.app-status {
+  font-size: 0.875rem;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 400px;
+}
+
+.app-error {
+  padding: 0.5rem 0.75rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.toolbar-left {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toolbar-excel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.toolbar-excel-filename {
+  font-size: 0.875rem;
+  color: #6b7280;
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toolbar-sheet-select {
+  padding: 0.35rem 0.5rem;
+  font-size: 0.875rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  min-width: 8rem;
+}
+
+.toolbar-sheet-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.toolbar button {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.toolbar button:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+
+.toolbar button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.expression-paste {
+  margin-bottom: 1rem;
+}
+
+.expression-paste label {
+  display: block;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.expression-paste-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.expression-paste-textarea-wrap {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  min-height: 4.5rem;
+}
+
+.expression-paste-highlight {
+  position: absolute;
+  inset: 0;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow: auto;
+  pointer-events: none;
+  color: #111;
+}
+
+.expression-paste-token {
+  color: inherit;
+  /* background: #166534; */
+  /* color: #166534; */
+  padding: 0 1px;
+  margin: 0 -1px;
+  border-radius: 2px;
+  text-decoration: underline;
+  text-underline-offset: 1px;
+}
+
+.expression-paste-merge {
+  background: #fdba74;
+  color: #431407;
+  padding: 0 1px;
+  margin: 0 -1px;
+  border-radius: 2px;
+}
+
+.expression-paste-input {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 4.5rem;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  line-height: 1.4;
+  border: none;
+  border-radius: 4px;
+  resize: vertical;
+  background: transparent;
+  color: transparent;
+  caret-color: #111;
+}
+
+.expression-paste-input::placeholder {
+  color: #999;
+}
+
+.expression-paste-input:focus {
+  outline: none;
+}
+
+.expression-paste-line-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.expression-paste-line-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.expression-paste-line-input {
+  width: 4rem;
+  padding: 0.35rem 0.4rem;
+  font-size: 0.8125rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.expression-paste-line-input:focus {
+  outline: none;
+  border-color: #888;
+}
+
+.expression-paste-line-input::placeholder {
+  color: #9ca3af;
+}
+
+.expression-paste-tokens-panel {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.8125rem;
+  background: #f8faf8;
+  border: 1px solid #e5e7e5;
+  border-radius: 4px;
+  color: #374151;
+}
+
+.expression-paste-tokens-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.expression-paste-tokens-row + .expression-paste-tokens-row {
+  margin-top: 0.25rem;
+}
+
+.expression-paste-tokens-label {
+  font-weight: 500;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.expression-paste-tokens-list {
+  color: #374151;
+  min-width: 0;
+}
+
+.expression-paste button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  white-space: nowrap;
+}
+
+.expression-paste button:hover {
+  background: #f5f5f5;
+}
+
+.app-main {
+  flex: 1;
+  overflow: auto;
+}
+
+.records-grid-wrap {
+  overflow: auto;
+}
+
+.records-grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.records-grid th,
+.records-grid td {
+  border: 1px solid #e5e5e5;
+  padding: 0.25rem 0.4rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* Name cells for rows referenced by the focused expression (see RecordsGrid). */
+.records-grid td.cell-name-expression-dep {
+  box-shadow: inset 0 0 0 2px #166534;
+}
+
+.records-grid th {
+  background: #fafafa;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+}
+
+.records-grid input,
+.records-grid select {
+  width: 100%;
+  min-width: 60px;
+  padding: 0.2rem 0.35rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+.records-grid input:focus,
+.records-grid select:focus {
+  outline: none;
+  border-color: #888;
+}
+
+.records-grid input.cell-disabled,
+.records-grid select.cell-disabled {
+  background: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.cell-symbol {
+  font-weight: 500;
+  min-width: 100px;
+}
+
+.cell-symbol-complete {
+  background: #86efac;
+}
+
+.cell-symbol-complete .cell-symbol-input {
+  background: transparent;
+}
+
+.cell-symbol-complete .cell-symbol-input:focus {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.records-grid .col-order {
+  width: 1%;
+  white-space: nowrap;
+  padding: 0.2rem 0.35rem;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.records-grid .col-expression {
+  min-width: 280px;
+  width: 30%;
+}
+
+.expression-cell-wrap {
+  position: relative;
+  min-width: 0;
+}
+
+.expression-cell-highlight {
+  position: absolute;
+  inset: 0;
+  padding: 0.2rem 0.35rem;
+  font-size: 0.8125rem;
+  font-family: inherit;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow: auto;
+  pointer-events: none;
+  color: #111;
+}
+
+.expression-cell-token {
+  color: inherit;
+  background: #166534;
+  color: #f0fdf4;
+  padding: 0 1px;
+  border-radius: 2px;
+  text-decoration: underline;
+  text-underline-offset: 1px;
+}
+
+.expression-cell-input {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 2.5em;
+  max-height: 8em;
+  padding: 0.2rem 0.35rem;
+  font-size: 0.8125rem;
+  font-family: inherit;
+  line-height: 1.4;
+  border: none;
+  border-radius: 2px;
+  resize: none;
+  background: transparent;
+  color: transparent;
+  caret-color: #111;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow-y: auto;
+}
+
+.expression-cell-wrap.expression-cell-disabled .expression-cell-highlight {
+  visibility: hidden;
+}
+
+.expression-cell-wrap.expression-cell-disabled .expression-cell-input {
+  color: #999;
+}
+
+.records-grid .col-line {
+  width: 80px;
+  max-width: 100px;
+}
+
+.records-grid .col-method2 {
+  width: 1%;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.records-grid .col-method2 input[type='checkbox'] {
+  width: auto;
+  min-width: 0;
+  margin: 0 auto;
+  display: block;
+  cursor: pointer;
+}
+
+.row-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  cursor: grab;
+  color: #888;
+  border-radius: 2px;
+  user-select: none;
+}
+
+.row-drag-handle:active {
+  cursor: grabbing;
+}
+
+.row-drag-handle:hover {
+  color: #555;
+  background: #f0f0f0;
+}
+
+.row-drag-handle-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+}
+
+.row-drag-bar {
+  display: block;
+  width: 10px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+.btn-export {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border: 1px solid #e5e5e5;
+  border-radius: 2px;
+  background: #fff;
+  white-space: nowrap;
+  margin-right: 0.35rem;
+}
+
+.btn-export:hover:not(:disabled) {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+.btn-export:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-remove {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border: 1px solid #e5e5e5;
+  border-radius: 2px;
+  background: #fff;
+  white-space: nowrap;
+}
+
+.btn-remove:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.records-empty {
+  color: #666;
+  font-size: 0.875rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.records-grid-actions {
+  margin-top: 0.75rem;
+  padding: 0 0.25rem;
+}
+
+.records-new-record-btn {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8125rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.records-new-record-btn:hover {
+  background: #f5f5f5;
+  border-color: #999;
+}

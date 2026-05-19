@@ -1,0 +1,2 @@
+# ODS spreadsheets: extract content.xml for readable git diff
+*.ods diff=ods

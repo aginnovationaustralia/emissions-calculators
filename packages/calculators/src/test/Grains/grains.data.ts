@@ -1,174 +1,349 @@
-import { GrainsCrop } from '@/types/Grains/crop.input';
-import { GrainsInput } from '@/types/Grains/input';
-import { veg1, veg2, veg3, veg4 } from './vegetation.data';
+import { GrainsCrop, GrainsInput } from '@/calculators/Grains/types';
 
 export const grainWheat: GrainsCrop = {
   type: 'Wheat',
   state: 'nsw',
-  productionSystem: 'Non-irrigated crop',
-  averageGrainYield: 3,
+  averageYield: 3,
   areaSown: 1000,
-  nonUreaNitrogen: 2,
-  ureaApplication: 50,
-  ureaAmmoniumNitrate: 5,
-  phosphorusApplication: 20,
-  potassiumApplication: 0,
-  sulfurApplication: 0,
   rainfallAbove600: true,
   fractionOfAnnualCropBurnt: 1,
-  herbicideUse: 8.5,
-  glyphosateOtherHerbicideUse: 3.6,
   electricityAllocation: 0.2,
   limestone: 500,
   limestoneFraction: 1,
-  dieselUse: 200,
-  petrolUse: 500,
-  lpg: 100,
+  dolomiteFraction: 0,
+  chemicals: [
+    {
+      type: 'Herbicide (paraquat, diquat, glyphosate)',
+      amountKg: 8.5,
+    },
+    {
+      type: 'Other herbicide',
+      amountKg: 3.6,
+    },
+  ],
+  refrigerants: [],
+  inorganicFertilisers: {
+    productionSystem: 'Non-irrigated crops',
+    applications: [
+      {
+        massAppliedKg: 100,
+        fertiliserType: 'Urea',
+        calculationMethodScope3: '1',
+      },
+    ],
+    calculationMethodScope1: '1',
+  },
+  organicFertilisers: {
+    applications: [],
+  },
+  isInLeachingZone: true,
+  transportFuel: [
+    {
+      amountLitres: 1000,
+      vehicleType: 'Cars and light commercial vehicles',
+      fuelType: 'Diesel oil',
+    },
+  ],
+  stationaryFuel: [
+    {
+      fuelClass: 'Liquid fuels',
+      fuelType: 'Automotive gasoline/petrol',
+      amountLitres: 12000,
+    },
+  ],
+  cropResidues: {
+    calculationMethod: '1',
+  },
+  services: [],
+  waste: {
+    solidWaste: {
+      landfill: [],
+      incineration: [],
+      composting: [],
+      anaerobicDigestion: [],
+    },
+    offsiteManure: [],
+  },
 };
 
 export const grainSorghum: GrainsCrop = {
   type: 'Sorghum',
   state: 'nsw',
-  productionSystem: 'Non-irrigated crop',
-  averageGrainYield: 2.5,
+  isInLeachingZone: false,
+  averageYield: 2.5,
   areaSown: 200,
-  nonUreaNitrogen: 0,
-  ureaApplication: 40,
-  ureaAmmoniumNitrate: 10,
-  phosphorusApplication: 20,
-  potassiumApplication: 0,
-  sulfurApplication: 2,
   rainfallAbove600: false,
   fractionOfAnnualCropBurnt: 0.5,
-  herbicideUse: 4.25,
-  glyphosateOtherHerbicideUse: 10.8,
   electricityAllocation: 0.4,
   limestone: 100,
   limestoneFraction: 1,
-  dieselUse: 500,
-  petrolUse: 250,
-  lpg: 110,
+  dolomiteFraction: 0,
+  chemicals: [
+    {
+      type: 'Herbicide (paraquat, diquat, glyphosate)',
+      amountKg: 4.25,
+    },
+    {
+      type: 'Other herbicide',
+      amountKg: 10.8,
+    },
+  ],
+  refrigerants: [],
+  inorganicFertilisers: {
+    productionSystem: 'Non-irrigated crops',
+    applications: [],
+    calculationMethodScope1: '1',
+  },
+  organicFertilisers: {
+    applications: [],
+  },
+  transportFuel: [],
+  stationaryFuel: [],
+  cropResidues: {
+    calculationMethod: '1',
+  },
+  services: [],
+  waste: {
+    solidWaste: {
+      landfill: [],
+      incineration: [],
+      composting: [],
+      anaerobicDigestion: [],
+    },
+    offsiteManure: [],
+  },
 };
 
 export const grainLegume: GrainsCrop = {
   type: 'Other legume',
   state: 'nsw',
-  productionSystem: 'Irrigated crop',
-  averageGrainYield: 2,
+  isInLeachingZone: false,
+  averageYield: 2,
   areaSown: 500,
-  nonUreaNitrogen: 0,
-  ureaApplication: 20,
-  ureaAmmoniumNitrate: 5,
-  phosphorusApplication: 20,
-  potassiumApplication: 0,
-  sulfurApplication: 0,
   rainfallAbove600: false,
   fractionOfAnnualCropBurnt: 0,
-  herbicideUse: 2.12,
-  glyphosateOtherHerbicideUse: 3.6,
   electricityAllocation: 0.2,
   limestone: 250,
   limestoneFraction: 1,
-  dieselUse: 600,
-  petrolUse: 400,
-  lpg: 120,
+  dolomiteFraction: 0,
+  chemicals: [
+    {
+      type: 'Herbicide (paraquat, diquat, glyphosate)',
+      amountKg: 2.12,
+    },
+    {
+      type: 'Other herbicide',
+      amountKg: 3.6,
+    },
+  ],
+  refrigerants: [],
+  inorganicFertilisers: {
+    productionSystem: 'Irrigated crop',
+    applications: [],
+    calculationMethodScope1: '1',
+  },
+  organicFertilisers: {
+    applications: [],
+  },
+  transportFuel: [],
+  stationaryFuel: [],
+  cropResidues: {
+    calculationMethod: '1',
+  },
+  services: [],
+  waste: {
+    solidWaste: {
+      landfill: [],
+      incineration: [],
+      composting: [],
+      anaerobicDigestion: [],
+    },
+    offsiteManure: [],
+  },
 };
 
 export const grainGrass: GrainsCrop = {
   type: 'Annual grass',
   state: 'nsw',
-  productionSystem: 'Non-irrigated crop',
-  averageGrainYield: 6,
+  isInLeachingZone: false,
+  averageYield: 6,
   areaSown: 800,
-  nonUreaNitrogen: 0,
-  ureaApplication: 30,
-  ureaAmmoniumNitrate: 12,
-  phosphorusApplication: 20,
-  potassiumApplication: 3,
-  sulfurApplication: 0,
   rainfallAbove600: false,
   fractionOfAnnualCropBurnt: 0,
-  herbicideUse: 4.25,
-  glyphosateOtherHerbicideUse: 18,
   electricityAllocation: 0.1,
   limestone: 400,
   limestoneFraction: 1,
-  dieselUse: 150,
-  petrolUse: 100,
-  lpg: 130,
+  dolomiteFraction: 0,
+  chemicals: [
+    {
+      type: 'Herbicide (paraquat, diquat, glyphosate)',
+      amountKg: 4.25,
+    },
+    {
+      type: 'Other herbicide',
+      amountKg: 18,
+    },
+  ],
+  refrigerants: [],
+  inorganicFertilisers: {
+    productionSystem: 'Non-irrigated crops',
+    applications: [],
+    calculationMethodScope1: '1',
+  },
+  organicFertilisers: {
+    applications: [],
+  },
+  transportFuel: [],
+  stationaryFuel: [],
+  cropResidues: {
+    calculationMethod: '1',
+  },
+  services: [],
+  waste: {
+    solidWaste: {
+      landfill: [],
+      incineration: [],
+      composting: [],
+      anaerobicDigestion: [],
+    },
+    offsiteManure: [],
+  },
 };
 
 export const grainTriticale: GrainsCrop = {
   type: 'Triticale',
   state: 'nsw',
-  productionSystem: 'Non-irrigated crop',
-  averageGrainYield: 4,
+  isInLeachingZone: false,
+  averageYield: 4,
   areaSown: 300,
-  nonUreaNitrogen: 0,
-  ureaApplication: 50,
-  ureaAmmoniumNitrate: 15,
-  phosphorusApplication: 20,
-  potassiumApplication: 4,
-  sulfurApplication: 4,
   rainfallAbove600: false,
   fractionOfAnnualCropBurnt: 0,
-  herbicideUse: 8.5,
-  glyphosateOtherHerbicideUse: 5.4,
   electricityAllocation: 0.1,
   limestone: 150,
   limestoneFraction: 1,
-  dieselUse: 50,
-  petrolUse: 250,
-  lpg: 140,
+  dolomiteFraction: 0,
+  chemicals: [
+    {
+      type: 'Herbicide (paraquat, diquat, glyphosate)',
+      amountKg: 8.5,
+    },
+    {
+      type: 'Other herbicide',
+      amountKg: 5.4,
+    },
+  ],
+  refrigerants: [],
+  inorganicFertilisers: {
+    productionSystem: 'Non-irrigated crops',
+    applications: [],
+    calculationMethodScope1: '1',
+  },
+  organicFertilisers: {
+    applications: [],
+  },
+  transportFuel: [],
+  stationaryFuel: [],
+  cropResidues: {
+    calculationMethod: '1',
+  },
+  services: [],
+  waste: {
+    solidWaste: {
+      landfill: [],
+      incineration: [],
+      composting: [],
+      anaerobicDigestion: [],
+    },
+    offsiteManure: [],
+  },
 };
 
 export const grainsTestData: GrainsInput = {
   crops: [grainWheat, grainSorghum, grainLegume, grainGrass, grainTriticale],
-  electricityUse: 4000,
-  electricityRenewable: 0,
+  electricity: {
+    method: 'location',
+    electricityPurchasedKWh: 4000,
+  },
   state: 'nsw',
-  vegetation: [veg1, veg2, veg3, veg4],
 };
 
 export const grainsTestData102: GrainsInput = {
   state: 'nsw',
-  electricityRenewable: 0,
-  electricityUse: 2650,
+  electricity: {
+    method: 'location',
+    electricityPurchasedKWh: 2650,
+  },
   crops: [
     {
       type: 'Hops',
       state: 'nsw',
-      productionSystem: 'Non-irrigated crop',
-      averageGrainYield: 2.5,
+      isInLeachingZone: false,
+      averageYield: 2.5,
       areaSown: 180,
-      nonUreaNitrogen: 6.5,
-      ureaApplication: 350,
-      ureaAmmoniumNitrate: 100,
-      phosphorusApplication: 19.515,
-      potassiumApplication: 0,
-      sulfurApplication: 6.6,
       rainfallAbove600: false,
       fractionOfAnnualCropBurnt: 0.1,
-      herbicideUse: 54.504,
-      glyphosateOtherHerbicideUse: 0,
       electricityAllocation: 1,
       limestone: 360,
       limestoneFraction: 0.5,
-      dieselUse: 6352,
-      petrolUse: 0,
-      lpg: 100,
-    },
-  ],
-  vegetation: [
-    {
-      vegetation: {
-        region: 'Central Wheat Belt',
-        treeSpecies: 'Mixed species (Environmental Plantings)',
-        soil: 'Coloured Sands',
-        area: 22,
-        age: 7,
+      dolomiteFraction: 0.5,
+      chemicals: [
+        {
+          type: 'Herbicide (paraquat, diquat, glyphosate)',
+          amountKg: 54.504,
+        },
+        {
+          type: 'Other herbicide',
+          amountKg: 100,
+        },
+      ],
+      refrigerants: [
+        {
+          refrigerant: 'HCFC-141b (R-141b)',
+          chargeSize: 100,
+          refrigerationType: 'Domestic refrigerators',
+        },
+      ],
+      inorganicFertilisers: {
+        productionSystem: 'Non-irrigated crops',
+        applications: [
+          {
+            fertiliserType: 'Urea',
+            massAppliedKg: 100,
+            calculationMethodScope3: '1',
+          },
+        ],
+        calculationMethodScope1: '1',
       },
-      allocationToCrops: [1],
+      organicFertilisers: {
+        applications: [],
+      },
+      transportFuel: [],
+      stationaryFuel: [],
+      cropResidues: {
+        calculationMethod: '1',
+      },
+      services: [],
+      waste: {
+        solidWaste: {
+          landfill: [],
+          incineration: [],
+          composting: [],
+          anaerobicDigestion: [],
+        },
+        offsiteManure: [],
+      },
     },
   ],
+  // vegetation: [
+  //   {
+  //     vegetation: {
+  //       region: 'Central Wheat Belt',
+  //       treeSpecies: 'Mixed species (Environmental Plantings)',
+  //       soil: 'Coloured Sands',
+  //       area: 22,
+  //       age: 7,
+  //     },
+  //     allocationToCrops: [1],
+  //   },
+  // ],
 };
