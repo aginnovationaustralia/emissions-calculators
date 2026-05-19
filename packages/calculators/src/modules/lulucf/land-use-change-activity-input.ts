@@ -9,10 +9,10 @@ import { object } from '@/types/schemas';
 import { z } from 'zod';
 
 export const LandUseChangeActivityBaseInputSchema = object({
-  activityArea: z
+  activityAreaHectares: z
     .number()
     .min(0)
-    .meta({ description: 'Area of the activity' })
+    .meta({ description: 'Area of the activity in hectares' })
     .transform((val) =>
       input('ActivityArea', area(hectaresToSquareMetres(val))),
     ),
@@ -68,27 +68,6 @@ export const LandUseChangeActivityBaseInputSchema = object({
         massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
       ),
     ),
-  ghgMassFromBiomassBurningPerHectare: z
-    .number()
-    .min(0)
-    .meta({
-      description:
-        'GHG mass per hectare from biomass burning. Derived from FullCAM output.',
-    })
-    .transform((val) =>
-      input(
-        'Eg,i,j,y',
-        massPerArea('CO2e', tonnesPerHectareToKgPerSquareMetres(val)),
-      ),
-    ),
-
-  areaBurnt: z
-    .number()
-    .min(0)
-    .meta({
-      description: 'Area burnt. Derived from FullCAM output.',
-    })
-    .transform((val) => input('ag,i,j,y', area(hectaresToSquareMetres(val)))),
 });
 
 const LandUseLandClearingBaseInputSchema =
@@ -96,6 +75,41 @@ const LandUseLandClearingBaseInputSchema =
     region: z.enum(IBRA7Regions).meta({
       description: 'IBRA7 region of the activity area',
     }),
+
+    massCH4FromBiomassBurningPerHectare: z
+      .number()
+      .min(0)
+      .meta({
+        description:
+          'Mass CH4 per hectare from biomass burning. Derived from FullCAM output.',
+      })
+      .transform((val) =>
+        input(
+          'Eg=ch4,i,j,y',
+          massPerArea('CH4', tonnesPerHectareToKgPerSquareMetres(val)),
+        ),
+      ),
+    massN2OFromBiomassBurningPerHectare: z
+      .number()
+      .min(0)
+      .meta({
+        description:
+          'Mass N2O per hectare from biomass burning. Derived from FullCAM output.',
+      })
+      .transform((val) =>
+        input(
+          'Eg=n2o,i,j,y',
+          massPerArea('N2O', tonnesPerHectareToKgPerSquareMetres(val)),
+        ),
+      ),
+
+    areaBurnt: z
+      .number()
+      .min(0)
+      .meta({
+        description: 'Area burnt. Derived from FullCAM output.',
+      })
+      .transform((val) => input('ag,i,j,y', area(hectaresToSquareMetres(val)))),
   });
 
 const ForestryActivityBaseInputSchema =
@@ -157,9 +171,9 @@ const RevegetationByPlantingInputSchema =
     number: 4 as const,
   }));
 
-const HumanInducedNationalRegenerationInputSchema =
+const HumanInducedNaturalRegenerationInputSchema =
   LandUseChangeActivityBaseInputSchema.extend({
-    type: z.literal('humanInducedNationalRegeneration'),
+    type: z.literal('humanInducedNaturalRegeneration'),
   }).transform((val) => ({
     ...val,
     number: 5 as const,
@@ -184,7 +198,7 @@ export const LandUseChangeActivityInputSchema = z.discriminatedUnion('type', [
   LandClearingForestToGrasslandInputSchema,
   LandClearingForestToSettlementsInputSchema,
   RevegetationByPlantingInputSchema,
-  HumanInducedNationalRegenerationInputSchema,
+  HumanInducedNaturalRegenerationInputSchema,
   FarmForestryInputSchema,
   PlantationForestryInputSchema,
 ]);
@@ -202,7 +216,7 @@ export type RevegetationByPlantingInputTransformed = z.output<
   typeof RevegetationByPlantingInputSchema
 >;
 export type HumanInducedNationalRegenerationInputTransformed = z.output<
-  typeof HumanInducedNationalRegenerationInputSchema
+  typeof HumanInducedNaturalRegenerationInputSchema
 >;
 export type FarmForestryInputTransformed = z.output<
   typeof FarmForestryInputSchema

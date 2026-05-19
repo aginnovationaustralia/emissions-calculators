@@ -44,14 +44,13 @@ const getCalculatorInput = (
   } as unknown as StationaryFuelInput;
 
   const fuelInput: FuelInput = {
-    naturalGas: 0,
     stationaryFuel: [stationaryFuelRecord],
     transportFuel: [],
   };
 
   const baseGrainsCrop: BaseGrainsCrop = {
     state,
-    areaSown: 0,
+    areaSown: 1,
     isInLeachingZone: false,
     electricityAllocation: 0,
   };

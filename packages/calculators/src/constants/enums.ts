@@ -402,7 +402,7 @@ export const ServiceByAreaTypes = [
   'Spraying, broadacre crop, pre & post-emergence, conventional',
   'Windrowing, broadacre crop, controlled traffic',
   'Windrowing, broadacre crop, conventional',
-];
+] as const;
 export type ServiceByAreaType = (typeof ServiceByAreaTypes)[number];
 
 export const ServiceByHourTypes = [

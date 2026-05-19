@@ -61,7 +61,6 @@ export const grainsInputData: GrainsInput = {
       services: [],
       transportFuel: [],
       stationaryFuel: [],
-      naturalGas: 0,
       rainfallAbove600: true,
       cropResidues: {
         calculationMethod: '1',

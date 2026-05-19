@@ -5,9 +5,9 @@ import { LandUseChangeActivityInputSchema } from './land-use-change-activity-inp
 import { PerennialCropInputSchema } from './perennial-crops-input';
 
 export const LULUCFInputSchema = object({
-  /* REVISIT: When we create full calculator inputs, we will probably want to move this input.
-  If we assume all LULUCF activity areas are within the activity boundary, this input should be added to all top level calculators.
-  We could also make it optional on a LULUCF activity to let the user enter areas outside the property.
+  /* REVISIT: We need to review the scope for location based fields like isInLeachingZone and rainfallAbove600.
+  When a cropping enterprise defines multiple crops, it seems necessary to accept leaching status per crop. Chapter 1 states a leaching zone is where "the land is irrigated (except drip irrigation)."
+  For livestock, should it also be per herd? And what about here for LULUCF, should it be per activity record, or per activity area, or inherited from the rest of the calculator inputs?
   */
   isInLeachingZone: z.boolean().meta({
     description: 'Whether the activity is in a leaching zone.',

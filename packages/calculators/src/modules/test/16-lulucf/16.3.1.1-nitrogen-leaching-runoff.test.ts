@@ -34,7 +34,7 @@ const getCalculatorInput = (
   }
 
   const region = checkIBRA7Region(cell(columnRegion));
-  const activityArea = Number(cell(columnActivityArea));
+  const activityAreaHectares = Number(cell(columnActivityArea));
   const rainfallAbove600 = cell(columnRainfallAbove600) === 'yes';
 
   const clearingType = cell(columnClearingType);
@@ -52,10 +52,11 @@ const getCalculatorInput = (
     carbonMassInTreesPreviousYear: 0,
     carbonMassInDebrisCurrentYear: 0,
     carbonMassInDebrisPreviousYear: 0,
-    ghgMassFromBiomassBurningPerHectare: 0,
+    massCH4FromBiomassBurningPerHectare: 0,
+    massN2OFromBiomassBurningPerHectare: 0,
     region,
     areaBurnt: 0,
-    activityArea,
+    activityAreaHectares,
   };
 
   const lulucfInput: LULUCFInput = {
