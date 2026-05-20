@@ -678,6 +678,36 @@ export const PurchasedMineralSupplementTypes = [
 export type PurchasedMineralSupplementType =
   (typeof PurchasedMineralSupplementTypes)[number];
 
+/**
+ * REVISIT: Table A.1.8.1 is a complete table of methane conversion factors by
+ * MAT used across all livestock types, with 4 stated exceptions:
+ * - Drylot MCF is state based - 0.02 (NT) or 0.01 (Other States) - source NIR
+ * - Dairy daily spread - drains to paddock should apply liquid slurry MCFs - source NIR
+ * - Dairy pasture range and paddock is state based - 0.03 (QLD, NT) or 0.01 (Other States) - source NIR
+ * - Poultry and Swine pasture range and paddock should apply the drylot MCFs - source NIR
+ *
+ * These factors are currently spread across multiple sets of constants, ideally they should be kept in one place
+ * (on the shared Livestock constants) to prevent duplicates falling out of sync.
+ */
+export const AllManureManagementSystems = [
+  'Anaerobic lagoon',
+  'Liquid systems',
+  'Daily spread',
+  'Sump and dispersal',
+  'Drains to paddock',
+  'Solid storage',
+  'Drylot',
+  'Composting (passive windrow)',
+  'Digestor/Covered lagoon',
+  'Deep litter',
+  'Pit storage (<1 month)',
+  'Poultry manure with litter',
+  'Poultry manure without litter',
+  'Direct processing into pelletised fertiliser',
+  'Direct application',
+  'Pasture range and paddock',
+] as const;
+
 export const FeedlotMMSTypes = [
   'Dry lot (Feedpad)',
   'Solid Storage (Stockpile)',
@@ -754,6 +784,8 @@ export const PoultryMMS2Types = [
   'solidStorage',
   'composting',
   'digester',
+  // REVISIT: Deep litter is given as an option but none of the needed constants are supplied in the appendix.
+  // 'deepLitter',
   'directProcessing',
 ] as const;
 export type PoultryMMS2Type = (typeof PoultryMMS2Types)[number];
@@ -1298,12 +1330,14 @@ export const OtherLivestockTypes = [
 ] as const;
 export type OtherLivestockType = (typeof OtherLivestockTypes)[number];
 
-export const MeanAnnualTemperatures = [
+export const CoolMeanAnnualTemperatures = [
   '10 or below',
   '11',
   '12',
   '13',
   '14',
+] as const;
+export const TemperateMeanAnnualTemperatures = [
   '15',
   '16',
   '17',
@@ -1315,10 +1349,14 @@ export const MeanAnnualTemperatures = [
   '23',
   '24',
   '25',
-  '26',
-  '27',
-  '28 or above',
 ] as const;
+export const WarmMeanAnnualTemperatures = ['26', '27', '28 or above'] as const;
+export const MeanAnnualTemperatures = [
+  ...CoolMeanAnnualTemperatures,
+  ...TemperateMeanAnnualTemperatures,
+  ...WarmMeanAnnualTemperatures,
+] as const;
+
 export type MeanAnnualTemperature = (typeof MeanAnnualTemperatures)[number];
 export const SheepClasses = [
   'rams',

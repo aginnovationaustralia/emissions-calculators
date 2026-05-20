@@ -31,7 +31,7 @@ import {
   volumePerMass,
   years,
 } from '@/tools/units';
-import { State } from './enums';
+import { PureState, State } from './enums';
 import {
   BeefPastureConstants,
   CommonConstants,
@@ -2077,6 +2077,22 @@ export const dairyConstants: DairyConstants = {
   // }
 };
 
+const allPureStatesWithValue = (
+  rawValue: number,
+): Record<PureState, RealNumber> => {
+  const value = realNumber(rawValue);
+  return {
+    ACT: realNumber(rawValue),
+    NSW: realNumber(rawValue),
+    VIC: realNumber(rawValue),
+    QLD: realNumber(rawValue),
+    SA: realNumber(rawValue),
+    TAS: realNumber(rawValue),
+    NT: realNumber(rawValue),
+    WA: realNumber(rawValue),
+  };
+};
+
 export const poultryConstants: PoultryConstants = {
   name: 'POULTRY',
   CLASSES: {
@@ -2086,6 +2102,7 @@ export const poultryConstants: PoultryConstants = {
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.19),
       nitrogenRetentionRate: realNumber(0.35),
       manureAsh: realNumber(0.18),
+      emissionsPotential: volumePerMass('CH4', 'Volatile Solids', 0.39),
     },
     meatChickenGrowers: {
       dryMatterIntake: massPerHeadPerDay('DryMatter', 0.093),
@@ -2093,6 +2110,7 @@ export const poultryConstants: PoultryConstants = {
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.23),
       nitrogenRetentionRate: realNumber(0.47),
       manureAsh: realNumber(0.15),
+      emissionsPotential: volumePerMass('CH4', 'Volatile Solids', 0.36),
     },
     meatChickenBreeder: {
       dryMatterIntake: massPerHeadPerDay('DryMatter', 0.103),
@@ -2100,6 +2118,7 @@ export const poultryConstants: PoultryConstants = {
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.19),
       nitrogenRetentionRate: realNumber(0.32),
       manureAsh: realNumber(0.18),
+      emissionsPotential: volumePerMass('CH4', 'Volatile Solids', 0.36),
     },
     meatOther: {
       dryMatterIntake: massPerHeadPerDay('DryMatter', 0.093),
@@ -2107,6 +2126,7 @@ export const poultryConstants: PoultryConstants = {
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.23),
       nitrogenRetentionRate: realNumber(0.47),
       manureAsh: realNumber(0.15),
+      emissionsPotential: volumePerMass('CH4', 'Volatile Solids', 0.36),
     },
   },
 
@@ -2114,30 +2134,64 @@ export const poultryConstants: PoultryConstants = {
     manureWithLitter: {
       FracGASM: realNumber(0.3),
       EFm: realNumber(0.001),
+      fractionSolidsLost: realNumber(0.15),
+      METHANE_CONVERSION_FACTOR: {
+        byState: allPureStatesWithValue(0.015),
+      },
     },
     beltManureRemoval: {
       FracGASM: realNumber(0.05),
       EFm: realNumber(0.001),
+      fractionSolidsLost: realNumber(0.2),
+      METHANE_CONVERSION_FACTOR: {
+        byState: allPureStatesWithValue(0.015),
+      },
     },
     manureStoredInHouse: {
       FracGASM: realNumber(0.4),
       EFm: realNumber(0.02),
+      fractionSolidsLost: realNumber(0),
+      METHANE_CONVERSION_FACTOR: {
+        byState: allPureStatesWithValue(0.15),
+      },
     },
     solidStorage: {
       FracGASM: realNumber(0.2),
       EFm: realNumber(0.005),
+      METHANE_CONVERSION_FACTOR: {
+        byState: allPureStatesWithValue(0.02),
+      },
     },
     composting: {
       FracGASM: realNumber(0.2),
       EFm: realNumber(0.01),
+      METHANE_CONVERSION_FACTOR: {
+        byState: { ...allPureStatesWithValue(0.01), TAS: realNumber(0.005) },
+      },
     },
     directProcessing: {
       FracGASM: realNumber(0),
       EFm: realNumber(0),
+      METHANE_CONVERSION_FACTOR: {
+        byState: allPureStatesWithValue(0),
+      },
     },
     digester: {
       FracGASM: realNumber(0),
       EFm: realNumber(0),
+      METHANE_CONVERSION_FACTOR: {
+        byState: allPureStatesWithValue(0.1),
+      },
+    },
+    pastureRangeAndPaddock: {
+      EFm: realNumber(0.2),
+      METHANE_CONVERSION_FACTOR: {
+        byState: {
+          ...allPureStatesWithValue(0.1),
+          QLD: realNumber(0.3),
+          NT: realNumber(0.3),
+        },
+      },
     },
   },
 };

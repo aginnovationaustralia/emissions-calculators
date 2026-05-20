@@ -58,7 +58,10 @@ import {
   PerennialWoodyCropFull,
   PerennialWoodyCropPartial,
   PoultryClass,
-  PoultryMMSType,
+  PoultryMMS1Type,
+  PoultryMMS1TypeWithPasture,
+  PoultryMMS2Type,
+  PoultryMMS2TypeWithPasture,
   PurchasedFeedAquacultureType,
   PurchasedFeedLivestockRegionalType,
   PurchasedFeedLivestockRegionlessType,
@@ -436,16 +439,29 @@ type PoultryClassFactors = {
   crudeProtein: MassPerMass<'CrudeProtein', 'DryMatter'>;
   nitrogenRetentionRate: RealNumber;
   manureAsh: RealNumber;
+  emissionsPotential: VolumePerMass<'CH4', 'Volatile Solids'>;
 };
 
 type PoultryMMSFactors = {
   EFm: RealNumber; // MassPerMass<'N2O', 'N'>;
   FracGASM: RealNumber; // MassPerMass<'Volatilised N', 'N'>;
+  METHANE_CONVERSION_FACTOR: {
+    byState: Record<PureState, RealNumber>;
+    // byMAT: Record<MeanAnnualTemperature, RealNumber>;
+  };
 };
 
 export type PoultryConstants = NamedConstants & {
   CLASSES: Record<PoultryClass, PoultryClassFactors>;
-  MMS: Record<PoultryMMSType, PoultryMMSFactors>;
+  MMS: Record<
+    PoultryMMS1Type,
+    PoultryMMSFactors & { fractionSolidsLost: RealNumber }
+  > &
+    Record<PoultryMMS2Type, PoultryMMSFactors> &
+    Record<
+      Exclude<PoultryMMS1TypeWithPasture, PoultryMMS1Type>,
+      Pick<PoultryMMSFactors, 'EFm' | 'METHANE_CONVERSION_FACTOR'>
+    >;
 };
 
 type OtherLivestockFactors = {
@@ -495,6 +511,8 @@ export type LivestockConstants = NamedConstants & {
     OtherLivestockType,
     MassPerHead<'Liveweight'>
   >;
+
+  // MANURE_MANAGEMENT_METHANE_CONVERSION_FACTORS: {};
 
   METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE: Record<
     MeanAnnualTemperature,

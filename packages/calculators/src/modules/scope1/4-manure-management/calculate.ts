@@ -35,7 +35,7 @@ export function calculateMassOfNitrogenAppliedToSoils(
   if (livestockManureIsPoultry(manureInput)) {
     return calculateMassOfNitrogenAppliedToSoilsForPoultry(
       manureInput,
-      crop,
+      crop.isInLeachingZone,
       constants,
     );
   }
