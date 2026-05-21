@@ -385,9 +385,11 @@ const calculateManureManagementN2ODirectForHerd = (
 */
   const { AFi, AUi } = calculateExcretedNitrogenForHerd(input, herd, context);
   const wetOrDry = isWetClimateZone(input.climateZone) ? 'wet' : 'dry';
-  const EFPRP = selectConstant(constants.LIVESTOCK, 'EFPRP', wetOrDry).named(
-    `EFPRP ${wetOrDry}`,
-  );
+  const EFPRP = selectConstant(
+    constants.LIVESTOCK,
+    'EF_DEPOSITED_URINE_AND_DUNG_PRP',
+    wetOrDry,
+  ).named(`EFPRP ${wetOrDry}`);
 
   // const GWPN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC6').named(
   //   'GWPN2O',

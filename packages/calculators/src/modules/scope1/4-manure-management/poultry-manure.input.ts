@@ -9,7 +9,11 @@ import {
 import { object, proportion } from '@/types/schemas';
 import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
-import { MeanAnnualTemperatures } from '@/constants/enums';
+import {
+  GrazingProductionSystemsWithRainfall,
+  MeanAnnualTemperatures,
+  PureStates,
+} from '@/constants/enums';
 
 const createPoultryMMSAllocationInputSchema = <
   M extends '10' | '11a' | '11b' | '14',
@@ -79,30 +83,38 @@ const createPoultryManureClassInputSchema = <
         ),
       ),
 
-    temperatureZone: z
-      .literal(MeanAnnualTemperatures)
-      .optional()
-      .transform(mapOptional((val) => input(`i`, val)))
-      .meta({
-        description: 'Average annual temperature',
-      }),
-
     manureAllocation: object({
-      manureWithLitter: createPoultryMMSAllocationInputSchema(
-        '10',
-        'manure with litter',
-      ),
-      beltManureRemoval: createPoultryMMSAllocationInputSchema(
-        '11a',
-        'belt removal (without litter)',
-      ),
-      manureStoredInHouse: createPoultryMMSAllocationInputSchema(
-        '11b',
-        'in house storage (without litter)',
-      ),
-      pastureRangeAndPaddock: proportion(
-        'Fraction of manure stored in pasture range and paddock. There is no secondary system for manure treated this way.',
-      ).transform((val) => input(`MMSj=${j}m=14T=1`, realNumber(val))),
+      allocationStage1: object({
+        manureWithLitter: proportion(
+          'Fraction of all manure produced by this class initially stored/treated in a manure with litter system.',
+        ).transform((val) => input(`MMSj=${j}m=10T=1'`, realNumber(val))),
+        beltManureRemoval: proportion(
+          'Fraction of all manure produced by this class initially stored/treated in a belt-removal system.',
+        ).transform((val) => input(`MMSj=${j}m=11aT=1`, realNumber(val))),
+        manureStoredInHouse: proportion(
+          'Fraction of all manure produced by this class initially stored/treated in-house.',
+        ).transform((val) => input(`MMSj=${j}m=11bT=1`, realNumber(val))),
+        pastureRangeAndPaddock: proportion(
+          'Fraction of all manure produced by this class deposited directly onto pasture range/paddock. There is no secondary system for manure treated this way.',
+        ).transform((val) => input(`MMSj=${j}m=14T=1`, realNumber(val))),
+      }),
+      allocationStage2: object({
+        solidStorage: proportion(
+          `Fraction of the manure produced by this class and transferred out of primary treatment that was then stored in solid storage`,
+        ).transform((val) => input('MMSm=4T=2', realNumber(val))),
+        composting: proportion(
+          `Fraction of the manure produced by this class and transferred out of primary treatment that was then composted.`,
+        ).transform((val) => input(`MMSj=${j}m=6T=2`, realNumber(val))),
+        digester: proportion(
+          `Fraction of the manure produced by this class and transferred out of primary treatment that was then digested`,
+        ).transform((val) => input(`MMSj=${j}m=7T=2`, realNumber(val))),
+        directProcessing: proportion(
+          `Fraction of the manure produced by this class and transferred out of primary treatment that was then processed directly`,
+        ).transform((val) => input(`MMSj=${j}m=12T=2`, realNumber(val))),
+        directApplication: proportion(
+          `Fraction of the manure produced by this class and transferred out of primary treatment that was then applied directly to soil.`,
+        ).transform((val) => input(`MMSj=${j}m=13T=2`, realNumber(val))),
+      }),
     }),
   }).transform((val) => ({ ...val, classNumber: j }));
 
@@ -141,7 +153,20 @@ const PoultryManureClassesInputSchema = object({
 
 export const PoultryManureInputSchema = object({
   type: z.literal('poultry'),
+  temperatureZone: z
+    .literal(MeanAnnualTemperatures)
+    .optional()
+    .transform(mapOptional((val) => input('MAT', val)))
+    .meta({
+      description: 'Average annual temperature',
+    }),
+  state: z.literal(PureStates).transform((val) => input('state', val)),
   classes: PoultryManureClassesInputSchema,
+  // TODO: Transform?
+  productionSystem: z.literal(GrazingProductionSystemsWithRainfall).meta({
+    description:
+      'REVISIT: The description in section 4.6 says: Select the value based on the production system which most accurately describes the land surrounding the housing area. "productionSystem" might not be the most appropriate name for this input.',
+  }),
   fractionAppliedToSoils: proportion(
     'Fraction of manure applied to soil within the activity boundary',
   ).transform((val) => input('PF', realNumber(val))),

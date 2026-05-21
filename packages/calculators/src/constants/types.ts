@@ -443,12 +443,9 @@ type PoultryClassFactors = {
 };
 
 type PoultryMMSFactors = {
-  EFm: RealNumber; // MassPerMass<'N2O', 'N'>;
-  FracGASM: RealNumber; // MassPerMass<'Volatilised N', 'N'>;
-  METHANE_CONVERSION_FACTOR: {
-    byState: Record<PureState, RealNumber>;
-    // byMAT: Record<MeanAnnualTemperature, RealNumber>;
-  };
+  EFm: MassPerMass<'N2O', 'N'>;
+  FracGASM: MassPerMass<'Volatilised N', 'N'>;
+  METHANE_CONVERSION_FACTOR_BY_STATE: Record<PureState, RealNumber>;
 };
 
 export type PoultryConstants = NamedConstants & {
@@ -460,7 +457,7 @@ export type PoultryConstants = NamedConstants & {
     Record<PoultryMMS2Type, PoultryMMSFactors> &
     Record<
       Exclude<PoultryMMS1TypeWithPasture, PoultryMMS1Type>,
-      Pick<PoultryMMSFactors, 'EFm' | 'METHANE_CONVERSION_FACTOR'>
+      Pick<PoultryMMSFactors, 'EFm' | 'METHANE_CONVERSION_FACTOR_BY_STATE'>
     >;
 };
 
@@ -512,7 +509,20 @@ export type LivestockConstants = NamedConstants & {
     MassPerHead<'Liveweight'>
   >;
 
-  // MANURE_MANAGEMENT_METHANE_CONVERSION_FACTORS: {};
+  MANURE_MANAGEMENT_METHANE_CONVERSION_FACTORS: {
+    manureWithLitter: Record<MeanAnnualTemperature, RealNumber>;
+    beltManureRemoval: Record<MeanAnnualTemperature, RealNumber>;
+    manureStoredInHouse: Record<MeanAnnualTemperature, RealNumber>;
+    solidStorage: Record<MeanAnnualTemperature, RealNumber>;
+    composting: Record<MeanAnnualTemperature, RealNumber>;
+    digester: Record<MeanAnnualTemperature, RealNumber>;
+    // REVISIT: Deep litter is given as an option but none of the needed constants are supplied in the appendix.
+    // 'deepLitter': Record<MeanAnnualTemperature, RealNumber>;
+    directProcessing: Record<MeanAnnualTemperature, RealNumber>;
+    directApplication: Record<MeanAnnualTemperature, RealNumber>;
+    pastureRangeAndPaddock: Record<MeanAnnualTemperature, RealNumber>;
+    anaerobicLagoon: Record<MeanAnnualTemperature, RealNumber>;
+  };
 
   METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE: Record<
     MeanAnnualTemperature,
@@ -521,7 +531,10 @@ export type LivestockConstants = NamedConstants & {
 
   OTHER_LIVESTOCK_METHANE_CONVERSION_PASTURE: RealNumber;
 
-  EFPRP: Record<'wet' | 'dry', MassPerMass<'N2O', 'N'>>;
+  EF_DEPOSITED_URINE_AND_DUNG_PRP: Record<
+    'wet' | 'dry',
+    MassPerMass<'N2O', 'N'>
+  >;
 
   EF_ATMOSPHERIC_DEPOSITION: Record<
     GrazingProductionSystemsWithRainfall,
