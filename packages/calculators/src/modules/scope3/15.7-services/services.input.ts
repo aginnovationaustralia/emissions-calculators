@@ -34,7 +34,7 @@ export const ServiceByHourInputSchema = object({
 
 export const ServicesInputSchema = object({
   services: z.array(
-    z.union([ServiceByAreaInputSchema, ServiceByHourInputSchema]),
+    z.xor([ServiceByAreaInputSchema, ServiceByHourInputSchema]),
   ),
 });
 

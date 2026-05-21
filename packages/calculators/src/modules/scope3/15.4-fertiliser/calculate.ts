@@ -1,12 +1,12 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
-import { isInorganicFertiliserComponentTypeRegional } from '@/constants/enums';
 import {
   InorganicFertiliserComponentInputTransformed,
   InorganicFertiliserKnownComponentInputTransformed,
   InorganicFertiliserUnknownComponentInputTransformed,
   isInorganicFertiliserKnownComponent,
+  isInorganicFertiliserKnownComponentWithOrigin,
 } from '@/modules/scope1/5-fertiliser/inorganic-fertiliser-components.input';
 import {
   InorganicFertiliserInputScope3Method1Transformed,
@@ -50,7 +50,7 @@ const emissionsFactorForComponent = (
 ) => {
   const { constants } = context;
   if (isInorganicFertiliserKnownComponent(component)) {
-    if (isInorganicFertiliserComponentTypeRegional(component.componentType)) {
+    if (isInorganicFertiliserKnownComponentWithOrigin(component)) {
       return selectConstant(
         constants.CROP,
         'INORGANIC_FERTILISER_FRACTIONS_BY_REGION',
