@@ -298,14 +298,11 @@ const calculateManureManagementCH4ForClass = (
   poultryClass: PoultryManureClassInputTransformed,
   state: RootContainer<PureState>,
   meanAnnualTemperature: RootContainer<MeanAnnualTemperature> | undefined,
-  context: ExecutionContext<
-    HasCommonConstants & {
-      POULTRY: PoultryConstants;
-      LIVESTOCK: LivestockConstants;
-    }
-  >,
+  constants: HasCommonConstants & {
+    POULTRY: PoultryConstants;
+    LIVESTOCK: LivestockConstants;
+  },
 ) => {
-  const { constants } = context;
   /**
    * ECH4 = SUM(j,m,T) Dj * MjmT * Nj
    *
@@ -488,11 +485,16 @@ const calculateNitrogenPerStage2MMSForClass = (
 };
 
 /**
- * Calculate direct nitrous oxide emissions *EN2O,dir* from a class *j* (4.6.1.3 (1))
+ * Calculate direct nitrous oxide emissions *EN2O,dir* from a poultry class
+ * (4.6.1.3 (1) and  4.6.1.10 (1)).
  */
 const calculateDirectN2OEmissionsForClass = (
   poultryClass: PoultryManureClassInputTransformed,
-  constants: HasCommonConstants & { POULTRY: PoultryConstants },
+  climateZone: 'wet' | 'dry',
+  constants: HasCommonConstants & {
+    POULTRY: PoultryConstants;
+    LIVESTOCK: LivestockConstants;
+  },
 ) => {
   const nitrogenInPrimarySystems = calculateNitrogenPerStage1MMSForClass(
     poultryClass,
@@ -505,7 +507,16 @@ const calculateDirectN2OEmissionsForClass = (
     constants,
   );
 
-  // REVISIT: Should pasture be included here?
+  /**
+   * REVISIT:
+   *
+   * I'm not sure if the inclusion of pasture in 4.6.1.3 is a mistake. The guidelines
+   * currently calculate 'direct N2O' in two different ways for poultry, it's unclear to
+   * me if these are two different forms of direct N2O or if these equations are meant to
+   * be used exclusively (there is nothing I've seen to suggest this).
+   *
+   * For now, I'm performing both calculations here.
+   */
   const n2oFromPrimarySystems = PoultryMMS1TypesWithPasture.map((mms) => {
     const nitrogenInSystem = nitrogenInPrimarySystems[mms];
     const nitrousOxideEmissionsFactor = selectConstant(
@@ -530,48 +541,35 @@ const calculateDirectN2OEmissionsForClass = (
     return nitrogenInSystem.multiply(nitrousOxideEmissionsFactor);
   });
 
-  const cN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
-
-  return sum(n2oFromPrimarySystems)
-    .plus(sum(n2oFromSecondarySystems))
-    .multiply(cN2O);
-};
-
-/**
- * Calculate direct nitrous oxide emissions *EMN2O,PRP,dir* from poultry manure deposited
- * directly onto pasture at the primary treatment stage (4.6.1.10 (1)). This
- * function takes the mass of  nitrogen at pasture as an argument, so this function can
- * calculate emissions from this source per class, or as an aggregate amount.
- *
- * REVISIT: This could possibly be folded into calculateDirectN2OEmissionsForClass, I've
- * left it separate for now in case we want to be able to break the 'direct' N2O
- * emissions totals down and separate them.
- */
-const calculateDirectN2OEmissionsFromManureAppliedToPastureStage1 = (
-  nitrogenInStage1Pasture: Container<Mass<'N'>>,
-  climateZone: 'wet' | 'dry',
-  constants: HasCommonConstants & {
-    POULTRY: PoultryConstants;
-    LIVESTOCK: LivestockConstants;
-  },
-) => {
+  /**
+   * See above re: REVISIT comment.
+   */
   const EFprp = selectConstant(
     constants.LIVESTOCK,
     'EF_DEPOSITED_URINE_AND_DUNG_PRP',
     climateZone,
   ).named(`EFprp (${climateZone})`);
+  const additionalN2OFromPasture =
+    nitrogenInPrimarySystems.pastureRangeAndPaddock.multiply(EFprp);
 
-  const cN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+  const cN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
 
-  return nitrogenInStage1Pasture
-    .multiply(EFprp)
-    .multiply(cN2O)
-    .named(`EMN2O,PRP,dir`);
+  /**
+   * From 4.6.1.3 (1): EN2O,dir = SUMj,m,T (MNjmT * EFjm * CN2O) * 10^-3
+   *
+   * From 4.6.1.10 (1): EMN2O,PRP,dir = SUMj (MNjm=14T=1 * EFPRP * CN2O) * 10^-3
+   *
+   * This has been factorised below as: (SUMj,m,T (MNjmT * EFjm) + SUMj (MNjm=14T=1 * EFPRP)) * CN2O) * 10^-3
+   */
+  return sum(n2oFromPrimarySystems)
+    .plus(additionalN2OFromPasture)
+    .plus(sum(n2oFromSecondarySystems))
+    .multiply(cN2O);
 };
 
 /**
  * Calculate total annual atmospheric deposition emissions from manure management
- * *EN2O,ad* from a class *j* (4.6.1.5)
+ * *EN2O,ad* from a poultry class (4.6.1.5 and 4.6.1.12).
  */
 const calculateAtmosphericDepositionN2OEmissionsForClass = (
   poultryClass: PoultryManureClassInputTransformed,
@@ -579,6 +577,7 @@ const calculateAtmosphericDepositionN2OEmissionsForClass = (
   constants: HasCommonConstants & {
     POULTRY: PoultryConstants;
     LIVESTOCK: LivestockConstants;
+    CROP: CropConstants;
   },
 ) => {
   const nitrogenInPrimarySystems = calculateNitrogenPerStage1MMSForClass(
@@ -592,48 +591,140 @@ const calculateAtmosphericDepositionN2OEmissionsForClass = (
     constants,
   );
 
-  // REVISIT: Should pasture be included here?
-  const volatisedNitrogenFromPrimarySystems = PoultryMMS1Types.map((mms) => {
-    const nitrogenInSystem = nitrogenInPrimarySystems[mms];
-    const fracGASM = selectConstant(
-      constants.POULTRY,
-      'MMS',
-      mms,
-      'FracGASM',
-    ).named(`FracGASMm=${subscriptNotation}T=1`);
+  const volatilisedNitrogenFromPrimarySystemsWithoutPasture =
+    PoultryMMS1Types.map((mms) => {
+      const nitrogenInSystem = nitrogenInPrimarySystems[mms];
+      const fracGASM = selectConstant(
+        constants.POULTRY,
+        'MMS',
+        mms,
+        'FracGASM',
+      ).named(`FracGASMm=${subscriptNotation}T=1`);
 
-    return nitrogenInSystem.multiply(fracGASM);
-  });
+      return nitrogenInSystem.multiply(fracGASM);
+    });
 
-  const volatisedNitrogenFromSecondarySystems = PoultryMMS2Types.map((mms) => {
-    const nitrogenInSystem = nitrogenInSecondarySystems[mms];
-    const fracGASM = selectConstant(
-      constants.POULTRY,
-      'MMS',
-      mms,
-      'FracGASM',
-    ).named(`FracGASMm=${subscriptNotation}T=2`);
+  /**
+   * MMSATMOS = SUMj,m,T MNjmT * FracGASMmT
+   *
+   * NOTE: Volatised nitrogen at pasture is calculated with a separate factor.
+   */
+  const volatilisedNitrogenFromSecondarySystems = PoultryMMS2Types.map(
+    (mms) => {
+      const nitrogenInSystem = nitrogenInSecondarySystems[mms];
+      const fracGASM = selectConstant(
+        constants.POULTRY,
+        'MMS',
+        mms,
+        'FracGASM',
+      ).named(`FracGASMm=${subscriptNotation}T=2`);
 
-    return nitrogenInSystem.multiply(fracGASM);
-  });
+      return nitrogenInSystem.multiply(fracGASM);
+    },
+  );
 
-  const totalVolatisedNitrogen = sum(volatisedNitrogenFromPrimarySystems)
-    .plus(sum(volatisedNitrogenFromSecondarySystems))
+  const fracGASMsoil = selectConstant(
+    constants.CROP,
+    'FRACTION_N_VOLATILISED_ORGANIC_FERTILISER',
+  ).named('FracGASMsoil');
+
+  /**
+   * Mvol,m=14 = SUMj MNjm=14T=1 * FracGASMsoil
+   *
+   * NOTE: The subscript in the guidelines is misleading. Mvol,m=14 is a mass of
+   * volatised nitrogen, not a volume.
+   */
+  const volatilisedNitrogenFromPasture =
+    nitrogenInPrimarySystems.pastureRangeAndPaddock.multiply(fracGASMsoil);
+
+  const totalVolatisedNitrogenExcludingPasture = sum(
+    volatilisedNitrogenFromPrimarySystemsWithoutPasture,
+  )
+    .plus(sum(volatilisedNitrogenFromSecondarySystems))
     .named('MMS_ATMOS');
 
-  const cN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+  const CN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
 
-  const EFm = selectConstant(
+  const EFN2O = selectConstant(
     constants.LIVESTOCK,
     'EF_ATMOSPHERIC_DEPOSITION',
     productionSystem,
   ).named('EFN2O');
 
-  return totalVolatisedNitrogen.multiply(cN2O).multiply(EFm);
+  /**
+   * From 4.6.1.5 (1): EN2O,ad = (MMSATMOS * EFN2O * CN2O) * 10^-3
+   *
+   * From 4.6.1.12 (1): EN2O,ad = Mvol,m=14 * EFN2O * CN2O * 10^-3
+   *
+   * We can factorise this into:
+   *  (MMSATMOS + Mvol,m=14) * EFN2O * CN2O * 10^-3
+   *
+   */
+  return totalVolatisedNitrogenExcludingPasture
+    .plus(volatilisedNitrogenFromPasture)
+    .multiply(CN2O)
+    .multiply(EFN2O)
+    .named(`E20,ad (j=${poultryClass.classNumber})`);
 };
 
 /**
- * TODO
+ * Calculate emissions from leaching and runoff *EN2O,leach* from manure produced by a
+ * poultry class (4.6.1.7 (1) and 4.6.1.14 (1))
+ */
+const calculateLeachingAndRunoffN2OEmissionsForClass = (
+  poultryClass: PoultryManureClassInputTransformed,
+  isInLeachingZone: boolean,
+  constants: HasCommonConstants & {
+    POULTRY: PoultryConstants;
+    CROP: CropConstants;
+  },
+) => {
+  const fracWETSoil = (isInLeachingZone ? num(1) : num(0)).named('FracWETSoil');
+  const fracLeachMS = selectConstant(
+    constants.CROP,
+    'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF_SOLID_STORAGE',
+  ).named('FracLeachMMS');
+
+  const nitrogenInPrimarySystems = calculateNitrogenPerStage1MMSForClass(
+    poultryClass,
+    constants,
+  );
+  const nitrogenLostInPasture = nitrogenInPrimarySystems.pastureRangeAndPaddock
+    .multiply(fracWETSoil)
+    .multiply(fracLeachMS)
+    .named(`Mleachm=14 (j=${poultryClass.classNumber})`);
+  const nitrogenLostInSolidStorage = calculateNitrogenPerStage2MMSForClass(
+    poultryClass,
+    nitrogenInPrimarySystems,
+    constants,
+  )
+    .solidStorage.multiply(fracWETSoil)
+    .multiply(fracLeachMS)
+    .named(`Mleachm=4 (j=${poultryClass.classNumber})`);
+
+  const EFleach = selectConstant(
+    constants.CROP,
+    'EF_N2O_LEACHING_AND_RUNOFF',
+  ).named(`EFleach`);
+
+  const CN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+
+  /**
+   * 4.6.1.7L: EN2O,leach = MNLeachjm=4 * EFleach * CN2O * 10^-3
+   *
+   * 4.6.1.14: EN2O,leach = Mleachjm=14 * EFleach * CN2O * 10^-3
+   *
+   * Factorised as: EN2O,leach (Mleachjm=4 + Mleachjm=14) * EFleach * CN2O * 10^-3
+   */
+  return nitrogenLostInPasture
+    .plus(nitrogenLostInSolidStorage)
+    .multiply(EFleach)
+    .multiply(CN2O);
+};
+
+/**
+ * Calculate the mass of nitrogen applied to soils for scope 1 and 3 emissions
+ * (*MNSoilscope1* and *MNSoilscope3*) produced by a poultry class (4.6.1.9).
  */
 const calculateMassOfNitrogenAppliedToSoilsForClass = (
   poultryClass: PoultryManureClassInputTransformed,
@@ -727,6 +818,192 @@ const calculateMassOfNitrogenAppliedToSoilsForClass = (
   };
 };
 
+/**
+ * Calculate methane emissions produced by a whole poultry flock from manure management
+ * (4.6.1.1/4.6.1.2).
+ */
+export function calculateManureManagementCH4ForPoultry(
+  manureInput: PoultryManureInputTransformed,
+  context: ExecutionContext<
+    HasCommonConstants & {
+      POULTRY: PoultryConstants;
+      LIVESTOCK: LivestockConstants;
+    }
+  >,
+) {
+  const layersCH4 = calculateManureManagementCH4ForClass(
+    manureInput.classes.layers,
+    manureInput.state,
+    manureInput.temperatureZone,
+    context.constants,
+  );
+  const meatBreedersCH4 = calculateManureManagementCH4ForClass(
+    manureInput.classes.meatChickenBreeder,
+    manureInput.state,
+    manureInput.temperatureZone,
+    context.constants,
+  );
+  const meatGrowersCH4 = calculateManureManagementCH4ForClass(
+    manureInput.classes.meatChickenGrowers,
+    manureInput.state,
+    manureInput.temperatureZone,
+    context.constants,
+  );
+  const meatOtherCH4 = calculateManureManagementCH4ForClass(
+    manureInput.classes.meatOther,
+    manureInput.state,
+    manureInput.temperatureZone,
+    context.constants,
+  );
+
+  return layersCH4
+    .plus(meatBreedersCH4)
+    .plus(meatGrowersCH4)
+    .plus(meatOtherCH4)
+    .named('ECH4');
+}
+
+/**
+ * Calculate direct N2O emissions produced by a whole poultry flock from manure
+ * management (4.6.1.3/4.6.1.4 + 4.6.1.10).
+ */
+export function calculateDirectN2OEmissionsForPoultry(
+  manureInput: PoultryManureInputTransformed,
+  context: ExecutionContext<
+    HasCommonConstants & {
+      POULTRY: PoultryConstants;
+      LIVESTOCK: LivestockConstants;
+    }
+  >,
+) {
+  const layersDirectN2O = calculateDirectN2OEmissionsForClass(
+    manureInput.classes.layers,
+    manureInput.climateZone,
+    context.constants,
+  );
+  const meatBreedersDirectN2O = calculateDirectN2OEmissionsForClass(
+    manureInput.classes.meatChickenBreeder,
+    manureInput.climateZone,
+    context.constants,
+  );
+  const meatGrowersDirectN2O = calculateDirectN2OEmissionsForClass(
+    manureInput.classes.meatChickenGrowers,
+    manureInput.climateZone,
+    context.constants,
+  );
+  const meatOtherDirectN2O = calculateDirectN2OEmissionsForClass(
+    manureInput.classes.meatOther,
+    manureInput.climateZone,
+    context.constants,
+  );
+
+  return layersDirectN2O
+    .plus(meatBreedersDirectN2O)
+    .plus(meatGrowersDirectN2O)
+    .plus(meatOtherDirectN2O)
+    .named('EN2O,dir');
+}
+
+/**
+ * Calculate atmospheric deposition N2O emissions produced by a whole poultry flock from
+ * manure management (4.6.1.5 + 4.6.1.12).
+ */
+export function calculateAtmosphericDepositionN2OEmissionsForPoultry(
+  manureInput: PoultryManureInputTransformed,
+  context: ExecutionContext<
+    HasCommonConstants & {
+      POULTRY: PoultryConstants;
+      LIVESTOCK: LivestockConstants;
+      CROP: CropConstants;
+    }
+  >,
+) {
+  const layersAtmosphericDepN2O =
+    calculateAtmosphericDepositionN2OEmissionsForClass(
+      manureInput.classes.layers,
+      manureInput.productionSystem,
+      context.constants,
+    );
+  const meatBreederAtmosphericDepN2O =
+    calculateAtmosphericDepositionN2OEmissionsForClass(
+      manureInput.classes.meatChickenBreeder,
+      manureInput.productionSystem,
+      context.constants,
+    );
+  const meatGrowerAtmosphericDepN2O =
+    calculateAtmosphericDepositionN2OEmissionsForClass(
+      manureInput.classes.meatChickenGrowers,
+      manureInput.productionSystem,
+      context.constants,
+    );
+  const meatOtherAtmosphericDepN2O =
+    calculateAtmosphericDepositionN2OEmissionsForClass(
+      manureInput.classes.meatOther,
+      manureInput.productionSystem,
+      context.constants,
+    );
+
+  return layersAtmosphericDepN2O
+    .plus(meatBreederAtmosphericDepN2O)
+    .plus(meatGrowerAtmosphericDepN2O)
+    .plus(meatOtherAtmosphericDepN2O)
+    .named('EN2O,ad');
+}
+
+/**
+ * Calculate leaching and runoff N2O emissions produced by a whole poultry flock from
+ * manure management (4.6.1.7 + 4.6.1.14).
+ */
+export function calculateLeachingAndRunoffN2OEmissionsForPoultry(
+  manureInput: PoultryManureInputTransformed,
+  isInLeachingZone: boolean,
+  context: ExecutionContext<
+    HasCommonConstants & {
+      POULTRY: PoultryConstants;
+      CROP: CropConstants;
+    }
+  >,
+) {
+  const layersLeachingRunoffN2O =
+    calculateLeachingAndRunoffN2OEmissionsForClass(
+      manureInput.classes.layers,
+      isInLeachingZone,
+      context.constants,
+    );
+
+  const meatBreederLeachingRunoffN2O =
+    calculateLeachingAndRunoffN2OEmissionsForClass(
+      manureInput.classes.meatChickenBreeder,
+      isInLeachingZone,
+      context.constants,
+    );
+
+  const meatGrowerLeachingRunoffN2O =
+    calculateLeachingAndRunoffN2OEmissionsForClass(
+      manureInput.classes.meatChickenGrowers,
+      isInLeachingZone,
+      context.constants,
+    );
+
+  const meatOtherLeachingRunoffN2O =
+    calculateLeachingAndRunoffN2OEmissionsForClass(
+      manureInput.classes.meatOther,
+      isInLeachingZone,
+      context.constants,
+    );
+
+  return layersLeachingRunoffN2O
+    .plus(meatBreederLeachingRunoffN2O)
+    .plus(meatGrowerLeachingRunoffN2O)
+    .plus(meatOtherLeachingRunoffN2O)
+    .named('EN2O,leach');
+}
+
+/**
+ * Calculate the mass of nitrogen applied to soils for scope 1 and 3 emissions
+ * (*MNSoilscope1* and *MNSoilscope3*) produced by a whole poultry flock
+ * (4.6.1.9).
+ */
 export function calculateMassOfNitrogenAppliedToSoilsForPoultry(
   manureInput: PoultryManureInputTransformed,
   isInLeachingZone: boolean,

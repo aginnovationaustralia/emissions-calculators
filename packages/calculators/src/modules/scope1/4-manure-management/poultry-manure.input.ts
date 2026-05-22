@@ -10,6 +10,7 @@ import { object, proportion } from '@/types/schemas';
 import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 import {
+  ClimateZoneTypes,
   GrazingProductionSystemsWithRainfall,
   MeanAnnualTemperatures,
   PureStates,
@@ -161,6 +162,7 @@ export const PoultryManureInputSchema = object({
       description: 'Average annual temperature',
     }),
   state: z.literal(PureStates).transform((val) => input('state', val)),
+  climateZone: z.literal(ClimateZoneTypes),
   classes: PoultryManureClassesInputSchema,
   // TODO: Transform?
   productionSystem: z.literal(GrazingProductionSystemsWithRainfall).meta({
