@@ -7,6 +7,7 @@ import { getCalculatorInput } from './common';
 import {
   calculateAtmosphericDepositionN2OEmissionsForPoultry,
   calculateDirectN2OEmissionsForPoultry,
+  calculateLeachingAndRunoffN2OEmissionsForPoultry,
 } from '@/modules/scope1/4-manure-management/4.6-poultry-manure/calculate';
 
 const extractInputsAndOutput = (cell: string) =>
@@ -42,6 +43,22 @@ describe('4.6.1.5 Poultry Manure Atmospheric Deposition N2O', () => {
     compareInputsAndOutputs(
       inputsAndOutputs,
       calculateAtmosphericDepositionN2OEmissionsForPoultry,
+    );
+  });
+});
+
+describe('4.6.1.7 Poultry Manure Leaching and Runoff N2O', () => {
+  it('method 1 matches spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/4.6-poultry-manure/4.6-poultry-manure.xlsx',
+      '4.6.1.7',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput('AI')(sheet, 11, '1');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateLeachingAndRunoffN2OEmissionsForPoultry,
     );
   });
 });
