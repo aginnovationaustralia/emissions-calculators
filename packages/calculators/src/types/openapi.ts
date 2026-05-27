@@ -1,3 +1,4 @@
+import { BeefOutputSchema } from '@/calculators/Beef/types/output';
 import {
   entriesFromObject,
   ObjectEntry,
@@ -5,7 +6,10 @@ import {
 } from '@/calculators/common/tools/object';
 import { packageVersion } from '@/calculators/execution/version';
 import { GrainsOutputSchema } from '@/calculators/Grains/types';
-import { GrainsInputWithFullCAMSchema } from '@/fullcam/calculators';
+import {
+  BeefInputWithFullCAMSchema,
+  GrainsInputWithFullCAMSchema,
+} from '@/fullcam/calculators';
 import { OpenAPIObject } from 'openapi3-ts/oas31';
 import * as z from 'zod';
 import {
@@ -30,6 +34,10 @@ const endpoints: Record<
   grains: {
     inputSchema: GrainsInputWithFullCAMSchema,
     outputSchema: GrainsOutputSchema,
+  },
+  beef: {
+    inputSchema: BeefInputWithFullCAMSchema,
+    outputSchema: BeefOutputSchema,
   },
 };
 
