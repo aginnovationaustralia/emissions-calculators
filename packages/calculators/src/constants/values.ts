@@ -2133,7 +2133,11 @@ export const poultryConstants: PoultryConstants = {
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.19),
       nitrogenRetentionRate: realNumber(0.35),
       manureAsh: realNumber(0.18),
-      emissionsPotential: volumePerMass('CH4', 'Volatile Solids', 0.39),
+      emissionsPotential: volumePerMass(
+        'CH4',
+        'Volatile Solids',
+        cubicMetresToLitres(0.39),
+      ),
     },
     meatChickenGrowers: {
       dryMatterIntake: massPerHeadPerDay('DryMatter', 0.093),
@@ -2141,7 +2145,11 @@ export const poultryConstants: PoultryConstants = {
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.23),
       nitrogenRetentionRate: realNumber(0.47),
       manureAsh: realNumber(0.15),
-      emissionsPotential: volumePerMass('CH4', 'Volatile Solids', 0.36),
+      emissionsPotential: volumePerMass(
+        'CH4',
+        'Volatile Solids',
+        cubicMetresToLitres(0.36),
+      ),
     },
     meatChickenBreeder: {
       dryMatterIntake: massPerHeadPerDay('DryMatter', 0.103),
@@ -2149,7 +2157,11 @@ export const poultryConstants: PoultryConstants = {
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.19),
       nitrogenRetentionRate: realNumber(0.32),
       manureAsh: realNumber(0.18),
-      emissionsPotential: volumePerMass('CH4', 'Volatile Solids', 0.36),
+      emissionsPotential: volumePerMass(
+        'CH4',
+        'Volatile Solids',
+        cubicMetresToLitres(0.36),
+      ),
     },
     meatOther: {
       dryMatterIntake: massPerHeadPerDay('DryMatter', 0.093),
@@ -2157,7 +2169,11 @@ export const poultryConstants: PoultryConstants = {
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.23),
       nitrogenRetentionRate: realNumber(0.47),
       manureAsh: realNumber(0.15),
-      emissionsPotential: volumePerMass('CH4', 'Volatile Solids', 0.36),
+      emissionsPotential: volumePerMass(
+        'CH4',
+        'Volatile Solids',
+        cubicMetresToLitres(0.36),
+      ),
     },
   },
 
@@ -2171,14 +2187,14 @@ export const poultryConstants: PoultryConstants = {
     beltManureRemoval: {
       FracGASM: massPerMass('Volatilised N', 'N', 0.05),
       EFm: massPerMass('N2O', 'N', 0.001),
-      fractionSolidsLost: realNumber(0.2),
+      fractionSolidsLost: realNumber(0),
       METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.015),
     },
     manureStoredInHouse: {
       FracGASM: massPerMass('Volatilised N', 'N', 0.4),
-      EFm: massPerMass('N2O', 'N', 0.02),
-      fractionSolidsLost: realNumber(0),
-      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.15),
+      EFm: massPerMass('N2O', 'N', 0.001),
+      fractionSolidsLost: realNumber(0.2),
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.015),
     },
     solidStorage: {
       FracGASM: massPerMass('Volatilised N', 'N', 0.2),
@@ -2204,13 +2220,17 @@ export const poultryConstants: PoultryConstants = {
       METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.1),
     },
     pastureRangeAndPaddock: {
-      EFm: massPerMass('N2O', 'N', 0.2),
+      EFm: massPerMass('N2O', 'N', 0.02),
       METHANE_CONVERSION_FACTOR_BY_STATE: {
-        ...allPureStatesWithValue(0.1),
+        ...allPureStatesWithValue(0.01),
         // REVISIT: This might actually be 0.2, implied by a footnote on table A.1.8.1 - or that footnote might hold the typo and this is correct.
-        QLD: realNumber(0.3),
-        NT: realNumber(0.3),
+        QLD: realNumber(0.03),
+        NT: realNumber(0.03),
       },
+    },
+    directApplication: {
+      // NOTE: There is no row for this in table A.1.7.4, but in table A.1.8.1 this value is 0 across all mean annual temperatures, so this is implied.
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0),
     },
   },
 };

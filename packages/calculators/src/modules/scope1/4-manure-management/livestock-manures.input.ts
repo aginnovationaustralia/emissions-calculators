@@ -10,7 +10,7 @@ import {
 import {
   PoultryManureInputSchema,
   PoultryManureInputTransformed,
-} from './poultry-manure.input';
+} from './4.6-poultry-manure';
 import { SwineManureInputSchema } from './swine-manure.input';
 
 export const livestockManureIsSwine = (

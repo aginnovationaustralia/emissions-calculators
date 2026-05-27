@@ -16,36 +16,6 @@ import {
   PureStates,
 } from '@/constants/enums';
 
-const createPoultryMMSAllocationInputSchema = <
-  M extends '10' | '11a' | '11b' | '14',
->(
-  m: M,
-  system: string,
-) =>
-  object({
-    allocationStage1: proportion(
-      `Fraction of manure initially treated in a ${system} manure management system in initial stage of treatment`,
-    ).transform((val) => input(`MMSm=${m}T=1`, realNumber(val))),
-    solidStorage: proportion(
-      `Fraction of the manure initially treated in a ${system} manure management system that was then stored in solid storage`,
-    ).transform((val) => input('MMSm=4T=2', realNumber(val))),
-    composting: proportion(
-      `Fraction of the manure initially treated in a ${system} manure management system that was then composted`,
-    ).transform((val) => input('MMSm=6T=2', realNumber(val))),
-    digester: proportion(
-      `Fraction of the manure initially treated in a ${system} manure management system that was then digested`,
-    ).transform((val) => input('MMSm=7T=2', realNumber(val))),
-    deepLitter: proportion(
-      `Fraction of the manure initially treated in a ${system} manure management system that was then moved to a deep litter system`,
-    ).transform((val) => input('MMSm=8T=2', realNumber(val))),
-    directProcessing: proportion(
-      `Fraction of the manure initially treated in a ${system} manure management system that was then processed directly`,
-    ).transform((val) => input('MMSm=12T=2', realNumber(val))),
-    directApplication: proportion(
-      `Fraction of the manure initially applied directly to soil after being treated in a ${system} manure management system`,
-    ).transform((val) => input('MMSm=13T=2', realNumber(val))),
-  });
-
 const createPoultryManureClassInputSchema = <
   J extends '1' | '2a' | '2b' | '2c',
 >(
@@ -101,16 +71,16 @@ const createPoultryManureClassInputSchema = <
       }),
       allocationStage2: object({
         solidStorage: proportion(
-          `Fraction of the manure produced by this class and transferred out of primary treatment that was then stored in solid storage`,
-        ).transform((val) => input('MMSm=4T=2', realNumber(val))),
+          `Fraction of the manure produced by this class and transferred out of primary treatment that was then stored in solid storage.`,
+        ).transform((val) => input(`MMSj=${j}m=4T=2`, realNumber(val))),
         composting: proportion(
           `Fraction of the manure produced by this class and transferred out of primary treatment that was then composted.`,
         ).transform((val) => input(`MMSj=${j}m=6T=2`, realNumber(val))),
         digester: proportion(
-          `Fraction of the manure produced by this class and transferred out of primary treatment that was then digested`,
+          `Fraction of the manure produced by this class and transferred out of primary treatment that was then digested.`,
         ).transform((val) => input(`MMSj=${j}m=7T=2`, realNumber(val))),
         directProcessing: proportion(
-          `Fraction of the manure produced by this class and transferred out of primary treatment that was then processed directly`,
+          `Fraction of the manure produced by this class and transferred out of primary treatment that was then processed directly into pelletised fertiliser.`,
         ).transform((val) => input(`MMSj=${j}m=12T=2`, realNumber(val))),
         directApplication: proportion(
           `Fraction of the manure produced by this class and transferred out of primary treatment that was then applied directly to soil.`,
@@ -159,16 +129,32 @@ export const PoultryManureInputSchema = object({
     .optional()
     .transform(mapOptional((val) => input('MAT', val)))
     .meta({
-      description: 'Average annual temperature',
+      description: 'Average annual temperature, if known',
     }),
-  state: z.literal(PureStates).transform((val) => input('state', val)),
-  climateZone: z.literal(ClimateZoneTypes),
-  classes: PoultryManureClassesInputSchema,
   // TODO: Transform?
-  productionSystem: z.literal(GrazingProductionSystemsWithRainfall).meta({
-    description:
-      'REVISIT: The description in section 4.6 says: Select the value based on the production system which most accurately describes the land surrounding the housing area. "productionSystem" might not be the most appropriate name for this input.',
+  state: z
+    .literal(PureStates)
+    .transform((val) => input('state', val))
+    .meta({
+      description: 'TODO',
+    }),
+  climateZone: z.literal(ClimateZoneTypes).meta({
+    description: 'TODO',
   }),
+  // REVISIT: The description in section 4.6 says: Select the value based on the production system which most accurately describes the land surrounding the housing area. "productionSystem" might not be the most appropriate name for this input.
+  productionSystem: z.literal(GrazingProductionSystemsWithRainfall).meta({
+    description: 'TODO',
+  }),
+  isInLeachingZone: z.boolean().meta({
+    description: 'TODO',
+  }),
+  classes: PoultryManureClassesInputSchema,
+  /**
+   * REVISIT: This description is *slightly* incorrect/misleading, this is the proportion
+   * of all manure excluding the manure applied/deposited directly to soil. This will
+   * slightly skew the scope 1 and 3 values of *MNsoil* depending on how manure gets
+   * allocated.
+   */
   fractionAppliedToSoils: proportion(
     'Fraction of manure applied to soil within the activity boundary',
   ).transform((val) => input('PF', realNumber(val))),

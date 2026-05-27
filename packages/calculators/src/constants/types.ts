@@ -458,6 +458,10 @@ export type PoultryConstants = NamedConstants & {
     Record<
       Exclude<PoultryMMS1TypeWithPasture, PoultryMMS1Type>,
       Pick<PoultryMMSFactors, 'EFm' | 'METHANE_CONVERSION_FACTOR_BY_STATE'>
+    > &
+    Record<
+      Exclude<PoultryMMS2TypeWithPasture, PoultryMMS2Type>,
+      Pick<PoultryMMSFactors, 'METHANE_CONVERSION_FACTOR_BY_STATE'>
     >;
 };
 
