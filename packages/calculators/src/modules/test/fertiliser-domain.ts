@@ -9,6 +9,8 @@ import {
   InorganicFertiliserTypes,
   OrganicFertiliserType,
   OrganicFertiliserTypes,
+  ProductionSystemsInorganicFertiliser,
+  ProductionSystemsInorganicFertilisers,
 } from '@/constants/enums';
 
 export const checkInorganicFertiliserType = (
@@ -42,6 +44,21 @@ export const checkExtendedCropProductionSystem = (
     throw new Error(`Invalid extended crop production system: ${system}`);
   }
   return system as ExtendedCropProductionSystem;
+};
+
+export const checkProductionSystemsInorganicFertilisers = (
+  system: string | undefined,
+): ProductionSystemsInorganicFertiliser => {
+  if (
+    !ProductionSystemsInorganicFertilisers.includes(
+      system as ProductionSystemsInorganicFertiliser,
+    )
+  ) {
+    throw new Error(
+      `Invalid production systems inorganic fertilisers: ${system}`,
+    );
+  }
+  return system as ProductionSystemsInorganicFertiliser;
 };
 
 export const checkLivestockManureType = (
