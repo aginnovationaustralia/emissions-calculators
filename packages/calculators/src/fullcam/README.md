@@ -28,4 +28,8 @@ This module for FullCAM wraps up tools you can use to convert simple event input
 
 # Caching and optimisation
 
-The tools here help to define expected input and output values, and some templates that are used to generate valid requests. There is no code pat hout of the box that will make the API requests for you. It is necessary to supply your FullCAM API key, and to call the API responsibly. This means things like caching of results to reduce the load placed on the FullCAM APIs.
+The tools here help to define expected input and output values, and some templates that are used to generate valid requests. There is no code path out of the box that will make the API requests for you. It is necessary to supply your FullCAM API key, and to call the API responsibly. This means things like caching of results to reduce the load placed on the FullCAM APIs.
+
+# Status
+
+For now, this code should be considered a working prototype.
