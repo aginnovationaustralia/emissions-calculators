@@ -150,9 +150,11 @@ export function calculate_4_7_1_3_OtherLivestockManureDirectN2O(
 
   const AE = calculateNitrousEmissionsFromHerdsAE(input, context);
 
-  const EFprp = selectConstant(constants.LIVESTOCK, 'EFPRP', wetOrDry).named(
-    'EF PRP',
-  );
+  const EFprp = selectConstant(
+    constants.LIVESTOCK,
+    'EF_DEPOSITED_URINE_AND_DUNG_PRP',
+    wetOrDry,
+  ).named('EF PRP');
   const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
 
   return AE.multiply(EFprp).multiply(cn2o).named('EN2O,dir');

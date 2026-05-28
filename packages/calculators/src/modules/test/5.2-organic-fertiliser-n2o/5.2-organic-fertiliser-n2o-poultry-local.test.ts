@@ -8,7 +8,7 @@ import XLSX from 'xlsx-populate';
 import {
   PoultryManureClassesInput,
   PoultryMMS1To2AllocationInput,
-} from '../../scope1/4-manure-management/poultry-manure.input';
+} from '../../scope1/4-manure-management/4.6-poultry-manure';
 import { calculate52OrganicFertiliser } from '../../scope1/5-fertiliser/5.2-organic-fertiliser';
 import {
   FertiliserInput,
@@ -145,7 +145,7 @@ const getCalculatorInput = (
       directProcessing: mms2M11aDirectProcessing,
       directApplication: mms2M11aDirectApplication,
     },
-    manureStoredInStorage: {
+    manureStoredInHouse: {
       solidStorage: mms2M11bSolidStorage,
       composting: mms2M11bComposting,
       digester: mms2M11bDigester,
@@ -169,7 +169,7 @@ const getCalculatorInput = (
       manureAllocation: {
         manureWithLitter: mms1LayersM10,
         beltManureRemoval: mm1LayersM11a,
-        manureStoredInStorage: mm1LayersM11b,
+        manureStoredInHouse: mm1LayersM11b,
         pastureRangeAndPaddock: mm1LayersM14,
       },
     },
@@ -187,7 +187,7 @@ const getCalculatorInput = (
       manureAllocation: {
         manureWithLitter: mms1MeatChickenGrowersM10,
         beltManureRemoval: mm1MeatChickenGrowersM11a,
-        manureStoredInStorage: mm1MeatChickenGrowersM11b,
+        manureStoredInHouse: mm1MeatChickenGrowersM11b,
         pastureRangeAndPaddock: mm1MeatChickenGrowersM14,
       },
     },
@@ -205,7 +205,7 @@ const getCalculatorInput = (
       manureAllocation: {
         manureWithLitter: mms1MeatChickenBreederM10,
         beltManureRemoval: mm1MeatChickenBreederM11a,
-        manureStoredInStorage: mm1MeatChickenBreederM11b,
+        manureStoredInHouse: mm1MeatChickenBreederM11b,
         pastureRangeAndPaddock: mm1MeatChickenBreederM14,
       },
     },
@@ -223,7 +223,7 @@ const getCalculatorInput = (
       manureAllocation: {
         manureWithLitter: mms1MeatOtherM10,
         beltManureRemoval: mm1MeatOtherM11a,
-        manureStoredInStorage: mm1MeatOtherM11b,
+        manureStoredInHouse: mm1MeatOtherM11b,
         pastureRangeAndPaddock: mm1MeatOtherM14,
       },
     },

@@ -8,9 +8,9 @@ import {
   FeedlotManureInputTransformed,
 } from './feedlot-manure.input';
 import {
-  PoultryManureInputSchema,
-  PoultryManureInputTransformed,
-} from './poultry-manure.input';
+  CropPoultryManureInputSchema,
+  CropPoultryManureInputTransformed,
+} from './4.6-poultry-manure';
 import { SwineManureInputSchema } from './swine-manure.input';
 
 export const livestockManureIsSwine = (
@@ -33,7 +33,7 @@ export const livestockManureIsDairy = (
 
 export const livestockManureIsPoultry = (
   input: LivestockManuresInputTransformed,
-): input is PoultryManureInputTransformed => {
+): input is CropPoultryManureInputTransformed => {
   return input.type === 'poultry';
 };
 
@@ -46,7 +46,7 @@ export const LivestockManuresInputSchema = z.discriminatedUnion('type', [
   SwineManureInputSchema,
   DairyManureInputSchema,
   FeedlotManureInputSchema,
-  PoultryManureInputSchema,
+  CropPoultryManureInputSchema,
 ]);
 
 export type LivestockManuresInput = z.input<typeof LivestockManuresInputSchema>;

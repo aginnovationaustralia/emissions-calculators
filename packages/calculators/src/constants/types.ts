@@ -58,7 +58,10 @@ import {
   PerennialWoodyCropFull,
   PerennialWoodyCropPartial,
   PoultryClass,
-  PoultryMMSType,
+  PoultryMMS1Type,
+  PoultryMMS1TypeWithPasture,
+  PoultryMMS2Type,
+  PoultryMMS2TypeWithPasture,
   PurchasedFeedAquacultureType,
   PurchasedFeedLivestockRegionalType,
   PurchasedFeedLivestockRegionlessType,
@@ -380,7 +383,6 @@ type FeedlotFeedFactors = {
 export type FeedlotConstants = NamedConstants & {
   MMS: Record<FeedlotMMSType, MMSFactors>;
   FEED: Record<FeedlotDurationType, FeedlotFeedFactors>;
-  CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: MassPerMass<'CrudeProtein', 'N'>;
 };
 
 type TimeInLocations = {
@@ -436,16 +438,30 @@ type PoultryClassFactors = {
   crudeProtein: MassPerMass<'CrudeProtein', 'DryMatter'>;
   nitrogenRetentionRate: RealNumber;
   manureAsh: RealNumber;
+  emissionsPotential: VolumePerMass<'CH4', 'Volatile Solids'>;
 };
 
 type PoultryMMSFactors = {
-  EFm: RealNumber; // MassPerMass<'N2O', 'N'>;
-  FracGASM: RealNumber; // MassPerMass<'Volatilised N', 'N'>;
+  EFm: MassPerMass<'N2O', 'N'>;
+  FracGASM: MassPerMass<'Volatilised N', 'N'>;
+  METHANE_CONVERSION_FACTOR_BY_STATE: Record<PureState, RealNumber>;
 };
 
 export type PoultryConstants = NamedConstants & {
   CLASSES: Record<PoultryClass, PoultryClassFactors>;
-  MMS: Record<PoultryMMSType, PoultryMMSFactors>;
+  MMS: Record<
+    PoultryMMS1Type,
+    PoultryMMSFactors & { fractionSolidsLost: RealNumber }
+  > &
+    Record<PoultryMMS2Type, PoultryMMSFactors> &
+    Record<
+      Exclude<PoultryMMS1TypeWithPasture, PoultryMMS1Type>,
+      Pick<PoultryMMSFactors, 'EFm' | 'METHANE_CONVERSION_FACTOR_BY_STATE'>
+    > &
+    Record<
+      Exclude<PoultryMMS2TypeWithPasture, PoultryMMS2Type>,
+      Pick<PoultryMMSFactors, 'METHANE_CONVERSION_FACTOR_BY_STATE'>
+    >;
 };
 
 type OtherLivestockFactors = {
@@ -496,6 +512,21 @@ export type LivestockConstants = NamedConstants & {
     MassPerHead<'Liveweight'>
   >;
 
+  MANURE_MANAGEMENT_METHANE_CONVERSION_FACTORS: {
+    manureWithLitter: Record<MeanAnnualTemperature, RealNumber>;
+    beltManureRemoval: Record<MeanAnnualTemperature, RealNumber>;
+    manureStoredInHouse: Record<MeanAnnualTemperature, RealNumber>;
+    solidStorage: Record<MeanAnnualTemperature, RealNumber>;
+    composting: Record<MeanAnnualTemperature, RealNumber>;
+    digester: Record<MeanAnnualTemperature, RealNumber>;
+    // REVISIT: Deep litter is given as an option but none of the needed constants are supplied in the appendix.
+    // 'deepLitter': Record<MeanAnnualTemperature, RealNumber>;
+    directProcessing: Record<MeanAnnualTemperature, RealNumber>;
+    directApplication: Record<MeanAnnualTemperature, RealNumber>;
+    pastureRangeAndPaddock: Record<MeanAnnualTemperature, RealNumber>;
+    anaerobicLagoon: Record<MeanAnnualTemperature, RealNumber>;
+  };
+
   METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE: Record<
     MeanAnnualTemperature,
     RealNumber
@@ -503,7 +534,10 @@ export type LivestockConstants = NamedConstants & {
 
   OTHER_LIVESTOCK_METHANE_CONVERSION_PASTURE: RealNumber;
 
-  EFPRP: Record<'wet' | 'dry', MassPerMass<'N2O', 'N'>>;
+  EF_DEPOSITED_URINE_AND_DUNG_PRP: Record<
+    'wet' | 'dry',
+    MassPerMass<'N2O', 'N'>
+  >;
 
   EF_ATMOSPHERIC_DEPOSITION: Record<
     GrazingProductionSystemsWithRainfall,

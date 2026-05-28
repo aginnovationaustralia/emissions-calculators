@@ -109,7 +109,7 @@ export function calculateMassOfNitrogenAppliedToSoilsForFeedlot(
       'NITROGEN_RETENTION_FRACTION',
     ).named('NRj');
     const crudeProteinToNitrogen = selectConstant(
-      constants.FEEDLOT,
+      constants.COMMON,
       'CRUDE_PROTEIN_TO_NITROGEN_CONVERSION',
     ).named('CP per N');
     // CP / (CP / N)

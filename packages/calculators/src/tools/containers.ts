@@ -481,7 +481,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
       if (isMass(leftUnit) && isArea(rightUnit)) {
         unit = massPerArea(leftUnit.substance);
       } else if (isMassPerHeadPerDay(leftUnit) && isMassPerMass(rightUnit)) {
-        unit = massPerHeadPerDay(rightUnit.snum);
+        unit = massPerHeadPerDay(rightUnit.sdenom);
       } else if (
         isEnergyPerHeadPerDay(leftUnit) &&
         isEnergyPerMass(rightUnit)

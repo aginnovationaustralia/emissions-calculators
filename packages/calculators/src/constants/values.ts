@@ -31,7 +31,7 @@ import {
   volumePerMass,
   years,
 } from '@/tools/units';
-import { State } from './enums';
+import { MeanAnnualTemperature, PureState, State } from './enums';
 import {
   BeefPastureConstants,
   CommonConstants,
@@ -1875,8 +1875,6 @@ export const feedlotConstants: FeedlotConstants = {
       ETHER_EXTRACT_PERCENTAGE: percentage(5.5),
     },
   },
-
-  CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: massPerMass('CrudeProtein', 'N', 6.25),
 };
 
 export const dairyConstants: DairyConstants = {
@@ -2077,6 +2075,53 @@ export const dairyConstants: DairyConstants = {
   // }
 };
 
+const allPureStatesWithValue = (
+  rawValue: number,
+): Record<PureState, RealNumber> => {
+  const value = realNumber(rawValue);
+  return {
+    ACT: value,
+    NSW: value,
+    VIC: value,
+    QLD: value,
+    SA: value,
+    TAS: value,
+    NT: value,
+    WA: value,
+  };
+};
+
+const allTemperaturesWithValues = (
+  rawValues: number | { cool: number; temperate: number; warm: number },
+): Record<MeanAnnualTemperature, RealNumber> => {
+  const cool = typeof rawValues === 'number' ? rawValues : rawValues.cool;
+  const temperate =
+    typeof rawValues === 'number' ? rawValues : rawValues.temperate;
+  const warm = typeof rawValues === 'number' ? rawValues : rawValues.warm;
+
+  return {
+    '10 or below': realNumber(cool),
+    11: realNumber(cool),
+    12: realNumber(cool),
+    13: realNumber(cool),
+    14: realNumber(cool),
+    15: realNumber(temperate),
+    16: realNumber(temperate),
+    17: realNumber(temperate),
+    18: realNumber(temperate),
+    19: realNumber(temperate),
+    20: realNumber(temperate),
+    21: realNumber(temperate),
+    22: realNumber(temperate),
+    23: realNumber(temperate),
+    24: realNumber(temperate),
+    25: realNumber(temperate),
+    26: realNumber(warm),
+    27: realNumber(warm),
+    '28 or above': realNumber(warm),
+  };
+};
+
 export const poultryConstants: PoultryConstants = {
   name: 'POULTRY',
   CLASSES: {
@@ -2086,6 +2131,11 @@ export const poultryConstants: PoultryConstants = {
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.19),
       nitrogenRetentionRate: realNumber(0.35),
       manureAsh: realNumber(0.18),
+      emissionsPotential: volumePerMass(
+        'CH4',
+        'Volatile Solids',
+        cubicMetresToLitres(0.39),
+      ),
     },
     meatChickenGrowers: {
       dryMatterIntake: massPerHeadPerDay('DryMatter', 0.093),
@@ -2093,6 +2143,11 @@ export const poultryConstants: PoultryConstants = {
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.23),
       nitrogenRetentionRate: realNumber(0.47),
       manureAsh: realNumber(0.15),
+      emissionsPotential: volumePerMass(
+        'CH4',
+        'Volatile Solids',
+        cubicMetresToLitres(0.36),
+      ),
     },
     meatChickenBreeder: {
       dryMatterIntake: massPerHeadPerDay('DryMatter', 0.103),
@@ -2100,6 +2155,11 @@ export const poultryConstants: PoultryConstants = {
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.19),
       nitrogenRetentionRate: realNumber(0.32),
       manureAsh: realNumber(0.18),
+      emissionsPotential: volumePerMass(
+        'CH4',
+        'Volatile Solids',
+        cubicMetresToLitres(0.36),
+      ),
     },
     meatOther: {
       dryMatterIntake: massPerHeadPerDay('DryMatter', 0.093),
@@ -2107,37 +2167,68 @@ export const poultryConstants: PoultryConstants = {
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.23),
       nitrogenRetentionRate: realNumber(0.47),
       manureAsh: realNumber(0.15),
+      emissionsPotential: volumePerMass(
+        'CH4',
+        'Volatile Solids',
+        cubicMetresToLitres(0.36),
+      ),
     },
   },
 
   MMS: {
     manureWithLitter: {
-      FracGASM: realNumber(0.3),
-      EFm: realNumber(0.001),
+      FracGASM: massPerMass('Volatilised N', 'N', 0.3),
+      EFm: massPerMass('N2O', 'N', 0.001),
+      fractionSolidsLost: realNumber(0.15),
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.015),
     },
     beltManureRemoval: {
-      FracGASM: realNumber(0.05),
-      EFm: realNumber(0.001),
+      FracGASM: massPerMass('Volatilised N', 'N', 0.05),
+      EFm: massPerMass('N2O', 'N', 0.001),
+      fractionSolidsLost: realNumber(0),
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.015),
     },
     manureStoredInHouse: {
-      FracGASM: realNumber(0.4),
-      EFm: realNumber(0.02),
+      FracGASM: massPerMass('Volatilised N', 'N', 0.4),
+      EFm: massPerMass('N2O', 'N', 0.001),
+      fractionSolidsLost: realNumber(0.2),
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.015),
     },
     solidStorage: {
-      FracGASM: realNumber(0.2),
-      EFm: realNumber(0.005),
+      FracGASM: massPerMass('Volatilised N', 'N', 0.2),
+      EFm: massPerMass('N2O', 'N', 0.005),
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.02),
     },
     composting: {
-      FracGASM: realNumber(0.2),
-      EFm: realNumber(0.01),
+      FracGASM: massPerMass('Volatilised N', 'N', 0.2),
+      EFm: massPerMass('N2O', 'N', 0.01),
+      METHANE_CONVERSION_FACTOR_BY_STATE: {
+        ...allPureStatesWithValue(0.01),
+        TAS: realNumber(0.005),
+      },
     },
     directProcessing: {
-      FracGASM: realNumber(0),
-      EFm: realNumber(0),
+      FracGASM: massPerMass('Volatilised N', 'N', 0),
+      EFm: massPerMass('N2O', 'N', 0),
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0),
     },
     digester: {
-      FracGASM: realNumber(0),
-      EFm: realNumber(0),
+      FracGASM: massPerMass('Volatilised N', 'N', 0),
+      EFm: massPerMass('N2O', 'N', 0),
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.1),
+    },
+    pastureRangeAndPaddock: {
+      EFm: massPerMass('N2O', 'N', 0.02),
+      METHANE_CONVERSION_FACTOR_BY_STATE: {
+        ...allPureStatesWithValue(0.01),
+        // REVISIT: This might actually be 0.2, implied by a footnote on table A.1.8.1 - or that footnote might hold the typo and this is correct.
+        QLD: realNumber(0.03),
+        NT: realNumber(0.03),
+      },
+    },
+    directApplication: {
+      // NOTE: There is no row for this in table A.1.7.4, but in table A.1.8.1 this value is 0 across all mean annual temperatures, so this is implied.
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0),
     },
   },
 };
@@ -2347,6 +2438,42 @@ export const livestockConstants: LivestockConstants = {
     '27': realNumber(0.8),
     '28 or above': realNumber(0.8),
   },
+  MANURE_MANAGEMENT_METHANE_CONVERSION_FACTORS: {
+    anaerobicLagoon: {
+      '10 or below': realNumber(0.66),
+      '11': realNumber(0.68),
+      '12': realNumber(0.7),
+      '13': realNumber(0.71),
+      '14': realNumber(0.73),
+      '15': realNumber(0.74),
+      '16': realNumber(0.75),
+      '17': realNumber(0.76),
+      '18': realNumber(0.77),
+      '19': realNumber(0.77),
+      '20': realNumber(0.78),
+      '21': realNumber(0.78),
+      '22': realNumber(0.78),
+      '23': realNumber(0.79),
+      '24': realNumber(0.79),
+      '25': realNumber(0.79),
+      '26': realNumber(0.79),
+      '27': realNumber(0.8),
+      '28 or above': realNumber(0.8),
+    },
+    manureWithLitter: allTemperaturesWithValues(0.015),
+    beltManureRemoval: allTemperaturesWithValues(0.015),
+    manureStoredInHouse: allTemperaturesWithValues(0.015),
+    solidStorage: allTemperaturesWithValues(0.02),
+    composting: allTemperaturesWithValues({
+      cool: 0.005,
+      temperate: 0.01,
+      warm: 0.015,
+    }),
+    digester: allTemperaturesWithValues(0.1),
+    directProcessing: allTemperaturesWithValues(0),
+    directApplication: allTemperaturesWithValues(0),
+    pastureRangeAndPaddock: allTemperaturesWithValues(0.0047),
+  },
 
   OTHER_LIVESTOCK_METHANE_CONVERSION_BY_STATE: {
     ACT: realNumber(0.71),
@@ -2361,7 +2488,7 @@ export const livestockConstants: LivestockConstants = {
 
   OTHER_LIVESTOCK_METHANE_CONVERSION_PASTURE: realNumber(0.0047),
 
-  EFPRP: {
+  EF_DEPOSITED_URINE_AND_DUNG_PRP: {
     wet: massPerMass('N2O', 'N', 0.006),
     dry: massPerMass('N2O', 'N', 0.002),
   },
