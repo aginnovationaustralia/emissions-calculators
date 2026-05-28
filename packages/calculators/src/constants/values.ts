@@ -2080,14 +2080,14 @@ const allPureStatesWithValue = (
 ): Record<PureState, RealNumber> => {
   const value = realNumber(rawValue);
   return {
-    ACT: realNumber(rawValue),
-    NSW: realNumber(rawValue),
-    VIC: realNumber(rawValue),
-    QLD: realNumber(rawValue),
-    SA: realNumber(rawValue),
-    TAS: realNumber(rawValue),
-    NT: realNumber(rawValue),
-    WA: realNumber(rawValue),
+    ACT: value,
+    NSW: value,
+    VIC: value,
+    QLD: value,
+    SA: value,
+    TAS: value,
+    NT: value,
+    WA: value,
   };
 };
 

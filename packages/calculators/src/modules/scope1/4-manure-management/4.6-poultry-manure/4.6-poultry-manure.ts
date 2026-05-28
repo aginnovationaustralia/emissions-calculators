@@ -11,7 +11,7 @@ import {
   PureState,
 } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
-import { Container, num, root, RootContainer } from '@/tools/containers';
+import { Container, num, root } from '@/tools/containers';
 import { oneMinus } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
@@ -363,8 +363,6 @@ const calculateNitrogenIntakeForClass = (
     constants.COMMON,
     'CRUDE_PROTEIN_TO_NITROGEN_CONVERSION',
   ).named('CP per N');
-
-  const x = dryMatterIntake.multiply(crudeProtein);
   /**
    * NIjk = Ij * CPj ÷ 6.25
    */
@@ -500,9 +498,6 @@ export const calculateNitrogenPerStage2MMSForClass = (
         );
       return n;
     });
-    const sumN = sum(nFromEachPrimarySystem).named(
-      `MNj=${poultryClass.classNumber}m=${subscriptNotation[mms2]}T=2`,
-    );
     return sum(nFromEachPrimarySystem).named(
       `MNj=${poultryClass.classNumber}m=${subscriptNotation[mms2]}T=2`,
     );
