@@ -1,9 +1,9 @@
 import { calculate_16_4_1_2_SavannaCarbonChange } from '@/modules/lulucf/16.4-burning';
 import { BurningInput } from '@/modules/lulucf/burning-input';
 import {
-  LULUCFInput,
-  LULUCFInputSchema,
-  LULUCFInputTransformed,
+  LULUCFParentInput,
+  LULUCFParentInputSchema,
+  LULUCFParentInputTransformed,
 } from '@/modules/lulucf/input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
@@ -18,7 +18,7 @@ const columnCarbonStockChangeLowRainfallZone = 'B';
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-): LULUCFInputTransformed | undefined => {
+): LULUCFParentInputTransformed | undefined => {
   const cell = (column: string, offset: number = 0) =>
     sheet
       .cell(`${column}${row + offset}`)
@@ -40,14 +40,16 @@ const getCalculatorInput = (
     ),
   };
 
-  const lulucfInput: LULUCFInput = {
+  const lulucfInput: LULUCFParentInput = {
     isInLeachingZone: false,
     rainfallAbove600: false,
-    activities: [],
-    burning: [burning],
+    landUse: {
+      activities: [],
+      burning: [burning],
+    },
   };
 
-  return LULUCFInputSchema.parse(lulucfInput);
+  return LULUCFParentInputSchema.parse(lulucfInput);
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {

@@ -6,7 +6,7 @@ import { Container, root } from '@/tools/containers';
 import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { years, Years } from '@/tools/units';
-import { LULUCFInputTransformed } from './input';
+import { LULUCFParentInputTransformed } from './input';
 import { PerennialCropPlantingInputTransformed } from './perennial-crop-planting-input';
 import {
   isPerennialCropCalculationMethod1,
@@ -72,7 +72,7 @@ const getBiomassAccumulationRateBARcForRemovals = (
 };
 
 export const calculate_16_5_1_1_RemovalsFromPerennialCrops = (
-  input: LULUCFInputTransformed,
+  input: LULUCFParentInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   const { constants } = context;
@@ -82,7 +82,7 @@ export const calculate_16_5_1_1_RemovalsFromPerennialCrops = (
 
   const CgCO2 = selectConstant(constants.COMMON, 'CG_CO2');
 
-  const { perennialCrops } = input;
+  const perennialCrops = input.landUse?.perennialCrops;
 
   if (perennialCrops === undefined) {
     return zeroCO2e.named('RLU,c');
@@ -123,7 +123,7 @@ export const calculate_16_5_1_1_RemovalsFromPerennialCrops = (
 };
 
 export const calculate_16_5_1_3_EmissionsFromPerennialCrops = (
-  input: LULUCFInputTransformed,
+  input: LULUCFParentInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   /*
@@ -131,7 +131,7 @@ export const calculate_16_5_1_3_EmissionsFromPerennialCrops = (
   */
   const { constants } = context;
 
-  const { perennialCrops } = input;
+  const perennialCrops = input.landUse?.perennialCrops;
 
   if (perennialCrops === undefined) {
     return zeroCO2e.named('ELU,c (all)');

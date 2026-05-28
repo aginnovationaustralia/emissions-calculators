@@ -1,8 +1,8 @@
 import { calculate_16_2_1_1_NitrogenMineralisationSoilLosses } from '@/modules/lulucf/16.2-nitrogen-soil-losses';
 import {
-  LULUCFInput,
-  LULUCFInputSchema,
-  LULUCFInputTransformed,
+  LULUCFParentInput,
+  LULUCFParentInputSchema,
+  LULUCFParentInputTransformed,
 } from '@/modules/lulucf/input';
 import { LandUseChangeActivityInput } from '@/modules/lulucf/land-use-change-activity-input';
 import { getSheet } from '@/test/common/sheets';
@@ -22,7 +22,7 @@ const columnExpectedOutput = 'R';
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-): LULUCFInputTransformed | undefined => {
+): LULUCFParentInputTransformed | undefined => {
   const cell = (column: string, offset: number = 0) =>
     sheet
       .cell(`${column}${row + offset}`)
@@ -59,13 +59,15 @@ const getCalculatorInput = (
     activityAreaHectares,
   };
 
-  const lulucfInput: LULUCFInput = {
+  const lulucfInput: LULUCFParentInput = {
     isInLeachingZone: false,
     rainfallAbove600,
-    activities: [activity],
+    landUse: {
+      activities: [activity],
+    },
   };
 
-  return LULUCFInputSchema.parse(lulucfInput);
+  return LULUCFParentInputSchema.parse(lulucfInput);
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {

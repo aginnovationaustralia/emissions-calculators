@@ -55,6 +55,35 @@ function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+const SINGLE_SIMULATION_CONCURRENCY = 5;
+
+/** Run `fn` over `items` with at most `concurrency` tasks in flight at once. */
+async function mapWithConcurrency<T, R>(
+  items: T[],
+  concurrency: number,
+  fn: (item: T, index: number) => Promise<R>,
+): Promise<R[]> {
+  if (items.length === 0) {
+    return [];
+  }
+
+  const results: R[] = new Array(items.length);
+  let nextIndex = 0;
+
+  async function worker(): Promise<void> {
+    while (nextIndex < items.length) {
+      const i = nextIndex++;
+      results[i] = await fn(items[i], i);
+    }
+  }
+
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, items.length) }, () => worker()),
+  );
+
+  return results;
+}
+
 function safePlotFileName(areaKey: string, index: number): string {
   const safe = areaKey.replace(/[^a-zA-Z0-9._-]+/g, '_').slice(0, 200);
   return `${index}-${safe}.plo`;
@@ -350,13 +379,15 @@ export async function runSimulationBatch(
   return results;
 }
 
+// NOTE: The preferred solution is to get batch execution fully tested and implemented. This will be upgraded shortly
 export async function runSimulationsSingle(
   requests: BatchSimulationRequest[],
   options: RunSimulationBatchOptions,
 ): Promise<BatchSimulationResponse[]> {
-  // TODO: Add some rate limiting to prevent lots of parallel requests
-  const results = await Promise.all(
-    requests.map(async (request) => {
+  return mapWithConcurrency(
+    requests,
+    SINGLE_SIMULATION_CONCURRENCY,
+    async (request) => {
       const simulationCsv = await runSimulation(
         request.plotContent,
         options.fullcamApiKey,
@@ -365,8 +396,6 @@ export async function runSimulationsSingle(
         areaKey: request.areaKey,
         simulationCsv,
       };
-    }),
+    },
   );
-
-  return results;
 }

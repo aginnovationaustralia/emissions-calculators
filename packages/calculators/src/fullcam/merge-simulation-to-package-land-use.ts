@@ -67,8 +67,6 @@ export function generateLulucfInput(pairs: FullCAMPair[]): LULUCFInput {
   );
 
   const result: LULUCFInput = {
-    isInLeachingZone: false, // TODO
-    rainfallAbove600: false, // TODO
     activities,
     burning,
     perennialCrops,
