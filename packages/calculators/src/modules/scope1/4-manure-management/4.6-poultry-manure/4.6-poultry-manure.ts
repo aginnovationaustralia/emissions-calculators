@@ -172,8 +172,8 @@ const calculateVolatileSolidsTransferredOutOfPrimarySystems = (
  */
 const calculateMethaneProductionInStage1MMSForClass = (
   poultryClass: PoultryManureClassInputTransformed,
-  state: RootContainer<PureState>,
-  meanAnnualTemperature: RootContainer<MeanAnnualTemperature> | undefined,
+  state: PureState,
+  meanAnnualTemperature: MeanAnnualTemperature | undefined,
   constants: HasCommonConstants & {
     POULTRY: PoultryConstants;
     LIVESTOCK: LivestockConstants;
@@ -244,8 +244,8 @@ const calculateMethaneProductionInStage1MMSForClass = (
 const calculateMethaneProductionInStage2MMSForClass = (
   poultryClass: PoultryManureClassInputTransformed,
   stage2ManureAllocations: PoultryMMS1To2AllocationInputTransformed,
-  state: RootContainer<PureState>,
-  meanAnnualTemperature: RootContainer<MeanAnnualTemperature> | undefined,
+  state: PureState,
+  meanAnnualTemperature: MeanAnnualTemperature | undefined,
   constants: HasCommonConstants & {
     POULTRY: PoultryConstants;
     LIVESTOCK: LivestockConstants;
@@ -310,8 +310,8 @@ const calculateMethaneProductionInStage2MMSForClass = (
 export const calculateManureManagementCH4ForClass = (
   poultryClass: PoultryManureClassInputTransformed,
   stage2ManureAllocations: PoultryMMS1To2AllocationInputTransformed,
-  state: RootContainer<PureState>,
-  meanAnnualTemperature: RootContainer<MeanAnnualTemperature> | undefined,
+  state: PureState,
+  meanAnnualTemperature: MeanAnnualTemperature | undefined,
   constants: HasCommonConstants & {
     POULTRY: PoultryConstants;
     LIVESTOCK: LivestockConstants;
@@ -468,7 +468,13 @@ export const calculateNitrogenPerStage2MMSForClass = (
     return nitrogenInSystem
       .multiply(
         oneMinus(
-          // TODO: Explain unit switch
+          /**
+           * On the unit switch:
+           * My understanding here is that the two values being subtracted here are
+           * fractions of 'other stuff' in the mass of nitrogen. Subtracting them from 1
+           * gives us the fraction of N that isn't 'other stuff', i.e, the solid nitrogen
+           * that can be transferred to stage 2 of treatment.
+           */
           fractionNitrogenVolatised.switchUnit((v) => realNumber(v.value)),
         ).minus(
           nitrousOxideEmissionsFactor.switchUnit((v) => realNumber(v.value)),
@@ -541,15 +547,15 @@ export const calculateDirectN2OEmissionsForClass = (
   const CN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
 
   /**
-   * REVISIT:
+   * 4.6.1.3 (1): EN2O,dir = SUMj,m,T (MNjmT * EFjm * CN2O) * 10^-3
    *
-   * I'm not sure if the inclusion of pasture in 4.6.1.3 is a mistake. The guidelines
-   * currently calculate 'direct N2O' from manure deposited at pasture in two different
-   * ways for poultry, it's unclear to me if these are two different forms of direct N2O
-   * or if these equations are meant to be used exclusively (there is nothing I've seen
-   * to suggest this).
+   * REVISIT: I'm not sure if the inclusion (or rather, lack of exclusion) of pasture in
+   * 4.6.1.3 is a mistake. The guidelines currently calculate 'direct N2O' from manure
+   * deposited at pasture in two different ways for poultry, it's unclear to me if these
+   * are two different forms of direct N2O or if these equations are meant to be
+   * used exclusively (there is nothing I've seen to suggest this).
    *
-   * For now, I'm performing both calculations here.
+   * For now, I'm performing both calculations for pasture.
    */
   const n2oFromPrimarySystems = PoultryMMS1TypesWithPasture.map((mms) => {
     const nitrogenInSystem = nitrogenInPrimarySystems[mms];
@@ -587,6 +593,8 @@ export const calculateDirectN2OEmissionsForClass = (
 
   /**
    * See above re: REVISIT comment.
+   *
+   * 4.6.1.10 (1): EMN2O,PRP,dir = SUMj (MNjm=14T=1 * EFPRP * CN2O) * 10^-3
    */
   const EFprp = selectConstant(
     constants.LIVESTOCK,
@@ -599,12 +607,7 @@ export const calculateDirectN2OEmissionsForClass = (
       .multiply(CN2O);
 
   /**
-   * TODO
-   * From 4.6.1.3 (1): EN2O,dir = SUMj,m,T (MNjmT * EFjm * CN2O) * 10^-3
-   *
-   * From 4.6.1.10 (1): EMN2O,PRP,dir = SUMj (MNjm=14T=1 * EFPRP * CN2O) * 10^-3
-   *
-   * This has been factorised below as: (SUMj,m,T (MNjmT * EFjm) + SUMj (MNjm=14T=1 * EFPRP)) * CN2O) * 10^-3
+   * EN2O,dir + EMN2O,PRP,dir
    */
   return sum(n2oFromPrimarySystems)
     .plus(sum(n2oFromSecondarySystems))
@@ -854,7 +857,7 @@ export const calculateMassOfNitrogenAppliedToSoilsForClass = (
       return nitrogenInSecondarySystems[mms]
         .multiply(
           oneMinus(
-            // TODO: Justify unit switch
+            // See above (`calculateNitrogenPerStage2MMSForClass`) for explanation of unit switch.
             nitrousOxideEmissionsFactor.switchUnit((v) => realNumber(v.value)),
           ).minus(fracGASM.switchUnit((v) => realNumber(v.value))),
         )

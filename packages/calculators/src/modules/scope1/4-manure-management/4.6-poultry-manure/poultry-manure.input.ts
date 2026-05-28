@@ -202,29 +202,24 @@ export type CropPoultryManureInputTransformed = z.output<
 
 export const LivestockPoultryInputSchema =
   CommonPoultryManureInputSchema.extend({
-    temperatureZone: z
-      .literal(MeanAnnualTemperatures)
-      .optional()
-      .transform(mapOptional((val) => input('MAT', val)))
-      .meta({
-        description: 'Average annual temperature, if known',
-      }),
-    // TODO: Transform?
-    state: z
-      .literal(PureStates)
-      .transform((val) => input('state', val))
-      .meta({
-        description: 'TODO',
-      }),
-    climateZone: z.literal(ClimateZoneTypes).meta({
-      description: 'TODO',
+    temperatureZone: z.literal(MeanAnnualTemperatures).optional().meta({
+      description: 'Average annual temperature, if known',
+    }),
+    state: z.literal(PureStates).meta({
+      description: 'State that contains the land the flock occupies',
+    }),
+    climateZone: z.enum(ClimateZoneTypes).meta({
+      description:
+        'What is the climate zone of the flock? (see Chapter 1 section 1.8.2)',
     }),
     // REVISIT: The description in section 4.6 says: Select the value based on the production system which most accurately describes the land surrounding the housing area. "productionSystem" might not be the most appropriate name for this input.
-    productionSystem: z.literal(GrazingProductionSystemsWithRainfall).meta({
-      description: 'TODO',
+    productionSystem: z.enum(GrazingProductionSystemsWithRainfall).meta({
+      description:
+        'The production system which most accurately describes the land surrounding the housing area.',
     }),
     isInLeachingZone: z.boolean().meta({
-      description: 'TODO',
+      description:
+        'Is the flock located in a leaching zone? (see Chapter 1 section 1.8.2)',
     }),
   });
 export type LivestockPoultryManureInput = z.input<
