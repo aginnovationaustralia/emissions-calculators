@@ -16,6 +16,37 @@ import {
   PureStates,
 } from '@/constants/enums';
 
+const PoultryMMS2AllocationInputSchema = object({
+  solidStorage: proportion(
+    'Fraction of manure stored in solid storage',
+  ).transform((val) => input('MMSm=4T=2', realNumber(val))),
+  composting: proportion('Fraction of manure composted').transform((val) =>
+    input('MMSm=6T=2', realNumber(val)),
+  ),
+  digester: proportion('Fraction of manure digested').transform((val) =>
+    input('MMSm=7T=2', realNumber(val)),
+  ),
+  directProcessing: proportion(
+    'Fraction of manure processed directly',
+  ).transform((val) => input('MMSm=12T=2', realNumber(val))),
+  directApplication: proportion(
+    'Fraction of manure applied directly',
+  ).transform((val) => input('MMSm=13T=2', realNumber(val))),
+});
+
+const PoultryMMS1To2AllocationInputSchema = object({
+  manureWithLitter: PoultryMMS2AllocationInputSchema,
+  beltManureRemoval: PoultryMMS2AllocationInputSchema,
+  manureStoredInHouse: PoultryMMS2AllocationInputSchema,
+});
+
+export type PoultryMMS1To2AllocationInput = z.input<
+  typeof PoultryMMS1To2AllocationInputSchema
+>;
+export type PoultryMMS1To2AllocationInputTransformed = z.output<
+  typeof PoultryMMS1To2AllocationInputSchema
+>;
+
 const createPoultryManureClassInputSchema = <
   J extends '1' | '2a' | '2b' | '2c',
 >(
@@ -55,37 +86,35 @@ const createPoultryManureClassInputSchema = <
       ),
 
     manureAllocation: object({
-      allocationStage1: object({
-        manureWithLitter: proportion(
-          'Fraction of all manure produced by this class initially stored/treated in a manure with litter system.',
-        ).transform((val) => input(`MMSj=${j}m=10T=1'`, realNumber(val))),
-        beltManureRemoval: proportion(
-          'Fraction of all manure produced by this class initially stored/treated in a belt-removal system.',
-        ).transform((val) => input(`MMSj=${j}m=11aT=1`, realNumber(val))),
-        manureStoredInHouse: proportion(
-          'Fraction of all manure produced by this class initially stored/treated in-house.',
-        ).transform((val) => input(`MMSj=${j}m=11bT=1`, realNumber(val))),
-        pastureRangeAndPaddock: proportion(
-          'Fraction of all manure produced by this class deposited directly onto pasture range/paddock. There is no secondary system for manure treated this way.',
-        ).transform((val) => input(`MMSj=${j}m=14T=1`, realNumber(val))),
-      }),
-      allocationStage2: object({
-        solidStorage: proportion(
-          `Fraction of the manure produced by this class and transferred out of primary treatment that was then stored in solid storage.`,
-        ).transform((val) => input(`MMSj=${j}m=4T=2`, realNumber(val))),
-        composting: proportion(
-          `Fraction of the manure produced by this class and transferred out of primary treatment that was then composted.`,
-        ).transform((val) => input(`MMSj=${j}m=6T=2`, realNumber(val))),
-        digester: proportion(
-          `Fraction of the manure produced by this class and transferred out of primary treatment that was then digested.`,
-        ).transform((val) => input(`MMSj=${j}m=7T=2`, realNumber(val))),
-        directProcessing: proportion(
-          `Fraction of the manure produced by this class and transferred out of primary treatment that was then processed directly into pelletised fertiliser.`,
-        ).transform((val) => input(`MMSj=${j}m=12T=2`, realNumber(val))),
-        directApplication: proportion(
-          `Fraction of the manure produced by this class and transferred out of primary treatment that was then applied directly to soil.`,
-        ).transform((val) => input(`MMSj=${j}m=13T=2`, realNumber(val))),
-      }),
+      manureWithLitter: proportion(
+        'Fraction of all manure produced by this class initially stored/treated in a manure with litter system.',
+      ).transform((val) => input(`MMSj=${j}m=10T=1'`, realNumber(val))),
+      beltManureRemoval: proportion(
+        'Fraction of all manure produced by this class initially stored/treated in a belt-removal system.',
+      ).transform((val) => input(`MMSj=${j}m=11aT=1`, realNumber(val))),
+      manureStoredInHouse: proportion(
+        'Fraction of all manure produced by this class initially stored/treated in-house.',
+      ).transform((val) => input(`MMSj=${j}m=11bT=1`, realNumber(val))),
+      pastureRangeAndPaddock: proportion(
+        'Fraction of all manure produced by this class deposited directly onto pasture range/paddock. There is no secondary system for manure treated this way.',
+      ).transform((val) => input(`MMSj=${j}m=14T=1`, realNumber(val))),
+      // allocationStage2: object({
+      //   solidStorage: proportion(
+      //     `Fraction of the manure produced by this class and transferred out of primary treatment that was then stored in solid storage.`,
+      //   ).transform((val) => input(`MMSj=${j}m=4T=2`, realNumber(val))),
+      //   composting: proportion(
+      //     `Fraction of the manure produced by this class and transferred out of primary treatment that was then composted.`,
+      //   ).transform((val) => input(`MMSj=${j}m=6T=2`, realNumber(val))),
+      //   digester: proportion(
+      //     `Fraction of the manure produced by this class and transferred out of primary treatment that was then digested.`,
+      //   ).transform((val) => input(`MMSj=${j}m=7T=2`, realNumber(val))),
+      //   directProcessing: proportion(
+      //     `Fraction of the manure produced by this class and transferred out of primary treatment that was then processed directly into pelletised fertiliser.`,
+      //   ).transform((val) => input(`MMSj=${j}m=12T=2`, realNumber(val))),
+      //   directApplication: proportion(
+      //     `Fraction of the manure produced by this class and transferred out of primary treatment that was then applied directly to soil.`,
+      //   ).transform((val) => input(`MMSj=${j}m=13T=2`, realNumber(val))),
+      // }),
     }),
   }).transform((val) => ({ ...val, classNumber: j }));
 
@@ -149,6 +178,7 @@ export const PoultryManureInputSchema = object({
     description: 'TODO',
   }),
   classes: PoultryManureClassesInputSchema,
+  mms1To2Allocation: PoultryMMS1To2AllocationInputSchema,
   /**
    * REVISIT: This description is *slightly* incorrect/misleading, this is the proportion
    * of all manure excluding the manure applied/deposited directly to soil. This will

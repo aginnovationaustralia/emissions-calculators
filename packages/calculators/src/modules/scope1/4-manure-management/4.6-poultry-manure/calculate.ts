@@ -30,24 +30,28 @@ export function calculateManureManagementCH4ForPoultry(
 ) {
   const layersCH4 = calculateManureManagementCH4ForClass(
     manureInput.classes.layers,
+    manureInput.mms1To2Allocation,
     manureInput.state,
     manureInput.temperatureZone,
     context.constants,
   ).named('ECH4 (j=1)');
   const meatBreedersCH4 = calculateManureManagementCH4ForClass(
     manureInput.classes.meatChickenBreeder,
+    manureInput.mms1To2Allocation,
     manureInput.state,
     manureInput.temperatureZone,
     context.constants,
   );
   const meatGrowersCH4 = calculateManureManagementCH4ForClass(
     manureInput.classes.meatChickenGrowers,
+    manureInput.mms1To2Allocation,
     manureInput.state,
     manureInput.temperatureZone,
     context.constants,
   );
   const meatOtherCH4 = calculateManureManagementCH4ForClass(
     manureInput.classes.meatOther,
+    manureInput.mms1To2Allocation,
     manureInput.state,
     manureInput.temperatureZone,
     context.constants,
@@ -75,21 +79,25 @@ export function calculateDirectN2OEmissionsForPoultry(
 ) {
   const layersDirectN2O = calculateDirectN2OEmissionsForClass(
     manureInput.classes.layers,
+    manureInput.mms1To2Allocation,
     manureInput.climateZone,
     context.constants,
   );
   const meatBreedersDirectN2O = calculateDirectN2OEmissionsForClass(
     manureInput.classes.meatChickenBreeder,
+    manureInput.mms1To2Allocation,
     manureInput.climateZone,
     context.constants,
   );
   const meatGrowersDirectN2O = calculateDirectN2OEmissionsForClass(
     manureInput.classes.meatChickenGrowers,
+    manureInput.mms1To2Allocation,
     manureInput.climateZone,
     context.constants,
   );
   const meatOtherDirectN2O = calculateDirectN2OEmissionsForClass(
     manureInput.classes.meatOther,
+    manureInput.mms1To2Allocation,
     manureInput.climateZone,
     context.constants,
   );
@@ -118,24 +126,28 @@ export function calculateAtmosphericDepositionN2OEmissionsForPoultry(
   const layersAtmosphericDepN2O =
     calculateAtmosphericDepositionN2OEmissionsForClass(
       manureInput.classes.layers,
+      manureInput.mms1To2Allocation,
       manureInput.productionSystem,
       context.constants,
     );
   const meatBreederAtmosphericDepN2O =
     calculateAtmosphericDepositionN2OEmissionsForClass(
       manureInput.classes.meatChickenBreeder,
+      manureInput.mms1To2Allocation,
       manureInput.productionSystem,
       context.constants,
     );
   const meatGrowerAtmosphericDepN2O =
     calculateAtmosphericDepositionN2OEmissionsForClass(
       manureInput.classes.meatChickenGrowers,
+      manureInput.mms1To2Allocation,
       manureInput.productionSystem,
       context.constants,
     );
   const meatOtherAtmosphericDepN2O =
     calculateAtmosphericDepositionN2OEmissionsForClass(
       manureInput.classes.meatOther,
+      manureInput.mms1To2Allocation,
       manureInput.productionSystem,
       context.constants,
     );
@@ -163,6 +175,7 @@ export function calculateLeachingAndRunoffN2OEmissionsForPoultry(
   const layersLeachingRunoffN2O =
     calculateLeachingAndRunoffN2OEmissionsForClass(
       manureInput.classes.layers,
+      manureInput.mms1To2Allocation,
       manureInput.isInLeachingZone,
       context.constants,
     );
@@ -170,6 +183,7 @@ export function calculateLeachingAndRunoffN2OEmissionsForPoultry(
   const meatBreederLeachingRunoffN2O =
     calculateLeachingAndRunoffN2OEmissionsForClass(
       manureInput.classes.meatChickenBreeder,
+      manureInput.mms1To2Allocation,
       manureInput.isInLeachingZone,
       context.constants,
     );
@@ -177,6 +191,7 @@ export function calculateLeachingAndRunoffN2OEmissionsForPoultry(
   const meatGrowerLeachingRunoffN2O =
     calculateLeachingAndRunoffN2OEmissionsForClass(
       manureInput.classes.meatChickenGrowers,
+      manureInput.mms1To2Allocation,
       manureInput.isInLeachingZone,
       context.constants,
     );
@@ -184,6 +199,7 @@ export function calculateLeachingAndRunoffN2OEmissionsForPoultry(
   const meatOtherLeachingRunoffN2O =
     calculateLeachingAndRunoffN2OEmissionsForClass(
       manureInput.classes.meatOther,
+      manureInput.mms1To2Allocation,
       manureInput.isInLeachingZone,
       context.constants,
     );
@@ -211,24 +227,28 @@ export function calculateMassOfNitrogenAppliedToSoilsForPoultry(
   const nitrogenAppliedToSoilPerClass = [
     calculateMassOfNitrogenAppliedToSoilsForClass(
       manureInput.classes.layers,
+      manureInput.mms1To2Allocation,
       isInLeachingZone,
       manureInput.fractionAppliedToSoils,
       constants,
     ),
     calculateMassOfNitrogenAppliedToSoilsForClass(
       manureInput.classes.meatChickenBreeder,
+      manureInput.mms1To2Allocation,
       isInLeachingZone,
       manureInput.fractionAppliedToSoils,
       constants,
     ),
     calculateMassOfNitrogenAppliedToSoilsForClass(
       manureInput.classes.meatChickenGrowers,
+      manureInput.mms1To2Allocation,
       isInLeachingZone,
       manureInput.fractionAppliedToSoils,
       constants,
     ),
     calculateMassOfNitrogenAppliedToSoilsForClass(
       manureInput.classes.meatOther,
+      manureInput.mms1To2Allocation,
       isInLeachingZone,
       manureInput.fractionAppliedToSoils,
       constants,

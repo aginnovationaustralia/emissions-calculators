@@ -383,7 +383,6 @@ type FeedlotFeedFactors = {
 export type FeedlotConstants = NamedConstants & {
   MMS: Record<FeedlotMMSType, MMSFactors>;
   FEED: Record<FeedlotDurationType, FeedlotFeedFactors>;
-  CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: MassPerMass<'CrudeProtein', 'N'>;
 };
 
 type TimeInLocations = {

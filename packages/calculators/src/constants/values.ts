@@ -1875,8 +1875,6 @@ export const feedlotConstants: FeedlotConstants = {
       ETHER_EXTRACT_PERCENTAGE: percentage(5.5),
     },
   },
-
-  CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: massPerMass('CrudeProtein', 'N', 6.25),
 };
 
 export const dairyConstants: DairyConstants = {
