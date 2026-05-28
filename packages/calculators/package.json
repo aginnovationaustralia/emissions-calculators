@@ -1,6 +1,6 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "4.0.1-beta.0",
+  "version": "4.0.1-beta.3",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -361,6 +361,7 @@
   },
   "dependencies": {
     "decimal.js-light": "^2.5.1",
+    "fflate": "^0.8.3",
     "mixpanel": "^0.19.1",
     "mixpanel-browser": "^2.72.0",
     "openapi3-ts": "^4.5.0",

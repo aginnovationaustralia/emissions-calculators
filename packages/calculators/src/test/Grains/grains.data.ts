@@ -259,6 +259,8 @@ export const grainTriticale: GrainsCrop = {
 };
 
 export const grainsTestData: GrainsInput = {
+  isInLeachingZone: false,
+  rainfallAbove600: false,
   crops: [grainWheat, grainSorghum, grainLegume, grainGrass, grainTriticale],
   electricity: {
     method: 'location',
@@ -268,6 +270,8 @@ export const grainsTestData: GrainsInput = {
 };
 
 export const grainsTestData102: GrainsInput = {
+  isInLeachingZone: false,
+  rainfallAbove600: false,
   state: 'nsw',
   electricity: {
     method: 'location',

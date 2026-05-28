@@ -1,17 +1,23 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { selectConstant } from '@/tools/constants';
-import { one, zero } from '@/tools/sentinels';
+import { one, zero, zeroN } from '@/tools/sentinels';
 import {
   calculateMineralisedNitrogenFromClearingToCrops,
   calculateMineralisedNitrogenFromClearingToOpen,
 } from './16.2-nitrogen-soil-losses';
-import { LULUCFInputTransformed } from './input';
+import { LULUCFParentInputTransformed } from './input';
 
 export const calculate_16_3_1_1_NitrogenLeachingAndRunoff = (
-  input: LULUCFInputTransformed,
+  input: LULUCFParentInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
+  const { landUse } = input;
+
+  if (!landUse) {
+    return zeroN.named('ELUC,i,j=1-3,y');
+  }
+
   /*
     ELUC,i,j=1-3,y = Ni,j=1-3,y * FracWET * FracLEACH * EF leach * Cg,N2O
     Ni,j=1-3,y = SUM (∆Si,j=1-3,y)/R
@@ -28,8 +34,14 @@ export const calculate_16_3_1_1_NitrogenLeachingAndRunoff = (
   const EFleach = selectConstant(constants.CROP, 'EF_N2O_LEACHING_AND_RUNOFF');
   const CgN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
 
-  const Nij1y = calculateMineralisedNitrogenFromClearingToCrops(input, context);
-  const Nij23y = calculateMineralisedNitrogenFromClearingToOpen(input, context);
+  const Nij1y = calculateMineralisedNitrogenFromClearingToCrops(
+    landUse,
+    context,
+  );
+  const Nij23y = calculateMineralisedNitrogenFromClearingToOpen(
+    landUse,
+    context,
+  );
 
   const Nij123y = Nij1y.plus(Nij23y);
 

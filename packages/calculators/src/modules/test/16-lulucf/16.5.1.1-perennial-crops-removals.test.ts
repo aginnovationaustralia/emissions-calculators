@@ -5,9 +5,9 @@ import {
 } from '@/constants/enums';
 import { calculate_16_5_1_1_RemovalsFromPerennialCrops } from '@/modules/lulucf/16.5-perennial-crops';
 import {
-  LULUCFInput,
-  LULUCFInputSchema,
-  LULUCFInputTransformed,
+  LULUCFParentInput,
+  LULUCFParentInputSchema,
+  LULUCFParentInputTransformed,
 } from '@/modules/lulucf/input';
 import { PerennialCropPlantingInput } from '@/modules/lulucf/perennial-crop-planting-input';
 import { PerennialCropInput } from '@/modules/lulucf/perennial-crops-input';
@@ -72,7 +72,7 @@ const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
   method: '1' | '2',
-): LULUCFInputTransformed | undefined => {
+): LULUCFParentInputTransformed | undefined => {
   const cell = (column: string, offset: number = 0) =>
     sheet
       .cell(`${column}${row + offset}`)
@@ -118,15 +118,17 @@ const getCalculatorInput = (
     method2BiomassAtMaturity,
   );
 
-  const lulucfInput: LULUCFInput = {
+  const lulucfInput: LULUCFParentInput = {
     isInLeachingZone: false,
     rainfallAbove600: false,
-    perennialCrops: [crop1],
+    landUse: {
+      perennialCrops: [crop1],
+    },
   };
 
   // console.dir(lulucfInput, { depth: null });
 
-  return LULUCFInputSchema.parse(lulucfInput);
+  return LULUCFParentInputSchema.parse(lulucfInput);
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {

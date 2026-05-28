@@ -1,8 +1,8 @@
 import { calculate_16_1_1_7_HarvestedWoodProducts } from '@/modules/lulucf/16.1-land-use-change-forestry';
 import {
-  LULUCFInput,
-  LULUCFInputSchema,
-  LULUCFInputTransformed,
+  LULUCFParentInput,
+  LULUCFParentInputSchema,
+  LULUCFParentInputTransformed,
 } from '@/modules/lulucf/input';
 import { LandUseChangeActivityInput } from '@/modules/lulucf/land-use-change-activity-input';
 import { getSheet } from '@/test/common/sheets';
@@ -18,7 +18,7 @@ const columnActivityArea = 'B';
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-): LULUCFInputTransformed | undefined => {
+): LULUCFParentInputTransformed | undefined => {
   const cell = (column: string, offset: number = 0) =>
     sheet
       .cell(`${column}${row + offset}`)
@@ -44,13 +44,15 @@ const getCalculatorInput = (
     carbonMassInDebrisPreviousYear: 0,
   };
 
-  const lulucfInput: LULUCFInput = {
+  const lulucfInput: LULUCFParentInput = {
     isInLeachingZone: false,
     rainfallAbove600: false,
-    activities: [activity],
+    landUse: {
+      activities: [activity],
+    },
   };
 
-  return LULUCFInputSchema.parse(lulucfInput);
+  return LULUCFParentInputSchema.parse(lulucfInput);
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {

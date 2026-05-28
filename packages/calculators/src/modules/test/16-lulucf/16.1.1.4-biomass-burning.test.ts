@@ -3,9 +3,9 @@ import {
   calculate_16_1_1_4_BiomassBurningN2O,
 } from '@/modules/lulucf/16.1-land-use-change-forestry';
 import {
-  LULUCFInput,
-  LULUCFInputSchema,
-  LULUCFInputTransformed,
+  LULUCFParentInput,
+  LULUCFParentInputSchema,
+  LULUCFParentInputTransformed,
 } from '@/modules/lulucf/input';
 import { LandUseChangeActivityInput } from '@/modules/lulucf/land-use-change-activity-input';
 import { getSheet } from '@/test/common/sheets';
@@ -22,7 +22,7 @@ const columnAreaBurnt = 'D';
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-): LULUCFInputTransformed | undefined => {
+): LULUCFParentInputTransformed | undefined => {
   const cell = (column: string, offset: number = 0) =>
     sheet
       .cell(`${column}${row + offset}`)
@@ -50,13 +50,15 @@ const getCalculatorInput = (
     activityAreaHectares: 100,
   };
 
-  const lulucfInput: LULUCFInput = {
+  const lulucfInput: LULUCFParentInput = {
     isInLeachingZone: false,
     rainfallAbove600: false,
-    activities: [activity],
+    landUse: {
+      activities: [activity],
+    },
   };
 
-  return LULUCFInputSchema.parse(lulucfInput);
+  return LULUCFParentInputSchema.parse(lulucfInput);
 };
 
 const getExpectedOutputCH4 = (sheet: XLSX.Sheet, row: number): number => {

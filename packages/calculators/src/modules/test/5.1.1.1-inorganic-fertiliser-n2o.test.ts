@@ -2,6 +2,7 @@ import {
   BaseGrainsCropSchema,
   BaseGrainsCropTransformed,
 } from '@/calculators/Grains/types/base-crop.input';
+import { InorganicFertiliserType } from '@/constants/enums';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
 import { calculateInorganicFertiliserN2O } from '../scope1/5-fertiliser/5.1-inorganic-fertiliser';
@@ -16,13 +17,62 @@ import {
 } from '../scope1/5-fertiliser/inorganic-fertilisers.input';
 import {
   checkBasicCropProductionSystem,
-  checkExtendedCropProductionSystem,
   checkInorganicFertiliserType,
+  checkProductionSystemsInorganicFertilisers,
 } from './fertiliser-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from './sheet-comparison';
+
+const getInorganicFertilisersInput = (
+  method: '1' | '2',
+  fertiliserType: InorganicFertiliserType,
+  massAppliedKg: number,
+  customNitrogenFraction: number | undefined,
+  cell: (column: string) => string | undefined,
+): InorganicFertilisersInput => {
+  if (method === '1') {
+    const result: InorganicFertilisersScope1Method1Input = {
+      productionSystem: checkBasicCropProductionSystem(cell('A')),
+      applications: [
+        {
+          calculationMethodScope3: '1',
+          fertiliserType,
+          massAppliedKg,
+
+          components: customNitrogenFraction
+            ? [
+                {
+                  componentType: 'Nitrogen - Generic',
+                  fractionOfFertiliser: customNitrogenFraction,
+                },
+              ]
+            : undefined,
+        },
+      ],
+      calculationMethodScope1: '1',
+    };
+
+    return result;
+  }
+
+  const result: InorganicFertilisersScope1Method2Input = {
+    productionSystem: checkProductionSystemsInorganicFertilisers(cell('A')),
+    applications: [
+      {
+        calculationMethodScope3: '2',
+        fertiliserType,
+        massAppliedKg,
+        ...(customNitrogenFraction ? { customNitrogenFraction } : {}),
+        customScope3EmissionFactor: 0,
+      },
+    ],
+    calculationMethodScope1: '2',
+  };
+
+  return result;
+};
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -37,49 +87,17 @@ const getCalculatorInput = (
   }
 
   const areaSown = Number(cell('C'));
-  const productionSystem =
-    method === '1'
-      ? checkBasicCropProductionSystem(cell('A'))
-      : checkExtendedCropProductionSystem(cell('A'));
   const fertiliserType = checkInorganicFertiliserType(cell('B'));
   const massAppliedKg = Number(cell('D'));
   const customNitrogenFraction = cell('F') ? Number(cell('F')) : undefined;
 
-  const inorganicFertilisers: InorganicFertilisersInput =
-    method === '1'
-      ? ({
-          productionSystem,
-          applications: [
-            {
-              calculationMethodScope3: '1',
-              fertiliserType,
-              massAppliedKg,
-              components: customNitrogenFraction
-                ? [
-                    {
-                      componentType: 'Nitrogen - Generic',
-                      componentOrigin: 'Unspecified',
-                      fractionOfFertiliser: customNitrogenFraction,
-                    },
-                  ]
-                : undefined,
-            },
-          ],
-          calculationMethodScope1: '1',
-        } as InorganicFertilisersScope1Method1Input)
-      : ({
-          productionSystem,
-          applications: [
-            {
-              calculationMethodScope3: '2',
-              fertiliserType,
-              massAppliedKg,
-              ...(customNitrogenFraction ? { customNitrogenFraction } : {}),
-              customScope3EmissionFactor: 0,
-            },
-          ],
-          calculationMethodScope1: '2',
-        } as InorganicFertilisersScope1Method2Input);
+  const inorganicFertilisers = getInorganicFertilisersInput(
+    method,
+    fertiliserType,
+    massAppliedKg,
+    customNitrogenFraction,
+    cell,
+  );
 
   return {
     ...FertiliserInputSchema.parse({

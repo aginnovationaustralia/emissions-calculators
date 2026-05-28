@@ -1,23 +1,46 @@
 import {
   InorganicFertiliserComponentOrigins,
-  InorganicFertiliserComponentTypes,
+  InorganicFertiliserComponentTypesNonRegional,
+  InorganicFertiliserComponentTypesRegional,
 } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { massPerMass, realNumber } from '@/tools/units';
 import { object, percentage } from '@/types/schemas';
 import { z } from 'zod';
 
-export const InorganicFertiliserKnownComponentInputSchema = object({
+export const InorganicFertiliserKnownComponentWithOriginInputSchema = object({
   fractionOfFertiliser: percentage(
     'Fraction of inorganic fertiliser that is applied',
   ).transform((val) => input('fractionOfFertiliser', realNumber(val))),
-  componentType: z.enum(InorganicFertiliserComponentTypes).meta({
+  componentType: z.enum(InorganicFertiliserComponentTypesRegional).meta({
     description: 'Type of inorganic fertiliser component',
   }),
   componentOrigin: z.enum(InorganicFertiliserComponentOrigins).meta({
     description: 'Origin of inorganic fertiliser component',
   }),
 });
+export type InorganicFertiliserKnownComponentWithOriginInputTransformed =
+  z.output<typeof InorganicFertiliserKnownComponentWithOriginInputSchema>;
+
+export const InorganicFertiliserKnownComponentNoOriginInputSchema = object({
+  fractionOfFertiliser: percentage(
+    'Fraction of inorganic fertiliser that is applied',
+  ).transform((val) => input('fractionOfFertiliser', realNumber(val))),
+  componentType: z.enum(InorganicFertiliserComponentTypesNonRegional).meta({
+    description: 'Type of inorganic fertiliser component',
+  }),
+});
+
+const InorganicFertiliserKnownComponentInputSchema = z.xor([
+  InorganicFertiliserKnownComponentWithOriginInputSchema,
+  InorganicFertiliserKnownComponentNoOriginInputSchema,
+]);
+
+export const isInorganicFertiliserKnownComponentWithOrigin = (
+  component: InorganicFertiliserKnownComponentInputTransformed,
+): component is InorganicFertiliserKnownComponentWithOriginInputTransformed => {
+  return 'componentOrigin' in component;
+};
 
 export const isInorganicFertiliserKnownComponent = (
   component: InorganicFertiliserComponentInputTransformed,

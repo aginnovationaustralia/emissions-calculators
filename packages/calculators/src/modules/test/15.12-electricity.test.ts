@@ -30,6 +30,8 @@ const getCalculatorInput = (
 
   const grainsInput: GrainsInput = {
     crops: [],
+    isInLeachingZone: false,
+    rainfallAbove600: false,
     electricity:
       recsSurrenderedKWh === undefined
         ? {

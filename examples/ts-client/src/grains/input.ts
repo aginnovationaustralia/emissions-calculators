@@ -3,6 +3,8 @@ import { GrainsInput } from '@aginnovationaustralia/emissions-calculators/grains
 // Create a sample grains input (simplified for demonstration)
 export const grainsInputData: GrainsInput = {
   state: 'nsw',
+  isInLeachingZone: false,
+  rainfallAbove600: false,
   electricity: {
     method: 'location',
     electricityPurchasedKWh: 4000,

@@ -4,7 +4,7 @@ import { selectConstant } from '@/tools/constants';
 import { br } from '@/tools/containers';
 import { zeroN } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { LULUCFInputTransformed } from './input';
+import { LULUCFInputTransformed, LULUCFParentInputTransformed } from './input';
 import {
   isLandClearingForestToCropland,
   isLandClearingToGrasslandOrSettlements,
@@ -79,9 +79,15 @@ export const calculateMineralisedNitrogenFromClearingToOpen = (
 };
 
 export const calculate_16_2_1_1_NitrogenMineralisationSoilLosses = (
-  input: LULUCFInputTransformed,
+  input: LULUCFParentInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
+  const { landUse } = input;
+
+  if (!landUse) {
+    return zeroN.named('ELUC,i,j=1-3,y');
+  }
+
   /*
     ELUC,i,j=1-3,y = (Ni,j=1,y * EF crop + Ni,j=2-3,y * EF pasture) * Cg,N2O
     Ni,j=1-3,y = SUM (∆Si,j=1-3,y)/R
@@ -98,8 +104,14 @@ export const calculate_16_2_1_1_NitrogenMineralisationSoilLosses = (
   const EFpasture = selectConstant(constants.LULUCF, 'EF_PASTURE');
   const CgN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
 
-  const Nij1y = calculateMineralisedNitrogenFromClearingToCrops(input, context);
-  const Nij23y = calculateMineralisedNitrogenFromClearingToOpen(input, context);
+  const Nij1y = calculateMineralisedNitrogenFromClearingToCrops(
+    landUse,
+    context,
+  );
+  const Nij23y = calculateMineralisedNitrogenFromClearingToOpen(
+    landUse,
+    context,
+  );
 
   return br(Nij1y.multiply(EFcrop).plus(Nij23y.multiply(EFpasture)))
     .multiply(CgN2O)

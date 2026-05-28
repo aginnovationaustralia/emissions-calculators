@@ -1,4 +1,5 @@
 import { GrainsInputSchema } from '@/calculators';
+import { BeefInputSchema } from '@/calculators/Beef/types/input';
 import { LULUCFInputSchema } from '@/modules';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
@@ -28,9 +29,20 @@ export const GrainsInputWithFullCAMSchema = GrainsInputSchema.extend({
     .optional(),
 });
 
+export const BeefInputWithFullCAMSchema = BeefInputSchema.extend({
+  landUse: z
+    .discriminatedUnion('fullcamMode', [
+      FullCAMOutputsSchema,
+      FullCAMInputsSchema,
+    ])
+    .optional(),
+});
+
 export type GrainsInputWithFullCAM = z.input<
   typeof GrainsInputWithFullCAMSchema
 >;
+
+export type BeefInputWithFullCAM = z.input<typeof BeefInputWithFullCAMSchema>;
 
 export const isLandUseFullCAMInputs = (
   input: FullCAMInputs | FullCAMOutputs,
