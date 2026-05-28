@@ -3,12 +3,19 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from '../sheet-comparison';
-import { getCalculatorInput } from './common';
+import { getSimpleCalculatorInput as getCalculatorInput } from './common';
 import { calculateManureManagementCH4ForPoultry } from '@/modules/scope1/4-manure-management/4.6-poultry-manure/calculate';
 
 const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'AC', {
   rowInterval: 5,
 });
+
+/**
+ * TODO:
+ * - Method 2 tests
+ * - Scenario with more granular stage 2 allocations
+ * - Multi-class scenario
+ */
 
 describe('4.6.1.1 Poultry Manure Management CH4', () => {
   it('method 1 matches spreadsheet results', async () => {

@@ -243,10 +243,6 @@ const getCalculatorInput = (
             origin: 'Local',
             details: {
               type: 'poultry',
-              isInLeachingZone,
-              climateZone: climate,
-              state: 'VIC',
-              productionSystem: 'Non-irrigated crop (low rainfall)',
               classes,
               mms1To2Allocation,
               fractionAppliedToSoils,

@@ -6,7 +6,10 @@ import {
   CropConstants,
 } from '@/constants/types';
 import { sum } from '@/tools/sum';
-import { PoultryManureInputTransformed } from './poultry-manure.input';
+import {
+  CropPoultryManureInputTransformed,
+  LivestockPoultryManureInputTransformed,
+} from './poultry-manure.input';
 import {
   calculateDirectN2OEmissionsForClass,
   calculateAtmosphericDepositionN2OEmissionsForClass,
@@ -20,7 +23,7 @@ import {
  * (4.6.1.1/4.6.1.2).
  */
 export function calculateManureManagementCH4ForPoultry(
-  manureInput: PoultryManureInputTransformed,
+  manureInput: LivestockPoultryManureInputTransformed,
   context: ExecutionContext<
     HasCommonConstants & {
       POULTRY: PoultryConstants;
@@ -69,7 +72,7 @@ export function calculateManureManagementCH4ForPoultry(
  * management (4.6.1.3/4.6.1.4 + 4.6.1.10).
  */
 export function calculateDirectN2OEmissionsForPoultry(
-  manureInput: PoultryManureInputTransformed,
+  manureInput: LivestockPoultryManureInputTransformed,
   context: ExecutionContext<
     HasCommonConstants & {
       POULTRY: PoultryConstants;
@@ -114,7 +117,7 @@ export function calculateDirectN2OEmissionsForPoultry(
  * manure management (4.6.1.5 + 4.6.1.12).
  */
 export function calculateAtmosphericDepositionN2OEmissionsForPoultry(
-  manureInput: PoultryManureInputTransformed,
+  manureInput: LivestockPoultryManureInputTransformed,
   context: ExecutionContext<
     HasCommonConstants & {
       POULTRY: PoultryConstants;
@@ -164,7 +167,7 @@ export function calculateAtmosphericDepositionN2OEmissionsForPoultry(
  * manure management (4.6.1.7 + 4.6.1.14).
  */
 export function calculateLeachingAndRunoffN2OEmissionsForPoultry(
-  manureInput: PoultryManureInputTransformed,
+  manureInput: LivestockPoultryManureInputTransformed,
   context: ExecutionContext<
     HasCommonConstants & {
       POULTRY: PoultryConstants;
@@ -217,7 +220,7 @@ export function calculateLeachingAndRunoffN2OEmissionsForPoultry(
  * (4.6.1.9).
  */
 export function calculateMassOfNitrogenAppliedToSoilsForPoultry(
-  manureInput: PoultryManureInputTransformed,
+  manureInput: CropPoultryManureInputTransformed,
   isInLeachingZone: boolean,
   constants: HasCommonConstants & {
     POULTRY: PoultryConstants;
@@ -269,7 +272,7 @@ export function calculateMassOfNitrogenAppliedToSoilsForPoultry(
  * Calculate emissions from poultry manure management (4.6)
  */
 export function calculatePoultryManureEmissions(
-  manureInput: PoultryManureInputTransformed,
+  manureInput: LivestockPoultryManureInputTransformed,
   context: ExecutionContext<
     HasCommonConstants & {
       POULTRY: PoultryConstants;

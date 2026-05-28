@@ -3,7 +3,7 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from '../sheet-comparison';
-import { getCalculatorInput } from './common';
+import { getSimpleCalculatorInput as getCalculatorInput } from './common';
 import {
   calculateAtmosphericDepositionN2OEmissionsForPoultry,
   calculateDirectN2OEmissionsForPoultry,
@@ -14,6 +14,13 @@ const extractInputsAndOutput = (cell: string) =>
   createSheetExtractor(getCalculatorInput, cell, {
     rowInterval: 5,
   });
+
+/**
+ * TODO:
+ * - Method 2 tests
+ * - Scenario with more granular stage 2 allocations
+ * - Multi-class scenario
+ */
 
 describe('4.6.1.3 Poultry Manure Direct N2O', () => {
   it('method 1 matches spreadsheet results', async () => {

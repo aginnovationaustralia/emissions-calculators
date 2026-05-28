@@ -244,10 +244,6 @@ const getCalculatorInput = (
             details: {
               type: 'poultry',
               classes,
-              isInLeachingZone,
-              climateZone: climate,
-              state: 'VIC',
-              productionSystem: 'Non-irrigated crop (low rainfall)',
               mms1To2Allocation,
               fractionAppliedToSoils,
             },
@@ -290,7 +286,7 @@ const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
 const extractInputsAndOutput = createSheetExtractor(
   getCalculatorInput,
   getExpectedOutput,
-  { rowInterval: 6 },
+  { rowInterval: 10 },
 );
 
 describe('5.2.1.1 Organic Fertiliser N2O (purchased traced)', () => {
