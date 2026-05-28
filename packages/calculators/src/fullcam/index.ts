@@ -1,4 +1,11 @@
 export {
+  BatchSimulationRequest,
+  BatchSimulationResponse,
+  runSimulationBatch,
+  RunSimulationBatchOptions,
+  runSimulationsSingle,
+} from './batch';
+export {
   FullCAMInputsSchema,
   FullCAMOutputsSchema,
   isLandUseFullCAMInputs,
@@ -18,3 +25,6 @@ export type {
   FullCAMWildfireEvent,
   LULUCFWithFullCAMInput,
 } from './input';
+export { generateLulucfInput } from './merge-simulation-to-package-land-use';
+export { runSimulation, updateSpatial } from './requests';
+export { generateSummaryFromSimulationOutput } from './response';
