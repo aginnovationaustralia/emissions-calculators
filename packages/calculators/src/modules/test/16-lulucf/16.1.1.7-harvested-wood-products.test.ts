@@ -32,18 +32,16 @@ const getCalculatorInput = (
   const carbonMassOfWoodProductsHarvestedPerHectare = Number(
     cell(columnCarbonMass),
   );
-  const activityArea = Number(cell(columnActivityArea));
+  const activityAreaHectares = Number(cell(columnActivityArea));
 
   const activity: LandUseChangeActivityInput = {
     type: 'plantationForestry',
+    carbonMassOfWoodProductsHarvestedPerHectare,
+    activityAreaHectares,
     carbonMassInTreesCurrentYear: 0,
     carbonMassInTreesPreviousYear: 0,
     carbonMassInDebrisCurrentYear: 0,
     carbonMassInDebrisPreviousYear: 0,
-    ghgMassFromBiomassBurningPerHectare: 0,
-    areaBurnt: 0,
-    carbonMassOfWoodProductsHarvestedPerHectare,
-    activityArea,
   };
 
   const lulucfInput: LULUCFInput = {

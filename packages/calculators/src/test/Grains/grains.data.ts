@@ -51,7 +51,6 @@ export const grainWheat: GrainsCrop = {
       amountLitres: 12000,
     },
   ],
-  naturalGas: 0,
   cropResidues: {
     calculationMethod: '1',
   },
@@ -100,7 +99,6 @@ export const grainSorghum: GrainsCrop = {
   },
   transportFuel: [],
   stationaryFuel: [],
-  naturalGas: 0,
   cropResidues: {
     calculationMethod: '1',
   },
@@ -149,7 +147,6 @@ export const grainLegume: GrainsCrop = {
   },
   transportFuel: [],
   stationaryFuel: [],
-  naturalGas: 0,
   cropResidues: {
     calculationMethod: '1',
   },
@@ -198,7 +195,6 @@ export const grainGrass: GrainsCrop = {
   },
   transportFuel: [],
   stationaryFuel: [],
-  naturalGas: 0,
   cropResidues: {
     calculationMethod: '1',
   },
@@ -247,7 +243,6 @@ export const grainTriticale: GrainsCrop = {
   },
   transportFuel: [],
   stationaryFuel: [],
-  naturalGas: 0,
   cropResidues: {
     calculationMethod: '1',
   },
@@ -324,7 +319,6 @@ export const grainsTestData102: GrainsInput = {
       },
       transportFuel: [],
       stationaryFuel: [],
-      naturalGas: 0,
       cropResidues: {
         calculationMethod: '1',
       },

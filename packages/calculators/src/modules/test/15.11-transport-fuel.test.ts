@@ -40,7 +40,6 @@ const getCalculatorInput = (
   } as unknown as TransportFuelInput;
 
   const fuelInput: FuelInput = {
-    naturalGas: 0,
     stationaryFuel: [],
     transportFuel: [transportFuelRecord],
   };

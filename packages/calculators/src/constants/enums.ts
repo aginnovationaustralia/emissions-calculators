@@ -402,7 +402,7 @@ export const ServiceByAreaTypes = [
   'Spraying, broadacre crop, pre & post-emergence, conventional',
   'Windrowing, broadacre crop, controlled traffic',
   'Windrowing, broadacre crop, conventional',
-];
+] as const;
 export type ServiceByAreaType = (typeof ServiceByAreaTypes)[number];
 
 export const ServiceByHourTypes = [
@@ -1330,14 +1330,12 @@ export const OtherLivestockTypes = [
 ] as const;
 export type OtherLivestockType = (typeof OtherLivestockTypes)[number];
 
-export const CoolMeanAnnualTemperatures = [
+export const MeanAnnualTemperatures = [
   '10 or below',
   '11',
   '12',
   '13',
   '14',
-] as const;
-export const TemperateMeanAnnualTemperatures = [
   '15',
   '16',
   '17',
@@ -1349,14 +1347,10 @@ export const TemperateMeanAnnualTemperatures = [
   '23',
   '24',
   '25',
+  '26',
+  '27',
+  '28 or above',
 ] as const;
-export const WarmMeanAnnualTemperatures = ['26', '27', '28 or above'] as const;
-export const MeanAnnualTemperatures = [
-  ...CoolMeanAnnualTemperatures,
-  ...TemperateMeanAnnualTemperatures,
-  ...WarmMeanAnnualTemperatures,
-] as const;
-
 export type MeanAnnualTemperature = (typeof MeanAnnualTemperatures)[number];
 export const SheepClasses = [
   'rams',

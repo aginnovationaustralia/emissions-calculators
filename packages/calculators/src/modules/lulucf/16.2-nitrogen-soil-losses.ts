@@ -27,7 +27,7 @@ export const calculateMineralisedNitrogenFromClearingToCrops = (
   const activityRecords = activities
     .filter(isLandClearingForestToCropland)
     .map((activity) => {
-      const { region, activityArea } = activity;
+      const { region, activityAreaHectares } = activity;
 
       const Or = selectConstant(
         constants.LULUCF,
@@ -35,7 +35,8 @@ export const calculateMineralisedNitrogenFromClearingToCrops = (
         region,
       );
 
-      const organicCarbonChange = Or.multiply(activityArea).named('∆Si,j=1,y');
+      const organicCarbonChange =
+        Or.multiply(activityAreaHectares).named('∆Si,j=1,y');
 
       return organicCarbonChange.divide(R);
     });
@@ -60,7 +61,7 @@ export const calculateMineralisedNitrogenFromClearingToOpen = (
   const activityRecords = activities
     .filter(isLandClearingToGrasslandOrSettlements)
     .map((activity) => {
-      const { region, activityArea } = activity;
+      const { region, activityAreaHectares } = activity;
 
       const Or = selectConstant(
         constants.LULUCF,
@@ -69,7 +70,7 @@ export const calculateMineralisedNitrogenFromClearingToOpen = (
       );
 
       const organicCarbonChange =
-        Or.multiply(activityArea).named('∆Si,j=2-3,y');
+        Or.multiply(activityAreaHectares).named('∆Si,j=2-3,y');
 
       return organicCarbonChange.divide(R);
     });

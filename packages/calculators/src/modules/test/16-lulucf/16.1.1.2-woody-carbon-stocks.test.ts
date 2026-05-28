@@ -33,14 +33,16 @@ const getCalculatorInput = (
   }
 
   const activity: LandUseChangeActivityInput = {
-    type: 'humanInducedNationalRegeneration',
+    type: 'landClearingForestToCropland',
     carbonMassInTreesCurrentYear: Number(cell(columnMassTreesY)),
     carbonMassInTreesPreviousYear: Number(cell(columnMassTreesYMinus1)),
     carbonMassInDebrisCurrentYear: Number(cell(columnMassDebrisY)),
     carbonMassInDebrisPreviousYear: Number(cell(columnMassDebrisYMinus1)),
-    ghgMassFromBiomassBurningPerHectare: 0,
+    massCH4FromBiomassBurningPerHectare: 0,
+    massN2OFromBiomassBurningPerHectare: 0,
+    region: 'Arnhem Coast',
     areaBurnt: 0,
-    activityArea: Number(cell(columnActivityArea)),
+    activityAreaHectares: Number(cell(columnActivityArea)),
   };
 
   const lulucfInput: LULUCFInput = {
