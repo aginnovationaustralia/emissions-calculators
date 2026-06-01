@@ -43,6 +43,10 @@ const getCalculatorInput = (
       col.columnCustomDryMatterDigestibility,
       offsetRows,
     );
+    const customAverageDurationDays = cell(
+      col.columnCustomAverageDurationDays,
+      offsetRows,
+    );
     return {
       head: Number(cell(col.columnHead, offsetRows)),
       method2Liveweight:
@@ -57,54 +61,122 @@ const getCalculatorInput = (
         method === '2' && customDryMatterDigestibility
           ? Number(customDryMatterDigestibility)
           : undefined,
+      method2AverageDurationDays:
+        method === '2' && customAverageDurationDays
+          ? Number(customAverageDurationDays)
+          : undefined,
     };
   };
 
   const readSheepClass = (offset: number): SheepClassInput | undefined => {
-    const offsetRows = offset * 4;
+    const offsetRows = offset * 12;
     if (cell(col.columnHead, offsetRows) === undefined) {
       return undefined;
     }
     return {
-      spring: readSheepClassPeriod(offsetRows),
-      summer: readSheepClassPeriod(offsetRows + 1),
-      autumn: readSheepClassPeriod(offsetRows + 2),
-      winter: readSheepClassPeriod(offsetRows + 3),
+      january: readSheepClassPeriod(offsetRows),
+      february: readSheepClassPeriod(offsetRows + 1),
+      march: readSheepClassPeriod(offsetRows + 2),
+      april: readSheepClassPeriod(offsetRows + 3),
+      may: readSheepClassPeriod(offsetRows + 4),
+      june: readSheepClassPeriod(offsetRows + 5),
+      july: readSheepClassPeriod(offsetRows + 6),
+      august: readSheepClassPeriod(offsetRows + 7),
+      september: readSheepClassPeriod(offsetRows + 8),
+      october: readSheepClassPeriod(offsetRows + 9),
+      november: readSheepClassPeriod(offsetRows + 10),
+      december: readSheepClassPeriod(offsetRows + 11),
     };
   };
 
   const readSheepClassWithLambing = (
     offset: number,
   ): SheepClassWithLambingInput | undefined => {
-    const offsetRows = offset * 4;
+    const offsetRows = offset * 12;
     if (cell(col.columnHead, offsetRows) === undefined) {
       return undefined;
     }
     return {
-      spring: {
+      january: {
         ...readSheepClassPeriod(offsetRows),
         percentLambing: Number(cell(col.columnLambingRateLR, offsetRows)),
         percentLambMarking: Number(cell(col.columnMarkingRateLMR, offsetRows)),
       },
-      summer: {
+      february: {
         ...readSheepClassPeriod(offsetRows + 1),
         percentLambing: Number(cell(col.columnLambingRateLR, offsetRows + 1)),
         percentLambMarking: Number(
           cell(col.columnMarkingRateLMR, offsetRows + 1),
         ),
       },
-      autumn: {
+      march: {
         ...readSheepClassPeriod(offsetRows + 2),
         percentLambing: Number(cell(col.columnLambingRateLR, offsetRows + 2)),
         percentLambMarking: Number(
           cell(col.columnMarkingRateLMR, offsetRows + 2),
         ),
       },
-      winter: {
+      april: {
         ...readSheepClassPeriod(offsetRows + 3),
         percentLambing: Number(cell(col.columnLambingRateLR, offsetRows + 3)),
         percentLambMarking: Number(
           cell(col.columnMarkingRateLMR, offsetRows + 3),
+        ),
+      },
+      may: {
+        ...readSheepClassPeriod(offsetRows + 4),
+        percentLambing: Number(cell(col.columnLambingRateLR, offsetRows + 4)),
+        percentLambMarking: Number(
+          cell(col.columnMarkingRateLMR, offsetRows + 4),
+        ),
+      },
+      june: {
+        ...readSheepClassPeriod(offsetRows + 5),
+        percentLambing: Number(cell(col.columnLambingRateLR, offsetRows + 5)),
+        percentLambMarking: Number(
+          cell(col.columnMarkingRateLMR, offsetRows + 5),
+        ),
+      },
+      july: {
+        ...readSheepClassPeriod(offsetRows + 6),
+        percentLambing: Number(cell(col.columnLambingRateLR, offsetRows + 6)),
+        percentLambMarking: Number(
+          cell(col.columnMarkingRateLMR, offsetRows + 6),
+        ),
+      },
+      august: {
+        ...readSheepClassPeriod(offsetRows + 7),
+        percentLambing: Number(cell(col.columnLambingRateLR, offsetRows + 7)),
+        percentLambMarking: Number(
+          cell(col.columnMarkingRateLMR, offsetRows + 7),
+        ),
+      },
+      september: {
+        ...readSheepClassPeriod(offsetRows + 8),
+        percentLambing: Number(cell(col.columnLambingRateLR, offsetRows + 8)),
+        percentLambMarking: Number(
+          cell(col.columnMarkingRateLMR, offsetRows + 8),
+        ),
+      },
+      october: {
+        ...readSheepClassPeriod(offsetRows + 9),
+        percentLambing: Number(cell(col.columnLambingRateLR, offsetRows + 9)),
+        percentLambMarking: Number(
+          cell(col.columnMarkingRateLMR, offsetRows + 9),
+        ),
+      },
+      november: {
+        ...readSheepClassPeriod(offsetRows + 10),
+        percentLambing: Number(cell(col.columnLambingRateLR, offsetRows + 10)),
+        percentLambMarking: Number(
+          cell(col.columnMarkingRateLMR, offsetRows + 10),
+        ),
+      },
+      december: {
+        ...readSheepClassPeriod(offsetRows + 11),
+        percentLambing: Number(cell(col.columnLambingRateLR, offsetRows + 11)),
+        percentLambMarking: Number(
+          cell(col.columnMarkingRateLMR, offsetRows + 11),
         ),
       },
     };
@@ -123,10 +195,8 @@ const getCalculatorInput = (
         classes: {
           breedingEwes: readSheepClassWithLambing(0),
           lambsHoggets: readSheepClass(1),
-          maidenEwes: readSheepClassWithLambing(2),
-          otherEwes: readSheepClass(3),
-          rams: readSheepClass(4),
-          wethers: readSheepClass(5),
+          rams: readSheepClass(2),
+          wethers: readSheepClass(3),
         },
       },
     ],
@@ -154,7 +224,7 @@ describe('4.4.1.1 Sheep manure methane seasonal', () => {
       '4.4.1.1',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 231, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,

@@ -16,7 +16,6 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from '../sheet-comparison';
-
 import * as col from './columns';
 
 const getCalculatorInput = (

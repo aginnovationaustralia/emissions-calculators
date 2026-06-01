@@ -155,11 +155,13 @@ function calculateManureMethaneForPeriod(
   /*
     ECH4 = SUM SUM SUM (Njk * Mjkm * Dj) * 10^-3
   */
-  const { head } = periodInput;
+  const { head, method2AverageDurationDays } = periodInput;
 
   const Njk = head.named(`Njk=${className}`);
 
-  const Dj = daysInSeason.named(`Dj=${periodName}`);
+  const Dj = (method2AverageDurationDays ?? periodDuration).named(
+    `Dj=${periodName}`,
+  );
 
   const Mjkm = calculateDailyManureMethane(
     input,

@@ -1,0 +1,11 @@
+export const columnState = 'B';
+export const columnNoUnfencedNaturalWater = 'D';
+export const columnMonth = 'G';
+export const columnHead = 'H';
+export const columnLambingRateLR = 'I';
+export const columnMarkingRateLMR = 'J';
+export const columnCustomAverageDurationDays = 'L';
+export const columnCustomLiveweight = 'P';
+export const columnCustomDryMatterDigestibility = 'N';
+export const columnCustomDryMatterAvailability = 'AB';
+export const columnOutput = 'AP';
