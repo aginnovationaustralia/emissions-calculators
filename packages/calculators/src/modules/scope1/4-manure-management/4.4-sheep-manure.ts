@@ -82,16 +82,20 @@ function calculateDailyManureMethane(
     context,
   ).named(`Ij=${periodName},k=${className}`);
 
+  const { method2DryMatterDigestibility } = periodInput;
+
   const limitedState = pureStateWithoutNTToLimitedState(input.state);
 
-  const DMDjk = selectConstant(
-    constants.SHEEP,
-    'SEASONAL_FACTORS',
-    limitedState,
-    className,
-    seasonName,
-    'dryMatterDigestibility',
-  ).named(`DMDj=${periodName},k=${className}`);
+  const DMDjk =
+    method2DryMatterDigestibility ??
+    selectConstant(
+      constants.SHEEP,
+      'SEASONAL_FACTORS',
+      limitedState,
+      className,
+      seasonName,
+      'dryMatterDigestibility',
+    ).named(`DMDj=${periodName},k=${className}`);
 
   const ashContentOfManureA = selectConstant(
     constants.SHEEP,
