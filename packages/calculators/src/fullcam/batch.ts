@@ -1,20 +1,9 @@
 import { unzipSync } from 'fflate';
-import { runSimulation, SIMULATION_API_URL } from './requests';
-
-const SUBSCRIPTION_KEY = process.env.FULLCAM_SUBSCRIPTION_KEY ?? '';
+import { runSimulation } from './requests';
 
 /** Plot API v1 root; batch workflow paths omit the `/2024/` segment used by run-plotsimulation. */
-const PLOT_V1_BASE = (() => {
-  const m = SIMULATION_API_URL.match(
-    /^(.*\/plot\/v1)\/2024\/fullcam-simulator\/run-plotsimulation$/,
-  );
-  if (!m?.[1]) {
-    throw new Error(
-      'SIMULATION_API_URL must end with /plot/v1/2024/fullcam-simulator/run-plotsimulation',
-    );
-  }
-  return m[1];
-})();
+const PLOT_V1_BASE =
+  'https://api.dcceew.gov.au/climate/carbon-accounting/plotsimworkflow/v1';
 
 const FULLCAM_BATCH_BASE = `${PLOT_V1_BASE}/fullcam-simulator`;
 
@@ -207,6 +196,13 @@ export async function runSimulationBatch(
     return [];
   }
 
+  const fullcamApiKey = options?.fullcamApiKey;
+  if (!fullcamApiKey) {
+    throw new Error('fullcamApiKey is required');
+  }
+
+  console.log('fullcamApiKey', fullcamApiKey);
+
   const batchName =
     options?.batchName ??
     process.env.FULLCAM_BATCH_NAME ??
@@ -240,7 +236,7 @@ export async function runSimulationBatch(
   const createRes = await fetch(BATCH_CREATE_URL, {
     method: 'POST',
     headers: {
-      'Ocp-Apim-Subscription-Key': SUBSCRIPTION_KEY,
+      'Ocp-Apim-Subscription-Key': fullcamApiKey,
     },
     body: formData,
   });
@@ -248,7 +244,7 @@ export async function runSimulationBatch(
   const createText = await createRes.text();
   if (!createRes.ok || (createRes.status !== 200 && createRes.status !== 207)) {
     throw new Error(
-      `FullCAM fullcam-simulator/batches failed: ${createRes.status} ${createRes.statusText}`,
+      `FullCAM fullcam-simulator/batches failed: ${createRes.status} ${createRes.statusText} ${createText}`,
     );
   }
 
@@ -288,7 +284,7 @@ export async function runSimulationBatch(
   const runRes = await fetch(BATCH_RUN_URL, {
     method: 'POST',
     headers: {
-      'Ocp-Apim-Subscription-Key': SUBSCRIPTION_KEY,
+      'Ocp-Apim-Subscription-Key': fullcamApiKey,
       'Content-Type': 'application/json',
     },
     body: runBody,
@@ -312,7 +308,7 @@ export async function runSimulationBatch(
 
   while (Date.now() < deadline) {
     const statusRes = await fetch(batchStatusUrl(batchId), {
-      headers: { 'Ocp-Apim-Subscription-Key': SUBSCRIPTION_KEY },
+      headers: { 'Ocp-Apim-Subscription-Key': fullcamApiKey },
     });
     lastStatusText = await statusRes.text();
 
@@ -344,7 +340,7 @@ export async function runSimulationBatch(
   }
 
   const zipRes = await fetch(batchResultPackageUrl(batchId), {
-    headers: { 'Ocp-Apim-Subscription-Key': SUBSCRIPTION_KEY },
+    headers: { 'Ocp-Apim-Subscription-Key': fullcamApiKey },
   });
 
   if (!zipRes.ok) {
