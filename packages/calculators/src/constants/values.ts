@@ -2534,10 +2534,10 @@ export const livestockConstants: LivestockConstants = {
   },
 
   EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: {
-    general: volumePerMass('CH4', 'Volatile Solids', 0.19),
-    dairy: volumePerMass('CH4', 'Volatile Solids', 0.24),
+    general: volumePerMass('CH4', 'Volatile Solids', cubicMetresToLitres(0.19)),
+    dairy: volumePerMass('CH4', 'Volatile Solids', cubicMetresToLitres(0.24)),
     // REVISIT: Tranche 2 docs have a value of 0.24, but source IPCC (2019), Chapter 10 [3] appears to have 0.19 for sheep
-    sheep: volumePerMass('CH4', 'Volatile Solids', 0.19),
+    sheep: volumePerMass('CH4', 'Volatile Solids', cubicMetresToLitres(0.19)),
   },
 };
 

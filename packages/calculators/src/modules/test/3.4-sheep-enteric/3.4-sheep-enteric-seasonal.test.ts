@@ -16,15 +16,7 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from '../sheet-comparison';
-
-const columnState = 'B';
-const columnLambingRate = 'G';
-const columnMarkingRate = 'H';
-const columnCustomLiveweight = 'P';
-const columnCustomDryMatterAvailability = 'K';
-const columnCustomDryMatterDigestibility = 'M';
-const columnHead = 'V';
-const columnOutput = 'AA';
+import * as col from './columns';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -42,17 +34,17 @@ const getCalculatorInput = (
   }
 
   const readSheepClassPeriod = (offsetRows: number): SheepClassPeriodInput => {
-    const customLiveweight = cell(columnCustomLiveweight, offsetRows);
+    const customLiveweight = cell(col.columnCustomLiveweight, offsetRows);
     const customDryMatterAvailability = cell(
-      columnCustomDryMatterAvailability,
+      col.columnCustomDryMatterAvailability,
       offsetRows,
     );
     const customDryMatterDigestibility = cell(
-      columnCustomDryMatterDigestibility,
+      col.columnCustomDryMatterDigestibility,
       offsetRows,
     );
     return {
-      head: Number(cell(columnHead, offsetRows)),
+      head: Number(cell(col.columnHead, offsetRows)),
       method2Liveweight:
         method === '2' && customLiveweight
           ? Number(customLiveweight)
@@ -70,7 +62,7 @@ const getCalculatorInput = (
 
   const readSheepClass = (offset: number): SheepClassInput | undefined => {
     const offsetRows = offset * 4;
-    if (cell(columnHead, offsetRows) === undefined) {
+    if (cell(col.columnHead, offsetRows) === undefined) {
       return undefined;
     }
     return {
@@ -85,35 +77,35 @@ const getCalculatorInput = (
     offset: number,
   ): SheepClassWithLambingInput | undefined => {
     const offsetRows = offset * 4;
-    if (cell(columnHead, offsetRows) === undefined) {
+    if (cell(col.columnHead, offsetRows) === undefined) {
       return undefined;
     }
     return {
       spring: {
         ...readSheepClassPeriod(offsetRows),
-        percentLambing: Number(cell(columnLambingRate, offsetRows)),
-        percentLambMarking: Number(cell(columnMarkingRate, offsetRows)),
+        percentLambing: Number(cell(col.columnLambingRate, offsetRows)),
+        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows)),
       },
       summer: {
         ...readSheepClassPeriod(offsetRows + 1),
-        percentLambing: Number(cell(columnLambingRate, offsetRows + 1)),
-        percentLambMarking: Number(cell(columnMarkingRate, offsetRows + 1)),
+        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 1)),
+        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows + 1)),
       },
       autumn: {
         ...readSheepClassPeriod(offsetRows + 2),
-        percentLambing: Number(cell(columnLambingRate, offsetRows + 2)),
-        percentLambMarking: Number(cell(columnMarkingRate, offsetRows + 2)),
+        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 2)),
+        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows + 2)),
       },
       winter: {
         ...readSheepClassPeriod(offsetRows + 3),
-        percentLambing: Number(cell(columnLambingRate, offsetRows + 3)),
-        percentLambMarking: Number(cell(columnMarkingRate, offsetRows + 3)),
+        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 3)),
+        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows + 3)),
       },
     };
   };
 
   const sheepInput: SheepInput = {
-    state: checkPureStateWithoutNT(cell(columnState)),
+    state: checkPureStateWithoutNT(cell(col.columnState)),
     electricity: {
       method: 'location',
       electricityPurchasedKWh: 0,
@@ -139,7 +131,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`${columnOutput}${row}`).value());
+  return Number(sheet.cell(`${col.columnOutput}${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
