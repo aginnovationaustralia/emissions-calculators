@@ -162,14 +162,10 @@ export function calculateDailyFeedIntakeIjk(
     .named(`PIj=${periodName},k=${className}`);
 
   const RIjk = oneMinus(
-    e
-      .power(
-        num(-2).multiply(
-          DMAjk.squared().switchUnit((r) => realNumber(r.value)),
-        ),
-      )
-      .named(`RIj=${periodName},k=${className}`),
-  );
+    e.power(
+      num(-2).multiply(DMAjk.squared().switchUnit((r) => realNumber(r.value))),
+    ),
+  ).named(`RIj=${periodName},k=${className}`);
 
   const MAjk = calculateAdditionalIntakeForMilkProductionMAjk(
     input,

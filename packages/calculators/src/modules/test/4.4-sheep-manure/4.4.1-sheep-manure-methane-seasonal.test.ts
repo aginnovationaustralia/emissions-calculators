@@ -138,7 +138,7 @@ const getCalculatorInput = (
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`${col.columnOutput}${row}`).value());
+  return Number(sheet.cell(`${col.columnOutputECH4}${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(

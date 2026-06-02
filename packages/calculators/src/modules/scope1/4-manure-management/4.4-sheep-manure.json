@@ -1,0 +1,430 @@
+{
+  "records": [
+    {
+      "symbol": "Njk",
+      "name": "number of sheep in each time-period and input class",
+      "units": "head",
+      "type": "input",
+      "expression": "",
+      "line": "1071",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "Dj",
+      "name": "number of days in each time-period",
+      "units": "days",
+      "type": "input",
+      "expression": "",
+      "line": "1075",
+      "method2Input": true,
+      "notes": ""
+    },
+    {
+      "symbol": "CPjk",
+      "name": "crude protein content of feed intake expressed as a fraction",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "1078",
+      "method2Input": true,
+      "notes": "",
+      "values": "Appendix Table A.1.4.4"
+    },
+    {
+      "symbol": "DMDjk",
+      "name": "dry matter digestibility expressed as a fraction",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "1077",
+      "method2Input": true,
+      "notes": "",
+      "values": "Appendix table A.1.4.2"
+    },
+    {
+      "symbol": "Wjk",
+      "name": "Liveweight of livestock per time period and sheep class",
+      "units": "kg",
+      "type": "constant",
+      "expression": "",
+      "line": "1081",
+      "method2Input": true,
+      "notes": "",
+      "values": "Appendix table A.1.4.1"
+    },
+    {
+      "symbol": "MMSm",
+      "name": "fraction of waste in each MMS",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "1085",
+      "method2Input": false,
+      "notes": "",
+      "values": "Appendix A.1.4.7"
+    },
+    {
+      "symbol": "MCFim",
+      "name": "methane conversion factor for temperature zone and MMS",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "1082",
+      "method2Input": true,
+      "notes": "method 2 requires temperature zone",
+      "values": "Appendix table A.1.4.8"
+    },
+    {
+      "symbol": "LEjk=3,4",
+      "name": "proportion of ewes lactating each season or time period",
+      "units": "",
+      "type": "unknown",
+      "expression": "",
+      "line": "",
+      "method2Input": false,
+      "notes": "see ch 3.4.1"
+    },
+    {
+      "symbol": "PLjk=6",
+      "name": "proportion of lambs born in the time-period",
+      "units": "d",
+      "type": "input",
+      "expression": "",
+      "line": "990",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "Ijk",
+      "name": "dry matter intake as calculated",
+      "units": "",
+      "type": "unknown",
+      "expression": "",
+      "line": "",
+      "method2Input": false,
+      "notes": "see ch 3.4.1"
+    },
+    {
+      "symbol": "CPIjk",
+      "name": "crude protein intake",
+      "units": "kg / head / day",
+      "type": "expression",
+      "expression": "(Ijk * CPjk) + (0.045 * MCjk=6)",
+      "line": "983",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "A",
+      "name": "ash content of feed intake",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "1087",
+      "method2Input": false,
+      "notes": "",
+      "values": "0.08"
+    },
+    {
+      "symbol": "VSjk",
+      "name": "volatile solid production in each time-period and class",
+      "units": "kg / head / day",
+      "type": "expression",
+      "expression": "(Ijk * ((1 - DMDjk) + (0.04 * Ijk))) * ( 1 - A )",
+      "line": "945",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "BO",
+      "name": "emissions potential",
+      "units": "m3 CH4 / head / day",
+      "type": "constant",
+      "expression": "",
+      "line": "1084",
+      "method2Input": false,
+      "notes": "",
+      "values": "0.24"
+    },
+    {
+      "symbol": "𝜌",
+      "name": "density of methane",
+      "units": "kg / m3",
+      "type": "constant",
+      "expression": "",
+      "line": "1086",
+      "method2Input": false,
+      "notes": "",
+      "values": "0.6784"
+    },
+    {
+      "symbol": "Mjkm",
+      "name": "daily methane produced from the manure in each time-period",
+      "units": "kg CH4 / head / day",
+      "type": "expression",
+      "expression": "VSjk * BO * MMSm * MCFim * 𝜌",
+      "line": "930",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "FracWet",
+      "name": "fraction of N that is available for leaching and runoff",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "1092",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "ECH4",
+      "name": "Total annual methane production from manure management",
+      "units": "kg H4",
+      "type": "expression",
+      "expression": "SUM SUM SUM (Njk * Mjkm * Dj) * 10^-3",
+      "line": "922",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "FracLEACH",
+      "name": "fraction of all N that is lost through leaching and runoff",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "1094",
+      "method2Input": false,
+      "notes": "",
+      "values": "0.24"
+    },
+    {
+      "symbol": "ESN2O,leach",
+      "name": "Leaching and runoff emissions from urine and dung deposited on pasture",
+      "units": "t N2O",
+      "type": "expression",
+      "expression": "Mleach * EFleach * CN2O * 10^-3",
+      "line": "1056",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "FracGASMsoil",
+      "name": "fraction of nitrogen volatilised from urine and faeces deposited on pasture",
+      "units": "kg NH3-N + NOx-N / kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "1093",
+      "method2Input": false,
+      "notes": "",
+      "values": "0.21"
+    },
+    {
+      "symbol": "Mvol",
+      "name": "mass of nitrogen volatilised from urine and faeces deposited on pasture",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "AE * FracGASMsoil",
+      "line": "1045",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "EFN2O",
+      "name": "nitrous oxide emission factor for atmospheric deposition",
+      "units": "kg N2O-N / kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "1091",
+      "method2Input": false,
+      "notes": "",
+      "values": "Appendix table A.2.2.1"
+    },
+    {
+      "symbol": "EN2O,ad",
+      "name": "Annual atmospheric deposition emissions from urine and dung deposited on pasture",
+      "units": "t N2O",
+      "type": "expression",
+      "expression": "Mvol * EFN2O * CN2O * 10^-3",
+      "line": "1037",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "LWGjk",
+      "name": "liveweight gain",
+      "units": "kg",
+      "type": "constant",
+      "expression": "",
+      "line": "1080",
+      "method2Input": true,
+      "notes": "",
+      "values": "Appendix table A.1.4.5"
+    },
+    {
+      "symbol": "GWk",
+      "name": "greasy wool production per sheep class",
+      "units": "kg / head",
+      "type": "input",
+      "expression": "",
+      "line": "1072",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "Yk",
+      "name": "average clean wool yield per sheep class",
+      "units": "fraction",
+      "type": "input",
+      "expression": "",
+      "line": "1073",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "MPjk=3,4",
+      "name": "milk production",
+      "units": "kg/head/day",
+      "type": "expression",
+      "expression": "LEjk=3,4 * 1.6",
+      "line": "1003",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "WPk",
+      "name": "clean wool production",
+      "units": "kg/head/day",
+      "type": "expression",
+      "expression": "(GWk * Yk) / 365",
+      "line": "1011",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "EBGjk",
+      "name": "empty body gain",
+      "units": "kg",
+      "type": "expression",
+      "expression": "LWGjk * 0.92",
+      "line": "1017",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "SRWk",
+      "name": "standard reference weight",
+      "units": "kg",
+      "type": "constant",
+      "expression": "",
+      "line": "1089",
+      "method2Input": false,
+      "notes": "",
+      "values": "Appendix table A.1.4.6"
+    },
+    {
+      "symbol": "Zjk",
+      "name": "relative size",
+      "units": "d",
+      "type": "expression",
+      "expression": "Wjk / SRWk",
+      "line": "1021",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "NRijk",
+      "name": "the amount of nitrogen retained by the body",
+      "units": "kg N / head / day",
+      "type": "expression",
+      "expression": "((0.045 * MPjk=3,4) + (WPk * 0.84)  + (EBGjk * ((212 - 4 * ((EBGjk * 1000)/(4* SRWk^0.75) - 1)) - ((140 - 4 * (((EBGjk * 1000)/4 * SRWk ^0.75) - 1))/(1 + e ^ (-6 * (Zjk - 0.4)))))) * 10^-3) / 6.25",
+      "line": "994",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "MCjk=6",
+      "name": "milk intake for sheep",
+      "units": "kg / head / day",
+      "type": "expression",
+      "expression": "1.6 * PLjk=6",
+      "line": "988",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "NEjk",
+      "name": "nitrogen excreted in each time-period and by each class",
+      "units": "kg N/head/day",
+      "type": "expression",
+      "expression": "(CPIjk  / 6.25 ) - NRjk",
+      "line": "978",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "AE",
+      "name": "total mass of nitrogen excreted on PRP by sheep",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "SUM SUM (Njk * NEjk * Dj)",
+      "line": "970",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "EFprp",
+      "name": "emission factor for nitrous oxide from urine and dung deposited to soil",
+      "units": "kg N2O-N/kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "1090",
+      "method2Input": false,
+      "notes": "",
+      "values": "Appendix table A.2.2.2"
+    },
+    {
+      "symbol": "CN2O",
+      "name": "factor to convert elemental mass of nitrous oxide to molecular mass",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "1088",
+      "method2Input": false,
+      "notes": "",
+      "values": "1.57"
+    },
+    {
+      "symbol": "EN2O,dir",
+      "name": "Total annual direct nitrous oxide emissions from agricultural soils from deposition of urine and dung",
+      "units": "t N2O",
+      "type": "expression",
+      "expression": "AE * EFprp * CN2O * 10^-3",
+      "line": "963",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "Mleach",
+      "name": "mass of nitrogen lost to leaching and runoff",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "AE * FracWet * FracLEACH",
+      "line": "1062",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "EFleach",
+      "name": "emission factor for leaching and run off",
+      "units": "kg N2O-N / kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "1095",
+      "method2Input": false,
+      "notes": "",
+      "values": "0.011"
+    }
+  ]
+}
