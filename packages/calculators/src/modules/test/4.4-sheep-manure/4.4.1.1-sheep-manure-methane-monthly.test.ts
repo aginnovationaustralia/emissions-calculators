@@ -47,6 +47,7 @@ const getCalculatorInput = (
     climateZone: checkClimateZone(cell(col.columnClimateZone)),
     isInLeachingZone: cell(col.columnIsInLeachingZone) === 'yes',
     rainfallAbove600: cell(col.columnRainfallAbove600) === 'yes',
+    productionSystem: 'Non-irrigated pasture',
     electricity: {
       method: 'location',
       electricityPurchasedKWh: 0,

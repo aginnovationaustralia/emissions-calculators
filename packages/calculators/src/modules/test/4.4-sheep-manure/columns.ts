@@ -17,4 +17,6 @@ export const columnIsInLeachingZone = 'AT';
 export const columnClimateZone = 'AW';
 export const columnGreasyWoolProduction = 'BA';
 export const columnCleanWoolYieldProportion = 'BB';
+export const columnProductionSystem = 'BN';
 export const columnOutputEN2ODir = 'BS';
+export const columnOutputEN2OAd = 'BP';

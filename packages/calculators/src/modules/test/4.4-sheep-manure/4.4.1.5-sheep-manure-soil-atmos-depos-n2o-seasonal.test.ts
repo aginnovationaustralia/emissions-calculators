@@ -3,10 +3,14 @@ import {
   SheepInputSchema,
   SheepInputTransformed,
 } from '@/calculators/Sheep/types/input';
-import { calculate_4_4_1_3_SheepSoilDirectN2O } from '@/modules/scope1/4-manure-management/4.4-sheep-manure';
+import { calculate_4_4_1_5_SheepSoilAtmosphericDepositionN2O } from '@/modules/scope1/4-manure-management/4.4-sheep-manure';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { checkClimateZone, checkPureStateWithoutNT } from '../livestock-domain';
+import {
+  checkClimateZone,
+  checkGrazingProductionSystemsWithRainfall,
+  checkPureStateWithoutNT,
+} from '../livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
@@ -47,7 +51,9 @@ const getCalculatorInput = (
     climateZone: checkClimateZone(cell(col.columnClimateZone)),
     isInLeachingZone: cell(col.columnIsInLeachingZone) === 'yes',
     rainfallAbove600: cell(col.columnRainfallAbove600) === 'yes',
-    productionSystem: 'Non-irrigated pasture',
+    productionSystem: checkGrazingProductionSystemsWithRainfall(
+      cell(col.columnProductionSystem),
+    ),
     electricity: {
       method: 'location',
       electricityPurchasedKWh: 0,
@@ -68,13 +74,13 @@ const getCalculatorInput = (
     ],
   };
 
-  // console.dir(sheepInput, { depth: null });
+  // console.log('test4415', sheepInput.productionSystem);
 
-  return SheepInputSchema.parse(sheepInput);
+  return SheepInputSchema.parse(sheepInput, { reportInput: true });
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`${col.columnOutputEN2ODir}${row}`).value());
+  return Number(sheet.cell(`${col.columnOutputEN2OAd}${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
@@ -83,18 +89,18 @@ const extractInputsAndOutput = createSheetExtractor(
   { rowInterval: 30 },
 );
 
-describe('4.4.1.3 Sheep manure soil direct N2O seasonal', () => {
+describe('4.4.1.5 Sheep manure soil atmospheric deposition N2O seasonal', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.4-sheep-manure/4.4-sheep-manure.xlsx',
       '4.4.1.1',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1', 7);
 
     compareInputsAndOutputs(
       inputsAndOutputs,
-      calculate_4_4_1_3_SheepSoilDirectN2O,
+      calculate_4_4_1_5_SheepSoilAtmosphericDepositionN2O,
     );
   });
 });

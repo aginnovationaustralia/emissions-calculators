@@ -143,6 +143,7 @@ const getCalculatorInput = (
     climateZone: 'Boreal dry',
     isInLeachingZone: false,
     rainfallAbove600: false,
+    productionSystem: 'Non-irrigated pasture',
     electricity: {
       method: 'location',
       electricityPurchasedKWh: 0,

@@ -438,7 +438,7 @@ function calculateCrudeProteinIntakeCPIjk(
   return CPIjk;
 }
 
-function calculateSoilDirectN2OForPeriod(
+function calculateNitrogenExcretedOnPastureAEForPeriod(
   input: SheepInputTransformed,
   flock: SheepFlockInputTransformed,
   className: SheepClass,
@@ -448,9 +448,7 @@ function calculateSoilDirectN2OForPeriod(
   seasonName: Season,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) {
-  const { constants } = context;
   /*
-  EN2O,dir = AE * EF PRP * CN2O * 10^-3
   AE = SUM SUM (Njk * NEjk * Dj)
   NEjk = (CPIjk / 6.25 ) - NRjk
   */
@@ -468,7 +466,6 @@ function calculateSoilDirectN2OForPeriod(
     seasonName,
     context,
   );
-
   const NRjk = calculateNitrogenRetainedNRjk(
     input,
     flock,
@@ -491,6 +488,35 @@ function calculateSoilDirectN2OForPeriod(
   const AE = NEjk.multiply(Njk)
     .multiply(Dj)
     .named(`AEj=${className},k=${periodName}`);
+
+  return AE;
+}
+
+function calculateSoilDirectN2OForPeriod(
+  input: SheepInputTransformed,
+  flock: SheepFlockInputTransformed,
+  className: SheepClass,
+  periodInput: SheepClassPeriodsInputTransformed,
+  periodName: string,
+  periodDuration: Container<Days>,
+  seasonName: Season,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
+  const { constants } = context;
+  /*
+  EN2O,dir = AE * EF PRP * CN2O * 10^-3
+  */
+
+  const AE = calculateNitrogenExcretedOnPastureAEForPeriod(
+    input,
+    flock,
+    className,
+    periodInput,
+    periodName,
+    periodDuration,
+    seasonName,
+    context,
+  ).named(`AE=${className},${periodName}`);
 
   const wetOrDry = isWetClimateZone(input.climateZone) ? 'wet' : 'dry';
   const EFPRP = selectConstant(
@@ -575,4 +601,96 @@ export function calculate_4_4_1_3_SheepSoilDirectN2O(
   });
 
   return sum(EN2ODir, { name: 'EN2O,dir' });
+}
+
+function calculateSoilAtmosphericDepositionN2OForFlock(
+  input: SheepInputTransformed,
+  flock: SheepFlockInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
+  /*
+  EN2O,ad = AE * EF PRP * CN2O * 10^-3
+  */
+  const { classes } = flock;
+  const classInputs = entriesFromObject(classes);
+
+  const classResults = classInputs
+    .map(([className, classInput]) => {
+      if (!classInput) {
+        return undefined;
+      }
+
+      if (isSheepClassSeasonal(classInput)) {
+        const seasonalResults = Seasons.map((seasonName) => {
+          const seasonalN2O = calculateNitrogenExcretedOnPastureAEForPeriod(
+            input,
+            flock,
+            className,
+            classInput[seasonName],
+            seasonName,
+            daysInSeason,
+            seasonName,
+            context,
+          );
+          return seasonalN2O;
+        });
+        return sum(seasonalResults, { name: `EN2O,ad=${className}` });
+      }
+      const monthlyResults = Months.map((monthName) => {
+        const daysInMonth = root(days(monthDurationMap[monthName]));
+        const monthlyN2O = calculateNitrogenExcretedOnPastureAEForPeriod(
+          input,
+          flock,
+          className,
+          classInput[monthName],
+          monthName,
+          daysInMonth,
+          monthSeasonMap[monthName],
+          context,
+        );
+        return monthlyN2O;
+      });
+      return sum(monthlyResults, { name: `EN2O,ad=${className}` });
+    })
+    .filter(isDefined);
+
+  return sum(classResults, { name: 'EN2O,ad' });
+}
+
+export function calculate_4_4_1_5_SheepSoilAtmosphericDepositionN2O(
+  input: SheepInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
+  const { flocks } = input;
+
+  const { constants } = context;
+  const { productionSystem } = input;
+
+  const FracGASMSoil = selectConstant(
+    constants.CROP,
+    'FRACTION_N_VOLATILISED_ORGANIC_FERTILISER',
+  ).named('FracGASMsoil');
+
+  const AERecords = flocks.map((flock, ix) => {
+    const n2o = calculateSoilAtmosphericDepositionN2OForFlock(
+      input,
+      flock,
+      context,
+    ).named(`EN2O,ad (flock ${ix})`);
+    return n2o;
+  });
+
+  const AE = sum(AERecords, { name: 'AE' });
+
+  const Mvol = AE.multiply(FracGASMSoil).named(`Mvol`);
+
+  const EFN2O = selectConstant(
+    constants.LIVESTOCK,
+    'EF_ATMOSPHERIC_DEPOSITION',
+    productionSystem,
+  ).named('EFN2O');
+
+  const CN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+
+  return Mvol.multiply(EFN2O).multiply(CN2O).named('EN2O,ad');
 }
