@@ -5,6 +5,7 @@ import {
   mass,
   massPerArea,
   massPerHeadPerDay,
+  massPerMass,
   realNumber,
 } from '@/tools/units';
 import { mapOptional } from '@/tools/zod';
@@ -28,7 +29,6 @@ export const SheepClassPeriodInputSchema = object({
     .transform(mapOptional((val) => input('Wjk', mass('Liveweight', val)))),
   method2LiveweightGain: z
     .number()
-    .min(0)
     .optional()
     .meta({
       description:
@@ -65,6 +65,18 @@ export const SheepClassPeriodInputSchema = object({
         'Method 2: supply an exact value for average duration days for this class for this period based on farm records',
     })
     .transform(mapOptional((val) => input('Dj', days(val)))),
+  method2CrudeProteinContent: z
+    .number()
+    .optional()
+    .meta({
+      description:
+        'Method 2: supply an exact value for crude protein content for this class for this period based on farm records',
+    })
+    .transform(
+      mapOptional((val) =>
+        input('CPjk', massPerMass('CrudeProtein', 'DryMatter', val)),
+      ),
+    ),
 });
 
 export const SheepClassWithLambingPeriodInputSchema =

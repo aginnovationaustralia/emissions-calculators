@@ -13,12 +13,7 @@ export type SheepManurePeriodsPerClass = 4 | 12;
 export const SHEEP_MANURE_SEASONAL_PERIODS_PER_CLASS = 4 as const;
 export const SHEEP_MANURE_MONTHLY_PERIODS_PER_CLASS = 12 as const;
 
-const SEASONAL_PERIOD_KEYS = [
-  'spring',
-  'summer',
-  'autumn',
-  'winter',
-] as const;
+const SEASONAL_PERIOD_KEYS = ['spring', 'summer', 'autumn', 'winter'] as const;
 
 const MONTHLY_PERIOD_KEYS = [
   'january',
@@ -76,6 +71,14 @@ export function createSheepManureSheetReaders(
       col.columnCustomAverageDurationDays,
       offsetRows,
     );
+    const customCrudeProteinContent = cell(
+      col.columnCustomCrudeProteinContent,
+      offsetRows,
+    );
+    const customLiveweightGain = cell(
+      col.columnCustomLiveweightGain,
+      offsetRows,
+    );
     return {
       head: Number(cell(col.columnHead, offsetRows)),
       method2Liveweight:
@@ -93,6 +96,14 @@ export function createSheepManureSheetReaders(
       method2AverageDurationDays:
         method === '2' && customAverageDurationDays
           ? Number(customAverageDurationDays)
+          : undefined,
+      method2CrudeProteinContent:
+        method === '2' && customCrudeProteinContent
+          ? Number(customCrudeProteinContent)
+          : undefined,
+      method2LiveweightGain:
+        method === '2' && customLiveweightGain
+          ? Number(customLiveweightGain)
           : undefined,
     };
   };

@@ -288,7 +288,9 @@ function calculateNitrogenRetainedNRjk(
   const { state } = input;
   const pureState = pureStateWithoutNTToLimitedState(state);
 
-  // const { head, method2AverageDurationDays } = periodInput;
+  const { method2Liveweight } = periodInput;
+
+  const { method2LiveweightGain } = periodInput;
 
   const LEjk = calculateProportionLactatingLEjk(
     periodInput,
@@ -302,14 +304,16 @@ function calculateNitrogenRetainedNRjk(
     .multiply(cleanWoolYieldProportion)
     .divide(daysInYear)
     .named(`WPk=${className}`);
-  const LWGjk = selectConstant(
-    constants.SHEEP,
-    'SEASONAL_FACTORS',
-    pureState,
-    className,
-    seasonName,
-    'liveweightGain',
-  ).named(`LWGjk=${className},${periodName}`);
+  const LWGjk =
+    method2LiveweightGain ??
+    selectConstant(
+      constants.SHEEP,
+      'SEASONAL_FACTORS',
+      pureState,
+      className,
+      seasonName,
+      'liveweightGain',
+    ).named(`LWGjk=${className},${periodName}`);
   const EBGjk = LWGjk.multiply(num(0.92)).named(
     `EBGjk=${className},${periodName}`,
   );
@@ -323,14 +327,16 @@ function calculateNitrogenRetainedNRjk(
     'standardReferenceWeight',
   ).named(`SRWk=${className},${periodName}`);
 
-  const Wjk = selectConstant(
-    constants.SHEEP,
-    'SEASONAL_FACTORS',
-    pureState,
-    className,
-    seasonName,
-    'liveweight',
-  ).named(`Wjk=${className},${periodName}`);
+  const Wjk =
+    method2Liveweight ??
+    selectConstant(
+      constants.SHEEP,
+      'SEASONAL_FACTORS',
+      pureState,
+      className,
+      seasonName,
+      'liveweight',
+    ).named(`Wjk=${className},${periodName}`);
 
   const Zjk = Wjk.divide(SRWk).named(`Zjk=${className},${periodName}`);
 
@@ -397,6 +403,7 @@ function calculateCrudeProteinIntakeCPIjk(
   const { constants } = context;
   const { state } = input;
   const pureState = pureStateWithoutNTToLimitedState(state);
+  const { method2CrudeProteinContent } = periodInput;
   const Ijk = calculateDailyFeedIntakeIjk(
     input,
     className,
@@ -406,14 +413,16 @@ function calculateCrudeProteinIntakeCPIjk(
     context,
   );
 
-  const CPjk = selectConstant(
-    constants.SHEEP,
-    'SEASONAL_FACTORS',
-    pureState,
-    className,
-    seasonName,
-    'crudeProteinContent',
-  ).named(`CPjk=${className},${periodName}`);
+  const CPjk =
+    method2CrudeProteinContent ??
+    selectConstant(
+      constants.SHEEP,
+      'SEASONAL_FACTORS',
+      pureState,
+      className,
+      seasonName,
+      'crudeProteinContent',
+    ).named(`CPjk=${className},${periodName}`);
 
   const MCjk = calculateMilkIntakeMCjk(
     input,

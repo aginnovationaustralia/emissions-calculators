@@ -80,8 +80,8 @@ const extractInputsAndOutput = createSheetExtractor(
   { rowInterval: 30 },
 );
 
-describe('4.4.1.1 Sheep manure methane seasonal', () => {
-  it.skip('method 1 matches spreadsheet results', async () => {
+describe('4.4.1.3 Sheep manure soil direct N2O monthly', () => {
+  it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.4-sheep-manure/4.4-sheep-manure.xlsx',
       '4.4.1.1',
