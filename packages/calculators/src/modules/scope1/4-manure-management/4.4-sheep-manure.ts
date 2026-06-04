@@ -11,15 +11,15 @@ import { SheepFlockInputTransformed } from '@/calculators/Sheep/types/sheep-floc
 import { isDefined } from '@/common/filters';
 import {
   isWetClimateZone,
-  Month,
   Months,
   pureStateWithoutNTToLimitedState,
   Season,
   Seasons,
   SheepClass,
 } from '@/constants/enums';
+import { monthDurationMap, monthSeasonMap } from '@/modules/shared';
 import { selectConstant } from '@/tools/constants';
-import { br, Container, num, root } from '@/tools/containers';
+import { br, Container, num, root, SummedContainer } from '@/tools/containers';
 import {
   daysInSeason,
   daysInYear,
@@ -28,55 +28,104 @@ import {
   oneMinus,
   tenToPowMinus3,
   zero,
-  zeroN2O,
 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { days, Days, massPerHeadPerDay, realNumber } from '@/tools/units';
+import {
+  days,
+  Days,
+  massPerHeadPerDay,
+  NumberUnit,
+  realNumber,
+} from '@/tools/units';
 import {
   calculateDailyFeedIntakeIjk,
   calculateProportionLactatingLEjk,
 } from '../3-enteric-methane/3.4-sheep-enteric';
 
-// TODO: Cloned from 3.4-sheep-enteric.ts
-const monthSeasonMap: Record<Month, Season> = {
-  january: 'summer',
-  february: 'summer',
-  march: 'autumn',
-  april: 'autumn',
-  may: 'autumn',
-  june: 'winter',
-  july: 'winter',
-  august: 'winter',
-  september: 'spring',
-  october: 'spring',
-  november: 'spring',
-  december: 'summer',
+/*
+ * NOTE: The implementation in this file is trialling several patterns to try to reduce noisy boilerplate that
+ * is common across livestock manure calculations. In particular calculateForAllClassPeriods makes it easier to
+ * process inputs that might either be monthly or seasonal. The periodProps pattern also makes it much nicer to
+ * define all the pieces needed for calculating through each class and period.
+ */
+
+type SheepManureFlockProps = {
+  input: SheepInputTransformed;
+  flock: SheepFlockInputTransformed;
+  context: ExecutionContext<ConstantsForGrainsCalculator>;
 };
 
-const monthDurationMap: Record<Month, number> = {
-  january: 31,
-  february: 28,
-  march: 31,
-  april: 30,
-  may: 31,
-  june: 30,
-  july: 31,
-  august: 31,
-  september: 30,
-  october: 31,
-  november: 30,
-  december: 31,
+type SheepManurePeriodProps = SheepManureFlockProps & {
+  className: SheepClass;
+  periodInput: SheepClassPeriodsInputTransformed;
+  periodName: string;
+  periodDuration: Container<Days>;
+  seasonName: Season;
 };
 
-function calculateDailyManureMethane(
-  input: SheepInputTransformed,
-  flock: SheepFlockInputTransformed,
-  className: SheepClass,
-  periodInput: SheepClassPeriodsInputTransformed,
-  periodName: string,
-  seasonName: Season,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) {
+function calculateForAllClassPeriods<N extends NumberUnit>(
+  flockProps: SheepManureFlockProps,
+  calculatePeriod: (periodProps: SheepManurePeriodProps) => Container<N>,
+  options: {
+    classResultName: (className: SheepClass) => string;
+    flockResultName: string;
+  },
+): SummedContainer<N> {
+  const { flock } = flockProps;
+  const { classes } = flock;
+  const classInputs = entriesFromObject(classes);
+
+  const classResults = classInputs
+    .map(([className, classInput]) => {
+      if (!classInput) {
+        return undefined;
+      }
+
+      if (isSheepClassSeasonal(classInput)) {
+        const seasonalResults = Seasons.map((seasonName) => {
+          return calculatePeriod({
+            ...flockProps,
+            className,
+            periodInput: classInput[seasonName],
+            periodName: seasonName,
+            periodDuration: daysInSeason,
+            seasonName,
+          });
+        });
+
+        return sum(seasonalResults, {
+          name: options.classResultName(className),
+        });
+      }
+
+      const monthlyResults = Months.map((monthName) => {
+        return calculatePeriod({
+          ...flockProps,
+          className,
+          periodInput: classInput[monthName],
+          periodName: monthName,
+          periodDuration: root(days(monthDurationMap[monthName])),
+          seasonName: monthSeasonMap[monthName],
+        });
+      });
+
+      return sum(monthlyResults, { name: options.classResultName(className) });
+    })
+    .filter(isDefined);
+
+  return sum(classResults, { name: options.flockResultName });
+}
+
+function calculateDailyManureMethane(periodProps: SheepManurePeriodProps) {
+  const {
+    input,
+    flock,
+    className,
+    periodInput,
+    periodName,
+    seasonName,
+    context,
+  } = periodProps;
   const { constants } = context;
   /*
     Mjkm = VSjk * BO * MMSm * MCFim * 𝜌
@@ -162,16 +211,8 @@ function calculateDailyManureMethane(
   return sum([Mjkm1, Mjkm14], { name: `Mj=${periodName},k=${className}` });
 }
 
-function calculateManureMethaneForPeriod(
-  input: SheepInputTransformed,
-  flock: SheepFlockInputTransformed,
-  className: SheepClass,
-  periodInput: SheepClassPeriodsInputTransformed,
-  periodName: string,
-  periodDuration: Container<Days>,
-  seasonName: Season,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) {
+function calculateManureMethaneForPeriod(periodProps: SheepManurePeriodProps) {
+  const { className, periodInput, periodName, periodDuration } = periodProps;
   /*
     ECH4 = SUM SUM SUM (Njk * Mjkm * Dj) * 10^-3
   */
@@ -183,74 +224,22 @@ function calculateManureMethaneForPeriod(
     `Dj=${periodName}`,
   );
 
-  const Mjkm = calculateDailyManureMethane(
-    input,
-    flock,
-    className,
-    periodInput,
-    periodName,
-    seasonName,
-    context,
-  );
+  const Mjkm = calculateDailyManureMethane(periodProps);
 
   return Mjkm.multiply(Njk)
     .multiply(Dj)
     .named(`ECH4=${periodName},k=${className}`);
 }
 
-function calculateManureMethaneForFlock(
-  input: SheepInputTransformed,
-  flock: SheepFlockInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) {
-  const { classes } = flock;
-  const classInputs = entriesFromObject(classes);
-
-  const classResults = classInputs
-    .map(([className, classInput]) => {
-      if (!classInput) {
-        return undefined;
-      }
-
-      if (isSheepClassSeasonal(classInput)) {
-        const seasonalResults = Seasons.map((seasonName) => {
-          const seasonalMethane = calculateManureMethaneForPeriod(
-            input,
-            flock,
-            className,
-            classInput[seasonName],
-            seasonName,
-            daysInSeason,
-            seasonName,
-            context,
-          );
-
-          return seasonalMethane;
-        });
-
-        return sum(seasonalResults, { name: `ECH4=${className}` });
-      }
-      const monthlyResults = Months.map((monthName) => {
-        const daysInMonth = root(days(monthDurationMap[monthName]));
-        const monthlyMethane = calculateManureMethaneForPeriod(
-          input,
-          flock,
-          className,
-          classInput[monthName],
-          monthName,
-          daysInMonth,
-          monthSeasonMap[monthName],
-          context,
-        );
-
-        return monthlyMethane;
-      });
-
-      return sum(monthlyResults, { name: `ECH4=${className}` });
-    })
-    .filter(isDefined);
-
-  return sum(classResults, { name: 'ECH4 (flock)' });
+function calculateManureMethaneForFlock(flockProps: SheepManureFlockProps) {
+  return calculateForAllClassPeriods(
+    flockProps,
+    calculateManureMethaneForPeriod,
+    {
+      classResultName: (className) => `ECH4=${className}`,
+      flockResultName: 'ECH4 (flock)',
+    },
+  );
 }
 
 export function calculate_4_4_1_1_SheepManureMethane(
@@ -260,22 +249,22 @@ export function calculate_4_4_1_1_SheepManureMethane(
   const { flocks } = input;
 
   const ECH4 = flocks.map((flock) => {
-    return calculateManureMethaneForFlock(input, flock, context);
+    return calculateManureMethaneForFlock({ input, flock, context });
   });
 
   return sum(ECH4, { name: 'ECH4' });
 }
 
-function calculateNitrogenRetainedNRjk(
-  input: SheepInputTransformed,
-  flock: SheepFlockInputTransformed,
-  className: SheepClass,
-  periodInput: SheepClassPeriodsInputTransformed,
-  periodName: string,
-  periodDuration: Container<Days>,
-  seasonName: Season,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) {
+function calculateNitrogenRetainedNRjk(periodProps: SheepManurePeriodProps) {
+  const {
+    input,
+    flock,
+    className,
+    periodInput,
+    periodName,
+    seasonName,
+    context,
+  } = periodProps;
   /*
   NRijk = ((0.045 * MPjk=3,4) + (WPk * 0.84)  + (EBGjk * ((212 - 4 * ((EBGjk * 1000)/(4* SRWk^0.75) - 1)) - ((140 - 4 * (((EBGjk * 1000)/4*SRWk^0.75) - 1))/(1 + e ^ (-6 * (Zjk - 0.4)))))) * 10^-3) / 6.25
   */
@@ -306,6 +295,7 @@ function calculateNitrogenRetainedNRjk(
     .multiply(cleanWoolYieldProportion)
     .divide(daysInYear)
     .named(`WPk=${className}`);
+
   const LWGjk =
     method2LiveweightGain ??
     selectConstant(
@@ -376,12 +366,12 @@ function calculateNitrogenRetainedNRjk(
 }
 
 function calculateMilkIntakeMCjk(
-  input: SheepInputTransformed,
-  flock: SheepFlockInputTransformed,
-  className: SheepClass,
-  periodInput: SheepClassPeriodsInputTransformed,
-  periodName: string,
+  periodProps: Pick<
+    SheepManurePeriodProps,
+    'className' | 'periodInput' | 'periodName'
+  >,
 ) {
+  const { className, periodInput, periodName } = periodProps;
   if (!isSeasonInputWithProportionLambsBorn(periodInput)) {
     return num(0).named(`MCjk=${className},${periodName}`);
   }
@@ -392,16 +382,9 @@ function calculateMilkIntakeMCjk(
     .named(`MCjk=${className},${periodName}`);
 }
 
-function calculateCrudeProteinIntakeCPIjk(
-  input: SheepInputTransformed,
-  flock: SheepFlockInputTransformed,
-  className: SheepClass,
-  periodInput: SheepClassPeriodsInputTransformed,
-  periodName: string,
-  periodDuration: Container<Days>,
-  seasonName: Season,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) {
+function calculateCrudeProteinIntakeCPIjk(periodProps: SheepManurePeriodProps) {
+  const { input, className, periodInput, periodName, seasonName, context } =
+    periodProps;
   const { constants } = context;
   const { state } = input;
   const pureState = pureStateWithoutNTToLimitedState(state);
@@ -426,13 +409,7 @@ function calculateCrudeProteinIntakeCPIjk(
       'crudeProteinContent',
     ).named(`CPjk=${className},${periodName}`);
 
-  const MCjk = calculateMilkIntakeMCjk(
-    input,
-    flock,
-    className,
-    periodInput,
-    periodName,
-  );
+  const MCjk = calculateMilkIntakeMCjk(periodProps);
 
   const CPIjk = Ijk.multiply(CPjk)
     .plus(num(0.045).multiply(MCjk))
@@ -441,15 +418,9 @@ function calculateCrudeProteinIntakeCPIjk(
 }
 
 function calculateNitrogenExcretedOnPastureAEForPeriod(
-  input: SheepInputTransformed,
-  flock: SheepFlockInputTransformed,
-  className: SheepClass,
-  periodInput: SheepClassPeriodsInputTransformed,
-  periodName: string,
-  periodDuration: Container<Days>,
-  seasonName: Season,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  periodProps: SheepManurePeriodProps,
 ) {
+  const { className, periodInput, periodName, periodDuration } = periodProps;
   /*
   AE = SUM SUM (Njk * NEjk * Dj)
   NEjk = (CPIjk / 6.25 ) - NRjk
@@ -458,26 +429,8 @@ function calculateNitrogenExcretedOnPastureAEForPeriod(
 
   const Njk = head.named(`Njk=${className},${periodName}`);
 
-  const CPIjk = calculateCrudeProteinIntakeCPIjk(
-    input,
-    flock,
-    className,
-    periodInput,
-    periodName,
-    periodDuration,
-    seasonName,
-    context,
-  );
-  const NRjk = calculateNitrogenRetainedNRjk(
-    input,
-    flock,
-    className,
-    periodInput,
-    periodName,
-    periodDuration,
-    seasonName,
-    context,
-  );
+  const CPIjk = calculateCrudeProteinIntakeCPIjk(periodProps);
+  const NRjk = calculateNitrogenRetainedNRjk(periodProps);
   const NEjk = CPIjk.divide(num(6.25))
     .switchUnit((u) => massPerHeadPerDay('N', u.value))
     .minus(NRjk)
@@ -494,31 +447,16 @@ function calculateNitrogenExcretedOnPastureAEForPeriod(
   return AE;
 }
 
-function calculateSoilDirectN2OForPeriod(
-  input: SheepInputTransformed,
-  flock: SheepFlockInputTransformed,
-  className: SheepClass,
-  periodInput: SheepClassPeriodsInputTransformed,
-  periodName: string,
-  periodDuration: Container<Days>,
-  seasonName: Season,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) {
+function calculateSoilDirectN2OForPeriod(periodProps: SheepManurePeriodProps) {
+  const { input, className, periodName, context } = periodProps;
   const { constants } = context;
   /*
   EN2O,dir = AE * EF PRP * CN2O * 10^-3
   */
 
-  const AE = calculateNitrogenExcretedOnPastureAEForPeriod(
-    input,
-    flock,
-    className,
-    periodInput,
-    periodName,
-    periodDuration,
-    seasonName,
-    context,
-  ).named(`AE=${className},${periodName}`);
+  const AE = calculateNitrogenExcretedOnPastureAEForPeriod(periodProps).named(
+    `AE=${className},${periodName}`,
+  );
 
   const wetOrDry = isWetClimateZone(input.climateZone) ? 'wet' : 'dry';
   const EFPRP = selectConstant(
@@ -534,59 +472,15 @@ function calculateSoilDirectN2OForPeriod(
     .named(`EN2O,dir=${periodName},k=${className}`);
 }
 
-function calculateSoilDirectN2OForFlock(
-  input: SheepInputTransformed,
-  flock: SheepFlockInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) {
-  /*
-  EN2O,dir = AE * EF PRP * CN2O * 10^-3
-  */
-  const { classes } = flock;
-  const classInputs = entriesFromObject(classes);
-
-  const classResults = classInputs
-    .map(([className, classInput]) => {
-      if (!classInput) {
-        return undefined;
-      }
-
-      if (isSheepClassSeasonal(classInput)) {
-        const seasonalResults = Seasons.map((seasonName) => {
-          const seasonalN2O = calculateSoilDirectN2OForPeriod(
-            input,
-            flock,
-            className,
-            classInput[seasonName],
-            seasonName,
-            daysInSeason,
-            seasonName,
-            context,
-          );
-          return seasonalN2O;
-        });
-        return sum(seasonalResults, { name: `EN2O,dir=${className}` });
-      }
-      const monthlyResults = Months.map((monthName) => {
-        const daysInMonth = root(days(monthDurationMap[monthName]));
-        const monthlyN2O = calculateSoilDirectN2OForPeriod(
-          input,
-          flock,
-          className,
-          classInput[monthName],
-          monthName,
-          daysInMonth,
-          monthSeasonMap[monthName],
-          context,
-        );
-        return monthlyN2O;
-      });
-      return sum(monthlyResults, { name: `EN2O,dir=${className}` });
-    })
-    .filter(isDefined);
-
-  return sum(classResults, { name: 'EN2O,dir' });
-  return zeroN2O;
+function calculateSoilDirectN2OForFlock(flockProps: SheepManureFlockProps) {
+  return calculateForAllClassPeriods(
+    flockProps,
+    calculateSoilDirectN2OForPeriod,
+    {
+      classResultName: (className) => `EN2O,dir=${className}`,
+      flockResultName: 'EN2O,dir',
+    },
+  );
 }
 
 export function calculate_4_4_1_3_SheepSoilDirectN2O(
@@ -596,7 +490,7 @@ export function calculate_4_4_1_3_SheepSoilDirectN2O(
   const { flocks } = input;
 
   const EN2ODir = flocks.map((flock, ix) => {
-    const n2o = calculateSoilDirectN2OForFlock(input, flock, context).named(
+    const n2o = calculateSoilDirectN2OForFlock({ input, flock, context }).named(
       `EN2O,dir (flock ${ix})`,
     );
     return n2o;
@@ -606,57 +500,16 @@ export function calculate_4_4_1_3_SheepSoilDirectN2O(
 }
 
 function calculateSoilAtmosphericDepositionN2OForFlock(
-  input: SheepInputTransformed,
-  flock: SheepFlockInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  flockProps: SheepManureFlockProps,
 ) {
-  /*
-  EN2O,ad = AE * EF PRP * CN2O * 10^-3
-  */
-  const { classes } = flock;
-  const classInputs = entriesFromObject(classes);
-
-  const classResults = classInputs
-    .map(([className, classInput]) => {
-      if (!classInput) {
-        return undefined;
-      }
-
-      if (isSheepClassSeasonal(classInput)) {
-        const seasonalResults = Seasons.map((seasonName) => {
-          const seasonalN2O = calculateNitrogenExcretedOnPastureAEForPeriod(
-            input,
-            flock,
-            className,
-            classInput[seasonName],
-            seasonName,
-            daysInSeason,
-            seasonName,
-            context,
-          );
-          return seasonalN2O;
-        });
-        return sum(seasonalResults, { name: `EN2O,ad=${className}` });
-      }
-      const monthlyResults = Months.map((monthName) => {
-        const daysInMonth = root(days(monthDurationMap[monthName]));
-        const monthlyN2O = calculateNitrogenExcretedOnPastureAEForPeriod(
-          input,
-          flock,
-          className,
-          classInput[monthName],
-          monthName,
-          daysInMonth,
-          monthSeasonMap[monthName],
-          context,
-        );
-        return monthlyN2O;
-      });
-      return sum(monthlyResults, { name: `EN2O,ad=${className}` });
-    })
-    .filter(isDefined);
-
-  return sum(classResults, { name: 'EN2O,ad' });
+  return calculateForAllClassPeriods(
+    flockProps,
+    calculateNitrogenExcretedOnPastureAEForPeriod,
+    {
+      classResultName: (className) => `EN2O,ad=${className}`,
+      flockResultName: 'EN2O,ad',
+    },
+  );
 }
 
 export function calculate_4_4_1_5_SheepSoilAtmosphericDepositionN2O(
@@ -674,11 +527,11 @@ export function calculate_4_4_1_5_SheepSoilAtmosphericDepositionN2O(
   ).named('FracGASMsoil');
 
   const AERecords = flocks.map((flock, ix) => {
-    const n2o = calculateSoilAtmosphericDepositionN2OForFlock(
+    const n2o = calculateSoilAtmosphericDepositionN2OForFlock({
       input,
       flock,
       context,
-    ).named(`EN2O,ad (flock ${ix})`);
+    }).named(`EN2O,ad (flock ${ix})`);
     return n2o;
   });
 
@@ -710,11 +563,11 @@ export function calculate_4_4_1_7_SheepSoilLeachingRunoffN2O(
   const { isInLeachingZone } = input;
 
   const AERecords = flocks.map((flock, ix) => {
-    const n2o = calculateSoilAtmosphericDepositionN2OForFlock(
+    const n2o = calculateSoilAtmosphericDepositionN2OForFlock({
       input,
       flock,
       context,
-    ).named(`EN2O,ad (flock ${ix})`);
+    }).named(`EN2O,ad (flock ${ix})`);
     return n2o;
   });
 

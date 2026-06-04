@@ -10,48 +10,18 @@ import {
 import { SheepFlockInputTransformed } from '@/calculators/Sheep/types/sheep-flock.input';
 import { isDefined } from '@/common/filters';
 import {
-  Month,
   Months,
   pureStateWithoutNTToLimitedState,
   Season,
   Seasons,
   SheepClass,
 } from '@/constants/enums';
+import { monthDurationMap, monthSeasonMap } from '@/modules/shared';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, num, root } from '@/tools/containers';
 import { daysInSeason, e, oneMinus, tenToPowMinus3 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { days, Days, massPerHeadPerDay, realNumber } from '@/tools/units';
-
-const monthSeasonMap: Record<Month, Season> = {
-  january: 'summer',
-  february: 'summer',
-  march: 'autumn',
-  april: 'autumn',
-  may: 'autumn',
-  june: 'winter',
-  july: 'winter',
-  august: 'winter',
-  september: 'spring',
-  october: 'spring',
-  november: 'spring',
-  december: 'summer',
-};
-
-const monthDurationMap: Record<Month, number> = {
-  january: 31,
-  february: 28,
-  march: 31,
-  april: 30,
-  may: 31,
-  june: 30,
-  july: 31,
-  august: 31,
-  september: 30,
-  october: 31,
-  november: 30,
-  december: 31,
-};
 
 export function calculateProportionLactatingLEjk(
   periodInput: SheepClassPeriodsInputTransformed,
