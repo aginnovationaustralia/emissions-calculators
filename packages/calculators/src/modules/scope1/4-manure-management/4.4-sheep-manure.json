@@ -338,7 +338,7 @@
       "name": "the amount of nitrogen retained by the body",
       "units": "kg N / head / day",
       "type": "expression",
-      "expression": "((0.045 * MPjk=3,4) + (WPk * 0.84)  + (EBGjk * ((212 - 4 * ((EBGjk * 1000)/(4* SRWk^0.75) - 1)) - ((140 - 4 * (((EBGjk * 1000)/4 * SRWk ^0.75) - 1))/(1 + e ^ (-6 * (Zjk - 0.4)))))) * 10^-3) / 6.25",
+      "expression": "((0.045 * MPjk=3,4) + (WPk * 0.84)  + (EBGjk * ((212 - 4 * ((EBGjk * 1000)/(4* SRWk^0.75) - 1)) - ((140 - 4 * (((EBGjk * 1000)/(4 * SRWk ^0.75)) - 1))/(1 + e ^ (-6 * (Zjk - 0.4)))))) * 10^-3) / 6.25",
       "line": "994",
       "method2Input": false,
       "notes": ""

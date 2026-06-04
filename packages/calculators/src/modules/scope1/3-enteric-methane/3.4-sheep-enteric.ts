@@ -53,6 +53,27 @@ const monthDurationMap: Record<Month, number> = {
   december: 31,
 };
 
+export function calculateProportionLactatingLEjk(
+  periodInput: SheepClassPeriodsInputTransformed,
+  periodName: string,
+  className: SheepClass,
+) {
+  if (!isSheepPeriodWithLambing(periodInput)) {
+    return num(0);
+  }
+
+  const { percentLambing, percentLambMarking } = periodInput;
+
+  const LRjk = percentLambing.named(`LRj=${periodName},k=${className}`);
+  const LMRjk = percentLambMarking.named(`LMRj=${periodName},k=${className}`);
+
+  const LEjk = LRjk.divide(num(100))
+    .multiply(LMRjk.limitedTo(100).divide(num(100)))
+    .named(`LEj=${periodName},k=${className}`);
+
+  return LEjk;
+}
+
 function calculateAdditionalIntakeForMilkProductionMAjk(
   input: SheepInputTransformed,
   className: SheepClass,
@@ -65,14 +86,12 @@ function calculateAdditionalIntakeForMilkProductionMAjk(
   }
 
   const { constants } = context;
-  const { percentLambing, percentLambMarking } = periodInput;
 
-  const LRjk = percentLambing.named(`LRj=${periodName},k=${className}`);
-  const LMRjk = percentLambMarking.named(`LMRj=${periodName},k=${className}`);
-
-  const LEjk = LRjk.divide(num(100))
-    .multiply(LMRjk.limitedTo(100).divide(num(100)))
-    .named(`LEj=${periodName},k=${className}`);
+  const LEjk = calculateProportionLactatingLEjk(
+    periodInput,
+    periodName,
+    className,
+  );
 
   const FAk = selectConstant(constants.SHEEP, 'FEED_ADJUSTMENT').named(
     `FAj=${periodName},k=${className}`,

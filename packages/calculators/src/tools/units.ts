@@ -14,6 +14,8 @@ export type Substance =
   | 'CO2e'
   | 'Refrigerant'
   | 'Fuel'
+  | 'Greasy Wool'
+  | 'Clean Wool'
   | 'FluidWaste'
   | 'Oxygen'
   | 'Urea'

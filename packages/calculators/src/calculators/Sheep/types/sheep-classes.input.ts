@@ -3,6 +3,7 @@ import { z } from 'zod';
 import {
   SheepClassInputSchema,
   SheepClassWithLambingInputSchema,
+  SheepClassWithProportionLambsBornInputSchema,
 } from './sheep-class.input';
 
 const SheepRamsInputSchema = SheepClassInputSchema.transform((val) => ({
@@ -35,11 +36,12 @@ const SheepOtherEwesInputSchema = SheepClassInputSchema.transform((val) => ({
   name: 'otherEwes' as const,
   number: '5' as const,
 }));
-const SheepLambsHoggetsInputSchema = SheepClassInputSchema.transform((val) => ({
-  ...val,
-  name: 'lambsHoggets' as const,
-  number: '6' as const,
-}));
+const SheepLambsHoggetsInputSchema =
+  SheepClassWithProportionLambsBornInputSchema.transform((val) => ({
+    ...val,
+    name: 'lambsHoggets' as const,
+    number: '6' as const,
+  }));
 
 export const SheepClassesInputSchema = object({
   breedingEwes: SheepBreedingEwesInputSchema.optional(),

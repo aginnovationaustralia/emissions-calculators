@@ -2,11 +2,15 @@ import { entriesFromObject } from '@/calculators/common/tools';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { SheepInputTransformed } from '@/calculators/Sheep/types/input';
-import { SheepClassPeriodsInputTransformed } from '@/calculators/Sheep/types/sheep-class-period.input';
+import {
+  isSeasonInputWithProportionLambsBorn,
+  SheepClassPeriodsInputTransformed,
+} from '@/calculators/Sheep/types/sheep-class-period.input';
 import { isSheepClassSeasonal } from '@/calculators/Sheep/types/sheep-class.input';
 import { SheepFlockInputTransformed } from '@/calculators/Sheep/types/sheep-flock.input';
 import { isDefined } from '@/common/filters';
 import {
+  isWetClimateZone,
   Month,
   Months,
   pureStateWithoutNTToLimitedState,
@@ -15,11 +19,21 @@ import {
   SheepClass,
 } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
-import { Container, num, root } from '@/tools/containers';
-import { daysInSeason, oneMinus } from '@/tools/sentinels';
+import { br, Container, num, root } from '@/tools/containers';
+import {
+  daysInSeason,
+  daysInYear,
+  e,
+  oneMinus,
+  tenToPowMinus3,
+  zeroN2O,
+} from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { days, Days, realNumber } from '@/tools/units';
-import { calculateDailyFeedIntakeIjk } from '../3-enteric-methane/3.4-sheep-enteric';
+import { days, Days, massPerHeadPerDay, realNumber } from '@/tools/units';
+import {
+  calculateDailyFeedIntakeIjk,
+  calculateProportionLactatingLEjk,
+} from '../3-enteric-methane/3.4-sheep-enteric';
 
 // TODO: Cloned from 3.4-sheep-enteric.ts
 const monthSeasonMap: Record<Month, Season> = {
@@ -248,4 +262,308 @@ export function calculate_4_4_1_1_SheepManureMethane(
   });
 
   return sum(ECH4, { name: 'ECH4' });
+}
+
+function calculateNitrogenRetainedNRjk(
+  input: SheepInputTransformed,
+  flock: SheepFlockInputTransformed,
+  className: SheepClass,
+  periodInput: SheepClassPeriodsInputTransformed,
+  periodName: string,
+  periodDuration: Container<Days>,
+  seasonName: Season,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
+  /*
+  NRijk = ((0.045 * MPjk=3,4) + (WPk * 0.84)  + (EBGjk * ((212 - 4 * ((EBGjk * 1000)/(4* SRWk^0.75) - 1)) - ((140 - 4 * (((EBGjk * 1000)/4*SRWk^0.75) - 1))/(1 + e ^ (-6 * (Zjk - 0.4)))))) * 10^-3) / 6.25
+  */
+  const { constants } = context;
+  const classInput = flock.classes[className];
+  if (!classInput) {
+    return root(massPerHeadPerDay('N', 0)).named(
+      `NRjk=${className},${periodName}`,
+    );
+  }
+  const { greasyWoolProduction, cleanWoolYieldProportion } = classInput;
+  const { state } = input;
+  const pureState = pureStateWithoutNTToLimitedState(state);
+
+  // const { head, method2AverageDurationDays } = periodInput;
+
+  const LEjk = calculateProportionLactatingLEjk(
+    periodInput,
+    periodName,
+    className,
+  );
+
+  const MPjk = LEjk.multiply(num(1.6)).named(`MPjk=${className},${periodName}`);
+
+  const WPk = greasyWoolProduction
+    .multiply(cleanWoolYieldProportion)
+    .divide(daysInYear)
+    .named(`WPk=${className}`);
+  const LWGjk = selectConstant(
+    constants.SHEEP,
+    'SEASONAL_FACTORS',
+    pureState,
+    className,
+    seasonName,
+    'liveweightGain',
+  ).named(`LWGjk=${className},${periodName}`);
+  const EBGjk = LWGjk.multiply(num(0.92)).named(
+    `EBGjk=${className},${periodName}`,
+  );
+
+  const SRWk = selectConstant(
+    constants.SHEEP,
+    'SEASONAL_FACTORS',
+    pureState,
+    className,
+    seasonName,
+    'standardReferenceWeight',
+  ).named(`SRWk=${className},${periodName}`);
+
+  const Wjk = selectConstant(
+    constants.SHEEP,
+    'SEASONAL_FACTORS',
+    pureState,
+    className,
+    seasonName,
+    'liveweight',
+  ).named(`Wjk=${className},${periodName}`);
+
+  const Zjk = Wjk.divide(SRWk).named(`Zjk=${className},${periodName}`);
+
+  const NRmilkProduction = br(num(0.045).multiply(MPjk));
+  const NRwoolProduction = br(num(0.84).multiply(WPk));
+  const NRgainForWeight = num(4).multiply(
+    br(
+      EBGjk.multiply(num(1000))
+        .divide(num(4).multiply(SRWk.power(num(0.75))))
+        .switchUnit((u) => realNumber(u.value))
+        .minus(num(1)),
+    ),
+  );
+  const NRrelativeSize = num(1).plus(
+    e.power(num(-6).multiply(Zjk.minus(num(0.4)))),
+  );
+
+  const NRjk = br(
+    NRmilkProduction.plus(NRwoolProduction)
+      .switchUnit((u) => massPerHeadPerDay('N', u.value))
+      .plus(
+        br(
+          EBGjk.multiply(
+            br(num(212).minus(NRgainForWeight)).minus(
+              br(num(140).minus(NRgainForWeight)).divide(NRrelativeSize),
+            ),
+          ).switchUnit((u) => realNumber(u.value)),
+        ).multiply(tenToPowMinus3),
+      ),
+  )
+    .divide(num(6.25))
+    .named(`NRj=${className},k=${periodName}`);
+
+  return NRjk;
+}
+
+function calculateMilkIntakeMCjk(
+  input: SheepInputTransformed,
+  flock: SheepFlockInputTransformed,
+  className: SheepClass,
+  periodInput: SheepClassPeriodsInputTransformed,
+  periodName: string,
+) {
+  if (!isSeasonInputWithProportionLambsBorn(periodInput)) {
+    return num(0).named(`MCjk=${className},${periodName}`);
+  }
+  const { proportionOfLambsBorn } = periodInput;
+
+  return proportionOfLambsBorn
+    .multiply(num(1.6))
+    .named(`MCjk=${className},${periodName}`);
+}
+
+function calculateCrudeProteinIntakeCPIjk(
+  input: SheepInputTransformed,
+  flock: SheepFlockInputTransformed,
+  className: SheepClass,
+  periodInput: SheepClassPeriodsInputTransformed,
+  periodName: string,
+  periodDuration: Container<Days>,
+  seasonName: Season,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
+  const { constants } = context;
+  const { state } = input;
+  const pureState = pureStateWithoutNTToLimitedState(state);
+  const Ijk = calculateDailyFeedIntakeIjk(
+    input,
+    className,
+    periodInput,
+    periodName,
+    seasonName,
+    context,
+  );
+
+  const CPjk = selectConstant(
+    constants.SHEEP,
+    'SEASONAL_FACTORS',
+    pureState,
+    className,
+    seasonName,
+    'crudeProteinContent',
+  ).named(`CPjk=${className},${periodName}`);
+
+  const MCjk = calculateMilkIntakeMCjk(
+    input,
+    flock,
+    className,
+    periodInput,
+    periodName,
+  );
+
+  const CPIjk = Ijk.multiply(CPjk)
+    .plus(num(0.045).multiply(MCjk))
+    .named(`CPIjk=${className},${periodName}`);
+  return CPIjk;
+}
+
+function calculateSoilDirectN2OForPeriod(
+  input: SheepInputTransformed,
+  flock: SheepFlockInputTransformed,
+  className: SheepClass,
+  periodInput: SheepClassPeriodsInputTransformed,
+  periodName: string,
+  periodDuration: Container<Days>,
+  seasonName: Season,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
+  const { constants } = context;
+  /*
+  EN2O,dir = AE * EF PRP * CN2O * 10^-3
+  AE = SUM SUM (Njk * NEjk * Dj)
+  NEjk = (CPIjk / 6.25 ) - NRjk
+  */
+  const { head, method2AverageDurationDays } = periodInput;
+
+  const Njk = head.named(`Njk=${className},${periodName}`);
+
+  const CPIjk = calculateCrudeProteinIntakeCPIjk(
+    input,
+    flock,
+    className,
+    periodInput,
+    periodName,
+    periodDuration,
+    seasonName,
+    context,
+  );
+
+  const NRjk = calculateNitrogenRetainedNRjk(
+    input,
+    flock,
+    className,
+    periodInput,
+    periodName,
+    periodDuration,
+    seasonName,
+    context,
+  );
+  const NEjk = CPIjk.divide(num(6.25))
+    .switchUnit((u) => massPerHeadPerDay('N', u.value))
+    .minus(NRjk)
+    .named(`NEjk=${className},${periodName}`); // line 978
+
+  const Dj = (method2AverageDurationDays ?? periodDuration).named(
+    `Dj=${periodName}`,
+  );
+
+  const AE = NEjk.multiply(Njk)
+    .multiply(Dj)
+    .named(`AEj=${className},k=${periodName}`);
+
+  const wetOrDry = isWetClimateZone(input.climateZone) ? 'wet' : 'dry';
+  const EFPRP = selectConstant(
+    constants.LIVESTOCK,
+    'EF_DEPOSITED_URINE_AND_DUNG_PRP',
+    wetOrDry,
+  ).named(`EFPRP ${wetOrDry}`);
+
+  const CN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+
+  return AE.multiply(EFPRP)
+    .multiply(CN2O)
+    .named(`EN2O,dir=${periodName},k=${className}`);
+}
+
+function calculateSoilDirectN2OForFlock(
+  input: SheepInputTransformed,
+  flock: SheepFlockInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
+  /*
+  EN2O,dir = AE * EF PRP * CN2O * 10^-3
+  */
+  const { classes } = flock;
+  const classInputs = entriesFromObject(classes);
+
+  const classResults = classInputs
+    .map(([className, classInput]) => {
+      if (!classInput) {
+        return undefined;
+      }
+
+      if (isSheepClassSeasonal(classInput)) {
+        const seasonalResults = Seasons.map((seasonName) => {
+          const seasonalN2O = calculateSoilDirectN2OForPeriod(
+            input,
+            flock,
+            className,
+            classInput[seasonName],
+            seasonName,
+            daysInSeason,
+            seasonName,
+            context,
+          );
+          return seasonalN2O;
+        });
+        return sum(seasonalResults, { name: `EN2O,dir=${className}` });
+      }
+      const monthlyResults = Months.map((monthName) => {
+        const daysInMonth = root(days(monthDurationMap[monthName]));
+        const monthlyN2O = calculateSoilDirectN2OForPeriod(
+          input,
+          flock,
+          className,
+          classInput[monthName],
+          monthName,
+          daysInMonth,
+          monthSeasonMap[monthName],
+          context,
+        );
+        return monthlyN2O;
+      });
+      return sum(monthlyResults, { name: `EN2O,dir=${className}` });
+    })
+    .filter(isDefined);
+
+  return sum(classResults, { name: 'EN2O,dir' });
+  return zeroN2O;
+}
+
+export function calculate_4_4_1_3_SheepSoilDirectN2O(
+  input: SheepInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
+  const { flocks } = input;
+
+  const EN2ODir = flocks.map((flock, ix) => {
+    const n2o = calculateSoilDirectN2OForFlock(input, flock, context).named(
+      `EN2O,dir (flock ${ix})`,
+    );
+    return n2o;
+  });
+
+  return sum(EN2ODir, { name: 'EN2O,dir' });
 }
