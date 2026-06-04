@@ -1,5 +1,6 @@
 import { Month, Season } from '@/constants/enums';
 
+// NOTE: Further common code and constants can accumulate in this folder
 export const monthSeasonMap: Record<Month, Season> = {
   january: 'summer',
   february: 'summer',

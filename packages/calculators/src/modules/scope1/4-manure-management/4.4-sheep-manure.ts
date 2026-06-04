@@ -277,7 +277,7 @@ function calculateNitrogenRetainedNRjk(periodProps: SheepManurePeriodProps) {
   }
   const { greasyWoolProduction, cleanWoolYieldProportion } = classInput;
   const { state } = input;
-  const pureState = pureStateWithoutNTToLimitedState(state);
+  const limitedState = pureStateWithoutNTToLimitedState(state);
 
   const { method2Liveweight } = periodInput;
 
@@ -301,7 +301,7 @@ function calculateNitrogenRetainedNRjk(periodProps: SheepManurePeriodProps) {
     selectConstant(
       constants.SHEEP,
       'SEASONAL_FACTORS',
-      pureState,
+      limitedState,
       className,
       seasonName,
       'liveweightGain',
@@ -313,7 +313,7 @@ function calculateNitrogenRetainedNRjk(periodProps: SheepManurePeriodProps) {
   const SRWk = selectConstant(
     constants.SHEEP,
     'SEASONAL_FACTORS',
-    pureState,
+    limitedState,
     className,
     seasonName,
     'standardReferenceWeight',
@@ -324,7 +324,7 @@ function calculateNitrogenRetainedNRjk(periodProps: SheepManurePeriodProps) {
     selectConstant(
       constants.SHEEP,
       'SEASONAL_FACTORS',
-      pureState,
+      limitedState,
       className,
       seasonName,
       'liveweight',
@@ -387,7 +387,7 @@ function calculateCrudeProteinIntakeCPIjk(periodProps: SheepManurePeriodProps) {
     periodProps;
   const { constants } = context;
   const { state } = input;
-  const pureState = pureStateWithoutNTToLimitedState(state);
+  const limitedState = pureStateWithoutNTToLimitedState(state);
   const { method2CrudeProteinContent } = periodInput;
   const Ijk = calculateDailyFeedIntakeIjk(
     input,
@@ -403,7 +403,7 @@ function calculateCrudeProteinIntakeCPIjk(periodProps: SheepManurePeriodProps) {
     selectConstant(
       constants.SHEEP,
       'SEASONAL_FACTORS',
-      pureState,
+      limitedState,
       className,
       seasonName,
       'crudeProteinContent',

@@ -95,18 +95,4 @@ describe('4.4.1.1 Sheep manure methane seasonal', () => {
       calculate_4_4_1_1_SheepManureMethane,
     );
   });
-
-  it.skip('method 2 matches spreadsheet results', async () => {
-    const sheet = await getSheet(
-      './src/modules/test/4.4-sheep-enteric.xlsx',
-      '3.4.1.1',
-    );
-
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 201, '2');
-
-    compareInputsAndOutputs(
-      inputsAndOutputs,
-      calculate_4_4_1_1_SheepManureMethane,
-    );
-  });
 });
