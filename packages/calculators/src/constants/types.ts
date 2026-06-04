@@ -621,14 +621,19 @@ type SeasonalSheepFactors = {
   dryMatterDigestibility: RealNumber;
   liveweight: Mass<'Liveweight'>;
   liveweightGain: MassPerHeadPerDay<'Liveweight'>;
-  standardReferenceWeight: Mass<'Liveweight'>;
+
   crudeProteinContent: MassPerMass<'CrudeProtein', 'DryMatter'>;
 };
 
 export type SheepConstants = NamedConstants & {
   SEASONAL_FACTORS: Record<
     LimitedState,
-    Record<SheepClass, Record<Season, SeasonalSheepFactors>>
+    Record<
+      SheepClass,
+      {
+        standardReferenceWeight: Mass<'Liveweight'>;
+      } & Record<Season, SeasonalSheepFactors>
+    >
   >;
 
   FEED_ADJUSTMENT: RealNumber;

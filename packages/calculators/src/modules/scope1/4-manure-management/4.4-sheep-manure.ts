@@ -315,7 +315,6 @@ function calculateNitrogenRetainedNRjk(periodProps: SheepManurePeriodProps) {
     'SEASONAL_FACTORS',
     limitedState,
     className,
-    seasonName,
     'standardReferenceWeight',
   ).named(`SRWk=${className},${periodName}`);
 

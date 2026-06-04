@@ -5423,13 +5423,13 @@ export const sheepConstants: SheepConstants = {
   SEASONAL_FACTORS: {
     'ACT/NSW': {
       rams: {
+        standardReferenceWeight: mass('Liveweight', 78),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
           dryMatterAvailability: massPerArea('DryMatter', 2.9),
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 75),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.07),
-          standardReferenceWeight: mass('Liveweight', 78),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -5437,7 +5437,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.61),
           liveweight: mass('Liveweight', 75),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 78),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.12),
@@ -5445,7 +5444,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.64),
           liveweight: mass('Liveweight', 69),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.07),
-          standardReferenceWeight: mass('Liveweight', 78),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.18),
@@ -5453,17 +5451,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.72),
           liveweight: mass('Liveweight', 69),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 78),
         },
       },
       wethers: {
+        standardReferenceWeight: mass('Liveweight', 62),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
           dryMatterAvailability: massPerArea('DryMatter', 2.9),
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 62),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.08),
-          standardReferenceWeight: mass('Liveweight', 62),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -5471,7 +5468,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.61),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.08),
-          standardReferenceWeight: mass('Liveweight', 62),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.12),
@@ -5479,7 +5475,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.64),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 62),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.18),
@@ -5487,17 +5482,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.72),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 62),
         },
       },
       maidenEwes: {
+        standardReferenceWeight: mass('Liveweight', 57),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
           dryMatterAvailability: massPerArea('DryMatter', 2.9),
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 44),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.07),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -5505,7 +5499,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.61),
           liveweight: mass('Liveweight', 42),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.12),
@@ -5513,7 +5506,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.64),
           liveweight: mass('Liveweight', 43),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.18),
@@ -5521,17 +5513,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.72),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
       },
       breedingEwes: {
+        standardReferenceWeight: mass('Liveweight', 57),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
           dryMatterAvailability: massPerArea('DryMatter', 2.9),
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 54),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.04),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -5539,7 +5530,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.61),
           liveweight: mass('Liveweight', 49),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.12),
@@ -5547,7 +5537,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.64),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.01),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.18),
@@ -5555,17 +5544,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.72),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
       },
       otherEwes: {
+        standardReferenceWeight: mass('Liveweight', 57),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
           dryMatterAvailability: massPerArea('DryMatter', 2.9),
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 56),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -5573,7 +5561,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.61),
           liveweight: mass('Liveweight', 51),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.12),
@@ -5581,7 +5568,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.64),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.01),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.18),
@@ -5589,17 +5575,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.72),
           liveweight: mass('Liveweight', 51),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.01),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
       },
       lambsHoggets: {
+        standardReferenceWeight: mass('Liveweight', 60),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
           dryMatterAvailability: massPerArea('DryMatter', 2.9),
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 20),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -5607,7 +5592,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.61),
           liveweight: mass('Liveweight', 27),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.08),
-          standardReferenceWeight: mass('Liveweight', 61),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.12),
@@ -5615,7 +5599,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.64),
           liveweight: mass('Liveweight', 32),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 62),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.18),
@@ -5623,19 +5606,18 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.72),
           liveweight: mass('Liveweight', 34),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.04),
-          standardReferenceWeight: mass('Liveweight', 63),
         },
       },
     },
     QLD: {
       rams: {
+        standardReferenceWeight: mass('Liveweight', 70),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.08),
           dryMatterAvailability: massPerArea('DryMatter', 1.5),
           dryMatterDigestibility: realNumber(0.51),
           liveweight: mass('Liveweight', 58),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.02),
-          standardReferenceWeight: mass('Liveweight', 70),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -5643,7 +5625,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 61),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.03),
-          standardReferenceWeight: mass('Liveweight', 70),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.09),
@@ -5651,7 +5632,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.59),
           liveweight: mass('Liveweight', 63),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
-          standardReferenceWeight: mass('Liveweight', 70),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -5659,17 +5639,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.58),
           liveweight: mass('Liveweight', 60),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.03),
-          standardReferenceWeight: mass('Liveweight', 70),
         },
       },
       wethers: {
+        standardReferenceWeight: mass('Liveweight', 60),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.08),
           dryMatterAvailability: massPerArea('DryMatter', 1.5),
           dryMatterDigestibility: realNumber(0.51),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -5677,7 +5656,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.09),
@@ -5685,7 +5663,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.59),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -5693,17 +5670,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.58),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
       },
       maidenEwes: {
+        standardReferenceWeight: mass('Liveweight', 50),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.08),
           dryMatterAvailability: massPerArea('DryMatter', 1.5),
           dryMatterDigestibility: realNumber(0.51),
           liveweight: mass('Liveweight', 35),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -5711,7 +5687,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 40),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.09),
@@ -5719,7 +5694,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.59),
           liveweight: mass('Liveweight', 40),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -5727,17 +5701,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.58),
           liveweight: mass('Liveweight', 35),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
       },
       breedingEwes: {
+        standardReferenceWeight: mass('Liveweight', 50),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.08),
           dryMatterAvailability: massPerArea('DryMatter', 1.5),
           dryMatterDigestibility: realNumber(0.51),
           liveweight: mass('Liveweight', 40),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.02),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -5745,7 +5718,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.09),
@@ -5753,7 +5725,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.59),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -5761,17 +5732,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.58),
           liveweight: mass('Liveweight', 42),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.03),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
       },
       otherEwes: {
+        standardReferenceWeight: mass('Liveweight', 50),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.08),
           dryMatterAvailability: massPerArea('DryMatter', 1.5),
           dryMatterDigestibility: realNumber(0.51),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.03),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -5779,7 +5749,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.09),
@@ -5787,7 +5756,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.59),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -5795,17 +5763,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.58),
           liveweight: mass('Liveweight', 48),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.02),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
       },
       lambsHoggets: {
+        standardReferenceWeight: mass('Liveweight', 55),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.08),
           dryMatterAvailability: massPerArea('DryMatter', 1.5),
           dryMatterDigestibility: realNumber(0.51),
           liveweight: mass('Liveweight', 20),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -5813,7 +5780,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 25),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 56),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.09),
@@ -5821,7 +5787,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.59),
           liveweight: mass('Liveweight', 20),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.2),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -5829,19 +5794,18 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.58),
           liveweight: mass('Liveweight', 25),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 58),
         },
       },
     },
     SA: {
       rams: {
+        standardReferenceWeight: mass('Liveweight', 84),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
           dryMatterAvailability: massPerArea('DryMatter', 4),
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 80),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 84),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -5849,7 +5813,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 70),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.1),
-          standardReferenceWeight: mass('Liveweight', 84),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.09),
@@ -5857,7 +5820,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 70),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 84),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
@@ -5865,17 +5827,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 70),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 84),
         },
       },
       wethers: {
+        standardReferenceWeight: mass('Liveweight', 72),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
           dryMatterAvailability: massPerArea('DryMatter', 4),
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 70),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 72),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -5883,7 +5844,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 65),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.1),
-          standardReferenceWeight: mass('Liveweight', 72),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.09),
@@ -5891,7 +5851,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 60),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.1),
-          standardReferenceWeight: mass('Liveweight', 72),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
@@ -5899,17 +5858,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 60),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 72),
         },
       },
       maidenEwes: {
+        standardReferenceWeight: mass('Liveweight', 60),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
           dryMatterAvailability: massPerArea('DryMatter', 4),
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 52),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -5917,7 +5875,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 52),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.09),
@@ -5925,7 +5882,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 52),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
@@ -5933,17 +5889,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 52),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
       },
       breedingEwes: {
+        standardReferenceWeight: mass('Liveweight', 60),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
           dryMatterAvailability: massPerArea('DryMatter', 4),
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -5951,7 +5906,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.09),
@@ -5959,7 +5913,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
@@ -5967,17 +5920,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
       },
       otherEwes: {
+        standardReferenceWeight: mass('Liveweight', 60),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
           dryMatterAvailability: massPerArea('DryMatter', 4),
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -5985,7 +5937,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.09),
@@ -5993,7 +5944,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
@@ -6001,17 +5951,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
       },
       lambsHoggets: {
+        standardReferenceWeight: mass('Liveweight', 66),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
           dryMatterAvailability: massPerArea('DryMatter', 4),
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 40),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 66),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6019,7 +5968,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 67),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.09),
@@ -6027,7 +5975,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 20),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
-          standardReferenceWeight: mass('Liveweight', 68),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
@@ -6035,19 +5982,18 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 30),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
-          standardReferenceWeight: mass('Liveweight', 69),
         },
       },
     },
     TAS: {
       rams: {
+        standardReferenceWeight: mass('Liveweight', 77),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
           dryMatterAvailability: massPerArea('DryMatter', 2.5),
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 90),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
-          standardReferenceWeight: mass('Liveweight', 77),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6055,7 +6001,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 90),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 77),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.14),
@@ -6063,7 +6008,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.67),
           liveweight: mass('Liveweight', 75),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.2),
-          standardReferenceWeight: mass('Liveweight', 77),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
@@ -6071,17 +6015,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 75),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 77),
         },
       },
       wethers: {
+        standardReferenceWeight: mass('Liveweight', 66),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
           dryMatterAvailability: massPerArea('DryMatter', 2.5),
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 66),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6089,7 +6032,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 66),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.14),
@@ -6097,7 +6039,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.67),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.1),
-          standardReferenceWeight: mass('Liveweight', 66),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
@@ -6105,17 +6046,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.1),
-          standardReferenceWeight: mass('Liveweight', 66),
         },
       },
       maidenEwes: {
+        standardReferenceWeight: mass('Liveweight', 55),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
           dryMatterAvailability: massPerArea('DryMatter', 2.5),
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.03),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6123,7 +6063,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.14),
@@ -6131,7 +6070,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.67),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
@@ -6139,17 +6077,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.5),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
       },
       breedingEwes: {
+        standardReferenceWeight: mass('Liveweight', 55),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
           dryMatterAvailability: massPerArea('DryMatter', 2.5),
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.02),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6157,7 +6094,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.14),
@@ -6165,7 +6101,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.67),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
@@ -6173,17 +6108,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
       },
       otherEwes: {
+        standardReferenceWeight: mass('Liveweight', 55),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
           dryMatterAvailability: massPerArea('DryMatter', 2.5),
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6191,7 +6125,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.14),
@@ -6199,7 +6132,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.67),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
@@ -6207,17 +6139,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
       },
       lambsHoggets: {
+        standardReferenceWeight: mass('Liveweight', 60),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.2),
           dryMatterAvailability: massPerArea('DryMatter', 2.5),
           dryMatterDigestibility: realNumber(0.75),
           liveweight: mass('Liveweight', 14),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.15),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6225,7 +6156,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 24),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 61),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.14),
@@ -6233,7 +6163,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.67),
           liveweight: mass('Liveweight', 36),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
-          standardReferenceWeight: mass('Liveweight', 62),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
@@ -6241,19 +6170,18 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 42),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.07),
-          standardReferenceWeight: mass('Liveweight', 63),
         },
       },
     },
     VIC: {
       rams: {
+        standardReferenceWeight: mass('Liveweight', 70),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
           dryMatterAvailability: massPerArea('DryMatter', 3.2),
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 70),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 70),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6261,7 +6189,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 65),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 70),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.13),
@@ -6269,7 +6196,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.65),
           liveweight: mass('Liveweight', 65),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 70),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -6277,17 +6203,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.6),
           liveweight: mass('Liveweight', 60),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 70),
         },
       },
       wethers: {
+        standardReferenceWeight: mass('Liveweight', 60),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
           dryMatterAvailability: massPerArea('DryMatter', 3.2),
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 60),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6295,7 +6220,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.13),
@@ -6303,7 +6227,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.65),
           liveweight: mass('Liveweight', 52),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.03),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -6311,17 +6234,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.6),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.02),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
       },
       maidenEwes: {
+        standardReferenceWeight: mass('Liveweight', 50),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
           dryMatterAvailability: massPerArea('DryMatter', 3.2),
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.16),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6329,7 +6251,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.13),
@@ -6337,7 +6258,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.65),
           liveweight: mass('Liveweight', 43),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.02),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -6345,17 +6265,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.6),
           liveweight: mass('Liveweight', 40),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.03),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
       },
       breedingEwes: {
+        standardReferenceWeight: mass('Liveweight', 50),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
           dryMatterAvailability: massPerArea('DryMatter', 3.2),
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6363,7 +6282,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.13),
@@ -6371,7 +6289,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.65),
           liveweight: mass('Liveweight', 48),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.02),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -6379,17 +6296,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.6),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.03),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
       },
       otherEwes: {
+        standardReferenceWeight: mass('Liveweight', 50),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
           dryMatterAvailability: massPerArea('DryMatter', 3.2),
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6397,7 +6313,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.13),
@@ -6405,7 +6320,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.65),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -6413,17 +6327,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.6),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 50),
         },
       },
       lambsHoggets: {
+        standardReferenceWeight: mass('Liveweight', 55),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
           dryMatterAvailability: massPerArea('DryMatter', 3.2),
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 22),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.15),
-          standardReferenceWeight: mass('Liveweight', 55),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.07),
@@ -6431,7 +6344,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 28),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.07),
-          standardReferenceWeight: mass('Liveweight', 56),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.13),
@@ -6439,7 +6351,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.65),
           liveweight: mass('Liveweight', 33),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 57),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.1),
@@ -6447,19 +6358,18 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.6),
           liveweight: mass('Liveweight', 35),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.02),
-          standardReferenceWeight: mass('Liveweight', 58),
         },
       },
     },
     WA: {
       rams: {
+        standardReferenceWeight: mass('Liveweight', 84),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.18),
           dryMatterAvailability: massPerArea('DryMatter', 3.5),
           dryMatterDigestibility: realNumber(0.73),
           liveweight: mass('Liveweight', 75),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 84),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.06),
@@ -6467,7 +6377,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 65),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.11),
-          standardReferenceWeight: mass('Liveweight', 84),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.06),
@@ -6475,7 +6384,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.5),
           liveweight: mass('Liveweight', 65),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 84),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.21),
@@ -6483,17 +6391,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.76),
           liveweight: mass('Liveweight', 65),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 84),
         },
       },
       wethers: {
+        standardReferenceWeight: mass('Liveweight', 72),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.18),
           dryMatterAvailability: massPerArea('DryMatter', 3.5),
           dryMatterDigestibility: realNumber(0.73),
           liveweight: mass('Liveweight', 60),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.13),
-          standardReferenceWeight: mass('Liveweight', 72),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.06),
@@ -6501,7 +6408,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 72),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.06),
@@ -6509,7 +6415,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.5),
           liveweight: mass('Liveweight', 48),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.08),
-          standardReferenceWeight: mass('Liveweight', 72),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.21),
@@ -6517,17 +6422,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.76),
           liveweight: mass('Liveweight', 48),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 72),
         },
       },
       maidenEwes: {
+        standardReferenceWeight: mass('Liveweight', 60),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.18),
           dryMatterAvailability: massPerArea('DryMatter', 3.5),
           dryMatterDigestibility: realNumber(0.73),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.06),
@@ -6535,7 +6439,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
@@ -6543,7 +6446,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 40),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.21),
@@ -6551,17 +6453,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.76),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
       },
       breedingEwes: {
+        standardReferenceWeight: mass('Liveweight', 60),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.18),
           dryMatterAvailability: massPerArea('DryMatter', 3.5),
           dryMatterDigestibility: realNumber(0.73),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.06),
@@ -6569,7 +6470,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
@@ -6577,7 +6477,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.21),
@@ -6585,17 +6484,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.76),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
       },
       otherEwes: {
+        standardReferenceWeight: mass('Liveweight', 60),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.18),
           dryMatterAvailability: massPerArea('DryMatter', 3.5),
           dryMatterDigestibility: realNumber(0.73),
           liveweight: mass('Liveweight', 55),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.06),
@@ -6603,7 +6501,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.06),
@@ -6611,7 +6508,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.5),
           liveweight: mass('Liveweight', 45),
           liveweightGain: massPerHeadPerDay('Liveweight', -0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.21),
@@ -6619,17 +6515,16 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.76),
           liveweight: mass('Liveweight', 50),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.05),
-          standardReferenceWeight: mass('Liveweight', 60),
         },
       },
       lambsHoggets: {
+        standardReferenceWeight: mass('Liveweight', 66),
         spring: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.18),
           dryMatterAvailability: massPerArea('DryMatter', 3.5),
           dryMatterDigestibility: realNumber(0.73),
           liveweight: mass('Liveweight', 30),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 66),
         },
         summer: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.06),
@@ -6637,7 +6532,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.55),
           liveweight: mass('Liveweight', 30),
           liveweightGain: massPerHeadPerDay('Liveweight', 0),
-          standardReferenceWeight: mass('Liveweight', 67),
         },
         autumn: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.16),
@@ -6645,7 +6539,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.7),
           liveweight: mass('Liveweight', 10),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 68),
         },
         winter: {
           crudeProteinContent: massPerMass('CrudeProtein', 'DryMatter', 0.21),
@@ -6653,7 +6546,6 @@ export const sheepConstants: SheepConstants = {
           dryMatterDigestibility: realNumber(0.76),
           liveweight: mass('Liveweight', 20),
           liveweightGain: massPerHeadPerDay('Liveweight', 0.11),
-          standardReferenceWeight: mass('Liveweight', 69),
         },
       },
     },
