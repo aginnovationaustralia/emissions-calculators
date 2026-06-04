@@ -24,8 +24,10 @@ import {
   daysInSeason,
   daysInYear,
   e,
+  one,
   oneMinus,
   tenToPowMinus3,
+  zero,
   zeroN2O,
 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
@@ -693,4 +695,45 @@ export function calculate_4_4_1_5_SheepSoilAtmosphericDepositionN2O(
   const CN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
 
   return Mvol.multiply(EFN2O).multiply(CN2O).named('EN2O,ad');
+}
+
+export function calculate_4_4_1_7_SheepSoilLeachingRunoffN2O(
+  input: SheepInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
+  /*
+  ESN2O,leach = Mleach * EFleach * CN2O * 10^-3
+  Mleach = AE * FracWet * FracLEACH
+  */
+  const { flocks } = input;
+  const { constants } = context;
+  const { isInLeachingZone } = input;
+
+  const AERecords = flocks.map((flock, ix) => {
+    const n2o = calculateSoilAtmosphericDepositionN2OForFlock(
+      input,
+      flock,
+      context,
+    ).named(`EN2O,ad (flock ${ix})`);
+    return n2o;
+  });
+
+  const AE = sum(AERecords, { name: 'AE' });
+
+  const CN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+
+  const FracWET = (isInLeachingZone ? one : zero).named('FracWET');
+
+  const FracLEACH = selectConstant(
+    constants.CROP,
+    'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF',
+  ).named('FracLEACH');
+
+  const EFleach = selectConstant(
+    constants.CROP,
+    'EF_N2O_LEACHING_AND_RUNOFF',
+  ).named('EFleach');
+  const Mleach = AE.multiply(FracWET).multiply(FracLEACH).named(`Mleach`);
+
+  return Mleach.multiply(EFleach).multiply(CN2O).named('EN2O,leach');
 }
