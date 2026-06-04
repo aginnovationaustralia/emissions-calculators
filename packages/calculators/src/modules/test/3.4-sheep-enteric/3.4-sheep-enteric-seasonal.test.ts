@@ -7,6 +7,7 @@ import type { SheepClassPeriodInput } from '@/calculators/Sheep/types/sheep-clas
 import {
   SheepClassInput,
   SheepClassWithLambingInput,
+  SheepClassWithProportionLambsBornInput,
 } from '@/calculators/Sheep/types/sheep-class.input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
@@ -66,6 +67,8 @@ const getCalculatorInput = (
       return undefined;
     }
     return {
+      greasyWoolProduction: 0,
+      cleanWoolYieldProportion: 0,
       spring: readSheepClassPeriod(offsetRows),
       summer: readSheepClassPeriod(offsetRows + 1),
       autumn: readSheepClassPeriod(offsetRows + 2),
@@ -81,6 +84,8 @@ const getCalculatorInput = (
       return undefined;
     }
     return {
+      greasyWoolProduction: 0,
+      cleanWoolYieldProportion: 0,
       spring: {
         ...readSheepClassPeriod(offsetRows),
         percentLambing: Number(cell(col.columnLambingRate, offsetRows)),
@@ -104,8 +109,40 @@ const getCalculatorInput = (
     };
   };
 
+  const readSheepClassWithProportionLambsBorn = (
+    offset: number,
+  ): SheepClassWithProportionLambsBornInput | undefined => {
+    const offsetRows = offset * 4;
+    if (cell(col.columnHead, offsetRows) === undefined) {
+      return undefined;
+    }
+    return {
+      greasyWoolProduction: 0,
+      cleanWoolYieldProportion: 0,
+      spring: {
+        ...readSheepClassPeriod(offsetRows),
+        proportionOfLambsBorn: 0,
+      },
+      summer: {
+        ...readSheepClassPeriod(offsetRows + 1),
+        proportionOfLambsBorn: 0,
+      },
+      autumn: {
+        ...readSheepClassPeriod(offsetRows + 2),
+        proportionOfLambsBorn: 0,
+      },
+      winter: {
+        ...readSheepClassPeriod(offsetRows + 3),
+        proportionOfLambsBorn: 0,
+      },
+    };
+  };
+
   const sheepInput: SheepInput = {
     state: checkPureStateWithoutNT(cell(col.columnState)),
+    climateZone: 'Boreal dry',
+    isInLeachingZone: false,
+    rainfallAbove600: false,
     electricity: {
       method: 'location',
       electricityPurchasedKWh: 0,
@@ -119,7 +156,7 @@ const getCalculatorInput = (
           maidenEwes: readSheepClassWithLambing(2),
           breedingEwes: readSheepClassWithLambing(3),
           otherEwes: readSheepClass(4),
-          lambsHoggets: readSheepClass(5),
+          lambsHoggets: readSheepClassWithProportionLambsBorn(5),
         },
       },
     ],

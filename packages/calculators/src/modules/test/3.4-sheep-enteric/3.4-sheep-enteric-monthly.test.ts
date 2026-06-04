@@ -7,6 +7,7 @@ import type { SheepClassPeriodInput } from '@/calculators/Sheep/types/sheep-clas
 import {
   SheepClassInput,
   SheepClassWithLambingInput,
+  SheepClassWithProportionLambsBornInput,
 } from '@/calculators/Sheep/types/sheep-class.input';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
@@ -74,6 +75,8 @@ const getCalculatorInput = (
       return undefined;
     }
     return {
+      greasyWoolProduction: 0,
+      cleanWoolYieldProportion: 0,
       january: readSheepClassPeriod(offsetRows),
       february: readSheepClassPeriod(offsetRows + 1),
       march: readSheepClassPeriod(offsetRows + 2),
@@ -97,6 +100,8 @@ const getCalculatorInput = (
       return undefined;
     }
     return {
+      greasyWoolProduction: 0,
+      cleanWoolYieldProportion: 0,
       january: {
         ...readSheepClassPeriod(offsetRows),
         percentLambing: Number(cell(col.columnLambingRate, offsetRows)),
@@ -164,8 +169,72 @@ const getCalculatorInput = (
     };
   };
 
+  const readSheepClassWithProportionLambsBorn = (
+    offset: number,
+  ): SheepClassWithProportionLambsBornInput | undefined => {
+    const offsetRows = offset * 12;
+    if (cell(col.columnHead, offsetRows) === undefined) {
+      return undefined;
+    }
+    return {
+      greasyWoolProduction: 0,
+      cleanWoolYieldProportion: 0,
+      january: {
+        ...readSheepClassPeriod(offsetRows),
+        proportionOfLambsBorn: 0,
+      },
+      february: {
+        ...readSheepClassPeriod(offsetRows + 1),
+        proportionOfLambsBorn: 0,
+      },
+      march: {
+        ...readSheepClassPeriod(offsetRows + 2),
+        proportionOfLambsBorn: 0,
+      },
+      april: {
+        ...readSheepClassPeriod(offsetRows + 3),
+        proportionOfLambsBorn: 0,
+      },
+      may: {
+        ...readSheepClassPeriod(offsetRows + 4),
+        proportionOfLambsBorn: 0,
+      },
+      june: {
+        ...readSheepClassPeriod(offsetRows + 5),
+        proportionOfLambsBorn: 0,
+      },
+      july: {
+        ...readSheepClassPeriod(offsetRows + 6),
+        proportionOfLambsBorn: 0,
+      },
+      august: {
+        ...readSheepClassPeriod(offsetRows + 7),
+        proportionOfLambsBorn: 0,
+      },
+      september: {
+        ...readSheepClassPeriod(offsetRows + 8),
+        proportionOfLambsBorn: 0,
+      },
+      october: {
+        ...readSheepClassPeriod(offsetRows + 9),
+        proportionOfLambsBorn: 0,
+      },
+      november: {
+        ...readSheepClassPeriod(offsetRows + 10),
+        proportionOfLambsBorn: 0,
+      },
+      december: {
+        ...readSheepClassPeriod(offsetRows + 11),
+        proportionOfLambsBorn: 0,
+      },
+    };
+  };
+
   const sheepInput: SheepInput = {
     state: checkPureStateWithoutNT(cell(col.columnState)),
+    climateZone: 'Boreal dry',
+    isInLeachingZone: false,
+    rainfallAbove600: false,
     electricity: {
       method: 'location',
       electricityPurchasedKWh: 0,
@@ -177,7 +246,7 @@ const getCalculatorInput = (
           rams: readSheepClass(0),
           wethers: readSheepClass(1),
           breedingEwes: readSheepClassWithLambing(2),
-          lambsHoggets: readSheepClass(3),
+          lambsHoggets: readSheepClassWithProportionLambsBorn(3),
         },
       },
     ],
