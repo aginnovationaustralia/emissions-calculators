@@ -14,6 +14,16 @@ export default [
   },
   {
     ...js.configs.recommended,
+    rules: {
+      ...js.configs.recommended.rules,
+      'no-warning-comments': [
+        'warn',
+        {
+          terms: ['todo', 'revisit'],
+          location: 'start',
+        },
+      ],
+    },
   },
   {
     files: ['**/*.cjs', '**/*.mjs', '**/jest.config.js'],

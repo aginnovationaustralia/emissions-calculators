@@ -323,6 +323,7 @@
     "generate:exports": "tsx scripts/generate-exports.ts",
     "generate:openapi": "tsx scripts/generate-openapi.ts",
     "check:openapi-breaking": "tsx scripts/check-openapi-breaking.ts",
+    "dump:sheet": "tsx scripts/dump-test-sheet.ts",
     "prepare:release": "pnpm run build && pnpm run generate:exports && pnpm run generate:openapi && pnpm run check:openapi-breaking"
   },
   "repository": {

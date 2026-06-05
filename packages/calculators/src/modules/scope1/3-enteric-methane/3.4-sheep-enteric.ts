@@ -9,42 +9,40 @@ import {
 } from '@/calculators/Sheep/types/sheep-class.input';
 import { SheepFlockInputTransformed } from '@/calculators/Sheep/types/sheep-flock.input';
 import { isDefined } from '@/common/filters';
-import { Month, Months, Season, Seasons, SheepClass } from '@/constants/enums';
+import {
+  Months,
+  pureStateWithoutNTToLimitedState,
+  Season,
+  Seasons,
+  SheepClass,
+} from '@/constants/enums';
+import { monthDurationMap, monthSeasonMap } from '@/modules/shared';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, num, root } from '@/tools/containers';
 import { daysInSeason, e, oneMinus, tenToPowMinus3 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { days, Days, massPerHeadPerDay, realNumber } from '@/tools/units';
 
-const monthSeasonMap: Record<Month, Season> = {
-  january: 'summer',
-  february: 'summer',
-  march: 'autumn',
-  april: 'autumn',
-  may: 'autumn',
-  june: 'winter',
-  july: 'winter',
-  august: 'winter',
-  september: 'spring',
-  october: 'spring',
-  november: 'spring',
-  december: 'summer',
-};
+export function calculateProportionLactatingLEjk(
+  periodInput: SheepClassPeriodsInputTransformed,
+  periodName: string,
+  className: SheepClass,
+) {
+  if (!isSheepPeriodWithLambing(periodInput)) {
+    return num(0);
+  }
 
-const monthDurationMap: Record<Month, number> = {
-  january: 31,
-  february: 28,
-  march: 31,
-  april: 30,
-  may: 31,
-  june: 30,
-  july: 31,
-  august: 31,
-  september: 30,
-  october: 31,
-  november: 30,
-  december: 31,
-};
+  const { percentLambing, percentLambMarking } = periodInput;
+
+  const LRjk = percentLambing.named(`LRj=${periodName},k=${className}`);
+  const LMRjk = percentLambMarking.named(`LMRj=${periodName},k=${className}`);
+
+  const LEjk = LRjk.divide(num(100))
+    .multiply(LMRjk.limitedTo(100).divide(num(100)))
+    .named(`LEj=${periodName},k=${className}`);
+
+  return LEjk;
+}
 
 function calculateAdditionalIntakeForMilkProductionMAjk(
   input: SheepInputTransformed,
@@ -58,14 +56,12 @@ function calculateAdditionalIntakeForMilkProductionMAjk(
   }
 
   const { constants } = context;
-  const { percentLambing, percentLambMarking } = periodInput;
 
-  const LRjk = percentLambing.named(`LRj=${periodName},k=${className}`);
-  const LMRjk = percentLambMarking.named(`LMRj=${periodName},k=${className}`);
-
-  const LEjk = LRjk.divide(num(100))
-    .multiply(LMRjk.limitedTo(100).divide(num(100)))
-    .named(`LEj=${periodName},k=${className}`);
+  const LEjk = calculateProportionLactatingLEjk(
+    periodInput,
+    periodName,
+    className,
+  );
 
   const FAk = selectConstant(constants.SHEEP, 'FEED_ADJUSTMENT').named(
     `FAj=${periodName},k=${className}`,
@@ -76,7 +72,7 @@ function calculateAdditionalIntakeForMilkProductionMAjk(
     .named(`MAj=${periodName},k=${className}`);
 }
 
-function calculateDailyFeedIntakeIjk(
+export function calculateDailyFeedIntakeIjk(
   input: SheepInputTransformed,
   className: SheepClass,
   periodInput: SheepClassPeriodsInputTransformed,
@@ -99,12 +95,14 @@ function calculateDailyFeedIntakeIjk(
     method2DryMatterDigestibility,
   } = periodInput;
 
+  const limitedState = pureStateWithoutNTToLimitedState(input.state);
+
   const DMAjk = (
     method2DryMatterAvailability ??
     selectConstant(
       constants.SHEEP,
       'SEASONAL_FACTORS',
-      input.state,
+      limitedState,
       className,
       seasonName,
       'dryMatterAvailability',
@@ -116,7 +114,7 @@ function calculateDailyFeedIntakeIjk(
     selectConstant(
       constants.SHEEP,
       'SEASONAL_FACTORS',
-      input.state,
+      limitedState,
       className,
       seasonName,
       'dryMatterDigestibility',
@@ -128,7 +126,7 @@ function calculateDailyFeedIntakeIjk(
     selectConstant(
       constants.SHEEP,
       'SEASONAL_FACTORS',
-      input.state,
+      limitedState,
       className,
       seasonName,
       'liveweight',
@@ -153,14 +151,10 @@ function calculateDailyFeedIntakeIjk(
     .named(`PIj=${periodName},k=${className}`);
 
   const RIjk = oneMinus(
-    e
-      .power(
-        num(-2).multiply(
-          DMAjk.squared().switchUnit((r) => realNumber(r.value)),
-        ),
-      )
-      .named(`RIj=${periodName},k=${className}`),
-  );
+    e.power(
+      num(-2).multiply(DMAjk.squared().switchUnit((r) => realNumber(r.value))),
+    ),
+  ).named(`RIj=${periodName},k=${className}`);
 
   const MAjk = calculateAdditionalIntakeForMilkProductionMAjk(
     input,

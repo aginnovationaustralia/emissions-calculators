@@ -1,7 +1,15 @@
 import { input } from '@/tools/inputs';
-import { days, head, mass, massPerArea, realNumber } from '@/tools/units';
-import { object, percentage } from '@/types/schemas';
+import {
+  days,
+  head,
+  mass,
+  massPerArea,
+  massPerHeadPerDay,
+  massPerMass,
+  realNumber,
+} from '@/tools/units';
 import { mapOptional } from '@/tools/zod';
+import { object, percentage, proportion } from '@/types/schemas';
 import { z } from 'zod';
 
 export const SheepClassPeriodInputSchema = object({
@@ -18,8 +26,18 @@ export const SheepClassPeriodInputSchema = object({
       description:
         'Method 2: supply an exact value for liveweight for this class for this season based on farm records',
     })
+    .transform(mapOptional((val) => input('Wjk', mass('Liveweight', val)))),
+  method2LiveweightGain: z
+    .number()
+    .optional()
+    .meta({
+      description:
+        'Method 2: supply an exact value for liveweight gain for this class for this season based on farm records',
+    })
     .transform(
-      mapOptional((val) => input('Wijkln', mass('Liveweight', val))),
+      mapOptional((val) =>
+        input('LWGjk', massPerHeadPerDay('Liveweight', val)),
+      ),
     ),
   method2DryMatterAvailability: z
     .number()
@@ -38,9 +56,7 @@ export const SheepClassPeriodInputSchema = object({
       description:
         'Method 2: supply an exact value for dry matter digestibility for this class for this period based on farm records',
     })
-    .transform(
-      mapOptional((val) => input('DMDjk', realNumber(val))),
-    ),
+    .transform(mapOptional((val) => input('DMDjk', realNumber(val)))),
   method2AverageDurationDays: z
     .number()
     .optional()
@@ -49,6 +65,18 @@ export const SheepClassPeriodInputSchema = object({
         'Method 2: supply an exact value for average duration days for this class for this period based on farm records',
     })
     .transform(mapOptional((val) => input('Dj', days(val)))),
+  method2CrudeProteinContent: z
+    .number()
+    .optional()
+    .meta({
+      description:
+        'Method 2: supply an exact value for crude protein content for this class for this period based on farm records',
+    })
+    .transform(
+      mapOptional((val) =>
+        input('CPjk', massPerMass('CrudeProtein', 'DryMatter', val)),
+      ),
+    ),
 });
 
 export const SheepClassWithLambingPeriodInputSchema =
@@ -65,12 +93,25 @@ export const SheepClassWithLambingPeriodInputSchema =
       .transform((val) => input('LMRjk', realNumber(val))),
   });
 
+export const SheepClassWithProportionLambsBornPeriodInputSchema =
+  SheepClassPeriodInputSchema.extend({
+    proportionOfLambsBorn: proportion()
+      .meta({
+        description: 'Proportion of lambs born in this time period.',
+      })
+      .transform((val) => input('PLBjk', realNumber(val))),
+  });
+
 export const isSeasonInputWithLambing = (
-  period:
-    | SheepClassPeriodInputTransformed
-    | SheepClassWithLambingPeriodInputTransformed,
+  period: SheepClassPeriodsInputTransformed,
 ): period is SheepClassWithLambingPeriodInputTransformed => {
   return 'percentLambing' in period;
+};
+
+export const isSeasonInputWithProportionLambsBorn = (
+  period: SheepClassPeriodsInputTransformed,
+): period is SheepClassWithProportionLambsBornPeriodInputTransformed => {
+  return 'proportionOfLambsBorn' in period;
 };
 
 export type SheepClassPeriodInput = z.input<typeof SheepClassPeriodInputSchema>;
@@ -85,6 +126,14 @@ export type SheepClassWithLambingPeriodInputTransformed = z.output<
   typeof SheepClassWithLambingPeriodInputSchema
 >;
 
+export type SheepClassWithProportionLambsBornPeriodInput = z.input<
+  typeof SheepClassWithProportionLambsBornPeriodInputSchema
+>;
+export type SheepClassWithProportionLambsBornPeriodInputTransformed = z.output<
+  typeof SheepClassWithProportionLambsBornPeriodInputSchema
+>;
+
 export type SheepClassPeriodsInputTransformed =
   | SheepClassPeriodInputTransformed
-  | SheepClassWithLambingPeriodInputTransformed;
+  | SheepClassWithLambingPeriodInputTransformed
+  | SheepClassWithProportionLambsBornPeriodInputTransformed;
