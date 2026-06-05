@@ -1,10 +1,10 @@
-import { TreeSpeciesName } from './input';
+import { FullCAMAreaInput, TreeSpeciesName } from './input';
 
 export const treeSpeciesIdMap: Record<TreeSpeciesName, number> = {
   'Environmental Plantings': 7,
-  'Mallee eucalyptus species': 23,
-  'Native species regeneration < 500mm rainfall': 33,
-  'Native species regeneration > 500mm rainfall': 34,
+  'Mallee eucalypt species': 23,
+  'Native Species Regeneration <500mm rainfall': 33,
+  'Native Species Regeneration >=500mm rainfall': 34,
 };
 
 // Year,Step In Year,Dec. Year,"C mass of trees  (tC/ha)","CH4 emitted due to fire (tCH4/ha)","N2O emitted due to fire (tN2O/ha)","C mass of forest debris  (tC/ha)"
@@ -18,7 +18,7 @@ export type FullCAMOutputLine = {
   carbonMassOfForestDebrisTCPerHectare: number;
 };
 
-export type FullCAMOutputSummary = {
+export type FullCAMOutputKeyFields = {
   carbonMassInTreesPerHectare: number; // Ct,i,j,y
   carbonMassInDebrisPerHectare: number; // Cd,i,j,y
   carbonMassInTreesPerHectarePrevYear: number; // Ct,i,j,y-1
@@ -27,3 +27,38 @@ export type FullCAMOutputSummary = {
   ch4FromBiomassBurningPerHectare: number; // Eg,i,j,y for g = CH4
   n2oFromBiomassBurningPerHectare: number; // Eg,i,j,y for g = N2O
 };
+
+export type BatchSimulationRequest = {
+  inputArea: FullCAMAreaInput;
+  uniqueAreaKey: string;
+  plotContent: string;
+};
+
+export type FullCAMSubmission = BatchSimulationRequest & {
+  outputCsv: string;
+};
+
+export type InputAreaWithOutputKeyFields = {
+  inputArea: FullCAMAreaInput;
+  keyFields: FullCAMOutputKeyFields;
+};
+
+export type BatchSimulationError = {
+  uniqueAreaKey: string;
+  error: string;
+};
+export type BatchSimulationResult =
+  | BatchSimulationError
+  | InputAreaWithOutputKeyFields;
+
+export function isBatchSimulationError(
+  result: BatchSimulationResult,
+): result is BatchSimulationError {
+  return 'error' in result;
+}
+
+export function isBatchSimulationSuccess(
+  result: BatchSimulationResult,
+): result is InputAreaWithOutputKeyFields {
+  return !isBatchSimulationError(result);
+}

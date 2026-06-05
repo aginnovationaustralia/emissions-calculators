@@ -1,5 +1,6 @@
 import { unzipSync } from 'fflate';
 import { runSimulation } from './requests';
+import { BatchSimulationRequest, FullCAMSubmission } from './types';
 
 /** Plot API v1 root; batch workflow paths omit the `/2024/` segment used by run-plotsimulation. */
 const PLOT_V1_BASE =
@@ -13,11 +14,6 @@ export const batchStatusUrl = (batchId: string, includeDetails = true) =>
   `${FULLCAM_BATCH_BASE}/batches-status/${encodeURIComponent(batchId)}?includeDetails=${includeDetails}`;
 export const batchResultPackageUrl = (batchId: string) =>
   `${FULLCAM_BATCH_BASE}/simulation-result-package/${encodeURIComponent(batchId)}`;
-
-export type BatchSimulationRequest = {
-  plotContent: string;
-  areaKey: string;
-};
 
 export type BatchSimulationResponse = {
   simulationCsv: string;
@@ -99,28 +95,24 @@ function parseCreateBatchResponse(text: string): CreateBatchResponse {
 
 /** Best-effort terminal detection for batches-status (OpenAPI does not publish a response schema). */
 function workflowPhase(
-  body: unknown,
+  body: object | null,
 ): 'completed' | 'failed' | 'running' | 'unknown' {
+  // console.log('Workflow phase');
+  // console.dir(body, { depth: null });
   if (body === null || body === undefined) return 'unknown';
-  const s = JSON.stringify(body);
-  if (/runtimeStatus"\s*:\s*"(Failed|Terminated)"/i.test(s)) {
-    return 'failed';
+  if (!('runtimeStatus' in body)) return 'unknown';
+  const runtimeStatus = body.runtimeStatus;
+  switch (runtimeStatus) {
+    case 'Failed':
+    case 'Terminated':
+      return 'failed';
+    case 'Completed':
+      return 'completed';
+    case 'Running':
+      return 'running';
+    default:
+      return 'unknown';
   }
-  if (
-    /runtimeStatus"\s*:\s*"Completed"/i.test(s) ||
-    /"workflowStatus"\s*:\s*"Completed"/i.test(s) ||
-    /"overallStatus"\s*:\s*"Completed"/i.test(s)
-  ) {
-    return 'completed';
-  }
-  if (
-    /runtimeStatus"\s*:\s*"(Running|Pending)"/i.test(s) ||
-    /"workflowStatus"\s*:\s*"(Running|Pending)"/i.test(s) ||
-    /"status"\s*:\s*"(Running|Pending|InProgress)"/i.test(s)
-  ) {
-    return 'running';
-  }
-  return 'unknown';
 }
 
 function findSimulationCsvInArchive(
@@ -128,6 +120,9 @@ function findSimulationCsvInArchive(
   plotStem: string,
   areaKey: string,
 ): string {
+  // console.dir(archive, { depth: null });
+  // console.log('Archive', Object.keys(archive));
+
   const csvPaths = Object.keys(archive).filter(
     (p) =>
       !p.endsWith('/') &&
@@ -171,7 +166,8 @@ export type RunSimulationBatchOptions = {
   isUpdatingSpatialAndSpecies?: boolean;
   pollIntervalMs?: number;
   maxWaitMs?: number;
-  fullcamApiKey: string;
+  fullcamApiKey?: string;
+  fullcamWorkflowApiKey?: string;
 };
 
 const DEFAULT_POLL_MS = 5000;
@@ -191,17 +187,18 @@ const DEFAULT_MAX_WAIT_MS = 45 * 60_000;
 export async function runSimulationBatch(
   requests: BatchSimulationRequest[],
   options?: Partial<RunSimulationBatchOptions>,
-): Promise<BatchSimulationResponse[]> {
+): Promise<FullCAMSubmission[]> {
   if (requests.length === 0) {
     return [];
   }
 
-  const fullcamApiKey = options?.fullcamApiKey;
-  if (!fullcamApiKey) {
-    throw new Error('fullcamApiKey is required');
+  const fullcamWorkflowApiKey = options?.fullcamWorkflowApiKey;
+  if (!fullcamWorkflowApiKey) {
+    throw new Error('fullcamWorkflowApiKey is required');
   }
 
-  console.log('fullcamApiKey', fullcamApiKey);
+  // console.log('fullcamApiKey', fullcamApiKey);
+  // console.log('fullcamWorkflowApiKey', fullcamWorkflowApiKey);
 
   const batchName =
     options?.batchName ??
@@ -218,25 +215,29 @@ export async function runSimulationBatch(
   }
 
   const version = options?.version ?? '2024';
-  const isUpdatingSpatialAndSpecies =
-    options?.isUpdatingSpatialAndSpecies ?? false;
+  const isUpdatingSpatialAndSpecies = true;
+  // options?.isUpdatingSpatialAndSpecies ?? false;
   const pollIntervalMs = options?.pollIntervalMs ?? DEFAULT_POLL_MS;
   const maxWaitMs = options?.maxWaitMs ?? DEFAULT_MAX_WAIT_MS;
+
+  // console.log(`Running ${requests.length} simulations via batch`);
 
   const formData = new FormData();
   for (let i = 0; i < requests.length; i++) {
     const r = requests[i];
-    const name = safePlotFileName(r.areaKey, i);
+    const name = safePlotFileName(r.uniqueAreaKey, i);
     formData.append(
       'plotFiles',
       new File([r.plotContent], name, { type: 'application/xml' }),
     );
   }
 
+  // console.dir(formData, { depth: null });
+
   const createRes = await fetch(BATCH_CREATE_URL, {
     method: 'POST',
     headers: {
-      'Ocp-Apim-Subscription-Key': fullcamApiKey,
+      'Ocp-Apim-Subscription-Key': fullcamWorkflowApiKey,
     },
     body: formData,
   });
@@ -267,7 +268,7 @@ export async function runSimulationBatch(
     const u = uploads[i];
     if (u.httpStatusCode !== 201) {
       throw new Error(
-        `Plot file upload failed for ${requests[i].areaKey}: HTTP ${u.httpStatusCode} ` +
+        `Plot file upload failed for ${requests[i].uniqueAreaKey}: HTTP ${u.httpStatusCode} ` +
           `(originalFileName=${u.originalFileName}, uploadedFileName=${u.uploadedFileName})`,
       );
     }
@@ -284,7 +285,7 @@ export async function runSimulationBatch(
   const runRes = await fetch(BATCH_RUN_URL, {
     method: 'POST',
     headers: {
-      'Ocp-Apim-Subscription-Key': fullcamApiKey,
+      'Ocp-Apim-Subscription-Key': fullcamWorkflowApiKey,
       'Content-Type': 'application/json',
     },
     body: runBody,
@@ -308,13 +309,13 @@ export async function runSimulationBatch(
 
   while (Date.now() < deadline) {
     const statusRes = await fetch(batchStatusUrl(batchId), {
-      headers: { 'Ocp-Apim-Subscription-Key': fullcamApiKey },
+      headers: { 'Ocp-Apim-Subscription-Key': fullcamWorkflowApiKey },
     });
     lastStatusText = await statusRes.text();
 
-    let statusJson: unknown;
+    let statusJson: object | null;
     try {
-      statusJson = JSON.parse(lastStatusText) as unknown;
+      statusJson = JSON.parse(lastStatusText) as object;
     } catch {
       statusJson = null;
     }
@@ -340,7 +341,7 @@ export async function runSimulationBatch(
   }
 
   const zipRes = await fetch(batchResultPackageUrl(batchId), {
-    headers: { 'Ocp-Apim-Subscription-Key': fullcamApiKey },
+    headers: { 'Ocp-Apim-Subscription-Key': fullcamWorkflowApiKey },
   });
 
   if (!zipRes.ok) {
@@ -360,16 +361,20 @@ export async function runSimulationBatch(
     );
   }
 
-  const results: BatchSimulationResponse[] = [];
+  const results: FullCAMSubmission[] = [];
   for (let i = 0; i < requests.length; i++) {
-    const { areaKey } = requests[i];
+    const request = requests[i];
     const upload = uploads[i];
     const stem = plotStemFromNames(
       upload.originalFileName,
       upload.uploadedFileName,
     );
-    const simulationCsv = findSimulationCsvInArchive(archive, stem, areaKey);
-    results.push({ areaKey, simulationCsv });
+    const outputCsv = findSimulationCsvInArchive(
+      archive,
+      stem,
+      request.uniqueAreaKey,
+    );
+    results.push({ ...request, outputCsv });
   }
 
   return results;
@@ -386,10 +391,10 @@ export async function runSimulationsSingle(
     async (request) => {
       const simulationCsv = await runSimulation(
         request.plotContent,
-        options.fullcamApiKey,
+        options.fullcamApiKey ?? '',
       );
       return {
-        areaKey: request.areaKey,
+        areaKey: request.uniqueAreaKey,
         simulationCsv,
       };
     },

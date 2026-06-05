@@ -29,4 +29,5 @@ export type {
 } from './input';
 export { generateLulucfInput } from './merge-simulation-to-package-land-use';
 export { runSimulation, updateSpatial } from './requests';
-export { generateSummaryFromSimulationOutput } from './response';
+export { extractKeyFieldsFromFullCAMOutput } from './response';
+export { generateTemplateForSpatialUpdate } from './templates/spatial-update';

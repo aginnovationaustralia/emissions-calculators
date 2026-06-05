@@ -3957,9 +3957,9 @@ export const speciesForestNativeRegenGt500 = (id: string) =>
 
 const speciesSnippetMap: Record<TreeSpeciesName, (id: string) => string> = {
   'Environmental Plantings': speciesForestEnvPlantings,
-  'Mallee eucalyptus species': speciesForestMalleeEucSpecies,
-  'Native species regeneration < 500mm rainfall': speciesForestNativeRegenLt500,
-  'Native species regeneration > 500mm rainfall': speciesForestNativeRegenGt500,
+  'Mallee eucalypt species': speciesForestMalleeEucSpecies,
+  'Native Species Regeneration <500mm rainfall': speciesForestNativeRegenLt500,
+  'Native Species Regeneration >=500mm rainfall': speciesForestNativeRegenGt500,
 };
 
 export const generateSpeciesForestSet = (input: FullCAMAreaInput) => {

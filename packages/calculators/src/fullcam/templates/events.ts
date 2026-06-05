@@ -5,6 +5,7 @@ import {
   FullCAMPrescribedBurnEvent,
   FullCAMWildfireEvent,
 } from '../input';
+import { escapeXmlAttribute } from './xml';
 
 function fullCAMDate(d: Date): string {
   const y = d.getFullYear();
@@ -13,8 +14,13 @@ function fullCAMDate(d: Date): string {
   return `${y}${String(m).padStart(2, '0')}${String(day).padStart(2, '0')}`;
 }
 
-function generatePlantingEvent(event: FullCAMPlantingEvent): string {
-  const plantingName = `${event.speciesName} - ${fullCAMDate(event.plantingDate)}`;
+function generatePlantingEvent(
+  event: FullCAMPlantingEvent,
+  index: number,
+): string {
+  const plantingName = escapeXmlAttribute(
+    `${event.speciesName} - ${fullCAMDate(event.plantingDate)} - ${index}`,
+  );
   return `<Event tEV="PlnF" clearEV="false" onEV="true" dateOriginEV="Calendar" nYrsFromStEV="" nDaysFromStEV="" tFaqEV="Blank" tAaqEV="Blank" aqStYrEV="1990" aqEnYrEV="2100" nmEV="Establish environmental plantings - block geometry" categoryEV="CatUndef" tEvent="Doc" idSP="7" regimeInstance="fd726ee9-d483-4506-b5f9-c78fb7c52055" nmRegime="${plantingName}">
       <notesEV/>
       <PlnF tStemPlnF="Mass" agePlnF="0.3" stemVolPlnF="" stemMPlnF="0.087" branMPlnF="0.059" barkMPlnF="0.026" leafMPlnF="0.039" cortMPlnF="0.074" firtMPlnF="0.014" stemNCRatioPlnF="" branNCRatioPlnF="" barkNCRatioPlnF="" leafNCRatioPlnF="" cortNCRatioPlnF="" firtNCRatioPlnF="" storNMPlnF="" fixPlnF="" phaPlnF="" tTYFCat="BlockES" treeNmPlnF="Environmental plantings"/>

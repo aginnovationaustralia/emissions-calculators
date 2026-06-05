@@ -1,8 +1,27 @@
 import { isDefined } from '@/common/filters';
-import { FullCAMOutputLine, FullCAMOutputSummary } from './types';
+import {
+  BatchSimulationResult,
+  FullCAMOutputKeyFields,
+  FullCAMOutputLine,
+  FullCAMSubmission,
+} from './types';
 
-export const generateCsvLines = (csvString: string): FullCAMOutputLine[] => {
+export const generateCsvLines = (
+  csvString: string,
+): FullCAMOutputLine[] | string => {
   const lines = csvString.split('\n');
+
+  if (lines.length < 2) {
+    return 'Invalid CSV output: no data';
+  }
+
+  const csvHeader = lines[0];
+  const columnNames = csvHeader.split(',');
+  const firstLineValues = lines[1].split(',');
+  if (columnNames.length === 3) {
+    return `Batch error: ${firstLineValues[2] ?? firstLineValues}`;
+  }
+
   const summary = lines
     .map((line): FullCAMOutputLine | undefined => {
       if (line === '') {
@@ -11,7 +30,7 @@ export const generateCsvLines = (csvString: string): FullCAMOutputLine[] => {
       const values = line.split(',');
 
       if (values.length !== 7) {
-        throw new Error(`Invalid line in csv output: '${line}'`);
+        throw new Error(`Invalid line '${line}' in csv output: ${csvString}`);
       }
 
       // Year,Step In Year,Dec. Year,"C mass of trees  (tC/ha)","CH4 emitted due to fire (tCH4/ha)","N2O emitted due to fire (tN2O/ha)","C mass of forest debris  (tC/ha)"
@@ -40,7 +59,7 @@ export const generateCsvLines = (csvString: string): FullCAMOutputLine[] => {
 };
 
 /*
-Summary field definitions: see FullCAMOutputSummary in ./types.ts
+Summary field definitions: see FullCAMOutputKeyFields in ./types.ts
 
 Determining tree and debris carbon for plantings, regeneration, farm forestry and commercial plantation forestry
 
@@ -144,13 +163,13 @@ function sumFireForReportingYear(
 }
 
 /**
- * Builds {@link FullCAMOutputSummary} from sorted monthly FullCAM lines. See block comment above
+ * Builds {@link FullCAMOutputKeyFields} from sorted monthly FullCAM lines. See block comment above
  * {@link ExtractionOptions} for methodology; calendar vs financial year follows `endMonth` (12 vs 6).
  */
 export const generateSummaryFromLines = (
   lines: FullCAMOutputLine[],
   options: ExtractionOptions,
-): FullCAMOutputSummary => {
+): FullCAMOutputKeyFields => {
   const { endYear, endMonth } = options;
   const terminalMonth = terminalStockMonth(endMonth);
   const prevYear = endYear - 1;
@@ -172,10 +191,20 @@ export const generateSummaryFromLines = (
   };
 };
 
-export const generateSummaryFromSimulationOutput = (
-  csvString: string,
-  options: ExtractionOptions,
-): FullCAMOutputSummary => {
-  const lines = generateCsvLines(csvString);
-  return generateSummaryFromLines(lines, options);
+export const extractKeyFieldsFromFullCAMOutput = (
+  submission: FullCAMSubmission,
+): BatchSimulationResult => {
+  const lines = generateCsvLines(submission.outputCsv);
+
+  if (typeof lines === 'string') {
+    return {
+      uniqueAreaKey: submission.uniqueAreaKey,
+      error: lines,
+    };
+  }
+
+  return {
+    inputArea: submission.inputArea,
+    keyFields: generateSummaryFromLines(lines, submission.inputArea),
+  };
 };

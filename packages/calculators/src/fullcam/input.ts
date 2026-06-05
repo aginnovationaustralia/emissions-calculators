@@ -6,9 +6,9 @@ import { z } from 'zod';
 
 export const TreeSpeciesNames = [
   'Environmental Plantings',
-  'Mallee eucalyptus species',
-  'Native species regeneration < 500mm rainfall',
-  'Native species regeneration > 500mm rainfall',
+  'Mallee eucalypt species',
+  'Native Species Regeneration <500mm rainfall',
+  'Native Species Regeneration >=500mm rainfall',
 ] as const;
 export type TreeSpeciesName = (typeof TreeSpeciesNames)[number];
 

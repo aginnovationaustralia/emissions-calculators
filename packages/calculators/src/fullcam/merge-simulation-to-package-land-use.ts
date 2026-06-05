@@ -1,19 +1,16 @@
 import { LandUseChangeActivityInput, LULUCFInput } from '@/modules/lulucf';
-import { FullCAMAreaInput } from './input';
-import type { FullCAMOutputSummary } from './types';
+import type { InputAreaWithOutputKeyFields } from './types';
 
-type FullCAMPair = {
-  areaInput: FullCAMAreaInput;
-  summary: FullCAMOutputSummary;
-};
 /**
  * Maps FullCAM simulation output into the emissions package `landUse` shape. The key values that can be extracted from the
  * FullCAM simulation results are inserted into simple 'token' activities, for the calculator to consume and inject into the
  * appropriate chapters of the guidelines.
  */
-export function generateLulucfInput(pairs: FullCAMPair[]): LULUCFInput {
+export function generateLulucfInput(
+  pairs: InputAreaWithOutputKeyFields[],
+): LULUCFInput {
   // Create activities that can receive the interesting values extracted from a simulation output
-  const activities = pairs.flatMap(({ areaInput, summary }) => {
+  const activities = pairs.flatMap(({ inputArea, keyFields }) => {
     const burningActivity: LandUseChangeActivityInput = {
       type: 'landClearingForestToCropland',
       carbonMassInTreesCurrentYear: 0,
@@ -21,34 +18,34 @@ export function generateLulucfInput(pairs: FullCAMPair[]): LULUCFInput {
       carbonMassInDebrisCurrentYear: 0,
       carbonMassInDebrisPreviousYear: 0,
       massCH4FromBiomassBurningPerHectare:
-        summary.ch4FromBiomassBurningPerHectare,
+        keyFields.ch4FromBiomassBurningPerHectare,
       massN2OFromBiomassBurningPerHectare:
-        summary.n2oFromBiomassBurningPerHectare,
-      activityAreaHectares: areaInput.areaHectares,
-      areaBurnt: areaInput.areaHectares,
-      region: areaInput.region,
+        keyFields.n2oFromBiomassBurningPerHectare,
+      activityAreaHectares: inputArea.areaHectares,
+      areaBurnt: inputArea.areaHectares,
+      region: inputArea.region,
     };
 
     const plantingActivity: LandUseChangeActivityInput = {
       type: 'landClearingForestToCropland',
-      carbonMassInTreesCurrentYear: summary.carbonMassInTreesPerHectare,
+      carbonMassInTreesCurrentYear: keyFields.carbonMassInTreesPerHectare,
       carbonMassInTreesPreviousYear:
-        summary.carbonMassInTreesPerHectarePrevYear,
-      carbonMassInDebrisCurrentYear: summary.carbonMassInDebrisPerHectare,
+        keyFields.carbonMassInTreesPerHectarePrevYear,
+      carbonMassInDebrisCurrentYear: keyFields.carbonMassInDebrisPerHectare,
       carbonMassInDebrisPreviousYear:
-        summary.carbonMassInDebrisPerHectarePrevYear,
+        keyFields.carbonMassInDebrisPerHectarePrevYear,
       massCH4FromBiomassBurningPerHectare: 0,
       massN2OFromBiomassBurningPerHectare: 0,
-      activityAreaHectares: areaInput.areaHectares,
+      activityAreaHectares: inputArea.areaHectares,
       areaBurnt: 0,
-      region: areaInput.region,
+      region: inputArea.region,
     };
 
     const forestryActivity: LandUseChangeActivityInput = {
       type: 'farmForestry',
       carbonMassOfWoodProductsHarvestedPerHectare:
-        summary.carbonMassInForestProductsPerHectare,
-      activityAreaHectares: areaInput.areaHectares,
+        keyFields.carbonMassInForestProductsPerHectare,
+      activityAreaHectares: inputArea.areaHectares,
       carbonMassInTreesCurrentYear: 0,
       carbonMassInTreesPreviousYear: 0,
       carbonMassInDebrisCurrentYear: 0,
@@ -60,10 +57,10 @@ export function generateLulucfInput(pairs: FullCAMPair[]): LULUCFInput {
 
   // Pass through savanna burning and perennial crops, these have not been passed into a FullCAM request. They just go straight through to the calculator.
   const burning = pairs.flatMap(
-    ({ areaInput }) => areaInput.savannaBurning ?? [],
+    ({ inputArea }) => inputArea.savannaBurning ?? [],
   );
   const perennialCrops = pairs.flatMap(
-    ({ areaInput }) => areaInput.perennialCrops ?? [],
+    ({ inputArea }) => inputArea.perennialCrops ?? [],
   );
 
   const result: LULUCFInput = {
