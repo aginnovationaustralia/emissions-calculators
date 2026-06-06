@@ -34,9 +34,24 @@ export type BatchSimulationRequest = {
   plotContent: string;
 };
 
-export type FullCAMSubmission = BatchSimulationRequest & {
-  outputCsv: string;
+export type Area = {
+  input: FullCAMAreaInput;
+  uniqueAreaKey: string;
+  plotfileName: string;
 };
+
+export type AreaPlotContent = Area & {
+  plotContent: string;
+};
+
+export type FullCAMSubmission = { area: AreaPlotContent } & (
+  | {
+      outputCsv: string;
+    }
+  | {
+      error: string;
+    }
+);
 
 export type InputAreaWithOutputKeyFields = {
   inputArea: FullCAMAreaInput;

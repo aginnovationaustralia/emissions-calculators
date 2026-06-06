@@ -135,7 +135,7 @@ async function main() {
     },
     landUse: {
       fullcamMode: 'inputs',
-      areas: [area1],
+      areas: [area2],
     },
   };
 

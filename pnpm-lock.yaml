@@ -78,6 +78,9 @@ importers:
       semver:
         specifier: ^7.7.3
         version: 7.7.3
+      true-myth:
+        specifier: ^9.4.0
+        version: 9.4.0
       ts-deepmerge:
         specifier: ^7.0.3
         version: 7.0.3
@@ -3730,6 +3733,10 @@ packages:
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
+
+  true-myth@9.4.0:
+    resolution: {integrity: sha512-NQP/xMI25jtwk7mDBgA0VS+xdVWUqDaxrTofvx1gfhc5PQwMyA1V39oERLvPrCbI3+6S29fIkivy2ZXdzNY3kQ==}
+    engines: {node: 18.* || >= 20.*}
 
   ts-api-utils@2.1.0:
     resolution: {integrity: sha512-CUgTZL1irw8u29bzrOD/nH85jqyc74D6SshFgujOIA7osm2Rz7dYH77agkx7H4FBNxDq7Cjf+IjaX/8zwFW+ZQ==}
@@ -7698,6 +7705,8 @@ snapshots:
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
+
+  true-myth@9.4.0: {}
 
   ts-api-utils@2.1.0(typescript@5.9.2):
     dependencies:
