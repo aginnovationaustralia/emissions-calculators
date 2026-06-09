@@ -1,3 +1,4 @@
+import { calculateLULUCF } from '@/modules/lulucf/calculate';
 import {
   calculate51InorganicFertiliser,
   calculate52OrganicFertiliser,
@@ -67,6 +68,7 @@ function getIntensities(
 
 const calculateScope1Grains = (
   crop: GrainsCropTransformed,
+  input: GrainsInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
   // 6.3 refrigerants
@@ -110,6 +112,8 @@ const calculateScope1Grains = (
   // 6.3 refrigerants
   const refrigerantHFCs = calculateScope1RefrigerantUse(crop, context);
 
+  const lulucf = calculateLULUCF(input, context, crop.lulucfAllocation);
+
   return {
     fuelTransportCO2,
     fuelTransportCH4,
@@ -129,6 +133,7 @@ const calculateScope1Grains = (
     fieldBurningN2O,
     fieldBurningCH4,
     refrigerantHFCs,
+    ...lulucf,
   };
 };
 
@@ -195,7 +200,7 @@ export function calculateGrains(
 ): GrainsOutput {
   const cropResults = input.crops.map((crop, ix) => {
     return {
-      scope1: calculateScope1Grains(crop, context),
+      scope1: calculateScope1Grains(crop, input, context),
       scope2: calculateScope2Grains(crop, input, context),
       scope3: calculateScope3Grains(crop, input, context),
       meta: {

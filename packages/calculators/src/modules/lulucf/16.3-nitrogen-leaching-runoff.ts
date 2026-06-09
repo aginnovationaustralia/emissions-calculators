@@ -1,7 +1,7 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { selectConstant } from '@/tools/constants';
-import { one, zero, zeroN } from '@/tools/sentinels';
+import { one, zero, zeroN2O } from '@/tools/sentinels';
 import {
   calculateMineralisedNitrogenFromClearingToCrops,
   calculateMineralisedNitrogenFromClearingToOpen,
@@ -15,7 +15,7 @@ export const calculate_16_3_1_1_NitrogenLeachingAndRunoff = (
   const { landUse } = input;
 
   if (!landUse) {
-    return zeroN.named('ELUC,i,j=1-3,y');
+    return zeroN2O.named('ELUC,i,j=1-3,y');
   }
 
   /*

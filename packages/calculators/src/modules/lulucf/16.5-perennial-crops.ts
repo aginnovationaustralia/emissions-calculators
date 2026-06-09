@@ -3,9 +3,8 @@ import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { isPerennialWoodyCropFull } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { Container, root } from '@/tools/containers';
-import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { years, Years } from '@/tools/units';
+import { mass, years, Years } from '@/tools/units';
 import { LULUCFParentInputTransformed } from './input';
 import { PerennialCropPlantingInputTransformed } from './perennial-crop-planting-input';
 import {
@@ -85,7 +84,7 @@ export const calculate_16_5_1_1_RemovalsFromPerennialCrops = (
   const perennialCrops = input.landUse?.perennialCrops;
 
   if (perennialCrops === undefined) {
-    return zeroCO2e.named('RLU,c');
+    return root(mass('CO2', 0)).named('RLU,c');
   }
 
   const annualCropRemovals = perennialCrops.map((crop) => {
@@ -134,7 +133,7 @@ export const calculate_16_5_1_3_EmissionsFromPerennialCrops = (
   const perennialCrops = input.landUse?.perennialCrops;
 
   if (perennialCrops === undefined) {
-    return zeroCO2e.named('ELU,c (all)');
+    return root(mass('CO2', 0)).named('ELU,c (all)');
   }
 
   const CgCO2 = selectConstant(constants.COMMON, 'CG_CO2');
