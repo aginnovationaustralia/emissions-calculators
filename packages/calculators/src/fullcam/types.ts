@@ -69,6 +69,7 @@ export const isFullCAMSubmissionFailed = (
 };
 
 export type InputAreaWithOutputKeyFields = {
+  uniqueAreaKey: string;
   inputArea: FullCAMAreaInput;
   keyFields: FullCAMOutputKeyFields;
 };

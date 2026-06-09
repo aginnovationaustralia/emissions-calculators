@@ -54,9 +54,9 @@ export const generateCsvLines = (
       }
       const values = line.split(',');
 
-      if (values.length !== 7) {
-        throw new Error(`Invalid line '${line}' in csv output: ${csvString}`);
-      }
+      // if (values.length !== 7) {
+      //   throw new Error(`Invalid line '${line}' in csv output: ${csvString}`);
+      // }
 
       const valueYear = values[indexYear];
       const valueMonth = values[indexMonth];
@@ -202,7 +202,7 @@ export const generateSummaryFromLines = (
   options: ExtractionOptions,
 ): FullCAMOutputKeyFields => {
   const { endYear, endMonth } = options;
-  const terminalMonth = terminalStockMonth(endMonth);
+  const terminalMonth = endMonth; // terminalStockMonth(endMonth);
   const prevYear = endYear - 1;
 
   const rowY = requireRow(lines, endYear, terminalMonth, 'current year y');
@@ -225,6 +225,11 @@ export const generateSummaryFromLines = (
 export const extractKeyFieldsFromFullCAMOutput = (
   submission: FullCAMSubmissionSucceeded,
 ): BatchSimulationResult => {
+  // console.log(
+  //   'extracting key fields from fullcam output',
+  //   submission.area.uniqueAreaKey,
+  //   submission.area.input,
+  // );
   const lines = generateCsvLines(submission.outputCsv);
 
   if (typeof lines === 'string') {
@@ -235,6 +240,7 @@ export const extractKeyFieldsFromFullCAMOutput = (
   }
 
   return {
+    uniqueAreaKey: submission.area.uniqueAreaKey,
     inputArea: submission.area.input,
     keyFields: generateSummaryFromLines(lines, submission.area.input),
   };
