@@ -3,7 +3,6 @@ import { unzipSync } from 'fflate';
 import { Result } from 'true-myth';
 import { z } from 'zod';
 import { runSimulation } from './requests';
-import { generateTemplateForSpatialUpdate } from './templates/spatial-update';
 import {
   AreaPlotContent,
   BatchSimulationRequest,
@@ -28,7 +27,7 @@ export type BatchSimulationResponse = {
   areaKey: string;
 };
 
-const plotFileName = 'fullcam-emissions-calculator.plo';
+// const plotFileName = 'fullcam-emissions-calculator.plo';
 
 function basename(path: string): string {
   const norm = path.replace(/\\/g, '/');
@@ -36,13 +35,13 @@ function basename(path: string): string {
   return i === -1 ? norm : norm.slice(i + 1);
 }
 
-function plotStemFromNames(
-  originalFileName: string | null | undefined,
-  uploadedFileName: string | null | undefined,
-): string {
-  const name = originalFileName || uploadedFileName || plotFileName;
-  return basename(name).replace(/\.plo$/i, '');
-}
+// function plotStemFromNames(
+//   originalFileName: string | null | undefined,
+//   uploadedFileName: string | null | undefined,
+// ): string {
+//   const name = originalFileName || uploadedFileName || plotFileName;
+//   return basename(name).replace(/\.plo$/i, '');
+// }
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -292,9 +291,8 @@ const batchStatusCompletedSchema = z.object({
     plotSimulationResults: z.array(
       z.object({
         plotFileName: z.string(),
-        areaKey: z.string(),
         status: z.enum(['Completed', 'Failed']),
-        errorMessage: z.string(),
+        errorMessage: z.string().nullable(),
         isCompleted: z.boolean(),
         isFailed: z.boolean(),
       }),
@@ -344,7 +342,7 @@ async function waitBatch(
 
     if (!parseResult.success) {
       throw new Error(
-        `Could not parse status response for batch ${batchId}. Last status: ${lastStatusText.slice(0, 2000)}`,
+        `Could not parse status response for batch ${batchId}. Last status: ${lastStatusText.slice(0, 2000)}. Message: ${parseResult.error.message}`,
       );
     }
 
@@ -418,7 +416,7 @@ function extractSimulationResults(
     if (batchStatus === 'Failed') {
       return {
         area,
-        error: batchResult.errorMessage,
+        error: batchResult.errorMessage ?? 'Unknown error',
       };
     }
     const outputCsv = findSimulationCsvInArchive(
@@ -435,17 +433,11 @@ function extractSimulationResults(
 }
 
 async function batchPipeline(
-  areas: AreaPlotContent[],
+  plots: AreaPlotContent[],
   options: PipelineOptions,
 ): Promise<Result<FullCAMSubmission[], Error>> {
   // create form data for creating the batch
-  const plots: AreaPlotContent[] = areas.map((area) => ({
-    ...area,
-    plotContent: generateTemplateForSpatialUpdate(area.input),
-  }));
-
   // create the batch request
-  // check uploads
   const createResult = await createBatch(plots, options);
   if (createResult.isErr) {
     return Result.err(createResult.error);
@@ -493,7 +485,7 @@ async function batchPipeline(
  * `FULLCAM_BATCH_NAME` or a generated name.
  */
 export async function runSimulationBatch(
-  requests: BatchSimulationRequest[],
+  requests: Omit<AreaPlotContent, 'plotfileName'>[],
   options?: Partial<RunSimulationBatchOptions>,
 ): Promise<FullCAMSubmission[]> {
   if (requests.length === 0) {
@@ -522,23 +514,25 @@ export async function runSimulationBatch(
     );
   }
 
-  const version = options?.version ?? '2024';
-  const isUpdatingSpatialAndSpecies = true;
-  // options?.isUpdatingSpatialAndSpecies ?? false;
-  const pollIntervalMs = options?.pollIntervalMs ?? DEFAULT_POLL_MS;
-  const maxWaitMs = options?.maxWaitMs ?? DEFAULT_MAX_WAIT_MS;
+  const safeRequests = requests.map((request) => ({
+    ...request,
+    plotfileName: safePlotFileName(request.uniqueAreaKey),
+  }));
 
-  // console.log(`Running ${requests.length} simulations via batch`);
+  const pipelineOptions = {
+    fetcher: defaultFetcher,
+    fullcamWorkflowApiKey,
+    batchName,
+    notificationEmail,
+  };
 
-  // console.dir(archive, { depth: null });
-  // console.log(
-  //   'Archive',
-  //   new TextDecoder('utf-8').decode(archive['simulation_status.csv']),
-  // );
+  const results = await batchPipeline(safeRequests, pipelineOptions);
 
-  const results = await batchPipeline(requests, options);
+  if (results.isErr) {
+    throw new Error(results.error.message);
+  }
 
-  return results;
+  return results.value;
 }
 
 // NOTE: The preferred solution is to get batch execution fully tested and implemented. This will be upgraded shortly

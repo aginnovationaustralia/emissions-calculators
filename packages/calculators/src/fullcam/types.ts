@@ -44,14 +44,29 @@ export type AreaPlotContent = Area & {
   plotContent: string;
 };
 
-export type FullCAMSubmission = { area: AreaPlotContent } & (
-  | {
-      outputCsv: string;
-    }
-  | {
-      error: string;
-    }
-);
+export type FullCAMSubmissionSucceeded = { area: AreaPlotContent } & {
+  outputCsv: string;
+};
+
+export type FullCAMSubmissionFailed = { area: AreaPlotContent } & {
+  error: string;
+};
+
+export type FullCAMSubmission =
+  | FullCAMSubmissionSucceeded
+  | FullCAMSubmissionFailed;
+
+export const isFullCAMSubmissionSucceeded = (
+  submission: FullCAMSubmission,
+): submission is FullCAMSubmissionSucceeded => {
+  return 'outputCsv' in submission;
+};
+
+export const isFullCAMSubmissionFailed = (
+  submission: FullCAMSubmission,
+): submission is FullCAMSubmissionFailed => {
+  return 'error' in submission;
+};
 
 export type InputAreaWithOutputKeyFields = {
   inputArea: FullCAMAreaInput;

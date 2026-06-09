@@ -1,5 +1,4 @@
 export {
-  BatchSimulationRequest,
   BatchSimulationResponse,
   runSimulationBatch,
   RunSimulationBatchOptions,

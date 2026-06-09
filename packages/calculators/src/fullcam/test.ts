@@ -16,7 +16,11 @@ import {
 } from '.';
 import { calculateEmissions, LULUCFInput } from '../..';
 import { extractKeyFieldsFromFullCAMOutput } from './response';
-import { isBatchSimulationError, isBatchSimulationSuccess } from './types';
+import {
+  isBatchSimulationSuccess,
+  isFullCAMSubmissionFailed,
+  isFullCAMSubmissionSucceeded,
+} from './types';
 
 function uniqueHash(input: FullCAMAreaInput, index: number): string {
   const hash = createHash('sha256').update(JSON.stringify(input)).digest('hex');
@@ -50,10 +54,10 @@ async function processLandUseKey(
     );
   }
 
-  const plotFiles = landUse.areas.map((inputArea, index) => ({
-    uniqueAreaKey: uniqueHash(inputArea, index),
-    plotContent: generateTemplateForSpatialUpdate(inputArea),
-    inputArea,
+  const plotFiles = landUse.areas.map((input, index) => ({
+    uniqueAreaKey: uniqueHash(input, index),
+    plotContent: generateTemplateForSpatialUpdate(input),
+    input,
   }));
 
   const batchOptions: RunSimulationBatchOptions = {
@@ -69,15 +73,19 @@ async function processLandUseKey(
 
   const simulationResults = await runSimulationBatch(plotFiles, batchOptions);
 
-  console.dir(simulationResults, { depth: null });
-
-  const batchResults = simulationResults.map(extractKeyFieldsFromFullCAMOutput);
-
-  const failedResults = batchResults.filter(isBatchSimulationError);
-
+  const succeededResults = simulationResults.filter(
+    isFullCAMSubmissionSucceeded,
+  );
+  const failedResults = simulationResults.filter(isFullCAMSubmissionFailed);
   if (failedResults.length > 0) {
     console.warn('Warning: some batch simulations failed:', failedResults);
   }
+
+  console.dir(simulationResults, { depth: null });
+
+  const batchResults = succeededResults.map(extractKeyFieldsFromFullCAMOutput);
+
+  //   const failedResults = batchResults.filter(isBatchSimulationError);
 
   const successfulResults = batchResults.filter(isBatchSimulationSuccess);
 
@@ -135,7 +143,7 @@ async function main() {
     },
     landUse: {
       fullcamMode: 'inputs',
-      areas: [area2],
+      areas: [area1, area2],
     },
   };
 

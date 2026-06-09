@@ -3,7 +3,7 @@ import {
   BatchSimulationResult,
   FullCAMOutputKeyFields,
   FullCAMOutputLine,
-  FullCAMSubmission,
+  FullCAMSubmissionSucceeded,
 } from './types';
 
 export const generateCsvLines = (
@@ -192,19 +192,19 @@ export const generateSummaryFromLines = (
 };
 
 export const extractKeyFieldsFromFullCAMOutput = (
-  submission: FullCAMSubmission,
+  submission: FullCAMSubmissionSucceeded,
 ): BatchSimulationResult => {
   const lines = generateCsvLines(submission.outputCsv);
 
   if (typeof lines === 'string') {
     return {
-      uniqueAreaKey: submission.uniqueAreaKey,
+      uniqueAreaKey: submission.area.uniqueAreaKey,
       error: lines,
     };
   }
 
   return {
-    inputArea: submission.inputArea,
-    keyFields: generateSummaryFromLines(lines, submission.inputArea),
+    inputArea: submission.area.input,
+    keyFields: generateSummaryFromLines(lines, submission.area.input),
   };
 };
