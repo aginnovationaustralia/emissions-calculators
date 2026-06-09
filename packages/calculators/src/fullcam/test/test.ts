@@ -69,11 +69,14 @@ async function processLandUseKey(
 
   console.log('Running simulation batch...');
 
-  plotFiles.forEach((plotFile) =>
-    fs.writeFileSync(`${plotFile.uniqueAreaKey}.plo`, plotFile.plotContent),
-  );
+  // plotFiles.forEach((plotFile) =>
+  //   fs.writeFileSync(`${plotFile.uniqueAreaKey}.plo`, plotFile.plotContent),
+  // );
 
   const simulationResults = await runSimulationBatch(plotFiles, batchOptions);
+
+  fs.mkdirSync('out/success', { recursive: true });
+  fs.mkdirSync('out/failed', { recursive: true });
 
   const succeededResults = simulationResults.filter(
     isFullCAMSubmissionSucceeded,
@@ -88,6 +91,16 @@ async function processLandUseKey(
         error: r.error,
       })),
     );
+    failedResults.forEach((r) => {
+      fs.writeFileSync(
+        `out/failed/${r.area.uniqueAreaKey}.input.json`,
+        JSON.stringify(r.area.input, null, 2),
+      );
+      fs.writeFileSync(
+        `out/failed/${r.area.uniqueAreaKey}.plo`,
+        r.area.plotContent,
+      );
+    });
   }
 
   // console.dir(simulationResults, { depth: null });
@@ -98,7 +111,11 @@ async function processLandUseKey(
   // );
 
   succeededResults.forEach((r) => {
-    fs.writeFileSync(`${r.area.uniqueAreaKey}.csv`, r.outputCsv);
+    fs.writeFileSync(`out/success/${r.area.uniqueAreaKey}.csv`, r.outputCsv);
+    fs.writeFileSync(
+      `out/success/${r.area.uniqueAreaKey}.plo`,
+      r.area.plotContent,
+    );
   });
 
   const batchResults = succeededResults.map(extractKeyFieldsFromFullCAMOutput);
@@ -134,18 +151,79 @@ const area1: FullCAMAreaInput = {
 const area2: FullCAMAreaInput = {
   ...area1,
   plantingEvents: [
-    ...area1.plantingEvents,
     {
       plantingDate: new Date('2022-02-01'),
       speciesName: 'Mallee eucalypt species',
     },
+  ],
+};
+
+const area3: FullCAMAreaInput = {
+  ...area1,
+  plantingEvents: [
     {
       plantingDate: new Date('2022-03-01'),
       speciesName: 'Native Species Regeneration <500mm rainfall',
     },
+  ],
+};
+
+const area4: FullCAMAreaInput = {
+  ...area1,
+  plantingEvents: [
     {
       plantingDate: new Date('2022-04-01'),
       speciesName: 'Native Species Regeneration >=500mm rainfall',
+    },
+  ],
+};
+
+const area5: FullCAMAreaInput = {
+  ...area1,
+  plantingEvents: [],
+  clearingEvents: [
+    {
+      clearingDate: new Date('2010-05-01'),
+      percentThinned: 50,
+    },
+    {
+      clearingDate: new Date('2014-01-01'),
+      percentThinned: 20,
+    },
+  ],
+};
+
+const area6: FullCAMAreaInput = {
+  ...area1,
+  plantingEvents: [],
+  clearingEvents: [],
+  wildfireEvents: [
+    {
+      fireDate: new Date('2010-05-01'),
+      percentBurned: 70,
+      percentTreesKilled: 30,
+    },
+    {
+      fireDate: new Date('2012-05-01'),
+      percentBurned: 20,
+      percentTreesKilled: 10,
+    },
+  ],
+};
+
+const area7: FullCAMAreaInput = {
+  ...area1,
+  plantingEvents: [],
+  clearingEvents: [],
+  wildfireEvents: [],
+  prescribedBurnEvents: [
+    {
+      fireDate: new Date('2010-05-01'),
+      percentBurned: 70,
+    },
+    {
+      fireDate: new Date('2014-05-01'),
+      percentBurned: 10,
     },
   ],
 };
@@ -202,7 +280,7 @@ async function main() {
     },
     landUse: {
       fullcamMode: 'inputs',
-      areas: [area1],
+      areas: [area1, area2, area3, area4, area5, area6, area7],
     },
   };
 

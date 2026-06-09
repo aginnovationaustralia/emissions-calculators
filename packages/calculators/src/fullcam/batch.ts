@@ -296,7 +296,7 @@ const batchStatusCompletedSchema = z.object({
 });
 
 const batchStatusNotCompleteSchema = z.object({
-  runtimeStatus: z.enum(['Failed', 'Running', 'Unknown']),
+  runtimeStatus: z.enum(['Failed', 'Running', 'Unknown', 'Pending']),
 });
 
 type BatchStatusCompleted = z.infer<typeof batchStatusCompletedSchema>;

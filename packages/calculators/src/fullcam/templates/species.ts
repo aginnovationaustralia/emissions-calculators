@@ -3967,7 +3967,7 @@ export const generateSpeciesForestSet = (input: FullCAMAreaInput) => {
     input.plantingEvents.map((p) => p.speciesName),
   );
   const snippets = entriesFromObject(speciesSnippetMap)
-    .filter(([species, _]) => speciesToInclude.has(species))
+    // .filter(([species, _]) => speciesToInclude.has(species))
     .map(([_, snippetFn]) => snippetFn);
 
   return `<SpeciesForestSet count="${snippets.length}" showOnlyInUse="false">
