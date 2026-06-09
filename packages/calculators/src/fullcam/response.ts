@@ -6,6 +6,17 @@ import {
   FullCAMSubmissionSucceeded,
 } from './types';
 
+function extractFloatByColumnIndex(
+  lineValues: string[],
+  index: number,
+): number {
+  const value = lineValues[index];
+  if (value === undefined) {
+    return 0;
+  }
+  return parseFloat(value);
+}
+
 export const generateCsvLines = (
   csvString: string,
 ): FullCAMOutputLine[] | string => {
@@ -22,6 +33,20 @@ export const generateCsvLines = (
     return `Batch error: ${firstLineValues[2] ?? firstLineValues}`;
   }
 
+  const indexCMassOfTrees = columnNames.indexOf('"C mass of trees  (tC/ha)"');
+  const indexCH4EmittedDueToFire = columnNames.indexOf(
+    '"CH4 emitted due to fire (tCH4/ha)"',
+  );
+  const indexN2OEmittedDueToFire = columnNames.indexOf(
+    '"N2O emitted due to fire (tN2O/ha)"',
+  );
+  const indexCMassOfForestDebris = columnNames.indexOf(
+    '"C mass of forest debris  (tC/ha)"',
+  );
+  const indexYear = columnNames.indexOf('Year');
+  const indexMonth = columnNames.indexOf('Step In Year');
+  const indexDecimalYear = columnNames.indexOf('Dec. Year');
+
   const summary = lines
     .map((line): FullCAMOutputLine | undefined => {
       if (line === '') {
@@ -33,24 +58,30 @@ export const generateCsvLines = (
         throw new Error(`Invalid line '${line}' in csv output: ${csvString}`);
       }
 
-      // Year,Step In Year,Dec. Year,"C mass of trees  (tC/ha)","CH4 emitted due to fire (tCH4/ha)","N2O emitted due to fire (tN2O/ha)","C mass of forest debris  (tC/ha)"
-      const [
-        year,
-        month,
-        decimalYear,
-        cMassOfTrees,
-        ch4EmittedDueToFire,
-        n2oEmittedDueToFire,
-        cMassOfForestDebris,
-      ] = values;
+      const valueYear = values[indexYear];
+      const valueMonth = values[indexMonth];
+      const valueDecimalYear = values[indexDecimalYear];
+
       return {
-        year: parseInt(year),
-        month: parseInt(month),
-        decimalYear: parseFloat(decimalYear),
-        carbonMassOfTreesTCPerHectare: parseFloat(cMassOfTrees),
-        ch4EmittedDueToFireTCH4PerHectare: parseFloat(ch4EmittedDueToFire),
-        n2oEmittedDueToFireTN2OPerHectare: parseFloat(n2oEmittedDueToFire),
-        carbonMassOfForestDebrisTCPerHectare: parseFloat(cMassOfForestDebris),
+        year: parseInt(valueYear),
+        month: parseInt(valueMonth),
+        decimalYear: parseFloat(valueDecimalYear),
+        carbonMassOfTreesTCPerHectare: extractFloatByColumnIndex(
+          values,
+          indexCMassOfTrees,
+        ),
+        ch4EmittedDueToFireTCH4PerHectare: extractFloatByColumnIndex(
+          values,
+          indexCH4EmittedDueToFire,
+        ),
+        n2oEmittedDueToFireTN2OPerHectare: extractFloatByColumnIndex(
+          values,
+          indexN2OEmittedDueToFire,
+        ),
+        carbonMassOfForestDebrisTCPerHectare: extractFloatByColumnIndex(
+          values,
+          indexCMassOfForestDebris,
+        ),
       };
     })
     .filter(isDefined);

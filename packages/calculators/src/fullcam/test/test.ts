@@ -1,5 +1,8 @@
 /* eslint-disable no-console */
+import { calculateEmissions } from '@/calculators';
+import { entriesFromObject } from '@/calculators/common/tools';
 import { GrainsInput } from '@/calculators/Grains';
+import { LULUCFInput } from '@/modules';
 import { createHash } from 'crypto';
 import * as fs from 'fs';
 import {
@@ -13,14 +16,13 @@ import {
   isLandUseFullCAMOutputs,
   runSimulationBatch,
   RunSimulationBatchOptions,
-} from '.';
-import { calculateEmissions, LULUCFInput } from '../..';
-import { extractKeyFieldsFromFullCAMOutput } from './response';
+} from '..';
+import { extractKeyFieldsFromFullCAMOutput } from '../response';
 import {
   isBatchSimulationSuccess,
   isFullCAMSubmissionFailed,
   isFullCAMSubmissionSucceeded,
-} from './types';
+} from '../types';
 
 function uniqueHash(input: FullCAMAreaInput, index: number): string {
   const hash = createHash('sha256').update(JSON.stringify(input)).digest('hex');
@@ -78,21 +80,38 @@ async function processLandUseKey(
   );
   const failedResults = simulationResults.filter(isFullCAMSubmissionFailed);
   if (failedResults.length > 0) {
-    console.warn('Warning: some batch simulations failed:', failedResults);
+    console.warn(
+      'Warning: some batch simulations failed:',
+      failedResults.map((r) => ({
+        uniqueAreaKey: r.area.uniqueAreaKey,
+        input: r.area.input,
+        error: r.error,
+      })),
+    );
   }
 
-  console.dir(simulationResults, { depth: null });
+  // console.dir(simulationResults, { depth: null });
+
+  // fs.writeFileSync(
+  //   'simulation.json',
+  //   JSON.stringify(simulationResults, null, 2),
+  // );
+
+  succeededResults.forEach((r) => {
+    fs.writeFileSync(`${r.area.uniqueAreaKey}.csv`, r.outputCsv);
+  });
 
   const batchResults = succeededResults.map(extractKeyFieldsFromFullCAMOutput);
 
-  //   const failedResults = batchResults.filter(isBatchSimulationError);
+  // console.log('batchResults', batchResults.length);
+  // console.dir(batchResults, { depth: null });
 
   const successfulResults = batchResults.filter(isBatchSimulationSuccess);
 
   return generateLulucfInput(successfulResults);
 }
 
-const area1 = {
+const area1: FullCAMAreaInput = {
   latitude: -37.756414,
   longitude: 145.081546,
   region: 'Victorian Midlands',
@@ -103,7 +122,7 @@ const area1 = {
   endMonth: 12,
   plantingEvents: [
     {
-      plantingDate: new Date('2022-01-01'),
+      plantingDate: new Date('2010-01-01'),
       speciesName: 'Environmental Plantings',
     },
   ],
@@ -112,7 +131,7 @@ const area1 = {
   prescribedBurnEvents: [],
 };
 
-const area2 = {
+const area2: FullCAMAreaInput = {
   ...area1,
   plantingEvents: [
     ...area1.plantingEvents,
@@ -132,8 +151,48 @@ const area2 = {
 };
 
 async function main() {
-  const userInput: unknown = {
-    crops: [],
+  const userInput: GrainsInputWithFullCAM = {
+    crops: [
+      {
+        areaSown: 100,
+        isInLeachingZone: false,
+        electricityAllocation: 0,
+        chemicals: [],
+        refrigerants: [],
+        inorganicFertilisers: {
+          productionSystem: 'Non-irrigated crops',
+          applications: [],
+          calculationMethodScope1: '1',
+        },
+        organicFertilisers: {
+          applications: [],
+        },
+        waste: {
+          offsiteManure: [],
+          solidWaste: {
+            landfill: [],
+            incineration: [],
+            composting: [],
+            anaerobicDigestion: [],
+          },
+        },
+        services: [],
+        transportFuel: [],
+        stationaryFuel: [],
+        rainfallAbove600: false,
+        cropResidues: {
+          calculationMethod: '1',
+        },
+        averageYield: 3,
+        fractionOfAnnualCropBurnt: 1,
+        limestone: 500,
+        limestoneFraction: 1,
+        dolomiteFraction: 0,
+        type: 'Wheat',
+        state: 'vic',
+        lulucfAllocation: 1,
+      },
+    ],
     isInLeachingZone: false,
     rainfallAbove600: false,
     state: 'vic',
@@ -143,7 +202,7 @@ async function main() {
     },
     landUse: {
       fullcamMode: 'inputs',
-      areas: [area1, area2],
+      areas: [area1],
     },
   };
 
@@ -160,6 +219,9 @@ async function main() {
 
   const landUse = await processLandUseKey(initialLandUse);
 
+  // console.dir(initialLandUse, { depth: null });
+  // console.dir(landUse, { depth: null });
+
   const inputForCalculation: GrainsInput = {
     ...validInput,
     landUse,
@@ -167,7 +229,20 @@ async function main() {
 
   const emissions = calculateEmissions('grains', inputForCalculation);
 
-  console.log('emissions', emissions);
+  if (emissions.status === 'OK') {
+    console.log('Emissions calculated correctly');
+    console.dir(
+      entriesFromObject(emissions.emissions.scope1).map(([k, v]) => [
+        k,
+        v.value / 1000,
+      ]),
+      { depth: null },
+    );
+  } else if (emissions.status === 'INVALID_INPUT') {
+    console.error('Input was not valid', emissions.message);
+  } else {
+    console.error('Error calculating emissions', emissions.error.message);
+  }
 }
 
 main().catch((err) => {

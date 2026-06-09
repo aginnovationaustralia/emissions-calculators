@@ -105,9 +105,6 @@ function findSimulationCsvInArchive(
   plotStem: string,
   areaKey: string,
 ): string {
-  // console.dir(archive, { depth: null });
-  // console.log('Archive', Object.keys(archive));
-
   const csvPaths = Object.keys(archive).filter(
     (p) =>
       !p.endsWith('/') &&
@@ -127,8 +124,6 @@ function findSimulationCsvInArchive(
 
   const chosen =
     byStem ?? byAreaKey ?? (csvPaths.length === 1 ? csvPaths[0] : undefined);
-
-  console.log({ plotStem, areaKey, byStem, byAreaKey, chosen });
 
   if (!chosen) {
     throw new Error(
@@ -496,9 +491,6 @@ export async function runSimulationBatch(
   if (!fullcamWorkflowApiKey) {
     throw new Error('fullcamWorkflowApiKey is required');
   }
-
-  // console.log('fullcamApiKey', fullcamApiKey);
-  // console.log('fullcamWorkflowApiKey', fullcamWorkflowApiKey);
 
   const batchName =
     options?.batchName ??
