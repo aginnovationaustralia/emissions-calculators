@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { unzipSync } from 'fflate';
-import { Result } from 'true-myth';
+import { Result } from './result';
 import { z } from 'zod';
 import { runSimulation } from './requests';
 import {
