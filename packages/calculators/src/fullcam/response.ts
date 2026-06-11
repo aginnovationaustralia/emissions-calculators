@@ -40,9 +40,14 @@ export const generateCsvLines = (
   const indexN2OEmittedDueToFire = columnNames.indexOf(
     '"N2O emitted due to fire (tN2O/ha)"',
   );
-  const indexCMassOfForestDebris = columnNames.indexOf(
-    '"C mass of forest debris  (tC/ha)"',
+  const indexCMassOfForestDebris = columnNames.findIndex((c) =>
+    [
+      // REVISIT: I noticed both column names emitted from the batch API for this field
+      '"C mass of forest debris  (tC/ha)"',
+      '"C mass of debris  (tC/ha)"',
+    ].includes(c),
   );
+
   const indexYear = columnNames.indexOf('Year');
   const indexMonth = columnNames.indexOf('Step In Year');
   const indexDecimalYear = columnNames.indexOf('Dec. Year');
@@ -125,9 +130,9 @@ export type ExtractionOptions = {
   endMonth: number;
 };
 
-function terminalStockMonth(endMonth: number): 6 | 12 {
-  return endMonth === 6 ? 6 : 12;
-}
+// function terminalStockMonth(endMonth: number): 6 | 12 {
+//   return endMonth === 6 ? 6 : 12;
+// }
 
 function findLastRowForYearMonth(
   lines: FullCAMOutputLine[],

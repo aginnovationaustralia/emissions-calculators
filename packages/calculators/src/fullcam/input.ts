@@ -5,7 +5,7 @@ import { object } from '@/types/schemas';
 import { z } from 'zod';
 
 export const TreeSpeciesNames = [
-  'Environmental Plantings',
+  'Environmental plantings',
   'Mallee eucalypt species',
   'Native Species Regeneration <500mm rainfall',
   'Native Species Regeneration >=500mm rainfall',
@@ -51,7 +51,7 @@ export type FullCAMPrescribedBurnEvent = z.input<
   typeof PrescribedBurnEventSchema
 >;
 
-export const FullCAMAreaSchema = object({
+const FullCAMBaseAreaSchema = object({
   latitude: z.number(),
   longitude: z.number(),
   region: z.enum(IBRA7Regions),
@@ -61,17 +61,40 @@ export const FullCAMAreaSchema = object({
   endYear: z.number(),
   endMonth: z.number(),
   plantingEvents: z.array(PlantingEventSchema),
-  clearingEvents: z.array(ClearingEventSchema),
   wildfireEvents: z.array(WildfireEventSchema),
   prescribedBurnEvents: z.array(PrescribedBurnEventSchema),
   // Expose these package input keys so they can be supplied alongside minimal inputs for the FullCAM API
   savannaBurning: z.array(BurningInputSchema).optional(),
   perennialCrops: z.array(PerennialCropInputSchema).optional(),
 });
+export const FullCAMClearableAreaSchema = FullCAMBaseAreaSchema.extend({
+  initialTrees: object({ speciesName: z.enum(TreeSpeciesNames) }),
+  clearingEvents: z.array(ClearingEventSchema),
+});
+export const FullCAMUnclearableAreaSchema = FullCAMBaseAreaSchema.extend({
+  initialTrees: z.literal(false),
+});
+
+export const FullCAMAreaSchema = z.xor([
+  FullCAMClearableAreaSchema,
+  FullCAMUnclearableAreaSchema,
+]);
 
 export const LULUCFWithFullCAMInputSchema = z.array(FullCAMAreaSchema);
 
 export type FullCAMAreaInput = z.input<typeof FullCAMAreaSchema>;
+export type FullCAMClearableAreaInput = z.input<
+  typeof FullCAMClearableAreaSchema
+>;
+export type FullCAMUnclearableAreaInput = z.input<
+  typeof FullCAMUnclearableAreaSchema
+>;
+
+export const isAreaClearable = (
+  area: FullCAMAreaInput,
+): area is FullCAMClearableAreaInput => {
+  return 'initialTrees' in area && area.initialTrees !== false;
+};
 
 export type LULUCFWithFullCAMInput = z.input<
   typeof LULUCFWithFullCAMInputSchema

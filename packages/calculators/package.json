@@ -323,6 +323,7 @@
     "check:types": "tsc --noEmit",
     "lint": "eslint . && pnpm run check:types",
     "test": "jest",
+    "test:fullcam": "jest --config jest.config.fullcam.cjs",
     "version": "npm version --no-git-tag-version",
     "build:docs": "tsx scripts/build-docs/index.ts",
     "generate:exports": "tsx scripts/generate-exports.ts",

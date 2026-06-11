@@ -1,7 +1,7 @@
 import { FullCAMAreaInput, TreeSpeciesName } from './input';
 
 export const treeSpeciesIdMap: Record<TreeSpeciesName, number> = {
-  'Environmental Plantings': 7,
+  'Environmental plantings': 7,
   'Mallee eucalypt species': 23,
   'Native Species Regeneration <500mm rainfall': 33,
   'Native Species Regeneration >=500mm rainfall': 34,

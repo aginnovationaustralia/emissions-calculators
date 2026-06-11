@@ -2,6 +2,7 @@ module.exports = {
   testEnvironment: 'node',
   roots: ['<rootDir>/src'],
   testMatch: ['**/*.test.ts'],
+  testPathIgnorePatterns: ['/fullcam/test/scenarios/'],
   setupFiles: ['<rootDir>/jest.setup.ts'],
   transform: {
     '^.+\\.ts$': [
@@ -16,5 +17,6 @@ module.exports = {
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^true-myth$': '<rootDir>/src/fullcam/test/shims/true-myth.ts',
   },
 };
