@@ -62,6 +62,7 @@ import {
   PoultryMMS1TypeWithPasture,
   PoultryMMS2Type,
   PoultryMMS2TypeWithPasture,
+  PrimarySwineMMSType,
   PurchasedFeedAquacultureType,
   PurchasedFeedLivestockRegionalType,
   PurchasedFeedLivestockRegionlessType,
@@ -77,6 +78,7 @@ import {
   RiceCultivationPreSeasonWaterRegimeType,
   RiceCultivationSeasonWaterRegimeType,
   Season,
+  SecondarySwineMMSType,
   ServiceByAreaType,
   ServiceByHourType,
   SheepClass,
@@ -362,14 +364,32 @@ type MMSFactors = {
 
 type SwineClassFactors = {
   FEED_INTAKE: MassPerHeadPerDay<'DryMatter'>;
+  VOLATILE_SOLIDS: MassPerHeadPerDay<'Volatile Solids'>;
+  NITROGEN_IN_WASTE: MassPerHeadPerDay<'N'>;
 };
 
 export type SwineConstants = NamedConstants & {
-  MMS: Record<SwineMMSType, MMSFactors>;
+  MMS: Record<
+    PrimarySwineMMSType,
+    MMSFactors & {
+      VOLATILE_SOLIDS_LOST: RealNumber;
+      METHANE_CONVERSION_FACTOR_BY_STATE: Record<PureState, RealNumber>;
+      EFm: MassPerMass<'N2O', 'N'>;
+      FracGASM: MassPerMass<'Volatilised N', 'N'>;
+    }
+  > & {
+    directApplication: MMSFactors & {
+      VOLATILE_SOLIDS_LOST: RealNumber;
+      METHANE_CONVERSION_FACTOR_BY_STATE: Record<PureState, RealNumber>;
+    };
+  };
   GROSS_ENERGY_CONTENT_OF_FEED: EnergyPerMass<'DryMatter'>;
   ENERGY_PER_MASS_METHANE: EnergyPerMass<'CH4'>;
   SWINE_CLASS_FACTORS: Record<SwineClass, SwineClassFactors>;
   FRACTION_INTAKE_CONVERTED_TO_METHANE: RealNumber;
+  EMISSIONS_POTENTIAL: VolumePerMass<'CH4', 'Volatile Solids'>;
+  DEFAULT_FRACTION_SOLIDS_SEPARATED: RealNumber;
+  DEFAULT_FRACTION_NITROGEN_SEPARATED: RealNumber;
 };
 
 type FeedlotFeedFactors = {
@@ -520,11 +540,12 @@ export type LivestockConstants = NamedConstants & {
     composting: Record<MeanAnnualTemperature, RealNumber>;
     digester: Record<MeanAnnualTemperature, RealNumber>;
     // REVISIT: Deep litter is given as an option but none of the needed constants are supplied in the appendix.
-    // 'deepLitter': Record<MeanAnnualTemperature, RealNumber>;
+    deepLitter: Record<MeanAnnualTemperature, RealNumber>;
     directProcessing: Record<MeanAnnualTemperature, RealNumber>;
     directApplication: Record<MeanAnnualTemperature, RealNumber>;
     pastureRangeAndPaddock: Record<MeanAnnualTemperature, RealNumber>;
     anaerobicLagoon: Record<MeanAnnualTemperature, RealNumber>;
+    pitStorage: Record<MeanAnnualTemperature, RealNumber>;
   };
 
   METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE: Record<

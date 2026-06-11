@@ -119,6 +119,50 @@ export const SwineMMSTypes = [
 ] as const;
 export type SwineMMSType = (typeof SwineMMSTypes)[number];
 
+export const SwineHousingAndWasteSystems = [
+  'Outdoor/Free Range',
+  'Conventional Housing',
+  'Deep Litter Housing',
+] as const;
+export type SwineHousingAndWasteSystem =
+  (typeof SwineHousingAndWasteSystems)[number];
+
+export const PrimarySwineMMSWithSolidSeparationTypes = [
+  // REVISIT: call it 'covered' for the sake of recognisable terminology?
+  'anaerobicLagoon',
+  'digester',
+  'pitStorage',
+] as const;
+
+export const PrimarySwineMMSTypes = [
+  ...PrimarySwineMMSWithSolidSeparationTypes,
+  'outdoorAndFreeRange',
+  'deepLitter',
+  'solidStorage',
+] as const;
+export type PrimarySwineMMSType = (typeof PrimarySwineMMSTypes)[number];
+
+export const SecondarySwineMMSTypesWithoutDirectApplication = [
+  'solidStorage',
+  // REVISIT: this is an uncovered anaerobic lagoon, called digester here to make constant selection easier for now.
+  'anaerobicLagoon',
+] as const;
+
+export const SecondarySwineMMSTypes = [
+  ...SecondarySwineMMSTypesWithoutDirectApplication,
+  'directApplication',
+] as const;
+export type SecondarySwineMMSType = (typeof SecondarySwineMMSTypes)[number];
+
+export const PrimaryToSecondarySwineMMSMap = {
+  outdoorAndFreeRange: 'directApplication',
+  deepLitter: 'solidStorage',
+  anaerobicLagoon: 'directApplication',
+  digester: 'anaerobicLagoon',
+  pitStorage: 'directApplication',
+  solidStorage: 'directApplication',
+} as const satisfies Record<PrimarySwineMMSType, SecondarySwineMMSType>;
+
 export const StationaryFuelTypes = [
   'petroleum based oils',
   'petroleum based greases',
@@ -1362,10 +1406,5 @@ export const SheepClasses = [
 ] as const;
 export type SheepClass = (typeof SheepClasses)[number];
 
-export const SwineClasses = [
-  'boars',
-  'sows',
-  'gilts',
-  'slaughterPigs',
-] as const;
+export const SwineClasses = ['boars', 'sows', 'gilts', 'others'] as const;
 export type SwineClass = (typeof SwineClasses)[number];

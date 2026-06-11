@@ -108,7 +108,7 @@ export const compareInputsAndOutputs = <
         // console.log(formatIntermediates(actual));
         console.log(
           formatNamedValues(actual, {
-            maxDepth: 5,
+            maxDepth: 6,
             // focusOn: 'Mj=january,k=rams',
             // focusOn: 'PIj=january,k=rams',
             // focusOn: 'EN2O,leach',
