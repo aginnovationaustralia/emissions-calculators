@@ -166,13 +166,19 @@ describe('FullCAM scenario batch simulations', () => {
       notificationEmail: process.env.FULLCAM_BATCH_NOTIFICATION_EMAIL,
     };
 
-    const batchResults = await runSimulationBatch(
+    const batchResult = await runSimulationBatch(
       buildScenarioPlots(),
       batchOptions,
     );
 
-    succeededSubmissions = batchResults.filter(isFullCAMSubmissionSucceeded);
-    failedSubmissions = batchResults.filter(isFullCAMSubmissionFailed);
+    if (batchResult.isErr) {
+      throw new Error('Failed to run batch: ' + batchResult.error.message);
+    }
+
+    const submissions = batchResult.value;
+
+    succeededSubmissions = submissions.filter(isFullCAMSubmissionSucceeded);
+    failedSubmissions = submissions.filter(isFullCAMSubmissionFailed);
 
     failedSubmissions.forEach((submission) => {
       const outFailedDir = join(__dirname, 'out/failed');
@@ -181,7 +187,6 @@ describe('FullCAM scenario batch simulations', () => {
         outFailedDir,
         `${submission.area.uniqueAreaKey}.plo`,
       );
-      console.log(submission.error);
       writeFileSync(filepath, submission.area.plotContent);
     });
 

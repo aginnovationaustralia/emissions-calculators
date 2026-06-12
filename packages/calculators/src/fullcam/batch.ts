@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import { unzipSync } from 'fflate';
-import { Result } from './result';
 import { z } from 'zod';
 import { runSimulation } from './requests';
+import { Result } from './result';
 import {
   AreaPlotContent,
   BatchSimulationRequest,
@@ -480,11 +480,11 @@ async function batchPipeline(
  * `FULLCAM_BATCH_NAME` or a generated name.
  */
 export async function runSimulationBatch(
-  requests: Omit<AreaPlotContent, 'plotfileName'>[],
+  requests: BatchSimulationRequest[],
   options?: Partial<RunSimulationBatchOptions>,
-): Promise<FullCAMSubmission[]> {
+): Promise<Result<FullCAMSubmission[], Error>> {
   if (requests.length === 0) {
-    return [];
+    return Result.ok([]);
   }
 
   const fullcamWorkflowApiKey = options?.fullcamWorkflowApiKey;
@@ -520,14 +520,9 @@ export async function runSimulationBatch(
 
   const results = await batchPipeline(safeRequests, pipelineOptions);
 
-  if (results.isErr) {
-    throw new Error(results.error.message);
-  }
-
-  return results.value;
+  return results;
 }
 
-// NOTE: The preferred solution is to get batch execution fully tested and implemented. This will be upgraded shortly
 export async function runSimulationsSingle(
   requests: BatchSimulationRequest[],
   options: RunSimulationBatchOptions,

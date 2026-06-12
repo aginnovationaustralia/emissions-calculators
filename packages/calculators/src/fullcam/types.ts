@@ -29,7 +29,7 @@ export type FullCAMOutputKeyFields = {
 };
 
 export type BatchSimulationRequest = {
-  inputArea: FullCAMAreaInput;
+  input: FullCAMAreaInput;
   uniqueAreaKey: string;
   plotContent: string;
 };

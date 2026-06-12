@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <DocumentPlot FileType="FullCAM Plot " Version="5009" pageIxDO="10" tDiagram="-1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.fullcam.au/XML/DocumentPlot5009.xsd">
-  <Meta nmME="ExampleDeforestation" savedByResearch="true" savedByVersion="" lockTime="" lockId="" lockOnME="">
+  <Meta nmME="3-deforestation-gt-500" savedByResearch="true" savedByVersion="" lockTime="" lockId="" lockOnME="">
     <notesME/>
   </Meta>
   <Config tPlot="CompF" userSoilMnrl="true" userMulchF="false" userMulchA="false" tTreeProd="TYF" userCalcFPI="false" userCalcModTemp="false" userCalcModASW="false" userCalcModFrost="false" userN="false" userDispEner="false" userDispProd="false" userEventIrrF="false" userEventIrrA="false" userEventNFeF="true" userEventNFeA="true" userEventManF="false" userEventManA="false" rothCVers="Vers263" userSens="false" userOpti="false" userEcon="false" userLogGrade="false" userCropGrade="false"/>
-  <Timing dailyTimingTZ="false" useDaysPerStepDTZ="true" daysPerStepDTZ="1" stepsPerDayDTZ="1" outputFreqDTZ="Daily" stepsPerOutDTZ="1" firstOutStepDTZ="1" tStepsYTZ="Monthly" stepsPerYrYTZ="110" stYrYTZ="2010" stStepInStYrYTZ="01" enYrYTZ="2016" enStepInEnYrYTZ="01" stepsPerOutYTZ="1" firstOutStepYTZ="1"/>
+  <Timing dailyTimingTZ="false" useDaysPerStepDTZ="true" daysPerStepDTZ="1" stepsPerDayDTZ="1" outputFreqDTZ="Daily" stepsPerOutDTZ="1" firstOutStepDTZ="1" tStepsYTZ="Monthly" stepsPerYrYTZ="110" stYrYTZ="2015" stStepInStYrYTZ="01" enYrYTZ="2030" enStepInEnYrYTZ="01" stepsPerOutYTZ="1" firstOutStepYTZ="1"/>
   <Build lonBL="151.428" latBL="-30.542" frCat="" applyDownloadedData="true" areaBL="Cell" frFracBL=""/>
   <Site count="21" tAirTemp="Direct" tVPD="" tSoilTemp="" hasArea="false" userHasArea="false" siteArea="" conditIrrigOnF="false" conditIrrigOnA="false" siteMultStemF="1.0" siteMultBranF="1.0" siteMultBarkF="1.0" siteMultLeafF="1.0" siteMultCortF="1.0" siteMultFirtF="1.0" siteMultGbfrA="1.0" siteMultStlkA="1.0" siteMultLeafA="1.0" siteMultCortA="1.0" siteMultFirtA="1.0" maxAbgMF="120.124290466309" maxAbgMA="" latitude3PG="" molPARPerMJRad="" plantMPerMolC="" upstreamCRatio="" fpiAvgLT="9.128782798846563">
     <TimeSeries tInTS="defnitIrrigA" tExtrapTS="AvgYr" tOriginTS="Calendar" yr0TS="2010" nYrsTS="1" dataPerYrTS="12" nDecPlacesTS="1" colWidthTS="50" multTS="1.0" showGraphTS="true">
@@ -205,9 +205,9 @@
         <rawTS count="1"/>
       </TimeSeries>
       <ForestInit>
-        <InitTreeF treeExistsInit="true" maxTreeAgeInit="9999.0" avgTreeAgeInit="9999.0" tInitStem="FracAge" stemMInitF="" branMInitF="25.0" barkMInitF="8.0" leafMInitF="10.0" cortMInitF="15.0" firtMInitF="3.0" stemVolInitF="100.0" stemFracInitF="0.49" branFracInitF="0.11" barkFracInitF="0.09" leafFracInitF="0.04" cortFracInitF="0.24" firtFracInitF="0.03" stemNCRatioInitF="" branNCRatioInitF="" barkNCRatioInitF="" leafNCRatioInitF="" cortNCRatioInitF="" firtNCRatioInitF="" storNMInitF="" stemM3PGInit="5.0" foliM3PGInit="7.0" rootM3PGInit="2.0" nStemsInit="1111.0" tTYFCatInitF="BlockLMG" frFracInit="1" tFrFracInit="FracConst" treeNmInit="Native Species Regeneration >=500mm rainfall" agRegimeId="0"/>
+        <InitTreeF treeExistsInit="true" maxTreeAgeInit="1000.0" avgTreeAgeInit="1000.0" tInitStem="Frac" stemMInitF="" branMInitF="25.0" barkMInitF="8.0" leafMInitF="10.0" cortMInitF="15.0" firtMInitF="3.0" stemVolInitF="100.0" stemFracInitF="0.422069892" branFracInitF="0.199533585" barkFracInitF="0.113706229" leafFracInitF="0.059503198" cortFracInitF="0.17649553" firtFracInitF="0.028691566" stemNCRatioInitF="" branNCRatioInitF="" barkNCRatioInitF="" leafNCRatioInitF="" cortNCRatioInitF="" firtNCRatioInitF="" storNMInitF="" stemM3PGInit="5.0" foliM3PGInit="7.0" rootM3PGInit="2.0" nStemsInit="1111.0" tTYFCatInitF="Custom" frFracInit="1" tFrFracInit="FracConst" treeNmInit="Native species and revegetation >=500mm rainfall" agRegimeId="0"/>
         <InitSDwdF sDStemCMInitF="0.0" sDBranCMInitF="0.0" sDBlitCMInitF="0.0" sDLlitCMInitF="0.0" sDCodrCMInitF="0.0" sDFidrCMInitF="0.0"/>
-        <InitDebrF dDdwdCMInitF="0.0" rDdwdCMInitF="3.66" dChwdCMInitF="0.0" rChwdCMInitF="0.0" dBlitCMInitF="0.0" rBlitCMInitF="1.57" dLlitCMInitF="0.02" rLlitCMInitF="2.07" dCodrCMInitF="0.0" rCodrCMInitF="3.35" dFidrCMInitF="0.0" rFidrCMInitF="0.0" dDdwdNCRatioInitF="" dChwdNCRatioInitF="" dBlitNCRatioInitF="" dLlitNCRatioInitF="" dCodrNCRatioInitF="" dFidrNCRatioInitF=""/>
+        <InitDebrF dDdwdCMInitF="0.0" rDdwdCMInitF="14.6" dChwdCMInitF="0.0" rChwdCMInitF="0.0" dBlitCMInitF="0.0" rBlitCMInitF="4.2" dLlitCMInitF="0.06" rLlitCMInitF="7.34" dCodrCMInitF="0.0" rCodrCMInitF="7.38" dFidrCMInitF="0.19" rFidrCMInitF="0.3" dDdwdNCRatioInitF="" dChwdNCRatioInitF="" dBlitNCRatioInitF="" dLlitNCRatioInitF="" dCodrNCRatioInitF="" dFidrNCRatioInitF=""/>
         <InitProdF fuelCMInitF="0.0" paprCMInitF="0.0" packCMInitF="0.0" furnCMInitF="0.0" fibrCMInitF="0.0" consCMInitF="0.0" resiCMInitF="0.0" fuelLfCMInitF="0.0" paprLfCMInitF="0.0" packLfCMInitF="0.0" furnLfCMInitF="0.0" fibrLfCMInitF="0.0" consLfCMInitF="0.0" resiLfCMInitF="0.0" fuelNCRatioInitF="" paprNCRatioInitF="" packNCRatioInitF="" furnNCRatioInitF="" fibrNCRatioInitF="" consNCRatioInitF="" resiNCRatioInitF=""/>
       </ForestInit>
       <EventQ count="76">
@@ -603,7 +603,7 @@
     <InitWholP tFrFracInit="FracConst" frFracInit=""/>
   </Init>
   <EventQ count="1">
-    <Event tEV="Thin" clearEV="true" onEV="true" dateOriginEV="Calendar" nYrsFromStEV="" nDaysFromStEV="" tFaqEV="InitClrNoProd" tAaqEV="Blank" aqStYrEV="1800" aqEnYrEV="2100" nmEV="Thin (clearing)" categoryEV="CatUndef" tEvent="Doc" idSP="1" regimeInstance="c7b424c1-a50d-4f91-823a-851ad1e5a642" nmRegime="New Regime">
+    <Event tEV="Thin" clearEV="true" onEV="true" dateOriginEV="Calendar" nYrsFromStEV="" nDaysFromStEV="" tFaqEV="InitClrNoProd" tAaqEV="Blank" aqStYrEV="1800" aqEnYrEV="2100" nmEV="Thin (clearing)" categoryEV="CatUndef" tEvent="Doc" idSP="1" regimeInstance="88552154-b94d-489b-96df-b909cf64ef23" nmRegime="New Regime">
       <notesEV/>
       <Thin fracAfctThin="1" userThisThinByLG="false" clearAllRemainsF="false" fracStemToDdwdExtraF="" fracBranToDdwdExtraF="" fracBarkToBlitExtraF="" fracLeafToLlitExtraF="" fracCortToCodrExtraF="" fracFirtToFidrExtraF="" replaceStemsThin="false" useBioAgeAdjThin="false" remvAvgAgeMultThin="1.0" remvMaxAgeMultThin="0.0" remvOffsetThin="0.0" multStemThin="1.0" multBranThin="1.0" multBarkThin="1.0" multLeafThin="1.0" multFirtThin="1.0" multCortThin="1.0" boostYrsThin="0.0" fixThin="" phaThin="" treeNmThin="Native species and revegetation >=500mm rainfall" yrsStemRegrowThin="0.0" yrsBarkRegrowThin="0.0" yrsBranRegrowThin="0.0" yrsLeafRegrowThin="0.0" yrsCortRegrowThin="0.0" yrsFirtRegrowThin="0.0">
         <fracGradeThin>,,,,</fracGradeThin>
@@ -617,7 +617,7 @@
     <showEvT>t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,f</showEvT>
   </EventQ>
   <OutWinSet/>
-  <LogEntrySet count="4">
+  <LogEntrySet count="6">
     <LogEntry classLE="Info" levelLE="1" tMsgLE="ConfigChangeOldNew" timeStampLE="1764118905">
       <givenArgs count="4">
         <s id="0">Type of plot</s>
@@ -642,6 +642,20 @@
     <LogEntry classLE="Info" levelLE="1" tMsgLE="UserAction" timeStampLE="1764119485">
       <givenArgs count="1">
         <s id="0">Tree 'Native species and revegetation &gt;=500mm rainfall' set as initial species</s>
+      </givenArgs>
+    </LogEntry>
+    <LogEntry classLE="Info" levelLE="1" tMsgLE="DocSave" timeStampLE="1781149231">
+      <givenArgs count="3">
+        <s id="0">Plot</s>
+        <s id="1">project 1/scenarios/3-deforestation-gt-500.plo</s>
+        <s id="2">FullCAM UI Version: 3.1.0</s>
+      </givenArgs>
+    </LogEntry>
+    <LogEntry classLE="Info" levelLE="1" tMsgLE="DocSave" timeStampLE="1781149955">
+      <givenArgs count="3">
+        <s id="0">Plot</s>
+        <s id="1">project 1/scenarios/3-deforestation-gt-500.plo</s>
+        <s id="2">FullCAM UI Version: 3.1.0</s>
       </givenArgs>
     </LogEntry>
   </LogEntrySet>

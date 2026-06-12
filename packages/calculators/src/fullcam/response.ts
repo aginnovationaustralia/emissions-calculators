@@ -1,4 +1,5 @@
 import { isDefined } from '@/common/filters';
+import { Result } from './result';
 import {
   BatchSimulationResult,
   FullCAMOutputKeyFields,
@@ -19,18 +20,18 @@ function extractFloatByColumnIndex(
 
 export const generateCsvLines = (
   csvString: string,
-): FullCAMOutputLine[] | string => {
+): Result<FullCAMOutputLine[], string> => {
   const lines = csvString.split('\n');
 
   if (lines.length < 2) {
-    return 'Invalid CSV output: no data';
+    return Result.err('Invalid CSV output: no data');
   }
 
   const csvHeader = lines[0];
   const columnNames = csvHeader.split(',');
   const firstLineValues = lines[1].split(',');
   if (columnNames.length === 3) {
-    return `Batch error: ${firstLineValues[2] ?? firstLineValues}`;
+    return Result.err(`Batch error: ${firstLineValues[2] ?? firstLineValues}`);
   }
 
   const indexCMassOfTrees = columnNames.indexOf('"C mass of trees  (tC/ha)"');
@@ -91,7 +92,7 @@ export const generateCsvLines = (
     })
     .filter(isDefined);
 
-  return summary;
+  return Result.ok(summary);
 };
 
 /*
@@ -148,19 +149,19 @@ function findLastRowForYearMonth(
   return found;
 }
 
-function requireRow(
+function findRequiredRow(
   lines: FullCAMOutputLine[],
   year: number,
   month: number,
   label: string,
-): FullCAMOutputLine {
+): Result<FullCAMOutputLine, string> {
   const row = findLastRowForYearMonth(lines, year, month);
   if (!row) {
-    throw new Error(
+    return Result.err(
       `FullCAM summary: no output row for ${label} at year=${year}, month=${month} (terminal month per reporting period).`,
     );
   }
-  return row;
+  return Result.ok(row);
 }
 
 function isInReportingYearForEmissions(
@@ -205,26 +206,38 @@ function sumFireForReportingYear(
 export const generateSummaryFromLines = (
   lines: FullCAMOutputLine[],
   options: ExtractionOptions,
-): FullCAMOutputKeyFields => {
+): Result<FullCAMOutputKeyFields, string> => {
   const { endYear, endMonth } = options;
   const terminalMonth = endMonth; // terminalStockMonth(endMonth);
   const prevYear = endYear - 1;
 
-  const rowY = requireRow(lines, endYear, terminalMonth, 'current year y');
-  const rowY1 = requireRow(lines, prevYear, terminalMonth, 'previous year y-1');
+  const rowY = findRequiredRow(lines, endYear, terminalMonth, 'current year y');
+  if (rowY.isErr) {
+    return Result.err(rowY.error);
+  }
+
+  const rowY1 = findRequiredRow(
+    lines,
+    prevYear,
+    terminalMonth,
+    'previous year y-1',
+  );
+  if (rowY1.isErr) {
+    return Result.err(rowY1.error);
+  }
 
   const { ch4, n2o } = sumFireForReportingYear(lines, endYear, endMonth);
 
-  return {
-    carbonMassInTreesPerHectare: rowY.carbonMassOfTreesTCPerHectare, // Ct,i,j,y
-    carbonMassInDebrisPerHectare: rowY.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y
-    carbonMassInTreesPerHectarePrevYear: rowY1.carbonMassOfTreesTCPerHectare, // Ct,i,j,y-1
+  return Result.ok({
+    carbonMassInTreesPerHectare: rowY.value.carbonMassOfTreesTCPerHectare, // Ct,i,j,y
+    carbonMassInDebrisPerHectare: rowY.value.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y
+    carbonMassInTreesPerHectarePrevYear: rowY1.value.carbonMassOfTreesTCPerHectare, // Ct,i,j,y-1
     carbonMassInDebrisPerHectarePrevYear:
-      rowY1.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y-1
+      rowY1.value.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y-1
     carbonMassInForestProductsPerHectare: 0, // Cp,i,j=6-7,y // TODO
     ch4FromBiomassBurningPerHectare: ch4, // Eg,i,j,y for g = CH4
     n2oFromBiomassBurningPerHectare: n2o, // Eg,i,j,y for g = N2O
-  };
+  });
 };
 
 export const extractKeyFieldsFromFullCAMOutput = (
@@ -235,18 +248,28 @@ export const extractKeyFieldsFromFullCAMOutput = (
   //   submission.area.uniqueAreaKey,
   //   submission.area.input,
   // );
-  const lines = generateCsvLines(submission.outputCsv);
-
-  if (typeof lines === 'string') {
+  const linesResult = generateCsvLines(submission.outputCsv);
+  if (linesResult.isErr) {
     return {
       uniqueAreaKey: submission.area.uniqueAreaKey,
-      error: lines,
+      error: linesResult.error,
+    };
+  }
+
+  const summaryResult = generateSummaryFromLines(
+    linesResult.value,
+    submission.area.input,
+  );
+  if (summaryResult.isErr) {
+    return {
+      uniqueAreaKey: submission.area.uniqueAreaKey,
+      error: summaryResult.error,
     };
   }
 
   return {
     uniqueAreaKey: submission.area.uniqueAreaKey,
     inputArea: submission.area.input,
-    keyFields: generateSummaryFromLines(lines, submission.area.input),
+    keyFields: summaryResult.value,
   };
 };

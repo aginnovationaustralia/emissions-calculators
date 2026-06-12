@@ -73,7 +73,13 @@ async function processLandUseKey(
   //   fs.writeFileSync(`${plotFile.uniqueAreaKey}.plo`, plotFile.plotContent),
   // );
 
-  const simulationResults = await runSimulationBatch(plotFiles, batchOptions);
+  const batchResult = await runSimulationBatch(plotFiles, batchOptions);
+
+  if (batchResult.isErr) {
+    throw new Error('Failed to run batch: ' + batchResult.error.message);
+  }
+
+  const simulationResults = batchResult.value;
 
   fs.mkdirSync('out/success', { recursive: true });
   fs.mkdirSync('out/failed', { recursive: true });
@@ -137,13 +143,13 @@ const area1: FullCAMAreaInput = {
   startMonth: 1,
   endYear: 2023,
   endMonth: 12,
+  initialTrees: false,
   plantingEvents: [
     {
       plantingDate: new Date('2010-01-01'),
-      speciesName: 'Environmental Plantings',
+      speciesName: 'Environmental plantings',
     },
   ],
-  clearingEvents: [],
   wildfireEvents: [],
   prescribedBurnEvents: [],
 };
@@ -180,6 +186,7 @@ const area4: FullCAMAreaInput = {
 
 const area5: FullCAMAreaInput = {
   ...area1,
+  initialTrees: { speciesName: 'Native Species Regeneration <500mm rainfall' },
   plantingEvents: [],
   clearingEvents: [
     {
@@ -196,7 +203,6 @@ const area5: FullCAMAreaInput = {
 const area6: FullCAMAreaInput = {
   ...area1,
   plantingEvents: [],
-  clearingEvents: [],
   wildfireEvents: [
     {
       fireDate: new Date('2010-05-01'),
@@ -214,7 +220,6 @@ const area6: FullCAMAreaInput = {
 const area7: FullCAMAreaInput = {
   ...area1,
   plantingEvents: [],
-  clearingEvents: [],
   wildfireEvents: [],
   prescribedBurnEvents: [
     {
