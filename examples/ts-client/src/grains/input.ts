@@ -36,16 +36,24 @@ export const grainsInputData: GrainsInput = {
               origin: 'Local',
               details: {
                 type: 'swine',
-                totalNitrogenExcreted: 100,
                 fractionAppliedToSoils: 0.5,
-                mms: {
-                  liquids: {
-                    fractionOfManureFromLiquidsStage1to2: 0.5,
-                    fractionOfManureToLiquidsMMS: 0.5,
-                    liquidsSystem2: 'Direct application',
-                    liquidsSystem1: 'Outdoor (Dry lot)',
+                herds: [
+                  {
+                    boars: {
+                      head: 1000,
+                      days: 180,
+                      manureAllocation: {
+                        solidsSeparatedPreTreatment: true,
+                        anaerobicLagoon: 0.3,
+                        digester: 0.3,
+                        deepLitter: 0.4,
+                        solidStorage: 0,
+                        outdoorAndFreeRange: 0,
+                        pitStorage: 0,
+                      },
+                    },
                   },
-                },
+                ],
               },
             },
           },

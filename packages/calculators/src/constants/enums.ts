@@ -137,7 +137,6 @@ export type PrimarySwineMMSType = (typeof PrimarySwineMMSTypes)[number];
 
 export const SecondarySwineMMSTypesWithoutDirectApplication = [
   'solidStorage',
-  // REVISIT: this is an uncovered anaerobic lagoon, called digester here to make constant selection easier for now.
   'anaerobicLagoon',
 ] as const;
 
