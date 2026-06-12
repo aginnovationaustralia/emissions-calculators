@@ -10,7 +10,7 @@ export function generateLulucfInput(
   pairs: InputAreaWithOutputKeyFields[],
 ): LULUCFInput {
   // Create activities that can receive the interesting values extracted from a simulation output
-  const activities = pairs.flatMap(({ inputArea, keyFields }) => {
+  const activities = pairs.flatMap(({ area, keyFields }) => {
     const burningActivity: LandUseChangeActivityInput = {
       type: 'landClearingForestToCropland',
       carbonMassInTreesCurrentYear: 0,
@@ -21,9 +21,9 @@ export function generateLulucfInput(
         keyFields.ch4FromBiomassBurningPerHectare,
       massN2OFromBiomassBurningPerHectare:
         keyFields.n2oFromBiomassBurningPerHectare,
-      activityAreaHectares: inputArea.areaHectares,
-      areaBurnt: inputArea.areaHectares,
-      region: inputArea.region,
+      activityAreaHectares: area.input.areaHectares,
+      areaBurnt: area.input.areaHectares,
+      region: area.input.region,
     };
 
     const plantingActivity: LandUseChangeActivityInput = {
@@ -36,16 +36,16 @@ export function generateLulucfInput(
         keyFields.carbonMassInDebrisPerHectarePrevYear,
       massCH4FromBiomassBurningPerHectare: 0,
       massN2OFromBiomassBurningPerHectare: 0,
-      activityAreaHectares: inputArea.areaHectares,
+      activityAreaHectares: area.input.areaHectares,
       areaBurnt: 0,
-      region: inputArea.region,
+      region: area.input.region,
     };
 
     const forestryActivity: LandUseChangeActivityInput = {
       type: 'farmForestry',
       carbonMassOfWoodProductsHarvestedPerHectare:
         keyFields.carbonMassInForestProductsPerHectare,
-      activityAreaHectares: inputArea.areaHectares,
+      activityAreaHectares: area.input.areaHectares,
       carbonMassInTreesCurrentYear: 0,
       carbonMassInTreesPreviousYear: 0,
       carbonMassInDebrisCurrentYear: 0,
@@ -56,11 +56,9 @@ export function generateLulucfInput(
   });
 
   // Pass through savanna burning and perennial crops, these have not been passed into a FullCAM request. They just go straight through to the calculator.
-  const burning = pairs.flatMap(
-    ({ inputArea }) => inputArea.savannaBurning ?? [],
-  );
+  const burning = pairs.flatMap(({ area }) => area.input.savannaBurning ?? []);
   const perennialCrops = pairs.flatMap(
-    ({ inputArea }) => inputArea.perennialCrops ?? [],
+    ({ area }) => area.input.perennialCrops ?? [],
   );
 
   const result: LULUCFInput = {

@@ -5,15 +5,12 @@ import {
   runSimulationBatch,
   RunSimulationBatchOptions,
 } from '@/fullcam';
+import { isErr, isOk } from '@/fullcam/result';
 import {
   AreaPlotContent,
-  FullCAMSubmissionFailed,
-  FullCAMSubmissionSucceeded,
+  FullCAMAreaError,
+  FullCAMSubmission,
   InputAreaWithOutputKeyFields,
-  isBatchSimulationError,
-  isBatchSimulationSuccess,
-  isFullCAMSubmissionFailed,
-  isFullCAMSubmissionSucceeded,
 } from '@/fullcam/types';
 import { mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { basename, join } from 'path';
@@ -157,8 +154,8 @@ function compareResults(
 
 describe('FullCAM scenario batch simulations', () => {
   let resultsByKey: Map<string, InputAreaWithOutputKeyFields>;
-  let succeededSubmissions: FullCAMSubmissionSucceeded[];
-  let failedSubmissions: FullCAMSubmissionFailed[];
+  let succeededSubmissions: FullCAMSubmission[];
+  let failedSubmissions: FullCAMAreaError[];
 
   beforeAll(async () => {
     const batchOptions: RunSimulationBatchOptions = {
@@ -177,8 +174,8 @@ describe('FullCAM scenario batch simulations', () => {
 
     const submissions = batchResult.value;
 
-    succeededSubmissions = submissions.filter(isFullCAMSubmissionSucceeded);
-    failedSubmissions = submissions.filter(isFullCAMSubmissionFailed);
+    succeededSubmissions = submissions.filter(isOk).map(({ value }) => value);
+    failedSubmissions = submissions.filter(isErr).map(({ error }) => error);
 
     failedSubmissions.forEach((submission) => {
       const outFailedDir = join(__dirname, 'out/failed');
@@ -208,19 +205,22 @@ describe('FullCAM scenario batch simulations', () => {
     const extractedResults = succeededSubmissions.map(
       extractKeyFieldsFromFullCAMOutput,
     );
-    const successfulExtractions = extractedResults.filter(
-      isBatchSimulationSuccess,
-    );
-    const failedExtractions = extractedResults.filter(isBatchSimulationError);
+    const successfulExtractions = extractedResults
+      .filter(isOk)
+      .map(({ value }) => value);
+    const failedExtractions = extractedResults.filter(isErr);
 
     if (failedExtractions.length > 0) {
       throw new Error(
-        `Key field extraction failed for: ${failedExtractions.map((r) => r.uniqueAreaKey).join(', ')}`,
+        `Key field extraction failed for: ${failedExtractions.map((r) => r.error.area.uniqueAreaKey).join(', ')}`,
       );
     }
 
     resultsByKey = new Map(
-      successfulExtractions.map((result) => [result.uniqueAreaKey, result]),
+      successfulExtractions.map((result) => [
+        result.area.uniqueAreaKey,
+        result,
+      ]),
     );
   });
 

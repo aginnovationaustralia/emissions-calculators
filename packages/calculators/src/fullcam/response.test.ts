@@ -1,4 +1,4 @@
-import type { FullCAMOutputLine, FullCAMSubmissionSucceeded } from './types';
+import type { FullCAMOutputLine, FullCAMSubmission } from './types';
 
 import { FullCAMAreaInput } from './input';
 import {
@@ -6,6 +6,7 @@ import {
   generateCsvLines,
   generateSummaryFromLines,
 } from './response';
+import { Result } from './result';
 
 const CSV_HEADER =
   'Year,Step In Year,Dec. Year,"C mass of trees  (tC/ha)","CH4 emitted due to fire (tCH4/ha)","N2O emitted due to fire (tN2O/ha)","C mass of forest debris  (tC/ha)"';
@@ -46,7 +47,7 @@ function submission(
   outputCsv: string,
   input: FullCAMAreaInput = minimalAreaInput(),
   uniqueAreaKey = 'area-1',
-): FullCAMSubmissionSucceeded {
+): FullCAMSubmission {
   return {
     area: {
       uniqueAreaKey,
@@ -277,31 +278,33 @@ describe('generateSummaryFromLines', () => {
 
 describe('extractKeyFieldsFromFullCAMOutput', () => {
   it('returns a batch error when CSV parsing fails', () => {
-    const result = extractKeyFieldsFromFullCAMOutput(
-      submission('only,a,header'),
-    );
+    const testInput = submission('only,a,header');
+    const result = extractKeyFieldsFromFullCAMOutput(testInput);
 
-    expect(result).toEqual({
-      uniqueAreaKey: 'area-1',
-      error: {
-        step: 'extract-results',
-        message: 'Invalid CSV output: no data',
-      },
-    });
+    expect(result).toEqual(
+      Result.err({
+        area: testInput.area,
+        error: {
+          step: 'extract-results',
+          message: 'Invalid CSV output: no data',
+        },
+      }),
+    );
   });
 
   it('returns a batch error when the batch API CSV contains an error row', () => {
-    const result = extractKeyFieldsFromFullCAMOutput(
-      submission('col1,col2,col3\na,b,Area not found'),
-    );
+    const testInput = submission('col1,col2,col3\na,b,Area not found');
+    const result = extractKeyFieldsFromFullCAMOutput(testInput);
 
-    expect(result).toEqual({
-      uniqueAreaKey: 'area-1',
-      error: {
-        step: 'extract-results',
-        message: 'Batch error: Area not found',
-      },
-    });
+    expect(result).toEqual(
+      Result.err({
+        area: testInput.area,
+        error: {
+          step: 'extract-results',
+          message: 'Batch error: Area not found',
+        },
+      }),
+    );
   });
 
   it('returns a batch error when summary extraction fails', () => {
@@ -309,15 +312,18 @@ describe('extractKeyFieldsFromFullCAMOutput', () => {
       '\n',
     );
 
-    const result = extractKeyFieldsFromFullCAMOutput(submission(outputCsv));
+    const testInput = submission(outputCsv);
+    const result = extractKeyFieldsFromFullCAMOutput(testInput);
 
-    expect(result).toMatchObject({
-      uniqueAreaKey: 'area-1',
-      error: {
-        step: 'extract-results',
-        message: expect.stringMatching(/no output row for current year y/),
-      },
-    });
+    expect(result).toEqual(
+      Result.err({
+        area: testInput.area,
+        error: {
+          step: 'extract-results',
+          message: expect.stringMatching(/no output row for current year y/),
+        },
+      }),
+    );
   });
 
   it('returns key fields when CSV parsing and summary extraction succeed', () => {
@@ -328,22 +334,22 @@ describe('extractKeyFieldsFromFullCAMOutput', () => {
       csvLine(2020, 12, 2020.92, 88, 0.5, 0.1, 8),
     ].join('\n');
 
-    const result = extractKeyFieldsFromFullCAMOutput(
-      submission(outputCsv, input, 'scenario-1'),
-    );
+    const testInput = submission(outputCsv, input, 'scenario-1');
+    const result = extractKeyFieldsFromFullCAMOutput(testInput);
 
-    expect(result).toEqual({
-      uniqueAreaKey: 'scenario-1',
-      inputArea: input,
-      keyFields: {
-        carbonMassInTreesPerHectare: 88,
-        carbonMassInDebrisPerHectare: 8,
-        carbonMassInTreesPerHectarePrevYear: 10,
-        carbonMassInDebrisPerHectarePrevYear: 1,
-        carbonMassInForestProductsPerHectare: 0,
-        ch4FromBiomassBurningPerHectare: 0.5,
-        n2oFromBiomassBurningPerHectare: 0.1,
-      },
-    });
+    expect(result).toEqual(
+      Result.ok({
+        area: testInput.area,
+        keyFields: {
+          carbonMassInTreesPerHectare: 88,
+          carbonMassInDebrisPerHectare: 8,
+          carbonMassInTreesPerHectarePrevYear: 10,
+          carbonMassInDebrisPerHectarePrevYear: 1,
+          carbonMassInForestProductsPerHectare: 0,
+          ch4FromBiomassBurningPerHectare: 0.5,
+          n2oFromBiomassBurningPerHectare: 0.1,
+        },
+      }),
+    );
   });
 });

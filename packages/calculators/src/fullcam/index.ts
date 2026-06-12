@@ -29,20 +29,13 @@ export type {
 export { generateLulucfInput } from './merge-simulation-to-package-land-use';
 export { runSimulation, updateSpatial } from './requests';
 export { extractKeyFieldsFromFullCAMOutput } from './response';
-export type { Result } from './result';
+export { isErr, isOk, Result } from './result';
+export type { Err, Ok } from './result';
 export { generateTemplateForSpatialUpdate } from './templates/spatial-update';
-export {
-  isBatchSimulationError,
-  isBatchSimulationSuccess,
-  isFullCAMSubmissionFailed,
-  isFullCAMSubmissionSucceeded,
-} from './types';
 export type {
-  BatchSimulationError,
   BatchSimulationRequest,
-  BatchSimulationResult,
+  FullCAMError,
+  FullCAMResult,
   FullCAMSubmission,
-  FullCAMSubmissionFailed,
-  FullCAMSubmissionSucceeded,
   InputAreaWithOutputKeyFields,
 } from './types';

@@ -45,61 +45,20 @@ export type AreaPlotContent = Area & {
   plotContent: string;
 };
 
-export type FullCAMSubmissionSucceeded = {
+export type FullCAMSubmission = {
   area: AreaPlotContent;
   outputCsv: string;
 };
 
-export type FullCAMSubmissionFailed = {
-  area: AreaPlotContent;
-  error: FullCAMError;
-};
-
-export type FullCAMSubmission =
-  | FullCAMSubmissionSucceeded
-  | FullCAMSubmissionFailed;
-
-export const isFullCAMSubmissionSucceeded = (
-  submission: FullCAMSubmission,
-): submission is FullCAMSubmissionSucceeded => {
-  return 'outputCsv' in submission;
-};
-
-export const isFullCAMSubmissionFailed = (
-  submission: FullCAMSubmission,
-): submission is FullCAMSubmissionFailed => {
-  return 'error' in submission;
-};
+export type FullCAMSubmissionResult = FullCAMAreaResult<FullCAMSubmission>;
 
 export type InputAreaWithOutputKeyFields = {
-  uniqueAreaKey: string;
-  inputArea: FullCAMAreaInput;
+  area: AreaPlotContent;
   keyFields: FullCAMOutputKeyFields;
 };
 
-export type BatchSimulationError = {
-  uniqueAreaKey: string;
-  error: FullCAMError;
-};
-
-// TODO: Can this switch to a FullCAMAreaResult object?
-export type BatchSimulationResult =
-  | BatchSimulationError
-  | InputAreaWithOutputKeyFields;
-
-export function isBatchSimulationError(
-  result: BatchSimulationResult,
-): result is BatchSimulationError {
-  return 'error' in result;
-}
-
-export function isBatchSimulationSuccess(
-  result: BatchSimulationResult,
-): result is InputAreaWithOutputKeyFields {
-  return !isBatchSimulationError(result);
-}
-
 export type FullCAMStep =
+  | 'parse-input'
   | 'pipeline'
   | 'create-batch'
   | 'run-batch'
@@ -110,5 +69,15 @@ export type FullCAMError = {
   step: FullCAMStep;
   message: string;
 };
+
+export type FullCAMAreaError = {
+  area: AreaPlotContent;
+  error: FullCAMError;
+};
+
+export type FullCAMAreaResult<T extends { area: AreaPlotContent }> = Result<
+  T,
+  FullCAMAreaError
+>;
 
 export type FullCAMResult<T> = Result<T, FullCAMError>;

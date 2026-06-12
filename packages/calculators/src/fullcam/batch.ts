@@ -7,7 +7,7 @@ import {
   AreaPlotContent,
   BatchSimulationRequest,
   FullCAMResult,
-  FullCAMSubmission,
+  FullCAMSubmissionResult,
 } from './types';
 
 /** Plot API v1 root; batch workflow paths omit the `/2024/` segment used by run-plotsimulation. */
@@ -409,29 +409,29 @@ function extractSimulationResults(
   areas: AreaPlotContent[],
   archive: Record<string, Uint8Array>,
   plotResults: PlotSimulationResults,
-): FullCAMSubmission[] {
-  const results = areas.map((area): FullCAMSubmission => {
+): FullCAMSubmissionResult[] {
+  const results = areas.map((area): FullCAMSubmissionResult => {
     const batchResult = plotResults.find(
       (result) => result.plotFileName === area.plotfileName,
     );
     if (!batchResult) {
-      return {
+      return Result.err({
         area,
         error: {
           step: 'extract-results',
           message: 'Could not find simulation result for plot',
         },
-      };
+      });
     }
     const batchStatus = batchResult.status;
     if (batchStatus === 'Failed') {
-      return {
+      return Result.err({
         area,
         error: {
           step: 'extract-results',
           message: batchResult.errorMessage ?? 'Unknown error',
         },
-      };
+      });
     }
     const outputCsv = findSimulationCsvInArchive(
       archive,
@@ -440,15 +440,15 @@ function extractSimulationResults(
     );
 
     if (outputCsv.isErr) {
-      return {
+      return Result.err({
         area,
         error: outputCsv.error,
-      };
+      });
     }
-    return {
+    return Result.ok({
       area,
       outputCsv: outputCsv.value,
-    };
+    });
   });
   return results;
 }
@@ -456,7 +456,7 @@ function extractSimulationResults(
 async function batchPipeline(
   plots: AreaPlotContent[],
   options: PipelineOptions,
-): Promise<FullCAMResult<FullCAMSubmission[]>> {
+): Promise<FullCAMResult<FullCAMSubmissionResult[]>> {
   // create form data for creating the batch
   // create the batch request
   const createResult = await createBatch(plots, options);
@@ -508,14 +508,17 @@ async function batchPipeline(
 export async function runSimulationBatch(
   requests: BatchSimulationRequest[],
   options?: Partial<RunSimulationBatchOptions>,
-): Promise<FullCAMResult<FullCAMSubmission[]>> {
+): Promise<FullCAMResult<FullCAMSubmissionResult[]>> {
   if (requests.length === 0) {
     return Result.ok([]);
   }
 
   const fullcamWorkflowApiKey = options?.fullcamWorkflowApiKey;
   if (!fullcamWorkflowApiKey) {
-    throw new Error('fullcamWorkflowApiKey is required');
+    return Result.err({
+      step: 'pipeline',
+      message: 'fullcamWorkflowApiKey is required',
+    });
   }
 
   const batchName =

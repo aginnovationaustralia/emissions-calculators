@@ -1,11 +1,12 @@
 import { isDefined } from '@/common/filters';
 import { Result } from './result';
 import {
-  BatchSimulationResult,
-  FullCAMOutputKeyFields,
+  AreaPlotContent,
+  FullCAMAreaResult,
   FullCAMOutputLine,
   FullCAMResult,
-  FullCAMSubmissionSucceeded,
+  FullCAMSubmission,
+  InputAreaWithOutputKeyFields,
 } from './types';
 
 function extractFloatByColumnIndex(
@@ -205,16 +206,16 @@ function sumFireForReportingYear(
  */
 export const generateSummaryFromLines = (
   lines: FullCAMOutputLine[],
-  options: ExtractionOptions,
-): FullCAMResult<FullCAMOutputKeyFields> => {
-  const { endYear, endMonth } = options;
+  area: AreaPlotContent,
+): FullCAMAreaResult<InputAreaWithOutputKeyFields> => {
+  const { endYear, endMonth } = area.input;
   // NOTE: Guidelines chapter implies end month should always be a terminal, but example plots include other final months
   const terminalMonth = endMonth;
   const prevYear = endYear - 1;
 
   const rowY = findRequiredRow(lines, endYear, terminalMonth, 'current year y');
   if (rowY.isErr) {
-    return Result.err(rowY.error);
+    return Result.err({ area, error: rowY.error });
   }
 
   const rowY1 = findRequiredRow(
@@ -224,50 +225,39 @@ export const generateSummaryFromLines = (
     'previous year y-1',
   );
   if (rowY1.isErr) {
-    return Result.err(rowY1.error);
+    return Result.err({ area, error: rowY1.error });
   }
 
   const { ch4, n2o } = sumFireForReportingYear(lines, endYear, endMonth);
 
   return Result.ok({
-    carbonMassInTreesPerHectare: rowY.value.carbonMassOfTreesTCPerHectare, // Ct,i,j,y
-    carbonMassInDebrisPerHectare:
-      rowY.value.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y
-    carbonMassInTreesPerHectarePrevYear:
-      rowY1.value.carbonMassOfTreesTCPerHectare, // Ct,i,j,y-1
-    carbonMassInDebrisPerHectarePrevYear:
-      rowY1.value.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y-1
-    carbonMassInForestProductsPerHectare: 0, // Cp,i,j=6-7,y // TODO
-    ch4FromBiomassBurningPerHectare: ch4, // Eg,i,j,y for g = CH4
-    n2oFromBiomassBurningPerHectare: n2o, // Eg,i,j,y for g = N2O
+    area,
+    keyFields: {
+      carbonMassInTreesPerHectare: rowY.value.carbonMassOfTreesTCPerHectare, // Ct,i,j,y
+      carbonMassInDebrisPerHectare:
+        rowY.value.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y
+      carbonMassInTreesPerHectarePrevYear:
+        rowY1.value.carbonMassOfTreesTCPerHectare, // Ct,i,j,y-1
+      carbonMassInDebrisPerHectarePrevYear:
+        rowY1.value.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y-1
+      carbonMassInForestProductsPerHectare: 0, // Cp,i,j=6-7,y // TODO
+      ch4FromBiomassBurningPerHectare: ch4, // Eg,i,j,y for g = CH4
+      n2oFromBiomassBurningPerHectare: n2o, // Eg,i,j,y for g = N2O
+    },
   });
 };
 
 export const extractKeyFieldsFromFullCAMOutput = (
-  submission: FullCAMSubmissionSucceeded,
-): BatchSimulationResult => {
-  const linesResult = generateCsvLines(submission.outputCsv);
+  submission: FullCAMSubmission,
+): FullCAMAreaResult<InputAreaWithOutputKeyFields> => {
+  const { area, outputCsv } = submission;
+  const linesResult = generateCsvLines(outputCsv);
   if (linesResult.isErr) {
-    return {
-      uniqueAreaKey: submission.area.uniqueAreaKey,
+    return Result.err({
+      area,
       error: linesResult.error,
-    };
+    });
   }
 
-  const summaryResult = generateSummaryFromLines(
-    linesResult.value,
-    submission.area.input,
-  );
-  if (summaryResult.isErr) {
-    return {
-      uniqueAreaKey: submission.area.uniqueAreaKey,
-      error: summaryResult.error,
-    };
-  }
-
-  return {
-    uniqueAreaKey: submission.area.uniqueAreaKey,
-    inputArea: submission.area.input,
-    keyFields: summaryResult.value,
-  };
+  return generateSummaryFromLines(linesResult.value, area);
 };

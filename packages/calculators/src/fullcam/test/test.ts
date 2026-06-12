@@ -18,11 +18,7 @@ import {
   RunSimulationBatchOptions,
 } from '..';
 import { extractKeyFieldsFromFullCAMOutput } from '../response';
-import {
-  isBatchSimulationSuccess,
-  isFullCAMSubmissionFailed,
-  isFullCAMSubmissionSucceeded,
-} from '../types';
+import { isErr, isOk } from '../result';
 
 function uniqueHash(input: FullCAMAreaInput, index: number): string {
   const hash = createHash('sha256').update(JSON.stringify(input)).digest('hex');
@@ -84,27 +80,27 @@ async function processLandUseKey(
   fs.mkdirSync('out/success', { recursive: true });
   fs.mkdirSync('out/failed', { recursive: true });
 
-  const succeededResults = simulationResults.filter(
-    isFullCAMSubmissionSucceeded,
-  );
-  const failedResults = simulationResults.filter(isFullCAMSubmissionFailed);
+  const succeededResults = simulationResults
+    .filter(isOk)
+    .map(({ value }) => value);
+  const failedResults = simulationResults.filter(isErr);
   if (failedResults.length > 0) {
     console.warn(
       'Warning: some batch simulations failed:',
-      failedResults.map((r) => ({
-        uniqueAreaKey: r.area.uniqueAreaKey,
-        input: r.area.input,
-        error: r.error,
+      failedResults.map(({ error }) => ({
+        uniqueAreaKey: error.area.uniqueAreaKey,
+        input: error.area.input,
+        error: error.error,
       })),
     );
-    failedResults.forEach((r) => {
+    failedResults.forEach(({ error }) => {
       fs.writeFileSync(
-        `out/failed/${r.area.uniqueAreaKey}.input.json`,
-        JSON.stringify(r.area.input, null, 2),
+        `out/failed/${error.area.uniqueAreaKey}.input.json`,
+        JSON.stringify(error.area.input, null, 2),
       );
       fs.writeFileSync(
-        `out/failed/${r.area.uniqueAreaKey}.plo`,
-        r.area.plotContent,
+        `out/failed/${error.area.uniqueAreaKey}.plo`,
+        error.area.plotContent,
       );
     });
   }
@@ -116,11 +112,14 @@ async function processLandUseKey(
   //   JSON.stringify(simulationResults, null, 2),
   // );
 
-  succeededResults.forEach((r) => {
-    fs.writeFileSync(`out/success/${r.area.uniqueAreaKey}.csv`, r.outputCsv);
+  succeededResults.forEach((value) => {
     fs.writeFileSync(
-      `out/success/${r.area.uniqueAreaKey}.plo`,
-      r.area.plotContent,
+      `out/success/${value.area.uniqueAreaKey}.csv`,
+      value.outputCsv,
+    );
+    fs.writeFileSync(
+      `out/success/${value.area.uniqueAreaKey}.plo`,
+      value.area.plotContent,
     );
   });
 
@@ -129,7 +128,7 @@ async function processLandUseKey(
   // console.log('batchResults', batchResults.length);
   // console.dir(batchResults, { depth: null });
 
-  const successfulResults = batchResults.filter(isBatchSimulationSuccess);
+  const successfulResults = batchResults.filter(isOk).map(({ value }) => value);
 
   return generateLulucfInput(successfulResults);
 }
