@@ -68,7 +68,7 @@ export const getSimpleCalculatorInput = (
   const state = checkPureState(cell('A'));
   const productionSystem = checkGrazingProductionSystemsWithRainfall(cell('C'));
   const climateZone = checkClimate(cell('D'));
-  const isInLeachingZone = Boolean(cell('E'));
+  const isInLeachingZone = cell('E') === 'true';
 
   const allocationStage2 = {
     solidStorage: Number(cell('O')),

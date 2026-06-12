@@ -19,7 +19,7 @@ export function calculateMassOfNitrogenAppliedToSoils(
   if (livestockManureIsSwine(manureInput)) {
     return calculateMassOfNitrogenAppliedToSoilsForSwine(
       manureInput,
-      crop,
+      crop.isInLeachingZone,
       constants,
     );
   }

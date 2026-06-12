@@ -3,7 +3,7 @@ import { z } from 'zod';
 import {
   SwineBoarsInputSchema,
   SwineGiltsInputSchema,
-  SwineSlaughterPigsInputSchema,
+  SwineOtherInputSchema,
   SwineSowsInputSchema,
 } from './swine-class.input';
 
@@ -11,7 +11,7 @@ export const SwineHerdInputSchema = object({
   boars: SwineBoarsInputSchema.optional(),
   sows: SwineSowsInputSchema.optional(),
   gilts: SwineGiltsInputSchema.optional(),
-  slaughterPigs: SwineSlaughterPigsInputSchema.optional(),
+  others: SwineOtherInputSchema.optional(),
 });
 
 export type SwineHerdInput = z.input<typeof SwineHerdInputSchema>;

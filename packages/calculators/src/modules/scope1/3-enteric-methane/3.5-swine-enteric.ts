@@ -11,7 +11,6 @@ import { sum } from '@/tools/sum';
 import { MassPerHeadPerDay } from '@/tools/units';
 
 function calculateEntericMethaneForClass(
-  herd: SwineHerdInputTransformed,
   className: SwineClass,
   classInput: SwineSpecificClassInputTransformed | undefined,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
@@ -20,9 +19,9 @@ function calculateEntericMethaneForClass(
   if (!classInput) {
     return num(0);
   }
-  const { head, averageNumberOfDays, method2AverageFeedIntake } = classInput;
+  const { head, days, method2AverageFeedIntake } = classInput;
   const Nj = head.named(`Nj=${className}`);
-  const Dj = averageNumberOfDays.named(`Dj=${className}`);
+  const Dj = days.named(`Dj=${className}`);
   const Ij =
     method2AverageFeedIntake ??
     selectConstant(
@@ -54,19 +53,13 @@ function calculateEntericMethaneForClass(
 }
 
 function calculateEntericMethaneForHerd(
-  input: SwineInputTransformed,
   herd: SwineHerdInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) {
   const entries = entriesFromObject(herd);
 
   const classResults = entries.map(([className, classInput]) => {
-    return calculateEntericMethaneForClass(
-      herd,
-      className,
-      classInput,
-      context,
-    );
+    return calculateEntericMethaneForClass(className, classInput, context);
   });
   return sum(classResults);
 }
@@ -82,7 +75,7 @@ export function calculate35SwineEntericMethane(
   */
   const { herds } = input;
   const herdResults = herds.map((herd) => {
-    return calculateEntericMethaneForHerd(input, herd, context);
+    return calculateEntericMethaneForHerd(herd, context);
   });
   return sum(herdResults).named('Eenteric');
 }

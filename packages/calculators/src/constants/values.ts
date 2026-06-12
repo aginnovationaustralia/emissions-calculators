@@ -1757,39 +1757,98 @@ Single Super Phosphate (SSP) 0.26
   EF_N2O_LEACHING_AND_RUNOFF: massPerMass('N2O', 'N', 0.011),
 };
 
+const allPureStatesWithValue = (
+  rawValue: number,
+): Record<PureState, RealNumber> => {
+  const value = realNumber(rawValue);
+  return {
+    ACT: value,
+    NSW: value,
+    VIC: value,
+    QLD: value,
+    SA: value,
+    TAS: value,
+    NT: value,
+    WA: value,
+  };
+};
+
 export const swineConstants: SwineConstants = {
   name: 'SWINE',
 
   // A.1.6.2
   // A.1.6.3
   MMS: {
-    'Outdoor (Dry lot)': {
+    outdoorAndFreeRange: {
       N_VOLATISED_EF: realNumber(0.3),
       N2O_EF: realNumber(0.02),
+      VOLATILE_SOLIDS_LOST: realNumber(0),
+      /**
+       * REVISIT: There were no constants provided for ACT, so I've used the constants
+       * for NSW for the time being.
+       */
+      METHANE_CONVERSION_FACTOR_BY_STATE: {
+        ...allPureStatesWithValue(0.01),
+        QLD: realNumber(0.03),
+        NT: realNumber(0.03),
+      },
+      FracGASM: massPerMass('Volatilised N', 'N', 0.3),
+      EFm: massPerMass('N2O', 'N', 0.02),
     },
-    'Deep litter': {
+    deepLitter: {
       N_VOLATISED_EF: realNumber(0.125),
       N2O_EF: realNumber(0.01),
+      VOLATILE_SOLIDS_LOST: realNumber(0.05),
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.04),
+      FracGASM: massPerMass('Volatilised N', 'N', 0.125),
+      EFm: massPerMass('N2O', 'N', 0.01),
     },
-    'Stockpile (Solid storage)': {
+    solidStorage: {
       N_VOLATISED_EF: realNumber(0.2),
       N2O_EF: realNumber(0.005),
+      VOLATILE_SOLIDS_LOST: realNumber(0),
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.02),
+      FracGASM: massPerMass('Volatilised N', 'N', 0.2),
+      EFm: massPerMass('N2O', 'N', 0.005),
     },
-    'Effluent pond (Uncovered anaerobic lagoon)': {
+    anaerobicLagoon: {
       N_VOLATISED_EF: realNumber(0.55),
       N2O_EF: realNumber(0),
+      VOLATILE_SOLIDS_LOST: realNumber(0),
+      METHANE_CONVERSION_FACTOR_BY_STATE: {
+        ACT: realNumber(0.75),
+        NSW: realNumber(0.75),
+        QLD: realNumber(0.78),
+        NT: realNumber(0.78),
+        SA: realNumber(0.75),
+        TAS: realNumber(0.7),
+        VIC: realNumber(0.74),
+        WA: realNumber(0.76),
+      },
+      FracGASM: massPerMass('Volatilised N', 'N', 0.55),
+      EFm: massPerMass('N2O', 'N', 0),
     },
-    'Anaerobic digestor / Covered lagoon': {
+    digester: {
       N_VOLATISED_EF: realNumber(0),
       N2O_EF: realNumber(0),
+      VOLATILE_SOLIDS_LOST: realNumber(0.75),
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.1),
+      FracGASM: massPerMass('Volatilised N', 'N', 0),
+      EFm: massPerMass('N2O', 'N', 0),
     },
-    'Short HRT tank storage < 1 month (pit storage)': {
+    pitStorage: {
       N_VOLATISED_EF: realNumber(0.25),
       N2O_EF: realNumber(0.002),
+      VOLATILE_SOLIDS_LOST: realNumber(0),
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0.03),
+      FracGASM: massPerMass('Volatilised N', 'N', 0.25),
+      EFm: massPerMass('N2O', 'N', 0.002),
     },
-    'Direct application': {
+    directApplication: {
       N_VOLATISED_EF: realNumber(0),
       N2O_EF: realNumber(0),
+      VOLATILE_SOLIDS_LOST: realNumber(0),
+      METHANE_CONVERSION_FACTOR_BY_STATE: allPureStatesWithValue(0),
     },
   },
 
@@ -1805,17 +1864,34 @@ export const swineConstants: SwineConstants = {
   SWINE_CLASS_FACTORS: {
     boars: {
       FEED_INTAKE: massPerHeadPerDay('DryMatter', 2.62),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.4),
+      NITROGEN_IN_WASTE: massPerHeadPerDay('N', 0.046),
     },
     sows: {
       FEED_INTAKE: massPerHeadPerDay('DryMatter', 2.3),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.46),
+      NITROGEN_IN_WASTE: massPerHeadPerDay('N', 0.049),
     },
     gilts: {
       FEED_INTAKE: massPerHeadPerDay('DryMatter', 2.5),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.55),
+      NITROGEN_IN_WASTE: massPerHeadPerDay('N', 0.046),
     },
-    slaughterPigs: {
+    others: {
       FEED_INTAKE: massPerHeadPerDay('DryMatter', 1.71),
+      VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.39),
+      NITROGEN_IN_WASTE: massPerHeadPerDay('N', 11.4 / 365), // TODO: Is this conversion correct? It seems to be in the right ballpark
     },
   },
+
+  EMISSIONS_POTENTIAL: volumePerMass(
+    'CH4',
+    'Volatile Solids',
+    cubicMetresToLitres(0.19),
+  ),
+
+  DEFAULT_FRACTION_SOLIDS_SEPARATED: realNumber(0.25),
+  DEFAULT_FRACTION_NITROGEN_SEPARATED: realNumber(0.25),
 };
 
 export const feedlotConstants: FeedlotConstants = {
@@ -2067,22 +2143,6 @@ export const dairyConstants: DairyConstants = {
   //   bullsGt1: undefined,
   //   bullsLt1: undefined
   // }
-};
-
-const allPureStatesWithValue = (
-  rawValue: number,
-): Record<PureState, RealNumber> => {
-  const value = realNumber(rawValue);
-  return {
-    ACT: value,
-    NSW: value,
-    VIC: value,
-    QLD: value,
-    SA: value,
-    TAS: value,
-    NT: value,
-    WA: value,
-  };
 };
 
 const allTemperaturesWithValues = (
@@ -2467,6 +2527,8 @@ export const livestockConstants: LivestockConstants = {
     directProcessing: allTemperaturesWithValues(0),
     directApplication: allTemperaturesWithValues(0),
     pastureRangeAndPaddock: allTemperaturesWithValues(0.0047),
+    deepLitter: allTemperaturesWithValues(0.02),
+    pitStorage: allTemperaturesWithValues(0.03),
   },
 
   OTHER_LIVESTOCK_METHANE_CONVERSION_BY_STATE: {

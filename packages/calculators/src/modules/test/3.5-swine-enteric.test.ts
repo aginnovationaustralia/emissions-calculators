@@ -10,6 +10,7 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from './sheet-comparison';
+import { SwineClass } from '@/constants/enums';
 
 const columnCustomFeedIntake = 'C';
 const columnHead = 'F';
@@ -31,7 +32,9 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const readSwineClass = (offset: number) => {
+  const readSwineClass = (
+    offset: number,
+  ): SwineInput['herds'][number][SwineClass] => {
     if (cell(columnHead, offset) === undefined) {
       return undefined;
     }
@@ -41,8 +44,18 @@ const getCalculatorInput = (
       method === '2' && customFeedIntake ? Number(customFeedIntake) : undefined;
     return {
       head: Number(cell(columnHead, offset)),
-      averageNumberOfDays: Number(cell(columnAverageDuration, offset)),
+      days: Number(cell(columnAverageDuration, offset)),
       method2AverageFeedIntake,
+      // No effect on enteric fermentation calculation.
+      manureAllocation: {
+        deepLitter: 0,
+        digester: 0,
+        pitStorage: 0,
+        solidStorage: 0,
+        anaerobicLagoon: 0,
+        outdoorAndFreeRange: 1,
+        solidsSeparatedPreTreatment: false,
+      },
     };
   };
 
@@ -52,9 +65,13 @@ const getCalculatorInput = (
         boars: readSwineClass(0),
         sows: readSwineClass(1),
         gilts: readSwineClass(2),
-        slaughterPigs: readSwineClass(3),
+        others: readSwineClass(3),
       },
     ],
+    // None of these inputs affect the enteric ch4 calculation.
+    state: 'ACT',
+    productionSystem: 'Non-irrigated pasture',
+    isInLeachingZone: false,
   };
 
   return SwineInputSchema.parse(swineInput);
