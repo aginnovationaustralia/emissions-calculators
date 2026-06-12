@@ -8,7 +8,7 @@ import { LULUCFWithFullCAMInputSchema } from './input';
 // NOTE: These types are built to be used on a public API. The 'input' mode can be intercepted and sent to the FullCAM API
 // The 'output' mode means the values are sourced from FullCAM outputs, and it is ready to be run through the calculator.
 export const FullCAMOutputsSchema = object({
-  fullcamMode: z.literal('outputs'),
+  fullcamMode: z.literal('outputs'), // TODO: Use ready vs needs-upgrade
   areas: z.array(LULUCFInputSchema),
 });
 

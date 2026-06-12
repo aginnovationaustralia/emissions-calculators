@@ -4,6 +4,7 @@ import {
   BatchSimulationResult,
   FullCAMOutputKeyFields,
   FullCAMOutputLine,
+  FullCAMResult,
   FullCAMSubmissionSucceeded,
 } from './types';
 
@@ -20,18 +21,24 @@ function extractFloatByColumnIndex(
 
 export const generateCsvLines = (
   csvString: string,
-): Result<FullCAMOutputLine[], string> => {
+): FullCAMResult<FullCAMOutputLine[]> => {
   const lines = csvString.split('\n');
 
   if (lines.length < 2) {
-    return Result.err('Invalid CSV output: no data');
+    return Result.err({
+      step: 'extract-results',
+      message: 'Invalid CSV output: no data',
+    });
   }
 
   const csvHeader = lines[0];
   const columnNames = csvHeader.split(',');
   const firstLineValues = lines[1].split(',');
   if (columnNames.length === 3) {
-    return Result.err(`Batch error: ${firstLineValues[2] ?? firstLineValues}`);
+    return Result.err({
+      step: 'extract-results',
+      message: `Batch error: ${firstLineValues[2] ?? firstLineValues}`,
+    });
   }
 
   const indexCMassOfTrees = columnNames.indexOf('"C mass of trees  (tC/ha)"');
@@ -59,10 +66,6 @@ export const generateCsvLines = (
         return undefined;
       }
       const values = line.split(',');
-
-      // if (values.length !== 7) {
-      //   throw new Error(`Invalid line '${line}' in csv output: ${csvString}`);
-      // }
 
       const valueYear = values[indexYear];
       const valueMonth = values[indexMonth];
@@ -131,10 +134,6 @@ export type ExtractionOptions = {
   endMonth: number;
 };
 
-// function terminalStockMonth(endMonth: number): 6 | 12 {
-//   return endMonth === 6 ? 6 : 12;
-// }
-
 function findLastRowForYearMonth(
   lines: FullCAMOutputLine[],
   year: number,
@@ -154,12 +153,13 @@ function findRequiredRow(
   year: number,
   month: number,
   label: string,
-): Result<FullCAMOutputLine, string> {
+): FullCAMResult<FullCAMOutputLine> {
   const row = findLastRowForYearMonth(lines, year, month);
   if (!row) {
-    return Result.err(
-      `FullCAM summary: no output row for ${label} at year=${year}, month=${month} (terminal month per reporting period).`,
-    );
+    return Result.err({
+      step: 'extract-results',
+      message: `FullCAM summary: no output row for ${label} at year=${year}, month=${month} (terminal month per reporting period).`,
+    });
   }
   return Result.ok(row);
 }
@@ -206,9 +206,10 @@ function sumFireForReportingYear(
 export const generateSummaryFromLines = (
   lines: FullCAMOutputLine[],
   options: ExtractionOptions,
-): Result<FullCAMOutputKeyFields, string> => {
+): FullCAMResult<FullCAMOutputKeyFields> => {
   const { endYear, endMonth } = options;
-  const terminalMonth = endMonth; // terminalStockMonth(endMonth);
+  // NOTE: Guidelines chapter implies end month should always be a terminal, but example plots include other final months
+  const terminalMonth = endMonth;
   const prevYear = endYear - 1;
 
   const rowY = findRequiredRow(lines, endYear, terminalMonth, 'current year y');
@@ -230,8 +231,10 @@ export const generateSummaryFromLines = (
 
   return Result.ok({
     carbonMassInTreesPerHectare: rowY.value.carbonMassOfTreesTCPerHectare, // Ct,i,j,y
-    carbonMassInDebrisPerHectare: rowY.value.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y
-    carbonMassInTreesPerHectarePrevYear: rowY1.value.carbonMassOfTreesTCPerHectare, // Ct,i,j,y-1
+    carbonMassInDebrisPerHectare:
+      rowY.value.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y
+    carbonMassInTreesPerHectarePrevYear:
+      rowY1.value.carbonMassOfTreesTCPerHectare, // Ct,i,j,y-1
     carbonMassInDebrisPerHectarePrevYear:
       rowY1.value.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y-1
     carbonMassInForestProductsPerHectare: 0, // Cp,i,j=6-7,y // TODO
@@ -243,11 +246,6 @@ export const generateSummaryFromLines = (
 export const extractKeyFieldsFromFullCAMOutput = (
   submission: FullCAMSubmissionSucceeded,
 ): BatchSimulationResult => {
-  // console.log(
-  //   'extracting key fields from fullcam output',
-  //   submission.area.uniqueAreaKey,
-  //   submission.area.input,
-  // );
   const linesResult = generateCsvLines(submission.outputCsv);
   if (linesResult.isErr) {
     return {

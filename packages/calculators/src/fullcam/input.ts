@@ -27,6 +27,7 @@ const ClearingEventSchema = z.object({
   percentThinned: z.number().min(0).max(100),
 });
 
+// TODO: Tidy extra input keys
 const WildfireEventSchema = z.object({
   latitude: z.number().optional(),
   longitude: z.number().optional(),
@@ -67,6 +68,8 @@ const FullCAMBaseAreaSchema = object({
   savannaBurning: z.array(BurningInputSchema).optional(),
   perennialCrops: z.array(PerennialCropInputSchema).optional(),
 });
+
+// Clearing events are only considered valid by FullCAM if trees were already in place
 export const FullCAMClearableAreaSchema = FullCAMBaseAreaSchema.extend({
   initialTrees: object({ speciesName: z.enum(TreeSpeciesNames) }),
   clearingEvents: z.array(ClearingEventSchema),

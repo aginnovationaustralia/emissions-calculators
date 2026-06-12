@@ -6,6 +6,7 @@ import { Result } from './result';
 import {
   AreaPlotContent,
   BatchSimulationRequest,
+  FullCAMResult,
   FullCAMSubmission,
 } from './types';
 
@@ -104,7 +105,7 @@ function findSimulationCsvInArchive(
   archive: Record<string, Uint8Array>,
   plotStem: string,
   areaKey: string,
-): string {
+): FullCAMResult<string> {
   const csvPaths = Object.keys(archive).filter(
     (p) =>
       !p.endsWith('/') &&
@@ -126,13 +127,15 @@ function findSimulationCsvInArchive(
     byStem ?? byAreaKey ?? (csvPaths.length === 1 ? csvPaths[0] : undefined);
 
   if (!chosen) {
-    throw new Error(
-      `Could not map simulation CSV for plot stem "${plotStem}" (areaKey prefix ${areaKey.slice(0, 32)}). ` +
+    return Result.err({
+      step: 'extract-results',
+      message:
+        `Could not map simulation CSV for plot stem "${plotStem}" (areaKey prefix ${areaKey.slice(0, 32)}). ` +
         `Found ${csvPaths.length} CSV paths in archive.`,
-    );
+    });
   }
 
-  return new TextDecoder('utf-8').decode(archive[chosen]);
+  return Result.ok(new TextDecoder('utf-8').decode(archive[chosen]));
 }
 
 export type RunSimulationBatchOptions = {
@@ -186,7 +189,7 @@ const defaultFetcher: Fetcher = async (url, options) => {
 async function createBatch(
   plots: AreaPlotContent[],
   { fullcamWorkflowApiKey, fetcher }: PipelineOptions,
-): Promise<Result<string, Error>> {
+): Promise<FullCAMResult<string>> {
   const formData = new FormData();
   for (let i = 0; i < plots.length; i++) {
     const r = plots[i];
@@ -205,33 +208,38 @@ async function createBatch(
 
   const createText = await createRes.text();
   if (!createRes.ok || (createRes.status !== 200 && createRes.status !== 207)) {
-    throw new Error(
-      `FullCAM fullcam-simulator/batches failed: ${createRes.status} ${createRes.statusText} ${createText}`,
-    );
+    return Result.err({
+      step: 'create-batch',
+      message: `FullCAM fullcam-simulator/batches failed: ${createRes.status} ${createRes.statusText} ${createText}`,
+    });
   }
 
   const created = parseCreateBatchResponse(createText);
   const batchId = created.batchId;
   if (!batchId) {
-    throw new Error(
-      `create batch: missing batchId in response: ${createText.slice(0, 800)}`,
-    );
+    return Result.err({
+      step: 'create-batch',
+      message: `create batch: missing batchId in response: ${createText.slice(0, 800)}`,
+    });
   }
 
   const uploads = created.plotFileUploadResults ?? [];
   if (uploads.length !== plots.length) {
-    throw new Error(
-      `create batch: expected ${plots.length} upload results, got ${uploads.length}`,
-    );
+    return Result.err({
+      step: 'create-batch',
+      message: `create batch: expected ${plots.length} upload results, got ${uploads.length}`,
+    });
   }
 
   for (let i = 0; i < uploads.length; i++) {
     const u = uploads[i];
     if (u.httpStatusCode !== 201) {
-      throw new Error(
-        `Plot file upload failed for ${plots[i].uniqueAreaKey}: HTTP ${u.httpStatusCode} ` +
+      return Result.err({
+        step: 'create-batch',
+        message:
+          `Plot file upload failed for ${plots[i].uniqueAreaKey}: HTTP ${u.httpStatusCode} ` +
           `(originalFileName=${u.originalFileName}, uploadedFileName=${u.uploadedFileName})`,
-      );
+      });
     }
   }
 
@@ -246,7 +254,7 @@ async function runBatch(
     batchName,
     notificationEmail,
   }: PipelineOptions,
-): Promise<Result<void, Error>> {
+): Promise<FullCAMResult<void>> {
   const version = '2024';
   const isUpdatingSpatialAndSpecies = true;
   const body = JSON.stringify({
@@ -268,14 +276,16 @@ async function runBatch(
 
   const runText = await runRes.text();
   if (runRes.status === 409) {
-    throw new Error(
-      `batches-run conflict (409): workflow may already exist for batch ${batchId}: ${runText}`,
-    );
+    return Result.err({
+      step: 'run-batch',
+      message: `batches-run conflict (409): workflow may already exist for batch ${batchId}: ${runText}`,
+    });
   }
   if (!runRes.ok || runRes.status !== 202) {
-    throw new Error(
-      `fullcam-simulator/batches-run failed: ${runRes.status} ${runRes.statusText}`,
-    );
+    return Result.err({
+      step: 'run-batch',
+      message: `fullcam-simulator/batches-run failed: ${runRes.status} ${runRes.statusText} ${runText}`,
+    });
   }
   return Result.ok(void 0);
 }
@@ -300,7 +310,6 @@ const batchStatusNotCompleteSchema = z.object({
 });
 
 type BatchStatusCompleted = z.infer<typeof batchStatusCompletedSchema>;
-// type BatchStatusNotComplete = z.infer<typeof batchStatusNotCompleteSchema>;
 type PlotSimulationResults =
   BatchStatusCompleted['output']['plotSimulationResults'];
 
@@ -318,7 +327,7 @@ const isBatchStatusCompleted = (
 async function waitBatch(
   batchId: string,
   { fullcamWorkflowApiKey, fetcher }: PipelineOptions,
-): Promise<Result<PlotSimulationResults, Error>> {
+): Promise<FullCAMResult<PlotSimulationResults>> {
   const pollIntervalMs = DEFAULT_POLL_MS;
   const maxWaitMs = DEFAULT_MAX_WAIT_MS;
   const deadline = Date.now() + maxWaitMs;
@@ -336,9 +345,10 @@ async function waitBatch(
     const parseResult = batchStatusSchema.safeParse(JSON.parse(lastStatusText));
 
     if (!parseResult.success) {
-      throw new Error(
-        `Could not parse status response for batch ${batchId}. Last status: ${lastStatusText.slice(0, 2000)}. Message: ${parseResult.error.message}`,
-      );
+      return Result.err({
+        step: 'wait-batch',
+        message: `Could not parse status response for batch ${batchId}. Last status: ${lastStatusText.slice(0, 2000)}. Message: ${parseResult.error.message}`,
+      });
     }
 
     lastPhase = parseResult.data.runtimeStatus;
@@ -347,19 +357,20 @@ async function waitBatch(
       break;
     }
     if (lastPhase === 'Failed') {
-      throw new Error(
-        `FullCAM batch workflow failed for batch ${batchId}. Last status: ${lastStatusText.slice(0, 2000)}`,
-      );
+      return Result.err({
+        step: 'wait-batch',
+        message: `FullCAM batch workflow failed for batch ${batchId}. Last status: ${lastStatusText.slice(0, 2000)}`,
+      });
     }
 
     await delay(pollIntervalMs);
   }
 
   if (lastPhase !== 'Completed') {
-    throw new Error(
-      `Timed out after ${maxWaitMs}ms waiting for batch ${batchId} to complete. ` +
-        `Last phase=${lastPhase} body=${lastStatusText.slice(0, 1500)}`,
-    );
+    return Result.err({
+      step: 'wait-batch',
+      message: `Timed out after ${maxWaitMs}ms waiting for batch ${batchId} to complete. Last phase=${lastPhase} body=${lastStatusText.slice(0, 1500)}`,
+    });
   }
   return Result.ok(plotResults);
 }
@@ -367,7 +378,7 @@ async function waitBatch(
 async function fetchArchive(
   batchId: string,
   { fullcamWorkflowApiKey, fetcher }: PipelineOptions,
-): Promise<Result<Record<string, Uint8Array>, Error>> {
+): Promise<FullCAMResult<Record<string, Uint8Array>>> {
   const zipRes = await fetcher(batchResultPackageUrl(batchId), {
     method: 'GET',
     fullcamWorkflowApiKey,
@@ -375,9 +386,10 @@ async function fetchArchive(
 
   if (!zipRes.ok) {
     const zipErr = await zipRes.text();
-    throw new Error(
-      `simulation-result-package failed: ${zipRes.status} ${zipRes.statusText} ${zipErr.slice(0, 800)}`,
-    );
+    return Result.err({
+      step: 'fetch-archive',
+      message: `simulation-result-package failed: ${zipRes.status} ${zipRes.statusText} ${zipErr.slice(0, 800)}`,
+    });
   }
 
   const zipBuf = new Uint8Array(await zipRes.arrayBuffer());
@@ -385,9 +397,10 @@ async function fetchArchive(
   try {
     archive = unzipSync(zipBuf);
   } catch (e) {
-    throw new Error(
-      `Failed to unzip simulation result package for batch ${batchId}: ${e instanceof Error ? e.message : String(e)}`,
-    );
+    return Result.err({
+      step: 'fetch-archive',
+      message: `Failed to unzip simulation result package for batch ${batchId}: ${e instanceof Error ? e.message : String(e)}`,
+    });
   }
   return Result.ok(archive);
 }
@@ -404,14 +417,20 @@ function extractSimulationResults(
     if (!batchResult) {
       return {
         area,
-        error: 'Could not find simulation result for plot',
+        error: {
+          step: 'extract-results',
+          message: 'Could not find simulation result for plot',
+        },
       };
     }
     const batchStatus = batchResult.status;
     if (batchStatus === 'Failed') {
       return {
         area,
-        error: batchResult.errorMessage ?? 'Unknown error',
+        error: {
+          step: 'extract-results',
+          message: batchResult.errorMessage ?? 'Unknown error',
+        },
       };
     }
     const outputCsv = findSimulationCsvInArchive(
@@ -419,9 +438,16 @@ function extractSimulationResults(
       area.plotfileName,
       area.uniqueAreaKey,
     );
+
+    if (outputCsv.isErr) {
+      return {
+        area,
+        error: outputCsv.error,
+      };
+    }
     return {
       area,
-      outputCsv,
+      outputCsv: outputCsv.value,
     };
   });
   return results;
@@ -430,7 +456,7 @@ function extractSimulationResults(
 async function batchPipeline(
   plots: AreaPlotContent[],
   options: PipelineOptions,
-): Promise<Result<FullCAMSubmission[], Error>> {
+): Promise<FullCAMResult<FullCAMSubmission[]>> {
   // create form data for creating the batch
   // create the batch request
   const createResult = await createBatch(plots, options);
@@ -482,7 +508,7 @@ async function batchPipeline(
 export async function runSimulationBatch(
   requests: BatchSimulationRequest[],
   options?: Partial<RunSimulationBatchOptions>,
-): Promise<Result<FullCAMSubmission[], Error>> {
+): Promise<FullCAMResult<FullCAMSubmission[]>> {
   if (requests.length === 0) {
     return Result.ok([]);
   }
@@ -501,9 +527,11 @@ export async function runSimulationBatch(
     options?.notificationEmail ?? process.env.FULLCAM_BATCH_NOTIFICATION_EMAIL;
 
   if (!notificationEmail) {
-    throw new Error(
-      'runSimulationBatch requires notificationEmail in options or FULLCAM_BATCH_NOTIFICATION_EMAIL',
-    );
+    return Result.err({
+      step: 'pipeline',
+      message:
+        'runSimulationBatch requires notificationEmail in options or FULLCAM_BATCH_NOTIFICATION_EMAIL',
+    });
   }
 
   const safeRequests = requests.map((request) => ({

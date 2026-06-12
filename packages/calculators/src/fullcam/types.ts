@@ -1,4 +1,5 @@
 import { FullCAMAreaInput, TreeSpeciesName } from './input';
+import { Result } from './result';
 
 export const treeSpeciesIdMap: Record<TreeSpeciesName, number> = {
   'Environmental plantings': 7,
@@ -44,12 +45,14 @@ export type AreaPlotContent = Area & {
   plotContent: string;
 };
 
-export type FullCAMSubmissionSucceeded = { area: AreaPlotContent } & {
+export type FullCAMSubmissionSucceeded = {
+  area: AreaPlotContent;
   outputCsv: string;
 };
 
-export type FullCAMSubmissionFailed = { area: AreaPlotContent } & {
-  error: string;
+export type FullCAMSubmissionFailed = {
+  area: AreaPlotContent;
+  error: FullCAMError;
 };
 
 export type FullCAMSubmission =
@@ -76,8 +79,10 @@ export type InputAreaWithOutputKeyFields = {
 
 export type BatchSimulationError = {
   uniqueAreaKey: string;
-  error: string;
+  error: FullCAMError;
 };
+
+// TODO: Can this switch to a FullCAMAreaResult object?
 export type BatchSimulationResult =
   | BatchSimulationError
   | InputAreaWithOutputKeyFields;
@@ -93,3 +98,17 @@ export function isBatchSimulationSuccess(
 ): result is InputAreaWithOutputKeyFields {
   return !isBatchSimulationError(result);
 }
+
+export type FullCAMStep =
+  | 'pipeline'
+  | 'create-batch'
+  | 'run-batch'
+  | 'wait-batch'
+  | 'fetch-archive'
+  | 'extract-results';
+export type FullCAMError = {
+  step: FullCAMStep;
+  message: string;
+};
+
+export type FullCAMResult<T> = Result<T, FullCAMError>;

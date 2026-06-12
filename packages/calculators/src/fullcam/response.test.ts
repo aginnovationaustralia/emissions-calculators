@@ -86,7 +86,10 @@ describe('generateCsvLines', () => {
     if (!result.isErr) {
       return;
     }
-    expect(result.error).toBe('Invalid CSV output: no data');
+    expect(result.error).toEqual({
+      step: 'extract-results',
+      message: 'Invalid CSV output: no data',
+    });
   });
 
   it('returns an error when the CSV has only a header row', () => {
@@ -96,7 +99,10 @@ describe('generateCsvLines', () => {
     if (!result.isErr) {
       return;
     }
-    expect(result.error).toBe('Invalid CSV output: no data');
+    expect(result.error).toEqual({
+      step: 'extract-results',
+      message: 'Invalid CSV output: no data',
+    });
   });
 
   it('returns an error when the batch API reports a three-column error row', () => {
@@ -106,7 +112,10 @@ describe('generateCsvLines', () => {
     if (!result.isErr) {
       return;
     }
-    expect(result.error).toBe('Batch error: Simulation failed');
+    expect(result.error).toEqual({
+      step: 'extract-results',
+      message: 'Batch error: Simulation failed',
+    });
   });
 
   it('parses valid FullCAM CSV output into lines', () => {
@@ -211,7 +220,10 @@ describe('generateSummaryFromLines', () => {
     if (!result.isErr) {
       return;
     }
-    expect(result.error).toMatch(/no output row for current year y/);
+    expect(result.error).toEqual({
+      step: 'extract-results',
+      message: expect.stringMatching(/no output row for current year y/),
+    });
   });
 
   it('returns an error when no row exists for the previous reporting year terminal month', () => {
@@ -228,7 +240,10 @@ describe('generateSummaryFromLines', () => {
     if (!result.isErr) {
       return;
     }
-    expect(result.error).toMatch(/no output row for previous year y-1/);
+    expect(result.error).toEqual({
+      step: 'extract-results',
+      message: expect.stringMatching(/no output row for previous year y-1/),
+    });
   });
 
   it('treats non-finite fire values as zero when summing', () => {
@@ -268,7 +283,10 @@ describe('extractKeyFieldsFromFullCAMOutput', () => {
 
     expect(result).toEqual({
       uniqueAreaKey: 'area-1',
-      error: 'Invalid CSV output: no data',
+      error: {
+        step: 'extract-results',
+        message: 'Invalid CSV output: no data',
+      },
     });
   });
 
@@ -279,7 +297,10 @@ describe('extractKeyFieldsFromFullCAMOutput', () => {
 
     expect(result).toEqual({
       uniqueAreaKey: 'area-1',
-      error: 'Batch error: Area not found',
+      error: {
+        step: 'extract-results',
+        message: 'Batch error: Area not found',
+      },
     });
   });
 
@@ -292,7 +313,10 @@ describe('extractKeyFieldsFromFullCAMOutput', () => {
 
     expect(result).toMatchObject({
       uniqueAreaKey: 'area-1',
-      error: expect.stringMatching(/no output row for current year y/),
+      error: {
+        step: 'extract-results',
+        message: expect.stringMatching(/no output row for current year y/),
+      },
     });
   });
 
