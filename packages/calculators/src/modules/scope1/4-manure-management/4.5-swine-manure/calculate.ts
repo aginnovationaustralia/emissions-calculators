@@ -253,7 +253,7 @@ export function calculateLeachingAndRunoffN2OEmissionsForSwine(
 /**
  * Calculate nitrogen applied to soils *MNSoil* (scope 1 and 3) produced by swine herds.
  * REVISIT: The section number is subject to change due to formatting issues in the draft
- * guidance.
+ * guidance, but for reference, in the draft it's under 4.5.1.5.
  */
 export function calculateMassOfNitrogenAppliedToSoilsForSwine(
   input: SwineManureInputTransformed,

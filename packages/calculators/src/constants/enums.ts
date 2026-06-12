@@ -120,14 +120,6 @@ export const SwineMMSTypes = [
 ] as const;
 export type SwineMMSType = (typeof SwineMMSTypes)[number];
 
-export const SwineHousingAndWasteSystems = [
-  'Outdoor/Free Range',
-  'Conventional Housing',
-  'Deep Litter Housing',
-] as const;
-export type SwineHousingAndWasteSystem =
-  (typeof SwineHousingAndWasteSystems)[number];
-
 export const PrimarySwineMMSWithSolidSeparationTypes = [
   // REVISIT: call it 'covered' for the sake of recognisable terminology?
   'anaerobicLagoon',

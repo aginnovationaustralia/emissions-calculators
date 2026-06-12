@@ -1783,7 +1783,10 @@ export const swineConstants: SwineConstants = {
       N_VOLATISED_EF: realNumber(0.3),
       N2O_EF: realNumber(0.02),
       VOLATILE_SOLIDS_LOST: realNumber(0),
-      // TODO: Comment on ACT exclusion from state factors
+      /**
+       * REVISIT: There were no constants provided for ACT, so I've used the constants
+       * for NSW for the time being.
+       */
       METHANE_CONVERSION_FACTOR_BY_STATE: {
         ...allPureStatesWithValue(0.01),
         QLD: realNumber(0.03),

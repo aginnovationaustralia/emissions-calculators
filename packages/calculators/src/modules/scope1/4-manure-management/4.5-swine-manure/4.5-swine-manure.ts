@@ -52,7 +52,7 @@ const subscriptNotation: Record<
 /**
  * Convenience wrapper for volatile solid production (*VSj*)
  */
-export const getVolatileSolidsProductionForClass = (
+const getVolatileSolidsProductionForClass = (
   swineClass: SwineSpecificClassInputTransformed,
   constants: { SWINE: SwineConstants },
 ) => {
@@ -122,7 +122,7 @@ const getNitrogenSeparationRate = (
 /**
  * Calculate annual nitrogen excretion *AEj* for a class *j* (4.5.1.3 (5))
  */
-export const calculateAnnualNitrogenExcretionForClass = (
+const calculateAnnualNitrogenExcretionForClass = (
   swineClass: SwineSpecificClassInputTransformed,
   constants: { SWINE: SwineConstants },
 ) =>
@@ -805,7 +805,7 @@ export const calculateLeachingAndRunoffN2OEmissionsForClass = (
  * class *j*.
  *
  * REVISIT: This section is labelled as 4.5.1.5, due to other errors in the section
- * numbers this will definitely change.
+ * numbers this will probably change.
  */
 export const calculateMassOfNitrogenAppliedToSoilsForClass = (
   swineClass: SwineSpecificClassInputTransformed,
@@ -860,6 +860,9 @@ export const calculateMassOfNitrogenAppliedToSoilsForClass = (
        * > Note: where direct application occurs at treatment stage 2 (MNjm=13T=2),
        * EFjm=13T=2 and FracGASMjm=13T=2 are set to zero.
        *
+       * I.e. (1 - EFm=13T=2 - FracGASMm=13T=2) = 1, so
+       * MNjm=13T=2 * (1 - EFm=13T=2 - FracGASMm=13T=2) can just be simplified to
+       * MNjm=13T=2.
        */
       if (mms === 'directApplication') return nitrogenPerSecondarySystem[mms];
 

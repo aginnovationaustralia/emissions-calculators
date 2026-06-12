@@ -79,7 +79,6 @@ import {
   RiceCultivationPreSeasonWaterRegimeType,
   RiceCultivationSeasonWaterRegimeType,
   Season,
-  SecondarySwineMMSType,
   ServiceByAreaType,
   ServiceByHourType,
   SheepClass,
@@ -89,7 +88,6 @@ import {
   State,
   StateOrRegion,
   SwineClass,
-  SwineMMSType,
   VesselFuelType,
   WastewaterFacilityType,
 } from './enums';
@@ -535,7 +533,6 @@ export type LivestockConstants = NamedConstants & {
     solidStorage: Record<MeanAnnualTemperature, RealNumber>;
     composting: Record<MeanAnnualTemperature, RealNumber>;
     digester: Record<MeanAnnualTemperature, RealNumber>;
-    // REVISIT: Deep litter is given as an option but none of the needed constants are supplied in the appendix.
     deepLitter: Record<MeanAnnualTemperature, RealNumber>;
     directProcessing: Record<MeanAnnualTemperature, RealNumber>;
     directApplication: Record<MeanAnnualTemperature, RealNumber>;

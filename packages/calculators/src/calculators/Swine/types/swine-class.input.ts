@@ -7,26 +7,27 @@ import { z } from 'zod';
 
 const createClassManureAllocationSchema = (number: '1' | '2' | '3' | '4') => {
   const base = object({
-    deepLitter: proportion('TODO').transform((val) =>
-      input(`MMSj=${number}m=8T=1`, realNumber(val)),
-    ),
-    // NOTE: This is called drylot at points in the guidelines because it represents
-    // emissions from free-range systems than the constants associated with m=14.
-    outdoorAndFreeRange: proportion('TODO').transform((val) =>
-      input(`MMSj=${number}m=5T=1`, realNumber(val)),
-    ),
-    anaerobicLagoon: proportion('TODO').transform((val) =>
-      input(`MMSj=${number}m=7T=1`, realNumber(val)),
-    ), // Covered
-    digester: proportion('TODO').transform((val) =>
-      input(`MMSj=${number}m=1T=1`, realNumber(val)),
-    ), // Uncovered
-    pitStorage: proportion('TODO').transform((val) =>
-      input(`MMSj=${number}m=9T=1`, realNumber(val)),
-    ),
-    solidStorage: proportion('TODO').transform((val) =>
-      input(`MMSj=${number}m=9T=1`, realNumber(val)),
-    ),
+    deepLitter: proportion(
+      'Fraction of manure that was initially treated in a deep litter system',
+    ).transform((val) => input(`MMSj=${number}m=8T=1`, realNumber(val))),
+    // NOTE: This is called drylot at points in the guidelines because the constants
+    // associated with drylot better represent emissions from free-range systems than
+    // the constants associated with pasture range/paddock (m=14).
+    outdoorAndFreeRange: proportion(
+      'Fraction of manure (excluding solids separated in pre-treatment, if solid separation occurred) that was directly deposited outdoors',
+    ).transform((val) => input(`MMSj=${number}m=5T=1`, realNumber(val))),
+    anaerobicLagoon: proportion(
+      'Fraction of manure (excluding solids separated in pre-treatment, if solid separation occurred) that was treated in an uncovered anaerobic lagoon',
+    ).transform((val) => input(`MMSj=${number}m=7T=1`, realNumber(val))),
+    digester: proportion(
+      'Fraction of manure (excluding solids separated in pre-treatment, if solid separation occurred) that was treated in an covered anaerobic lagoon',
+    ).transform((val) => input(`MMSj=${number}m=1T=1`, realNumber(val))), // Uncovered
+    pitStorage: proportion(
+      'Fraction of manure (excluding solids separated in pre-treatment, if solid separation occurred) that was treated in pit storage (short hydraulic retention tank (HRT) < 1 month)',
+    ).transform((val) => input(`MMSj=${number}m=9T=1`, realNumber(val))),
+    solidStorage: proportion(
+      'Fraction of manure (excluding solids separated in pre-treatment, if solid separation occurred) that was treated in solid storage.',
+    ).transform((val) => input(`MMSj=${number}m=9T=1`, realNumber(val))),
   });
 
   const method1 = base
