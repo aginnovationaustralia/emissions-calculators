@@ -35,8 +35,9 @@ const calculateManureMethaneForHerd = (
     ).named(`VSj=${number}`);
 
     const Bo = selectConstant(
-      constants.COMMON,
+      constants.LIVESTOCK,
       'EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4',
+      'general',
     ).named('BO');
 
     const MCFim1 = method2MeanAnnualTemperature

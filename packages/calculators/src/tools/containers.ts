@@ -457,6 +457,13 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S>>;
 
+  // MassPerHead<S> / Days = MassPerHeadPerDay<S>
+  divide<S extends Substance>(
+    this: BaseContainer<MassPerHead<S>>,
+    right: Container<Days>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerHeadPerDay<S>>;
+
   divide<
     S1 extends Substance,
     S2 extends Substance,
@@ -493,6 +500,8 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = realNumber();
       } else if (isMassPerArea(leftUnit) && isYears(rightUnit)) {
         unit = massPerAreaPerYear(leftUnit.substance);
+      } else if (isMassPerHead(leftUnit) && isDays(rightUnit)) {
+        unit = massPerHeadPerDay(leftUnit.substance);
       } else {
         if (!isRealNumber(rightUnit)) {
           // eslint-disable-next-line no-console

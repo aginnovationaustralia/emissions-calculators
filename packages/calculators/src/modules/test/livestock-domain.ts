@@ -26,6 +26,8 @@ import {
   OtherLivestockTypes,
   PureState,
   PureStates,
+  PureStatesWithoutNT,
+  PureStateWithoutNT,
   StateOrRegion,
   StateOrRegions,
   SwineMMSType,
@@ -94,6 +96,15 @@ export const checkLimitedState = (state: string | undefined): LimitedState => {
     throw new Error(`Invalid state: ${state}`);
   }
   return state as LimitedState;
+};
+
+export const checkPureStateWithoutNT = (
+  state: string | undefined,
+): PureStateWithoutNT => {
+  if (!PureStatesWithoutNT.includes(state as PureStateWithoutNT)) {
+    throw new Error(`Invalid pure state without NT: ${state}`);
+  }
+  return state as PureStateWithoutNT;
 };
 
 export const checkGrazingSystem = (

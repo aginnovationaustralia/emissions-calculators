@@ -1127,16 +1127,32 @@ export const WastewaterFacilityTypes = [
 ] as const;
 export type WastewaterFacilityType = (typeof WastewaterFacilityTypes)[number];
 
-export const PureStates = [
+export const PureStatesWithoutNT = [
   'ACT',
   'NSW',
   'VIC',
   'QLD',
   'SA',
   'TAS',
-  'NT',
   'WA',
 ] as const;
+export type PureStateWithoutNT = (typeof PureStatesWithoutNT)[number];
+export const isPureStateWithoutNT = (
+  state: string,
+): state is PureStateWithoutNT => {
+  return PureStatesWithoutNT.includes(state as PureStateWithoutNT);
+};
+
+export const pureStateWithoutNTToLimitedState = (
+  state: PureStateWithoutNT,
+): LimitedState => {
+  if (state === 'ACT' || state === 'NSW') {
+    return 'ACT/NSW';
+  }
+  return state;
+};
+
+export const PureStates = [...PureStatesWithoutNT, 'NT'] as const;
 export type PureState = (typeof PureStates)[number];
 export const isPureState = (state: string): state is PureState => {
   return PureStates.includes(state as PureState);
@@ -1398,12 +1414,12 @@ export const MeanAnnualTemperatures = [
 ] as const;
 export type MeanAnnualTemperature = (typeof MeanAnnualTemperatures)[number];
 export const SheepClasses = [
+  'breedingEwes',
+  'lambsHoggets',
+  'maidenEwes',
+  'otherEwes',
   'rams',
   'wethers',
-  'maidenEwes',
-  'breedingEwes',
-  'otherEwes',
-  'lambsHoggets',
 ] as const;
 export type SheepClass = (typeof SheepClasses)[number];
 

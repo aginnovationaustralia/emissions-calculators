@@ -6,13 +6,10 @@ import { SheepClassesInputSchema } from './sheep-classes.input';
 
 export const SheepFlockInputSchema = object({
   classes: SheepClassesInputSchema,
-  method2NoUnfencedNaturalWater: z
-    .boolean()
-    .meta({
-      description:
-        'Method 2: Whether animals have access to unfenced natural water. If animals are on bore or reticulated water systems where water is provided in troughs (i.e. no unfenced natural water sources) then set to false',
-    })
-    .optional(),
+  noUnfencedNaturalWater: z.boolean().meta({
+    description:
+      'Method 2: Whether animals have access to unfenced natural water. If animals are on bore or reticulated water systems where water is provided in troughs (i.e. no unfenced natural water sources) then set to false',
+  }),
   method2Dmd: object({
     spring: proportion()
       .meta({
