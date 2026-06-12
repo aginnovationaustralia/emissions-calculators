@@ -52,7 +52,7 @@ const subscriptNotation: Record<
 /**
  * Convenience wrapper for volatile solid production (*VSj*)
  */
-const getVolatileSolidsProductionForClass = (
+export const getVolatileSolidsProductionForClass = (
   swineClass: SwineSpecificClassInputTransformed,
   constants: { SWINE: SwineConstants },
 ) => {
@@ -122,7 +122,7 @@ const getNitrogenSeparationRate = (
 /**
  * Calculate annual nitrogen excretion *AEj* for a class *j* (4.5.1.3 (5))
  */
-const calculateAnnualNitrogenExcretionForClass = (
+export const calculateAnnualNitrogenExcretionForClass = (
   swineClass: SwineSpecificClassInputTransformed,
   constants: { SWINE: SwineConstants },
 ) =>
@@ -227,14 +227,10 @@ const calculateFractionVolatileSolidsInPrimarySystems = (
  * Hence, the sum of these values may be less than or equal to one.
  *
  * For some level of conceptual consistency with the symbols the guidance uses, these
- * values are named *FVSjmT=2*. These values can be defined in terms of values the
- * guidance uses as follows:
- *
- * VSTjmT=2 = SUM[m] (FVSjmT=2 * VSj)
- *
- * (for a given value of *j*)
+ * values are named *FVSjmT=2*. Also note that *VSTjmT=2 = SUM[m] (FVSjmT=2 * VSj)* (for
+ * a given value of *j*)
  */
-const calculateFractionVolatileSolidsInSecondarySystems = (
+export const calculateFractionVolatileSolidsInSecondarySystems = (
   swineClass: SwineSpecificClassInputTransformed,
   constants: { SWINE: SwineConstants },
 ): Record<SecondarySwineMMSType, Container<RealNumber>> => {
@@ -354,9 +350,9 @@ const calculateFractionNitrogenInPrimarySystems = (
  * sum of these values may be less than or equal to one.
  *
  * For some level of conceptual consistency with the symbols the guidance uses, these
- * values are named *FVSjmT=2*.
+ * values are named *FNjmT=2*.
  */
-const calculateFractionNitrogenInSecondarySystems = (
+export const calculateFractionNitrogenInSecondarySystems = (
   swineClass: SwineSpecificClassInputTransformed,
   constants: { SWINE: SwineConstants },
 ): Record<SecondarySwineMMSType, Container<RealNumber>> => {
@@ -458,7 +454,7 @@ const calculateNitrogenPerStage1MMSForClass = (
 };
 
 /**
- * Calculate the mass of nitrogen *MNjmT=2 in each secondary MMS produced by class *j*
+ * Calculate the mass of nitrogen *MNjmT=2* in each secondary MMS produced by class *j*
  * (4.5.1.3 (6))
  */
 const calculateNitrogenPerStage2MMSForClass = (
@@ -472,25 +468,24 @@ const calculateNitrogenPerStage2MMSForClass = (
     constants,
   );
 
-  // TODO
-  const nitrogenPerSecondarySystem =
+  const fractionsOfNitrogenPerSecondarySystem =
     calculateFractionNitrogenInSecondarySystems(swineClass, constants);
 
   return {
     anaerobicLagoon: annualNitrogenExcretion
-      .multiply(nitrogenPerSecondarySystem.anaerobicLagoon)
+      .multiply(fractionsOfNitrogenPerSecondarySystem.anaerobicLagoon)
       .named(`MNj=${swineClass.number}m=1T=2`),
     solidStorage: annualNitrogenExcretion
-      .multiply(nitrogenPerSecondarySystem.solidStorage)
+      .multiply(fractionsOfNitrogenPerSecondarySystem.solidStorage)
       .named(`MNj=${swineClass.number}m=4T=2`),
     directApplication: annualNitrogenExcretion
-      .multiply(nitrogenPerSecondarySystem.solidStorage)
+      .multiply(fractionsOfNitrogenPerSecondarySystem.directApplication)
       .named(`MNj=${swineClass.number}m=13T=2`),
   };
 };
 
 /**
- * TODO: DESCRIBE
+ * Calculate CH4 emissions *ECH4* produced by a single swine class *j* (4.5.1.1 (1 & 2)).
  */
 export const calculateManureManagementCH4ForClass = (
   swineClass: SwineSpecificClassInputTransformed,
@@ -596,11 +591,11 @@ export const calculateManureManagementCH4ForClass = (
   );
 
   /**
-   * ECH4 = SUM[jmT] (Dj * MjmT * Nj) * 10^-3
+   * ECH4 = SUM[j,m,T] (Dj * MjmT * Nj) * 10^-3
    *
    * For one class only:
-   * ECH4j = SUM[mT] (Dj * MjmT * Nj) * 10^-3
-   *       = Dj * Nj * SUM[mT] (MjmT) * 10^-3
+   * ECH4j = SUM[m,T] (Dj * MjmT * Nj) * 10^-3
+   *       = Dj * Nj * SUM[m,T] (MjmT) * 10^-3
    */
   return sum([
     ...methaneProductionPerPrimarySystem,
@@ -611,7 +606,8 @@ export const calculateManureManagementCH4ForClass = (
 };
 
 /**
- * TODO: DESCRIBE
+ * Calculate direct N2O emissions *EN2O,dir* produced by a single swine class *j*
+ * (4.5.1.1 (3 & 4)).
  */
 export const calculateDirectN2OEmissionsForClass = (
   swineClass: SwineSpecificClassInputTransformed,
@@ -664,11 +660,17 @@ export const calculateDirectN2OEmissionsForClass = (
     });
 
   /**
-   * EN2O,dir = SUM[j,m,T] (MNjmT * EFjm * CN2O ) * 10^-3
+   * EN2O,dir = SUM[j,m,T] (MNjmT * EFjm * CN2O) * 10^-3
    */
   return sum([...n2oFromPrimarySystems, ...n2oFromSecondarySystems]);
 };
 
+/**
+ * Calculate atmospheric deposition N2O emissions *EN2O,ad* produced by a single swine
+ * class *j*
+ *
+ * REVISIT: This section is labelled as 4.5.1.1 which is a duplicate.
+ */
 export const calculateAtmosphericDepositionN2OEmissionsForClass = (
   swineClass: SwineSpecificClassInputTransformed,
   productionSystem: GrazingProductionSystemsWithRainfall,
@@ -688,7 +690,7 @@ export const calculateAtmosphericDepositionN2OEmissionsForClass = (
   );
 
   /**
-   * MMSATMOS = SUMj,m,T MNjmT * FracGASMmT
+   * MMSATMOS = SUM[j,m,T] MNjmT * FracGASMmT
    */
   const volatilisedNitrogenFromPrimarySystems = PrimarySwineMMSTypes.map(
     (mms) => {
@@ -705,7 +707,7 @@ export const calculateAtmosphericDepositionN2OEmissionsForClass = (
   );
 
   /**
-   * MMSATMOS = SUMj,m,T MNjmT * FracGASMmT
+   * MMSATMOS = SUM[j,m,T] MNjmT * FracGASMmT
    */
   const volatilisedNitrogenFromSecondarySystems =
     SecondarySwineMMSTypesWithoutDirectApplication.map((mms) => {
@@ -742,6 +744,12 @@ export const calculateAtmosphericDepositionN2OEmissionsForClass = (
     .named(`E20,ad (j=${swineClass.number})`);
 };
 
+/**
+ * Calculate N2O emissions from leaching and runoff *EN2O,leach* produced by a single
+ * swine class *j*
+ *
+ * REVISIT: This section is labelled as 4.5.1.3 which is a duplicate.
+ */
 export const calculateLeachingAndRunoffN2OEmissionsForClass = (
   swineClass: SwineSpecificClassInputTransformed,
   isInLeachingZone: boolean,
@@ -761,10 +769,13 @@ export const calculateLeachingAndRunoffN2OEmissionsForClass = (
     constants,
   );
 
-  const nitrogenLostInDrylot = nitrogenInPrimarySystems.outdoorAndFreeRange
+  /**
+   * MNLeachjm=5 = MNjm=5T=1 * FracWET * FracLEACHMS
+   */
+  const nitrogenLostOutdoors = nitrogenInPrimarySystems.outdoorAndFreeRange
     .multiply(fracWETSoil)
     .multiply(fracLeachMS)
-    .named(`Mleachm=4 (j=${swineClass.number})`);
+    .named(`MNleachj=${swineClass.number}m=5`);
 
   const EFleach = selectConstant(
     constants.CROP,
@@ -774,7 +785,110 @@ export const calculateLeachingAndRunoffN2OEmissionsForClass = (
   const CN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
 
   /**
-   * TODO
+   * EN2O,leach = MNLeachjm=5 * EFleach * Cg * 10^-3
+   *
+   * NOTE: Cg isn't defined, but the guidance uses this as a simplified version of the
+   * equation:
+   *
+   * SUM[j,m] (MNLeachjm m=1-13 * EFleach * CN2O) * 10^-3
+   *
+   * So it's clear Cg = CN2O.
    */
-  return nitrogenLostInDrylot.multiply(EFleach).multiply(CN2O);
+  return nitrogenLostOutdoors
+    .multiply(EFleach)
+    .multiply(CN2O)
+    .named(`EN2O,leach (j=${swineClass.number})`);
+};
+
+/**
+ * Calculate the mass of nitrogen applied to soils *MNSoil* produced by a single swine
+ * class *j*.
+ *
+ * REVISIT: This section is labelled as 4.5.1.5, due to other errors in the section
+ * numbers this will definitely change.
+ */
+export const calculateMassOfNitrogenAppliedToSoilsForClass = (
+  swineClass: SwineSpecificClassInputTransformed,
+  isInLeachingZone: boolean,
+  constants: HasCommonConstants & {
+    SWINE: SwineConstants;
+    CROP: CropConstants;
+  },
+) => {
+  const fracWETSoil = (isInLeachingZone ? num(1) : num(0)).named('FracWETSoil');
+
+  const fracLeachMS = selectConstant(
+    constants.CROP,
+    'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF_SOLID_STORAGE',
+  ).named('FracLeachMS');
+
+  const nitrogenLostOutdoors = calculateNitrogenPerStage1MMSForClass(
+    swineClass,
+    constants,
+  )
+    .outdoorAndFreeRange.multiply(fracWETSoil)
+    .multiply(fracLeachMS)
+    .named(`Mleachm=4 (j=${swineClass.number})`);
+
+  const nitrogenPerSecondarySystem = calculateNitrogenPerStage2MMSForClass(
+    swineClass,
+    constants,
+  );
+
+  /**
+   *
+   * SUM[j,m] (MNjmT=2 * (1 - EFmT=2 - FracGASMmT=2) - MNLeachjm=5)
+   *
+   * NOTE: It doesn't make sense that MNLeachjm=5 would be subtracted for each MMS used
+   * in this sum. Expanding the list of secondary MMS options would change the result if
+   * that were true. I have assumed that this was meant to be written as:
+   *
+   * (SUM[j,m] MNjmT=2 * (1 - EFmT=2 - FracGASMmT=2)) - MNLeachjm=5
+   *
+   * or alternatively,
+   *
+   * SUM[j,m] (MNjmT=2 * (1 - EFmT=2 - FracGASMmT=2) - MNLeachjm)
+   *
+   * where MNleachjm = 0 when m != 5.
+   *
+   * REVISIT: Take extra care revising this when the full guidance is published.
+   */
+  return sum(
+    SecondarySwineMMSTypes.map((mms) => {
+      /**
+       * From the guidance:
+       * > Note: where direct application occurs at treatment stage 2 (MNjm=13T=2),
+       * EFjm=13T=2 and FracGASMjm=13T=2 are set to zero.
+       *
+       */
+      if (mms === 'directApplication') return nitrogenPerSecondarySystem[mms];
+
+      const EFm = selectConstant(constants.SWINE, 'MMS', mms, 'EFm').named(
+        `EFm=${subscriptNotation[mms]}T=2`,
+      );
+
+      const fracGASM = selectConstant(
+        constants.SWINE,
+        'MMS',
+        mms,
+        'FracGASM',
+      ).named(`FracGASMm=${subscriptNotation[mms]}T=2`);
+
+      /**
+       * MNjmT=2 * (1 - EFmT=2 - FracGASMmT=2)
+       *
+       * On the need for the unit switch: My understanding (take it with a grain of salt)
+       * is that EFm and FracGASMm can be thought of as fractions of the nitrogen that
+       * reacts and becomes other substances. Here, we're multiplying the total nitrogen
+       * by the fraction of what remains as nitrogren.
+       */
+      return nitrogenPerSecondarySystem[mms].multiply(
+        oneMinus(EFm.switchUnit((v) => realNumber(v.value))).minus(
+          fracGASM.switchUnit((v) => realNumber(v.value)),
+        ),
+      );
+    }),
+  )
+    .minus(nitrogenLostOutdoors)
+    .named(`MNSoil (j=${swineClass.number})`);
 };

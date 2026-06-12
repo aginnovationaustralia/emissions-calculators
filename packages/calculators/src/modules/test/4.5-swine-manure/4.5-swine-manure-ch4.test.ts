@@ -16,7 +16,7 @@ const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'BK', {
  */
 
 describe('4.5.1.1 Swine Manure Management CH4', () => {
-  it.only('method 1 matches spreadsheet results', async () => {
+  it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.5-swine-manure/4.5-swine-manure.xlsx',
       '4.5.1.1',

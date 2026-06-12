@@ -11,6 +11,7 @@ import {
   calculateDirectN2OEmissionsForClass,
   calculateLeachingAndRunoffN2OEmissionsForClass,
   calculateManureManagementCH4ForClass,
+  calculateMassOfNitrogenAppliedToSoilsForClass,
 } from './4.5-swine-manure';
 import {
   GrazingProductionSystemsWithRainfall,
@@ -19,6 +20,10 @@ import {
 } from '@/constants/enums';
 import { sum } from '@/tools/sum';
 import { SwineInputTransformed } from '@/calculators/Swine/types/input';
+import { RealNumber } from '@/tools/units';
+import { Container } from '@/tools/containers';
+import { oneMinus } from '@/tools/sentinels';
+import { SwineManureInputTransformed } from './swine-manure.input';
 
 /**
  * Calculate methane emissions produced by an individual swine herd from manure management
@@ -41,7 +46,7 @@ function calculateManureManagementCH4ForSwineHerd(
       state,
       temperatureZone,
       context.constants,
-    ).named(`ECH4 (j=${swineClass.number})`),
+    ),
   );
   return sum(swineClassEmissions).named('ECH4');
 }
@@ -60,9 +65,7 @@ function calculateDirectN2OEmissionsForSwineHerd(
   >,
 ) {
   const swineClassEmissions = Object.values(herdInput).map((swineClass) =>
-    calculateDirectN2OEmissionsForClass(swineClass, context.constants).named(
-      `EN2O,dir (j=${swineClass.number})`,
-    ),
+    calculateDirectN2OEmissionsForClass(swineClass, context.constants),
   );
 
   return sum(swineClassEmissions).named('EN2O,dir');
@@ -89,7 +92,7 @@ function calculateAtmosphericDepositionN2OEmissionsForSwineHerd(
       swineClass,
       productionSystem,
       context.constants,
-    ).named(`EN2O,ad (j=${swineClass.number})`),
+    ),
   );
   return sum(swineClassEmissions).named('EN2O,ad');
 }
@@ -114,9 +117,40 @@ function calculateLeachingAndRunoffN2OEmissionsForSwineHerd(
       swineClass,
       isInLeachingZone,
       context.constants,
-    ).named(`EN2O,ad (j=${swineClass.number})`),
+    ),
   );
   return sum(swineClassEmissions).named('EN2O,leach');
+}
+
+/**
+ * Calculate nitrogen applied to soils *MNSoil* (scope 1 and 3) produced by a swine herd.
+ * REVISIT: The section number is subject to change due to formatting issues in the draft
+ * guidance.
+ */
+function calculateMassOfNitrogenAppliedToSoilsForSwineHerd(
+  herdInput: SwineHerdInputTransformed,
+  isInLeachingZone: boolean,
+  fractionAppliedToSoils: Container<RealNumber>,
+  constants: HasCommonConstants & {
+    SWINE: SwineConstants;
+    CROP: CropConstants;
+  },
+) {
+  const nitrogenProducedBySwineHerd = sum(
+    Object.values(herdInput).map((swineClass) =>
+      calculateMassOfNitrogenAppliedToSoilsForClass(
+        swineClass,
+        isInLeachingZone,
+        constants,
+      ),
+    ),
+  );
+  return {
+    scope1: nitrogenProducedBySwineHerd.multiply(fractionAppliedToSoils),
+    scope3: nitrogenProducedBySwineHerd.multiply(
+      oneMinus(fractionAppliedToSoils),
+    ),
+  };
 }
 
 /**
@@ -214,6 +248,34 @@ export function calculateLeachingAndRunoffN2OEmissionsForSwine(
       ),
     ),
   );
+}
+
+/**
+ * Calculate nitrogen applied to soils *MNSoil* (scope 1 and 3) produced by swine herds.
+ * REVISIT: The section number is subject to change due to formatting issues in the draft
+ * guidance.
+ */
+export function calculateMassOfNitrogenAppliedToSoilsForSwine(
+  input: SwineManureInputTransformed,
+  isInLeachingZone: boolean,
+  constants: HasCommonConstants & {
+    SWINE: SwineConstants;
+    CROP: CropConstants;
+  },
+) {
+  const nitrogenPerHerd = input.herds.map((herd) =>
+    calculateMassOfNitrogenAppliedToSoilsForSwineHerd(
+      herd,
+      isInLeachingZone,
+      input.fractionAppliedToSoils,
+      constants,
+    ),
+  );
+
+  return {
+    scope1: sum(nitrogenPerHerd.map((n) => n.scope1)),
+    scope3: sum(nitrogenPerHerd.map((n) => n.scope3)),
+  };
 }
 
 export function calculateSwineManureEmissions(

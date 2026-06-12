@@ -108,6 +108,7 @@ export const OrganicFertiliserOrigins = [
 ] as const;
 export type OrganicFertiliserOrigin = (typeof OrganicFertiliserOrigins)[number];
 
+// REVISIT: This list is still used in module 15.3 (waste)
 export const SwineMMSTypes = [
   'Outdoor (Dry lot)',
   'Deep litter',

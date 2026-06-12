@@ -104,16 +104,9 @@ export const compareInputsAndOutputs = <
       const message = e instanceof Error ? e.message : String(e);
       console.error(`Row ${outputRow} (0-based sheet row): ${message}`);
       if (actual) {
-        // console.log(formatExpression(actual));
-        // console.log(formatIntermediates(actual));
         console.log(
           formatNamedValues(actual, {
-            maxDepth: 6,
-            // focusOn: 'Mj=january,k=rams',
-            // focusOn: 'PIj=january,k=rams',
-            // focusOn: 'EN2O,leach',
-            // focusOn: 'NRijkln (bullsLt1, spring)',
-            // focusOn: 'MAijkl=5 (cows2To3Years, summer)',
+            maxDepth: 7,
           }),
         );
       }
