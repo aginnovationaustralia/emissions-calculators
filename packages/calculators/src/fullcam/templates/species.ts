@@ -1,5 +1,5 @@
 import { entriesFromObject } from '@/calculators/common/tools';
-import { FullCAMAreaInput, TreeSpeciesName } from '../input';
+import { TreeSpeciesName } from '../input';
 import { treeSpeciesIdMap } from '../types';
 
 export const speciesForestEnvPlantings = `<SpeciesForest idSP="${treeSpeciesIdMap['Environmental plantings']}" nmSP="Environmental plantings" grthModeSP="Yield" tAgeIxSP="AvgAge" curEdit="false" idRegimeSP="7" mvgTreeId="82" pltnType="Other" tSpecFrCat="EnvMallee" CFracStemF="0.5" CFracBranF="0.468" CFracBarkF="0.487" CFracLeafF="0.529" CFracCortF="0.492" CFracFirtF="0.461" turnFracCortF="25.0" turnFracFirtF="1.0" ratioBranMortF="" ratioBarkMortF="" ratioLeafMortF="" ratioCortMortF="" ratioFirtMortF="" rFracStemF="1" rFracBranF="1" rFracBarkF="1" rFracLeafF="0.75" rFracCortF="1" rFracFirtF="0.1" bkdnFracSDdwdF="6.90255039" bkdnFracSChwdF="6.90255039" bkdnFracSBlitF="4.59203952" bkdnFracSLlitF="3.43677387" bkdnFracSCodrF="6.90255039" bkdnFracSFidrF="3.43677387" atmsFracSDdwdBkdnF="0.8" atmsFracSChwdBkdnF="0.8" atmsFracSBlitBkdnF="0.8" atmsFracSLlitBkdnF="0.8" atmsFracSCodrBkdnF="0.8" atmsFracSFidrBkdnF="0.8" bkdnFracDDdwdF="4.5" bkdnFracRDdwdF="4.5" bkdnFracDChwdF="2.0" bkdnFracRChwdF="2.0" bkdnFracDBlitF="3.5" bkdnFracRBlitF="3.5" bkdnFracDLlitF="0.075" bkdnFracRLlitF="2.56" bkdnFracDCodrF="3.0" bkdnFracRCodrF="3.0" bkdnFracDFidrF="0.001" bkdnFracRFidrF="0.001" atmsFracDDdwdBkdnF="0.8" atmsFracRDdwdBkdnF="0.8" atmsFracDChwdBkdnF="0.8" atmsFracRChwdBkdnF="0.8" atmsFracDBlitBkdnF="0.7" atmsFracRBlitBkdnF="0.7" atmsFracDLlitBkdnF="0.4" atmsFracRLlitBkdnF="0.5" atmsFracDCodrBkdnF="0.8" atmsFracRCodrBkdnF="0.8" atmsFracDFidrBkdnF="0.0001" atmsFracRFidrBkdnF="0.0001" bkdnSensMulcF="false" bkdnSensSoilF="true" bkdnSensTempF="0.0" bkdnSensRainF="0.0" turnFracBranF01="8.0" turnFracBranF02="8.0" turnFracBranF03="8.0" turnFracBranF04="8.0" turnFracBranF05="8.0" turnFracBranF06="8.0" turnFracBranF07="8.0" turnFracBranF08="8.0" turnFracBranF09="8.0" turnFracBranF10="8.0" turnFracBranF11="8.0" turnFracBranF12="8.0" turnFracBarkF01="12.0" turnFracBarkF02="12.0" turnFracBarkF03="12.0" turnFracBarkF04="12.0" turnFracBarkF05="12.0" turnFracBarkF06="12.0" turnFracBarkF07="12.0" turnFracBarkF08="12.0" turnFracBarkF09="12.0" turnFracBarkF10="12.0" turnFracBarkF11="12.0" turnFracBarkF12="12.0" turnFracLeafF01="2.9" turnFracLeafF02="2.9" turnFracLeafF03="2.9" turnFracLeafF04="2.9" turnFracLeafF05="2.9" turnFracLeafF06="2.9" turnFracLeafF07="2.9" turnFracLeafF08="2.9" turnFracLeafF09="2.9" turnFracLeafF10="2.9" turnFracLeafF11="2.9" turnFracLeafF12="2.9">
@@ -3961,13 +3961,10 @@ const speciesSnippetMap: Record<TreeSpeciesName, string> = {
   'Native Species Regeneration >=500mm rainfall': speciesForestNativeRegenGt500,
 };
 
-export const generateSpeciesForestSet = (_input: FullCAMAreaInput) => {
-  // const speciesToInclude = new Set(
-  //   input.plantingEvents.map((p) => p.speciesName),
-  // );
-  const snippets = entriesFromObject(speciesSnippetMap)
-    // .filter(([species, _]) => speciesToInclude.has(species))
-    .map(([_, snippetFn]) => snippetFn);
+export const generateSpeciesForestSet = () => {
+  const snippets = entriesFromObject(speciesSnippetMap).map(
+    ([_, snippetFn]) => snippetFn,
+  );
 
   return `<SpeciesForestSet count="${snippets.length}" showOnlyInUse="false">
     ${snippets.join('\n\t')}

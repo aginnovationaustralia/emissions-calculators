@@ -16,6 +16,10 @@ import { mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { basename, join } from 'path';
 import './matchers';
 
+/**
+ * NOTE: These tests aren't executed by default for now. They are useful for exersizing
+ * the FullCAM pipeline with real inputs and making real API requests.
+ */
 const area1: FullCAMAreaInput = {
   latitude: -30.542,
   longitude: 151.428,
@@ -35,7 +39,6 @@ const area1: FullCAMAreaInput = {
   wildfireEvents: [],
   prescribedBurnEvents: [],
 };
-// lonBL="151.428" latBL="-30.542"
 const area2: FullCAMAreaInput = {
   latitude: -30.542,
   longitude: 151.428,
@@ -62,7 +65,6 @@ const area2: FullCAMAreaInput = {
   prescribedBurnEvents: [],
 };
 
-// lonBL="151.428" latBL="-30.542"
 const area3: FullCAMAreaInput = {
   latitude: -30.542,
   longitude: 151.428,
@@ -177,6 +179,7 @@ describe('FullCAM scenario batch simulations', () => {
     succeededSubmissions = submissions.filter(isOk).map(({ value }) => value);
     failedSubmissions = submissions.filter(isErr).map(({ error }) => error);
 
+    // The test dumps quite a few files to disk to aid in debugging
     failedSubmissions.forEach((submission) => {
       const outFailedDir = join(__dirname, 'out/failed');
       mkdirSync(outFailedDir, { recursive: true });

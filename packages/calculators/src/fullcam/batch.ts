@@ -28,53 +28,14 @@ export type BatchSimulationResponse = {
   areaKey: string;
 };
 
-// const plotFileName = 'fullcam-emissions-calculator.plo';
-
 function basename(path: string): string {
   const norm = path.replace(/\\/g, '/');
   const i = norm.lastIndexOf('/');
   return i === -1 ? norm : norm.slice(i + 1);
 }
 
-// function plotStemFromNames(
-//   originalFileName: string | null | undefined,
-//   uploadedFileName: string | null | undefined,
-// ): string {
-//   const name = originalFileName || uploadedFileName || plotFileName;
-//   return basename(name).replace(/\.plo$/i, '');
-// }
-
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-const SINGLE_SIMULATION_CONCURRENCY = 5;
-
-/** Run `fn` over `items` with at most `concurrency` tasks in flight at once. */
-async function mapWithConcurrency<T, R>(
-  items: T[],
-  concurrency: number,
-  fn: (item: T, index: number) => Promise<R>,
-): Promise<R[]> {
-  if (items.length === 0) {
-    return [];
-  }
-
-  const results: R[] = new Array(items.length);
-  let nextIndex = 0;
-
-  async function worker(): Promise<void> {
-    while (nextIndex < items.length) {
-      const i = nextIndex++;
-      results[i] = await fn(items[i], i);
-    }
-  }
-
-  await Promise.all(
-    Array.from({ length: Math.min(concurrency, items.length) }, () => worker()),
-  );
-
-  return results;
 }
 
 function safePlotFileName(areaKey: string): string {
@@ -550,6 +511,35 @@ export async function runSimulationBatch(
   };
 
   const results = await batchPipeline(safeRequests, pipelineOptions);
+
+  return results;
+}
+
+const SINGLE_SIMULATION_CONCURRENCY = 5;
+
+/** Run `fn` over `items` with at most `concurrency` tasks in flight at once. */
+async function mapWithConcurrency<T, R>(
+  items: T[],
+  concurrency: number,
+  fn: (item: T, index: number) => Promise<R>,
+): Promise<R[]> {
+  if (items.length === 0) {
+    return [];
+  }
+
+  const results: R[] = new Array(items.length);
+  let nextIndex = 0;
+
+  async function worker(): Promise<void> {
+    while (nextIndex < items.length) {
+      const i = nextIndex++;
+      results[i] = await fn(items[i], i);
+    }
+  }
+
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, items.length) }, () => worker()),
+  );
 
   return results;
 }

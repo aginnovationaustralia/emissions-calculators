@@ -66,7 +66,7 @@ function processLandUseKey(landUse: FullCAMInputs | FullCAMOutputs): FullCAMOutp
 const userInput: unknown = {
     crops: [...],
     landUse: {
-        fullcamMode: 'inputs',
+        fullcamMode: 'upgrade',
         areas: [{
             latitude: -37.756414,
             longitude: 145.081546,
@@ -101,6 +101,10 @@ const emissions = calculateEmissions('grains', inputForCalculation)
 
 ```
 
+# Error handling
+
+The FullCAM batch API pipeline has many steps along the way. The exported functions wrap return values with `FullCAMResult` for single result values. `FullCAMAreaResult` tends to be used when individual areas are being processed in a list. These wrappers can be unwrapped safely to ensure errors are handled cleanly. The `Result` object is a cut down version of the same concept from the `true-myth` library.
+
 # Caching and optimisation
 
 The tools here help to define expected input and output values, and some templates that are used to generate valid requests. There is no code path out of the box that will make the API requests for you. It is necessary to supply your FullCAM API key, and to call the API responsibly. This means things like caching of results to reduce the load placed on the FullCAM APIs.
@@ -127,9 +131,9 @@ Activity details for an enterprise
 calculatorInputPlusFullcamInputs[Calculator input with LULUCF areas attached]
 calculatorInputPlusFullcamOutputs[Calculator input with FullCAM outputs attached]
 fullcamModeOutputsJSON["`herds: [...],
-landUse: { fullcamMode: 'outputs', areas: [...]}`"]
+landUse: { fullcamMode: 'ready', areas: [...]}`"]
 fullcamModeInputsJSON["`herds: [...],
-landUse: { fullcamMode: 'inputs', areas: [...]}`"]
+landUse: { fullcamMode: 'upgrade', areas: [...]}`"]
 fullcam[FullCAM software simulation]
 fullcamOutputElements[Extract key fields from FullCAM output]
 subgraph Preparing API input
@@ -157,7 +161,7 @@ subgraph Calculator application
 fullcamPipeline <--> fullcamApi
 fullcamPipeline --> fullcamModeOutputsJSON2
 fullcamModeOutputsJSON2["`herds: [...],
-landUse: { fullcamMode: 'outputs', areas: [...]}`"]
+landUse: { fullcamMode: 'ready', areas: [...]}`"]
 fullcamModeOutputsJSON2 --> emissionsCalculatorEngine
 
 end

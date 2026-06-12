@@ -102,7 +102,7 @@ export const generateTemplateForSpatialUpdate = (input: FullCAMAreaInput) => {
         <rawTS count="12">,,,,,,,,,,,</rawTS>
         </TimeSeries>
     </Site>
-    ${generateSpeciesForestSet(input)}
+    ${generateSpeciesForestSet()}
     <SpeciesAgricultureSet count="0" showOnlyInUse="false"/>
   <Soil>
     <SoilBase>

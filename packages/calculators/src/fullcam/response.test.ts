@@ -1,4 +1,8 @@
-import type { FullCAMOutputLine, FullCAMSubmission } from './types';
+import type {
+  AreaPlotContent,
+  FullCAMOutputLine,
+  FullCAMSubmission,
+} from './types';
 
 import { FullCAMAreaInput } from './input';
 import {
@@ -43,18 +47,28 @@ function minimalAreaInput(
   } as FullCAMAreaInput;
 }
 
+function areaPlotContent(
+  inputOverrides: Partial<FullCAMAreaInput> = {},
+  overrides: Partial<
+    Pick<AreaPlotContent, 'plotContent' | 'plotfileName' | 'uniqueAreaKey'>
+  > = {},
+): AreaPlotContent {
+  const uniqueAreaKey = overrides.uniqueAreaKey ?? 'area-1';
+  return {
+    uniqueAreaKey,
+    plotfileName: overrides.plotfileName ?? `${uniqueAreaKey}.plo`,
+    plotContent: overrides.plotContent ?? '',
+    input: minimalAreaInput(inputOverrides),
+  };
+}
+
 function submission(
   outputCsv: string,
   input: FullCAMAreaInput = minimalAreaInput(),
   uniqueAreaKey = 'area-1',
 ): FullCAMSubmission {
   return {
-    area: {
-      uniqueAreaKey,
-      plotfileName: `${uniqueAreaKey}.plo`,
-      plotContent: '',
-      input,
-    },
+    area: areaPlotContent(input, { uniqueAreaKey }),
     outputCsv,
   };
 }
@@ -150,18 +164,21 @@ describe('generateSummaryFromLines', () => {
       row(2020, 12, 88, 8, 0.5, 0.1),
     ];
 
-    const result = generateSummaryFromLines(lines, {
-      startYear: 2019,
-      startMonth: 1,
-      endYear: 2020,
-      endMonth: 12,
-    });
+    const result = generateSummaryFromLines(
+      lines,
+      areaPlotContent({
+        startYear: 2019,
+        startMonth: 1,
+        endYear: 2020,
+        endMonth: 12,
+      }),
+    );
 
     expect(result.isOk).toBe(true);
     if (!result.isOk) {
       return;
     }
-    const summary = result.value;
+    const summary = result.value.keyFields;
 
     expect(summary.carbonMassInTreesPerHectare).toBe(88);
     expect(summary.carbonMassInDebrisPerHectare).toBe(8);
@@ -182,18 +199,21 @@ describe('generateSummaryFromLines', () => {
       row(2001, 7, 101, 21, 9, 9),
     ];
 
-    const result = generateSummaryFromLines(lines, {
-      startYear: 2000,
-      startMonth: 1,
-      endYear: 2001,
-      endMonth: 6,
-    });
+    const result = generateSummaryFromLines(
+      lines,
+      areaPlotContent({
+        startYear: 2000,
+        startMonth: 1,
+        endYear: 2001,
+        endMonth: 6,
+      }),
+    );
 
     expect(result.isOk).toBe(true);
     if (!result.isOk) {
       return;
     }
-    const summary = result.value;
+    const summary = result.value.keyFields;
 
     expect(summary.carbonMassInTreesPerHectare).toBe(100);
     expect(summary.carbonMassInDebrisPerHectare).toBe(20);
@@ -210,40 +230,48 @@ describe('generateSummaryFromLines', () => {
   it('returns an error when no row exists for the current reporting year terminal month', () => {
     const lines: FullCAMOutputLine[] = [row(2020, 11, 1, 1)];
 
-    const result = generateSummaryFromLines(lines, {
+    const area = areaPlotContent({
       startYear: 2020,
       startMonth: 1,
       endYear: 2020,
       endMonth: 12,
     });
+    const result = generateSummaryFromLines(lines, area);
 
     expect(result.isErr).toBe(true);
     if (!result.isErr) {
       return;
     }
     expect(result.error).toEqual({
-      step: 'extract-results',
-      message: expect.stringMatching(/no output row for current year y/),
+      area,
+      error: {
+        step: 'extract-results',
+        message: expect.stringMatching(/no output row for current year y/),
+      },
     });
   });
 
   it('returns an error when no row exists for the previous reporting year terminal month', () => {
     const lines: FullCAMOutputLine[] = [row(2020, 12, 88, 8)];
 
-    const result = generateSummaryFromLines(lines, {
+    const area = areaPlotContent({
       startYear: 2020,
       startMonth: 1,
       endYear: 2020,
       endMonth: 12,
     });
+    const result = generateSummaryFromLines(lines, area);
 
     expect(result.isErr).toBe(true);
     if (!result.isErr) {
       return;
     }
     expect(result.error).toEqual({
-      step: 'extract-results',
-      message: expect.stringMatching(/no output row for previous year y-1/),
+      area,
+      error: {
+        step: 'extract-results',
+        message: expect.stringMatching(/no output row for previous year y-1/),
+      },
     });
   });
 
@@ -258,18 +286,27 @@ describe('generateSummaryFromLines', () => {
       row(2020, 12, 1, 1, 0.1, 0.2),
     ];
 
-    const result = generateSummaryFromLines(lines, {
-      startYear: 2020,
-      startMonth: 1,
-      endYear: 2020,
-      endMonth: 12,
-    });
+    const result = generateSummaryFromLines(
+      lines,
+      areaPlotContent(
+        {
+          startYear: 2020,
+          startMonth: 1,
+          endYear: 2020,
+          endMonth: 12,
+        },
+        {
+          uniqueAreaKey: 'test',
+          plotfileName: 'test.plo',
+        },
+      ),
+    );
 
     expect(result.isOk).toBe(true);
     if (!result.isOk) {
       return;
     }
-    const summary = result.value;
+    const summary = result.value.keyFields;
 
     expect(summary.ch4FromBiomassBurningPerHectare).toBeCloseTo(0.1);
     expect(summary.n2oFromBiomassBurningPerHectare).toBeCloseTo(0.2);

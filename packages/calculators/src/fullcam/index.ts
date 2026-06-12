@@ -9,8 +9,8 @@ export {
   FullCAMInputsSchema,
   FullCAMOutputsSchema,
   GrainsInputWithFullCAMSchema,
-  isLandUseFullCAMInputs,
-  isLandUseFullCAMOutputs,
+  isLandUseInputReady,
+  isLandUseNeedsFullCAMUpgrade,
 } from './calculators';
 export type {
   FullCAMInputs,

@@ -13,34 +13,22 @@ export const TreeSpeciesNames = [
 export type TreeSpeciesName = (typeof TreeSpeciesNames)[number];
 
 const PlantingEventSchema = z.object({
-  latitude: z.number().optional(),
-  longitude: z.number().optional(),
   speciesName: z.enum(TreeSpeciesNames),
-  //   areaHectares: z.number(),
   plantingDate: z.date(),
 });
 
 const ClearingEventSchema = z.object({
-  latitude: z.number().optional(),
-  longitude: z.number().optional(),
   clearingDate: z.date(),
   percentThinned: z.number().min(0).max(100),
 });
 
-// TODO: Tidy extra input keys
 const WildfireEventSchema = z.object({
-  latitude: z.number().optional(),
-  longitude: z.number().optional(),
-  //   areaBurnedHectares: z.number(),
   fireDate: z.date(),
   percentBurned: z.number().min(0).max(100),
   percentTreesKilled: z.number().min(0).max(100), // REVISIT: Haven't found a destination for this in the event template
 });
 
 const PrescribedBurnEventSchema = z.object({
-  latitude: z.number().optional(),
-  longitude: z.number().optional(),
-  //   areaBurnedHectares: z.number(),
   fireDate: z.date(),
   percentBurned: z.number().min(0).max(100),
 });
