@@ -1,4 +1,8 @@
-import { FullCAMAreaInput, TreeSpeciesName } from './input';
+import {
+  FullCAMAreaInput,
+  FullCAMAreaInputTransformed,
+  TreeSpeciesName,
+} from './input';
 import { Result } from './result';
 
 export const treeSpeciesIdMap: Record<TreeSpeciesName, number> = {
@@ -30,13 +34,15 @@ export type FullCAMOutputKeyFields = {
 };
 
 export type BatchSimulationRequest = {
-  input: FullCAMAreaInput;
+  input: FullCAMAreaInputTransformed;
+  originalInput: FullCAMAreaInput;
   uniqueAreaKey: string;
   plotContent: string;
 };
 
 export type Area = {
-  input: FullCAMAreaInput;
+  input: FullCAMAreaInputTransformed;
+  originalInput: FullCAMAreaInput;
   uniqueAreaKey: string;
   plotfileName: string;
 };
@@ -61,6 +67,7 @@ export type FullCAMStep =
   | 'parse-input'
   | 'pipeline'
   | 'create-batch'
+  | 'validate-scenario'
   | 'run-batch'
   | 'wait-batch'
   | 'fetch-archive'

@@ -56,9 +56,11 @@ export function generateLulucfInput(
   });
 
   // Pass through savanna burning and perennial crops, these have not been passed into a FullCAM request. They just go straight through to the calculator.
-  const burning = pairs.flatMap(({ area }) => area.input.savannaBurning ?? []);
+  const burning = pairs.flatMap(
+    ({ area }) => area.originalInput.savannaBurning ?? [],
+  );
   const perennialCrops = pairs.flatMap(
-    ({ area }) => area.input.perennialCrops ?? [],
+    ({ area }) => area.originalInput.perennialCrops ?? [],
   );
 
   const result: LULUCFInput = {

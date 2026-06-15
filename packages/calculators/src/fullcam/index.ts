@@ -17,7 +17,11 @@ export type {
   FullCAMOutputs,
   GrainsInputWithFullCAM,
 } from './calculators';
-export { LULUCFWithFullCAMInputSchema, TreeSpeciesName } from './input';
+export {
+  FullCAMAreaSchema,
+  LULUCFWithFullCAMInputSchema,
+  TreeSpeciesName,
+} from './input';
 export type {
   FullCAMAreaInput,
   FullCAMClearingEvent,

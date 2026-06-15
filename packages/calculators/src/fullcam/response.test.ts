@@ -4,7 +4,7 @@ import type {
   FullCAMSubmission,
 } from './types';
 
-import { FullCAMAreaInput } from './input';
+import { FullCAMAreaInput, FullCAMAreaSchema } from './input';
 import {
   extractKeyFieldsFromFullCAMOutput,
   generateCsvLines,
@@ -54,11 +54,14 @@ function areaPlotContent(
   > = {},
 ): AreaPlotContent {
   const uniqueAreaKey = overrides.uniqueAreaKey ?? 'area-1';
+  const originalInput = minimalAreaInput(inputOverrides);
+
   return {
     uniqueAreaKey,
     plotfileName: overrides.plotfileName ?? `${uniqueAreaKey}.plo`,
     plotContent: overrides.plotContent ?? '',
-    input: minimalAreaInput(inputOverrides),
+    input: FullCAMAreaSchema.parse(originalInput),
+    originalInput,
   };
 }
 

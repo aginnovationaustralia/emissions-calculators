@@ -1,6 +1,6 @@
-import { FullCAMAreaInput } from '../input';
+import { FullCAMAreaInputTransformed } from '../input';
 
-export function generateInitialTrees(input: FullCAMAreaInput) {
+export function generateInitialTrees(input: FullCAMAreaInputTransformed) {
   const { initialTrees } = input;
 
   if (initialTrees === false) {

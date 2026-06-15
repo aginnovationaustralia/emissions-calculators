@@ -1,9 +1,11 @@
-import { FullCAMAreaInput } from '../input';
+import { FullCAMAreaInputTransformed } from '../input';
 import { generateEventQ } from './events';
 import { generateInitialTrees } from './init';
 import { generateSpeciesForestSet } from './species';
 
-export const generateTemplateForSpatialUpdate = (input: FullCAMAreaInput) => {
+export const generateTemplateForSpatialUpdate = (
+  input: FullCAMAreaInputTransformed,
+) => {
   const simulationStartYear = input.startYear - 20;
   const simulationEndYear = input.endYear + 20;
 

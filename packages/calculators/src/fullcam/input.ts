@@ -14,29 +14,41 @@ export type TreeSpeciesName = (typeof TreeSpeciesNames)[number];
 
 const PlantingEventSchema = z.object({
   speciesName: z.enum(TreeSpeciesNames),
-  plantingDate: z.date(),
+  plantingDate: z.iso.date().transform((v) => new Date(v)),
 });
 
 const ClearingEventSchema = z.object({
-  clearingDate: z.date(),
+  clearingDate: z.iso.date().transform((v) => new Date(v)),
   percentThinned: z.number().min(0).max(100),
 });
 
 const WildfireEventSchema = z.object({
-  fireDate: z.date(),
+  fireDate: z.iso.date().transform((v) => new Date(v)),
   percentBurned: z.number().min(0).max(100),
   percentTreesKilled: z.number().min(0).max(100), // REVISIT: Haven't found a destination for this in the event template
 });
 
 const PrescribedBurnEventSchema = z.object({
-  fireDate: z.date(),
+  fireDate: z.iso.date().transform((v) => new Date(v)),
   percentBurned: z.number().min(0).max(100),
 });
 
 export type FullCAMPlantingEvent = z.input<typeof PlantingEventSchema>;
+export type FullCAMPlantingEventTransformed = z.output<
+  typeof PlantingEventSchema
+>;
 export type FullCAMClearingEvent = z.input<typeof ClearingEventSchema>;
+export type FullCAMClearingEventTransformed = z.output<
+  typeof ClearingEventSchema
+>;
 export type FullCAMWildfireEvent = z.input<typeof WildfireEventSchema>;
+export type FullCAMWildfireEventTransformed = z.output<
+  typeof WildfireEventSchema
+>;
 export type FullCAMPrescribedBurnEvent = z.input<
+  typeof PrescribedBurnEventSchema
+>;
+export type FullCAMPrescribedBurnEventTransformed = z.output<
   typeof PrescribedBurnEventSchema
 >;
 
@@ -74,16 +86,23 @@ export const FullCAMAreaSchema = z.xor([
 export const LULUCFWithFullCAMInputSchema = z.array(FullCAMAreaSchema);
 
 export type FullCAMAreaInput = z.input<typeof FullCAMAreaSchema>;
+export type FullCAMAreaInputTransformed = z.output<typeof FullCAMAreaSchema>;
 export type FullCAMClearableAreaInput = z.input<
+  typeof FullCAMClearableAreaSchema
+>;
+export type FullCAMClearableAreaInputTransformed = z.output<
   typeof FullCAMClearableAreaSchema
 >;
 export type FullCAMUnclearableAreaInput = z.input<
   typeof FullCAMUnclearableAreaSchema
 >;
+export type FullCAMUnclearableAreaInputTransformed = z.output<
+  typeof FullCAMUnclearableAreaSchema
+>;
 
 export const isAreaClearable = (
-  area: FullCAMAreaInput,
-): area is FullCAMClearableAreaInput => {
+  area: FullCAMAreaInputTransformed,
+): area is FullCAMClearableAreaInputTransformed => {
   return 'initialTrees' in area && area.initialTrees !== false;
 };
 

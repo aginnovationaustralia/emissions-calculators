@@ -19,6 +19,7 @@ export const FullCAMInputsSchema = object({
 
 export type FullCAMOutputs = z.input<typeof FullCAMOutputsSchema>;
 export type FullCAMInputs = z.input<typeof FullCAMInputsSchema>;
+export type FullCAMInputsTransformed = z.output<typeof FullCAMInputsSchema>;
 
 export const GrainsInputWithFullCAMSchema = GrainsInputSchema.extend({
   landUse: z

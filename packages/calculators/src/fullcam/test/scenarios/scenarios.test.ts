@@ -1,10 +1,14 @@
 import {
   extractKeyFieldsFromFullCAMOutput,
-  FullCAMAreaInput,
   generateTemplateForSpatialUpdate,
   runSimulationBatch,
   RunSimulationBatchOptions,
 } from '@/fullcam';
+import {
+  FullCAMAreaInput,
+  FullCAMAreaInputTransformed,
+  FullCAMAreaSchema,
+} from '@/fullcam/input';
 import { isErr, isOk } from '@/fullcam/result';
 import {
   AreaPlotContent,
@@ -32,7 +36,7 @@ const area1: FullCAMAreaInput = {
   initialTrees: false,
   plantingEvents: [
     {
-      plantingDate: new Date('2015-01-02'),
+      plantingDate: '2015-01-02',
       speciesName: 'Environmental plantings',
     },
   ],
@@ -51,13 +55,13 @@ const area2: FullCAMAreaInput = {
   initialTrees: false,
   plantingEvents: [
     {
-      plantingDate: new Date('2015-01-02'),
+      plantingDate: '2015-01-02',
       speciesName: 'Native Species Regeneration >=500mm rainfall',
     },
   ],
   wildfireEvents: [
     {
-      fireDate: new Date('2025-01-01'),
+      fireDate: '2025-01-01',
       percentBurned: 100,
       percentTreesKilled: 20,
     },
@@ -78,7 +82,7 @@ const area3: FullCAMAreaInput = {
   plantingEvents: [],
   clearingEvents: [
     {
-      clearingDate: new Date('2016-01-01'),
+      clearingDate: '2016-01-01',
       percentThinned: 100,
     },
   ],
@@ -93,11 +97,13 @@ function loadExamplePlotFile(
 ): Omit<AreaPlotContent, 'plotfileName'> {
   const filePath = join(__dirname, fileName);
   const plotContent = readFileSync(filePath, 'utf8');
+  const input = {
+    endYear,
+    endMonth,
+  };
   return {
-    input: {
-      endYear,
-      endMonth,
-    } as FullCAMAreaInput,
+    input: input as FullCAMAreaInputTransformed,
+    originalInput: input as FullCAMAreaInput,
     uniqueAreaKey: basename(fileName),
     plotContent,
   };
@@ -110,11 +116,17 @@ function buildScenarioPlots(): Omit<AreaPlotContent, 'plotfileName'>[] {
     loadExamplePlotFile('3-ExampleDeforestation.plo', 2016, 1),
   ];
 
-  const plotsFromUserInputs = [area1, area2, area3].map((input, index) => ({
-    uniqueAreaKey: `${index + 1}-plotsFromUserInputs`,
-    plotContent: generateTemplateForSpatialUpdate(input),
-    input,
-  }));
+  const plotsFromUserInputs = [area1, area2, area3].map(
+    (originalInput, index) => {
+      const parsed = FullCAMAreaSchema.parse(originalInput);
+      return {
+        uniqueAreaKey: `${index + 1}-plotsFromUserInputs`,
+        plotContent: generateTemplateForSpatialUpdate(parsed),
+        input: parsed as FullCAMAreaInputTransformed,
+        originalInput,
+      };
+    },
+  );
 
   return examplePlotFiles.concat(plotsFromUserInputs);
 }
@@ -160,9 +172,20 @@ describe('FullCAM scenario batch simulations', () => {
   let failedSubmissions: FullCAMAreaError[];
 
   beforeAll(async () => {
+    const fullcamWorkflowApiKey = process.env.FULLCAM_WORKFLOW_API_KEY;
+    if (!fullcamWorkflowApiKey) {
+      throw new Error('FULLCAM_WORKFLOW_API_KEY is not set');
+    }
+
+    const fullcamBatchNotificationEmail =
+      process.env.FULLCAM_BATCH_NOTIFICATION_EMAIL;
+    if (!fullcamBatchNotificationEmail) {
+      throw new Error('FULLCAM_BATCH_NOTIFICATION_EMAIL is not set');
+    }
+
     const batchOptions: RunSimulationBatchOptions = {
-      fullcamWorkflowApiKey: process.env.FULLCAM_WORKFLOW_API_KEY,
-      notificationEmail: process.env.FULLCAM_BATCH_NOTIFICATION_EMAIL,
+      fullcamWorkflowApiKey,
+      fullcamBatchNotificationEmail,
     };
 
     const batchResult = await runSimulationBatch(

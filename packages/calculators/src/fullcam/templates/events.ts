@@ -1,10 +1,10 @@
 import {
-  FullCAMAreaInput,
-  FullCAMClearableAreaInput,
-  FullCAMClearingEvent,
-  FullCAMPlantingEvent,
-  FullCAMPrescribedBurnEvent,
-  FullCAMWildfireEvent,
+  FullCAMAreaInputTransformed,
+  FullCAMClearableAreaInputTransformed,
+  FullCAMClearingEventTransformed,
+  FullCAMPlantingEventTransformed,
+  FullCAMPrescribedBurnEventTransformed,
+  FullCAMWildfireEventTransformed,
   isAreaClearable,
 } from '../input';
 import { treeSpeciesIdMap } from '../types';
@@ -17,7 +17,7 @@ function fullCAMDate(d: Date): string {
   return `${y}${String(m).padStart(2, '0')}${String(day).padStart(2, '0')}`;
 }
 
-function generatePlantingEvent(event: FullCAMPlantingEvent): string {
+function generatePlantingEvent(event: FullCAMPlantingEventTransformed): string {
   const plantingName = escapeXmlAttribute(
     `Establish ${event.speciesName} - block geometry - ${fullCAMDate(event.plantingDate)}`,
   );
@@ -50,8 +50,8 @@ function generatePlantingEvent(event: FullCAMPlantingEvent): string {
 }
 
 function generateClearingEvent(
-  input: FullCAMClearableAreaInput,
-  event: FullCAMClearingEvent,
+  input: FullCAMClearableAreaInputTransformed,
+  event: FullCAMClearingEventTransformed,
 ): string {
   switch (input.initialTrees.speciesName) {
     case 'Environmental plantings':
@@ -93,7 +93,7 @@ function generateClearingEvent(
   }
 }
 
-function generateWildfireEvent(event: FullCAMWildfireEvent): string {
+function generateWildfireEvent(event: FullCAMWildfireEventTransformed): string {
   return `<Event tEV="FirF" clearEV="false" onEV="true" dateOriginEV="Calendar" nYrsFromStEV="" nDaysFromStEV="" tFaqEV="Blank" tAaqEV="Blank" aqStYrEV="1" aqEnYrEV="2100" nmEV="Forest Fire 51-61 &amp; 64-70_ACT-Wildfire" categoryEV="CatUndef" tEvent="Doc" idSP="1" regimeInstance="093b2a36-07e0-4f1c-a2e3-da5158b882f8" nmRegime="New Regime">
       <notesEV/>
       <FirF fracAfctFirF="${event.percentBurned / 100}" fracStemToAtmsFirF="0.09" fracBranToAtmsFirF="0.09" fracBarkToAtmsFirF="0.09" fracLeafToAtmsFirF="0.05" fracCortToAtmsFirF="0" fracFirtToAtmsFirF="0" fracStemToDdwdFirF="0" fracBranToDdwdFirF="0" fracBarkToBlitFirF="0" fracLeafToLlitFirF="0" fracCortToCodrFirF="0" fracFirtToFidrFirF="0" fracStemToSDdwdFirF="0.01" fracBranToSChwdFirF="0.01" fracBarkToSBlitFirF="0.01" fracLeafToSLlitFirF="0.05" fracCortToSCodrFirF="0" fracFirtToSFidrFirF="0" fracDDdwdToAtmsFirF="0.55" fracRDdwdToAtmsFirF="0.55" fracDChwdToAtmsFirF="0.55" fracRChwdToAtmsFirF="0.55" fracDBlitToAtmsFirF="0.65" fracRBlitToAtmsFirF="0.65" fracDLlitToAtmsFirF="0.9" fracRLlitToAtmsFirF="0.9" fracDCodrToAtmsFirF="0" fracRCodrToAtmsFirF="0" fracDFidrToAtmsFirF="0" fracRFidrToAtmsFirF="0" fracDDdwdToInrtFirF="0" fracRDdwdToInrtFirF="0" fracDChwdToInrtFirF="0" fracRChwdToInrtFirF="0" fracDBlitToInrtFirF="0" fracRBlitToInrtFirF="0" fracDLlitToInrtFirF="0" fracRLlitToInrtFirF="0" fracDCodrToInrtFirF="0" fracRCodrToInrtFirF="0" fracDFidrToInrtFirF="0" fracRFidrToInrtFirF="0" fracSopmToAtmsFirF="" fracLrpmToAtmsFirF="" fracMrpmToAtmsFirF="" fracSommToAtmsFirF="" fracLrmmToAtmsFirF="" fracMrmmToAtmsFirF="" fracMicrToAtmsFirF="" fracSopmToInrtFirF="" fracLrpmToInrtFirF="" fracMrpmToInrtFirF="" fracSommToInrtFirF="" fracLrmmToInrtFirF="" fracMrmmToInrtFirF="" fracMicrToInrtFirF="" fracMnamNToAtmsFirF="" fracSAmmNToAtmsFirF="" fracSNtrNToAtmsFirF="" fracDAmmNToAtmsFirF="" fracDNtrNToAtmsFirF="" yrsStemRegrowFirF="60.0" yrsBranRegrowFirF="60.0" yrsBarkRegrowFirF="60.0" yrsLeafRegrowFirF="15.0" yrsCortRegrowFirF="0.0" yrsFirtRegrowFirF="0.0" fracSDdwdToAtmsFirF="0.28" fracSChwdToAtmsFirF="0.28" fracSBlitToAtmsFirF="0.28" fracSLlitToAtmsFirF="0.76" fracSDdwdToDebrFirF="0.03" fracSChwdToDebrFirF="0.03" fracSBlitToDebrFirF="0.03" fracSLlitToDebrFirF="0.08" useBioAgeAdjFirF="false" fixFirF="" phaFirF=""/>
@@ -102,7 +102,7 @@ function generateWildfireEvent(event: FullCAMWildfireEvent): string {
 }
 
 function generatePrescribedBurnEvent(
-  event: FullCAMPrescribedBurnEvent,
+  event: FullCAMPrescribedBurnEventTransformed,
 ): string {
   return `<Event tEV="FirF" clearEV="false" onEV="true" dateOriginEV="Calendar" nYrsFromStEV="" nDaysFromStEV="" tFaqEV="Blank" tAaqEV="Blank" aqStYrEV="1" aqEnYrEV="2100" nmEV="Forest Fire 51-61 &amp; 64-70_ACT-Prescribed" categoryEV="CatUndef" tEvent="Doc" idSP="1" regimeInstance="45923b30-8a7c-455d-ba12-51910fa109da" nmRegime="New Regime">
       <notesEV/>
@@ -116,11 +116,11 @@ const eventQHeader = `<HeaderState sortIx="0" sortUp="true" sortBy1="false" sort
 </HeaderState>
 <showEvT>t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,f</showEvT>`;
 
-function eventsWithClearing(input: FullCAMClearableAreaInput) {
+function eventsWithClearing(input: FullCAMClearableAreaInputTransformed) {
   return input.clearingEvents.map((c) => generateClearingEvent(input, c));
 }
 
-export function generateEventQ(input: FullCAMAreaInput) {
+export function generateEventQ(input: FullCAMAreaInputTransformed) {
   const { plantingEvents, wildfireEvents, prescribedBurnEvents } = input;
 
   const clearingEvents = isAreaClearable(input)

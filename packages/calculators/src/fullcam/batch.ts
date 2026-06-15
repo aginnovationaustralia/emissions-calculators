@@ -101,8 +101,6 @@ function findSimulationCsvInArchive(
 
 export type RunSimulationBatchOptions = {
   batchName?: string;
-  /** Completion notification address required by the Plot API. */
-  notificationEmail?: string;
   /** Must match plot file format; defaults to 2024 to align with {@link SIMULATION_API_URL}. */
   version?: '2020' | '2024' | 'RMT';
   /**
@@ -112,8 +110,8 @@ export type RunSimulationBatchOptions = {
   isUpdatingSpatialAndSpecies?: boolean;
   pollIntervalMs?: number;
   maxWaitMs?: number;
-  fullcamApiKey?: string;
-  fullcamWorkflowApiKey?: string;
+  fullcamWorkflowApiKey: string;
+  fullcamBatchNotificationEmail: string;
 };
 
 const DEFAULT_POLL_MS = 5000;
@@ -132,7 +130,7 @@ type PipelineOptions = {
   fetcher: Fetcher;
   fullcamWorkflowApiKey: string;
   batchName: string;
-  notificationEmail: string;
+  fullcamBatchNotificationEmail: string;
 };
 
 const defaultFetcher: Fetcher = async (url, options) => {
@@ -213,7 +211,7 @@ async function runBatch(
     fullcamWorkflowApiKey,
     fetcher,
     batchName,
-    notificationEmail,
+    fullcamBatchNotificationEmail,
   }: PipelineOptions,
 ): Promise<FullCAMResult<void>> {
   const version = '2024';
@@ -222,7 +220,7 @@ async function runBatch(
     batchId,
     batchName,
     version,
-    notificationEmail,
+    notificationEmail: fullcamBatchNotificationEmail,
     isUpdatingSpatialAndSpecies,
   });
 
@@ -386,6 +384,20 @@ function extractSimulationResults(
     }
     const batchStatus = batchResult.status;
     if (batchStatus === 'Failed') {
+      // If the batch API decides the scenario is not valid, it returns 'Document not Ready'
+      // This could be anything from corrupt XML at one extreme, to a subtle issue like the sequence of planting and clearing events
+      if (
+        batchResult.errorMessage?.toLowerCase().includes('document not ready')
+      ) {
+        return Result.err({
+          area,
+          error: {
+            step: 'validate-scenario',
+            message:
+              'The inputs passed to the FullCAM API are not a valid scenario. Complex events probably require using the FullCAM application directly',
+          },
+        });
+      }
       return Result.err({
         area,
         error: {
@@ -468,35 +480,18 @@ async function batchPipeline(
  */
 export async function runSimulationBatch(
   requests: BatchSimulationRequest[],
-  options?: Partial<RunSimulationBatchOptions>,
+  options: RunSimulationBatchOptions,
 ): Promise<FullCAMResult<FullCAMSubmissionResult[]>> {
   if (requests.length === 0) {
     return Result.ok([]);
   }
 
-  const fullcamWorkflowApiKey = options?.fullcamWorkflowApiKey;
-  if (!fullcamWorkflowApiKey) {
-    return Result.err({
-      step: 'pipeline',
-      message: 'fullcamWorkflowApiKey is required',
-    });
-  }
+  const { fullcamWorkflowApiKey, fullcamBatchNotificationEmail } = options;
 
   const batchName =
-    options?.batchName ??
+    options.batchName ??
     process.env.FULLCAM_BATCH_NAME ??
     `aia-fullcam-${new Date().toISOString().replace(/[:.]/g, '-')}`;
-
-  const notificationEmail =
-    options?.notificationEmail ?? process.env.FULLCAM_BATCH_NOTIFICATION_EMAIL;
-
-  if (!notificationEmail) {
-    return Result.err({
-      step: 'pipeline',
-      message:
-        'runSimulationBatch requires notificationEmail in options or FULLCAM_BATCH_NOTIFICATION_EMAIL',
-    });
-  }
 
   const safeRequests = requests.map((request) => ({
     ...request,
@@ -506,8 +501,8 @@ export async function runSimulationBatch(
   const pipelineOptions = {
     fetcher: defaultFetcher,
     fullcamWorkflowApiKey,
+    fullcamBatchNotificationEmail,
     batchName,
-    notificationEmail,
   };
 
   const results = await batchPipeline(safeRequests, pipelineOptions);
@@ -554,7 +549,7 @@ export async function runSimulationsSingle(
     async (request) => {
       const simulationCsv = await runSimulation(
         request.plotContent,
-        options.fullcamApiKey ?? '',
+        options.fullcamWorkflowApiKey,
       );
       return {
         areaKey: request.uniqueAreaKey,
