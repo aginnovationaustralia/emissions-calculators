@@ -6,8 +6,8 @@ import {
 import { getSimpleCalculatorInput as getCalculatorInput } from './common';
 import { calculateManureManagementCH4ForPoultry } from '@/modules/scope1/4-manure-management/4.6-poultry-manure/calculate';
 
-const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'AC', {
-  rowInterval: 5,
+const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'BO', {
+  rowInterval: 4,
 });
 
 /**
