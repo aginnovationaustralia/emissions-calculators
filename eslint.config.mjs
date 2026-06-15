@@ -45,6 +45,12 @@ export default [
     },
   })),
   {
+    files: ['**/*.cjs'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+  {
     files: ['**/*.ts'],
     rules: {
       'no-console': 'error',
