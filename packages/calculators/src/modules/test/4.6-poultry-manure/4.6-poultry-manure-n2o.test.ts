@@ -12,14 +12,13 @@ import {
 
 const extractInputsAndOutput = (cell: string) =>
   createSheetExtractor(getCalculatorInput, cell, {
-    rowInterval: 5,
+    rowInterval: 4,
   });
 
 /**
  * TODO:
  * - Method 2 tests
  * - Scenario with more granular stage 2 allocations
- * - Multi-class scenario
  */
 
 describe('4.6.1.3 Poultry Manure Direct N2O', () => {
@@ -29,7 +28,7 @@ describe('4.6.1.3 Poultry Manure Direct N2O', () => {
       '4.6.1.3',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput('AI')(sheet, 11, '1');
+    const inputsAndOutputs = extractInputsAndOutput('BZ')(sheet, 11, '1');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
@@ -45,7 +44,7 @@ describe('4.6.1.5 Poultry Manure Atmospheric Deposition N2O', () => {
       '4.6.1.5',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput('AH')(sheet, 11, '1');
+    const inputsAndOutputs = extractInputsAndOutput('CB')(sheet, 11, '1');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
@@ -61,7 +60,7 @@ describe('4.6.1.7 Poultry Manure Leaching and Runoff N2O', () => {
       '4.6.1.7',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput('AI')(sheet, 11, '1');
+    const inputsAndOutputs = extractInputsAndOutput('BR')(sheet, 11, '1');
 
     compareInputsAndOutputs(
       inputsAndOutputs,

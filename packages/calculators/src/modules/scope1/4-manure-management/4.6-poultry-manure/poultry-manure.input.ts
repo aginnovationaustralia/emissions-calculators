@@ -74,7 +74,14 @@ const createPoultryManureClassInputSchema = <
         mapOptional((val) =>
           input(`Ij=${j}`, massPerHeadPerDay('DryMatter', val)),
         ),
-      ),
+      )
+      .meta({ description: 'Dry matter intake' }),
+    method2DryMatterDigestibility: z
+      .number()
+      .gt(0)
+      .optional()
+      .transform(mapOptional((val) => input(`DMDj=${j}`, realNumber(val))))
+      .meta({ description: 'Dry matter digestibility' }),
     method2CrudeProtein: z
       .number()
       .gt(0)

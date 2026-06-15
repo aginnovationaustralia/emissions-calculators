@@ -6,7 +6,7 @@ import {
 import { getSimpleCalculatorInput as getCalculatorInput } from './common';
 import { calculateManureManagementCH4ForPoultry } from '@/modules/scope1/4-manure-management/4.6-poultry-manure/calculate';
 
-const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'BO', {
+const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'BT', {
   rowInterval: 4,
 });
 
@@ -14,7 +14,6 @@ const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'BO', {
  * TODO:
  * - Method 2 tests
  * - Scenario with more granular stage 2 allocations
- * - Multi-class scenario
  */
 
 describe('4.6.1.1 Poultry Manure Management CH4', () => {

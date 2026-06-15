@@ -345,7 +345,8 @@ export const calculateManureManagementCH4ForClass = (
 
   return totalMethaneProductionPerBirdPerDay
     .multiply(poultryClass.head)
-    .multiply(poultryClass.days);
+    .multiply(poultryClass.days)
+    .named(`ECH4 (j=${poultryClass.classNumber})`);
 };
 
 /**
