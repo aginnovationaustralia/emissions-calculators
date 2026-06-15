@@ -602,7 +602,8 @@ export const calculateManureManagementCH4ForClass = (
     ...methaneProductionPerSecondarySystem,
   ])
     .multiply(swineClass.head)
-    .multiply(swineClass.days);
+    .multiply(swineClass.days)
+    .named(`ECH4 (j=${swineClass.number})`);
 };
 
 /**
