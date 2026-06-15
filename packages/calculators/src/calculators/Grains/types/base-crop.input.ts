@@ -7,6 +7,7 @@ import { object, proportion } from '@/types/schemas';
 import { z } from 'zod';
 
 export const BaseGrainsCropSchema = object({
+  // TODO: This input for state should be redundant now, prefer the top level state input
   state: z.enum(States).meta({ description: DESCRIPTIONS.STATE }),
   areaSown: z
     .number()
@@ -14,6 +15,7 @@ export const BaseGrainsCropSchema = object({
     .transform((val) => input('areaSown', area(hectaresToSquareMetres(val))))
     .meta({ description: 'Area sown, in ha (hectares)' }),
   // NOTE: See Chapter 1 section 1.8.2 on leaching zones
+  // TODO: This input for isInLeachingZone should be redundant now, prefer the top level input
   isInLeachingZone: z.boolean().meta({
     description: 'Whether the property is within a leaching zone',
   }),

@@ -1,8 +1,11 @@
-import { FullCAMAreaInput } from '../input';
+import { FullCAMAreaInputTransformed } from '../input';
 import { generateEventQ } from './events';
+import { generateInitialTrees } from './init';
 import { generateSpeciesForestSet } from './species';
 
-export const generateTemplateForSpatialUpdate = (input: FullCAMAreaInput) => {
+export const generateTemplateForSpatialUpdate = (
+  input: FullCAMAreaInputTransformed,
+) => {
   const simulationStartYear = input.startYear - 20;
   const simulationEndYear = input.endYear + 20;
 
@@ -101,7 +104,7 @@ export const generateTemplateForSpatialUpdate = (input: FullCAMAreaInput) => {
         <rawTS count="12">,,,,,,,,,,,</rawTS>
         </TimeSeries>
     </Site>
-    ${generateSpeciesForestSet(input)}
+    ${generateSpeciesForestSet()}
     <SpeciesAgricultureSet count="0" showOnlyInUse="false"/>
   <Soil>
     <SoilBase>
@@ -127,7 +130,7 @@ export const generateTemplateForSpatialUpdate = (input: FullCAMAreaInput) => {
     </TimeSeries>
   </Soil>
   <Init>
-    <InitTreeF treeExistsInit="false" maxTreeAgeInit="" avgTreeAgeInit="" tInitStem="Vol" stemMInitF="" branMInitF="" barkMInitF="" leafMInitF="" cortMInitF="" firtMInitF="" stemVolInitF="" stemFracInitF="" branFracInitF="" barkFracInitF="" leafFracInitF="" cortFracInitF="" firtFracInitF="" stemNCRatioInitF="" branNCRatioInitF="" barkNCRatioInitF="" leafNCRatioInitF="" cortNCRatioInitF="" firtNCRatioInitF="" storNMInitF="" stemM3PGInit="" foliM3PGInit="" rootM3PGInit="" nStemsInit="" tTYFCatInitF="Custom" frFracInit="" tFrFracInit="FracConst" treeNmInit="Environmental plantings"/>
+    ${generateInitialTrees(input)}
     <InitCropA cropExistsInit="" maxCropAgeInit="" avgCropAgeInit="" gbfrMInitA="" stlkMInitA="" leafMInitA="" cortMInitA="" firtMInitA="" gbfrNCRatioInitA="" stlkNCRatioInitA="" leafNCRatioInitA="" cortNCRatioInitA="" firtNCRatioInitA="" storNMInitA="" cropNmInit=""/>
     <InitSDwdF sDStemCMInitF="0" sDBranCMInitF="0" sDBlitCMInitF="0" sDLlitCMInitF="0" sDCodrCMInitF="0" sDFidrCMInitF="0"/>
     <InitDebrF dDdwdCMInitF="0" rDdwdCMInitF="0" dChwdCMInitF="0" rChwdCMInitF="0" dBlitCMInitF="0" rBlitCMInitF="0" dLlitCMInitF="0" rLlitCMInitF="0" dCodrCMInitF="0" rCodrCMInitF="0" dFidrCMInitF="0" rFidrCMInitF="0" dDdwdNCRatioInitF="" dChwdNCRatioInitF="" dBlitNCRatioInitF="" dLlitNCRatioInitF="" dCodrNCRatioInitF="" dFidrNCRatioInitF=""/>

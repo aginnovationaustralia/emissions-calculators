@@ -1,6 +1,6 @@
 {
   "name": "@aginnovationaustralia/emissions-calculators",
-  "version": "4.0.1-beta.3",
+  "version": "4.0.1-beta.4",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -297,6 +297,11 @@
         "browser": "./dist/fullcam/index.mjs",
         "types": "./dist/fullcam/index.d.ts",
         "default": "./dist/fullcam/index.mjs"
+      },
+      "require": {
+        "browser": "./dist/fullcam/index.cjs",
+        "types": "./dist/fullcam/index.d.ts",
+        "default": "./dist/fullcam/index.cjs"
       }
     },
     "./openapi": {
@@ -318,6 +323,7 @@
     "check:types": "tsc --noEmit",
     "lint": "eslint . && pnpm run check:types",
     "test": "jest",
+    "test:fullcam": "jest --config jest.config.fullcam.cjs",
     "version": "npm version --no-git-tag-version",
     "build:docs": "tsx scripts/build-docs/index.ts",
     "generate:exports": "tsx scripts/generate-exports.ts",
@@ -337,6 +343,7 @@
     "node": ">=22.19.0"
   },
   "devDependencies": {
+    "@aginnovationaustralia/eslint-plugin-emissions-calculators": "workspace:*",
     "@rollup/plugin-alias": "^6.0.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
@@ -357,8 +364,7 @@
     "tsc-alias": "^1.8.10",
     "tsx": "^4.21.0",
     "typescript": "^5.9.2",
-    "xlsx-populate": "^1.21.0",
-    "@aginnovationaustralia/eslint-plugin-emissions-calculators": "workspace:*"
+    "xlsx-populate": "^1.21.0"
   },
   "dependencies": {
     "decimal.js-light": "^2.5.1",

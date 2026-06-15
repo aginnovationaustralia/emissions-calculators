@@ -2,7 +2,7 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { selectConstant } from '@/tools/constants';
 import { br } from '@/tools/containers';
-import { zeroN } from '@/tools/sentinels';
+import { zeroN, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { LULUCFInputTransformed, LULUCFParentInputTransformed } from './input';
 import {
@@ -85,7 +85,7 @@ export const calculate_16_2_1_1_NitrogenMineralisationSoilLosses = (
   const { landUse } = input;
 
   if (!landUse) {
-    return zeroN.named('ELUC,i,j=1-3,y');
+    return zeroN2O.named('ELUC,i,j=1-3,y');
   }
 
   /*

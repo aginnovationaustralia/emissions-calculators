@@ -64,6 +64,7 @@ export const grainWheat: GrainsCrop = {
     },
     offsiteManure: [],
   },
+  lulucfAllocation: 0,
 };
 
 export const grainSorghum: GrainsCrop = {
@@ -112,6 +113,7 @@ export const grainSorghum: GrainsCrop = {
     },
     offsiteManure: [],
   },
+  lulucfAllocation: 0,
 };
 
 export const grainLegume: GrainsCrop = {
@@ -160,6 +162,7 @@ export const grainLegume: GrainsCrop = {
     },
     offsiteManure: [],
   },
+  lulucfAllocation: 0,
 };
 
 export const grainGrass: GrainsCrop = {
@@ -208,6 +211,7 @@ export const grainGrass: GrainsCrop = {
     },
     offsiteManure: [],
   },
+  lulucfAllocation: 0,
 };
 
 export const grainTriticale: GrainsCrop = {
@@ -256,6 +260,7 @@ export const grainTriticale: GrainsCrop = {
     },
     offsiteManure: [],
   },
+  lulucfAllocation: 0,
 };
 
 export const grainsTestData: GrainsInput = {
@@ -336,6 +341,7 @@ export const grainsTestData102: GrainsInput = {
         },
         offsiteManure: [],
       },
+      lulucfAllocation: 0,
     },
   ],
   // vegetation: [

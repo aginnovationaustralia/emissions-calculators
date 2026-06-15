@@ -14,6 +14,7 @@ export const grainsInputData: GrainsInput = {
       areaSown: 1000,
       isInLeachingZone: true,
       electricityAllocation: 0.2,
+      lulucfAllocation: 0,
       chemicals: [],
       refrigerants: [],
       inorganicFertilisers: {

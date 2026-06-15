@@ -2,7 +2,7 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { selectConstant } from '@/tools/constants';
 import { br, num, root } from '@/tools/containers';
-import { zeroCO2e } from '@/tools/sentinels';
+import { zeroCH4, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { mass } from '@/tools/units';
 import { LULUCFParentInputTransformed } from './input';
@@ -25,7 +25,7 @@ export const calculate_16_1_1_2_ChangesInWoodyCarbonStocks = (
   const activities = input.landUse?.activities;
 
   if (!activities) {
-    return zeroCO2e.named('CLUC,j,y');
+    return root(mass('CO2', 0)).named('CLUC,j,y');
   }
 
   const CgCO2 = selectConstant(constants.COMMON, 'CG_CO2');
@@ -69,7 +69,7 @@ export const calculate_16_1_1_4_BiomassBurningCH4 = (
   const activities = input.landUse?.activities;
 
   if (!activities) {
-    return zeroCO2e.named('ELUC,g=ch4,j,y');
+    return zeroCH4.named('ELUC,g=ch4,j,y');
   }
 
   const ch4FromBurnings = activities
@@ -93,7 +93,7 @@ export const calculate_16_1_1_4_BiomassBurningN2O = (
   const activities = input.landUse?.activities;
 
   if (!activities) {
-    return zeroCO2e.named('ELUC,g=n2o,j,y');
+    return zeroN2O.named('ELUC,g=n2o,j,y');
   }
 
   const n2oFromBurnings = activities
@@ -119,7 +119,7 @@ export const calculate_16_1_1_5_SoilOrganicStockLosses = (
   const activities = input.landUse?.activities;
 
   if (!activities) {
-    return zeroCO2e.named('SLUC,j=1-3,y');
+    return root(mass('CO2', 0)).named('SLUC,j=1-3,y');
   }
 
   const CgCO2 = selectConstant(constants.COMMON, 'CG_CO2');
@@ -155,7 +155,7 @@ export const calculate_16_1_1_7_HarvestedWoodProducts = (
   const activities = input.landUse?.activities;
 
   if (!activities) {
-    return root(mass('CO2e', 0)).named('CHWP,j=6-7,y');
+    return root(mass('CO2', 0)).named('CHWP,j=6-7,y');
   }
 
   const CgCO2 = selectConstant(constants.COMMON, 'CG_CO2');

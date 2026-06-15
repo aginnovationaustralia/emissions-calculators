@@ -1,4 +1,4 @@
-import { FullCAMAreaInput } from './input';
+import { FullCAMAreaInputTransformed } from './input';
 import { generateTemplateForSpatialUpdate } from './templates/spatial-update';
 
 export const SIMULATION_API_URL =
@@ -9,7 +9,7 @@ export const SPATIAL_UPDATE_API_URL =
 const plotFileName = 'fullcam-emissions-calculator.plo';
 
 export async function updateSpatial(
-  inputs: FullCAMAreaInput,
+  inputs: FullCAMAreaInputTransformed,
   apiKey: string,
 ): Promise<string> {
   const plotContent = generateTemplateForSpatialUpdate(inputs);

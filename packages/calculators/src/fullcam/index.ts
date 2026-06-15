@@ -1,5 +1,4 @@
 export {
-  BatchSimulationRequest,
   BatchSimulationResponse,
   runSimulationBatch,
   RunSimulationBatchOptions,
@@ -10,15 +9,19 @@ export {
   FullCAMInputsSchema,
   FullCAMOutputsSchema,
   GrainsInputWithFullCAMSchema,
-  isLandUseFullCAMInputs,
-  isLandUseFullCAMOutputs,
+  isLandUseInputReady,
+  isLandUseNeedsFullCAMUpgrade,
 } from './calculators';
 export type {
   FullCAMInputs,
   FullCAMOutputs,
   GrainsInputWithFullCAM,
 } from './calculators';
-export { LULUCFWithFullCAMInputSchema, TreeSpeciesName } from './input';
+export {
+  FullCAMAreaSchema,
+  LULUCFWithFullCAMInputSchema,
+  TreeSpeciesName,
+} from './input';
 export type {
   FullCAMAreaInput,
   FullCAMClearingEvent,
@@ -29,4 +32,14 @@ export type {
 } from './input';
 export { generateLulucfInput } from './merge-simulation-to-package-land-use';
 export { runSimulation, updateSpatial } from './requests';
-export { generateSummaryFromSimulationOutput } from './response';
+export { extractKeyFieldsFromFullCAMOutput } from './response';
+export { isErr, isOk, Result } from './result';
+export type { Err, Ok } from './result';
+export { generateTemplateForSpatialUpdate } from './templates/spatial-update';
+export type {
+  BatchSimulationRequest,
+  FullCAMError,
+  FullCAMResult,
+  FullCAMSubmission,
+  InputAreaWithOutputKeyFields,
+} from './types';

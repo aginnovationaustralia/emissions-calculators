@@ -1,8 +1,66 @@
 import { isDefined } from '@/common/filters';
-import { FullCAMOutputLine, FullCAMOutputSummary } from './types';
+import { Result } from './result';
+import {
+  AreaPlotContent,
+  FullCAMAreaResult,
+  FullCAMOutputLine,
+  FullCAMResult,
+  FullCAMSubmission,
+  InputAreaWithOutputKeyFields,
+} from './types';
 
-export const generateCsvLines = (csvString: string): FullCAMOutputLine[] => {
+function extractFloatByColumnIndex(
+  lineValues: string[],
+  index: number,
+): number {
+  const value = lineValues[index];
+  if (value === undefined) {
+    return 0;
+  }
+  return parseFloat(value);
+}
+
+export const generateCsvLines = (
+  csvString: string,
+): FullCAMResult<FullCAMOutputLine[]> => {
   const lines = csvString.split('\n');
+
+  if (lines.length < 2) {
+    return Result.err({
+      step: 'extract-results',
+      message: 'Invalid CSV output: no data',
+    });
+  }
+
+  const csvHeader = lines[0];
+  const columnNames = csvHeader.split(',');
+  const firstLineValues = lines[1].split(',');
+  if (columnNames.length === 3) {
+    return Result.err({
+      step: 'extract-results',
+      message: `Batch error: ${firstLineValues[2] ?? firstLineValues}`,
+    });
+  }
+
+  const indexCMassOfTrees = columnNames.indexOf('"C mass of trees  (tC/ha)"');
+  const indexCH4EmittedDueToFire = columnNames.indexOf(
+    '"CH4 emitted due to fire (tCH4/ha)"',
+  );
+  const indexN2OEmittedDueToFire = columnNames.indexOf(
+    '"N2O emitted due to fire (tN2O/ha)"',
+  );
+  const indexCMassOfForestDebris = columnNames.findIndex((c) =>
+    [
+      // REVISIT: I noticed both column names emitted from the batch API for this field
+      '"C mass of forest debris  (tC/ha)"',
+      '"C mass of debris  (tC/ha)"',
+    ].includes(c),
+  );
+
+  const indexYear = columnNames.indexOf('Year');
+  const indexMonth = columnNames.indexOf('Step In Year');
+  const indexDecimalYear = columnNames.indexOf('Dec. Year');
+
   const summary = lines
     .map((line): FullCAMOutputLine | undefined => {
       if (line === '') {
@@ -10,37 +68,39 @@ export const generateCsvLines = (csvString: string): FullCAMOutputLine[] => {
       }
       const values = line.split(',');
 
-      if (values.length !== 7) {
-        throw new Error(`Invalid line in csv output: '${line}'`);
-      }
+      const valueYear = values[indexYear];
+      const valueMonth = values[indexMonth];
+      const valueDecimalYear = values[indexDecimalYear];
 
-      // Year,Step In Year,Dec. Year,"C mass of trees  (tC/ha)","CH4 emitted due to fire (tCH4/ha)","N2O emitted due to fire (tN2O/ha)","C mass of forest debris  (tC/ha)"
-      const [
-        year,
-        month,
-        decimalYear,
-        cMassOfTrees,
-        ch4EmittedDueToFire,
-        n2oEmittedDueToFire,
-        cMassOfForestDebris,
-      ] = values;
       return {
-        year: parseInt(year),
-        month: parseInt(month),
-        decimalYear: parseFloat(decimalYear),
-        carbonMassOfTreesTCPerHectare: parseFloat(cMassOfTrees),
-        ch4EmittedDueToFireTCH4PerHectare: parseFloat(ch4EmittedDueToFire),
-        n2oEmittedDueToFireTN2OPerHectare: parseFloat(n2oEmittedDueToFire),
-        carbonMassOfForestDebrisTCPerHectare: parseFloat(cMassOfForestDebris),
+        year: parseInt(valueYear),
+        month: parseInt(valueMonth),
+        decimalYear: parseFloat(valueDecimalYear),
+        carbonMassOfTreesTCPerHectare: extractFloatByColumnIndex(
+          values,
+          indexCMassOfTrees,
+        ),
+        ch4EmittedDueToFireTCH4PerHectare: extractFloatByColumnIndex(
+          values,
+          indexCH4EmittedDueToFire,
+        ),
+        n2oEmittedDueToFireTN2OPerHectare: extractFloatByColumnIndex(
+          values,
+          indexN2OEmittedDueToFire,
+        ),
+        carbonMassOfForestDebrisTCPerHectare: extractFloatByColumnIndex(
+          values,
+          indexCMassOfForestDebris,
+        ),
       };
     })
     .filter(isDefined);
 
-  return summary;
+  return Result.ok(summary);
 };
 
 /*
-Summary field definitions: see FullCAMOutputSummary in ./types.ts
+Summary field definitions: see FullCAMOutputKeyFields in ./types.ts
 
 Determining tree and debris carbon for plantings, regeneration, farm forestry and commercial plantation forestry
 
@@ -75,10 +135,6 @@ export type ExtractionOptions = {
   endMonth: number;
 };
 
-function terminalStockMonth(endMonth: number): 6 | 12 {
-  return endMonth === 6 ? 6 : 12;
-}
-
 function findLastRowForYearMonth(
   lines: FullCAMOutputLine[],
   year: number,
@@ -93,19 +149,20 @@ function findLastRowForYearMonth(
   return found;
 }
 
-function requireRow(
+function findRequiredRow(
   lines: FullCAMOutputLine[],
   year: number,
   month: number,
   label: string,
-): FullCAMOutputLine {
+): FullCAMResult<FullCAMOutputLine> {
   const row = findLastRowForYearMonth(lines, year, month);
   if (!row) {
-    throw new Error(
-      `FullCAM summary: no output row for ${label} at year=${year}, month=${month} (terminal month per reporting period).`,
-    );
+    return Result.err({
+      step: 'extract-results',
+      message: `FullCAM summary: no output row for ${label} at year=${year}, month=${month} (terminal month per reporting period).`,
+    });
   }
-  return row;
+  return Result.ok(row);
 }
 
 function isInReportingYearForEmissions(
@@ -144,38 +201,63 @@ function sumFireForReportingYear(
 }
 
 /**
- * Builds {@link FullCAMOutputSummary} from sorted monthly FullCAM lines. See block comment above
+ * Builds {@link FullCAMOutputKeyFields} from sorted monthly FullCAM lines. See block comment above
  * {@link ExtractionOptions} for methodology; calendar vs financial year follows `endMonth` (12 vs 6).
  */
 export const generateSummaryFromLines = (
   lines: FullCAMOutputLine[],
-  options: ExtractionOptions,
-): FullCAMOutputSummary => {
-  const { endYear, endMonth } = options;
-  const terminalMonth = terminalStockMonth(endMonth);
+  area: AreaPlotContent,
+): FullCAMAreaResult<InputAreaWithOutputKeyFields> => {
+  const { endYear, endMonth } = area.input;
+  // NOTE: Guidelines chapter implies end month should always be a terminal, but example plots include other final months
+  const terminalMonth = endMonth;
   const prevYear = endYear - 1;
 
-  const rowY = requireRow(lines, endYear, terminalMonth, 'current year y');
-  const rowY1 = requireRow(lines, prevYear, terminalMonth, 'previous year y-1');
+  const rowY = findRequiredRow(lines, endYear, terminalMonth, 'current year y');
+  if (rowY.isErr) {
+    return Result.err({ area, error: rowY.error });
+  }
+
+  const rowY1 = findRequiredRow(
+    lines,
+    prevYear,
+    terminalMonth,
+    'previous year y-1',
+  );
+  if (rowY1.isErr) {
+    return Result.err({ area, error: rowY1.error });
+  }
 
   const { ch4, n2o } = sumFireForReportingYear(lines, endYear, endMonth);
 
-  return {
-    carbonMassInTreesPerHectare: rowY.carbonMassOfTreesTCPerHectare, // Ct,i,j,y
-    carbonMassInDebrisPerHectare: rowY.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y
-    carbonMassInTreesPerHectarePrevYear: rowY1.carbonMassOfTreesTCPerHectare, // Ct,i,j,y-1
-    carbonMassInDebrisPerHectarePrevYear:
-      rowY1.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y-1
-    carbonMassInForestProductsPerHectare: 0, // Cp,i,j=6-7,y // TODO
-    ch4FromBiomassBurningPerHectare: ch4, // Eg,i,j,y for g = CH4
-    n2oFromBiomassBurningPerHectare: n2o, // Eg,i,j,y for g = N2O
-  };
+  return Result.ok({
+    area,
+    keyFields: {
+      carbonMassInTreesPerHectare: rowY.value.carbonMassOfTreesTCPerHectare, // Ct,i,j,y
+      carbonMassInDebrisPerHectare:
+        rowY.value.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y
+      carbonMassInTreesPerHectarePrevYear:
+        rowY1.value.carbonMassOfTreesTCPerHectare, // Ct,i,j,y-1
+      carbonMassInDebrisPerHectarePrevYear:
+        rowY1.value.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y-1
+      carbonMassInForestProductsPerHectare: 0, // Cp,i,j=6-7,y // TODO
+      ch4FromBiomassBurningPerHectare: ch4, // Eg,i,j,y for g = CH4
+      n2oFromBiomassBurningPerHectare: n2o, // Eg,i,j,y for g = N2O
+    },
+  });
 };
 
-export const generateSummaryFromSimulationOutput = (
-  csvString: string,
-  options: ExtractionOptions,
-): FullCAMOutputSummary => {
-  const lines = generateCsvLines(csvString);
-  return generateSummaryFromLines(lines, options);
+export const extractKeyFieldsFromFullCAMOutput = (
+  submission: FullCAMSubmission,
+): FullCAMAreaResult<InputAreaWithOutputKeyFields> => {
+  const { area, outputCsv } = submission;
+  const linesResult = generateCsvLines(outputCsv);
+  if (linesResult.isErr) {
+    return Result.err({
+      area,
+      error: linesResult.error,
+    });
+  }
+
+  return generateSummaryFromLines(linesResult.value, area);
 };
