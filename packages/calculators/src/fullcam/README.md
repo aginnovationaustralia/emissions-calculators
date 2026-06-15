@@ -54,7 +54,7 @@ function processLandUseKey(landUse: FullCAMInputs | FullCAMOutputs): FullCAMOutp
 
     const batchOptions: RunSimulationBatchOptions = {
         fullcamWorkflowApiKey: 'abcd1234',
-        notificationEmail: 'myaddress@example.com'
+        fullcamBatchNotificationEmail: 'myaddress@example.com'
     }
 
     const simulationResults = runSimulationBatch(plotFiles, options)
@@ -111,7 +111,7 @@ The tools here help to define expected input and output values, and some templat
 
 # Status
 
-For now, this code should be considered a working prototype.
+This code can be considered ready for production usage.
 
 # Example application
 
