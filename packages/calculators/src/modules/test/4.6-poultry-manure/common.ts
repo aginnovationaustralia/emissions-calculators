@@ -104,7 +104,7 @@ export const getSimpleCalculatorInput = (
 
   if (method === '1') return LivestockPoultryInputSchema.parse(input);
 
-  input.temperatureZone = checkMeanAnnualTemperature('B');
+  input.temperatureZone = checkMeanAnnualTemperature(cell('B'));
 
   return LivestockPoultryInputSchema.parse(input);
 };

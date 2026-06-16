@@ -15,13 +15,7 @@ const extractInputsAndOutput = (cell: string) =>
     rowInterval: 4,
   });
 
-/**
- * TODO:
- * - Method 2 tests
- * - Scenario with more granular stage 2 allocations
- */
-
-describe('4.6.1.3 Poultry Manure Direct N2O', () => {
+describe('4.6.1.3 & 4.6.1.4 Poultry Manure Direct N2O', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.6-poultry-manure/4.6-poultry-manure.xlsx',
@@ -35,9 +29,23 @@ describe('4.6.1.3 Poultry Manure Direct N2O', () => {
       calculateDirectN2OEmissionsForPoultry,
     );
   });
+
+  it('method 2 matches spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/4.6-poultry-manure/4.6-poultry-manure.xlsx',
+      '4.6.1.4',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput('BZ')(sheet, 11, '2');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateDirectN2OEmissionsForPoultry,
+    );
+  });
 });
 
-describe('4.6.1.5 Poultry Manure Atmospheric Deposition N2O', () => {
+describe('4.6.1.5 & 4.6.1.6 Poultry Manure Atmospheric Deposition N2O', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.6-poultry-manure/4.6-poultry-manure.xlsx',
@@ -51,9 +59,23 @@ describe('4.6.1.5 Poultry Manure Atmospheric Deposition N2O', () => {
       calculateAtmosphericDepositionN2OEmissionsForPoultry,
     );
   });
+
+  it('method 2 matches spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/4.6-poultry-manure/4.6-poultry-manure.xlsx',
+      '4.6.1.6',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput('CB')(sheet, 11, '2');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateAtmosphericDepositionN2OEmissionsForPoultry,
+    );
+  });
 });
 
-describe('4.6.1.7 Poultry Manure Leaching and Runoff N2O', () => {
+describe('4.6.1.7 & 4.6.1.8 Poultry Manure Leaching and Runoff N2O', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.6-poultry-manure/4.6-poultry-manure.xlsx',
@@ -61,6 +83,20 @@ describe('4.6.1.7 Poultry Manure Leaching and Runoff N2O', () => {
     );
 
     const inputsAndOutputs = extractInputsAndOutput('BR')(sheet, 11, '1');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateLeachingAndRunoffN2OEmissionsForPoultry,
+    );
+  });
+
+  it('method 2 matches spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/4.6-poultry-manure/4.6-poultry-manure.xlsx',
+      '4.6.1.8',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput('BR')(sheet, 11, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,

@@ -63,6 +63,21 @@ const getDryMatterIntake = (
   ).named(`Ij=${poultryClass.classNumber}`);
 
 /**
+ * Convenience wrapper for getting dry matter intake *Ij* for a class *j*
+ */
+const getDryMatterDigestibility = (
+  poultryClass: PoultryManureClassInputTransformed,
+  constants: PoultryConstants,
+) =>
+  poultryClass.method2DryMatterDigestibility ??
+  selectConstant(
+    constants,
+    'CLASSES',
+    poultryClass.className,
+    'dryMatterDigestibility',
+  ).named(`DMDj=${poultryClass.classNumber}`);
+
+/**
  * Convenience wrapper for getting nitrogen retention rate *NRj* for a class *j*
  */
 const getNitrogenRetentionRate = (
@@ -101,19 +116,17 @@ const calculateVolatileSolidProduction = (
 ) => {
   const dryMatterIntake = getDryMatterIntake(poultryClass, constants.POULTRY);
 
-  const dryMatterDigestibility = selectConstant(
+  const dryMatterDigestibility = getDryMatterDigestibility(
+    poultryClass,
     constants.POULTRY,
-    'CLASSES',
-    poultryClass.className,
-    'dryMatterDigestibility',
-  ).named(`Ij=${poultryClass.classNumber}`);
+  );
 
   const ashContent = selectConstant(
     constants.POULTRY,
     'CLASSES',
     poultryClass.className,
     'manureAsh',
-  ).named(`Ij=${poultryClass.classNumber}`);
+  ).named(`Aj=${poultryClass.classNumber}`);
 
   /**
    * VSjk = Ijk * (1 - DMDjk) * (1 - Aj)

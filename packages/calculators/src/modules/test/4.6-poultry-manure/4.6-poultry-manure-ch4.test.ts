@@ -10,13 +10,7 @@ const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'BT', {
   rowInterval: 4,
 });
 
-/**
- * TODO:
- * - Method 2 tests
- * - Scenario with more granular stage 2 allocations
- */
-
-describe('4.6.1.1 Poultry Manure Management CH4', () => {
+describe('4.6.1.1 & 4.6.1.2 Poultry Manure Management CH4', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.6-poultry-manure/4.6-poultry-manure.xlsx',
@@ -24,6 +18,19 @@ describe('4.6.1.1 Poultry Manure Management CH4', () => {
     );
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateManureManagementCH4ForPoultry,
+    );
+  });
+  it('method 2 matches spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/4.6-poultry-manure/4.6-poultry-manure.xlsx',
+      '4.6.1.2',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
