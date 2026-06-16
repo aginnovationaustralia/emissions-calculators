@@ -2527,7 +2527,7 @@ export const livestockConstants: LivestockConstants = {
     directProcessing: allTemperaturesWithValues(0),
     directApplication: allTemperaturesWithValues(0),
     pastureRangeAndPaddock: allTemperaturesWithValues(0.0047),
-    deepLitter: allTemperaturesWithValues(0.02),
+    deepLitter: allTemperaturesWithValues(0.04),
     pitStorage: allTemperaturesWithValues(0.03),
   },
 

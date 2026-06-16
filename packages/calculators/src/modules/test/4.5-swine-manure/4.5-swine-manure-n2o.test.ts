@@ -15,12 +15,7 @@ const extractInputsAndOutput = (cell: string) =>
     rowInterval: 4,
   });
 
-/**
- * TODO:
- * - Method 2 tests
- */
-
-describe('4.5.1.3 Swine Manure Management Direct N2O', () => {
+describe('4.5.1.3 & 4.5.1.4 Swine Manure Management Direct N2O', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.5-swine-manure/4.5-swine-manure.xlsx',
@@ -28,6 +23,20 @@ describe('4.5.1.3 Swine Manure Management Direct N2O', () => {
     );
 
     const inputsAndOutputs = extractInputsAndOutput('BL')(sheet, 11, '1');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateDirectN2OEmissionsForSwine,
+    );
+  });
+
+  it('method 1 matches spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/4.5-swine-manure/4.5-swine-manure.xlsx',
+      '4.5.1.4',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput('BL')(sheet, 11, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
@@ -50,6 +59,19 @@ describe('4.5 Swine Manure Management Atmospheric Deposition N2O', () => {
       calculateAtmosphericDepositionN2OEmissionsForSwine,
     );
   });
+  it('method 2 matches spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/4.5-swine-manure/4.5-swine-manure.xlsx',
+      'Atmospheric Deposition (2)',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput('BO')(sheet, 11, '2');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateAtmosphericDepositionN2OEmissionsForSwine,
+    );
+  });
 });
 
 describe('4.5 Swine Manure Management Leaching and Runoff N2O', () => {
@@ -60,6 +82,19 @@ describe('4.5 Swine Manure Management Leaching and Runoff N2O', () => {
     );
 
     const inputsAndOutputs = extractInputsAndOutput('AC')(sheet, 11, '1');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateLeachingAndRunoffN2OEmissionsForSwine,
+    );
+  });
+  it('method 2 matches spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/4.5-swine-manure/4.5-swine-manure.xlsx',
+      'Leaching and Runoff (2)',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput('AC')(sheet, 11, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,

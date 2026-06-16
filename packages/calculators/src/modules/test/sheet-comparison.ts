@@ -106,7 +106,7 @@ export const compareInputsAndOutputs = <
       if (actual) {
         console.log(
           formatNamedValues(actual, {
-            maxDepth: 7,
+            maxDepth: 6,
           }),
         );
       }

@@ -1,6 +1,7 @@
 import XLSX from 'xlsx-populate';
 import {
   checkGrazingProductionSystemsWithRainfall,
+  checkMeanAnnualTemperature,
   checkPureState,
 } from '../livestock-domain';
 import { SwineSpecificClassInput } from '@/calculators/Swine/types/swine-class.input';
@@ -50,11 +51,11 @@ export const readSwineClass = (
     },
   };
 
-  if (method === '1') return classInput;
-
-  classInput.method2AverageFeedIntake = Number(cell('H'));
-  classInput.method2VolatileSolidProductionRate = Number(cell('I'));
-  classInput.method2NitrogenWasteProductionRate = Number(cell('J'));
+  if (method === '2') {
+    classInput.method2AverageFeedIntake = Number(cell('H'));
+    classInput.method2VolatileSolidProductionRate = Number(cell('I'));
+    classInput.method2NitrogenWasteProductionRate = Number(cell('J'));
+  }
 
   return classInput;
 };
@@ -85,6 +86,9 @@ export const getSimpleCalculatorInput = (
     isInLeachingZone: cell('D') === 'true',
     herds: [herd],
   };
+
+  if (method === '2')
+    swineInput.temperatureZone = checkMeanAnnualTemperature(cell('B'));
 
   return SwineInputSchema.parse(swineInput);
 };

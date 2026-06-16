@@ -10,12 +10,7 @@ const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'BK', {
   rowInterval: 4,
 });
 
-/**
- * TODO:
- * - Method 2 tests
- */
-
-describe('4.5.1.1 Swine Manure Management CH4', () => {
+describe('4.5.1.1 & 4.5.1.2 Swine Manure Management CH4', () => {
   it('method 1 matches spreadsheet results', async () => {
     const sheet = await getSheet(
       './src/modules/test/4.5-swine-manure/4.5-swine-manure.xlsx',
@@ -23,6 +18,20 @@ describe('4.5.1.1 Swine Manure Management CH4', () => {
     );
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateManureManagementCH4ForSwine,
+    );
+  });
+
+  it('method 2 matches spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/4.5-swine-manure/4.5-swine-manure.xlsx',
+      '4.5.1.2',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,

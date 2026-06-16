@@ -11,28 +11,24 @@ import {
   checkMeanAnnualTemperature,
   checkPureState,
 } from '../livestock-domain';
-import { checkPoultryClass } from '../poultry-domain';
 import { PoultryClass } from '@/constants/enums';
 
 export const readPoultryClass = (
   sheet: XLSX.Sheet,
   row: number,
   method: '1' | '2',
-): PoultryManureClassesInput[PoultryClass] | undefined => {
-  const cell = (column: string, offset: number = 0) =>
-    sheet
-      .cell(`${column}${row + offset}`)
-      .value()
-      ?.toString();
+): PoultryManureClassesInput[PoultryClass] => {
+  const cell = (column: string) =>
+    sheet.cell(`${column}${row}`).value()?.toString();
 
   const head = Number(cell('G'));
   const days = Number(cell('H'));
 
   const allocationStage1 = {
     manureWithLitter: Number(cell('M')),
-    beltManureRemoval: Number(cell('M', 1)),
-    manureStoredInHouse: Number(cell('M', 2)),
-    pastureRangeAndPaddock: Number(cell('M', 3)),
+    beltManureRemoval: Number(cell('N')),
+    manureStoredInHouse: Number(cell('O')),
+    pastureRangeAndPaddock: Number(cell('P')),
   };
 
   const classInput: PoultryManureClassesInput[PoultryClass] = {
@@ -44,8 +40,9 @@ export const readPoultryClass = (
   if (method === '1') return classInput;
 
   classInput.method2DryMatterIntake = Number(cell('I'));
-  classInput.method2CrudeProtein = Number(cell('J'));
-  classInput.method2NitrogenRetentionRate = Number(cell('K'));
+  classInput.method2DryMatterDigestibility = Number(cell('J'));
+  classInput.method2CrudeProtein = Number(cell('K'));
+  classInput.method2NitrogenRetentionRate = Number(cell('L'));
 
   return classInput;
 };
@@ -61,58 +58,53 @@ export const getSimpleCalculatorInput = (
       .value()
       ?.toString();
 
-  const classNameUnchecked = cell('F');
-  if (classNameUnchecked === undefined) return;
-  const className = checkPoultryClass(classNameUnchecked);
+  if (cell('A') === undefined) return;
 
   const state = checkPureState(cell('A'));
   const productionSystem = checkGrazingProductionSystemsWithRainfall(cell('C'));
   const climateZone = checkClimate(cell('D'));
   const isInLeachingZone = cell('E') === 'true';
 
-  const allocationStage2 = {
-    solidStorage: Number(cell('O')),
-    composting: Number(cell('O', 1)),
-    digester: Number(cell('O', 2)),
-    directProcessing: Number(cell('O', 3)),
-    directApplication: Number(cell('O', 4)),
-  };
-  const empty: PoultryManureClassesInput[PoultryClass] = {
-    head: 0,
-    days: 0,
-    manureAllocation: {
-      manureWithLitter: 0,
-      beltManureRemoval: 0,
-      manureStoredInHouse: 0,
-      pastureRangeAndPaddock: 1,
+  const mms1To2Allocation: LivestockPoultryManureInput['mms1To2Allocation'] = {
+    manureWithLitter: {
+      solidStorage: Number(cell('Q')),
+      composting: Number(cell('R')),
+      digester: Number(cell('S')),
+      directProcessing: Number(cell('T')),
+      directApplication: Number(cell('U')),
+    },
+    beltManureRemoval: {
+      solidStorage: Number(cell('V')),
+      composting: Number(cell('W')),
+      digester: Number(cell('X')),
+      directProcessing: Number(cell('Y')),
+      directApplication: Number(cell('Z')),
+    },
+    manureStoredInHouse: {
+      solidStorage: Number(cell('AA')),
+      composting: Number(cell('AB')),
+      digester: Number(cell('AC')),
+      directProcessing: Number(cell('AD')),
+      directApplication: Number(cell('AE')),
     },
   };
-
   const input: LivestockPoultryManureInput = {
     state,
     climateZone,
     productionSystem,
     isInLeachingZone,
     classes: {
-      layers: empty,
-      meatChickenBreeder: empty,
-      meatChickenGrowers: empty,
-      meatOther: empty,
-      [className]: readPoultryClass(sheet, row, method),
+      layers: readPoultryClass(sheet, row, method),
+      meatChickenBreeder: readPoultryClass(sheet, row + 1, method),
+      meatChickenGrowers: readPoultryClass(sheet, row + 2, method),
+      meatOther: readPoultryClass(sheet, row + 3, method),
     },
-    mms1To2Allocation: {
-      manureWithLitter: allocationStage2,
-      beltManureRemoval: allocationStage2,
-      manureStoredInHouse: allocationStage2,
-    },
+    mms1To2Allocation,
   };
 
   if (method === '1') return LivestockPoultryInputSchema.parse(input);
 
-  input.temperatureZone = checkMeanAnnualTemperature('B');
-  input.classes[className].method2DryMatterIntake = Number(cell('I'));
-  input.classes[className].method2CrudeProtein = Number(cell('J'));
-  input.classes[className].method2NitrogenRetentionRate = Number(cell('K'));
+  input.temperatureZone = checkMeanAnnualTemperature(cell('B'));
 
   return LivestockPoultryInputSchema.parse(input);
 };
