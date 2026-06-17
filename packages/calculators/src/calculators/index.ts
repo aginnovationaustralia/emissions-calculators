@@ -307,5 +307,7 @@ export const calculateEmissions = <
 
 export type { CalculateEmissionsResult } from '../calculate';
 
+export { GAF_REFERENCES } from './references';
+
 // Node only exports
 export { CalculationEnvironment } from './execution/node/environment';
