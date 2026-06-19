@@ -1,10 +1,10 @@
 import { input } from '@/tools/inputs';
 import { head, mass, massPerHeadPerDay, realNumber } from '@/tools/units';
-import { object, proportion } from '@/types/schemas';
 import { mapOptional } from '@/tools/zod';
+import { object, proportion } from '@/types/schemas';
 import { z } from 'zod';
 
-export const BeefClassSeasonInputSchema = object({
+export const BeefClassPeriodInputSchema = object({
   head: z
     .number()
     .min(0)
@@ -18,9 +18,7 @@ export const BeefClassSeasonInputSchema = object({
       description:
         'Method 2: supply an exact value for liveweight for this class for this season based on farm records',
     })
-    .transform(
-      mapOptional((val) => input('Wijkln', mass('Liveweight', val))),
-    ),
+    .transform(mapOptional((val) => input('Wijkln', mass('Liveweight', val)))),
   method2LiveweightGain: z
     .number()
     .optional()
@@ -35,8 +33,8 @@ export const BeefClassSeasonInputSchema = object({
     ),
 });
 
-export const BeefClassWithCalvesSeasonInputSchema =
-  BeefClassSeasonInputSchema.extend({
+export const BeefClassWithCalvesPeriodInputSchema =
+  BeefClassPeriodInputSchema.extend({
     proportionCowsGt2ThisSeasonInCalf: proportion()
       .meta({
         description:
@@ -55,14 +53,25 @@ export const isSeasonInputWithCalves = (
   return 'proportionCowsGt2ThisSeasonInCalf' in season;
 };
 
-export type BeefClassSeasonInput = z.input<typeof BeefClassSeasonInputSchema>;
+export type BeefClassSeasonInput = z.input<typeof BeefClassPeriodInputSchema>;
 export type BeefClassSeasonInputTransformed = z.output<
-  typeof BeefClassSeasonInputSchema
+  typeof BeefClassPeriodInputSchema
 >;
 
 export type BeefClassWithCalvesSeasonInput = z.input<
-  typeof BeefClassWithCalvesSeasonInputSchema
+  typeof BeefClassWithCalvesPeriodInputSchema
 >;
 export type BeefClassWithCalvesSeasonInputTransformed = z.output<
-  typeof BeefClassWithCalvesSeasonInputSchema
+  typeof BeefClassWithCalvesPeriodInputSchema
 >;
+
+export type BeefClassPeriodInputTransformed = z.output<
+  typeof BeefClassPeriodInputSchema
+>;
+export type BeefClassWithCalvesPeriodInputTransformed = z.output<
+  typeof BeefClassWithCalvesPeriodInputSchema
+>;
+
+export type BeefClassPeriodsInputTransformed =
+  | BeefClassPeriodInputTransformed
+  | BeefClassWithCalvesPeriodInputTransformed;

@@ -1,23 +1,122 @@
-import { isSeasonInputWithCalves } from '@/calculators/Beef/types/beef-class-season.input';
 import {
-  BeefClassInputTransformed,
+  BeefClassPeriodsInputTransformed,
+  isSeasonInputWithCalves,
+} from '@/calculators/Beef/types/beef-class-period.input';
+import {
   BeefClassWithCalvesInputTransformed,
-  isBeefClassWithCalves,
+  isBeefClassSeasonal,
 } from '@/calculators/Beef/types/beef-class.input';
 import { BeefSpecificClassInputTransformed } from '@/calculators/Beef/types/beef-classes.input';
+import { BeefHerdInputTransformed } from '@/calculators/Beef/types/beef-herd.input';
 import { BeefInputTransformed } from '@/calculators/Beef/types/input';
+import { entriesFromObject } from '@/calculators/common/tools';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
+import { isDefined } from '@/common/filters';
 import {
   BeefClass,
-  LimitedRegion,
+  Month,
+  Months,
   Season,
+  Seasons,
   stateOrRegionToExtendedRegion,
+  stateOrRegionToLimitedRegion,
 } from '@/constants/enums';
+import { monthDurationMap, monthSeasonMap } from '@/modules/shared';
 import { selectConstant } from '@/tools/constants';
-import { br, num, root } from '@/tools/containers';
-import { one, oneMinus } from '@/tools/sentinels';
-import { massPerHeadPerDay, realNumber } from '@/tools/units';
+import { br, Container, num, root, SummedContainer } from '@/tools/containers';
+import { daysInSeason, one, oneMinus, tenToPowMinus3 } from '@/tools/sentinels';
+import { sum } from '@/tools/sum';
+import {
+  days,
+  Days,
+  massPerHeadPerDay,
+  NumberUnit,
+  realNumber,
+} from '@/tools/units';
+
+export type BeefManureHerdProps = {
+  input: BeefInputTransformed;
+  herd: BeefHerdInputTransformed;
+  context: ExecutionContext<ConstantsForGrainsCalculator>;
+};
+
+// TODO: Make this generic so it can contain a specific class like cows2To3Years
+export type BeefManurePeriodProps = BeefManureHerdProps & {
+  className: BeefClass;
+  classInput: BeefSpecificClassInputTransformed;
+  currentPeriod: BeefClassPeriodsInputTransformed;
+  previousPeriod: BeefClassPeriodsInputTransformed; // TODO: Why isn't this next period?
+  periodName: string;
+  previousPeriodName: string;
+  periodDuration: Container<Days>;
+  seasonName: Season;
+};
+
+export function calculateForAllClassPeriods<N extends NumberUnit>(
+  herdProps: BeefManureHerdProps,
+  calculatePeriod: (periodProps: BeefManurePeriodProps) => Container<N>,
+  options: {
+    classResultName: (className: BeefClass) => string;
+    herdResultName: string;
+  },
+): SummedContainer<N> {
+  const { herd } = herdProps;
+  const { classes } = herd;
+  const classInputs = entriesFromObject(classes);
+
+  const classResults = classInputs
+    .map(([className, classInput]) => {
+      if (!classInput) {
+        return undefined;
+      }
+
+      if (isBeefClassSeasonal(classInput)) {
+        const seasonalResults = Seasons.map((seasonName) => {
+          const currentPeriod = classInput[seasonName];
+          const previousPeriodName = getPreviousSeason(seasonName);
+          const previousPeriod = classInput[previousPeriodName];
+          return calculatePeriod({
+            ...herdProps,
+            className,
+            classInput,
+            currentPeriod,
+            previousPeriod,
+            periodName: seasonName,
+            previousPeriodName,
+            periodDuration: daysInSeason,
+            seasonName,
+          });
+        });
+
+        return sum(seasonalResults, {
+          name: options.classResultName(className),
+        });
+      }
+
+      const monthlyResults = Months.map((monthName) => {
+        const currentPeriod = classInput[monthName];
+        const previousPeriodName = getPreviousMonth(monthName);
+        const previousPeriod = classInput[previousPeriodName];
+        return calculatePeriod({
+          ...herdProps,
+          className,
+          classInput,
+          currentPeriod,
+          previousPeriod,
+          periodName: monthName,
+          previousPeriodName,
+          periodDuration: root(days(monthDurationMap[monthName])),
+          seasonName: monthSeasonMap[monthName],
+        });
+      });
+
+      return sum(monthlyResults, { name: options.classResultName(className) });
+    })
+    .filter(isDefined);
+
+  return sum(classResults, { name: options.herdResultName });
+}
 
 const getPreviousSeason = (seasonName: Season) => {
   if (seasonName === 'spring') {
@@ -32,135 +131,131 @@ const getPreviousSeason = (seasonName: Season) => {
   return 'autumn';
 };
 
+const getPreviousMonth = (monthName: Month) => {
+  if (monthName === 'january') {
+    return 'december';
+  }
+  return Months[Months.indexOf(monthName) - 1];
+};
+
+// TODO: This requires a periodProps that is specific to a breeding class like cows2To3Years
 export const getMilkIntakeMC236 = (
   calvingClassInput: BeefClassWithCalvesInputTransformed | undefined,
-  seasonName: Season,
-  region: LimitedRegion,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  periodProps: BeefManurePeriodProps,
 ) => {
+  const { context, currentPeriod, previousPeriod, periodName, input } =
+    periodProps;
+  const { constants } = context;
+  const { region } = input;
+  const limitedRegion = stateOrRegionToLimitedRegion(region);
   if (!calvingClassInput) {
     return root(massPerHeadPerDay('Milk', 0)).named(
-      `MCijkl=236 (${seasonName} no calving class)`,
+      `MCijkl=236 (${periodName} no calving class)`,
     );
   }
 
-  const { constants } = context;
-  const previousSeasonName = getPreviousSeason(seasonName);
-
   const currentSeasonCalvingRate =
-    calvingClassInput[seasonName].proportionCowsGt2ThisSeasonInCalf;
+    currentPeriod.proportionCowsGt2ThisSeasonInCalf;
 
   // REVISIT: need to investigate handling partial calving, and multiple calving seasons. At the moment any amount of calving is treated as full calving.
 
   const previousSeasonCalvingRate =
-    calvingClassInput[previousSeasonName].proportionCowsGt2ThisSeasonInCalf;
+    previousPeriod.proportionCowsGt2ThisSeasonInCalf;
   if (previousSeasonCalvingRate.unit.value.gt(0)) {
     return selectConstant(
       constants.BEEF_PASTURE,
       'MILK_INTAKE',
-      region,
+      limitedRegion,
       'afterCalving',
-    ).named(`MCijkl=236 (${seasonName} after calving)`);
+    ).named(`MCijkl=236 (${periodName} after calving)`);
   }
 
   if (currentSeasonCalvingRate.unit.value.gt(0)) {
     return selectConstant(
       constants.BEEF_PASTURE,
       'MILK_INTAKE',
-      region,
+      limitedRegion,
       'calving',
-    ).named(`MCijkl=236 (${seasonName} calving)`);
+    ).named(`MCijkl=236 (${periodName} calving)`);
   }
 
   return root(massPerHeadPerDay('Milk', 0)).named(
-    `MCijkl=236 (${seasonName} no calving)`,
+    `MCijkl=236 (${periodName} no calving)`,
   );
 };
 
 export const getProportionCowsGt2InCalfLC = (
-  classInput: BeefClassInputTransformed | BeefClassWithCalvesInputTransformed,
-  seasonName: Season,
+  periodProps: BeefManurePeriodProps,
 ) => {
-  const currentSeason = classInput[seasonName];
-  const previousSeason = classInput[getPreviousSeason(seasonName)];
+  const { currentPeriod, previousPeriod, seasonName, herd, className } =
+    periodProps;
   if (
-    !isSeasonInputWithCalves(currentSeason) ||
-    !isSeasonInputWithCalves(previousSeason)
+    !isSeasonInputWithCalves(currentPeriod) ||
+    !isSeasonInputWithCalves(previousPeriod)
   ) {
     return num(0).named('LC (0)');
   }
 
-  return currentSeason.proportionCowsGt2ThisSeasonInCalf
-    .plus(previousSeason.proportionCowsGt2ThisSeasonInCalf)
+  return currentPeriod.proportionCowsGt2ThisSeasonInCalf
+    .plus(previousPeriod.proportionCowsGt2ThisSeasonInCalf)
     .named('LCijkl=5');
 };
 
-const getFeedAdjustmentForCowsGt2FA = (
-  classInput: BeefClassInputTransformed | BeefClassWithCalvesInputTransformed,
-  seasonName: Season,
-) => {
-  if (!isBeefClassWithCalves(classInput)) {
+const getFeedAdjustmentForCowsGt2FA = (periodProps: BeefManurePeriodProps) => {
+  const { periodName, currentPeriod, previousPeriod, previousPeriodName } =
+    periodProps;
+  if (
+    !isSeasonInputWithCalves(currentPeriod) ||
+    !isSeasonInputWithCalves(previousPeriod)
+  ) {
     return num(1).named('FA (1)');
   }
 
   // REVISIT: We need to review the logic used to calculate FA. There is an example in the test sheet showing why it is probably incorrect
-  const currentSeason = classInput[seasonName];
   const currentSeasonInCalf =
-    currentSeason.proportionCowsGt2ThisSeasonInCalf.named(
-      `Cows calving (${seasonName})`,
+    currentPeriod.proportionCowsGt2ThisSeasonInCalf.named(
+      `Cows calving (${periodName})`,
     );
 
-  const previousSeasonName = getPreviousSeason(seasonName);
-  const previousSeason = classInput[previousSeasonName];
   const previousSeasonInCalf =
-    previousSeason.proportionCowsGt2ThisSeasonInCalf.named(
-      `Cows calving (${previousSeasonName})`,
+    previousPeriod.proportionCowsGt2ThisSeasonInCalf.named(
+      `Cows calving (${previousPeriodName})`,
     );
 
   return one
     .plus(num(0.3).multiply(currentSeasonInCalf))
     .plus(num(0.1).multiply(previousSeasonInCalf))
-    .named(`FAijkl=5 (${seasonName})`);
+    .named(`FAijkl=5 (${periodName})`);
 };
 
 export const calculateAdditionalIntakeForMilkProductionMAijkl = (
-  classInput: BeefSpecificClassInputTransformed,
-  className: BeefClass,
-  seasonName: Season,
+  periodProps: BeefManurePeriodProps,
 ) => {
+  const { className, seasonName } = periodProps;
   /*
     MAijkl=5 = (LCijkl=5 * FAijkl=5) + (1 - LCijkl=5 ) -- line 143
   */
-  const LC = getProportionCowsGt2InCalfLC(classInput, seasonName);
-  const FA = getFeedAdjustmentForCowsGt2FA(classInput, seasonName);
+  const LC = getProportionCowsGt2InCalfLC(periodProps);
+  const FA = getFeedAdjustmentForCowsGt2FA(periodProps);
   return br(LC.multiply(FA))
     .plus(br(oneMinus(LC)))
     .switchUnit((u) => massPerHeadPerDay('DryMatter', u.value))
     .named(`MAijkl=5 (${className}, ${seasonName})`);
 };
 
-export const calculateDryMatterIntakeIijkln = (
-  input: BeefInputTransformed,
-  classInput: BeefSpecificClassInputTransformed,
-  seasonName: Season,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) => {
-  const className = classInput.name;
-  const season = classInput[seasonName];
-
-  const MAijkl = calculateAdditionalIntakeForMilkProductionMAijkl(
-    classInput,
-    className,
-    seasonName,
-  );
-
+export function calculateDailyDryMatterIntakeForPeriodIjkl(
+  periodProps: BeefManurePeriodProps,
+) {
+  const { context, input, currentPeriod, className, seasonName } = periodProps;
   const { constants } = context;
   const { region } = input;
+
+  const MAijkl = calculateAdditionalIntakeForMilkProductionMAijkl(periodProps);
 
   const extendedRegion = stateOrRegionToExtendedRegion(region);
 
   const Wijkln =
-    season.method2Liveweight ??
+    currentPeriod.method2Liveweight ??
     selectConstant(
       constants.BEEF_PASTURE,
       'LIVEWEIGHT',
@@ -170,7 +265,7 @@ export const calculateDryMatterIntakeIijkln = (
       'liveweight',
     );
   const LWGijkln =
-    season.method2LiveweightGain ??
+    currentPeriod.method2LiveweightGain ??
     selectConstant(
       constants.BEEF_PASTURE,
       'LIVEWEIGHT',
@@ -196,4 +291,73 @@ export const calculateDryMatterIntakeIijkln = (
     .named('Iijkln');
 
   return Iijkln;
-};
+}
+
+function calculateDailyMethaneForPeriod(periodProps: BeefManurePeriodProps) {
+  const Ijkl = calculateDailyDryMatterIntakeForPeriodIjkl(periodProps);
+  const Mjkl = num(20.7).multiply(Ijkl).multiply(tenToPowMinus3).named('Mjkl');
+  return Mjkl;
+}
+
+function calculateClassMethaneForPeriod(periodProps: BeefManurePeriodProps) {
+  const {
+    className,
+    currentPeriod,
+    periodName,
+    seasonName,
+    periodDuration,
+    context,
+    input,
+  } = periodProps;
+  const { constants } = context;
+  const { region } = input;
+  const { head } = currentPeriod;
+  const extendedRegion = stateOrRegionToExtendedRegion(region);
+  const Nj = head.named(`Nj=${periodName}`);
+  const Dj = periodDuration.named(`Dj=${periodName}`);
+  const Wj =
+    currentPeriod.method2Liveweight ??
+    selectConstant(
+      constants.BEEF_PASTURE,
+      'LIVEWEIGHT',
+      extendedRegion,
+      className,
+      seasonName,
+      'liveweight',
+    ).named(`Wj (${className}, ${seasonName})`);
+  const LWGj =
+    currentPeriod.method2LiveweightGain ??
+    selectConstant(
+      constants.BEEF_PASTURE,
+      'LIVEWEIGHT',
+      extendedRegion,
+      className,
+      seasonName,
+      'liveweightGain',
+    ).named(`LWGj=${periodName}`);
+  const Mjkl = calculateDailyMethaneForPeriod(periodProps);
+  return Mjkl.multiply(Nj)
+    .multiply(Dj)
+    .named(`Eenteric ${periodName},k=${className}`);
+}
+
+function calculateEntericMethaneForHerd(herdProps: BeefManureHerdProps) {
+  return calculateForAllClassPeriods(
+    herdProps,
+    calculateClassMethaneForPeriod,
+    {
+      classResultName: (className) => `Eenteric=${className}`,
+      herdResultName: 'Eenteric (herd)',
+    },
+  );
+}
+export function calculate32BeefPastureEntericMethane(
+  input: BeefInputTransformed,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
+) {
+  const { herds } = input;
+  const herdResults = herds.map((herd) => {
+    return calculateEntericMethaneForHerd({ input, herd, context });
+  });
+  return sum(herdResults).named('Eenteric');
+}
