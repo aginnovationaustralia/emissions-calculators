@@ -2,10 +2,7 @@ import {
   BeefClassPeriodsInputTransformed,
   isSeasonInputWithCalves,
 } from '@/calculators/Beef/types/beef-class-period.input';
-import {
-  BeefClassWithCalvesInputTransformed,
-  isBeefClassSeasonal,
-} from '@/calculators/Beef/types/beef-class.input';
+import { isBeefClassSeasonal } from '@/calculators/Beef/types/beef-class.input';
 import { BeefSpecificClassInputTransformed } from '@/calculators/Beef/types/beef-classes.input';
 import { BeefHerdInputTransformed } from '@/calculators/Beef/types/beef-herd.input';
 import { BeefInputTransformed } from '@/calculators/Beef/types/input';
@@ -42,11 +39,14 @@ export type BeefManureHerdProps = {
 };
 
 // TODO: Make this generic so it can contain a specific class like cows2To3Years
-export type BeefManurePeriodProps = BeefManureHerdProps & {
+export type BeefManurePeriodProps<
+  C = BeefSpecificClassInputTransformed,
+  P = BeefClassPeriodsInputTransformed,
+> = BeefManureHerdProps & {
   className: BeefClass;
-  classInput: BeefSpecificClassInputTransformed;
-  currentPeriod: BeefClassPeriodsInputTransformed;
-  previousPeriod: BeefClassPeriodsInputTransformed; // TODO: Why isn't this next period?
+  classInput: C;
+  currentPeriod: P;
+  previousPeriod: P; // TODO: Why isn't this next period?
   periodName: string;
   previousPeriodName: string;
   periodDuration: Container<Days>;
@@ -138,17 +138,16 @@ const getPreviousMonth = (monthName: Month) => {
   return Months[Months.indexOf(monthName) - 1];
 };
 
-// TODO: This requires a periodProps that is specific to a breeding class like cows2To3Years
-export const getMilkIntakeMC236 = (
-  calvingClassInput: BeefClassWithCalvesInputTransformed | undefined,
-  periodProps: BeefManurePeriodProps,
-) => {
+export const getMilkIntakeMC236 = (periodProps: BeefManurePeriodProps) => {
   const { context, currentPeriod, previousPeriod, periodName, input } =
     periodProps;
   const { constants } = context;
   const { region } = input;
   const limitedRegion = stateOrRegionToLimitedRegion(region);
-  if (!calvingClassInput) {
+  if (
+    !isSeasonInputWithCalves(currentPeriod) ||
+    !isSeasonInputWithCalves(previousPeriod)
+  ) {
     return root(massPerHeadPerDay('Milk', 0)).named(
       `MCijkl=236 (${periodName} no calving class)`,
     );
