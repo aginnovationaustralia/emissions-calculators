@@ -1,17 +1,30 @@
-export { BeefSummaryOutputSchema } from './beef-summary.output';
-export { BeefSummaryOutput } from './beef-summary.output';
-export { SheepBeefInputSchema } from './input';
-export { SheepBeefInput } from './input';
+export {
+  BeefSummaryOutput,
+  BeefSummaryOutputSchema,
+} from './beef-summary.output';
+export {
+  SheepBeefInput,
+  SheepBeefInputSchema,
+  SheepBeefInputTransformed,
+} from './input';
 export { SheepBeefEmissionsIntensities } from './intensities.output';
-export { SheepBeefIntermediateOutputSchema } from './intermediate.output';
-export { SheepBeefIntermediateOutput } from './intermediate.output';
+export {
+  SheepBeefIntermediateOutput,
+  SheepBeefIntermediateOutputSchema,
+} from './intermediate.output';
 export { SheepBeefNet } from './net.output';
-export { SheepBeefOutputSchema } from './output';
-export { SheepBeefOutput } from './output';
-export { SheepBeefScope1OutputSchema } from './scope1.output';
-export { SheepBeefScope1Output } from './scope1.output';
-export { SheepBeefScope3OutputSchema } from './scope3.output';
-export { SheepBeefScope3Output } from './scope3.output';
-export { SheepSummaryOutputSchema } from './sheep-summary.output';
-export { SheepSummaryOutput } from './sheep-summary.output';
+export { SheepBeefOutput, SheepBeefOutputSchema } from './output';
+export {
+  SheepBeefScope1Output,
+  SheepBeefScope1OutputSchema,
+} from './scope1.output';
+export {
+  SheepBeefScope3Output,
+  SheepBeefScope3OutputSchema,
+} from './scope3.output';
+export {
+  SheepSummaryOutput,
+  SheepSummaryOutputSchema,
+} from './sheep-summary.output';
+export { TemporarySavannahInputSchema } from './temporary-savannah.input';
 export { SheepBeefVegetation } from './vegetation.input';

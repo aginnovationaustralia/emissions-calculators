@@ -200,6 +200,7 @@ export {
   Season,
   Seasons,
   SheepClassesAPI,
+  SheepClassName,
   SoilType,
   SoilTypes,
   State,
@@ -462,7 +463,11 @@ export {
   BeefSummaryOutput,
   BeefSummaryOutputSchema,
 } from './SheepBeef/beef-summary.output';
-export { SheepBeefInput, SheepBeefInputSchema } from './SheepBeef/input';
+export {
+  SheepBeefInput,
+  SheepBeefInputSchema,
+  SheepBeefInputTransformed,
+} from './SheepBeef/input';
 export { SheepBeefEmissionsIntensities } from './SheepBeef/intensities.output';
 export {
   SheepBeefIntermediateOutput,
@@ -482,6 +487,7 @@ export {
   SheepSummaryOutput,
   SheepSummaryOutputSchema,
 } from './SheepBeef/sheep-summary.output';
+export { TemporarySavannahInputSchema } from './SheepBeef/temporary-savannah.input';
 export { SheepBeefVegetation } from './SheepBeef/vegetation.input';
 export {
   StationaryFuelInput,
