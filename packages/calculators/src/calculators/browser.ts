@@ -306,3 +306,5 @@ export const calculateEmissions = <
 };
 
 export type { CalculateEmissionsResult } from '../calculate';
+
+export { GAF_REFERENCES } from './references';
