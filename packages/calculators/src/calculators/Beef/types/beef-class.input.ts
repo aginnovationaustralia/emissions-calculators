@@ -3,6 +3,7 @@ import { z } from 'zod';
 import {
   BeefClassPeriodInputSchema,
   BeefClassWithCalvesPeriodInputSchema,
+  createBeefClassWithCalvesSeasonalInputSchema,
   isSeasonInputWithCalves,
 } from './beef-class-period.input';
 
@@ -14,10 +15,10 @@ export const BeefClassSeasonalInputSchema = object({
 });
 
 export const BeefClassWithCalvesSeasonalInputSchema = object({
-  spring: BeefClassWithCalvesPeriodInputSchema,
-  summer: BeefClassWithCalvesPeriodInputSchema,
-  autumn: BeefClassWithCalvesPeriodInputSchema,
-  winter: BeefClassWithCalvesPeriodInputSchema,
+  spring: createBeefClassWithCalvesSeasonalInputSchema('spring', 'winter'),
+  summer: createBeefClassWithCalvesSeasonalInputSchema('summer', 'spring'),
+  autumn: createBeefClassWithCalvesSeasonalInputSchema('autumn', 'summer'),
+  winter: createBeefClassWithCalvesSeasonalInputSchema('winter', 'autumn'),
 });
 
 export const BeefClassMonthlyInputSchema = object({

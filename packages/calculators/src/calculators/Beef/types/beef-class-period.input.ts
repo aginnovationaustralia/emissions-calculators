@@ -1,3 +1,4 @@
+import { Season } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { head, mass, massPerHeadPerDay, realNumber } from '@/tools/units';
 import { mapOptional } from '@/tools/zod';
@@ -42,6 +43,27 @@ export const BeefClassWithCalvesPeriodInputSchema =
       })
       .transform((val) =>
         input('Cows > 2 years calving this season', realNumber(val)),
+      ),
+  });
+
+export const createBeefClassWithCalvesSeasonalInputSchema = (
+  thisSeason: Season,
+  previousSeason: Season,
+) =>
+  BeefClassPeriodInputSchema.extend({
+    proportionCowsGt2ThisSeasonInCalf: proportion()
+      .meta({
+        description: `Proportion of cows > 2 years in the herd during ${thisSeason} that calved in that season.`,
+      })
+      .transform((val) =>
+        input('Cows > 2 years calving this season', realNumber(val)),
+      ),
+    proportionCowsGt2PreviousSeasonInCalf: proportion()
+      .meta({
+        description: `Proportion of cows > 2 years in the herd during ${thisSeason} that calved in the previous ${previousSeason} season.`,
+      })
+      .transform((val) =>
+        input('Cows > 2 years calving previous season', realNumber(val)),
       ),
   });
 
