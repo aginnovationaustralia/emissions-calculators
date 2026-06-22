@@ -21,11 +21,13 @@ const BeefCowsLt1InputSchema = BeefClassInputSchema.transform((val) => ({
   name: 'cowsLt1' as const,
   number: '3' as const,
 }));
-const BeefCows1To2YearsInputSchema = BeefClassInputSchema.transform((val) => ({
-  ...val,
-  name: 'cows1To2Years' as const,
-  number: '4' as const,
-}));
+const BeefCows1To2YearsInputSchema = BeefClassWithCalvesInputSchema.transform(
+  (val) => ({
+    ...val,
+    name: 'cows1To2Years' as const,
+    number: '4' as const,
+  }),
+);
 const BeefCows2To3YearsInputSchema = BeefClassWithCalvesInputSchema.transform(
   (val) => ({ ...val, name: 'cows2To3Years' as const, number: '5a' as const }),
 );

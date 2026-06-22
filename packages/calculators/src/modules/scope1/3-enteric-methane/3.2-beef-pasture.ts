@@ -186,18 +186,14 @@ export const getMilkIntakeMC236 = (periodProps: BeefManurePeriodProps) => {
 export const getProportionCowsGt2InCalfLC = (
   periodProps: BeefManurePeriodProps,
 ) => {
-  const { currentPeriod, previousPeriod, seasonName, herd, className } =
-    periodProps;
-  if (
-    !isSeasonInputWithCalves(currentPeriod) ||
-    !isSeasonInputWithCalves(previousPeriod)
-  ) {
-    return num(0).named('LC (0)');
+  const { currentPeriod, className, periodName } = periodProps;
+  if (!isSeasonInputWithCalves(currentPeriod)) {
+    return num(0).named(`LC j=${periodName},k=${className} (0)`);
   }
 
-  return currentPeriod.proportionCowsGt2ThisSeasonInCalf
-    .plus(previousPeriod.proportionCowsGt2ThisSeasonInCalf)
-    .named('LCijkl=5');
+  return currentPeriod.proportionCowsGt2ThisSeasonInCalf.named(
+    `LC j=${periodName},k=${className}`,
+  );
 };
 
 const getFeedAdjustmentForCowsGt2FA = (periodProps: BeefManurePeriodProps) => {
@@ -227,19 +223,27 @@ const getFeedAdjustmentForCowsGt2FA = (periodProps: BeefManurePeriodProps) => {
     .named(`FAijkl=5 (${periodName})`);
 };
 
-export const calculateAdditionalIntakeForMilkProductionMAijkl = (
+export const calculateAdditionalIntakeForMilkProductionMAjk = (
   periodProps: BeefManurePeriodProps,
 ) => {
-  const { className, seasonName } = periodProps;
+  const { className, classInput, periodName } = periodProps;
   /*
-    MAijkl=5 = (LCijkl=5 * FAijkl=5) + (1 - LCijkl=5 ) -- line 143
+    MAjk=4,5 = (LCijkl=4,5 * FAjk=4,5) + (1 - LCjk=4,5 ) -- line 143
   */
-  const LC = getProportionCowsGt2InCalfLC(periodProps);
-  const FA = getFeedAdjustmentForCowsGt2FA(periodProps);
-  return br(LC.multiply(FA))
-    .plus(br(oneMinus(LC)))
-    .switchUnit((u) => massPerHeadPerDay('DryMatter', u.value))
-    .named(`MAijkl=5 (${className}, ${seasonName})`);
+  const { number } = classInput;
+
+  if (['4', '5a', '5b'].includes(number)) {
+    const LC = getProportionCowsGt2InCalfLC(periodProps);
+    const FA = getFeedAdjustmentForCowsGt2FA(periodProps);
+    return br(LC.multiply(FA))
+      .plus(br(oneMinus(LC)))
+      .switchUnit((u) => massPerHeadPerDay('DryMatter', u.value))
+      .named(`MA j=${periodName},k=${className}`);
+  }
+
+  return root(massPerHeadPerDay('Milk', 1)).named(
+    `MA j=${periodName},k=${className}`,
+  );
 };
 
 export function calculateDailyDryMatterIntakeForPeriodIjkl(
@@ -249,7 +253,7 @@ export function calculateDailyDryMatterIntakeForPeriodIjkl(
   const { constants } = context;
   const { region } = input;
 
-  const MAijkl = calculateAdditionalIntakeForMilkProductionMAijkl(periodProps);
+  const MAjk = calculateAdditionalIntakeForMilkProductionMAjk(periodProps);
 
   const extendedRegion = stateOrRegionToExtendedRegion(region);
 
@@ -286,7 +290,7 @@ export function calculateDailyDryMatterIntakeForPeriodIjkl(
   )
     .squared()
     .switchUnit((u) => realNumber(u.value))
-    .multiply(MAijkl)
+    .multiply(MAjk)
     .named('Iijkln');
 
   return Iijkln;
@@ -303,41 +307,41 @@ function calculateClassMethaneForPeriod(periodProps: BeefManurePeriodProps) {
     className,
     currentPeriod,
     periodName,
-    seasonName,
+    // seasonName,
     periodDuration,
-    context,
+    // context,
     input,
   } = periodProps;
-  const { constants } = context;
+  // const { constants } = context;
   const { region } = input;
   const { head } = currentPeriod;
-  const extendedRegion = stateOrRegionToExtendedRegion(region);
+  // const extendedRegion = stateOrRegionToExtendedRegion(region);
   const Nj = head.named(`Nj=${periodName}`);
   const Dj = periodDuration.named(`Dj=${periodName}`);
-  const Wj =
-    currentPeriod.method2Liveweight ??
-    selectConstant(
-      constants.BEEF_PASTURE,
-      'LIVEWEIGHT',
-      extendedRegion,
-      className,
-      seasonName,
-      'liveweight',
-    ).named(`Wj (${className}, ${seasonName})`);
-  const LWGj =
-    currentPeriod.method2LiveweightGain ??
-    selectConstant(
-      constants.BEEF_PASTURE,
-      'LIVEWEIGHT',
-      extendedRegion,
-      className,
-      seasonName,
-      'liveweightGain',
-    ).named(`LWGj=${periodName}`);
+  // const Wj =
+  //   currentPeriod.method2Liveweight ??
+  //   selectConstant(
+  //     constants.BEEF_PASTURE,
+  //     'LIVEWEIGHT',
+  //     extendedRegion,
+  //     className,
+  //     seasonName,
+  //     'liveweight',
+  //   ).named(`Wj (${className}, ${seasonName})`);
+  // const LWGj =
+  //   currentPeriod.method2LiveweightGain ??
+  //   selectConstant(
+  //     constants.BEEF_PASTURE,
+  //     'LIVEWEIGHT',
+  //     extendedRegion,
+  //     className,
+  //     seasonName,
+  //     'liveweightGain',
+  //   ).named(`LWGj=${periodName}`);
   const Mjkl = calculateDailyMethaneForPeriod(periodProps);
   return Mjkl.multiply(Nj)
     .multiply(Dj)
-    .named(`Eenteric ${periodName},k=${className}`);
+    .named(`Eenteric j=${periodName},k=${className}`);
 }
 
 function calculateEntericMethaneForHerd(herdProps: BeefManureHerdProps) {

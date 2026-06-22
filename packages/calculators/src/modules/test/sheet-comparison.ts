@@ -106,7 +106,8 @@ export const compareInputsAndOutputs = <
       if (actual) {
         console.log(
           formatNamedValues(actual, {
-            maxDepth: 6,
+            maxDepth: 7,
+            focusOn: 'MA j=spring',
           }),
         );
       }

@@ -12,11 +12,12 @@ import XLSX from 'xlsx-populate';
 import { checkStateOrRegion } from '../livestock-domain';
 
 const columnBreed = 'B';
-const columnStateOrRegion = 'C';
-const columnHeadN = 'G';
-const columnCustomLiveweightW = 'K';
-const columnCustomLiveweightGainLWG = 'M';
-const columnProportionCowsGt2InCalfLC = 'I';
+const columnStateOrRegion = 'D';
+const columnHeadN = 'I';
+const columnProportionCowsGt2InCalfLC = 'J';
+const columnCustomLiveweightW = 'M';
+const columnCustomLiveweightGainLWG = 'O';
+export const columnExpectedOutput = 'V';
 
 // const columnDmd = 'AM';
 // const columnCrudeProteinContent = 'AN';
@@ -206,7 +207,7 @@ export const getCalculatorInput = (
       bullsLt1: readBeefClass(0),
       bullsGt1: readBeefClass(1),
       cowsLt1: readBeefClass(2),
-      cows1To2Years: readBeefClass(3),
+      cows1To2Years: readBeefClassWithCalves(3),
       cows2To3Years: readBeefClassWithCalves(4),
       cowsGt3Years: readBeefClassWithCalves(5),
       steersLt1: readBeefClass(6),

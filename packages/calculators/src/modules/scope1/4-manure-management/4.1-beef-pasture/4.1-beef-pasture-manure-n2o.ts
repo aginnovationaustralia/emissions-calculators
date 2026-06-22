@@ -30,7 +30,7 @@ import {
 import {
   BeefManureHerdProps,
   BeefManurePeriodProps,
-  calculateAdditionalIntakeForMilkProductionMAijkl,
+  calculateAdditionalIntakeForMilkProductionMAjk,
   calculateDailyDryMatterIntakeForPeriodIjkl,
   calculateForAllClassPeriods,
   getMilkIntakeMC236,
@@ -212,7 +212,7 @@ const calculateUrinaryNitrogenExcretedUijkln = (
     : root(massPerHeadPerDay('Milk', 0)).named('DMPijkl');
 
   const MPijkl = LCijkl.multiply(DMPijkl).named('MPijkl');
-  const MAijkl = calculateAdditionalIntakeForMilkProductionMAijkl(periodProps);
+  const MAijkl = calculateAdditionalIntakeForMilkProductionMAjk(periodProps);
   const Lijkln = calculateIntakeRelativeToMaintenanceLj(Iijkln, Wijkln, MAijkl);
   const WRil = selectConstant(
     constants.BEEF_PASTURE,

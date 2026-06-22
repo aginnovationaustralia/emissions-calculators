@@ -5,10 +5,10 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from '../sheet-comparison';
-import { getCalculatorInput } from './common';
+import { columnExpectedOutput, getCalculatorInput } from './common';
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`T${row}`).value());
+  return Number(sheet.cell(`${columnExpectedOutput}${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
