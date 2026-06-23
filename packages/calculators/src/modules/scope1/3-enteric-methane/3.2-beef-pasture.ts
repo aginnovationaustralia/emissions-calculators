@@ -22,7 +22,7 @@ import {
 import { monthDurationMap, monthSeasonMap } from '@/modules/shared';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, num, root, SummedContainer } from '@/tools/containers';
-import { daysInSeason, one, oneMinus, tenToPowMinus3 } from '@/tools/sentinels';
+import { daysInSeason, oneMinus, tenToPowMinus3 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
   days,
@@ -197,29 +197,25 @@ export const getProportionCowsGt2InCalfLC = (
 };
 
 const getFeedAdjustmentForCowsGt2FA = (periodProps: BeefManurePeriodProps) => {
-  const { periodName, currentPeriod, previousPeriod, previousPeriodName } =
-    periodProps;
-  if (
-    !isSeasonInputWithCalves(currentPeriod) ||
-    !isSeasonInputWithCalves(previousPeriod)
-  ) {
+  const { periodName, currentPeriod, previousPeriodName } = periodProps;
+  if (!isSeasonInputWithCalves(currentPeriod)) {
     return num(1).named('FA (1)');
   }
 
   // REVISIT: We need to review the logic used to calculate FA. There is an example in the test sheet showing why it is probably incorrect
   const currentSeasonInCalf =
     currentPeriod.proportionCowsGt2ThisSeasonInCalf.named(
-      `Cows calving (${periodName})`,
+      `Cows calving this season (${periodName})`,
     );
 
   const previousSeasonInCalf =
-    previousPeriod.proportionCowsGt2ThisSeasonInCalf.named(
+    currentPeriod.proportionCowsGt2PreviousSeasonInCalf.named(
       `Cows calving (${previousPeriodName})`,
     );
 
-  return one
-    .plus(num(0.3).multiply(currentSeasonInCalf))
-    .plus(num(0.1).multiply(previousSeasonInCalf))
+  return num(1.3)
+    .multiply(currentSeasonInCalf)
+    .plus(num(1.1).multiply(previousSeasonInCalf))
     .named(`FAijkl=5 (${periodName})`);
 };
 
@@ -232,7 +228,7 @@ export const calculateAdditionalIntakeForMilkProductionMAjk = (
   */
   const { number } = classInput;
 
-  if (['4', '5a', '5b'].includes(number)) {
+  if (['5a', '5b'].includes(number)) {
     const LC = getProportionCowsGt2InCalfLC(periodProps);
     const FA = getFeedAdjustmentForCowsGt2FA(periodProps);
     return br(LC.multiply(FA))

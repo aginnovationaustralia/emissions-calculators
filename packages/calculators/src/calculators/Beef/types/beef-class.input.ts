@@ -2,7 +2,7 @@ import { object } from '@/types/schemas';
 import { z } from 'zod';
 import {
   BeefClassPeriodInputSchema,
-  BeefClassWithCalvesPeriodInputSchema,
+  createBeefClassWithCalvesMonthlyInputSchema,
   createBeefClassWithCalvesSeasonalInputSchema,
   isSeasonInputWithCalves,
 } from './beef-class-period.input';
@@ -15,10 +15,10 @@ export const BeefClassSeasonalInputSchema = object({
 });
 
 export const BeefClassWithCalvesSeasonalInputSchema = object({
-  spring: createBeefClassWithCalvesSeasonalInputSchema('spring', 'winter'),
-  summer: createBeefClassWithCalvesSeasonalInputSchema('summer', 'spring'),
-  autumn: createBeefClassWithCalvesSeasonalInputSchema('autumn', 'summer'),
-  winter: createBeefClassWithCalvesSeasonalInputSchema('winter', 'autumn'),
+  spring: createBeefClassWithCalvesSeasonalInputSchema('spring'),
+  summer: createBeefClassWithCalvesSeasonalInputSchema('summer'),
+  autumn: createBeefClassWithCalvesSeasonalInputSchema('autumn'),
+  winter: createBeefClassWithCalvesSeasonalInputSchema('winter'),
 });
 
 export const BeefClassMonthlyInputSchema = object({
@@ -37,18 +37,18 @@ export const BeefClassMonthlyInputSchema = object({
 });
 
 export const BeefClassWithCalvesMonthlyInputSchema = object({
-  january: BeefClassWithCalvesPeriodInputSchema,
-  february: BeefClassWithCalvesPeriodInputSchema,
-  march: BeefClassWithCalvesPeriodInputSchema,
-  april: BeefClassWithCalvesPeriodInputSchema,
-  may: BeefClassWithCalvesPeriodInputSchema,
-  june: BeefClassWithCalvesPeriodInputSchema,
-  july: BeefClassWithCalvesPeriodInputSchema,
-  august: BeefClassWithCalvesPeriodInputSchema,
-  september: BeefClassWithCalvesPeriodInputSchema,
-  october: BeefClassWithCalvesPeriodInputSchema,
-  november: BeefClassWithCalvesPeriodInputSchema,
-  december: BeefClassWithCalvesPeriodInputSchema,
+  january: createBeefClassWithCalvesMonthlyInputSchema('january'),
+  february: createBeefClassWithCalvesMonthlyInputSchema('february'),
+  march: createBeefClassWithCalvesMonthlyInputSchema('march'),
+  april: createBeefClassWithCalvesMonthlyInputSchema('april'),
+  may: createBeefClassWithCalvesMonthlyInputSchema('may'),
+  june: createBeefClassWithCalvesMonthlyInputSchema('june'),
+  july: createBeefClassWithCalvesMonthlyInputSchema('july'),
+  august: createBeefClassWithCalvesMonthlyInputSchema('august'),
+  september: createBeefClassWithCalvesMonthlyInputSchema('september'),
+  october: createBeefClassWithCalvesMonthlyInputSchema('october'),
+  november: createBeefClassWithCalvesMonthlyInputSchema('november'),
+  december: createBeefClassWithCalvesMonthlyInputSchema('december'),
 });
 
 export const BeefClassInputSchema = z.union([

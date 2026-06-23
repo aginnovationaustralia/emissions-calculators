@@ -1,4 +1,9 @@
-import { Season } from '@/constants/enums';
+import {
+  getPreviousMonth,
+  getPreviousSeason,
+  Month,
+  Season,
+} from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { head, mass, massPerHeadPerDay, realNumber } from '@/tools/units';
 import { mapOptional } from '@/tools/zod';
@@ -37,18 +42,24 @@ export const BeefClassPeriodInputSchema = object({
 export const BeefClassWithCalvesPeriodInputSchema =
   BeefClassPeriodInputSchema.extend({
     proportionCowsGt2ThisSeasonInCalf: proportion()
-      .meta({
-        description:
-          'Proportion of cows > 2 years in calf in this season. Do not include cows that were in calf in the previous season.',
-      })
+      // .meta({
+      //   description:
+      //     'Proportion of cows > 2 years in calf in this season. Do not include cows that were in calf in the previous season.',
+      // })
       .transform((val) =>
-        input('Cows > 2 years calving this season', realNumber(val)),
+        input('Cows > 2 years calving this period', realNumber(val)),
+      ),
+    proportionCowsGt2PreviousSeasonInCalf: proportion()
+      // .meta({
+      //   description: 'Proportion of cows > 2 years in calf in the previous season. Do not include cows that were in calf in this season.',
+      // })
+      .transform((val) =>
+        input('Cows > 2 years calving previous period', realNumber(val)),
       ),
   });
 
 export const createBeefClassWithCalvesSeasonalInputSchema = (
   thisSeason: Season,
-  previousSeason: Season,
 ) =>
   BeefClassPeriodInputSchema.extend({
     proportionCowsGt2ThisSeasonInCalf: proportion()
@@ -60,12 +71,39 @@ export const createBeefClassWithCalvesSeasonalInputSchema = (
       ),
     proportionCowsGt2PreviousSeasonInCalf: proportion()
       .meta({
-        description: `Proportion of cows > 2 years in the herd during ${thisSeason} that calved in the previous ${previousSeason} season.`,
+        description: `Proportion of cows > 2 years in the herd during ${thisSeason} that calved in the previous ${getPreviousSeason(thisSeason)} season.`,
       })
       .transform((val) =>
         input('Cows > 2 years calving previous season', realNumber(val)),
       ),
   });
+
+export const createBeefClassWithCalvesMonthlyInputSchema = (
+  thisMonth: Month,
+) => {
+  const previousMonth1 = getPreviousMonth(thisMonth, 1);
+  const previousMonth2 = getPreviousMonth(thisMonth, 2);
+  const previousMonth3 = getPreviousMonth(thisMonth, 3);
+  const previousMonth4 = getPreviousMonth(thisMonth, 4);
+  const previousMonth5 = getPreviousMonth(thisMonth, 5);
+
+  return BeefClassPeriodInputSchema.extend({
+    proportionCowsGt2ThisSeasonInCalf: proportion()
+      .meta({
+        description: `Proportion of cows > 2 years in the herd during ${thisMonth} that calved in that month of ${thisMonth}, or the immediate prior 2 months (${previousMonth1} or ${previousMonth2}).`,
+      })
+      .transform((val) =>
+        input('Cows > 2 years calving this season', realNumber(val)),
+      ),
+    proportionCowsGt2PreviousSeasonInCalf: proportion()
+      .meta({
+        description: `Proportion of cows > 2 years in the herd during ${thisMonth} that calved in the "previous season", which means the previous ${previousMonth3}, ${previousMonth4} or ${previousMonth5}.`,
+      })
+      .transform((val) =>
+        input('Cows > 2 years calving previous season', realNumber(val)),
+      ),
+  });
+};
 
 export const isSeasonInputWithCalves = (
   season:

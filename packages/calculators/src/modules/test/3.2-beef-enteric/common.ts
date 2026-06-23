@@ -11,10 +11,11 @@ import {
 import XLSX from 'xlsx-populate';
 import { checkStateOrRegion } from '../livestock-domain';
 
-const columnBreed = 'B';
+// const columnBreed = 'B';
 const columnStateOrRegion = 'D';
 const columnHeadN = 'I';
-const columnProportionCowsGt2InCalfLC = 'J';
+const columnProportionCowsGt2ThisSeasonInCalf = 'J';
+const columnProportionCowsGt2PreviousSeasonInCalf = 'K';
 const columnCustomLiveweightW = 'M';
 const columnCustomLiveweightGainLWG = 'O';
 export const columnExpectedOutput = 'V';
@@ -104,19 +105,31 @@ export const readBeefClassWithCalvesFn =
     }
     const springHead = Number(springHeadRaw);
     const springProportionCowsGt2InCalf = Number(
-      cell(columnProportionCowsGt2InCalfLC, offsetRows),
+      cell(columnProportionCowsGt2ThisSeasonInCalf, offsetRows),
+    );
+    const springProportionCowsGt2PreviousSeasonInCalf = Number(
+      cell(columnProportionCowsGt2PreviousSeasonInCalf, offsetRows),
     );
     const summerHead = Number(cell(columnHeadN, offsetRows + 1));
     const summerProportionCowsGt2InCalf = Number(
-      cell(columnProportionCowsGt2InCalfLC, offsetRows + 1),
+      cell(columnProportionCowsGt2ThisSeasonInCalf, offsetRows + 1),
+    );
+    const summerProportionCowsGt2PreviousSeasonInCalf = Number(
+      cell(columnProportionCowsGt2PreviousSeasonInCalf, offsetRows + 1),
     );
     const autumnHead = Number(cell(columnHeadN, offsetRows + 2));
     const autumnProportionCowsGt2InCalf = Number(
-      cell(columnProportionCowsGt2InCalfLC, offsetRows + 2),
+      cell(columnProportionCowsGt2ThisSeasonInCalf, offsetRows + 2),
+    );
+    const autumnProportionCowsGt2PreviousSeasonInCalf = Number(
+      cell(columnProportionCowsGt2PreviousSeasonInCalf, offsetRows + 2),
     );
     const winterHead = Number(cell(columnHeadN, offsetRows + 3));
     const winterProportionCowsGt2InCalf = Number(
-      cell(columnProportionCowsGt2InCalfLC, offsetRows + 3),
+      cell(columnProportionCowsGt2ThisSeasonInCalf, offsetRows + 3),
+    );
+    const winterProportionCowsGt2PreviousSeasonInCalf = Number(
+      cell(columnProportionCowsGt2PreviousSeasonInCalf, offsetRows + 3),
     );
 
     const springLiveweight =
@@ -157,24 +170,32 @@ export const readBeefClassWithCalvesFn =
       spring: {
         head: springHead,
         proportionCowsGt2ThisSeasonInCalf: springProportionCowsGt2InCalf,
+        proportionCowsGt2PreviousSeasonInCalf:
+          springProportionCowsGt2PreviousSeasonInCalf,
         method2Liveweight: springLiveweight,
         method2LiveweightGain: springLiveweightGain,
       },
       summer: {
         head: summerHead,
         proportionCowsGt2ThisSeasonInCalf: summerProportionCowsGt2InCalf,
+        proportionCowsGt2PreviousSeasonInCalf:
+          summerProportionCowsGt2PreviousSeasonInCalf,
         method2Liveweight: summerLiveweight,
         method2LiveweightGain: summerLiveweightGain,
       },
       autumn: {
         head: autumnHead,
         proportionCowsGt2ThisSeasonInCalf: autumnProportionCowsGt2InCalf,
+        proportionCowsGt2PreviousSeasonInCalf:
+          autumnProportionCowsGt2PreviousSeasonInCalf,
         method2Liveweight: autumnLiveweight,
         method2LiveweightGain: autumnLiveweightGain,
       },
       winter: {
         head: winterHead,
         proportionCowsGt2ThisSeasonInCalf: winterProportionCowsGt2InCalf,
+        proportionCowsGt2PreviousSeasonInCalf:
+          winterProportionCowsGt2PreviousSeasonInCalf,
         method2Liveweight: winterLiveweight,
         method2LiveweightGain: winterLiveweightGain,
       },
