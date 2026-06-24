@@ -114,3 +114,13 @@ export type BeefSpecificClassInputTransformed =
   | BeefSteers1To2YearsInputTransformed
   | BeefSteers2To3YearsInputTransformed
   | BeefSteersGt3YearsInputTransformed;
+
+export const isBeefClassWithCalves = (
+  classInput: BeefSpecificClassInputTransformed,
+): classInput is
+  | BeefCows2To3YearsInputTransformed
+  | BeefCowsGt3YearsInputTransformed => {
+  return (
+    classInput.name === 'cows2To3Years' || classInput.name === 'cowsGt3Years'
+  );
+};

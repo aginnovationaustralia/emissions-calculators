@@ -4714,7 +4714,7 @@ export const beefPastureConstants: BeefPastureConstants = {
       cows1To2Years: {
         spring: {
           liveweight: mass('Liveweight', 302),
-          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
         },
         summer: {
           liveweight: mass('Liveweight', 277),

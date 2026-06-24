@@ -22,7 +22,7 @@ import {
 import { monthDurationMap, monthSeasonMap } from '@/modules/shared';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, num, root, SummedContainer } from '@/tools/containers';
-import { daysInSeason, oneMinus, tenToPowMinus3 } from '@/tools/sentinels';
+import { daysInSeason, tenToPowMinus3 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
   days,
@@ -222,22 +222,32 @@ const getFeedAdjustmentForCowsGt2FA = (periodProps: BeefManurePeriodProps) => {
 export const calculateAdditionalIntakeForMilkProductionMAjk = (
   periodProps: BeefManurePeriodProps,
 ) => {
-  const { className, classInput, periodName } = periodProps;
+  const { className, periodName, currentPeriod } = periodProps;
   /*
     MAjk=4,5 = (LCijkl=4,5 * FAjk=4,5) + (1 - LCjk=4,5 ) -- line 143
   */
-  const { number } = classInput;
-
-  if (['5a', '5b'].includes(number)) {
-    const LC = getProportionCowsGt2InCalfLC(periodProps);
-    const FA = getFeedAdjustmentForCowsGt2FA(periodProps);
-    return br(LC.multiply(FA))
-      .plus(br(oneMinus(LC)))
+  if (isSeasonInputWithCalves(currentPeriod)) {
+    return br(
+      currentPeriod.proportionCowsGt2ThisSeasonInCalf
+        .multiply(num(1.3))
+        .plus(
+          currentPeriod.proportionCowsGt2PreviousSeasonInCalf.multiply(
+            num(1.1),
+          ),
+        ),
+    )
+      .plus(
+        br(
+          num(1)
+            .minus(currentPeriod.proportionCowsGt2ThisSeasonInCalf)
+            .minus(currentPeriod.proportionCowsGt2PreviousSeasonInCalf),
+        ),
+      )
       .switchUnit((u) => massPerHeadPerDay('DryMatter', u.value))
       .named(`MA j=${periodName},k=${className}`);
   }
 
-  return root(massPerHeadPerDay('Milk', 1)).named(
+  return root(massPerHeadPerDay('DryMatter', 1)).named(
     `MA j=${periodName},k=${className}`,
   );
 };
@@ -245,7 +255,8 @@ export const calculateAdditionalIntakeForMilkProductionMAjk = (
 export function calculateDailyDryMatterIntakeForPeriodIjkl(
   periodProps: BeefManurePeriodProps,
 ) {
-  const { context, input, currentPeriod, className, seasonName } = periodProps;
+  const { context, input, currentPeriod, className, seasonName, periodName } =
+    periodProps;
   const { constants } = context;
   const { region } = input;
 
@@ -262,7 +273,7 @@ export function calculateDailyDryMatterIntakeForPeriodIjkl(
       className,
       seasonName,
       'liveweight',
-    );
+    ).named(`W j=${periodName},k=${className}`);
   const LWGijkln =
     currentPeriod.method2LiveweightGain ??
     selectConstant(
@@ -272,7 +283,7 @@ export function calculateDailyDryMatterIntakeForPeriodIjkl(
       className,
       seasonName,
       'liveweightGain',
-    );
+    ).named(`LWG j=${periodName},k=${className}`);
 
   /*
     Iijkln = (1.185 + 0.00454 * Wijkln - 0.0000026 * Wijkln ^ 2 + 0.315 * LWGijkln) ^ 2 * MAijkl=5 -- line 136
@@ -299,41 +310,13 @@ function calculateDailyMethaneForPeriod(periodProps: BeefManurePeriodProps) {
 }
 
 function calculateClassMethaneForPeriod(periodProps: BeefManurePeriodProps) {
-  const {
-    className,
-    currentPeriod,
-    periodName,
-    // seasonName,
-    periodDuration,
-    // context,
-    input,
-  } = periodProps;
+  const { className, currentPeriod, periodName, periodDuration } = periodProps;
   // const { constants } = context;
-  const { region } = input;
   const { head } = currentPeriod;
   // const extendedRegion = stateOrRegionToExtendedRegion(region);
   const Nj = head.named(`Nj=${periodName}`);
   const Dj = periodDuration.named(`Dj=${periodName}`);
-  // const Wj =
-  //   currentPeriod.method2Liveweight ??
-  //   selectConstant(
-  //     constants.BEEF_PASTURE,
-  //     'LIVEWEIGHT',
-  //     extendedRegion,
-  //     className,
-  //     seasonName,
-  //     'liveweight',
-  //   ).named(`Wj (${className}, ${seasonName})`);
-  // const LWGj =
-  //   currentPeriod.method2LiveweightGain ??
-  //   selectConstant(
-  //     constants.BEEF_PASTURE,
-  //     'LIVEWEIGHT',
-  //     extendedRegion,
-  //     className,
-  //     seasonName,
-  //     'liveweightGain',
-  //   ).named(`LWGj=${periodName}`);
+
   const Mjkl = calculateDailyMethaneForPeriod(periodProps);
   return Mjkl.multiply(Nj)
     .multiply(Dj)
