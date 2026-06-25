@@ -5,7 +5,7 @@ import {
   Season,
 } from '@/constants/enums';
 import { input } from '@/tools/inputs';
-import { head, mass, massPerHeadPerDay, realNumber } from '@/tools/units';
+import { days, head, mass, massPerHeadPerDay, realNumber } from '@/tools/units';
 import { mapOptional } from '@/tools/zod';
 import { object, proportion } from '@/types/schemas';
 import { z } from 'zod';
@@ -36,6 +36,24 @@ export const BeefClassPeriodInputSchema = object({
       mapOptional((val) =>
         input('LWGijkln', massPerHeadPerDay('Liveweight', val)),
       ),
+    ),
+  method2DurationDays: z
+    .number()
+    .optional()
+    .meta({
+      description:
+        'Method 2: supply an exact value for the average duration of animals in this class for this time period in days, based on farm records',
+    })
+    .transform(mapOptional((val) => input('Djk', days(val)))),
+  method2DryMatterIntake: z
+    .number()
+    .optional()
+    .meta({
+      description:
+        'Method 2: supply an exact value for the dry matter intake for this class for this time period based on farm records',
+    })
+    .transform(
+      mapOptional((val) => input('Ijk', massPerHeadPerDay('DryMatter', val))),
     ),
 });
 

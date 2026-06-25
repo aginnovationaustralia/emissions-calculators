@@ -257,6 +257,12 @@ export function calculateDailyDryMatterIntakeForPeriodIjkl(
 ) {
   const { context, input, currentPeriod, className, seasonName, periodName } =
     periodProps;
+
+  if (currentPeriod.method2DryMatterIntake) {
+    return currentPeriod.method2DryMatterIntake.named(
+      `Ijkl=${periodName},k=${className}`,
+    );
+  }
   const { constants } = context;
   const { region } = input;
 
@@ -315,7 +321,9 @@ function calculateClassMethaneForPeriod(periodProps: BeefManurePeriodProps) {
   const { head } = currentPeriod;
   // const extendedRegion = stateOrRegionToExtendedRegion(region);
   const Nj = head.named(`Nj=${periodName}`);
-  const Dj = periodDuration.named(`Dj=${periodName}`);
+  const Dj =
+    currentPeriod.method2DurationDays ??
+    periodDuration.named(`Dj=${periodName}`);
 
   const Mjkl = calculateDailyMethaneForPeriod(periodProps);
   return Mjkl.multiply(Nj)

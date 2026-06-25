@@ -1,31 +1,35 @@
 import {
+  BeefInput,
+  BeefInputSchema,
+  BeefInputTransformed,
+} from '@/calculators/Beef/types';
+import {
   BeefClassInput,
   BeefClassWithCalvesInput,
 } from '@/calculators/Beef/types/beef-class.input';
 import { BeefHerdInput } from '@/calculators/Beef/types/beef-herd.input';
-import {
-  BeefInput,
-  BeefInputSchema,
-  BeefInputTransformed,
-} from '@/calculators/Beef/types/input';
+import { calculate32BeefPastureEntericMethane } from '@/modules/scope1/3-enteric-methane/3.2-beef-pasture';
+import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
+import { columnStateOrRegion } from '../4.2-beef-pasture/common';
 import { checkStateOrRegion } from '../livestock-domain';
+import {
+  compareInputsAndOutputs,
+  createSheetExtractor,
+} from '../sheet-comparison';
+import {
+  CellFn,
+  columnCustomLiveweightGainLWG,
+  columnCustomLiveweightW,
+  columnExpectedOutput,
+  columnHeadN,
+  columnProportionCowsGt2PreviousSeasonInCalf,
+  columnProportionCowsGt2ThisSeasonInCalf,
+} from './common';
 
-// const columnBreed = 'B';
-export const columnStateOrRegion = 'D';
-export const columnCustomDurationDays = 'G';
-export const columnHeadN = 'I';
-export const columnProportionCowsGt2ThisSeasonInCalf = 'J';
-export const columnProportionCowsGt2PreviousSeasonInCalf = 'K';
-export const columnCustomLiveweightW = 'M';
-export const columnCustomLiveweightGainLWG = 'O';
-export const columnCustomDryMatterIntakeI = 'R';
-export const columnExpectedOutput = 'V';
-
-// const columnDmd = 'AM';
-// const columnCrudeProteinContent = 'AN';
-
-export type CellFn = (column: string, offset?: number) => string | undefined;
+const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
+  return Number(sheet.cell(`${columnExpectedOutput}${row}`).value());
+};
 
 export const readBeefClassFn =
   (cell: CellFn, method: '1' | '2') =>
@@ -261,3 +265,29 @@ export const getCalculatorInput = (
     ...BeefInputSchema.parse(beefInput),
   };
 };
+
+const extractInputsAndOutput = createSheetExtractor(
+  getCalculatorInput,
+  getExpectedOutput,
+  { rowInterval: 50 },
+);
+
+describe('3.2. Beef enteric methane', () => {
+  it('method 1 scenarios match spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/3.2-beef-enteric/3.2-beef-enteric.xlsx',
+      '3.2.1',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculate32BeefPastureEntericMethane,
+    );
+  });
+});
+
+/* TODO
+- add a test case with no calving
+*/
