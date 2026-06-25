@@ -31,7 +31,7 @@ const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
   return Number(sheet.cell(`${columnExpectedOutput}${row}`).value());
 };
 
-export const readBeefClassFn =
+const readBeefClassFn =
   (cell: CellFn, method: '1' | '2') =>
   (offset: number): BeefClassInput | undefined => {
     const offsetRows = offset * 4;
@@ -101,7 +101,7 @@ export const readBeefClassFn =
     };
   };
 
-export const readBeefClassWithCalvesFn =
+const readBeefClassWithCalvesFn =
   (cell: CellFn, method: '1' | '2') =>
   (offset: number): BeefClassWithCalvesInput | undefined => {
     const offsetRows = offset * 4;
@@ -208,7 +208,7 @@ export const readBeefClassWithCalvesFn =
     };
   };
 
-export const getCalculatorInput = (
+const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
   method: '1' | '2',
