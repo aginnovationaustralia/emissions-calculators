@@ -259,11 +259,8 @@ const calculateUrinaryNitrogenExcretedUijkln = (
 const calculateExcretedNitrogenForClassPeriod = (
   periodProps: BeefManurePeriodProps,
 ) => {
-  const { herd, currentPeriod, classInput, seasonName, className } =
-    periodProps;
-  const calvingClassInput = ['1', '3', '6'].includes(classInput.number)
-    ? herd.classes.cows2To3Years
-    : undefined;
+  const { currentPeriod, seasonName, className } = periodProps;
+
   const Nkln = currentPeriod.head.named(`Nkln (${className}, ${seasonName})`);
 
   const faecalNitrogenExcretedPerDay =

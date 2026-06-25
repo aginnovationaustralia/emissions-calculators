@@ -196,29 +196,6 @@ export const getProportionCowsGt2InCalfLC = (
   );
 };
 
-const getFeedAdjustmentForCowsGt2FA = (periodProps: BeefManurePeriodProps) => {
-  const { periodName, currentPeriod, previousPeriodName } = periodProps;
-  if (!isSeasonInputWithCalves(currentPeriod)) {
-    return num(1).named('FA (1)');
-  }
-
-  // REVISIT: We need to review the logic used to calculate FA. There is an example in the test sheet showing why it is probably incorrect
-  const currentSeasonInCalf =
-    currentPeriod.proportionCowsGt2ThisSeasonInCalf.named(
-      `Cows calving this season (${periodName})`,
-    );
-
-  const previousSeasonInCalf =
-    currentPeriod.proportionCowsGt2PreviousSeasonInCalf.named(
-      `Cows calving (${previousPeriodName})`,
-    );
-
-  return num(1.3)
-    .multiply(currentSeasonInCalf)
-    .plus(num(1.1).multiply(previousSeasonInCalf))
-    .named(`FAijkl=5 (${periodName})`);
-};
-
 export const calculateAdditionalIntakeForMilkProductionMAjk = (
   periodProps: BeefManurePeriodProps,
 ) => {

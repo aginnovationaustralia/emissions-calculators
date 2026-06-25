@@ -23,6 +23,7 @@ export const columnHeadN = 'M';
 export const columnLiveweightW = 'N';
 export const columnLiveweightGainLWG = 'O';
 export const columnProportionCowsGt2InCalfLC = 'R';
+export const columnProportionCowsGt2PreviousSeasonInCalfLC = 'S';
 
 export const columnUnfencedWater = 'AU';
 
@@ -111,17 +112,29 @@ export const readBeefClassWithCalvesFn =
     const springProportionCowsGt2InCalf = Number(
       cell(columnProportionCowsGt2InCalfLC, offsetRows),
     );
+    const springProportionCowsGt2PreviousSeasonInCalf = Number(
+      cell(columnProportionCowsGt2PreviousSeasonInCalfLC, offsetRows),
+    );
     const summerHead = Number(cell(columnHeadN, offsetRows + 1));
     const summerProportionCowsGt2InCalf = Number(
       cell(columnProportionCowsGt2InCalfLC, offsetRows + 1),
+    );
+    const summerProportionCowsGt2PreviousSeasonInCalf = Number(
+      cell(columnProportionCowsGt2PreviousSeasonInCalfLC, offsetRows + 1),
     );
     const autumnHead = Number(cell(columnHeadN, offsetRows + 2));
     const autumnProportionCowsGt2InCalf = Number(
       cell(columnProportionCowsGt2InCalfLC, offsetRows + 2),
     );
+    const autumnProportionCowsGt2PreviousSeasonInCalf = Number(
+      cell(columnProportionCowsGt2PreviousSeasonInCalfLC, offsetRows + 2),
+    );
     const winterHead = Number(cell(columnHeadN, offsetRows + 3));
     const winterProportionCowsGt2InCalf = Number(
       cell(columnProportionCowsGt2InCalfLC, offsetRows + 3),
+    );
+    const winterProportionCowsGt2PreviousSeasonInCalf = Number(
+      cell(columnProportionCowsGt2PreviousSeasonInCalfLC, offsetRows + 3),
     );
 
     const springLiveweight =
@@ -160,24 +173,32 @@ export const readBeefClassWithCalvesFn =
       spring: {
         head: springHead,
         proportionCowsGt2ThisSeasonInCalf: springProportionCowsGt2InCalf,
+        proportionCowsGt2PreviousSeasonInCalf:
+          springProportionCowsGt2PreviousSeasonInCalf,
         method2Liveweight: springLiveweight,
         method2LiveweightGain: springLiveweightGain,
       },
       summer: {
         head: summerHead,
         proportionCowsGt2ThisSeasonInCalf: summerProportionCowsGt2InCalf,
+        proportionCowsGt2PreviousSeasonInCalf:
+          summerProportionCowsGt2PreviousSeasonInCalf,
         method2Liveweight: summerLiveweight,
         method2LiveweightGain: summerLiveweightGain,
       },
       autumn: {
         head: autumnHead,
         proportionCowsGt2ThisSeasonInCalf: autumnProportionCowsGt2InCalf,
+        proportionCowsGt2PreviousSeasonInCalf:
+          autumnProportionCowsGt2PreviousSeasonInCalf,
         method2Liveweight: autumnLiveweight,
         method2LiveweightGain: autumnLiveweightGain,
       },
       winter: {
         head: winterHead,
         proportionCowsGt2ThisSeasonInCalf: winterProportionCowsGt2InCalf,
+        proportionCowsGt2PreviousSeasonInCalf:
+          winterProportionCowsGt2PreviousSeasonInCalf,
         method2Liveweight: winterLiveweight,
         method2LiveweightGain: winterLiveweightGain,
       },
@@ -216,7 +237,7 @@ export const getCalculatorInput = (
       bullsLt1: readBeefClass(0),
       bullsGt1: readBeefClass(1),
       cowsLt1: readBeefClass(2),
-      cows1To2Years: readBeefClass(3),
+      cows1To2Years: readBeefClassWithCalves(3),
       cows2To3Years: readBeefClassWithCalves(4),
       cowsGt3Years: readBeefClassWithCalves(5),
       steersLt1: readBeefClass(6),
@@ -256,7 +277,7 @@ export const getCalculatorInput = (
     },
   };
 
-  //   console.dir(beefInput, { depth: null });
+  // console.dir(beefInput, { depth: null });
 
   return {
     ...BeefInputSchema.parse(beefInput),
