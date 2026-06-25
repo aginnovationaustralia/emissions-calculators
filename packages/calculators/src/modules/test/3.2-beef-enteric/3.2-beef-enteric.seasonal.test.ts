@@ -287,7 +287,3 @@ describe('3.2. Beef enteric methane', () => {
     );
   });
 });
-
-/* TODO
-- add a test case with no calving
-*/
