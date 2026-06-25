@@ -115,6 +115,7 @@ export type BeefSpecificClassInputTransformed =
   | BeefSteers2To3YearsInputTransformed
   | BeefSteersGt3YearsInputTransformed;
 
+// REVISIT: Need to confirm if class 4 (cows 1 to 2 years) is considered a class with calves
 export const isBeefClassWithCalves = (
   classInput: BeefSpecificClassInputTransformed,
 ): classInput is

@@ -59,21 +59,12 @@ export const BeefClassPeriodInputSchema = object({
 
 export const BeefClassWithCalvesPeriodInputSchema =
   BeefClassPeriodInputSchema.extend({
-    proportionCowsGt2ThisSeasonInCalf: proportion()
-      // .meta({
-      //   description:
-      //     'Proportion of cows > 2 years in calf in this season. Do not include cows that were in calf in the previous season.',
-      // })
-      .transform((val) =>
-        input('Cows > 2 years calving this period', realNumber(val)),
-      ),
-    proportionCowsGt2PreviousSeasonInCalf: proportion()
-      // .meta({
-      //   description: 'Proportion of cows > 2 years in calf in the previous season. Do not include cows that were in calf in this season.',
-      // })
-      .transform((val) =>
-        input('Cows > 2 years calving previous period', realNumber(val)),
-      ),
+    proportionCowsGt2ThisSeasonInCalf: proportion().transform((val) =>
+      input('Cows > 2 years calving this period', realNumber(val)),
+    ),
+    proportionCowsGt2PreviousSeasonInCalf: proportion().transform((val) =>
+      input('Cows > 2 years calving previous period', realNumber(val)),
+    ),
   });
 
 export const createBeefClassWithCalvesSeasonalInputSchema = (

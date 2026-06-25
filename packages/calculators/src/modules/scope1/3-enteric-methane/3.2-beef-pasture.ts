@@ -138,6 +138,7 @@ const getPreviousMonth = (monthName: Month) => {
   return Months[Months.indexOf(monthName) - 1];
 };
 
+// REVISIT: When updating beef pasture 4.2 to tranche 2a, check this function. It may be that previousPeriod is not needed here, and would then disappear from PeriodProps entirely
 export const getMilkIntakeMC236 = (periodProps: BeefManurePeriodProps) => {
   const { context, currentPeriod, previousPeriod, periodName, input } =
     periodProps;
@@ -202,6 +203,8 @@ export const calculateAdditionalIntakeForMilkProductionMAjk = (
   const { className, periodName, currentPeriod } = periodProps;
   /*
     MAjk=4,5 = (LCijkl=4,5 * FAjk=4,5) + (1 - LCjk=4,5 ) -- line 143
+    NOTE: The proposal to fix this equation is to modify it to:
+    (LC (calving current season) * FA (calving current season) + LC (calving previous season) * FA (calving previous season)) + (1 - LC (calving current season) - LC (calving previous season))
   */
   if (isSeasonInputWithCalves(currentPeriod)) {
     return br(
@@ -294,9 +297,7 @@ function calculateDailyMethaneForPeriod(periodProps: BeefManurePeriodProps) {
 
 function calculateClassMethaneForPeriod(periodProps: BeefManurePeriodProps) {
   const { className, currentPeriod, periodName, periodDuration } = periodProps;
-  // const { constants } = context;
   const { head } = currentPeriod;
-  // const extendedRegion = stateOrRegionToExtendedRegion(region);
   const Nj = head.named(`Nj=${periodName}`);
   const Dj =
     currentPeriod.method2DurationDays ??
