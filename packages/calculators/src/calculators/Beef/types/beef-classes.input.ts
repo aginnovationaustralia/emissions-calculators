@@ -21,11 +21,13 @@ const BeefCowsLt1InputSchema = BeefClassInputSchema.transform((val) => ({
   name: 'cowsLt1' as const,
   number: '3' as const,
 }));
-const BeefCows1To2YearsInputSchema = BeefClassInputSchema.transform((val) => ({
-  ...val,
-  name: 'cows1To2Years' as const,
-  number: '4' as const,
-}));
+const BeefCows1To2YearsInputSchema = BeefClassWithCalvesInputSchema.transform(
+  (val) => ({
+    ...val,
+    name: 'cows1To2Years' as const,
+    number: '4' as const,
+  }),
+);
 const BeefCows2To3YearsInputSchema = BeefClassWithCalvesInputSchema.transform(
   (val) => ({ ...val, name: 'cows2To3Years' as const, number: '5a' as const }),
 );
@@ -112,3 +114,14 @@ export type BeefSpecificClassInputTransformed =
   | BeefSteers1To2YearsInputTransformed
   | BeefSteers2To3YearsInputTransformed
   | BeefSteersGt3YearsInputTransformed;
+
+// REVISIT: Need to confirm if class 4 (cows 1 to 2 years) is considered a class with calves
+export const isBeefClassWithCalves = (
+  classInput: BeefSpecificClassInputTransformed,
+): classInput is
+  | BeefCows2To3YearsInputTransformed
+  | BeefCowsGt3YearsInputTransformed => {
+  return (
+    classInput.name === 'cows2To3Years' || classInput.name === 'cowsGt3Years'
+  );
+};

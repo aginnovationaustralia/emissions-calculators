@@ -1075,6 +1075,15 @@ export type StateOrRegion = (typeof StateOrRegions)[number];
 export const Seasons = ['spring', 'summer', 'autumn', 'winter'] as const;
 export type Season = (typeof Seasons)[number];
 
+export const getPreviousSeason = (season: Season): Season => {
+  const seasonIndex = Seasons.indexOf(season);
+
+  if (seasonIndex === 0) {
+    return 'winter';
+  }
+  return Seasons[seasonIndex - 1];
+};
+
 export const Months = [
   'january',
   'february',
@@ -1090,6 +1099,17 @@ export const Months = [
   'december',
 ] as const;
 export type Month = (typeof Months)[number];
+
+export const getPreviousMonth = (
+  fromMonth: Month,
+  skipBack: number = 1,
+): Month => {
+  const fromMonthIndex = Months.indexOf(fromMonth);
+  const previousMonthIndex = fromMonthIndex - skipBack;
+  const validPreviousMonthIndex =
+    previousMonthIndex < 0 ? previousMonthIndex + 12 : previousMonthIndex;
+  return Months[validPreviousMonthIndex];
+};
 
 export const BeefClasses = [
   'bullsLt1',

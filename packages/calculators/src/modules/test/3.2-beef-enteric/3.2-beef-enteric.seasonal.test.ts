@@ -1,38 +1,37 @@
 import {
+  BeefInput,
+  BeefInputSchema,
+  BeefInputTransformed,
+} from '@/calculators/Beef/types';
+import {
   BeefClassInput,
   BeefClassWithCalvesInput,
 } from '@/calculators/Beef/types/beef-class.input';
 import { BeefHerdInput } from '@/calculators/Beef/types/beef-herd.input';
-import {
-  BeefInput,
-  BeefInputSchema,
-  BeefInputTransformed,
-} from '@/calculators/Beef/types/input';
+import { calculate32BeefPastureEntericMethane } from '@/modules/scope1/3-enteric-methane/3.2-beef-pasture';
+import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
+import { columnStateOrRegion } from '../4.2-beef-pasture/common';
+import { checkStateOrRegion } from '../livestock-domain';
 import {
-  checkClimateZone,
-  checkGrazingSystem,
-  checkStateOrRegion,
-} from '../livestock-domain';
+  compareInputsAndOutputs,
+  createSheetExtractor,
+} from '../sheet-comparison';
+import {
+  CellFn,
+  columnCustomLiveweightGainLWG,
+  columnCustomLiveweightW,
+  columnExpectedOutput,
+  columnHeadN,
+  columnProportionCowsGt2PreviousSeasonInCalf,
+  columnProportionCowsGt2ThisSeasonInCalf,
+} from './common';
 
-export const columnClimateZone = 'B';
-export const columnStateOrRegion = 'D';
-const columnGrazingSystem = 'H';
-const columnRainfall = 'I';
-export const columnHeadN = 'M';
-export const columnLiveweightW = 'N';
-export const columnLiveweightGainLWG = 'O';
-export const columnProportionCowsGt2InCalfLC = 'R';
-export const columnProportionCowsGt2PreviousSeasonInCalfLC = 'S';
+const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
+  return Number(sheet.cell(`${columnExpectedOutput}${row}`).value());
+};
 
-export const columnUnfencedWater = 'AU';
-
-export const columnDmd = 'AM';
-export const columnCrudeProteinContent = 'AN';
-
-type CellFn = (column: string, offset?: number) => string | undefined;
-
-export const readBeefClassFn =
+const readBeefClassFn =
   (cell: CellFn, method: '1' | '2') =>
   (offset: number): BeefClassInput | undefined => {
     const offsetRows = offset * 4;
@@ -45,36 +44,38 @@ export const readBeefClassFn =
     const autumnHead = Number(cell(columnHeadN, offsetRows + 2));
     const winterHead = Number(cell(columnHeadN, offsetRows + 3));
     const springLiveweight =
-      method === '1' ? undefined : Number(cell(columnLiveweightW, offsetRows));
+      method === '1'
+        ? undefined
+        : Number(cell(columnCustomLiveweightW, offsetRows));
     const summerLiveweight =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightW, offsetRows + 1));
+        : Number(cell(columnCustomLiveweightW, offsetRows + 1));
     const autumnLiveweight =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightW, offsetRows + 2));
+        : Number(cell(columnCustomLiveweightW, offsetRows + 2));
     const winterLiveweight =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightW, offsetRows + 3));
+        : Number(cell(columnCustomLiveweightW, offsetRows + 3));
 
     const springLiveweightGain =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightGainLWG, offsetRows));
+        : Number(cell(columnCustomLiveweightGainLWG, offsetRows));
     const summerLiveweightGain =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightGainLWG, offsetRows + 1));
+        : Number(cell(columnCustomLiveweightGainLWG, offsetRows + 1));
     const autumnLiveweightGain =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightGainLWG, offsetRows + 2));
+        : Number(cell(columnCustomLiveweightGainLWG, offsetRows + 2));
     const winterLiveweightGain =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightGainLWG, offsetRows + 3));
+        : Number(cell(columnCustomLiveweightGainLWG, offsetRows + 3));
 
     return {
       spring: {
@@ -100,7 +101,7 @@ export const readBeefClassFn =
     };
   };
 
-export const readBeefClassWithCalvesFn =
+const readBeefClassWithCalvesFn =
   (cell: CellFn, method: '1' | '2') =>
   (offset: number): BeefClassWithCalvesInput | undefined => {
     const offsetRows = offset * 4;
@@ -110,64 +111,66 @@ export const readBeefClassWithCalvesFn =
     }
     const springHead = Number(springHeadRaw);
     const springProportionCowsGt2InCalf = Number(
-      cell(columnProportionCowsGt2InCalfLC, offsetRows),
+      cell(columnProportionCowsGt2ThisSeasonInCalf, offsetRows),
     );
     const springProportionCowsGt2PreviousSeasonInCalf = Number(
-      cell(columnProportionCowsGt2PreviousSeasonInCalfLC, offsetRows),
+      cell(columnProportionCowsGt2PreviousSeasonInCalf, offsetRows),
     );
     const summerHead = Number(cell(columnHeadN, offsetRows + 1));
     const summerProportionCowsGt2InCalf = Number(
-      cell(columnProportionCowsGt2InCalfLC, offsetRows + 1),
+      cell(columnProportionCowsGt2ThisSeasonInCalf, offsetRows + 1),
     );
     const summerProportionCowsGt2PreviousSeasonInCalf = Number(
-      cell(columnProportionCowsGt2PreviousSeasonInCalfLC, offsetRows + 1),
+      cell(columnProportionCowsGt2PreviousSeasonInCalf, offsetRows + 1),
     );
     const autumnHead = Number(cell(columnHeadN, offsetRows + 2));
     const autumnProportionCowsGt2InCalf = Number(
-      cell(columnProportionCowsGt2InCalfLC, offsetRows + 2),
+      cell(columnProportionCowsGt2ThisSeasonInCalf, offsetRows + 2),
     );
     const autumnProportionCowsGt2PreviousSeasonInCalf = Number(
-      cell(columnProportionCowsGt2PreviousSeasonInCalfLC, offsetRows + 2),
+      cell(columnProportionCowsGt2PreviousSeasonInCalf, offsetRows + 2),
     );
     const winterHead = Number(cell(columnHeadN, offsetRows + 3));
     const winterProportionCowsGt2InCalf = Number(
-      cell(columnProportionCowsGt2InCalfLC, offsetRows + 3),
+      cell(columnProportionCowsGt2ThisSeasonInCalf, offsetRows + 3),
     );
     const winterProportionCowsGt2PreviousSeasonInCalf = Number(
-      cell(columnProportionCowsGt2PreviousSeasonInCalfLC, offsetRows + 3),
+      cell(columnProportionCowsGt2PreviousSeasonInCalf, offsetRows + 3),
     );
 
     const springLiveweight =
-      method === '1' ? undefined : Number(cell(columnLiveweightW, offsetRows));
+      method === '1'
+        ? undefined
+        : Number(cell(columnCustomLiveweightW, offsetRows));
     const summerLiveweight =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightW, offsetRows + 1));
+        : Number(cell(columnCustomLiveweightW, offsetRows + 1));
     const autumnLiveweight =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightW, offsetRows + 2));
+        : Number(cell(columnCustomLiveweightW, offsetRows + 2));
     const winterLiveweight =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightW, offsetRows + 3));
+        : Number(cell(columnCustomLiveweightW, offsetRows + 3));
 
     const springLiveweightGain =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightGainLWG, offsetRows));
+        : Number(cell(columnCustomLiveweightGainLWG, offsetRows));
     const summerLiveweightGain =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightGainLWG, offsetRows + 1));
+        : Number(cell(columnCustomLiveweightGainLWG, offsetRows + 1));
     const autumnLiveweightGain =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightGainLWG, offsetRows + 2));
+        : Number(cell(columnCustomLiveweightGainLWG, offsetRows + 2));
     const winterLiveweightGain =
       method === '1'
         ? undefined
-        : Number(cell(columnLiveweightGainLWG, offsetRows + 3));
+        : Number(cell(columnCustomLiveweightGainLWG, offsetRows + 3));
 
     return {
       spring: {
@@ -205,7 +208,7 @@ export const readBeefClassWithCalvesFn =
     };
   };
 
-export const getCalculatorInput = (
+const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
   method: '1' | '2',
@@ -223,53 +226,32 @@ export const getCalculatorInput = (
     return undefined;
   }
 
-  const climateZone = checkClimateZone(cell(columnClimateZone));
   const region = checkStateOrRegion(cell(columnStateOrRegion));
 
-  const grazingSystem = checkGrazingSystem(cell(columnGrazingSystem));
-  const highRainfall = cell(columnRainfall) === 'high';
-
-  const unfencedWater = cell(columnUnfencedWater) === 'yes';
-
   const herd: BeefHerdInput = {
-    method2NoUnfencedNaturalWater: method === '1' ? undefined : !unfencedWater,
+    method2NoUnfencedNaturalWater: undefined,
     classes: {
       bullsLt1: readBeefClass(0),
       bullsGt1: readBeefClass(1),
-      cowsLt1: readBeefClass(2),
-      cows1To2Years: readBeefClassWithCalves(3),
-      cows2To3Years: readBeefClassWithCalves(4),
+      cows1To2Years: readBeefClassWithCalves(2),
+      cows2To3Years: readBeefClassWithCalves(3),
+      cowsLt1: readBeefClass(4),
       cowsGt3Years: readBeefClassWithCalves(5),
-      steersLt1: readBeefClass(6),
-      steers1To2Years: readBeefClass(7),
-      steers2To3Years: readBeefClass(8),
+      steers1To2Years: readBeefClass(6),
+      steers2To3Years: readBeefClass(7),
+      steersLt1: readBeefClass(8),
       steersGt3Years: readBeefClass(9),
     },
-    method2Dmd:
-      method === '1'
-        ? undefined
-        : {
-            spring: Number(cell(columnDmd)),
-            summer: Number(cell(columnDmd, 1)),
-            autumn: Number(cell(columnDmd, 2)),
-            winter: Number(cell(columnDmd, 3)),
-          },
-    method2CrudeProteinContent:
-      method === '1'
-        ? undefined
-        : {
-            spring: Number(cell(columnCrudeProteinContent)),
-            summer: Number(cell(columnCrudeProteinContent, 1)),
-            autumn: Number(cell(columnCrudeProteinContent, 2)),
-            winter: Number(cell(columnCrudeProteinContent, 3)),
-          },
+    method2Dmd: undefined,
+
+    method2CrudeProteinContent: undefined,
   };
 
   const beefInput: BeefInput = {
     region,
-    climateZone,
-    grazingSystem,
-    rainfallAbove600: highRainfall,
+    climateZone: 'Boreal dry',
+    grazingSystem: 'Irrigated crop',
+    rainfallAbove600: false,
     herds: [herd],
     electricity: {
       method: 'location',
@@ -277,9 +259,31 @@ export const getCalculatorInput = (
     },
   };
 
-  // console.dir(beefInput, { depth: null });
+  //   console.dir(beefInput, { depth: null });
 
   return {
     ...BeefInputSchema.parse(beefInput),
   };
 };
+
+const extractInputsAndOutput = createSheetExtractor(
+  getCalculatorInput,
+  getExpectedOutput,
+  { rowInterval: 50 },
+);
+
+describe('3.2. Beef enteric methane', () => {
+  it('method 1 scenarios match spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/3.2-beef-enteric/3.2-beef-enteric.xlsx',
+      '3.2.1',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculate32BeefPastureEntericMethane,
+    );
+  });
+});

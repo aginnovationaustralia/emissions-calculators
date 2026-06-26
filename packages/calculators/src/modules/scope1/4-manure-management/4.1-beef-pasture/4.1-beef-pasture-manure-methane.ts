@@ -1,37 +1,31 @@
-import { BeefSpecificClassInputTransformed } from '@/calculators/Beef/types/beef-classes.input';
-import { BeefHerdInputTransformed } from '@/calculators/Beef/types/beef-herd.input';
 import { BeefInputTransformed } from '@/calculators/Beef/types/input';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import {
-  BeefClasses,
-  Season,
-  stateOrRegionToLimitedRegion,
-} from '@/constants/enums';
+import { stateOrRegionToLimitedRegion } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
-import { br, num, root } from '@/tools/containers';
+import { br, num } from '@/tools/containers';
 import { daysInSeason, oneMinus } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { mass, massPerHeadPerDay } from '@/tools/units';
-import { calculateDryMatterIntakeIijkln } from '../../3-enteric-methane/3.2-beef-pasture';
+import { massPerHeadPerDay } from '@/tools/units';
+import {
+  BeefManureHerdProps,
+  BeefManurePeriodProps,
+  calculateDailyDryMatterIntakeForPeriodIjkl,
+  calculateForAllClassPeriods,
+} from '../../3-enteric-methane/3.2-beef-pasture';
 
 const calculateTotalMethaneFromClassSeasonMmmSeason = (
-  input: BeefInputTransformed,
-  herd: BeefHerdInputTransformed,
-  seasonName: Season,
-  classInput: BeefSpecificClassInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  periodProps: BeefManurePeriodProps,
 ) => {
+  const { context, input, herd, currentPeriod, seasonName, className } =
+    periodProps;
   const { constants } = context;
   const { climateZone, region } = input;
   const limitedRegion = stateOrRegionToLimitedRegion(region);
 
   const { method2Dmd, method2NoUnfencedNaturalWater } = herd;
-  const className = classInput.name;
 
-  const season = classInput[seasonName];
-
-  const Nkln = season.head;
+  const Nkln = currentPeriod.head;
 
   const dmd = method2Dmd
     ? method2Dmd[seasonName]
@@ -50,12 +44,7 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
     'ASH_CONTENT_OF_MANURE',
   ).named('A');
 
-  const Iijkln = calculateDryMatterIntakeIijkln(
-    input,
-    classInput,
-    seasonName,
-    context,
-  );
+  const Iijkln = calculateDailyDryMatterIntakeForPeriodIjkl(periodProps);
 
   // VSijkln = (Iijkln * (1 - DMDijk) + (0.04 * Iijkln)) * ( 1 - A ) -- line 425
   const VSijkln = br(
@@ -113,48 +102,17 @@ const calculateTotalMethaneFromClassSeasonMmmSeason = (
   return sum([Mmm1, Mmm14], { name: `Mmm (${className}, ${seasonName})` });
 };
 
-export const calculateManureManagementCH4ForClass = (
-  input: BeefInputTransformed,
-  herd: BeefHerdInputTransformed,
-  classInput: BeefSpecificClassInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) => {
-  const className = classInput.name;
-
-  const seasons = ['spring', 'summer', 'autumn', 'winter'] as const;
-  const totalMethaneFromClassMmmPerSeason = seasons.map((seasonName) =>
-    calculateTotalMethaneFromClassSeasonMmmSeason(
-      input,
-      herd,
-      seasonName,
-      classInput,
-      context,
-    ),
-  );
-
-  return sum(totalMethaneFromClassMmmPerSeason, { name: `Mmm ${className}` });
-};
-
 export const calculateManureManagementCH4ForHerd = (
-  input: BeefInputTransformed,
-  herd: BeefHerdInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  herdProps: BeefManureHerdProps,
 ) => {
-  const { classes } = herd;
-  const classResults = BeefClasses.map((className) => {
-    const classInput = classes[className];
-    if (classInput === undefined) {
-      return root(mass('CH4', 0)).named(`Mmm ${className} (empty)`);
-    }
-    return calculateManureManagementCH4ForClass(
-      input,
-      herd,
-      classInput,
-      context,
-    );
-  });
-
-  return sum(classResults, { name: 'Mmm (all classes in herd)' });
+  return calculateForAllClassPeriods(
+    herdProps,
+    calculateTotalMethaneFromClassSeasonMmmSeason,
+    {
+      classResultName: (className) => `Eenteric=${className}`,
+      herdResultName: 'Eenteric (herd)',
+    },
+  );
 };
 
 export const calculateManureManagementCH4 = (
@@ -173,7 +131,7 @@ export const calculateManureManagementCH4 = (
 
   const { herds } = input;
   const ch4EmissionsForHerds = herds.map((herd) =>
-    calculateManureManagementCH4ForHerd(input, herd, context),
+    calculateManureManagementCH4ForHerd({ input, herd, context }),
   );
 
   const Mmm = sum(ch4EmissionsForHerds, { name: 'Mmm (all herds)' });

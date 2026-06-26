@@ -4714,7 +4714,7 @@ export const beefPastureConstants: BeefPastureConstants = {
       cows1To2Years: {
         spring: {
           liveweight: mass('Liveweight', 302),
-          liveweightGain: massPerHeadPerDay('Liveweight', 0.3),
+          liveweightGain: massPerHeadPerDay('Liveweight', 0.25),
         },
         summer: {
           liveweight: mass('Liveweight', 277),
@@ -5442,6 +5442,12 @@ export const beefPastureConstants: BeefPastureConstants = {
     'WA - Pilbara': realNumber(0.28),
     'WA - Kimberley': realNumber(0.3),
   },
+
+  DRY_MATTER_TO_METHANE_CONVERSION_FACTOR: massPerMass(
+    'CH4',
+    'DryMatter',
+    20.7 * 10 ** -3,
+  ),
 };
 
 export const riceConstants: RiceConstants = {

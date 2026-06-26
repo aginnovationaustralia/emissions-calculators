@@ -590,6 +590,8 @@ export type BeefPastureConstants = NamedConstants & {
   >;
 
   FRAC_WET_SOIL: Record<StateOrRegion, RealNumber>;
+
+  DRY_MATTER_TO_METHANE_CONVERSION_FACTOR: MassPerMass<'CH4', 'DryMatter'>;
 };
 
 export type RiceConstants = NamedConstants & {

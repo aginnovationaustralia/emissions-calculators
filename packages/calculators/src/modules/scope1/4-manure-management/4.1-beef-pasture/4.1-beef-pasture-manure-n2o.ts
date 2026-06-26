@@ -1,17 +1,10 @@
-import {
-  BeefClassWithCalvesInputTransformed,
-  isBeefClassWithCalves,
-} from '@/calculators/Beef/types/beef-class.input';
-import { BeefSpecificClassInputTransformed } from '@/calculators/Beef/types/beef-classes.input';
-import { BeefHerdInputTransformed } from '@/calculators/Beef/types/beef-herd.input';
+import { isBeefClassWithCalves } from '@/calculators/Beef/types/beef-class.input';
 import { BeefInputTransformed } from '@/calculators/Beef/types/input';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import {
   addRainfallToGrazingProductionSystem,
-  BeefClasses,
   isWetClimateZone,
-  Season,
   stateOrRegionToExtendedRegion,
   stateOrRegionToLimitedRegion,
   stateOrRegionToPureState,
@@ -29,38 +22,30 @@ import { sum } from '@/tools/sum';
 import {
   energyPerMass,
   Mass,
-  mass,
   MassPerHeadPerDay,
   massPerHeadPerDay,
   RealNumber,
   realNumber,
 } from '@/tools/units';
 import {
-  calculateAdditionalIntakeForMilkProductionMAijkl,
-  calculateDryMatterIntakeIijkln,
+  BeefManureHerdProps,
+  BeefManurePeriodProps,
+  calculateAdditionalIntakeForMilkProductionMAjk,
+  calculateDailyDryMatterIntakeForPeriodIjkl,
+  calculateForAllClassPeriods,
   getMilkIntakeMC236,
   getProportionCowsGt2InCalfLC,
 } from '../../3-enteric-methane/3.2-beef-pasture';
 
 const calculateFaecalNitrogenExcretedFijkln = (
-  input: BeefInputTransformed,
-  herd: BeefHerdInputTransformed,
-  classInput: BeefSpecificClassInputTransformed,
-  calvingClassInput: BeefClassWithCalvesInputTransformed | undefined,
-  seasonName: Season,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  periodProps: BeefManurePeriodProps,
 ) => {
+  const { context, input, herd, seasonName, className } = periodProps;
   const { constants } = context;
-  const className = classInput.name;
   const { region } = input;
   const limitedRegion = stateOrRegionToLimitedRegion(region);
 
-  const Iijkln = calculateDryMatterIntakeIijkln(
-    input,
-    classInput,
-    seasonName,
-    context,
-  );
+  const Iijkln = calculateDailyDryMatterIntakeForPeriodIjkl(periodProps);
   const CPijkln =
     herd.method2CrudeProteinContent?.[seasonName] ??
     selectConstant(
@@ -83,12 +68,9 @@ const calculateFaecalNitrogenExcretedFijkln = (
     .minus(num(1.037))
     .switchUnit((r) => energyPerMass('DryMatter', r.value))
     .named(`MEijkl (${className})`);
-  const MCijkl = getMilkIntakeMC236(
-    calvingClassInput,
-    seasonName,
-    limitedRegion,
-    context,
-  );
+
+  // TODO: This requires passing the period details for the calving class
+  const MCijkl = getMilkIntakeMC236(periodProps);
 
   /*
     line 464
@@ -176,23 +158,24 @@ const calculateIntakeRelativeToMaintenanceLj = (
 };
 
 const calculateUrinaryNitrogenExcretedUijkln = (
-  input: BeefInputTransformed,
-  herd: BeefHerdInputTransformed,
-  classInput: BeefSpecificClassInputTransformed,
-  calvingClassInput: BeefClassWithCalvesInputTransformed | undefined,
-  seasonName: Season,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  periodProps: BeefManurePeriodProps,
 ) => {
+  const {
+    context,
+    input,
+    herd,
+    currentPeriod,
+    classInput,
+    seasonName,
+    className,
+  } = periodProps;
   const { constants } = context;
   const { region } = input;
   const limitedRegion = stateOrRegionToLimitedRegion(region);
   const extendedRegion = stateOrRegionToExtendedRegion(region);
   const state = stateOrRegionToPureState(region);
-  const className = classInput.name;
-
-  const seasonInput = classInput[seasonName];
   const Wijkln =
-    seasonInput.method2Liveweight ??
+    currentPeriod.method2Liveweight ??
     selectConstant(
       constants.BEEF_PASTURE,
       'LIVEWEIGHT',
@@ -202,7 +185,7 @@ const calculateUrinaryNitrogenExcretedUijkln = (
       'liveweight',
     ).named(`Wijkln (${className}, ${seasonName})`);
   const LWGijkln =
-    seasonInput.method2LiveweightGain ??
+    currentPeriod.method2LiveweightGain ??
     selectConstant(
       constants.BEEF_PASTURE,
       'LIVEWEIGHT',
@@ -211,12 +194,7 @@ const calculateUrinaryNitrogenExcretedUijkln = (
       seasonName,
       'liveweightGain',
     ).named(`LWGijkln (${className}, ${seasonName})`);
-  const Iijkln = calculateDryMatterIntakeIijkln(
-    input,
-    classInput,
-    seasonName,
-    context,
-  );
+  const Iijkln = calculateDailyDryMatterIntakeForPeriodIjkl(periodProps);
   const CPijkl =
     herd.method2CrudeProteinContent?.[seasonName] ??
     selectConstant(
@@ -225,25 +203,16 @@ const calculateUrinaryNitrogenExcretedUijkln = (
       limitedRegion,
       seasonName,
     ).named(`CPijkl ${seasonName}`);
-  const MCijkl = getMilkIntakeMC236(
-    calvingClassInput,
-    seasonName,
-    limitedRegion,
-    context,
-  );
+  const MCijkl = getMilkIntakeMC236(periodProps);
 
-  const LCijkl = getProportionCowsGt2InCalfLC(classInput, seasonName);
+  const LCijkl = getProportionCowsGt2InCalfLC(periodProps);
 
   const DMPijkl = isBeefClassWithCalves(classInput)
-    ? getMilkIntakeMC236(classInput, seasonName, limitedRegion, context)
+    ? getMilkIntakeMC236(periodProps)
     : root(massPerHeadPerDay('Milk', 0)).named('DMPijkl');
 
   const MPijkl = LCijkl.multiply(DMPijkl).named('MPijkl');
-  const MAijkl = calculateAdditionalIntakeForMilkProductionMAijkl(
-    classInput,
-    className,
-    seasonName,
-  );
+  const MAijkl = calculateAdditionalIntakeForMilkProductionMAjk(periodProps);
   const Lijkln = calculateIntakeRelativeToMaintenanceLj(Iijkln, Wijkln, MAijkl);
   const WRil = selectConstant(
     constants.BEEF_PASTURE,
@@ -259,14 +228,7 @@ const calculateUrinaryNitrogenExcretedUijkln = (
     LWGijkln,
     Zijkln,
   ).named(`NRijkln (${className}, ${seasonName})`);
-  const Fijkln = calculateFaecalNitrogenExcretedFijkln(
-    input,
-    herd,
-    classInput,
-    calvingClassInput,
-    seasonName,
-    context,
-  );
+  const Fijkln = calculateFaecalNitrogenExcretedFijkln(periodProps);
 
   /*
     line 486
@@ -294,85 +256,33 @@ const calculateUrinaryNitrogenExcretedUijkln = (
   return Uijkln.named(`Uijkln (${className}, ${seasonName})`);
 };
 
-const calculateExcretedNitrogenForClass = (
-  input: BeefInputTransformed,
-  herd: BeefHerdInputTransformed,
-  classInput: BeefSpecificClassInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+const calculateExcretedNitrogenForClassPeriod = (
+  periodProps: BeefManurePeriodProps,
 ) => {
-  const calvingClassInput = ['1', '3', '6'].includes(classInput.number)
-    ? herd.classes.cows2To3Years
-    : undefined;
-  const className = classInput.name;
-  const seasons = ['spring', 'summer', 'autumn', 'winter'] as const;
-  const totalNitrogenExcretedPerSeason = seasons.map((seasonName) => {
-    const seasonInput = classInput[seasonName];
-    const Nkln = seasonInput.head.named(`Nkln (${className}, ${seasonName})`);
+  const { currentPeriod, seasonName, className } = periodProps;
 
-    const AFi = calculateFaecalNitrogenExcretedFijkln(
-      input,
-      herd,
-      classInput,
-      calvingClassInput,
-      seasonName,
-      context,
-    );
-    const AUi = calculateUrinaryNitrogenExcretedUijkln(
-      input,
-      herd,
-      classInput,
-      calvingClassInput,
-      seasonName,
-      context,
-    );
+  const Nkln = currentPeriod.head.named(`Nkln (${className}, ${seasonName})`);
 
-    return {
-      AFi: AFi.multiply(Nkln)
-        .multiply(daysInSeason)
-        .named(`AFi (${className}, ${seasonName})`),
-      AUi: AUi.multiply(Nkln)
-        .multiply(daysInSeason)
-        .named(`AUi (${className}, ${seasonName})`),
-    };
-  });
-  return {
-    AFi: sum(totalNitrogenExcretedPerSeason.map((result) => result.AFi)).named(
-      `AFi ${className}`,
-    ),
-    AUi: sum(totalNitrogenExcretedPerSeason.map((result) => result.AUi)).named(
-      `AUi ${className}`,
-    ),
-  };
+  const faecalNitrogenExcretedPerDay =
+    calculateFaecalNitrogenExcretedFijkln(periodProps);
+  const urinaryNitrogenExcretedPerDay =
+    calculateUrinaryNitrogenExcretedUijkln(periodProps);
+
+  const AFi = faecalNitrogenExcretedPerDay
+    .multiply(Nkln)
+    .multiply(daysInSeason)
+    .named(`AFi (${className}, ${seasonName})`);
+  const AUi = urinaryNitrogenExcretedPerDay
+    .multiply(Nkln)
+    .multiply(daysInSeason)
+    .named(`AUi (${className}, ${seasonName})`);
+  return { AFi, AUi };
 };
 
-const calculateExcretedNitrogenForHerd = (
-  input: BeefInputTransformed,
-  herd: BeefHerdInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+const calculateManureManagementN2ODirectForClassPeriod = (
+  periodProps: BeefManurePeriodProps,
 ) => {
-  const { classes } = herd;
-  const classResults = BeefClasses.map((className) => {
-    const classInput = classes[className];
-    if (classInput === undefined) {
-      return {
-        AFi: root(mass('N', 0)).named(`AFi ${className} (empty)`),
-        AUi: root(mass('N', 0)).named(`AUi ${className} (empty)`),
-      };
-    }
-    return calculateExcretedNitrogenForClass(input, herd, classInput, context);
-  });
-
-  return {
-    AFi: sum(classResults.map((result) => result.AFi)).named('AFi'),
-    AUi: sum(classResults.map((result) => result.AUi)).named('AUi'),
-  };
-};
-
-const calculateManureManagementN2ODirectForHerd = (
-  input: BeefInputTransformed,
-  herd: BeefHerdInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) => {
+  const { context, input } = periodProps;
   const { constants } = context;
   /*
     line 442:
@@ -383,7 +293,7 @@ const calculateManureManagementN2ODirectForHerd = (
     GWPN2O = GWP of nitrous oxide to convert tN2O to tCO2e
     Cg,N2O = factor to convert elemental mass of nitrous oxide to molecular mass (dimensionless)
 */
-  const { AFi, AUi } = calculateExcretedNitrogenForHerd(input, herd, context);
+  const { AFi, AUi } = calculateExcretedNitrogenForClassPeriod(periodProps);
   const wetOrDry = isWetClimateZone(input.climateZone) ? 'wet' : 'dry';
   const EFPRP = selectConstant(
     constants.LIVESTOCK,
@@ -406,11 +316,10 @@ const calculateManureManagementN2ODirectForHerd = (
   return EMN2Odir;
 };
 
-const calculateManureManagementN2OAtmosphericDepositionForHerd = (
-  input: BeefInputTransformed,
-  herd: BeefHerdInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+const calculateManureManagementN2OAtmosphericDepositionForClassPeriod = (
+  periodProps: BeefManurePeriodProps,
 ) => {
+  const { context, input } = periodProps;
   const { constants } = context;
   /*
     line 524
@@ -418,7 +327,7 @@ const calculateManureManagementN2OAtmosphericDepositionForHerd = (
     Mvol = mass of nitrogen volatilised from urine and faeces deposited on pasture (kgN)
     EFad = emission factor for atmospheric deposition (kgN2O-N/kgN)
 */
-  const { AFi, AUi } = calculateExcretedNitrogenForHerd(input, herd, context);
+  const { AFi, AUi } = calculateExcretedNitrogenForClassPeriod(periodProps);
   const fracGASMsoil = selectConstant(
     constants.CROP,
     'FRACTION_N_VOLATILISED_ORGANIC_FERTILISER',
@@ -441,13 +350,12 @@ const calculateManureManagementN2OAtmosphericDepositionForHerd = (
   return Mvol.multiply(EFad).multiply(cgn2o); //.multiply(tenToPowMinus3);
 };
 
-const calculateManureManagementN2OLeachingAndRunoffForHerd = (
-  input: BeefInputTransformed,
-  herd: BeefHerdInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+const calculateManureManagementN2OLeachingAndRunoffForClassPeriod = (
+  periodProps: BeefManurePeriodProps,
 ) => {
+  const { context, input } = periodProps;
   const { constants } = context;
-  const { AFi, AUi } = calculateExcretedNitrogenForHerd(input, herd, context);
+  const { AFi, AUi } = calculateExcretedNitrogenForClassPeriod(periodProps);
   const fracWetSoil = selectConstant(
     constants.BEEF_PASTURE,
     'FRAC_WET_SOIL',
@@ -481,10 +389,8 @@ const calculateManureManagementN2OLeachingAndRunoffForHerd = (
   return EN2Oleach;
 };
 
-export const calculateManureManagementN2OForHerd = (
-  input: BeefInputTransformed,
-  herd: BeefHerdInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+const calculateManureManagementN2OForClassPeriod = (
+  periodProps: BeefManurePeriodProps,
 ) => {
   /*
       line 437:
@@ -493,22 +399,32 @@ export const calculateManureManagementN2OForHerd = (
       EN2O,ad = atmospheric deposition nitrous oxide emissions on pasture (tCO2e)
       EN2O,leach = leaching and runoff nitrous oxide emissions on pasture (tCO2e)
   */
-  const EN2Odir = calculateManureManagementN2ODirectForHerd(
-    input,
-    herd,
-    context,
-  ).named('EN2O,dir');
-  const EN2Oad = calculateManureManagementN2OAtmosphericDepositionForHerd(
-    input,
-    herd,
-    context,
-  ).named('EN2O,ad');
-  const EN2Oleach = calculateManureManagementN2OLeachingAndRunoffForHerd(
-    input,
-    herd,
-    context,
-  ).named('EN2O,leach');
+  const EN2Odir =
+    calculateManureManagementN2ODirectForClassPeriod(periodProps).named(
+      'EN2O,dir',
+    );
+  const EN2Oad =
+    calculateManureManagementN2OAtmosphericDepositionForClassPeriod(
+      periodProps,
+    ).named('EN2O,ad');
+  const EN2Oleach =
+    calculateManureManagementN2OLeachingAndRunoffForClassPeriod(
+      periodProps,
+    ).named('EN2O,leach');
   return EN2Odir.plus(EN2Oad).plus(EN2Oleach).named('EMN2O');
+};
+
+const calculateManureManagementN2OForHerd = (
+  herdProps: BeefManureHerdProps,
+) => {
+  return calculateForAllClassPeriods(
+    herdProps,
+    calculateManureManagementN2OForClassPeriod,
+    {
+      classResultName: (className) => `EMN2O=${className}`,
+      herdResultName: 'EMN2O (herd)',
+    },
+  );
 };
 
 export const calculateManureManagementN2O = (
@@ -517,7 +433,7 @@ export const calculateManureManagementN2O = (
 ) => {
   const { herds } = input;
   const n2oEmissionsForHerds = herds.map((herd) =>
-    calculateManureManagementN2OForHerd(input, herd, context),
+    calculateManureManagementN2OForHerd({ input, herd, context }),
   );
 
   return sum(n2oEmissionsForHerds).named('EMN2O');
