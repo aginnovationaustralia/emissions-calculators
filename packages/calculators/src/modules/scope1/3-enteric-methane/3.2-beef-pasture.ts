@@ -22,7 +22,7 @@ import {
 import { monthDurationMap, monthSeasonMap } from '@/modules/shared';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, num, root, SummedContainer } from '@/tools/containers';
-import { daysInSeason, tenToPowMinus3 } from '@/tools/sentinels';
+import { daysInSeason } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
   days,
@@ -290,9 +290,15 @@ export function calculateDailyDryMatterIntakeForPeriodIjkl(
 }
 
 function calculateDailyMethaneForPeriod(periodProps: BeefManurePeriodProps) {
+  const { context } = periodProps;
+  const { constants } = context;
   const Ijkl = calculateDailyDryMatterIntakeForPeriodIjkl(periodProps);
-  const Mjkl = num(20.7).multiply(Ijkl).multiply(tenToPowMinus3).named('Mjkl');
-  return Mjkl;
+  const dryMatterToMethaneConversionFactor = selectConstant(
+    constants.BEEF_PASTURE,
+    'DRY_MATTER_TO_METHANE_CONVERSION_FACTOR',
+  ).named('dryMatterToMethaneConversionFactor');
+
+  return Ijkl.multiply(dryMatterToMethaneConversionFactor).named('Mjkl');
 }
 
 function calculateClassMethaneForPeriod(periodProps: BeefManurePeriodProps) {
