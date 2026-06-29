@@ -21,9 +21,23 @@ import { basename, join } from 'path';
 import './matchers';
 
 /**
- * NOTE: These tests aren't executed by default for now. They are useful for exersizing
+ * These tests are to help assess how well we can create a valid FullCAM plot file from the simplified set of inputs the user can supply.
+ * Scenarios have been created via the FullCAM application, and those plot files have been exported and are stored on disk here. The tests also define 'area inputs'
+ * using the API input schema, which offers a very cut down set of values and events the user needs to supply. We pass the 3 plot files from FullCAM to the batch API,
+ * as well as the 3 plot files generated from the user inputs using template snippets. The values generated should be similar, and the tests assert this.
+ *
+ * To run these tests:
+ * Set real values for the env vars FULLCAM_WORKFLOW_API_KEY and FULLCAM_BATCH_NOTIFICATION_EMAIL
+ * Switch to the folder `packages/calculators`
+ * Run `pnpm install`
+ * Run `pnpm test:fullcam` to kick the tests off
+ * Notice that output files are generated in the local `out` folder, for success and failure scenarios, to help with debugging. All should be succeeding.
+ *
+ * NOTE: These tests aren't executed by default for now. They are useful for exercising
  * the FullCAM pipeline with real inputs and making real API requests.
  */
+
+// Simulates simple environmental planting
 const area1: FullCAMAreaInput = {
   latitude: -30.542,
   longitude: 151.428,
@@ -43,6 +57,8 @@ const area1: FullCAMAreaInput = {
   wildfireEvents: [],
   prescribedBurnEvents: [],
 };
+
+// Simulates simple regeneration
 const area2: FullCAMAreaInput = {
   latitude: -30.542,
   longitude: 151.428,
@@ -69,6 +85,7 @@ const area2: FullCAMAreaInput = {
   prescribedBurnEvents: [],
 };
 
+// Simulates simple deforestation
 const area3: FullCAMAreaInput = {
   latitude: -30.542,
   longitude: 151.428,
@@ -110,12 +127,14 @@ function loadExamplePlotFile(
 }
 
 function buildScenarioPlots(): Omit<AreaPlotContent, 'plotfileName'>[] {
+  // Load valid plot files directly from disk, ready to submit for batch simulation. Exported from fullcam application
   const examplePlotFiles: Omit<AreaPlotContent, 'plotfileName'>[] = [
     loadExamplePlotFile('1-ExampleEnvironmentalPlanting.plo', 2030, 1),
     loadExamplePlotFile('2-ExampleRegeneration.plo', 2030, 1),
     loadExamplePlotFile('3-ExampleDeforestation.plo', 2016, 1),
   ];
 
+  // Generate plot files using simple inputs, via template snippets
   const plotsFromUserInputs = [area1, area2, area3].map(
     (originalInput, index) => {
       const parsed = FullCAMAreaSchema.parse(originalInput);
@@ -128,6 +147,7 @@ function buildScenarioPlots(): Omit<AreaPlotContent, 'plotfileName'>[] {
     },
   );
 
+  // Return the plot files built with FullCAM, plus the ones built from user inputs using template snippets
   return examplePlotFiles.concat(plotsFromUserInputs);
 }
 
@@ -160,6 +180,7 @@ function compareResults(
   // console.log(`Example key fields:`, exampleKeyFields);
   // console.log(`Input key fields:`, inputKeyFields);
 
+  // Grab expected and actual results, and check every actual value is within 75% of the expected value
   expect(inputKeyFields).toBeWithinRatioOf(exampleKeyFields, {
     margin: 0.75,
     keys: [...comparedKeyFields],
@@ -171,6 +192,7 @@ describe('FullCAM scenario batch simulations', () => {
   let succeededSubmissions: FullCAMSubmission[];
   let failedSubmissions: FullCAMAreaError[];
 
+  // Run the batch simulation once before all tests are run
   beforeAll(async () => {
     const fullcamWorkflowApiKey = process.env.FULLCAM_WORKFLOW_API_KEY;
     if (!fullcamWorkflowApiKey) {
@@ -188,6 +210,7 @@ describe('FullCAM scenario batch simulations', () => {
       fullcamBatchNotificationEmail,
     };
 
+    // Run all the plot files through FullCAM batch simulation
     const batchResult = await runSimulationBatch(
       buildScenarioPlots(),
       batchOptions,
@@ -202,7 +225,7 @@ describe('FullCAM scenario batch simulations', () => {
     succeededSubmissions = submissions.filter(isOk).map(({ value }) => value);
     failedSubmissions = submissions.filter(isErr).map(({ error }) => error);
 
-    // The test dumps quite a few files to disk to aid in debugging
+    // NOTE: The test dumps quite a few files to disk to aid in debugging
     failedSubmissions.forEach((submission) => {
       const outFailedDir = join(__dirname, 'out/failed');
       mkdirSync(outFailedDir, { recursive: true });
@@ -214,6 +237,8 @@ describe('FullCAM scenario batch simulations', () => {
     });
 
     succeededSubmissions.forEach((submission) => {
+      const outputDir = join(__dirname, 'out/success');
+      mkdirSync(outputDir, { recursive: true });
       const plofilepath = join(
         __dirname,
         'out/success',
@@ -236,6 +261,7 @@ describe('FullCAM scenario batch simulations', () => {
       .map(({ value }) => value);
     const failedExtractions = extractedResults.filter(isErr);
 
+    // If any plot files triggered a failure, fail the test immediately
     if (failedExtractions.length > 0) {
       throw new Error(
         `Key field extraction failed for: ${failedExtractions.map((r) => r.error.area.uniqueAreaKey).join(', ')}`,
@@ -258,6 +284,8 @@ describe('FullCAM scenario batch simulations', () => {
       expect(resultsByKey.size).toBe(6);
     });
 
+    // There are 3 plot files generated by FullCAM loaded from disk, and 3 plot files generated from user inputs using template snippets
+    // They should match each other fairly closely, the tests assert each value is within 75% of the expected value
     it('has the right results for scenario 1', () => {
       compareResults(
         resultsByKey,
