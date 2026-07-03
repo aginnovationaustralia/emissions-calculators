@@ -42,18 +42,18 @@ export const generateCsvLines = (
     });
   }
 
-  const indexCMassOfTrees = columnNames.indexOf('"C mass of trees  (tC)"');
+  const indexCMassOfTrees = columnNames.indexOf('"C mass of trees  (tC/ha)"');
   const indexCH4EmittedDueToFire = columnNames.indexOf(
-    '"CH4 emitted due to fire (tCH4)"',
+    '"CH4 emitted due to fire (tCH4/ha)"',
   );
   const indexN2OEmittedDueToFire = columnNames.indexOf(
-    '"N2O emitted due to fire (tN2O)"',
+    '"N2O emitted due to fire (tN2O/ha)"',
   );
   const indexCMassOfForestDebris = columnNames.findIndex((c) =>
     [
       // REVISIT: I noticed both column names emitted from the batch API for this field
-      '"C mass of forest debris  (tC)"',
-      '"C mass of debris  (tC)"',
+      '"C mass of forest debris  (tC/ha)"',
+      '"C mass of debris  (tC/ha)"',
     ].includes(c),
   );
 

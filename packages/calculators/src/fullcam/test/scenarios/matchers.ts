@@ -3,6 +3,8 @@ const DEFAULT_MARGIN = 0.75;
 export type ToBeWithinRatioOfOptions = {
   margin?: number;
   keys?: string[];
+  actualKey?: string;
+  expectedKey?: string;
 };
 
 type NumericRecord = Record<string, number>;
@@ -78,7 +80,7 @@ export function toBeWithinRatioOf(
     message: () =>
       pass
         ? `Expected objects not to be within a ${margin} ratio of each other`
-        : `Expected objects to be within a ${margin} ratio of each other:\n${failures.join('\n')}`,
+        : `Expected objects to be within a ${margin} ratio of each other:\n${failures.join('\n')}\nexpectedKey: ${options.expectedKey}\nactualKey: ${options.actualKey}`,
   };
 }
 

@@ -1,19 +1,12 @@
-import { generateTemplateForSpatialUpdate } from '@/fullcam';
-import {
-  FullCAMAreaInput,
-  FullCAMAreaInputTransformed,
-  FullCAMAreaSchema,
-} from '@/fullcam/input';
-import {
-  AreaPlotContent,
-  FullCAMAreaError,
-  InputAreaWithOutputKeyFields,
-} from '@/fullcam/types';
+import { FullCAMAreaInput } from '@/fullcam/input';
+import { FullCAMAreaError } from '@/fullcam/types';
 import '../matchers';
 import {
+  BatchResultPair,
   compareResults,
   generateBatchResults,
   loadExamplePlotFile,
+  TestScenarioPair,
 } from '../setup';
 
 /*
@@ -115,43 +108,59 @@ const areaRiparianVegetation: FullCAMAreaInput = {
   ],
 };
 
-function buildScenarioPlots(): Omit<AreaPlotContent, 'plotfileName'>[] {
-  // Load valid plot files directly from disk, ready to submit for batch simulation. Exported from fullcam application
-  const examplePlotFiles: Omit<AreaPlotContent, 'plotfileName'>[] = [
-    loadExamplePlotFile('sheep-grazing/areaGrazing.plo', 2025, 12),
-    loadExamplePlotFile('sheep-grazing/areaRemnantVegetation.plo', 2025, 12),
-    loadExamplePlotFile(
-      'sheep-grazing/areaRemnantVegetationCleared.plo',
-      2025,
-      12,
-    ),
-    loadExamplePlotFile('sheep-grazing/areaShelterBelt.plo', 2025, 12),
-    loadExamplePlotFile('sheep-grazing/areaRiparianVegetation.plo', 2025, 12),
-  ];
-
-  // Generate plot files using simple inputs, via template snippets
-  const plotsFromUserInputs = [
-    areaGrazing,
-    areaRemnantVegetation,
-    areaRemnantVegetationCleared,
-    areaShelterBelt,
-    areaRiparianVegetation,
-  ].map((originalInput, index) => {
-    const parsed = FullCAMAreaSchema.parse(originalInput);
-    return {
-      uniqueAreaKey: `${index + 1}-plotsFromUserInputs`,
-      plotContent: generateTemplateForSpatialUpdate(parsed),
-      input: parsed as FullCAMAreaInputTransformed,
-      originalInput,
-    };
-  });
-
+function buildScenarioPlots(): TestScenarioPair[] {
   // Return the plot files built with FullCAM, plus the ones built from user inputs using template snippets
-  return examplePlotFiles.concat(plotsFromUserInputs);
+  return [
+    {
+      scenarioName: 'sheep-grazing',
+      referenceArea: loadExamplePlotFile(
+        'sheep-grazing/areaGrazing.plo',
+        2025,
+        12,
+      ),
+      userDefinedArea: areaGrazing,
+    },
+    {
+      scenarioName: 'remnant-vegetation',
+      referenceArea: loadExamplePlotFile(
+        'sheep-grazing/areaRemnantVegetation.plo',
+        2025,
+        12,
+      ),
+      userDefinedArea: areaRemnantVegetation,
+    },
+    {
+      scenarioName: 'remnant-vegetation-cleared',
+      referenceArea: loadExamplePlotFile(
+        'sheep-grazing/areaRemnantVegetationCleared.plo',
+        2025,
+        12,
+      ),
+      userDefinedArea: areaRemnantVegetationCleared,
+    },
+    {
+      scenarioName: 'shelter-belt',
+      referenceArea: loadExamplePlotFile(
+        'sheep-grazing/areaShelterBelt.plo',
+        2025,
+        12,
+      ),
+      userDefinedArea: areaShelterBelt,
+    },
+    {
+      scenarioName: 'riparian-vegetation',
+      referenceArea: loadExamplePlotFile(
+        'sheep-grazing/areaRiparianVegetation.plo',
+        2025,
+        12,
+      ),
+      userDefinedArea: areaRiparianVegetation,
+    },
+  ];
 }
 
 describe('FullCAM scenario for sheep grazing farm', () => {
-  let resultsByKey: Map<string, InputAreaWithOutputKeyFields>;
+  let resultsByKey: Map<string, BatchResultPair>;
   let failedSubmissions: FullCAMAreaError[];
 
   // Run the batch simulation once before all tests are run
@@ -169,41 +178,43 @@ describe('FullCAM scenario for sheep grazing farm', () => {
       expect(failedSubmissions.map((s) => s.area.uniqueAreaKey)).toEqual([]);
     });
     it('has the correct number of results', () => {
-      expect(resultsByKey.size).toBe(10);
+      expect(resultsByKey.size).toBe(5);
     });
 
     it('has the right results for grazing area', () => {
-      // Currently failing on carbonMassInDebrisPerHectare. Expected is 330.2792352523473 from crop debris. Do we need to allow
-      // choosing crops on areas?
-      compareResults(resultsByKey, 'areaGrazing.plo', '1-plotsFromUserInputs');
+      const grazingAreaResults = resultsByKey.get('sheep-grazing')!;
+
+      // Test is failing, carbonMassInDebrisPerHectare is 3.5899... in expected scenario but is 0 in generated scenario
+      // Do we need to allow defining crops on areas to generate crop debris?
+      compareResults(grazingAreaResults);
     });
     it('has the right results for remnant vegetation', () => {
-      compareResults(
-        resultsByKey,
-        'areaRemnantVegetation.plo',
-        '2-plotsFromUserInputs',
-      );
+      const remnantVegetationResults = resultsByKey.get('remnant-vegetation')!;
+      compareResults(remnantVegetationResults);
     });
     it('has the right results for remnant vegetation cleared', () => {
-      compareResults(
-        resultsByKey,
-        'areaRemnantVegetationCleared.plo',
-        '3-plotsFromUserInputs',
-      );
+      const remnantVegetationClearedResults = resultsByKey.get(
+        'remnant-vegetation-cleared',
+      )!;
+      compareResults(remnantVegetationClearedResults);
     });
     it('has the right results for shelter belt', () => {
-      compareResults(
-        resultsByKey,
-        'areaShelterBelt.plo',
-        '4-plotsFromUserInputs',
-      );
+      const shelterBeltResults = resultsByKey.get('shelter-belt')!;
+
+      // carbonMassInDebrisPerHectare is 53.39 in reference scenario, 31.95 in user defined scenario. The reference
+      // has around 5TC/ha when planting occurs (2005). Muh less carbon accumulates in debris in user scenario
+
+      // carbonMassInTreesPerHectare is 206 in reference, 134 in user defined scenario. Slower growth in user scenario.
+      // Tests start passing if the reference plot changes EventQ.Event.PlnF.tTYFCat from BeltH to BlockES. BlockES is the type in the template we use. Do we need to support block vs belt in the user planting event input
+      compareResults(shelterBeltResults);
     });
-    it('has the right results for remnant vegetation cleared', () => {
-      compareResults(
-        resultsByKey,
-        'areaRiparianVegetation.plo',
-        '5-plotsFromUserInputs',
-      );
+    it('has the right results for riparian vegetation', () => {
+      const riparianVegetationResults = resultsByKey.get(
+        'riparian-vegetation',
+      )!;
+
+      // carbonMassInDebrisPerHectare is 30.1 in reference, 22.1 in user defined scenario. Another example of initial debris from a crop. But debris accumulates faster after planting as well.
+      compareResults(riparianVegetationResults);
     });
   });
 });

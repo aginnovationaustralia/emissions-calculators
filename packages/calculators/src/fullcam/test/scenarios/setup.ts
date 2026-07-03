@@ -1,7 +1,12 @@
 import { runSimulationBatch, RunSimulationBatchOptions } from '@/fullcam/batch';
-import { FullCAMAreaInput, FullCAMAreaInputTransformed } from '@/fullcam/input';
+import {
+  FullCAMAreaInput,
+  FullCAMAreaInputTransformed,
+  FullCAMAreaSchema,
+} from '@/fullcam/input';
 import { extractKeyFieldsFromFullCAMOutput } from '@/fullcam/response';
 import { isErr, isOk } from '@/fullcam/result';
+import { generateTemplateForSpatialUpdate } from '@/fullcam/templates/spatial-update';
 import { AreaPlotContent, InputAreaWithOutputKeyFields } from '@/fullcam/types';
 import { mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { basename, join } from 'path';
@@ -33,36 +38,41 @@ const comparedKeyFields = [
   'n2oFromBiomassBurningPerHectare',
 ] as const;
 
-export function compareResults(
-  resultsByKey: Map<string, InputAreaWithOutputKeyFields>,
-  exampleFilename: string,
-  inputFilename: string,
-) {
-  const exampleResult = resultsByKey.get(exampleFilename);
-  const inputResult = resultsByKey.get(inputFilename);
+export type BatchResultPair = {
+  scenarioName: string;
+  expected: InputAreaWithOutputKeyFields;
+  actual: InputAreaWithOutputKeyFields;
+};
 
-  if (!exampleResult || !inputResult) {
-    throw new Error(
-      `Result not found for ${exampleFilename} or ${inputFilename}`,
-    );
-  }
-
-  const exampleKeyFields = exampleResult.keyFields;
-  const inputKeyFields = inputResult.keyFields;
+export function compareResults(results: BatchResultPair) {
+  const { expected, actual } = results;
 
   // console.log(`Comparing results for ${exampleFilename} and ${inputFilename}`);
   // console.log(`Example key fields:`, exampleKeyFields);
   // console.log(`Input key fields:`, inputKeyFields);
 
   // Grab expected and actual results, and check every actual value is within 75% of the expected value
-  expect(inputKeyFields).toBeWithinRatioOf(exampleKeyFields, {
+  expect(actual.keyFields).toBeWithinRatioOf(expected.keyFields, {
     margin: 0.75,
     keys: [...comparedKeyFields],
+    actualKey: actual.area.uniqueAreaKey,
+    expectedKey: expected.area.uniqueAreaKey,
   });
 }
 
+export type TestScenarioPair = {
+  scenarioName: string;
+  referenceArea: Omit<AreaPlotContent, 'plotfileName'>;
+  userDefinedArea: FullCAMAreaInput;
+};
+
+const areaKeyForReference = (scenarioName: string) =>
+  `${scenarioName}-reference`;
+const areaKeyForGenerated = (scenarioName: string) =>
+  `${scenarioName}-generated`;
+
 export async function generateBatchResults(
-  scenariosToRun: Omit<AreaPlotContent, 'plotfileName'>[],
+  scenariosToRun: TestScenarioPair[],
   scenarioName: string,
 ) {
   const fullcamWorkflowApiKey = process.env.FULLCAM_WORKFLOW_API_KEY;
@@ -81,8 +91,24 @@ export async function generateBatchResults(
     fullcamBatchNotificationEmail,
   };
 
+  const allPlots = scenariosToRun.flatMap((scenario) => {
+    const parsed = FullCAMAreaSchema.parse(scenario.userDefinedArea);
+    return [
+      {
+        ...scenario.referenceArea,
+        uniqueAreaKey: areaKeyForReference(scenario.scenarioName),
+      },
+      {
+        uniqueAreaKey: areaKeyForGenerated(scenario.scenarioName),
+        plotContent: generateTemplateForSpatialUpdate(parsed),
+        input: parsed as FullCAMAreaInputTransformed,
+        originalInput: scenario.userDefinedArea,
+      },
+    ];
+  });
+
   // Run all the plot files through FullCAM batch simulation
-  const batchResult = await runSimulationBatch(scenariosToRun, batchOptions);
+  const batchResult = await runSimulationBatch(allPlots, batchOptions);
 
   if (batchResult.isErr) {
     throw new Error('Failed to run batch: ' + batchResult.error.message);
@@ -138,7 +164,29 @@ export async function generateBatchResults(
   }
 
   const resultsByKey = new Map(
-    successfulExtractions.map((result) => [result.area.uniqueAreaKey, result]),
+    scenariosToRun.map(({ scenarioName }) => {
+      const expected = successfulExtractions.find(
+        (r) => r.area.uniqueAreaKey === areaKeyForReference(scenarioName),
+      );
+      const actual = successfulExtractions.find(
+        (r) => r.area.uniqueAreaKey === areaKeyForGenerated(scenarioName),
+      );
+
+      if (expected === undefined) {
+        throw new Error(`Expected result not found for ${scenarioName}`);
+      }
+      if (actual === undefined) {
+        throw new Error(`Actual result not found for ${scenarioName}`);
+      }
+      return [
+        scenarioName,
+        {
+          scenarioName,
+          expected,
+          actual,
+        },
+      ];
+    }),
   );
 
   return { resultsByKey, failedSubmissions, succeededSubmissions };
