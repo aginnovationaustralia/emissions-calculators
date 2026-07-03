@@ -9,7 +9,7 @@ export const generateTemplateForSpatialUpdate = (
   const simulationStartYear = input.startYear - 20;
   const simulationEndYear = input.endYear + 20;
 
-  const { latitude, longitude } = input;
+  const { latitude, longitude, areaHectares } = input;
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <DocumentPlot FileType="FullCAM Plot" Version="5009" pageIxDO="1" tDiagram="-1">
     <Meta nmME="Environmental Plantings Method" savedByVersion="8.23.04.1101" lockTime="" lockId="" lockOnME="false">
@@ -18,7 +18,7 @@ export const generateTemplateForSpatialUpdate = (
     <Config tPlot="CompF" userSoilMnrl="true" userMulchF="false" userMulchA="false" tTreeProd="TYF" userCalcFPI="false" userCalcModTemp="false" userCalcModASW="false" userCalcModFrost="false" userN="false" userDispEner="false" userDispProd="false" userEventIrrF="false" userEventIrrA="false" userEventNFeF="true" userEventNFeA="true" userEventManF="false" userEventManA="false" rothCVers="Vers263" userSens="false" userOpti="false" userEcon="false" userLogGrade="false" userCropGrade="false" />
     <Timing dailyTimingTZ="false" useDaysPerStepDTZ="true" daysPerStepDTZ="1" stepsPerDayDTZ="1" outputFreqDTZ="Daily" stepsPerOutDTZ="1" firstOutStepDTZ="1" tStepsYTZ="Monthly" stepsPerYrYTZ="110" stYrYTZ="${simulationStartYear}" stStepInStYrYTZ="1" enYrYTZ="${simulationEndYear}" enStepInEnYrYTZ="1" stepsPerOutYTZ="1" firstOutStepYTZ="1" />
     <Build lonBL="${longitude}" latBL="${latitude}" frCat="All" areaBL="Cell" frFracBL="" />
-    <Site count="21" tAirTemp="Direct" tVPD="" tSoilTemp="" hasArea="false" userHasArea="false" siteArea="" conditIrrigOnF="false" conditIrrigOnA="false" siteMultStemF="1.0" siteMultBranF="1.0" siteMultBarkF="1.0" siteMultLeafF="1.0" siteMultCortF="1.0" siteMultFirtF="1.0" siteMultGbfrA="1.0" siteMultStlkA="1.0" siteMultLeafA="1.0" siteMultCortA="1.0" siteMultFirtA="1.0" maxAbgMF="240.678588867188" maxAbgMA="" latitude3PG="" molPARPerMJRad="" plantMPerMolC="" upstreamCRatio="" fpiAvgLT="16.393014093240108">
+    <Site count="21" tAirTemp="Direct" tVPD="" tSoilTemp="" hasArea="true" userHasArea="false" siteArea="${areaHectares}" conditIrrigOnF="false" conditIrrigOnA="false" siteMultStemF="1.0" siteMultBranF="1.0" siteMultBarkF="1.0" siteMultLeafF="1.0" siteMultCortF="1.0" siteMultFirtF="1.0" siteMultGbfrA="1.0" siteMultStlkA="1.0" siteMultLeafA="1.0" siteMultCortA="1.0" siteMultFirtA="1.0" maxAbgMF="240.678588867188" maxAbgMA="" latitude3PG="" molPARPerMJRad="" plantMPerMolC="" upstreamCRatio="" fpiAvgLT="16.393014093240108">
         <TimeSeries tInTS="defnitIrrigA" tExtrapTS="AvgYr" tOriginTS="Calendar" yr0TS="2010" nYrsTS="1" dataPerYrTS="12" nDecPlacesTS="1" colWidthTS="50" multTS="1.0" showGraphTS="true">
         <WinState L="10" T="83" clientW="702" clientH="450" ws="Normal"/>
         <rawTS count="12">0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0</rawTS>

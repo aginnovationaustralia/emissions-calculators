@@ -55,7 +55,7 @@ function generateClearingEvent(
 ): string {
   switch (input.initialTrees.speciesName) {
     case 'Environmental plantings':
-      return `    <Event tEV="Thin" clearEV="true" onEV="false" dateOriginEV="Calendar" nYrsFromStEV="" nDaysFromStEV="" tFaqEV="InitClrNoProd" tAaqEV="Blank" aqStYrEV="1800" aqEnYrEV="2100" nmEV="Thin (clearing)" categoryEV="CatUndef" tEvent="Doc" idSP="2" regimeInstance="73c3f21c-6326-487d-9826-d6e6725a18bf" nmRegime="New Regime">
+      return `    <Event tEV="Thin" clearEV="true" onEV="true" dateOriginEV="Calendar" nYrsFromStEV="" nDaysFromStEV="" tFaqEV="InitClrNoProd" tAaqEV="Blank" aqStYrEV="1800" aqEnYrEV="2100" nmEV="Thin (clearing)" categoryEV="CatUndef" tEvent="Doc" idSP="2" regimeInstance="73c3f21c-6326-487d-9826-d6e6725a18bf" nmRegime="New Regime">
       <notesEV/>
       <Thin fracAfctThin="${event.percentThinned / 100}" userThisThinByLG="false" clearAllRemainsF="false" fracStemToDdwdExtraF="" fracBranToDdwdExtraF="" fracBarkToBlitExtraF="" fracLeafToLlitExtraF="" fracCortToCodrExtraF="" fracFirtToFidrExtraF="" replaceStemsThin="false" useBioAgeAdjThin="false" remvAvgAgeMultThin="1.0" remvMaxAgeMultThin="0.0" remvOffsetThin="0.0" multStemThin="1.0" multBranThin="1.0" multBarkThin="1.0" multLeafThin="1.0" multFirtThin="1.0" multCortThin="1.0" boostYrsThin="0.0" fixThin="" phaThin="" treeNmThin="Environmental plantings" yrsStemRegrowThin="0.0" yrsBarkRegrowThin="0.0" yrsBranRegrowThin="0.0" yrsLeafRegrowThin="0.0" yrsCortRegrowThin="0.0" yrsFirtRegrowThin="0.0">
         <fracGradeThin>,,,,</fracGradeThin>
@@ -73,7 +73,7 @@ function generateClearingEvent(
       <dateEV CalendarSystemT="FixedLength">${fullCAMDate(event.clearingDate)}</dateEV>
     </Event>`;
     case 'Native Species Regeneration <500mm rainfall':
-      return `    <Event tEV="Thin" clearEV="true" onEV="false" dateOriginEV="Calendar" nYrsFromStEV="" nDaysFromStEV="" tFaqEV="InitClrNoProd" tAaqEV="Blank" aqStYrEV="1800" aqEnYrEV="2100" nmEV="Thin (clearing)" categoryEV="CatUndef" tEvent="Doc" idSP="2" regimeInstance="628071e5-fdc3-44d3-9f2e-f9e2119edfde" nmRegime="New Regime">
+      return `    <Event tEV="Thin" clearEV="true" onEV="true" dateOriginEV="Calendar" nYrsFromStEV="" nDaysFromStEV="" tFaqEV="InitClrNoProd" tAaqEV="Blank" aqStYrEV="1800" aqEnYrEV="2100" nmEV="Thin (clearing)" categoryEV="CatUndef" tEvent="Doc" idSP="2" regimeInstance="628071e5-fdc3-44d3-9f2e-f9e2119edfde" nmRegime="New Regime">
       <notesEV/>
       <Thin fracAfctThin="${event.percentThinned / 100}" userThisThinByLG="false" clearAllRemainsF="false" fracStemToDdwdExtraF="" fracBranToDdwdExtraF="" fracBarkToBlitExtraF="" fracLeafToLlitExtraF="" fracCortToCodrExtraF="" fracFirtToFidrExtraF="" replaceStemsThin="false" useBioAgeAdjThin="false" remvAvgAgeMultThin="1.0" remvMaxAgeMultThin="0.0" remvOffsetThin="0.0" multStemThin="1.0" multBranThin="1.0" multBarkThin="1.0" multLeafThin="1.0" multFirtThin="1.0" multCortThin="1.0" boostYrsThin="0.0" fixThin="" phaThin="" treeNmThin="Native Species Regeneration &lt;500mm rainfall" yrsStemRegrowThin="0.0" yrsBarkRegrowThin="0.0" yrsBranRegrowThin="0.0" yrsLeafRegrowThin="0.0" yrsCortRegrowThin="0.0" yrsFirtRegrowThin="0.0">
         <fracGradeThin>,,,,</fracGradeThin>
@@ -117,7 +117,9 @@ const eventQHeader = `<HeaderState sortIx="0" sortUp="true" sortBy1="false" sort
 <showEvT>t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,t,f</showEvT>`;
 
 function eventsWithClearing(input: FullCAMClearableAreaInputTransformed) {
-  return input.clearingEvents.map((c) => generateClearingEvent(input, c));
+  return (
+    input.clearingEvents?.map((c) => generateClearingEvent(input, c)) ?? []
+  );
 }
 
 export function generateEventQ(input: FullCAMAreaInputTransformed) {

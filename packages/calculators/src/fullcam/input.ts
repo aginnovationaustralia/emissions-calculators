@@ -72,7 +72,7 @@ const FullCAMBaseAreaSchema = object({
 // Clearing events are only considered valid by FullCAM if trees were already in place
 export const FullCAMClearableAreaSchema = FullCAMBaseAreaSchema.extend({
   initialTrees: object({ speciesName: z.enum(TreeSpeciesNames) }),
-  clearingEvents: z.array(ClearingEventSchema),
+  clearingEvents: z.array(ClearingEventSchema).optional(),
 });
 export const FullCAMUnclearableAreaSchema = FullCAMBaseAreaSchema.extend({
   initialTrees: z.literal(false),
