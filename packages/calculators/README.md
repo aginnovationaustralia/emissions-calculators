@@ -177,7 +177,7 @@ All users of the Code must acknowledge AIA as the source and maintainer of the E
 
 The acknowledgement must be displayed in documentation, digital interfaces, or product materials where attribution of technical components is ordinarily provided.
 
-This includes the need to display the [‘Powered by EAP’](https://www.aiaeap.com/branding) logo in any systems which directly or indirectly use the open-source code, in a way which is clearly visible to third-party clients/customers/users of those systems.
+This includes the right to display the [‘Powered by EAP’](https://www.aiaeap.com/branding) logo in any systems which directly or indirectly use the open-source code, in a way which is clearly visible to third-party clients/customers/users of those systems.
 
 At a minimum, the acknowledgement must state:
 
