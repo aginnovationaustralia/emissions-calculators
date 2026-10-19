@@ -1,11 +1,12 @@
+import { locateStationaryFuel } from '@/tools/modules';
 import { z } from 'zod';
 import {
-  StationaryFuelLiquidInputSchema,
+  stationaryFuelLiquidInputSchema,
   StationaryFuelLiquidInputTransformed,
 } from './stationaryFuel-liquid.input';
-import { StationaryFuelNaturalGasInputSchema } from './stationaryFuel-naturalGas.input';
+import { stationaryFuelNaturalGasInputSchema } from './stationaryFuel-naturalGas.input';
 import {
-  StationaryFuelSolidInputSchema,
+  stationaryFuelSolidInputSchema,
   StationaryFuelSolidInputTransformed,
 } from './stationaryFuel-solid.input';
 
@@ -21,13 +22,17 @@ export const isStationaryFuelLiquid = (
   return fuel.fuelClass === 'Liquid fuels';
 };
 
-export const StationaryFuelInputSchema = z.discriminatedUnion('fuelClass', [
-  StationaryFuelSolidInputSchema,
-  StationaryFuelLiquidInputSchema,
-  StationaryFuelNaturalGasInputSchema,
-]);
+export const stationaryFuelInputSchema = locateStationaryFuel(({ location }) =>
+  z.discriminatedUnion('fuelClass', [
+    stationaryFuelSolidInputSchema(location),
+    stationaryFuelLiquidInputSchema(location),
+    stationaryFuelNaturalGasInputSchema(location),
+  ]),
+);
 
-export type StationaryFuelInput = z.input<typeof StationaryFuelInputSchema>;
+export type StationaryFuelInput = z.input<
+  ReturnType<typeof stationaryFuelInputSchema>
+>;
 export type StationaryFuelInputTransformed = z.output<
-  typeof StationaryFuelInputSchema
+  ReturnType<typeof stationaryFuelInputSchema>
 >;

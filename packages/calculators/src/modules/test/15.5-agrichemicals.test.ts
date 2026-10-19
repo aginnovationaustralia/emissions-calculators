@@ -1,4 +1,5 @@
 import { getSheet } from '@/test/common/sheets';
+import { nv, nvo } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import { calculateScope3Agrichemicals } from '../scope3/15.5-agrichemicals';
 import {
@@ -31,10 +32,12 @@ const getCalculatorInput = (
   const agrichemicalsInput: AgrichemicalsInput = {
     chemicals: [
       {
-        amountKg,
+        amountKg: nv(amountKg),
         type,
         ...(method === '2' && customEmissionsFactor
-          ? { customEmissionsFactor: Number(customEmissionsFactor) }
+          ? {
+              customEmissionsFactor: nvo(Number(customEmissionsFactor)),
+            }
           : {}),
       },
     ],
@@ -54,7 +57,11 @@ describe('15.5.1.1 Agrichemicals', () => {
 
     const inputsAndOutputs = extractInputsAndOutputs(sheet, 5, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculateScope3Agrichemicals);
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateScope3Agrichemicals,
+      '15.5',
+    );
   });
 
   it('method 2 matches spreadsheet results', async () => {
@@ -65,6 +72,10 @@ describe('15.5.1.1 Agrichemicals', () => {
 
     const inputsAndOutputs = extractInputsAndOutputs(sheet, 11, '2');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculateScope3Agrichemicals);
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateScope3Agrichemicals,
+      '15.5',
+    );
   });
 });

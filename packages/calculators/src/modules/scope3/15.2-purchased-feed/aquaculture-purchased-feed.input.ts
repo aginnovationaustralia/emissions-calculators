@@ -1,22 +1,17 @@
-import {
-  PurchasedFeedAquacultureType,
-  PurchasedFeedAquacultureTypes,
-} from '@/constants/enums';
-import { input } from '@/tools/inputs';
+import { PurchasedFeedAquacultureTypes } from '@/constants/enums';
+import { enumInput } from '@/tools/inputs';
+import { PURCH_FEED_15_2 } from '@/tools/modules';
 import { z } from 'zod';
 import { BasePurchasedFeedInputSchema } from './base-purchased-feed.input';
 
 export const PurchasedFeedAquacultureInputSchema =
   BasePurchasedFeedInputSchema.extend({
-    type: z
-      .literal(PurchasedFeedAquacultureTypes)
-      .transform((val) =>
-        input('purchased feed type', val as PurchasedFeedAquacultureType),
-      )
-      .meta({
-        description: 'The type of feed purchased.',
-      }),
-  });
+    type: enumInput(PurchasedFeedAquacultureTypes, {
+      name: 'purchased feed type',
+      description: 'The type of feed purchased.',
+      modules: [PURCH_FEED_15_2],
+    }),
+  }).meta({ title: 'Aquaculture feed' });
 
 export type PurchasedFeedAquacultureInput = z.input<
   typeof PurchasedFeedAquacultureInputSchema

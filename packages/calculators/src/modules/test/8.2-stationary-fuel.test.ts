@@ -1,9 +1,10 @@
 import { getSheet } from '@/test/common/sheets';
+import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import {
-  FuelInput,
-  FuelInputSchema,
-  FuelInputTransformed,
+  HasFuelInput,
+  hasFuelInputSchema,
+  HasFuelInputTransformed,
   stationaryEmissionsForCH4,
   stationaryEmissionsForCO2,
   stationaryEmissionsForN2O,
@@ -17,7 +18,7 @@ import {
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-): FuelInputTransformed | undefined => {
+): HasFuelInputTransformed | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
@@ -27,10 +28,10 @@ const getCalculatorInput = (
 
   const fuelClass = cell('A');
   const fuelType = cell('B');
-  const amount = Number(cell('C'));
+  const amount = nv(Number(cell('C')));
   const units = cell('F');
   const amountObject =
-    units === 'GJ/kL' ? { amountLitres: amount } : { amountTonnes: amount };
+    units === 'GJ/kL' ? { amountKilolitres: amount } : { amountTonnes: amount };
 
   const stationaryFuelRecord: StationaryFuelInput = {
     fuelClass,
@@ -38,17 +39,18 @@ const getCalculatorInput = (
     ...amountObject,
   } as unknown as StationaryFuelInput;
 
-  const fuelInput: FuelInput = {
-    stationaryFuel: [stationaryFuelRecord],
-    transportFuel: [],
+  const fuelInput: HasFuelInput = {
+    fuel: {
+      stationary: [stationaryFuelRecord],
+      transport: [],
+    },
   };
-
-  return FuelInputSchema.parse(fuelInput);
+  return hasFuelInputSchema('fuel').parse(fuelInput);
 };
 
-const extractInputsAndOutputCO2 = createSheetExtractor(getCalculatorInput, 'K');
-const extractInputsAndOutputCH4 = createSheetExtractor(getCalculatorInput, 'L');
-const extractInputsAndOutputN2O = createSheetExtractor(getCalculatorInput, 'M');
+const extractInputsAndOutputCO2 = createSheetExtractor(getCalculatorInput, 'L');
+const extractInputsAndOutputCH4 = createSheetExtractor(getCalculatorInput, 'M');
+const extractInputsAndOutputN2O = createSheetExtractor(getCalculatorInput, 'N');
 
 describe('8.2 Stationary fuel', () => {
   it('method 1 matches spreadsheet results for stationary fuels CO2', async () => {
@@ -59,7 +61,7 @@ describe('8.2 Stationary fuel', () => {
 
     const inputsAndOutputs = extractInputsAndOutputCO2(sheet, 5, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, stationaryEmissionsForCO2);
+    compareInputsAndOutputs(inputsAndOutputs, stationaryEmissionsForCO2, '8.2');
   });
 
   it('method 1 matches spreadsheet results for stationary fuels CH4', async () => {
@@ -70,7 +72,7 @@ describe('8.2 Stationary fuel', () => {
 
     const inputsAndOutputs = extractInputsAndOutputCH4(sheet, 5, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, stationaryEmissionsForCH4);
+    compareInputsAndOutputs(inputsAndOutputs, stationaryEmissionsForCH4, '8.2');
   });
 
   it('method 1 matches spreadsheet results for stationary fuels N2O', async () => {
@@ -81,6 +83,6 @@ describe('8.2 Stationary fuel', () => {
 
     const inputsAndOutputs = extractInputsAndOutputN2O(sheet, 5, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, stationaryEmissionsForN2O);
+    compareInputsAndOutputs(inputsAndOutputs, stationaryEmissionsForN2O, '8.2');
   });
 });

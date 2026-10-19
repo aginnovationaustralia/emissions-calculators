@@ -1,12 +1,12 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForRiceCalculator } from '@/calculators/Rice/constants';
-import { RiceCropTransformed } from '@/calculators/Rice/types';
 import { selectConstant } from '@/tools/constants';
 import { num } from '@/tools/containers';
 import { sum } from '@/tools/sum';
+import { HasRiceCultivationInputTransformed } from './rice-cultivation.input';
 
 const calculateSpecificRiceCultivationEmissionsFactor = (
-  crop: RiceCropTransformed,
+  input: HasRiceCultivationInputTransformed,
   context: ExecutionContext<ConstantsForRiceCalculator>,
 ) => {
   /**
@@ -23,7 +23,8 @@ const calculateSpecificRiceCultivationEmissionsFactor = (
    */
 
   const { constants } = context;
-  const { preSeasonWaterRegimeType, waterRegimeType, organicAmendments } = crop;
+  const { preSeasonWaterRegimeType, waterRegimeType, organicAmendments } =
+    input.crop;
 
   /**
    * SFo = (1 + SUMo(ROAo * CFOAo)) ^ 0.59
@@ -54,7 +55,8 @@ const calculateSpecificRiceCultivationEmissionsFactor = (
       ])
         .multiply(num(10))
         .power(num(0.59))
-        .named('SFo');
+        .named('SFo')
+        .reference('7.1.1 (3)');
 
   const waterRegimeScalingFactor = selectConstant(
     constants.RICE,
@@ -74,21 +76,23 @@ const calculateSpecificRiceCultivationEmissionsFactor = (
   );
 
   /**
-   * EFrice,wpo = EFc * SFw * SFp * SF
+   * EFrice,wpo = EFc * SFw * SFp * SFo
    */
   return baselineEmissionsFactor
     .multiply(waterRegimeScalingFactor)
     .multiply(preSeasonWaterRegimeScalingFactor)
     .multiply(cumulativeOrganicAmendmentsScalingFactor)
-    .named('EFrice,wpo');
+    .named('EFrice,wpo')
+    .reference('7.1.1 (2)');
 };
 
 export const calculateScope1RiceCultivation = (
-  crop: RiceCropTransformed,
+  input: HasRiceCultivationInputTransformed,
   context: ExecutionContext<ConstantsForRiceCalculator>,
 ) => {
+  const { areaSown, cultivationPeriodDays } = input.crop;
   const riceEmissionsFactor = calculateSpecificRiceCultivationEmissionsFactor(
-    crop,
+    input,
     context,
   );
 
@@ -96,6 +100,7 @@ export const calculateScope1RiceCultivation = (
    * Erice,wpo = Arice,wpo * EFrice,wpo * trice,wpo
    */
   return riceEmissionsFactor
-    .multiply(crop.areaSown)
-    .multiply(crop.cultivationPeriodDays);
+    .multiply(areaSown)
+    .multiply(cultivationPeriodDays)
+    .attach({ name: 'Erice', references: ['7.1.1 (1)'] });
 };

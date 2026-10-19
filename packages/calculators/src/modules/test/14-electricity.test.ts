@@ -1,12 +1,13 @@
-import {
-  GrainsInput,
-  GrainsInputSchema,
-  GrainsInputTransformed,
-} from '@/calculators/Grains/types/input';
 import { getSheet } from '@/test/common/sheets';
+import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import { calculateElectricityScope2 } from '../scope2/14-electricity';
-import { checkState } from './crop-residue-domain';
+import {
+  ElectricityInputs,
+  ElectricityInputsSchema,
+  ElectricityInputsTransformed,
+} from '../scope2/14-electricity/electricity.input';
+import { checkRegion } from './crop-residue-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
@@ -15,7 +16,7 @@ import {
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-): GrainsInputTransformed | undefined => {
+): ElectricityInputsTransformed | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
@@ -24,30 +25,26 @@ const getCalculatorInput = (
   }
 
   const electricityPurchasedKWh = Number(cell('A'));
-  const state = checkState(cell('B'));
-  const recsSurrenderedKWh = cell('C');
-  const recsOnsiteKWh = Number(cell('D'));
+  const region = checkRegion(cell('B'));
+  const recsSurrendered = cell('C');
+  const recsOnsite = Number(cell('D'));
 
-  const grainsInput: GrainsInput = {
-    crops: [],
-    isInLeachingZone: false,
-    rainfallAbove600: false,
-    electricity:
-      recsSurrenderedKWh === undefined
-        ? {
-            method: 'location',
-            electricityPurchasedKWh,
-          }
-        : {
-            method: 'market',
-            electricityPurchasedKWh,
-            recsSurrenderedKWh: Number(recsSurrenderedKWh),
-            recsOnsiteKWh,
-          },
-    state,
-  };
+  const electricityInput: ElectricityInputs =
+    recsSurrendered === undefined
+      ? {
+          method: 'location',
+          electricityPurchasedKWh: nv(electricityPurchasedKWh),
+          region,
+        }
+      : {
+          method: 'market',
+          electricityPurchasedKWh: nv(electricityPurchasedKWh),
+          recsSurrendered: nv(Number(recsSurrendered)),
+          recsOnsite: nv(recsOnsite),
+          region,
+        };
 
-  return GrainsInputSchema.parse(grainsInput);
+  return ElectricityInputsSchema.parse(electricityInput);
 };
 
 const extractInputsAndOutputLocationBased = createSheetExtractor(
@@ -68,7 +65,11 @@ describe('14.1.1.1 Electricity scope 2', () => {
 
     const inputsAndOutputs = extractInputsAndOutputLocationBased(sheet, 5, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculateElectricityScope2);
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateElectricityScope2,
+      '14.1',
+    );
   });
 
   it('method 1 matches spreadsheet results market-based', async () => {
@@ -79,6 +80,10 @@ describe('14.1.1.1 Electricity scope 2', () => {
 
     const inputsAndOutputs = extractInputsAndOutputMarketBased(sheet, 15, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculateElectricityScope2);
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateElectricityScope2,
+      '14.1',
+    );
   });
 });

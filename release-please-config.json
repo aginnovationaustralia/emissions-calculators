@@ -7,6 +7,13 @@
       "release-type": "node",
       "include-component-in-tag": false,
       "include-v-in-tag": true
+    },
+    "packages/emissions-calculator-research": {
+      "changelog-path": "CHANGELOG.md",
+      "release-type": "node",
+      "component": "emissions-calculator-research",
+      "include-component-in-tag": true,
+      "include-v-in-tag": true
     }
   },
   "pull-request-title-pattern": "chore(main): release ${version}"

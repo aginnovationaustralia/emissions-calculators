@@ -1,8 +1,12 @@
-export { GrainsCrop } from './crop.input';
+export {
+  GrainsCropInput,
+  GrainsCropInputSchema,
+  GrainsCropInputTransformed,
+} from './crop.input';
 export {
   GrainsInput,
-  GrainsInputTransformed,
   GrainsInputSchema,
+  GrainsInputTransformed,
 } from './input';
 export {
   GrainsIntensitiesOutput,
@@ -12,7 +16,11 @@ export {
   GrainsIntermediateOutput,
   GrainsIntermediateOutputSchema,
 } from './intermediate.output';
-export { NetOutput, NetOutputSchema } from './net.output';
 export { GrainsOutput, GrainsOutputSchema } from './output';
-export { GrainsScope1Output, GrainsScope1OutputSchema } from './scope1.output';
+export {
+  GrainsScope1Output,
+  GrainsScope1OutputPlusLULUCF,
+  GrainsScope1OutputSchema,
+  GrainsScope1OutputSchemaPlusLULUCF,
+} from './scope1.output';
 export { GrainsScope3Output, GrainsScope3OutputSchema } from './scope3.output';

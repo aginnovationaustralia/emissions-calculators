@@ -2,8 +2,8 @@
 export const columnStateOrRegion = 'D';
 export const columnCustomDurationDays = 'G';
 export const columnHeadN = 'I';
-export const columnProportionCowsGt2ThisSeasonInCalf = 'J';
-export const columnProportionCowsGt2PreviousSeasonInCalf = 'K';
+export const columnProportionCowsThisSeasonInCalf = 'J';
+export const columnProportionCowsPreviousSeasonInCalf = 'K';
 export const columnCustomLiveweightW = 'M';
 export const columnCustomLiveweightGainLWG = 'O';
 export const columnCustomDryMatterIntakeI = 'R';

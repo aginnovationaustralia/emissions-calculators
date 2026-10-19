@@ -11,5 +11,4 @@ export const columnSecondaryMMS = 'N';
 export const columnDirectApplicationStage2 = 'O';
 export const columnTertiaryLagoonInUse = 'P';
 
-export const columnExpectedResultLocal = 'AI';
-export const columnExpectedResultPurchasedTraced = 'AJ';
+export const columnExpectedResult = 'AH';

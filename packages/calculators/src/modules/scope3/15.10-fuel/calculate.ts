@@ -1,9 +1,8 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
-import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
+import { HasStateInputTransformed } from '@/calculators/types/has-state.input';
 import {
   FuelInputTransformed,
+  HasFuelInputTransformed,
   isStationaryLiquidFuelMassBased,
   selectTransportFuelConstants,
   StationaryFuelLiquidInputTransformed,
@@ -19,11 +18,11 @@ import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
 
 export const calculateScope3EmissionsFromFuelTransport = (
-  crop: FuelInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  fuel: FuelInputTransformed,
+  context: ExecutionContext,
 ) => {
   const { constants } = context;
-  const emissionsRecords = crop.transportFuel.map((fuel) => {
+  const emissionsRecords = fuel.transport.map((fuel) => {
     const { ecTransQ, efTrans3Q } = selectTransportFuelConstants(
       fuel,
       constants,
@@ -32,92 +31,91 @@ export const calculateScope3EmissionsFromFuelTransport = (
 
     const qTransTQ = isTransportFuelCNGBased(fuel)
       ? fuel.amountCubicMetres
-      : fuel.amountLitres;
+      : fuel.amountKilolitres;
 
     const energyFromFuel = ecTransQ.multiply(qTransTQ);
     return efTrans3Q.multiply(energyFromFuel);
   });
   return sum(emissionsRecords, {
     name: 'EWTT,trans,q',
-    references: ['15.11.1.1 (551)'],
+    references: ['15.10.1.1 (2)'],
   });
 };
 
 const calculateScope3EmissionsFromFuelStationarySolid = (
   fuel: StationaryFuelSolidInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  context: ExecutionContext,
 ) => {
   const { constants } = context;
-  const qTransQ = fuel.amountTonnes;
-  const ecTransQ = selectConstant(
+  const qScQ = fuel.amountTonnes;
+  const ecScQ = selectConstant(
     constants.COMMON,
     'STATIONARY_FUEL_FACTORS_BY_MASS',
     'Solid fuels',
     fuel.fuelType,
     'ENERGY_CONTENT_FACTOR',
   );
-  const efTrans3Q = selectConstant(
+  const efSc3Q = selectConstant(
     constants.COMMON,
-    // REVISIT: Constant values in table 4 are all in GJ/t, we are converting to GJ/kL
     'STATIONARY_FUEL_FACTORS_BY_MASS',
     'Solid fuels',
     fuel.fuelType,
     'SCOPE3_EF',
   );
-  const energyFromFuel = ecTransQ.multiply(qTransQ);
-  return efTrans3Q.multiply(energyFromFuel);
+  const energyFromFuel = ecScQ.multiply(qScQ);
+  return efSc3Q.multiply(energyFromFuel);
 };
 
 const calculateScope3EmissionsFromFuelStationaryLiquid = (
   fuel: StationaryFuelLiquidInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  context: ExecutionContext,
 ) => {
   const { constants } = context;
   if (isStationaryLiquidFuelMassBased(fuel)) {
-    const qTransQ = fuel.amountTonnes;
-    const ecTransQ = selectConstant(
+    const qScQ = fuel.amountTonnes;
+    const ecScQ = selectConstant(
       constants.COMMON,
       'STATIONARY_FUEL_FACTORS_BY_MASS',
       'Liquid fuels',
       fuel.fuelType,
       'ENERGY_CONTENT_FACTOR',
     );
-    const efTrans3Q = selectConstant(
+    const efSc3Q = selectConstant(
       constants.COMMON,
       'STATIONARY_FUEL_FACTORS_BY_MASS',
       'Liquid fuels',
       fuel.fuelType,
       'SCOPE3_EF',
     );
-    const energyFromFuel = ecTransQ.multiply(qTransQ);
-    return efTrans3Q.multiply(energyFromFuel);
+    const energyFromFuel = ecScQ.multiply(qScQ);
+    return efSc3Q.multiply(energyFromFuel);
   }
-  const qTransQ = fuel.amountLitres;
-  const ecTransQ = selectConstant(
+  const qScQ = fuel.amountKilolitres;
+  const ecScQ = selectConstant(
     constants.COMMON,
     'STATIONARY_FUEL_FACTORS_BY_VOLUME',
     'Liquid fuels',
     fuel.fuelType,
     'ENERGY_CONTENT_FACTOR',
   );
-  const efTrans3Q = selectConstant(
+  const efSc3Q = selectConstant(
     constants.COMMON,
     'STATIONARY_FUEL_FACTORS_BY_VOLUME',
     'Liquid fuels',
     fuel.fuelType,
     'SCOPE3_EF',
   );
-  const energyFromFuel = ecTransQ.multiply(qTransQ);
-  return efTrans3Q.multiply(energyFromFuel);
+  const energyFromFuel = ecScQ.multiply(qScQ);
+  return efSc3Q.multiply(energyFromFuel);
 };
 
 const calculateScope3EmissionsFromFuelStationaryNaturalGas = (
   fuel: StationaryFuelNaturalGasInputTransformed,
-  input: BaseGrainsCropTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  input: HasStateInputTransformed,
+  context: ExecutionContext,
 ) => {
   const { constants } = context;
-  const qTransQ = fuel.amountLitres;
+  const qTransQ = fuel.amountKilolitres;
   const ecTransQ = selectConstant(
     constants.COMMON,
     'NATURAL_GAS_FACTORS',
@@ -134,10 +132,10 @@ const calculateScope3EmissionsFromFuelStationaryNaturalGas = (
 };
 
 export const calculateScope3EmissionsFromFuelStationary = (
-  crop: BaseGrainsCropTransformed & FuelInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  activity: HasFuelInputTransformed & HasStateInputTransformed,
+  context: ExecutionContext,
 ) => {
-  const emissionsRecords = crop.stationaryFuel.map((fuel) => {
+  const emissionsRecords = activity.fuel.stationary.map((fuel) => {
     if (isStationaryFuelSolid(fuel)) {
       return calculateScope3EmissionsFromFuelStationarySolid(fuel, context);
     } else if (isStationaryFuelLiquid(fuel)) {
@@ -145,21 +143,21 @@ export const calculateScope3EmissionsFromFuelStationary = (
     }
     return calculateScope3EmissionsFromFuelStationaryNaturalGas(
       fuel,
-      crop,
+      activity,
       context,
     );
   });
   return sum(emissionsRecords, {
     name: 'EWTT,SC,q',
-    references: ['15.11.1.1 (561)'],
+    references: ['15.10.1.1 (3)'],
   });
 };
 
 export const calculateScope3EmissionsFromFuel = (
-  crop: GrainsCropTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  activity: HasFuelInputTransformed & HasStateInputTransformed,
+  context: ExecutionContext,
 ) => {
-  /*  15.11.1.1 Method 1 -- Upstream Fuel
+  /*  15.10.1.1 Method 1 -- Upstream Fuel
   (1) Total upstream emissions from scope 1 fuel consumption E (t CO2e) are calculated as the sum of upstream emissions from scope 1 fuel used for transport purposes
   (EWTT,trans,q) and upstream emissions from scope 1 fuel used for stationary combustion purposes (EWTT,SC,q) as:
   E = SUM EWTT,trans,qq + SUM EWTT,SC,qq
@@ -179,15 +177,15 @@ export const calculateScope3EmissionsFromFuel = (
   EFSC,3,q = Scope 3 emission factor for stationary combustion operations (kg CO2e /GJ)
   */
   const transportEmissions = calculateScope3EmissionsFromFuelTransport(
-    crop,
+    activity.fuel,
     context,
   );
   const stationaryEmissions = calculateScope3EmissionsFromFuelStationary(
-    crop,
+    activity,
     context,
   );
   return transportEmissions.plus(stationaryEmissions, {
     name: 'E',
-    references: ['15.11.1.1 (547)'],
+    references: ['15.10.1.1 (1)'],
   });
 };

@@ -1,11 +1,13 @@
 import { getSheet } from '@/test/common/sheets';
+import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import { calculate53Lime } from '../scope1/5-fertiliser';
 import {
-  LimeInput,
-  LimeInputSchema,
-  LimeInputTransformed,
+  HasLimeInput,
+  HasLimeInputSchema,
+  HasLimeInputTransformed,
 } from '../scope1/5-fertiliser/lime.input';
+import { checkSoilAmeliorant } from './fertiliser-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
@@ -14,7 +16,7 @@ import {
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-): LimeInputTransformed | undefined => {
+): HasLimeInputTransformed | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
@@ -22,17 +24,29 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const massAppliedKg = Number(cell('A'));
+  const massAppliedKg = nv(Number(cell('A')));
   const limestoneFraction = Number(cell('B'));
-  const dolomiteFraction = Number(cell('C'));
+  const type = checkSoilAmeliorant(cell('C'));
 
-  const limeInput: LimeInput = {
-    limestone: massAppliedKg,
-    limestoneFraction,
-    dolomiteFraction,
+  const application =
+    type === 'Gypsum'
+      ? {
+          massAppliedKg,
+          type,
+        }
+      : {
+          massAppliedKg,
+          limestoneFraction: nv(limestoneFraction),
+          type,
+        };
+
+  const limeInput: HasLimeInput = {
+    lime: {
+      applications: [application],
+    },
   };
 
-  return LimeInputSchema.parse(limeInput);
+  return HasLimeInputSchema.parse(limeInput);
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
@@ -50,6 +64,6 @@ describe('5.3.1.1 Lime N2O', () => {
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 4, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculate53Lime);
+    compareInputsAndOutputs(inputsAndOutputs, calculate53Lime, '5.3');
   });
 });

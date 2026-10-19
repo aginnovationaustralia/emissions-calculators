@@ -4,7 +4,12 @@ import type {
   FullCAMSubmission,
 } from './types';
 
-import { FullCAMAreaInput, FullCAMAreaSchema } from './input';
+import {
+  FullCAMAreaInput,
+  FullCAMAreaSchema,
+  FullCAMClearableAreaInput,
+  FullCAMUnclearableAreaInput,
+} from './input';
 import {
   extractKeyFieldsFromFullCAMOutput,
   generateCsvLines,
@@ -27,10 +32,36 @@ function csvLine(
   return `${year},${month},${decimalYear},${trees},${ch4},${n2o},${debris}`;
 }
 
+const DEFAULT_INITIAL_TREES: FullCAMClearableAreaInput['initialTrees'] = {
+  speciesName: 'Environmental plantings',
+};
+
+function isClearableOverrides(
+  overrides:
+    | Partial<FullCAMClearableAreaInput>
+    | Partial<FullCAMUnclearableAreaInput>,
+): overrides is Partial<FullCAMClearableAreaInput> {
+  return (
+    ('isInLeachingZone' in overrides &&
+      overrides.isInLeachingZone !== undefined) ||
+    ('initialTrees' in overrides &&
+      overrides.initialTrees !== undefined &&
+      overrides.initialTrees !== false)
+  );
+}
+
 function minimalAreaInput(
-  overrides: Partial<FullCAMAreaInput> = {},
+  overrides?: Partial<FullCAMUnclearableAreaInput>,
+): FullCAMUnclearableAreaInput;
+function minimalAreaInput(
+  overrides: Partial<FullCAMClearableAreaInput>,
+): FullCAMClearableAreaInput;
+function minimalAreaInput(
+  overrides:
+    | Partial<FullCAMClearableAreaInput>
+    | Partial<FullCAMUnclearableAreaInput> = {},
 ): FullCAMAreaInput {
-  return {
+  const base: Omit<FullCAMUnclearableAreaInput, 'initialTrees'> = {
     latitude: -30,
     longitude: 151,
     region: 'New England Tablelands',
@@ -42,13 +73,26 @@ function minimalAreaInput(
     plantingEvents: [],
     wildfireEvents: [],
     prescribedBurnEvents: [],
+  };
+
+  if (isClearableOverrides(overrides)) {
+    return {
+      ...base,
+      initialTrees: DEFAULT_INITIAL_TREES,
+      isInLeachingZone: false,
+      ...overrides,
+    };
+  }
+
+  return {
+    ...base,
     initialTrees: false,
     ...overrides,
-  } as FullCAMAreaInput;
+  };
 }
 
 function areaPlotContent(
-  inputOverrides: Partial<FullCAMAreaInput> = {},
+  inputOverrides: Partial<FullCAMUnclearableAreaInput> = {},
   overrides: Partial<
     Pick<AreaPlotContent, 'plotContent' | 'plotfileName' | 'uniqueAreaKey'>
   > = {},
@@ -67,7 +111,7 @@ function areaPlotContent(
 
 function submission(
   outputCsv: string,
-  input: FullCAMAreaInput = minimalAreaInput(),
+  input: FullCAMUnclearableAreaInput = minimalAreaInput(),
   uniqueAreaKey = 'area-1',
 ): FullCAMSubmission {
   return {
@@ -76,15 +120,25 @@ function submission(
   };
 }
 
-function row(
-  year: number,
-  month: number,
-  trees: number,
-  debris: number,
+function row({
+  year,
+  month,
+  trees,
+  debris,
+  products = 0,
   ch4 = 0,
   n2o = 0,
   decimalYear = year + month / 12,
-): FullCAMOutputLine {
+}: {
+  year: number;
+  month: number;
+  trees: number;
+  debris: number;
+  products?: number;
+  ch4?: number;
+  n2o?: number;
+  decimalYear?: number;
+}): FullCAMOutputLine {
   return {
     year,
     month,
@@ -93,6 +147,7 @@ function row(
     carbonMassOfForestDebrisTCPerHectare: debris,
     ch4EmittedDueToFireTCH4PerHectare: ch4,
     n2oEmittedDueToFireTN2OPerHectare: n2o,
+    carbonMassOfForestProductsTCPerHectare: products,
   };
 }
 
@@ -153,6 +208,7 @@ describe('generateCsvLines', () => {
       ch4EmittedDueToFireTCH4PerHectare: 0.5,
       n2oEmittedDueToFireTN2OPerHectare: 0.1,
       carbonMassOfForestDebrisTCPerHectare: 8,
+      carbonMassOfForestProductsTCPerHectare: 0,
     });
   });
 });
@@ -160,11 +216,29 @@ describe('generateCsvLines', () => {
 describe('generateSummaryFromLines', () => {
   it('uses calendar-year terminal month 12, prior December for y-1, and sums fire columns for endYear', () => {
     const lines: FullCAMOutputLine[] = [
-      row(2019, 12, 10, 1),
-      ...Array.from({ length: 5 }, (_, i) => row(2020, i + 1, 50 + i, 2, 0, 0)),
-      row(2020, 6, 55, 2, 0.25, 0.05),
-      ...Array.from({ length: 6 }, (_, i) => row(2020, i + 7, 56 + i, 2, 0, 0)),
-      row(2020, 12, 88, 8, 0.5, 0.1),
+      row({ year: 2019, month: 12, trees: 10, debris: 1 }),
+      ...Array.from({ length: 5 }, (_, i) =>
+        row({ year: 2020, month: i + 1, trees: 50 + i, debris: 2 }),
+      ),
+      row({
+        year: 2020,
+        month: 6,
+        trees: 55,
+        debris: 2,
+        ch4: 0.25,
+        n2o: 0.05,
+      }),
+      ...Array.from({ length: 6 }, (_, i) =>
+        row({ year: 2020, month: i + 7, trees: 56 + i, debris: 2 }),
+      ),
+      row({
+        year: 2020,
+        month: 12,
+        trees: 88,
+        debris: 8,
+        ch4: 0.5,
+        n2o: 0.1,
+      }),
     ];
 
     const result = generateSummaryFromLines(
@@ -194,12 +268,47 @@ describe('generateSummaryFromLines', () => {
 
   it('uses financial-year July-June window for fire sums and June terminal rows for stocks', () => {
     const lines: FullCAMOutputLine[] = [
-      row(2000, 6, 1, 10),
-      row(2000, 7, 2, 11, 0.1, 0.01),
-      row(2000, 12, 3, 12, 0.2, 0.02),
-      row(2001, 1, 4, 13, 0.4, 0.04),
-      row(2001, 6, 100, 20, 0.8, 0.08),
-      row(2001, 7, 101, 21, 9, 9),
+      row({ year: 2000, month: 6, trees: 1, debris: 10 }),
+      row({
+        year: 2000,
+        month: 7,
+        trees: 2,
+        debris: 11,
+        ch4: 0.1,
+        n2o: 0.01,
+      }),
+      row({
+        year: 2000,
+        month: 12,
+        trees: 3,
+        debris: 12,
+        ch4: 0.2,
+        n2o: 0.02,
+      }),
+      row({
+        year: 2001,
+        month: 1,
+        trees: 4,
+        debris: 13,
+        ch4: 0.4,
+        n2o: 0.04,
+      }),
+      row({
+        year: 2001,
+        month: 6,
+        trees: 100,
+        debris: 20,
+        ch4: 0.8,
+        n2o: 0.08,
+      }),
+      row({
+        year: 2001,
+        month: 7,
+        trees: 101,
+        debris: 21,
+        ch4: 9,
+        n2o: 9,
+      }),
     ];
 
     const result = generateSummaryFromLines(
@@ -231,7 +340,9 @@ describe('generateSummaryFromLines', () => {
   });
 
   it('returns an error when no row exists for the current reporting year terminal month', () => {
-    const lines: FullCAMOutputLine[] = [row(2020, 11, 1, 1)];
+    const lines: FullCAMOutputLine[] = [
+      row({ year: 2020, month: 11, trees: 1, debris: 1 }),
+    ];
 
     const area = areaPlotContent({
       startYear: 2020,
@@ -255,7 +366,9 @@ describe('generateSummaryFromLines', () => {
   });
 
   it('returns an error when no row exists for the previous reporting year terminal month', () => {
-    const lines: FullCAMOutputLine[] = [row(2020, 12, 88, 8)];
+    const lines: FullCAMOutputLine[] = [
+      row({ year: 2020, month: 12, trees: 88, debris: 8 }),
+    ];
 
     const area = areaPlotContent({
       startYear: 2020,
@@ -280,13 +393,20 @@ describe('generateSummaryFromLines', () => {
 
   it('treats non-finite fire values as zero when summing', () => {
     const lines: FullCAMOutputLine[] = [
-      row(2019, 12, 0, 0),
+      row({ year: 2019, month: 12, trees: 0, debris: 0 }),
       {
-        ...row(2020, 1, 0, 0, NaN, NaN),
+        ...row({ year: 2020, month: 1, trees: 0, debris: 0 }),
         ch4EmittedDueToFireTCH4PerHectare: Number.NaN,
         n2oEmittedDueToFireTN2OPerHectare: Number.NaN,
       },
-      row(2020, 12, 1, 1, 0.1, 0.2),
+      row({
+        year: 2020,
+        month: 12,
+        trees: 1,
+        debris: 1,
+        ch4: 0.1,
+        n2o: 0.2,
+      }),
     ];
 
     const result = generateSummaryFromLines(

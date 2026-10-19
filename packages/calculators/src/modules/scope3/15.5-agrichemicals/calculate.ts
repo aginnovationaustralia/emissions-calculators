@@ -1,12 +1,13 @@
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/executionContext';
+import { HasCommonConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
+import { captureMethod1Or2Value } from '@/tools/multi';
 import { sum } from '@/tools/sum';
 import { AgrichemicalsInputTransformed } from './agrichemicals.input';
 
 export const calculateScope3Agrichemicals = (
   crop: AgrichemicalsInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  context: ExecutionContext<HasCommonConstants>,
 ) => {
   const { constants } = context;
   /*
@@ -19,13 +20,11 @@ EF h = emission factor of purchased agrichemical (kg CO2e/kg)
   const emissionsFromPurchases = crop.chemicals.map((chemical) => {
     const type = chemical.type;
     const qh = chemical.amountKg;
-    const customEmissionsFactor = chemical.customEmissionsFactor;
-    const emissionsFactor = selectConstant(
-      constants.COMMON,
-      'AGROCHEMICAL_FACTORS',
-      type,
-    );
-    return qh.multiply(customEmissionsFactor ?? emissionsFactor);
+    const emissionsFactor = captureMethod1Or2Value(
+      selectConstant(constants.COMMON, 'AGROCHEMICAL_FACTORS', type),
+      chemical.customEmissionsFactor,
+    ).named('EFh');
+    return qh.multiply(emissionsFactor).named('E').reference('15.5.1.1 (1)');
   });
 
   const agrichemicals = sum(emissionsFromPurchases);

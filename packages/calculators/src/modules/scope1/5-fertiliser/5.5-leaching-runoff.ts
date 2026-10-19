@@ -1,17 +1,67 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
+import { HasIsInLeachingZoneInputTransformed } from '@/calculators/types/has-is-in-leaching.input';
+import { isInLeachingZoneToFracWET } from '@/constants/translations';
+import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
-import { one, zero } from '@/tools/sentinels';
+import { Container } from '@/tools/containers';
+import { zeroN } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
+import { Mass } from '@/tools/units';
+import { ConstantsForManureManagement } from '../4-manure-management/constants';
 import { massNitrogenFromInorganicFertiliserAppliedMNjf } from './5.1-inorganic-fertiliser';
 import { calculateMNSoilForOrganicFertiliser } from './5.2-organic-fertiliser';
-import { FertiliserInputTransformed } from './fertiliser.input';
+import { HasFertiliserInputTransformed } from './fertiliser.input';
 
-const calculateLeachingAndRunoffN2O = (
-  input: FertiliserInputTransformed & BaseGrainsCropTransformed,
-  constants: ConstantsForGrainsCalculator,
+/**
+ * Raw implementation of equation for nitrous oxide emissions from leaching and runoff
+ * *Eleach* from the application of fertiliser (5.5.1.1 (1) - 5.5.1.1 (3)).
+ * This function is used in both the contexts of estimating scope 1 inorganic and organic
+ * fertiliser emissions (Chapter 5.5) and scope 3 waste emissions (Chapter 15.12).
+ */
+export const calculateLeachingAndRunoffFromNitrogen = (
+  massOfNitrogen: Container<Mass<'N'>>,
+  isInLeachingZone: Container<boolean>,
+  constants: HasConstants<'CROP' | 'COMMON'>,
+): Container<Mass<'N2O'>> => {
+  const fracWET = isInLeachingZoneToFracWET(isInLeachingZone);
+  const fracLeach = selectConstant(
+    constants.CROP,
+    'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF',
+  ).named(`FracLEACH`);
+
+  /**
+   *
+   * 5.5.1.1 (2):
+   * > Mleach,inorganic,j = SUMf (MNjf * FracWET,j * FracLEACH)
+   *
+   * 5.5.1.1 (3):
+   * > Mleach,organic,j = SUMf (MNSoiljf * FracWET,j * FracLEACH)
+   */
+  const lostNitrogen = massOfNitrogen
+    .multiply(fracWET)
+    .multiply(fracLeach)
+    .attach({ references: ['5.5.1.1 (2)', '5.5.1.1 (3)'] });
+
+  const leachingEF = selectConstant(
+    constants.CROP,
+    'EF_N2O_LEACHING_AND_RUNOFF',
+  ).named('EFleach');
+  const CN2O = selectConstant(
+    constants.COMMON,
+    'ELEMENTAL_TO_MOLECULAR_N2O',
+  ).named('CN2O');
+
+  /**
+   * Efert,leach = SUM (Mleach,inorganic,j + Mleach,organic,j) * EFleach * CN2O * 10^-3
+   */
+  return lostNitrogen.multiply(leachingEF).multiply(CN2O);
+};
+
+export const calculateLeachingAndRunoffN2O = (
+  activity: HasFertiliserInputTransformed & HasIsInLeachingZoneInputTransformed,
+  context: ExecutionContext<ConstantsForManureManagement>,
 ) => {
+  const { constants } = context;
   /*
     5.5.1.1 Method 1 -- Fertiliser Leaching and Runoff N2O
     (1) Nitrous oxide emissions from nitrogen leaching and runoff from the application of all
@@ -22,63 +72,48 @@ const calculateLeachingAndRunoffN2O = (
     EF leach = emission factor for nitrogen leaching and runoff (kg N2O-N / kg N)
     CN2O = factor to convert elemental mass of nitrous oxide to molecular mass (dimensionless)
     */
-  const { organicFertilisers, inorganicFertilisers } = input;
-  const inorganicEmissions = inorganicFertilisers.applications.map(
-    (inorganicFertiliser) => {
-      const mnjf = massNitrogenFromInorganicFertiliserAppliedMNjf(
-        inorganicFertiliser,
-        constants,
-      );
-      const fracWetj = input.isInLeachingZone ? one : zero;
-      const fracLeach = selectConstant(
-        constants.CROP,
-        'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF',
-      );
-      return mnjf.multiply(fracWetj).multiply(fracLeach);
-    },
+  const { organic, inorganic } = activity.fertiliser;
+  const inorganicNitrogen = inorganic.applications.map((inorganicFertiliser) =>
+    massNitrogenFromInorganicFertiliserAppliedMNjf(
+      inorganicFertiliser,
+      constants,
+    ),
   );
 
-  const inorganicMass = sum(inorganicEmissions);
+  const inorganicMass =
+    inorganicNitrogen.length === 0 ? zeroN : sum(inorganicNitrogen);
 
-  const organicEmissions = organicFertilisers.applications.map(
-    (organicFertiliser) => {
-      const mnsoiljf = calculateMNSoilForOrganicFertiliser(
-        organicFertiliser,
-        input,
-        constants,
-      );
-      const fracWetj = input.isInLeachingZone ? one : zero;
-      const fracLeach = selectConstant(
-        constants.CROP,
-        'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF',
-      );
-      return mnsoiljf.multiply(fracWetj).multiply(fracLeach);
-    },
+  const organicNitrogen = organic.applications.map((organicFertiliser) =>
+    calculateMNSoilForOrganicFertiliser(organicFertiliser, constants),
   );
-  const organicMass = sum(organicEmissions);
+  const organicMass =
+    organicNitrogen.length === 0 ? zeroN : sum(organicNitrogen);
 
-  const massLeached = inorganicMass.plus(organicMass);
+  /**
+   * NOTE: The calculation of mass of nitrogen lost through leaching is the same for a
+   * given mass of nitrogen, regardless of whether it came from inorganic or organic
+   * fertiliser.
+   */
+  const totalNitrogen = inorganicMass.plus(organicMass);
 
-  const efLeach = selectConstant(constants.CROP, 'EF_N2O_LEACHING_AND_RUNOFF');
-  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
-  const eFertLeach = massLeached.multiply(efLeach).multiply(cn2o, {
+  return calculateLeachingAndRunoffFromNitrogen(
+    totalNitrogen,
+    activity.isInLeachingZone,
+    constants,
+  ).attach({
     name: 'E fert,leach',
-    references: [`5.5.1.1 (378)`],
+    references: [`5.5.1.1 (1)`],
   });
-
-  return eFertLeach;
 };
 
 export const calculate55LeachingAndRunoff = (
-  input: FertiliserInputTransformed & BaseGrainsCropTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  input: HasFertiliserInputTransformed & HasIsInLeachingZoneInputTransformed,
+  context: ExecutionContext<ConstantsForManureManagement>,
 ) => {
-  const { constants } = context;
-
   return {
     fertiliserLeachingAndRunoffN2O: calculateLeachingAndRunoffN2O(
       input,
-      constants,
+      context,
     ),
   };
 };

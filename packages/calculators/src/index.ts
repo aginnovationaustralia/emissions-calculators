@@ -5,4 +5,8 @@ export {
 export * from './calculators';
 export * from './constants';
 export * from './modules';
-export { createOpenApiSchemaFile } from './types/openapi';
+export {
+  createOpenApiSchemaBundle,
+  createOpenApiSchemaFile,
+} from './types/openapi';
+export type { OpenApiSchemaBundle } from './types/openapi';

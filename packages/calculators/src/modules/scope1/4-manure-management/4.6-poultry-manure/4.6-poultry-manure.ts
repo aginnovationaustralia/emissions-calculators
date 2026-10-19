@@ -1,41 +1,35 @@
 import {
+  PoultryClassLivestockInputTransformed,
+  PoultryClassSharedInputTransformed,
+} from '@/calculators/Poultry/types/poultry-class.input';
+import {
   GrazingProductionSystemsWithRainfall,
   MeanAnnualTemperature,
   PoultryMMS1Type,
   PoultryMMS1Types,
   PoultryMMS1TypesWithPasture,
   PoultryMMS1TypeWithPasture,
+  PoultryMMS2Type,
   PoultryMMS2Types,
-  PoultryMMS2TypesWithPasture,
-  PoultryMMS2TypeWithPasture,
-  PureState,
+  PoultryMMSTypeWithPasture,
+  State,
 } from '@/constants/enums';
+import { isInLeachingZoneToFracWET } from '@/constants/translations';
+import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
-import { Container, num, root } from '@/tools/containers';
+import { Container, root } from '@/tools/containers';
+import { captureMethod1Or2Value } from '@/tools/multi';
 import { oneMinus } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
   mass,
   Mass,
+  massPerHeadPerDay,
   MassPerHeadPerDay,
   realNumber,
-  RealNumber,
 } from '@/tools/units';
-import {
-  PoultryManureClassInputTransformed,
-  PoultryMMS1To2AllocationInputTransformed,
-} from './poultry-manure.input';
-import {
-  CropConstants,
-  HasCommonConstants,
-  LivestockConstants,
-  PoultryConstants,
-} from '@/constants/types';
 
-const subscriptNotation: Record<
-  PoultryMMS1TypeWithPasture | PoultryMMS2TypeWithPasture,
-  string
-> = {
+const subscriptNotation: Record<PoultryMMSTypeWithPasture, string> = {
   manureWithLitter: '10',
   beltManureRemoval: '11a',
   manureStoredInHouse: '11b',
@@ -51,74 +45,65 @@ const subscriptNotation: Record<
  * Convenience wrapper for getting dry matter intake *Ij* for a class *j*
  */
 const getDryMatterIntake = (
-  poultryClass: PoultryManureClassInputTransformed,
-  constants: PoultryConstants,
+  poultryClass: PoultryClassSharedInputTransformed,
+  constants: HasConstants<'POULTRY'>,
 ) =>
-  poultryClass.method2DryMatterIntake ??
-  selectConstant(
-    constants,
-    'CLASSES',
-    poultryClass.className,
-    'dryMatterIntake',
+  captureMethod1Or2Value(
+    selectConstant(
+      constants.POULTRY,
+      'CLASSES',
+      poultryClass.className,
+      'dryMatterIntake',
+    ),
+    poultryClass.method2DryMatterIntake,
   ).named(`Ij=${poultryClass.classNumber}`);
 
 /**
  * Convenience wrapper for getting dry matter intake *Ij* for a class *j*
  */
 const getDryMatterDigestibility = (
-  poultryClass: PoultryManureClassInputTransformed,
-  constants: PoultryConstants,
+  poultryClass: PoultryClassLivestockInputTransformed,
+  constants: HasConstants<'POULTRY'>,
 ) =>
-  poultryClass.method2DryMatterDigestibility ??
-  selectConstant(
-    constants,
-    'CLASSES',
-    poultryClass.className,
-    'dryMatterDigestibility',
+  captureMethod1Or2Value(
+    selectConstant(
+      constants.POULTRY,
+      'CLASSES',
+      poultryClass.className,
+      'dryMatterDigestibility',
+    ),
+    poultryClass.method2DryMatterDigestibility,
   ).named(`DMDj=${poultryClass.classNumber}`);
-
-/**
- * Convenience wrapper for getting nitrogen retention rate *NRj* for a class *j*
- */
-const getNitrogenRetentionRate = (
-  poultryClass: PoultryManureClassInputTransformed,
-  constants: PoultryConstants,
-) =>
-  poultryClass.method2NitrogenRetentionRate ??
-  selectConstant(
-    constants,
-    'CLASSES',
-    poultryClass.className,
-    'nitrogenRetentionRate',
-  ).named(`NRj=${poultryClass.classNumber}`);
 
 /**
  * Convenience wrapper for getting crude protein *CPj* for a class *j*
  */
 const getCrudeProtein = (
-  poultryClass: PoultryManureClassInputTransformed,
-  constants: PoultryConstants,
+  poultryClass: PoultryClassSharedInputTransformed,
+  constants: HasConstants<'POULTRY'>,
 ) =>
-  poultryClass.method2CrudeProtein ??
-  selectConstant(
-    constants,
-    'CLASSES',
-    poultryClass.className,
-    'crudeProtein',
+  captureMethod1Or2Value(
+    selectConstant(
+      constants.POULTRY,
+      'CLASSES',
+      poultryClass.className,
+      'crudeProtein',
+    ),
+    poultryClass.method2CrudeProtein,
   ).named(`CPj=${poultryClass.classNumber}`);
 
 /**
  * Calculate volatile solid production rate *VSj* for a given class *j* (4.6.1.1 (5))
  */
 const calculateVolatileSolidProduction = (
-  poultryClass: PoultryManureClassInputTransformed,
-  constants: HasCommonConstants & { POULTRY: PoultryConstants },
+  poultryClass: PoultryClassLivestockInputTransformed,
+  constants: HasConstants<'COMMON' | 'POULTRY'>,
 ) => {
-  const dryMatterIntake = getDryMatterIntake(poultryClass, constants.POULTRY);
+  const dryMatterIntake = getDryMatterIntake(poultryClass, constants);
 
   const dryMatterDigestibility = getDryMatterDigestibility(
     poultryClass,
-    constants.POULTRY,
+    constants,
   );
 
   const ashContent = selectConstant(
@@ -133,7 +118,8 @@ const calculateVolatileSolidProduction = (
    */
   return dryMatterIntake
     .multiply(oneMinus(dryMatterDigestibility))
-    .multiply(oneMinus(ashContent));
+    .multiply(oneMinus(ashContent))
+    .switchUnit((v) => massPerHeadPerDay('Volatile Solids', v.store));
 };
 
 /**
@@ -143,9 +129,9 @@ const calculateVolatileSolidProduction = (
  * Note that there is no second stage for manure applied to pasture range/paddocks.
  */
 const calculateVolatileSolidsTransferredOutOfPrimarySystems = (
-  poultryClass: PoultryManureClassInputTransformed,
-  constants: HasCommonConstants & { POULTRY: PoultryConstants },
-): Record<PoultryMMS1Type, Container<MassPerHeadPerDay<'DryMatter'>>> => {
+  poultryClass: PoultryClassLivestockInputTransformed,
+  constants: HasConstants<'COMMON' | 'POULTRY'>,
+): Record<PoultryMMS1Type, Container<MassPerHeadPerDay<'Volatile Solids'>>> => {
   const volatileSolids = calculateVolatileSolidProduction(
     poultryClass,
     constants,
@@ -155,7 +141,7 @@ const calculateVolatileSolidsTransferredOutOfPrimarySystems = (
    */
   const solidsTransferredOutOf = (mms: PoultryMMS1Type) => {
     const solidsIn = volatileSolids.multiply(
-      poultryClass.manureAllocation[mms],
+      poultryClass.manureAllocations[mms].manureAllocated,
     );
     const fractionOfSolidsLost = selectConstant(
       constants.POULTRY,
@@ -184,13 +170,10 @@ const calculateVolatileSolidsTransferredOutOfPrimarySystems = (
  * class *j* for all manure management systems used in stage 1 of treatment (4.6.1.1 (2))
  */
 const calculateMethaneProductionInStage1MMSForClass = (
-  poultryClass: PoultryManureClassInputTransformed,
-  state: PureState,
-  meanAnnualTemperature: MeanAnnualTemperature | undefined,
-  constants: HasCommonConstants & {
-    POULTRY: PoultryConstants;
-    LIVESTOCK: LivestockConstants;
-  },
+  poultryClass: PoultryClassLivestockInputTransformed,
+  state: Container<State>,
+  meanAnnualTemperature: Container<MeanAnnualTemperature> | undefined,
+  constants: HasConstants<'COMMON' | 'POULTRY' | 'LIVESTOCK'>,
 ): Container<MassPerHeadPerDay<'CH4'>> => {
   const volatileSolids = calculateVolatileSolidProduction(
     poultryClass,
@@ -202,7 +185,7 @@ const calculateMethaneProductionInStage1MMSForClass = (
     'CLASSES',
     poultryClass.className,
     'emissionsPotential',
-  ).named(`Boj=${poultryClass.classNumber}`);
+  ).named(`B0j=${poultryClass.classNumber}`);
 
   const densityOfMethane = selectConstant(
     constants.COMMON,
@@ -221,25 +204,35 @@ const calculateMethaneProductionInStage1MMSForClass = (
      *
      * a) Drylot MCF is state based - 0.02 (NT) or 0.01 (Other States) - source NIR
      * ...
-     * d) Poultry and Swine pasture range and paddock should apply the drylot MCFs - source NIR
+     * d) Poultry and Pigs pasture range and paddock should apply the drylot MCFs - source NIR
      */
-    const methaneConversionFactor = (
-      meanAnnualTemperature === undefined || mms === 'pastureRangeAndPaddock'
+    const defaultMCF = selectConstant(
+      constants.POULTRY,
+      'MMS',
+      mms,
+      'METHANE_CONVERSION_FACTOR_BY_STATE',
+      state,
+    );
+
+    const customMCF =
+      meanAnnualTemperature && mms !== 'pastureRangeAndPaddock'
         ? selectConstant(
-            constants.POULTRY,
-            'MMS',
-            mms,
-            'METHANE_CONVERSION_FACTOR_BY_STATE',
-            state,
-          )
-        : selectConstant(
             constants.LIVESTOCK,
             'MANURE_MANAGEMENT_METHANE_CONVERSION_FACTORS',
             mms,
             meanAnnualTemperature,
           )
+        : undefined;
+
+    const methaneConversionFactor = captureMethod1Or2Value(
+      defaultMCF,
+      customMCF,
     ).named(`MCFim=${subscriptNotation[mms]}`);
-    const allocation = poultryClass.manureAllocation[mms];
+
+    const allocation =
+      mms !== 'pastureRangeAndPaddock'
+        ? poultryClass.manureAllocations[mms].manureAllocated
+        : poultryClass.manureAllocations.pastureRangeAndPaddock;
 
     return totalPotentialMethaneProductionForClass
       .multiply(methaneConversionFactor)
@@ -255,21 +248,17 @@ const calculateMethaneProductionInStage1MMSForClass = (
  * class *j* for all manure management systems used in stage 2 of treatment (4.6.1.1 (3))
  */
 const calculateMethaneProductionInStage2MMSForClass = (
-  poultryClass: PoultryManureClassInputTransformed,
-  stage2ManureAllocations: PoultryMMS1To2AllocationInputTransformed,
-  state: PureState,
-  meanAnnualTemperature: MeanAnnualTemperature | undefined,
-  constants: HasCommonConstants & {
-    POULTRY: PoultryConstants;
-    LIVESTOCK: LivestockConstants;
-  },
+  poultryClass: PoultryClassLivestockInputTransformed,
+  state: Container<State>,
+  meanAnnualTemperature: Container<MeanAnnualTemperature> | undefined,
+  constants: HasConstants<'COMMON' | 'POULTRY' | 'LIVESTOCK'>,
 ) => {
   const emissionsPotential = selectConstant(
     constants.POULTRY,
     'CLASSES',
     poultryClass.className,
     'emissionsPotential',
-  ).named(`Boj=${poultryClass.classNumber}`);
+  ).named(`B0j=${poultryClass.classNumber}`);
 
   const densityOfMethane = selectConstant(
     constants.COMMON,
@@ -282,11 +271,11 @@ const calculateMethaneProductionInStage2MMSForClass = (
       constants,
     );
 
-  const methaneProductionPerSystem = PoultryMMS2TypesWithPasture.map((mms2) => {
+  const methaneProductionPerSystem = PoultryMMS2Types.map((mms2) => {
     const volatileSolidsInSystem = sum(
       PoultryMMS1Types.map((mms1) =>
         solidsTransferredOutOf[mms1].multiply(
-          stage2ManureAllocations[mms1][mms2],
+          poultryClass.manureAllocations[mms1].treatmentStage2Allocations[mms2],
         ),
       ),
     );
@@ -318,20 +307,16 @@ const calculateMethaneProductionInStage2MMSForClass = (
 
 /**
  * Calculates total annual methane emissions from manure management *ECH4* for the given
- * poultry class (*ECH4j*, if you will).
+ * poultry class.
  */
 export const calculateManureManagementCH4ForClass = (
-  poultryClass: PoultryManureClassInputTransformed,
-  stage2ManureAllocations: PoultryMMS1To2AllocationInputTransformed,
-  state: PureState,
-  meanAnnualTemperature: MeanAnnualTemperature | undefined,
-  constants: HasCommonConstants & {
-    POULTRY: PoultryConstants;
-    LIVESTOCK: LivestockConstants;
-  },
+  poultryClass: PoultryClassLivestockInputTransformed,
+  state: Container<State>,
+  meanAnnualTemperature: Container<MeanAnnualTemperature> | undefined,
+  constants: HasConstants<'COMMON' | 'POULTRY' | 'LIVESTOCK'>,
 ) => {
   /**
-   * ECH4 = SUM(j,m,T) Dj * MjmT * Nj
+   * ECH4 = SUM(j,k,m,T) Djk * MjkmT * Njk
    *
    * Since this function only handles one class at a time, (i.e. 'ECH4j = SUM(m,T) Dj * MjmT * Nj') we can simplify this
    * by summing all values of MjmT before multiplying everything together.
@@ -349,7 +334,6 @@ export const calculateManureManagementCH4ForClass = (
     ).plus(
       calculateMethaneProductionInStage2MMSForClass(
         poultryClass,
-        stage2ManureAllocations,
         state,
         meanAnnualTemperature,
         constants,
@@ -359,23 +343,24 @@ export const calculateManureManagementCH4ForClass = (
   return totalMethaneProductionPerBirdPerDay
     .multiply(poultryClass.head)
     .multiply(poultryClass.days)
-    .named(`ECH4 (j=${poultryClass.classNumber})`);
+    .named(`ECH4 (j=${poultryClass.classNumber})`)
+    .reference('4.6.1.1 (1)');
 };
 
 /**
  * Calculate nitrogen intake rate 'NIj' for a given class 'j' (4.6.1.3 (5))
  */
 const calculateNitrogenIntakeForClass = (
-  poultryClass: PoultryManureClassInputTransformed,
-  constants: HasCommonConstants & { POULTRY: PoultryConstants },
+  poultryClass: PoultryClassSharedInputTransformed,
+  constants: HasConstants<'COMMON' | 'POULTRY'>,
 ) => {
-  const crudeProtein = getCrudeProtein(poultryClass, constants.POULTRY);
+  const crudeProtein = getCrudeProtein(poultryClass, constants);
 
-  const dryMatterIntake = getDryMatterIntake(poultryClass, constants.POULTRY);
+  const dryMatterIntake = getDryMatterIntake(poultryClass, constants);
 
   const crudeProteinToNitrogen = selectConstant(
     constants.COMMON,
-    'CRUDE_PROTEIN_TO_NITROGEN_CONVERSION',
+    'NITROGEN_TO_PROTEIN',
   ).named('CP per N');
   /**
    * NIjk = Ij * CPj ÷ 6.25
@@ -392,16 +377,20 @@ const calculateNitrogenIntakeForClass = (
  * Calculate nitrogen excretion rate 'NEj for a given class 'j' (4.6.1.3 (4))
  */
 const calculateNitrogenExcretionForClass = (
-  poultryClass: PoultryManureClassInputTransformed,
-  constants: HasCommonConstants & { POULTRY: PoultryConstants },
+  poultryClass: PoultryClassSharedInputTransformed,
+  constants: HasConstants<'COMMON' | 'POULTRY'>,
 ) => {
   /**
    * NEjk = NIjk * (1 - NRjk)
    */
+  const NRjk = selectConstant(
+    constants.POULTRY,
+    'CLASSES',
+    poultryClass.className,
+    'nitrogenRetentionRate',
+  ).named(`NRj=${poultryClass.classNumber}`);
   return calculateNitrogenIntakeForClass(poultryClass, constants)
-    .multiply(
-      oneMinus(getNitrogenRetentionRate(poultryClass, constants.POULTRY)),
-    )
+    .multiply(oneMinus(NRjk))
     .named(`NEj=${poultryClass.classNumber}`);
 };
 
@@ -410,10 +399,10 @@ const calculateNitrogenExcretionForClass = (
  * (4.6.1.3 (2))
  */
 export const calculateNitrogenPerStage1MMSForClass = (
-  poultryClass: PoultryManureClassInputTransformed,
-  constants: HasCommonConstants & { POULTRY: PoultryConstants },
+  poultryClass: PoultryClassSharedInputTransformed,
+  constants: HasConstants<'COMMON' | 'POULTRY'>,
 ): Record<PoultryMMS1TypeWithPasture, Container<Mass<'N'>>> => {
-  const { head, days, manureAllocation, classNumber } = poultryClass;
+  const { head, days, manureAllocations, classNumber } = poultryClass;
 
   const nitrogenExcretionRate = calculateNitrogenExcretionForClass(
     poultryClass,
@@ -430,16 +419,16 @@ export const calculateNitrogenPerStage1MMSForClass = (
    */
   return {
     manureWithLitter: annualNitrogenExcretion
-      .multiply(manureAllocation.manureWithLitter)
+      .multiply(manureAllocations.manureWithLitter.manureAllocated)
       .named(`MNj=${classNumber}m=10T=1`),
     beltManureRemoval: annualNitrogenExcretion
-      .multiply(manureAllocation.beltManureRemoval)
+      .multiply(manureAllocations.beltManureRemoval.manureAllocated)
       .named(`MNj=${classNumber}m=11aT=1`),
     manureStoredInHouse: annualNitrogenExcretion
-      .multiply(manureAllocation.manureStoredInHouse)
+      .multiply(manureAllocations.manureStoredInHouse.manureAllocated)
       .named(`MNj=${classNumber}m=11bT=1`),
     pastureRangeAndPaddock: annualNitrogenExcretion
-      .multiply(manureAllocation.pastureRangeAndPaddock)
+      .multiply(manureAllocations.pastureRangeAndPaddock)
       .named(`MNj=${classNumber}m=14T=1`),
   };
 };
@@ -449,14 +438,13 @@ export const calculateNitrogenPerStage1MMSForClass = (
  * stage 2 of treatment created by class *j* (4.6.1.3 (6))
  */
 export const calculateNitrogenPerStage2MMSForClass = (
-  poultryClass: PoultryManureClassInputTransformed,
-  stage2ManureAllocations: PoultryMMS1To2AllocationInputTransformed,
+  poultryClass: PoultryClassSharedInputTransformed,
   nitrogenPerStage1MMS: Record<
     PoultryMMS1TypeWithPasture,
     Container<Mass<'N'>>
   >,
-  constants: HasCommonConstants & { POULTRY: PoultryConstants },
-): Record<PoultryMMS2TypeWithPasture, Container<Mass<'N'>>> => {
+  constants: HasConstants<'COMMON' | 'POULTRY'>,
+): Record<PoultryMMS2Type, Container<Mass<'N'>>> => {
   /**
    * NTjkmT=2 = (MNjkmT=1 * (1 - FracGASMmT=1 - EFmT=1))
    */
@@ -480,16 +468,9 @@ export const calculateNitrogenPerStage2MMSForClass = (
     return nitrogenInSystem
       .multiply(
         oneMinus(
-          /**
-           * On the unit switch:
-           * My understanding here is that the two values being subtracted here are
-           * fractions of 'other stuff' in the mass of nitrogen. Subtracting them from 1
-           * gives us the fraction of N that isn't 'other stuff', i.e, the solid nitrogen
-           * that can be transferred to stage 2 of treatment.
-           */
-          fractionNitrogenVolatised.switchUnit((v) => realNumber(v.value)),
+          fractionNitrogenVolatised.switchUnit((v) => realNumber(v.store)),
         ).minus(
-          nitrousOxideEmissionsFactor.switchUnit((v) => realNumber(v.value)),
+          nitrousOxideEmissionsFactor.switchUnit((v) => realNumber(v.store)),
         ),
       )
       .named(`NTj=${poultryClass.classNumber}m=${subscriptNotation[mms]}T=1`);
@@ -501,12 +482,12 @@ export const calculateNitrogenPerStage2MMSForClass = (
     manureStoredInHouse: nitrogenExitingPrimarySystem('manureStoredInHouse'),
   };
 
-  const nitrogenEnteringSecondarySystem = (
-    mms2: PoultryMMS2TypeWithPasture,
-  ) => {
+  const nitrogenEnteringSecondarySystem = (mms2: PoultryMMS2Type) => {
     const nFromEachPrimarySystem = PoultryMMS1Types.map((mms1) => {
       const n = nitrogenOutOfEachPrimarySystem[mms1]
-        .multiply(stage2ManureAllocations[mms1][mms2])
+        .multiply(
+          poultryClass.manureAllocations[mms1].treatmentStage2Allocations[mms2],
+        )
         .named(
           `NTj=${poultryClass.classNumber}m=${subscriptNotation[mms1]}T=2`,
         );
@@ -533,13 +514,9 @@ export const calculateNitrogenPerStage2MMSForClass = (
  * (4.6.1.3 (1) and  4.6.1.10 (1)).
  */
 export const calculateDirectN2OEmissionsForClass = (
-  poultryClass: PoultryManureClassInputTransformed,
-  stage2ManureAllocations: PoultryMMS1To2AllocationInputTransformed,
-  climateZone: 'wet' | 'dry',
-  constants: HasCommonConstants & {
-    POULTRY: PoultryConstants;
-    LIVESTOCK: LivestockConstants;
-  },
+  poultryClass: PoultryClassSharedInputTransformed,
+  climateZone: Container<'wet' | 'dry'>,
+  constants: HasConstants<'COMMON' | 'POULTRY' | 'LIVESTOCK'>,
 ) => {
   const nitrogenInPrimarySystems = calculateNitrogenPerStage1MMSForClass(
     poultryClass,
@@ -548,23 +525,17 @@ export const calculateDirectN2OEmissionsForClass = (
 
   const nitrogenInSecondarySystems = calculateNitrogenPerStage2MMSForClass(
     poultryClass,
-    stage2ManureAllocations,
     nitrogenInPrimarySystems,
     constants,
   );
 
-  const CN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
+  const CN2O = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_N2O');
 
   /**
-   * 4.6.1.3 (1): EN2O,dir = SUMj,m,T (MNjmT * EFjm * CN2O) * 10^-3
+   * 4.6.1.3 (1): EN2O,dir = SUMj,k,m,T (MNjkmT * EFm * CN2O) * 10^-3
    *
-   * REVISIT: I'm not sure if the inclusion (or rather, lack of exclusion) of pasture in
-   * 4.6.1.3 is a mistake. The guidelines currently calculate 'direct N2O' from manure
-   * deposited at pasture in two different ways for poultry, it's unclear to me if these
-   * are two different forms of direct N2O or if these equations are meant to be
-   * used exclusively (there is nothing I've seen to suggest this).
-   *
-   * For now, I'm performing both calculations for pasture.
+   * NOTE: EFm=14 = 0, so no emissions from PRP are calculated here. 4.6.1.10 (1) covers
+   * direct emissions from pasture.
    */
   const n2oFromPrimarySystems = PoultryMMS1TypesWithPasture.map((mms) => {
     const nitrogenInSystem = nitrogenInPrimarySystems[mms];
@@ -597,12 +568,11 @@ export const calculateDirectN2OEmissionsForClass = (
       .multiply(CN2O)
       .named(
         `EN2O,dir (m=${subscriptNotation[mms]}, j=${poultryClass.classNumber})`,
-      );
+      )
+      .reference('4.6.1.3 (1)');
   });
 
   /**
-   * See above re: REVISIT comment.
-   *
    * 4.6.1.10 (1): EMN2O,PRP,dir = SUMj (MNjm=14T=1 * EFPRP * CN2O) * 10^-3
    */
   const EFprp = selectConstant(
@@ -613,7 +583,9 @@ export const calculateDirectN2OEmissionsForClass = (
   const additionalN2OFromPasture =
     nitrogenInPrimarySystems.pastureRangeAndPaddock
       .multiply(EFprp)
-      .multiply(CN2O);
+      .multiply(CN2O)
+      .named('EMN2O,PRP,dir')
+      .reference('4.6.1.10 (1)');
 
   /**
    * EN2O,dir + EMN2O,PRP,dir
@@ -628,14 +600,9 @@ export const calculateDirectN2OEmissionsForClass = (
  * *EN2O,ad* from a poultry class (4.6.1.5 and 4.6.1.12).
  */
 export const calculateAtmosphericDepositionN2OEmissionsForClass = (
-  poultryClass: PoultryManureClassInputTransformed,
-  stage2ManureAllocations: PoultryMMS1To2AllocationInputTransformed,
-  productionSystem: GrazingProductionSystemsWithRainfall,
-  constants: HasCommonConstants & {
-    POULTRY: PoultryConstants;
-    LIVESTOCK: LivestockConstants;
-    CROP: CropConstants;
-  },
+  poultryClass: PoultryClassSharedInputTransformed,
+  grazingSystem: Container<GrazingProductionSystemsWithRainfall>,
+  constants: HasConstants<'COMMON' | 'POULTRY' | 'LIVESTOCK' | 'CROP'>,
 ) => {
   const nitrogenInPrimarySystems = calculateNitrogenPerStage1MMSForClass(
     poultryClass,
@@ -644,7 +611,6 @@ export const calculateAtmosphericDepositionN2OEmissionsForClass = (
 
   const nitrogenInSecondarySystems = calculateNitrogenPerStage2MMSForClass(
     poultryClass,
-    stage2ManureAllocations,
     nitrogenInPrimarySystems,
     constants,
   );
@@ -703,12 +669,15 @@ export const calculateAtmosphericDepositionN2OEmissionsForClass = (
     .plus(sum(volatilisedNitrogenFromSecondarySystems))
     .named('MMS_ATMOS');
 
-  const CN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+  const CN2O = selectConstant(
+    constants.COMMON,
+    'ELEMENTAL_TO_MOLECULAR_N2O',
+  ).named('CN2O');
 
   const EFN2O = selectConstant(
-    constants.LIVESTOCK,
-    'EF_ATMOSPHERIC_DEPOSITION',
-    productionSystem,
+    constants.CROP,
+    'EF_N2O_ATMOSPHERIC_DEPOSITION_PRODUCTION_SYSTEM',
+    grazingSystem,
   ).named('EFN2O');
 
   /**
@@ -722,9 +691,10 @@ export const calculateAtmosphericDepositionN2OEmissionsForClass = (
    */
   return totalVolatisedNitrogenExcludingPasture
     .plus(volatilisedNitrogenFromPasture)
-    .multiply(CN2O)
     .multiply(EFN2O)
-    .named(`E20,ad (j=${poultryClass.classNumber})`);
+    .multiply(CN2O)
+    .named(`E20,ad (j=${poultryClass.classNumber})`)
+    .reference('4.6.1.5 (1)');
 };
 
 /**
@@ -732,15 +702,11 @@ export const calculateAtmosphericDepositionN2OEmissionsForClass = (
  * poultry class (4.6.1.7 (1) and 4.6.1.14 (1))
  */
 export const calculateLeachingAndRunoffN2OEmissionsForClass = (
-  poultryClass: PoultryManureClassInputTransformed,
-  stage2ManureAllocations: PoultryMMS1To2AllocationInputTransformed,
-  isInLeachingZone: boolean,
-  constants: HasCommonConstants & {
-    POULTRY: PoultryConstants;
-    CROP: CropConstants;
-  },
+  poultryClass: PoultryClassSharedInputTransformed,
+  isInLeachingZone: Container<boolean>,
+  constants: HasConstants<'COMMON' | 'POULTRY' | 'CROP'>,
 ) => {
-  const fracWETSoil = (isInLeachingZone ? num(1) : num(0)).named('FracWETSoil');
+  const fracWETSoil = isInLeachingZoneToFracWET(isInLeachingZone);
   const fracLeachMS = selectConstant(
     constants.CROP,
     'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF_SOLID_STORAGE',
@@ -756,7 +722,6 @@ export const calculateLeachingAndRunoffN2OEmissionsForClass = (
     .named(`Mleachm=14 (j=${poultryClass.classNumber})`);
   const nitrogenLostInSolidStorage = calculateNitrogenPerStage2MMSForClass(
     poultryClass,
-    stage2ManureAllocations,
     nitrogenInPrimarySystems,
     constants,
   )
@@ -769,7 +734,10 @@ export const calculateLeachingAndRunoffN2OEmissionsForClass = (
     'EF_N2O_LEACHING_AND_RUNOFF',
   ).named(`EFleach`);
 
-  const CN2O = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+  const CN2O = selectConstant(
+    constants.COMMON,
+    'ELEMENTAL_TO_MOLECULAR_N2O',
+  ).named('CN2O');
 
   /**
    * 4.6.1.7: EN2O,leach = MNLeachjm=4 * EFleach * CN2O * 10^-3
@@ -785,35 +753,20 @@ export const calculateLeachingAndRunoffN2OEmissionsForClass = (
 };
 
 /**
- * Calculate the mass of nitrogen applied to soils for scope 1 and 3 emissions
- * (*MNSoilscope1* and *MNSoilscope3*) produced by a poultry class (4.6.1.9).
+ * Calculate the mass of nitrogen applicable to soils produced by a poultry class.
+ * Nitrogen actually applied within the activity boundary is calculated in
+ * `calculateMassOfNitrogenAppliedToSoilsForPoultry` (4.6.1.9)
  */
 export const calculateMassOfNitrogenAppliedToSoilsForClass = (
-  poultryClass: PoultryManureClassInputTransformed,
-  stage2ManureAllocations: PoultryMMS1To2AllocationInputTransformed,
-  isInLeachingZone: boolean,
-  fractionAppliedToSoils: Container<RealNumber>,
-  constants: HasCommonConstants & {
-    POULTRY: PoultryConstants;
-    CROP: CropConstants;
-  },
+  poultryClass: PoultryClassSharedInputTransformed,
+  isInLeachingZone: Container<boolean>,
+  constants: HasConstants<'COMMON' | 'POULTRY' | 'CROP'>,
 ) => {
   /**
-   * MNSoil (scope 1) = SUMj,m (MNjmT=2 * (1 - EFjm=1-13 - FracGASMjm=1-13) - Mleach,MMS)
+   * MNSoilscope1 = (SUMj,m (MNjmT=2 * (1 - EFjm=1-13 - FracGASMjm=1-13) - Mleach,MMS) * PF
    *
-   * MNSoil (scope 3) = SUMj,m,T MNjmT=2 * (1 - EFmT=2 - FracGASMmT=2) * (1 - PF)
-   *
-   * NOTES (possibly need to REVISIT):
-   * - *m=1-13* is fairly confusing subscript, we've assumed we're summing over *m* where
-   * *T=2* only (i.e. only secondary treatment systems *m=4,6,7,12,13*).
-   * - *Mleach,MMS* is not defined in this chapter. Presumably, this is meant to be
-   * nitrogen lost from leaching (hence it's no longer in the soil). Therefore, we assume
-   * *Mleach,MMS* is equivalent to *MNLeachjm=4* (see equation 4.6.1.7 (2))
-   * - This implementation assumes that the missing subtraction of *Mleach,MMS* in the
-   * scope 3 equation is a mistake (Mleach,MMS is the amount of nitrogen lost; if it's
-   * 'lost' then it's not being applied to soils out of the farm boundary either).
-   * - The nitrogen from manure directly deposited onto pasture ranges and paddocks is
-   * excluded from this calculation.
+   * Multiplication by PF is applied outside this function after summing the total for
+   * each class.
    */
   const nitrogenInPrimarySystems = calculateNitrogenPerStage1MMSForClass(
     poultryClass,
@@ -822,23 +775,21 @@ export const calculateMassOfNitrogenAppliedToSoilsForClass = (
 
   const nitrogenInSecondarySystems = calculateNitrogenPerStage2MMSForClass(
     poultryClass,
-    stage2ManureAllocations,
     nitrogenInPrimarySystems,
     constants,
   );
 
-  const fracWETSoil = (isInLeachingZone ? num(1) : num(0)).named('FracWETSoil');
+  const fracWETSoil = isInLeachingZoneToFracWET(isInLeachingZone);
+  const fracLeachMS = selectConstant(
+    constants.CROP,
+    'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF_SOLID_STORAGE',
+  ).named('FracLeachMMS');
 
   /**
    * SUM (MNjmT=2 * (1 - EFjm=1-13 - FracGASMjm=1-13) - Mleach,MMS)
    */
   const nitrogenFromSecondarySystemsAppliedToSoils = PoultryMMS2Types.map(
     (mms) => {
-      const fracLeachMS = selectConstant(
-        constants.CROP,
-        'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF_SOLID_STORAGE',
-      ).named('FracLeachMMS');
-
       /**
        * MNLeachjm=4 = MNjkm=4T=1 * FracWET * FracLEACHMS
        */
@@ -866,24 +817,12 @@ export const calculateMassOfNitrogenAppliedToSoilsForClass = (
       return nitrogenInSecondarySystems[mms]
         .multiply(
           oneMinus(
-            // See above (`calculateNitrogenPerStage2MMSForClass`) for explanation of unit switch.
-            nitrousOxideEmissionsFactor.switchUnit((v) => realNumber(v.value)),
-          ).minus(fracGASM.switchUnit((v) => realNumber(v.value))),
+            nitrousOxideEmissionsFactor.switchUnit((v) => realNumber(v.store)),
+          ).minus(fracGASM.switchUnit((v) => realNumber(v.store))),
         )
         .minus(nitrogenLostThroughLeaching);
     },
   );
 
-  return {
-    scope1: sum(nitrogenFromSecondarySystemsAppliedToSoils)
-      .multiply(fractionAppliedToSoils)
-      // All nitrogen applied directly to soil will not leave the farm boundary.
-      .plus(nitrogenInSecondarySystems['directApplication'])
-      .named(`MNSoil (Scope 1, j=${poultryClass.classNumber})`),
-    scope3: sum(nitrogenFromSecondarySystemsAppliedToSoils).multiply(
-      oneMinus(fractionAppliedToSoils).named(
-        `MNSoil (Scope 3, j=${poultryClass.classNumber})`,
-      ),
-    ),
-  };
+  return sum(nitrogenFromSecondarySystemsAppliedToSoils);
 };

@@ -1,8 +1,19 @@
+import {
+  entriesFromObject,
+  ObjectEntry,
+  objectFromEntries,
+} from '@/calculators/common/tools';
 import Decimal from 'decimal.js-light';
 import { formatUnit } from './format';
+import { IfElseContainer } from './if-else';
+import { InputContainer } from './inputs';
+import { Method1And2Container, Method2Container } from './multi';
+import { QualityTable } from './quality';
+import { SwitchContainer } from './switch';
 import {
   AnyUnit,
   Area,
+  BooleanUnit,
   Days,
   Distance,
   Electricity,
@@ -56,7 +67,9 @@ import {
   massPerDay,
   MassPerDay,
   MassPerElectricity,
+  massPerEnergy,
   MassPerEnergy,
+  massPerHead,
   MassPerHead,
   massPerHeadPerDay,
   MassPerHeadPerDay,
@@ -64,6 +77,7 @@ import {
   MassPerMass,
   MassPerMassDistance,
   MassPerTime,
+  massPerVolume,
   MassPerVolume,
   massPerYear,
   MassPerYear,
@@ -74,6 +88,7 @@ import {
   Substance,
   Time,
   voidUnit,
+  volume,
   Volume,
   volumePerHeadPerDay,
   VolumePerHeadPerDay,
@@ -101,6 +116,7 @@ export type Metadata =
   | {
       name?: string;
       references?: string[];
+      quality?: QualityTable;
     }
   | undefined;
 
@@ -110,7 +126,6 @@ type NamedMetadata = Metadata & {
 
 export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   unit: U;
-  // unit: U | VoidUnit;
   core: M;
 
   constructor(unit: U, baseOrigin: M) {
@@ -119,23 +134,44 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     this.core = baseOrigin;
   }
 
+  /** NOTE: this style of clone from the base class is only possible right now while there are no private fields in
+   * derived classes.
+   * */
+  protected clone(): this {
+    return Object.create(
+      Object.getPrototypeOf(this),
+      Object.getOwnPropertyDescriptors(this),
+    ) as this;
+  }
+
   attach(metadata: Metadata) {
-    this.core = {
+    const clone = this.clone();
+    clone.core = {
       ...this.core,
       ...metadata,
     };
 
-    return this;
+    return clone;
   }
 
   named(name: string) {
-    this.core = {
+    const clone = this.clone();
+    clone.core = {
       ...this.core,
       name,
     };
 
-    // REVISIT: calling named() mutates this, it has the potential to modify reused containers (like one)
-    return this;
+    return clone;
+  }
+
+  reference(reference: string) {
+    const clone = this.clone();
+    clone.core = {
+      ...this.core,
+      references: [...(this.core?.references ?? []), reference],
+    };
+
+    return clone;
   }
 
   /**
@@ -165,29 +201,34 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   // MassPerMass<S1,S2> * Mass<S2> → Mass<S1>
   multiply<S1 extends Substance, S2 extends Substance>(
     this: BaseContainer<MassPerMass<S1, S2>>,
-    right: Container<Mass<S2>>,
+    right: Container<Mass<NoInfer<S2>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
-  // Mass<S2> * MassPerMass<S1,S2> → Mass<S1> (only when right's denominator S2Right equals this's substance S2)
-  multiply<
-    S1 extends Substance,
-    S2 extends Substance,
-    S2Right extends Substance,
-  >(
+  // Mass<S2> * MassPerMass<S1,S2> → Mass<S1>
+  // NOTE: `right`'s denominator is wrapped in `NoInfer` so S2 is inferred ONLY from `this`.
+  // Reusing S2 as a plain (uninferred-from-one-side) type parameter here does NOT enforce a
+  // match: TS infers S2 from both `this` and `right` independently, then unions the candidates
+  // (e.g. 'CO2' | 'Carbon'), and both original arguments remain structurally assignable to that
+  // wider union - so a mismatched call silently succeeds. `NoInfer` forces S2 to come from `this`
+  // alone, so `right`'s actual denominator is checked against that fixed S2 and a mismatch is a
+  // real "argument not assignable" error.
+  multiply<S1 extends Substance, S2 extends Substance>(
     this: BaseContainer<Mass<S2>>,
-    right: Container<MassPerMass<S1, S2Right>>,
+    right: Container<MassPerMass<S1, NoInfer<S2>>>,
     baseOrigin?: Metadata,
-  ): [S2Right] extends [S2]
-    ? [S2] extends [S2Right]
-      ? BinaryContainer<Mass<S1>>
-      : never
-    : never;
+  ): BinaryContainer<Mass<S1>>;
   // EnergyPerVolume<S> * Volume<S> → Energy
   multiply<S extends Substance>(
     this: BaseContainer<EnergyPerVolume<S>>,
-    right: Container<Volume<S>>,
+    right: Container<Volume<NoInfer<S>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Energy>;
+  // MassPerEnergy<S1> * EnergyPerVolume<S2> → MassPerVolume<S1, S2>
+  multiply<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<MassPerEnergy<S1>>,
+    right: Container<EnergyPerVolume<S2>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerVolume<S1, S2>>;
   // MassPerEnergy * Energy → Mass<substance>
   multiply<UL extends MassPerEnergy<Substance>>(
     this: BaseContainer<UL>,
@@ -215,7 +256,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   // MassPerVolume * Volume → Mass<substance>
   multiply<S1 extends Substance, S2 extends Substance>(
     this: BaseContainer<MassPerVolume<S1, S2>>,
-    right: Container<Volume<S2>>,
+    right: Container<Volume<NoInfer<S2>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
   // Electricity * MassPerElectricity<S> → Mass<S>
@@ -224,10 +265,16 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<MassPerElectricity<S>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S>>;
+  // MassPerHead<S1> * MassPerMass<S2, S1> = MassPerHead<S2>
+  multiply<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<MassPerHead<S1>>,
+    right: Container<MassPerMass<S2, NoInfer<S1>>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerHead<S2>>;
   // MassPerHeadPerDay<S1> * MassPerMass<S2, S1> = MassPerHeadPerDay<S2>
   multiply<S1 extends Substance, S2 extends Substance>(
     this: BaseContainer<MassPerHeadPerDay<S1>>,
-    right: Container<MassPerMass<S2, S1>>,
+    right: Container<MassPerMass<S2, NoInfer<S1>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S2>>;
   // MassPerHeadPerDay<S1> * Head = MassPerDay<S1>
@@ -236,6 +283,12 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<Head>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerDay<ExtractMassPerHeadPerDaySubstance<UL>>>;
+  // MassPerHeadPerDay<S1> * Day = MassPerHead<S1>
+  multiply<S extends Substance, UL extends MassPerHeadPerDay<S>>(
+    this: BaseContainer<UL>,
+    right: Container<Days>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerHead<ExtractMassPerHeadPerDaySubstance<UL>>>;
   // Head * MassPerHead<S> = Mass<S>
   multiply<S extends Substance>(
     this: BaseContainer<Head>,
@@ -245,7 +298,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   // MassPerEnergy<S1> * EnergyPerMass<S1> = RealNumber
   multiply<S extends Substance>(
     this: BaseContainer<MassPerEnergy<S>>,
-    right: Container<EnergyPerMass<S>>,
+    right: Container<EnergyPerMass<NoInfer<S>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<RealNumber>;
   // MassPerDay<S1> * Days = Mass<S1>
@@ -257,13 +310,13 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   // MassPerHeadPerDay<S1> * VolumePerMass<S2, S1> = VolumePerHeadPerDay<S2>
   multiply<S1 extends Substance, S2 extends Substance>(
     this: BaseContainer<MassPerHeadPerDay<S1>>,
-    right: Container<VolumePerMass<S2, S1>>,
+    right: Container<VolumePerMass<S2, NoInfer<S1>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<VolumePerHeadPerDay<S2>>;
   // VolumePerHeadPerDay<S1> * MassPerVolume<S2, S1> = MassPerHeadPerDay<S2>
   multiply<S1 extends Substance, S2 extends Substance>(
     this: BaseContainer<VolumePerHeadPerDay<S1>>,
-    right: Container<MassPerVolume<S2, S1>>,
+    right: Container<MassPerVolume<S2, NoInfer<S1>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S2>>;
   // MassPerAreaPerDay<S> * Days = MassPerArea<S>
@@ -287,7 +340,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   // MassPerYear<S1> * <MassPerMass<S2, S1>> = MassPerYear<S2>
   multiply<S1 extends Substance, S2 extends Substance>(
     this: BaseContainer<MassPerYear<S1>>,
-    right: Container<MassPerMass<S2, S1>>,
+    right: Container<MassPerMass<S2, NoInfer<S1>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerYear<S2>>;
   // MassPerYear<S1> * Years = MassPerYear<S1>
@@ -311,15 +364,21 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   // MassPerMassDistance<S1, S2> * MassDistance<S2> = Mass<S1>
   multiply<S1 extends Substance, S2 extends Substance>(
     this: BaseContainer<MassPerMassDistance<S1, S2>>,
-    right: Container<MassDistance<S2>>,
+    right: Container<MassDistance<NoInfer<S2>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
   // MassPerHeadPerDay<S> * EnergyPerMass<S> = EnergyPerHeadPerDay
   multiply<S extends Substance>(
     this: BaseContainer<MassPerHeadPerDay<S>>,
-    right: Container<EnergyPerMass<S>>,
+    right: Container<EnergyPerMass<NoInfer<S>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<EnergyPerHeadPerDay>;
+  // MassPerVolume<S1, SVol> * MassPerMass<S2, S1> = MassPerVolume<S2, SVol>
+  multiply<S1 extends Substance, S2 extends Substance, SVol extends Substance>(
+    this: BaseContainer<MassPerVolume<S1, SVol>>,
+    right: Container<MassPerMass<S2, S1>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerVolume<S2, SVol>>;
   // Fallback implementation
   multiply(
     this: BaseContainer<NumberUnit>,
@@ -332,7 +391,6 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     if (isVoid(leftUnit) || isVoid(rightUnit)) {
       unit = voidUnit();
     } else {
-      // REVISIT: data structure and utilities for capturing operations
       if (isMassPerMass(leftUnit) && isMass(rightUnit)) {
         unit = mass(leftUnit.snum);
       } else if (isMass(leftUnit) && isMassPerMass(rightUnit)) {
@@ -347,18 +405,24 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = mass(rightUnit.substance);
       } else if (isEnergyPerVolume(leftUnit) && isVolume(rightUnit)) {
         unit = energy();
+      } else if (isMassPerEnergy(leftUnit) && isEnergyPerVolume(rightUnit)) {
+        unit = massPerVolume(leftUnit.substance, rightUnit.substance);
       } else if (isMassPerHeadPerDay(leftUnit) && isEnergyPerMass(rightUnit)) {
         unit = energyPerHeadPerDay();
       } else if (isMassPerTime(leftUnit) && isTime(rightUnit)) {
         unit = mass(leftUnit.substance);
+      } else if (isMassPerHead(leftUnit) && isMassPerMass(rightUnit)) {
+        unit = massPerHead(rightUnit.snum);
       } else if (isMassPerHeadPerDay(leftUnit) && isMassPerMass(rightUnit)) {
         unit = massPerHeadPerDay(rightUnit.snum);
       } else if (isMassPerHeadPerDay(leftUnit) && isHead(rightUnit)) {
         unit = massPerDay(leftUnit.substance);
+      } else if (isMassPerHeadPerDay(leftUnit) && isDays(rightUnit)) {
+        unit = massPerHead(leftUnit.substance);
       } else if (isMassPerDay(leftUnit) && isDays(rightUnit)) {
         unit = mass(leftUnit.substance);
       } else if (isMassPerHeadPerDay(leftUnit) && isVolumePerMass(rightUnit)) {
-        unit = volumePerHeadPerDay(leftUnit.substance);
+        unit = volumePerHeadPerDay(rightUnit.volume);
       } else if (isMassPerAreaPerDay(leftUnit) && isDays(rightUnit)) {
         unit = massPerArea(leftUnit.substance);
       } else if (isMassPerAreaPerDay(leftUnit) && isArea(rightUnit)) {
@@ -392,6 +456,8 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = mass(leftUnit.snum);
       } else if (isRealNumber(leftUnit)) {
         unit = { ...rightUnit };
+      } else if (isMassPerVolume(leftUnit) && isMassPerMass(rightUnit)) {
+        unit = massPerVolume(rightUnit.snum, leftUnit.volume);
       } else {
         if (!isRealNumber(rightUnit)) {
           // eslint-disable-next-line no-console
@@ -403,12 +469,13 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         }
         unit = { ...leftUnit };
       }
-      unit.value = leftUnit.value.mul(rightUnit.value);
+      unit.store = leftUnit.store.multiply(rightUnit.store);
     }
+
     return new BinaryContainer(
       unit,
       'multiply',
-      this as unknown as Container<NumberUnit>,
+      this as unknown as NumberContainer<NumberUnit>,
       right,
       baseOrigin,
     );
@@ -425,7 +492,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   // NumberUnit / NumberUnit → RealNumber
   divide<UL extends NumberUnit>(
     this: BaseContainer<UL>,
-    right: Container<UL>,
+    right: Container<NoInfer<UL>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<RealNumber>;
 
@@ -439,7 +506,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   // Mass<S1> / MassPerMass<S1, S2> = Mass<S2>
   divide<S1 extends Substance, S2 extends Substance>(
     this: BaseContainer<Mass<S1>>,
-    right: Container<MassPerMass<S1, S2>>,
+    right: Container<MassPerMass<NoInfer<S1>, S2>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S2>>;
 
@@ -464,15 +531,26 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S>>;
 
-  divide<
-    S1 extends Substance,
-    S2 extends Substance,
-    UL extends MassPerHeadPerDay<S1>,
-  >(
-    this: BaseContainer<UL>,
-    right: Container<MassPerMass<S1, S2>>,
+  // MassPerHeadPerDay<S1> / MassPerMass<S1, S2> = MassPerHeadPerDay<S2>
+  divide<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<MassPerHeadPerDay<S1>>,
+    right: Container<MassPerMass<NoInfer<S1>, S2>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S2>>;
+
+  // Mass<S1> / MassPerVolume<S1, S2> = Volume<S2>
+  divide<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<Mass<S1>>,
+    right: Container<MassPerVolume<S1, S2>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<Volume<S2>>;
+
+  // MassPerEnergy<S1> / MassPerMass<S1, S2> => MassPerEnergy<S2>
+  divide<S1 extends Substance, S2 extends Substance>(
+    this: BaseContainer<MassPerEnergy<S1>>,
+    right: Container<MassPerMass<NoInfer<S1>, S2>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerEnergy<S2>>;
 
   divide<UL extends NumberUnit>(
     this: BaseContainer<NumberUnit>,
@@ -502,6 +580,10 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerAreaPerYear(leftUnit.substance);
       } else if (isMassPerHead(leftUnit) && isDays(rightUnit)) {
         unit = massPerHeadPerDay(leftUnit.substance);
+      } else if (isMass(leftUnit) && isMassPerVolume(rightUnit)) {
+        unit = volume(rightUnit.volume);
+      } else if (isMassPerEnergy(leftUnit) && isMassPerMass(rightUnit)) {
+        unit = massPerEnergy(rightUnit.sdenom);
       } else {
         if (!isRealNumber(rightUnit)) {
           // eslint-disable-next-line no-console
@@ -513,40 +595,65 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         }
         unit = { ...leftUnit };
       }
-      unit.value = leftUnit.value.div(rightUnit.value);
+      unit.store = leftUnit.store.divide(rightUnit.store);
     }
     return new BinaryContainer(
       unit as UL,
       'divide',
-      this as unknown as Container<UL>,
+      this as unknown as NumberContainer<UL>,
       right,
       baseOrigin,
     );
   }
 
-  // Implement minus operation where this container's unit is a NumberUnit, and also this and right must have identical units.
+  minus<UL extends NumberUnit>(
+    this: BaseContainer<UL>,
+    right: Container<RealNumber>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<UL>;
+
+  minus<UL extends NumberUnit>(
+    this: BaseContainer<RealNumber>,
+    right: Container<UL>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<UL>;
+
   minus<UL extends NumberUnit>(
     this: BaseContainer<UL>,
     right: Container<UL>,
     baseOrigin?: Metadata,
-  ): BinaryContainer<UL> {
-    let unit: NumberUnit;
-    if (isVoid(this.unit)) {
-      unit = voidUnit();
-    } else if (isVoid(right.unit)) {
-      unit = this.unit;
-    } else {
-      unit = this.unit;
-    }
+  ): BinaryContainer<UL>;
 
+  minus<UL extends NumberUnit>(
+    this: BaseContainer<NumberUnit>,
+    right: Container<NumberUnit>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<UL> {
+    const leftUnit = this.unit;
+    const rightUnit = right.unit;
+    let unit: NumberUnit;
+    if (isVoid(leftUnit) && isVoid(rightUnit)) {
+      unit = voidUnit();
+    } else {
+      if (isRealNumber(leftUnit) && !isRealNumber(rightUnit)) {
+        unit = rightUnit;
+      } else if (!isRealNumber(leftUnit) && isRealNumber(rightUnit)) {
+        unit = leftUnit;
+      } else if (leftUnit.__unitType === rightUnit.__unitType) {
+        unit = { ...leftUnit };
+      } else {
+        unit = realNumber(leftUnit.store.minus(rightUnit.store));
+      }
+    }
     const newUnit = {
       ...unit,
-      value: this.unit.value.sub(right.unit.value),
+      store: leftUnit.store.minus(rightUnit.store),
     };
+
     return new BinaryContainer(
       newUnit as UL,
       'subtract',
-      this as unknown as Container<NumberUnit>,
+      this as unknown as NumberContainer<NumberUnit>,
       right,
       baseOrigin,
     );
@@ -589,15 +696,19 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
       } else if (leftUnit.__unitType === rightUnit.__unitType) {
         unit = { ...leftUnit };
       } else {
-        unit = realNumber(leftUnit.value.add(rightUnit.value));
+        unit = realNumber(leftUnit.store.plus(rightUnit.store));
       }
-
-      unit.value = leftUnit.value.add(rightUnit.value);
     }
+
+    const newUnit = {
+      ...unit,
+      store: leftUnit.store.plus(rightUnit.store),
+    };
+
     return new BinaryContainer(
-      unit as UL,
+      newUnit as UL,
       'add',
-      this as unknown as Container<NumberUnit>,
+      this as unknown as NumberContainer<NumberUnit>,
       right,
       baseOrigin,
     );
@@ -611,12 +722,13 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     const leftUnit = this.unit;
     const rightUnit = right.unit;
 
-    const unit = realNumber(leftUnit.value.pow(rightUnit.value));
+    // For arbitrary power operations, units are hard to predict, so we just return a RealNumber
+    const unit = realNumber(leftUnit.store.power(rightUnit.store));
 
     return new BinaryContainer(
       unit,
       'power',
-      this as unknown as Container<RealNumber>,
+      this as unknown as NumberContainer<RealNumber>,
       right,
       baseOrigin,
     );
@@ -628,58 +740,109 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   ): BinaryContainer<UL> {
     const unit = {
       ...this.unit,
-      value: this.unit.value.pow(2),
+      store: this.unit.store.squared(),
     };
     const right = num(2);
 
     return new BinaryContainer(
       unit,
       'power',
-      this as unknown as Container<UL>,
+      this as unknown as NumberContainer<UL>,
       right,
       baseOrigin,
     );
   }
 
   /**
-   * Implement an operation that limits the value of a unit. You would normally express this as min(n1, n2) but limitedTo is more clear
-   * given the object dot notation needed here
+   * Takes the minimum of this value or the one given.
    * @param this the unit being limited
    * @param right the limit value
    * @param baseOrigin the base origin of the new container
    * @returns a new container with the limited value
    */
-  limitedTo<UL extends NumberUnit>(
+  min<UL extends NumberUnit>(
     this: BaseContainer<UL>,
-    right: number,
+    right: NumberContainer<UL | RealNumber>,
     baseOrigin?: Metadata,
   ): BinaryContainer<UL> {
-    const limit = new Decimal(right);
+    const limit = right.unit.store.value;
     const unit = {
       ...this.unit,
-      value: this.unit.value.gt(limit) ? limit : this.unit.value,
+      store: this.unit.store.min(limit),
     };
     return new BinaryContainer(
       unit,
-      'limitedTo',
-      this as unknown as Container<UL>,
-      num(right),
+      'min',
+      this as unknown as NumberContainer<UL>,
+      right,
+      baseOrigin,
+    );
+  }
+
+  /**
+   * Takes the minimum of this value or the one given.
+   * @param this the unit being constrained
+   * @param right the max value
+   * @param baseOrigin the base origin of the new container
+   * @returns a new container with the maximum value
+   */
+  max<UL extends NumberUnit>(
+    this: BaseContainer<UL>,
+    right: NumberContainer<UL | RealNumber>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<UL> {
+    const limit = right.unit.store.value;
+    const unit = {
+      ...this.unit,
+      store: this.unit.store.max(limit),
+    };
+    return new BinaryContainer(
+      unit,
+      'max',
+      this as unknown as NumberContainer<UL>,
+      right,
       baseOrigin,
     );
   }
 }
 
+/**
+ * Takes the minimum of 2 values. This is a very thin wrapper around `BaseContainer.min`,
+ * to make it slightly easier to read than using the dot notation directly on a container
+ * @param this the unit being limited
+ * @param right the limit value
+ * @param baseOrigin the base origin of the new container
+ * @returns a new container with the limited value
+ */
+export const min = <U extends NumberUnit>(
+  value1: NumberContainer<U>,
+  value2: NumberContainer<U | RealNumber>,
+): BinaryContainer<U> => value1.min(value2);
+
+/**
+ * Takes the minimum of 2 values. This is a very thin wrapper around `BaseContainer.min`,
+ * to make it slightly easier to read than using the dot notation directly on a container
+ * @param this the unit being limited
+ * @param right the limit value
+ * @param baseOrigin the base origin of the new container
+ * @returns a new container with the limited value
+ */
+export const max = <U extends NumberUnit>(
+  value1: NumberContainer<U>,
+  value2: NumberContainer<U | RealNumber>,
+): BinaryContainer<U> => value1.max(value2);
+
 export class BinaryContainer<U extends AnyUnit> extends BaseContainer<U> {
   originType: 'binary';
-  type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'limitedTo';
-  left: Container<NumberUnit>;
-  right: Container<NumberUnit>;
+  type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'min' | 'max';
+  left: NumberContainer<NumberUnit>;
+  right: NumberContainer<NumberUnit>;
 
   constructor(
     unit: U,
-    type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'limitedTo',
-    left: Container<NumberUnit>,
-    right: Container<NumberUnit>,
+    type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'min' | 'max',
+    left: NumberContainer<NumberUnit>,
+    right: NumberContainer<NumberUnit>,
     baseOrigin: Metadata,
   ) {
     super(unit, baseOrigin);
@@ -689,24 +852,28 @@ export class BinaryContainer<U extends AnyUnit> extends BaseContainer<U> {
     this.right = right;
   }
 
-  switchUnit<UN extends U extends NumberUnit ? U : never, V extends NumberUnit>(
-    converter: (from: UN) => V,
-  ): BinaryContainer<V> {
+  switchUnit<
+    UN extends (U extends NumberUnit ? U : never),
+    V extends NumberUnit,
+  >(converter: (from: UN) => V): BinaryContainer<V> {
     const newUnit = converter(this.unit as unknown as UN);
-    //@ts-expect-error Force switch of units
-    this.unit = newUnit;
-
-    return this as unknown as BinaryContainer<V>;
+    return new BinaryContainer(
+      newUnit,
+      this.type,
+      this.left,
+      this.right,
+      this.core,
+    );
   }
 }
 
 export class SummedContainer<N extends NumberUnit> extends BaseContainer<N> {
   originType: 'sum';
-  from: Container<NumberUnit>[];
+  from: NumberContainer<NumberUnit>[];
 
   constructor(
     unit: N,
-    from: TypedContainer<NumberUnit>[],
+    from: NumberContainer<NumberUnit>[],
     baseOrigin: Metadata,
   ) {
     super(unit, baseOrigin);
@@ -714,14 +881,12 @@ export class SummedContainer<N extends NumberUnit> extends BaseContainer<N> {
     this.from = from;
   }
 
-  switchUnit<UN extends N extends NumberUnit ? N : never, V extends NumberUnit>(
-    converter: (from: UN) => V,
-  ): SummedContainer<V> {
+  switchUnit<
+    UN extends (N extends NumberUnit ? N : never),
+    V extends NumberUnit,
+  >(converter: (from: UN) => V): SummedContainer<V> {
     const newUnit = converter(this.unit as unknown as UN);
-    //@ts-expect-error Force switch of units
-    this.unit = newUnit;
-
-    return this as unknown as SummedContainer<V>;
+    return new SummedContainer(newUnit, this.from, this.core);
   }
 }
 
@@ -729,11 +894,11 @@ export class ConstantSelectionContainer<
   U extends NumberUnit,
 > extends BaseContainer<U, NamedMetadata> {
   originType: 'constant_selection';
-  selectors: (Container<StringUnit> | string)[];
+  selectors: (StringContainer<StringUnit> | string)[];
 
   constructor(
     unit: U,
-    selectors: (Container<StringUnit> | string)[],
+    selectors: (StringContainer<StringUnit> | string)[],
     name: string,
   ) {
     super(unit, { name });
@@ -741,14 +906,16 @@ export class ConstantSelectionContainer<
     this.selectors = selectors;
   }
 
-  switchUnit<UN extends U extends NumberUnit ? U : never, V extends NumberUnit>(
-    converter: (from: UN) => V,
-  ): ConstantSelectionContainer<V> {
+  switchUnit<
+    UN extends (U extends NumberUnit ? U : never),
+    V extends NumberUnit,
+  >(converter: (from: UN) => V): ConstantSelectionContainer<V> {
     const newUnit = converter(this.unit as unknown as UN);
-    //@ts-expect-error Force switch of units
-    this.unit = newUnit;
-
-    return this as unknown as ConstantSelectionContainer<V>;
+    return new ConstantSelectionContainer(
+      newUnit,
+      this.selectors,
+      this.core.name,
+    );
   }
 }
 
@@ -760,14 +927,12 @@ export class RootContainer<U extends AnyUnit> extends BaseContainer<U> {
     this.originType = 'root';
   }
 
-  switchUnit<UN extends U extends NumberUnit ? U : never, V extends NumberUnit>(
-    converter: (from: UN) => V,
-  ): RootContainer<V> {
+  switchUnit<
+    UN extends (U extends NumberUnit ? U : never),
+    V extends NumberUnit,
+  >(converter: (from: UN) => V): RootContainer<V> {
     const newUnit = converter(this.unit as unknown as UN);
-    //@ts-expect-error Force switch of units
-    this.unit = newUnit;
-
-    return this as unknown as RootContainer<V>;
+    return new RootContainer(newUnit, this.core);
   }
 }
 
@@ -776,46 +941,124 @@ export const root = <U extends AnyUnit>(
   baseOrigin?: Metadata,
 ): RootContainer<U> => new RootContainer(unit, baseOrigin);
 
-export class BracketedContainer<U extends AnyUnit> extends BaseContainer<U> {
+export class BracketedContainer<U extends NumberUnit> extends BaseContainer<U> {
   originType: 'bracketed';
-  inner: Container<AnyUnit>;
-  constructor(unit: U, inner: Container<AnyUnit>, baseOrigin?: Metadata) {
+  inner: Container<NumberUnit>;
+  constructor(unit: U, inner: Container<NumberUnit>, baseOrigin?: Metadata) {
     super(unit, baseOrigin);
     this.originType = 'bracketed';
     this.inner = inner;
   }
 
-  switchUnit<UN extends U extends NumberUnit ? U : never, V extends NumberUnit>(
-    converter: (from: UN) => V,
-  ): BracketedContainer<V> {
+  switchUnit<
+    UN extends (U extends NumberUnit ? U : never),
+    V extends NumberUnit,
+  >(converter: (from: UN) => V): BracketedContainer<V> {
     const newUnit = converter(this.unit as unknown as UN);
-    //@ts-expect-error Force switch of units
-    this.unit = newUnit;
-
-    return this as unknown as BracketedContainer<V>;
+    return new BracketedContainer(newUnit, this.inner, this.core);
   }
 }
 
-export const br = <U extends AnyUnit>(
+export const br = <U extends NumberUnit>(
   inner: Container<U>,
 ): BracketedContainer<U> => new BracketedContainer(inner.unit, inner);
+
+export class TranslationContainer<
+  TIn extends StringUnit | NumberUnit | BooleanUnit,
+  TOut extends StringUnit | NumberUnit,
+> extends BaseContainer<TOut> {
+  originType: 'translation';
+  from: Container<TIn>;
+  constructor(unit: TOut, from: Container<TIn>, baseOrigin?: Metadata) {
+    super(unit, baseOrigin);
+    this.originType = 'translation';
+    this.from = from;
+  }
+
+  switchUnit<
+    UN extends (TOut extends NumberUnit ? TOut : never),
+    V extends NumberUnit,
+  >(converter: (from: UN) => V): TranslationContainer<TIn, V> {
+    const newUnit = converter(this.unit as unknown as UN);
+    return new TranslationContainer(newUnit, this.from, this.core);
+  }
+}
+
+export const translate = <
+  TIn extends StringUnit | NumberUnit | BooleanUnit,
+  TOut extends StringUnit | NumberUnit,
+>(
+  newValue: TOut,
+  from: Container<TIn>,
+): TranslationContainer<TIn, TOut> => new TranslationContainer(newValue, from);
 
 export const num = (value: number | Decimal): RootContainer<RealNumber> =>
   new RootContainer(realNumber(value));
 
-export const value = <N extends NumberUnit>(v: N): RootContainer<N> =>
-  new RootContainer(v);
-
-export type TypedContainer<U extends AnyUnit> =
+export type NumberContainer<U extends NumberUnit> =
   | BracketedContainer<U>
   | BinaryContainer<U>
+  | InputContainer<U>
   | RootContainer<U>
-  | SummedContainer<U extends NumberUnit ? U : never>
-  | ConstantSelectionContainer<U extends NumberUnit ? U : never>;
+  | Method1And2Container<U>
+  | Method2Container<U>
+  | SummedContainer<U>
+  | ConstantSelectionContainer<U>
+  | SwitchContainer<StringUnit, U>
+  | IfElseContainer<U>
+  | TranslationContainer<StringUnit | NumberUnit | BooleanUnit, U>;
+
+export type StringContainer<U extends StringUnit> =
+  | InputContainer<U>
+  | RootContainer<U>
+  | TranslationContainer<StringUnit | NumberUnit | BooleanUnit, U>;
+
+export type BooleanContainer<U extends BooleanUnit = BooleanUnit> =
+  InputContainer<U> | RootContainer<U>;
+
+export type TypedContainer<U extends AnyUnit> = [U] extends [NumberUnit]
+  ? NumberContainer<U>
+  : [U] extends [StringUnit]
+    ? StringContainer<U>
+    : [U] extends [BooleanUnit]
+      ? BooleanContainer<U>
+      : | NumberContainer<Extract<U, NumberUnit>>
+        | StringContainer<Extract<U, StringUnit>>
+        | BooleanContainer<Extract<U, BooleanUnit>>;
 
 export type MultiContainer<U extends NumberUnit = NumberUnit> =
   SummedContainer<U>;
 
-export type Container<U extends AnyUnit> =
-  | TypedContainer<U>
-  | MultiContainer<U extends NumberUnit ? U : never>;
+export type Container<U extends AnyUnit> = [U] extends [NumberUnit]
+  ? NumberContainer<U> | MultiContainer<U>
+  : TypedContainer<U>;
+
+export type AsAnyContainer<C extends Container<AnyUnit>> = Container<C['unit']>;
+export type ValuesAsAnyContainer<Input extends object> = {
+  [K in keyof Input]: Input[K] extends Container<AnyUnit>
+    ? AsAnyContainer<Input[K]>
+    : Input[K] extends object
+      ? ValuesAsAnyContainer<Input[K]>
+      : Input[K];
+};
+
+type MultiplyAllValuesByResult<
+  T extends { [K in keyof T]: Container<NumberUnit> },
+> = {
+  [K in keyof T]: T[K] extends Container<infer U extends NumberUnit>
+    ? BinaryContainer<U>
+    : never;
+};
+
+export function multiplyAllValuesBy<
+  T extends { [K in keyof T]: Container<NumberUnit> },
+>(object: T, factor: Container<RealNumber>): MultiplyAllValuesByResult<T> {
+  return objectFromEntries(
+    entriesFromObject(object).map(
+      ([key, value]) =>
+        [key, value.multiply(factor)] as ObjectEntry<
+          MultiplyAllValuesByResult<T>
+        >,
+    ),
+  );
+}

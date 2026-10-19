@@ -1,8 +1,12 @@
+import { WasteTypesForFacility } from '@/modules/scope1/10-solid-waste/solid-waste-units.input';
 import {
   AnyUnit,
   CountPerArea,
+  Days,
   EnergyPerMass,
   EnergyPerVolume,
+  Liveweight,
+  LiveweightGain,
   Mass,
   MassPerArea,
   MassPerAreaPerDay,
@@ -13,7 +17,6 @@ import {
   MassPerHeadPerDay,
   MassPerMass,
   MassPerMassDistance,
-  MassPerTime,
   MassPerVolume,
   NumberUnitBase,
   RealNumber,
@@ -22,25 +25,27 @@ import {
 } from '@/tools/units';
 import {
   AgrochemicalType,
+  AquacultureSystemLocation,
   AviationFuelType,
   BasicCropProductionSystem,
+  BeefBreed,
   BeefClass,
   CarsLightCommercialFuelType,
   CarsLightCommercialPre2004FuelType,
-  ClimateZone,
+  ClimateZoneType,
   CropType,
   DairyCattleBreed,
   DairyClass,
-  DairyMMSType,
+  DairyMMSTypeWithPasture,
   DairySystem,
+  DairyTimeInLocations,
+  ElectricityRegion,
   ExtendedRegion,
   FeedlotDurationType,
-  FeedlotMMSType,
   FreightType,
   FuelStationaryMassBasedLiquidType,
   FuelStationarySolidType,
   FuelStationaryVolumeBasedLiquidType,
-  GrazingProductionSystemsWithRainfall,
   HeavyDutyFuelType,
   IBRA7Region,
   InorganicFertiliserComponentOrigin,
@@ -49,7 +54,8 @@ import {
   InorganicFertiliserType,
   LightDutyFuelType,
   LimitedRegion,
-  LimitedState,
+  LivestockPurchaseCategory,
+  MatureDairyClass,
   MeanAnnualTemperature,
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
@@ -57,38 +63,42 @@ import {
   PastureType,
   PerennialWoodyCropFull,
   PerennialWoodyCropPartial,
+  PigsClass,
+  PigsLiveweightClass,
   PoultryClass,
   PoultryMMS1Type,
   PoultryMMS1TypeWithPasture,
   PoultryMMS2Type,
-  PoultryMMS2TypeWithPasture,
-  PrimarySwineMMSType,
+  PoultryWeightClass,
+  PreWeanedDairyClass,
+  PrimaryFeedlotMMSType,
+  PrimaryPigsMMSType,
   PurchasedFeedAquacultureType,
   PurchasedFeedLivestockRegionalType,
   PurchasedFeedLivestockRegionlessType,
   PurchasedFeedRegion,
-  PurchasedGrowMediaByMassType,
-  PurchasedGrowMediaByVolumeType,
   PurchasedMineralSupplementType,
-  PurchasedPackagingType,
-  PureState,
-  PureStateWithoutNT,
+  PurchasedPackagingByMassType,
+  PurchasedPackagingByUnitsType,
   RefrigerantType,
   RefrigerationType,
   RiceCultivationOrganicAmendmentType,
   RiceCultivationPreSeasonWaterRegimeType,
   RiceCultivationSeasonWaterRegimeType,
   Season,
-  ServiceByAreaType,
-  ServiceByHourType,
+  SecondaryFeedlotMMSType,
   SheepClass,
-  SolidWasteByVolumeType,
-  SolidWasteIncinerationType,
-  SolidWasteLandfillType,
+  SoilAmeliorant,
+  SolidWasteManagedTreatmentType,
+  SolidWasteNonStreamType,
+  SolidWasteOrganicManagedTreatmentType,
+  SolidWasteType,
+  SolidWasteUnmanagedTreatmentType,
   State,
   StateOrRegion,
-  SwineClass,
+  TertiaryFeedlotMMSType,
   VesselFuelType,
+  WastewaterCommodity,
   WastewaterFacilityType,
 } from './enums';
 
@@ -102,55 +112,59 @@ export type NamedConstants = {
   name: string;
 };
 
-export const STATES = {
-  NSW: 'nsw',
-  VIC: 'vic',
-  QLD: 'qld',
-  SA: 'sa',
-  WA_NW: 'wa_nw',
-  WA_SW: 'wa_sw',
-  TAS: 'tas',
-  NT: 'nt',
-  ACT: 'act',
-} as const;
-export type States = (typeof STATES)[keyof typeof STATES];
-
 export type GasType = 'CO2' | 'CH4' | 'N2O';
+export type FuelEmissionsGasType = GasType | 'CO2e';
 export type FuelFactorByVolume = {
   ENERGY_CONTENT_FACTOR: EnergyPerVolume<'Fuel'>;
-  SCOPE1_EF: { [G in GasType]: MassPerEnergy<G> };
+  SCOPE1_EF: { [G in FuelEmissionsGasType]: MassPerEnergy<'CO2e'> };
   SCOPE3_EF: MassPerEnergy<'CO2e'>;
 };
 
 export type FuelFactorByMass = {
   ENERGY_CONTENT_FACTOR: EnergyPerMass<'Fuel'>;
-  SCOPE1_EF: { [G in GasType]: MassPerEnergy<G> };
+  SCOPE1_EF: { [G in FuelEmissionsGasType]: MassPerEnergy<'CO2e'> };
   SCOPE3_EF: MassPerEnergy<'CO2e'>;
 };
+
+export type SolidWasteTypesFactors = {
+  CARBON_CONTENT: MassPerMass<'Carbon', 'Solid Waste'>;
+  FOSSIL_ORIGIN: RealNumber;
+  OXIDATION_FACTOR: RealNumber;
+  DRY_MATTER_CONTENT: RealNumber;
+  DEGRADABLE_ORGANIC_CONTENT: MassPerMass<'Carbon', 'Solid Waste'>;
+  FRAC_DOC_DECOMPOSES: RealNumber;
+};
+
 export type CommonConstants = NamedConstants & {
   AGROCHEMICAL_FACTORS: Record<
     AgrochemicalType,
     MassPerMass<'CO2e', 'Chemical'>
   >;
 
-  EF_UREA_CO2: MassPerMass<'CO2e', 'Urea'>;
-  GWP_FACTORSC6: MassPerMass<'CO2e', 'N2O'>;
-  GWP_FACTORSC13: MassPerMass<'CO2', 'CO2e'>;
-  GWP_FACTORSC14: RealNumber;
+  EF_CONVERSION_UREA_TO_CO2: MassPerMass<'Carbon', 'Urea'>;
 
-  GWP_FACTORSC15: RealNumber;
-  GWP_FACTORSC18: RealNumber;
-
-  GWP_CH4: MassPerMass<'CO2e', 'CH4'>;
-
-  CG_CO2: MassPerMass<'CO2', 'Carbon'>;
+  /*
+   * NOTE: These elemental conversion factors are not consistent across their denominator units, or what you might call the input unit.
+   * The way the guidelines use subscripts and refer to the input material is most often a gas already converted (N2O or CH4). We have preferred
+   * matching the guidelines over strict correctness of our unit tracking, which would probably suit a mass of C or N instead of CH4 or N2O.
+   * */
+  ELEMENTAL_TO_MOLECULAR_CO2: MassPerMass<'CO2', 'Carbon'>;
+  ELEMENTAL_TO_MOLECULAR_CH4: MassPerMass<'CH4', 'Carbon'>;
+  ELEMENTAL_TO_MOLECULAR_N2O: MassPerMass<'N2O', 'N2O'>;
 
   DENSITY_OF_METHANE: MassPerVolume<'CH4', 'CH4'>;
 
-  LIME_SCOPE3_EF: MassPerMass<'CO2e', 'Lime'>;
+  LIME_SCOPE3_EF: Record<SoilAmeliorant, MassPerMass<'CO2e', 'Lime'>>;
+
+  LIMING: {
+    LIMESTONE_PURITY: RealNumber;
+    LIMESTONE_EF: MassPerMass<'Carbon', 'Lime'>;
+    DOLOMITE_PURITY: RealNumber;
+    DOLOMITE_EF: MassPerMass<'Carbon', 'Lime'>;
+  };
 
   ELECTRICITY: {
-    [state in States | 'Australia']: {
+    [region in ElectricityRegion]: {
       SCOPE2_EF: MassPerElectricity<'CO2e'>;
       SCOPE3_EF: MassPerElectricity<'CO2e'>;
     };
@@ -196,8 +210,8 @@ export type CommonConstants = NamedConstants & {
 
   NATURAL_GAS_FACTORS: {
     ENERGY_CONTENT_FACTOR: EnergyPerVolume<'Fuel'>;
-    SCOPE1_EF: { [G in GasType]: MassPerEnergy<G> };
-    SCOPE3_EF: Record<States, MassPerEnergy<'CO2e'>>;
+    SCOPE1_EF: { [G in FuelEmissionsGasType]: MassPerEnergy<'CO2e'> };
+    SCOPE3_EF: Record<State, MassPerEnergy<'CO2e'>>;
   };
 
   FREIGHT_EMISSIONS: Record<
@@ -205,41 +219,61 @@ export type CommonConstants = NamedConstants & {
     MassPerMassDistance<'CO2e', 'Freight Goods'>
   >;
 
-  LIMING: {
-    LIMESTONE_PURITY: RealNumber;
-    LIMESTONE_EF: MassPerMass<'CO2', 'Lime'>;
-    DOLOMITE_PURITY: RealNumber;
-    DOLOMITE_EF: MassPerMass<'CO2', 'Lime'>;
-  };
-
   // NGAF 2023 Table 10
   REFRIGERATION_LEAKAGE_RATES: Record<RefrigerationType, RealNumber>;
   REFRIGERANT_GWP: Record<RefrigerantType, MassPerMass<'CO2e', 'Refrigerant'>>;
 
-  SERVICE_EMISSIONS_BY_AREA: Record<ServiceByAreaType, MassPerArea<'CO2e'>>;
-  SERVICE_EMISSIONS_BY_HOUR: Record<ServiceByHourType, MassPerTime<'CO2e'>>;
+  SOLID_WASTE_TREATMENT: {
+    SCOPE_1: {
+      FACILITY_FACTORS: {
+        Incineration: MassPerMass<'Carbon', 'Solid Waste'>;
+      } & Record<
+        SolidWasteOrganicManagedTreatmentType,
+        {
+          CH4: MassPerMass<'CH4', 'Solid Waste'>;
+          N2O: MassPerMass<'N2O', 'Solid Waste'>;
+        }
+      > &
+        Record<
+          SolidWasteUnmanagedTreatmentType,
+          {
+            METHANE_EF: MassPerMass<'CH4', 'Solid Waste'>;
+            METHANE_CONVERSION_FACTOR: RealNumber;
+            OXIDATION_FACTOR: RealNumber;
+          }
+        >;
+      WASTE_FACTORS: Record<SolidWasteNonStreamType, SolidWasteTypesFactors>;
 
-  SOLID_WASTE_LANDFILL_EF: Record<
-    SolidWasteLandfillType,
-    MassPerMass<'CO2e', 'Solid Waste'>
-  >;
-  SOLID_WASTE_INCINERATION_EF: Record<
-    SolidWasteIncinerationType,
-    MassPerMass<'CO2e', 'Solid Waste'>
-  >;
+      UNMANAGED_METHANE_FRACTION: RealNumber;
+    };
+    SCOPE_3: {
+      [
+        FType in Exclude<
+          SolidWasteManagedTreatmentType,
+          SolidWasteOrganicManagedTreatmentType
+        >
+      ]: {
+        WASTE_TYPES: Record<
+          WasteTypesForFacility<FType, 3>,
+          MassPerMass<'CO2e', 'Solid Waste'>
+        >;
+        RECOVERY_FRACTION: RealNumber;
+      };
+    } & Record<
+      SolidWasteOrganicManagedTreatmentType,
+      {
+        EF: MassPerMass<'CO2e', 'Solid Waste'>;
+        RECOVERY_FRACTION: RealNumber;
+      }
+    >;
 
-  SOLID_WASTE_COMPOSTING_EF: MassPerMass<'CO2e', 'Solid Waste'>;
-  SOLID_WASTE_ANAEROBIC_DIGESTION_EF: MassPerMass<'CO2e', 'Solid Waste'>;
+    WASTE_TYPES_VOLUME_TO_MASS: Record<
+      SolidWasteType,
+      MassPerVolume<'Solid Waste', 'Solid Waste'>
+    >;
+  };
 
-  SOLID_WASTE_BY_VOLUME_TO_MASS: Record<
-    SolidWasteByVolumeType,
-    MassPerVolume<'Solid Waste', 'Solid Waste'>
-  >;
-
-  CRUDE_PROTEIN_TO_NITROGEN_CONVERSION: MassPerMass<'CrudeProtein', 'N'>;
-
-  // REVISIT: Could move to the common livestock area
-  ASH_CONTENT_OF_MANURE: RealNumber;
+  NITROGEN_TO_PROTEIN: MassPerMass<'CrudeProtein', 'N'>;
 
   WASTEWATER_TREATMENT: {
     WASTEWATER_METHANE_CORRECTION_FACTORS: Record<
@@ -250,32 +284,37 @@ export type CommonConstants = NamedConstants & {
       WastewaterFacilityType,
       RealNumber
     >;
+    FRAC_SLUDGE: RealNumber;
     WASTEWATER_EF: MassPerMass<'CH4', 'COD'>;
     SLUDGE_EF: MassPerMass<'CH4', 'COD'>;
     SLUDGE_BIOGAS_ENERGY_CONTENT: EnergyPerVolume<'CH4'>;
     SLUDGE_BIOGAS_CH4_EF: MassPerEnergy<'CH4'>;
     SLUDGE_BIOGAS_N2O_EF: MassPerEnergy<'N2O'>;
-  };
 
-  PURCHASED_PACKAGING_FACTORS: Record<PurchasedPackagingType, Mass<'CO2e'>>;
-
-  PURCHASED_GROW_MEDIA_FACTORS: {
-    byVolume: Record<
-      PurchasedGrowMediaByVolumeType,
-      MassPerVolume<'CO2e', 'Grow Media'>
-    >;
-    byMass: Record<
-      PurchasedGrowMediaByMassType,
-      MassPerMass<'CO2e', 'Grow Media'>
+    COD_BY_COMMODITY: Record<
+      WastewaterCommodity,
+      {
+        inletCOD: MassPerVolume<'COD', 'FluidWaste'>;
+        fracRecovered: RealNumber;
+      }
     >;
   };
+
+  PURCHASED_PACKAGING_FACTORS_BY_UNITS: Record<
+    PurchasedPackagingByUnitsType,
+    Mass<'CO2e'>
+  >;
+  PURCHASED_PACKAGING_FACTORS_BY_MASS: Record<
+    PurchasedPackagingByMassType,
+    MassPerMass<'CO2e', 'Packaging'>
+  >;
 };
 
 type CropResidueFactors = {
   residueCropRatio: MassPerMass<'CropResidue', 'DryMatter'>;
   belowAboveResidueRatio: RealNumber;
   dryMatterContent: MassPerMass<'DryMatter', 'CropResidue'>;
-  carbonMassFraction: RealNumber;
+  carbonMassFraction: MassPerMass<'Carbon', 'DryMatter'>;
   aboveGroundN: MassPerMass<'N', 'DryMatter'>;
   belowGroundN: MassPerMass<'N', 'DryMatter'>;
   fractionOfResidueAtBurning: RealNumber;
@@ -283,7 +322,7 @@ type CropResidueFactors = {
 };
 
 type PastureResidueFactors = {
-  // averageYield: number;
+  averageYield: MassPerArea<'DryMatter'>;
   belowAboveResidueRatio: RealNumber;
   aboveGroundN: MassPerMass<'N', 'DryMatter'>;
   belowGroundN: MassPerMass<'N', 'DryMatter'>;
@@ -317,6 +356,7 @@ type OrganicFertiliserFractions = {
 };
 
 export type CropConstants = NamedConstants & {
+  INORGANIC_FERTILISER_OTHER_VOLATILISES: MassPerMass<'Volatilised N', 'N'>;
   INORGANIC_FERTILISER_FRACTIONS: Record<
     InorganicFertiliserType,
     InorganicFertiliserFractions
@@ -335,13 +375,15 @@ export type CropConstants = NamedConstants & {
 
   FRACTION_CROP_RESIDUE_REMOVED: Record<CropType, Record<State, RealNumber>>;
 
-  BURNING_METHANE_EF: MassPerMass<'CH4', 'DryMatter'>;
+  BURNING_METHANE_EF: MassPerMass<'CH4', 'CH4'>;
   BURNING_N2O_EF: MassPerMass<'N2O', 'N'>;
-  EF_RESIDUES_RETURNED_TO_SOIL: Record<'wet' | 'dry', MassPerMass<'N2O', 'N'>>;
+  EF_RESIDUES_RETURNED_TO_SOIL: Record<
+    ClimateZoneType,
+    MassPerMass<'N2O', 'N'>
+  >;
 
-  EF_N2O_PRODUCTION_SYSTEM: Record<
+  EF_N2O_ATMOSPHERIC_DEPOSITION_PRODUCTION_SYSTEM: Record<
     BasicCropProductionSystem,
-    // MassPerMass<'N2O', 'N'>
     MassPerMass<'N2O', 'Volatilised N'>
   >;
 
@@ -349,6 +391,8 @@ export type CropConstants = NamedConstants & {
   FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF: RealNumber;
   FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF_SOLID_STORAGE: RealNumber;
   EF_N2O_LEACHING_AND_RUNOFF: MassPerMass<'N2O', 'N'>;
+
+  COTTON_ECONOMIC_LINT_ALLOCATION: RealNumber;
 };
 
 type MMSFactors = {
@@ -356,93 +400,136 @@ type MMSFactors = {
   N2O_EF: RealNumber;
 };
 
-type SwineClassFactors = {
+type PigsClassFactors = {
   FEED_INTAKE: MassPerHeadPerDay<'DryMatter'>;
   VOLATILE_SOLIDS: MassPerHeadPerDay<'Volatile Solids'>;
   NITROGEN_IN_WASTE: MassPerHeadPerDay<'N'>;
 };
 
-export type SwineConstants = NamedConstants & {
+export type PigsConstants = NamedConstants & {
   MMS: Record<
-    PrimarySwineMMSType,
+    PrimaryPigsMMSType,
     MMSFactors & {
       VOLATILE_SOLIDS_LOST: RealNumber;
-      METHANE_CONVERSION_FACTOR_BY_STATE: Record<PureState, RealNumber>;
+      METHANE_CONVERSION_FACTOR_BY_STATE: Record<State, RealNumber>;
       EFm: MassPerMass<'N2O', 'N'>;
       FracGASM: MassPerMass<'Volatilised N', 'N'>;
     }
   > & {
     directApplication: MMSFactors & {
       VOLATILE_SOLIDS_LOST: RealNumber;
-      METHANE_CONVERSION_FACTOR_BY_STATE: Record<PureState, RealNumber>;
+      METHANE_CONVERSION_FACTOR_BY_STATE: Record<State, RealNumber>;
     };
   };
   GROSS_ENERGY_CONTENT_OF_FEED: EnergyPerMass<'DryMatter'>;
   ENERGY_PER_MASS_METHANE: EnergyPerMass<'CH4'>;
-  SWINE_CLASS_FACTORS: Record<SwineClass, SwineClassFactors>;
+  PIGS_CLASS_FACTORS: Record<PigsClass, PigsClassFactors>;
   FRACTION_INTAKE_CONVERTED_TO_METHANE: RealNumber;
-  EMISSIONS_POTENTIAL: VolumePerMass<'CH4', 'Volatile Solids'>;
   DEFAULT_FRACTION_SOLIDS_SEPARATED: RealNumber;
   DEFAULT_FRACTION_NITROGEN_SEPARATED: RealNumber;
+  LIVEWEIGHT: Record<PigsLiveweightClass, Liveweight>;
 };
 
 type FeedlotFeedFactors = {
-  DRY_MATTER_INTAKE: MassPerHeadPerDay<'DryMatter'>;
-  CRUDE_PROTEIN_CONTENT: MassPerMass<'CrudeProtein', 'DryMatter'>;
-  NITROGEN_RETENTION_FRACTION: RealNumber;
-  NEUTRAL_DETERGENT_FIBRE_PERCENTAGE: RealNumber;
-  ETHER_EXTRACT_PERCENTAGE: RealNumber;
+  dryMatterIntake: MassPerHeadPerDay<'DryMatter'>;
+  crudeProtein: MassPerMass<'CrudeProtein', 'DryMatter'>;
+  dryMatterDigestibility: RealNumber;
+  nitrogenRetentionRate: RealNumber;
+  neutralDetergentFibrePercentage: RealNumber;
+  etherExtractPercentage: RealNumber;
+};
+
+type FeedlotMMSFactors = {
+  METHANE_CONVERSION_FACTOR_BY_STATE: Record<State, RealNumber>;
+  FracGASM: MassPerMass<'Volatilised N', 'N'>;
+  EFm: MassPerMass<'N2O', 'N'>;
 };
 
 export type FeedlotConstants = NamedConstants & {
-  MMS: Record<FeedlotMMSType, MMSFactors>;
+  MMS: Record<
+    PrimaryFeedlotMMSType,
+    FeedlotMMSFactors & { FRACTION_SOLIDS_LOST: RealNumber }
+  > &
+    Record<SecondaryFeedlotMMSType, FeedlotMMSFactors> &
+    Record<
+      TertiaryFeedlotMMSType,
+      FeedlotMMSFactors & {
+        FRACTION_SOLIDS_RUNOFF: RealNumber;
+      }
+    >;
   FEED: Record<FeedlotDurationType, FeedlotFeedFactors>;
 };
 
-type TimeInLocations = {
-  pasture: RealNumber;
-  milkingShed: RealNumber;
-  feedPad: RealNumber;
+export type TimeInLocations = Record<DairyTimeInLocations, RealNumber>;
+
+type BaseDairyClassFactors = {
+  referenceWeight: Liveweight;
+  liveweightGain: LiveweightGain;
 };
 
-type DairyClassFactors = {
-  referenceWeight: Mass<'Liveweight'>;
-  liveweightGain: MassPerHeadPerDay<'Liveweight'>;
+type MatureDairyClassFactors = BaseDairyClassFactors & {
+  averageStay: Days;
+  netEnergyForGrowth: EnergyPerMass<'Liveweight'>;
+};
+
+type PreWeanedDairyClassFactors = BaseDairyClassFactors & {
+  methaneProduction: MassPerHeadPerDay<'CH4'>;
+  nitrogenExcreted: MassPerHeadPerDay<'N'>;
+  volatileSolids: MassPerHeadPerDay<'Volatile Solids'>;
+  netEnergyForGrowth: {
+    preWeaned: EnergyPerMass<'Liveweight'>;
+    weaned: EnergyPerMass<'Liveweight'>;
+  };
+  averageStay: {
+    preWeaned: Days;
+    weaned: Days;
+  };
 };
 
 type DairyMMSFactors = {
-  EFm: RealNumber; // MassPerMass<'N2O', 'N'>;
-  FracGASM: RealNumber; // MassPerMass<'Volatilised N', 'N'>;
+  EFm: MassPerMass<'N2O', 'N'>;
+  FracGASM: MassPerMass<'Volatilised N', 'N'>;
+  METHANE_CONVERSION_FACTOR_BY_STATE: Record<State, RealNumber>;
 };
 
-type PreWeanedFactors = {
-  urinaryN: MassPerHeadPerDay<'N'>;
-  faecalN: MassPerHeadPerDay<'N'>;
-  methaneProduction: MassPerHeadPerDay<'CH4'>;
-};
-
-type BreedWeights = Record<DairyClass, Mass<'Liveweight'>>;
+type BreedWeights = Record<DairyClass, Liveweight>;
 
 export type DairyConstants = NamedConstants & {
   TIME_IN_LOCATIONS: Record<DairySystem, TimeInLocations>;
-  FAT_CONTENT: RealNumber;
-  PROTEIN_CONTENT: RealNumber;
-  NET_ENERGY_FOR_MILK_PRODUCTION: EnergyPerMass<'Milk'>;
-  GROSS_ENERGY_CONTENT: EnergyPerMass<'DryMatter'>;
-  EFFICIENCY_OF_MILK_PRODUCTION: RealNumber;
-  CRUDE_PROTEIN_CONTENT_OF_FEED: RealNumber;
-  DAIRY_CLASS_FACTORS: Record<DairyClass, DairyClassFactors>;
-  INCREASE_METABOLIC_RATE_FOR_MILK: {
-    milkingCows: MassPerHeadPerDay<'DryMatter'>;
-    others: MassPerHeadPerDay<'DryMatter'>;
+
+  CLASSES: Record<MatureDairyClass, MatureDairyClassFactors> &
+    Record<PreWeanedDairyClass, PreWeanedDairyClassFactors>;
+
+  DIETARY_CONSTANTS: {
+    dryMatterDigestibility: RealNumber;
+    crudeProtein: MassPerMass<'CrudeProtein', 'DryMatter'>;
   };
-  DRY_MATTER_DIGESTIBILITY: RealNumber;
-  PRE_WEANED_CLASSES: {
-    heifersLt1: PreWeanedFactors;
-    bullsLt1: PreWeanedFactors;
+
+  MILK_CONSTANTS: {
+    FAT_CONTENT: RealNumber;
+    PROTEIN_CONTENT: RealNumber;
+    NET_ENERGY: EnergyPerMass<'Milk'>;
+    /**
+     * Not to be confused with `NET_ENERGY`!
+     *
+     * While both factors describe the same thing (the net energy required for milk
+     * production), The factor here should ONLY be used to calculate allocation of
+     * emissions to milk production - consistent with the approach to calculating
+     * intensities adopted by the International Dairy Foundation. The `NET_ENERGY` figure
+     * should be used for the emissions estimate.
+     */
+    NET_ENERGY_FOR_INTENSITY_ALLOCATION: EnergyPerMass<'Milk'>;
+    GROSS_ENERGY_CONTENT: EnergyPerMass<'DryMatter'>;
+    EFFICIENCY_OF_MILK_PRODUCTION: RealNumber;
+    DENSITY_OF_MILK: MassPerVolume<'Milk', 'Milk'>;
+
+    INCREASE_METABOLIC_RATE_FOR_MILK: {
+      milkingCows: RealNumber;
+      others: RealNumber;
+    };
   };
-  MMS: Record<DairyMMSType, DairyMMSFactors>;
-  FracLEACH: RealNumber;
+  MMS: Record<DairyMMSTypeWithPasture, DairyMMSFactors>;
+  DEFAULT_SOLID_SEPARATION_RATE: RealNumber;
   LIVEWEIGHTS_BY_BREED: Record<DairyCattleBreed, BreedWeights>;
 };
 
@@ -458,7 +545,7 @@ type PoultryClassFactors = {
 type PoultryMMSFactors = {
   EFm: MassPerMass<'N2O', 'N'>;
   FracGASM: MassPerMass<'Volatilised N', 'N'>;
-  METHANE_CONVERSION_FACTOR_BY_STATE: Record<PureState, RealNumber>;
+  METHANE_CONVERSION_FACTOR_BY_STATE: Record<State, RealNumber>;
 };
 
 export type PoultryConstants = NamedConstants & {
@@ -467,21 +554,24 @@ export type PoultryConstants = NamedConstants & {
     PoultryMMS1Type,
     PoultryMMSFactors & { fractionSolidsLost: RealNumber }
   > &
-    Record<PoultryMMS2Type, PoultryMMSFactors> &
     Record<
-      Exclude<PoultryMMS1TypeWithPasture, PoultryMMS1Type>,
-      Pick<PoultryMMSFactors, 'EFm' | 'METHANE_CONVERSION_FACTOR_BY_STATE'>
-    > &
-    Record<
-      Exclude<PoultryMMS2TypeWithPasture, PoultryMMS2Type>,
-      Pick<PoultryMMSFactors, 'METHANE_CONVERSION_FACTOR_BY_STATE'>
+      PoultryMMS2Type | Exclude<PoultryMMS1TypeWithPasture, PoultryMMS1Type>,
+      PoultryMMSFactors
     >;
+
+  PURCHASED_LIVESTOCK_EF: MassPerMass<'CO2e', 'Liveweight'>;
+  LIVEWEIGHT: Record<PoultryWeightClass, Liveweight>;
 };
 
 type OtherLivestockFactors = {
   ENTERIC: MassPerHead<'CH4'>;
   VOLATILE_SOLIDS: MassPerHeadPerDay<'Volatile Solids'>;
   NITROGEN_EXCRETED: MassPerHeadPerDay<'N'>;
+};
+
+type OtherLivestockMMSFactors = {
+  METHANE_CONVERSION_FACTOR_BY_STATE: Record<State, RealNumber>;
+  ALLOCATION_TO_MMS_WITH_NATURAL_WATER: RealNumber;
 };
 
 export type LivestockConstants = NamedConstants & {
@@ -510,20 +600,18 @@ export type LivestockConstants = NamedConstants & {
     OtherLivestockFactors
   >;
 
-  OTHER_LIVESTOCK_METHANE_CONVERSION_BY_STATE: Record<PureState, RealNumber>;
+  OTHER_LIVESTOCK_MMS_FACTORS: {
+    pastureRangeAndPaddock: OtherLivestockMMSFactors;
+    anaerobicLagoon: OtherLivestockMMSFactors;
+  };
 
-  /**
-   * REVISIT: The current draft does not factor in region for these
-   * livestock types. We should check back here when the first complete
-   * version of the guidelines is published.
-   */
   OTHER_PURCHASED_LIVESTOCK_FACTORS: Record<
     OtherLivestockType,
     MassPerMass<'CO2e', 'Liveweight'>
   >;
   OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS: Record<
     OtherLivestockType,
-    MassPerHead<'Liveweight'>
+    Liveweight
   >;
 
   MANURE_MANAGEMENT_METHANE_CONVERSION_FACTORS: {
@@ -539,29 +627,33 @@ export type LivestockConstants = NamedConstants & {
     pastureRangeAndPaddock: Record<MeanAnnualTemperature, RealNumber>;
     anaerobicLagoon: Record<MeanAnnualTemperature, RealNumber>;
     pitStorage: Record<MeanAnnualTemperature, RealNumber>;
+    sumpDispersal: Record<MeanAnnualTemperature, RealNumber>;
+    drainToPaddock: Record<MeanAnnualTemperature, RealNumber>;
   };
-
-  METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE: Record<
-    MeanAnnualTemperature,
-    RealNumber
-  >;
-
-  OTHER_LIVESTOCK_METHANE_CONVERSION_PASTURE: RealNumber;
 
   EF_DEPOSITED_URINE_AND_DUNG_PRP: Record<
     'wet' | 'dry',
     MassPerMass<'N2O', 'N'>
   >;
 
-  EF_ATMOSPHERIC_DEPOSITION: Record<
-    GrazingProductionSystemsWithRainfall,
-    MassPerMass<'N2O', 'Volatilised N'>
-  >;
-
   EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4: Record<
-    'general' | 'sheep' | 'dairy',
+    'beef' | 'sheep' | 'dairy' | 'feedlot' | 'pigs' | 'other',
     VolumePerMass<'CH4', 'Volatile Solids'>
   >;
+
+  ASH_CONTENT_OF_MANURE: Record<
+    'sheep' | 'feedlot' | 'beef' | 'dairy',
+    RealNumber
+  >;
+
+  NITROGEN_TO_MILK_PROTEIN: MassPerMass<'Milk', 'N'>;
+
+  PURCHASED_EF: Record<
+    LivestockPurchaseCategory,
+    MassPerMass<'CO2e', 'Liveweight'>
+  >;
+
+  OTHER_LIVESTOCK_EF_PROPORTION: Record<OtherLivestockType, RealNumber>;
 };
 
 type SeasonalFactors<F extends AnyUnit = RealNumber> = Record<Season, F>;
@@ -571,27 +663,35 @@ type WeightFactorsByClass = Record<
   Record<
     Season,
     {
-      liveweight: Mass<'Liveweight'>;
-      liveweightGain: MassPerHeadPerDay<'Liveweight'>;
+      liveweight: Liveweight;
+      liveweightGain: LiveweightGain;
     }
   >
 >;
 
 export type BeefPastureConstants = NamedConstants & {
   DMD: Record<LimitedRegion, SeasonalFactors>;
-  CP: Record<LimitedRegion, SeasonalFactors>;
-  REFERENCE_WEIGHT: Record<PureState, Record<BeefClass, Mass<'Liveweight'>>>;
-  MCF_PASTURE: RealNumber;
-  MCF_LAGOON: Record<ClimateZone, RealNumber>;
-  LIVEWEIGHT: Record<ExtendedRegion, WeightFactorsByClass>;
-  MILK_INTAKE: Record<
+  CP: Record<
     LimitedRegion,
-    Record<'calving' | 'afterCalving', MassPerHeadPerDay<'Milk'>>
+    SeasonalFactors<MassPerMass<'CrudeProtein', 'DryMatter'>>
   >;
-
-  FRAC_WET_SOIL: Record<StateOrRegion, RealNumber>;
+  REFERENCE_WEIGHT: Record<State, Record<BeefClass, Liveweight>>;
+  MCF_PASTURE: RealNumber;
+  MCF_LAGOON: Record<StateOrRegion, RealNumber>;
+  LIVEWEIGHT: Record<ExtendedRegion, WeightFactorsByClass>;
 
   DRY_MATTER_TO_METHANE_CONVERSION_FACTOR: MassPerMass<'CH4', 'DryMatter'>;
+
+  MMS: Record<StateOrRegion, { PRP: RealNumber; Lagoon: RealNumber }>;
+
+  MILK_FACTORS: {
+    DAILY_MILK_PRODUCTION_BY_BREED: Record<
+      BeefBreed,
+      Record<'calving' | 'postCalving', MassPerHeadPerDay<'Milk'>>
+    >;
+    // These values don't vary by breed.
+    FEED_ADJUSTMENTS: Record<'calving' | 'postCalving', RealNumber>;
+  };
 };
 
 export type RiceConstants = NamedConstants & {
@@ -623,9 +723,6 @@ export type LULUCFConstants = NamedConstants & {
   ORGANIC_STOCK_LOSS_FACTORS: Record<IBRA7Region, MassPerArea<'Carbon'>>;
   CARBON_TO_NITROGEN_RATIO: MassPerMass<'Carbon', 'N'>;
 
-  EF_CROP: Record<'high' | 'low', MassPerMass<'N2O', 'N'>>;
-  EF_PASTURE: MassPerMass<'N2O', 'N'>;
-
   WOODY_PERENNIAL_CROPS_FULL: Record<
     PerennialWoodyCropFull,
     WoodyPerennialCropsFullConstants
@@ -639,37 +736,43 @@ export type LULUCFConstants = NamedConstants & {
 type SeasonalSheepFactors = {
   dryMatterAvailability: MassPerArea<'DryMatter'>;
   dryMatterDigestibility: RealNumber;
-  liveweight: Mass<'Liveweight'>;
-  liveweightGain: MassPerHeadPerDay<'Liveweight'>;
+  liveweight: Liveweight;
+  liveweightGain: LiveweightGain;
 
   crudeProteinContent: MassPerMass<'CrudeProtein', 'DryMatter'>;
 };
 
+export type SheepSeasonFactorsRecord = Record<
+  SheepClass,
+  {
+    standardReferenceWeight: Liveweight;
+  } & Record<Season, SeasonalSheepFactors>
+>;
+
 export type SheepConstants = NamedConstants & {
-  SEASONAL_FACTORS: Record<
-    LimitedState,
-    Record<
-      SheepClass,
-      {
-        standardReferenceWeight: Mass<'Liveweight'>;
-      } & Record<Season, SeasonalSheepFactors>
-    >
-  >;
+  SEASONAL_FACTORS: Record<State, SheepSeasonFactorsRecord>;
+
+  MILK_PRODUCTION: MassPerHeadPerDay<'Milk'>;
+  MILK_PROTEIN: MassPerMass<'CrudeProtein', 'Milk'>;
+  WOOL_PROTEIN: MassPerMass<'CrudeProtein', 'Clean Wool'>;
+  LIVEWEIGHT_PROTEIN: MassPerMass<'CrudeProtein', 'Liveweight'>;
 
   FEED_ADJUSTMENT: RealNumber;
 
-  ASH_CONTENT_OF_MANURE: RealNumber;
-
-  MMS: Record<PureStateWithoutNT, Record<'PRP' | 'Lagoon', RealNumber>>;
+  MMS: Record<State, Record<'PRP' | 'Lagoon', RealNumber>>;
 
   MCF_PRP: RealNumber;
-  MCF_LAGOON: Record<PureStateWithoutNT, RealNumber>;
+  MCF_LAGOON: Record<State, RealNumber>;
+};
+
+export type AquacultureConstants = NamedConstants & {
+  AQUACULTURE_EF: Record<AquacultureSystemLocation, MassPerMass<'N2O', 'Fish'>>;
 };
 
 export type AllConstants = {
   COMMON: CommonConstants;
   CROP: CropConstants;
-  SWINE: SwineConstants;
+  PIGS: PigsConstants;
   FEEDLOT: FeedlotConstants;
   DAIRY: DairyConstants;
   POULTRY: PoultryConstants;
@@ -677,9 +780,10 @@ export type AllConstants = {
   BEEF_PASTURE: BeefPastureConstants;
   SHEEP: SheepConstants;
   RICE: RiceConstants;
+  AQUACULTURE: AquacultureConstants;
   LULUCF: LULUCFConstants;
 };
 
-export type HasCommonConstants = {
-  COMMON: CommonConstants;
-};
+export type HasConstants<C extends keyof AllConstants> = Pick<AllConstants, C>;
+
+export type HasCommonConstants = HasConstants<'COMMON'>;

@@ -1,10 +1,12 @@
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/executionContext';
+import { FuelEmissionsGasType } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
-import { BinaryContainer } from '@/tools/containers';
+import { BinaryContainer, Container } from '@/tools/containers';
+import { massCO2eToMassGHGGas } from '@/tools/gwp';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
-import { FuelInputTransformed } from './fuel.input';
+import { ConstantsForFuel } from './constants';
+import { FuelInputTransformed, HasFuelInputTransformed } from './fuel.input';
 import {
   isStationaryLiquidFuelMassBased,
   StationaryFuelLiquidInputTransformed,
@@ -17,11 +19,11 @@ import {
   StationaryFuelInputTransformed,
 } from './stationaryFuel.input';
 
-const emissionsOfGasForSolidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+const emissionsOfGasForSolidFuel = (
   fuel: StationaryFuelSolidInputTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
-): BinaryContainer<Mass<GasType>> => {
+  constants: ConstantsForFuel,
+  gasType: FuelEmissionsGasType,
+): BinaryContainer<Mass<'CO2e'>> => {
   const qSCq = fuel.amountTonnes;
   const efSC1qg = selectConstant(
     constants.COMMON,
@@ -42,11 +44,11 @@ const emissionsOfGasForSolidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   return efSC1qg.multiply(energyFromFuel);
 };
 
-const emissionsOfGasForLiquidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+const emissionsOfGasForLiquidFuel = (
   fuel: StationaryFuelLiquidInputTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
-): BinaryContainer<Mass<GasType>> => {
+  constants: ConstantsForFuel,
+  gasType: FuelEmissionsGasType,
+): BinaryContainer<Mass<'CO2e'>> => {
   if (isStationaryLiquidFuelMassBased(fuel)) {
     const qSCq = fuel.amountTonnes;
     const efSC1qg = selectConstant(
@@ -68,7 +70,7 @@ const emissionsOfGasForLiquidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     return efSC1qg.multiply(energyFromFuel);
   }
 
-  const qSCq = fuel.amountLitres;
+  const qSCq = fuel.amountKilolitres;
   const efSC1qg = selectConstant(
     constants.COMMON,
     'STATIONARY_FUEL_FACTORS_BY_VOLUME',
@@ -88,12 +90,12 @@ const emissionsOfGasForLiquidFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   return efSC1qg.multiply(energyFromFuel);
 };
 
-const emissionsOfGasForNaturalGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+const emissionsOfGasForNaturalGas = (
   fuel: StationaryFuelNaturalGasInputTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
-): BinaryContainer<Mass<GasType>> => {
-  const qSCq = fuel.amountLitres;
+  constants: ConstantsForFuel,
+  gasType: FuelEmissionsGasType,
+): BinaryContainer<Mass<'CO2e'>> => {
+  const qSCq = fuel.amountKilolitres;
   const efSC1qg = selectConstant(
     constants.COMMON,
     'NATURAL_GAS_FACTORS',
@@ -109,11 +111,11 @@ const emissionsOfGasForNaturalGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   return efSC1qg.multiply(energyFromFuel);
 };
 
-const emissionsOfGasForFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+const emissionsOfGasForFuel = <G extends FuelEmissionsGasType>(
   fuel: StationaryFuelInputTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
-): BinaryContainer<Mass<GasType>> => {
+  constants: ConstantsForFuel,
+  gasType: G,
+): Container<Mass<G>> => {
   /*
   8.2.1.1 Method 1 - Fuel use stationary combustion
   (1) Emissions for each GHG from the stationary combustion of fuels, Eg (t CO2e), is
@@ -125,57 +127,66 @@ const emissionsOfGasForFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
   EF SC,1,qg = Scope 1 emission factor for stationary combustion for each greenhouse gas g (kg CO2e /GJ)
   */
 
-  if (isStationaryFuelSolid(fuel)) {
-    return emissionsOfGasForSolidFuel(fuel, constants, gasType);
-  } else if (isStationaryFuelLiquid(fuel)) {
-    return emissionsOfGasForLiquidFuel(fuel, constants, gasType);
-  }
-  return emissionsOfGasForNaturalGas(fuel, constants, gasType);
+  const emissionsCO2e = isStationaryFuelSolid(fuel)
+    ? emissionsOfGasForSolidFuel(fuel, constants, gasType)
+    : isStationaryFuelLiquid(fuel)
+      ? emissionsOfGasForLiquidFuel(fuel, constants, gasType)
+      : emissionsOfGasForNaturalGas(fuel, constants, gasType);
+
+  return massCO2eToMassGHGGas(emissionsCO2e, gasType);
 };
 
-const stationaryEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
-  input: FuelInputTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
+const stationaryEmissionsForGas = <G extends FuelEmissionsGasType>(
+  fuel: FuelInputTransformed,
+  constants: ConstantsForFuel,
+  gasType: G,
 ) => {
-  const stationaryEmissions = input.stationaryFuel.map((fuel) => {
+  const stationaryEmissions = fuel.stationary.map((fuel) => {
     return emissionsOfGasForFuel(fuel, constants, gasType);
   });
   return sum(stationaryEmissions, {
     name: `EtransGHG${gasType}`,
-    references: [`6.1.1 (55)`],
+    references: [`8.2.1.1 (1)`],
   });
 };
 
 export const stationaryEmissionsForCO2 = (
-  input: FuelInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  input: HasFuelInputTransformed,
+  context: ExecutionContext,
 ) => {
   const { constants } = context;
-  return stationaryEmissionsForGas(input, constants, 'CO2');
+  return stationaryEmissionsForGas(input.fuel, constants, 'CO2');
 };
 
 export const stationaryEmissionsForCH4 = (
-  input: FuelInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  input: HasFuelInputTransformed,
+  context: ExecutionContext,
 ) => {
   const { constants } = context;
-  return stationaryEmissionsForGas(input, constants, 'CH4');
+  return stationaryEmissionsForGas(input.fuel, constants, 'CH4');
 };
 
 export const stationaryEmissionsForN2O = (
-  input: FuelInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  input: HasFuelInputTransformed,
+  context: ExecutionContext,
 ) => {
   const { constants } = context;
-  return stationaryEmissionsForGas(input, constants, 'N2O');
+  return stationaryEmissionsForGas(input.fuel, constants, 'N2O');
+};
+
+export const stationaryEmissionsForCombined = (
+  input: HasFuelInputTransformed,
+  context: ExecutionContext,
+) => {
+  const { constants } = context;
+  return stationaryEmissionsForGas(input.fuel, constants, 'CO2e');
 };
 
 // 8.2 Stationary combustion fuel
 //   fuelCO2, fuelCH4, fuelN2O
 export const calculate82StationaryFuel = (
-  input: FuelInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  input: HasFuelInputTransformed,
+  context: ExecutionContext,
 ) => {
   const fuelStationaryCO2 = stationaryEmissionsForCO2(input, context);
   const fuelStationaryCH4 = stationaryEmissionsForCH4(input, context);

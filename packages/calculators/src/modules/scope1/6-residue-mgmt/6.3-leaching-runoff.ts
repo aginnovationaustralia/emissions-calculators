@@ -1,16 +1,21 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
-import { isPastureType } from '@/constants/enums';
+import { HasIsInLeachingZoneInputTransformed } from '@/calculators/types/has-is-in-leaching.input';
+import { HasStateInputTransformed } from '@/calculators/types/has-state.input';
+import { isInLeachingZoneToFracWET } from '@/constants/translations';
 import { selectConstant } from '@/tools/constants';
-import { one, zero } from '@/tools/sentinels';
 import { calculateMassNCropAppliedToSoil } from './6.1-residues-crops';
 import { calculateMassNPastureAppliedToSoil } from './6.2-residues-pasture';
-import { CropResidueInputTransformed } from './crop-residue.input';
+import { ConstantsForResidueManagement } from './constants';
+import {
+  HasCropOrPastureResidueInputTransformed,
+  isPastureResidueInput,
+} from './crop-residue.input';
 
 export const calculate63ResidueLeachingAndRunoffN2O = (
-  crop: CropResidueInputTransformed & BaseGrainsCropTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  activity: HasCropOrPastureResidueInputTransformed &
+    HasStateInputTransformed &
+    HasIsInLeachingZoneInputTransformed,
+  context: ExecutionContext<ConstantsForResidueManagement>,
 ) => {
   const { constants } = context;
   /*
@@ -28,25 +33,28 @@ export const calculate63ResidueLeachingAndRunoffN2O = (
     FracWET j = fraction of N that is available for leaching and runoff from production system j (dimensionless)
     FracLEACH = fraction of N that is lost through leaching and runoff (dimensionless)
   */
-  const mcp = isPastureType(crop.type)
-    ? calculateMassNPastureAppliedToSoil(crop, crop.type, context)
-    : calculateMassNCropAppliedToSoil(crop, crop.type, context);
+  const mcp = isPastureResidueInput(activity)
+    ? calculateMassNPastureAppliedToSoil(activity.pasture, constants)
+    : calculateMassNCropAppliedToSoil(activity, constants);
 
-  const fracWetj = crop.isInLeachingZone ? one : zero;
+  const fracWetj = isInLeachingZoneToFracWET(activity.isInLeachingZone);
 
   const fracLeach = selectConstant(
     constants.CROP,
     'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF',
   );
 
-  const mleachCp = mcp.multiply(fracWetj).multiply(fracLeach);
+  const mleachCp = mcp
+    .multiply(fracWetj)
+    .multiply(fracLeach)
+    .reference('6.3.1.1 (2)');
 
   const efLeach = selectConstant(constants.CROP, 'EF_N2O_LEACHING_AND_RUNOFF');
 
-  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
+  const cn2o = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_N2O');
 
   return mleachCp.multiply(efLeach).multiply(cn2o, {
     name: 'En2o',
-    references: [`6.3.1.1 (554)`],
+    references: [`6.3.1.1 (1)`],
   });
 };

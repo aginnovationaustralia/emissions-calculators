@@ -89,6 +89,7 @@ export const traverseTree = (
         `Error in recurseExpectations for key ${k1} at path '${path.join(
           ' -> ',
         )}': ${error}`,
+        { cause: error },
       );
     }
 

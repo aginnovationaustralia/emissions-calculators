@@ -1,16 +1,17 @@
-import { input } from '@/tools/inputs';
+import { numberInput } from '@/tools/inputs';
+import { PURCH_FEED_15_2 } from '@/tools/modules';
+import { tonnesToKg } from '@/tools/unit-conversion';
 import { mass } from '@/tools/units';
 import { object } from '@/types/schemas';
-import { z } from 'zod';
 
 export const BasePurchasedFeedInputSchema = object({
-  amount: z
-    .number()
-    .min(0)
-    .transform((val) =>
-      input('feed quantity', mass('Purchased Feed', val * 1000)),
-    )
-    .meta({
-      description: 'Quantity of this type of feed purchased, in tonnes.',
-    }),
+  amount: numberInput(
+    (val) => mass('Purchased Feed', tonnesToKg(val)),
+    {
+      name: 'feed quantity',
+      description: 'Quantity of this type of feed purchased.',
+      modules: [PURCH_FEED_15_2],
+    },
+    (s) => s.min(0),
+  ),
 });

@@ -39,9 +39,8 @@ You can find more details on using the NPM package in its [README](./packages/ca
 import { calculateEmissions } from '@aginnovationaustralia/emissions-calculators';
 
 export const beefInputData: BeefInput = {
-  state: 'nsw' as const,
+  state: 'NSW' as const,
   northOfTropicOfCapricorn: true,
-  rainfallAbove600: true,
   beef: [
     {
       classes: {
@@ -72,6 +71,10 @@ if (result.status === 'OK') {
 ```
 
 The repo also includes [examples](./examples) to help you get started consuming the package.
+
+## Research use
+
+The [`@aginnovationaustralia/emissions-calculator-research`](./packages/emissions-calculator-research/README.md) package runs the same calculators with custom values for any of the constants, for research and sensitivity analysis. Results produced with overridden constants are not aligned with any VEERG guidance.
 
 # Data and metrics collection
 
@@ -120,6 +123,8 @@ New versions of the package are published to the NPM registry via a [Github acti
 - Tag the latest commit with the new version ie `v1.5.17`
 - Push the new tag with `git push --tags`
 - The automated publish will trigger when the new tag is detected
+
+The [research package](./packages/emissions-calculator-research/package.json) is versioned independently, and its tags include the package name, ie `emissions-calculator-research-v0.1.0`. It depends on the exact version of the calculators package it was published with, so release it after each calculators release.
 
 # License
 

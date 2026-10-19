@@ -1,71 +1,155 @@
-import { input } from '@/tools/inputs';
-import { realNumber } from '@/tools/units';
-import { object, proportion } from '@/types/schemas';
+import {
+  ActivityInput,
+  ActivityInputTransformed,
+} from '@/calculators/types/activity.input';
+import { LivestockActivityInputSchema } from '@/calculators/types/livestock-activity.input';
+import { State, StateOrRegion } from '@/constants/enums';
+import { stateOrRegionToState } from '@/constants/translations';
+import {
+  HasFertiliserInput,
+  HasFertiliserInputSchema,
+  HasFertiliserInputTransformed,
+} from '@/modules/scope1/5-fertiliser/fertiliser.input';
+import {
+  HasLimeInput,
+  HasLimeInputSchema,
+  HasLimeInputTransformed,
+} from '@/modules/scope1/5-fertiliser/lime.input';
+import {
+  HasPastureResidueInput,
+  HasPastureResidueInputSchema,
+  HasPastureResidueInputTransformed,
+} from '@/modules/scope1/6-residue-mgmt/crop-residue.input';
+import {
+  HasFuelInput,
+  hasFuelInputSchema,
+  HasFuelInputTransformed,
+} from '@/modules/scope1/8-fuel-use';
+import {
+  BeefManureAndEntericHerdInput,
+  BeefManureAndEntericHerdInputTransformed,
+  BeefManureAndEntericSharedFieldsSchema,
+} from '@/modules/scope1/shared/beef/input';
+import {
+  HasSolidWasteInput,
+  HasSolidWasteInputSchema,
+  HasSolidWasteInputTransformed,
+} from '@/modules/scope1/shared/solid-waste/input';
+import {
+  HasBeefPurchasedLivestockInput,
+  HasBeefPurchasedLivestockInputSchema,
+  HasBeefPurchasedLivestockInputTransformed,
+} from '@/modules/scope3/15.1-purchased-livestock/input';
+import {
+  HasPurchasedFeedInput,
+  HasPurchasedFeedInputSchema,
+  HasPurchasedFeedInputTransformed,
+} from '@/modules/scope3/15.2-purchased-feed/has-purchased-feed.input';
+import {
+  PurchasedMineralSupplementsInput,
+  PurchasedMineralSupplementsInputSchema,
+  PurchasedMineralSupplementsInputTransformed,
+} from '@/modules/scope3/15.3-purchased-mineral-supplements/purchased-mineral-supplements.input';
+import {
+  AgrichemicalsInput,
+  AgrichemicalsInputSchema,
+  AgrichemicalsInputTransformed,
+} from '@/modules/scope3/15.5-agrichemicals/agrichemicals.input';
+import {
+  ServicesInput,
+  ServicesInputSchema,
+  ServicesInputTransformed,
+} from '@/modules/scope3/15.7-services/services.input';
+import {
+  OtherPurchasedGoodsAndServicesInput,
+  OtherPurchasedGoodsAndServicesInputTransformed,
+  OtherPurchasedGoodsAndServicesSchema,
+} from '@/modules/scope3/15.9-other-purchases';
+import { TranslationContainer } from '@/tools/containers';
+import { InputContainer, numberInput, NumberInputValue } from '@/tools/inputs';
+import { INTENSITIES } from '@/tools/modules';
+import { Mass, mass } from '@/tools/units';
 import { z } from 'zod';
-import { BeefClassesInputSchema } from './beef-classes.input';
 
-export const BeefHerdInputSchema = object({
-  classes: BeefClassesInputSchema,
-  method2NoUnfencedNaturalWater: z
-    .boolean()
-    .meta({
+export type BeefHerdInputWithoutState = ActivityInput &
+  BeefManureAndEntericHerdInput &
+  HasFuelInput &
+  HasLimeInput &
+  HasPastureResidueInput &
+  HasBeefPurchasedLivestockInput &
+  HasPurchasedFeedInput &
+  PurchasedMineralSupplementsInput &
+  AgrichemicalsInput &
+  ServicesInput &
+  OtherPurchasedGoodsAndServicesInput &
+  HasFertiliserInput &
+  HasSolidWasteInput & {
+    liveweightSoldKg: NumberInputValue;
+  };
+export type BeefHerdInputTransformedWithoutState = ActivityInputTransformed &
+  BeefManureAndEntericHerdInputTransformed &
+  HasFuelInputTransformed &
+  HasLimeInputTransformed &
+  HasPastureResidueInputTransformed &
+  HasBeefPurchasedLivestockInputTransformed &
+  HasPurchasedFeedInputTransformed &
+  PurchasedMineralSupplementsInputTransformed &
+  AgrichemicalsInputTransformed &
+  ServicesInputTransformed &
+  OtherPurchasedGoodsAndServicesInputTransformed &
+  HasFertiliserInputTransformed &
+  HasSolidWasteInputTransformed & {
+    liveweightSoldKg: InputContainer<Mass<'Liveweight'>>;
+  };
+
+export const BeefHerdInputSchemaWithoutState: z.ZodType<
+  BeefHerdInputTransformedWithoutState,
+  BeefHerdInputWithoutState
+> = LivestockActivityInputSchema.safeExtend({
+  ...BeefManureAndEntericSharedFieldsSchema.shape,
+  /**
+   * Common requirements framework 10.3:
+   *
+   * "In meat production systems that do not have significant by-products, including
+   * grass-fed beef, feedlot beef, self-fleecing sheep and goats, all emissions in the
+   * reporting period should be attributed to liveweight sold during the reporting
+   * period."
+   */
+  liveweightSoldKg: numberInput(
+    (val) => mass('Liveweight', val),
+    {
+      name: 'liveweightSoldKg',
       description:
-        'Method 2: Whether animals have access to unfenced natural water. If animals are on bore or reticulated water systems where water is provided in troughs (i.e. no unfenced natural water sources) then set to false',
-    })
-    .optional(),
-  method2Dmd: object({
-    spring: proportion()
-      .meta({
-        description:
-          'Method 2: Specific dry matter digestibility in spring, based on farm records',
-      })
-      .transform((val) => input('DMDijk=spring', realNumber(val))),
-    summer: proportion()
-      .meta({
-        description:
-          'Method 2: Specific dry matter digestibility in summer, based on farm records',
-      })
-      .transform((val) => input('DMDijk=summer', realNumber(val))),
-    autumn: proportion()
-      .meta({
-        description:
-          'Method 2: Specific dry matter digestibility in autumn, based on farm records',
-      })
-      .transform((val) => input('DMDijk=autumn', realNumber(val))),
-    winter: proportion()
-      .meta({
-        description:
-          'Method 2: Specific dry matter digestibility in winter, based on farm records',
-      })
-      .transform((val) => input('DMDijk=winter', realNumber(val))),
-  }).optional(),
-  method2CrudeProteinContent: object({
-    spring: proportion()
-      .meta({
-        description:
-          'Method 2: Specific crude protein content in spring, based on farm records',
-      })
-      .transform((val) => input('CPijk=spring', realNumber(val))),
-    summer: proportion()
-      .meta({
-        description:
-          'Method 2: Specific crude protein content in summer, based on farm records',
-      })
-      .transform((val) => input('CPijk=summer', realNumber(val))),
-    autumn: proportion()
-      .meta({
-        description:
-          'Method 2: Specific crude protein content in autumn, based on farm records',
-      })
-      .transform((val) => input('CPijk=autumn', realNumber(val))),
-    winter: proportion()
-      .meta({
-        description:
-          'Method 2: Specific dry matter digestibility in winter, based on farm records',
-      })
-      .transform((val) => input('CPijk=winter', realNumber(val))),
-  }).optional(),
+        'The liveweight of the animals sold during the reporting period',
+      modules: [INTENSITIES],
+    },
+    (s) => s.min(0),
+  ),
+  ...hasFuelInputSchema('fuel').shape,
+  ...HasLimeInputSchema.shape,
+  ...HasPastureResidueInputSchema.shape,
+  ...HasBeefPurchasedLivestockInputSchema.shape,
+  ...HasPurchasedFeedInputSchema.shape,
+  ...PurchasedMineralSupplementsInputSchema.shape,
+  ...AgrichemicalsInputSchema.shape,
+  ...ServicesInputSchema.shape,
+  ...OtherPurchasedGoodsAndServicesSchema.shape,
+  ...HasSolidWasteInputSchema.shape,
+  ...HasFertiliserInputSchema.shape,
 });
 
-export type BeefHerdInput = z.input<typeof BeefHerdInputSchema>;
-export type BeefHerdInputTransformed = z.output<typeof BeefHerdInputSchema>;
+export type BeefHerdInput = BeefHerdInputWithoutState;
+export type BeefHerdInputTransformed = BeefHerdInputTransformedWithoutState & {
+  state: TranslationContainer<StateOrRegion, State>;
+};
+
+export const BeefHerdInputSchema: z.ZodType<
+  BeefHerdInputTransformed,
+  BeefHerdInput
+> = BeefHerdInputSchemaWithoutState.transform(
+  (val): BeefHerdInputTransformed => ({
+    ...val,
+    // state can easily be inferred from region, no need for the user to supply it
+    state: stateOrRegionToState(val.region),
+  }),
+);

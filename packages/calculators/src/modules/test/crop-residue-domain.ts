@@ -1,11 +1,11 @@
 import {
   CropType,
   CropTypes,
+  ElectricityRegions,
   PastureType,
   PastureTypes,
-  State,
-  States,
 } from '@/constants/enums';
+import { createValueCheck } from './domain';
 
 export const checkCropType = (type: string | undefined): CropType => {
   if (!CropTypes.includes(type as CropType)) {
@@ -21,11 +21,4 @@ export const checkPastureType = (type: string | undefined): PastureType => {
   return type as PastureType;
 };
 
-export const checkState = (state: string | undefined): State => {
-  const lowerState = state?.toLowerCase();
-  const mappedState = lowerState === 'wa' ? 'wa_nw' : lowerState;
-  if (!States.includes(mappedState as State)) {
-    throw new Error(`Invalid state: ${state}`);
-  }
-  return mappedState as State;
-};
+export const checkRegion = createValueCheck(ElectricityRegions, 'region');

@@ -1,25 +1,24 @@
-import { outputKey, outputValue } from '@/tools/zod';
+import { Scope3TotalsSchema } from '@/calculators/types/scope3.output';
+import { outputKey } from '@/tools/zod';
+import { OUTPUTDESCRIPTIONS } from '@/types/descriptions.schema';
 import { z } from 'zod';
-import { OUTPUTDESCRIPTIONS } from '../../Grains/types/descriptions.schema';
 
-export const BeefScope3OutputSchema = z
-  .object({
-    livestock: outputKey(OUTPUTDESCRIPTIONS.purchasedLivestock),
-    feed: outputKey(OUTPUTDESCRIPTIONS.purchasedFeed),
-    mineralSupplements: outputKey(
-      OUTPUTDESCRIPTIONS.purchasedMineralSupplements,
-    ),
-    fertiliser: outputKey(OUTPUTDESCRIPTIONS.purchasedFertiliser),
-    agrichemicals: outputKey(OUTPUTDESCRIPTIONS.purchasedAgrichemicals),
-    lime: outputKey(OUTPUTDESCRIPTIONS.purchasedLime),
-    services: outputKey(OUTPUTDESCRIPTIONS.purchasedServices),
-    offsiteManure: outputKey(OUTPUTDESCRIPTIONS.offsiteManure),
-    solidWaste: outputKey(OUTPUTDESCRIPTIONS.solidWaste),
-    fuel: outputKey(OUTPUTDESCRIPTIONS.upstreamFuel),
-    electricity: outputKey(OUTPUTDESCRIPTIONS.upstreamElectricity),
-    waste: outputKey(OUTPUTDESCRIPTIONS.managementOfWaste),
-    total: outputValue(OUTPUTDESCRIPTIONS.scope3Total),
-  })
-  .meta({ description: OUTPUTDESCRIPTIONS.scope3 });
+export const BeefScope3OutputSchema = Scope3TotalsSchema.safeExtend({
+  purchasedLivestock: outputKey(OUTPUTDESCRIPTIONS.purchasedLivestock),
+  purchasedFeed: outputKey(OUTPUTDESCRIPTIONS.purchasedFeed),
+  purchasedMineralSupplements: outputKey(
+    OUTPUTDESCRIPTIONS.purchasedMineralSupplements,
+  ),
+  fertiliser: outputKey(OUTPUTDESCRIPTIONS.purchasedFertiliser),
+  agrichemicals: outputKey(OUTPUTDESCRIPTIONS.purchasedAgrichemicals),
+  soilAmeliorants: outputKey(OUTPUTDESCRIPTIONS.purchasedSoilAmeliorants),
+  services: outputKey(OUTPUTDESCRIPTIONS.purchasedServices),
+  solidWaste: outputKey(OUTPUTDESCRIPTIONS.solidWaste),
+  fuel: outputKey(OUTPUTDESCRIPTIONS.upstreamFuel),
+  electricity: outputKey(OUTPUTDESCRIPTIONS.upstreamElectricity),
+  otherPurchasedGoodsAndServices: outputKey(
+    OUTPUTDESCRIPTIONS.otherPurchasedGoodsAndServices,
+  ),
+}).meta({ description: OUTPUTDESCRIPTIONS.scope3 });
 
 export type BeefScope3Output = z.infer<typeof BeefScope3OutputSchema>;

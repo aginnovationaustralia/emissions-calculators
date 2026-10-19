@@ -1,18 +1,25 @@
 import {
-  BaseGrainsCrop,
-  BaseGrainsCropSchema,
-  BaseGrainsCropTransformed,
-} from '@/calculators/Grains/types/base-crop.input';
+  HasIsInLeachingZoneInput,
+  hasIsInLeachingZoneInputSchema,
+  HasIsInLeachingZoneInputTransformed,
+} from '@/calculators/types/has-is-in-leaching.input';
+import {
+  HasStateInput,
+  hasStateInputSchema,
+  HasStateInputTransformed,
+} from '@/calculators/types/has-state.input';
 import { getSheet } from '@/test/common/sheets';
+import { nv } from '@/tools/inputs';
+import { RESIDUE_LEACH_6_3 } from '@/tools/modules';
 import XLSX from 'xlsx-populate';
 import {
   calculate63ResidueLeachingAndRunoffN2O,
-  CropResidueInput,
-  CropResidueInputSchema,
-  CropResidueInputTransformed,
+  HasCropOrPastureResidueInputTransformed,
+  HasCropResidueInput,
+  HasCropResidueInputSchema,
 } from '../scope1/6-residue-mgmt';
-import { checkCropType, checkState } from './crop-residue-domain';
-import { checkClimate } from './fertiliser-domain';
+import { checkCropType } from './crop-residue-domain';
+import { checkState } from './livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
@@ -21,7 +28,11 @@ import {
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-): (CropResidueInputTransformed & BaseGrainsCropTransformed) | undefined => {
+):
+  | (HasCropOrPastureResidueInputTransformed &
+      HasStateInputTransformed &
+      HasIsInLeachingZoneInputTransformed)
+  | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
@@ -30,45 +41,43 @@ const getCalculatorInput = (
   }
 
   const isInLeachingZone = cell('A') === 'yes';
-  const climate = checkClimate(cell('B'));
   const type = checkCropType(cell('C'));
   const state = checkState(cell('D'));
-  const areaSown = Number(cell('E'));
-  const averageYield = Number(cell('F'));
-  const fractionOfAnnualCropBurnt = Number(cell('G'));
+  const fractionOfAnnualCropBurnt = Number(cell('E'));
+  const totalYieldKg = nv(Number(cell('G')));
 
-  const baseCrop: BaseGrainsCrop = {
-    state,
-    areaSown,
-    isInLeachingZone,
-    electricityAllocation: 0,
+  const residues = {
+    calculationMethod: '1',
+  } as const;
+
+  const cropResidueInput: HasCropResidueInput = {
+    crop: {
+      type,
+      totalYieldKg,
+      fractionOfAnnualCropBurnt: nv(fractionOfAnnualCropBurnt),
+      residues,
+    },
   };
 
-  const cropResidues = {
-    calculationMethod: '1',
-  } as const;
+  const hasStateInput: HasStateInput = {
+    state,
+  };
 
-  const pastureResidues = {
-    calculationMethod: '1',
-  } as const;
-
-  const cropResidueInput: CropResidueInput = {
-    rainfallAbove600: climate === 'wet',
-    type,
-    averageYield,
-    fractionOfAnnualCropBurnt,
-    cropResidues,
-    pastureResidues,
+  const hasIsInLeachingZoneInput: HasIsInLeachingZoneInput = {
+    isInLeachingZone,
   };
 
   return {
-    ...BaseGrainsCropSchema.parse(baseCrop),
-    ...CropResidueInputSchema.parse(cropResidueInput),
+    ...hasStateInputSchema([RESIDUE_LEACH_6_3]).parse(hasStateInput),
+    ...hasIsInLeachingZoneInputSchema(RESIDUE_LEACH_6_3).parse(
+      hasIsInLeachingZoneInput,
+    ),
+    ...HasCropResidueInputSchema.parse(cropResidueInput),
   };
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`V${row}`).value());
+  return Number(sheet.cell(`T${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
@@ -88,6 +97,7 @@ describe('6.3.1.1 Leaching and runoff from crop residues N2O', () => {
     compareInputsAndOutputs(
       inputsAndOutputs,
       calculate63ResidueLeachingAndRunoffN2O,
+      '6.3',
     );
   });
 });

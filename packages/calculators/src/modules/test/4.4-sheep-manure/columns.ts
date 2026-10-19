@@ -1,6 +1,5 @@
 export const columnState = 'B';
-export const columnRainfallAbove600 = 'ZZ';
-export const columnNoUnfencedNaturalWater = 'D';
+export const columnExcludedFromNaturalWater = 'D';
 export const columnMonth = 'G';
 export const columnHead = 'H';
 export const columnLambingRateLR = 'I';

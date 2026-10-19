@@ -1,14 +1,15 @@
 import {
-  BaseGrainsCrop,
-  BaseGrainsCropSchema,
-  BaseGrainsCropTransformed,
-} from '@/calculators/Grains/types/base-crop.input';
+  HasClimateZoneInput,
+  HasClimateZoneInputSchemaForCrops,
+  HasClimateZoneInputTransformed,
+} from '@/calculators/types/has-climate-zone.input';
 import { getSheet } from '@/test/common/sheets';
+import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import {
-  CropResidueInput,
-  CropResidueInputSchema,
-  CropResidueInputTransformed,
+  HasCropOrPastureResidueInputTransformed,
+  HasPastureResidueInput,
+  HasPastureResidueInputSchema,
 } from '../scope1/6-residue-mgmt';
 import { calculate62PastureResidueN2O } from '../scope1/6-residue-mgmt/6.2-residues-pasture';
 import { checkPastureType } from './crop-residue-domain';
@@ -22,7 +23,9 @@ const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
   calculationMethod: '1' | '2',
-): (CropResidueInputTransformed & BaseGrainsCropTransformed) | undefined => {
+):
+  | (HasCropOrPastureResidueInputTransformed & HasClimateZoneInputTransformed)
+  | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
@@ -30,49 +33,35 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const climate = checkClimate(cell('A'));
+  const climateZone = checkClimate(cell('A'));
   const type = checkPastureType(cell('B'));
-  const areaSown = Number(cell('C'));
   const averageYield = Number(cell('D'));
+  const areaManaged = Number(cell('C'));
 
-  const baseCrop: BaseGrainsCrop = {
-    state: 'wa_nw',
-    areaSown,
-    isInLeachingZone: true,
-    electricityAllocation: 0,
+  const pastureResidueInput: HasPastureResidueInput = {
+    pasture: {
+      type,
+      areaManaged: nv(areaManaged),
+      fractionOfAnnualCropBurnt: nv(0),
+      residues:
+        calculationMethod === '2'
+          ? {
+              calculationMethod,
+              averageYieldPerHectare: nv(averageYield),
+            }
+          : {
+              calculationMethod,
+            },
+    },
   };
 
-  const cropResidues =
-    calculationMethod === '2'
-      ? {
-          calculationMethod,
-          fractionCropResidueRemoved: 0,
-        }
-      : {
-          calculationMethod,
-        };
-  const pastureResidues =
-    calculationMethod === '2'
-      ? {
-          calculationMethod,
-          averageYieldPerHectare: averageYield,
-        }
-      : {
-          calculationMethod,
-        };
-
-  const cropResidueInput: CropResidueInput = {
-    rainfallAbove600: climate === 'wet',
-    type,
-    averageYield,
-    fractionOfAnnualCropBurnt: 0,
-    cropResidues,
-    pastureResidues,
+  const hasClimateZoneInput: HasClimateZoneInput = {
+    climateZone,
   };
 
   return {
-    ...BaseGrainsCropSchema.parse(baseCrop),
-    ...CropResidueInputSchema.parse(cropResidueInput),
+    ...HasClimateZoneInputSchemaForCrops.parse(hasClimateZoneInput),
+    ...HasPastureResidueInputSchema.parse(pastureResidueInput),
   };
 };
 
@@ -94,7 +83,11 @@ describe('6.2.1.1 Pasture residue N2O', () => {
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 5, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculate62PastureResidueN2O);
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculate62PastureResidueN2O,
+      '6.2',
+    );
   });
 
   it('method 2 matches spreadsheet results', async () => {
@@ -105,6 +98,10 @@ describe('6.2.1.1 Pasture residue N2O', () => {
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 17, '2');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculate62PastureResidueN2O);
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculate62PastureResidueN2O,
+      '6.2',
+    );
   });
 });

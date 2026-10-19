@@ -1,5 +1,4 @@
 import { entriesFromObject } from '@/calculators/common/tools/object';
-import { States } from '@/constants/types';
 import XLSX, { Cell } from 'xlsx-populate';
 
 export const getWorkbook = async (filePath: string) => {
@@ -70,44 +69,6 @@ export const emptyOrNumber = (input: Cell): number | null => {
     return null;
   }
   return numberInput(input);
-};
-
-export const mapInputRegion = mapInput<States>({
-  wa_sw: 'SW WA',
-  wa_nw: 'NW WA',
-  vic: 'Vic',
-  qld: 'Qld',
-  sa: 'SA',
-  tas: 'Tas',
-  nt: 'NT',
-  act: 'ACT',
-  nsw: 'NSW',
-});
-
-export const mapInputRegionFromNumber = (input: Cell): States => {
-  const numberValue = numberInput(input);
-
-  const lookup: Record<States, number> = {
-    act: 1,
-    nsw: 2,
-    tas: 3,
-    wa_sw: 4,
-    sa: 5,
-    vic: 6,
-    qld: 7,
-    nt: 8,
-    wa_nw: 9,
-  };
-
-  const match = entriesFromObject(lookup).find(([_k, v]) => v === numberValue);
-
-  if (match) {
-    return match[0];
-  }
-
-  throw new Error(
-    `Cell address ${input.address()} is not a valid state: ${numberValue}`,
-  );
 };
 
 export const calculateElectricity = (

@@ -1,18 +1,24 @@
 import {
-  SheepInput,
-  SheepInputSchema,
-  SheepInputTransformed,
-} from '@/calculators/Sheep/types/input';
+  SheepClassMonthlyInput,
+  SheepClassWithLambingMonthlyInput,
+  SheepClassWithProportionLambsBornMonthlyInput,
+} from '@/calculators/Sheep/types/sheep-class-monthly.input';
 import type { SheepClassPeriodInput } from '@/calculators/Sheep/types/sheep-class-period.input';
 import {
-  SheepClassInput,
-  SheepClassWithLambingInput,
-  SheepClassWithProportionLambsBornInput,
-} from '@/calculators/Sheep/types/sheep-class.input';
+  SheepFlockInput,
+  SheepFlockInputSchema,
+  SheepFlockInputTransformed,
+} from '@/calculators/Sheep/types/sheep-flock.input';
+import {
+  HasIsFebruaryInLeapYearInputSchemaForSheep,
+  HasIsFebruaryInLeapYearInputTransformed,
+} from '@/calculators/types/has-is-february-in-leap-year.input';
 import { getSheet } from '@/test/common/sheets';
+import { nv, nvo } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import { calculate34SheepEntericMethane } from '../../scope1/3-enteric-methane/3.4-sheep-enteric';
-import { checkPureStateWithoutNT } from '../livestock-domain';
+import { createSheepFlockInput } from '../factory';
+import { checkState } from '../livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
@@ -23,7 +29,9 @@ const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
   method: '1' | '2',
-): SheepInputTransformed | undefined => {
+):
+  | (SheepFlockInputTransformed & HasIsFebruaryInLeapYearInputTransformed)
+  | undefined => {
   const cell = (column: string, offset: number = 0) =>
     sheet
       .cell(`${column}${row + offset}`)
@@ -49,34 +57,40 @@ const getCalculatorInput = (
       offsetRows,
     );
     return {
-      head: Number(cell(col.columnHead, offsetRows)),
-      method2Liveweight:
+      head: nv(Number(cell(col.columnHead, offsetRows))),
+      method2Liveweight: nvo(
         method === '2' && customLiveweight
           ? Number(customLiveweight)
           : undefined,
-      method2DryMatterAvailability:
+      ),
+      method2DryMatterAvailability: nvo(
         method === '2' && customDryMatterAvailability
           ? Number(customDryMatterAvailability)
           : undefined,
-      method2DryMatterDigestibility:
+      ),
+      method2DryMatterDigestibility: nvo(
         method === '2' && customDryMatterDigestibility
           ? Number(customDryMatterDigestibility)
           : undefined,
-      method2AverageDurationDays:
+      ),
+      method2AverageDurationDays: nvo(
         method === '2' && customAverageDurationDays
           ? Number(customAverageDurationDays)
           : undefined,
+      ),
     };
   };
 
-  const readSheepClass = (offset: number): SheepClassInput | undefined => {
+  const readSheepClass = (
+    offset: number,
+  ): SheepClassMonthlyInput | undefined => {
     const offsetRows = offset * 12;
     if (cell(col.columnHead, offsetRows) === undefined) {
       return undefined;
     }
     return {
-      greasyWoolProduction: 0,
-      cleanWoolYieldProportion: 0,
+      greasyWoolProduction: nv(0),
+      cleanWoolYieldProportion: nv(0),
       january: readSheepClassPeriod(offsetRows),
       february: readSheepClassPeriod(offsetRows + 1),
       march: readSheepClassPeriod(offsetRows + 2),
@@ -94,76 +108,98 @@ const getCalculatorInput = (
 
   const readSheepClassWithLambing = (
     offset: number,
-  ): SheepClassWithLambingInput | undefined => {
+  ): SheepClassWithLambingMonthlyInput | undefined => {
     const offsetRows = offset * 12;
     if (cell(col.columnHead, offsetRows) === undefined) {
       return undefined;
     }
     return {
-      greasyWoolProduction: 0,
-      cleanWoolYieldProportion: 0,
+      greasyWoolProduction: nv(0),
+      cleanWoolYieldProportion: nv(0),
       january: {
         ...readSheepClassPeriod(offsetRows),
-        percentLambing: Number(cell(col.columnLambingRate, offsetRows)),
-        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows)),
+        percentLambing: nv(Number(cell(col.columnLambingRate, offsetRows))),
+        percentLambMarking: nv(Number(cell(col.columnMarkingRate, offsetRows))),
       },
       february: {
         ...readSheepClassPeriod(offsetRows + 1),
-        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 1)),
-        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows + 1)),
+        percentLambing: nv(Number(cell(col.columnLambingRate, offsetRows + 1))),
+        percentLambMarking: nv(
+          Number(cell(col.columnMarkingRate, offsetRows + 1)),
+        ),
       },
       march: {
         ...readSheepClassPeriod(offsetRows + 2),
-        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 2)),
-        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows + 2)),
+        percentLambing: nv(Number(cell(col.columnLambingRate, offsetRows + 2))),
+        percentLambMarking: nv(
+          Number(cell(col.columnMarkingRate, offsetRows + 2)),
+        ),
       },
       april: {
         ...readSheepClassPeriod(offsetRows + 3),
-        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 3)),
-        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows + 3)),
+        percentLambing: nv(Number(cell(col.columnLambingRate, offsetRows + 3))),
+        percentLambMarking: nv(
+          Number(cell(col.columnMarkingRate, offsetRows + 3)),
+        ),
       },
       may: {
         ...readSheepClassPeriod(offsetRows + 4),
-        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 4)),
-        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows + 4)),
+        percentLambing: nv(Number(cell(col.columnLambingRate, offsetRows + 4))),
+        percentLambMarking: nv(
+          Number(cell(col.columnMarkingRate, offsetRows + 4)),
+        ),
       },
       june: {
         ...readSheepClassPeriod(offsetRows + 5),
-        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 5)),
-        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows + 5)),
+        percentLambing: nv(Number(cell(col.columnLambingRate, offsetRows + 5))),
+        percentLambMarking: nv(
+          Number(cell(col.columnMarkingRate, offsetRows + 5)),
+        ),
       },
       july: {
         ...readSheepClassPeriod(offsetRows + 6),
-        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 6)),
-        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows + 6)),
+        percentLambing: nv(Number(cell(col.columnLambingRate, offsetRows + 6))),
+        percentLambMarking: nv(
+          Number(cell(col.columnMarkingRate, offsetRows + 6)),
+        ),
       },
       august: {
         ...readSheepClassPeriod(offsetRows + 7),
-        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 7)),
-        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows + 7)),
+        percentLambing: nv(Number(cell(col.columnLambingRate, offsetRows + 7))),
+        percentLambMarking: nv(
+          Number(cell(col.columnMarkingRate, offsetRows + 7)),
+        ),
       },
       september: {
         ...readSheepClassPeriod(offsetRows + 8),
-        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 8)),
-        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows + 8)),
+        percentLambing: nv(Number(cell(col.columnLambingRate, offsetRows + 8))),
+        percentLambMarking: nv(
+          Number(cell(col.columnMarkingRate, offsetRows + 8)),
+        ),
       },
       october: {
         ...readSheepClassPeriod(offsetRows + 9),
-        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 9)),
-        percentLambMarking: Number(cell(col.columnMarkingRate, offsetRows + 9)),
+        percentLambing: nv(Number(cell(col.columnLambingRate, offsetRows + 9))),
+        percentLambMarking: nv(
+          Number(cell(col.columnMarkingRate, offsetRows + 9)),
+        ),
       },
       november: {
         ...readSheepClassPeriod(offsetRows + 10),
-        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 10)),
-        percentLambMarking: Number(
-          cell(col.columnMarkingRate, offsetRows + 10),
+        percentLambing: nv(
+          Number(cell(col.columnLambingRate, offsetRows + 10)),
+        ),
+        percentLambMarking: nv(
+          Number(cell(col.columnMarkingRate, offsetRows + 10)),
         ),
       },
       december: {
         ...readSheepClassPeriod(offsetRows + 11),
-        percentLambing: Number(cell(col.columnLambingRate, offsetRows + 11)),
-        percentLambMarking: Number(
-          cell(col.columnMarkingRate, offsetRows + 11),
+        percentLambing: nv(
+          Number(cell(col.columnLambingRate, offsetRows + 11)),
+        ),
+        percentLambMarking: nv(
+          Number(cell(col.columnMarkingRate, offsetRows + 11)),
         ),
       },
     };
@@ -171,91 +207,82 @@ const getCalculatorInput = (
 
   const readSheepClassWithProportionLambsBorn = (
     offset: number,
-  ): SheepClassWithProportionLambsBornInput | undefined => {
+  ): SheepClassWithProportionLambsBornMonthlyInput | undefined => {
     const offsetRows = offset * 12;
     if (cell(col.columnHead, offsetRows) === undefined) {
       return undefined;
     }
     return {
-      greasyWoolProduction: 0,
-      cleanWoolYieldProportion: 0,
+      greasyWoolProduction: nv(0),
+      cleanWoolYieldProportion: nv(0),
       january: {
         ...readSheepClassPeriod(offsetRows),
-        proportionOfLambsBorn: 0,
+        proportionOfLambsBorn: nv(0),
       },
       february: {
         ...readSheepClassPeriod(offsetRows + 1),
-        proportionOfLambsBorn: 0,
+        proportionOfLambsBorn: nv(0),
       },
       march: {
         ...readSheepClassPeriod(offsetRows + 2),
-        proportionOfLambsBorn: 0,
+        proportionOfLambsBorn: nv(0),
       },
       april: {
         ...readSheepClassPeriod(offsetRows + 3),
-        proportionOfLambsBorn: 0,
+        proportionOfLambsBorn: nv(0),
       },
       may: {
         ...readSheepClassPeriod(offsetRows + 4),
-        proportionOfLambsBorn: 0,
+        proportionOfLambsBorn: nv(0),
       },
       june: {
         ...readSheepClassPeriod(offsetRows + 5),
-        proportionOfLambsBorn: 0,
+        proportionOfLambsBorn: nv(0),
       },
       july: {
         ...readSheepClassPeriod(offsetRows + 6),
-        proportionOfLambsBorn: 0,
+        proportionOfLambsBorn: nv(0),
       },
       august: {
         ...readSheepClassPeriod(offsetRows + 7),
-        proportionOfLambsBorn: 0,
+        proportionOfLambsBorn: nv(0),
       },
       september: {
         ...readSheepClassPeriod(offsetRows + 8),
-        proportionOfLambsBorn: 0,
+        proportionOfLambsBorn: nv(0),
       },
       october: {
         ...readSheepClassPeriod(offsetRows + 9),
-        proportionOfLambsBorn: 0,
+        proportionOfLambsBorn: nv(0),
       },
       november: {
         ...readSheepClassPeriod(offsetRows + 10),
-        proportionOfLambsBorn: 0,
+        proportionOfLambsBorn: nv(0),
       },
       december: {
         ...readSheepClassPeriod(offsetRows + 11),
-        proportionOfLambsBorn: 0,
+        proportionOfLambsBorn: nv(0),
       },
     };
   };
 
-  const sheepInput: SheepInput = {
-    state: checkPureStateWithoutNT(cell(col.columnState)),
-    climateZone: 'Boreal dry',
-    isInLeachingZone: false,
-    rainfallAbove600: false,
-    productionSystem: 'Non-irrigated pasture',
-    electricity: {
-      method: 'location',
-      electricityPurchasedKWh: 0,
+  const sheepInput: SheepFlockInput = createSheepFlockInput({
+    state: checkState(cell(col.columnState)),
+    classes: {
+      period: 'monthly',
+      rams: readSheepClass(0),
+      wethers: readSheepClass(1),
+      breedingEwes: readSheepClassWithLambing(2),
+      lambsHoggets: readSheepClassWithProportionLambsBorn(3),
     },
-    flocks: [
-      {
-        noUnfencedNaturalWater: false,
-        classes: {
-          rams: readSheepClass(0),
-          wethers: readSheepClass(1),
-          breedingEwes: readSheepClassWithLambing(2),
-          lambsHoggets: readSheepClassWithProportionLambsBorn(3),
-        },
-      },
-    ],
+  });
+
+  return {
+    ...SheepFlockInputSchema.parse(sheepInput),
+    ...HasIsFebruaryInLeapYearInputSchemaForSheep.parse({
+      isFebruaryInLeapYear: false,
+    }),
   };
-
-  // console.dir(sheepInput.flocks[0].classes.rams, { depth: null });
-
-  return SheepInputSchema.parse(sheepInput);
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
@@ -277,7 +304,11 @@ describe('3.4.1.1 Sheep enteric methane monthly', () => {
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 331, '2');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculate34SheepEntericMethane);
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculate34SheepEntericMethane,
+      '3.4',
+    );
   });
 
   // it('method 2 matches spreadsheet results', async () => {

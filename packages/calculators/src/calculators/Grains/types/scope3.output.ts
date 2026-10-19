@@ -1,19 +1,19 @@
-import { outputKey, outputValue } from '@/tools/zod';
+import { Scope3TotalsSchema } from '@/calculators/types/scope3.output';
+import { outputKey } from '@/tools/zod';
+import { OUTPUTDESCRIPTIONS } from '@/types/descriptions.schema';
 import { z } from 'zod';
-import { OUTPUTDESCRIPTIONS } from './descriptions.schema';
 
-export const GrainsScope3OutputSchema = z
-  .object({
-    fertiliser: outputKey(OUTPUTDESCRIPTIONS.fertiliser),
-    agrichemicals: outputKey(OUTPUTDESCRIPTIONS.agrichemicals),
-    electricity: outputKey(OUTPUTDESCRIPTIONS.electricity),
-    fuel: outputKey(OUTPUTDESCRIPTIONS.fuel),
-    lime: outputKey(OUTPUTDESCRIPTIONS.lime),
-    services: outputKey(OUTPUTDESCRIPTIONS.services),
-    offsiteManure: outputKey(OUTPUTDESCRIPTIONS.offsiteManure),
-    solidWaste: outputKey(OUTPUTDESCRIPTIONS.solidWaste),
-    total: outputValue(OUTPUTDESCRIPTIONS.scope3Total),
-  })
-  .meta({ description: OUTPUTDESCRIPTIONS.scope3 });
+export const GrainsScope3OutputSchema = Scope3TotalsSchema.safeExtend({
+  fertiliser: outputKey(OUTPUTDESCRIPTIONS.fertiliser),
+  agrichemicals: outputKey(OUTPUTDESCRIPTIONS.agrichemicals),
+  electricity: outputKey(OUTPUTDESCRIPTIONS.electricity),
+  fuel: outputKey(OUTPUTDESCRIPTIONS.fuel),
+  soilAmeliorants: outputKey(OUTPUTDESCRIPTIONS.purchasedSoilAmeliorants),
+  services: outputKey(OUTPUTDESCRIPTIONS.services),
+  solidWaste: outputKey(OUTPUTDESCRIPTIONS.solidWaste),
+  otherPurchasedGoodsAndServices: outputKey(
+    OUTPUTDESCRIPTIONS.otherPurchasedGoodsAndServices,
+  ),
+}).meta({ id: 'GrainsScope3Output', description: OUTPUTDESCRIPTIONS.scope3 });
 
 export type GrainsScope3Output = z.infer<typeof GrainsScope3OutputSchema>;

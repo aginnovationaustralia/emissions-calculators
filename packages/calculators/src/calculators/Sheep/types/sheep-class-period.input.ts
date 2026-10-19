@@ -1,115 +1,134 @@
-import { input } from '@/tools/inputs';
+import {
+  isPercentage,
+  isProportion,
+  numberInput,
+  numberInputOptional,
+} from '@/tools/inputs';
+import { ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4 } from '@/tools/modules';
+import { tonnesPerHectareToKgPerSquareMetres } from '@/tools/unit-conversion';
 import {
   days,
   head,
-  mass,
+  liveweight,
+  liveweightGain,
   massPerArea,
-  massPerHeadPerDay,
   massPerMass,
   realNumber,
 } from '@/tools/units';
-import { mapOptional } from '@/tools/zod';
-import { object, percentage, proportion } from '@/types/schemas';
+import { object } from '@/types/schemas';
 import { z } from 'zod';
 
 export const SheepClassPeriodInputSchema = object({
-  head: z
-    .number()
-    .min(0)
-    .meta({ description: 'Number of head for this class for this season' })
-    .transform((val) => input('Nkln', head(val))),
-  method2Liveweight: z
-    .number()
-    .min(0)
-    .optional()
-    .meta({
+  head: numberInput(
+    (val) => head(val),
+    {
+      name: 'Nkln',
+      method: '1',
+      description: 'Number of animals in this class for this season',
+      modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
+    },
+    (s) => s.min(0),
+  ),
+  method2Liveweight: numberInputOptional(
+    (val) => liveweight(val),
+    {
+      name: 'Wjk',
+      method: '2',
       description:
         'Method 2: supply an exact value for liveweight for this class for this season based on farm records',
-    })
-    .transform(mapOptional((val) => input('Wjk', mass('Liveweight', val)))),
-  method2LiveweightGain: z
-    .number()
-    .optional()
-    .meta({
+      modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
+    },
+    (s) => s.min(0),
+  ),
+  method2LiveweightGain: numberInputOptional((val) => liveweightGain(val), {
+    name: 'LWGjk',
+    method: '2',
+    description:
+      'Method 2: supply an exact value for liveweight gain for this class for this season based on farm records',
+    modules: [MANURE_SHEEP_4_4],
+  }),
+  method2DryMatterAvailability: numberInputOptional(
+    (val) => massPerArea('DryMatter', tonnesPerHectareToKgPerSquareMetres(val)),
+    {
+      name: 'DMAjk',
+      method: '2',
       description:
-        'Method 2: supply an exact value for liveweight gain for this class for this season based on farm records',
-    })
-    .transform(
-      mapOptional((val) =>
-        input('LWGjk', massPerHeadPerDay('Liveweight', val)),
-      ),
-    ),
-  method2DryMatterAvailability: z
-    .number()
-    .optional()
-    .meta({
-      description:
-        'Method 2: supply an exact value for dry matter availability for this class for this period based on farm records',
-    })
-    .transform(
-      mapOptional((val) => input('DMAjk', massPerArea('DryMatter', val))),
-    ),
-  method2DryMatterDigestibility: z
-    .number()
-    .optional()
-    .meta({
-      description:
-        'Method 2: supply an exact value for dry matter digestibility for this class for this period based on farm records',
-    })
-    .transform(mapOptional((val) => input('DMDjk', realNumber(val)))),
-  method2AverageDurationDays: z
-    .number()
-    .optional()
-    .meta({
-      description:
-        'Method 2: supply an exact value for average duration days for this class for this period based on farm records',
-    })
-    .transform(mapOptional((val) => input('Dj', days(val)))),
-  method2CrudeProteinContent: z
-    .number()
-    .optional()
-    .meta({
+        'Method 2: Dry matter availability for this class for this period based on farm records',
+      modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
+    },
+  ),
+  method2DryMatterDigestibility: numberInputOptional((val) => realNumber(val), {
+    name: 'DMDjk',
+    method: '2',
+    description:
+      'Method 2: supply an exact value for dry matter digestibility for this class for this period based on farm records',
+    modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
+  }),
+  method2AverageDurationDays: numberInputOptional((val) => days(val), {
+    name: 'Dj',
+    method: '2',
+    description:
+      'Method 2: supply an exact value for average duration for this class for this period based on farm records',
+    modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
+  }),
+  method2CrudeProteinContent: numberInputOptional(
+    (val) => massPerMass('CrudeProtein', 'DryMatter', val),
+    {
+      name: 'CPjk',
+      method: '2',
       description:
         'Method 2: supply an exact value for crude protein content for this class for this period based on farm records',
-    })
-    .transform(
-      mapOptional((val) =>
-        input('CPjk', massPerMass('CrudeProtein', 'DryMatter', val)),
-      ),
-    ),
-});
+      modules: [MANURE_SHEEP_4_4],
+    },
+  ),
+}).meta({ id: 'SheepClassPeriodInput' });
 
 export const SheepClassWithLambingPeriodInputSchema =
   SheepClassPeriodInputSchema.extend({
-    percentLambing: percentage()
-      .meta({
-        description: 'Percentage of ewes lambing in this season.',
-      })
-      .transform((val) => input('LRjk', realNumber(val))),
-    percentLambMarking: percentage()
-      .meta({
-        description: 'Percentage of lamb marking in this season.',
-      })
-      .transform((val) => input('LMRjk', realNumber(val))),
+    percentLambing: numberInput(
+      (val) => realNumber(val),
+      {
+        name: 'LRjk',
+        method: '1',
+        description: 'Share of ewes lambing in this season.',
+        modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
+      },
+      isPercentage,
+    ),
+    percentLambMarking: numberInput(
+      (val) => realNumber(val),
+      {
+        name: 'LMRjk',
+        method: '1',
+        description: 'Share of lamb marking in this season.',
+        modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
+      },
+      isPercentage,
+    ),
   });
 
 export const SheepClassWithProportionLambsBornPeriodInputSchema =
   SheepClassPeriodInputSchema.extend({
-    proportionOfLambsBorn: proportion()
-      .meta({
+    proportionOfLambsBorn: numberInput(
+      (val) => realNumber(val),
+      {
+        name: 'PLBjk',
+        method: '1',
         description: 'Proportion of lambs born in this time period.',
-      })
-      .transform((val) => input('PLBjk', realNumber(val))),
+        modules: [MANURE_SHEEP_4_4],
+      },
+      isProportion,
+    ),
   });
 
-export const isSeasonInputWithLambing = (
-  period: SheepClassPeriodsInputTransformed,
+export const isSheepClassPeriodInputWithLambing = (
+  period: SheepClassPeriodExtendedInputTransformed,
 ): period is SheepClassWithLambingPeriodInputTransformed => {
   return 'percentLambing' in period;
 };
 
-export const isSeasonInputWithProportionLambsBorn = (
-  period: SheepClassPeriodsInputTransformed,
+export const isSheepClassPeriodInputWithProportionLambsBorn = (
+  period: SheepClassPeriodExtendedInputTransformed,
 ): period is SheepClassWithProportionLambsBornPeriodInputTransformed => {
   return 'proportionOfLambsBorn' in period;
 };
@@ -133,7 +152,7 @@ export type SheepClassWithProportionLambsBornPeriodInputTransformed = z.output<
   typeof SheepClassWithProportionLambsBornPeriodInputSchema
 >;
 
-export type SheepClassPeriodsInputTransformed =
+export type SheepClassPeriodExtendedInputTransformed =
   | SheepClassPeriodInputTransformed
   | SheepClassWithLambingPeriodInputTransformed
   | SheepClassWithProportionLambsBornPeriodInputTransformed;

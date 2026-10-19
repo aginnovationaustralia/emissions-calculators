@@ -25,12 +25,23 @@
     },
     "examples-ts-client#build": {
       "dependsOn": [
-        "@aginnovationaustralia/emissions-calculators#build"
+        "@aginnovationaustralia/emissions-calculators#build",
+        "@aginnovationaustralia/emissions-calculator-research#build"
       ]
     },
     "data-entry#build": {
       "outputs": [
         "dist/**"
+      ]
+    },
+    "@aginnovationaustralia/emissions-calculator-research#test": {
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "@aginnovationaustralia/emissions-calculator-research#check:types": {
+      "dependsOn": [
+        "^build"
       ]
     }
   }

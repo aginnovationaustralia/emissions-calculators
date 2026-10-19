@@ -1,8 +1,9 @@
 import {
-  PurchasedFeedLivestockRegionlessTypes,
   PurchasedFeedLivestockRegionlessType,
+  PurchasedFeedLivestockRegionlessTypes,
 } from '@/constants/enums';
 import { input } from '@/tools/inputs';
+import { PURCH_FEED_15_2 } from '@/tools/modules';
 import { z } from 'zod';
 import { BasePurchasedFeedInputSchema } from './base-purchased-feed.input';
 
@@ -14,15 +15,15 @@ export const PurchasedFeedLivestockRegionlessInputSchema =
     type: z
       .literal(PurchasedFeedLivestockRegionlessTypes)
       .transform((val) =>
-        input(
-          'purchased feed type',
-          val as PurchasedFeedLivestockRegionlessType,
-        ),
+        input(val as PurchasedFeedLivestockRegionlessType, {
+          name: 'purchased feed type',
+          modules: [PURCH_FEED_15_2],
+        }),
       )
       .meta({
         description: 'The type of feed purchased.',
       }),
-  });
+  }).meta({ title: 'Regionless feed type' });
 export type PurchasedFeedLivestockRegionlessInput = z.input<
   typeof PurchasedFeedLivestockRegionlessInputSchema
 >;

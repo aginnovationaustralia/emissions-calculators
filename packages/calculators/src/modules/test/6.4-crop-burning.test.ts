@@ -1,16 +1,12 @@
-import {
-  BaseGrainsCrop,
-  BaseGrainsCropSchema,
-  BaseGrainsCropTransformed,
-} from '@/calculators/Grains/types/base-crop.input';
 import { getSheet } from '@/test/common/sheets';
+import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import {
   calculateFieldBurningCH4,
   calculateFieldBurningN2O,
-  CropResidueInput,
-  CropResidueInputSchema,
-  CropResidueInputTransformed,
+  HasCropResidueInput,
+  HasCropResidueInputSchema,
+  HasCropResidueInputTransformed,
 } from '../scope1/6-residue-mgmt';
 import { checkCropType } from './crop-residue-domain';
 import {
@@ -21,7 +17,7 @@ import {
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-): (CropResidueInputTransformed & BaseGrainsCropTransformed) | undefined => {
+): HasCropResidueInputTransformed | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
@@ -30,45 +26,28 @@ const getCalculatorInput = (
   }
 
   const type = checkCropType(cell('A'));
-  const areaSown = Number(cell('B'));
-  const averageYield = Number(cell('C'));
-  const fractionOfAnnualCropBurnt = Number(cell('D'));
+  const fractionOfAnnualCropBurnt = Number(cell('B'));
+  const totalYieldKg = nv(Number(cell('C')));
 
-  const baseCrop: BaseGrainsCrop = {
-    state: 'wa_nw',
-    areaSown,
-    isInLeachingZone: false,
-    electricityAllocation: 0,
+  const cropResidueInput: HasCropResidueInput = {
+    crop: {
+      type,
+      totalYieldKg,
+      fractionOfAnnualCropBurnt: nv(fractionOfAnnualCropBurnt),
+      residues: {
+        calculationMethod: '1',
+      },
+    },
   };
 
-  const cropResidues = {
-    calculationMethod: '1',
-  } as const;
-
-  const pastureResidues = {
-    calculationMethod: '1',
-  } as const;
-
-  const cropResidueInput: CropResidueInput = {
-    rainfallAbove600: false,
-    type,
-    averageYield,
-    fractionOfAnnualCropBurnt,
-    cropResidues,
-    pastureResidues,
-  };
-
-  return {
-    ...BaseGrainsCropSchema.parse(baseCrop),
-    ...CropResidueInputSchema.parse(cropResidueInput),
-  };
+  return HasCropResidueInputSchema.parse(cropResidueInput);
 };
 
 const getExpectedOutputCH4 = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`P${row}`).value());
+  return Number(sheet.cell(`N${row}`).value());
 };
 const getExpectedOutputN2O = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`Q${row}`).value());
+  return Number(sheet.cell(`O${row}`).value());
 };
 
 const extractInputsAndOutputCH4 = createSheetExtractor(
@@ -88,7 +67,7 @@ describe('6.4.1.1 Field burning of crop residues', () => {
 
     const inputsAndOutputs = extractInputsAndOutputCH4(sheet, 5, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculateFieldBurningCH4);
+    compareInputsAndOutputs(inputsAndOutputs, calculateFieldBurningCH4, '6.4');
   });
 
   it('method 1 matches spreadsheet results for n2o', async () => {
@@ -99,6 +78,6 @@ describe('6.4.1.1 Field burning of crop residues', () => {
 
     const inputsAndOutputs = extractInputsAndOutputN2O(sheet, 5, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculateFieldBurningN2O);
+    compareInputsAndOutputs(inputsAndOutputs, calculateFieldBurningN2O, '6.4');
   });
 });

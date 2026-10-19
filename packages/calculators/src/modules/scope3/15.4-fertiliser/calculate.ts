@@ -1,6 +1,6 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { GrainsCropTransformed } from '@/calculators/Grains/types/crop.input';
+import { HasConstants } from '@/constants/types';
+import { HasFertiliserInputTransformed } from '@/modules/scope1/5-fertiliser';
 import {
   InorganicFertiliserComponentInputTransformed,
   InorganicFertiliserKnownComponentInputTransformed,
@@ -14,11 +14,13 @@ import {
   isInorganicFertiliserInputScope3Method2,
 } from '@/modules/scope1/5-fertiliser/inorganic-fertiliser.input';
 import { selectConstant } from '@/tools/constants';
+import { captureMethod1Or2Value } from '@/tools/multi';
 import { sum } from '@/tools/sum';
+import { voidUnit } from '@/tools/units';
 
 export const calculateScope3FertiliserMethod1EmissionsFactor = (
   fertiliser: InorganicFertiliserInputScope3Method1Transformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
 ) => {
   /*
     15.4.1.1 Method 1 -- Purchased Fertiliser
@@ -38,15 +40,15 @@ export const calculateScope3FertiliserMethod1EmissionsFactor = (
     'Scope3EF',
   );
   const e = tmjf.multiply(ef, {
-    name: 'E fertiliser',
-    references: ['15.4.1.1 (314)'],
+    name: 'E',
+    references: ['15.4.1.1 (1)'],
   });
   return e;
 };
 
 const emissionsFactorForComponent = (
   component: InorganicFertiliserComponentInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
 ) => {
   const { constants } = context;
   if (isInorganicFertiliserKnownComponent(component)) {
@@ -72,7 +74,7 @@ const emissionsFactorForComponent = (
 export const calculateScope3FertiliserMethod1KnownComponent = (
   fertiliser: InorganicFertiliserInputScope3Method1Transformed,
   component: InorganicFertiliserKnownComponentInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
 ) => {
   const fcf = component.fractionOfFertiliser;
   const tmjf = fertiliser.massAppliedKg;
@@ -87,13 +89,13 @@ export const calculateScope3FertiliserMethod1UnknownComponent = (
   const fcf = component.fractionOfFertiliser;
   const tmjf = fertiliser.massAppliedKg;
   const efc = component.emissionFactor;
-  return fcf.multiply(tmjf).multiply(efc);
+  return fcf.multiply(tmjf).multiply(efc).named('E').reference('15.4.1.1 (2)');
 };
 
 export const calculateScope3FertiliserMethod1Components = (
   fertiliser: InorganicFertiliserInputScope3Method1Transformed,
   components: InorganicFertiliserComponentInputTransformed[],
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
 ) => {
   /*
   Where emission factors for the purchased fertiliser are not available, the emissions can be
@@ -124,7 +126,7 @@ export const calculateScope3FertiliserMethod1Components = (
 
 export const calculateScope3FertiliserMethod1 = (
   fertiliser: InorganicFertiliserInputScope3Method1Transformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
 ) => {
   if (fertiliser.components) {
     return calculateScope3FertiliserMethod1Components(
@@ -146,21 +148,27 @@ export const calculateScope3FertiliserMethod2 = (
   */
   const tmjf = fertiliser.massAppliedKg;
   const ef = fertiliser.customScope3EmissionFactor;
-  const e = tmjf.multiply(ef).attach({ references: ['15.4.1.2 (342)'] });
+  const e = tmjf.multiply(ef).attach({ references: ['15.4.1.1 (1)'] });
   return e;
 };
 
 export const calculateScope3Fertiliser = (
-  crop: GrainsCropTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  activity: HasFertiliserInputTransformed,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
 ) => {
-  const fertilisers = crop.inorganicFertilisers;
+  const { inorganic } = activity.fertiliser;
 
-  const emissionsRecords = fertilisers.applications.map((fertiliser) => {
+  const emissionsRecords = inorganic.applications.map((fertiliser) => {
     if (isInorganicFertiliserInputScope3Method2(fertiliser)) {
-      return calculateScope3FertiliserMethod2(fertiliser);
+      return captureMethod1Or2Value(
+        voidUnit(),
+        calculateScope3FertiliserMethod2(fertiliser),
+      );
     } else {
-      return calculateScope3FertiliserMethod1(fertiliser, context);
+      return captureMethod1Or2Value(
+        calculateScope3FertiliserMethod1(fertiliser, context),
+        undefined,
+      );
     }
   });
 

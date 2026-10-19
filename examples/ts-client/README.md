@@ -78,10 +78,7 @@ import type { BeefInput } from '@aginnovationaustralia/emissions-calculators/bee
 const beefInputData: BeefInput = {
   state: 'nsw',
   northOfTropicOfCapricorn: true,
-  rainfallAbove600: true,
-  beef: [
-    /* ... beef enterprise data ... */
-  ],
+  beef: [/* ... beef enterprise data ... */],
 };
 
 const result = calculateEmissions('beef', beefInputData);
@@ -133,6 +130,37 @@ if (validatedInput.valid) {
   const result = calculateBeef(validatedInput.result);
   console.log('Emissions calculated:', result);
 }
+```
+
+### Research: Overriding constant values
+
+The `@aginnovationaustralia/emissions-calculator-research` package runs the same calculators with custom
+values for any of the constants. See [`src/grains/research-overrides.ts`](./src/grains/research-overrides.ts):
+
+```typescript
+import {
+  calculateGrains,
+  executeCalculator,
+  ResearchEnvironment,
+} from '@aginnovationaustralia/emissions-calculator-research';
+import { GrainsInputSchema } from '@aginnovationaustralia/emissions-calculators/grains';
+
+const input = GrainsInputSchema.parse(grainsInputData);
+
+const result = ResearchEnvironment.run(
+  {
+    overrides: {
+      COMMON: {
+        TRANSPORT_FUEL_FACTORS: {
+          'Cars and light commercial vehicles': {
+            Gasoline: { SCOPE1_EF: { CO2: 0.0000674 * 2 } },
+          },
+        },
+      },
+    },
+  },
+  () => executeCalculator(calculateGrains, input, 'grains'),
+);
 ```
 
 ### Available Calculators

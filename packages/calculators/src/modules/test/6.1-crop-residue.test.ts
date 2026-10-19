@@ -1,28 +1,40 @@
 import {
-  BaseGrainsCrop,
-  BaseGrainsCropSchema,
-  BaseGrainsCropTransformed,
-} from '@/calculators/Grains/types/base-crop.input';
+  HasClimateZoneInput,
+  HasClimateZoneInputSchemaForCrops,
+  HasClimateZoneInputTransformed,
+} from '@/calculators/types/has-climate-zone.input';
+import {
+  HasStateInput,
+  hasStateInputSchema,
+  HasStateInputTransformed,
+} from '@/calculators/types/has-state.input';
 import { getSheet } from '@/test/common/sheets';
+import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import {
   calculate61CropResidueN2O,
-  CropResidueInput,
-  CropResidueInputSchema,
-  CropResidueInputTransformed,
+  HasCropOrPastureResidueInputTransformed,
+  HasCropResidueInput,
+  HasCropResidueInputSchema,
 } from '../scope1/6-residue-mgmt';
-import { checkCropType, checkState } from './crop-residue-domain';
+import { checkCropType } from './crop-residue-domain';
 import { checkClimate } from './fertiliser-domain';
+import { checkState } from './livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from './sheet-comparison';
+import { RESIDUE_CROPS_6_1 } from '@/tools/modules';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
   calculationMethod: '1' | '2',
-): (CropResidueInputTransformed & BaseGrainsCropTransformed) | undefined => {
+):
+  | (HasCropOrPastureResidueInputTransformed &
+      HasClimateZoneInputTransformed &
+      HasStateInputTransformed)
+  | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
@@ -30,49 +42,49 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const climate = checkClimate(cell('A'));
+  const climateZone = checkClimate(cell('A'));
   const type = checkCropType(cell('B'));
   const state = checkState(cell('C'));
-  const areaSown = Number(cell('D'));
-  const averageYield = Number(cell('E'));
-  const fractionOfAnnualCropBurnt = Number(cell('F'));
-  const customFractionCropResidueRemoved = Number(
-    sheet.cell(`G${row}`).value(),
-  );
+  const fractionOfAnnualCropBurnt = Number(cell('D'));
+  const customMassCropResidueRemoved = Number(cell(`E`));
+  const totalYieldKg = nv(Number(cell('G')));
 
-  const baseCrop: BaseGrainsCrop = {
-    state,
-    areaSown,
-    isInLeachingZone: true,
-    electricityAllocation: 0,
-  };
-
-  const cropResidues =
+  const residues =
     calculationMethod === '2'
       ? {
           calculationMethod,
-          fractionCropResidueRemoved: customFractionCropResidueRemoved,
+          massCropResidueRemoved: nv(customMassCropResidueRemoved),
         }
       : {
           calculationMethod,
         };
 
-  const cropResidueInput: CropResidueInput = {
-    rainfallAbove600: climate === 'wet',
-    type,
-    averageYield,
-    fractionOfAnnualCropBurnt,
-    cropResidues,
+  const cropResidueInput: HasCropResidueInput = {
+    crop: {
+      type,
+      totalYieldKg,
+      fractionOfAnnualCropBurnt: nv(fractionOfAnnualCropBurnt),
+      residues,
+    },
+  };
+
+  const hasStateInput: HasStateInput = {
+    state,
+  };
+
+  const hasClimateZoneInput: HasClimateZoneInput = {
+    climateZone,
   };
 
   return {
-    ...BaseGrainsCropSchema.parse(baseCrop),
-    ...CropResidueInputSchema.parse(cropResidueInput),
+    ...HasClimateZoneInputSchemaForCrops.parse(hasClimateZoneInput),
+    ...HasCropResidueInputSchema.parse(cropResidueInput),
+    ...hasStateInputSchema([RESIDUE_CROPS_6_1]).parse(hasStateInput),
   };
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`R${row}`).value());
+  return Number(sheet.cell(`Q${row}`).value());
 };
 
 const extractInputsAndOutput = createSheetExtractor(
@@ -89,7 +101,7 @@ describe('6.1.1.1 Crop residue N2O', () => {
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 5, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculate61CropResidueN2O);
+    compareInputsAndOutputs(inputsAndOutputs, calculate61CropResidueN2O, '6.1');
   });
 
   it('method 2 matches spreadsheet results', async () => {
@@ -100,6 +112,6 @@ describe('6.1.1.1 Crop residue N2O', () => {
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 17, '2');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculate61CropResidueN2O);
+    compareInputsAndOutputs(inputsAndOutputs, calculate61CropResidueN2O, '6.1');
   });
 });

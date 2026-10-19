@@ -1,20 +1,60 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
-import { isPastureType } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { zeroCH4, zeroN2O } from '@/tools/sentinels';
-import { CropResidueInputTransformed } from './crop-residue.input';
+import { ConstantsForResidueManagement } from './constants';
+import {
+  CropResidueInputTransformed,
+  HasCropOrPastureResidueInputTransformed,
+  HasCropResidueInputTransformed,
+  isPastureResidueInput,
+} from './crop-residue.input';
+
+const calculateCropBurnt = (
+  crop: CropResidueInputTransformed,
+  constants: ConstantsForResidueManagement,
+) => {
+  const pc = crop.totalYieldKg;
+  const ragc = selectConstant(
+    constants.CROP,
+    'CROPRESIDUE',
+    crop.type,
+    'residueCropRatio',
+  );
+  const sc = selectConstant(
+    constants.CROP,
+    'CROPRESIDUE',
+    crop.type,
+    'fractionOfResidueAtBurning',
+  );
+  const dmc = selectConstant(
+    constants.CROP,
+    'CROPRESIDUE',
+    crop.type,
+    'dryMatterContent',
+  );
+  const zc = selectConstant(
+    constants.CROP,
+    'CROPRESIDUE',
+    crop.type,
+    'fractionBurnt',
+  );
+  const fc = crop.fractionOfAnnualCropBurnt;
+
+  const mburnc = pc
+    .multiply(ragc)
+    .multiply(sc)
+    .multiply(dmc)
+    .multiply(zc)
+    .multiply(fc, { name: 'Mburnc', references: [`6.4.1.1 (3)`] });
+
+  return mburnc;
+};
 
 export const calculateFieldBurningN2O = (
-  input: CropResidueInputTransformed & BaseGrainsCropTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  activity: HasCropResidueInputTransformed,
+  context: ExecutionContext<ConstantsForResidueManagement>,
 ) => {
   const { constants } = context;
-
-  if (isPastureType(input.type)) {
-    return zeroN2O;
-  }
   /*
     (2) Nitrous oxide emissions from the burning of crop residue EN2O (t N2O), are calculated
     as:
@@ -26,67 +66,34 @@ export const calculateFieldBurningN2O = (
     CN2O = factor to convert elemental mass of nitrous oxide to molecular mass
     (dimensionless)
     */
-  const pc = input.averageYield.multiply(input.areaSown, { name: 'Pc' });
-  const ragc = selectConstant(
-    constants.CROP,
-    'CROPRESIDUE',
-    input.type,
-    'residueCropRatio',
-  );
-  const sc = selectConstant(
-    constants.CROP,
-    'CROPRESIDUE',
-    input.type,
-    'fractionOfResidueAtBurning',
-  );
-  // TODO: I believe this is a new constant
-  const zc = selectConstant(
-    constants.CROP,
-    'CROPRESIDUE',
-    input.type,
-    'fractionBurnt',
-  );
-  const fc = input.fractionOfAnnualCropBurnt;
 
-  const mburnc = pc
-    .multiply(ragc)
-    .multiply(sc)
-    .multiply(zc)
-    .multiply(fc, { name: 'Mburnc' });
+  const { crop } = activity;
 
-  const dmc = selectConstant(
-    constants.CROP,
-    'CROPRESIDUE',
-    input.type,
-    'dryMatterContent',
-  );
+  const mburnc = calculateCropBurnt(crop, constants);
+
   const ncagc = selectConstant(
     constants.CROP,
     'CROPRESIDUE',
-    input.type,
+    crop.type,
     'aboveGroundN',
   );
   const efn2o = selectConstant(constants.CROP, 'BURNING_N2O_EF');
-  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
+  const cn2o = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_N2O');
 
   const fieldBurningN2O = mburnc
-    .multiply(dmc)
     .multiply(ncagc)
     .multiply(efn2o)
-    .multiply(cn2o);
+    .multiply(cn2o)
+    .reference('6.4.1.1 (2)');
 
   return fieldBurningN2O;
 };
 
 export const calculateFieldBurningCH4 = (
-  input: CropResidueInputTransformed & BaseGrainsCropTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  activity: HasCropResidueInputTransformed,
+  context: ExecutionContext<ConstantsForResidueManagement>,
 ) => {
   const { constants } = context;
-
-  if (isPastureType(input.type)) {
-    return zeroCH4;
-  }
   /*
     6.4.1.1 Method 1 -- Burning of Crop Residues CH4 and N2O
   (1) Methane emissions from the burning of crop residues ECH4 (t CH4), are calculated as ECH4 = sum (Mburn,c * CCc * EF CH4 * CCH4 * 10^-3)
@@ -100,60 +107,41 @@ export const calculateFieldBurningCH4 = (
 
   Mburn,c = Pc * RAGc * Sc * DMc * Zc * Fc
   */
-  const pc = input.averageYield.multiply(input.areaSown, { name: 'Pc' });
-  const ragc = selectConstant(
-    constants.CROP,
-    'CROPRESIDUE',
-    input.type,
-    'residueCropRatio',
-  );
-  const sc = selectConstant(
-    constants.CROP,
-    'CROPRESIDUE',
-    input.type,
-    'fractionOfResidueAtBurning',
-  );
-  const dmc = selectConstant(
-    constants.CROP,
-    'CROPRESIDUE',
-    input.type,
-    'dryMatterContent',
-  );
-  const zc = selectConstant(
-    constants.CROP,
-    'CROPRESIDUE',
-    input.type,
-    'fractionBurnt',
-  );
-  const fc = input.fractionOfAnnualCropBurnt;
 
-  const mburnc = pc
-    .multiply(ragc)
-    .multiply(sc)
-    .multiply(dmc)
-    .multiply(zc)
-    .multiply(fc, { name: 'Mburnc' });
+  const { crop } = activity;
+
+  const mburnc = calculateCropBurnt(crop, constants);
 
   const ccc = selectConstant(
     constants.CROP,
     'CROPRESIDUE',
-    input.type,
+    crop.type,
     'carbonMassFraction',
   );
-  const efch4 = selectConstant(constants.CROP, 'BURNING_METHANE_EF');
-  const cch4 = selectConstant(constants.COMMON, 'GWP_FACTORSC14');
 
-  const fieldBurningCH4 = mburnc.multiply(ccc).multiply(efch4).multiply(cch4);
+  const efch4 = selectConstant(constants.CROP, 'BURNING_METHANE_EF');
+  const cch4 = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_CH4');
+
+  const fieldBurningCH4 = mburnc
+    .multiply(ccc)
+    .multiply(cch4)
+    .multiply(efch4)
+    .reference('6.4.1.1 (1)');
 
   return fieldBurningCH4;
 };
 
 export const calculate64FieldBurning = (
-  crop: CropResidueInputTransformed & BaseGrainsCropTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  crop: HasCropOrPastureResidueInputTransformed,
+  context: ExecutionContext<ConstantsForResidueManagement>,
 ) => {
-  return {
-    fieldBurningN2O: calculateFieldBurningN2O(crop, context),
-    fieldBurningCH4: calculateFieldBurningCH4(crop, context),
-  };
+  return isPastureResidueInput(crop)
+    ? {
+        fieldBurningN2O: zeroN2O,
+        fieldBurningCH4: zeroCH4,
+      }
+    : {
+        fieldBurningN2O: calculateFieldBurningN2O(crop, context),
+        fieldBurningCH4: calculateFieldBurningCH4(crop, context),
+      };
 };

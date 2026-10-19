@@ -1,5 +1,5 @@
 import {
-  calculateGrains,
+  calculateGrainsParsed,
   validateCalculatorInput,
 } from '@aginnovationaustralia/emissions-calculators';
 import {
@@ -8,7 +8,7 @@ import {
   GrainsInputTransformed,
 } from '@aginnovationaustralia/emissions-calculators/grains';
 import { ValidationResult } from '@aginnovationaustralia/emissions-calculators/validate';
-import { grainsInputData } from './input';
+import { grainsInputDataMethod1 } from './input';
 
 /**
  * Calculate beef emissions using top-level exports, which might be a little easier to discover and start working with.
@@ -17,7 +17,7 @@ import { grainsInputData } from './input';
  */
 export const calculateGrainsTopLevel = () => {
   const validatedInput: ValidationResult<GrainsInputTransformed, GrainsInput> =
-    validateCalculatorInput(GrainsInputSchema, grainsInputData);
+    validateCalculatorInput(GrainsInputSchema, grainsInputDataMethod1);
 
   if (!validatedInput.valid) {
     const formattedString = validatedInput.issues
@@ -27,7 +27,7 @@ export const calculateGrainsTopLevel = () => {
     throw new Error('Input was not valid: ' + formattedString);
   }
 
-  const result = calculateGrains(validatedInput.result, {
+  const result = calculateGrainsParsed(validatedInput.result, {
     disableMetrics: true,
   });
   return result;

@@ -1,43 +1,45 @@
+import { Container } from '@/tools/containers';
+
 export const CalculationMethods = ['1', '2'] as const;
 export type CalculationMethod = (typeof CalculationMethods)[number];
-
-export const States = [
-  'nsw',
-  'vic',
-  'qld',
-  'sa',
-  'wa_nw',
-  'wa_sw',
-  'tas',
-  'nt',
-  'act',
-] as const;
-
-export type State = (typeof States)[number];
 
 // Currently only used for inorganic fertilisers
 // 5.1.1.2
 export const ProductionSystemsInorganicFertilisers = [
   'Irrigated crop (maize)',
-  'Non-irrigated crop (high rainfall zone)',
+  'Non-irrigated crop (high rainfall)',
   'Cotton',
 ] as const;
 export type ProductionSystemsInorganicFertiliser =
   (typeof ProductionSystemsInorganicFertilisers)[number];
 
-export const BasicCropProductionSystems = [
-  'Irrigated pasture',
-  'Irrigated crop (low rainfall)',
-  'Irrigated crop (high rainfall)',
+export const RiceProductionSystems = [
+  'Rice (continuous flooding)',
+  'Rice (single and multiple drainage, or alternate wetting and drying)',
+] as const;
+
+export const CropOnlyProductionSystems = [
   'Irrigated crop',
+  'Non-irrigated crop (low rainfall)',
+  'Non-irrigated crop (high rainfall)',
+] as const;
+export type CropOnlyProductionSystem =
+  (typeof CropOnlyProductionSystems)[number];
+
+export const PastureOnlyProductionSystems = [
+  'Irrigated pasture',
   'Non-irrigated pasture',
-  'Non-irrigated crops',
+] as const;
+export type PastureOnlyProductionSystem =
+  (typeof PastureOnlyProductionSystems)[number];
+
+export const BasicCropProductionSystems = [
+  ...RiceProductionSystems,
+  ...CropOnlyProductionSystems,
+  ...PastureOnlyProductionSystems,
   'Sugar',
   'Cotton',
   'Horticultural crops',
-  'Aquaculture',
-  'Rice (continuous flooding)',
-  'Rice (single and multiple drainage, or alternate wetting and drying)',
   'Aquaculture',
   'Forestry',
 ] as const;
@@ -67,17 +69,6 @@ export const GrazingProductionSystemsWithRainfall = [
 ] as const;
 export type GrazingProductionSystemsWithRainfall =
   (typeof GrazingProductionSystemsWithRainfall)[number];
-export const addRainfallToGrazingProductionSystem = (
-  system: GrazingProductionSystem,
-  highRainfallZone: boolean,
-): GrazingProductionSystemsWithRainfall => {
-  if (system === 'Non-irrigated crop') {
-    return highRainfallZone
-      ? 'Non-irrigated crop (high rainfall)'
-      : 'Non-irrigated crop (low rainfall)';
-  }
-  return system;
-};
 
 // Appendix A 2.2.6
 export const InorganicFertiliserTypes = [
@@ -88,6 +79,8 @@ export const InorganicFertiliserTypes = [
   'Urea-Ammonium Nitrate (UAN)',
   'Ammonium Nitrate (AN)',
   'Calcium Ammonium Nitrate (CAN)',
+  'Calcium Nitrate',
+  'Single Super Phosphate',
 ] as const;
 export type InorganicFertiliserType = (typeof InorganicFertiliserTypes)[number];
 
@@ -95,65 +88,59 @@ export const OrganicFertiliserTypes = [
   'Dairy cattle',
   'Beef cattle',
   'Poultry',
-  'Swine',
+  'Pigs',
   'Sheep',
   'Horses/Mules',
 ] as const;
 export type OrganicFertiliserType = (typeof OrganicFertiliserTypes)[number];
 
-export const OrganicFertiliserOrigins = [
-  'Local',
-  'Purchased_Traced',
-  'Purchased_Untraced',
+export const PrimaryPigsMMSWithSolidSeparationTypes = [
+  'anaerobicLagoon',
+  'digester',
+  'pitStorage',
 ] as const;
-export type OrganicFertiliserOrigin = (typeof OrganicFertiliserOrigins)[number];
+export type PrimaryPigsMMSWithSolidSeparationType =
+  (typeof PrimaryPigsMMSWithSolidSeparationTypes)[number];
 
-// REVISIT: This list is still used in module 15.3 (waste)
-export const SwineMMSTypes = [
-  'Outdoor (Dry lot)',
-  'Deep litter',
-  'Stockpile (Solid storage)',
-  'Effluent pond (Uncovered anaerobic lagoon)',
-  'Anaerobic digestor / Covered lagoon',
-  'Short HRT tank storage < 1 month (pit storage)',
-  'Direct application', // This is not strictly derived from references. It is implicit and added to allow easier data entry
+export const PrimaryPigsMMSTypesWithoutPasture = [
+  ...PrimaryPigsMMSWithSolidSeparationTypes,
+  'deepLitter',
+  'solidStorage',
 ] as const;
-export type SwineMMSType = (typeof SwineMMSTypes)[number];
 
-export const PrimarySwineMMSWithSolidSeparationTypes = [
-  // REVISIT: call it 'covered' for the sake of recognisable terminology?
+export const PrimaryPigsMMSTypes = [
+  ...PrimaryPigsMMSTypesWithoutPasture,
+  'outdoorAndFreeRange',
+] as const;
+export type PrimaryPigsMMSType = (typeof PrimaryPigsMMSTypes)[number];
+
+export const primaryPigMMSIsWithSolidSeparationType = (
+  mms: PrimaryPigsMMSType,
+): mms is PrimaryPigsMMSWithSolidSeparationType =>
+  PrimaryPigsMMSWithSolidSeparationTypes.includes(
+    mms as PrimaryPigsMMSWithSolidSeparationType,
+  );
+
+export const SecondaryPigsMMSTypesWithoutDirectApplication = [
+  'solidStorage',
   'anaerobicLagoon',
   'digester',
   'pitStorage',
 ] as const;
 
-export const PrimarySwineMMSTypes = [
-  ...PrimarySwineMMSWithSolidSeparationTypes,
-  'outdoorAndFreeRange',
-  'deepLitter',
-  'solidStorage',
-] as const;
-export type PrimarySwineMMSType = (typeof PrimarySwineMMSTypes)[number];
-
-export const SecondarySwineMMSTypesWithoutDirectApplication = [
-  'solidStorage',
-  'anaerobicLagoon',
-] as const;
-
-export const SecondarySwineMMSTypes = [
-  ...SecondarySwineMMSTypesWithoutDirectApplication,
+export const SecondaryPigsMMSTypes = [
+  ...SecondaryPigsMMSTypesWithoutDirectApplication,
   'directApplication',
 ] as const;
-export type SecondarySwineMMSType = (typeof SecondarySwineMMSTypes)[number];
+export type SecondaryPigsMMSType = (typeof SecondaryPigsMMSTypes)[number];
 
-export const PrimaryToSecondarySwineMMSMap = {
-  outdoorAndFreeRange: 'directApplication',
-  deepLitter: 'solidStorage',
-  anaerobicLagoon: 'directApplication',
-  digester: 'anaerobicLagoon',
-  pitStorage: 'directApplication',
-  solidStorage: 'directApplication',
-} as const satisfies Record<PrimarySwineMMSType, SecondarySwineMMSType>;
+export const AquacultureSystemLocations = [
+  'Coastal wetland habitat',
+  'Offshore cages in seagrass meadows',
+  'Other',
+] as const;
+export type AquacultureSystemLocation =
+  (typeof AquacultureSystemLocations)[number];
 
 export const StationaryFuelTypes = [
   'petroleum based oils',
@@ -260,34 +247,39 @@ export const PastureTypes = [
 ] as const;
 export type PastureType = (typeof PastureTypes)[number];
 
-export const isPastureType = (type: PastureCropType): type is PastureType => {
-  return PastureTypes.includes(type as PastureType);
-};
-
-export const CropTypes = [
+export const GrainsCropTypes = [
   'Wheat',
   'Barley',
   'Maize',
   'Oats',
-  'Rice',
   'Sorghum',
   'Triticale',
   'Other Cereals',
   'Pulses',
-  'Tubers and Roots',
+] as const;
+export type GrainsCropType = (typeof GrainsCropTypes)[number];
+
+export const HorticultureCropTypes = [
+  'Hops and grape vines',
   'Peanuts',
+  'Tubers and Roots',
+  'Pulses',
+] as const;
+
+export const CropTypes = [
+  ...GrainsCropTypes,
+  'Hops and grape vines',
+  'Peanuts',
+  'Tubers and Roots',
+  'Rice',
   'Sugar Cane',
   'Cotton',
-  'Hops',
   'Oilseeds',
   'Forage Crops',
   'Other Annual Crops',
   'Other Perennial Crops',
 ] as const;
 export type CropType = (typeof CropTypes)[number];
-
-export const PastureCropTypes = [...PastureTypes, ...CropTypes] as const;
-export type PastureCropType = (typeof PastureCropTypes)[number];
 
 export const RefrigerationTypes = [
   'Domestic refrigerators',
@@ -354,146 +346,101 @@ export const isInorganicFertiliserComponentTypeRegional = (
   );
 };
 
-// Taken from AusLCI CEF V47 2026
-export const ServiceByAreaTypes = [
-  'Air blast spraying, orchards',
-  'Bed forming, cotton',
-  'Bed forming, horticulture',
-  'Boom spraying, cotton',
-  'Boom spraying, horticulture',
-  'Control of brigalow suckers, graslan aerial application',
-  'Cultivating, broadacre crop, controlled traffic',
-  'Cultivating, broadacre crop, conventional',
-  'Cultivating, cotton',
-  'Cultivating, large implement, horticulture',
-  'Cultivating, medium implement, horticulture',
-  'Disc ploughing, broadacre crop, controlled traffic',
-  'Disc ploughing, broadacre crop, conventional',
-  'Discing, cotton',
-  'Fertiliser application, cotton',
-  'Fertiliser side dressing, horticulture',
-  'Fertiliser spreading, cotton',
-  'Fertiliser spreading, horticulture',
-  'Fertilizing, broadacre crop, pre & post-emergence, controlled traffic',
-  'Fertilizing, broadacre crop, pre & post-emergence, conventional',
-  'Grader operation, broadacre crop, medium load factor, controlled traffic',
-  'Grader operation, broadacre crop, medium load factor, conventional',
-  'Grain collection, broadacre, in-field with tractor and bin, controlled traffic',
-  'Grain collection, broadacre, in-field with tractor and bin, conventional',
-  'Harrowing, horticulture',
-  'Harvesting, broadacre crop, combine less than 200kW, controlled traffic',
-  'Harvesting, broadacre crop, combine less than 200kW, conventional',
-  'Harvesting, cotton',
-  'Harvesting, specialised machine, horticulture, 150 kW combine',
-  'Hay baling, large square bales, broadacre crop, controlled traffic',
-  'Hay baling, large square bales, broadacre crop, conventional',
-  'Hay baling, round bales, broadacre crop, controlled traffic',
-  'Hay baling, round bales, broadacre crop, conventional',
-  'Hay baling, small square bales, broadacre crop, controlled traffic',
-  'Hay baling, small square bales, broadacre crop, conventional',
-  'Hay mowing, broadacre crop, controlled traffic',
-  'Hay mowing, broadacre crop, conventional',
-  'Hay raking, broadacre crop, controlled traffic',
-  'Hay raking, broadacre crop, conventional',
-  'Inter-row cultivation, horticulture',
-  'Inter-row tractor, horticulture',
-  'Irrigation, centre pivot irrigation system',
-  'Irrigation, hose move sprinkler system',
-  'Irrigation, pipe irrigation system',
-  'Irrigation, solid set irrigation system',
-  'Irrigation, travel spray boom irrigation system',
-  'Irrigation, under tree irrigation system',
-  'Irrigation,flood or furrow irrigation',
-  'Irrigation,travelling gun irrigation system',
-  'Levelling, cotton',
-  'Liming, broadacre crop, pre & post-emergence, controlled traffic',
-  'Liming, broadacre crop, pre & post-emergence, conventional',
-  'Mulching, cotton',
-  'Offset disc harrowing, horticulture',
-  'Pasture establishment, SE Qld',
-  'Pasture establishment, top end, NT',
-  'Picking, cotton',
-  'Planting, broadacre crop, soil clay content 0 to 10%, controlled traffic',
-  'Planting, broadacre crop, soil clay content 0 to 10%, conventional',
-  'Planting, broadacre crop, soil clay content 10 to 20%, controlled traffic',
-  'Planting, broadacre crop, soil clay content 10 to 20%, conventional',
-  'Planting, broadacre crop, soil clay content greater than 20%, controlled traffic',
-  'Planting, broadacre crop, soil clay content greater than 20%, conventional',
-  'Planting, cotton',
-  'Precision planting, horticulture',
-  'Ripping, large implement, horticulture',
-  'Ripping, medium implement, horticulture',
-  'Rolling, cotton',
-  'Root cutting, cotton',
-  'Rotary hoeing, medium implement, horticulture',
-  'Savanna burning, northern Australia woodland, Qld & NT',
-  'Savanna burning, open eucalypt woodland, late dry season, Qld & NT',
-  'Scarifiying, broadacre crop, controlled traffic',
-  'Scarifiying, broadacre crop, conventional',
-  'Seedling transplanting, horticulture',
-  'Spraying, aerial, broadacre crop',
-  'Spraying, aerial, cotton',
-  'Spraying, aerial, rice',
-  'Spraying, broadacre crop, pre & post-emergence, controlled traffic',
-  'Spraying, broadacre crop, pre & post-emergence, conventional',
-  'Windrowing, broadacre crop, controlled traffic',
-  'Windrowing, broadacre crop, conventional',
+export const SolidWasteOrganicManagedTreatmentTypes = [
+  'Composting',
+  'Anaerobic Digestion',
 ] as const;
-export type ServiceByAreaType = (typeof ServiceByAreaTypes)[number];
+export type SolidWasteOrganicManagedTreatmentType =
+  (typeof SolidWasteOrganicManagedTreatmentTypes)[number];
 
-export const ServiceByHourTypes = [
-  'Bulldozer operation, medium load factor',
+export const SolidWasteLandfilTreatmentTypes = [
+  'Landfill (without gas recovery)',
+  'Landfill (with gas recovery)',
 ] as const;
-export type ServiceByHourType = (typeof ServiceByHourTypes)[number];
+export type SolidWasteLandfilTreatmentType =
+  (typeof SolidWasteLandfilTreatmentTypes)[number];
 
-export const OrganicWasteTypes = [
+export const SolidWasteManagedTreatmentTypes = [
+  ...SolidWasteOrganicManagedTreatmentTypes,
+  ...SolidWasteLandfilTreatmentTypes,
+  'Incineration',
+] as const;
+export type SolidWasteManagedTreatmentType =
+  (typeof SolidWasteManagedTreatmentTypes)[number];
+
+export const SolidWasteUnmanagedTreatmentTypes = [
+  'Unmanaged - deep',
+  'Unmanaged - shallow',
+  'Burial',
+] as const;
+export type SolidWasteUnmanagedTreatmentType =
+  (typeof SolidWasteUnmanagedTreatmentTypes)[number];
+
+export const solidWasteTreatmentTypeIsOrganicOnly = (
+  type: SolidWasteManagedTreatmentType | SolidWasteUnmanagedTreatmentType,
+): type is SolidWasteOrganicManagedTreatmentType => {
+  return type === 'Composting' || type === 'Anaerobic Digestion';
+};
+
+export const SolidWasteOrganicTypes = [
   'Food waste',
   'Green waste',
-  'Wood',
+  'Wood products (at time of harvest)',
+  'Wood products (at end of life)',
   'Sludge',
 ] as const;
-export type OrganicWasteType = (typeof OrganicWasteTypes)[number];
+export type SolidWasteOrganicType = (typeof SolidWasteOrganicTypes)[number];
 
-export const SolidWasteLandfillTypes = [
-  ...OrganicWasteTypes,
-  'Textiles',
+export const SolidWasteWithoutNappiesInorganicTypes = [
   'Paper and cardboard',
+  'Textiles',
   'Rubber and leather',
-  'Inert waste (including concrete, metal, plastic or glass)',
+  'Inert waste',
+] as const;
+export type SolidWasteWithoutNappiesInorganicType =
+  (typeof SolidWasteWithoutNappiesInorganicTypes)[number];
+
+export const SolidWasteInorganicTypes = [
+  ...SolidWasteWithoutNappiesInorganicTypes,
+  'Nappies',
+] as const;
+export type SolidWasteInorganicType = (typeof SolidWasteInorganicTypes)[number];
+
+export const SolidWasteNonStreamTypes = [
+  ...SolidWasteOrganicTypes,
+  ...SolidWasteInorganicTypes,
+] as const;
+export type SolidWasteNonStreamType = (typeof SolidWasteNonStreamTypes)[number];
+
+export const SolidWasteStreamTypes = [
   'Municipal solid waste',
-  'Commercial waste',
-  'Industrial waste',
+  'Commercial and industrial waste',
   'Construction and demolition waste',
 ] as const;
-export type SolidWasteLandfillType = (typeof SolidWasteLandfillTypes)[number];
+export type SolidWasteStreamType = (typeof SolidWasteStreamTypes)[number];
 
-export const SolidWasteIncinerationTypes = [
-  ...OrganicWasteTypes,
-  'Paper and cardboard',
-  'Textiles',
-  'Rubber and leather',
-  'Inert waste (including concrete, metal, plastic or glass)',
-  'Municipal solid waste',
-  'Industrial waste',
+export const SolidWasteScope3LandfillTypes = [
+  ...SolidWasteOrganicTypes,
+  ...SolidWasteWithoutNappiesInorganicTypes,
+  ...SolidWasteStreamTypes,
 ] as const;
-export type SolidWasteIncinerationType =
-  (typeof SolidWasteIncinerationTypes)[number];
+export type SolidWasteScope3LandfillType =
+  (typeof SolidWasteScope3LandfillTypes)[number];
 
-export const SolidWasteByVolumeTypes = [
-  ...OrganicWasteTypes,
-  'Paper and cardboard',
-  'Textiles',
-  'Rubber and leather',
-  'Inert waste (including concrete, metal, plastic or glass)',
+export const SolidWasteScope3IncinerationTypes = [
+  ...SolidWasteOrganicTypes,
+  ...SolidWasteWithoutNappiesInorganicTypes,
   'Municipal solid waste',
-  'Commercial waste',
-  'Industrial waste',
-  'Construction and demolition waste',
+  'Commercial and industrial waste',
 ] as const;
-export type SolidWasteByVolumeType = (typeof SolidWasteByVolumeTypes)[number];
+export type SolidWasteScope3IncinerationType =
+  (typeof SolidWasteScope3IncinerationTypes)[number];
 
-export const ClimateZoneTypes = ['dry', 'wet'] as const;
-export type ClimateZoneType = (typeof ClimateZoneTypes)[number];
+export const SolidWasteTypes = [
+  ...SolidWasteNonStreamTypes,
+  ...SolidWasteStreamTypes,
+] as const;
+export type SolidWasteType = (typeof SolidWasteTypes)[number];
 
 export const FuelStationarySolidTypes = [
   'Bituminous coal',
@@ -703,8 +650,7 @@ export type PurchasedFeedLivestockRegionalType<
 > = (typeof PurchasedFeedLivestockTypesPerRegion)[R][number];
 
 export type PurchasedFeedLivestockType =
-  | PurchasedFeedLivestockRegionlessType
-  | PurchasedFeedLivestockRegionalType;
+  PurchasedFeedLivestockRegionlessType | PurchasedFeedLivestockRegionalType;
 
 export const PurchasedMineralSupplementTypes = [
   'Lick block, dry season mix',
@@ -714,60 +660,28 @@ export const PurchasedMineralSupplementTypes = [
 export type PurchasedMineralSupplementType =
   (typeof PurchasedMineralSupplementTypes)[number];
 
-/**
- * REVISIT: Table A.1.8.1 is a complete table of methane conversion factors by
- * MAT used across all livestock types, with 4 stated exceptions:
- * - Drylot MCF is state based - 0.02 (NT) or 0.01 (Other States) - source NIR
- * - Dairy daily spread - drains to paddock should apply liquid slurry MCFs - source NIR
- * - Dairy pasture range and paddock is state based - 0.03 (QLD, NT) or 0.01 (Other States) - source NIR
- * - Poultry and Swine pasture range and paddock should apply the drylot MCFs - source NIR
- *
- * These factors are currently spread across multiple sets of constants, ideally they should be kept in one place
- * (on the shared Livestock constants) to prevent duplicates falling out of sync.
- */
-export const AllManureManagementSystems = [
-  'Anaerobic lagoon',
-  'Liquid systems',
-  'Daily spread',
-  'Sump and dispersal',
-  'Drains to paddock',
-  'Solid storage',
-  'Drylot',
-  'Composting (passive windrow)',
-  'Digestor/Covered lagoon',
-  'Deep litter',
-  'Pit storage (<1 month)',
-  'Poultry manure with litter',
-  'Poultry manure without litter',
-  'Direct processing into pelletised fertiliser',
-  'Direct application',
-  'Pasture range and paddock',
+export const PrimaryFeedlotMMSTypes = ['drylot'] as const;
+export type PrimaryFeedlotMMSType = (typeof PrimaryFeedlotMMSTypes)[number];
+export const SecondaryFeedlotMMSTypes = [
+  'solidStorage',
+  'composting',
+  'directApplication',
 ] as const;
+export type SecondaryFeedlotMMSType = (typeof SecondaryFeedlotMMSTypes)[number];
+export const TertiaryFeedlotMMSTypes = ['anaerobicLagoon'] as const;
+export type TertiaryFeedlotMMSType = (typeof TertiaryFeedlotMMSTypes)[number];
 
 export const FeedlotMMSTypes = [
-  'Dry lot (Feedpad)',
-  'Solid Storage (Stockpile)',
-  'Composting (Passive Windrow)',
-  'Uncovered anaerobic lagoon (Effluent Pond)',
-  'Direct application', // This is not strictly derived from references. It is implicit and added to allow easier data entry
+  ...PrimaryFeedlotMMSTypes,
+  ...SecondaryFeedlotMMSTypes,
+  ...TertiaryFeedlotMMSTypes,
 ] as const;
-export type FeedlotMMSType = (typeof FeedlotMMSTypes)[number];
+export type FeedlotMMSType =
+  PrimaryFeedlotMMSType | SecondaryFeedlotMMSType | TertiaryFeedlotMMSType;
 
 export const FeedlotDurationTypes = ['0-80 days', '81-200 days', '201+ days'];
 
 export type FeedlotDurationType = (typeof FeedlotDurationTypes)[number];
-
-export const groupDurationToDurationType = (
-  duration: number,
-): FeedlotDurationType => {
-  if (duration <= 80) {
-    return '0-80 days';
-  } else if (duration <= 200) {
-    return '81-200 days';
-  } else {
-    return '201+ days';
-  }
-};
 
 export const DairySystems = [
   'Grazed only',
@@ -777,12 +691,26 @@ export const DairySystems = [
 ] as const;
 export type DairySystem = (typeof DairySystems)[number];
 
-export const DairyClasses = [
+export const DairyTimeInLocationTypes = [
+  'pasture',
+  'feedpad',
+  'milkingShed',
+] as const;
+export type DairyTimeInLocations = (typeof DairyTimeInLocationTypes)[number];
+export const MatureDairyClasses = [
   'milkingCows',
   'heifersGt1',
-  'heifersLt1',
   'bullsGt1',
-  'bullsLt1',
+] as const;
+export type MatureDairyClass = (typeof MatureDairyClasses)[number];
+
+// I.e *potentially* pre-weaned
+export const PreWeanedDairyClasses = ['bullsLt1', 'heifersLt1'] as const;
+export type PreWeanedDairyClass = (typeof PreWeanedDairyClasses)[number];
+
+export const DairyClasses = [
+  ...MatureDairyClasses,
+  ...PreWeanedDairyClasses,
 ] as const;
 export type DairyClass = (typeof DairyClasses)[number];
 
@@ -791,17 +719,62 @@ export const DairyMMSTypes = [
   'sumpDispersal',
   'drainToPaddock',
   'solidStorage',
-  'pastureRangeAndPaddock',
 ] as const;
 export type DairyMMSType = (typeof DairyMMSTypes)[number];
+
+export const DairyMMSTypesWithPasture = [
+  ...DairyMMSTypes,
+  'pastureRangeAndPaddock',
+] as const;
+export type DairyMMSTypeWithPasture = (typeof DairyMMSTypesWithPasture)[number];
+
+export const BeefPurchaseCategories = ['beefPrime', 'beefWeaned'] as const;
+export type BeefPurchaseCategory = (typeof BeefPurchaseCategories)[number];
+export const DairyPurchaseCategories = [
+  'dairySpent',
+  ...BeefPurchaseCategories,
+] as const;
+export type DairyPurchaseCategory = (typeof DairyPurchaseCategories)[number];
+
+export const SheepPurchaseCategories = [
+  'sheepMutton',
+  'sheepPrimeLamb',
+] as const;
+export type SheepPurchaseCategory = (typeof SheepPurchaseCategories)[number];
+
+export const PigPurchaseCategories = [
+  'pigsDefault',
+  'pigsConventionalRearingCoveredPond',
+  'pigsConventionalRearingUncoveredEffluentPond',
+  'pigsDeepLitterRearing',
+  'pigsOutdoorRearing',
+] as const;
+export type PigPurchaseCategory = (typeof PigPurchaseCategories)[number];
+
+export const LivestockPurchaseCategories = [
+  ...DairyPurchaseCategories,
+  ...SheepPurchaseCategories,
+  ...PigPurchaseCategories,
+] as const;
+export type LivestockPurchaseCategory =
+  (typeof LivestockPurchaseCategories)[number];
 
 export const PoultryClasses = [
   'layers',
   'meatChickenGrowers',
-  'meatChickenBreeder',
+  'meatChickenBreeders',
   'meatOther',
 ] as const;
 export type PoultryClass = (typeof PoultryClasses)[number];
+
+export const PoultryWeightClasses = [
+  'chickens',
+  'hensGte1',
+  'pullets',
+  'broilers',
+  'chicks',
+] as const;
+export type PoultryWeightClass = (typeof PoultryWeightClasses)[number];
 
 export const PoultryMMS1Types = [
   'manureWithLitter',
@@ -820,18 +793,10 @@ export const PoultryMMS2Types = [
   'solidStorage',
   'composting',
   'digester',
-  // REVISIT: Deep litter is given as an option but none of the needed constants are supplied in the appendix.
-  // 'deepLitter',
   'directProcessing',
-] as const;
-export type PoultryMMS2Type = (typeof PoultryMMS2Types)[number];
-
-export const PoultryMMS2TypesWithPasture = [
-  ...PoultryMMS2Types,
   'directApplication',
 ] as const;
-export type PoultryMMS2TypeWithPasture =
-  (typeof PoultryMMS2TypesWithPasture)[number];
+export type PoultryMMS2Type = (typeof PoultryMMS2Types)[number];
 
 export const PoultryMMSTypes = [
   ...PoultryMMS1Types,
@@ -841,7 +806,7 @@ export type PoultryMMSType = (typeof PoultryMMSTypes)[number];
 
 export const PoultryMMSTypesWithPasture = [
   ...PoultryMMS1TypesWithPasture,
-  ...PoultryMMS2TypesWithPasture,
+  ...PoultryMMSTypes,
 ] as const;
 export type PoultryMMSTypeWithPasture =
   (typeof PoultryMMSTypesWithPasture)[number];
@@ -915,47 +880,43 @@ export const RefrigerantTypes = [
 ] as const;
 export type RefrigerantType = (typeof RefrigerantTypes)[number];
 
-export const PurchasedPackagingTypes = [
+export const PurchasedPackagingByUnitsTypes = [
   '1 tonne polypropylene bag',
   '25 kg polypropylene bag',
   '20L high density polyethylene (HDPE) container',
   '1000L intermediate bulk containers',
   'Plastic crate polypropylene',
 ] as const;
-export type PurchasedPackagingType = (typeof PurchasedPackagingTypes)[number];
+export type PurchasedPackagingByUnitsType =
+  (typeof PurchasedPackagingByUnitsTypes)[number];
 
-export const PurchasedGrowMediaByVolumeTypes = [
-  'PLACEHOLDER_VOLUME_TYPE',
+export const PurchasedPackagingByMassTypes = [
+  'Corrugated board',
+  'Plastic film LDPE',
+  'Plastic sheet HDPE',
 ] as const;
-export type PurchasedGrowMediaByVolumeType =
-  (typeof PurchasedGrowMediaByVolumeTypes)[number];
-
-export const PurchasedGrowMediaByMassTypes = ['PLACEHOLDER_MASS_TYPE'] as const;
-export type PurchasedGrowMediaByMassType =
-  (typeof PurchasedGrowMediaByMassTypes)[number];
+export type PurchasedPackagingByMassType =
+  (typeof PurchasedPackagingByMassTypes)[number];
 
 export const FreightTypes = [
-  'PLACEHOLDER_TRAIN',
-  'PLACEHOLDER_TRUCK',
-  'PLACEHOLDER_AVIATION',
+  'Van < 3.5 tonnes (diesel)',
+  'Van < 3.5 tonnes (petrol)',
+  'Van < 3.5 tonnes (CNG)',
+  'Van < 3.5 tonnes (LPG)',
+  'Van < 3.5 tonnes (PHEV)',
+  'Van < 3.5 tonnes (BEV)',
+  'Truck > 3.5 tonnes non-refrigerated (diesel)',
+  'Truck > 3.5 tonnes refrigerated (diesel)',
+  'Freight flight (domestic)',
+  'Freight flight (short haul)',
+  'Freight flight (international)',
+  'Rail',
+  'Cargo ship (bulk carrier)',
+  'Cargo ship (general cargo)',
+  'Cargo ship (container)',
+  'Cargo ship (refrigerated)',
 ] as const;
 export type FreightType = (typeof FreightTypes)[number];
-
-export const isPurchasedGrowMediaByVolume = (
-  growMedia: PurchasedGrowMediaByVolumeType | PurchasedGrowMediaByMassType,
-): growMedia is PurchasedGrowMediaByVolumeType => {
-  return PurchasedGrowMediaByVolumeTypes.includes(
-    growMedia as PurchasedGrowMediaByVolumeType,
-  );
-};
-
-export const isPurchasedGrowMediaByMass = (
-  growMedia: PurchasedGrowMediaByVolumeType | PurchasedGrowMediaByMassType,
-): growMedia is PurchasedGrowMediaByMassType => {
-  return PurchasedGrowMediaByMassTypes.includes(
-    growMedia as PurchasedGrowMediaByMassType,
-  );
-};
 
 export const WetClimateZones = [
   'Tropical montane',
@@ -988,6 +949,24 @@ export const isDryClimateZone = (
 export const ClimateZones = [...WetClimateZones, ...DryClimateZones] as const;
 export type ClimateZone = (typeof ClimateZones)[number];
 
+export const ClimateZoneTypes = ['dry', 'wet'] as const;
+export type ClimateZoneType = (typeof ClimateZoneTypes)[number];
+
+export const RainfallLevels = ['high_rainfall', 'low_rainfall'] as const;
+export type RainfallLevel = (typeof RainfallLevels)[number];
+
+export const ClimateZoneOrZoneTypes = [
+  ...ClimateZones,
+  ...ClimateZoneTypes,
+] as const;
+export type ClimateZoneOrZoneType = (typeof ClimateZoneOrZoneTypes)[number];
+
+export const isClimateZoneType = (
+  value: ClimateZoneOrZoneType,
+): value is ClimateZoneType => {
+  return ClimateZoneTypes.includes(value as ClimateZoneType);
+};
+
 const WARegions = [
   'WA - South West',
   'WA - Pilbara',
@@ -1010,7 +989,7 @@ const NTRegions = [
   'NT - Northern',
 ] as const;
 type NTRegion = (typeof NTRegions)[number];
-const isNTRegion = (region: StateOrRegion): region is NTRegion => {
+export const isNTRegion = (region: StateOrRegion): region is NTRegion => {
   return NTRegions.includes(region as NTRegion);
 };
 
@@ -1021,7 +1000,7 @@ const QLDRegions = [
   'QLD - Low',
 ] as const;
 type QLDRegion = (typeof QLDRegions)[number];
-const isQLDRegion = (region: StateOrRegion): region is QLDRegion => {
+export const isQLDRegion = (region: StateOrRegion): region is QLDRegion => {
   return QLDRegions.includes(region as QLDRegion);
 };
 
@@ -1035,30 +1014,6 @@ export const ExtendedRegions = [
   ...QLDRegions,
 ] as const;
 export type ExtendedRegion = (typeof ExtendedRegions)[number];
-
-export const stateOrRegionToExtendedRegion = (
-  stateOrRegion: StateOrRegion,
-): ExtendedRegion => {
-  if (stateOrRegion === 'ACT' || stateOrRegion === 'NSW') {
-    return 'ACT/NSW';
-  } else {
-    return stateOrRegion;
-  }
-};
-
-export const stateOrRegionToLimitedRegion = (
-  stateOrRegion: StateOrRegion,
-): LimitedRegion => {
-  if (isNTRegion(stateOrRegion)) {
-    return 'NT';
-  } else if (isQLDRegion(stateOrRegion)) {
-    return 'QLD';
-  } else if (stateOrRegion === 'ACT' || stateOrRegion === 'NSW') {
-    return 'ACT/NSW';
-  } else {
-    return stateOrRegion;
-  }
-};
 
 export const StateOrRegions = [
   'ACT',
@@ -1126,9 +1081,6 @@ export const BeefClasses = [
 
 export type BeefClass = (typeof BeefClasses)[number];
 
-export const BeefClassesWithCalves = ['cows2To3Years', 'cowsGt3Years'] as const;
-export type BeefClassWithCalves = (typeof BeefClassesWithCalves)[number];
-
 export const WastewaterFacilityTypes = [
   'Managed aerobic treatment',
   'Unmanaged aerobic treatment',
@@ -1138,60 +1090,46 @@ export const WastewaterFacilityTypes = [
 ] as const;
 export type WastewaterFacilityType = (typeof WastewaterFacilityTypes)[number];
 
-export const PureStatesWithoutNT = [
+export const WastewaterCommodities = [
+  'Dairy products',
+  'Pulp, paper and paperboard',
+  'Meat and poultry',
+  'Raw sugar',
+  'Beer',
+  'Wine and other alcoholic beverages',
+  'Fruit',
+  'Vegetables',
+] as const;
+export type WastewaterCommodity = (typeof WastewaterCommodities)[number];
+
+export const States = [
   'ACT',
+  'TAS',
   'NSW',
   'VIC',
   'QLD',
   'SA',
-  'TAS',
   'WA',
+  'NT',
 ] as const;
-export type PureStateWithoutNT = (typeof PureStatesWithoutNT)[number];
-export const isPureStateWithoutNT = (
-  state: string,
-): state is PureStateWithoutNT => {
-  return PureStatesWithoutNT.includes(state as PureStateWithoutNT);
+export type State = (typeof States)[number];
+export const isState = (state: string): state is State => {
+  return States.includes(state as State);
 };
 
-export const pureStateWithoutNTToLimitedState = (
-  state: PureStateWithoutNT,
-): LimitedState => {
-  if (state === 'ACT' || state === 'NSW') {
-    return 'ACT/NSW';
-  }
-  return state;
-};
-
-export const PureStates = [...PureStatesWithoutNT, 'NT'] as const;
-export type PureState = (typeof PureStates)[number];
-export const isPureState = (state: string): state is PureState => {
-  return PureStates.includes(state as PureState);
-};
-
-export const stateOrRegionToPureState = (
-  stateOrRegion: StateOrRegion,
-): PureState => {
-  if (isPureState(stateOrRegion)) {
-    return stateOrRegion;
-  } else if (isNTRegion(stateOrRegion)) {
-    return 'NT';
-  } else if (isQLDRegion(stateOrRegion)) {
-    return 'QLD';
-  } else {
-    return 'WA';
-  }
-};
-
-export const LimitedStates = [
-  'ACT/NSW',
+export const ElectricityRegions = [
+  'NSW',
   'VIC',
   'QLD',
   'SA',
+  'WA_NW',
+  'WA_SW',
   'TAS',
-  'WA',
+  'NT',
+  'ACT',
+  'National',
 ] as const;
-export type LimitedState = (typeof LimitedStates)[number];
+export type ElectricityRegion = (typeof ElectricityRegions)[number];
 
 export const RiceCultivationSeasonWaterRegimeTypes = [
   'Paddy rotation',
@@ -1335,6 +1273,13 @@ export const PerennialWoodyCrops = [
 ] as const;
 export type PerennialWoodyCrop = (typeof PerennialWoodyCrops)[number];
 
+export const isPerennialWoodyCropContainerFull = (
+  crop:
+    Container<PerennialWoodyCropFull> | Container<PerennialWoodyCropPartial>,
+): crop is Container<PerennialWoodyCropFull> => {
+  return isPerennialWoodyCropFull(crop.unit);
+};
+
 export const isPerennialWoodyCropFull = (
   crop: PerennialWoodyCropFull | PerennialWoodyCropPartial,
 ): crop is PerennialWoodyCropFull => {
@@ -1434,5 +1379,20 @@ export const SheepClasses = [
 ] as const;
 export type SheepClass = (typeof SheepClasses)[number];
 
-export const SwineClasses = ['boars', 'sows', 'gilts', 'others'] as const;
-export type SwineClass = (typeof SwineClasses)[number];
+export const PigsClasses = ['boars', 'sows', 'gilts', 'slaughterPigs'] as const;
+export type PigsClass = (typeof PigsClasses)[number];
+
+export const PigsLiveweightClasses = [
+  ...PigsClasses,
+  'slaughterPigsAtTurnoff',
+] as const;
+export type PigsLiveweightClass = (typeof PigsLiveweightClasses)[number];
+
+export const BeefBreeds = [
+  'Hereford or Shorthorn',
+  'Northern Brahman cross breed',
+] as const;
+export type BeefBreed = (typeof BeefBreeds)[number];
+
+export const SoilAmeliorants = ['Limestone', 'Dolomite', 'Gypsum'] as const;
+export type SoilAmeliorant = (typeof SoilAmeliorants)[number];

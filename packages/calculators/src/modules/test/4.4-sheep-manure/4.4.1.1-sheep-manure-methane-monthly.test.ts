@@ -1,12 +1,17 @@
 import {
-  SheepInput,
-  SheepInputSchema,
-  SheepInputTransformed,
-} from '@/calculators/Sheep/types/input';
-import { calculate_4_4_1_1_SheepManureMethane } from '@/modules/scope1/4-manure-management/4.4-sheep-manure';
+  SheepFlockInput,
+  SheepFlockInputSchema,
+  SheepFlockInputTransformed,
+} from '@/calculators/Sheep/types/sheep-flock.input';
+import {
+  HasIsFebruaryInLeapYearInputSchemaForSheep,
+  HasIsFebruaryInLeapYearInputTransformed,
+} from '@/calculators/types/has-is-february-in-leap-year.input';
+import { calculateManureManagementCH4ForSheepFlock } from '@/modules/scope1/4-manure-management/4.4-sheep-manure/calculate';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
-import { checkClimateZone, checkPureStateWithoutNT } from '../livestock-domain';
+import { createSheepFlockInput } from '../factory';
+import { checkClimateZone, checkState } from '../livestock-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
@@ -21,7 +26,9 @@ const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
   method: '1' | '2',
-): SheepInputTransformed | undefined => {
+):
+  | (SheepFlockInputTransformed & HasIsFebruaryInLeapYearInputTransformed)
+  | undefined => {
   const cell = (column: string, offset: number = 0) =>
     sheet
       .cell(`${column}${row + offset}`)
@@ -36,39 +43,33 @@ const getCalculatorInput = (
     readSheepClass,
     readSheepClassWithLambing,
     readSheepClassWithProportionLambsBorn,
-  } = createSheepManureSheetReaders(
+  } = createSheepManureSheetReaders<12>(
     cell,
     method,
     SHEEP_MANURE_MONTHLY_PERIODS_PER_CLASS,
   );
 
-  const sheepInput: SheepInput = {
-    state: checkPureStateWithoutNT(cell(col.columnState)),
+  const sheepInput: SheepFlockInput = createSheepFlockInput({
     climateZone: checkClimateZone(cell(col.columnClimateZone)),
     isInLeachingZone: cell(col.columnIsInLeachingZone) === 'yes',
-    rainfallAbove600: cell(col.columnRainfallAbove600) === 'yes',
-    productionSystem: 'Non-irrigated pasture',
-    electricity: {
-      method: 'location',
-      electricityPurchasedKWh: 0,
+    state: checkState(cell(col.columnState)),
+    excludedFromNaturalWater:
+      cell(col.columnExcludedFromNaturalWater) === 'yes',
+    classes: {
+      period: 'monthly',
+      breedingEwes: readSheepClassWithLambing(0),
+      lambsHoggets: readSheepClassWithProportionLambsBorn(1),
+      rams: readSheepClass(2),
+      wethers: readSheepClass(3),
     },
-    flocks: [
-      {
-        noUnfencedNaturalWater:
-          cell(col.columnNoUnfencedNaturalWater) === 'yes',
-        classes: {
-          breedingEwes: readSheepClassWithLambing(0),
-          lambsHoggets: readSheepClassWithProportionLambsBorn(1),
-          rams: readSheepClass(2),
-          wethers: readSheepClass(3),
-        },
-      },
-    ],
+  });
+
+  return {
+    ...SheepFlockInputSchema.parse(sheepInput),
+    ...HasIsFebruaryInLeapYearInputSchemaForSheep.parse({
+      isFebruaryInLeapYear: false,
+    }),
   };
-
-  // console.dir(sheepInput, { depth: null });
-
-  return SheepInputSchema.parse(sheepInput);
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
@@ -92,7 +93,8 @@ describe('4.4.1.1 Sheep manure methane seasonal', () => {
 
     compareInputsAndOutputs(
       inputsAndOutputs,
-      calculate_4_4_1_1_SheepManureMethane,
+      calculateManureManagementCH4ForSheepFlock,
+      '4.4',
     );
   });
 });

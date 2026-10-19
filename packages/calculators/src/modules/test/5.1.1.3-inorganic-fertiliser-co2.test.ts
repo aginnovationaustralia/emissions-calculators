@@ -1,9 +1,11 @@
 import { getSheet } from '@/test/common/sheets';
+import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import { calculateInorganicFertiliserCO2 } from '../scope1/5-fertiliser/5.1-inorganic-fertiliser';
 import {
-  FertiliserInputSchema,
-  FertiliserInputTransformed,
+  HasFertiliserInput,
+  HasFertiliserInputSchema,
+  HasFertiliserInputTransformed,
 } from '../scope1/5-fertiliser/fertiliser.input';
 import { InorganicFertilisersScope1Method1Input } from '../scope1/5-fertiliser/inorganic-fertilisers.input';
 import {
@@ -18,7 +20,7 @@ import {
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-): FertiliserInputTransformed | undefined => {
+): HasFertiliserInputTransformed | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
@@ -31,26 +33,28 @@ const getCalculatorInput = (
   const massAppliedKg = Number(cell('D'));
 
   const inorganicFertilisers: InorganicFertilisersScope1Method1Input = {
-    productionSystem,
     applications: [
       {
         calculationMethodScope3: '1',
         fertiliserType,
-        massAppliedKg,
+        massAppliedKg: nv(massAppliedKg),
         components: undefined,
       },
     ],
     calculationMethodScope1: '1',
   };
 
-  return {
-    ...FertiliserInputSchema.parse({
-      inorganicFertilisers,
-      organicFertilisers: {
+  const fertiliserInput: HasFertiliserInput = {
+    fertiliser: {
+      productionSystem,
+      inorganic: inorganicFertilisers,
+      organic: {
         applications: [],
       },
-    }),
+    },
   };
+
+  return HasFertiliserInputSchema.parse(fertiliserInput);
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
@@ -71,6 +75,10 @@ describe('5.1.1.3 Inorganic Fertiliser CO2', () => {
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 7, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculateInorganicFertiliserCO2);
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateInorganicFertiliserCO2,
+      '5.1',
+    );
   });
 });

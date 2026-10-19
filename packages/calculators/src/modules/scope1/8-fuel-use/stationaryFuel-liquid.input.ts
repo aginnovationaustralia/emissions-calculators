@@ -1,11 +1,12 @@
-import { DESCRIPTIONS } from '@/calculators/Grains/types/descriptions.schema';
 import {
   FuelStationaryMassBasedLiquidTypes,
   FuelStationaryVolumeBasedLiquidTypes,
 } from '@/constants/enums';
-import { input } from '@/tools/inputs';
-import { tonnesToKg } from '@/tools/unit-conversion';
+import { enumInput, numberInput } from '@/tools/inputs';
+import { locateStationaryFuel } from '@/tools/modules';
+import { kilolitresToLitres, tonnesToKg } from '@/tools/unit-conversion';
 import { mass, volume } from '@/tools/units';
+import { DESCRIPTIONS } from '@/types/descriptions.schema';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 
@@ -14,42 +15,66 @@ export const isStationaryLiquidFuelMassBased = (
 ): fuel is StationaryFuelLiquidMassBasedInputTransformed => {
   return 'amountTonnes' in fuel;
 };
-const StationaryFuelLiquidInputLitresSchema = object({
-  fuelClass: z.literal('Liquid fuels'),
-  fuelType: z.enum(FuelStationaryVolumeBasedLiquidTypes),
-  amountLitres: z
-    .number()
-    .min(0)
-    .meta({ description: DESCRIPTIONS.FUEL_CONSUMPTION })
-    .transform((a) => input(`AMOUNT_LITRES[${a}]`, volume('Fuel', a))),
-});
-const StationaryFuelLiquidInputMassBasedSchema = object({
-  fuelClass: z.literal('Liquid fuels'),
-  fuelType: z.enum(FuelStationaryMassBasedLiquidTypes),
-  amountTonnes: z
-    .number()
-    .min(0)
-    .meta({ description: DESCRIPTIONS.FUEL_CONSUMPTION })
-    .transform((a) =>
-      input(`AMOUNT_TONNES[${a}]`, mass('Fuel', tonnesToKg(a))),
-    ),
-});
-export const StationaryFuelLiquidInputSchema = z.discriminatedUnion(
-  'fuelType',
-  [
-    StationaryFuelLiquidInputLitresSchema,
-    StationaryFuelLiquidInputMassBasedSchema,
-  ],
+const stationaryFuelLiquidInputLitresSchema = locateStationaryFuel(
+  ({ modules }) =>
+    object({
+      fuelClass: z.literal('Liquid fuels'),
+      fuelType: enumInput(FuelStationaryVolumeBasedLiquidTypes, {
+        name: 'Stationary liquid fuel type',
+        description: 'Type of liquid fuel used in stationary equipment',
+        modules,
+      }),
+      amountKilolitres: numberInput(
+        (a) => volume('Fuel', kilolitresToLitres(a)),
+        {
+          name: 'Qscq (kl)',
+          method: '1',
+          description: DESCRIPTIONS.FUEL_CONSUMPTION,
+          modules,
+        },
+        (s) => s.min(0),
+      ),
+    }).meta({ title: 'Quantity by volume' }),
+);
+const stationaryFuelLiquidInputMassBasedSchema = locateStationaryFuel(
+  ({ modules }) =>
+    object({
+      fuelClass: z.literal('Liquid fuels'),
+      fuelType: enumInput(FuelStationaryMassBasedLiquidTypes, {
+        name: 'Stationary liquid fuel type',
+        description: 'Type of liquid fuel used in stationary equipment',
+        modules,
+      }),
+      amountTonnes: numberInput(
+        (a) => mass('Fuel', tonnesToKg(a)),
+        {
+          name: 'Qscq (t)',
+          method: '1',
+          description: DESCRIPTIONS.FUEL_CONSUMPTION,
+          modules,
+        },
+        (s) => s.min(0),
+      ),
+    }).meta({ title: 'Quantity by mass' }),
+);
+export const stationaryFuelLiquidInputSchema = locateStationaryFuel(
+  ({ location }) =>
+    z
+      .discriminatedUnion('fuelType', [
+        stationaryFuelLiquidInputLitresSchema(location),
+        stationaryFuelLiquidInputMassBasedSchema(location),
+      ])
+      .meta({ title: 'Liquid fuels' }),
 );
 
 export type StationaryFuelLiquidInputTransformed = z.output<
-  typeof StationaryFuelLiquidInputSchema
+  ReturnType<typeof stationaryFuelLiquidInputSchema>
 >;
 
 export type StationaryFuelLiquidInputMassBasedTransformed = z.output<
-  typeof StationaryFuelLiquidInputMassBasedSchema
+  ReturnType<typeof stationaryFuelLiquidInputMassBasedSchema>
 >;
 
 export type StationaryFuelLiquidMassBasedInputTransformed = z.output<
-  typeof StationaryFuelLiquidInputMassBasedSchema
+  ReturnType<typeof stationaryFuelLiquidInputMassBasedSchema>
 >;

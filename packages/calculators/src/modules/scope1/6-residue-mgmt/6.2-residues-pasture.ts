@@ -1,106 +1,100 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
-import { isPastureType, PastureType } from '@/constants/enums';
+import { HasClimateZoneInputTransformed } from '@/calculators/types/has-climate-zone.input';
 import { selectConstant } from '@/tools/constants';
 import { oneMinus, zeroN2O } from '@/tools/sentinels';
-import { CropResidueInputTransformed } from './crop-residue.input';
+import { ConstantsForResidueManagement, HasCropConstants } from './constants';
+import {
+  getAverageYieldForPasture,
+  HasCropOrPastureResidueInputTransformed,
+  isPastureResidueInput,
+  PastureResidueInputTransformed,
+} from './crop-residue.input';
 
 export const calculateMassNPastureAppliedToSoil = (
-  crop: CropResidueInputTransformed & BaseGrainsCropTransformed,
-  pastureType: PastureType,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  pasture: PastureResidueInputTransformed,
+  constants: HasCropConstants,
 ) => {
-  const { constants } = context;
-
-  const ap = crop.areaSown;
-  const yp = crop.averageYield;
+  const ap = pasture.areaManaged;
+  const yp = getAverageYieldForPasture(pasture, constants);
 
   const ncagp = selectConstant(
     constants.CROP,
     'PASTURERESIDUE',
-    pastureType,
+    pasture.type,
     'aboveGroundN',
-  );
+  ).named('NCAGp');
   const rbgp = selectConstant(
     constants.CROP,
     'PASTURERESIDUE',
-    pastureType,
+    pasture.type,
     'belowAboveResidueRatio',
-  );
+  ).named('RBGp');
   const ncbgp = selectConstant(
     constants.CROP,
     'PASTURERESIDUE',
-    pastureType,
+    pasture.type,
     'belowGroundN',
-  );
+  ).named('NCBGp');
   const ffodp = selectConstant(
     constants.CROP,
     'PASTURERESIDUE',
-    pastureType,
+    pasture.type,
     'fractionRemoved',
-  );
+  ).named('FFODp');
 
   /**
-   * (Ap * (Yp * 10^-3) * (1 - FFODp) * NCAGp)
+   * Ap * (Yp * 10^3)
    *
-   * NOTE: We've already converted the area and yield to
-   * kg & kg/m^2 respectively, so we don't need to convert it again
-   * by multiplying by a power of 10
+   * NOTE: We've already converted the yield to kg per m^2 (and area to m^2), so we don't
+   * need to convert it again by multiplying by a power of 10
    */
-  const mpAboveGround = yp
-    .multiply(ap)
-    .multiply(oneMinus(ffodp))
-    .multiply(ncagp);
-  /**
-   * (Ap * (Yp * 10^-3) * RBGp * NCBGp)
-   */
-  const mpBelowGround = yp.multiply(ap).multiply(rbgp).multiply(ncbgp);
-  const mp = mpAboveGround.plus(mpBelowGround);
+  const totalYield = yp.multiply(ap);
 
-  return mp;
+  /**
+   * (Ap * (Yp * 10^3) * (1 - FFODp) * NCAGp)
+   */
+  const mpAboveGround = totalYield.multiply(oneMinus(ffodp)).multiply(ncagp);
+  /**
+   * (Ap * (Yp * 10^3) * RBGp * NCBGp)
+   */
+  const mpBelowGround = totalYield.multiply(rbgp).multiply(ncbgp);
+
+  /**
+   * Mp = (Ap * (Yp * 10^3) * (1 - FFODp) * NCAGp) + (Ap * (Yp * 10^3) * RBGp * NCBGp)
+   */
+  return mpAboveGround.plus(mpBelowGround).named('Mp').reference('6.2.1.1 (2)');
 };
 
 export const calculate62PastureResidueN2O = (
-  crop: CropResidueInputTransformed & BaseGrainsCropTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  activity: HasCropOrPastureResidueInputTransformed &
+    HasClimateZoneInputTransformed,
+  context: ExecutionContext<ConstantsForResidueManagement>,
 ) => {
   const { constants } = context;
+  /**
+   * En2o = SUMp (Mp * EFni) * Cn2o * 10^-3
+   */
 
-  // REVISIT: This type is accepting crop and pasture types. Is it correct to merge both together? The input shape might be more obviously distinct as we add other calculators
-  if (!isPastureType(crop.type)) {
+  if (!isPastureResidueInput(activity)) {
     return zeroN2O;
   }
 
-  /* pastureResidueN2O
-    6.2.1.1 Method 1 -- Pasture Residue N2O Emissions
-    (1) Nitrous oxide emissions from the return of pasture residues from all pasture types p
-    to the soil, EN2O (t N2O), are calculated as:
-    EN2O = SUMp (Mp * EF Ni * CN2O * 10^-3)
-    Where Mp = the mass of nitrogen in pasture p residues returned to the soil (kg N)
-    EF Ni = emission factor for crop residues returned to the soil in climate zone i (kg N2O-N/ kg N)
-    CN2O = factor to convert elemental mass of nitrous oxide to molecular mass (dimensionless)
-    (2) Mass of nitrogen in pasture residues returned to the soil, Mp (kg N), is calculated as:
-    Mp = (Ap * (Y p * 10^-3) * (1 - FFODp) * NCAGp)
-      + (Ap * (Y p * 10^-3) * RBGp * NCBGp)
-    Where Ap = area of pasture renewed or removed (ha)
-    Y p = average yield of pasture crop (t DM/ha)
-    NCAGp = N content of above-ground pasture residue (kg N/kg DM)
-    RBGp = below-ground residue to above-ground residue ratio for pasture crop
-    NCBGp = N content of below-ground pasture crop residue (kg N/kg DM)
-    FFODp = fraction of pasture yield that is removed
-  */
+  const { pasture } = activity;
 
-  const mp = calculateMassNPastureAppliedToSoil(crop, crop.type, context);
+  const mp = calculateMassNPastureAppliedToSoil(pasture, constants);
 
   const efni = selectConstant(
     constants.CROP,
     'EF_RESIDUES_RETURNED_TO_SOIL',
-    crop.rainfallAbove600,
-  );
-  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
+    activity.climateZone,
+  ).named('EFni');
+  const cn2o = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_N2O');
 
-  const pastureResidueN2O = mp.multiply(efni).multiply(cn2o);
+  const pastureResidueN2O = mp
+    .multiply(efni)
+    .multiply(cn2o)
+    .named('En2o')
+    .reference('6.2.1.1 (1)');
 
   return pastureResidueN2O;
 };

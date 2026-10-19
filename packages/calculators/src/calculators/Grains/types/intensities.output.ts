@@ -2,12 +2,12 @@ import { outputValue } from '@/tools/zod';
 import { z } from 'zod';
 
 export const GrainsIntensitiesOutputSchema = z.object({
-  grainProducedTonnes: outputValue('Grain produced in tonnes'),
-  grainsExcludingSequestration: outputValue(
-    'Grains emissions intensity excluding sequestration, in t-CO2e/t grain',
+  grainHarvestedKg: outputValue('Grain harvested in kg'),
+  grainsExcludingLULUCF: outputValue(
+    'Grains emissions intensity excluding LULUCF, in kg-CO2e/kg grain',
   ),
-  grainsIncludingSequestration: outputValue(
-    'Grains emissions intensity including sequestration, in t-CO2e/t grain',
+  grainsIncludingLULUCF: outputValue(
+    'Grains emissions intensity including LULUCF, in kg-CO2e/kg grain',
   ),
 });
 

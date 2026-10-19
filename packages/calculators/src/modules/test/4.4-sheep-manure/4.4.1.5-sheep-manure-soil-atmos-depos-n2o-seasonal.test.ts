@@ -1,15 +1,20 @@
 import {
-  SheepInput,
-  SheepInputSchema,
-  SheepInputTransformed,
-} from '@/calculators/Sheep/types/input';
-import { calculate_4_4_1_5_SheepSoilAtmosphericDepositionN2O } from '@/modules/scope1/4-manure-management/4.4-sheep-manure';
+  SheepFlockInput,
+  SheepFlockInputSchema,
+  SheepFlockInputTransformed,
+} from '@/calculators/Sheep/types/sheep-flock.input';
+import {
+  HasIsFebruaryInLeapYearInputSchemaForSheep,
+  HasIsFebruaryInLeapYearInputTransformed,
+} from '@/calculators/types/has-is-february-in-leap-year.input';
+import { calculateAtmosphericDepositionN2OEmissionsForSheepFlock } from '@/modules/scope1/4-manure-management/4.4-sheep-manure/calculate';
 import { getSheet } from '@/test/common/sheets';
 import XLSX from 'xlsx-populate';
+import { createSheepFlockInput } from '../factory';
 import {
   checkClimateZone,
   checkGrazingProductionSystemsWithRainfall,
-  checkPureStateWithoutNT,
+  checkState,
 } from '../livestock-domain';
 import {
   compareInputsAndOutputs,
@@ -25,7 +30,9 @@ const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
   method: '1' | '2',
-): SheepInputTransformed | undefined => {
+):
+  | (SheepFlockInputTransformed & HasIsFebruaryInLeapYearInputTransformed)
+  | undefined => {
   const cell = (column: string, offset: number = 0) =>
     sheet
       .cell(`${column}${row + offset}`)
@@ -40,43 +47,38 @@ const getCalculatorInput = (
     readSheepClass,
     readSheepClassWithLambing,
     readSheepClassWithProportionLambsBorn,
-  } = createSheepManureSheetReaders(
+  } = createSheepManureSheetReaders<4>(
     cell,
     method,
     SHEEP_MANURE_SEASONAL_PERIODS_PER_CLASS,
   );
 
-  const sheepInput: SheepInput = {
-    state: checkPureStateWithoutNT(cell(col.columnState)),
-    climateZone: checkClimateZone(cell(col.columnClimateZone)),
-    isInLeachingZone: cell(col.columnIsInLeachingZone) === 'yes',
-    rainfallAbove600: cell(col.columnRainfallAbove600) === 'yes',
-    productionSystem: checkGrazingProductionSystemsWithRainfall(
+  const sheepInput: SheepFlockInput = createSheepFlockInput({
+    grazingSystem: checkGrazingProductionSystemsWithRainfall(
       cell(col.columnProductionSystem),
     ),
-    electricity: {
-      method: 'location',
-      electricityPurchasedKWh: 0,
+    climateZone: checkClimateZone(cell(col.columnClimateZone)),
+    isInLeachingZone: cell(col.columnIsInLeachingZone) === 'yes',
+    state: checkState(cell(col.columnState)),
+    excludedFromNaturalWater:
+      cell(col.columnExcludedFromNaturalWater) === 'yes',
+    classes: {
+      period: 'seasonal',
+      breedingEwes: readSheepClassWithLambing(0),
+      lambsHoggets: readSheepClassWithProportionLambsBorn(1),
+      maidenEwes: readSheepClassWithLambing(2),
+      otherEwes: readSheepClass(3),
+      rams: readSheepClass(4),
+      wethers: readSheepClass(5),
     },
-    flocks: [
-      {
-        noUnfencedNaturalWater:
-          cell(col.columnNoUnfencedNaturalWater) === 'yes',
-        classes: {
-          breedingEwes: readSheepClassWithLambing(0),
-          lambsHoggets: readSheepClassWithProportionLambsBorn(1),
-          maidenEwes: readSheepClassWithLambing(2),
-          otherEwes: readSheepClass(3),
-          rams: readSheepClass(4),
-          wethers: readSheepClass(5),
-        },
-      },
-    ],
+  });
+
+  return {
+    ...SheepFlockInputSchema.parse(sheepInput),
+    ...HasIsFebruaryInLeapYearInputSchemaForSheep.parse({
+      isFebruaryInLeapYear: false,
+    }),
   };
-
-  // console.log('test4415', sheepInput.productionSystem);
-
-  return SheepInputSchema.parse(sheepInput, { reportInput: true });
 };
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
@@ -96,11 +98,14 @@ describe('4.4.1.5 Sheep manure soil atmospheric deposition N2O seasonal', () => 
       '4.4.1.1',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1', 7);
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1', {
+      expectedTests: 7,
+    });
 
     compareInputsAndOutputs(
       inputsAndOutputs,
-      calculate_4_4_1_5_SheepSoilAtmosphericDepositionN2O,
+      calculateAtmosphericDepositionN2OEmissionsForSheepFlock,
+      '4.4',
     );
   });
 });

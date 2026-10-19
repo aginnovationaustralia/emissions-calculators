@@ -1,5 +1,6 @@
 export * from './8.1-transport-fuel';
 export * from './8.2-stationary-fuel';
+export * from './constants';
 export * from './fuel.input';
 export * from './stationaryFuel-liquid.input';
 export * from './stationaryFuel-naturalGas.input';

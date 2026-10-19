@@ -12,12 +12,13 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@aginnovationaustralia/emissions-calculator-research": "workspace:*",
     "@aginnovationaustralia/emissions-calculators": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^25.0.1",
-    "typescript": "^5.0.0",
-    "ts-node": "^10.9.0"
+    "typescript": "^5.9.3",
+    "ts-node": "^10.9.2"
   },
   "engines": {
     "node": ">=22.19.0"

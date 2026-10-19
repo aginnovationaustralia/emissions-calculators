@@ -1,22 +1,39 @@
 import { execSync } from 'child_process';
-import { existsSync, readdirSync, readFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'fs';
 import { join } from 'path';
 import semver from 'semver';
 
 const OPENAPI_DIR = 'openapi';
 
 /**
+ * Resolve the combined OpenAPI spec path for a version.
+ * Prefers the versioned folder layout; falls back to legacy flat files.
+ */
+function openapiSpecPath(version: string): string {
+  const nested = join(OPENAPI_DIR, version, `openapi-${version}.json`);
+  if (existsSync(nested)) {
+    return nested;
+  }
+  return join(OPENAPI_DIR, `openapi-${version}.json`);
+}
+
+/**
  * Find the highest patch version for a given major.minor version
- * by scanning the openapi directory for matching files.
+ * by scanning version folders and legacy flat files in the openapi directory.
  */
 function findHighestPatchVersion(major: number, minor: number): string | null {
-  const files = readdirSync(OPENAPI_DIR);
-  const pattern = new RegExp(`^openapi-(${major}\\.${minor}\\.\\d+)\\.json$`);
+  const entries = readdirSync(OPENAPI_DIR);
+  const folderPattern = new RegExp(`^(${major}\\.${minor}\\.\\d+)$`);
+  const filePattern = new RegExp(`^openapi-(${major}\\.${minor}\\.\\d+)\\.json$`);
 
-  const versions = files
-    .map((file) => {
-      const match = file.match(pattern);
-      return match ? match[1] : null;
+  const versions = entries
+    .map((entry) => {
+      const folderMatch = entry.match(folderPattern);
+      if (folderMatch && statSync(join(OPENAPI_DIR, entry)).isDirectory()) {
+        return folderMatch[1];
+      }
+      const fileMatch = entry.match(filePattern);
+      return fileMatch ? fileMatch[1] : null;
     })
     .filter((v): v is string => v !== null)
     .sort((a, b) => semver.compare(b, a)); // Sort descending
@@ -137,14 +154,15 @@ function main(): void {
   // Read current version from package.json
   const packageJsonPath = join(process.cwd(), 'package.json');
   const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
-  const currentVersion: string = packageJson.version;
+  const currentVersionRaw: string = packageJson.version;
+  const currentVersion = semver.coerce(currentVersionRaw)?.version;
 
   if (!currentVersion) {
     console.error('Error: Could not read version from package.json');
     process.exit(1);
   }
 
-  console.log(`Current version: ${currentVersion}`);
+  console.log(`Current version: ${currentVersionRaw} (comparing as ${currentVersion})`);
 
   // Determine previous version to compare against
   const { version: previousVersion, isPatchRelease } =
@@ -160,9 +178,9 @@ function main(): void {
 
   console.log(`Previous version: ${previousVersion}`);
 
-  // Build file paths
-  const currentFile = join(OPENAPI_DIR, `openapi-${currentVersion}.json`);
-  const previousFile = join(OPENAPI_DIR, `openapi-${previousVersion}.json`);
+  // Build file paths (version folders, with legacy flat-file fallback)
+  const currentFile = openapiSpecPath(currentVersion);
+  const previousFile = openapiSpecPath(previousVersion);
 
   // Check if files exist
   if (!existsSync(currentFile)) {

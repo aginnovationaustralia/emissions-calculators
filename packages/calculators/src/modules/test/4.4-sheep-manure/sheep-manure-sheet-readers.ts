@@ -1,14 +1,33 @@
 import type { SheepClassPeriodInput } from '@/calculators/Sheep/types/sheep-class-period.input';
-import {
-  SheepClassInput,
-  SheepClassWithLambingInput,
-  SheepClassWithProportionLambsBornInput,
-} from '@/calculators/Sheep/types/sheep-class.input';
+
+import { nv, nvo } from '@/tools/inputs';
 import * as col from './columns';
+import {
+  SheepClassMonthlyInput,
+  SheepClassWithLambingMonthlyInput,
+  SheepClassWithProportionLambsBornMonthlyInput,
+} from '@/calculators/Sheep/types/sheep-class-monthly.input';
+import {
+  SheepClassSeasonalInput,
+  SheepClassWithLambingSeasonalInput,
+  SheepClassWithProportionLambsBornSeasonalInput,
+} from '@/calculators/Sheep/types/sheep-class-seasonal.input';
 
 export type CellFn = (column: string, offset?: number) => string | undefined;
 
 export type SheepManurePeriodsPerClass = 4 | 12;
+type SheepClassInputFromPeriods<P extends SheepManurePeriodsPerClass> =
+  P extends 12 ? SheepClassMonthlyInput : SheepClassSeasonalInput;
+type SheepClassWithLambingInputFromPeriods<
+  P extends SheepManurePeriodsPerClass,
+> = P extends 12
+  ? SheepClassWithLambingMonthlyInput
+  : SheepClassWithLambingSeasonalInput;
+type SheepClassWithProportionLambsBornInputFromPeriods<
+  P extends SheepManurePeriodsPerClass,
+> = P extends 12
+  ? SheepClassWithProportionLambsBornMonthlyInput
+  : SheepClassWithProportionLambsBornSeasonalInput;
 
 export const SHEEP_MANURE_SEASONAL_PERIODS_PER_CLASS = 4 as const;
 export const SHEEP_MANURE_MONTHLY_PERIODS_PER_CLASS = 12 as const;
@@ -39,18 +58,20 @@ const readPeriods = <T>(
     keys.map((key, index) => [key, readPeriod(offsetRows + index)]),
   );
 
-export function createSheepManureSheetReaders(
+export function createSheepManureSheetReaders<
+  P extends SheepManurePeriodsPerClass,
+>(
   cell: CellFn,
   method: '1' | '2',
   periodsPerClass: SheepManurePeriodsPerClass,
 ): {
-  readSheepClass: (offset: number) => SheepClassInput | undefined;
+  readSheepClass: (offset: number) => SheepClassInputFromPeriods<P> | undefined;
   readSheepClassWithLambing: (
     offset: number,
-  ) => SheepClassWithLambingInput | undefined;
+  ) => SheepClassWithLambingInputFromPeriods<P> | undefined;
   readSheepClassWithProportionLambsBorn: (
     offset: number,
-  ) => SheepClassWithProportionLambsBornInput | undefined;
+  ) => SheepClassWithProportionLambsBornInputFromPeriods<P> | undefined;
 } {
   const periodKeys =
     periodsPerClass === SHEEP_MANURE_SEASONAL_PERIODS_PER_CLASS
@@ -80,44 +101,52 @@ export function createSheepManureSheetReaders(
       offsetRows,
     );
     return {
-      head: Number(cell(col.columnHead, offsetRows)),
-      method2Liveweight:
+      head: nv(Number(cell(col.columnHead, offsetRows))),
+      method2Liveweight: nvo(
         method === '2' && customLiveweight
           ? Number(customLiveweight)
           : undefined,
-      method2DryMatterAvailability:
+      ),
+      method2DryMatterAvailability: nvo(
         method === '2' && customDryMatterAvailability
           ? Number(customDryMatterAvailability)
           : undefined,
-      method2DryMatterDigestibility:
+      ),
+      method2DryMatterDigestibility: nvo(
         method === '2' && customDryMatterDigestibility
           ? Number(customDryMatterDigestibility)
           : undefined,
-      method2AverageDurationDays:
+      ),
+      method2AverageDurationDays: nvo(
         method === '2' && customAverageDurationDays
           ? Number(customAverageDurationDays)
           : undefined,
-      method2CrudeProteinContent:
+      ),
+      method2CrudeProteinContent: nvo(
         method === '2' && customCrudeProteinContent
           ? Number(customCrudeProteinContent)
           : undefined,
-      method2LiveweightGain:
+      ),
+      method2LiveweightGain: nvo(
         method === '2' && customLiveweightGain
           ? Number(customLiveweightGain)
           : undefined,
+      ),
     };
   };
 
   const readSheepClassBase = (offsetRows: number) => ({
-    greasyWoolProduction: Number(
-      cell(col.columnGreasyWoolProduction, offsetRows) ?? 0,
+    greasyWoolProduction: nv(
+      Number(cell(col.columnGreasyWoolProduction, offsetRows) ?? 0),
     ),
-    cleanWoolYieldProportion: Number(
-      cell(col.columnCleanWoolYieldProportion, offsetRows) ?? 0,
+    cleanWoolYieldProportion: nv(
+      Number(cell(col.columnCleanWoolYieldProportion, offsetRows) ?? 0),
     ),
   });
 
-  const readSheepClass = (offset: number): SheepClassInput | undefined => {
+  const readSheepClass = (
+    offset: number,
+  ): SheepClassWithLambingInputFromPeriods<P> | undefined => {
     const offsetRows = offset * periodsPerClass;
     if (cell(col.columnHead, offsetRows) === undefined) {
       return undefined;
@@ -125,12 +154,12 @@ export function createSheepManureSheetReaders(
     return {
       ...readSheepClassBase(offsetRows),
       ...readPeriods(periodKeys, offsetRows, readSheepClassPeriod),
-    } as SheepClassInput;
+    } as SheepClassWithLambingInputFromPeriods<P>;
   };
 
   const readSheepClassWithLambing = (
     offset: number,
-  ): SheepClassWithLambingInput | undefined => {
+  ): SheepClassWithLambingInputFromPeriods<P> | undefined => {
     const offsetRows = offset * periodsPerClass;
     if (cell(col.columnHead, offsetRows) === undefined) {
       return undefined;
@@ -139,15 +168,17 @@ export function createSheepManureSheetReaders(
       ...readSheepClassBase(offsetRows),
       ...readPeriods(periodKeys, offsetRows, (rowOffset) => ({
         ...readSheepClassPeriod(rowOffset),
-        percentLambing: Number(cell(col.columnLambingRateLR, rowOffset)),
-        percentLambMarking: Number(cell(col.columnMarkingRateLMR, rowOffset)),
+        percentLambing: nv(Number(cell(col.columnLambingRateLR, rowOffset))),
+        percentLambMarking: nv(
+          Number(cell(col.columnMarkingRateLMR, rowOffset)),
+        ),
       })),
-    } as SheepClassWithLambingInput;
+    } as SheepClassWithLambingInputFromPeriods<P>;
   };
 
   const readSheepClassWithProportionLambsBorn = (
     offset: number,
-  ): SheepClassWithProportionLambsBornInput | undefined => {
+  ): SheepClassWithProportionLambsBornInputFromPeriods<P> | undefined => {
     const offsetRows = offset * periodsPerClass;
     if (cell(col.columnHead, offsetRows) === undefined) {
       return undefined;
@@ -156,11 +187,11 @@ export function createSheepManureSheetReaders(
       ...readSheepClassBase(offsetRows),
       ...readPeriods(periodKeys, offsetRows, (rowOffset) => ({
         ...readSheepClassPeriod(rowOffset),
-        proportionOfLambsBorn: Number(
-          cell(col.columnProportionOfLambsBornPL, rowOffset),
+        proportionOfLambsBorn: nv(
+          Number(cell(col.columnProportionOfLambsBornPL, rowOffset)),
         ),
       })),
-    } as SheepClassWithProportionLambsBornInput;
+    } as SheepClassWithProportionLambsBornInputFromPeriods<P>;
   };
 
   return {

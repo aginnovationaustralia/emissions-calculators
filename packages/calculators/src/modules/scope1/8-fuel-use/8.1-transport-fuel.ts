@@ -1,10 +1,12 @@
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/executionContext';
+import { FuelEmissionsGasType } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
-import { BinaryContainer } from '@/tools/containers';
+import { Container, SummedContainer } from '@/tools/containers';
+import { massCO2eToMassGHGGas } from '@/tools/gwp';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
-import { FuelInputTransformed } from './fuel.input';
+import { ConstantsForFuel } from './constants';
+import { FuelInputTransformed, HasFuelInputTransformed } from './fuel.input';
 import {
   isTransportFuelCNGBased,
   TransportFuelInputAviationTransformed,
@@ -17,11 +19,10 @@ import {
   TransportFuelInputVesselTransformed,
 } from './transportFuel.input';
 
-// REVISIT: It would be nice to find a generic way to access the constants for the transport fuel factors.
-const constantsForCarsLightCommercial = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+const constantsForCarsLightCommercial = (
   input: TransportFuelInputCarsLightCommercialTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
+  constants: ConstantsForFuel,
+  gasType: FuelEmissionsGasType,
 ) => {
   return {
     ecTransQ: selectConstant(
@@ -48,12 +49,10 @@ const constantsForCarsLightCommercial = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
   };
 };
-const constantsForCarsLightCommercialPre2004 = <
-  GasType extends 'CO2' | 'CH4' | 'N2O',
->(
+const constantsForCarsLightCommercialPre2004 = (
   input: TransportFuelInputCarsLightCommercialPre2004Transformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
+  constants: ConstantsForFuel,
+  gasType: FuelEmissionsGasType,
 ) => {
   return {
     ecTransQ: selectConstant(
@@ -80,10 +79,10 @@ const constantsForCarsLightCommercialPre2004 = <
     ),
   };
 };
-const constantsForLightDuty = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+const constantsForLightDuty = (
   input: TransportFuelInputLightDutyTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
+  constants: ConstantsForFuel,
+  gasType: FuelEmissionsGasType,
 ) => {
   return {
     ecTransQ: selectConstant(
@@ -110,10 +109,10 @@ const constantsForLightDuty = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
   };
 };
-const constantsForHeavyDuty = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+const constantsForHeavyDuty = (
   input: TransportFuelInputHeavyDutyTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
+  constants: ConstantsForFuel,
+  gasType: FuelEmissionsGasType,
 ) => {
   return {
     ecTransQ: selectConstant(
@@ -140,10 +139,10 @@ const constantsForHeavyDuty = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
   };
 };
-const constantsForAviation = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+const constantsForAviation = (
   input: TransportFuelInputAviationTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
+  constants: ConstantsForFuel,
+  gasType: FuelEmissionsGasType,
 ) => {
   return {
     ecTransQ: selectConstant(
@@ -170,10 +169,10 @@ const constantsForAviation = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
   };
 };
-const constantsForVessel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+const constantsForVessel = (
   input: TransportFuelInputVesselTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
+  constants: ConstantsForFuel,
+  gasType: FuelEmissionsGasType,
 ) => {
   return {
     ecTransQ: selectConstant(
@@ -200,12 +199,10 @@ const constantsForVessel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
     ),
   };
 };
-const constantsForOffRoadAgricultureAndForestryEquipment = <
-  GasType extends 'CO2' | 'CH4' | 'N2O',
->(
+const constantsForOffRoadAgricultureAndForestryEquipment = (
   input: TransportFuelInputOffRoadAgricultureAndForestryEquipmentTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
+  constants: ConstantsForFuel,
+  gasType: FuelEmissionsGasType,
 ) => {
   return {
     ecTransQ: selectConstant(
@@ -234,12 +231,10 @@ const constantsForOffRoadAgricultureAndForestryEquipment = <
   };
 };
 
-export const transportFuelConstantsForCNG = <
-  GasType extends 'CO2' | 'CH4' | 'N2O',
->(
+export const transportFuelConstantsForCNG = (
   vehicleType: 'Light duty vehicles' | 'Heavy duty vehicles',
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
+  constants: ConstantsForFuel,
+  gasType: FuelEmissionsGasType,
 ) => {
   return {
     ecTransQ: selectConstant(
@@ -268,12 +263,10 @@ export const transportFuelConstantsForCNG = <
   };
 };
 
-export const selectTransportFuelConstants = <
-  GasType extends 'CO2' | 'CH4' | 'N2O',
->(
+export const selectTransportFuelConstants = (
   fuel: TransportFuelInputTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
+  constants: ConstantsForFuel,
+  gasType: FuelEmissionsGasType,
 ) => {
   switch (fuel.vehicleType) {
     case 'Cars and light commercial vehicles':
@@ -281,7 +274,7 @@ export const selectTransportFuelConstants = <
     case 'Cars and light commercial vehicles (pre 2004)':
       return constantsForCarsLightCommercialPre2004(fuel, constants, gasType);
     case 'Light duty vehicles':
-      if (fuel.fuelType === 'Compressed natural gas') {
+      if (isTransportFuelCNGBased(fuel)) {
         return transportFuelConstantsForCNG(
           fuel.vehicleType,
           constants,
@@ -290,7 +283,7 @@ export const selectTransportFuelConstants = <
       }
       return constantsForLightDuty(fuel, constants, gasType);
     case 'Heavy duty vehicles':
-      if (fuel.fuelType === 'Compressed natural gas') {
+      if (isTransportFuelCNGBased(fuel)) {
         return transportFuelConstantsForCNG(
           fuel.vehicleType,
           constants,
@@ -311,11 +304,11 @@ export const selectTransportFuelConstants = <
   }
 };
 
-const emissionsOfGasForFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+export function emissionsOfGasForFuel<G extends FuelEmissionsGasType>(
   fuel: TransportFuelInputTransformed,
-  constants: ConstantsForGrainsCalculator,
-  gasType: GasType,
-): BinaryContainer<Mass<GasType>> => {
+  constants: ConstantsForFuel,
+  gasType: G,
+): Container<Mass<G>> {
   /*
   8.1.1.1 Method 1 - Fuel use transport
   (1) Emissions for each GHG from the combustion of fuels for transport purposes, Eg (t
@@ -335,57 +328,66 @@ const emissionsOfGasForFuel = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
 
   const qTransTQ = isTransportFuelCNGBased(fuel)
     ? fuel.amountCubicMetres
-    : fuel.amountLitres;
+    : fuel.amountKilolitres;
 
   const energyFromFuel = ecTransQ.multiply(qTransTQ);
 
-  return efTrans1tqg.multiply(energyFromFuel);
-};
+  const massCO2e = efTrans1tqg.multiply(energyFromFuel);
 
-const transportEmissionsForGas = <GasType extends 'CO2' | 'CH4' | 'N2O'>(
+  return massCO2eToMassGHGGas(massCO2e, gasType);
+}
+
+const transportEmissionsForGas = <G extends FuelEmissionsGasType>(
   input: FuelInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-  gasType: GasType,
-) => {
+  context: ExecutionContext,
+  gasType: G,
+): SummedContainer<Mass<G>> => {
   const { constants } = context;
-  const transportFuelEmissions = input.transportFuel.map((fuel) => {
+  const transportFuelEmissions = input.transport.map((fuel) => {
     return emissionsOfGasForFuel(fuel, constants, gasType);
   });
 
   return sum(transportFuelEmissions, {
-    name: `EtransGHG${gasType}`,
-    references: [`8.1.1.1 (62)`],
+    name: `Eg=${gasType}`,
+    references: [`8.1.1.1 (1)`],
   });
 };
 
 export const transportEmissionsForCO2 = (
   input: FuelInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  context: ExecutionContext,
 ) => {
   return transportEmissionsForGas(input, context, 'CO2');
 };
 
 export const transportEmissionsForCH4 = (
   input: FuelInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  context: ExecutionContext,
 ) => {
   return transportEmissionsForGas(input, context, 'CH4');
 };
 
 export const transportEmissionsForN2O = (
   input: FuelInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  context: ExecutionContext,
 ) => {
   return transportEmissionsForGas(input, context, 'N2O');
 };
 
-export const calculate81TransportFuel = (
+export const transportEmissionsForCombined = (
   input: FuelInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  context: ExecutionContext,
 ) => {
-  const fuelTransportCO2 = transportEmissionsForCO2(input, context);
-  const fuelTransportCH4 = transportEmissionsForCH4(input, context);
-  const fuelTransportN2O = transportEmissionsForN2O(input, context);
+  return transportEmissionsForGas(input, context, 'CO2e');
+};
+
+export const calculate81TransportFuel = (
+  input: HasFuelInputTransformed,
+  context: ExecutionContext,
+) => {
+  const fuelTransportCO2 = transportEmissionsForCO2(input.fuel, context);
+  const fuelTransportCH4 = transportEmissionsForCH4(input.fuel, context);
+  const fuelTransportN2O = transportEmissionsForN2O(input.fuel, context);
 
   return {
     fuelTransportCO2,

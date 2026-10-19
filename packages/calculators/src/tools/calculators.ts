@@ -18,9 +18,15 @@ import { output, Output, scope1Output, Scope1Output } from './outputs';
 import { sum } from './sum';
 import { Mass } from './units';
 
-type Scope123ExcludedKeys = 'totalCO2' | 'totalCH4' | 'totalN2O' | 'total';
+type Scope123ExcludedKeys =
+  | 'totalCO2'
+  | 'totalCH4'
+  | 'totalN2O'
+  | 'totalLULUCF'
+  | 'total'
+  | 'totalOtherGases';
 
-type IntermediateScope1<O extends Record<string, unknown>> = {
+export type IntermediateScope1<O extends Record<string, unknown>> = {
   [K in Exclude<keyof O, Scope123ExcludedKeys>]: TypedContainer<
     Mass<
       K extends `${string}CO2`
@@ -34,7 +40,7 @@ type IntermediateScope1<O extends Record<string, unknown>> = {
   >;
 };
 
-type IntermediateScope23<O extends Record<string, unknown>> = {
+export type IntermediateScope23<O extends Record<string, unknown>> = {
   [K in Exclude<keyof O, Scope123ExcludedKeys>]: TypedContainer<
     Mass<'CO2e' | 'N2O'>
   >;
@@ -78,9 +84,20 @@ type ScopeValuesAsOutputs<
   scope3: OutputScope3<O['scope3']>;
 };
 
-type ScopeSchema<K extends string> = z.ZodObject<Record<K, z.ZodObject>>;
+/**
+ * Only the key names are read from a scope schema (see `mergeScopeOutputs`/`wrapScopesAsOutputs`
+ * below, both of which only ever access `.shape`), so any zod type is acceptable per key, and a
+ * real `z.ZodObject` isn't required either - anything with a matching `.shape` will do. That lets
+ * a caller derive one of these from a real schema (e.g. by filtering its `.shape` down to a
+ * subset of keys) without needing to round-trip back through zod's own object type.
+ */
+type ScopeSchema<K extends string> = { shape: Record<K, z.ZodType> };
 
-type ScopesSchema<S1 extends string, S2 extends string, S3 extends string> = {
+export type ScopesSchema<
+  S1 extends string,
+  S2 extends string,
+  S3 extends string,
+> = {
   scope1: ScopeSchema<S1>;
   scope2: ScopeSchema<S2>;
   scope3: ScopeSchema<S3>;
@@ -109,6 +126,7 @@ export function mergeScopeOutputs<
     'totalCO2',
     'totalCH4',
     'totalN2O',
+    'totalOtherGases',
     'total',
   ]);
 
@@ -118,30 +136,24 @@ export function mergeScopeOutputs<
 
   const scope1Entries = entriesFromObject(schema.scope1.shape)
     .filter(([key]) => !excludedKeys.has(String(key)))
-    .map(
-      ([key, _value]): ObjectEntry<Scope1> => [
-        key as keyof Scope1,
-        sum(intermediates.map((s) => s.scope1[key as keyof Scope1])),
-      ],
-    );
+    .map(([key, _value]): ObjectEntry<Scope1> => [
+      key as keyof Scope1,
+      sum(intermediates.map((s) => s.scope1[key as keyof Scope1])),
+    ]);
 
   const scope2Entries = entriesFromObject(schema.scope2.shape)
     .filter(([key]) => !excludedKeys.has(String(key)))
-    .map(
-      ([key, _value]): ObjectEntry<Scope2> => [
-        key as keyof Scope2,
-        sum(intermediates.map((s) => s.scope2[key as keyof Scope2])),
-      ],
-    );
+    .map(([key, _value]): ObjectEntry<Scope2> => [
+      key as keyof Scope2,
+      sum(intermediates.map((s) => s.scope2[key as keyof Scope2])),
+    ]);
 
   const scope3Entries = entriesFromObject(schema.scope3.shape)
     .filter(([key]) => !excludedKeys.has(String(key)))
-    .map(
-      ([key, _value]): ObjectEntry<Scope3> => [
-        key as keyof Scope3,
-        sum(intermediates.map((s) => s.scope3[key as keyof Scope3])),
-      ],
-    );
+    .map(([key, _value]): ObjectEntry<Scope3> => [
+      key as keyof Scope3,
+      sum(intermediates.map((s) => s.scope3[key as keyof Scope3])),
+    ]);
 
   return {
     scope1: objectFromEntries(scope1Entries),

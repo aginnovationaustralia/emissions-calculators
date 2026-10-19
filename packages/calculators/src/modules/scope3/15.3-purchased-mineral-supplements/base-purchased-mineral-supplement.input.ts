@@ -1,21 +1,17 @@
-import { input } from '@/tools/inputs';
+import { numberInput } from '@/tools/inputs';
+import { PURCH_MINERAL_15_3 } from '@/tools/modules';
 import { tonnesToKg } from '@/tools/unit-conversion';
 import { mass } from '@/tools/units';
 import { object } from '@/types/schemas';
-import { z } from 'zod';
 
 export const BasePurchasedMineralSupplementInputSchema = object({
-  amount: z
-    .number()
-    .min(0)
-    .transform((val) =>
-      input(
-        'feed quantity',
-        mass('Purchased Mineral Supplement', tonnesToKg(val)),
-      ),
-    )
-    .meta({
-      description:
-        'Quantity of this type of mineral supplement purchased, in tonnes.',
-    }),
+  amount: numberInput(
+    (val) => mass('Purchased Mineral Supplement', tonnesToKg(val)),
+    {
+      name: 'feed quantity',
+      description: 'Quantity of this type of mineral supplement purchased.',
+      modules: [PURCH_MINERAL_15_3],
+    },
+    (s) => s.min(0),
+  ),
 });

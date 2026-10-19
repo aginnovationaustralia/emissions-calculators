@@ -1,40 +1,28 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { OtherLivestockInputTransformed } from '@/calculators/OtherLivestock/types/input';
+import { HasConstants } from '@/constants/types';
+import { OtherLivestockManureAndEntericHerdInputTransformed } from '@/modules/scope1/shared/other-livestock/input';
 import { selectConstant } from '@/tools/constants';
 import { sum } from '@/tools/sum';
 
-export function calculate36OtherLivestockEntericMethane(
-  input: OtherLivestockInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+export function calculate36OtherLivestockEntericMethaneForHerd(
+  herd: OtherLivestockManureAndEntericHerdInputTransformed,
+  context: ExecutionContext<HasConstants<'COMMON' | 'LIVESTOCK'>>,
 ) {
   const { constants } = context;
-  /*
-    3.6.1.1 Method 1 -- Other livestock enteric methane
-    Total annual methane production from enteric fermentation in other livestock Eenteric (t CH4) is calculated as:
-    Eenteric = SUM (N j * M j ) * 10^-3
-    Where N j = number of livestock of each livestock type j (head)
-    M j = enteric fermentation emission factor (kg CH4/head/year)
-  */
+  /**
+   * Eenteric = SUM[j] (Nj * Mj) * 10^-3
+   */
 
-  const { herds } = input;
-
-  const emissionsFromHerds = herds.map((herd) => {
-    const { classes } = herd;
-
-    const emissionsFromClasses = classes.map((livestockClass) => {
-      const { head, type } = livestockClass;
-      const Mj = selectConstant(
-        constants.LIVESTOCK,
-        'OTHER_LIVESTOCK_EMISSION_FACTORS',
-        type,
-        'ENTERIC',
-      );
-      return head.multiply(Mj);
-    });
-
-    return sum(emissionsFromClasses);
+  const emissionsFromClasses = herd.livestock.map((livestockClass) => {
+    const { head, type } = livestockClass;
+    const Mj = selectConstant(
+      constants.LIVESTOCK,
+      'OTHER_LIVESTOCK_EMISSION_FACTORS',
+      type,
+      'ENTERIC',
+    );
+    return head.multiply(Mj).reference('3.6.1.1 (1)').named('Eenteric');
   });
 
-  return sum(emissionsFromHerds, { name: 'Eenteric' });
+  return sum(emissionsFromClasses);
 }

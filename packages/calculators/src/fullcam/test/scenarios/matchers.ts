@@ -2,7 +2,9 @@ const DEFAULT_MARGIN = 0.75;
 
 export type ToBeWithinRatioOfOptions = {
   margin?: number;
-  keys?: string[];
+  keys?: readonly string[];
+  actualKey?: string;
+  expectedKey?: string;
 };
 
 type NumericRecord = Record<string, number>;
@@ -10,8 +12,8 @@ type NumericRecord = Record<string, number>;
 function resolveKeys(
   received: NumericRecord,
   expected: NumericRecord,
-  keys?: string[],
-): string[] {
+  keys?: readonly string[],
+): readonly string[] {
   if (keys) {
     return keys;
   }
@@ -73,12 +75,17 @@ export function toBeWithinRatioOf(
 
   const pass = failures.length === 0;
 
+  if (!pass) {
+    // eslint-disable-next-line no-console
+    console.dir({ received, expected }, { depth: null });
+  }
+
   return {
     pass,
     message: () =>
       pass
         ? `Expected objects not to be within a ${margin} ratio of each other`
-        : `Expected objects to be within a ${margin} ratio of each other:\n${failures.join('\n')}`,
+        : `Expected objects to be within a ${margin} ratio of each other:\n${failures.join('\n')}\nexpectedKey: ${options.expectedKey}\nactualKey: ${options.actualKey}`,
   };
 }
 
@@ -91,7 +98,7 @@ declare global {
   namespace jest {
     interface Matchers<R> {
       toBeWithinRatioOf(
-        expected: NumericRecord,
+        expected: Record<string, unknown>,
         options?: ToBeWithinRatioOfOptions,
       ): R;
     }

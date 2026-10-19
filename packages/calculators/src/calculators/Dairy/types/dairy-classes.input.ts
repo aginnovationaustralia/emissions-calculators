@@ -1,26 +1,33 @@
+import { LivestockLocation } from '@/tools/modules';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 import {
-  DairyClassBullsGt1InputSchema,
-  DairyClassBullsLt1PreWeanedInputSchema,
-  DairyClassBullsLt1WeanedInputSchema,
-  DairyClassHeifersGt1InputSchema,
-  DairyClassHeifersLt1PreWeanedInputSchema,
-  DairyClassHeifersLt1WeanedInputSchema,
-  DairyClassMilkingCowsInputSchema,
+  dairyClassBullsGt1InputSchema,
+  dairyClassBullsLt1PreWeanedInputSchema,
+  dairyClassBullsLt1WeanedInputSchema,
+  dairyClassHeifersGt1InputSchema,
+  dairyClassHeifersLt1PreWeanedInputSchema,
+  dairyClassHeifersLt1WeanedInputSchema,
+  dairyClassMilkingCowsInputSchema,
 } from './dairy-class.input';
 
-export const DairyClassesInputSchema = object({
-  milkingCows: DairyClassMilkingCowsInputSchema,
-  heifersGt1: DairyClassHeifersGt1InputSchema,
-  heifersLt1PreWeaned: DairyClassHeifersLt1PreWeanedInputSchema,
-  heifersLt1Weaned: DairyClassHeifersLt1WeanedInputSchema,
-  bullsGt1: DairyClassBullsGt1InputSchema,
-  bullsLt1PreWeaned: DairyClassBullsLt1PreWeanedInputSchema,
-  bullsLt1Weaned: DairyClassBullsLt1WeanedInputSchema,
-});
+export const dairyClassesInputSchema = (location: LivestockLocation) =>
+  object({
+    milkingCows: dairyClassMilkingCowsInputSchema(location).optional(),
+    heifersGt1: dairyClassHeifersGt1InputSchema(location).optional(),
+    heifersLt1PreWeaned:
+      dairyClassHeifersLt1PreWeanedInputSchema(location).optional(),
+    heifersLt1Weaned:
+      dairyClassHeifersLt1WeanedInputSchema(location).optional(),
+    bullsGt1: dairyClassBullsGt1InputSchema(location).optional(),
+    bullsLt1PreWeaned:
+      dairyClassBullsLt1PreWeanedInputSchema(location).optional(),
+    bullsLt1Weaned: dairyClassBullsLt1WeanedInputSchema(location).optional(),
+  });
 
-export type DairyClassesInput = z.input<typeof DairyClassesInputSchema>;
+export type DairyClassesInput = z.input<
+  ReturnType<typeof dairyClassesInputSchema>
+>;
 export type DairyClassesInputTransformed = z.output<
-  typeof DairyClassesInputSchema
+  ReturnType<typeof dairyClassesInputSchema>
 >;

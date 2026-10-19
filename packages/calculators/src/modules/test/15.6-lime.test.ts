@@ -1,11 +1,13 @@
 import { getSheet } from '@/test/common/sheets';
+import { nv, nvo } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import {
-  LimeInput,
-  LimeInputSchema,
-  LimeInputTransformed,
+  HasLimeInput,
+  HasLimeInputSchema,
+  HasLimeInputTransformed,
 } from '../scope1/5-fertiliser/lime.input';
-import { calculateScope3Lime } from '../scope3/15.6-lime';
+import { calculateScope3SoilAmeliorants } from '../scope3/15.6-lime';
+import { checkSoilAmeliorant } from './fertiliser-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
@@ -15,7 +17,7 @@ const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
   method: '1' | '2',
-): LimeInputTransformed | undefined => {
+): HasLimeInputTransformed | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
@@ -23,23 +25,42 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  // The formula 15.6.1.1 is clearly in tonnes, this adjustment corrects for the input being in kg
-  const limestone = Number(cell('A')) * 1000;
-  const customEmissionsFactor = cell('C');
+  const massAppliedKg = nv(Number(cell('A')));
+  const limestoneFraction = Number(cell('B'));
+  const type = checkSoilAmeliorant(cell('C'));
+  const customEmissionsFactor = cell('D');
 
-  const limeInput: LimeInput = {
-    dolomiteFraction: 0,
-    limestoneFraction: 0,
-    limestone,
-    ...(method === '2' && customEmissionsFactor
-      ? { customScope3EmissionsFactor: Number(customEmissionsFactor) }
-      : {}),
+  const application =
+    type === 'Gypsum'
+      ? {
+          massAppliedKg,
+          type,
+        }
+      : {
+          massAppliedKg,
+          limestoneFraction: nv(limestoneFraction),
+          type,
+        };
+
+  const limeInput: HasLimeInput = {
+    lime: {
+      applications: [
+        {
+          ...application,
+          ...(method === '2' && customEmissionsFactor
+            ? {
+                customScope3EmissionsFactor: nvo(Number(customEmissionsFactor)),
+              }
+            : {}),
+        },
+      ],
+    },
   };
 
-  return LimeInputSchema.parse(limeInput);
+  return HasLimeInputSchema.parse(limeInput);
 };
 
-const extractInputsAndOutputs = createSheetExtractor(getCalculatorInput, 'D');
+const extractInputsAndOutputs = createSheetExtractor(getCalculatorInput, 'E');
 
 describe('15.6.1.1 Purchased Lime', () => {
   it('method 1 matches spreadsheet results', async () => {
@@ -50,7 +71,11 @@ describe('15.6.1.1 Purchased Lime', () => {
 
     const inputsAndOutputs = extractInputsAndOutputs(sheet, 5, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculateScope3Lime);
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateScope3SoilAmeliorants,
+      '15.6',
+    );
   });
 
   it('method 2 matches spreadsheet results', async () => {
@@ -61,6 +86,10 @@ describe('15.6.1.1 Purchased Lime', () => {
 
     const inputsAndOutputs = extractInputsAndOutputs(sheet, 11, '2');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculateScope3Lime);
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateScope3SoilAmeliorants,
+      '15.6',
+    );
   });
 });

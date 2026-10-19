@@ -1,63 +1,87 @@
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
 import { ExecutionContext } from '@/calculators/executionContext';
-import { selectConstant } from '@/tools/constants';
-import { sum } from '@/tools/sum';
+import { HasStateInputTransformed } from '@/calculators/types/has-state.input';
+import { HasCommonConstants } from '@/constants/types';
 import {
-  isServiceAreaBased,
-  ServiceByAreaInputTransformed,
-  ServiceByHourInputTransformed,
-  ServicesInputTransformed,
-} from './services.input';
+  HasFuelInputTransformed,
+  isTransportFuelCNGBased,
+  selectTransportFuelConstants,
+  stationaryEmissionsForCombined,
+} from '@/modules/scope1/8-fuel-use';
+import { calculateScope3EmissionsFromFuelStationary } from '@/modules/scope3/15.10-fuel';
+import { br } from '@/tools/containers';
+import { sum } from '@/tools/sum';
 
-const calculateScope3ServiceByArea = (
-  service: ServiceByAreaInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+type ServicesFuelActivity = HasFuelInputTransformed & HasStateInputTransformed;
+
+const calculateScope3ServicesTransportFuel = (
+  activity: ServicesFuelActivity,
+  context: ExecutionContext<HasCommonConstants>,
 ) => {
   const { constants } = context;
-  const area = service.areaServicedHa;
-  const efp = selectConstant(
-    constants.COMMON,
-    'SERVICE_EMISSIONS_BY_AREA',
-    service.serviceType,
-  );
-  return efp.multiply(area);
+  // SUM{QTPTransq * ECTransq * (EFTrans1tqg + EFTrans3tqg}
+  const emissionsRecords = activity.fuel.transport.map((fuel) => {
+    const qTransTQ = isTransportFuelCNGBased(fuel)
+      ? fuel.amountCubicMetres
+      : fuel.amountKilolitres;
+
+    const { ecTransQ, efTrans1tqg, efTrans3Q } = selectTransportFuelConstants(
+      fuel,
+      constants,
+      'CO2e',
+    );
+
+    const energyFromFuel = ecTransQ.multiply(qTransTQ);
+
+    return br(efTrans1tqg.plus(efTrans3Q)).multiply(energyFromFuel);
+  });
+
+  return sum(emissionsRecords);
 };
 
-const calculateScope3ServiceByHour = (
-  service: ServiceByHourInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+const calculateScope3ServicesStationaryFuel = (
+  activity: ServicesFuelActivity,
+  context: ExecutionContext<HasCommonConstants>,
 ) => {
-  const { constants } = context;
-  const time = service.serviceTimeHours;
-  const efp = selectConstant(
-    constants.COMMON,
-    'SERVICE_EMISSIONS_BY_HOUR',
-    service.serviceType,
+  /*
+   * SUM{Qtpscq * ECscq * (EFsc1qg + EFsc3qg)}
+   *
+   * NOTE: This implementation has lent on existing functions for scope 1 and scope 3, and simply sums them together.
+   * This is to avoid reproducing the complexity of solid vs liquid vs natural gas, at the expense of not matching the
+   * exact format of the reference equation, although the result is identical
+   * */
+  const scope1StationaryEmissions = stationaryEmissionsForCombined(
+    activity,
+    context,
   );
-  return efp.multiply(time);
+  const scope3StationaryEmissions = calculateScope3EmissionsFromFuelStationary(
+    activity,
+    context,
+  );
+
+  return scope1StationaryEmissions.plus(scope3StationaryEmissions);
 };
 
 export const calculateScope3Services = (
-  crop: ServicesInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  activity: ServicesFuelActivity,
+  context: ExecutionContext<HasCommonConstants>,
 ) => {
   /*
   15.7.1.1 Method 1 -- Purchased Services and Contractors
-  (1) Emissions of purchased services and contractor operations is calculated E (t CO2e)
-  as:
-  Where E = SUMp Ap * EF p * 10^-3
-  Ap= activity data of the service that was purchased (either in area of land
-  serviced (ha) or time of operation (hours), depending on the service
-  purchased)
-  EF p = life cycle emission factor for the purchased service (kgCO2e/ha or kgCO2e/hr)
+  E = SUM{QTPTransq * ECTransq * (EFTrans1tqg + EFTrans3tqg} * 10^-3 +
+      SUM{Qtpscq * ECscq * (EFsc1qg + EFsc3qg)} * 10^-3
   */
 
-  const emissionRecords = crop.services.map((service) => {
-    if (isServiceAreaBased(service)) {
-      return calculateScope3ServiceByArea(service, context);
-    } else {
-      return calculateScope3ServiceByHour(service, context);
-    }
-  });
-  return sum(emissionRecords);
+  const transportEmissions = calculateScope3ServicesTransportFuel(
+    activity,
+    context,
+  );
+  const stationaryEmissions = calculateScope3ServicesStationaryFuel(
+    activity,
+    context,
+  );
+
+  return transportEmissions
+    .plus(stationaryEmissions)
+    .named('E')
+    .reference('15.7.1.1 (1)');
 };

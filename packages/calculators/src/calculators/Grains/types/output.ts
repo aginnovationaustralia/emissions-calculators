@@ -1,19 +1,18 @@
+import { EnterpriseNetOutputSchema } from '@/calculators/types/enterprise-net.output';
+import { Scope2OutputSchema } from '@/calculators/types/scope2.output';
 import { emissionsOutput } from '@/types/schemas';
 import { z } from 'zod';
 import { GrainsIntensitiesOutputSchema } from './intensities.output';
 import { GrainsIntermediateOutputSchema } from './intermediate.output';
-import { NetOutputSchema } from './net.output';
-import { GrainsScope1OutputSchema } from './scope1.output';
-import { GrainsScope2OutputSchema } from './scope2.output';
+import { GrainsScope1OutputSchemaPlusLULUCF } from './scope1.output';
 import { GrainsScope3OutputSchema } from './scope3.output';
 
 export const GrainsOutputSchema = emissionsOutput('Grains', {
-  scope1: GrainsScope1OutputSchema,
-  scope2: GrainsScope2OutputSchema,
+  scope1: GrainsScope1OutputSchemaPlusLULUCF,
+  scope2: Scope2OutputSchema,
   scope3: GrainsScope3OutputSchema,
-  // carbonSequestration: SequestrationOutputSchema,
   intermediate: z.array(GrainsIntermediateOutputSchema),
-  net: NetOutputSchema,
+  net: EnterpriseNetOutputSchema,
   intensities: GrainsIntensitiesOutputSchema,
 });
 

@@ -1,53 +1,104 @@
-import { input } from '@/tools/inputs';
-import { days, head, mass, massPerHeadPerDay } from '@/tools/units';
+import {
+  dairyEntericAndManureModules,
+  dairyManureModules,
+} from '@/modules/scope1/shared/dairy/modules';
+import { numberInput, numberInputOptional } from '@/tools/inputs';
+import { LivestockLocation } from '@/tools/modules';
+import {
+  days,
+  head,
+  liveweight,
+  liveweightGain,
+  massPerMass,
+  realNumber,
+} from '@/tools/units';
 import { object } from '@/types/schemas';
-import { mapOptional } from '@/tools/zod';
 import { z } from 'zod';
 
-export const DairyClassBaseInputSchema = object({
-  head: z
-    .number()
-    .gt(0)
-    .transform((val) => input('Nj', head(val))),
-  method2Liveweight: z
-    .number()
-    .gt(0)
-    .optional()
-    .transform(
-      mapOptional((val) => input('Wj', mass('Liveweight', val))),
+export const dairyClassBaseInputSchema = (location: LivestockLocation) =>
+  object({
+    head: numberInput(
+      (val) => head(val),
+      {
+        name: 'Nj',
+        method: '1',
+        description: 'Number of animals in this class for this time period',
+        modules: dairyEntericAndManureModules(location),
+      },
+      (s) => s.gt(0),
     ),
-  method2LiveweightGain: z
-    .number()
-    .optional()
-    .transform(
-      mapOptional((val) => input('LWGj', massPerHeadPerDay('Liveweight', val))),
+    method2Liveweight: numberInputOptional(
+      (val) => liveweight(val),
+      {
+        name: 'Wj',
+        method: '2',
+        description:
+          'Method 2: supply an exact value for the liveweight for this class based on farm records',
+        modules: dairyEntericAndManureModules(location),
+      },
+      (s) => s.gt(0),
     ),
-  method2DurationDays: z
-    .number()
-    .optional()
-    .transform(
-      mapOptional((val) => input('Dj', days(val))),
+    method2LiveweightGain: numberInputOptional((val) => liveweightGain(val), {
+      name: 'LWGj',
+      method: '2',
+      description:
+        'Method 2: supply an exact value for the liveweight gain for this class based on farm records',
+      modules: dairyEntericAndManureModules(location),
+    }),
+    method2DurationDays: numberInputOptional(
+      (val) => days(val),
+      {
+        name: 'Dj',
+        method: '2',
+        description:
+          'Method 2: supply an exact value for the number of days for this time period based on farm records',
+        modules: dairyEntericAndManureModules(location),
+      },
+      (s) => s.min(0),
     ),
-});
+    method2DryMatterDigestibility: numberInputOptional(
+      (val) => realNumber(val),
+      {
+        name: 'DMDj',
+        method: '2',
+        description:
+          'Method 2: supply an exact value for the dry matter digestibility for this class based on farm records',
+        modules: dairyEntericAndManureModules(location),
+      },
+      (s) => s.min(0),
+    ),
+    method2CrudeProtein: numberInputOptional(
+      (val) => massPerMass('CrudeProtein', 'DryMatter', val),
+      {
+        name: 'CPj',
+        method: '2',
+        description:
+          'Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records',
+        modules: dairyManureModules(location),
+      },
+      (s) => s.min(0),
+    ),
+  });
 
-export const DairyClassMilkingCowsInputSchema =
-  DairyClassBaseInputSchema.transform((val) => ({
+export const dairyClassMilkingCowsInputSchema = (location: LivestockLocation) =>
+  dairyClassBaseInputSchema(location).transform((val) => ({
     ...val,
     className: 'milkingCows' as const,
     weanedName: 'milkingCows' as const,
     number: 1 as const,
   }));
 
-export const DairyClassHeifersGt1InputSchema =
-  DairyClassBaseInputSchema.transform((val) => ({
+export const dairyClassHeifersGt1InputSchema = (location: LivestockLocation) =>
+  dairyClassBaseInputSchema(location).transform((val) => ({
     ...val,
     className: 'heifersGt1' as const,
     weanedName: 'heifersGt1' as const,
     number: 2 as const,
   }));
-
-export const DairyClassHeifersLt1PreWeanedInputSchema =
-  DairyClassBaseInputSchema.transform((val) => ({
+export const dairyClassHeifersLt1PreWeanedInputSchema = (
+  location: LivestockLocation,
+) =>
+  dairyClassBaseInputSchema(location).transform((val) => ({
     ...val,
     className: 'heifersLt1' as const,
     weaned: false as const,
@@ -55,8 +106,10 @@ export const DairyClassHeifersLt1PreWeanedInputSchema =
     number: 3 as const,
   }));
 
-export const DairyClassHeifersLt1WeanedInputSchema =
-  DairyClassBaseInputSchema.transform((val) => ({
+export const dairyClassHeifersLt1WeanedInputSchema = (
+  location: LivestockLocation,
+) =>
+  dairyClassBaseInputSchema(location).transform((val) => ({
     ...val,
     className: 'heifersLt1' as const,
     weaned: true as const,
@@ -64,16 +117,17 @@ export const DairyClassHeifersLt1WeanedInputSchema =
     number: 3 as const,
   }));
 
-export const DairyClassBullsGt1InputSchema =
-  DairyClassBaseInputSchema.transform((val) => ({
+export const dairyClassBullsGt1InputSchema = (location: LivestockLocation) =>
+  dairyClassBaseInputSchema(location).transform((val) => ({
     ...val,
     className: 'bullsGt1' as const,
     weanedName: 'bullsGt1' as const,
     number: 4 as const,
   }));
-
-export const DairyClassBullsLt1PreWeanedInputSchema =
-  DairyClassBaseInputSchema.transform((val) => ({
+export const dairyClassBullsLt1PreWeanedInputSchema = (
+  location: LivestockLocation,
+) =>
+  dairyClassBaseInputSchema(location).transform((val) => ({
     ...val,
     className: 'bullsLt1' as const,
     weaned: false as const,
@@ -81,8 +135,10 @@ export const DairyClassBullsLt1PreWeanedInputSchema =
     number: 5 as const,
   }));
 
-export const DairyClassBullsLt1WeanedInputSchema =
-  DairyClassBaseInputSchema.transform((val) => ({
+export const dairyClassBullsLt1WeanedInputSchema = (
+  location: LivestockLocation,
+) =>
+  dairyClassBaseInputSchema(location).transform((val) => ({
     ...val,
     className: 'bullsLt1' as const,
     weaned: true as const,
@@ -91,25 +147,25 @@ export const DairyClassBullsLt1WeanedInputSchema =
   }));
 
 export type DairyClassMilkingCowsInputTransformed = z.output<
-  typeof DairyClassMilkingCowsInputSchema
+  ReturnType<typeof dairyClassMilkingCowsInputSchema>
 >;
 export type DairyClassHeifersGt1InputTransformed = z.output<
-  typeof DairyClassHeifersGt1InputSchema
+  ReturnType<typeof dairyClassHeifersGt1InputSchema>
 >;
 export type DairyClassHeifersLt1PreWeanedInputTransformed = z.output<
-  typeof DairyClassHeifersLt1PreWeanedInputSchema
+  ReturnType<typeof dairyClassHeifersLt1PreWeanedInputSchema>
 >;
 export type DairyClassHeifersLt1WeanedInputTransformed = z.output<
-  typeof DairyClassHeifersLt1WeanedInputSchema
+  ReturnType<typeof dairyClassHeifersLt1WeanedInputSchema>
 >;
 export type DairyClassBullsGt1InputTransformed = z.output<
-  typeof DairyClassBullsGt1InputSchema
+  ReturnType<typeof dairyClassBullsGt1InputSchema>
 >;
 export type DairyClassBullsLt1PreWeanedInputTransformed = z.output<
-  typeof DairyClassBullsLt1PreWeanedInputSchema
+  ReturnType<typeof dairyClassBullsLt1PreWeanedInputSchema>
 >;
 export type DairyClassBullsLt1WeanedInputTransformed = z.output<
-  typeof DairyClassBullsLt1WeanedInputSchema
+  ReturnType<typeof dairyClassBullsLt1WeanedInputSchema>
 >;
 
 export type DairyClassMatureInputTransformed =

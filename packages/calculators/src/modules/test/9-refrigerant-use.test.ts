@@ -1,10 +1,11 @@
 import { getSheet } from '@/test/common/sheets';
+import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import { calculateScope1RefrigerantUse } from '../scope1/9-refrigerant-use';
 import { RefrigerantInput } from '../scope1/9-refrigerant-use/refrigerant.input';
 import {
-  RefrigerantInputsSchema,
-  RefrigerantInputsTransformed,
+  RefrigerantsInputSchema,
+  RefrigerantsInputTransformed,
 } from '../scope1/9-refrigerant-use/refrigerants.input';
 import {
   checkRefrigerantType,
@@ -18,7 +19,7 @@ import {
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-): RefrigerantInputsTransformed | undefined => {
+): RefrigerantsInputTransformed | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
@@ -33,10 +34,10 @@ const getCalculatorInput = (
   const refrigerantInput: RefrigerantInput = {
     refrigerant,
     refrigerationType,
-    chargeSize,
+    chargeSize: nv(chargeSize),
   };
 
-  return RefrigerantInputsSchema.parse({ refrigerants: [refrigerantInput] });
+  return RefrigerantsInputSchema.parse({ refrigerants: [refrigerantInput] });
 };
 
 const extractInputsAndOutputs = createSheetExtractor(getCalculatorInput, 'G');
@@ -50,6 +51,10 @@ describe('9.1.1 Refrigerant use', () => {
 
     const inputsAndOutputs = extractInputsAndOutputs(sheet, 11, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculateScope1RefrigerantUse);
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateScope1RefrigerantUse,
+      '9.1',
+    );
   });
 });

@@ -6,17 +6,50 @@ export const mapOptional =
   (value: T | undefined): U | undefined =>
     value === undefined ? undefined : fn(value);
 
+const outputKeyShape = {
+  amountGasKg: z.number(),
+  gas: z.enum(['CO2', 'CH4', 'N2O', 'CO2e']),
+  amountTonnesCO2e: z.number(),
+  references: z.array(z.string()),
+  constants: z.array(z.object({ name: z.string(), value: z.number() })),
+};
+
+/** A method 1 result has no method 2 value to report */
+const outputMethod1 = z
+  .strictObject({
+    ...outputKeyShape,
+    method: z.literal('1'),
+    amountGasKgMethod1: z.number(),
+    amountGasKgMethod2: z.undefined(),
+  })
+  .meta({ id: 'OutputMethod1', title: 'Method 1' });
+
+/** A method 2 result will sometimes include a method 1 value as well */
+const outputMethod2 = z
+  .strictObject({
+    ...outputKeyShape,
+    method: z.literal('2'),
+    amountGasKgMethod1: z.number().optional(),
+    amountGasKgMethod2: z.number(),
+  })
+  .meta({ id: 'OutputMethod2', title: 'Method 2' });
+
 export const outputKey = (description?: string) => {
   return z
+    .discriminatedUnion('method', [outputMethod1, outputMethod2])
+    .meta({ description });
+};
+
+export const outputTonnesCO2e = (description?: string) => {
+  return z
     .strictObject({
-      value: z.number(),
-      references: z.array(z.string()),
-      constants: z.array(z.object({ name: z.string(), value: z.number() })),
+      tonnesCO2e: z.number(),
     })
     .meta({ description });
 };
 
-export const outputValue = (description?: string) => {
+/** A unitless or derived value; the description must state its units */
+export const outputValue = (description: string) => {
   return z
     .strictObject({
       value: z.number(),

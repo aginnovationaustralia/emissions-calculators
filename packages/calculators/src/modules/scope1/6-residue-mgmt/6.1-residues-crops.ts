@@ -1,67 +1,78 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
-import { CropType, isPastureType } from '@/constants/enums';
+import { HasClimateZoneInputTransformed } from '@/calculators/types/has-climate-zone.input';
+import { HasStateInputTransformed } from '@/calculators/types/has-state.input';
 import { selectConstant } from '@/tools/constants';
+import { captureMethod1Or2Value } from '@/tools/multi';
 import { one, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { CropResidueInputTransformed } from './crop-residue.input';
+import { ConstantsForResidueManagement, HasCropConstants } from './constants';
+import {
+  HasCropOrPastureResidueInputTransformed,
+  HasCropResidueInputTransformed,
+  isPastureResidueInput,
+  residueIsByMass,
+} from './crop-residue.input';
 
 export const calculateMassNCropAppliedToSoil = (
-  crop: CropResidueInputTransformed & BaseGrainsCropTransformed,
-  cropType: CropType,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  activity: HasCropResidueInputTransformed & HasStateInputTransformed,
+  constants: HasCropConstants,
 ) => {
-  const { constants } = context;
-
+  const { crop } = activity;
+  const { residues } = crop;
   const ncbgc = selectConstant(
     constants.CROP,
     'CROPRESIDUE',
-    cropType,
+    crop.type,
     'belowGroundN',
   );
   const ncagc = selectConstant(
     constants.CROP,
     'CROPRESIDUE',
-    cropType,
+    crop.type,
     'aboveGroundN',
   );
   const dmc = selectConstant(
     constants.CROP,
     'CROPRESIDUE',
-    cropType,
+    crop.type,
     'dryMatterContent',
   );
-  const fc = crop.fractionOfAnnualCropBurnt;
-  const ffodc =
-    crop.cropResidues.calculationMethod === '1'
-      ? selectConstant(
-          constants.CROP,
-          'FRACTION_CROP_RESIDUE_REMOVED',
-          cropType,
-          crop.state,
-        )
-      : crop.cropResidues.fractionCropResidueRemoved;
-
-  const pc = crop.averageYield.multiply(crop.areaSown, { name: 'Pc' });
   const ragc = selectConstant(
     constants.CROP,
     'CROPRESIDUE',
-    cropType,
+    crop.type,
     'residueCropRatio',
   );
+
+  const fc = crop.fractionOfAnnualCropBurnt;
+  const ffodc = captureMethod1Or2Value(
+    selectConstant(
+      constants.CROP,
+      'FRACTION_CROP_RESIDUE_REMOVED',
+      crop.type,
+      activity.state,
+    ),
+    residues.calculationMethod === '2'
+      ? residueIsByMass(residues)
+        ? residues.massCropResidueRemoved.divide(
+            crop.totalYieldKg.multiply(ragc).reference('6.1.1.2 (1)'),
+          )
+        : residues.fractionCropResidueRemoved
+      : undefined,
+  ).named('FFODc');
+
+  const pc = crop.totalYieldKg;
   const rbgc = selectConstant(
     constants.CROP,
     'CROPRESIDUE',
-    cropType,
+    crop.type,
     'belowAboveResidueRatio',
   );
 
-  /*  448 | Mc =
-                    (P c * RAGc * (1 - F c- FFODc) * DMc * NCAGc)
-                      + 
-                    (P c * RAGc * RBGc * DMc * NCBGc) (kg N)
-      */
+  /**
+   *  Mc = (Pc * RAGc * (1 - F c- FFODc) * DMc * NCAGc) +
+   * (P c * RAGc * RBGc * DMc * NCBGc) (kg N)
+   */
   const aboveGroundNitrogen = pc
     .multiply(ragc)
     .multiply(one.minus(fc).minus(ffodc))
@@ -74,30 +85,33 @@ export const calculateMassNCropAppliedToSoil = (
     .multiply(dmc)
     .multiply(ncbgc);
 
-  const mc = sum([aboveGroundNitrogen, belowGroundNitrogen], { name: 'Mc' });
+  const mc = sum([aboveGroundNitrogen, belowGroundNitrogen], {
+    name: 'Mc',
+    references: ['6.1.1.1 (2)'],
+  });
 
   return mc;
 };
 
 export const calculate61CropResidueN2O = (
-  crop: CropResidueInputTransformed & BaseGrainsCropTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  activity: HasCropOrPastureResidueInputTransformed &
+    HasClimateZoneInputTransformed &
+    HasStateInputTransformed,
+  context: ExecutionContext<ConstantsForResidueManagement>,
 ) => {
   const { constants } = context;
 
-  // REVISIT: This pattern means we generate 2 separate output keys for crops and pastures. One
-  // will always be zero, the other will have a result. We could decide to combine 6.1 and 6.2
-  // into a single output key
-  if (isPastureType(crop.type)) {
+  if (isPastureResidueInput(activity)) {
     return zeroN2O;
   }
   /* cropResidueN2O
       6.1.1.1
-      441 | E = sum (Mc * EF Ni * CN2O * 10^-3) (t N2O)
+      E = sum (Mc * EF Ni) * CN2O * 10^-3 (t N2O)
       Mc = mass of nitrogen in crop c residues returned to the soil (kg N)
       EF Ni = emission factor for crop residues returned to the soil in climate zone i (kg N2O-N/ kg N)
       CN2O = factor to convert elemental mass of nitrous oxide to molecular mass (dimensionless)
-      448 | Mc = (P c * RAGc * (1 - F c- FFODc) * DMc * NCAGc) + (P c * RAGc * RBGc * DMc * NCBGc) (kg N)
+      
+      Mc = (Pc * RAGc * (1 - Fc - FFODc) * DMc * NCAGc) + (P c * RAGc * RBGc * DMc * NCBGc) (kg N)
       P c = annual production of crop c (kg)
       RAGc = residue to crop ratio for crop c (dimensionless)
       RBGc = below ground-residue to above ground residue ratio for crop c (dimensionless)
@@ -108,17 +122,19 @@ export const calculate61CropResidueN2O = (
       NCBGc = nitrogen content of below-ground crop residue of crop c (kg N/kg DM)
   */
 
-  const mc = calculateMassNCropAppliedToSoil(crop, crop.type, context);
+  const mc = calculateMassNCropAppliedToSoil(activity, constants);
 
   const efni = selectConstant(
     constants.CROP,
     'EF_RESIDUES_RETURNED_TO_SOIL',
-    crop.rainfallAbove600,
+    activity.climateZone,
   );
-  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15');
+  const cn2o = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_N2O');
 
-  // 441 | E = sum (Mc * EF Ni * CN2O * 10^-3) (t N2O)
-  const cropResidueN2O = mc.multiply(efni).multiply(cn2o);
+  const cropResidueN2O = mc
+    .multiply(efni)
+    .multiply(cn2o)
+    .reference('6.1.1.1 (1)');
 
   return cropResidueN2O;
 };

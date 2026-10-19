@@ -26,6 +26,10 @@ export const zeroCH4 = new RootContainer(mass('CH4', new Decimal(0)), {
   name: 'zeroCH4',
 });
 
+export const zeroCO2 = new RootContainer(mass('CO2', new Decimal(0)), {
+  name: 'zeroCO2',
+});
+
 export const zeroCO2e = new RootContainer(mass('CO2e', new Decimal(0)), {
   name: 'zeroCO2e',
 });
@@ -38,6 +42,8 @@ export const oneMinus = (x: TypedContainer<RealNumber>) =>
   num(1).named('one').minus(x);
 export const onePlus = (x: TypedContainer<RealNumber>) =>
   num(1).named('one').plus(x);
+export const percentageToFraction = (x: TypedContainer<RealNumber>) =>
+  x.divide(num(100));
 
 export const daysInYear = root(days(365));
 export const daysPostWeaning = root(days(281));

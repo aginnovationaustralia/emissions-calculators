@@ -1,31 +1,52 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { AllConstants } from '@/constants/types';
+import { HasConstants } from '@/constants/types';
+import { selectConstant } from '@/tools/constants';
+import { captureMethod1Or2Value } from '@/tools/multi';
+import { sum } from '@/tools/sum';
+import { voidUnit } from '@/tools/units';
 import {
-  purchasedMineralSupplementIsMethod1,
+  PurchasedMineralSupplementInputTransformed,
+  purchasedMineralSupplementIsMethod2,
   PurchasedMineralSupplementsInputTransformed,
 } from './purchased-mineral-supplements.input';
-import { selectConstant } from '@/tools/constants';
-import { sum } from '@/tools/sum';
+
+const getEmissionsFactor = (
+  mineral: PurchasedMineralSupplementInputTransformed,
+  constants: HasConstants<'LIVESTOCK'>,
+) => {
+  if (purchasedMineralSupplementIsMethod2(mineral)) {
+    return captureMethod1Or2Value(voidUnit(), mineral.customEmissionsFactor);
+  }
+  return captureMethod1Or2Value(
+    selectConstant(
+      constants.LIVESTOCK,
+      'PURCHASED_MINERAL_SUPPLEMENT_FACTORS',
+      mineral.type,
+    ),
+    undefined,
+  );
+};
 
 export const calculatePurchasedMineralSupplements = (
-  input: PurchasedMineralSupplementsInputTransformed,
-  context: ExecutionContext<AllConstants>,
+  activity: PurchasedMineralSupplementsInputTransformed,
+  context: ExecutionContext<HasConstants<'COMMON' | 'LIVESTOCK'>>,
 ) => {
   /**
    * E = SUM Qm * EFm
    */
   const { constants } = context;
-  const mineralEmissions = input.purchasedMineralSupplements.map((mineral) => {
-    const emissionsFactor = purchasedMineralSupplementIsMethod1(mineral)
-      ? selectConstant(
-          constants.LIVESTOCK,
-          'PURCHASED_MINERAL_SUPPLEMENT_FACTORS',
-          mineral.type,
-        )
-      : mineral.customEmissionsFactor;
+  const mineralEmissions = activity.purchasedMineralSupplements.map(
+    (mineral) => {
+      const emissionsFactor = getEmissionsFactor(mineral, constants).named(
+        'EFm',
+      );
 
-    return mineral.amount.multiply(emissionsFactor);
-  });
+      return mineral.amount
+        .multiply(emissionsFactor)
+        .named('E')
+        .reference('15.3.1.1 (1)');
+    },
+  );
 
   return sum(mineralEmissions);
 };

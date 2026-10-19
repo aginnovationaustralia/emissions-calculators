@@ -3,15 +3,19 @@ import {
   BasicCropProductionSystems,
   ClimateZoneType,
   ClimateZoneTypes,
+  CropOnlyProductionSystems,
   ExtendedCropProductionSystem,
   ExtendedCropProductionSystems,
   InorganicFertiliserType,
   InorganicFertiliserTypes,
   OrganicFertiliserType,
   OrganicFertiliserTypes,
+  PastureOnlyProductionSystems,
   ProductionSystemsInorganicFertiliser,
   ProductionSystemsInorganicFertilisers,
+  SoilAmeliorants,
 } from '@/constants/enums';
+import { createValueCheck } from './domain';
 
 export const checkInorganicFertiliserType = (
   type: string | undefined,
@@ -32,6 +36,15 @@ export const checkBasicCropProductionSystem = (
   }
   return system as BasicCropProductionSystem;
 };
+
+export const checkCropOnlyProductionSystems = createValueCheck(
+  CropOnlyProductionSystems,
+  'crop only production systems',
+);
+export const checkPastureOnlyProductionSystems = createValueCheck(
+  PastureOnlyProductionSystems,
+  'pasture only production systems',
+);
 
 export const checkExtendedCropProductionSystem = (
   system: string | undefined,
@@ -76,3 +89,8 @@ export const checkClimate = (climate: string | undefined): ClimateZoneType => {
   }
   return climate as ClimateZoneType;
 };
+
+export const checkSoilAmeliorant = createValueCheck(
+  SoilAmeliorants,
+  'soil ameliorant',
+);

@@ -2,13 +2,11 @@ import { outputValue } from '@/tools/zod';
 import { z } from 'zod';
 
 export const BeefIntensitiesOutputSchema = z.object({
-  grainProducedTonnes: outputValue('Grain produced in tonnes'),
-  beefLiveweightExcludingSequestration: outputValue(
-    'Beef liveweight emissions intensity excluding sequestration, in t-CO2e/t grain',
+  liveweightProducedKg: outputValue('Liveweight produced in kg'),
+  liveweightIntensityExcludingLULUCF: outputValue(
+    'Beef liveweight emissions intensity excluding LULUCF, in kg CO2e/kg liveweight',
   ),
-  beefLiveweightIncludingSequestration: outputValue(
-    'Beef liveweight emissions intensity including sequestration, in t-CO2e/t grain',
+  liveweightIntensityIncludingLULUCF: outputValue(
+    'Beef liveweight emissions intensity including LULUCF, in kg CO2e/kg liveweight',
   ),
 });
-
-export type BeefIntensitiesOutput = z.infer<typeof BeefIntensitiesOutputSchema>;

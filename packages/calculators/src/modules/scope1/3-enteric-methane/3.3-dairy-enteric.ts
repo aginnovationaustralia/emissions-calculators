@@ -1,152 +1,88 @@
-import { entriesFromObject } from '@/calculators/common/tools';
+import { ConstantsForDairyCalculator } from '@/calculators/Dairy/constants';
 import {
   DairyClassInputTransformed,
-  isClassMature,
   isClassPreWeaned,
 } from '@/calculators/Dairy/types/dairy-class.input';
-import { DairyHerdInputTransformed } from '@/calculators/Dairy/types/herd.input';
-import { DairyInputTransformed } from '@/calculators/Dairy/types/input';
 import { ExecutionContext } from '@/calculators/executionContext';
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
+import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
-import { Container, num, root } from '@/tools/containers';
-import {
-  daysInYear,
-  daysPostWeaning,
-  daysPreWeaning,
-  tenToPowMinus3,
-} from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { massPerHeadPerDay, MassPerHeadPerDay } from '@/tools/units';
 import {
-  calculateExtraIntakeForMilkProductionMIj,
-  calculateFeedIntakeIj,
   calculateMilkProduction,
+  calculateOrGetFeedIntakeForDairy,
 } from '../shared/dairy/calculate';
+import { getLengthOfStay } from '../shared/dairy/helpers';
+import { DairyHerdLivestockInputTransformed } from '../shared/dairy/input';
 
-const findDurationDays = (classInput: DairyClassInputTransformed) => {
-  return (
-    classInput.method2DurationDays ??
-    (isClassMature(classInput)
-      ? daysInYear
-      : isClassPreWeaned(classInput)
-        ? daysPreWeaning
-        : daysPostWeaning)
-  );
-};
-
+// Narrowed to just the fields the dairy enteric methane (3.3) and dairy manure
+// management (4.3) calculations actually read, rather than the full
+// `DairyHerdInputTransformed` -- see shared/dairy/input.ts. A full herd object still
+// satisfies this structurally, so the dedicated Dairy calculator (which does pass the
+// full herd) is unaffected.
 const calculateEntericMethaneForClass = (
-  herd: DairyHerdInputTransformed,
+  herd: DairyHerdLivestockInputTransformed,
   classInput: DairyClassInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  constants: HasConstants<'DAIRY' | 'BEEF_PASTURE'>,
 ) => {
-  const { breed, milkProduction, method2DryMatterDigestibility } = herd;
-  const {
-    head,
-    className,
-    weanedName,
-    method2Liveweight,
-    method2LiveweightGain,
-  } = classInput;
-  const { constants } = context;
+  const { breed, milkProduction } = herd;
+  const { head, weanedName } = classInput;
 
   const Nj = head.named(`Nj=${weanedName}`);
-  const Wj =
-    method2Liveweight ??
-    selectConstant(
-      constants.DAIRY,
-      'LIVEWEIGHTS_BY_BREED',
-      breed,
-      className,
-    ).named(`Wj=${weanedName}`);
-  const LWGj =
-    method2LiveweightGain ??
-    selectConstant(
-      constants.DAIRY,
-      'DAIRY_CLASS_FACTORS',
-      className,
-      'liveweightGain',
-    ).named(`LWGj=${weanedName}`);
-  const MRj = selectConstant(
-    constants.DAIRY,
-    'INCREASE_METABOLIC_RATE_FOR_MILK',
-    className === 'milkingCows' ? 'milkingCows' : 'others',
-  ).named('MRj');
+  const Dj = getLengthOfStay(classInput, constants);
 
-  const DMDj =
-    method2DryMatterDigestibility ??
-    selectConstant(constants.DAIRY, 'DRY_MATTER_DIGESTIBILITY').named('DMDj');
+  if (isClassPreWeaned(classInput)) {
+    const MPWenteric = selectConstant(
+      constants.DAIRY,
+      'CLASSES',
+      classInput.className,
+      'methaneProduction',
+    ).named(`MPWenteric,j=${weanedName}`);
 
-  const MPj = calculateMilkProduction(milkProduction).named(
+    return MPWenteric.multiply(Nj)
+      .multiply(Dj)
+      .named(`Eenteric,j=${weanedName}`)
+      .reference('3.3.1.1 (1)');
+  }
+
+  const MPj = calculateMilkProduction(milkProduction, constants).named(
     `MPj=${weanedName}`,
   );
 
-  const MIj: Container<MassPerHeadPerDay<'DryMatter'>> =
-    calculateExtraIntakeForMilkProductionMIj(MPj, DMDj, constants).named(
-      `MIj=${weanedName}`,
-    );
-  const MIj0 = root(massPerHeadPerDay('DryMatter', 0)).named('MIj0');
-  const Ij = calculateFeedIntakeIj(
-    Wj,
-    LWGj,
-    MRj,
-    className === 'milkingCows' ? MIj : MIj0,
-  ).named(`Ij=${weanedName}`);
-  // line 204 Mj = 20.7 * Ij * 10^-3
-  const Mj = num(20.7)
-    .multiply(Ij)
-    .multiply(tenToPowMinus3)
-    .switchUnit((r) => massPerHeadPerDay('CH4', r.value))
-    .named(`Mj=${weanedName}`);
+  const Ij = calculateOrGetFeedIntakeForDairy(
+    classInput,
+    MPj,
+    breed,
+    constants,
+  );
 
-  const Dj = findDurationDays(classInput).named(`Dj=${weanedName}`);
+  /**
+   * Mj = 20.7 * Ij * 10^-3
+   * */
 
-  const NMD = Mj.multiply(Nj).multiply(Dj);
+  const methanePerDryMatter = selectConstant(
+    constants.BEEF_PASTURE,
+    'DRY_MATTER_TO_METHANE_CONVERSION_FACTOR',
+  );
+  const Mj = Ij.multiply(methanePerDryMatter)
+    .named(`Mj=${weanedName}`)
+    .reference('3.3.1.1 (2)');
 
-  const MPWenteric = (
-    isClassPreWeaned(classInput)
-      ? selectConstant(
-          constants.DAIRY,
-          'PRE_WEANED_CLASSES',
-          classInput.className,
-          'methaneProduction',
-        )
-      : root(massPerHeadPerDay('CH4', 0))
-  ).named(`MPWenteric,j=${weanedName}`);
-
-  const preWeaned = MPWenteric.multiply(Nj).multiply(Dj);
-
-  // Line 192 - this appears a much simpler expression but is correctly implementing the inner part of the sum operation
-  const Eenteric = NMD.plus(preWeaned);
-
-  return Eenteric.named(`Eenteric,j=${weanedName}`);
+  return Mj.multiply(Nj)
+    .multiply(Dj)
+    .named(`Eenteric,j=${weanedName}`)
+    .reference('3.3.1.1 (1)');
 };
 
-const calculateEntericMethaneForHerd = (
-  herd: DairyHerdInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+export const calculate33EntericMethaneForHerd = (
+  herd: DairyHerdLivestockInputTransformed,
+  context: ExecutionContext<ConstantsForDairyCalculator>,
 ) => {
-  const { classes } = herd;
-  const classInputs = entriesFromObject(classes);
-  const classResults = classInputs.map(([_className, classInput]) => {
-    return calculateEntericMethaneForClass(herd, classInput, context);
+  /*
+    3.3.1.1 (1)
+    Eenteric = SUM ((N j=1,2,4 * M j=1,2,4 * D j=1,2,4) + (N j=3,5 * M j=3,5 * D j=3,5) + (N j=3,5 * MPW ENTERIC,j=3,5 * D j=3,5)) * 10^-3
+    */
+  const classResults = Object.values(herd.classes).map((classInput) => {
+    return calculateEntericMethaneForClass(herd, classInput, context.constants);
   });
   return sum(classResults).named('Eenteric (herd)');
 };
-
-export function calculate33DairyEntericMethane(
-  input: DairyInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) {
-  /*
-    Chapter 3.3 line 192
-    Eenteric = SUM ((N j=1,2,4 * M j=1,2,4 * D j=1,2,4) + (N j=3,5 * M j=3,5 * D j=3,5) + (N j=3,5 * MPW ENTERIC,j=3,5 * D j=3,5)) * 10^-3
-    */
-
-  const { herds } = input;
-
-  const emissionsFromHerds = herds.map((herd) =>
-    calculateEntericMethaneForHerd(herd, context),
-  );
-  return sum(emissionsFromHerds).named('Eenteric');
-}

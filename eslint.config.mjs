@@ -47,6 +47,7 @@ export default [
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
+          args: 'all',
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
           caughtErrorsIgnorePattern: '^_',
@@ -104,6 +105,24 @@ export default [
       'emissions/require-optional-zod-transform-guard': [
         'error',
         { helperNames: ['mapOptional'] },
+      ],
+    },
+  },
+  {
+    files: [
+      'packages/calculators/**/*.input.ts',
+      'packages/calculators/src/modules/lulucf/perennial-crops-input.ts',
+      'packages/calculators/src/modules/lulucf/land-use-change-activity-input.ts',
+    ],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            "CallExpression[callee.type='MemberExpression'][callee.object.type='Identifier'][callee.object.name='z'][callee.property.type='Identifier'][callee.property.name='enum']",
+          message:
+            'Avoid `z.enum(...)`. Use `enumInput(...)` from `packages/calculators/src/types/schemas.ts` instead.',
+        },
       ],
     },
   },

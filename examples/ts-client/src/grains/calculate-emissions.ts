@@ -4,7 +4,7 @@ import {
   GrainsOutput,
   isValidCalculatorName,
 } from '@aginnovationaustralia/emissions-calculators';
-import { grainsInputData } from './input';
+import { grainsInputDataMethod1 } from './input';
 
 /**
  * The simplest way to calculate beef emissions is to use the top-level `calculateEmissions` function.
@@ -21,7 +21,7 @@ export const calculateGrainsSimple = () => {
 
   const result: CalculateEmissionsResult<GrainsOutput> = calculateEmissions(
     calculatorName,
-    grainsInputData,
+    grainsInputDataMethod1,
   );
   if (result.status === 'OK') {
     console.log('Emissions calculated correctly', result.emissions);

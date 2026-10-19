@@ -1,22 +1,17 @@
 import { loadConstants } from '@/calculators/executionContext';
 import { AllConstants } from '@/constants/types';
 import { AsyncLocalStorage } from 'async_hooks';
-import { merge } from 'ts-deepmerge';
-import { PartialDeep } from 'type-fest';
-import { CALCULATOR_VERSION } from '../constants';
 import { CalculatorOptions, Environment } from '../types';
 import { packageVersion } from '../version';
 import { getMixpanelInstance } from './mixpanel';
 
-export type ConstantOverrides = PartialDeep<AllConstants>;
 type CalculationEnvironmentParameters = {
-  overrides?: ConstantOverrides;
   organisation?: string;
 };
 
 /**
  * The CalculationEnvironment is a wrapper around the AsyncLocalStorage API that allows for the
- * overriding of constants and organisation for a calculator execution. It is designed to wrap a calculator
+ * overriding of the organisation for a calculator execution. It is designed to wrap a calculator
  * execution in a web server context.
  */
 class CalculationEnvironment {
@@ -28,10 +23,6 @@ class CalculationEnvironment {
     callback: () => T,
   ): T {
     return this.storage.run(parameters, callback);
-  }
-
-  static getOverrides(): ConstantOverrides | undefined {
-    return this.storage.getStore()?.overrides;
   }
 
   static getOrganisation(): string | undefined {
@@ -46,10 +37,7 @@ class CalculationEnvironment {
   }
 
   static loadConstants(): AllConstants {
-    return merge<AllConstants[]>(
-      loadConstants(),
-      this.getOverrides() as AllConstants,
-    );
+    return loadConstants();
   }
 }
 
@@ -66,11 +54,7 @@ class NodeEnvironment implements Environment {
   }
 
   loadConstants(): AllConstants {
-    // REVISIT: This can be replaced with the mergeConstants function that will take care of units vs numbers
-    return merge<AllConstants[]>(
-      loadConstants(),
-      CalculationEnvironment.getOverrides() as AllConstants,
-    );
+    return CalculationEnvironment.loadConstants();
   }
 
   isMetricsEnabled(): boolean {
@@ -95,7 +79,7 @@ class NodeEnvironment implements Environment {
       failed,
       organisation: this.getOrganisation(),
       packageVersion: packageVersion(),
-      calculatorVersion: CALCULATOR_VERSION,
+      calculatorVersion: packageVersion(),
     });
   }
 }

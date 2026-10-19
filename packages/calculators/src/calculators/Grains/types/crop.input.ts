@@ -1,31 +1,34 @@
-import { FertiliserInputSchema } from '@/modules/scope1/5-fertiliser/fertiliser.input';
-import { LimeInputSchema } from '@/modules/scope1/5-fertiliser/lime.input';
-import { CropResidueInputSchema } from '@/modules/scope1/6-residue-mgmt/crop-residue.input';
-import { FuelInputSchema } from '@/modules/scope1/8-fuel-use';
-import { RefrigerantInputsSchema } from '@/modules/scope1/9-refrigerant-use/refrigerants.input';
-import { WasteInputSchema } from '@/modules/scope3/15.13-waste/waste.input';
-import { AgrichemicalsInputSchema } from '@/modules/scope3/15.5-agrichemicals/agrichemicals.input';
-import { ServicesInputSchema } from '@/modules/scope3/15.7-services/services.input';
-import { input } from '@/tools/inputs';
-import { realNumber } from '@/tools/units';
-import { proportion, singleEnterpriseInput } from '@/types/schemas';
+import { BaseCroppingActivityInputSchema } from '@/calculators/types/cropping-activity.input';
+import { GrainsCropTypes } from '@/constants/enums';
+import { HasFertiliserInputSchema } from '@/modules/scope1/5-fertiliser/fertiliser.input';
+import { BaseCropResidueInputSchema } from '@/modules/scope1/6-residue-mgmt/crop-residue.input';
+import { enumInput } from '@/tools/inputs';
+import {
+  RESIDUE_BURN_6_4,
+  RESIDUE_CROPS_6_1,
+  RESIDUE_LEACH_6_3,
+} from '@/tools/modules';
 import { z } from 'zod';
-import { BaseGrainsCropSchema } from './base-crop.input';
 
-export const GrainsCropSchema = singleEnterpriseInput('Grains', {
-  ...BaseGrainsCropSchema.shape,
-  ...AgrichemicalsInputSchema.shape,
-  ...LimeInputSchema.shape,
-  ...CropResidueInputSchema.shape,
-  ...FuelInputSchema.shape,
-  ...FertiliserInputSchema.shape,
-  ...RefrigerantInputsSchema.shape,
-  ...ServicesInputSchema.shape,
-  ...WasteInputSchema.shape,
-  lulucfAllocation: proportion(
-    'Percentage of LULUCF emissions to allocate to this crop, from 0 to 1',
-  ).transform((val) => input('lulucfAllocation', realNumber(val))),
+// This is a custom version of the 'crop' residue input, where the crop type is restricted to the grains crop types.
+export const GrainsCropResidueInputSchema = BaseCropResidueInputSchema.extend({
+  type: enumInput(GrainsCropTypes, {
+    name: 'Grains crop type',
+    description: 'Type of grains crop grown in this activity',
+    modules: [RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3, RESIDUE_BURN_6_4],
+  }),
 });
 
-export type GrainsCrop = z.input<typeof GrainsCropSchema>;
-export type GrainsCropTransformed = z.output<typeof GrainsCropSchema>;
+export type GrainsCropResidueInput = z.input<
+  typeof GrainsCropResidueInputSchema
+>;
+export type GrainsCropResidueInputTransformed = z.output<
+  typeof GrainsCropResidueInputSchema
+>;
+
+export const GrainsCropInputSchema = BaseCroppingActivityInputSchema.safeExtend(
+  { crop: GrainsCropResidueInputSchema, ...HasFertiliserInputSchema.shape },
+);
+
+export type GrainsCropInput = z.input<typeof GrainsCropInputSchema>;
+export type GrainsCropInputTransformed = z.output<typeof GrainsCropInputSchema>;

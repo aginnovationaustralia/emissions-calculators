@@ -1,11 +1,9 @@
-import { ElectricityInputsSchema } from '@/modules/scope2/14-electricity/electricity.input';
-import { singleEnterpriseInput } from '@/types/schemas';
+import { EnterpriseInputSchema } from '@/calculators/types/enterprise.input';
 import { z } from 'zod';
-import { FeedlotGroupInputSchema } from './feedlot-group.input';
+import { FeedlotLotInputSchema } from './feedlot-lot.input';
 
-export const FeedlotInputSchema = singleEnterpriseInput('Feedlot', {
-  groups: z.array(FeedlotGroupInputSchema),
-  electricity: ElectricityInputsSchema,
+export const FeedlotInputSchema = EnterpriseInputSchema.safeExtend({
+  lots: z.array(FeedlotLotInputSchema),
 });
 
 export type FeedlotInput = z.input<typeof FeedlotInputSchema>;

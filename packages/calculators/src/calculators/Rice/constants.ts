@@ -1,22 +1,24 @@
 import {
-  BeefPastureConstants,
   CommonConstants,
   CropConstants,
   DairyConstants,
   FeedlotConstants,
+  LivestockConstants,
+  LULUCFConstants,
+  PigsConstants,
   PoultryConstants,
   RiceConstants,
-  SwineConstants,
 } from '@/constants/types';
 import {
-  beefPastureConstants,
   commonConstants,
   cropConstants,
   dairyConstants,
   feedlotConstants,
+  livestockConstants,
+  lulucfConstants,
+  pigsConstants,
   poultryConstants,
   riceConstants,
-  swineConstants,
 } from '@/constants/values';
 
 export type ConstantsForRiceCalculator = {
@@ -24,9 +26,10 @@ export type ConstantsForRiceCalculator = {
   POULTRY: PoultryConstants;
   COMMON: CommonConstants;
   CROP: CropConstants;
-  SWINE: SwineConstants;
+  PIGS: PigsConstants;
   FEEDLOT: FeedlotConstants;
-  BEEF_PASTURE: BeefPastureConstants;
+  LIVESTOCK: LivestockConstants;
+  LULUCF: LULUCFConstants;
   RICE: RiceConstants;
 };
 
@@ -35,8 +38,9 @@ export const constantsForRiceCalculator: ConstantsForRiceCalculator = {
   POULTRY: poultryConstants,
   COMMON: commonConstants,
   CROP: cropConstants,
-  SWINE: swineConstants,
+  PIGS: pigsConstants,
   FEEDLOT: feedlotConstants,
-  BEEF_PASTURE: beefPastureConstants,
+  LIVESTOCK: livestockConstants,
+  LULUCF: lulucfConstants,
   RICE: riceConstants,
 };

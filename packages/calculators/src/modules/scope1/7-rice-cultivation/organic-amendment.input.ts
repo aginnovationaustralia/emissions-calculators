@@ -2,7 +2,8 @@ import {
   RiceCultivationOrganicAmendmentType,
   RiceCultivationOrganicAmendmentTypes,
 } from '@/constants/enums';
-import { input } from '@/tools/inputs';
+import { input, numberInput } from '@/tools/inputs';
+import { RICE_7_1 } from '@/tools/modules';
 import { tonnesPerHectareToKgPerSquareMetres } from '@/tools/unit-conversion';
 import { massPerArea } from '@/tools/units';
 import { object } from '@/types/schemas';
@@ -12,30 +13,29 @@ export const RiceCultivationOrganicAmendmentInputSchema = object({
   type: z
     .literal(RiceCultivationOrganicAmendmentTypes)
     .transform((val) =>
-      input(
-        'organic amendment type',
-        val as RiceCultivationOrganicAmendmentType,
-      ),
+      input(val as RiceCultivationOrganicAmendmentType, {
+        name: 'organic amendment type',
+        modules: [RICE_7_1],
+      }),
     )
     .meta({
       description: 'The type of organic amendment applied.',
     }),
-  rateOfApplication: z
-    .number()
-    .min(0)
-    .transform((val) =>
-      input(
-        'rate of application',
-        massPerArea(
-          'Organic Amendment',
-          tonnesPerHectareToKgPerSquareMetres(val),
-        ),
+  rateOfApplication: numberInput(
+    (val) =>
+      massPerArea(
+        'Organic Amendment',
+        tonnesPerHectareToKgPerSquareMetres(val),
       ),
-    )
-    .meta({
+    {
+      name: 'rate of application',
+      method: '1',
       description:
-        'The rate of application of this organic amendment, in tonnes per hectare. For straw, this should be measured in dry weight. Everything else should be given in terms of fresh weight.',
-    }),
+        'The rate of application of this organic amendment. For straw, this should be measured in dry weight. Everything else should be given in terms of fresh weight.',
+      modules: [RICE_7_1],
+    },
+    (s) => s.min(0),
+  ),
 });
 
 export type RiceCultivationOrganicAmendmentInput = z.input<

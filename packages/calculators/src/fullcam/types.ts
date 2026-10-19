@@ -21,6 +21,7 @@ export type FullCAMOutputLine = {
   ch4EmittedDueToFireTCH4PerHectare: number;
   n2oEmittedDueToFireTN2OPerHectare: number;
   carbonMassOfForestDebrisTCPerHectare: number;
+  carbonMassOfForestProductsTCPerHectare: number;
 };
 
 export type FullCAMOutputKeyFields = {

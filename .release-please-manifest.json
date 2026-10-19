@@ -1,3 +1,4 @@
 {
-  "packages/calculators": "3.0.1"
+  "packages/calculators": "3.0.1",
+  "packages/emissions-calculator-research": "0.1.0"
 }

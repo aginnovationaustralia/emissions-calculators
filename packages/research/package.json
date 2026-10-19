@@ -1,0 +1,62 @@
+{
+  "name": "@aginnovationaustralia/emissions-calculator-research",
+  "version": "0.1.0",
+  "description": "Run the emissions calculators with custom overrides to the constant values, for research purposes",
+  "keywords": [
+    "emissions",
+    "greenhouse gas",
+    "agriculture",
+    "research"
+  ],
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "pnpm run clean && tsc -p tsconfig.build.json && pnpm run check:package",
+    "check:package": "publint && attw --pack . --profile node16",
+    "prepublishOnly": "pnpm run check:package",
+    "clean": "rm -rf dist",
+    "check:types": "tsc --noEmit",
+    "lint": "eslint . && pnpm run check:types",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aginnovationaustralia/emissions-calculators.git",
+    "directory": "packages/emissions-calculator-research"
+  },
+  "homepage": "https://github.com/aginnovationaustralia/emissions-calculators/tree/main/packages/emissions-calculator-research#readme",
+  "bugs": {
+    "url": "https://github.com/aginnovationaustralia/emissions-calculators/issues"
+  },
+  "author": "Agricultural Innovation Australia",
+  "license": "CC-BY-4.0",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "dependencies": {
+    "@aginnovationaustralia/emissions-calculators": "workspace:*"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.9.7",
+    "jest": "^30.5.1",
+    "publint": "^0.3.24",
+    "ts-jest": "^29.4.12",
+    "typescript": "^5.9.3"
+  }
+}

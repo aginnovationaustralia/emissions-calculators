@@ -1,4 +1,4 @@
-import { calculateLULUCF } from '@/modules/lulucf/calculate';
+import { calculate10SolidWasteEmissions } from '@/modules/scope1/10-solid-waste';
 import {
   calculate51InorganicFertiliser,
   calculate52OrganicFertiliser,
@@ -10,109 +10,126 @@ import {
   calculate61CropResidueN2O,
   calculate63ResidueLeachingAndRunoffN2O,
   calculate64FieldBurning,
+  getAmountProduced,
 } from '@/modules/scope1/6-residue-mgmt';
-import { calculate62PastureResidueN2O } from '@/modules/scope1/6-residue-mgmt/6.2-residues-pasture';
+import { ConstantsForResidueManagement } from '@/modules/scope1/6-residue-mgmt/constants';
 import {
   calculate81TransportFuel,
   calculate82StationaryFuel,
 } from '@/modules/scope1/8-fuel-use';
 import { calculateScope1RefrigerantUse } from '@/modules/scope1/9-refrigerant-use';
-import { calculateElectricityScope2 } from '@/modules/scope2/14-electricity';
 import { calculateScope3EmissionsFromFuel } from '@/modules/scope3/15.10-fuel';
-import { calculateElectricityScope3 } from '@/modules/scope3/15.11-electricity';
-import { calculateScope3Waste } from '@/modules/scope3/15.13-waste';
+import { calculateScope3SolidWasteEmissions } from '@/modules/scope3/15.12-waste';
 import { calculateScope3Fertiliser } from '@/modules/scope3/15.4-fertiliser';
 import { calculateScope3Agrichemicals } from '@/modules/scope3/15.5-agrichemicals';
-import { calculateScope3Lime } from '@/modules/scope3/15.6-lime';
+import { calculateScope3SoilAmeliorants } from '@/modules/scope3/15.6-lime';
 import { calculateScope3Services } from '@/modules/scope3/15.7-services';
-import { mergeScopeOutputs, wrapScopesAsOutputs } from '@/tools/calculators';
+import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
+import { IntermediateScope1 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
+import { valueObject } from '@/tools/outputs';
 import { sum } from '@/tools/sum';
-import { addScope1Totals, addScope23Totals } from '@/tools/totals';
-import { massInTonnes } from '@/tools/unit-conversion';
 import { Mass } from '@/tools/units';
+import { createCalculator } from '../common/calculator';
 import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForGrainsCalculator } from './constants';
-import { GrainsOutput, GrainsOutputSchema } from './types';
-import { GrainsCropTransformed } from './types/crop.input';
-import { GrainsInputTransformed } from './types/input';
+import { GrainsOutputSchema, GrainsScope1Output } from './types';
+import { GrainsCropInputTransformed } from './types/crop.input';
+import { GrainsIntermediateIntensitiesOutput } from './types/intermediate-intensities.output';
 
-const valueObject = (value: number) => ({
-  value,
-});
-
-function getIntensities(
-  netTotal: number,
-  carbonSequestration: number,
-  grainProduced: Container<Mass<'DryMatter'>>,
-) {
-  const grainProducedTonnes = valueObject(
-    massInTonnes(grainProduced).toNumber(),
+function getSingleIntensities(
+  netEmissionsKgCO2e: number,
+  crop: GrainsCropInputTransformed,
+  context: ExecutionContext<ConstantsForResidueManagement>,
+): GrainsIntermediateIntensitiesOutput {
+  const grainHarvestedKg = getAmountProduced(
+    crop,
+    context.constants,
+  ).unit.store.toNumber();
+  const grainsIntensity = valueObject(
+    divideBySafeFromZero(netEmissionsKgCO2e, grainHarvestedKg),
   );
-  const grainsExcludingSequestration = valueObject(
+
+  return {
+    grainsIntensity,
+    grainHarvestedKg: valueObject(grainHarvestedKg),
+  };
+}
+
+function getTotalIntensities(
+  netTotalEmissionsKgCO2e: number,
+  netLulucfKgCO2e: number,
+  crops: GrainsCropInputTransformed[],
+  context: ExecutionContext<ConstantsForResidueManagement>,
+) {
+  const { constants } = context;
+  const grainHarvestedKg = sum(
+    crops.map((crop) => getAmountProduced(crop, constants)),
+  ).unit.store.toNumber();
+  const grainsExcludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotal + carbonSequestration,
-      grainProducedTonnes.value,
+      netTotalEmissionsKgCO2e + netLulucfKgCO2e,
+      grainHarvestedKg,
     ),
   );
-  const grainsIncludingSequestration = valueObject(
-    divideBySafeFromZero(netTotal, grainProducedTonnes.value),
+  const grainsIncludingLULUCF = valueObject(
+    divideBySafeFromZero(netTotalEmissionsKgCO2e, grainHarvestedKg),
   );
   return {
-    grainsExcludingSequestration,
-    grainsIncludingSequestration,
-    grainProducedTonnes,
+    grainsExcludingLULUCF,
+    grainsIncludingLULUCF,
+    grainHarvestedKg: valueObject(grainHarvestedKg),
   };
 }
 
 const calculateScope1Grains = (
-  crop: GrainsCropTransformed,
-  input: GrainsInputTransformed,
+  crop: GrainsCropInputTransformed,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
-) => {
-  // 6.3 refrigerants
-  // new outputs
-
-  // 8.1 Transport fuel
-  // 8.2 Stationary combustion fuel
-  const { fuelTransportCO2, fuelTransportCH4, fuelTransportN2O } =
-    calculate81TransportFuel(crop, context);
-  const { fuelStationaryCO2, fuelStationaryCH4, fuelStationaryN2O } =
-    calculate82StationaryFuel(crop, context);
-
-  // 5 Fertiliser use
-  const { inorganicFertiliserN2O } = calculate51InorganicFertiliser(
-    crop,
-    context,
-  );
+): IntermediateScope1<GrainsScope1Output> => {
+  // 5.1 Inorganic and urea fertiliser application
+  const { inorganicFertiliserN2O, inorganicFertiliserCO2 } =
+    calculate51InorganicFertiliser(crop, context);
+  // 5.2 Organic fertiliser application
   const organicFertiliserN2O = calculate52OrganicFertiliser(crop, context);
+  // 5.3 Lime application
   const limeCO2 = calculate53Lime(crop, context);
+  // 5.4 Atmospheric deposition
   const {
     inorganicFertiliserAtmosphericDepositionN2O,
     organicFertiliserAtmosphericDepositionN2O,
   } = calculate54AtmosphericDeposition(crop, context);
+  // 5.5 Fertiliser leaching and run-off resulting from fertiliser application
   const { fertiliserLeachingAndRunoffN2O } = calculate55LeachingAndRunoff(
     crop,
     context,
   );
 
   // 6 residue management
+  // 6.1 Return of crop residues to soils
   const cropResidueN2O = calculate61CropResidueN2O(crop, context);
-  const pastureResidueN2O = calculate62PastureResidueN2O(crop, context);
+  // 6.3 Residue leaching and run-off from crop and pasture residues
   const residueLeachingAndRunoffN2O = calculate63ResidueLeachingAndRunoffN2O(
     crop,
     context,
   );
+  // 6.4 Field burning of crop residues
   const { fieldBurningN2O, fieldBurningCH4 } = calculate64FieldBurning(
     crop,
     context,
   );
 
-  // 6.3 refrigerants
+  // Transport Fuel 8.1
+  const { fuelTransportCO2, fuelTransportCH4, fuelTransportN2O } =
+    calculate81TransportFuel(crop, context);
+  // Stationary Fuel 8.2
+  const { fuelStationaryCO2, fuelStationaryCH4, fuelStationaryN2O } =
+    calculate82StationaryFuel(crop, context);
+  // Refrigerant Use 9.1
   const refrigerantHFCs = calculateScope1RefrigerantUse(crop, context);
-
-  const lulucf = calculateLULUCF(input, context, crop.lulucfAllocation);
+  // Solid Waste Treatment 10.1
+  const { solidWasteCO2, solidWasteCH4, solidWasteN2O } =
+    calculate10SolidWasteEmissions(crop, context);
 
   return {
     fuelTransportCO2,
@@ -123,147 +140,71 @@ const calculateScope1Grains = (
     fuelStationaryN2O,
     limeCO2,
     inorganicFertiliserN2O,
+    inorganicFertiliserCO2,
     organicFertiliserN2O,
     inorganicFertiliserAtmosphericDepositionN2O,
     organicFertiliserAtmosphericDepositionN2O,
     fertiliserLeachingAndRunoffN2O,
     cropResidueN2O,
-    pastureResidueN2O,
     residueLeachingAndRunoffN2O,
     fieldBurningN2O,
     fieldBurningCH4,
     refrigerantHFCs,
-    ...lulucf,
-  };
-};
-
-const calculateScope2Grains = (
-  crop: GrainsCropTransformed,
-  input: GrainsInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) => {
-  // Scope 2
-  // 7.1 -electricity scope 2 and 3
-  // electricity (s2), electricity (s3)
-  const electricity = calculateElectricityScope2(input, context);
-  const allocatedElectricity = electricity.multiply(crop.electricityAllocation);
-
-  return {
-    electricity: allocatedElectricity,
+    solidWasteCO2,
+    solidWasteCH4,
+    solidWasteN2O,
   };
 };
 
 const calculateScope3Grains = (
-  crop: GrainsCropTransformed,
-  input: GrainsInputTransformed,
+  crop: GrainsCropInputTransformed,
+  enterpriseScope3Electricity: Container<Mass<'CO2e'>>,
   context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) => {
-  // 7.1 -electricity scope 2 and 3
-  // electricity (s2), electricity (s3)
-  const electricity = calculateElectricityScope3(input, context);
-  // 7.5 Purchased fertiliser
-  // fertiliser
+  // Purchased Fertiliser 15.4
   const fertiliser = calculateScope3Fertiliser(crop, context);
 
-  // 7.6 Purchased herbicides / pesticides
-  // herbicide
+  // Purchased Agrichemicals 15.5
   const agrichemicals = calculateScope3Agrichemicals(crop, context);
 
-  // 7.7 Purchased lime
-  // lime
-  const lime = calculateScope3Lime(crop, context);
+  // Purchased Soil Ameliorants 15.6
+  const soilAmeliorants = calculateScope3SoilAmeliorants(crop, context);
 
-  // 7.8 well to tank emissions from fuel
-  // fuel
+  // Purchased Services/Contractors 15.7
+  const services = calculateScope3Services(crop, context);
+
+  // Other Purchased Goods and Services 15.9
+  const otherPurchasedGoodsAndServices =
+    calculateOtherPurchasedGoodsAndServicesEmissions(crop);
+
+  // Upstream Emissions from Fuel 15.10
   const fuel = calculateScope3EmissionsFromFuel(crop, context);
 
-  // 7.10 management of waste
-  // new outputs
-  const services = calculateScope3Services(crop, context);
-  const { offsiteManure, solidWaste } = calculateScope3Waste(crop, context);
+  // Upstream emissions of Purchased Electricity 15.11
+  const electricity = enterpriseScope3Electricity.multiply(
+    crop.electricityAllocation,
+  );
+
+  // Management of Waste 15.12
+  const solidWaste = calculateScope3SolidWasteEmissions(crop, context);
 
   return {
     electricity,
     fertiliser,
     agrichemicals,
     fuel,
-    lime,
+    soilAmeliorants,
     services,
-    offsiteManure,
     solidWaste,
+    otherPurchasedGoodsAndServices,
   };
 };
-
-export function calculateGrains(
-  input: GrainsInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-): GrainsOutput {
-  const cropResults = input.crops.map((crop, ix) => {
-    return {
-      scope1: calculateScope1Grains(crop, input, context),
-      scope2: calculateScope2Grains(crop, input, context),
-      scope3: calculateScope3Grains(crop, input, context),
-      meta: {
-        id: crop.id || 'crop' + ix.toString(),
-        amountProduced: crop.averageYield.multiply(crop.areaSown),
-      },
-    };
-  });
-
-  const merged = mergeScopeOutputs(cropResults, GrainsOutputSchema.shape);
-
-  const mergedScopes = wrapScopesAsOutputs(merged);
-
-  const scope1WithTotals = addScope1Totals(mergedScopes.scope1);
-  const scope2WithTotals = addScope23Totals(mergedScopes.scope2);
-  const scope3WithTotals = addScope23Totals(mergedScopes.scope3);
-
-  const net = {
-    total: {
-      value:
-        scope1WithTotals.total.value +
-        scope2WithTotals.total.value +
-        scope3WithTotals.total.value,
-    },
-  };
-
-  // Carbon sequestration is covered by LULUCF guidance
-
-  return {
-    scope1: scope1WithTotals,
-    scope2: scope2WithTotals,
-    scope3: scope3WithTotals,
-    net,
-    intermediate: cropResults.map((crop) => {
-      const cropOutputs = wrapScopesAsOutputs<GrainsOutput>(crop);
-      const scope1 = addScope1Totals(cropOutputs.scope1);
-      const scope2 = addScope23Totals(cropOutputs.scope2);
-      const scope3 = addScope23Totals(cropOutputs.scope3);
-      const net = {
-        total: {
-          value: scope1.total.value + scope2.total.value + scope3.total.value,
-        },
-      };
-      return {
-        id: crop.meta.id,
-        scope1,
-        scope2,
-        scope3,
-        net,
-        carbonSequestration: {
-          total: 0,
-        },
-        intensities: getIntensities(
-          net.total.value,
-          0,
-          crop.meta.amountProduced,
-        ),
-      };
-    }),
-    intensities: getIntensities(
-      net.total.value,
-      0,
-      sum(cropResults.map((crop) => crop.meta.amountProduced)),
-    ),
-  };
-}
+export const calculateGrains = createCalculator(
+  'grains',
+  'crops',
+  GrainsOutputSchema.shape,
+  calculateScope1Grains,
+  calculateScope3Grains,
+  getSingleIntensities,
+  getTotalIntensities,
+);

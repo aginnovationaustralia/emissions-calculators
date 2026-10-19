@@ -1,11 +1,12 @@
-import { input } from '@/tools/inputs';
-import { z } from 'zod';
-import { BasePurchasedFeedInputSchema } from './base-purchased-feed.input';
 import {
-  PurchasedFeedLivestockTypesPerRegion,
   PurchasedFeedLivestockRegionalType,
+  PurchasedFeedLivestockTypesPerRegion,
   PurchasedFeedRegion,
 } from '@/constants/enums';
+import { input } from '@/tools/inputs';
+import { PURCH_FEED_15_2 } from '@/tools/modules';
+import { z } from 'zod';
+import { BasePurchasedFeedInputSchema } from './base-purchased-feed.input';
 
 export const createPurchasedFeedInputSchemaForRegion = <
   R extends PurchasedFeedRegion,
@@ -16,19 +17,24 @@ export const createPurchasedFeedInputSchemaForRegion = <
     type: z
       .literal(PurchasedFeedLivestockTypesPerRegion[region])
       .transform((val) =>
-        input(
-          'purchased feed type',
-          val as PurchasedFeedLivestockRegionalType<R>,
-        ),
+        input(val as PurchasedFeedLivestockRegionalType<R>, {
+          name: 'purchased feed type',
+          modules: [PURCH_FEED_15_2],
+        }),
       )
       .meta({
         description: 'The type of feed purchased.',
       }),
     region: z
       .literal([region])
-      .transform((val) => input('region of origin of purchased feed', val))
+      .transform((val) =>
+        input(val, {
+          name: 'region of origin of purchased feed',
+          modules: [PURCH_FEED_15_2],
+        }),
+      )
       .meta({ description: 'The region of origin of the purchased feed' }),
-  });
+  }).meta({ title: `Purchased from ${region}` });
 
 export const PurchasedFeedBrazilInputSchema =
   createPurchasedFeedInputSchemaForRegion('Brazil');
@@ -97,9 +103,8 @@ export type PurchasedFeedWAInputTransformed = z.output<
   typeof PurchasedFeedWAInputSchema
 >;
 
-export const PurchasedFeedLivestockRegionalInputSchema = z.discriminatedUnion(
-  'region',
-  [
+export const PurchasedFeedLivestockRegionalInputSchema = z
+  .discriminatedUnion('region', [
     PurchasedFeedBrazilInputSchema,
     PurchasedFeedAustralianInputSchema,
     PurchasedFeedNSWInputSchema,
@@ -109,8 +114,8 @@ export const PurchasedFeedLivestockRegionalInputSchema = z.discriminatedUnion(
     PurchasedFeedTASInputSchema,
     PurchasedFeedVICInputSchema,
     PurchasedFeedWAInputSchema,
-  ],
-);
+  ])
+  .meta({ title: 'Regional feed type' });
 
 export type PurchasedFeedLivestockRegionalInput = z.input<
   typeof PurchasedFeedLivestockRegionalInputSchema

@@ -1,5 +1,5 @@
 import { Container, isNamedOrigin } from './containers';
-import { AnyUnit, isStringUnit, isVoid } from './units';
+import { AnyUnit, isBooleanUnit, isStringUnit, isVoid } from './units';
 
 export function formatUnit(unit: AnyUnit): string {
   if (isVoid(unit)) {
@@ -7,6 +7,9 @@ export function formatUnit(unit: AnyUnit): string {
   }
   if (isStringUnit(unit)) {
     return `string: (${unit})`;
+  }
+  if (isBooleanUnit(unit)) {
+    return 'boolean';
   }
 
   switch (unit.__unitType) {
@@ -99,13 +102,15 @@ const formatUnitValue = (unit: AnyUnit): string => {
     return 'void(0)';
   } else if (isStringUnit(unit)) {
     return unit;
+  } else if (isBooleanUnit(unit)) {
+    return unit.toString();
   } else {
-    return unit.value.toNumber().toString();
+    return unit.store.toNumber().toString();
   }
 };
 
 const formatOperator = (
-  type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'limitedTo',
+  type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'min' | 'max',
 ): string => {
   const operatorMap = {
     add: '+',
@@ -113,7 +118,8 @@ const formatOperator = (
     multiply: '*',
     divide: '/',
     power: '^',
-    limitedTo: 'min',
+    min: 'min',
+    max: 'max',
   };
   return operatorMap[type];
 };
@@ -128,7 +134,7 @@ const formatValueAndName = (container: Container<AnyUnit>): string => {
 const formatExpressionRecursive = (container: Container<AnyUnit>): string => {
   switch (container.originType) {
     case 'binary':
-      if (container.type === 'limitedTo') {
+      if (container.type === 'min') {
         return `${formatOperator(container.type)}(${formatExpressionRecursive(container.left)}, ${formatExpressionRecursive(container.right)})`;
       }
       return `${formatExpressionRecursive(container.left)} ${formatOperator(container.type)} ${formatExpressionRecursive(container.right)}`;
@@ -140,6 +146,8 @@ const formatExpressionRecursive = (container: Container<AnyUnit>): string => {
       return formatValueAndName(container);
     case 'bracketed':
       return `(${formatExpressionRecursive(container.inner)})`;
+    case 'if_else':
+      return `if(${formatExpressionRecursive(container.condition)}, ${formatExpressionRecursive(container.whenTrue)}, ${formatExpressionRecursive(container.whenFalse)})`;
     default:
       return `Unknown ${container}`;
   }
@@ -167,6 +175,10 @@ const formatIntermediatesRecursive = (
       return [formatValueAndName(container)];
     case 'bracketed':
       return formatIntermediatesRecursive(container.inner);
+    case 'if_else':
+      return formatIntermediatesRecursive(container.condition)
+        .concat(formatIntermediatesRecursive(container.whenTrue))
+        .concat(formatIntermediatesRecursive(container.whenFalse));
     default:
       return [`Unknown ${container}`];
   }
@@ -299,6 +311,32 @@ const formatNamedValuesRecursive = (
       case 'bracketed': {
         return formatNamedValuesRecursive(container.inner, depth, true);
       }
+      case 'if_else': {
+        const conditionResults = formatNamedValuesRecursive(
+          container.condition,
+          depth + 1,
+        );
+        const trueResults = formatNamedValuesRecursive(
+          container.whenTrue,
+          depth + 1,
+        );
+        const falseResults = formatNamedValuesRecursive(
+          container.whenFalse,
+          depth + 1,
+        );
+        const children = conditionResults
+          .concat(trueResults)
+          .concat(falseResults);
+        return [
+          {
+            lhs,
+            name,
+            rhs: wrap(`if(${children.map((c) => c.lhs ?? c.rhs).join(', ')})`),
+            children,
+            depth,
+          },
+        ];
+      }
       default:
         return [
           {
@@ -344,6 +382,32 @@ const formatNamedValuesRecursive = (
       }
       case 'bracketed': {
         return formatNamedValuesRecursive(container.inner, depth, true);
+      }
+      case 'if_else': {
+        const conditionResults = formatNamedValuesRecursive(
+          container.condition,
+          depth,
+        );
+        const trueResults = formatNamedValuesRecursive(
+          container.whenTrue,
+          depth,
+        );
+        const falseResults = formatNamedValuesRecursive(
+          container.whenFalse,
+          depth,
+        );
+        const children = conditionResults
+          .concat(trueResults)
+          .concat(falseResults);
+        return [
+          {
+            lhs: undefined,
+            name,
+            rhs: wrap(`if(${children.map((c) => c.lhs ?? c.rhs).join(', ')})`),
+            children,
+            depth,
+          },
+        ];
       }
       case 'root':
         return [

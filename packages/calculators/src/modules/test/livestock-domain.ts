@@ -1,8 +1,15 @@
 import {
+  BeefBreed,
+  BeefBreeds,
+  BeefClass,
+  BeefClasses,
+  BeefPurchaseCategories,
   BuffaloClass,
   BuffaloClasses,
   ClimateZone,
   ClimateZones,
+  DairyClasses,
+  DairyPurchaseCategories,
   DairySystem,
   DairySystems,
   DeerClass,
@@ -18,28 +25,23 @@ import {
   GrazingProductionSystemsWithRainfall,
   LimitedRegion,
   LimitedRegions,
-  LimitedState,
-  LimitedStates,
+  LivestockPurchaseCategories,
   MeanAnnualTemperature,
   MeanAnnualTemperatures,
   OtherLivestockType,
   OtherLivestockTypes,
-  PureState,
-  PureStates,
-  PureStatesWithoutNT,
-  PureStateWithoutNT,
+  PigPurchaseCategories,
+  PigsLiveweightClasses,
+  PoultryWeightClasses,
+  Seasons,
+  SecondaryFeedlotMMSType,
+  SecondaryFeedlotMMSTypes,
+  State,
   StateOrRegion,
   StateOrRegions,
-  SwineMMSType,
-  SwineMMSTypes,
+  States,
 } from '@/constants/enums';
-
-export const checkSwineMMSType = (type: string | undefined): SwineMMSType => {
-  if (!SwineMMSTypes.includes(type as SwineMMSType)) {
-    throw new Error(`Invalid swine MMS type: ${type}`);
-  }
-  return type as SwineMMSType;
-};
+import { createValueCheck } from './domain';
 
 export const checkFeedlotMMSType = (
   type: string | undefined,
@@ -48,6 +50,15 @@ export const checkFeedlotMMSType = (
     throw new Error(`Invalid feedlot MMS type: ${type}`);
   }
   return type as FeedlotMMSType;
+};
+
+export const checkFeedlotSecondaryMMSType = (
+  type: string | undefined,
+): SecondaryFeedlotMMSType => {
+  if (!SecondaryFeedlotMMSTypes.includes(type as SecondaryFeedlotMMSType)) {
+    throw new Error(`Invalid feedlot secondary MMS type: ${type}`);
+  }
+  return type as SecondaryFeedlotMMSType;
 };
 
 export const checkDairySystem = (system: string | undefined): DairySystem => {
@@ -91,22 +102,6 @@ export const checkStateOrRegion = (
   return stateOrRegion as StateOrRegion;
 };
 
-export const checkLimitedState = (state: string | undefined): LimitedState => {
-  if (!LimitedStates.includes(state as LimitedState)) {
-    throw new Error(`Invalid state: ${state}`);
-  }
-  return state as LimitedState;
-};
-
-export const checkPureStateWithoutNT = (
-  state: string | undefined,
-): PureStateWithoutNT => {
-  if (!PureStatesWithoutNT.includes(state as PureStateWithoutNT)) {
-    throw new Error(`Invalid pure state without NT: ${state}`);
-  }
-  return state as PureStateWithoutNT;
-};
-
 export const checkGrazingSystem = (
   system: string | undefined,
 ): GrazingProductionSystem => {
@@ -146,11 +141,11 @@ export const checkDeerClass = (cls: string | undefined): DeerClass => {
   return cls as DeerClass;
 };
 
-export const checkPureState = (state: string | undefined): PureState => {
-  if (!PureStates.includes(state as PureState)) {
+export const checkState = (state: string | undefined): State => {
+  if (!States.includes(state as State)) {
     throw new Error(`Invalid pure state: ${state}`);
   }
-  return state as PureState;
+  return state as State;
 };
 
 export const checkMeanAnnualTemperature = (
@@ -176,3 +171,78 @@ export const checkGrazingProductionSystemsWithRainfall = (
   }
   return system as GrazingProductionSystemsWithRainfall;
 };
+
+export const checkBeefBreed = (breed: string | undefined): BeefBreed => {
+  if (!BeefBreeds.includes(breed as BeefBreed)) {
+    throw new Error(`Invalid beef breed: ${breed}`);
+  }
+  return breed as BeefBreed;
+};
+
+export const checkPurchaseCategory = createValueCheck(
+  LivestockPurchaseCategories,
+  'Livestock purchase category',
+);
+
+export const checkBeefPurchaseCategory = createValueCheck(
+  BeefPurchaseCategories,
+  'Beef purchase category',
+);
+
+export const checkDairyPurchaseCategory = createValueCheck(
+  DairyPurchaseCategories,
+  'Dairy purchase category',
+);
+
+export const checkBeefClass = createValueCheck(BeefClasses, 'Beef class');
+
+export const convertBeefClass = (input: string | undefined): BeefClass => {
+  switch (input) {
+    case 'Bulls < 1 year':
+      return 'bullsLt1';
+    case 'Cows 1-2 years':
+      return 'cows1To2Years';
+    case 'Cows < 1 year':
+      return 'cowsLt1';
+    case 'Cows > 3 years':
+      return 'cowsGt3Years';
+    case 'Steers 1-2 years':
+      return 'steers1To2Years';
+    case 'Steers 2-3 years':
+      return 'steers2To3Years';
+    case 'Steers < 1 year':
+      return 'steersLt1';
+    case 'Steers >3 years':
+      return 'steersGt3Years';
+  }
+
+  throw new Error(`${input} is not a valid beef class lookup value`);
+};
+
+export const convertExtendedRegion = (
+  input: string | undefined,
+): ExtendedRegion => {
+  if (input === 'ACT' || input === 'NSW') {
+    return 'ACT/NSW';
+  }
+
+  return checkExtendedRegion(input);
+};
+
+export const checkSeason = createValueCheck(Seasons, 'Season');
+
+export const checkDairyClass = createValueCheck(DairyClasses, 'Dairy class');
+
+export const checkPigPurchaseCategory = createValueCheck(
+  PigPurchaseCategories,
+  'Pig purchase',
+);
+export const checkPigWeightClass = createValueCheck(
+  PigsLiveweightClasses,
+  'Pig weight class',
+);
+
+export const checkPoultryWeightClass = createValueCheck(
+  PoultryWeightClasses,
+  'Poultry weight class',
+);

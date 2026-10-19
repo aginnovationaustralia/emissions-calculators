@@ -1,6 +1,9 @@
 import { getSheet } from '@/test/common/sheets';
+import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
+import { calculatePurchasedMineralSupplements } from '../scope3/15.3-purchased-mineral-supplements/calculate';
 import {
+  PurchasedMineralSupplementsInput,
   PurchasedMineralSupplementsInputSchema,
   PurchasedMineralSupplementsInputTransformed,
 } from '../scope3/15.3-purchased-mineral-supplements/purchased-mineral-supplements.input';
@@ -9,7 +12,6 @@ import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from './sheet-comparison';
-import { calculatePurchasedMineralSupplements } from '../scope3/15.3-purchased-mineral-supplements/calculate';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -26,25 +28,27 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const amount = Number(cell('B'));
+  const amount = nv(Number(cell('B')));
 
-  if (method === '2')
-    return PurchasedMineralSupplementsInputSchema.parse({
-      purchasedMineralSupplements: [
-        {
-          amount,
-          customEmissionsFactor: Number(cell('C')),
-        },
-      ],
-    });
-  return PurchasedMineralSupplementsInputSchema.parse({
-    purchasedMineralSupplements: [
-      {
-        amount,
-        type: checkPurchasedMineralSupplementType(cell('A')),
-      },
-    ],
-  });
+  const input: PurchasedMineralSupplementsInput =
+    method === '1'
+      ? {
+          purchasedMineralSupplements: [
+            {
+              amount,
+              type: checkPurchasedMineralSupplementType(cell('A')),
+            },
+          ],
+        }
+      : {
+          purchasedMineralSupplements: [
+            {
+              amount,
+              customEmissionsFactor: nv(Number(cell('C'))),
+            },
+          ],
+        };
+  return PurchasedMineralSupplementsInputSchema.parse(input);
 };
 
 const extractInputsAndOutputs = createSheetExtractor(getCalculatorInput, 'D');
@@ -61,6 +65,7 @@ describe('15.3.1 Purchased 15.3.', () => {
     compareInputsAndOutputs(
       inputsAndOutputs,
       calculatePurchasedMineralSupplements,
+      '15.3',
     );
   });
   it('Method 2 matches spreadsheet results', async () => {
@@ -74,6 +79,7 @@ describe('15.3.1 Purchased 15.3.', () => {
     compareInputsAndOutputs(
       inputsAndOutputs,
       calculatePurchasedMineralSupplements,
+      '15.3',
     );
   });
 });

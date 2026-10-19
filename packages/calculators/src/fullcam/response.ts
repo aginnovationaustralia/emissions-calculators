@@ -34,6 +34,7 @@ export const generateCsvLines = (
 
   const csvHeader = lines[0];
   const columnNames = csvHeader.split(',');
+  // console.log('columnNames', columnNames);
   const firstLineValues = lines[1].split(',');
   if (columnNames.length === 3) {
     return Result.err({
@@ -49,13 +50,16 @@ export const generateCsvLines = (
   const indexN2OEmittedDueToFire = columnNames.indexOf(
     '"N2O emitted due to fire (tN2O/ha)"',
   );
-  const indexCMassOfForestDebris = columnNames.findIndex((c) =>
-    [
-      // REVISIT: I noticed both column names emitted from the batch API for this field
-      '"C mass of forest debris  (tC/ha)"',
-      '"C mass of debris  (tC/ha)"',
-    ].includes(c),
+  const indexCMassOfForestDebris = columnNames.indexOf(
+    '"C mass of forest debris  (tC/ha)"',
   );
+
+  const indexCMassOfForestProducts = columnNames.indexOf(
+    '"C mass of forest products  (tC/ha)"',
+  );
+
+  // console.log(columnNames);
+  // console.log(indexCMassOfForestProducts);
 
   const indexYear = columnNames.indexOf('Year');
   const indexMonth = columnNames.indexOf('Step In Year');
@@ -91,6 +95,10 @@ export const generateCsvLines = (
         carbonMassOfForestDebrisTCPerHectare: extractFloatByColumnIndex(
           values,
           indexCMassOfForestDebris,
+        ),
+        carbonMassOfForestProductsTCPerHectare: extractFloatByColumnIndex(
+          values,
+          indexCMassOfForestProducts,
         ),
       };
     })
@@ -200,6 +208,29 @@ function sumFireForReportingYear(
   return { ch4, n2o };
 }
 
+/*
+To determine Cp,i,j=6-7,y, find the row corresponding to the date of the clearing with
+product recovery event. If this is the first clearing with product recovery event, then
+Cp,i,j=6-7,y is equal to the value in this cell. If the simulation contains an earlier clearing
+with product recovery event, then there may be some carbon in the “C mass of forest
+products (tC/ha)” column remaining from the previous clearing event. In that case,
+Cp,i,j=6-7,y is equal to the difference between the value in the highlighted and previous
+rows.
+
+NOTE: We don't always have the clearing event details. Just search through lines until the first row with a non zero value for the "C mass of forest products (tC/ha)" column.
+*/
+const findCarbonMassInForestProductsForEvent = (
+  lines: FullCAMOutputLine[],
+): FullCAMResult<number> => {
+  const firstRowWithProducts = lines.find(
+    (line) => line.carbonMassOfForestProductsTCPerHectare > 0,
+  );
+
+  return Result.ok(
+    firstRowWithProducts?.carbonMassOfForestProductsTCPerHectare ?? 0,
+  );
+};
+
 /**
  * Builds {@link FullCAMOutputKeyFields} from sorted monthly FullCAM lines. See block comment above
  * {@link ExtractionOptions} for methodology; calendar vs financial year follows `endMonth` (12 vs 6).
@@ -230,6 +261,19 @@ export const generateSummaryFromLines = (
 
   const { ch4, n2o } = sumFireForReportingYear(lines, endYear, endMonth);
 
+  const carbonMassInForestProductsPerHectareResult =
+    findCarbonMassInForestProductsForEvent(lines);
+
+  if (carbonMassInForestProductsPerHectareResult.isErr) {
+    return Result.err({
+      area,
+      error: carbonMassInForestProductsPerHectareResult.error,
+    });
+  }
+
+  const carbonMassInForestProductsPerHectare =
+    carbonMassInForestProductsPerHectareResult.value;
+
   return Result.ok({
     area,
     keyFields: {
@@ -240,7 +284,7 @@ export const generateSummaryFromLines = (
         rowY1.value.carbonMassOfTreesTCPerHectare, // Ct,i,j,y-1
       carbonMassInDebrisPerHectarePrevYear:
         rowY1.value.carbonMassOfForestDebrisTCPerHectare, // Cd,i,j,y-1
-      carbonMassInForestProductsPerHectare: 0, // Cp,i,j=6-7,y // TODO
+      carbonMassInForestProductsPerHectare, // Cp,i,j=6-7
       ch4FromBiomassBurningPerHectare: ch4, // Eg,i,j,y for g = CH4
       n2oFromBiomassBurningPerHectare: n2o, // Eg,i,j,y for g = N2O
     },

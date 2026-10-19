@@ -1,48 +1,77 @@
+import { PoultryMMSAllocationInput } from '@/calculators/Poultry/types/mms-allocation.input';
+import { PoultryClassesLivestockInput } from '@/calculators/Poultry/types/poultry-classes.input';
 import {
-  PoultryManureClassesInput,
-  LivestockPoultryManureInput,
-  LivestockPoultryInputSchema,
-  LivestockPoultryManureInputTransformed,
-} from '@/modules/scope1/4-manure-management/4.6-poultry-manure';
+  PoultryFlockInput,
+  PoultryFlockInputSchema,
+  PoultryFlockInputTransformed,
+} from '@/calculators/Poultry/types/poultry-flock.input';
+import { PoultryClass } from '@/constants/enums';
+import { nv, nvo } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
+import { createPoultryInput } from '../factory';
 import { checkClimate } from '../fertiliser-domain';
 import {
   checkGrazingProductionSystemsWithRainfall,
   checkMeanAnnualTemperature,
-  checkPureState,
+  checkState,
 } from '../livestock-domain';
-import { PoultryClass } from '@/constants/enums';
 
 export const readPoultryClass = (
   sheet: XLSX.Sheet,
   row: number,
   method: '1' | '2',
-): PoultryManureClassesInput[PoultryClass] => {
+): PoultryClassesLivestockInput[PoultryClass] => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
   const head = Number(cell('G'));
   const days = Number(cell('H'));
 
-  const allocationStage1 = {
-    manureWithLitter: Number(cell('M')),
-    beltManureRemoval: Number(cell('N')),
-    manureStoredInHouse: Number(cell('O')),
-    pastureRangeAndPaddock: Number(cell('P')),
+  const manureAllocations: PoultryMMSAllocationInput = {
+    manureWithLitter: {
+      manureAllocated: nv(Number(cell('M'))),
+      treatmentStage2Allocations: {
+        solidStorage: nv(Number(cell('Q'))),
+        composting: nv(Number(cell('R'))),
+        digester: nv(Number(cell('S'))),
+        directProcessing: nv(Number(cell('T'))),
+        directApplication: nv(Number(cell('U'))),
+      },
+    },
+    beltManureRemoval: {
+      manureAllocated: nv(Number(cell('N'))),
+      treatmentStage2Allocations: {
+        solidStorage: nv(Number(cell('V'))),
+        composting: nv(Number(cell('W'))),
+        digester: nv(Number(cell('X'))),
+        directProcessing: nv(Number(cell('Y'))),
+        directApplication: nv(Number(cell('Z'))),
+      },
+    },
+    manureStoredInHouse: {
+      manureAllocated: nv(Number(cell('O'))),
+      treatmentStage2Allocations: {
+        solidStorage: nv(Number(cell('AA'))),
+        composting: nv(Number(cell('AB'))),
+        digester: nv(Number(cell('AC'))),
+        directProcessing: nv(Number(cell('AD'))),
+        directApplication: nv(Number(cell('AE'))),
+      },
+    },
+    pastureRangeAndPaddock: nv(Number(cell('P'))),
   };
 
-  const classInput: PoultryManureClassesInput[PoultryClass] = {
-    head,
-    days,
-    manureAllocation: allocationStage1,
+  const classInput: PoultryClassesLivestockInput[PoultryClass] = {
+    head: nv(head),
+    days: nv(days),
+    manureAllocations,
   };
 
   if (method === '1') return classInput;
 
-  classInput.method2DryMatterIntake = Number(cell('I'));
-  classInput.method2DryMatterDigestibility = Number(cell('J'));
-  classInput.method2CrudeProtein = Number(cell('K'));
-  classInput.method2NitrogenRetentionRate = Number(cell('L'));
+  classInput.method2DryMatterIntake = nvo(Number(cell('I')));
+  classInput.method2DryMatterDigestibility = nvo(Number(cell('J')));
+  classInput.method2CrudeProtein = nvo(Number(cell('K')));
 
   return classInput;
 };
@@ -51,7 +80,7 @@ export const getSimpleCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
   method: '1' | '2',
-): LivestockPoultryManureInputTransformed | undefined => {
+): PoultryFlockInputTransformed | undefined => {
   const cell = (column: string, offset: number = 0) =>
     sheet
       .cell(`${column}${row + offset}`)
@@ -60,51 +89,27 @@ export const getSimpleCalculatorInput = (
 
   if (cell('A') === undefined) return;
 
-  const state = checkPureState(cell('A'));
-  const productionSystem = checkGrazingProductionSystemsWithRainfall(cell('C'));
+  const state = checkState(cell('A'));
+  const grazingSystem = checkGrazingProductionSystemsWithRainfall(cell('C'));
   const climateZone = checkClimate(cell('D'));
   const isInLeachingZone = cell('E') === 'true';
 
-  const mms1To2Allocation: LivestockPoultryManureInput['mms1To2Allocation'] = {
-    manureWithLitter: {
-      solidStorage: Number(cell('Q')),
-      composting: Number(cell('R')),
-      digester: Number(cell('S')),
-      directProcessing: Number(cell('T')),
-      directApplication: Number(cell('U')),
-    },
-    beltManureRemoval: {
-      solidStorage: Number(cell('V')),
-      composting: Number(cell('W')),
-      digester: Number(cell('X')),
-      directProcessing: Number(cell('Y')),
-      directApplication: Number(cell('Z')),
-    },
-    manureStoredInHouse: {
-      solidStorage: Number(cell('AA')),
-      composting: Number(cell('AB')),
-      digester: Number(cell('AC')),
-      directProcessing: Number(cell('AD')),
-      directApplication: Number(cell('AE')),
-    },
-  };
-  const input: LivestockPoultryManureInput = {
+  const input: PoultryFlockInput = createPoultryInput({
     state,
     climateZone,
-    productionSystem,
+    grazingSystem,
     isInLeachingZone,
     classes: {
       layers: readPoultryClass(sheet, row, method),
-      meatChickenBreeder: readPoultryClass(sheet, row + 1, method),
+      meatChickenBreeders: readPoultryClass(sheet, row + 1, method),
       meatChickenGrowers: readPoultryClass(sheet, row + 2, method),
       meatOther: readPoultryClass(sheet, row + 3, method),
     },
-    mms1To2Allocation,
-  };
+  });
 
-  if (method === '1') return LivestockPoultryInputSchema.parse(input);
+  if (method === '2') {
+    input.method2MeanAnnualTemperature = checkMeanAnnualTemperature(cell('B'));
+  }
 
-  input.temperatureZone = checkMeanAnnualTemperature(cell('B'));
-
-  return LivestockPoultryInputSchema.parse(input);
+  return PoultryFlockInputSchema.parse(input);
 };

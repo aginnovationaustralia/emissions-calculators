@@ -4,7 +4,7 @@ import {
   createSheetExtractor,
 } from '../sheet-comparison';
 import { getSimpleCalculatorInput as getCalculatorInput } from './common';
-import { calculateManureManagementCH4ForPoultry } from '@/modules/scope1/4-manure-management/4.6-poultry-manure/calculate';
+import { calculateManureManagementCH4ForPoultryFlock } from '@/modules/scope1/4-manure-management/4.6-poultry-manure/calculate';
 
 const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'BT', {
   rowInterval: 4,
@@ -21,7 +21,8 @@ describe('4.6.1.1 & 4.6.1.2 Poultry Manure Management CH4', () => {
 
     compareInputsAndOutputs(
       inputsAndOutputs,
-      calculateManureManagementCH4ForPoultry,
+      calculateManureManagementCH4ForPoultryFlock,
+      '4.6',
     );
   });
   it('method 2 matches spreadsheet results', async () => {
@@ -34,7 +35,8 @@ describe('4.6.1.1 & 4.6.1.2 Poultry Manure Management CH4', () => {
 
     compareInputsAndOutputs(
       inputsAndOutputs,
-      calculateManureManagementCH4ForPoultry,
+      calculateManureManagementCH4ForPoultryFlock,
+      '4.6',
     );
   });
 });

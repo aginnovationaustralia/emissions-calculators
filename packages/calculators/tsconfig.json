@@ -4,7 +4,7 @@
 
   "compilerOptions": {
     "target": "es2017",
-    "lib": ["es2019", "DOM"],
+    "lib": ["es2019", "es2022.error", "DOM"],
     "types": ["node", "jest"],
     "strict": true,
     "module": "ESNext",
@@ -13,9 +13,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "declaration": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
     "outDir": "./dist",
     "noEmit": false

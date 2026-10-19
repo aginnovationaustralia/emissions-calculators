@@ -1,17 +1,20 @@
-import { input } from '@/tools/inputs';
+import { numberInput } from '@/tools/inputs';
+import { PERENNIAL_16_6 } from '@/tools/modules';
 import { hectaresToSquareMetres } from '@/tools/unit-conversion';
 import { area, years } from '@/tools/units';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 
 export const PerennialCropClearingMethod1InputSchema = object({
-  areaCleared: z
-    .number()
-    .min(0)
-    .meta({
-      description: 'Area cleared, in hectares',
-    })
-    .transform((val) => input('Ac,t', area(hectaresToSquareMetres(val)))),
+  areaCleared: numberInput(
+    (val) => area(hectaresToSquareMetres(val)),
+    {
+      name: 'Ac,t',
+      description: 'Area cleared',
+      modules: [PERENNIAL_16_6],
+    },
+    (s) => s.min(0),
+  ),
 });
 
 export type PerennialCropClearingMethod1Input = z.input<
@@ -23,14 +26,17 @@ export type PerennialCropClearingMethod1InputTransformed = z.output<
 
 export const PerennialCropClearingMethod2InputSchema =
   PerennialCropClearingMethod1InputSchema.extend({
-    method2AgeAtClearing: z
-      .number()
-      .min(0)
-      .meta({
+    method2AgeAtClearing: numberInput(
+      (val) => years(val),
+      {
+        name: 't',
+        method: '2',
         description:
-          'Years since original planting when clearing occurs. This must be less than the maturity age for the crop type',
-      })
-      .transform((val) => input('t', years(val))),
+          'Time since original planting when clearing occurs. This must be less than the maturity age for the crop type',
+        modules: [PERENNIAL_16_6],
+      },
+      (s) => s.min(0),
+    ),
   });
 
 export type PerennialCropClearingMethod2Input = z.input<

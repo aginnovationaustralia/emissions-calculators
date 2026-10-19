@@ -1,0 +1,3030 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AIA Calculator API - fullcam",
+    "version": "4.0.2",
+    "description": "Emissions Calculators for various farming activities",
+    "contact": {
+      "name": "AIA",
+      "url": "https://aginnovationaustralia.com.au/contact-us/",
+      "email": "contact@aginnovationaustralia.com.au"
+    },
+    "license": {
+      "name": "CC-BY-4.0",
+      "identifier": "CC-BY-4.0"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://emissionscalculator-mtls.production.aiaapi.com/calculator/4.0.2",
+      "description": "Production Server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "AIA emissions calculators",
+      "description": "AIA Calculator API - fullcam"
+    }
+  ],
+  "paths": {
+    "/fullcam": {
+      "post": {
+        "summary": "Perform fullcam calculation",
+        "description": "Retrieve a simple JSON response",
+        "operationId": "post-fullcam",
+        "deprecated": false,
+        "tags": [
+          "emissions-calculators"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "areas": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "latitude": {
+                              "type": "number"
+                            },
+                            "longitude": {
+                              "type": "number"
+                            },
+                            "region": {
+                              "type": "string",
+                              "enum": [
+                                "Arnhem Coast",
+                                "Arnhem Plateau",
+                                "Australian Alps",
+                                "Avon Wheatbelt",
+                                "Brigalow Belt North",
+                                "Brigalow Belt South",
+                                "Ben Lomond",
+                                "Broken Hill Complex",
+                                "Burt Plain",
+                                "Carnarvon",
+                                "Central Arnhem",
+                                "Central Kimberley",
+                                "Central Ranges",
+                                "Channel Country",
+                                "Central Mackay Coast",
+                                "Coolgardie",
+                                "Cobar Peneplain",
+                                "Cape York Peninsula",
+                                "Daly Basin",
+                                "Darwin Coastal",
+                                "Dampierland",
+                                "Desert Uplands",
+                                "Davenport Murchison Ranges",
+                                "Darling Riverine Plains",
+                                "Einasleigh Uplands",
+                                "Esperance Plains",
+                                "Eyre Yorke Block",
+                                "Finke",
+                                "Flinders Lofty Block",
+                                "Furneaux",
+                                "Gascoyne",
+                                "Gawler",
+                                "Geraldton Sandplains",
+                                "Gulf Fall and Uplands",
+                                "Gibson Desert",
+                                "Great Sandy Desert",
+                                "Gulf Coastal",
+                                "Gulf Plains",
+                                "Great Victoria Desert",
+                                "Hampton",
+                                "Jarrah Forest",
+                                "Kanmantoo",
+                                "King",
+                                "Little Sandy Desert",
+                                "MacDonnell Ranges",
+                                "Mallee",
+                                "Murray Darling Depression",
+                                "Mitchell Grass Downs",
+                                "Mount Isa Inlier",
+                                "Mulga Lands",
+                                "Murchison",
+                                "Nandewar",
+                                "Naracoorte Coastal Plain",
+                                "New England Tablelands",
+                                "NSW North Coast",
+                                "Northern Kimberley",
+                                "NSW South Western Slopes",
+                                "Nullarbor",
+                                "Ord Victoria Plain",
+                                "Pine Creek",
+                                "Pilbara",
+                                "Riverina",
+                                "South East Coastal Plain",
+                                "South East Corner",
+                                "South Eastern Highlands",
+                                "South Eastern Queensland",
+                                "Simpson Strzelecki Dunefields",
+                                "Stony Plains",
+                                "Sturt Plateau",
+                                "Southern Volcanic Plain",
+                                "Swan Coastal Plain",
+                                "Sydney Basin",
+                                "Tanami",
+                                "Tasmanian Central Highlands",
+                                "Tiwi Cobourg",
+                                "Tasmanian Northern Midlands",
+                                "Tasmanian Northern Slopes",
+                                "Tasmanian South East",
+                                "Tasmanian Southern Ranges",
+                                "Tasmanian West",
+                                "Victoria Bonaparte",
+                                "Victorian Midlands",
+                                "Warren",
+                                "Wet Tropics",
+                                "Yalgoo"
+                              ]
+                            },
+                            "areaHectares": {
+                              "type": "number",
+                              "minimum": 0.2
+                            },
+                            "startYear": {
+                              "type": "number"
+                            },
+                            "startMonth": {
+                              "type": "number"
+                            },
+                            "endYear": {
+                              "type": "number"
+                            },
+                            "endMonth": {
+                              "type": "number"
+                            },
+                            "plantingEvents": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "speciesName": {
+                                    "type": "string",
+                                    "enum": [
+                                      "Environmental plantings",
+                                      "Mallee eucalypt species",
+                                      "Native Species Regeneration <500mm rainfall",
+                                      "Native Species Regeneration >=500mm rainfall"
+                                    ]
+                                  },
+                                  "plantingDate": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                                  },
+                                  "shape": {
+                                    "type": "string",
+                                    "enum": [
+                                      "BeltLt1500SPH",
+                                      "BeltGt1500SPH",
+                                      "Block"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "speciesName",
+                                  "plantingDate",
+                                  "shape"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "wildfireEvents": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "fireDate": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                                  },
+                                  "percentBurned": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  },
+                                  "treesKilled": {
+                                    "type": "boolean",
+                                    "description": "Were trees killed?"
+                                  }
+                                },
+                                "required": [
+                                  "fireDate",
+                                  "percentBurned",
+                                  "treesKilled"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "prescribedBurnEvents": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "fireDate": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                                  },
+                                  "percentBurned": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  }
+                                },
+                                "required": [
+                                  "fireDate",
+                                  "percentBurned"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "isInLeachingZone": {
+                              "type": "boolean"
+                            },
+                            "initialTrees": {
+                              "oneOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "speciesName": {
+                                      "type": "string",
+                                      "const": "Environmental plantings"
+                                    },
+                                    "maxTreeAge": {
+                                      "default": 12,
+                                      "type": "number"
+                                    },
+                                    "averageTreeAge": {
+                                      "default": 12,
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "speciesName"
+                                  ],
+                                  "additionalProperties": false,
+                                  "title": "Environmental plantings"
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "speciesName": {
+                                      "type": "string",
+                                      "const": "Mallee eucalypt species"
+                                    },
+                                    "maxTreeAge": {
+                                      "default": 0,
+                                      "type": "number"
+                                    },
+                                    "averageTreeAge": {
+                                      "default": 0,
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "speciesName"
+                                  ],
+                                  "additionalProperties": false,
+                                  "title": "Mallee eucalypt species"
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "speciesName": {
+                                      "type": "string",
+                                      "const": "Native Species Regeneration <500mm rainfall"
+                                    },
+                                    "maxTreeAge": {
+                                      "default": 9999,
+                                      "type": "number"
+                                    },
+                                    "averageTreeAge": {
+                                      "default": 9999,
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "speciesName"
+                                  ],
+                                  "additionalProperties": false,
+                                  "title": "Native Species Regeneration <500mm rainfall"
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "speciesName": {
+                                      "type": "string",
+                                      "const": "Native Species Regeneration >=500mm rainfall"
+                                    },
+                                    "maxTreeAge": {
+                                      "default": 9999,
+                                      "type": "number"
+                                    },
+                                    "averageTreeAge": {
+                                      "default": 9999,
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "speciesName"
+                                  ],
+                                  "additionalProperties": false,
+                                  "title": "Native Species Regeneration >=500mm rainfall"
+                                }
+                              ],
+                              "type": "object"
+                            },
+                            "clearingEvent": {
+                              "oneOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "clearingDate": {
+                                      "type": "string",
+                                      "format": "date",
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                                    },
+                                    "percentThinned": {
+                                      "type": "number",
+                                      "minimum": 0,
+                                      "maximum": 100
+                                    },
+                                    "percentMassRecoveredAsProducts": {
+                                      "type": "number",
+                                      "minimum": 0,
+                                      "maximum": 100
+                                    },
+                                    "useAfterClearing": {
+                                      "type": "string",
+                                      "const": "crops"
+                                    },
+                                    "cropProductionSystem": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Irrigated crop",
+                                        "Non-irrigated crop (low rainfall)",
+                                        "Non-irrigated crop (high rainfall)"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "clearingDate",
+                                    "percentThinned",
+                                    "percentMassRecoveredAsProducts",
+                                    "useAfterClearing",
+                                    "cropProductionSystem"
+                                  ],
+                                  "additionalProperties": false,
+                                  "title": "Cleared to crops"
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "clearingDate": {
+                                      "type": "string",
+                                      "format": "date",
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                                    },
+                                    "percentThinned": {
+                                      "type": "number",
+                                      "minimum": 0,
+                                      "maximum": 100
+                                    },
+                                    "percentMassRecoveredAsProducts": {
+                                      "type": "number",
+                                      "minimum": 0,
+                                      "maximum": 100
+                                    },
+                                    "useAfterClearing": {
+                                      "type": "string",
+                                      "const": "pasture"
+                                    },
+                                    "pastureProductionSystem": {
+                                      "type": "string",
+                                      "enum": [
+                                        "Irrigated pasture",
+                                        "Non-irrigated pasture"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "clearingDate",
+                                    "percentThinned",
+                                    "percentMassRecoveredAsProducts",
+                                    "useAfterClearing",
+                                    "pastureProductionSystem"
+                                  ],
+                                  "additionalProperties": false,
+                                  "title": "Cleared to pasture"
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "clearingDate": {
+                                      "type": "string",
+                                      "format": "date",
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                                    },
+                                    "percentThinned": {
+                                      "type": "number",
+                                      "minimum": 0,
+                                      "maximum": 100
+                                    },
+                                    "percentMassRecoveredAsProducts": {
+                                      "type": "number",
+                                      "minimum": 0,
+                                      "maximum": 100
+                                    },
+                                    "useAfterClearing": {
+                                      "type": "string",
+                                      "const": "settlement"
+                                    }
+                                  },
+                                  "required": [
+                                    "clearingDate",
+                                    "percentThinned",
+                                    "percentMassRecoveredAsProducts",
+                                    "useAfterClearing"
+                                  ],
+                                  "additionalProperties": false,
+                                  "title": "Cleared to settlements"
+                                }
+                              ],
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "latitude",
+                            "longitude",
+                            "region",
+                            "areaHectares",
+                            "startYear",
+                            "startMonth",
+                            "endYear",
+                            "endMonth",
+                            "plantingEvents",
+                            "wildfireEvents",
+                            "prescribedBurnEvents",
+                            "isInLeachingZone",
+                            "initialTrees"
+                          ],
+                          "additionalProperties": false,
+                          "title": "Clearable area (existing trees)"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "latitude": {
+                              "type": "number"
+                            },
+                            "longitude": {
+                              "type": "number"
+                            },
+                            "region": {
+                              "type": "string",
+                              "enum": [
+                                "Arnhem Coast",
+                                "Arnhem Plateau",
+                                "Australian Alps",
+                                "Avon Wheatbelt",
+                                "Brigalow Belt North",
+                                "Brigalow Belt South",
+                                "Ben Lomond",
+                                "Broken Hill Complex",
+                                "Burt Plain",
+                                "Carnarvon",
+                                "Central Arnhem",
+                                "Central Kimberley",
+                                "Central Ranges",
+                                "Channel Country",
+                                "Central Mackay Coast",
+                                "Coolgardie",
+                                "Cobar Peneplain",
+                                "Cape York Peninsula",
+                                "Daly Basin",
+                                "Darwin Coastal",
+                                "Dampierland",
+                                "Desert Uplands",
+                                "Davenport Murchison Ranges",
+                                "Darling Riverine Plains",
+                                "Einasleigh Uplands",
+                                "Esperance Plains",
+                                "Eyre Yorke Block",
+                                "Finke",
+                                "Flinders Lofty Block",
+                                "Furneaux",
+                                "Gascoyne",
+                                "Gawler",
+                                "Geraldton Sandplains",
+                                "Gulf Fall and Uplands",
+                                "Gibson Desert",
+                                "Great Sandy Desert",
+                                "Gulf Coastal",
+                                "Gulf Plains",
+                                "Great Victoria Desert",
+                                "Hampton",
+                                "Jarrah Forest",
+                                "Kanmantoo",
+                                "King",
+                                "Little Sandy Desert",
+                                "MacDonnell Ranges",
+                                "Mallee",
+                                "Murray Darling Depression",
+                                "Mitchell Grass Downs",
+                                "Mount Isa Inlier",
+                                "Mulga Lands",
+                                "Murchison",
+                                "Nandewar",
+                                "Naracoorte Coastal Plain",
+                                "New England Tablelands",
+                                "NSW North Coast",
+                                "Northern Kimberley",
+                                "NSW South Western Slopes",
+                                "Nullarbor",
+                                "Ord Victoria Plain",
+                                "Pine Creek",
+                                "Pilbara",
+                                "Riverina",
+                                "South East Coastal Plain",
+                                "South East Corner",
+                                "South Eastern Highlands",
+                                "South Eastern Queensland",
+                                "Simpson Strzelecki Dunefields",
+                                "Stony Plains",
+                                "Sturt Plateau",
+                                "Southern Volcanic Plain",
+                                "Swan Coastal Plain",
+                                "Sydney Basin",
+                                "Tanami",
+                                "Tasmanian Central Highlands",
+                                "Tiwi Cobourg",
+                                "Tasmanian Northern Midlands",
+                                "Tasmanian Northern Slopes",
+                                "Tasmanian South East",
+                                "Tasmanian Southern Ranges",
+                                "Tasmanian West",
+                                "Victoria Bonaparte",
+                                "Victorian Midlands",
+                                "Warren",
+                                "Wet Tropics",
+                                "Yalgoo"
+                              ]
+                            },
+                            "areaHectares": {
+                              "type": "number",
+                              "minimum": 0.2
+                            },
+                            "startYear": {
+                              "type": "number"
+                            },
+                            "startMonth": {
+                              "type": "number"
+                            },
+                            "endYear": {
+                              "type": "number"
+                            },
+                            "endMonth": {
+                              "type": "number"
+                            },
+                            "plantingEvents": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "speciesName": {
+                                    "type": "string",
+                                    "enum": [
+                                      "Environmental plantings",
+                                      "Mallee eucalypt species",
+                                      "Native Species Regeneration <500mm rainfall",
+                                      "Native Species Regeneration >=500mm rainfall"
+                                    ]
+                                  },
+                                  "plantingDate": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                                  },
+                                  "shape": {
+                                    "type": "string",
+                                    "enum": [
+                                      "BeltLt1500SPH",
+                                      "BeltGt1500SPH",
+                                      "Block"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "speciesName",
+                                  "plantingDate",
+                                  "shape"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "wildfireEvents": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "fireDate": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                                  },
+                                  "percentBurned": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  },
+                                  "treesKilled": {
+                                    "type": "boolean",
+                                    "description": "Were trees killed?"
+                                  }
+                                },
+                                "required": [
+                                  "fireDate",
+                                  "percentBurned",
+                                  "treesKilled"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "prescribedBurnEvents": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "fireDate": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                                  },
+                                  "percentBurned": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                  }
+                                },
+                                "required": [
+                                  "fireDate",
+                                  "percentBurned"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "initialTrees": {
+                              "type": "boolean",
+                              "const": false
+                            }
+                          },
+                          "required": [
+                            "latitude",
+                            "longitude",
+                            "region",
+                            "areaHectares",
+                            "startYear",
+                            "startMonth",
+                            "endYear",
+                            "endMonth",
+                            "plantingEvents",
+                            "wildfireEvents",
+                            "prescribedBurnEvents",
+                            "initialTrees"
+                          ],
+                          "additionalProperties": false,
+                          "title": "Unclearable area (no existing trees)"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "areas"
+                ],
+                "additionalProperties": false,
+                "description": "Supply inputs for a FullCAM simulation. The details of land use activity are supplied in a simplified format, and the areas are passed to the FullCAM API and simulated for the user. Results from FullCAM are then returned, ready for emissions calculations"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Executes a calculation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LandUseInput"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LandUseInput": {
+        "type": "object",
+        "properties": {
+          "activities": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "title": "Land clearing (forest to cropland)",
+                  "type": "object",
+                  "properties": {
+                    "activityAreaHectares": {
+                      "description": "Area of the activity (hectares)",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "minimum": 0.2
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "hectares"
+                    },
+                    "carbonMassInTreesCurrentYear": {
+                      "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInTreesPreviousYear": {
+                      "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisCurrentYear": {
+                      "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisPreviousYear": {
+                      "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "isInLeachingZone": {
+                      "type": "boolean",
+                      "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
+                      "x-modules": [
+                        "16.4"
+                      ]
+                    },
+                    "region": {
+                      "type": "string",
+                      "enum": [
+                        "Arnhem Coast",
+                        "Arnhem Plateau",
+                        "Australian Alps",
+                        "Avon Wheatbelt",
+                        "Brigalow Belt North",
+                        "Brigalow Belt South",
+                        "Ben Lomond",
+                        "Broken Hill Complex",
+                        "Burt Plain",
+                        "Carnarvon",
+                        "Central Arnhem",
+                        "Central Kimberley",
+                        "Central Ranges",
+                        "Channel Country",
+                        "Central Mackay Coast",
+                        "Coolgardie",
+                        "Cobar Peneplain",
+                        "Cape York Peninsula",
+                        "Daly Basin",
+                        "Darwin Coastal",
+                        "Dampierland",
+                        "Desert Uplands",
+                        "Davenport Murchison Ranges",
+                        "Darling Riverine Plains",
+                        "Einasleigh Uplands",
+                        "Esperance Plains",
+                        "Eyre Yorke Block",
+                        "Finke",
+                        "Flinders Lofty Block",
+                        "Furneaux",
+                        "Gascoyne",
+                        "Gawler",
+                        "Geraldton Sandplains",
+                        "Gulf Fall and Uplands",
+                        "Gibson Desert",
+                        "Great Sandy Desert",
+                        "Gulf Coastal",
+                        "Gulf Plains",
+                        "Great Victoria Desert",
+                        "Hampton",
+                        "Jarrah Forest",
+                        "Kanmantoo",
+                        "King",
+                        "Little Sandy Desert",
+                        "MacDonnell Ranges",
+                        "Mallee",
+                        "Murray Darling Depression",
+                        "Mitchell Grass Downs",
+                        "Mount Isa Inlier",
+                        "Mulga Lands",
+                        "Murchison",
+                        "Nandewar",
+                        "Naracoorte Coastal Plain",
+                        "New England Tablelands",
+                        "NSW North Coast",
+                        "Northern Kimberley",
+                        "NSW South Western Slopes",
+                        "Nullarbor",
+                        "Ord Victoria Plain",
+                        "Pine Creek",
+                        "Pilbara",
+                        "Riverina",
+                        "South East Coastal Plain",
+                        "South East Corner",
+                        "South Eastern Highlands",
+                        "South Eastern Queensland",
+                        "Simpson Strzelecki Dunefields",
+                        "Stony Plains",
+                        "Sturt Plateau",
+                        "Southern Volcanic Plain",
+                        "Swan Coastal Plain",
+                        "Sydney Basin",
+                        "Tanami",
+                        "Tasmanian Central Highlands",
+                        "Tiwi Cobourg",
+                        "Tasmanian Northern Midlands",
+                        "Tasmanian Northern Slopes",
+                        "Tasmanian South East",
+                        "Tasmanian Southern Ranges",
+                        "Tasmanian West",
+                        "Victoria Bonaparte",
+                        "Victorian Midlands",
+                        "Warren",
+                        "Wet Tropics",
+                        "Yalgoo"
+                      ],
+                      "description": "IBRA7 region of the activity area",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ]
+                    },
+                    "massCH4FromBiomassBurningPerHectare": {
+                      "description": "Mass CH4 from biomass burning. Derived from FullCAM output. (tonnes CH4 per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes CH4 per hectare"
+                    },
+                    "massN2OFromBiomassBurningPerHectare": {
+                      "description": "Mass N2O from biomass burning. Derived from FullCAM output. (tonnes N2O per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes N2O per hectare"
+                    },
+                    "areaBurnt": {
+                      "description": "Area burnt. Derived from FullCAM output. (hectares)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "hectares"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "landClearingForestToCropland"
+                    },
+                    "cropProductionSystem": {
+                      "type": "string",
+                      "enum": [
+                        "Irrigated crop",
+                        "Non-irrigated crop (low rainfall)",
+                        "Non-irrigated crop (high rainfall)"
+                      ],
+                      "description": "Crop production",
+                      "x-modules": [
+                        "16.3"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "activityAreaHectares",
+                    "carbonMassInTreesCurrentYear",
+                    "carbonMassInTreesPreviousYear",
+                    "carbonMassInDebrisCurrentYear",
+                    "carbonMassInDebrisPreviousYear",
+                    "isInLeachingZone",
+                    "region",
+                    "massCH4FromBiomassBurningPerHectare",
+                    "massN2OFromBiomassBurningPerHectare",
+                    "areaBurnt",
+                    "type",
+                    "cropProductionSystem"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Land clearing (forest to grassland)",
+                  "type": "object",
+                  "properties": {
+                    "activityAreaHectares": {
+                      "description": "Area of the activity (hectares)",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "minimum": 0.2
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "hectares"
+                    },
+                    "carbonMassInTreesCurrentYear": {
+                      "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInTreesPreviousYear": {
+                      "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisCurrentYear": {
+                      "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisPreviousYear": {
+                      "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "isInLeachingZone": {
+                      "type": "boolean",
+                      "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
+                      "x-modules": [
+                        "16.4"
+                      ]
+                    },
+                    "region": {
+                      "type": "string",
+                      "enum": [
+                        "Arnhem Coast",
+                        "Arnhem Plateau",
+                        "Australian Alps",
+                        "Avon Wheatbelt",
+                        "Brigalow Belt North",
+                        "Brigalow Belt South",
+                        "Ben Lomond",
+                        "Broken Hill Complex",
+                        "Burt Plain",
+                        "Carnarvon",
+                        "Central Arnhem",
+                        "Central Kimberley",
+                        "Central Ranges",
+                        "Channel Country",
+                        "Central Mackay Coast",
+                        "Coolgardie",
+                        "Cobar Peneplain",
+                        "Cape York Peninsula",
+                        "Daly Basin",
+                        "Darwin Coastal",
+                        "Dampierland",
+                        "Desert Uplands",
+                        "Davenport Murchison Ranges",
+                        "Darling Riverine Plains",
+                        "Einasleigh Uplands",
+                        "Esperance Plains",
+                        "Eyre Yorke Block",
+                        "Finke",
+                        "Flinders Lofty Block",
+                        "Furneaux",
+                        "Gascoyne",
+                        "Gawler",
+                        "Geraldton Sandplains",
+                        "Gulf Fall and Uplands",
+                        "Gibson Desert",
+                        "Great Sandy Desert",
+                        "Gulf Coastal",
+                        "Gulf Plains",
+                        "Great Victoria Desert",
+                        "Hampton",
+                        "Jarrah Forest",
+                        "Kanmantoo",
+                        "King",
+                        "Little Sandy Desert",
+                        "MacDonnell Ranges",
+                        "Mallee",
+                        "Murray Darling Depression",
+                        "Mitchell Grass Downs",
+                        "Mount Isa Inlier",
+                        "Mulga Lands",
+                        "Murchison",
+                        "Nandewar",
+                        "Naracoorte Coastal Plain",
+                        "New England Tablelands",
+                        "NSW North Coast",
+                        "Northern Kimberley",
+                        "NSW South Western Slopes",
+                        "Nullarbor",
+                        "Ord Victoria Plain",
+                        "Pine Creek",
+                        "Pilbara",
+                        "Riverina",
+                        "South East Coastal Plain",
+                        "South East Corner",
+                        "South Eastern Highlands",
+                        "South Eastern Queensland",
+                        "Simpson Strzelecki Dunefields",
+                        "Stony Plains",
+                        "Sturt Plateau",
+                        "Southern Volcanic Plain",
+                        "Swan Coastal Plain",
+                        "Sydney Basin",
+                        "Tanami",
+                        "Tasmanian Central Highlands",
+                        "Tiwi Cobourg",
+                        "Tasmanian Northern Midlands",
+                        "Tasmanian Northern Slopes",
+                        "Tasmanian South East",
+                        "Tasmanian Southern Ranges",
+                        "Tasmanian West",
+                        "Victoria Bonaparte",
+                        "Victorian Midlands",
+                        "Warren",
+                        "Wet Tropics",
+                        "Yalgoo"
+                      ],
+                      "description": "IBRA7 region of the activity area",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ]
+                    },
+                    "massCH4FromBiomassBurningPerHectare": {
+                      "description": "Mass CH4 from biomass burning. Derived from FullCAM output. (tonnes CH4 per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes CH4 per hectare"
+                    },
+                    "massN2OFromBiomassBurningPerHectare": {
+                      "description": "Mass N2O from biomass burning. Derived from FullCAM output. (tonnes N2O per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes N2O per hectare"
+                    },
+                    "areaBurnt": {
+                      "description": "Area burnt. Derived from FullCAM output. (hectares)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "hectares"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "landClearingForestToGrassland"
+                    },
+                    "pastureProductionSystem": {
+                      "type": "string",
+                      "enum": [
+                        "Irrigated pasture",
+                        "Non-irrigated pasture"
+                      ],
+                      "description": "Pasture production",
+                      "x-modules": [
+                        "16.3"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "activityAreaHectares",
+                    "carbonMassInTreesCurrentYear",
+                    "carbonMassInTreesPreviousYear",
+                    "carbonMassInDebrisCurrentYear",
+                    "carbonMassInDebrisPreviousYear",
+                    "isInLeachingZone",
+                    "region",
+                    "massCH4FromBiomassBurningPerHectare",
+                    "massN2OFromBiomassBurningPerHectare",
+                    "areaBurnt",
+                    "type",
+                    "pastureProductionSystem"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Land clearing (forest to settlements)",
+                  "type": "object",
+                  "properties": {
+                    "activityAreaHectares": {
+                      "description": "Area of the activity (hectares)",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "minimum": 0.2
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "hectares"
+                    },
+                    "carbonMassInTreesCurrentYear": {
+                      "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInTreesPreviousYear": {
+                      "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisCurrentYear": {
+                      "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisPreviousYear": {
+                      "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "isInLeachingZone": {
+                      "type": "boolean",
+                      "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
+                      "x-modules": [
+                        "16.4"
+                      ]
+                    },
+                    "region": {
+                      "type": "string",
+                      "enum": [
+                        "Arnhem Coast",
+                        "Arnhem Plateau",
+                        "Australian Alps",
+                        "Avon Wheatbelt",
+                        "Brigalow Belt North",
+                        "Brigalow Belt South",
+                        "Ben Lomond",
+                        "Broken Hill Complex",
+                        "Burt Plain",
+                        "Carnarvon",
+                        "Central Arnhem",
+                        "Central Kimberley",
+                        "Central Ranges",
+                        "Channel Country",
+                        "Central Mackay Coast",
+                        "Coolgardie",
+                        "Cobar Peneplain",
+                        "Cape York Peninsula",
+                        "Daly Basin",
+                        "Darwin Coastal",
+                        "Dampierland",
+                        "Desert Uplands",
+                        "Davenport Murchison Ranges",
+                        "Darling Riverine Plains",
+                        "Einasleigh Uplands",
+                        "Esperance Plains",
+                        "Eyre Yorke Block",
+                        "Finke",
+                        "Flinders Lofty Block",
+                        "Furneaux",
+                        "Gascoyne",
+                        "Gawler",
+                        "Geraldton Sandplains",
+                        "Gulf Fall and Uplands",
+                        "Gibson Desert",
+                        "Great Sandy Desert",
+                        "Gulf Coastal",
+                        "Gulf Plains",
+                        "Great Victoria Desert",
+                        "Hampton",
+                        "Jarrah Forest",
+                        "Kanmantoo",
+                        "King",
+                        "Little Sandy Desert",
+                        "MacDonnell Ranges",
+                        "Mallee",
+                        "Murray Darling Depression",
+                        "Mitchell Grass Downs",
+                        "Mount Isa Inlier",
+                        "Mulga Lands",
+                        "Murchison",
+                        "Nandewar",
+                        "Naracoorte Coastal Plain",
+                        "New England Tablelands",
+                        "NSW North Coast",
+                        "Northern Kimberley",
+                        "NSW South Western Slopes",
+                        "Nullarbor",
+                        "Ord Victoria Plain",
+                        "Pine Creek",
+                        "Pilbara",
+                        "Riverina",
+                        "South East Coastal Plain",
+                        "South East Corner",
+                        "South Eastern Highlands",
+                        "South Eastern Queensland",
+                        "Simpson Strzelecki Dunefields",
+                        "Stony Plains",
+                        "Sturt Plateau",
+                        "Southern Volcanic Plain",
+                        "Swan Coastal Plain",
+                        "Sydney Basin",
+                        "Tanami",
+                        "Tasmanian Central Highlands",
+                        "Tiwi Cobourg",
+                        "Tasmanian Northern Midlands",
+                        "Tasmanian Northern Slopes",
+                        "Tasmanian South East",
+                        "Tasmanian Southern Ranges",
+                        "Tasmanian West",
+                        "Victoria Bonaparte",
+                        "Victorian Midlands",
+                        "Warren",
+                        "Wet Tropics",
+                        "Yalgoo"
+                      ],
+                      "description": "IBRA7 region of the activity area",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ]
+                    },
+                    "massCH4FromBiomassBurningPerHectare": {
+                      "description": "Mass CH4 from biomass burning. Derived from FullCAM output. (tonnes CH4 per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes CH4 per hectare"
+                    },
+                    "massN2OFromBiomassBurningPerHectare": {
+                      "description": "Mass N2O from biomass burning. Derived from FullCAM output. (tonnes N2O per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes N2O per hectare"
+                    },
+                    "areaBurnt": {
+                      "description": "Area burnt. Derived from FullCAM output. (hectares)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "hectares"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "landClearingForestToSettlements"
+                    },
+                    "pastureProductionSystem": {
+                      "type": "string",
+                      "enum": [
+                        "Non-irrigated pasture"
+                      ],
+                      "description": "Pasture production",
+                      "x-modules": [
+                        "16.3"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "activityAreaHectares",
+                    "carbonMassInTreesCurrentYear",
+                    "carbonMassInTreesPreviousYear",
+                    "carbonMassInDebrisCurrentYear",
+                    "carbonMassInDebrisPreviousYear",
+                    "isInLeachingZone",
+                    "region",
+                    "massCH4FromBiomassBurningPerHectare",
+                    "massN2OFromBiomassBurningPerHectare",
+                    "areaBurnt",
+                    "type",
+                    "pastureProductionSystem"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Revegetation by planting",
+                  "type": "object",
+                  "properties": {
+                    "activityAreaHectares": {
+                      "description": "Area of the activity (hectares)",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "minimum": 0.2
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "hectares"
+                    },
+                    "carbonMassInTreesCurrentYear": {
+                      "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInTreesPreviousYear": {
+                      "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisCurrentYear": {
+                      "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisPreviousYear": {
+                      "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "revegetationByPlanting"
+                    }
+                  },
+                  "required": [
+                    "activityAreaHectares",
+                    "carbonMassInTreesCurrentYear",
+                    "carbonMassInTreesPreviousYear",
+                    "carbonMassInDebrisCurrentYear",
+                    "carbonMassInDebrisPreviousYear",
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Human-induced natural regeneration",
+                  "type": "object",
+                  "properties": {
+                    "activityAreaHectares": {
+                      "description": "Area of the activity (hectares)",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "minimum": 0.2
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "hectares"
+                    },
+                    "carbonMassInTreesCurrentYear": {
+                      "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInTreesPreviousYear": {
+                      "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisCurrentYear": {
+                      "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisPreviousYear": {
+                      "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "humanInducedNaturalRegeneration"
+                    }
+                  },
+                  "required": [
+                    "activityAreaHectares",
+                    "carbonMassInTreesCurrentYear",
+                    "carbonMassInTreesPreviousYear",
+                    "carbonMassInDebrisCurrentYear",
+                    "carbonMassInDebrisPreviousYear",
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Farm forestry",
+                  "type": "object",
+                  "properties": {
+                    "activityAreaHectares": {
+                      "description": "Area of the activity (hectares)",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "minimum": 0.2
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "hectares"
+                    },
+                    "carbonMassInTreesCurrentYear": {
+                      "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInTreesPreviousYear": {
+                      "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisCurrentYear": {
+                      "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisPreviousYear": {
+                      "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassOfWoodProducts": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "carbonMassPerHectareFromFullCAM": {
+                              "description": "Carbon mass of wood products harvested. Derived from a FullCAM simulation, using default simulation parameters. (tonnes carbon per hectare)",
+                              "x-modules": [
+                                "16.2"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "tonnes carbon per hectare"
+                            },
+                            "calculationMethod": {
+                              "type": "string",
+                              "const": "1"
+                            }
+                          },
+                          "required": [
+                            "carbonMassPerHectareFromFullCAM",
+                            "calculationMethod"
+                          ],
+                          "title": "From FullCAM simulation"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "carbonMassPerHectareFromRecords": {
+                              "description": "Carbon mass of wood products harvested. Derived from FullCAM output, where FullCAM simulation parameters are populated from detailed records or site specific research. (tonnes carbon per hectare)",
+                              "x-modules": [
+                                "16.2"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "tonnes carbon per hectare"
+                            },
+                            "calculationMethod": {
+                              "type": "string",
+                              "const": "2"
+                            }
+                          },
+                          "required": [
+                            "carbonMassPerHectareFromRecords",
+                            "calculationMethod"
+                          ],
+                          "title": "From farm records"
+                        }
+                      ],
+                      "type": "object"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "farmForestry"
+                    }
+                  },
+                  "required": [
+                    "activityAreaHectares",
+                    "carbonMassInTreesCurrentYear",
+                    "carbonMassInTreesPreviousYear",
+                    "carbonMassInDebrisCurrentYear",
+                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassOfWoodProducts",
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Plantation forestry",
+                  "type": "object",
+                  "properties": {
+                    "activityAreaHectares": {
+                      "description": "Area of the activity (hectares)",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "number",
+                          "minimum": 0.2
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "hectares"
+                    },
+                    "carbonMassInTreesCurrentYear": {
+                      "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInTreesPreviousYear": {
+                      "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisCurrentYear": {
+                      "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassInDebrisPreviousYear": {
+                      "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
+                      "x-modules": [
+                        "16.2"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                        },
+                        "quality": {
+                          "default": {},
+                          "$ref": "#/components/schemas/QualityTable"
+                        }
+                      },
+                      "required": [
+                        "value"
+                      ],
+                      "additionalProperties": false,
+                      "x-units": "tonnes carbon per hectare"
+                    },
+                    "carbonMassOfWoodProducts": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "carbonMassPerHectareFromFullCAM": {
+                              "description": "Carbon mass of wood products harvested. Derived from a FullCAM simulation, using default simulation parameters. (tonnes carbon per hectare)",
+                              "x-modules": [
+                                "16.2"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "tonnes carbon per hectare"
+                            },
+                            "calculationMethod": {
+                              "type": "string",
+                              "const": "1"
+                            }
+                          },
+                          "required": [
+                            "carbonMassPerHectareFromFullCAM",
+                            "calculationMethod"
+                          ],
+                          "title": "From FullCAM simulation"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "carbonMassPerHectareFromRecords": {
+                              "description": "Carbon mass of wood products harvested. Derived from FullCAM output, where FullCAM simulation parameters are populated from detailed records or site specific research. (tonnes carbon per hectare)",
+                              "x-modules": [
+                                "16.2"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "tonnes carbon per hectare"
+                            },
+                            "calculationMethod": {
+                              "type": "string",
+                              "const": "2"
+                            }
+                          },
+                          "required": [
+                            "carbonMassPerHectareFromRecords",
+                            "calculationMethod"
+                          ],
+                          "title": "From farm records"
+                        }
+                      ],
+                      "type": "object"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "plantationForestry"
+                    }
+                  },
+                  "required": [
+                    "activityAreaHectares",
+                    "carbonMassInTreesCurrentYear",
+                    "carbonMassInTreesPreviousYear",
+                    "carbonMassInDebrisCurrentYear",
+                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassOfWoodProducts",
+                    "type"
+                  ],
+                  "additionalProperties": false
+                }
+              ],
+              "type": "object"
+            }
+          },
+          "burning": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BurningInput"
+            }
+          },
+          "perennialCrops": {
+            "$ref": "#/components/schemas/PerennialCropsInput"
+          }
+        },
+        "additionalProperties": false
+      },
+      "QualityTable": {
+        "type": "object",
+        "properties": {
+          "Temporal": {
+            "$ref": "#/components/schemas/QualityLevel"
+          },
+          "Spatial": {
+            "$ref": "#/components/schemas/QualityLevel"
+          },
+          "SampleSize": {
+            "$ref": "#/components/schemas/QualityLevel"
+          },
+          "Scope3": {
+            "$ref": "#/components/schemas/QualityLevel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "QualityLevel": {
+        "type": "string",
+        "enum": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "Unknown"
+        ]
+      },
+      "NonNegativeNumberInput": {
+        "type": "number",
+        "minimum": 0
+      },
+      "BurningInput": {
+        "type": "object",
+        "properties": {
+          "emissionsFromBurningLowRainfallZone": {
+            "description": "Emissions from biomass burning in the Low Rainfall Zone (tonnes CO2e)",
+            "x-modules": [
+              "16.5"
+            ],
+            "type": "object",
+            "properties": {
+              "value": {
+                "$ref": "#/components/schemas/NumberInput"
+              },
+              "quality": {
+                "default": {},
+                "$ref": "#/components/schemas/QualityTable"
+              }
+            },
+            "required": [
+              "value"
+            ],
+            "additionalProperties": false,
+            "x-units": "tonnes CO2e"
+          },
+          "emissionsFromBurningHighRainfallZone": {
+            "description": "Emissions from biomass burning in the High Rainfall Zone (tonnes CO2e)",
+            "x-modules": [
+              "16.5"
+            ],
+            "type": "object",
+            "properties": {
+              "value": {
+                "$ref": "#/components/schemas/NumberInput"
+              },
+              "quality": {
+                "default": {},
+                "$ref": "#/components/schemas/QualityTable"
+              }
+            },
+            "required": [
+              "value"
+            ],
+            "additionalProperties": false,
+            "x-units": "tonnes CO2e"
+          },
+          "carbonStockChangeLowRainfallZone": {
+            "description": "Change in carbon stock in the Low Rainfall Zone for the activity area (tonnes CO2e)",
+            "x-modules": [
+              "16.5"
+            ],
+            "type": "object",
+            "properties": {
+              "value": {
+                "$ref": "#/components/schemas/NumberInput"
+              },
+              "quality": {
+                "default": {},
+                "$ref": "#/components/schemas/QualityTable"
+              }
+            },
+            "required": [
+              "value"
+            ],
+            "additionalProperties": false,
+            "x-units": "tonnes CO2e"
+          },
+          "carbonStockChangeHighRainfallZone": {
+            "description": "Change in carbon stock in the High Rainfall Zone for the activity area (tonnes CO2e)",
+            "x-modules": [
+              "16.5"
+            ],
+            "type": "object",
+            "properties": {
+              "value": {
+                "$ref": "#/components/schemas/NumberInput"
+              },
+              "quality": {
+                "default": {},
+                "$ref": "#/components/schemas/QualityTable"
+              }
+            },
+            "required": [
+              "value"
+            ],
+            "additionalProperties": false,
+            "x-units": "tonnes CO2e"
+          }
+        },
+        "required": [
+          "emissionsFromBurningLowRainfallZone",
+          "emissionsFromBurningHighRainfallZone",
+          "carbonStockChangeLowRainfallZone",
+          "carbonStockChangeHighRainfallZone"
+        ],
+        "additionalProperties": false
+      },
+      "NumberInput": {
+        "type": "number"
+      },
+      "PerennialCropsInput": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "method2ActualStemDensity": {
+                  "description": "Method 2: supply an exact value for the actual stem density of this planting based on farm records (trees per hectare)",
+                  "x-modules": [
+                    "16.6"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "$ref": "#/components/schemas/NumberInput"
+                    },
+                    "quality": {
+                      "default": {},
+                      "$ref": "#/components/schemas/QualityTable"
+                    }
+                  },
+                  "required": [
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "x-units": "trees per hectare"
+                },
+                "method2BiomassAtMaturity": {
+                  "description": "Method 2: supply an exact value for the biomass at maturity for this planting based on farm records (tonnes carbon per hectare)",
+                  "x-modules": [
+                    "16.6"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "$ref": "#/components/schemas/NumberInput"
+                    },
+                    "quality": {
+                      "default": {},
+                      "$ref": "#/components/schemas/QualityTable"
+                    }
+                  },
+                  "required": [
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "x-units": "tonnes carbon per hectare"
+                },
+                "plantings": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "areaPlanted": {
+                        "description": "Area planted t years ago (hectares)",
+                        "x-modules": [
+                          "16.6"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "hectares"
+                      },
+                      "yearsSincePlanting": {
+                        "description": "Time since planting (years)",
+                        "x-modules": [
+                          "16.6"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "years"
+                      }
+                    },
+                    "required": [
+                      "areaPlanted",
+                      "yearsSincePlanting"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "cropType": {
+                  "oneOf": [
+                    {
+                      "title": "Full",
+                      "type": "string",
+                      "enum": [
+                        "Oranges",
+                        "Macadamias",
+                        "Almonds",
+                        "Apples",
+                        "Peaches",
+                        "Olives",
+                        "Avocados",
+                        "Mangoes"
+                      ],
+                      "description": "Type of perennial woody crop planted",
+                      "x-modules": [
+                        "16.6"
+                      ]
+                    },
+                    {
+                      "title": "Partial",
+                      "type": "string",
+                      "enum": [
+                        "Grapes",
+                        "Kiwifruits"
+                      ],
+                      "description": "Type of perennial woody crop planted",
+                      "x-modules": [
+                        "16.6"
+                      ]
+                    }
+                  ]
+                },
+                "clearings": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "areaCleared": {
+                        "description": "Area cleared (hectares)",
+                        "x-modules": [
+                          "16.6"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "hectares"
+                      }
+                    },
+                    "required": [
+                      "areaCleared"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "calculationMethod": {
+                  "type": "string",
+                  "const": "1"
+                }
+              },
+              "required": [
+                "plantings",
+                "cropType",
+                "clearings",
+                "calculationMethod"
+              ],
+              "additionalProperties": false,
+              "title": "Method 1"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "method2ActualStemDensity": {
+                  "description": "Method 2: supply an exact value for the actual stem density of this planting based on farm records (trees per hectare)",
+                  "x-modules": [
+                    "16.6"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "$ref": "#/components/schemas/NumberInput"
+                    },
+                    "quality": {
+                      "default": {},
+                      "$ref": "#/components/schemas/QualityTable"
+                    }
+                  },
+                  "required": [
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "x-units": "trees per hectare"
+                },
+                "method2BiomassAtMaturity": {
+                  "description": "Method 2: supply an exact value for the biomass at maturity for this planting based on farm records (tonnes carbon per hectare)",
+                  "x-modules": [
+                    "16.6"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "$ref": "#/components/schemas/NumberInput"
+                    },
+                    "quality": {
+                      "default": {},
+                      "$ref": "#/components/schemas/QualityTable"
+                    }
+                  },
+                  "required": [
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "x-units": "tonnes carbon per hectare"
+                },
+                "plantings": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "areaPlanted": {
+                        "description": "Area planted t years ago (hectares)",
+                        "x-modules": [
+                          "16.6"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "hectares"
+                      },
+                      "yearsSincePlanting": {
+                        "description": "Time since planting (years)",
+                        "x-modules": [
+                          "16.6"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "years"
+                      }
+                    },
+                    "required": [
+                      "areaPlanted",
+                      "yearsSincePlanting"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "cropType": {
+                  "type": "string",
+                  "enum": [
+                    "Oranges",
+                    "Macadamias",
+                    "Almonds",
+                    "Apples",
+                    "Peaches",
+                    "Olives",
+                    "Avocados",
+                    "Mangoes"
+                  ],
+                  "description": "Type of perennial woody crop planted",
+                  "x-modules": [
+                    "16.6"
+                  ]
+                },
+                "calculationMethod": {
+                  "type": "string",
+                  "const": "2 (stem density)"
+                },
+                "clearings": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "areaCleared": {
+                        "description": "Area cleared (hectares)",
+                        "x-modules": [
+                          "16.6"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "hectares"
+                      },
+                      "method2AgeAtClearing": {
+                        "description": "Time since original planting when clearing occurs. This must be less than the maturity age for the crop type (years)",
+                        "x-modules": [
+                          "16.6"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "years"
+                      }
+                    },
+                    "required": [
+                      "areaCleared",
+                      "method2AgeAtClearing"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "method2ActualStemDensity",
+                "plantings",
+                "cropType",
+                "calculationMethod",
+                "clearings"
+              ],
+              "additionalProperties": false,
+              "title": "Method 2 (stem density)"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "method2ActualStemDensity": {
+                  "description": "Method 2: supply an exact value for the actual stem density of this planting based on farm records (trees per hectare)",
+                  "x-modules": [
+                    "16.6"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "$ref": "#/components/schemas/NumberInput"
+                    },
+                    "quality": {
+                      "default": {},
+                      "$ref": "#/components/schemas/QualityTable"
+                    }
+                  },
+                  "required": [
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "x-units": "trees per hectare"
+                },
+                "method2BiomassAtMaturity": {
+                  "description": "Method 2: supply an exact value for the biomass at maturity for this planting based on farm records (tonnes carbon per hectare)",
+                  "x-modules": [
+                    "16.6"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "$ref": "#/components/schemas/NumberInput"
+                    },
+                    "quality": {
+                      "default": {},
+                      "$ref": "#/components/schemas/QualityTable"
+                    }
+                  },
+                  "required": [
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "x-units": "tonnes carbon per hectare"
+                },
+                "plantings": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "areaPlanted": {
+                        "description": "Area planted t years ago (hectares)",
+                        "x-modules": [
+                          "16.6"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "hectares"
+                      },
+                      "yearsSincePlanting": {
+                        "description": "Time since planting (years)",
+                        "x-modules": [
+                          "16.6"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "years"
+                      }
+                    },
+                    "required": [
+                      "areaPlanted",
+                      "yearsSincePlanting"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "cropType": {
+                  "type": "string",
+                  "enum": [
+                    "Oranges",
+                    "Macadamias",
+                    "Almonds",
+                    "Apples",
+                    "Peaches",
+                    "Olives",
+                    "Avocados",
+                    "Mangoes"
+                  ],
+                  "description": "Type of perennial woody crop planted",
+                  "x-modules": [
+                    "16.6"
+                  ]
+                },
+                "clearings": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "areaCleared": {
+                        "description": "Area cleared (hectares)",
+                        "x-modules": [
+                          "16.6"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "hectares"
+                      }
+                    },
+                    "required": [
+                      "areaCleared"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "calculationMethod": {
+                  "type": "string",
+                  "const": "2 (BAM)"
+                }
+              },
+              "required": [
+                "method2BiomassAtMaturity",
+                "plantings",
+                "cropType",
+                "clearings",
+                "calculationMethod"
+              ],
+              "additionalProperties": false,
+              "title": "Method 2 (biomass at maturity)"
+            }
+          ],
+          "type": "object"
+        }
+      }
+    }
+  }
+}

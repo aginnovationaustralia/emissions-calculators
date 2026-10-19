@@ -1,8 +1,12 @@
-import { object } from '@/types/schemas';
+import { EnterpriseInputSchema } from '@/calculators/types/enterprise.input';
 import { z } from 'zod';
 import { DairyHerdInputSchema } from './herd.input';
 
-export const DairyInputSchema = object({
+/**
+ * Full dairy enterprise input.
+ * Note that a similar type is created for describing dairy manure in DairyManureInputSchema, but it uses a list of cut down herd inputs
+ */
+export const DairyInputSchema = EnterpriseInputSchema.safeExtend({
   herds: z.array(DairyHerdInputSchema),
 });
 

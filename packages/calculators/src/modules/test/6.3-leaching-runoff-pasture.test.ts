@@ -1,18 +1,24 @@
 import {
-  BaseGrainsCrop,
-  BaseGrainsCropSchema,
-  BaseGrainsCropTransformed,
-} from '@/calculators/Grains/types/base-crop.input';
+  HasIsInLeachingZoneInput,
+  hasIsInLeachingZoneInputSchema,
+  HasIsInLeachingZoneInputTransformed,
+} from '@/calculators/types/has-is-in-leaching.input';
+import {
+  HasStateInput,
+  hasStateInputSchema,
+  HasStateInputTransformed,
+} from '@/calculators/types/has-state.input';
 import { getSheet } from '@/test/common/sheets';
+import { nv } from '@/tools/inputs';
+import { RESIDUE_LEACH_6_3 } from '@/tools/modules';
 import XLSX from 'xlsx-populate';
 import {
   calculate63ResidueLeachingAndRunoffN2O,
-  CropResidueInput,
-  CropResidueInputSchema,
-  CropResidueInputTransformed,
+  HasCropOrPastureResidueInputTransformed,
+  HasPastureResidueInput,
+  HasPastureResidueInputSchema,
 } from '../scope1/6-residue-mgmt';
 import { checkPastureType } from './crop-residue-domain';
-import { checkClimate } from './fertiliser-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
@@ -21,7 +27,11 @@ import {
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-): (CropResidueInputTransformed & BaseGrainsCropTransformed) | undefined => {
+):
+  | (HasCropOrPastureResidueInputTransformed &
+      HasStateInputTransformed &
+      HasIsInLeachingZoneInputTransformed)
+  | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
@@ -30,38 +40,36 @@ const getCalculatorInput = (
   }
 
   const isInLeachingZone = cell('A') === 'yes';
-  const climate = checkClimate(cell('B'));
   const type = checkPastureType(cell('C'));
-  const areaSown = Number(cell('D'));
-  const averageYield = Number(cell('E'));
+  const areaManaged = Number(cell('D'));
 
-  const baseCrop: BaseGrainsCrop = {
-    state: 'wa_nw',
-    areaSown,
-    isInLeachingZone,
-    electricityAllocation: 0,
+  const residues = {
+    calculationMethod: '1',
+  } as const;
+
+  const cropResidueInput: HasPastureResidueInput = {
+    pasture: {
+      type,
+      areaManaged: nv(areaManaged),
+      fractionOfAnnualCropBurnt: nv(0),
+      residues,
+    },
   };
 
-  const cropResidues = {
-    calculationMethod: '1',
-  } as const;
+  const hasStateInput: HasStateInput = {
+    state: 'WA',
+  };
 
-  const pastureResidues = {
-    calculationMethod: '1',
-  } as const;
-
-  const cropResidueInput: CropResidueInput = {
-    rainfallAbove600: climate === 'wet',
-    type,
-    averageYield,
-    fractionOfAnnualCropBurnt: 0,
-    cropResidues,
-    pastureResidues,
+  const hasIsInLeachingZoneInput: HasIsInLeachingZoneInput = {
+    isInLeachingZone,
   };
 
   return {
-    ...BaseGrainsCropSchema.parse(baseCrop),
-    ...CropResidueInputSchema.parse(cropResidueInput),
+    ...hasStateInputSchema([RESIDUE_LEACH_6_3]).parse(hasStateInput),
+    ...hasIsInLeachingZoneInputSchema(RESIDUE_LEACH_6_3).parse(
+      hasIsInLeachingZoneInput,
+    ),
+    ...HasPastureResidueInputSchema.parse(cropResidueInput),
   };
 };
 
@@ -86,6 +94,7 @@ describe('6.3.1.1 Leaching and runoff from pasture residues N2O', () => {
     compareInputsAndOutputs(
       inputsAndOutputs,
       calculate63ResidueLeachingAndRunoffN2O,
+      '6.3',
     );
   });
 });

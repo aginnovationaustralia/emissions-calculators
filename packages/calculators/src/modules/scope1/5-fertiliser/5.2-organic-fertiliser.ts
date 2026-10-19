@@ -1,31 +1,51 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
+import { HasClimateZoneInputTransformed } from '@/calculators/types/has-climate-zone.input';
+import { ClimateZoneType } from '@/constants/enums';
+import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
+import { Container } from '@/tools/containers';
 import { sum } from '@/tools/sum';
+import { Mass } from '@/tools/units';
 import { calculateMassOfNitrogenAppliedToSoils } from '../4-manure-management/calculate';
-import { CropResidueInputTransformed } from '../6-residue-mgmt/crop-residue.input';
-import { FertiliserInputTransformed } from './fertiliser.input';
+import { ConstantsForManureManagement } from '../4-manure-management/constants';
+import { HasFertiliserInputTransformed } from './fertiliser.input';
 import { OrganicFertiliserInputTransformed } from './organic-fertiliser.input';
+
+/**
+ * Raw implementation of equation for nitrous oxide emissions *EN2O* from the application
+ * of organic fertiliser (5.2.1.1 (1)). This function is used in both the contexts of
+ * estimating scope 1 organic fertiliser emissions (Chapter 5.2) and scope 3 waste
+ * emissions (Chapter 15.12).
+ */
+export const calculateDirectN2OFromOrganicFertiliserNitrogen = (
+  massOfNitrogen: Container<Mass<'N'>>,
+  climateZone: Container<ClimateZoneType>,
+  constants: HasConstants<'CROP' | 'COMMON'>,
+): Container<Mass<'N2O'>> => {
+  /**
+   * EN2O = SUM[j,f] (MNSoiljf * EFN2O,i * CN2O) * 10^-3
+   */
+  const climateZoneEF = selectConstant(
+    constants.CROP,
+    'EF_RESIDUES_RETURNED_TO_SOIL',
+    climateZone,
+  ).named('EFN2O,i');
+
+  const CN2O = selectConstant(
+    constants.COMMON,
+    'ELEMENTAL_TO_MOLECULAR_N2O',
+  ).named('CN2O');
+
+  return massOfNitrogen.multiply(climateZoneEF).multiply(CN2O);
+};
 
 export const calculateMNSoilForOrganicFertiliser = (
   application: OrganicFertiliserInputTransformed,
-  crop: BaseGrainsCropTransformed,
-  constants: ConstantsForGrainsCalculator,
+  constants: ConstantsForManureManagement,
 ) => {
   const origin = application.origin;
-  if (origin.origin === 'Local') {
-    return calculateMassOfNitrogenAppliedToSoils(
-      origin.details,
-      crop,
-      constants,
-    ).scope1;
-  } else if (origin.origin === 'Purchased_Traced') {
-    return calculateMassOfNitrogenAppliedToSoils(
-      origin.details,
-      crop,
-      constants,
-    ).scope3;
+  if (origin.origin === 'Traced') {
+    return calculateMassOfNitrogenAppliedToSoils(origin.details, constants);
   } else {
     const { customNitrogenFraction } = origin;
     const fnOrganicF = selectConstant(
@@ -34,17 +54,15 @@ export const calculateMNSoilForOrganicFertiliser = (
       origin.organicFertiliserType,
       'N',
     );
+    // NOTE: This is definitely method 1, even though it feels like a method 2 input
     const nitrogenFraction = customNitrogenFraction ?? fnOrganicF;
-    // REVISIT: If massAppliedKg is only used here, for purchased generic fertiliser, the input key should be moved into details
-    return application.massAppliedKg.multiply(nitrogenFraction);
+    return origin.massAppliedKg.multiply(nitrogenFraction);
   }
 };
 
 export const calculate52OrganicFertiliser = (
-  input: FertiliserInputTransformed &
-    CropResidueInputTransformed &
-    BaseGrainsCropTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+  activity: HasFertiliserInputTransformed & HasClimateZoneInputTransformed,
+  context: ExecutionContext<ConstantsForManureManagement>,
 ) => {
   const { constants } = context;
   /*
@@ -56,26 +74,25 @@ export const calculate52OrganicFertiliser = (
   EF N2O,i = emission factor for direct nitrous oxide emissions from organic fertiliser applied to soils and aquatic systems in climate zone i (kg N2O-N/kg N).
   CN2O = factor to convert elemental mass of nitrous oxide to molecular mass (dimensionless)
   */
-  const { applications } = input.organicFertilisers;
+  const { organic } = activity.fertiliser;
+  const { applications } = organic;
   const emissionRecords = applications.map((organicFertiliser) => {
     const mnSoiljf = calculateMNSoilForOrganicFertiliser(
       organicFertiliser,
-      input,
       constants,
-    ).named('MNSoiljf');
-    const efN2Oi = selectConstant(
-      constants.CROP,
-      'EF_RESIDUES_RETURNED_TO_SOIL',
-      input.rainfallAbove600,
-    ).named('EF N2O,i');
-    const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named(
-      'CN2O',
+    )
+      .named('MNSoiljf')
+      .reference('5.2.1.1 (2)');
+
+    return calculateDirectN2OFromOrganicFertiliserNitrogen(
+      mnSoiljf,
+      activity.climateZone,
+      constants,
     );
-    return mnSoiljf.multiply(efN2Oi).multiply(cn2o, { name: 'E N2O' });
   });
 
   return sum(emissionRecords, {
     name: 'Sum E N2O',
-    references: [`5.2.1.1 (238)`],
+    references: [`5.2.1.1 (1)`],
   });
 };

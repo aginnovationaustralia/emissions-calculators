@@ -1,67 +1,52 @@
-import { input } from '@/tools/inputs';
-import { realNumber } from '@/tools/units';
-import { object, proportion } from '@/types/schemas';
+import { LivestockActivityInputSchema } from '@/calculators/types/livestock-activity.input';
+import { HasFertiliserInputSchema } from '@/modules/scope1/5-fertiliser';
+import { HasLimeInputSchema } from '@/modules/scope1/5-fertiliser/lime.input';
+import { HasPastureResidueInputSchema } from '@/modules/scope1/6-residue-mgmt';
+import { hasFuelInputSchema } from '@/modules/scope1/8-fuel-use';
+import { SheepManureAndEntericSharedFieldsSchema } from '@/modules/scope1/shared/sheep/input';
+import { HasSolidWasteInputSchema } from '@/modules/scope1/shared/solid-waste/input';
+import { HasSheepPurchasedLivestockInputSchema } from '@/modules/scope3/15.1-purchased-livestock/input';
+import { HasPurchasedFeedInputSchema } from '@/modules/scope3/15.2-purchased-feed/has-purchased-feed.input';
+import { PurchasedMineralSupplementsInputSchema } from '@/modules/scope3/15.3-purchased-mineral-supplements/purchased-mineral-supplements.input';
+import { AgrichemicalsInputSchema } from '@/modules/scope3/15.5-agrichemicals/agrichemicals.input';
+import { ServicesInputSchema } from '@/modules/scope3/15.7-services/services.input';
+import { OtherPurchasedGoodsAndServicesSchema } from '@/modules/scope3/15.9-other-purchases';
+import { numberInput } from '@/tools/inputs';
+import { INTENSITIES } from '@/tools/modules';
+import { mass } from '@/tools/units';
 import { z } from 'zod';
-import { SheepClassesInputSchema } from './sheep-classes.input';
 
-export const SheepFlockInputSchema = object({
-  classes: SheepClassesInputSchema,
-  noUnfencedNaturalWater: z.boolean().meta({
-    description:
-      'Method 2: Whether animals have access to unfenced natural water. If animals are on bore or reticulated water systems where water is provided in troughs (i.e. no unfenced natural water sources) then set to false',
-  }),
-  method2Dmd: object({
-    spring: proportion()
-      .meta({
+// Core fields without fertiliser, exported so narrower field-subset schemas (e.g.
+// shared/sheep/input.ts, used to trim the AllModules input down to what the enteric
+// methane/manure management calculations actually need) can pick individual fields off
+// `.shape` rather than redefining them.
+export const SheepFlockCoreInputSchema =
+  LivestockActivityInputSchema.safeExtend({
+    ...SheepManureAndEntericSharedFieldsSchema.shape,
+    ...HasLimeInputSchema.shape,
+    ...HasPastureResidueInputSchema.shape,
+    ...hasFuelInputSchema('fuel').shape,
+    ...HasSolidWasteInputSchema.shape,
+    ...HasSheepPurchasedLivestockInputSchema.shape,
+    ...HasPurchasedFeedInputSchema.shape,
+    ...PurchasedMineralSupplementsInputSchema.shape,
+    ...AgrichemicalsInputSchema.shape,
+    ...ServicesInputSchema.shape,
+    ...OtherPurchasedGoodsAndServicesSchema.shape,
+    liveweightSoldKg: numberInput(
+      (val) => mass('Liveweight', val),
+      {
+        name: 'liveweightSoldKg',
         description:
-          'Method 2: Specific dry matter digestibility in spring, based on farm records',
-      })
-      .transform((val) => input('DMDijk=spring', realNumber(val))),
-    summer: proportion()
-      .meta({
-        description:
-          'Method 2: Specific dry matter digestibility in summer, based on farm records',
-      })
-      .transform((val) => input('DMDijk=summer', realNumber(val))),
-    autumn: proportion()
-      .meta({
-        description:
-          'Method 2: Specific dry matter digestibility in autumn, based on farm records',
-      })
-      .transform((val) => input('DMDijk=autumn', realNumber(val))),
-    winter: proportion()
-      .meta({
-        description:
-          'Method 2: Specific dry matter digestibility in winter, based on farm records',
-      })
-      .transform((val) => input('DMDijk=winter', realNumber(val))),
-  }).optional(),
-  method2CrudeProteinContent: object({
-    spring: proportion()
-      .meta({
-        description:
-          'Method 2: Specific crude protein content in spring, based on farm records',
-      })
-      .transform((val) => input('CPijk=spring', realNumber(val))),
-    summer: proportion()
-      .meta({
-        description:
-          'Method 2: Specific crude protein content in summer, based on farm records',
-      })
-      .transform((val) => input('CPijk=summer', realNumber(val))),
-    autumn: proportion()
-      .meta({
-        description:
-          'Method 2: Specific crude protein content in autumn, based on farm records',
-      })
-      .transform((val) => input('CPijk=autumn', realNumber(val))),
-    winter: proportion()
-      .meta({
-        description:
-          'Method 2: Specific dry matter digestibility in winter, based on farm records',
-      })
-      .transform((val) => input('CPijk=winter', realNumber(val))),
-  }).optional(),
+          'The liveweight of the animals sold during the reporting period',
+        modules: [INTENSITIES],
+      },
+      (s) => s.min(0),
+    ),
+  });
+
+export const SheepFlockInputSchema = SheepFlockCoreInputSchema.safeExtend({
+  ...HasFertiliserInputSchema.shape,
 });
 
 export type SheepFlockInput = z.input<typeof SheepFlockInputSchema>;

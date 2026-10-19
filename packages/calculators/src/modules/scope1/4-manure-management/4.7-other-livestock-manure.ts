@@ -1,28 +1,56 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { OtherLivestockHerdInputTransformed } from '@/calculators/OtherLivestock/types/herd.input';
-import { OtherLivestockInputTransformed } from '@/calculators/OtherLivestock/types/input';
-import { isWetClimateZone } from '@/constants/enums';
+import { isInLeachingZoneToFracWET } from '@/constants/translations';
+import { HasConstants } from '@/constants/types';
+import { OtherLivestockManureAndEntericHerdInputTransformed } from '@/modules/scope1/shared/other-livestock/input';
 import { selectConstant } from '@/tools/constants';
-import { num } from '@/tools/containers';
+import { ifTrueElse } from '@/tools/if-else';
+import { captureMethod1Or2Value } from '@/tools/multi';
 import { daysInYear, one, zero } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 
-const calculateManureMethaneForHerd = (
-  input: OtherLivestockInputTransformed,
-  herd: OtherLivestockHerdInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) => {
+type ConstantsForOtherLivestockManure = HasConstants<
+  'COMMON' | 'LIVESTOCK' | 'CROP'
+>;
+
+/**
+ * Calculate methane emissions from manure *ECH4* produced by a herd of 'other' livestock
+ * (4.7.1.1/4.7.1.2)
+ */
+export function calculateManureManagementCH4ForOtherLivestockHerd(
+  herd: OtherLivestockManureAndEntericHerdInputTransformed,
+  context: ExecutionContext<ConstantsForOtherLivestockManure>,
+) {
   const { constants } = context;
-  const { excludedFromNaturalWater, classes } = herd;
-  const { state, method2MeanAnnualTemperature } = input;
+  const {
+    excludedFromNaturalWater,
+    livestock,
+    state,
+    method2MeanAnnualTemperature,
+  } = herd;
 
-  // REVISIT: These values have been based on how the runoff percentage was calculated for beef on pasture in an older draft document.
-  // This can be updated once we receive some feedback
-  const MMSm1 = excludedFromNaturalWater ? num(0) : num(0.05);
-  const MMSm14 = excludedFromNaturalWater ? num(1) : num(0.95);
+  const MMSm1 = ifTrueElse(
+    excludedFromNaturalWater,
+    zero,
+    selectConstant(
+      constants.LIVESTOCK,
+      'OTHER_LIVESTOCK_MMS_FACTORS',
+      'anaerobicLagoon',
+      'ALLOCATION_TO_MMS_WITH_NATURAL_WATER',
+    ),
+  ).named('MMSm=1');
 
-  const emissionsFromClasses = classes.map((cls) => {
+  const MMSm14 = ifTrueElse(
+    excludedFromNaturalWater,
+    one,
+    selectConstant(
+      constants.LIVESTOCK,
+      'OTHER_LIVESTOCK_MMS_FACTORS',
+      'pastureRangeAndPaddock',
+      'ALLOCATION_TO_MMS_WITH_NATURAL_WATER',
+    ),
+  ).named('MMSm=14');
+
+  const emissionsFromClasses = livestock.map((cls) => {
     const { head, type, number } = cls;
 
     const Nj = head.named(`Nj=${type}`);
@@ -34,73 +62,77 @@ const calculateManureMethaneForHerd = (
       'VOLATILE_SOLIDS',
     ).named(`VSj=${number}`);
 
-    const Bo = selectConstant(
+    const B0 = selectConstant(
       constants.LIVESTOCK,
       'EMISSIONS_POTENTIAL_VOLATILE_SOLIDS_TO_CH4',
-      'general',
-    ).named('BO');
+      'other',
+    ).named('B0');
 
-    const MCFim1 = method2MeanAnnualTemperature
-      ? selectConstant(
-          constants.LIVESTOCK,
-          'METHANE_CONVERSION_BY_MEAN_ANNUAL_TEMPERATURE',
-          method2MeanAnnualTemperature,
-        ).named(`MCFim=1 (${method2MeanAnnualTemperature})`)
-      : selectConstant(
-          constants.LIVESTOCK,
-          'OTHER_LIVESTOCK_METHANE_CONVERSION_BY_STATE',
-          state,
-        ).named(`MCFim=1 (${state})`);
+    const MCFim1 = captureMethod1Or2Value(
+      selectConstant(
+        constants.LIVESTOCK,
+        'OTHER_LIVESTOCK_MMS_FACTORS',
+        'anaerobicLagoon',
+        'METHANE_CONVERSION_FACTOR_BY_STATE',
+        state,
+      ),
+      method2MeanAnnualTemperature
+        ? selectConstant(
+            constants.LIVESTOCK,
+            'MANURE_MANAGEMENT_METHANE_CONVERSION_FACTORS',
+            'anaerobicLagoon',
+            method2MeanAnnualTemperature,
+          )
+        : undefined,
+    ).named(`MCFim=1 (${state})`);
 
     const MCFim14 = selectConstant(
       constants.LIVESTOCK,
-      'OTHER_LIVESTOCK_METHANE_CONVERSION_PASTURE',
+      'OTHER_LIVESTOCK_MMS_FACTORS',
+      'pastureRangeAndPaddock',
+      'METHANE_CONVERSION_FACTOR_BY_STATE',
+      state,
     ).named('MCFim=14 (pasture)');
 
     const p = selectConstant(constants.COMMON, 'DENSITY_OF_METHANE').named('p');
 
-    // M jm = VS j * BO * MMSm * MCF im * 𝜌 -- 1704
-    const Mjm1 = VSj.multiply(Bo)
+    // M jm = VS j * B0 * MMSm * MCF im * 𝜌 -- 1704
+    const Mjm1 = VSj.multiply(B0)
       .multiply(MMSm1)
       .multiply(MCFim1)
       .multiply(p)
-      .named(`Mjm=1 (${type})`);
+      .named(`Mjm=1 (${type})`)
+      .reference('4.7.1.1 (2)');
 
-    const Mjm14 = VSj.multiply(Bo)
+    const Mjm14 = VSj.multiply(B0)
       .multiply(MMSm14)
       .multiply(MCFim14)
       .multiply(p)
-      .named(`Mjm=14 (${type})`);
+      .named(`Mjm=14 (${type})`)
+      .reference('4.7.1.1 (2)');
 
     const Mjm = sum([Mjm1, Mjm14], { name: `Mjm (${type})` });
 
-    return Mjm.multiply(Nj).multiply(daysInYear).named(`EMCH4j=${number}`);
+    return Mjm.multiply(Nj)
+      .multiply(daysInYear)
+      .named(`EMCH4j=${number}`)
+      .reference('4.7.1.1 (1)');
   });
 
   return sum(emissionsFromClasses, { name: 'EMCH4 (herd)' });
-};
-
-export function calculate_4_7_1_1_OtherLivestockManureMethane(
-  input: OtherLivestockInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) {
-  const { herds } = input;
-
-  const emissionsFromHerds = herds.map((herd) => {
-    return calculateManureMethaneForHerd(input, herd, context);
-  });
-
-  return sum(emissionsFromHerds, { name: 'EMCH4' });
 }
 
-const calculateNitrousEmissionsFromHerd = (
-  herd: OtherLivestockHerdInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+/**
+ * Calculates annual nitrogen excreted *AE* by a herd of 'other' livestock (4.7.1.3 (2))
+ */
+const calculateAnnualNitrogenExcretionForHerd = (
+  herd: OtherLivestockManureAndEntericHerdInputTransformed,
+  context: ExecutionContext<ConstantsForOtherLivestockManure>,
 ) => {
   const { constants } = context;
-  const { classes } = herd;
+  const { livestock } = herd;
 
-  const nitrogenExcretedByClasses = classes.map((cls) => {
+  const nitrogenExcretedByClasses = livestock.map((cls) => {
     const { head, type, number } = cls;
     const Nj = head.named(`Nj=${number}`);
     const NEj = selectConstant(
@@ -110,96 +142,99 @@ const calculateNitrousEmissionsFromHerd = (
       'NITROGEN_EXCRETED',
     ).named(`NEj=${number}`);
 
-    return NEj.multiply(Nj).multiply(daysInYear).named(`AEj=${number}`);
+    return NEj.multiply(Nj)
+      .multiply(daysInYear)
+      .named(`AEj=${number}`)
+      .reference('4.7.1.3 (2)');
   });
 
-  const nitrogenExcreted = sum(nitrogenExcretedByClasses, {
-    name: 'AE (herd)',
-  });
+  const nitrogenExcreted = sum(nitrogenExcretedByClasses).named('AE');
 
   return nitrogenExcreted;
 };
 
-const calculateNitrousEmissionsFromHerdsAE = (
-  input: OtherLivestockInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
-) => {
-  const { herds } = input;
-
-  const emissionsFromHerds = herds.map((herd) => {
-    return calculateNitrousEmissionsFromHerd(herd, context);
-  });
-
-  return sum(emissionsFromHerds, { name: 'AE' });
-};
-
-export function calculate_4_7_1_3_OtherLivestockManureDirectN2O(
-  input: OtherLivestockInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+/**
+ * Calculate direct nitrous oxide emissions from manure *EN2O,dir* produced by a herd of
+ * 'other' livestock (4.7.1.3)
+ */
+export function calculateDirectN2OEmissionsForOtherLivestockHerd(
+  herd: OtherLivestockManureAndEntericHerdInputTransformed,
+  context: ExecutionContext<ConstantsForOtherLivestockManure>,
 ) {
   const { constants } = context;
-  /*
-    EN2O,dir = AE * EF PRP * CN2O * 10^-3
 
-    AE = annual nitrogen excreted by each livestock type (kg N/year)
-    EF PRP= emission factor for nitrous oxide from urine and dung deposited to soil (kg N2O-N/kg N deposited)
-    CN2O = factor to convert elemental mass of nitrous oxide to molecular mass (dimensionless)
-*/
-
-  const { climateZone } = input;
-  const wetOrDry = isWetClimateZone(climateZone) ? 'wet' : 'dry';
-
-  const AE = calculateNitrousEmissionsFromHerdsAE(input, context);
+  const AE = calculateAnnualNitrogenExcretionForHerd(herd, context);
 
   const EFprp = selectConstant(
     constants.LIVESTOCK,
     'EF_DEPOSITED_URINE_AND_DUNG_PRP',
-    wetOrDry,
+    herd.climateZone,
   ).named('EF PRP');
-  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+  const cn2o = selectConstant(
+    constants.COMMON,
+    'ELEMENTAL_TO_MOLECULAR_N2O',
+  ).named('CN2O');
 
-  return AE.multiply(EFprp).multiply(cn2o).named('EN2O,dir');
+  /**
+   * EN2O,dir = AE * EF PRP * CN2O * 10^-3
+   */
+  return AE.multiply(EFprp)
+    .multiply(cn2o)
+    .named('EN2O,dir')
+    .reference('4.7.1.3 (1)');
 }
 
-export function calculate_4_7_1_5_OtherLivestockManureDepositionN2O(
-  input: OtherLivestockInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+/**
+ * Calculate nitrous oxide emissions from atmospheric deposition *EN2O,ad* produced by a
+ * herd of 'other' livestock (4.7.1.5)
+ */
+export function calculateAtmosphericDepositionN2OEmissionsForOtherLivestockHerd(
+  herd: OtherLivestockManureAndEntericHerdInputTransformed,
+  context: ExecutionContext<ConstantsForOtherLivestockManure>,
 ) {
   const { constants } = context;
 
-  /*
-  EN2O,ad = Mvol * EF N2O * CN2O * 10^-3
-
-  Mvol = AE * FracGASMsoil
-  */
-
-  const { productionSystem } = input;
-
-  const AE = calculateNitrousEmissionsFromHerdsAE(input, context);
+  const AE = calculateAnnualNitrogenExcretionForHerd(herd, context);
 
   const fracGASMsoil = selectConstant(
     constants.CROP,
     'FRACTION_N_VOLATILISED_ORGANIC_FERTILISER',
   ).named('FracGASMsoil');
 
-  const Mvol = AE.multiply(fracGASMsoil).named('Mvol');
+  /**
+   * Mvol = AE * FracGASMsoil
+   */
+  const Mvol = AE.multiply(fracGASMsoil).named('Mvol').reference('4.7.1.5 (2)');
 
-  const EFn2o = selectConstant(
-    constants.LIVESTOCK,
-    'EF_ATMOSPHERIC_DEPOSITION',
-    productionSystem,
+  const EFN2O = selectConstant(
+    constants.CROP,
+    'EF_N2O_ATMOSPHERIC_DEPOSITION_PRODUCTION_SYSTEM',
+    herd.grazingSystem,
   );
 
-  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+  const CN2O = selectConstant(
+    constants.COMMON,
+    'ELEMENTAL_TO_MOLECULAR_N2O',
+  ).named('CN2O');
 
-  const En2oad = Mvol.multiply(EFn2o).multiply(cn2o).named('EN2O,ad');
+  /**
+   * EN2O,ad = Mvol * EF N2O * CN2O * 10^-3
+   */
+  const En2oad = Mvol.multiply(EFN2O)
+    .multiply(CN2O)
+    .named('EN2O,ad')
+    .reference('4.7.1.5 (1)');
 
   return En2oad;
 }
 
-export function calculate_4_7_1_7_OtherLivestockManureLeachingRunoffN2O(
-  input: OtherLivestockInputTransformed,
-  context: ExecutionContext<ConstantsForGrainsCalculator>,
+/**
+ * Calculate nitrous oxide emissions from leaching and runoff *EN2O,leach* produced by a
+ * herd of 'other' livestock (4.7.1.7)
+ */
+export function calculateLeachingAndRunoffN2OEmissionsForOtherLivestockHerd(
+  input: OtherLivestockManureAndEntericHerdInputTransformed,
+  context: ExecutionContext<ConstantsForOtherLivestockManure>,
 ) {
   /*
     EN2O,leach = Mleach * EF leach * CN2O * 10^-3
@@ -209,9 +244,9 @@ export function calculate_4_7_1_7_OtherLivestockManureLeachingRunoffN2O(
 
   const { constants } = context;
 
-  const AE = calculateNitrousEmissionsFromHerdsAE(input, context);
+  const AE = calculateAnnualNitrogenExcretionForHerd(input, context);
 
-  const FracWET = (input.isInLeachingZone ? one : zero).named('FracWET');
+  const FracWET = isInLeachingZoneToFracWET(input.isInLeachingZone);
   const FracLEACH = selectConstant(
     constants.CROP,
     'FRACTION_N_LOST_THROUGH_LEACHING_AND_RUNOFF',
@@ -220,10 +255,43 @@ export function calculate_4_7_1_7_OtherLivestockManureLeachingRunoffN2O(
     constants.CROP,
     'EF_N2O_LEACHING_AND_RUNOFF',
   ).named('EFleach');
-  const cn2o = selectConstant(constants.COMMON, 'GWP_FACTORSC15').named('CN2O');
+  const cn2o = selectConstant(
+    constants.COMMON,
+    'ELEMENTAL_TO_MOLECULAR_N2O',
+  ).named('CN2O');
 
-  const Mleach = AE.multiply(FracWET).multiply(FracLEACH).named('Mleach');
-  const En2oleach = Mleach.multiply(EFleach).multiply(cn2o).named('EN2O,leach');
+  const Mleach = AE.multiply(FracWET)
+    .multiply(FracLEACH)
+    .named('Mleach')
+    .reference('4.7.1.7 (2)');
+  return Mleach.multiply(EFleach)
+    .multiply(cn2o)
+    .named('EN2O,leach')
+    .reference('4.7.1.7 (1)');
+}
 
-  return En2oleach;
+export function calculate47OtherLivestockManureManagement(
+  herd: OtherLivestockManureAndEntericHerdInputTransformed,
+  context: ExecutionContext<ConstantsForOtherLivestockManure>,
+) {
+  return {
+    manureManagementCH4: calculateManureManagementCH4ForOtherLivestockHerd(
+      herd,
+      context,
+    ),
+    manureDirectN2O: calculateDirectN2OEmissionsForOtherLivestockHerd(
+      herd,
+      context,
+    ),
+    manureAtmosphericDepositionN2O:
+      calculateAtmosphericDepositionN2OEmissionsForOtherLivestockHerd(
+        herd,
+        context,
+      ),
+    manureLeachingRunoffN2O:
+      calculateLeachingAndRunoffN2OEmissionsForOtherLivestockHerd(
+        herd,
+        context,
+      ),
+  };
 }

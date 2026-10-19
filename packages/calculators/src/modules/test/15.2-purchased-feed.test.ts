@@ -1,9 +1,10 @@
 import { getSheet } from '@/test/common/sheets';
+import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import {
-  PurchasedFeedsInputSchema,
-  PurchasedFeedsInputTransformed,
-} from '../scope3/15.2-purchased-feed/purchased-feeds.input';
+  HasPurchasedFeedInputSchema,
+  HasPurchasedFeedInputTransformed,
+} from '../scope3/15.2-purchased-feed/has-purchased-feed.input';
 import {
   checkPurchasedFeedRegion,
   checkPurchasedFeedTypeInRegion,
@@ -18,7 +19,7 @@ const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
   method: '1' | '2',
-): PurchasedFeedsInputTransformed | undefined => {
+): HasPurchasedFeedInputTransformed | undefined => {
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
@@ -29,15 +30,15 @@ const getCalculatorInput = (
     return undefined;
   }
 
-  const amount = Number(cell('C'));
+  const amount = nv(Number(cell('C')));
   const region = checkPurchasedFeedRegion(cell('B')?.trim() || undefined);
 
   if (method === '2')
-    return PurchasedFeedsInputSchema.parse({
+    return HasPurchasedFeedInputSchema.parse({
       purchasedFeed: [
         {
           amount,
-          customEmissionsFactor: Number(cell('D')),
+          customEmissionsFactor: nv(Number(cell('D'))),
         },
       ],
     });
@@ -53,7 +54,7 @@ const getCalculatorInput = (
           type: checkPurchasedFeedTypeInRegion(cell('A'), region),
           region,
         };
-  return PurchasedFeedsInputSchema.parse({
+  return HasPurchasedFeedInputSchema.parse({
     purchasedFeed: [purchasedFeed],
   });
 };
@@ -69,7 +70,7 @@ describe('15.2.1 Purchased Feed', () => {
 
     const inputsAndOutputs = extractInputsAndOutputs(sheet, 11, '1');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculatePurchasedFeed);
+    compareInputsAndOutputs(inputsAndOutputs, calculatePurchasedFeed, '15.2');
   });
   it('Method 2 matches spreadsheet results', async () => {
     const sheet = await getSheet(
@@ -79,6 +80,6 @@ describe('15.2.1 Purchased Feed', () => {
 
     const inputsAndOutputs = extractInputsAndOutputs(sheet, 95, '2');
 
-    compareInputsAndOutputs(inputsAndOutputs, calculatePurchasedFeed);
+    compareInputsAndOutputs(inputsAndOutputs, calculatePurchasedFeed, '15.2');
   });
 });

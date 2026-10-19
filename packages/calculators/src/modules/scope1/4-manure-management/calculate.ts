@@ -1,33 +1,29 @@
-import { ConstantsForGrainsCalculator } from '@/calculators/Grains/constants';
-import { BaseGrainsCropTransformed } from '@/calculators/Grains/types/base-crop.input';
-import { calculateMassOfNitrogenAppliedToSoilsForFeedlot } from './4.2-feedlot-manure';
+import { Container } from '@/tools/containers';
+import { Mass } from '@/tools/units';
+import { calculateMassOfNitrogenAppliedToSoilsForFeedlot } from './4.1-feedlot-manure';
 import { calculateMassOfNitrogenAppliedToSoilsForDairy } from './4.3-dairy-manure';
-import { calculateMassOfNitrogenAppliedToSoilsForSwine } from './4.5-swine-manure';
+import { calculateMassOfNitrogenAppliedToSoilsForPigs } from './4.5-pigs-manure';
 import { calculateMassOfNitrogenAppliedToSoilsForPoultry } from './4.6-poultry-manure';
+import { ConstantsForManureManagement } from './constants';
 import {
+  livestockManureIsDairy,
   livestockManureIsFeedlot,
+  livestockManureIsPigs,
   livestockManureIsPoultry,
-  livestockManureIsSwine,
   LivestockManuresInputTransformed,
 } from './livestock-manures.input';
 
 export function calculateMassOfNitrogenAppliedToSoils(
   manureInput: LivestockManuresInputTransformed,
-  crop: BaseGrainsCropTransformed,
-  constants: ConstantsForGrainsCalculator,
-) {
-  if (livestockManureIsSwine(manureInput)) {
-    return calculateMassOfNitrogenAppliedToSoilsForSwine(
-      manureInput,
-      crop.isInLeachingZone,
-      constants,
-    );
+  constants: ConstantsForManureManagement,
+): Container<Mass<'N'>> {
+  if (livestockManureIsPigs(manureInput)) {
+    return calculateMassOfNitrogenAppliedToSoilsForPigs(manureInput, constants);
   }
 
   if (livestockManureIsFeedlot(manureInput)) {
     return calculateMassOfNitrogenAppliedToSoilsForFeedlot(
       manureInput,
-      crop,
       constants,
     );
   }
@@ -35,14 +31,16 @@ export function calculateMassOfNitrogenAppliedToSoils(
   if (livestockManureIsPoultry(manureInput)) {
     return calculateMassOfNitrogenAppliedToSoilsForPoultry(
       manureInput,
-      crop.isInLeachingZone,
       constants,
     );
   }
 
-  return calculateMassOfNitrogenAppliedToSoilsForDairy(
-    manureInput,
-    crop,
-    constants,
-  );
+  if (livestockManureIsDairy(manureInput)) {
+    return calculateMassOfNitrogenAppliedToSoilsForDairy(
+      manureInput,
+      constants,
+    );
+  }
+
+  throw new Error(`Unsupported livestock manure type`);
 }

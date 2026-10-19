@@ -4,20 +4,38 @@ import {
   RiceCultivationSeasonWaterRegimeType,
   RiceCultivationSeasonWaterRegimeTypes,
 } from '@/constants/enums';
-import { input } from '@/tools/inputs';
+import { input, numberInput } from '@/tools/inputs';
+import {
+  RESIDUE_BURN_6_4,
+  RESIDUE_CROPS_6_1,
+  RESIDUE_LEACH_6_3,
+  RICE_7_1,
+} from '@/tools/modules';
+import { hectaresToSquareMetres } from '@/tools/unit-conversion';
+import { area, days } from '@/tools/units';
 import { object } from '@/types/schemas';
 import z from 'zod';
+import { BaseCropResidueInputSchema } from '../6-residue-mgmt';
 import { RiceCultivationOrganicAmendmentInputSchema } from './organic-amendment.input';
-import { days } from '@/tools/units';
 
-export const RiceCultivationInputSchema = object({
+export const RiceCultivationInputSchema = BaseCropResidueInputSchema.extend({
+  areaSown: numberInput(
+    (val) => area(hectaresToSquareMetres(val)),
+    {
+      name: 'areaSown',
+      method: '1',
+      description: 'Area sown',
+      modules: [RICE_7_1],
+    },
+    (s) => s.min(0),
+  ),
   preSeasonWaterRegimeType: z
     .literal(RiceCultivationPreSeasonWaterRegimeTypes)
     .transform((val) =>
-      input(
-        'pre-season water regime type',
-        val as RiceCultivationPreSeasonWaterRegimeType,
-      ),
+      input(val as RiceCultivationPreSeasonWaterRegimeType, {
+        name: 'pre-season water regime type',
+        modules: [RICE_7_1],
+      }),
     )
     .meta({
       description: 'The type of pre-season water regime for this rice crop.',
@@ -25,7 +43,10 @@ export const RiceCultivationInputSchema = object({
   waterRegimeType: z
     .literal(RiceCultivationSeasonWaterRegimeTypes)
     .transform((val) =>
-      input('water regime type', val as RiceCultivationSeasonWaterRegimeType),
+      input(val as RiceCultivationSeasonWaterRegimeType, {
+        name: 'water regime type',
+        modules: [RICE_7_1],
+      }),
     )
     .meta({ description: 'The type of water regime for this rice crop' }),
 
@@ -33,22 +54,40 @@ export const RiceCultivationInputSchema = object({
     .array(RiceCultivationOrganicAmendmentInputSchema)
     .optional()
     .meta({
-      /**
-       * REVISIT:
-       * Do we want to put a warning here about remembering to 'reflect' any organic fertilisers in this input array as well? Looking at
-       * the organic fertiliser input types, I'm not too sure if each possible input reflects an option here or vice versa.
-       */
-      description:
-        'Any organic amendments that were applied to this rice crop. This can be ommitted if only inorganic fertilisers were applied to the crop.',
+      description: `Any organic amendments that were applied to this rice crop. This can be omitted if only inorganic fertilisers were applied to the crop.
+        Some amendments included here (like 'Farm yard manure') may overlap with chapter 5.2 Organic Fertiliser.
+        Make sure that fertilisers.organic.applications includes all organic fertilisers that were applied to the crop.`,
     }),
 
-  cultivationPeriodDays: z
-    .number()
-    .min(1)
-    .transform((val) => input('days in cultivation period', days(val))),
-});
+  cultivationPeriodDays: numberInput(
+    (val) => days(val),
+    {
+      name: 'days in cultivation period',
+      method: '1',
+      description: 'Duration this rice crop was under cultivation',
+      modules: [RICE_7_1],
+    },
+    (s) => s.min(1),
+  ),
+}).transform((val) => ({
+  ...val,
+  type: input('Rice' as const, {
+    name: 'Rice',
+    modules: [RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3, RESIDUE_BURN_6_4],
+  }),
+}));
 
 export type RiceCultivationInput = z.input<typeof RiceCultivationInputSchema>;
 export type RiceCultivationInputTransformed = z.output<
   typeof RiceCultivationInputSchema
+>;
+
+export const HasRiceCultivationInputSchema = object({
+  crop: RiceCultivationInputSchema,
+});
+export type HasRiceCultivationInput = z.input<
+  typeof HasRiceCultivationInputSchema
+>;
+export type HasRiceCultivationInputTransformed = z.output<
+  typeof HasRiceCultivationInputSchema
 >;

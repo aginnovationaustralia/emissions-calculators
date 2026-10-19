@@ -1,22 +1,25 @@
-import { z } from 'zod';
-import {
-  DairyManureInputSchema,
-  DairyManureInputTransformed,
-} from './dairy-manure.input';
+import z from 'zod';
 import {
   FeedlotManureInputSchema,
   FeedlotManureInputTransformed,
-} from './feedlot-manure.input';
+} from './4.1-feedlot-manure';
 import {
-  CropPoultryManureInputSchema,
-  CropPoultryManureInputTransformed,
+  DairyManureInputSchema,
+  DairyManureInputTransformed,
+} from './4.3-dairy-manure';
+import {
+  PigsManureInputSchema,
+  PigsManureInputTransformed,
+} from './4.5-pigs-manure';
+import {
+  PoultryManureInputSchema,
+  PoultryManureInputTransformed,
 } from './4.6-poultry-manure';
-import { SwineManureInputSchema } from './4.5-swine-manure';
 
-export const livestockManureIsSwine = (
+export const livestockManureIsPigs = (
   input: LivestockManuresInputTransformed,
-): input is SwineManureInputTransformed => {
-  return input.type === 'swine';
+): input is PigsManureInputTransformed => {
+  return input.type === 'pigs';
 };
 
 export const livestockManureIsFeedlot = (
@@ -33,21 +36,19 @@ export const livestockManureIsDairy = (
 
 export const livestockManureIsPoultry = (
   input: LivestockManuresInputTransformed,
-): input is CropPoultryManureInputTransformed => {
+): input is PoultryManureInputTransformed => {
   return input.type === 'poultry';
 };
 
-export type SwineManureInput = z.input<typeof SwineManureInputSchema>;
-export type SwineManureInputTransformed = z.output<
-  typeof SwineManureInputSchema
->;
-
-export const LivestockManuresInputSchema = z.discriminatedUnion('type', [
-  SwineManureInputSchema,
-  DairyManureInputSchema,
-  FeedlotManureInputSchema,
-  CropPoultryManureInputSchema,
-]);
+export const LivestockManuresInputSchema = z
+  .discriminatedUnion('type', [
+    // TODO: Review the shape of each list passed for these types (i.e. herds, groups, classes) to see if we can trim some inputs away not needed for fertiliser calculations
+    PigsManureInputSchema,
+    DairyManureInputSchema,
+    FeedlotManureInputSchema,
+    PoultryManureInputSchema,
+  ])
+  .meta({ id: 'LivestockManuresInput' });
 
 export type LivestockManuresInput = z.input<typeof LivestockManuresInputSchema>;
 export type LivestockManuresInputTransformed = z.output<

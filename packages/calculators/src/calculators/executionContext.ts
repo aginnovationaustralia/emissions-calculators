@@ -1,7 +1,6 @@
-import { Environment } from '@/calculators/execution/types';
-import { CalculatorNames } from '@/calculators/strings';
 import { AllConstants, HasCommonConstants } from '@/constants/types';
 import {
+  aquacultureConstants,
   beefPastureConstants,
   commonConstants,
   cropConstants,
@@ -9,11 +8,12 @@ import {
   feedlotConstants,
   livestockConstants,
   lulucfConstants,
+  pigsConstants,
   poultryConstants,
   riceConstants,
   sheepConstants,
-  swineConstants,
 } from '@/constants/values';
+import { packageVersion } from './execution/version';
 
 type ExecutionMetadata = {
   calculator: string;
@@ -37,7 +37,7 @@ export type WithExecutionMetadata<T> = T & { metaData: ExecutionMetadata };
 export function contextFor(calculator: string, constants: AllConstants) {
   return {
     calculator,
-    version: '4.0.0',
+    version: packageVersion(),
     constants,
     timestamp: new Date().toISOString(),
   };
@@ -47,7 +47,7 @@ export const loadConstants = (): AllConstants => {
   return {
     COMMON: commonConstants,
     CROP: cropConstants,
-    SWINE: swineConstants,
+    PIGS: pigsConstants,
     FEEDLOT: feedlotConstants,
     DAIRY: dairyConstants,
     POULTRY: poultryConstants,
@@ -56,34 +56,6 @@ export const loadConstants = (): AllConstants => {
     RICE: riceConstants,
     SHEEP: sheepConstants,
     LULUCF: lulucfConstants,
+    AQUACULTURE: aquacultureConstants,
   };
 };
-
-export type Calculator<Input extends object, Output extends object> = (
-  input: Input,
-  context: ExecutionContext<AllConstants>,
-) => Output;
-
-export function executeCalculator<Input extends object, Output extends object>(
-  calculator: Calculator<Input, Output>,
-  input: Input,
-  calculatorName: CalculatorNames,
-  environment: Environment,
-): Output {
-  const context = contextFor(calculatorName, loadConstants());
-  let result: Output;
-  let failed = false;
-
-  try {
-    result = calculator(input, context);
-  } catch (error) {
-    failed = true;
-    throw error;
-  } finally {
-    if (environment.isMetricsEnabled()) {
-      environment.trackCalculatorExecution(calculatorName, failed);
-    }
-  }
-
-  return result;
-}

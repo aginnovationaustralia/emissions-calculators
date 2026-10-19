@@ -39,9 +39,8 @@ If you're looking to make an emissions calculation with the least amount of setu
 import { calculateEmissions } from '@aginnovationaustralia/emissions-calculators';
 
 export const beefInputData: BeefInput = {
-  state: 'nsw' as const,
+  state: 'NSW' as const,
   northOfTropicOfCapricorn: true,
-  rainfallAbove600: true,
   beef: [
     {
       classes: {
@@ -121,9 +120,8 @@ const beefEnterprise1: BeefComplete = {
 }
 
 export const beefInputData: BeefInput = {
-  state: 'nsw' as const,
+  state: 'NSW' as const,
   northOfTropicOfCapricorn: true,
-  rainfallAbove600: true,
   beef: [beefEnterprise1]
   ...
 }

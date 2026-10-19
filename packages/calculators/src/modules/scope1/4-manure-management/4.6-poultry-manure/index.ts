@@ -1,5 +1,5 @@
 export {
   calculateMassOfNitrogenAppliedToSoilsForPoultry,
-  calculatePoultryManureEmissions,
+  calculate46PoultryManureManagement,
 } from './calculate';
 export * from './poultry-manure.input';
