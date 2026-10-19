@@ -18,7 +18,7 @@ If a user needs to adapt the Code to ensure it is compatible with their own plat
 
 On 19 October 2026, AIA released a beta-version of the open-source code aligned to the soft-release version of the Australian Government's Voluntary Emissions Estimation and Reporting Guidelines. Users of the code continue to have access to all previous versions of the GAF calculations code and can transfer to the Guidelines-aligned code at their own pace.
 
-The beta period is designed to help users prepare for the new Guidelines. We encourage code users to get familiar with the Guidelines and review AIA's Documentation Site [insert link] to view the new NPM-package implemented in practice and access support information. The Guidelines are available to anyone on request by emailing Ag.Land-EmissionsReduction@dcceew.gov.au. Under the grant program, AIA also provides free API access to the EAP calculation engine.
+The beta period is designed to help users prepare for the new Guidelines. We encourage code users to get familiar with the Guidelines and review AIA's [Documentation Site](https://docs.aiaplatform.com.au) to view the new NPM-package implemented in practice and access support information. The Guidelines are available to anyone on request by emailing Ag.Land-EmissionsReduction@dcceew.gov.au. Under the grant program, AIA also provides free API access to the EAP calculation engine.
 
 As users test the code, we anticipate making further updates in response to feedback.
 
