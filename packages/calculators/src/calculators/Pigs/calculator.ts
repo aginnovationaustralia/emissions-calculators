@@ -51,15 +51,15 @@ function getTotalIntensities(
 
   const liveweightProducedKg = liveweightProduced.unit.store.toNumber();
 
-  const totalEmissionsIncludingLulucf =
-    netTotalEmissionsKgCO2e + netLulucfKgCO2e;
+  const totalEmissionsExcludingLulucf =
+    netTotalEmissionsKgCO2e - netLulucfKgCO2e;
 
   const liveweightIntensityExcludingLULUCF = valueObject(
-    divideBySafeFromZero(netTotalEmissionsKgCO2e, liveweightProducedKg),
+    divideBySafeFromZero(totalEmissionsExcludingLulucf, liveweightProducedKg),
   );
 
   const liveweightIntensityIncludingLULUCF = valueObject(
-    divideBySafeFromZero(totalEmissionsIncludingLulucf, liveweightProducedKg),
+    divideBySafeFromZero(netTotalEmissionsKgCO2e, liveweightProducedKg),
   );
 
   return {

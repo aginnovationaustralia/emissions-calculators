@@ -108,6 +108,8 @@ type CalculatorOutputSchema<
  * @param getSingleIntensities - Calculates the intensities for one activity. Has no access to
  * LULUCF numbers, since LULUCF is only ever calculated for the whole enterprise.
  * @param getTotalIntensities - Calculates the enterprise-wide intensities, including LULUCF.
+ * The net total it receives already includes LULUCF, so intensities excluding LULUCF must
+ * subtract the LULUCF total from it.
  * @returns The calculator function that can be called with an input and context
  */
 export const createCalculator =

@@ -67,7 +67,7 @@ function getTotalIntensities(
 
   const riceExcludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotalEmissionsKgCO2e + netLulucfKgCO2e,
+      netTotalEmissionsKgCO2e - netLulucfKgCO2e,
       riceHarvestedKg,
     ),
   );
