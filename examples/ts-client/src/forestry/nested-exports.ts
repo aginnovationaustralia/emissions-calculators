@@ -1,12 +1,13 @@
 import {
   ForestryInput,
   ForestryInputSchema,
+  calculateForestry,
   calculateForestryParsed,
 } from '@aginnovationaustralia/emissions-calculators/forestry';
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
 import { forestryInputDataMethod1, forestryInputDataMethod2 } from './input';
 
-const calculate = (input: ForestryInput) => {
+const performValidationAndCalculate = (input: ForestryInput) => {
   const validatedInput = validateCalculatorInput(ForestryInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -29,18 +30,41 @@ const calculate = (input: ForestryInput) => {
  *
  * @returns Forestry emissions for the method 1 and method 2 inputs
  */
-export const calculateForestryNestedExport = () => {
-  const method1 = calculate(forestryInputDataMethod1);
+export const validateAndCalculateForestryNestedExport = () => {
+  const method1 = performValidationAndCalculate(forestryInputDataMethod1);
   console.log(
     'Forestry (method 1) emissions calculated correctly',
     method1.net,
   );
 
-  const method2 = calculate(forestryInputDataMethod2);
+  const method2 = performValidationAndCalculate(forestryInputDataMethod2);
   console.log(
     'Forestry (method 2) emissions calculated correctly',
     method2.net,
   );
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateForestry function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateForestryNestedExport = () => {
+  const method1 = calculateForestry(forestryInputDataMethod1);
+  const method2 = calculateForestry(forestryInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

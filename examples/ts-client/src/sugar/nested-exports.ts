@@ -1,4 +1,5 @@
 import {
+  calculateSugar,
   calculateSugarParsed,
   SugarInput,
   SugarInputSchema,
@@ -6,7 +7,7 @@ import {
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
 import { sugarInputDataMethod1, sugarInputDataMethod2 } from './input';
 
-const calculate = (input: SugarInput) => {
+const performValidationAndCalculate = (input: SugarInput) => {
   const validatedInput = validateCalculatorInput(SugarInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -29,12 +30,35 @@ const calculate = (input: SugarInput) => {
  *
  * @returns Sugar emissions for the method 1 and method 2 inputs
  */
-export const calculateSugarNestedExport = () => {
-  const method1 = calculate(sugarInputDataMethod1);
+export const validateAndCalculateSugarNestedExport = () => {
+  const method1 = performValidationAndCalculate(sugarInputDataMethod1);
   console.log('Sugar (method 1) emissions calculated correctly', method1.net);
 
-  const method2 = calculate(sugarInputDataMethod2);
+  const method2 = performValidationAndCalculate(sugarInputDataMethod2);
   console.log('Sugar (method 2) emissions calculated correctly', method2.net);
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateSugar function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateSugarNestedExport = () => {
+  const method1 = calculateSugar(sugarInputDataMethod1);
+  const method2 = calculateSugar(sugarInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

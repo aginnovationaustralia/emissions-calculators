@@ -1,12 +1,13 @@
 import {
   DairyInput,
   DairyInputSchema,
+  calculateDairy,
   calculateDairyParsed,
 } from '@aginnovationaustralia/emissions-calculators/dairy';
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
 import { dairyInputDataMethod1, dairyInputDataMethod2 } from './input';
 
-const calculate = (input: DairyInput) => {
+const performValidationAndCalculate = (input: DairyInput) => {
   const validatedInput = validateCalculatorInput(DairyInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -29,12 +30,35 @@ const calculate = (input: DairyInput) => {
  *
  * @returns Dairy emissions for the method 1 and method 2 inputs
  */
-export const calculateDairyNestedExport = () => {
-  const method1 = calculate(dairyInputDataMethod1);
+export const validateAndCalculateDairyNestedExport = () => {
+  const method1 = performValidationAndCalculate(dairyInputDataMethod1);
   console.log('Dairy (method 1) emissions calculated correctly', method1.net);
 
-  const method2 = calculate(dairyInputDataMethod2);
+  const method2 = performValidationAndCalculate(dairyInputDataMethod2);
   console.log('Dairy (method 2) emissions calculated correctly', method2.net);
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateDairy function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateDairyNestedExport = () => {
+  const method1 = calculateDairy(dairyInputDataMethod1);
+  const method2 = calculateDairy(dairyInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };
