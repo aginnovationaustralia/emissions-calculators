@@ -1,12 +1,13 @@
 import {
   FeedlotInput,
   FeedlotInputSchema,
+  calculateFeedlot,
   calculateFeedlotParsed,
 } from '@aginnovationaustralia/emissions-calculators/feedlot';
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
 import { feedlotInputDataMethod1, feedlotInputDataMethod2 } from './input';
 
-const calculate = (input: FeedlotInput) => {
+const performValidationAndCalculate = (input: FeedlotInput) => {
   const validatedInput = validateCalculatorInput(FeedlotInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -29,12 +30,35 @@ const calculate = (input: FeedlotInput) => {
  *
  * @returns Feedlot emissions for the method 1 and method 2 inputs
  */
-export const calculateFeedlotNestedExport = () => {
-  const method1 = calculate(feedlotInputDataMethod1);
+export const validateAndCalculateFeedlotNestedExport = () => {
+  const method1 = performValidationAndCalculate(feedlotInputDataMethod1);
   console.log('Feedlot (method 1) emissions calculated correctly', method1.net);
 
-  const method2 = calculate(feedlotInputDataMethod2);
+  const method2 = performValidationAndCalculate(feedlotInputDataMethod2);
   console.log('Feedlot (method 2) emissions calculated correctly', method2.net);
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateFeedlot function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateFeedlotNestedExport = () => {
+  const method1 = calculateFeedlot(feedlotInputDataMethod1);
+  const method2 = calculateFeedlot(feedlotInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

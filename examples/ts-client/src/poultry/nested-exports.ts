@@ -1,12 +1,13 @@
 import {
   PoultryInput,
   PoultryInputSchema,
+  calculatePoultry,
   calculatePoultryParsed,
 } from '@aginnovationaustralia/emissions-calculators/poultry';
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
 import { poultryInputDataMethod1, poultryInputDataMethod2 } from './input';
 
-const calculate = (input: PoultryInput) => {
+const performValidationAndCalculate = (input: PoultryInput) => {
   const validatedInput = validateCalculatorInput(PoultryInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -29,12 +30,35 @@ const calculate = (input: PoultryInput) => {
  *
  * @returns Poultry emissions for the method 1 and method 2 inputs
  */
-export const calculatePoultryNestedExport = () => {
-  const method1 = calculate(poultryInputDataMethod1);
+export const validateAndCalculatePoultryNestedExport = () => {
+  const method1 = performValidationAndCalculate(poultryInputDataMethod1);
   console.log('Poultry (method 1) emissions calculated correctly', method1.net);
 
-  const method2 = calculate(poultryInputDataMethod2);
+  const method2 = performValidationAndCalculate(poultryInputDataMethod2);
   console.log('Poultry (method 2) emissions calculated correctly', method2.net);
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculatePoultry function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculatePoultryNestedExport = () => {
+  const method1 = calculatePoultry(poultryInputDataMethod1);
+  const method2 = calculatePoultry(poultryInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

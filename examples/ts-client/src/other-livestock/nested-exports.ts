@@ -1,6 +1,7 @@
 import {
   OtherLivestockInput,
   OtherLivestockInputSchema,
+  calculateOtherLivestock,
   calculateOtherLivestockParsed,
 } from '@aginnovationaustralia/emissions-calculators/other-livestock';
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
@@ -9,7 +10,7 @@ import {
   otherLivestockInputDataMethod2,
 } from './input';
 
-const calculate = (input: OtherLivestockInput) => {
+const performValidationAndCalculate = (input: OtherLivestockInput) => {
   const validatedInput = validateCalculatorInput(
     OtherLivestockInputSchema,
     input,
@@ -35,18 +36,41 @@ const calculate = (input: OtherLivestockInput) => {
  *
  * @returns Other livestock emissions for the method 1 and method 2 inputs
  */
-export const calculateOtherLivestockNestedExport = () => {
-  const method1 = calculate(otherLivestockInputDataMethod1);
+export const validateAndCalculateOtherLivestockNestedExport = () => {
+  const method1 = performValidationAndCalculate(otherLivestockInputDataMethod1);
   console.log(
     'Other livestock (method 1) emissions calculated correctly',
     method1.net,
   );
 
-  const method2 = calculate(otherLivestockInputDataMethod2);
+  const method2 = performValidationAndCalculate(otherLivestockInputDataMethod2);
   console.log(
     'Other livestock (method 2) emissions calculated correctly',
     method2.net,
   );
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateOtherLivestock function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateOtherLivestockNestedExport = () => {
+  const method1 = calculateOtherLivestock(otherLivestockInputDataMethod1);
+  const method2 = calculateOtherLivestock(otherLivestockInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

@@ -1,4 +1,5 @@
 import {
+  calculateCropping,
   calculateCroppingParsed,
   CroppingInput,
   CroppingInputSchema,
@@ -6,7 +7,7 @@ import {
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
 import { croppingInputDataMethod1, croppingInputDataMethod2 } from './input';
 
-const calculate = (input: CroppingInput) => {
+const performValidationAndCalculate = (input: CroppingInput) => {
   const validatedInput = validateCalculatorInput(CroppingInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -29,18 +30,41 @@ const calculate = (input: CroppingInput) => {
  *
  * @returns Cropping emissions for the method 1 and method 2 inputs
  */
-export const calculateCroppingNestedExport = () => {
-  const method1 = calculate(croppingInputDataMethod1);
+export const validateAndCalculateCroppingNestedExport = () => {
+  const method1 = performValidationAndCalculate(croppingInputDataMethod1);
   console.log(
     'Cropping (method 1) emissions calculated correctly',
     method1.net,
   );
 
-  const method2 = calculate(croppingInputDataMethod2);
+  const method2 = performValidationAndCalculate(croppingInputDataMethod2);
   console.log(
     'Cropping (method 2) emissions calculated correctly',
     method2.net,
   );
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateCropping function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateCroppingNestedExport = () => {
+  const method1 = calculateCropping(croppingInputDataMethod1);
+  const method2 = calculateCropping(croppingInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

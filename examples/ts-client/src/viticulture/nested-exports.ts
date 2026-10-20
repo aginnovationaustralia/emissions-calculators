@@ -1,4 +1,5 @@
 import {
+  calculateViticulture,
   calculateViticultureParsed,
   ViticultureInput,
   ViticultureInputSchema,
@@ -9,7 +10,7 @@ import {
   viticultureInputDataMethod2,
 } from './input';
 
-const calculate = (input: ViticultureInput) => {
+const performValidationAndCalculate = (input: ViticultureInput) => {
   const validatedInput = validateCalculatorInput(ViticultureInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -32,18 +33,41 @@ const calculate = (input: ViticultureInput) => {
  *
  * @returns Viticulture emissions for the method 1 and method 2 inputs
  */
-export const calculateViticultureNestedExport = () => {
-  const method1 = calculate(viticultureInputDataMethod1);
+export const validateAndCalculateViticultureNestedExport = () => {
+  const method1 = performValidationAndCalculate(viticultureInputDataMethod1);
   console.log(
     'Viticulture (method 1) emissions calculated correctly',
     method1.net,
   );
 
-  const method2 = calculate(viticultureInputDataMethod2);
+  const method2 = performValidationAndCalculate(viticultureInputDataMethod2);
   console.log(
     'Viticulture (method 2) emissions calculated correctly',
     method2.net,
   );
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateViticulture function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateViticultureNestedExport = () => {
+  const method1 = calculateViticulture(viticultureInputDataMethod1);
+  const method2 = calculateViticulture(viticultureInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

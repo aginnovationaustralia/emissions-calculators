@@ -1,4 +1,5 @@
 import {
+  calculateCotton,
   calculateCottonParsed,
   CottonInput,
   CottonInputSchema,
@@ -6,7 +7,7 @@ import {
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
 import { cottonInputDataMethod1, cottonInputDataMethod2 } from './input';
 
-const calculate = (input: CottonInput) => {
+const performValidationAndCalculate = (input: CottonInput) => {
   const validatedInput = validateCalculatorInput(CottonInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -29,12 +30,35 @@ const calculate = (input: CottonInput) => {
  *
  * @returns Cotton emissions for the method 1 and method 2 inputs
  */
-export const calculateCottonNestedExport = () => {
-  const method1 = calculate(cottonInputDataMethod1);
+export const validateAndCalculateCottonNestedExport = () => {
+  const method1 = performValidationAndCalculate(cottonInputDataMethod1);
   console.log('Cotton (method 1) emissions calculated correctly', method1.net);
 
-  const method2 = calculate(cottonInputDataMethod2);
+  const method2 = performValidationAndCalculate(cottonInputDataMethod2);
   console.log('Cotton (method 2) emissions calculated correctly', method2.net);
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateCotton function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateCottonNestedExport = () => {
+  const method1 = calculateCotton(cottonInputDataMethod1);
+  const method2 = calculateCotton(cottonInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };
