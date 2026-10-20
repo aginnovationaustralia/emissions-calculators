@@ -57,7 +57,7 @@ The return value should be of type RootContainer<T>, with an originType of root 
 // NumberUnit (e.g. MassPerHeadPerDay<'DryMatter'> & MassPerHeadPerDay<Substance>).
 export function selectConstant<
   CK1 extends string,
-  Constants extends Record<CK1, unknown> & NamedConstants,
+  Constants extends Record<CK1, NumberUnit> & NamedConstants,
 >(
   constants: Constants,
   selector1: Selector<CK1>,
@@ -67,7 +67,7 @@ export function selectConstant<
 export function selectConstant<
   CK1 extends string,
   CK2 extends string,
-  Constants extends Record<CK1, Record<CK2, unknown>> & NamedConstants,
+  Constants extends Record<CK1, Record<CK2, NumberUnit>> & NamedConstants,
 >(
   constants: Constants,
   selector1: Selector<CK1>,
@@ -79,7 +79,7 @@ export function selectConstant<
   CK1 extends string,
   CK2 extends string,
   CK3 extends string,
-  Constants extends Record<CK1, Record<CK2, Record<CK3, unknown>>> &
+  Constants extends Record<CK1, Record<CK2, Record<CK3, NumberUnit>>> &
     NamedConstants,
 >(
   constants: Constants,
@@ -96,7 +96,7 @@ export function selectConstant<
   CK4 extends string,
   Constants extends Record<
     CK1,
-    Record<CK2, Record<CK3, Record<CK4, unknown>>>
+    Record<CK2, Record<CK3, Record<CK4, NumberUnit>>>
   > &
     NamedConstants,
 >(
@@ -118,7 +118,7 @@ export function selectConstant<
   CK5 extends string,
   Constants extends Record<
     CK1,
-    Record<CK2, Record<CK3, Record<CK4, Record<CK5, unknown>>>>
+    Record<CK2, Record<CK3, Record<CK4, Record<CK5, NumberUnit>>>>
   > &
     NamedConstants,
 >(
