@@ -180,6 +180,7 @@ function getLiveweight(
           purchase.state,
           purchase.class,
           purchase.season,
+          'liveweight',
         ),
         undefined,
       );
