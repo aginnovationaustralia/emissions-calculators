@@ -24,7 +24,7 @@ export const BeefClassPeriodInputSchema = object({
     {
       name: 'Nkln',
       method: '1',
-      description: 'Number of animals in this class for this season',
+      description: 'Number of animals in this class for this period',
       modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
     },
     (s) => s.min(0),
@@ -35,7 +35,7 @@ export const BeefClassPeriodInputSchema = object({
       name: 'Wijkln',
       method: '2',
       description:
-        'Method 2: supply an exact value for liveweight for this class for this season based on farm records',
+        'Method 2: supply an exact value for liveweight for this class for this time period based on farm records',
       modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
     },
     (s) => s.min(0),
@@ -44,7 +44,7 @@ export const BeefClassPeriodInputSchema = object({
     name: 'LWGijkln',
     method: '2',
     description:
-      'Method 2: supply an exact value for liveweight gain for this class for this season based on farm records',
+      'Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records',
     modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
   }),
   method2DurationDays: numberInputOptional(

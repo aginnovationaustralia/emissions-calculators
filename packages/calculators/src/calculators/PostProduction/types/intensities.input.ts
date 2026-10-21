@@ -25,7 +25,9 @@ export const PostProductionIntensitiesSchema = object({
     {
       name: 'Post-production allocation',
       description: `What share of the total post-production emissions calculated should be included in the post-production intensity?
-      In other words, what share of the fuel, packaging etc. listed in these inputs were related to processing these units?`,
+      In other words, what share of the fuel, packaging etc. listed in these inputs were related to processing these units?
+      For example, a value of 1 means that the post-production inputs described were exclusively used to process these units produced, and will all be allocated to your post-production intensity.
+      A value of 0.1 could indicate these units were one tenth of all units processed by a facility.`,
       modules: [INTENSITIES],
     },
     isProportion,

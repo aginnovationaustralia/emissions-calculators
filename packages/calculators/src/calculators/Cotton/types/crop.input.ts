@@ -6,9 +6,6 @@ import {
 import { OrganicFertilisersInputSchema } from '@/modules/scope1/5-fertiliser/organic-fertilisers.input';
 import { BaseCropResidueInputSchema } from '@/modules/scope1/6-residue-mgmt/crop-residue.input';
 import { input, InputContainer, numberInput } from '@/tools/inputs';
-import { realNumber } from '@/tools/units';
-import { object } from '@/types/schemas';
-import { z } from 'zod';
 import {
   FERT_INORGANIC_5_1,
   INTENSITIES,
@@ -16,6 +13,9 @@ import {
   RESIDUE_CROPS_6_1,
   RESIDUE_LEACH_6_3,
 } from '@/tools/modules';
+import { realNumber } from '@/tools/units';
+import { object } from '@/types/schemas';
+import { z } from 'zod';
 
 /**
  * The only relevant production system is 'Cotton', so it doesn't need to be provided by
@@ -76,12 +76,6 @@ const CottonFertiliserInputSchema: z.ZodType<
 
 export const CottonCropResidueInputSchema =
   BaseCropResidueInputSchema.safeExtend({
-    /**
-     * REVISIT: Q2 - This is very convenient for calculations (particularly for mass-based
-     * allocations for emissions intensities), but not the most
-     * user-friendly way providing this value.
-     * Status: waiting for response
-     */
     fractionSeedCottonLint: numberInput(realNumber, {
       name: 'Fraction of harvested crop that is cotton lint (not cotton seed)',
       description:
