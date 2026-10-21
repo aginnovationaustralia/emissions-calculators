@@ -12,7 +12,7 @@ export const HasSupplementaryCO2InputSchema = object({
       method: '1',
       scope: '1',
       description:
-        'Quantity of supplementary carbon dioxide used within operations.',
+        'Mass of supplementary carbon dioxide used within operations.',
       modules: [SUPP_CO2_12_1],
     },
     (s) => s.min(0),

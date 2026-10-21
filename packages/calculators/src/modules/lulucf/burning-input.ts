@@ -10,7 +10,8 @@ export const BurningInputSchema = object({
     (val) => mass('CO2e', tonnesToKg(val)),
     {
       name: 'ELRZ,i,y',
-      description: 'Emissions from biomass burning in the Low Rainfall Zone',
+      description:
+        'Emissions from biomass burning in the Low Rainfall Zone. Derived from a SavCAM abatement report',
       method: '2',
       modules: [BURNING_16_5],
     },
@@ -19,7 +20,8 @@ export const BurningInputSchema = object({
     (val) => mass('CO2e', tonnesToKg(val)),
     {
       name: 'EHRZ,i,y',
-      description: 'Emissions from biomass burning in the High Rainfall Zone',
+      description:
+        'Emissions from biomass burning in the High Rainfall Zone. Derived from a SavCAM abatement report',
       method: '2',
       modules: [BURNING_16_5],
     },
@@ -29,7 +31,7 @@ export const BurningInputSchema = object({
     {
       name: 'CLRZ,i,y',
       description:
-        'Change in carbon stock in the Low Rainfall Zone for the activity area',
+        'Change in carbon stock in the Low Rainfall Zone for the activity area. Derived from a SavCAM abatement report',
       method: '2',
       modules: [BURNING_16_5],
     },
@@ -39,7 +41,7 @@ export const BurningInputSchema = object({
     {
       name: 'CHRZ,i,y',
       description:
-        'Change in carbon stock in the High Rainfall Zone for the activity area',
+        'Change in carbon stock in the High Rainfall Zone for the activity area. Derived from a SavCAM abatement report',
       method: '2',
       modules: [BURNING_16_5],
     },

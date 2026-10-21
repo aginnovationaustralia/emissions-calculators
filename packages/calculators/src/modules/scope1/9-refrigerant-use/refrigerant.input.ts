@@ -24,7 +24,7 @@ export const RefrigerantInputSchema = object({
   ),
   refrigerationType: enumInput(RefrigerationTypes, {
     name: 'Refrigeration equipment type',
-    description: 'Type of refrigeration',
+    description: 'Type of refrigeration appliance',
     modules: [REFRIGERANT_9_1],
   }),
 });
