@@ -25,7 +25,7 @@ const isCO2e = (output: Output<1>): output is Output<1, 'CO2e'> => {
 };
 
 type MethodAmounts =
-  | { method: '1'; amountGasKgMethod1: number; amountGasKgMethod2: undefined }
+  | { method: '1'; amountGasKgMethod1: number }
   | {
       method: '2';
       amountGasKgMethod1: number | undefined;
@@ -48,7 +48,6 @@ const exposeMethodAmounts = (
     ? {
         method: '1',
         amountGasKgMethod1: internalResult.valueMethod1.toNumber(),
-        amountGasKgMethod2: undefined,
       }
     : {
         method: '2',

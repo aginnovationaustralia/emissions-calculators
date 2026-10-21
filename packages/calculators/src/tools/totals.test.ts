@@ -33,8 +33,8 @@ describe('addScope1Totals', () => {
       amountTonnesCO2e: 10 / 1000,
       method: '1',
       amountGasKgMethod1: 10,
-      amountGasKgMethod2: undefined,
     });
+    expect(totals.co2Item).not.toHaveProperty('amountGasKgMethod2');
     expect(totals.co2Item.references).toEqual([]);
     expect(totals.co2Item.constants).toEqual([]);
     expect(totals.co2Item.inputs).toEqual([]);

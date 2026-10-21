@@ -1,4 +1,5 @@
 import { core, object, z } from 'zod';
+import { QualityTableSchema } from './quality';
 
 /** Curried helper for Zod `.optional().transform(...)` so `undefined` is never passed to unit wrappers. */
 export const mapOptional =
@@ -11,16 +12,28 @@ const outputKeyShape = {
   gas: z.enum(['CO2', 'CH4', 'N2O', 'CO2e']),
   amountTonnesCO2e: z.number(),
   references: z.array(z.string()),
-  constants: z.array(z.object({ name: z.string(), value: z.number() })),
+  constants: z.array(
+    object({ name: z.string(), value: z.number(), units: z.string() }).meta({
+      id: 'OutputConstant',
+    }),
+  ),
+  inputs: z.array(
+    object({
+      name: z.string(),
+      value: z.union([z.number(), z.string(), z.boolean()]),
+      method: z.enum(['1', '2']),
+      modules: z.array(z.string()),
+      quality: QualityTableSchema.optional(),
+    }).meta({ id: 'OutputInput' }),
+  ),
 };
 
-/** A method 1 result has no method 2 value to report */
+/** A method 1 result has no method 2 value to report, so the key is omitted */
 const outputMethod1 = z
   .strictObject({
     ...outputKeyShape,
     method: z.literal('1'),
     amountGasKgMethod1: z.number(),
-    amountGasKgMethod2: z.undefined(),
   })
   .meta({ id: 'OutputMethod1', title: 'Method 1' });
 

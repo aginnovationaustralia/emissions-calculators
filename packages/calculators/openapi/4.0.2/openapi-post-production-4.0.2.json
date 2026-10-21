@@ -4270,20 +4270,13 @@
           "constants": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "value": {
-                  "type": "number"
-                }
-              },
-              "required": [
-                "name",
-                "value"
-              ],
-              "additionalProperties": false
+              "$ref": "#/components/schemas/OutputConstant"
+            }
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputInput"
             }
           },
           "method": {
@@ -4292,9 +4285,6 @@
           },
           "amountGasKgMethod1": {
             "type": "number"
-          },
-          "amountGasKgMethod2": {
-            "not": {}
           }
         },
         "required": [
@@ -4303,12 +4293,70 @@
           "amountTonnesCO2e",
           "references",
           "constants",
+          "inputs",
           "method",
-          "amountGasKgMethod1",
-          "amountGasKgMethod2"
+          "amountGasKgMethod1"
         ],
         "additionalProperties": false,
         "title": "Method 1"
+      },
+      "OutputConstant": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "units": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value",
+          "units"
+        ],
+        "additionalProperties": false
+      },
+      "OutputInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "number",
+              "string",
+              "boolean"
+            ]
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2"
+            ]
+          },
+          "modules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "quality": {
+            "$ref": "#/components/schemas/QualityTable"
+          }
+        },
+        "required": [
+          "name",
+          "value",
+          "method",
+          "modules"
+        ],
+        "additionalProperties": false
       },
       "OutputMethod2": {
         "type": "object",
@@ -4337,20 +4385,13 @@
           "constants": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "value": {
-                  "type": "number"
-                }
-              },
-              "required": [
-                "name",
-                "value"
-              ],
-              "additionalProperties": false
+              "$ref": "#/components/schemas/OutputConstant"
+            }
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputInput"
             }
           },
           "method": {
@@ -4370,6 +4411,7 @@
           "amountTonnesCO2e",
           "references",
           "constants",
+          "inputs",
           "method",
           "amountGasKgMethod2"
         ],
