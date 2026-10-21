@@ -19941,7 +19941,8 @@
         "type": "object",
         "properties": {
           "amountGasKg": {
-            "type": "number"
+            "type": "number",
+            "description": "Amount of the gas emitted, in kg of that gas. Uses the method 2 value when one is available, otherwise method 1"
           },
           "gas": {
             "type": "string",
@@ -19950,45 +19951,42 @@
               "CH4",
               "N2O",
               "CO2e"
-            ]
+            ],
+            "description": "The gas this amount is measured in. CO2e is used for amounts already expressed as carbon dioxide equivalent"
           },
           "amountTonnesCO2e": {
-            "type": "number"
+            "type": "number",
+            "description": "Amount of the gas emitted, converted to tonnes of carbon dioxide equivalent (CO2e)"
           },
           "references": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "References to the published sources for the methods and constants used in this calculation"
           },
           "constants": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "value": {
-                  "type": "number"
-                }
-              },
-              "required": [
-                "name",
-                "value"
-              ],
-              "additionalProperties": false
-            }
+              "$ref": "#/components/schemas/OutputConstant"
+            },
+            "description": "Constants used in this calculation"
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputInput"
+            },
+            "description": "Inputs used in this calculation"
           },
           "method": {
             "type": "string",
-            "const": "1"
+            "const": "1",
+            "description": "The highest calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
           },
           "amountGasKgMethod1": {
-            "type": "number"
-          },
-          "amountGasKgMethod2": {
-            "not": {}
+            "type": "number",
+            "description": "Amount of the gas emitted using method 1, in kg of that gas"
           }
         },
         "required": [
@@ -19997,18 +19995,85 @@
           "amountTonnesCO2e",
           "references",
           "constants",
+          "inputs",
           "method",
-          "amountGasKgMethod1",
-          "amountGasKgMethod2"
+          "amountGasKgMethod1"
         ],
         "additionalProperties": false,
         "title": "Method 1"
+      },
+      "OutputConstant": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the constant"
+          },
+          "value": {
+            "type": "number",
+            "description": "Value of the constant"
+          },
+          "units": {
+            "type": "string",
+            "description": "Units the constant value is expressed in"
+          }
+        },
+        "required": [
+          "name",
+          "value",
+          "units"
+        ],
+        "additionalProperties": false
+      },
+      "OutputInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the input"
+          },
+          "value": {
+            "description": "Value of the input, as provided",
+            "type": [
+              "number",
+              "string",
+              "boolean"
+            ]
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2"
+            ],
+            "description": "The calculation method this input contributes to"
+          },
+          "modules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Modules this input is relevant to"
+          },
+          "quality": {
+            "description": "Data quality ratings for this input, where provided",
+            "$ref": "#/components/schemas/QualityTable"
+          }
+        },
+        "required": [
+          "name",
+          "value",
+          "method",
+          "modules"
+        ],
+        "additionalProperties": false
       },
       "OutputMethod2": {
         "type": "object",
         "properties": {
           "amountGasKg": {
-            "type": "number"
+            "type": "number",
+            "description": "Amount of the gas emitted, in kg of that gas. Uses the method 2 value when one is available, otherwise method 1"
           },
           "gas": {
             "type": "string",
@@ -20017,45 +20082,46 @@
               "CH4",
               "N2O",
               "CO2e"
-            ]
+            ],
+            "description": "The gas this amount is measured in. CO2e is used for amounts already expressed as carbon dioxide equivalent"
           },
           "amountTonnesCO2e": {
-            "type": "number"
+            "type": "number",
+            "description": "Amount of the gas emitted, converted to tonnes of carbon dioxide equivalent (CO2e)"
           },
           "references": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "References to the published sources for the methods and constants used in this calculation"
           },
           "constants": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "value": {
-                  "type": "number"
-                }
-              },
-              "required": [
-                "name",
-                "value"
-              ],
-              "additionalProperties": false
-            }
+              "$ref": "#/components/schemas/OutputConstant"
+            },
+            "description": "Constants used in this calculation"
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputInput"
+            },
+            "description": "Inputs used in this calculation"
           },
           "method": {
             "type": "string",
-            "const": "2"
+            "const": "2",
+            "description": "The highest calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
           },
           "amountGasKgMethod1": {
-            "type": "number"
+            "type": "number",
+            "description": "Amount of the gas emitted using method 1, in kg of that gas, when a method 1 value can be calculated"
           },
           "amountGasKgMethod2": {
-            "type": "number"
+            "type": "number",
+            "description": "Amount of the gas emitted using method 2, in kg of that gas"
           }
         },
         "required": [
@@ -20064,6 +20130,7 @@
           "amountTonnesCO2e",
           "references",
           "constants",
+          "inputs",
           "method",
           "amountGasKgMethod2"
         ],

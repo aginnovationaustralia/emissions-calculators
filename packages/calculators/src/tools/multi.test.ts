@@ -1,5 +1,6 @@
 import { calculateBeef } from '@/calculators/Beef/calculator';
 import { BeefClassPeriodInput } from '@/calculators/Beef/types/beef-class-period.input';
+import { BeefOutputSchema } from '@/calculators/Beef/types/output';
 import { BeefScope1Output } from '@/calculators/Beef/types/scope1.output';
 import {
   createBeefHerdInput,
@@ -32,6 +33,7 @@ const DUAL_TRACK_KEYS = [
 
 type DualTrackKey = (typeof DUAL_TRACK_KEYS)[number];
 type DualTrackOutput = BeefScope1Output[DualTrackKey];
+type Method2Output = Extract<DualTrackOutput, { method: '2' }>;
 
 const livestockDualTrackOutputs = (scope1: BeefScope1Output) => ({
   entericCH4: scope1.entericCH4,
@@ -53,10 +55,12 @@ const assertOutputKeys = (output: DualTrackOutput) => {
       constants: expect.any(Array),
     }),
   );
-  expect(
-    output.amountGasKgMethod2 === undefined ||
-      typeof output.amountGasKgMethod2 === 'number',
-  ).toBe(true);
+  if (output.method === '1') {
+    // Method 1 results omit the method 2 key entirely, rather than exposing undefined
+    expect(output).not.toHaveProperty('amountGasKgMethod2');
+  } else {
+    expect(typeof output.amountGasKgMethod2).toBe('number');
+  }
 };
 
 const runBeef = (herdOverrides: Parameters<typeof createBeefHerdInput>[0]) => {
@@ -212,9 +216,12 @@ describe('Multi method integration', () => {
   });
   const method1Outputs = livestockDualTrackOutputs(method1Only.scope1);
 
-  const assertMethod2Output = (output: DualTrackOutput) => {
+  const assertMethod2Output: (
+    output: DualTrackOutput,
+  ) => asserts output is Method2Output = (output) => {
     assertOutputKeys(output);
     expect(output.method).toBe('2');
+    if (output.method !== '2') throw new Error('Expected a method 2 output');
     expect(output.amountGasKgMethod2).toBeDefined();
     expect(output.amountGasKg).toBe(output.amountGasKgMethod2);
     expect(output.amountGasKgMethod2).not.toBe(output.amountGasKgMethod1);
@@ -225,8 +232,29 @@ describe('Multi method integration', () => {
       const output = method1Outputs[key];
       assertOutputKeys(output);
       expect(output.method).toBe('1');
-      expect(output.amountGasKgMethod2).toBeUndefined();
+      expect(output).not.toHaveProperty('amountGasKgMethod2');
       expect(output.amountGasKg).toBe(output.amountGasKgMethod1);
+    }
+  });
+
+  it('method 1 and method 2 results conform to the strict output schema', () => {
+    const withLiveweight = runBeef({
+      ...herdBase,
+      classes: {
+        period: 'seasonal',
+        bullsGt1: seasons({
+          head: nv(5),
+          method2Liveweight: nvo(method2Liveweight),
+        }),
+      },
+    });
+
+    // Round trip through JSON to check the shape API consumers actually receive
+    for (const result of [method1Only, withLiveweight]) {
+      const parsed = BeefOutputSchema.safeParse(
+        JSON.parse(JSON.stringify(result)),
+      );
+      expect(parsed.error?.issues).toBeUndefined();
     }
   });
 
@@ -286,8 +314,10 @@ describe('Multi method integration', () => {
       expect(output.amountGasKgMethod1).toBe(
         method1Outputs[key].amountGasKgMethod1,
       );
+      const liveweightOutput = liveweightOutputs[key];
+      assertMethod2Output(liveweightOutput);
       expect(output.amountGasKgMethod2).not.toBe(
-        liveweightOutputs[key].amountGasKgMethod2,
+        liveweightOutput.amountGasKgMethod2,
       );
     }
   });
