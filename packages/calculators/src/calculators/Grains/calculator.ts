@@ -69,7 +69,7 @@ function getTotalIntensities(
   ).unit.store.toNumber();
   const grainsExcludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotalEmissionsKgCO2e + netLulucfKgCO2e,
+      netTotalEmissionsKgCO2e - netLulucfKgCO2e,
       grainHarvestedKg,
     ),
   );

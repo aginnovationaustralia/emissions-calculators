@@ -85,30 +85,30 @@ function getTotalIntensities(
     eggsProducedKg,
   );
 
-  const totalEmissionsIncludingLulucf =
-    netTotalEmissionsKgCO2e + netLulucfKgCO2e;
+  const totalEmissionsExcludingLulucf =
+    netTotalEmissionsKgCO2e - netLulucfKgCO2e;
   const liveweightIntensityExcludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotalEmissionsKgCO2e * meatAllocation,
+      totalEmissionsExcludingLulucf * meatAllocation,
       liveweightProducedKg,
     ),
   );
   const liveweightIntensityIncludingLULUCF = valueObject(
     divideBySafeFromZero(
-      totalEmissionsIncludingLulucf * meatAllocation,
+      netTotalEmissionsKgCO2e * meatAllocation,
       liveweightProducedKg,
     ),
   );
 
   const eggsIntensityExcludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotalEmissionsKgCO2e * eggAllocation,
+      totalEmissionsExcludingLulucf * eggAllocation,
       eggsProducedKg,
     ),
   );
   const eggsIntensityIncludingLULUCF = valueObject(
     divideBySafeFromZero(
-      totalEmissionsIncludingLulucf * eggAllocation,
+      netTotalEmissionsKgCO2e * eggAllocation,
       eggsProducedKg,
     ),
   );

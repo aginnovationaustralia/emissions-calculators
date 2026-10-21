@@ -360,31 +360,31 @@ function getTotalIntensities(
   ).unit.store.toNumber();
   const allocationToMeat = 1 - allocationToMilk;
 
-  const netTotalEmissionsIncludingLULUCF =
-    netTotalEmissionsKgCO2e + netLulucfKgCO2e;
+  const totalEmissionsExcludingLulucf =
+    netTotalEmissionsKgCO2e - netLulucfKgCO2e;
 
   const liveweightIntensityExcludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotalEmissionsKgCO2e * allocationToMeat,
+      totalEmissionsExcludingLulucf * allocationToMeat,
       liveweightProducedKg,
     ),
   );
   const liveweightIntensityIncludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotalEmissionsIncludingLULUCF * allocationToMeat,
+      netTotalEmissionsKgCO2e * allocationToMeat,
       liveweightProducedKg,
     ),
   );
 
   const milkIntensityExcludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotalEmissionsKgCO2e * allocationToMilk,
+      totalEmissionsExcludingLulucf * allocationToMilk,
       milkProducedKg,
     ),
   );
   const milkIntensityIncludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotalEmissionsIncludingLULUCF * allocationToMilk,
+      netTotalEmissionsKgCO2e * allocationToMilk,
       milkProducedKg,
     ),
   );
