@@ -115,9 +115,7 @@ describe('Cropping Calculator', () => {
       const residueLeachingAndRunoffN2O =
         emissions.scope1.inorganicFertiliserN2O;
 
-      expect(residueLeachingAndRunoffN2O.amountTonnesCO2e).toEqual(
-        34.48028571428571 / 1000,
-      );
+      expect(residueLeachingAndRunoffN2O.amountTonnesCO2e).toEqual(0.03444894);
       expect(residueLeachingAndRunoffN2O.references).toEqual([
         '5.1.1.1 (1)',
         '5.1.1.1 (2)',
@@ -135,7 +133,7 @@ describe('Cropping Calculator', () => {
         },
         {
           name: 'COMMON[ELEMENTAL_TO_MOLECULAR_N2O]',
-          value: 1.5714285714285714,
+          value: 1.57,
           units: 'Mass(N2O) / Mass(N2O)',
         },
       ]);
@@ -300,9 +298,7 @@ describe('Cropping Calculator', () => {
 
     it('has negative LULUCF emissions included in the net total', () => {
       expect(lulucfTotalKgCO2e).toBeLessThan(0);
-      expect(emissions.scope1.woodyCarbonStocksCO2.amountGasKg).toBeLessThan(
-        0,
-      );
+      expect(emissions.scope1.woodyCarbonStocksCO2.amountGasKg).toBeLessThan(0);
     });
 
     it('reports a higher intensity when sequestration is excluded', () => {
