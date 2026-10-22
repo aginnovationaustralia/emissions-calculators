@@ -2389,7 +2389,7 @@
         "type": "object",
         "properties": {
           "emissionsFromBurningLowRainfallZone": {
-            "description": "Emissions from biomass burning in the Low Rainfall Zone (tonnes CO2e)",
+            "description": "Emissions from biomass burning in the Low Rainfall Zone. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
             ],
@@ -2410,7 +2410,7 @@
             "x-units": "tonnes CO2e"
           },
           "emissionsFromBurningHighRainfallZone": {
-            "description": "Emissions from biomass burning in the High Rainfall Zone (tonnes CO2e)",
+            "description": "Emissions from biomass burning in the High Rainfall Zone. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
             ],
@@ -2431,7 +2431,7 @@
             "x-units": "tonnes CO2e"
           },
           "carbonStockChangeLowRainfallZone": {
-            "description": "Change in carbon stock in the Low Rainfall Zone for the activity area (tonnes CO2e)",
+            "description": "Change in carbon stock in the Low Rainfall Zone for the activity area. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
             ],
@@ -2452,7 +2452,7 @@
             "x-units": "tonnes CO2e"
           },
           "carbonStockChangeHighRainfallZone": {
-            "description": "Change in carbon stock in the High Rainfall Zone for the activity area (tonnes CO2e)",
+            "description": "Change in carbon stock in the High Rainfall Zone for the activity area. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
             ],
