@@ -259,7 +259,7 @@
                         "default": {
                           "value": 1
                         },
-                        "description": "What share of the total post-production emissions calculated should be included in the post-production intensity?\n      In other words, what share of the fuel, packaging etc. listed in these inputs were related to processing these units? (number)",
+                        "description": "What share of the total post-production emissions calculated should be included in the post-production intensity?\n      In other words, what share of the fuel, packaging etc. listed in these inputs were related to processing these units?\n      For example, a value of 1 means that the post-production inputs described were exclusively used to process these units produced, and will all be allocated to your post-production intensity.\n      A value of 0.1 could indicate these units were one tenth of all units processed by a facility. (number)",
                         "x-modules": [
                           "Intensities"
                         ],
@@ -684,7 +684,7 @@
                             "Light vehicle A/C",
                             "Heavy vehicle A/C"
                           ],
-                          "description": "Type of refrigeration",
+                          "description": "Type of refrigeration appliance",
                           "x-modules": [
                             "9.1"
                           ]
@@ -2024,7 +2024,7 @@
                     "additionalProperties": false
                   },
                   "supplementaryCO2Kg": {
-                    "description": "Quantity of supplementary carbon dioxide used within operations. (kilograms CO2)",
+                    "description": "Mass of supplementary carbon dioxide used within operations. (kilograms CO2)",
                     "x-modules": [
                       "12.1"
                     ],
@@ -4269,7 +4269,7 @@
             "items": {
               "type": "string"
             },
-            "description": "References to the published sources for the methods and constants used in this calculation"
+            "description": "References to the equations used to calculate this result"
           },
           "constants": {
             "type": "array",
@@ -4288,7 +4288,7 @@
           "method": {
             "type": "string",
             "const": "1",
-            "description": "The highest calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
+            "description": "The calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
           },
           "amountGasKgMethod1": {
             "type": "number",
@@ -4400,7 +4400,7 @@
             "items": {
               "type": "string"
             },
-            "description": "References to the published sources for the methods and constants used in this calculation"
+            "description": "References to the equations used to calculate this result"
           },
           "constants": {
             "type": "array",
@@ -4419,7 +4419,7 @@
           "method": {
             "type": "string",
             "const": "2",
-            "description": "The highest calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
+            "description": "The calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
           },
           "amountGasKgMethod1": {
             "type": "number",

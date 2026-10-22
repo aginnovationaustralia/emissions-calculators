@@ -223,7 +223,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -430,7 +430,7 @@
                                   "Light vehicle A/C",
                                   "Heavy vehicle A/C"
                                 ],
-                                "description": "Type of refrigeration",
+                                "description": "Type of refrigeration appliance",
                                 "x-modules": [
                                   "9.1"
                                 ]
@@ -4600,7 +4600,7 @@
         "type": "object",
         "properties": {
           "emissionsFromBurningLowRainfallZone": {
-            "description": "Emissions from biomass burning in the Low Rainfall Zone (tonnes CO2e)",
+            "description": "Emissions from biomass burning in the Low Rainfall Zone. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
             ],
@@ -4621,7 +4621,7 @@
             "x-units": "tonnes CO2e"
           },
           "emissionsFromBurningHighRainfallZone": {
-            "description": "Emissions from biomass burning in the High Rainfall Zone (tonnes CO2e)",
+            "description": "Emissions from biomass burning in the High Rainfall Zone. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
             ],
@@ -4642,7 +4642,7 @@
             "x-units": "tonnes CO2e"
           },
           "carbonStockChangeLowRainfallZone": {
-            "description": "Change in carbon stock in the Low Rainfall Zone for the activity area (tonnes CO2e)",
+            "description": "Change in carbon stock in the Low Rainfall Zone for the activity area. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
             ],
@@ -4663,7 +4663,7 @@
             "x-units": "tonnes CO2e"
           },
           "carbonStockChangeHighRainfallZone": {
-            "description": "Change in carbon stock in the High Rainfall Zone for the activity area (tonnes CO2e)",
+            "description": "Change in carbon stock in the High Rainfall Zone for the activity area. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
             ],
@@ -16589,7 +16589,7 @@
                       "x-units": "kilograms crude protein per kilogram dry matter"
                     },
                     "method2NitrogenRetentionRate": {
-                      "description": "Nitrogen retention rate (number)",
+                      "description": "Method 2: Nitrogen retention rate (number)",
                       "x-modules": [
                         "5.2",
                         "5.4",
@@ -16853,7 +16853,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed with litter (0-1)",
+                                      "description": "Fraction of manure that was initially managed with litter (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -17015,7 +17015,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                      "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -17177,7 +17177,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially stored in house (0-1)",
+                                      "description": "Fraction of manure that was initially stored in house (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -17477,7 +17477,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed with litter (0-1)",
+                                      "description": "Fraction of manure that was initially managed with litter (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -17639,7 +17639,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                      "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -17801,7 +17801,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially stored in house (0-1)",
+                                      "description": "Fraction of manure that was initially stored in house (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -18101,7 +18101,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed with litter (0-1)",
+                                      "description": "Fraction of manure that was initially managed with litter (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -18263,7 +18263,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                      "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -18425,7 +18425,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially stored in house (0-1)",
+                                      "description": "Fraction of manure that was initially stored in house (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -18725,7 +18725,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed with litter (0-1)",
+                                      "description": "Fraction of manure that was initially managed with litter (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -18887,7 +18887,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                      "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -19049,7 +19049,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially stored in house (0-1)",
+                                      "description": "Fraction of manure that was initially stored in house (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -20051,7 +20051,7 @@
             "items": {
               "type": "string"
             },
-            "description": "References to the published sources for the methods and constants used in this calculation"
+            "description": "References to the equations used to calculate this result"
           },
           "constants": {
             "type": "array",
@@ -20070,7 +20070,7 @@
           "method": {
             "type": "string",
             "const": "1",
-            "description": "The highest calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
+            "description": "The calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
           },
           "amountGasKgMethod1": {
             "type": "number",
@@ -20182,7 +20182,7 @@
             "items": {
               "type": "string"
             },
-            "description": "References to the published sources for the methods and constants used in this calculation"
+            "description": "References to the equations used to calculate this result"
           },
           "constants": {
             "type": "array",
@@ -20201,7 +20201,7 @@
           "method": {
             "type": "string",
             "const": "2",
-            "description": "The highest calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
+            "description": "The calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
           },
           "amountGasKgMethod1": {
             "type": "number",

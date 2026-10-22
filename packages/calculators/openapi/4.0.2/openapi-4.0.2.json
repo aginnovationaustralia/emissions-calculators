@@ -3908,7 +3908,7 @@
                                     "type": "object",
                                     "properties": {
                                       "manureAllocated": {
-                                        "description": "Fraction of manure initially managed with litter (0-1)",
+                                        "description": "Fraction of manure that was initially managed with litter (0-1)",
                                         "x-modules": [
                                           "4.6"
                                         ],
@@ -4058,7 +4058,7 @@
                                     "type": "object",
                                     "properties": {
                                       "manureAllocated": {
-                                        "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                        "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                         "x-modules": [
                                           "4.6"
                                         ],
@@ -4208,7 +4208,7 @@
                                     "type": "object",
                                     "properties": {
                                       "manureAllocated": {
-                                        "description": "Fraction of manure initially stored in house (0-1)",
+                                        "description": "Fraction of manure that was initially stored in house (0-1)",
                                         "x-modules": [
                                           "4.6"
                                         ],
@@ -4385,7 +4385,7 @@
                                 "additionalProperties": false
                               },
                               "method2DryMatterDigestibility": {
-                                "description": "Dry matter digestibility (number)",
+                                "description": "Dry matter digestibility of the feed for this class (number)",
                                 "x-modules": [
                                   "4.6"
                                 ],
@@ -4507,7 +4507,7 @@
                                     "type": "object",
                                     "properties": {
                                       "manureAllocated": {
-                                        "description": "Fraction of manure initially managed with litter (0-1)",
+                                        "description": "Fraction of manure that was initially managed with litter (0-1)",
                                         "x-modules": [
                                           "4.6"
                                         ],
@@ -4657,7 +4657,7 @@
                                     "type": "object",
                                     "properties": {
                                       "manureAllocated": {
-                                        "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                        "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                         "x-modules": [
                                           "4.6"
                                         ],
@@ -4807,7 +4807,7 @@
                                     "type": "object",
                                     "properties": {
                                       "manureAllocated": {
-                                        "description": "Fraction of manure initially stored in house (0-1)",
+                                        "description": "Fraction of manure that was initially stored in house (0-1)",
                                         "x-modules": [
                                           "4.6"
                                         ],
@@ -4984,7 +4984,7 @@
                                 "additionalProperties": false
                               },
                               "method2DryMatterDigestibility": {
-                                "description": "Dry matter digestibility (number)",
+                                "description": "Dry matter digestibility of the feed for this class (number)",
                                 "x-modules": [
                                   "4.6"
                                 ],
@@ -5106,7 +5106,7 @@
                                     "type": "object",
                                     "properties": {
                                       "manureAllocated": {
-                                        "description": "Fraction of manure initially managed with litter (0-1)",
+                                        "description": "Fraction of manure that was initially managed with litter (0-1)",
                                         "x-modules": [
                                           "4.6"
                                         ],
@@ -5256,7 +5256,7 @@
                                     "type": "object",
                                     "properties": {
                                       "manureAllocated": {
-                                        "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                        "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                         "x-modules": [
                                           "4.6"
                                         ],
@@ -5406,7 +5406,7 @@
                                     "type": "object",
                                     "properties": {
                                       "manureAllocated": {
-                                        "description": "Fraction of manure initially stored in house (0-1)",
+                                        "description": "Fraction of manure that was initially stored in house (0-1)",
                                         "x-modules": [
                                           "4.6"
                                         ],
@@ -5583,7 +5583,7 @@
                                 "additionalProperties": false
                               },
                               "method2DryMatterDigestibility": {
-                                "description": "Dry matter digestibility (number)",
+                                "description": "Dry matter digestibility of the feed for this class (number)",
                                 "x-modules": [
                                   "4.6"
                                 ],
@@ -5705,7 +5705,7 @@
                                     "type": "object",
                                     "properties": {
                                       "manureAllocated": {
-                                        "description": "Fraction of manure initially managed with litter (0-1)",
+                                        "description": "Fraction of manure that was initially managed with litter (0-1)",
                                         "x-modules": [
                                           "4.6"
                                         ],
@@ -5855,7 +5855,7 @@
                                     "type": "object",
                                     "properties": {
                                       "manureAllocated": {
-                                        "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                        "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                         "x-modules": [
                                           "4.6"
                                         ],
@@ -6005,7 +6005,7 @@
                                     "type": "object",
                                     "properties": {
                                       "manureAllocated": {
-                                        "description": "Fraction of manure initially stored in house (0-1)",
+                                        "description": "Fraction of manure that was initially stored in house (0-1)",
                                         "x-modules": [
                                           "4.6"
                                         ],
@@ -6182,7 +6182,7 @@
                                 "additionalProperties": false
                               },
                               "method2DryMatterDigestibility": {
-                                "description": "Dry matter digestibility (number)",
+                                "description": "Dry matter digestibility of the feed for this class (number)",
                                 "x-modules": [
                                   "4.6"
                                 ],
@@ -6823,7 +6823,7 @@
                               "x-units": "kilograms crude protein per kilogram dry matter"
                             },
                             "method2NitrogenRetentionRate": {
-                              "description": "Nitrogen retention rate (number)",
+                              "description": "Method 2: Nitrogen retention rate (number)",
                               "x-modules": [
                                 "4.1"
                               ],
@@ -6939,7 +6939,7 @@
                               "x-units": "percentage"
                             },
                             "method2DryMatterDigestibility": {
-                              "description": "Method 2:Dry matter digestibility of diet used within feedlot system for this cattle group (number)",
+                              "description": "Method 2: Dry matter digestibility of diet used within feedlot system for this cattle group (number)",
                               "x-modules": [
                                 "4.1"
                               ],
@@ -8094,7 +8094,7 @@
                             "Light vehicle A/C",
                             "Heavy vehicle A/C"
                           ],
-                          "description": "Type of refrigeration",
+                          "description": "Type of refrigeration appliance",
                           "x-modules": [
                             "9.1"
                           ]
@@ -9718,7 +9718,7 @@
                     ]
                   },
                   "supplementaryCO2Kg": {
-                    "description": "Quantity of supplementary carbon dioxide used within operations. (kilograms CO2)",
+                    "description": "Mass of supplementary carbon dioxide used within operations. (kilograms CO2)",
                     "x-modules": [
                       "12.1"
                     ],
@@ -14921,7 +14921,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -15058,7 +15058,7 @@
                                   "Light vehicle A/C",
                                   "Heavy vehicle A/C"
                                 ],
-                                "description": "Type of refrigeration",
+                                "description": "Type of refrigeration appliance",
                                 "x-modules": [
                                   "9.1"
                                 ]
@@ -18113,7 +18113,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -21436,7 +21436,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -21643,7 +21643,7 @@
                                   "Light vehicle A/C",
                                   "Heavy vehicle A/C"
                                 ],
-                                "description": "Type of refrigeration",
+                                "description": "Type of refrigeration appliance",
                                 "x-modules": [
                                   "9.1"
                                 ]
@@ -25235,7 +25235,7 @@
                               "type": "string"
                             },
                             "electricityAllocation": {
-                              "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                              "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                               "x-modules": [
                                 "Allocation"
                               ],
@@ -25442,7 +25442,7 @@
                                       "Light vehicle A/C",
                                       "Heavy vehicle A/C"
                                     ],
-                                    "description": "Type of refrigeration",
+                                    "description": "Type of refrigeration appliance",
                                     "x-modules": [
                                       "9.1"
                                     ]
@@ -27272,7 +27272,7 @@
                               "type": "string"
                             },
                             "electricityAllocation": {
-                              "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                              "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                               "x-modules": [
                                 "Allocation"
                               ],
@@ -27479,7 +27479,7 @@
                                       "Light vehicle A/C",
                                       "Heavy vehicle A/C"
                                     ],
-                                    "description": "Type of refrigeration",
+                                    "description": "Type of refrigeration appliance",
                                     "x-modules": [
                                       "9.1"
                                     ]
@@ -29661,7 +29661,7 @@
                               "type": "string"
                             },
                             "electricityAllocation": {
-                              "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                              "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                               "x-modules": [
                                 "Allocation"
                               ],
@@ -31734,7 +31734,7 @@
                                       "Light vehicle A/C",
                                       "Heavy vehicle A/C"
                                     ],
-                                    "description": "Type of refrigeration",
+                                    "description": "Type of refrigeration appliance",
                                     "x-modules": [
                                       "9.1"
                                     ]
@@ -33849,7 +33849,7 @@
                               "type": "string"
                             },
                             "electricityAllocation": {
-                              "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                              "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                               "x-modules": [
                                 "Allocation"
                               ],
@@ -35922,7 +35922,7 @@
                                       "Light vehicle A/C",
                                       "Heavy vehicle A/C"
                                     ],
-                                    "description": "Type of refrigeration",
+                                    "description": "Type of refrigeration appliance",
                                     "x-modules": [
                                       "9.1"
                                     ]
@@ -40379,7 +40379,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -40492,7 +40492,7 @@
                                 "x-units": "kilograms crude protein per kilogram dry matter"
                               },
                               "method2NitrogenRetentionRate": {
-                                "description": "Nitrogen retention rate (number)",
+                                "description": "Method 2: Nitrogen retention rate (number)",
                                 "x-modules": [
                                   "4.1"
                                 ],
@@ -40608,7 +40608,7 @@
                                 "x-units": "percentage"
                               },
                               "method2DryMatterDigestibility": {
-                                "description": "Method 2:Dry matter digestibility of diet used within feedlot system for this cattle group (number)",
+                                "description": "Method 2: Dry matter digestibility of diet used within feedlot system for this cattle group (number)",
                                 "x-modules": [
                                   "4.1"
                                 ],
@@ -44140,7 +44140,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -46884,7 +46884,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -47091,7 +47091,7 @@
                                   "Light vehicle A/C",
                                   "Heavy vehicle A/C"
                                 ],
-                                "description": "Type of refrigeration",
+                                "description": "Type of refrigeration appliance",
                                 "x-modules": [
                                   "9.1"
                                 ]
@@ -49308,7 +49308,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -52593,7 +52593,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -57477,7 +57477,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -60997,7 +60997,7 @@
                         "default": {
                           "value": 1
                         },
-                        "description": "What share of the total post-production emissions calculated should be included in the post-production intensity?\n      In other words, what share of the fuel, packaging etc. listed in these inputs were related to processing these units? (number)",
+                        "description": "What share of the total post-production emissions calculated should be included in the post-production intensity?\n      In other words, what share of the fuel, packaging etc. listed in these inputs were related to processing these units?\n      For example, a value of 1 means that the post-production inputs described were exclusively used to process these units produced, and will all be allocated to your post-production intensity.\n      A value of 0.1 could indicate these units were one tenth of all units processed by a facility. (number)",
                         "x-modules": [
                           "Intensities"
                         ],
@@ -61422,7 +61422,7 @@
                             "Light vehicle A/C",
                             "Heavy vehicle A/C"
                           ],
-                          "description": "Type of refrigeration",
+                          "description": "Type of refrigeration appliance",
                           "x-modules": [
                             "9.1"
                           ]
@@ -62762,7 +62762,7 @@
                     "additionalProperties": false
                   },
                   "supplementaryCO2Kg": {
-                    "description": "Quantity of supplementary carbon dioxide used within operations. (kilograms CO2)",
+                    "description": "Mass of supplementary carbon dioxide used within operations. (kilograms CO2)",
                     "x-modules": [
                       "12.1"
                     ],
@@ -64454,7 +64454,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -64571,7 +64571,7 @@
                                       "type": "object",
                                       "properties": {
                                         "manureAllocated": {
-                                          "description": "Fraction of manure initially managed with litter (0-1)",
+                                          "description": "Fraction of manure that was initially managed with litter (0-1)",
                                           "x-modules": [
                                             "4.6"
                                           ],
@@ -64721,7 +64721,7 @@
                                       "type": "object",
                                       "properties": {
                                         "manureAllocated": {
-                                          "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                          "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                           "x-modules": [
                                             "4.6"
                                           ],
@@ -64871,7 +64871,7 @@
                                       "type": "object",
                                       "properties": {
                                         "manureAllocated": {
-                                          "description": "Fraction of manure initially stored in house (0-1)",
+                                          "description": "Fraction of manure that was initially stored in house (0-1)",
                                           "x-modules": [
                                             "4.6"
                                           ],
@@ -65048,7 +65048,7 @@
                                   "additionalProperties": false
                                 },
                                 "method2DryMatterDigestibility": {
-                                  "description": "Dry matter digestibility (number)",
+                                  "description": "Dry matter digestibility of the feed for this class (number)",
                                   "x-modules": [
                                     "4.6"
                                   ],
@@ -65170,7 +65170,7 @@
                                       "type": "object",
                                       "properties": {
                                         "manureAllocated": {
-                                          "description": "Fraction of manure initially managed with litter (0-1)",
+                                          "description": "Fraction of manure that was initially managed with litter (0-1)",
                                           "x-modules": [
                                             "4.6"
                                           ],
@@ -65320,7 +65320,7 @@
                                       "type": "object",
                                       "properties": {
                                         "manureAllocated": {
-                                          "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                          "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                           "x-modules": [
                                             "4.6"
                                           ],
@@ -65470,7 +65470,7 @@
                                       "type": "object",
                                       "properties": {
                                         "manureAllocated": {
-                                          "description": "Fraction of manure initially stored in house (0-1)",
+                                          "description": "Fraction of manure that was initially stored in house (0-1)",
                                           "x-modules": [
                                             "4.6"
                                           ],
@@ -65647,7 +65647,7 @@
                                   "additionalProperties": false
                                 },
                                 "method2DryMatterDigestibility": {
-                                  "description": "Dry matter digestibility (number)",
+                                  "description": "Dry matter digestibility of the feed for this class (number)",
                                   "x-modules": [
                                     "4.6"
                                   ],
@@ -65769,7 +65769,7 @@
                                       "type": "object",
                                       "properties": {
                                         "manureAllocated": {
-                                          "description": "Fraction of manure initially managed with litter (0-1)",
+                                          "description": "Fraction of manure that was initially managed with litter (0-1)",
                                           "x-modules": [
                                             "4.6"
                                           ],
@@ -65919,7 +65919,7 @@
                                       "type": "object",
                                       "properties": {
                                         "manureAllocated": {
-                                          "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                          "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                           "x-modules": [
                                             "4.6"
                                           ],
@@ -66069,7 +66069,7 @@
                                       "type": "object",
                                       "properties": {
                                         "manureAllocated": {
-                                          "description": "Fraction of manure initially stored in house (0-1)",
+                                          "description": "Fraction of manure that was initially stored in house (0-1)",
                                           "x-modules": [
                                             "4.6"
                                           ],
@@ -66246,7 +66246,7 @@
                                   "additionalProperties": false
                                 },
                                 "method2DryMatterDigestibility": {
-                                  "description": "Dry matter digestibility (number)",
+                                  "description": "Dry matter digestibility of the feed for this class (number)",
                                   "x-modules": [
                                     "4.6"
                                   ],
@@ -66368,7 +66368,7 @@
                                       "type": "object",
                                       "properties": {
                                         "manureAllocated": {
-                                          "description": "Fraction of manure initially managed with litter (0-1)",
+                                          "description": "Fraction of manure that was initially managed with litter (0-1)",
                                           "x-modules": [
                                             "4.6"
                                           ],
@@ -66518,7 +66518,7 @@
                                       "type": "object",
                                       "properties": {
                                         "manureAllocated": {
-                                          "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                          "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                           "x-modules": [
                                             "4.6"
                                           ],
@@ -66668,7 +66668,7 @@
                                       "type": "object",
                                       "properties": {
                                         "manureAllocated": {
-                                          "description": "Fraction of manure initially stored in house (0-1)",
+                                          "description": "Fraction of manure that was initially stored in house (0-1)",
                                           "x-modules": [
                                             "4.6"
                                           ],
@@ -66845,7 +66845,7 @@
                                   "additionalProperties": false
                                 },
                                 "method2DryMatterDigestibility": {
-                                  "description": "Dry matter digestibility (number)",
+                                  "description": "Dry matter digestibility of the feed for this class (number)",
                                   "x-modules": [
                                     "4.6"
                                   ],
@@ -68656,7 +68656,7 @@
                           "x-units": "kilograms liveweight"
                         },
                         "eggsSoldKg": {
-                          "description": "Amount of eggs sold (kilograms eggs)",
+                          "description": "Total weight of eggs sold (kilograms eggs)",
                           "x-modules": [
                             "Intensities"
                           ],
@@ -69489,7 +69489,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -69696,7 +69696,7 @@
                                   "Light vehicle A/C",
                                   "Heavy vehicle A/C"
                                 ],
-                                "description": "Type of refrigeration",
+                                "description": "Type of refrigeration appliance",
                                 "x-modules": [
                                   "9.1"
                                 ]
@@ -72537,7 +72537,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -77175,7 +77175,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -77382,7 +77382,7 @@
                                   "Light vehicle A/C",
                                   "Heavy vehicle A/C"
                                 ],
-                                "description": "Type of refrigeration",
+                                "description": "Type of refrigeration appliance",
                                 "x-modules": [
                                   "9.1"
                                 ]
@@ -80095,7 +80095,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -83374,7 +83374,7 @@
                           "type": "string"
                         },
                         "electricityAllocation": {
-                          "description": "Share of electricity emissions to allocate to this activity (0-1)",
+                          "description": "Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods. (0-1)",
                           "x-modules": [
                             "Allocation"
                           ],
@@ -83511,7 +83511,7 @@
                                   "Light vehicle A/C",
                                   "Heavy vehicle A/C"
                                 ],
-                                "description": "Type of refrigeration",
+                                "description": "Type of refrigeration appliance",
                                 "x-modules": [
                                   "9.1"
                                 ]
@@ -87959,7 +87959,7 @@
         "type": "object",
         "properties": {
           "emissionsFromBurningLowRainfallZone": {
-            "description": "Emissions from biomass burning in the Low Rainfall Zone (tonnes CO2e)",
+            "description": "Emissions from biomass burning in the Low Rainfall Zone. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
             ],
@@ -87980,7 +87980,7 @@
             "x-units": "tonnes CO2e"
           },
           "emissionsFromBurningHighRainfallZone": {
-            "description": "Emissions from biomass burning in the High Rainfall Zone (tonnes CO2e)",
+            "description": "Emissions from biomass burning in the High Rainfall Zone. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
             ],
@@ -88001,7 +88001,7 @@
             "x-units": "tonnes CO2e"
           },
           "carbonStockChangeLowRainfallZone": {
-            "description": "Change in carbon stock in the Low Rainfall Zone for the activity area (tonnes CO2e)",
+            "description": "Change in carbon stock in the Low Rainfall Zone for the activity area. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
             ],
@@ -88022,7 +88022,7 @@
             "x-units": "tonnes CO2e"
           },
           "carbonStockChangeHighRainfallZone": {
-            "description": "Change in carbon stock in the High Rainfall Zone for the activity area (tonnes CO2e)",
+            "description": "Change in carbon stock in the High Rainfall Zone for the activity area. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
             ],
@@ -88619,7 +88619,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -88641,7 +88641,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -88663,7 +88663,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -88825,7 +88825,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -88847,7 +88847,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -88869,7 +88869,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89031,7 +89031,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89053,7 +89053,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89075,7 +89075,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89237,7 +89237,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89259,7 +89259,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89281,7 +89281,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89458,7 +89458,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89480,7 +89480,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89502,7 +89502,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89664,7 +89664,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89686,7 +89686,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89708,7 +89708,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89870,7 +89870,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89892,7 +89892,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -89914,7 +89914,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90076,7 +90076,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90098,7 +90098,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90120,7 +90120,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90303,7 +90303,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90325,7 +90325,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90347,7 +90347,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90509,7 +90509,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90531,7 +90531,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90553,7 +90553,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90715,7 +90715,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90737,7 +90737,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90759,7 +90759,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90921,7 +90921,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90943,7 +90943,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -90965,7 +90965,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91162,7 +91162,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91184,7 +91184,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91206,7 +91206,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91368,7 +91368,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91390,7 +91390,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91412,7 +91412,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91574,7 +91574,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91596,7 +91596,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91618,7 +91618,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91780,7 +91780,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91802,7 +91802,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91824,7 +91824,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -91986,7 +91986,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92008,7 +92008,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92030,7 +92030,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92192,7 +92192,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92214,7 +92214,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92236,7 +92236,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92398,7 +92398,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92420,7 +92420,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92442,7 +92442,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92604,7 +92604,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92626,7 +92626,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92648,7 +92648,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92810,7 +92810,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92832,7 +92832,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -92854,7 +92854,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93016,7 +93016,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93038,7 +93038,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93060,7 +93060,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93222,7 +93222,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93244,7 +93244,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93266,7 +93266,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93428,7 +93428,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93450,7 +93450,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93472,7 +93472,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93657,7 +93657,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93679,7 +93679,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93701,7 +93701,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93863,7 +93863,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93885,7 +93885,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -93907,7 +93907,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94069,7 +94069,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94091,7 +94091,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94113,7 +94113,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94275,7 +94275,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94297,7 +94297,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94319,7 +94319,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94481,7 +94481,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94503,7 +94503,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94525,7 +94525,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94687,7 +94687,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94709,7 +94709,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94731,7 +94731,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94893,7 +94893,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94915,7 +94915,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -94937,7 +94937,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95099,7 +95099,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95121,7 +95121,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95143,7 +95143,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95305,7 +95305,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95327,7 +95327,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95349,7 +95349,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95511,7 +95511,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95533,7 +95533,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95555,7 +95555,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95717,7 +95717,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95739,7 +95739,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95761,7 +95761,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95923,7 +95923,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95945,7 +95945,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -95967,7 +95967,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96158,7 +96158,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96180,7 +96180,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96202,7 +96202,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96364,7 +96364,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96386,7 +96386,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96408,7 +96408,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96570,7 +96570,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96592,7 +96592,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96614,7 +96614,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96776,7 +96776,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96798,7 +96798,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96820,7 +96820,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -96982,7 +96982,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97004,7 +97004,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97026,7 +97026,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97188,7 +97188,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97210,7 +97210,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97232,7 +97232,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97394,7 +97394,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97416,7 +97416,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97438,7 +97438,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97600,7 +97600,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97622,7 +97622,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97644,7 +97644,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97806,7 +97806,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97828,7 +97828,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -97850,7 +97850,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -98012,7 +98012,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -98034,7 +98034,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -98056,7 +98056,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -98218,7 +98218,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -98240,7 +98240,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -98262,7 +98262,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -98424,7 +98424,7 @@
                         "type": "object",
                         "properties": {
                           "head": {
-                            "description": "Number of animals in this class for this season (head)",
+                            "description": "Number of animals in this class for this period (head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -98446,7 +98446,7 @@
                             "x-units": "head"
                           },
                           "method2Liveweight": {
-                            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -98468,7 +98468,7 @@
                             "x-units": "kilograms liveweight per head"
                           },
                           "method2LiveweightGain": {
-                            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -98698,7 +98698,7 @@
         "type": "object",
         "properties": {
           "head": {
-            "description": "Number of animals in this class for this season (head)",
+            "description": "Number of animals in this class for this period (head)",
             "x-modules": [
               "3.2",
               "4.2"
@@ -98720,7 +98720,7 @@
             "x-units": "head"
           },
           "method2Liveweight": {
-            "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+            "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
             "x-modules": [
               "3.2",
               "4.2"
@@ -98742,7 +98742,7 @@
             "x-units": "kilograms liveweight per head"
           },
           "method2LiveweightGain": {
-            "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+            "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
             "x-modules": [
               "3.2",
               "4.2"
@@ -98861,7 +98861,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -98883,7 +98883,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -98905,7 +98905,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99067,7 +99067,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99089,7 +99089,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99111,7 +99111,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99273,7 +99273,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99295,7 +99295,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99317,7 +99317,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99479,7 +99479,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99501,7 +99501,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99523,7 +99523,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99753,7 +99753,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99775,7 +99775,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99797,7 +99797,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99959,7 +99959,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -99981,7 +99981,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100003,7 +100003,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100165,7 +100165,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100187,7 +100187,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100209,7 +100209,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100371,7 +100371,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100393,7 +100393,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100415,7 +100415,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100577,7 +100577,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100599,7 +100599,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100621,7 +100621,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100783,7 +100783,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100805,7 +100805,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100827,7 +100827,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -100989,7 +100989,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101011,7 +101011,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101033,7 +101033,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101195,7 +101195,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101217,7 +101217,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101239,7 +101239,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101401,7 +101401,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101423,7 +101423,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101445,7 +101445,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101607,7 +101607,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101629,7 +101629,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101651,7 +101651,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101813,7 +101813,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101835,7 +101835,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -101857,7 +101857,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -102019,7 +102019,7 @@
             "type": "object",
             "properties": {
               "head": {
-                "description": "Number of animals in this class for this season (head)",
+                "description": "Number of animals in this class for this period (head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -102041,7 +102041,7 @@
                 "x-units": "head"
               },
               "method2Liveweight": {
-                "description": "Method 2: supply an exact value for liveweight for this class for this season based on farm records (kilograms liveweight per head)",
+                "description": "Method 2: supply an exact value for liveweight for this class for this time period based on farm records (kilograms liveweight per head)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -102063,7 +102063,7 @@
                 "x-units": "kilograms liveweight per head"
               },
               "method2LiveweightGain": {
-                "description": "Method 2: supply an exact value for liveweight gain for this class for this season based on farm records (kilograms liveweight per head per day)",
+                "description": "Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records (kilograms liveweight per head per day)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -130391,7 +130391,7 @@
                       "x-units": "kilograms crude protein per kilogram dry matter"
                     },
                     "method2NitrogenRetentionRate": {
-                      "description": "Nitrogen retention rate (number)",
+                      "description": "Method 2: Nitrogen retention rate (number)",
                       "x-modules": [
                         "5.2",
                         "5.4",
@@ -130655,7 +130655,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed with litter (0-1)",
+                                      "description": "Fraction of manure that was initially managed with litter (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -130817,7 +130817,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                      "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -130979,7 +130979,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially stored in house (0-1)",
+                                      "description": "Fraction of manure that was initially stored in house (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -131279,7 +131279,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed with litter (0-1)",
+                                      "description": "Fraction of manure that was initially managed with litter (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -131441,7 +131441,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                      "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -131603,7 +131603,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially stored in house (0-1)",
+                                      "description": "Fraction of manure that was initially stored in house (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -131903,7 +131903,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed with litter (0-1)",
+                                      "description": "Fraction of manure that was initially managed with litter (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -132065,7 +132065,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                      "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -132227,7 +132227,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially stored in house (0-1)",
+                                      "description": "Fraction of manure that was initially stored in house (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -132527,7 +132527,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed with litter (0-1)",
+                                      "description": "Fraction of manure that was initially managed with litter (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -132689,7 +132689,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially managed through belt manure removal (0-1)",
+                                      "description": "Fraction of manure that was initially managed through belt manure removal (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -132851,7 +132851,7 @@
                                   "type": "object",
                                   "properties": {
                                     "manureAllocated": {
-                                      "description": "Fraction of manure initially stored in house (0-1)",
+                                      "description": "Fraction of manure that was initially stored in house (0-1)",
                                       "x-modules": [
                                         "5.2",
                                         "5.4",
@@ -135100,7 +135100,7 @@
             "items": {
               "type": "string"
             },
-            "description": "References to the published sources for the methods and constants used in this calculation"
+            "description": "References to the equations used to calculate this result"
           },
           "constants": {
             "type": "array",
@@ -135119,7 +135119,7 @@
           "method": {
             "type": "string",
             "const": "1",
-            "description": "The highest calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
+            "description": "The calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
           },
           "amountGasKgMethod1": {
             "type": "number",
@@ -135231,7 +135231,7 @@
             "items": {
               "type": "string"
             },
-            "description": "References to the published sources for the methods and constants used in this calculation"
+            "description": "References to the equations used to calculate this result"
           },
           "constants": {
             "type": "array",
@@ -135250,7 +135250,7 @@
           "method": {
             "type": "string",
             "const": "2",
-            "description": "The highest calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
+            "description": "The calculation method used to produce amountGasKg. Method 2 uses more specific, optional inputs"
           },
           "amountGasKgMethod1": {
             "type": "number",
