@@ -19,6 +19,10 @@ runs:
         git config --global url."https://github.com/".insteadOf git@github.com:
       shell: bash
 
+    - name: Check spreadsheets for local file paths
+      run: node scripts/strip-xlsx-paths.js --check
+      shell: bash
+
     - name: Install dependencies
       run: pnpm install
       shell: bash
