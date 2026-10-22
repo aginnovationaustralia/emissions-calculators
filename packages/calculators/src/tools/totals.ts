@@ -3,7 +3,7 @@ import {
   ObjectEntry,
   objectFromEntries,
 } from '@/calculators/common/tools/object';
-import { Decimal } from 'decimal.js-light';
+import Decimal from 'decimal.js-light';
 import { ConstantDefinition, InputDefinition } from './collect';
 import { Output } from './outputs';
 import { kgToTonnes } from './unit-conversion';
