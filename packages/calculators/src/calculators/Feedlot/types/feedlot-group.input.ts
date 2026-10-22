@@ -119,7 +119,7 @@ export const feedlotGroupSharedInputSchema = (location: LivestockLocation) =>
       {
         name: 'NRj',
         method: '2',
-        description: 'Nitrogen retention rate',
+        description: 'Method 2: Nitrogen retention rate',
         modules: feedlotManureModules(location),
       },
       isProportion,
@@ -156,7 +156,7 @@ export const FeedlotGroupLivestockInputSchema = feedlotGroupSharedInputSchema(
       name: 'DMDj',
       method: '2',
       description:
-        'Method 2:Dry matter digestibility of diet used within feedlot system for this cattle group',
+        'Method 2: Dry matter digestibility of diet used within feedlot system for this cattle group',
       modules: [MANURE_FEEDLOT_4_1],
     },
     isProportion,

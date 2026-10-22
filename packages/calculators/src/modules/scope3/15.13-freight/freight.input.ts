@@ -18,14 +18,6 @@ export const FreightBaseInputSchema = object({
     }),
 });
 export const FreightMethod1InputSchema = FreightBaseInputSchema.safeExtend({
-  freightType: z
-    .literal(FreightTypes)
-    .transform((val) =>
-      input(val, { name: 'freightType', modules: [FREIGHT_15_13] }),
-    )
-    .meta({
-      description: 'The type of vehicle used to transport this freight.',
-    }),
   distance: numberInput(
     (val) => distance(kilometresToMetres(val)),
     {

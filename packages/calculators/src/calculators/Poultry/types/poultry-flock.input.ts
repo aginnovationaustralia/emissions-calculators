@@ -33,7 +33,7 @@ export const PoultryFlockInputSchema = LivestockActivityInputSchema.extend({
     (val) => mass('Eggs', val),
     {
       name: 'eggsSoldKg',
-      description: 'Amount of eggs sold',
+      description: 'Total weight of eggs sold',
       modules: [INTENSITIES],
     },
     (s) => s.min(0),

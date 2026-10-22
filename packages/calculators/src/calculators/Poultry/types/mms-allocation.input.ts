@@ -76,7 +76,7 @@ const poultryMMS1InnerAllocationInputSchema = (
       (val) => realNumber(val),
       {
         name: `MMSjm=${m}T=1`,
-        description: `Fraction of manure initially ${sourceDescription}`,
+        description: `Fraction of manure that was initially ${sourceDescription}`,
         modules: poultryManureModules(location),
       },
       isProportion,
