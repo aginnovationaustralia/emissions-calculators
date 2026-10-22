@@ -13,7 +13,7 @@ export const ActivityInputSchema = object({
     {
       name: 'electricityAllocation',
       description:
-        'Share of electricity emissions to allocate to this activity. Refer to the Common Requirements Framework for guidance on allocation methods.',
+        'Share of electricity emissions to allocate to this activity. Refer to Chapter 10 (Estimating the GHG intensity of products) of the Common Requirements Framework for guidance on allocation methods.',
       modules: [ALLOCATION],
     },
     isProportion,
