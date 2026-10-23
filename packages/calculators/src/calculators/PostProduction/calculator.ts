@@ -13,80 +13,69 @@ import { calculateScope3SolidWasteEmissions } from '@/modules/scope3/15.12-waste
 import { calculateFreightEmissions } from '@/modules/scope3/15.13-freight';
 import { calculatePurchasedPackaging } from '@/modules/scope3/15.8-purchased-packaging';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
+import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
+import { Container, num } from '@/tools/containers';
+import { exposeMassValue, exposeRealNumberValue } from '@/tools/extract';
+import { generateIntensityPerUnit } from '@/tools/intensity';
 import {
-  IntermediateScope1,
-  IntermediateScope23,
-  wrapScopesAsOutputs,
-} from '@/tools/calculators';
-import { valueObject } from '@/tools/outputs';
-import { tonnesToKg } from '@/tools/unit-conversion';
-import { addScope1Totals, addScope23Totals } from '@/tools/totals';
-import { divideBySafeFromZero } from '../common/tools';
+  buildCalculatorLedger,
+  serialiseCalculatorLedger,
+} from '@/tools/ledger';
+import { Mass } from '@/tools/units';
 import { ExecutionContext } from '../executionContext';
-import { EnterpriseNetOutput } from '../types/enterprise-net.output';
 import { Scope2Output } from '../types/scope2.output';
 import { ConstantsForPostProductionCalculator } from './constants';
 import { PostProductionInputTransformed } from './types/input';
 import { PostProductionIntensitiesInputTransformed } from './types/intensities.input';
 import { PostProductionIntensitiesOutput } from './types/intensities.output';
 import { PostProductionScope1Output } from './types/scope1.output';
-import { PostProductionScope3Output } from './types/scope3.output';
 
 export function getIntensities(
   input: PostProductionIntensitiesInputTransformed | undefined,
-  net: EnterpriseNetOutput,
+  postProductionEmissions: Container<Mass<'CO2e'>>,
 ): PostProductionIntensitiesOutput {
-  const postProductionEmissionsKgCO2e = tonnesToKg(
-    net.total.tonnesCO2e,
-  ).toNumber();
-
   if (!input) {
     return {
       unitsProduced: { value: 0 },
       productionEmissionsKgCO2e: { value: 0 },
       postProductionAllocation: { value: 0 },
-      postProductionEmissionsKgCO2e: { value: postProductionEmissionsKgCO2e },
+      postProductionEmissionsKgCO2e: exposeMassValue(postProductionEmissions),
       productionIntensityKgCO2ePerUnit: { value: 0 },
       postProductionIntensityKgCO2ePerUnit: { value: 0 },
       combinedIntensityKgCO2ePerUnit: { value: 0 },
     };
   }
 
-  const unitsProduced = input.unitsProduced.unit.store.toNumber();
-  const productionEmissionsKgCO2e =
-    input.productionEmissionsKgCO2e.unit.store.toNumber();
-
-  const postProductionIntensityKgCO2ePerUnit = divideBySafeFromZero(
-    postProductionEmissionsKgCO2e,
+  const {
     unitsProduced,
-  );
+    productionEmissionsKgCO2e: productionEmissions,
+    postProductionAllocation,
+  } = input;
 
-  const combinedIntensityKgCO2ePerUnit = divideBySafeFromZero(
-    productionEmissionsKgCO2e + postProductionEmissionsKgCO2e,
-    unitsProduced,
-  );
-
-  const productionIntensityKgCO2ePerUnit = divideBySafeFromZero(
-    productionEmissionsKgCO2e,
-    unitsProduced,
+  // Only the allocated share of post-production emissions relates to these units
+  const allocatedPostProductionEmissions = postProductionEmissions.multiply(
+    postProductionAllocation ?? num(1),
   );
 
   return {
-    combinedIntensityKgCO2ePerUnit: valueObject(combinedIntensityKgCO2ePerUnit),
-    postProductionIntensityKgCO2ePerUnit: valueObject(
-      postProductionIntensityKgCO2ePerUnit,
+    combinedIntensityKgCO2ePerUnit: generateIntensityPerUnit(
+      productionEmissions.plus(allocatedPostProductionEmissions),
+      unitsProduced,
     ),
-    productionIntensityKgCO2ePerUnit: valueObject(
-      productionIntensityKgCO2ePerUnit,
+    postProductionIntensityKgCO2ePerUnit: generateIntensityPerUnit(
+      allocatedPostProductionEmissions,
+      unitsProduced,
     ),
-    postProductionEmissionsKgCO2e: valueObject(postProductionEmissionsKgCO2e),
-    productionEmissionsKgCO2e: valueObject(
-      input.productionEmissionsKgCO2e.unit.store.toNumber(),
+    productionIntensityKgCO2ePerUnit: generateIntensityPerUnit(
+      productionEmissions,
+      unitsProduced,
     ),
-    unitsProduced: valueObject(input.unitsProduced.unit.store.toNumber()),
-    postProductionAllocation: valueObject(
-      input.postProductionAllocation?.unit.store.toNumber() ?? 0,
-    ),
+    postProductionEmissionsKgCO2e: exposeMassValue(postProductionEmissions),
+    productionEmissionsKgCO2e: exposeMassValue(productionEmissions),
+    unitsProduced: exposeRealNumberValue(unitsProduced),
+    postProductionAllocation: postProductionAllocation
+      ? exposeRealNumberValue(postProductionAllocation)
+      : { value: 0 },
   };
 }
 
@@ -187,38 +176,10 @@ export const calculatePostProduction = (
 
   const scope3 = calculateScope3PostProduction(input, context);
 
-  const merged = {
-    scope1,
-    scope2,
-    scope3,
-  };
-
-  const mergedScopes = wrapScopesAsOutputs<{
-    scope1: PostProductionScope1Output;
-    scope2: Scope2Output;
-    scope3: PostProductionScope3Output;
-  }>(merged);
-
-  const scope1WithTotals = addScope1Totals(mergedScopes.scope1);
-  const scope2WithTotals = addScope23Totals(mergedScopes.scope2);
-  const scope3WithTotals = addScope23Totals(mergedScopes.scope3);
-
-  const net = {
-    total: {
-      tonnesCO2e:
-        scope1WithTotals.total.tonnesCO2e +
-        scope2WithTotals.total.tonnesCO2e +
-        scope3WithTotals.total.tonnesCO2e,
-    },
-  };
-
-  const intensities = getIntensities(input.intensities, net);
+  const ledger = buildCalculatorLedger({ scope1, scope2, scope3 });
 
   return {
-    scope1: scope1WithTotals,
-    scope2: scope2WithTotals,
-    scope3: scope3WithTotals,
-    net,
-    intensities,
+    ...serialiseCalculatorLedger(ledger),
+    intensities: getIntensities(input.intensities, ledger.net),
   };
 };

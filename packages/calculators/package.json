@@ -349,6 +349,7 @@
     "@types/xlsx-populate": "github:JanLoebel/types-xlsx-populate",
     "@typescript-eslint/parser": "^8.70.0",
     "dependency-cruiser": "^18.3.1",
+    "eslint": "^10.10.0",
     "glob": "^13.0.6",
     "jest": "^30.5.1",
     "nanoclone": "^1.0.2",

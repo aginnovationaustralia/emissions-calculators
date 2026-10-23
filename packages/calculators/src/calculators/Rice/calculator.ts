@@ -26,11 +26,11 @@ import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
-import { valueObject } from '@/tools/outputs';
+import { exposeMassValue } from '@/tools/extract';
+import { generateIntensity } from '@/tools/intensity';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
-import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForRiceCalculator } from './constants';
 import {
@@ -42,42 +42,31 @@ import {
 import { RiceIntermediateIntensitiesOutput } from './types/intermediate-intensities.output';
 
 function getSingleIntensities(
-  netEmissionsKgCO2e: number,
+  netEmissions: Container<Mass<'CO2e'>>,
   crop: RiceCropInputTransformed,
 ): RiceIntermediateIntensitiesOutput {
-  const riceHarvestedKg = crop.crop.totalYieldKg.unit.store.toNumber();
-  const riceIntensity = valueObject(
-    divideBySafeFromZero(netEmissionsKgCO2e, riceHarvestedKg),
-  );
+  const riceHarvested = crop.crop.totalYieldKg;
 
   return {
-    riceIntensity,
-    riceHarvestedKg: valueObject(riceHarvestedKg),
+    riceIntensity: generateIntensity(netEmissions, riceHarvested),
+    riceHarvestedKg: exposeMassValue(riceHarvested),
   };
 }
 
 function getTotalIntensities(
-  netTotalEmissionsKgCO2e: number,
-  netLulucfKgCO2e: number,
+  netTotalEmissions: Container<Mass<'CO2e'>>,
+  netLulucf: Container<Mass<'CO2e'>>,
   crops: RiceCropInputTransformed[],
 ) {
-  const riceHarvestedKg = sum(
-    crops.map(({ crop }) => crop.totalYieldKg),
-  ).unit.store.toNumber();
+  const riceHarvested = sum(crops.map(({ crop }) => crop.totalYieldKg));
 
-  const riceExcludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      netTotalEmissionsKgCO2e - netLulucfKgCO2e,
-      riceHarvestedKg,
-    ),
-  );
-  const riceIncludingLULUCF = valueObject(
-    divideBySafeFromZero(netTotalEmissionsKgCO2e, riceHarvestedKg),
-  );
   return {
-    riceExcludingLULUCF,
-    riceIncludingLULUCF,
-    riceHarvestedKg: valueObject(riceHarvestedKg),
+    riceExcludingLULUCF: generateIntensity(
+      netTotalEmissions.minus(netLulucf),
+      riceHarvested,
+    ),
+    riceIncludingLULUCF: generateIntensity(netTotalEmissions, riceHarvested),
+    riceHarvestedKg: exposeMassValue(riceHarvested),
   };
 }
 
