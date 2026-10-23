@@ -124,6 +124,38 @@ type NamedMetadata = Metadata & {
   name: string;
 };
 
+/**
+ * Picks the unit of the result when adding or subtracting two units. Void and RealNumber both
+ * adopt the other side's unit: void is the result of summing an empty list, so it must not erase
+ * the unit (and e.g. the gas of a Mass) of whatever it is combined with.
+ */
+const additiveUnit = (
+  left: NumberUnit,
+  right: NumberUnit,
+  op: 'add' | 'subtract',
+): NumberUnit => {
+  if (isVoid(left)) {
+    return right;
+  }
+  if (isVoid(right)) {
+    return left;
+  }
+  if (isRealNumber(left)) {
+    return right;
+  }
+  if (isRealNumber(right)) {
+    return left;
+  }
+  if (left.__unitType !== right.__unitType) {
+    // eslint-disable-next-line no-console
+    console.error(
+      `${op} does not support ${formatUnit(left)} and ${formatUnit(right)}`,
+    );
+    return realNumber();
+  }
+  return left;
+};
+
 export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   unit: U;
   core: M;
@@ -624,34 +656,20 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
-  minus<UL extends NumberUnit>(
+  minus(
     this: BaseContainer<NumberUnit>,
     right: Container<NumberUnit>,
     baseOrigin?: Metadata,
-  ): BinaryContainer<UL> {
+  ): BinaryContainer<NumberUnit> {
     const leftUnit = this.unit;
     const rightUnit = right.unit;
-    let unit: NumberUnit;
-    if (isVoid(leftUnit) && isVoid(rightUnit)) {
-      unit = voidUnit();
-    } else {
-      if (isRealNumber(leftUnit) && !isRealNumber(rightUnit)) {
-        unit = rightUnit;
-      } else if (!isRealNumber(leftUnit) && isRealNumber(rightUnit)) {
-        unit = leftUnit;
-      } else if (leftUnit.__unitType === rightUnit.__unitType) {
-        unit = { ...leftUnit };
-      } else {
-        unit = realNumber(leftUnit.store.minus(rightUnit.store));
-      }
-    }
-    const newUnit = {
-      ...unit,
+    const unit: NumberUnit = {
+      ...additiveUnit(leftUnit, rightUnit, 'subtract'),
       store: leftUnit.store.minus(rightUnit.store),
     };
 
     return new BinaryContainer(
-      newUnit as UL,
+      unit,
       'subtract',
       this as unknown as NumberContainer<NumberUnit>,
       right,
@@ -678,35 +696,20 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
-  plus<UL extends NumberUnit>(
+  plus(
     this: BaseContainer<NumberUnit>,
     right: Container<NumberUnit>,
     baseOrigin?: Metadata,
-  ): BinaryContainer<UL> {
+  ): BinaryContainer<NumberUnit> {
     const leftUnit = this.unit;
     const rightUnit = right.unit;
-    let unit: NumberUnit;
-    if (isVoid(leftUnit) && isVoid(rightUnit)) {
-      unit = voidUnit();
-    } else {
-      if (isRealNumber(leftUnit) && !isRealNumber(rightUnit)) {
-        unit = rightUnit;
-      } else if (!isRealNumber(leftUnit) && isRealNumber(rightUnit)) {
-        unit = leftUnit;
-      } else if (leftUnit.__unitType === rightUnit.__unitType) {
-        unit = { ...leftUnit };
-      } else {
-        unit = realNumber(leftUnit.store.plus(rightUnit.store));
-      }
-    }
-
-    const newUnit = {
-      ...unit,
+    const unit: NumberUnit = {
+      ...additiveUnit(leftUnit, rightUnit, 'add'),
       store: leftUnit.store.plus(rightUnit.store),
     };
 
     return new BinaryContainer(
-      newUnit as UL,
+      unit,
       'add',
       this as unknown as NumberContainer<NumberUnit>,
       right,
