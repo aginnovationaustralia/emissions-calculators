@@ -179,12 +179,14 @@ export function getSingleIntensities(
 }
 
 export function getTotalIntensities(
-  netTotalEmissionsKgCO2e: number,
-  netLulucfKgCO2e: number,
+  netTotalEmissions: Container<Mass<'CO2e'>>,
+  netLulucf: Container<Mass<'CO2e'>>,
   flocks: SheepFlockInputTransformed[],
   context: ExecutionContext<ConstantsForSheepCalculator>,
   input: Pick<SheepInputTransformed, 'isFebruaryInLeapYear'>,
 ): SheepIntensitiesOutput {
+  const netTotalEmissionsKgCO2e = extractMassAsNumber(netTotalEmissions);
+  const netLulucfKgCO2e = extractMassAsNumber(netLulucf);
   const { constants } = context;
   const liveweightProduced = sum(flocks.map((flock) => flock.liveweightSoldKg));
   const cleanWoolProduced = sum(

@@ -1,6 +1,8 @@
 import { HasIsFebruaryInLeapYearInputSchemaForSheep } from '@/calculators/types/has-is-february-in-leap-year.input';
 import { createSheepFlockInput } from '@/modules/test/factory';
+import { root } from '@/tools/containers';
 import { nv } from '@/tools/inputs';
+import { mass } from '@/tools/units';
 import { contextFor, loadConstants } from '../executionContext';
 import { getSingleIntensities, getTotalIntensities } from './calculator';
 import { SheepClassMonthlyInput } from './types/sheep-class-monthly.input';
@@ -66,8 +68,8 @@ describe('getTotalIntensities', () => {
   const netLulucfKgCO2e = -20_000;
 
   const result = getTotalIntensities(
-    netTotalEmissionsKgCO2e,
-    netLulucfKgCO2e,
+    root(mass('CO2e', netTotalEmissionsKgCO2e)),
+    root(mass('CO2e', netLulucfKgCO2e)),
     [flockA, flockB],
     context,
     input,

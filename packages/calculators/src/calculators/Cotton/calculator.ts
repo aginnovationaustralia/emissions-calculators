@@ -28,6 +28,7 @@ import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scop
 import { IntermediateScope1 } from '@/tools/calculators';
 import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
+import { extractMassAsNumber } from '@/tools/extract';
 import { valueObject } from '@/tools/outputs';
 import { oneMinus } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
@@ -152,11 +153,13 @@ function getSingleIntensities(
 }
 
 function getTotalIntensities(
-  netTotalEmissionsKgCO2e: number,
-  netLulucfKgCO2e: number,
+  netTotalEmissions: Container<Mass<'CO2e'>>,
+  netLulucf: Container<Mass<'CO2e'>>,
   crops: CottonCropInputTransformed[],
   context: ExecutionContext<ConstantsForResidueManagement>,
 ): CottonIntensitiesOutput {
+  const netTotalEmissionsKgCO2e = extractMassAsNumber(netTotalEmissions);
+  const netLulucfKgCO2e = extractMassAsNumber(netLulucf);
   const { constants } = context;
   const cottonHarvestedKg = sum(
     crops.map((crop) => getCottonHarvestedForCrop(crop, constants)),

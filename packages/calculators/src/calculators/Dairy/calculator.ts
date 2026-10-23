@@ -35,6 +35,7 @@ import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scop
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { selectConstant } from '@/tools/constants';
 import { Container, root } from '@/tools/containers';
+import { extractMassAsNumber } from '@/tools/extract';
 import { valueObject } from '@/tools/outputs';
 import { sum } from '@/tools/sum';
 import { mass, Mass } from '@/tools/units';
@@ -341,11 +342,13 @@ function getSingleIntensities(
 }
 
 function getTotalIntensities(
-  netTotalEmissionsKgCO2e: number,
-  netLulucfKgCO2e: number,
+  netTotalEmissions: Container<Mass<'CO2e'>>,
+  netLulucf: Container<Mass<'CO2e'>>,
   herds: DairyHerdInputTransformed[],
   context: ExecutionContext<ConstantsForDairyCalculator>,
 ): DairyIntensitiesOutput {
+  const netTotalEmissionsKgCO2e = extractMassAsNumber(netTotalEmissions);
+  const netLulucfKgCO2e = extractMassAsNumber(netLulucf);
   const liveweightProducedKg = sum(
     herds.map((herd) => getLiveweightProducedKgForHerd(herd, context)),
   ).unit.store.toNumber();

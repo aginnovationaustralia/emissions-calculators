@@ -26,6 +26,7 @@ import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
+import { extractMassAsNumber } from '@/tools/extract';
 import { valueObject } from '@/tools/outputs';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
@@ -57,10 +58,12 @@ function getSingleIntensities(
 }
 
 function getTotalIntensities(
-  netTotalEmissionsKgCO2e: number,
-  netLulucfKgCO2e: number,
+  netTotalEmissions: Container<Mass<'CO2e'>>,
+  netLulucf: Container<Mass<'CO2e'>>,
   crops: RiceCropInputTransformed[],
 ) {
+  const netTotalEmissionsKgCO2e = extractMassAsNumber(netTotalEmissions);
+  const netLulucfKgCO2e = extractMassAsNumber(netLulucf);
   const riceHarvestedKg = sum(
     crops.map(({ crop }) => crop.totalYieldKg),
   ).unit.store.toNumber();
