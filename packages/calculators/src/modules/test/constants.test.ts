@@ -2,16 +2,19 @@ import { commonConstants } from '@/constants/values';
 import { getWorkbook } from '@/test/common/sheets';
 import { Cell } from 'xlsx-populate';
 
-// constants.xlsx is the shared source of constants for the test workbooks, which reference
-// its cells by defined name (e.g. constants.xlsx!common_cch4). Each sheet is a constants
-// category, with rows of: values.ts key | value | Excel defined name.
-describe('constants.xlsx', () => {
+// The workbooks in constants/ are the shared source of constants for the test workbooks,
+// which reference their cells by defined name (e.g. common.xlsx!common_cch4). There is one
+// workbook per section of values.ts, each with a sheet of the same name containing rows of:
+// values.ts key | value | Excel defined name. See constants/README.md.
+describe('constants workbooks', () => {
   const categories = { common: commonConstants };
 
   it.each(Object.entries(categories))(
     'matches values.ts for %s constants',
     async (category, constants) => {
-      const workbook = await getWorkbook('./src/modules/test/constants.xlsx');
+      const workbook = await getWorkbook(
+        `./src/modules/test/constants/${category}.xlsx`,
+      );
       const sheet = workbook.sheet(category);
 
       let row = 2;
@@ -29,7 +32,7 @@ describe('constants.xlsx', () => {
         const constant = constants[key as keyof typeof constants];
         if (typeof constant !== 'object' || !('store' in constant)) {
           throw new Error(
-            `${key} in constants.xlsx is not a ${category} quantity constant`,
+            `${key} in ${category}.xlsx is not a ${category} quantity constant`,
           );
         }
         expect({ key, value }).toEqual({

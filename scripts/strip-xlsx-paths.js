@@ -204,10 +204,16 @@ const gitLines = (...args) =>
     .split('\0')
     .filter(Boolean);
 
+// tracked files deleted in the working tree have nothing left to strip or check
+const trackedSpreadsheets = () =>
+  gitLines('ls-files', '-z', '--', '*.xlsx').filter((file) =>
+    fs.existsSync(file),
+  );
+
 const args = process.argv.slice(2);
 
 if (args[0] === '--check') {
-  const failures = gitLines('ls-files', '-z', '--', '*.xlsx').flatMap((file) =>
+  const failures = trackedSpreadsheets().flatMap((file) =>
     findLocalPaths(fs.readFileSync(file)).map(
       (found) => `${file}\n    ${found}`,
     ),
@@ -261,8 +267,7 @@ if (args[0] === '--check') {
     process.exit(1);
   }
 } else {
-  const files =
-    args.length > 0 ? args : gitLines('ls-files', '-z', '--', '*.xlsx');
+  const files = args.length > 0 ? args : trackedSpreadsheets();
   for (const file of files) {
     const current = fs.readFileSync(file);
     const stripped = strip(current);
