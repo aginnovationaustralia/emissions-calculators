@@ -29,7 +29,6 @@ import { IntermediateScope1 } from '@/tools/calculators';
 import { selectConstant } from '@/tools/constants';
 import { Container, num } from '@/tools/containers';
 import { exposeMassValue, extractMassAsNumber } from '@/tools/extract';
-import { valueObject } from '@/tools/outputs';
 import { generateIntensity } from '@/tools/intensity';
 import { oneMinus } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
@@ -41,10 +40,8 @@ import { ConstantsForCottonCalculator } from './constants';
 import {
   CottonIntensitiesOutput,
   CottonIntermediateIntensitiesOutput,
-  CottonIntermediateSeedAndLintIntensitiesOutput,
   CottonOutputSchema,
   CottonScope1Output,
-  CottonSeedAndLintIntensitiesOutput,
 } from './types';
 import { CottonCropInputTransformed } from './types/crop.input';
 
