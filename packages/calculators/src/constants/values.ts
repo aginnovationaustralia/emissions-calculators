@@ -184,21 +184,21 @@ export const commonConstants: CommonConstants = {
   EF_CONVERSION_UREA_TO_CO2: massPerMass('Carbon', 'Urea', 0.2),
 
   /**
-   * @description Conversion factor for elemental to molecular CO2
-   * @nir2024Vol2 Annex VII Conversion factors
+   * @description Conversion factor for elemental to molecular CO2. Note the fraction has been converted to a decimal value deliberately in the guidance for more stable numeric operations
+   * @reference IPCC Good Practice Guidance and Uncertainty Management in National Greenhouse Gas Inventories. Chapter 5: Agriculture [6]
    */
-  ELEMENTAL_TO_MOLECULAR_CO2: massPerMass('CO2', 'Carbon', 44 / 12),
+  ELEMENTAL_TO_MOLECULAR_CO2: massPerMass('CO2', 'Carbon', 3.67),
   /**
-   * @description Conversion factor for elemental to molecular CH4
+   * @description Conversion factor for elemental to molecular CH4. Note the fraction has been converted to a decimal value deliberately in the guidance for more stable numeric operations
    * @nir2024Vol2 Annex VII Conversion factors
    */
-  ELEMENTAL_TO_MOLECULAR_CH4: massPerMass('CH4', 'Carbon', 16 / 12),
+  ELEMENTAL_TO_MOLECULAR_CH4: massPerMass('CH4', 'Carbon', 1.33),
 
   /**
-   * @description Conversion factor for elemental to molecular N2O
-   * @nir2024Vol2 Annex VII Conversion factors
+   * @description Conversion factor for elemental to molecular N2O. Note the fraction has been converted to a decimal value deliberately in the guidance for more stable numeric operations
+   * @reference IPCC Good Practice Guidance and Uncertainty Management in National Greenhouse Gas Inventories. Chapter 5: Agriculture [6]
    */
-  ELEMENTAL_TO_MOLECULAR_N2O: massPerMass('N2O', 'N2O', 44 / 28),
+  ELEMENTAL_TO_MOLECULAR_N2O: massPerMass('N2O', 'N2O', 1.57),
 
   /**
    * @description Density of methane

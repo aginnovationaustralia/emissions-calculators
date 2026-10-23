@@ -1,3 +1,4 @@
+import { commonConstants } from '@/constants/values';
 import { testContext } from '@/test/Grains/context';
 import { collectInputs } from '@/tools/collect';
 import { nv } from '@/tools/inputs';
@@ -46,7 +47,9 @@ describe('13.1.1 Aquatic N2O', () => {
     expect(massInTonnes(coastalOutput).toNumber()).toEqual(
       massInTonnes(seagrassOutput).toNumber(),
     );
-    expect(massInTonnes(coastalOutput).toNumber()).toEqual(0.169 * (44 / 28));
+    expect(massInTonnes(coastalOutput).toNumber()).toEqual(
+      0.169 * commonConstants.ELEMENTAL_TO_MOLECULAR_N2O.store.value.toNumber(),
+    );
 
     expect(massInTonnes(otherOutput).toNumber()).toEqual(0);
 

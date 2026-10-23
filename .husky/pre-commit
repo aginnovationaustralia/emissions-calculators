@@ -1,0 +1,1 @@
+node scripts/strip-xlsx-paths.js --staged
