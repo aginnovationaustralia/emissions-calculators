@@ -1,3 +1,4 @@
+import { valueObject } from './outputs';
 import { Mass, RealNumber, Substance } from './units';
 
 /**
@@ -12,6 +13,13 @@ export function extractMassAsNumber<S extends Substance>(container: {
   unit: Mass<S>;
 }): number {
   return container.unit.store.toNumber();
+}
+
+/** A total mass in kg, wrapped as an output value. See `extractMassAsNumber` */
+export function exposeMassValue<S extends Substance>(container: {
+  unit: Mass<S>;
+}) {
+  return valueObject(extractMassAsNumber(container));
 }
 
 /**

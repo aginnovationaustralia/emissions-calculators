@@ -10,7 +10,6 @@ import {
   ScopesSchema,
 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
-import { extractMassAsNumber } from '@/tools/extract';
 import {
   buildCalculatorLedger,
   serialiseCalculatorLedger,
@@ -142,7 +141,7 @@ export const createCalculator =
     ) => IntermediateScope23<S3>,
 
     getSingleIntensities: (
-      netTotalEmissionsKgCO2e: number,
+      netEmissions: Container<Mass<'CO2e'>>,
       activity: TActivity,
       context: ExecutionContext<TContext>,
       input: TInput,
@@ -212,7 +211,7 @@ export const createCalculator =
         id: meta.id,
         ...serialiseCalculatorLedger(ledger),
         intensities: getSingleIntensities(
-          extractMassAsNumber(ledger.net),
+          ledger.net,
           meta.originalActivity,
           context,
           input,

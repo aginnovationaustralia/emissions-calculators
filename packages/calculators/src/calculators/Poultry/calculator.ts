@@ -11,13 +11,12 @@ import { calculatePurchasedFeed } from '@/modules/scope3/15.2-purchased-feed';
 import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
-import { Container } from '@/tools/containers';
-import { extractMassAsNumber } from '@/tools/extract';
-import { valueObject } from '@/tools/outputs';
+import { Container, num, relabelMass } from '@/tools/containers';
+import { exposeMassValue } from '@/tools/extract';
+import { generateIntensity } from '@/tools/intensity';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
-import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForPoultryCalculator } from './constants';
 import { PoultryIntensitiesOutput } from './types/intensities.output';
@@ -27,102 +26,83 @@ import { PoultryFlockInputTransformed } from './types/poultry-flock.input';
 import { PoultryScope1Output } from './types/scope1.output';
 import { PoultryScope3Output } from './types/scope3.output';
 
+/**
+ * Splits emissions between meat and eggs by mass, treating a kg of liveweight and a kg of eggs
+ * as the same amount of product. Both inputs are validated as non-negative, so a zero total
+ * only happens when liveweight is also zero, and 0 / 0 gives a meat allocation of 0.
+ */
 function getMeatEggAllocation(
-  liveweightProducedKg: number,
-  eggsProducedKg: number,
+  liveweightProduced: Container<Mass<'Liveweight'>>,
+  eggsProduced: Container<Mass<'Eggs'>>,
 ) {
-  const meatAllocation =
-    liveweightProducedKg / (liveweightProducedKg + eggsProducedKg);
-  const eggAllocation = 1 - meatAllocation;
+  const totalProduced = liveweightProduced.plus(
+    relabelMass(eggsProduced, 'Liveweight'),
+  );
+  const meatAllocation = liveweightProduced.divide(totalProduced);
+  const eggAllocation = num(1).minus(meatAllocation);
 
   return { meatAllocation, eggAllocation };
 }
 
-function getSingleIntensities(
-  netEmissionsKgCO2e: number,
+export function getSingleIntensities(
+  netEmissions: Container<Mass<'CO2e'>>,
   flock: PoultryFlockInputTransformed,
 ): PoultryIntermediateIntensitiesOutput {
-  const eggsProducedKg = flock.eggsSoldKg.unit.store.toNumber();
-  const liveweightProducedKg = flock.liveweightSoldKg.unit.store.toNumber();
+  const eggsProduced = flock.eggsSoldKg;
+  const liveweightProduced = flock.liveweightSoldKg;
 
   const { meatAllocation, eggAllocation } = getMeatEggAllocation(
-    liveweightProducedKg,
-    eggsProducedKg,
-  );
-
-  const liveweightIntensity = valueObject(
-    divideBySafeFromZero(
-      netEmissionsKgCO2e * meatAllocation,
-      liveweightProducedKg,
-    ),
-  );
-  const eggsIntensity = valueObject(
-    divideBySafeFromZero(netEmissionsKgCO2e * eggAllocation, eggsProducedKg),
+    liveweightProduced,
+    eggsProduced,
   );
 
   return {
-    liveweightProducedKg: valueObject(liveweightProducedKg),
-    liveweightIntensity,
-    eggsProducedKg: valueObject(eggsProducedKg),
-    eggsIntensity,
+    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightIntensity: generateIntensity(
+      netEmissions.multiply(meatAllocation),
+      liveweightProduced,
+    ),
+    eggsProducedKg: exposeMassValue(eggsProduced),
+    eggsIntensity: generateIntensity(
+      netEmissions.multiply(eggAllocation),
+      eggsProduced,
+    ),
   };
 }
 
-function getTotalIntensities(
+export function getTotalIntensities(
   netTotalEmissions: Container<Mass<'CO2e'>>,
   netLulucf: Container<Mass<'CO2e'>>,
   flocks: PoultryFlockInputTransformed[],
 ): PoultryIntensitiesOutput {
-  const netTotalEmissionsKgCO2e = extractMassAsNumber(netTotalEmissions);
-  const netLulucfKgCO2e = extractMassAsNumber(netLulucf);
-  const eggsProducedKg = sum(
-    flocks.map((flock) => flock.eggsSoldKg),
-  ).unit.store.toNumber();
-
-  const liveweightProducedKg = sum(
-    flocks.map((flock) => flock.liveweightSoldKg),
-  ).unit.store.toNumber();
+  const eggsProduced = sum(flocks.map((flock) => flock.eggsSoldKg));
+  const liveweightProduced = sum(flocks.map((flock) => flock.liveweightSoldKg));
 
   const { meatAllocation, eggAllocation } = getMeatEggAllocation(
-    liveweightProducedKg,
-    eggsProducedKg,
+    liveweightProduced,
+    eggsProduced,
   );
-
-  const totalEmissionsExcludingLulucf =
-    netTotalEmissionsKgCO2e - netLulucfKgCO2e;
-  const liveweightIntensityExcludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      totalEmissionsExcludingLulucf * meatAllocation,
-      liveweightProducedKg,
-    ),
-  );
-  const liveweightIntensityIncludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      netTotalEmissionsKgCO2e * meatAllocation,
-      liveweightProducedKg,
-    ),
-  );
-
-  const eggsIntensityExcludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      totalEmissionsExcludingLulucf * eggAllocation,
-      eggsProducedKg,
-    ),
-  );
-  const eggsIntensityIncludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      netTotalEmissionsKgCO2e * eggAllocation,
-      eggsProducedKg,
-    ),
-  );
+  const netEmissionsExcludingLulucf = netTotalEmissions.minus(netLulucf);
 
   return {
-    liveweightProducedKg: valueObject(liveweightProducedKg),
-    liveweightIntensityExcludingLULUCF,
-    liveweightIntensityIncludingLULUCF,
-    eggsProducedKg: valueObject(eggsProducedKg),
-    eggsIntensityExcludingLULUCF,
-    eggsIntensityIncludingLULUCF,
+    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightIntensityExcludingLULUCF: generateIntensity(
+      netEmissionsExcludingLulucf.multiply(meatAllocation),
+      liveweightProduced,
+    ),
+    liveweightIntensityIncludingLULUCF: generateIntensity(
+      netTotalEmissions.multiply(meatAllocation),
+      liveweightProduced,
+    ),
+    eggsProducedKg: exposeMassValue(eggsProduced),
+    eggsIntensityExcludingLULUCF: generateIntensity(
+      netEmissionsExcludingLulucf.multiply(eggAllocation),
+      eggsProduced,
+    ),
+    eggsIntensityIncludingLULUCF: generateIntensity(
+      netTotalEmissions.multiply(eggAllocation),
+      eggsProduced,
+    ),
   };
 }
 

@@ -115,7 +115,12 @@ describe('getTotalIntensities', () => {
 
 describe('getSingleIntensities', () => {
   it('calculates clean wool produced for a single flock', () => {
-    const result = getSingleIntensities(100_000, flockB, context, input);
+    const result = getSingleIntensities(
+      root(mass('CO2e', 100_000)),
+      flockB,
+      context,
+      input,
+    );
 
     expect(result.woolProducedKg.value).toBeCloseTo(200 + 75);
     expect(result.liveweightProducedKg.value).toBeCloseTo(500);
@@ -143,7 +148,12 @@ describe('getSingleIntensities', () => {
       createSheepFlockInput({ classes: { period: 'monthly', rams } }),
     );
 
-    const result = getSingleIntensities(100_000, flock, context, input);
+    const result = getSingleIntensities(
+      root(mass('CO2e', 100_000)),
+      flock,
+      context,
+      input,
+    );
 
     expect(result.woolProducedKg.value).toBeCloseTo(12 * 5 * 0.6);
   });
