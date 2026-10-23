@@ -1,8 +1,8 @@
 import { divideBySafeFromZero } from '@/calculators/common/tools/calculate';
 import { Container } from './containers';
-import { extractMassAsNumber } from './extract';
+import { extractMassAsNumber, extractRealNumberAsNumber } from './extract';
 import { valueObject } from './outputs';
-import { Mass, Substance } from './units';
+import { Mass, RealNumber, Substance } from './units';
 
 /**
  * Emissions intensity in kg CO2e per kg of product, ready for output. Taking containers keeps
@@ -18,6 +18,22 @@ export function generateIntensity<S extends Substance>(
     divideBySafeFromZero(
       extractMassAsNumber(emissions),
       extractMassAsNumber(produced),
+    ),
+  );
+}
+
+/**
+ * Emissions intensity in kg CO2e per unit produced, for products counted rather than weighed.
+ * See `generateIntensity`.
+ */
+export function generateIntensityPerUnit(
+  emissions: Container<Mass<'CO2e'>>,
+  unitsProduced: Container<RealNumber>,
+) {
+  return valueObject(
+    divideBySafeFromZero(
+      extractMassAsNumber(emissions),
+      extractRealNumberAsNumber(unitsProduced),
     ),
   );
 }

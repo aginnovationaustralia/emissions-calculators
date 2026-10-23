@@ -1,5 +1,5 @@
-import { root } from './containers';
-import { generateIntensity } from './intensity';
+import { num, root } from './containers';
+import { generateIntensity, generateIntensityPerUnit } from './intensity';
 import { mass, massPerHead } from './units';
 
 describe('generateIntensity', () => {
@@ -28,5 +28,19 @@ describe('generateIntensity', () => {
     generateIntensity(methane, liveweight);
     // @ts-expect-error a mass per head is not a mass produced
     generateIntensity(emissions, woolPerHead);
+  });
+});
+
+describe('generateIntensityPerUnit', () => {
+  it('divides CO2e emissions by the number of units produced', () => {
+    expect(generateIntensityPerUnit(root(mass('CO2e', 300)), num(100))).toEqual(
+      { value: 3 },
+    );
+  });
+
+  it('returns zero when no units were produced', () => {
+    expect(generateIntensityPerUnit(root(mass('CO2e', 300)), num(0))).toEqual({
+      value: 0,
+    });
   });
 });

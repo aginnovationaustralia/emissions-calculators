@@ -31,3 +31,8 @@ export function extractRealNumberAsNumber(container: {
 }): number {
   return container.unit.store.toNumber();
 }
+
+/** A dimensionless number, wrapped as an output value. See `extractRealNumberAsNumber` */
+export function exposeRealNumberValue(container: { unit: RealNumber }) {
+  return valueObject(extractRealNumberAsNumber(container));
+}

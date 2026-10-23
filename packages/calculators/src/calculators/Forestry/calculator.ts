@@ -17,31 +17,22 @@ import { calculateScope3Fertiliser } from '@/modules/scope3/15.4-fertiliser';
 import { calculateScope3Agrichemicals } from '@/modules/scope3/15.5-agrichemicals';
 import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
-import {
-  IntermediateScope1,
-  mergeScopeOutputs,
-  wrapScopesAsOutputs,
-} from '@/tools/calculators';
+import { IntermediateScope1, mergeScopeOutputs } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
-import { addScope1Totals, addScope23Totals } from '@/tools/totals';
+import {
+  buildCalculatorLedger,
+  serialiseCalculatorLedger,
+} from '@/tools/ledger';
 import { Mass } from '@/tools/units';
 import { calculateScope2 } from '../common/calculator';
 import { ExecutionContext } from '../executionContext';
-import { Scope2Output } from '../types/scope2.output';
 import { ConstantsForForestryCalculator } from './constants';
 import {
   ForestryInputTransformed,
   ForestryOutputSchema,
   ForestryScope1Output,
-  ForestryScope3Output,
 } from './types';
 import { ForestryPlantationInputTransformed } from './types/plantation.input';
-
-type ForestryCalculatorScopes = {
-  scope1: ForestryScope1Output;
-  scope2: Scope2Output;
-  scope3: ForestryScope3Output;
-};
 
 /*
   Module mapping
@@ -182,48 +173,13 @@ export const calculateForestry = (
   });
 
   const merged = mergeScopeOutputs(activityResults, ForestryOutputSchema.shape);
-
-  const mergedScopes = wrapScopesAsOutputs(merged);
-
-  const scope1WithTotals = addScope1Totals(mergedScopes.scope1);
-  const scope2WithTotals = addScope23Totals(mergedScopes.scope2);
-  const scope3WithTotals = addScope23Totals(mergedScopes.scope3);
-
-  const net = {
-    total: {
-      tonnesCO2e:
-        scope1WithTotals.total.tonnesCO2e +
-        scope2WithTotals.total.tonnesCO2e +
-        scope3WithTotals.total.tonnesCO2e,
-    },
-  };
+  const enterprise = buildCalculatorLedger(merged);
 
   return {
-    scope1: scope1WithTotals,
-    scope2: scope2WithTotals,
-    scope3: scope3WithTotals,
-    net,
-    intermediate: activityResults.map((activity) => {
-      const activityOutputs =
-        wrapScopesAsOutputs<ForestryCalculatorScopes>(activity);
-      const scope1 = addScope1Totals(activityOutputs.scope1);
-      const scope2 = addScope23Totals(activityOutputs.scope2);
-      const scope3 = addScope23Totals(activityOutputs.scope3);
-      const net = {
-        total: {
-          tonnesCO2e:
-            scope1.total.tonnesCO2e +
-            scope2.total.tonnesCO2e +
-            scope3.total.tonnesCO2e,
-        },
-      };
-      return {
-        id: activity.meta.id,
-        scope1,
-        scope2,
-        scope3,
-        net,
-      };
-    }),
+    ...serialiseCalculatorLedger(enterprise),
+    intermediate: activityResults.map((activity) => ({
+      id: activity.meta.id,
+      ...serialiseCalculatorLedger(buildCalculatorLedger(activity)),
+    })),
   };
 };

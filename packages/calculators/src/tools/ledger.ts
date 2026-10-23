@@ -97,6 +97,11 @@ export function buildScopeLedger<
   return { emissions, totals };
 }
 
+/** A CO2e total, converted to tonnes for output */
+export const exposeTonnesCO2e = (container: CO2eContainer) => ({
+  tonnesCO2e: kgToTonnes(extractMassAsNumber(container)).toNumber(),
+});
+
 export type SerialisedScope<E, TK extends string> = {
   [K in keyof E]: KeysOnOutput;
 } & { [K in TK]: { tonnesCO2e: number } };
@@ -117,7 +122,7 @@ export function serialiseScope<
   const totals = objectFromEntries<Record<TK, { tonnesCO2e: number }>>(
     entriesFromObject(ledger.totals).map(([key, container]) => [
       key,
-      { tonnesCO2e: kgToTonnes(extractMassAsNumber(container)).toNumber() },
+      exposeTonnesCO2e(container),
     ]),
   );
   return { ...emissions, ...totals };
@@ -168,9 +173,7 @@ export function serialiseCalculatorLedger<
     scope2: serialiseScope(ledger.scope2, 2),
     scope3: serialiseScope(ledger.scope3, 3),
     net: {
-      total: {
-        tonnesCO2e: kgToTonnes(extractMassAsNumber(ledger.net)).toNumber(),
-      },
+      total: exposeTonnesCO2e(ledger.net),
     },
   };
 }
