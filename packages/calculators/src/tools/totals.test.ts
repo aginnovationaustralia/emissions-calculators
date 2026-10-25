@@ -2,6 +2,7 @@ import { root } from './containers';
 import { input } from './inputs';
 import { captureMethod1Or2Value } from './multi';
 import { output, scope1Output } from './outputs';
+import { sum } from './sum';
 import { addScope1Totals, addScope23Totals } from './totals';
 import { mass } from './units';
 
@@ -98,5 +99,26 @@ describe('addScope23Totals', () => {
 
   it('handles an empty outputs object', () => {
     expect(addScope23Totals({}).total.tonnesCO2e).toBe(0);
+  });
+
+  // Mirrors scope 3 fuel/services, which add a transport sum to a stationary sum. When only one
+  // of those fuel lists is empty, its `sum([])` is void, and adding it to a Mass must keep the
+  // Mass's gas, otherwise `gas` is undefined and dropped from the JSON response.
+  describe('with a non-empty sum added to an empty sum', () => {
+    const transport = sum([root(mass('CO2e', 600)), root(mass('CO2e', 67.78))]);
+    const stationary = sum<typeof transport>([]);
+
+    it.each([
+      ['transport only', () => transport.plus(stationary)],
+      ['stationary only', () => stationary.plus(transport)],
+    ])('keeps the gas key in the serialised output (%s)', (_, combine) => {
+      const totals = addScope23Totals({ fuel: output('fuel', 3, combine()) });
+
+      expect(JSON.parse(JSON.stringify(totals.fuel))).toMatchObject({
+        amountGasKg: 667.78,
+        gas: 'CO2e',
+        amountTonnesCO2e: 0.66778,
+      });
+    });
   });
 });

@@ -8,7 +8,8 @@ import {
 } from './collect';
 import { Container } from './containers';
 import { convertToCO2e } from './gwp';
-import { isVoid, mass, Mass, VoidUnit } from './units';
+import { formatUnit } from './format';
+import { isMass, isVoid, mass, Mass, VoidUnit } from './units';
 import { isValueSeedMethod2 } from './value-store';
 
 export const makeUnique = <T>(a: T[]): T[] => {
@@ -74,6 +75,27 @@ export type Output<
   S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e' = 'CO2' | 'CH4' | 'N2O' | 'CO2e',
 > = OutputMethod1<Scope, S> | OutputMethod2<Scope, S>;
 
+/**
+ * The gas an output reports. A void unit (e.g. from summing an empty list) has no gas of its own,
+ * so it is reported as zero CO2. Anything other than a Mass or void means an upstream operation
+ * produced a unit its type does not admit, which would otherwise surface as a missing `gas` key.
+ */
+const gasOf = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
+  name: string,
+  from: Container<Mass<S> | VoidUnit>,
+): S => {
+  const { unit } = from;
+  if (isVoid(unit)) {
+    return 'CO2' as S;
+  }
+  if (!isMass(unit)) {
+    throw new Error(
+      `Output ${name} must be a Mass or void, but was ${formatUnit(unit)}`,
+    );
+  }
+  return unit.substance;
+};
+
 export const output = <
   Scope extends 1 | 2 | 3,
   S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e',
@@ -85,7 +107,7 @@ export const output = <
   const gasAmountKg = isVoid(from.unit)
     ? new Decimal(0)
     : from.unit.store.value;
-  const gas = isVoid(from.unit) ? ('CO2' as S) : from.unit.substance;
+  const gas = gasOf(name, from);
   const amountKgCO2e = convertToCO2e(gasAmountKg, gas);
   const seed = from.unit.store.seed;
 
@@ -141,10 +163,10 @@ export const scope1Output = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(
   name: string,
   from: Container<Mass<S> | VoidUnit>,
 ): Scope1Output<S> => {
-  const gas: S = isVoid(from.unit) ? ('CO2' as S) : from.unit.substance;
+  const result = output(name, 1, from);
   return {
-    ...output(name, 1, from),
-    gas,
+    ...result,
+    gas: result.unit.substance,
   };
 };
 
