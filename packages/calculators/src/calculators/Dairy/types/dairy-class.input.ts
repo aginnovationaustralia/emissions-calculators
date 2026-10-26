@@ -2,7 +2,7 @@ import {
   dairyEntericAndManureModules,
   dairyManureModules,
 } from '@/modules/scope1/shared/dairy/modules';
-import { numberInput, numberInputOptional } from '@/tools/inputs';
+import { isProportion, numberInput, numberInputOptional } from '@/tools/inputs';
 import { LivestockLocation } from '@/tools/modules';
 import {
   days,
@@ -76,7 +76,7 @@ export const dairyClassBaseInputSchema = (location: LivestockLocation) =>
           'Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records',
         modules: dairyManureModules(location),
       },
-      (s) => s.min(0),
+      isProportion,
     ),
   });
 

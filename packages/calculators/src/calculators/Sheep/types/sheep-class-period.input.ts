@@ -57,13 +57,17 @@ export const SheepClassPeriodInputSchema = object({
       modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
     },
   ),
-  method2DryMatterDigestibility: numberInputOptional((val) => realNumber(val), {
-    name: 'DMDjk',
-    method: '2',
-    description:
-      'Method 2: supply an exact value for dry matter digestibility for this class for this period based on farm records',
-    modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
-  }),
+  method2DryMatterDigestibility: numberInputOptional(
+    (val) => realNumber(val),
+    {
+      name: 'DMDjk',
+      method: '2',
+      description:
+        'Method 2: supply an exact value for dry matter digestibility for this class for this period based on farm records',
+      modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
+    },
+    isProportion,
+  ),
   method2AverageDurationDays: numberInputOptional((val) => days(val), {
     name: 'Dj',
     method: '2',
@@ -80,6 +84,7 @@ export const SheepClassPeriodInputSchema = object({
         'Method 2: supply an exact value for crude protein content for this class for this period based on farm records',
       modules: [MANURE_SHEEP_4_4],
     },
+    isProportion,
   ),
 }).meta({ id: 'SheepClassPeriodInput' });
 
