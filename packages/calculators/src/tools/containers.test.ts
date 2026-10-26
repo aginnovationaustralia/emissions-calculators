@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js-light';
-import { BaseContainer, br, num, root } from './containers';
+import { BaseContainer, br, num, relabelMass, root } from './containers';
 import { input } from './inputs';
 import {
   area,
@@ -410,5 +410,28 @@ describe('num / root / br helpers', () => {
     expect(bracketed.originType).toBe('bracketed');
     expect(bracketed.inner).toBe(inner);
     expect(bracketed.unit.store.toNumber()).toBe(7);
+  });
+});
+
+describe('relabelMass', () => {
+  it('keeps the value and source while changing the substance', () => {
+    const eggs = root(mass('Eggs', 12));
+    const relabelled = relabelMass(eggs, 'Liveweight');
+
+    expect(relabelled.unit.substance).toBe('Liveweight');
+    expect(relabelled.unit.store.toNumber()).toBe(12);
+    expect(relabelled.from).toBe(eggs);
+  });
+
+  it('lets deliberately equivalent masses be combined', () => {
+    const liveweight = root(mass('Liveweight', 30));
+    const eggs = root(mass('Eggs', 10));
+
+    // @ts-expect-error different substances cannot be added directly
+    liveweight.plus(eggs);
+
+    expect(
+      liveweight.plus(relabelMass(eggs, 'Liveweight')).unit.store.toNumber(),
+    ).toBe(40);
   });
 });

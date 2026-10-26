@@ -27,11 +27,11 @@ import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
-import { valueObject } from '@/tools/outputs';
+import { exposeMassValue } from '@/tools/extract';
+import { generateIntensity } from '@/tools/intensity';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
-import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForSugarCalculator } from './constants';
 import { SugarOutputSchema, SugarScope1Output } from './types';
@@ -39,47 +39,36 @@ import { SugarCropInputTransformed } from './types/crop.input';
 import { SugarIntermediateIntensitiesOutput } from './types/intermediate-intensities.output';
 
 function getSingleIntensities(
-  netEmissionsKgCO2e: number,
+  netEmissions: Container<Mass<'CO2e'>>,
   crop: SugarCropInputTransformed,
   context: ExecutionContext<ConstantsForResidueManagement>,
 ): SugarIntermediateIntensitiesOutput {
-  const sugarCaneHarvestedKg = getAmountProduced(
-    crop,
-    context.constants,
-  ).unit.store.toNumber();
-  const sugarCaneIntensity = valueObject(
-    divideBySafeFromZero(netEmissionsKgCO2e, sugarCaneHarvestedKg),
-  );
+  const harvested = getAmountProduced(crop, context.constants);
 
   return {
-    sugarCaneIntensity,
-    sugarCaneHarvestedKg: valueObject(sugarCaneHarvestedKg),
+    sugarCaneIntensity: generateIntensity(netEmissions, harvested),
+    sugarCaneHarvestedKg: exposeMassValue(harvested),
   };
 }
 
 function getTotalIntensities(
-  netTotalEmissionsKgCO2e: number,
-  netLulucfKgCO2e: number,
+  netTotalEmissions: Container<Mass<'CO2e'>>,
+  netLulucf: Container<Mass<'CO2e'>>,
   crops: SugarCropInputTransformed[],
   context: ExecutionContext<ConstantsForResidueManagement>,
 ) {
   const { constants } = context;
-  const sugarCaneHarvestedKg = sum(
+  const harvested = sum(
     crops.map((crop) => getAmountProduced(crop, constants)),
-  ).unit.store.toNumber();
-  const sugarCaneExcludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      netTotalEmissionsKgCO2e - netLulucfKgCO2e,
-      sugarCaneHarvestedKg,
-    ),
   );
-  const sugarCaneIncludingLULUCF = valueObject(
-    divideBySafeFromZero(netTotalEmissionsKgCO2e, sugarCaneHarvestedKg),
-  );
+
   return {
-    sugarCaneExcludingLULUCF,
-    sugarCaneIncludingLULUCF,
-    sugarCaneHarvestedKg: valueObject(sugarCaneHarvestedKg),
+    sugarCaneExcludingLULUCF: generateIntensity(
+      netTotalEmissions.minus(netLulucf),
+      harvested,
+    ),
+    sugarCaneIncludingLULUCF: generateIntensity(netTotalEmissions, harvested),
+    sugarCaneHarvestedKg: exposeMassValue(harvested),
   };
 }
 

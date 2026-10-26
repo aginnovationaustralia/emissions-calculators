@@ -54,15 +54,14 @@ import { calculateScope3SoilAmeliorants } from '@/modules/scope3/15.6-lime';
 import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculatePurchasedPackaging } from '@/modules/scope3/15.8-purchased-packaging';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
+import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import {
-  IntermediateScope1,
-  IntermediateScope23,
-  wrapScopesAsOutputs,
-} from '@/tools/calculators';
-import { sumOfValuesInKgCO2e } from '@/tools/gwp';
+  buildCalculatorLedger,
+  exposeTonnesCO2e,
+  serialiseCalculatorLedger,
+  sumCO2e,
+} from '@/tools/ledger';
 import { zeroCH4, zeroCO2, zeroCO2e, zeroN2O } from '@/tools/sentinels';
-import { addScope1Totals, addScope23Totals } from '@/tools/totals';
-import { kgToTonnes } from '@/tools/unit-conversion';
 import { ExecutionContext } from '../executionContext';
 import { Scope2Output } from '../types/scope2.output';
 import { AllModulesInputTransformed } from './types/input';
@@ -477,7 +476,6 @@ export const calculateAllModules = (
   context: ExecutionContext<AllConstants>,
 ) => {
   const lulucf = calculateLULUCF(input, context);
-  const lulucfTotalKgCO2e = sumOfValuesInKgCO2e(lulucf);
 
   const scope1 = calculateScope1AllModules(input, lulucf, context);
 
@@ -485,38 +483,14 @@ export const calculateAllModules = (
 
   const scope3 = calculateScope3AllModules(input, context);
 
-  const merged = {
-    scope1,
-    scope2,
-    scope3,
-  };
-
-  const mergedScopes = wrapScopesAsOutputs<{
-    scope1: AllModulesScope1Output;
-    scope2: Scope2Output;
-    scope3: AllModulesScope3Output;
-  }>(merged);
-
-  const scope1WithTotals = addScope1Totals(mergedScopes.scope1);
-  const scope2WithTotals = addScope23Totals(mergedScopes.scope2);
-  const scope3WithTotals = addScope23Totals(mergedScopes.scope3);
-
-  const net = {
-    total: {
-      tonnesCO2e:
-        scope1WithTotals.total.tonnesCO2e +
-        scope2WithTotals.total.tonnesCO2e +
-        scope3WithTotals.total.tonnesCO2e,
-    },
-    lulucf: {
-      tonnesCO2e: kgToTonnes(lulucfTotalKgCO2e).toNumber(),
-    },
-  };
+  const ledger = buildCalculatorLedger({ scope1, scope2, scope3 });
+  const serialised = serialiseCalculatorLedger(ledger);
 
   return {
-    scope1: scope1WithTotals,
-    scope2: scope2WithTotals,
-    scope3: scope3WithTotals,
-    net,
+    ...serialised,
+    net: {
+      ...serialised.net,
+      lulucf: exposeTonnesCO2e(sumCO2e(Object.values(lulucf))),
+    },
   };
 };

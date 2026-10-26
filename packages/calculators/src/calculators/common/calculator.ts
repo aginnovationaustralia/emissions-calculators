@@ -8,13 +8,13 @@ import {
   IntermediateScope23,
   mergeScopeOutputs,
   ScopesSchema,
-  wrapScopesAsOutputs,
 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
-import { sumOfValuesInKgCO2e } from '@/tools/gwp';
-import { scope1Output } from '@/tools/outputs';
-import { addScope1Totals, addScope23Totals } from '@/tools/totals';
-import { tonnesToKg } from '@/tools/unit-conversion';
+import {
+  buildCalculatorLedger,
+  serialiseCalculatorLedger,
+  sumCO2e,
+} from '@/tools/ledger';
 import { Mass } from '@/tools/units';
 import z from 'zod';
 import { ExecutionContext } from '../executionContext';
@@ -68,15 +68,6 @@ export const calculateScope2 = (
   };
 };
 
-type CalculatorScopes<
-  S1 extends Record<string, unknown>,
-  S3 extends Record<string, unknown>,
-> = {
-  scope1: S1;
-  scope2: Scope2Output;
-  scope3: S3;
-};
-
 /**
  * Extends `ScopesSchema` with the two constraints `createCalculator`'s output must also satisfy:
  * a top level `intensities` key matching what `getTotalIntensities` returns, and an `intermediate`
@@ -106,10 +97,12 @@ type CalculatorOutputSchema<
  * whole input, for enterprise level fields that affect each activity's scope 1 calculation.
  * @param calculateScope3 - The function to calculate the scope 3 emissions
  * @param getSingleIntensities - Calculates the intensities for one activity. Has no access to
- * LULUCF numbers, since LULUCF is only ever calculated for the whole enterprise.
+ * LULUCF numbers, since LULUCF is only ever calculated for the whole enterprise. Like
+ * calculateScope1, it also receives the whole input.
  * @param getTotalIntensities - Calculates the enterprise-wide intensities, including LULUCF.
  * The net total it receives already includes LULUCF, so intensities excluding LULUCF must
- * subtract the LULUCF total from it.
+ * subtract the LULUCF total from it. Both totals are CO2e mass containers. Like
+ * calculateScope1, it also receives the whole input.
  * @returns The calculator function that can be called with an input and context
  */
 export const createCalculator =
@@ -148,21 +141,22 @@ export const createCalculator =
     ) => IntermediateScope23<S3>,
 
     getSingleIntensities: (
-      netTotalEmissionsKgCO2e: number,
+      netEmissions: Container<Mass<'CO2e'>>,
       activity: TActivity,
       context: ExecutionContext<TContext>,
+      input: TInput,
     ) => TSingleIntensities,
 
     getTotalIntensities: (
-      netTotalEmissionsKgCO2e: number,
-      netLulucfKgCO2e: number,
+      netTotalEmissions: Container<Mass<'CO2e'>>,
+      netLulucf: Container<Mass<'CO2e'>>,
       activities: TActivity[],
       context: ExecutionContext<TContext>,
+      input: TInput,
     ) => TTotalIntensities,
   ) =>
   (input: TInput, context: ExecutionContext<TContext>) => {
     const lulucf = calculateLULUCF(input, context);
-    const lulucfTotalKgCO2e = sumOfValuesInKgCO2e(lulucf);
     const enterpriseScope2Electricity = calculateElectricityScope2(
       input.electricity,
       context,
@@ -177,7 +171,6 @@ export const createCalculator =
         scope1: calculateScope1(activity, context, input),
         scope2: calculateScope2(activity, enterpriseScope2Electricity),
         scope3: calculateScope3(activity, enterpriseScope3Electricity, context),
-        lulucf,
         meta: {
           id: activity.id || calculatorName + ix.toString(),
           originalActivity: activity,
@@ -199,71 +192,37 @@ export const createCalculator =
       scope3: outputSchema.scope3,
     });
 
-    const mergedScopes = wrapScopesAsOutputs(merged);
+    // Totals are built as containers first, so the net total stays a typed CO2e mass for the
+    // intensity calculations. Only the final serialise step turns them into plain numbers.
+    const enterprise = buildCalculatorLedger({
+      ...merged,
+      scope1: { ...merged.scope1, ...lulucf },
+    });
+    const lulucfTotal = sumCO2e(Object.values(lulucf));
 
-    // `lulucf` holds raw containers, not the Output-wrapped shape `addScope1Totals` expects,
-    // so it needs the same scope1Output() wrapping wrapScopesAsOutputs gives every other key.
-    const lulucfAsOutputs = objectFromEntries(
-      entriesFromObject(lulucf).map(
-        ([key, value]) => [key, scope1Output(key, value)] as const,
-      ),
-    );
-
-    const scope1WithLulucf = {
-      ...mergedScopes.scope1,
-      ...lulucfAsOutputs,
-    };
-
-    const scope1WithTotals = addScope1Totals(scope1WithLulucf);
-    const scope2WithTotals = addScope23Totals(mergedScopes.scope2);
-    const scope3WithTotals = addScope23Totals(mergedScopes.scope3);
-
-    const net = {
-      total: {
-        tonnesCO2e:
-          scope1WithTotals.total.tonnesCO2e +
-          scope2WithTotals.total.tonnesCO2e +
-          scope3WithTotals.total.tonnesCO2e,
-      },
-    };
+    const activityLedgers = activityResults.map((activity) => ({
+      meta: activity.meta,
+      ledger: buildCalculatorLedger(activity),
+    }));
 
     return {
-      scope1: scope1WithTotals,
-      scope2: scope2WithTotals,
-      scope3: scope3WithTotals,
-      net,
-      intermediate: activityResults.map((activity) => {
-        const activityOutputs =
-          wrapScopesAsOutputs<CalculatorScopes<S1, S3>>(activity);
-        const scope1 = addScope1Totals(activityOutputs.scope1);
-        const scope2 = addScope23Totals(activityOutputs.scope2);
-        const scope3 = addScope23Totals(activityOutputs.scope3);
-        const net = {
-          total: {
-            tonnesCO2e:
-              scope1.total.tonnesCO2e +
-              scope2.total.tonnesCO2e +
-              scope3.total.tonnesCO2e,
-          },
-        };
-        return {
-          id: activity.meta.id,
-          scope1,
-          scope2,
-          scope3,
-          net,
-          intensities: getSingleIntensities(
-            tonnesToKg(net.total.tonnesCO2e).toNumber(),
-            activity.meta.originalActivity,
-            context,
-          ),
-        };
-      }),
+      ...serialiseCalculatorLedger(enterprise),
+      intermediate: activityLedgers.map(({ meta, ledger }) => ({
+        id: meta.id,
+        ...serialiseCalculatorLedger(ledger),
+        intensities: getSingleIntensities(
+          ledger.net,
+          meta.originalActivity,
+          context,
+          input,
+        ),
+      })),
       intensities: getTotalIntensities(
-        tonnesToKg(net.total.tonnesCO2e).toNumber(),
-        lulucfTotalKgCO2e.toNumber(),
-        activityResults.map((activity) => activity.meta.originalActivity),
+        enterprise.net,
+        lulucfTotal,
+        activities,
         context,
+        input,
       ),
     };
   };

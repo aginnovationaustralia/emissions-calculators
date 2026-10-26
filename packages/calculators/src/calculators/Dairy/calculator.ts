@@ -34,12 +34,12 @@ import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { selectConstant } from '@/tools/constants';
-import { Container, root } from '@/tools/containers';
-import { valueObject } from '@/tools/outputs';
+import { Container, root, num } from '@/tools/containers';
+import { exposeMassValue } from '@/tools/extract';
+import { generateIntensity } from '@/tools/intensity';
 import { sum } from '@/tools/sum';
 import { mass, Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
-import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForDairyCalculator } from './constants';
 import { DairyHerdInputTransformed } from './types/herd.input';
@@ -303,98 +303,66 @@ function getAllocationToMilkProduction(
 }
 
 function getSingleIntensities(
-  netEmissionsKgCO2e: number,
+  netEmissions: Container<Mass<'CO2e'>>,
   herd: DairyHerdInputTransformed,
   context: ExecutionContext<ConstantsForDairyCalculator>,
 ): DairyIntermediateIntensitiesOutput {
-  const liveweightProducedKg = getLiveweightProducedKgForHerd(
-    herd,
-    context,
-  ).unit.store.toNumber();
-  const milkProducedKg = getMilkProducedKgForHerd(
-    herd,
-    context,
-  ).unit.store.toNumber();
+  const liveweightProduced = getLiveweightProducedKgForHerd(herd, context);
+  const milkProduced = getMilkProducedKgForHerd(herd, context);
 
-  const allocationToMilk = getAllocationToMilkProduction(
-    [herd],
-    context,
-  ).unit.store.toNumber();
-  const allocationToMeat = 1 - allocationToMilk;
-
-  const liveweightIntensity = valueObject(
-    divideBySafeFromZero(
-      netEmissionsKgCO2e * allocationToMeat,
-      liveweightProducedKg,
-    ),
-  );
-  const milkIntensity = valueObject(
-    divideBySafeFromZero(netEmissionsKgCO2e * allocationToMilk, milkProducedKg),
-  );
+  const allocationToMilk = getAllocationToMilkProduction([herd], context);
+  const allocationToMeat = num(1).minus(allocationToMilk);
 
   return {
-    liveweightIntensity,
-    liveweightProducedKg: valueObject(liveweightProducedKg),
-    milkIntensity,
-    milkProducedKg: valueObject(milkProducedKg),
+    liveweightIntensity: generateIntensity(
+      netEmissions.multiply(allocationToMeat),
+      liveweightProduced,
+    ),
+    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    milkIntensity: generateIntensity(
+      netEmissions.multiply(allocationToMilk),
+      milkProduced,
+    ),
+    milkProducedKg: exposeMassValue(milkProduced),
   };
 }
 
 function getTotalIntensities(
-  netTotalEmissionsKgCO2e: number,
-  netLulucfKgCO2e: number,
+  netTotalEmissions: Container<Mass<'CO2e'>>,
+  netLulucf: Container<Mass<'CO2e'>>,
   herds: DairyHerdInputTransformed[],
   context: ExecutionContext<ConstantsForDairyCalculator>,
 ): DairyIntensitiesOutput {
-  const liveweightProducedKg = sum(
+  const liveweightProduced = sum(
     herds.map((herd) => getLiveweightProducedKgForHerd(herd, context)),
-  ).unit.store.toNumber();
-
-  const milkProducedKg = sum(
+  );
+  const milkProduced = sum(
     herds.map((herd) => getMilkProducedKgForHerd(herd, context)),
-  ).unit.store.toNumber();
-
-  const allocationToMilk = getAllocationToMilkProduction(
-    herds,
-    context,
-  ).unit.store.toNumber();
-  const allocationToMeat = 1 - allocationToMilk;
-
-  const totalEmissionsExcludingLulucf =
-    netTotalEmissionsKgCO2e - netLulucfKgCO2e;
-
-  const liveweightIntensityExcludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      totalEmissionsExcludingLulucf * allocationToMeat,
-      liveweightProducedKg,
-    ),
-  );
-  const liveweightIntensityIncludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      netTotalEmissionsKgCO2e * allocationToMeat,
-      liveweightProducedKg,
-    ),
   );
 
-  const milkIntensityExcludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      totalEmissionsExcludingLulucf * allocationToMilk,
-      milkProducedKg,
-    ),
-  );
-  const milkIntensityIncludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      netTotalEmissionsKgCO2e * allocationToMilk,
-      milkProducedKg,
-    ),
-  );
+  const allocationToMilk = getAllocationToMilkProduction(herds, context);
+  const allocationToMeat = num(1).minus(allocationToMilk);
+  const netEmissionsExcludingLulucf = netTotalEmissions.minus(netLulucf);
+
   return {
-    liveweightIntensityExcludingLULUCF,
-    liveweightIntensityIncludingLULUCF,
-    liveweightProducedKg: valueObject(liveweightProducedKg),
-    milkIntensityExcludingLULUCF,
-    milkIntensityIncludingLULUCF,
-    milkProducedKg: valueObject(milkProducedKg),
+    liveweightIntensityExcludingLULUCF: generateIntensity(
+      netEmissionsExcludingLulucf.multiply(allocationToMeat),
+      liveweightProduced,
+    ),
+    liveweightIntensityIncludingLULUCF: generateIntensity(
+      netTotalEmissions.multiply(allocationToMeat),
+      liveweightProduced,
+    ),
+    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    milkIntensityExcludingLULUCF: generateIntensity(
+      netEmissionsExcludingLulucf.multiply(allocationToMilk),
+      milkProduced,
+    ),
+    milkIntensityIncludingLULUCF: generateIntensity(
+      netTotalEmissions.multiply(allocationToMilk),
+      milkProduced,
+    ),
+    milkProducedKg: exposeMassValue(milkProduced),
   };
 }
 

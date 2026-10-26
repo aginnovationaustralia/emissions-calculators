@@ -60,7 +60,7 @@ const exposeMethodAmounts = (
  * @param internalResult An Output Container instance, storing a strongly typed Decimal, value store etc
  * @returns Primitive values designed for serialising to a JSON schema
  */
-const exposeKeysOnOutput = (
+export const exposeKeysOnOutput = (
   internalResult: Output<1 | 2 | 3>,
 ): KeysOnOutput => ({
   amountGasKg: internalResult.value.toNumber(),

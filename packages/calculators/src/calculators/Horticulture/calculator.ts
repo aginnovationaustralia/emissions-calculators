@@ -26,11 +26,11 @@ import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
-import { valueObject } from '@/tools/outputs';
+import { exposeMassValue } from '@/tools/extract';
+import { generateIntensity } from '@/tools/intensity';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
-import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForHorticultureCalculator } from './constants';
 import { HorticultureOutputSchema, HorticultureScope1Output } from './types';
@@ -38,47 +38,36 @@ import { HorticultureCropInputTransformed } from './types/crop.input';
 import { HorticultureIntermediateIntensitiesOutput } from './types/intermediate-intensities.output';
 
 function getSingleIntensities(
-  netEmissionsKgCO2e: number,
+  netEmissions: Container<Mass<'CO2e'>>,
   crop: HorticultureCropInputTransformed,
   context: ExecutionContext<ConstantsForResidueManagement>,
 ): HorticultureIntermediateIntensitiesOutput {
-  const cropHarvestedKg = getAmountProduced(
-    crop,
-    context.constants,
-  ).unit.store.toNumber();
-  const cropIntensity = valueObject(
-    divideBySafeFromZero(netEmissionsKgCO2e, cropHarvestedKg),
-  );
+  const harvested = getAmountProduced(crop, context.constants);
 
   return {
-    cropIntensity,
-    cropHarvestedKg: valueObject(cropHarvestedKg),
+    cropIntensity: generateIntensity(netEmissions, harvested),
+    cropHarvestedKg: exposeMassValue(harvested),
   };
 }
 
 function getTotalIntensities(
-  netTotalEmissionsKgCO2e: number,
-  netLulucfKgCO2e: number,
+  netTotalEmissions: Container<Mass<'CO2e'>>,
+  netLulucf: Container<Mass<'CO2e'>>,
   crops: HorticultureCropInputTransformed[],
   context: ExecutionContext<ConstantsForResidueManagement>,
 ) {
   const { constants } = context;
-  const cropHarvestedKg = sum(
+  const harvested = sum(
     crops.map((crop) => getAmountProduced(crop, constants)),
-  ).unit.store.toNumber();
-  const cropExcludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      netTotalEmissionsKgCO2e - netLulucfKgCO2e,
-      cropHarvestedKg,
-    ),
   );
-  const cropIncludingLULUCF = valueObject(
-    divideBySafeFromZero(netTotalEmissionsKgCO2e, cropHarvestedKg),
-  );
+
   return {
-    cropExcludingLULUCF,
-    cropIncludingLULUCF,
-    cropHarvestedKg: valueObject(cropHarvestedKg),
+    cropExcludingLULUCF: generateIntensity(
+      netTotalEmissions.minus(netLulucf),
+      harvested,
+    ),
+    cropIncludingLULUCF: generateIntensity(netTotalEmissions, harvested),
+    cropHarvestedKg: exposeMassValue(harvested),
   };
 }
 

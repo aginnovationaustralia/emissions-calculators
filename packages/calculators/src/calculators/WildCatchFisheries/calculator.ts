@@ -15,18 +15,18 @@ import {
   IntermediateScope1,
   IntermediateScope23,
   mergeScopeOutputs,
-  wrapScopesAsOutputs,
 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
-import { valueObject } from '@/tools/outputs';
+import { exposeMassValue } from '@/tools/extract';
+import { generateIntensity } from '@/tools/intensity';
+import {
+  buildCalculatorLedger,
+  serialiseCalculatorLedger,
+} from '@/tools/ledger';
 import { sum } from '@/tools/sum';
-import { tonnesToKg } from '@/tools/unit-conversion';
-import { addScope1Totals, addScope23Totals } from '@/tools/totals';
 import { Mass } from '@/tools/units';
 import { calculateScope2 } from '../common/calculator';
-import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
-import { Scope2Output } from '../types/scope2.output';
 import { ConstantsForWildCatchFisheriesCalculator } from './constants';
 import {
   WildCatchFisheriesInputTransformed,
@@ -39,19 +39,15 @@ import {
 } from './types';
 
 function getIntensities(
-  netTotalEmissionsKgCO2e: number,
+  netEmissions: Container<Mass<'CO2e'>>,
   fisheries: WildCatchFisheryInputTransformed[],
 ): WildCatchFisheriesIntensitiesOutput {
-  const fishHarvestedKg = sum(
+  const fishHarvested = sum(
     fisheries.map((fishery) => fishery.amountHarvested),
-  ).unit.store.toNumber();
-  const emissionsIntensity = divideBySafeFromZero(
-    netTotalEmissionsKgCO2e,
-    fishHarvestedKg,
   );
   return {
-    fishHarvestedKg: valueObject(fishHarvestedKg),
-    emissionsIntensity: valueObject(emissionsIntensity),
+    fishHarvestedKg: exposeMassValue(fishHarvested),
+    emissionsIntensity: generateIntensity(netEmissions, fishHarvested),
   };
 }
 
@@ -158,58 +154,22 @@ export function calculateWildCatchFisheries(
     resultsPerFishery,
     WildCatchFisheriesOutputSchema.shape,
   );
-
-  const mergedScopes = wrapScopesAsOutputs(merged);
-
-  const scope1WithTotals = addScope1Totals(mergedScopes.scope1);
-  const scope2WithTotals = addScope23Totals(mergedScopes.scope2);
-  const scope3WithTotals = addScope23Totals(mergedScopes.scope3);
-
-  const net = {
-    total: {
-      tonnesCO2e:
-        scope1WithTotals.total.tonnesCO2e +
-        scope2WithTotals.total.tonnesCO2e +
-        scope3WithTotals.total.tonnesCO2e,
-    },
-  };
+  const enterprise = buildCalculatorLedger(merged);
 
   return {
-    scope1: scope1WithTotals,
-    scope2: scope2WithTotals,
-    scope3: scope3WithTotals,
-    net,
+    ...serialiseCalculatorLedger(enterprise),
     intermediate: resultsPerFishery.map((fishery) => {
-      const output = wrapScopesAsOutputs<{
-        scope1: WildCatchFisheriesScope1Output;
-        scope2: Scope2Output;
-        scope3: WildCatchFisheriesScope3Output;
-      }>(fishery);
-      const scope1 = addScope1Totals(output.scope1);
-      const scope2 = addScope23Totals(output.scope2);
-      const scope3 = addScope23Totals(output.scope3);
-      const net = {
-        total: {
-          tonnesCO2e:
-            scope1.total.tonnesCO2e +
-            scope2.total.tonnesCO2e +
-            scope3.total.tonnesCO2e,
-        },
-      };
+      const ledger = buildCalculatorLedger(fishery);
       return {
         id: fishery.meta.id,
-        scope1,
-        scope2,
-        scope3,
-        net,
-        intensities: getIntensities(
-          tonnesToKg(net.total.tonnesCO2e).toNumber(),
-          [fishery.meta.originalActivity],
-        ),
+        ...serialiseCalculatorLedger(ledger),
+        intensities: getIntensities(ledger.net, [
+          fishery.meta.originalActivity,
+        ]),
       };
     }),
     intensities: getIntensities(
-      tonnesToKg(net.total.tonnesCO2e).toNumber(),
+      enterprise.net,
       resultsPerFishery.map((activity) => activity.meta.originalActivity),
     ),
   };
