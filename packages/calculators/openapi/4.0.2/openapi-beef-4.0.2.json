@@ -21345,7 +21345,7 @@
                                         "type": "object",
                                         "properties": {
                                           "fractionOfFertiliser": {
-                                            "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                            "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                             "x-modules": [
                                               "5.1",
                                               "5.5",
@@ -21405,7 +21405,7 @@
                                         "type": "object",
                                         "properties": {
                                           "fractionOfFertiliser": {
-                                            "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                            "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                             "x-modules": [
                                               "5.1",
                                               "5.5",
@@ -21467,7 +21467,7 @@
                                     "type": "object",
                                     "properties": {
                                       "fractionOfFertiliser": {
-                                        "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                        "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                         "x-modules": [
                                           "5.1",
                                           "5.5",
@@ -21900,7 +21900,7 @@
                                         "type": "object",
                                         "properties": {
                                           "fractionOfFertiliser": {
-                                            "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                            "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                             "x-modules": [
                                               "5.1",
                                               "5.5",
@@ -21960,7 +21960,7 @@
                                         "type": "object",
                                         "properties": {
                                           "fractionOfFertiliser": {
-                                            "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                            "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                             "x-modules": [
                                               "5.1",
                                               "5.5",
@@ -22022,7 +22022,7 @@
                                     "type": "object",
                                     "properties": {
                                       "fractionOfFertiliser": {
-                                        "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                        "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                         "x-modules": [
                                           "5.1",
                                           "5.5",
@@ -32651,9 +32651,7 @@
                               "type": "object",
                               "properties": {
                                 "value": {
-                                  "type": "number",
-                                  "exclusiveMinimum": 0,
-                                  "maximum": 1
+                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                 },
                                 "quality": {
                                   "default": {},
@@ -33277,9 +33275,7 @@
                               "type": "object",
                               "properties": {
                                 "value": {
-                                  "type": "number",
-                                  "exclusiveMinimum": 0,
-                                  "maximum": 1
+                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                 },
                                 "quality": {
                                   "default": {},
@@ -33903,9 +33899,7 @@
                               "type": "object",
                               "properties": {
                                 "value": {
-                                  "type": "number",
-                                  "exclusiveMinimum": 0,
-                                  "maximum": 1
+                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                 },
                                 "quality": {
                                   "default": {},
@@ -34529,9 +34523,7 @@
                               "type": "object",
                               "properties": {
                                 "value": {
-                                  "type": "number",
-                                  "exclusiveMinimum": 0,
-                                  "maximum": 1
+                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                 },
                                 "quality": {
                                   "default": {},

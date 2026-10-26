@@ -320,9 +320,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "type": "number",
-                                      "exclusiveMinimum": 0,
-                                      "maximum": 1
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -826,9 +824,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "type": "number",
-                                      "exclusiveMinimum": 0,
-                                      "maximum": 1
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -923,9 +919,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "type": "number",
-                                      "exclusiveMinimum": 0,
-                                      "maximum": 1
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -1429,9 +1423,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "type": "number",
-                                      "exclusiveMinimum": 0,
-                                      "maximum": 1
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -1526,9 +1518,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "type": "number",
-                                      "exclusiveMinimum": 0,
-                                      "maximum": 1
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -2032,9 +2022,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "type": "number",
-                                      "exclusiveMinimum": 0,
-                                      "maximum": 1
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -2129,9 +2117,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "type": "number",
-                                      "exclusiveMinimum": 0,
-                                      "maximum": 1
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -2635,9 +2621,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "type": "number",
-                                      "exclusiveMinimum": 0,
-                                      "maximum": 1
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
