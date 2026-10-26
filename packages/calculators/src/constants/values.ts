@@ -85,17 +85,45 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description The percentage of total charge leaked from appliance each year
-   * @ngaf2024 Table 10
+   * @ngaf2026 Table 10
    * @units percentage
    */
   REFRIGERATION_LEAKAGE_RATES: {
-    'Domestic refrigerators': percentage(1.7),
-    'Transport refrigeration': percentage(15.7),
-    'Domestic A/C portable': percentage(2.5),
-    'Domestic A/C split': percentage(3.5),
-    'Domestic A/C packaged': percentage(2.5),
-    'Light vehicle A/C': percentage(6.7),
-    'Heavy vehicle A/C': percentage(10.8),
+    'Domestic refrigerators': percentage(
+      ngaf2026['Table 10'].table['Domestic refrigerators'][
+        'Annual leakage rate (%)'
+      ],
+    ),
+    'Transport refrigeration': percentage(
+      ngaf2026['Table 10'].table['Transport refrigeration'][
+        'Annual leakage rate (%)'
+      ],
+    ),
+    'Domestic A/C portable': percentage(
+      ngaf2026['Table 10'].table['Domestic A/C portable'][
+        'Annual leakage rate (%)'
+      ],
+    ),
+    'Domestic A/C split': percentage(
+      ngaf2026['Table 10'].table['Domestic A/C split'][
+        'Annual leakage rate (%)'
+      ],
+    ),
+    'Domestic A/C packaged': percentage(
+      ngaf2026['Table 10'].table['Domestic A/C packaged'][
+        'Annual leakage rate (%)'
+      ],
+    ),
+    'Light vehicle A/C': percentage(
+      ngaf2026['Table 10'].table['Light vehicle A/C'][
+        'Annual leakage rate (%)'
+      ],
+    ),
+    'Heavy vehicle A/C': percentage(
+      ngaf2026['Table 10'].table['Heavy vehicle A/C'][
+        'Annual leakage rate (%)'
+      ],
+    ),
   },
 
   /**
@@ -275,7 +303,7 @@ export const commonConstants: CommonConstants = {
   /**
    * @description Electricity emission factors for each state and Australia, in kg CO2-e/kWh
    * @reference Primary data sources comprise National Greenhouse and Energy Reporting (Measurement) Determination 2008 (Schedule 1), Australian Energy Statistics, Clean Energy Regulator, and AEMO data and Department of Climate Change, Energy, the Environment and Water.
-   * @ngaf2024 Table 1
+   * @ngaf2026 Table 1
    * @units kg CO2-e/kWh
    */
   ELECTRICITY: {
@@ -399,7 +427,7 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description Electricity scope 2 emission factors for Renewable Energy Market Framework (RMF) in kg CO2-e/kWh
-   * @ngaf2024 Table 2
+   * @ngaf2026 Table 2
    * @units kg CO2-e/kWh
    */
   ELECTRICITY_RMF_SCOPE2_EF: massPerElectricity(
@@ -408,7 +436,7 @@ export const commonConstants: CommonConstants = {
   ),
   /**
    * @description Electricity scope 3 emission factors for Renewable Energy Market Framework (RMF) in kg CO2-e/kWh
-   * @ngaf2024 Table 2
+   * @ngaf2026 Table 2
    * @units kg CO2-e/kWh
    */
   ELECTRICITY_RMF_SCOPE3_EF: massPerElectricity(
@@ -424,13 +452,13 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description Jurisdictional renewable power percentage for the Renewable Energy Target (RET) in Australia
-   * @ngaf2024 Calculating emissions from electricity purchased or acquired using the market-based method
+   * @ngaf2026 Calculating emissions from electricity purchased or acquired using the market-based method
    */
-  JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE: percentage(79.51), // 2024
+  JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE: percentage(76.13), // 2026
 
   /**
    * @description Transport fuel emission factors for each fuel type, in kg CO2-e/GJ
-   * @ngaf2024 Table 9
+   * @ngaf2026 Table 9
    * @appendixA Table A.4.2.1 (Off-road equipment & vessels)
    * @units ENERGY_CONTENT is in J/m^3, other values are in kg CO2-e/GJ
    */
@@ -1735,7 +1763,7 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description Stationary fuel emission factors for each solid fuel type by mass, in kg CO2-e/GJ
-   * @ngaf2024 Table 4
+   * @ngaf2026 Table 4
    * @units kg CO2-e/GJ
    */
   STATIONARY_FUEL_FACTORS_BY_MASS: {
@@ -2658,7 +2686,7 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description Stationary fuel emission factors for each liquid fuel type by volume, in kg CO2-e/GJ
-   * @ngaf2024 Table 8
+   * @ngaf2026 Table 8
    * @units kg CO2-e/GJ
    */
   STATIONARY_FUEL_FACTORS_BY_VOLUME: {
@@ -3242,16 +3270,40 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description Stationary fuel emission factors for natural gas by volume, in kg CO2-e/GJ
-   * @ngaf2024 Table 5 and 6
+   * @ngaf2026 Table 5 and 6
    * @units kg CO2-e/GJ
    */
   NATURAL_GAS_FACTORS: {
     ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', gjPerKlToJPerLitre(25.3)), // GJ/kL
     SCOPE1_EF: {
-      CO2: massPerEnergy('CO2e', perGjToPerJ(51.4)),
-      CH4: massPerEnergy('CO2e', perGjToPerJ(0.1)),
-      N2O: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-      CO2e: massPerEnergy('CO2e', perGjToPerJ(51.53)),
+      CO2: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(
+          ngaf2026['Table 5'].table['Natural gas distributed in a pipeline']
+            .CO2,
+        ),
+      ),
+      CH4: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(
+          ngaf2026['Table 5'].table['Natural gas distributed in a pipeline']
+            .CH4,
+        ),
+      ),
+      N2O: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(
+          ngaf2026['Table 5'].table['Natural gas distributed in a pipeline']
+            .N2O,
+        ),
+      ),
+      CO2e: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(
+          ngaf2026['Table 5'].table['Natural gas distributed in a pipeline']
+            .COMBINED,
+        ),
+      ),
     },
     // Uses NGAF Table 6 non-metro values
     SCOPE3_EF: {
@@ -3299,10 +3351,12 @@ export const commonConstants: CommonConstants = {
       /**
        * @description Emission factors for solid waste treatment
        * @appendixA A.4.1.3, A.4.1.4
-       * @ngaf2024 Table 19, Table 29
+       * @reference National Greenhouse and Energy Reporting (Measurement) Determination 2008
        *
-       * Anaerobic digestion & composting factors come from NGAF 2024 Table 19, and are
+       * Anaerobic digestion & composting factors come from the NGER (2008) and are
        * converted to CH4 and N2O factors respectively by dividing by AR5 GWP values.
+       *
+       * These factors are repeated in NGAF as aggregated factors.
        */
       FACILITY_FACTORS: {
         Composting: {
