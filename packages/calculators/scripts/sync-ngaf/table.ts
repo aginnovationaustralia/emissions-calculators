@@ -24,9 +24,11 @@ export const getTableSheets = (workbook: XLSX.Workbook) => {
 const cellText = (cell: XLSX.Cell): string | undefined => {
   const value = cell.value();
   // xlsx-populate doesn't export the `RichText` class or include it in the return type
-  // of `Cell.text`, hence the cast to any.
-  if (typeof (value as any)?.text === 'function') {
-    return (value as any).text() as string;
+  // of `Cell.text`, hence the type casting.
+  if (
+    typeof (value as unknown as { text: () => string })?.text === 'function'
+  ) {
+    return (value as unknown as { text: () => string }).text();
   }
   return value?.toString();
 };
@@ -132,7 +134,7 @@ const applyHeaderRowToColumnMapping = (
  */
 export const getColumnMapping = <C extends string>(
   sheet: XLSX.Sheet,
-  tableOrigin: Required<Pick<TableMapping<string>, 'headerCols' | 'startRow'>>,
+  tableOrigin: Required<Pick<TableMapping<C>, 'headerCols' | 'startRow'>>,
 ) => {
   const { columnKeys, header } = getTableHeader(sheet, tableOrigin);
 
