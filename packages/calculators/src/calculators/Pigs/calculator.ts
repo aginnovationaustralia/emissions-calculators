@@ -9,7 +9,7 @@ import { calculatePurchasedLivestockEmissions } from '@/modules/scope3/15.1-purc
 import { calculateScope3EmissionsFromFuel } from '@/modules/scope3/15.10-fuel';
 import { calculateScope3SolidWasteEmissions } from '@/modules/scope3/15.12-waste';
 import { calculatePurchasedFeed } from '@/modules/scope3/15.2-purchased-feed';
-import { calculateScope3Services } from '@/modules/scope3/15.7-services';
+import { calculateScope3ServicesForActivity } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
@@ -128,7 +128,7 @@ const calculateScope3PigsHerd = (
   const purchasedFeed = calculatePurchasedFeed(herd, context);
 
   // Purchased Services/Contractors 15.7
-  const services = calculateScope3Services(herd, context);
+  const services = calculateScope3ServicesForActivity(herd, context);
 
   // Other Purchased Goods and Services 15.9
   const otherPurchasedGoodsAndServices =

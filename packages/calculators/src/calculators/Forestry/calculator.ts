@@ -15,7 +15,7 @@ import { calculateElectricityScope3 } from '@/modules/scope3/15.11-electricity';
 import { calculateScope3SolidWasteEmissions } from '@/modules/scope3/15.12-waste';
 import { calculateScope3Fertiliser } from '@/modules/scope3/15.4-fertiliser';
 import { calculateScope3Agrichemicals } from '@/modules/scope3/15.5-agrichemicals';
-import { calculateScope3Services } from '@/modules/scope3/15.7-services';
+import { calculateScope3ServicesForActivity } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import {
   IntermediateScope1,
@@ -122,7 +122,7 @@ const calculateScope3Forestry = (
   const agrichemicals = calculateScope3Agrichemicals(plantation, context);
 
   // Purchased Services/Contractors 15.7
-  const services = calculateScope3Services(plantation, context);
+  const services = calculateScope3ServicesForActivity(plantation, context);
 
   // Other Purchased Goods and Services 15.9
   const otherPurchasedGoodsAndServices =

@@ -10,6 +10,7 @@ import {
 import { calculateScope3EmissionsFromFuelStationary } from '@/modules/scope3/15.10-fuel';
 import { br } from '@/tools/containers';
 import { sum } from '@/tools/sum';
+import { ServicesInputTransformed } from './services.input';
 
 type ServicesFuelActivity = HasFuelInputTransformed & HasStateInputTransformed;
 
@@ -85,3 +86,18 @@ export const calculateScope3Services = (
     .named('E')
     .reference('15.7.1.1 (1)');
 };
+
+/**
+ * Purchased services for an industry calculator activity (crop, herd, flock, lot or
+ * plantation). Those activities carry both their own fuel (`fuel`, used by 8.1, 8.2 and
+ * 15.10) and the fuel burnt by contractors on their behalf (`services.fuel`). 15.7 must
+ * only use the latter, with the activity's own `state` for the stationary factors.
+ */
+export const calculateScope3ServicesForActivity = (
+  activity: ServicesInputTransformed & HasStateInputTransformed,
+  context: ExecutionContext<HasCommonConstants>,
+) =>
+  calculateScope3Services(
+    { state: activity.state, fuel: activity.services.fuel },
+    context,
+  );
