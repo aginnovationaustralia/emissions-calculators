@@ -19,7 +19,8 @@ export const InorganicFertiliserKnownComponentWithOriginInputSchema = object({
     {
       name: 'fractionOfFertiliser',
       method: '1',
-      description: 'Fraction of inorganic fertiliser that is applied',
+      description:
+        'Fraction of this component of the inorganic fertiliser that is being applied, by weight',
       modules: [FERT_INORGANIC_5_1, LEACH_RUNOFF_5_5, PURCH_FERT_15_4],
     },
     isProportion,
@@ -47,7 +48,8 @@ export const InorganicFertiliserKnownComponentNoOriginInputSchema = object({
     {
       name: 'fractionOfFertiliser',
       method: '1',
-      description: 'Fraction of inorganic fertiliser that is applied',
+      description:
+        'Fraction of this component of the inorganic fertiliser that is being applied, by weight',
       modules: [FERT_INORGANIC_5_1, LEACH_RUNOFF_5_5, PURCH_FERT_15_4],
     },
     isProportion,
@@ -84,7 +86,8 @@ export const InorganicFertiliserUnknownComponentInputSchema = object({
     {
       name: 'fractionOfFertiliser',
       method: '1',
-      description: 'Fraction of inorganic fertiliser that is applied',
+      description:
+        'Fraction of this component of the inorganic fertiliser that is being applied, by weight',
       modules: [FERT_INORGANIC_5_1, LEACH_RUNOFF_5_5, PURCH_FERT_15_4],
     },
     isProportion,
