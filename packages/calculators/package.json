@@ -322,7 +322,8 @@
     "generate:openapi": "tsx scripts/generate-openapi.ts",
     "check:openapi-breaking": "tsx scripts/check-openapi-breaking.ts",
     "dump:sheet": "tsx scripts/dump-test-sheet.ts",
-    "prepare:release": "pnpm run build && pnpm run generate:exports && pnpm run generate:openapi && pnpm run check:openapi-breaking"
+    "prepare:release": "pnpm run build && pnpm run generate:exports && pnpm run generate:openapi && pnpm run check:openapi-breaking",
+    "sync:ngaf": "tsx scripts/sync-ngaf/index.ts"
   },
   "repository": {
     "type": "git",
