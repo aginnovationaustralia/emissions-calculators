@@ -1,6 +1,6 @@
 import { PoultryClass } from '@/constants/enums';
 import { poultryManureModules } from '@/modules/scope1/shared/poultry/modules';
-import { numberInput, numberInputOptional } from '@/tools/inputs';
+import { isProportion, numberInput, numberInputOptional } from '@/tools/inputs';
 import { LivestockLocation, MANURE_POULTRY_4_6 } from '@/tools/modules';
 import {
   days,
@@ -61,7 +61,7 @@ const createPoultryClassSharedFieldsSchema = (
         description: 'Crude protein content of the diet for this class',
         modules: poultryManureModules(location),
       },
-      (s) => s.gt(0).max(1),
+      isProportion,
     ),
 
     manureAllocations: poultryMMSAllocationInputSchema(location),
@@ -106,7 +106,7 @@ const createPoultryClassLivestockInputSchema = <P extends PoultryClass>(
           description: 'Dry matter digestibility of the feed for this class',
           modules: [MANURE_POULTRY_4_6],
         },
-        (s) => s.gt(0).max(1),
+        isProportion,
       ),
     }),
     className,
