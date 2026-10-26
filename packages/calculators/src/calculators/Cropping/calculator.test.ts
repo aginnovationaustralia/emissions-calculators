@@ -418,4 +418,49 @@ describe('Cropping Calculator', () => {
       expect(emissions.net.total.tonnesCO2e).toBeCloseTo(scopeSum, 7);
     });
   });
+
+  describe('summing across crops when the first crop has none of an emission source', () => {
+    let emissions: CroppingOutput;
+
+    beforeAll(() => {
+      const input = CroppingInputSchema.parse({
+        ...lulucfCroppingTestInput,
+        crops: [
+          {
+            ...grainWheat,
+            crop: cropInputKeys[0],
+            chemicals: [],
+            fertiliser: {
+              productionSystem: 'Non-irrigated pasture',
+              inorganic: { applications: [], calculationMethodScope1: '1' },
+              organic: { applications: [] },
+            },
+          },
+          { ...grainWheat, crop: cropInputKeys[1] },
+        ],
+      } satisfies CroppingInput);
+      emissions = calculateCropping(input, testContext('Cropping'));
+    });
+
+    it("carries the second crop's fertiliser N2O into the enterprise total", () => {
+      const [first, second] = emissions.intermediate;
+      expect(first.scope1.inorganicFertiliserN2O.amountGasKg).toBe(0);
+      expect(second.scope1.inorganicFertiliserN2O.amountGasKg).toBeGreaterThan(
+        0,
+      );
+      expect(emissions.scope1.inorganicFertiliserN2O).toMatchObject({
+        gas: 'N2O',
+        amountGasKg: second.scope1.inorganicFertiliserN2O.amountGasKg,
+      });
+    });
+
+    it("carries the second crop's agrichemicals into the enterprise total", () => {
+      const [first, second] = emissions.intermediate;
+      expect(first.scope3.agrichemicals.amountGasKg).toBe(0);
+      expect(second.scope3.agrichemicals.amountGasKg).toBeGreaterThan(0);
+      expect(emissions.scope3.agrichemicals.amountGasKg).toBe(
+        second.scope3.agrichemicals.amountGasKg,
+      );
+    });
+  });
 });

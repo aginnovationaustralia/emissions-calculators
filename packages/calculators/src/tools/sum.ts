@@ -1,4 +1,9 @@
-import { Metadata, NumberContainer, SummedContainer } from './containers';
+import {
+  additiveUnit,
+  Metadata,
+  NumberContainer,
+  SummedContainer,
+} from './containers';
 import { NumberUnit, VoidUnit, voidUnit } from './units';
 
 // Extract the unit type from an origin (for preserving unit when summing)
@@ -21,12 +26,17 @@ export function sum(
   baseOrigin?: Metadata,
 ): SummedContainer<NumberUnit> {
   const [first, ...rest] = array;
-  const rootUnit: NumberUnit = first ? first.unit : voidUnit();
+  // The unit is chosen across every item with the same rule as `plus`, rather than taken from the
+  // first item: the first item may itself be an empty (void) sum, e.g. an enterprise element with
+  // no applications, and its void unit would otherwise make the whole total read as zero.
   const unit: NumberUnit = {
-    ...rootUnit,
+    ...array.reduce<NumberUnit>(
+      (acc, curr) => additiveUnit(acc, curr.unit, 'add'),
+      voidUnit(),
+    ),
     store: rest.reduce(
       (acc, curr) => acc.plus(curr.unit.store),
-      rootUnit.store,
+      first ? first.unit.store : voidUnit().store,
     ),
   };
   return new SummedContainer(unit, array, baseOrigin);

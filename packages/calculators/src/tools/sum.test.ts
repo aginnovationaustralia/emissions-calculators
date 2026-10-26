@@ -1,7 +1,7 @@
 import { RootContainer, root } from './containers';
 import { input } from './inputs';
 import { sum } from './sum';
-import { isVoid, mass, Mass } from './units';
+import { Area, area, isVoid, mass, Mass, realNumber } from './units';
 
 // `sum` underlies every aggregation across seasons/classes/herds in the calculators. Its
 // unit-inference for the empty-array case, and its use of the first item's unit as the "root"
@@ -47,5 +47,57 @@ describe('sum', () => {
     });
     const result = sum([method1Only, dualTrack]);
     expect(result.unit.store.toNumber()).toBe(7);
+  });
+  it('takes the unit from a later item when the first item is an empty sum', () => {
+    // e.g. the first crop has no fertiliser applications, so its own figure is an empty sum
+    const emptyFirst = sum<RootContainer<Mass<'N2O'>>>([]);
+    const result = sum([emptyFirst, root(mass('N2O', 15.6))]);
+    expect(result.unit.__unitType).toBe('Mass');
+    expect(result.unit.substance).toBe('N2O');
+    expect(result.unit.store.toNumber()).toBe(15.6);
+  });
+
+  it('keeps every item when void items are interleaved', () => {
+    const empty = sum<RootContainer<Mass<'CO2'>>>([]);
+    const result = sum([
+      empty,
+      root(mass('CO2', 2)),
+      empty,
+      root(mass('CO2', 3)),
+    ]);
+    expect(result.unit.substance).toBe('CO2');
+    expect(result.unit.store.toNumber()).toBe(5);
+  });
+
+  it('stays void when every item is void', () => {
+    const empty = sum<RootContainer<Mass<'CO2'>>>([]);
+    const result = sum([empty, empty]);
+    expect(isVoid(result.unit)).toBe(true);
+    expect(result.unit.store.toNumber()).toBe(0);
+  });
+
+  it('takes the unit from a later item when the first item is a plain number', () => {
+    const result = sum([root(realNumber(0)), root(mass('CH4', 4))]);
+    expect(result.unit).toMatchObject({ __unitType: 'Mass', substance: 'CH4' });
+    expect(result.unit.store.toNumber()).toBe(4);
+  });
+
+  it('reports mismatched units the same way `plus` does', () => {
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    try {
+      const result = sum<RootContainer<Mass<'CO2'> | Area>>([
+        root(mass('CO2', 1)),
+        root(area(2)),
+      ]);
+      expect(consoleError).toHaveBeenCalledWith(
+        expect.stringContaining('add does not support'),
+      );
+      expect(result.unit.__unitType).toBe('RealNumber');
+      expect(result.unit.store.toNumber()).toBe(3);
+    } finally {
+      consoleError.mockRestore();
+    }
   });
 });
