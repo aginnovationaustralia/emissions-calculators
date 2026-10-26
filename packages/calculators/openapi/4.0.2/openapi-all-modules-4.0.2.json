@@ -7097,7 +7097,8 @@
                       "state": {
                         "description": "The state or territory the activity is based in",
                         "x-modules": [
-                          "6.1"
+                          "6.1",
+                          "6.3"
                         ],
                         "$ref": "#/components/schemas/State"
                       },
@@ -7107,12 +7108,20 @@
                           "6.1"
                         ],
                         "$ref": "#/components/schemas/ClimateZoneOrZoneType"
+                      },
+                      "isInLeachingZone": {
+                        "type": "boolean",
+                        "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
+                        "x-modules": [
+                          "6.3"
+                        ]
                       }
                     },
                     "required": [
                       "crop",
                       "state",
-                      "climateZone"
+                      "climateZone",
+                      "isInLeachingZone"
                     ],
                     "additionalProperties": false
                   },
