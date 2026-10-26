@@ -1,4 +1,3 @@
-import { isDefined } from '@/common/filters';
 import { calculate10SolidWasteEmissions } from '@/modules/scope1/10-solid-waste';
 import { calculate34SheepEntericMethane } from '@/modules/scope1/3-enteric-methane/3.4-sheep-enteric';
 import { calculate44SheepManureManagement } from '@/modules/scope1/4-manure-management/4.4-sheep-manure';
@@ -17,6 +16,11 @@ import {
   calculate81TransportFuel,
   calculate82StationaryFuel,
 } from '@/modules/scope1/8-fuel-use';
+import {
+  calculateForAllClassPeriods,
+  getDurationDays,
+  SheepPeriodProps,
+} from '@/modules/scope1/shared/sheep/helpers';
 import { calculatePurchasedLivestockEmissions } from '@/modules/scope3/15.1-purchased-livestock';
 import { calculateScope3EmissionsFromFuel } from '@/modules/scope3/15.10-fuel';
 import { calculateScope3SolidWasteEmissions } from '@/modules/scope3/15.12-waste';
@@ -29,12 +33,14 @@ import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { selectConstant } from '@/tools/constants';
-import { Container } from '@/tools/containers';
-import { valueObject } from '@/tools/outputs';
+import { Container, NumberContainer, root, num } from '@/tools/containers';
+import { exposeMassValue, extractMassAsNumber } from '@/tools/extract';
+import { generateIntensity } from '@/tools/intensity';
+import { daysInYear } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { Mass } from '@/tools/units';
+import { mass, Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
-import { divideBySafeFromZero, entriesFromObject } from '../common/tools';
+import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForSheepCalculator } from './constants';
 import { SheepInputTransformed } from './types/input';
@@ -45,15 +51,43 @@ import { SheepScope1Output } from './types/scope1.output';
 import { SheepScope3Output } from './types/scope3.output';
 import { SheepFlockInputTransformed } from './types/sheep-flock.input';
 
-function getCleanWoolProducedForFlock(flock: SheepFlockInputTransformed) {
-  const { period: _period, ...classes } = flock.classes;
-  return sum(
-    entriesFromObject(classes)
-      .map(([_className, classInput]) => classInput)
-      .filter(isDefined)
-      .map(({ greasyWoolProduction, cleanWoolYieldProportion }) =>
-        greasyWoolProduction.multiply(cleanWoolYieldProportion),
-      ),
+/**
+ * Clean wool produced by sheep in class *k* in period *j*. Greasy wool production is an
+ * annual amount per head, so it is spread across the year and scaled by the head and
+ * duration of each period, matching how 4.4.1.3 (8) treats wool production.
+ */
+function calculateCleanWoolProducedInPeriod(
+  periodProps: SheepPeriodProps,
+): NumberContainer<Mass<'Clean Wool'>> {
+  const { flock, className, periodInput } = periodProps;
+  const classInput = flock.classes[className];
+  if (!classInput) {
+    return root(mass('Clean Wool', 0));
+  }
+  const { greasyWoolProduction, cleanWoolYieldProportion } = classInput;
+
+  const cleanWoolPerHeadPerDay = greasyWoolProduction
+    .multiply(cleanWoolYieldProportion)
+    .divide(daysInYear);
+
+  return periodInput.head.multiply(
+    cleanWoolPerHeadPerDay.multiply(getDurationDays(periodProps)),
+  );
+}
+
+function getCleanWoolProducedForFlock(
+  flock: SheepFlockInputTransformed,
+  context: ExecutionContext<ConstantsForSheepCalculator>,
+  isFebruaryInLeapYear: SheepInputTransformed['isFebruaryInLeapYear'],
+) {
+  return calculateForAllClassPeriods(
+    { flock, context },
+    calculateCleanWoolProducedInPeriod,
+    {
+      classResultName: (className) => `cleanWoolProduced=${className}`,
+      flockResultName: 'cleanWoolProduced',
+      isFebruaryInLeapYear,
+    },
   );
 }
 
@@ -75,23 +109,21 @@ function getCleanWoolProducedForFlock(flock: SheepFlockInputTransformed) {
  */
 function getMeatWoolAllocation(
   liveweightProduced: Container<Mass<'Liveweight'>>,
-  cleanWoolProduced: Container<
-    ReturnType<typeof getCleanWoolProducedForFlock>['unit']
-  >,
+  cleanWoolProduced: Container<Mass<'Clean Wool'>>,
   constants: ConstantsForSheepCalculator,
 ) {
   const proteinInLiveweight = selectConstant(
     constants.SHEEP,
     'LIVEWEIGHT_PROTEIN',
   );
-  const liveweightProteinKg = liveweightProduced
-    .multiply(proteinInLiveweight)
-    .unit.store.toNumber();
+  const liveweightProteinKg = extractMassAsNumber(
+    liveweightProduced.multiply(proteinInLiveweight),
+  );
 
   const proteinInCleanWool = selectConstant(constants.SHEEP, 'WOOL_PROTEIN');
-  const woolProteinKg = cleanWoolProduced
-    .multiply(proteinInCleanWool)
-    .unit.store.toNumber();
+  const woolProteinKg = extractMassAsNumber(
+    cleanWoolProduced.multiply(proteinInCleanWool),
+  );
 
   const woolAllocation = divideBySafeFromZero(
     woolProteinKg,
@@ -102,17 +134,19 @@ function getMeatWoolAllocation(
   return { meatAllocation, woolAllocation };
 }
 
-function getSingleIntensities(
-  netEmissionsKgCO2e: number,
+export function getSingleIntensities(
+  netEmissions: Container<Mass<'CO2e'>>,
   flock: SheepFlockInputTransformed,
   context: ExecutionContext<ConstantsForSheepCalculator>,
+  input: Pick<SheepInputTransformed, 'isFebruaryInLeapYear'>,
 ): SheepIntermediateIntensitiesOutput {
   const { constants } = context;
   const liveweightProduced = flock.liveweightSoldKg;
-  const cleanWoolProduced = getCleanWoolProducedForFlock(flock);
-
-  const liveweightProducedKg = liveweightProduced.unit.store.toNumber();
-  const cleanWoolProducedKg = cleanWoolProduced.unit.store.toNumber();
+  const cleanWoolProduced = getCleanWoolProducedForFlock(
+    flock,
+    context,
+    input.isFebruaryInLeapYear,
+  );
 
   const { meatAllocation, woolAllocation } = getMeatWoolAllocation(
     liveweightProduced,
@@ -120,87 +154,63 @@ function getSingleIntensities(
     constants,
   );
 
-  const liveweightIntensity = valueObject(
-    divideBySafeFromZero(
-      netEmissionsKgCO2e * meatAllocation,
-      liveweightProducedKg,
-    ),
-  );
-  const woolIntensity = valueObject(
-    divideBySafeFromZero(
-      netEmissionsKgCO2e * woolAllocation,
-      cleanWoolProducedKg,
-    ),
-  );
-
   return {
-    liveweightProducedKg: valueObject(liveweightProducedKg),
-    liveweightIntensity,
-    woolProducedKg: valueObject(cleanWoolProducedKg),
-    woolIntensity,
+    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightIntensity: generateIntensity(
+      netEmissions.multiply(num(meatAllocation)),
+      liveweightProduced,
+    ),
+    woolProducedKg: exposeMassValue(cleanWoolProduced),
+    woolIntensity: generateIntensity(
+      netEmissions.multiply(num(woolAllocation)),
+      cleanWoolProduced,
+    ),
   };
 }
 
-function getTotalIntensities(
-  netTotalEmissionsKgCO2e: number,
-  netLulucfKgCO2e: number,
+export function getTotalIntensities(
+  netTotalEmissions: Container<Mass<'CO2e'>>,
+  netLulucf: Container<Mass<'CO2e'>>,
   flocks: SheepFlockInputTransformed[],
   context: ExecutionContext<ConstantsForSheepCalculator>,
+  input: Pick<SheepInputTransformed, 'isFebruaryInLeapYear'>,
 ): SheepIntensitiesOutput {
   const { constants } = context;
   const liveweightProduced = sum(flocks.map((flock) => flock.liveweightSoldKg));
   const cleanWoolProduced = sum(
-    flocks.map((flock) => getCleanWoolProducedForFlock(flock)),
+    flocks.map((flock) =>
+      getCleanWoolProducedForFlock(flock, context, input.isFebruaryInLeapYear),
+    ),
   );
-
-  const liveweightProducedKg = liveweightProduced.unit.store.toNumber();
-
-  const cleanWoolProducedKg = cleanWoolProduced.unit.store.toNumber();
-
-  const totalEmissionsExcludingLulucf =
-    netTotalEmissionsKgCO2e - netLulucfKgCO2e;
 
   const { meatAllocation, woolAllocation } = getMeatWoolAllocation(
     liveweightProduced,
     cleanWoolProduced,
     constants,
   );
-
-  const liveweightIntensityExcludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      totalEmissionsExcludingLulucf * meatAllocation,
-      liveweightProducedKg,
-    ),
-  );
-
-  const liveweightIntensityIncludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      netTotalEmissionsKgCO2e * meatAllocation,
-      liveweightProducedKg,
-    ),
-  );
-
-  const woolIntensityExcludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      totalEmissionsExcludingLulucf * woolAllocation,
-      cleanWoolProducedKg,
-    ),
-  );
-
-  const woolIntensityIncludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      netTotalEmissionsKgCO2e * woolAllocation,
-      cleanWoolProducedKg,
-    ),
-  );
+  const meat = num(meatAllocation);
+  const wool = num(woolAllocation);
+  const netEmissionsExcludingLulucf = netTotalEmissions.minus(netLulucf);
 
   return {
-    liveweightProducedKg: valueObject(liveweightProducedKg),
-    liveweightIntensityExcludingLULUCF,
-    liveweightIntensityIncludingLULUCF,
-    woolProducedKg: valueObject(cleanWoolProducedKg),
-    woolIntensityExcludingLULUCF,
-    woolIntensityIncludingLULUCF,
+    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightIntensityExcludingLULUCF: generateIntensity(
+      netEmissionsExcludingLulucf.multiply(meat),
+      liveweightProduced,
+    ),
+    liveweightIntensityIncludingLULUCF: generateIntensity(
+      netTotalEmissions.multiply(meat),
+      liveweightProduced,
+    ),
+    woolProducedKg: exposeMassValue(cleanWoolProduced),
+    woolIntensityExcludingLULUCF: generateIntensity(
+      netEmissionsExcludingLulucf.multiply(wool),
+      cleanWoolProduced,
+    ),
+    woolIntensityIncludingLULUCF: generateIntensity(
+      netTotalEmissions.multiply(wool),
+      cleanWoolProduced,
+    ),
   };
 }
 

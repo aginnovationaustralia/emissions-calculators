@@ -27,8 +27,9 @@ import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1 } from '@/tools/calculators';
 import { selectConstant } from '@/tools/constants';
-import { Container } from '@/tools/containers';
-import { valueObject } from '@/tools/outputs';
+import { Container, num } from '@/tools/containers';
+import { exposeMassValue, extractMassAsNumber } from '@/tools/extract';
+import { generateIntensity } from '@/tools/intensity';
 import { oneMinus } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
@@ -39,10 +40,8 @@ import { ConstantsForCottonCalculator } from './constants';
 import {
   CottonIntensitiesOutput,
   CottonIntermediateIntensitiesOutput,
-  CottonIntermediateSeedAndLintIntensitiesOutput,
   CottonOutputSchema,
   CottonScope1Output,
-  CottonSeedAndLintIntensitiesOutput,
 } from './types';
 import { CottonCropInputTransformed } from './types/crop.input';
 
@@ -72,194 +71,152 @@ function getCottonSeedHarvestedForCrop(
 }
 
 function getSingleIntensities(
-  netEmissionsKgCO2e: number,
+  netEmissions: Container<Mass<'CO2e'>>,
   crop: CottonCropInputTransformed,
   context: ExecutionContext<ConstantsForResidueManagement>,
 ): CottonIntermediateIntensitiesOutput {
   const { constants } = context;
-  const cottonHarvestedKg = getCottonHarvestedForCrop(
-    crop,
-    constants,
-  ).unit.store.value.toNumber();
-  const cottonLintHarvestedKg = getCottonLintHarvestedForCrop(
-    crop,
-    constants,
-  ).unit.store.value.toNumber();
-  const cottonSeedHarvestedKg = getCottonSeedHarvestedForCrop(
-    crop,
-    constants,
-  ).unit.store.value.toNumber();
+  const cottonHarvested = getCottonHarvestedForCrop(crop, constants);
+  const cottonLintHarvested = getCottonLintHarvestedForCrop(crop, constants);
+  const cottonSeedHarvested = getCottonSeedHarvestedForCrop(crop, constants);
 
   const economicLintAllocation = selectConstant(
     constants.CROP,
     'COTTON_ECONOMIC_LINT_ALLOCATION',
-  ).unit.store.value.toNumber();
-  const economicSeedAllocation = 1 - economicLintAllocation;
-
-  const massLintAllocation = divideBySafeFromZero(
-    cottonLintHarvestedKg,
-    cottonHarvestedKg,
   );
-  const massSeedAllocation = divideBySafeFromZero(
-    cottonSeedHarvestedKg,
-    cottonHarvestedKg,
+  const economicSeedAllocation = num(1).minus(economicLintAllocation);
+
+  const massLintAllocation = num(
+    divideBySafeFromZero(
+      extractMassAsNumber(cottonLintHarvested),
+      extractMassAsNumber(cottonHarvested),
+    ),
   );
-
-  const cottonIntensity = valueObject(
-    divideBySafeFromZero(netEmissionsKgCO2e, cottonHarvestedKg),
+  const massSeedAllocation = num(
+    divideBySafeFromZero(
+      extractMassAsNumber(cottonSeedHarvested),
+      extractMassAsNumber(cottonHarvested),
+    ),
   );
-
-  // Lint and cottonseed intensities based on economic allocation of 83%
-  const economicIntensities: CottonIntermediateSeedAndLintIntensitiesOutput = {
-    cottonLint: valueObject(
-      divideBySafeFromZero(
-        netEmissionsKgCO2e * economicLintAllocation,
-        cottonLintHarvestedKg,
-      ),
-    ),
-    cottonSeed: valueObject(
-      divideBySafeFromZero(
-        netEmissionsKgCO2e * economicSeedAllocation,
-        cottonSeedHarvestedKg,
-      ),
-    ),
-  };
-
-  // Lint and cottonseed intensities based on mass
-  const massIntensities: CottonIntermediateSeedAndLintIntensitiesOutput = {
-    cottonLint: valueObject(
-      divideBySafeFromZero(
-        netEmissionsKgCO2e * massLintAllocation,
-        cottonLintHarvestedKg,
-      ),
-    ),
-    cottonSeed: valueObject(
-      divideBySafeFromZero(
-        netEmissionsKgCO2e * massSeedAllocation,
-        cottonSeedHarvestedKg,
-      ),
-    ),
-  };
 
   return {
-    cottonHarvestedKg: valueObject(cottonHarvestedKg),
-    cottonLintHarvestedKg: valueObject(cottonLintHarvestedKg),
-    cottonSeedHarvestedKg: valueObject(cottonSeedHarvestedKg),
-    cottonIntensity,
-    economicIntensities,
-    massIntensities,
+    cottonHarvestedKg: exposeMassValue(cottonHarvested),
+    cottonLintHarvestedKg: exposeMassValue(cottonLintHarvested),
+    cottonSeedHarvestedKg: exposeMassValue(cottonSeedHarvested),
+    cottonIntensity: generateIntensity(netEmissions, cottonHarvested),
+    // Lint and cottonseed intensities based on economic allocation of 83%
+    economicIntensities: {
+      cottonLint: generateIntensity(
+        netEmissions.multiply(economicLintAllocation),
+        cottonLintHarvested,
+      ),
+      cottonSeed: generateIntensity(
+        netEmissions.multiply(economicSeedAllocation),
+        cottonSeedHarvested,
+      ),
+    },
+    // Lint and cottonseed intensities based on mass
+    massIntensities: {
+      cottonLint: generateIntensity(
+        netEmissions.multiply(massLintAllocation),
+        cottonLintHarvested,
+      ),
+      cottonSeed: generateIntensity(
+        netEmissions.multiply(massSeedAllocation),
+        cottonSeedHarvested,
+      ),
+    },
   };
 }
 
 function getTotalIntensities(
-  netTotalEmissionsKgCO2e: number,
-  netLulucfKgCO2e: number,
+  netTotalEmissions: Container<Mass<'CO2e'>>,
+  netLulucf: Container<Mass<'CO2e'>>,
   crops: CottonCropInputTransformed[],
   context: ExecutionContext<ConstantsForResidueManagement>,
 ): CottonIntensitiesOutput {
   const { constants } = context;
-  const cottonHarvestedKg = sum(
+  const cottonHarvested = sum(
     crops.map((crop) => getCottonHarvestedForCrop(crop, constants)),
-  ).unit.store.value.toNumber();
-
-  const cottonLintHarvestedKg = sum(
+  );
+  const cottonLintHarvested = sum(
     crops.map((crop) => getCottonLintHarvestedForCrop(crop, constants)),
-  ).unit.store.value.toNumber();
-
-  const cottonSeedHarvestedKg = sum(
+  );
+  const cottonSeedHarvested = sum(
     crops.map((crop) => getCottonSeedHarvestedForCrop(crop, constants)),
-  ).unit.store.value.toNumber();
+  );
 
-  const totalEmissionsExcludingLulucf =
-    netTotalEmissionsKgCO2e - netLulucfKgCO2e;
+  const netEmissionsExcludingLulucf = netTotalEmissions.minus(netLulucf);
 
   const economicLintAllocation = selectConstant(
     constants.CROP,
     'COTTON_ECONOMIC_LINT_ALLOCATION',
-  ).unit.store.value.toNumber();
-  const economicSeedAllocation = 1 - economicLintAllocation;
-
-  const cottonExcludingLULUCF = valueObject(
-    divideBySafeFromZero(totalEmissionsExcludingLulucf, cottonHarvestedKg),
   );
+  const economicSeedAllocation = num(1).minus(economicLintAllocation);
 
-  const cottonIncludingLULUCF = valueObject(
-    divideBySafeFromZero(netTotalEmissionsKgCO2e, cottonHarvestedKg),
+  const massLintAllocation = num(
+    divideBySafeFromZero(
+      extractMassAsNumber(cottonLintHarvested),
+      extractMassAsNumber(cottonHarvested),
+    ),
   );
-
-  // Lint and cottonseed intensities based on economic allocation of 83%
-  const economicIntensities: CottonSeedAndLintIntensitiesOutput = {
-    cottonLintExcludingLULUCF: valueObject(
-      divideBySafeFromZero(
-        totalEmissionsExcludingLulucf * economicLintAllocation,
-        cottonLintHarvestedKg,
-      ),
+  const massSeedAllocation = num(
+    divideBySafeFromZero(
+      extractMassAsNumber(cottonSeedHarvested),
+      extractMassAsNumber(cottonHarvested),
     ),
-    cottonLintIncludingLULUCF: valueObject(
-      divideBySafeFromZero(
-        netTotalEmissionsKgCO2e * economicLintAllocation,
-        cottonLintHarvestedKg,
-      ),
-    ),
-    cottonSeedExcludingLULUCF: valueObject(
-      divideBySafeFromZero(
-        totalEmissionsExcludingLulucf * economicSeedAllocation,
-        cottonSeedHarvestedKg,
-      ),
-    ),
-    cottonSeedIncludingLULUCF: valueObject(
-      divideBySafeFromZero(
-        netTotalEmissionsKgCO2e * economicSeedAllocation,
-        cottonSeedHarvestedKg,
-      ),
-    ),
-  };
-
-  // Lint and cottonseed intensities based on mass
-  const massLintAllocation = divideBySafeFromZero(
-    cottonLintHarvestedKg,
-    cottonHarvestedKg,
   );
-  const massSeedAllocation = divideBySafeFromZero(
-    cottonSeedHarvestedKg,
-    cottonHarvestedKg,
-  );
-
-  const massIntensities: CottonSeedAndLintIntensitiesOutput = {
-    cottonLintExcludingLULUCF: valueObject(
-      divideBySafeFromZero(
-        totalEmissionsExcludingLulucf * massLintAllocation,
-        cottonLintHarvestedKg,
-      ),
-    ),
-    cottonLintIncludingLULUCF: valueObject(
-      divideBySafeFromZero(
-        netTotalEmissionsKgCO2e * massLintAllocation,
-        cottonLintHarvestedKg,
-      ),
-    ),
-    cottonSeedExcludingLULUCF: valueObject(
-      divideBySafeFromZero(
-        totalEmissionsExcludingLulucf * massSeedAllocation,
-        cottonSeedHarvestedKg,
-      ),
-    ),
-    cottonSeedIncludingLULUCF: valueObject(
-      divideBySafeFromZero(
-        netTotalEmissionsKgCO2e * massSeedAllocation,
-        cottonSeedHarvestedKg,
-      ),
-    ),
-  };
 
   return {
-    cottonHarvestedKg: valueObject(cottonHarvestedKg),
-    cottonLintHarvestedKg: valueObject(cottonLintHarvestedKg),
-    cottonSeedHarvestedKg: valueObject(cottonSeedHarvestedKg),
-    cottonExcludingLULUCF,
-    cottonIncludingLULUCF,
-    economicIntensities,
-    massIntensities,
+    cottonHarvestedKg: exposeMassValue(cottonHarvested),
+    cottonLintHarvestedKg: exposeMassValue(cottonLintHarvested),
+    cottonSeedHarvestedKg: exposeMassValue(cottonSeedHarvested),
+    cottonExcludingLULUCF: generateIntensity(
+      netEmissionsExcludingLulucf,
+      cottonHarvested,
+    ),
+    cottonIncludingLULUCF: generateIntensity(
+      netTotalEmissions,
+      cottonHarvested,
+    ),
+    // Lint and cottonseed intensities based on economic allocation of 83%
+    economicIntensities: {
+      cottonLintExcludingLULUCF: generateIntensity(
+        netEmissionsExcludingLulucf.multiply(economicLintAllocation),
+        cottonLintHarvested,
+      ),
+      cottonLintIncludingLULUCF: generateIntensity(
+        netTotalEmissions.multiply(economicLintAllocation),
+        cottonLintHarvested,
+      ),
+      cottonSeedExcludingLULUCF: generateIntensity(
+        netEmissionsExcludingLulucf.multiply(economicSeedAllocation),
+        cottonSeedHarvested,
+      ),
+      cottonSeedIncludingLULUCF: generateIntensity(
+        netTotalEmissions.multiply(economicSeedAllocation),
+        cottonSeedHarvested,
+      ),
+    },
+    // Lint and cottonseed intensities based on mass
+    massIntensities: {
+      cottonLintExcludingLULUCF: generateIntensity(
+        netEmissionsExcludingLulucf.multiply(massLintAllocation),
+        cottonLintHarvested,
+      ),
+      cottonLintIncludingLULUCF: generateIntensity(
+        netTotalEmissions.multiply(massLintAllocation),
+        cottonLintHarvested,
+      ),
+      cottonSeedExcludingLULUCF: generateIntensity(
+        netEmissionsExcludingLulucf.multiply(massSeedAllocation),
+        cottonSeedHarvested,
+      ),
+      cottonSeedIncludingLULUCF: generateIntensity(
+        netTotalEmissions.multiply(massSeedAllocation),
+        cottonSeedHarvested,
+      ),
+    },
   };
 }
 

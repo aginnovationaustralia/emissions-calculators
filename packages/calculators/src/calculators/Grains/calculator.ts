@@ -27,11 +27,11 @@ import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
-import { valueObject } from '@/tools/outputs';
+import { exposeMassValue } from '@/tools/extract';
+import { generateIntensity } from '@/tools/intensity';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
-import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForGrainsCalculator } from './constants';
 import { GrainsOutputSchema, GrainsScope1Output } from './types';
@@ -39,47 +39,36 @@ import { GrainsCropInputTransformed } from './types/crop.input';
 import { GrainsIntermediateIntensitiesOutput } from './types/intermediate-intensities.output';
 
 function getSingleIntensities(
-  netEmissionsKgCO2e: number,
+  netEmissions: Container<Mass<'CO2e'>>,
   crop: GrainsCropInputTransformed,
   context: ExecutionContext<ConstantsForResidueManagement>,
 ): GrainsIntermediateIntensitiesOutput {
-  const grainHarvestedKg = getAmountProduced(
-    crop,
-    context.constants,
-  ).unit.store.toNumber();
-  const grainsIntensity = valueObject(
-    divideBySafeFromZero(netEmissionsKgCO2e, grainHarvestedKg),
-  );
+  const harvested = getAmountProduced(crop, context.constants);
 
   return {
-    grainsIntensity,
-    grainHarvestedKg: valueObject(grainHarvestedKg),
+    grainsIntensity: generateIntensity(netEmissions, harvested),
+    grainHarvestedKg: exposeMassValue(harvested),
   };
 }
 
 function getTotalIntensities(
-  netTotalEmissionsKgCO2e: number,
-  netLulucfKgCO2e: number,
+  netTotalEmissions: Container<Mass<'CO2e'>>,
+  netLulucf: Container<Mass<'CO2e'>>,
   crops: GrainsCropInputTransformed[],
   context: ExecutionContext<ConstantsForResidueManagement>,
 ) {
   const { constants } = context;
-  const grainHarvestedKg = sum(
+  const harvested = sum(
     crops.map((crop) => getAmountProduced(crop, constants)),
-  ).unit.store.toNumber();
-  const grainsExcludingLULUCF = valueObject(
-    divideBySafeFromZero(
-      netTotalEmissionsKgCO2e - netLulucfKgCO2e,
-      grainHarvestedKg,
-    ),
   );
-  const grainsIncludingLULUCF = valueObject(
-    divideBySafeFromZero(netTotalEmissionsKgCO2e, grainHarvestedKg),
-  );
+
   return {
-    grainsExcludingLULUCF,
-    grainsIncludingLULUCF,
-    grainHarvestedKg: valueObject(grainHarvestedKg),
+    grainsExcludingLULUCF: generateIntensity(
+      netTotalEmissions.minus(netLulucf),
+      harvested,
+    ),
+    grainsIncludingLULUCF: generateIntensity(netTotalEmissions, harvested),
+    grainHarvestedKg: exposeMassValue(harvested),
   };
 }
 

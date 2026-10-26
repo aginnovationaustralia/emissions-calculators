@@ -995,6 +995,21 @@ export const translate = <
   from: Container<TIn>,
 ): TranslationContainer<TIn, TOut> => new TranslationContainer(newValue, from);
 
+/**
+ * Treats a mass of one substance as the same mass of another, keeping the original value and
+ * provenance. Container arithmetic refuses to combine different substances, so use this only
+ * where that equivalence is a deliberate modelling choice (e.g. a mass based allocation between
+ * different products), never to get around a genuine unit mismatch.
+ */
+export const relabelMass = <S1 extends Substance, S2 extends Substance>(
+  from: Container<Mass<S1>>,
+  substance: S2,
+): TranslationContainer<Mass<S1>, Mass<S2>> =>
+  translate<Mass<S1>, Mass<S2>>(
+    { __unitType: 'Mass', substance, store: from.unit.store },
+    from,
+  );
+
 export const num = (value: number | Decimal): RootContainer<RealNumber> =>
   new RootContainer(realNumber(value));
 

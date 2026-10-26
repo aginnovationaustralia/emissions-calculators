@@ -29,11 +29,11 @@ import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
-import { valueObject } from '@/tools/outputs';
+import { exposeMassValue } from '@/tools/extract';
+import { generateIntensity } from '@/tools/intensity';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
-import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForOtherLivestockCalculator } from './constants';
 import { OtherLivestockHerdInputTransformed } from './types/herd.input';
@@ -44,44 +44,34 @@ import { OtherLivestockScope1Output } from './types/scope1.output';
 import { OtherLivestockScope3Output } from './types/scope3.output';
 
 function getSingleIntensities(
-  netEmissionsKgCO2e: number,
+  netEmissions: Container<Mass<'CO2e'>>,
   herd: OtherLivestockHerdInputTransformed,
 ): OtherLivestockIntermediateIntensitiesOutput {
-  const liveweightProducedKg = herd.liveweightSoldKg.unit.store.toNumber();
-  const liveweightIntensity = valueObject(
-    divideBySafeFromZero(netEmissionsKgCO2e, liveweightProducedKg),
-  );
+  const liveweightProduced = herd.liveweightSoldKg;
 
   return {
-    liveweightIntensity,
-    liveweightProducedKg: valueObject(liveweightProducedKg),
+    liveweightIntensity: generateIntensity(netEmissions, liveweightProduced),
+    liveweightProducedKg: exposeMassValue(liveweightProduced),
   };
 }
 
 function getTotalIntensities(
-  netTotalEmissionsKgCO2e: number,
-  netLulucfKgCO2e: number,
+  netTotalEmissions: Container<Mass<'CO2e'>>,
+  netLulucf: Container<Mass<'CO2e'>>,
   herds: OtherLivestockHerdInputTransformed[],
 ): OtherLivestockIntensitiesOutput {
   const liveweightProduced = sum(herds.map((herd) => herd.liveweightSoldKg));
 
-  const liveweightProducedKg = liveweightProduced.unit.store.toNumber();
-
-  const totalEmissionsExcludingLulucf =
-    netTotalEmissionsKgCO2e - netLulucfKgCO2e;
-
-  const liveweightIntensityExcludingLULUCF = valueObject(
-    divideBySafeFromZero(totalEmissionsExcludingLulucf, liveweightProducedKg),
-  );
-
-  const liveweightIntensityIncludingLULUCF = valueObject(
-    divideBySafeFromZero(netTotalEmissionsKgCO2e, liveweightProducedKg),
-  );
-
   return {
-    liveweightProducedKg: valueObject(liveweightProducedKg),
-    liveweightIntensityExcludingLULUCF,
-    liveweightIntensityIncludingLULUCF,
+    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightIntensityExcludingLULUCF: generateIntensity(
+      netTotalEmissions.minus(netLulucf),
+      liveweightProduced,
+    ),
+    liveweightIntensityIncludingLULUCF: generateIntensity(
+      netTotalEmissions,
+      liveweightProduced,
+    ),
   };
 }
 
