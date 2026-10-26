@@ -3310,7 +3310,7 @@ export const commonConstants: CommonConstants = {
           N2O: massPerMass('N2O', 'Solid Waste', 0.0000943),
         },
         'Anaerobic Digestion': {
-          CH4: massPerMass('CH4', 'Solid Waste', 0.0001),
+          CH4: massPerMass('CH4', 'Solid Waste', 0.001),
           N2O: massPerMass('N2O', 'Solid Waste', 0),
         },
         Incineration: massPerMass('Carbon', 'Solid Waste', 0.0505),
