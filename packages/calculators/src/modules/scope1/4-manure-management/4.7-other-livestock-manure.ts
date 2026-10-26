@@ -124,6 +124,8 @@ export function calculateManureManagementCH4ForOtherLivestockHerd(
 
 /**
  * Calculates annual nitrogen excreted *AE* by a herd of 'other' livestock (4.7.1.3 (2))
+ *
+ * AE = SUM[j] (Nj * NEj), where NEj is kg N per head per year, so no days term
  */
 const calculateAnnualNitrogenExcretionForHerd = (
   herd: OtherLivestockManureAndEntericHerdInputTransformed,
@@ -142,10 +144,7 @@ const calculateAnnualNitrogenExcretionForHerd = (
       'NITROGEN_EXCRETED',
     ).named(`NEj=${number}`);
 
-    return NEj.multiply(Nj)
-      .multiply(daysInYear)
-      .named(`AEj=${number}`)
-      .reference('4.7.1.3 (2)');
+    return Nj.multiply(NEj).named(`AEj=${number}`).reference('4.7.1.3 (2)');
   });
 
   const nitrogenExcreted = sum(nitrogenExcretedByClasses).named('AE');
