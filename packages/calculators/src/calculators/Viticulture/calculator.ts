@@ -68,7 +68,7 @@ function getTotalIntensities(
   ).unit.store.value.toNumber();
   const grapesExcludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotalEmissionsKgCO2e + netLulucfKgCO2e,
+      netTotalEmissionsKgCO2e - netLulucfKgCO2e,
       grapesHarvestedKg,
     ),
   );

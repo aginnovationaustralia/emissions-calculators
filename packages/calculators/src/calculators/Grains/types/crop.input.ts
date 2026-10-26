@@ -10,7 +10,6 @@ import {
 } from '@/tools/modules';
 import { z } from 'zod';
 
-// This is a custom version of the 'crop' residue input, where the crop type is restricted to the grains crop types.
 export const GrainsCropResidueInputSchema = BaseCropResidueInputSchema.extend({
   type: enumInput(GrainsCropTypes, {
     name: 'Grains crop type',

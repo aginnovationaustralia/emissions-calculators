@@ -1,6 +1,7 @@
 import {
   WildCatchFisheriesInput,
   WildCatchFisheriesInputSchema,
+  calculateWildCatchFisheries,
   calculateWildCatchFisheriesParsed,
 } from '@aginnovationaustralia/emissions-calculators/wild-catch-fisheries';
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
@@ -9,7 +10,7 @@ import {
   wildCatchFisheriesInputDataMethod2,
 } from './input';
 
-const calculate = (input: WildCatchFisheriesInput) => {
+const performValidationAndCalculate = (input: WildCatchFisheriesInput) => {
   const validatedInput = validateCalculatorInput(
     WildCatchFisheriesInputSchema,
     input,
@@ -35,18 +36,49 @@ const calculate = (input: WildCatchFisheriesInput) => {
  *
  * @returns Wild catch fisheries emissions for the method 1 and method 2 inputs
  */
-export const calculateWildCatchFisheriesNestedExport = () => {
-  const method1 = calculate(wildCatchFisheriesInputDataMethod1);
+export const validateAndCalculateWildCatchFisheriesNestedExport = () => {
+  const method1 = performValidationAndCalculate(
+    wildCatchFisheriesInputDataMethod1,
+  );
   console.log(
     'Wild catch fisheries (method 1) emissions calculated correctly',
     method1.net,
   );
 
-  const method2 = calculate(wildCatchFisheriesInputDataMethod2);
+  const method2 = performValidationAndCalculate(
+    wildCatchFisheriesInputDataMethod2,
+  );
   console.log(
     'Wild catch fisheries (method 2) emissions calculated correctly',
     method2.net,
   );
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateWildCatchFisheries function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateWildCatchFisheriesNestedExport = () => {
+  const method1 = calculateWildCatchFisheries(
+    wildCatchFisheriesInputDataMethod1,
+  );
+  const method2 = calculateWildCatchFisheries(
+    wildCatchFisheriesInputDataMethod2,
+  );
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

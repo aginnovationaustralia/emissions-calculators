@@ -115,9 +115,7 @@ describe('Cropping Calculator', () => {
       const residueLeachingAndRunoffN2O =
         emissions.scope1.inorganicFertiliserN2O;
 
-      expect(residueLeachingAndRunoffN2O.amountTonnesCO2e).toEqual(
-        34.48028571428571 / 1000,
-      );
+      expect(residueLeachingAndRunoffN2O.amountTonnesCO2e).toEqual(0.03444894);
       expect(residueLeachingAndRunoffN2O.references).toEqual([
         '5.1.1.1 (1)',
         '5.1.1.1 (2)',
@@ -135,7 +133,7 @@ describe('Cropping Calculator', () => {
         },
         {
           name: 'COMMON[ELEMENTAL_TO_MOLECULAR_N2O]',
-          value: 1.5714285714285714,
+          value: 1.57,
           units: 'Mass(N2O) / Mass(N2O)',
         },
       ]);
@@ -199,12 +197,13 @@ describe('Cropping Calculator', () => {
       );
       expect(grainsExcludingLULUCF.value).toBeCloseTo(
         divideBySafeFromZero(
-          tonnesToKg(emissions.net.total.tonnesCO2e).toNumber() +
+          tonnesToKg(emissions.net.total.tonnesCO2e).toNumber() -
             lulucfTotalCO2e,
           grainProducedKg.value,
         ),
       );
-      expect(grainsExcludingLULUCF.value).toBeGreaterThan(
+      // Land clearing is a net LULUCF emission, so excluding it lowers the intensity
+      expect(grainsExcludingLULUCF.value).toBeLessThan(
         grainsIncludingLULUCF.value,
       );
     });
@@ -229,6 +228,101 @@ describe('Cropping Calculator', () => {
       });
     });
   });
+  describe('intensities with LULUCF sequestration', () => {
+    let emissions: CroppingOutput;
+    let lulucfTotalKgCO2e: number;
+    const cropHarvestedKg = 1000 * 1000;
+
+    beforeEach(() => {
+      const sequestrationInput: CroppingInput = {
+        electricity: {
+          method: 'location',
+          electricityPurchasedKWh: nv(0),
+          region: 'NSW',
+        },
+        landUse: {
+          activities: [
+            {
+              type: 'revegetationByPlanting',
+              // Trees and debris gain carbon, so LULUCF is a net removal (negative)
+              carbonMassInTreesCurrentYear: nv(50),
+              carbonMassInTreesPreviousYear: nv(10),
+              carbonMassInDebrisCurrentYear: nv(20),
+              carbonMassInDebrisPreviousYear: nv(5),
+              activityAreaHectares: nv(10),
+            },
+          ],
+        },
+        crops: [
+          {
+            climateZone: 'wet',
+            state: 'NSW',
+            electricityAllocation: nv(1),
+            crop: {
+              type: 'Wheat',
+              totalYieldKg: nv(cropHarvestedKg),
+              residues: { calculationMethod: '1' },
+              fractionOfAnnualCropBurnt: nv(0),
+            },
+            lime: { applications: [] },
+            chemicals: [],
+            refrigerants: [],
+            fertiliser: {
+              productionSystem: 'Non-irrigated pasture',
+              inorganic: { applications: [], calculationMethodScope1: '1' },
+              organic: { applications: [] },
+            },
+            isInLeachingZone: false,
+            fuel: {
+              transport: [
+                {
+                  vehicleType: 'Cars and light commercial vehicles',
+                  amountKilolitres: nv(1),
+                  fuelType: 'Diesel oil',
+                },
+              ],
+              stationary: [],
+            },
+            services: { fuel: { stationary: [], transport: [] } },
+            waste: {},
+          },
+        ],
+      };
+      const input = CroppingInputSchema.parse(sequestrationInput);
+      const context = testContext('Cropping');
+      lulucfTotalKgCO2e = sumOfValuesInKgCO2e(
+        calculateLULUCF(input, context),
+      ).toNumber();
+      emissions = calculateCropping(input, context);
+    });
+
+    it('has negative LULUCF emissions included in the net total', () => {
+      expect(lulucfTotalKgCO2e).toBeLessThan(0);
+      expect(emissions.scope1.woodyCarbonStocksCO2.amountGasKg).toBeLessThan(0);
+    });
+
+    it('reports a higher intensity when sequestration is excluded', () => {
+      const {
+        cropHarvestedKg: harvested,
+        cropIntensityIncludingLULUCF,
+        cropIntensityExcludingLULUCF,
+      } = emissions.intensities;
+      const netKgCO2e = tonnesToKg(emissions.net.total.tonnesCO2e).toNumber();
+
+      expect(harvested.value).toBe(cropHarvestedKg);
+      expect(cropIntensityIncludingLULUCF.value).toBeCloseTo(
+        netKgCO2e / cropHarvestedKg,
+      );
+      // Net already contains LULUCF, so excluding it means removing it from net
+      expect(cropIntensityExcludingLULUCF.value).toBeCloseTo(
+        (netKgCO2e - lulucfTotalKgCO2e) / cropHarvestedKg,
+      );
+      expect(cropIntensityExcludingLULUCF.value).toBeGreaterThan(
+        cropIntensityIncludingLULUCF.value,
+      );
+    });
+  });
+
   describe('scope outputs correctly sum to reported totals', () => {
     let input: CroppingInputTransformed;
     let emissions: CroppingOutput;

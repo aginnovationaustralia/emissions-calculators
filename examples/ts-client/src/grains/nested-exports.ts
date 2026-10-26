@@ -1,4 +1,5 @@
 import {
+  calculateGrains,
   calculateGrainsParsed,
   GrainsInput,
   GrainsInputSchema,
@@ -6,7 +7,7 @@ import {
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
 import { grainsInputDataMethod1, grainsInputDataMethod2 } from './input';
 
-const calculate = (input: GrainsInput) => {
+const performValidationAndCalculate = (input: GrainsInput) => {
   const validatedInput = validateCalculatorInput(GrainsInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -29,12 +30,35 @@ const calculate = (input: GrainsInput) => {
  *
  * @returns Grains emissions for the method 1 and method 2 inputs
  */
-export const calculateGrainsNestedExport = () => {
-  const method1 = calculate(grainsInputDataMethod1);
+export const validateAndCalculateGrainsNestedExport = () => {
+  const method1 = performValidationAndCalculate(grainsInputDataMethod1);
   console.log('Grains (method 1) emissions calculated correctly', method1.net);
 
-  const method2 = calculate(grainsInputDataMethod2);
+  const method2 = performValidationAndCalculate(grainsInputDataMethod2);
   console.log('Grains (method 2) emissions calculated correctly', method2.net);
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateGrains function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateGrainsNestedExport = () => {
+  const method1 = calculateGrains(grainsInputDataMethod1);
+  const method2 = calculateGrains(grainsInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

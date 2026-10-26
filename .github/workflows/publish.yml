@@ -40,8 +40,8 @@ jobs:
         run: pnpm run build
         shell: bash
 
-      - name: Latest npm
-        run: npm install -g npm@latest
+      - name: Upgrade npm (trusted publishing needs >= 11.5.1)
+        run: npm install -g npm@11
         shell: bash
 
       - name: Determine release type

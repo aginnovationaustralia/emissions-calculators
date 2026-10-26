@@ -10,7 +10,6 @@ import {
 } from '@/tools/modules';
 import { z } from 'zod';
 
-// This is a custom version of the 'crop' residue input, where the crop type is restricted to the Sugar crop types.
 export const SugarCropResidueInputSchema = BaseCropResidueInputSchema.transform(
   (val) => ({
     ...val,

@@ -1,12 +1,13 @@
 import {
   PigsInput,
   PigsInputSchema,
+  calculatePigs,
   calculatePigsParsed,
 } from '@aginnovationaustralia/emissions-calculators/pigs';
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
 import { pigsInputDataMethod1, pigsInputDataMethod2 } from './input';
 
-const calculate = (input: PigsInput) => {
+const performValidationAndCalculate = (input: PigsInput) => {
   const validatedInput = validateCalculatorInput(PigsInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -29,12 +30,35 @@ const calculate = (input: PigsInput) => {
  *
  * @returns Pigs emissions for the method 1 and method 2 inputs
  */
-export const calculatePigsNestedExport = () => {
-  const method1 = calculate(pigsInputDataMethod1);
+export const validateAndCalculatePigsNestedExport = () => {
+  const method1 = performValidationAndCalculate(pigsInputDataMethod1);
   console.log('Pigs (method 1) emissions calculated correctly', method1.net);
 
-  const method2 = calculate(pigsInputDataMethod2);
+  const method2 = performValidationAndCalculate(pigsInputDataMethod2);
   console.log('Pigs (method 2) emissions calculated correctly', method2.net);
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculatePigs function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculatePigsNestedExport = () => {
+  const method1 = calculatePigs(pigsInputDataMethod1);
+  const method2 = calculatePigs(pigsInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

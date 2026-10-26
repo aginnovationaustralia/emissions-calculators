@@ -1,12 +1,13 @@
 import {
   BeefInput,
   BeefInputSchema,
+  calculateBeef,
   calculateBeefParsed,
 } from '@aginnovationaustralia/emissions-calculators/beef';
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
 import { beefInputDataMethod1, beefInputDataMethod2 } from './input';
 
-const calculate = (input: BeefInput) => {
+const performValidationAndCalculate = (input: BeefInput) => {
   const validatedInput = validateCalculatorInput(BeefInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -29,12 +30,35 @@ const calculate = (input: BeefInput) => {
  *
  * @returns Beef emissions for the method 1 and method 2 inputs
  */
-export const calculateBeefNestedExport = () => {
-  const method1 = calculate(beefInputDataMethod1);
+export const validateAndCalculateBeefNestedExport = () => {
+  const method1 = performValidationAndCalculate(beefInputDataMethod1);
   console.log('Beef (method 1) emissions calculated correctly', method1.net);
 
-  const method2 = calculate(beefInputDataMethod2);
+  const method2 = performValidationAndCalculate(beefInputDataMethod2);
   console.log('Beef (method 2) emissions calculated correctly', method2.net);
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateBeef function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateBeefNestedExport = () => {
+  const method1 = calculateBeef(beefInputDataMethod1);
+  const method2 = calculateBeef(beefInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

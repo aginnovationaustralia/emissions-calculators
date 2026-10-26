@@ -298,6 +298,25 @@ describe('BaseContainer.minus / plus', () => {
     expect(result.unit.store.toNumber()).toBe(7);
   });
 
+  // Void is what `sum([])` produces, so it must act as the identity and keep the other side's
+  // unit; falling back to RealNumber here drops e.g. the gas of a Mass from calculator outputs.
+  // A literal void container matches no overload, so build these with `bypassOverloads`.
+  const voidC = () => bypassOverloads(root(voidUnit()));
+  const massC = () => bypassOverloads(root(mass('CO2e', 4)));
+  it.each([
+    ['void + Mass', () => voidC().plus(root(mass('CO2e', 4))), 4],
+    ['Mass + void', () => massC().plus(root(voidUnit())), 4],
+    ['void - Mass', () => voidC().minus(root(mass('CO2e', 4))), -4],
+    ['Mass - void', () => massC().minus(root(voidUnit())), 4],
+  ])('%s keeps the Mass unit and substance', (_, combine, expected) => {
+    const result = combine();
+    expect(result.unit).toMatchObject({
+      __unitType: 'Mass',
+      substance: 'CO2e',
+    });
+    expect(result.unit.store.toNumber()).toBe(expected);
+  });
+
   it('plus mirrors minus type-coercion, adding values', () => {
     const result = bypassOverloads(root(mass('CO2', 10))).plus(
       root(mass('CH4', 3)),

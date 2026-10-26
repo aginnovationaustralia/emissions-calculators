@@ -103,7 +103,7 @@ const createPoultryClassLivestockInputSchema = <P extends PoultryClass>(
         {
           name: `DMDj=${classNumbers[className]}`,
           method: '2',
-          description: 'Dry matter digestibility',
+          description: 'Dry matter digestibility of the feed for this class',
           modules: [MANURE_POULTRY_4_6],
         },
         (s) => s.gt(0),

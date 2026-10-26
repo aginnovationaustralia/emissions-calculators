@@ -17,7 +17,7 @@ import { z } from 'zod';
 export const FeedlotLotLivestockInputSchema = object({
   groups: z.array(FeedlotGroupLivestockInputSchema),
   state: enumInput(States, {
-    name: 'State that contains the land the feedlot occupies',
+    name: 'State',
     description: 'State or territory in which the feedlot is located',
     modules: [MANURE_FEEDLOT_4_1],
   }),

@@ -1,6 +1,7 @@
 import {
   AllModulesInput,
   AllModulesInputSchema,
+  calculateAllModules,
   calculateAllModulesParsed,
 } from '@aginnovationaustralia/emissions-calculators/all-modules';
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
@@ -9,7 +10,7 @@ import {
   allModulesInputDataMethod2,
 } from './input';
 
-const calculate = (input: AllModulesInput) => {
+const performValidationAndCalculate = (input: AllModulesInput) => {
   const validatedInput = validateCalculatorInput(AllModulesInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -32,18 +33,41 @@ const calculate = (input: AllModulesInput) => {
  *
  * @returns All modules emissions for the method 1 and method 2 inputs
  */
-export const calculateAllModulesNestedExport = () => {
-  const method1 = calculate(allModulesInputDataMethod1);
+export const validateAndCalculateAllModulesNestedExport = () => {
+  const method1 = performValidationAndCalculate(allModulesInputDataMethod1);
   console.log(
     'All modules (method 1) emissions calculated correctly',
     method1.net,
   );
 
-  const method2 = calculate(allModulesInputDataMethod2);
+  const method2 = performValidationAndCalculate(allModulesInputDataMethod2);
   console.log(
     'All modules (method 2) emissions calculated correctly',
     method2.net,
   );
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateAllModules function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateAllModulesNestedExport = () => {
+  const method1 = calculateAllModules(allModulesInputDataMethod1);
+  const method2 = calculateAllModules(allModulesInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

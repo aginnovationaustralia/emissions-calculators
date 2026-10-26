@@ -1,6 +1,7 @@
 import {
   AquacultureInput,
   AquacultureInputSchema,
+  calculateAquaculture,
   calculateAquacultureParsed,
 } from '@aginnovationaustralia/emissions-calculators/aquaculture';
 import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
@@ -9,7 +10,7 @@ import {
   aquacultureInputDataMethod2,
 } from './input';
 
-const calculate = (input: AquacultureInput) => {
+const performValidationAndCalculate = (input: AquacultureInput) => {
   const validatedInput = validateCalculatorInput(AquacultureInputSchema, input);
 
   if (!validatedInput.valid) {
@@ -32,18 +33,41 @@ const calculate = (input: AquacultureInput) => {
  *
  * @returns Aquaculture emissions for the method 1 and method 2 inputs
  */
-export const calculateAquacultureNestedExport = () => {
-  const method1 = calculate(aquacultureInputDataMethod1);
+export const validateAndCalculateAquacultureNestedExport = () => {
+  const method1 = performValidationAndCalculate(aquacultureInputDataMethod1);
   console.log(
     'Aquaculture (method 1) emissions calculated correctly',
     method1.net,
   );
 
-  const method2 = calculate(aquacultureInputDataMethod2);
+  const method2 = performValidationAndCalculate(aquacultureInputDataMethod2);
   console.log(
     'Aquaculture (method 2) emissions calculated correctly',
     method2.net,
   );
+
+  return { method1, method2 };
+};
+
+/**
+ * Pass user input directly into the calculateAquaculture function. This can either reject the input as invalid, perform the calculation, or fail with an error.
+ * The status of the result object allows you to check which scenario happened.
+ */
+export const calculateAquacultureNestedExport = () => {
+  const method1 = calculateAquaculture(aquacultureInputDataMethod1);
+  const method2 = calculateAquaculture(aquacultureInputDataMethod2);
+
+  if (method1.status === 'ERROR') {
+    console.log(
+      'The calculation for method 1 failed: ' + method1.error.message,
+    );
+  }
+
+  if (method2.status === 'ERROR') {
+    console.log(
+      'The calculation for method 2 failed: ' + method2.error.message,
+    );
+  }
 
   return { method1, method2 };
 };

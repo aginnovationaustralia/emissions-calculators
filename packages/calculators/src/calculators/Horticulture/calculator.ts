@@ -68,7 +68,7 @@ function getTotalIntensities(
   ).unit.store.toNumber();
   const cropExcludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotalEmissionsKgCO2e + netLulucfKgCO2e,
+      netTotalEmissionsKgCO2e - netLulucfKgCO2e,
       cropHarvestedKg,
     ),
   );

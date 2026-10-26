@@ -42,7 +42,6 @@ export const livestockManureIsPoultry = (
 
 export const LivestockManuresInputSchema = z
   .discriminatedUnion('type', [
-    // TODO: Review the shape of each list passed for these types (i.e. herds, groups, classes) to see if we can trim some inputs away not needed for fertiliser calculations
     PigsManureInputSchema,
     DairyManureInputSchema,
     FeedlotManureInputSchema,

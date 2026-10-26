@@ -157,8 +157,8 @@ function getTotalIntensities(
 
   const cleanWoolProducedKg = cleanWoolProduced.unit.store.toNumber();
 
-  const totalEmissionsIncludingLulucf =
-    netTotalEmissionsKgCO2e + netLulucfKgCO2e;
+  const totalEmissionsExcludingLulucf =
+    netTotalEmissionsKgCO2e - netLulucfKgCO2e;
 
   const { meatAllocation, woolAllocation } = getMeatWoolAllocation(
     liveweightProduced,
@@ -168,28 +168,28 @@ function getTotalIntensities(
 
   const liveweightIntensityExcludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotalEmissionsKgCO2e * meatAllocation,
+      totalEmissionsExcludingLulucf * meatAllocation,
       liveweightProducedKg,
     ),
   );
 
   const liveweightIntensityIncludingLULUCF = valueObject(
     divideBySafeFromZero(
-      totalEmissionsIncludingLulucf * meatAllocation,
+      netTotalEmissionsKgCO2e * meatAllocation,
       liveweightProducedKg,
     ),
   );
 
   const woolIntensityExcludingLULUCF = valueObject(
     divideBySafeFromZero(
-      netTotalEmissionsKgCO2e * woolAllocation,
+      totalEmissionsExcludingLulucf * woolAllocation,
       cleanWoolProducedKg,
     ),
   );
 
   const woolIntensityIncludingLULUCF = valueObject(
     divideBySafeFromZero(
-      totalEmissionsIncludingLulucf * woolAllocation,
+      netTotalEmissionsKgCO2e * woolAllocation,
       cleanWoolProducedKg,
     ),
   );

@@ -170,8 +170,8 @@ function getTotalIntensities(
     crops.map((crop) => getCottonSeedHarvestedForCrop(crop, constants)),
   ).unit.store.value.toNumber();
 
-  const totalEmissionsIncludingLulucf =
-    netTotalEmissionsKgCO2e + netLulucfKgCO2e;
+  const totalEmissionsExcludingLulucf =
+    netTotalEmissionsKgCO2e - netLulucfKgCO2e;
 
   const economicLintAllocation = selectConstant(
     constants.CROP,
@@ -180,7 +180,7 @@ function getTotalIntensities(
   const economicSeedAllocation = 1 - economicLintAllocation;
 
   const cottonExcludingLULUCF = valueObject(
-    divideBySafeFromZero(totalEmissionsIncludingLulucf, cottonHarvestedKg),
+    divideBySafeFromZero(totalEmissionsExcludingLulucf, cottonHarvestedKg),
   );
 
   const cottonIncludingLULUCF = valueObject(
@@ -191,25 +191,25 @@ function getTotalIntensities(
   const economicIntensities: CottonSeedAndLintIntensitiesOutput = {
     cottonLintExcludingLULUCF: valueObject(
       divideBySafeFromZero(
-        netTotalEmissionsKgCO2e * economicLintAllocation,
+        totalEmissionsExcludingLulucf * economicLintAllocation,
         cottonLintHarvestedKg,
       ),
     ),
     cottonLintIncludingLULUCF: valueObject(
       divideBySafeFromZero(
-        totalEmissionsIncludingLulucf * economicLintAllocation,
+        netTotalEmissionsKgCO2e * economicLintAllocation,
         cottonLintHarvestedKg,
       ),
     ),
     cottonSeedExcludingLULUCF: valueObject(
       divideBySafeFromZero(
-        netTotalEmissionsKgCO2e * economicSeedAllocation,
+        totalEmissionsExcludingLulucf * economicSeedAllocation,
         cottonSeedHarvestedKg,
       ),
     ),
     cottonSeedIncludingLULUCF: valueObject(
       divideBySafeFromZero(
-        totalEmissionsIncludingLulucf * economicSeedAllocation,
+        netTotalEmissionsKgCO2e * economicSeedAllocation,
         cottonSeedHarvestedKg,
       ),
     ),
@@ -228,25 +228,25 @@ function getTotalIntensities(
   const massIntensities: CottonSeedAndLintIntensitiesOutput = {
     cottonLintExcludingLULUCF: valueObject(
       divideBySafeFromZero(
-        netTotalEmissionsKgCO2e * massLintAllocation,
+        totalEmissionsExcludingLulucf * massLintAllocation,
         cottonLintHarvestedKg,
       ),
     ),
     cottonLintIncludingLULUCF: valueObject(
       divideBySafeFromZero(
-        totalEmissionsIncludingLulucf * massLintAllocation,
+        netTotalEmissionsKgCO2e * massLintAllocation,
         cottonLintHarvestedKg,
       ),
     ),
     cottonSeedExcludingLULUCF: valueObject(
       divideBySafeFromZero(
-        netTotalEmissionsKgCO2e * massSeedAllocation,
+        totalEmissionsExcludingLulucf * massSeedAllocation,
         cottonSeedHarvestedKg,
       ),
     ),
     cottonSeedIncludingLULUCF: valueObject(
       divideBySafeFromZero(
-        totalEmissionsIncludingLulucf * massSeedAllocation,
+        netTotalEmissionsKgCO2e * massSeedAllocation,
         cottonSeedHarvestedKg,
       ),
     ),
