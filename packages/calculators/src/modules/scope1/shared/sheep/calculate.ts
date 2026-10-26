@@ -24,6 +24,11 @@ export function calculateProportionLactatingLEjk({
   const LRjk = percentLambing.named(`LRj=${periodName},k=${className}`);
   const LMRjk = percentLambMarking.named(`LMRj=${periodName},k=${className}`);
 
+  /**
+   * 3.4.1.1 (8). LMRjk (lambs marked per ewe mated) can exceed 100% when ewes
+   * have multiple lambs, but the methodology caps it at 100% so that no more
+   * than the whole breeding flock is counted as lactating.
+   */
   const LEjk = LRjk.divide(num(100))
     .multiply(min(LMRjk, num(100)).divide(num(100)))
     .named(`LEj=${periodName},k=${className}`)

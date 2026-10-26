@@ -102467,7 +102467,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -102489,7 +102489,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -102497,7 +102497,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -102674,7 +102674,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -102696,7 +102696,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -102704,7 +102704,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -102881,7 +102881,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -102903,7 +102903,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -102911,7 +102911,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -103088,7 +103088,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -103110,7 +103110,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -103118,7 +103118,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104143,7 +104143,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -104165,7 +104165,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -104173,7 +104173,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104350,7 +104350,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -104372,7 +104372,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -104380,7 +104380,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104557,7 +104557,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -104579,7 +104579,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -104587,7 +104587,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104764,7 +104764,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -104786,7 +104786,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -104794,7 +104794,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105052,7 +105052,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -105074,7 +105074,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -105082,7 +105082,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105259,7 +105259,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -105281,7 +105281,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -105289,7 +105289,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105466,7 +105466,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -105488,7 +105488,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -105496,7 +105496,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105673,7 +105673,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -105695,7 +105695,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -105703,7 +105703,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105880,7 +105880,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -105902,7 +105902,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -105910,7 +105910,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106087,7 +106087,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -106109,7 +106109,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -106117,7 +106117,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106294,7 +106294,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -106316,7 +106316,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -106324,7 +106324,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106501,7 +106501,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -106523,7 +106523,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -106531,7 +106531,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106708,7 +106708,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -106730,7 +106730,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -106738,7 +106738,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106915,7 +106915,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -106937,7 +106937,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -106945,7 +106945,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -107122,7 +107122,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -107144,7 +107144,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -107152,7 +107152,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -107329,7 +107329,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -107351,7 +107351,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -107359,7 +107359,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -109864,7 +109864,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -109886,7 +109886,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -109894,7 +109894,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110071,7 +110071,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -110093,7 +110093,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -110101,7 +110101,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110278,7 +110278,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -110300,7 +110300,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -110308,7 +110308,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110485,7 +110485,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -110507,7 +110507,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -110515,7 +110515,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110692,7 +110692,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -110714,7 +110714,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -110722,7 +110722,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110899,7 +110899,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -110921,7 +110921,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -110929,7 +110929,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111106,7 +111106,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -111128,7 +111128,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -111136,7 +111136,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111313,7 +111313,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -111335,7 +111335,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -111343,7 +111343,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111520,7 +111520,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -111542,7 +111542,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -111550,7 +111550,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111727,7 +111727,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -111749,7 +111749,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -111757,7 +111757,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111934,7 +111934,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -111956,7 +111956,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -111964,7 +111964,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -112141,7 +112141,7 @@
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
                           "percentLambing": {
-                            "description": "Share of ewes lambing in this season. (number)",
+                            "description": "Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -112163,7 +112163,7 @@
                             "x-units": "number"
                           },
                           "percentLambMarking": {
-                            "description": "Share of lamb marking in this season. (number)",
+                            "description": "Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating. (number)",
                             "x-modules": [
                               "3.4",
                               "4.4"
@@ -112171,7 +112171,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
                               },
                               "quality": {
                                 "default": {},

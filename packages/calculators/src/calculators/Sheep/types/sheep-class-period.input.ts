@@ -1,4 +1,5 @@
 import {
+  isNonNegative,
   isPercentage,
   isProportion,
   numberInput,
@@ -90,7 +91,8 @@ export const SheepClassWithLambingPeriodInputSchema =
       {
         name: 'LRjk',
         method: '1',
-        description: 'Share of ewes lambing in this season.',
+        description:
+          'Percentage of ewes in this class that lamb in this season, from 0 to 100. This is the share of ewes lambing, not the number of lambs per ewe; enter lambs per ewe as percentLambMarking.',
         modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
       },
       isPercentage,
@@ -100,10 +102,11 @@ export const SheepClassWithLambingPeriodInputSchema =
       {
         name: 'LMRjk',
         method: '1',
-        description: 'Share of lamb marking in this season.',
+        description:
+          'Lamb marking rate in this season: lambs marked as a percentage of ewes mated. May exceed 100 where ewes have multiple lambs (e.g. 130). Per the methodology, values above 100 are treated as 100 when estimating the proportion of ewes lactating.',
         modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
       },
-      isPercentage,
+      isNonNegative,
     ),
   });
 
