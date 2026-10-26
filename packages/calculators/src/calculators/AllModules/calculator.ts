@@ -61,7 +61,11 @@ import {
 } from '@/tools/calculators';
 import { sumOfValuesInKgCO2e } from '@/tools/gwp';
 import { zeroCH4, zeroCO2, zeroCO2e, zeroN2O } from '@/tools/sentinels';
-import { addScope1Totals, addScope23Totals } from '@/tools/totals';
+import {
+  addScope1Totals,
+  addScope23Totals,
+  sumTonnesCO2e,
+} from '@/tools/totals';
 import { kgToTonnes } from '@/tools/unit-conversion';
 import { ExecutionContext } from '../executionContext';
 import { Scope2Output } from '../types/scope2.output';
@@ -503,10 +507,11 @@ export const calculateAllModules = (
 
   const net = {
     total: {
-      tonnesCO2e:
-        scope1WithTotals.total.tonnesCO2e +
-        scope2WithTotals.total.tonnesCO2e +
-        scope3WithTotals.total.tonnesCO2e,
+      tonnesCO2e: sumTonnesCO2e(
+        scope1WithTotals.total,
+        scope2WithTotals.total,
+        scope3WithTotals.total,
+      ),
     },
     lulucf: {
       tonnesCO2e: kgToTonnes(lulucfTotalKgCO2e).toNumber(),

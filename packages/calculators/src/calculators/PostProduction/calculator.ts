@@ -20,7 +20,11 @@ import {
 } from '@/tools/calculators';
 import { valueObject } from '@/tools/outputs';
 import { tonnesToKg } from '@/tools/unit-conversion';
-import { addScope1Totals, addScope23Totals } from '@/tools/totals';
+import {
+  addScope1Totals,
+  addScope23Totals,
+  sumTonnesCO2e,
+} from '@/tools/totals';
 import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
 import { EnterpriseNetOutput } from '../types/enterprise-net.output';
@@ -205,10 +209,11 @@ export const calculatePostProduction = (
 
   const net = {
     total: {
-      tonnesCO2e:
-        scope1WithTotals.total.tonnesCO2e +
-        scope2WithTotals.total.tonnesCO2e +
-        scope3WithTotals.total.tonnesCO2e,
+      tonnesCO2e: sumTonnesCO2e(
+        scope1WithTotals.total,
+        scope2WithTotals.total,
+        scope3WithTotals.total,
+      ),
     },
   };
 

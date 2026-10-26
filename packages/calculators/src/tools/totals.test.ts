@@ -3,7 +3,7 @@ import { input } from './inputs';
 import { captureMethod1Or2Value } from './multi';
 import { output, scope1Output } from './outputs';
 import { sum } from './sum';
-import { addScope1Totals, addScope23Totals } from './totals';
+import { addScope1Totals, addScope23Totals, sumTonnesCO2e } from './totals';
 import { mass } from './units';
 
 // These functions build the `total`/`totalCO2`/`totalCH4`/`totalN2O` figures every calculator
@@ -64,6 +64,16 @@ describe('addScope1Totals', () => {
     expect(totals.totalCH4.tonnesCO2e).toBe((5 * 28) / 1000);
   });
 
+  it('adds the per-gas totals without binary floating-point error', () => {
+    const totals = addScope1Totals({
+      co2Item: scope1Output('co2Item', root(mass('CO2', 100))),
+      co2eItem: scope1Output('co2eItem', root(mass('CO2e', 200))),
+    });
+
+    // As JS numbers, 0.1 + 0.2 = 0.30000000000000004
+    expect(totals.total.tonnesCO2e).toBe(0.3);
+  });
+
   it('handles an empty outputs object', () => {
     const totals = addScope1Totals({});
     expect(totals.totalCO2.tonnesCO2e).toBe(0);
@@ -120,5 +130,24 @@ describe('addScope23Totals', () => {
         amountTonnesCO2e: 0.66778,
       });
     });
+  });
+});
+
+describe('sumTonnesCO2e', () => {
+  it('adds totals without binary floating-point error', () => {
+    // As JS numbers, 0.1 + 0.2 = 0.30000000000000004
+    expect(sumTonnesCO2e({ tonnesCO2e: 0.1 }, { tonnesCO2e: 0.2 })).toBe(0.3);
+    expect(
+      sumTonnesCO2e(
+        { tonnesCO2e: 360.53877234285716 },
+        { tonnesCO2e: 14.2 },
+        { tonnesCO2e: 196.332664 },
+      ),
+    ).toBe(571.0714363428572);
+  });
+
+  it('handles negative totals and no totals', () => {
+    expect(sumTonnesCO2e({ tonnesCO2e: 0.3 }, { tonnesCO2e: -0.1 })).toBe(0.2);
+    expect(sumTonnesCO2e()).toBe(0);
   });
 });

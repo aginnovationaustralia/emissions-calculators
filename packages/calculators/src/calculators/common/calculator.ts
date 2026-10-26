@@ -13,7 +13,11 @@ import {
 import { Container } from '@/tools/containers';
 import { sumOfValuesInKgCO2e } from '@/tools/gwp';
 import { scope1Output } from '@/tools/outputs';
-import { addScope1Totals, addScope23Totals } from '@/tools/totals';
+import {
+  addScope1Totals,
+  addScope23Totals,
+  sumTonnesCO2e,
+} from '@/tools/totals';
 import { tonnesToKg } from '@/tools/unit-conversion';
 import { Mass } from '@/tools/units';
 import z from 'zod';
@@ -220,10 +224,11 @@ export const createCalculator =
 
     const net = {
       total: {
-        tonnesCO2e:
-          scope1WithTotals.total.tonnesCO2e +
-          scope2WithTotals.total.tonnesCO2e +
-          scope3WithTotals.total.tonnesCO2e,
+        tonnesCO2e: sumTonnesCO2e(
+          scope1WithTotals.total,
+          scope2WithTotals.total,
+          scope3WithTotals.total,
+        ),
       },
     };
 
@@ -240,10 +245,7 @@ export const createCalculator =
         const scope3 = addScope23Totals(activityOutputs.scope3);
         const net = {
           total: {
-            tonnesCO2e:
-              scope1.total.tonnesCO2e +
-              scope2.total.tonnesCO2e +
-              scope3.total.tonnesCO2e,
+            tonnesCO2e: sumTonnesCO2e(scope1.total, scope2.total, scope3.total),
           },
         };
         return {

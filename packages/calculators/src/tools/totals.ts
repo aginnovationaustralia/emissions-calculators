@@ -129,12 +129,12 @@ export const addScope1Totals = <
       ),
     ).toNumber(),
   };
+  // Sum the full-precision kg values, as for scopes 2 and 3, rather than adding the rounded
+  // per-gas totals as JS numbers.
   const total = {
-    tonnesCO2e:
-      totalN2O.tonnesCO2e +
-      totalCH4.tonnesCO2e +
-      totalCO2.tonnesCO2e +
-      totalOtherGases.tonnesCO2e,
+    tonnesCO2e: kgToTonnes(
+      values.reduce((acc, curr) => acc.add(curr.amountKgCO2e), new Decimal(0)),
+    ).toNumber(),
   };
   return {
     ...translatedOutputs,
@@ -175,3 +175,13 @@ export const addScope23Totals = <
     },
   };
 };
+
+/**
+ * Adds totals that have already been converted to numbers (e.g. scope totals into a net total).
+ * Adding them as JS numbers introduces binary floating-point error into headline figures
+ * (0.1 + 0.2 = 0.30000000000000004), so they're added in decimal.
+ */
+export const sumTonnesCO2e = (...totals: { tonnesCO2e: number }[]) =>
+  totals
+    .reduce((acc, total) => acc.add(total.tonnesCO2e), new Decimal(0))
+    .toNumber();
