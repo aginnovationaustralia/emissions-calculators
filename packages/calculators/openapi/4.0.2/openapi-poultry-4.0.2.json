@@ -320,7 +320,9 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "type": "number",
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 1
                                     },
                                     "quality": {
                                       "default": {},
@@ -824,7 +826,9 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "type": "number",
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 1
                                     },
                                     "quality": {
                                       "default": {},
@@ -919,7 +923,9 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "type": "number",
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 1
                                     },
                                     "quality": {
                                       "default": {},
@@ -1423,7 +1429,9 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "type": "number",
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 1
                                     },
                                     "quality": {
                                       "default": {},
@@ -1518,7 +1526,9 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "type": "number",
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 1
                                     },
                                     "quality": {
                                       "default": {},
@@ -2022,7 +2032,9 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "type": "number",
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 1
                                     },
                                     "quality": {
                                       "default": {},
@@ -2117,7 +2129,9 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "type": "number",
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 1
                                     },
                                     "quality": {
                                       "default": {},
@@ -2621,7 +2635,9 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "type": "number",
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 1
                                     },
                                     "quality": {
                                       "default": {},

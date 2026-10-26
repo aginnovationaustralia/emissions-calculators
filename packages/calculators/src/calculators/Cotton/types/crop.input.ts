@@ -5,7 +5,12 @@ import {
 } from '@/modules/scope1/5-fertiliser/inorganic-fertilisers.input';
 import { OrganicFertilisersInputSchema } from '@/modules/scope1/5-fertiliser/organic-fertilisers.input';
 import { BaseCropResidueInputSchema } from '@/modules/scope1/6-residue-mgmt/crop-residue.input';
-import { input, InputContainer, numberInput } from '@/tools/inputs';
+import {
+  input,
+  InputContainer,
+  isProportion,
+  numberInput,
+} from '@/tools/inputs';
 import {
   FERT_INORGANIC_5_1,
   INTENSITIES,
@@ -76,12 +81,16 @@ const CottonFertiliserInputSchema: z.ZodType<
 
 export const CottonCropResidueInputSchema =
   BaseCropResidueInputSchema.safeExtend({
-    fractionSeedCottonLint: numberInput(realNumber, {
-      name: 'Fraction of harvested crop that is cotton lint (not cotton seed)',
-      description:
-        'Fraction of the harvested cotton crop that is lint, as opposed to cotton seed.',
-      modules: [INTENSITIES],
-    }),
+    fractionSeedCottonLint: numberInput(
+      realNumber,
+      {
+        name: 'Fraction of harvested crop that is cotton lint (not cotton seed)',
+        description:
+          'Fraction of the harvested cotton crop that is lint, as opposed to cotton seed.',
+        modules: [INTENSITIES],
+      },
+      isProportion,
+    ),
   }).transform((val) => ({
     ...val,
     type: input('Cotton' as const, {

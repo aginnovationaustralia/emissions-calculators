@@ -3,12 +3,7 @@ import {
   InorganicFertiliserComponentTypesNonRegional,
   InorganicFertiliserComponentTypesRegional,
 } from '@/constants/enums';
-import {
-  enumInput,
-  isPercentage,
-  isProportion,
-  numberInput,
-} from '@/tools/inputs';
+import { enumInput, isProportion, numberInput } from '@/tools/inputs';
 import {
   FERT_INORGANIC_5_1,
   LEACH_RUNOFF_5_5,
@@ -27,7 +22,7 @@ export const InorganicFertiliserKnownComponentWithOriginInputSchema = object({
       description: 'Fraction of inorganic fertiliser that is applied',
       modules: [FERT_INORGANIC_5_1, LEACH_RUNOFF_5_5, PURCH_FERT_15_4],
     },
-    isPercentage,
+    isProportion,
   ),
   // Only read via 5.1's `.unit` predicate (never incorporated as a container, so
   // 5.1 doesn't count as a consumer here) - genuinely consumed as a selector
@@ -55,7 +50,7 @@ export const InorganicFertiliserKnownComponentNoOriginInputSchema = object({
       description: 'Fraction of inorganic fertiliser that is applied',
       modules: [FERT_INORGANIC_5_1, LEACH_RUNOFF_5_5, PURCH_FERT_15_4],
     },
-    isPercentage,
+    isProportion,
   ),
   componentType: enumInput(InorganicFertiliserComponentTypesNonRegional, {
     name: 'Fertiliser component type',
