@@ -208,8 +208,6 @@ type AllModulesFertiliserInputTransformed =
     HasFertiliserInputTransformed;
 
 // TODO: Double nested inputs here as well
-// `isInLeachingZone` is optional so existing inputs stay valid: omitting it keeps the
-// previous behaviour of no crop residue leaching and runoff (6.3).
 const AllModulesCropInputSchema = object({
   crop: CropResidueInputSchema,
   ...hasStateInputSchema([RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3]).shape,
