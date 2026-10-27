@@ -3,7 +3,6 @@ import {
   cubicMetresToLitres,
   gjPerCubicMetreToJPerLitre,
   gjPerKlToJPerLitre,
-  gjPerTonneToJPerKg,
   gramsToKg,
   megaJoulesToJoules,
   perCubicMetresToPerLitres,
@@ -38,6 +37,16 @@ import {
   years,
 } from '@/tools/units';
 import { MeanAnnualTemperature, State } from './enums';
+import {
+  createStationaryFuelConstantsFromNGAFByMass,
+  createStationaryFuelConstantsFromNGAFByVolume,
+  createTransportFuelConstantsFromNGAF,
+  getElectricityFactorsFromNGAF,
+  getRefrigerantLeakageRateFromNGAF,
+  ngafLiquidFuelData,
+  ngafSolidFuelData,
+  ngafTables,
+} from './ngaf';
 import {
   AquacultureConstants,
   BeefPastureConstants,
@@ -79,17 +88,26 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description The percentage of total charge leaked from appliance each year
-   * @ngaf2024 Table 10
+   * @ngaf2026 Table 10
    * @units percentage
    */
   REFRIGERATION_LEAKAGE_RATES: {
-    'Domestic refrigerators': percentage(1.7),
-    'Transport refrigeration': percentage(15.7),
-    'Domestic A/C portable': percentage(2.5),
-    'Domestic A/C split': percentage(3.5),
-    'Domestic A/C packaged': percentage(2.5),
-    'Light vehicle A/C': percentage(6.7),
-    'Heavy vehicle A/C': percentage(10.8),
+    'Domestic refrigerators': getRefrigerantLeakageRateFromNGAF(
+      'Domestic refrigerators',
+    ),
+    'Transport refrigeration': getRefrigerantLeakageRateFromNGAF(
+      'Transport refrigeration',
+    ),
+    'Domestic A/C portable': getRefrigerantLeakageRateFromNGAF(
+      'Domestic A/C portable',
+    ),
+    'Domestic A/C split':
+      getRefrigerantLeakageRateFromNGAF('Domestic A/C split'),
+    'Domestic A/C packaged': getRefrigerantLeakageRateFromNGAF(
+      'Domestic A/C packaged',
+    ),
+    'Light vehicle A/C': getRefrigerantLeakageRateFromNGAF('Light vehicle A/C'),
+    'Heavy vehicle A/C': getRefrigerantLeakageRateFromNGAF('Heavy vehicle A/C'),
   },
 
   /**
@@ -269,64 +287,50 @@ export const commonConstants: CommonConstants = {
   /**
    * @description Electricity emission factors for each state and Australia, in kg CO2-e/kWh
    * @reference Primary data sources comprise National Greenhouse and Energy Reporting (Measurement) Determination 2008 (Schedule 1), Australian Energy Statistics, Clean Energy Regulator, and AEMO data and Department of Climate Change, Energy, the Environment and Water.
-   * @ngaf2024 Table 1
+   * @ngaf2026 Table 1
    * @units kg CO2-e/kWh
    */
   ELECTRICITY: {
-    NSW: {
-      SCOPE2_EF: massPerElectricity('CO2e', 0.66),
-      SCOPE3_EF: massPerElectricity('CO2e', 0.04),
-    },
-    ACT: {
-      SCOPE2_EF: massPerElectricity('CO2e', 0.66),
-      SCOPE3_EF: massPerElectricity('CO2e', 0.04),
-    },
-    VIC: {
-      SCOPE2_EF: massPerElectricity('CO2e', 0.77),
-      SCOPE3_EF: massPerElectricity('CO2e', 0.09),
-    },
-    QLD: {
-      SCOPE2_EF: massPerElectricity('CO2e', 0.71),
-      SCOPE3_EF: massPerElectricity('CO2e', 0.1),
-    },
-    SA: {
-      SCOPE2_EF: massPerElectricity('CO2e', 0.23),
-      SCOPE3_EF: massPerElectricity('CO2e', 0.05),
-    },
-    WA_SW: {
-      SCOPE2_EF: massPerElectricity('CO2e', 0.51),
-      SCOPE3_EF: massPerElectricity('CO2e', 0.06),
-    },
-    WA_NW: {
-      SCOPE2_EF: massPerElectricity('CO2e', 0.61),
-      SCOPE3_EF: massPerElectricity('CO2e', 0.09),
-    },
-    TAS: {
-      SCOPE2_EF: massPerElectricity('CO2e', 0.15),
-      SCOPE3_EF: massPerElectricity('CO2e', 0.03),
-    },
-    NT: {
-      SCOPE2_EF: massPerElectricity('CO2e', 0.56),
-      SCOPE3_EF: massPerElectricity('CO2e', 0.07),
-    },
-    National: {
-      SCOPE2_EF: massPerElectricity('CO2e', 0.63),
-      SCOPE3_EF: massPerElectricity('CO2e', 0.07),
-    },
+    NSW: getElectricityFactorsFromNGAF(
+      'New South Wales and Australian Capital Territory',
+    ),
+    ACT: getElectricityFactorsFromNGAF(
+      'New South Wales and Australian Capital Territory',
+    ),
+    VIC: getElectricityFactorsFromNGAF('Victoria'),
+    QLD: getElectricityFactorsFromNGAF('Queensland'),
+    SA: getElectricityFactorsFromNGAF('South Australia'),
+    WA_SW: getElectricityFactorsFromNGAF(
+      'Western Australia - South West Interconnected System (SWIS)',
+    ),
+    WA_NW: getElectricityFactorsFromNGAF(
+      'Western Australia - North Western Interconnected System (NWIS)',
+    ),
+    TAS: getElectricityFactorsFromNGAF('Tasmania'),
+    NT: getElectricityFactorsFromNGAF(
+      'Northern territory - Darwin Katherine Interconnected System (DKIS)',
+    ),
+    National: getElectricityFactorsFromNGAF('National'),
   },
 
   /**
    * @description Electricity scope 2 emission factors for Renewable Energy Market Framework (RMF) in kg CO2-e/kWh
-   * @ngaf2024 Table 2
+   * @ngaf2026 Table 2
    * @units kg CO2-e/kWh
    */
-  ELECTRICITY_RMF_SCOPE2_EF: massPerElectricity('CO2e', 0.81),
+  ELECTRICITY_RMF_SCOPE2_EF: massPerElectricity(
+    'CO2e',
+    ngafTables['Table 2'].table.National.SCOPE_2,
+  ),
   /**
    * @description Electricity scope 3 emission factors for Renewable Energy Market Framework (RMF) in kg CO2-e/kWh
-   * @ngaf2024 Table 2
+   * @ngaf2026 Table 2
    * @units kg CO2-e/kWh
    */
-  ELECTRICITY_RMF_SCOPE3_EF: massPerElectricity('CO2e', 0.1),
+  ELECTRICITY_RMF_SCOPE3_EF: massPerElectricity(
+    'CO2e',
+    ngafTables['Table 2'].table.National.SCOPE_3,
+  ),
 
   /**
    * @description Renewable power percentage for the Renewable Energy Target (RET) in Australia (value for 2026)
@@ -336,365 +340,148 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description Jurisdictional renewable power percentage for the Renewable Energy Target (RET) in Australia
-   * @ngaf2024 Calculating emissions from electricity purchased or acquired using the market-based method
+   * @ngaf2026 Calculating emissions from electricity purchased or acquired using the market-based method
    */
-  JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE: percentage(79.51), // 2024
+  JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE: percentage(76.13), // 2026
 
   /**
    * @description Transport fuel emission factors for each fuel type, in kg CO2-e/GJ
-   * @ngaf2024 Table 9
-   * @units kg CO2-e/GJ
+   * @ngaf2026 Table 9
+   * @appendixA Table A.4.2.1 (Off-road equipment & vessels)
+   * @units ENERGY_CONTENT is in J/m^3, other values are in kg CO2-e/GJ
    */
   TRANSPORT_FUEL_FACTORS: {
-    'Cars and light commercial vehicles': {
-      Gasoline: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(34.2),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(67.4)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.02)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(67.62)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(17.2)),
-      },
-      'Diesel oil': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.6),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.9)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.01)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.5)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(70.41)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(17.3)),
-      },
-      'Liquefied petroleum gas (LPG)': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(26.2),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(60.2)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.5)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.3)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(61.0)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(20.2)),
-      },
-      'Fuel oil': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(39.7),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(73.6)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.08)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.5)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(74.18)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      Ethanol: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(23.4),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0.0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(0.4)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0.0)), // NE
-      },
-      Biodiesel: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(34.6),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0.0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.8)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(1.7)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(2.5)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0.0)), // NE
-      },
-      'Renewable diesel': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.6),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0.0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.01)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.5)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(0.51)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0.0)), // NE
-      },
-      'Other biofuels': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(23.4),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0.0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.8)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(1.7)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(2.5)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0.0)), // NE
-      },
-    },
+    /**
+     * NOTE:
+     * The pre-2004 figures for cars/light commercial vehicles are the usual figures for
+     * these vehicles, with some deviations applied.
+     *
+     * These deviations are detailed under Table 9, but aren't available in the excel
+     * extracts:
+     *
+     * "For vehicles manufactured prior to 2004, the following scope 1 emission factors
+     * (in kg CO2-e/GJ) should be used instead of those presented in Table 9:
+     * - Gasoline CH4 =0.6, N2O = 1.6,
+     * - Diesel oil CH4 =0.1, N2O = 0.4,
+     * - LPG CH4 =0.7, N2O = 0.6,
+     * - Ethanol CH4= 0.8, N2O = 1.7,
+     * - Renewable diesel CH4 = 0.1, N2O = 0.4."
+     */
     'Cars and light commercial vehicles (pre 2004)': {
-      Gasoline: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(34.2),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(67.4)),
+      Gasoline: createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Gasoline',
+        {
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.6)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(1.6)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(69.6)),
         },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(17.2)),
-      },
-      'Diesel oil': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.6),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.9)),
+      ),
+      'Diesel oil': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Diesel oil',
+        {
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.1)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(0.4)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(70.4)),
         },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(17.3)),
-      },
-      'Liquefied petroleum gas (LPG)': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(26.2),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(60.2)),
+      ),
+      'Liquefied petroleum gas (LPG)': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)',
+        {
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.7)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(0.6)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(61.5)),
         },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(20.2)),
-      },
-
-      Ethanol: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(23.4),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0.0)),
+      ),
+      Ethanol: createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Ethanol',
+        {
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.8)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(1.7)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(2.5)),
         },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0.0)), // NE
-      },
-
-      'Renewable diesel': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.6),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0.0)),
+      ),
+      'Renewable diesel': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Ethanol',
+        {
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.01)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(0.5)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(0.51)),
         },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0.0)), // NE
-      },
+      ),
+    },
+    'Cars and light commercial vehicles': {
+      Gasoline: createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Gasoline',
+      ),
+      'Diesel oil': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Diesel oil',
+      ),
+      'Liquefied petroleum gas (LPG)': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)',
+      ),
+      'Fuel oil': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Fuel oil',
+      ),
+      Ethanol: createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Ethanol',
+      ),
+      Biodiesel: createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Biodiesel',
+      ),
+      'Renewable diesel': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Renewable diesel',
+      ),
+      'Other biofuels': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Other biofuels',
+      ),
     },
     'Light duty vehicles': {
-      'Compressed natural gas': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerCubicMetreToJPerLitre(0.0393),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(51.4)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(7.3)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.3)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(59.0)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Liquefied natural gas': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(25.3),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(51.4)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(7.3)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.3)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(59.0)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
+      'Compressed natural gas': createTransportFuelConstantsFromNGAF(
+        'Light duty vehicles, Compressed natural gas',
+      ),
+      'Liquefied natural gas': createTransportFuelConstantsFromNGAF(
+        'Light duty vehicles, Liquefied natural gas',
+      ),
     },
     'Heavy duty vehicles': {
-      'Compressed natural gas': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerCubicMetreToJPerLitre(0.0393),
+      'Compressed natural gas': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Compressed natural gas',
+      ),
+      'Liquefied natural gas': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Liquefied natural gas',
+      ),
+      'Diesel oil - Euro iv or higher': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Diesel oil - Euro iv or higher',
+      ),
+      'Diesel oil - Euro iii': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Diesel oil - Euro iii',
+      ),
+      'Diesel oil - Euro i': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Diesel oil - Euro i',
+      ),
+      'Renewable diesel - Euro iv or higher':
+        createTransportFuelConstantsFromNGAF(
+          'Heavy duty vehicles, Renewable diesel - Euro iv or higher',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(51.4)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(2.8)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.3)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(54.5)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Liquefied natural gas': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(25.3),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(51.4)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(2.8)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.3)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(54.5)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Diesel oil - Euro iv or higher': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.6),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.9)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.07)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.4)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(70.37)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(17.3)),
-      },
-      'Diesel oil - Euro iii': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.6),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.9)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.1)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.4)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(70.4)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(17.3)),
-      },
-      'Diesel oil - Euro i': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.6),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.9)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.4)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(70.5)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(17.3)),
-      },
-      'Renewable diesel - Euro iv or higher': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.6),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0.0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.07)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.4)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(0.47)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0.0)), // NE
-      },
-      'Renewable diesel - Euro iii': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.6),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0.0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.1)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.4)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(0.5)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0.0)), // NE
-      },
-      'Renewable diesel - Euro i': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.6),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0.0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.4)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(0.6)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0.0)), // NE
-      },
+      'Renewable diesel - Euro iii': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Renewable diesel - Euro iii',
+      ),
+      'Renewable diesel - Euro i': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Renewable diesel - Euro i',
+      ),
     },
     Aviation: {
-      'Gasoline for use as fuel in an aircraft': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(33.1),
+      'Gasoline for use as fuel in an aircraft':
+        createTransportFuelConstantsFromNGAF(
+          'Aviation, Gasoline for use as fuel in an aircraft',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(67.0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.06)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.6)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(67.66)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Kerosene for use as fuel in an aircraft': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(36.8),
+      'Kerosene for use as fuel in an aircraft':
+        createTransportFuelConstantsFromNGAF(
+          'Aviation, Kerosene for use as fuel in an aircraft',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.6)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.01)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.6)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(70.21)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Renewable aviation kerosene': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(36.8),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0.0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.01)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.6)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(0.61)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0.0)), // NE
-      },
+      'Renewable aviation kerosene': createTransportFuelConstantsFromNGAF(
+        'Aviation, Renewable aviation kerosene',
+      ),
     },
     Vessel: {
       Petrol: {
@@ -756,459 +543,188 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description Stationary fuel emission factors for each solid fuel type by mass, in kg CO2-e/GJ
-   * @ngaf2024 Table 4
-   * @units kg CO2-e/GJ
+   * @ngaf2026 Table 4 (solid fuels) & Table 8 (liquid fuels)
+   * @units ENERGY_CONTENT is in J/kg, other values are in kg CO2-e/GJ
    */
   STATIONARY_FUEL_FACTORS_BY_MASS: {
-    // NGAF table 4
     'Solid fuels': {
-      'Bituminous coal': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(27)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(90)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.04)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(90.24)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(3)),
-      },
-      'Sub-bituminous coal': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(21)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(90)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.04)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(90.24)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(2.5)),
-      },
-      Anthracite: {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(29)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(90)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.04)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(90.24)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Brown coal (lignite)': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(10.2)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(93.5)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.02)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.3)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(93.82)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0.4)),
-      },
-      'Coking coal': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(30)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(91.8)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(92.03)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(6.4)),
-      },
-      'Coal briquettes': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(22.1)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(95)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.08)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.3)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(95.38)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Coal coke': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(27)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(107)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(107.23)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Coal tar': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(37.5)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(81.8)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(82.03)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Other solid fossil fuels': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(22.1)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(95)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.08)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(95.28)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Industrial materials derived from fossil fuels': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(26.3)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(81.6)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(81.83)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Passenger car tyres': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(32)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(62.8)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(63.03)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Truck and off-road tyres': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(27.1)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(55.9)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(56.13)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Non-biomass municipal materials': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(10.5)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(87.1)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.8)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(1)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(88.9)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Dry wood': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(16.2)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.1)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(1.1)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(1.2)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Green and air dried wood': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(10.4)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.1)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(1.1)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(1.2)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Sulphite lyes': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(12.4)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.08)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.5)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(0.58)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      Bagasse: {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(9.6)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.3)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(1.1)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(1.4)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Biomass,  municipal and industrial materials': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(12.2)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.8)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(1)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(1.8)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      Charcoal: {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(31.1)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(5.3)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(1)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(6.3)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
-      'Other primary solid biomass fuels': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(12.2)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.8)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(1)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(1.8)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)),
-      },
+      'Bituminous coal': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Bituminous coal',
+      ),
+      'Sub-bituminous coal': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Sub-bituminous coal',
+      ),
+      Anthracite: createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Anthracite',
+      ),
+      'Brown coal (lignite)': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Brown coal (lignite)',
+      ),
+      'Coking coal': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Coking coal',
+      ),
+      'Coal briquettes': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Coal briquettes',
+      ),
+      'Coal coke': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Coal coke',
+      ),
+      'Coal tar': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Coal tar',
+      ),
+      'Other solid fossil fuels': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Solid fossil fuels other than those mentioned in the items above',
+      ),
+      'Industrial materials derived from fossil fuels':
+        createStationaryFuelConstantsFromNGAFByMass(
+          ngafSolidFuelData,
+          'Industrial materials that are derived from fossil fuels, if recycled and combusted to produce heat or electricity',
+        ),
+      'Passenger car tyres': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Passenger car tyres, if recycled and combusted to produce heat or electricity',
+      ),
+      'Truck and off-road tyres': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Truck and off-road tyres, if recycled and combusted to produce heat or electricity',
+      ),
+      'Non-biomass municipal materials':
+        createStationaryFuelConstantsFromNGAFByMass(
+          ngafSolidFuelData,
+          'Non-biomass municipal materials, if combusted to produce heat or electricity',
+        ),
+      'Dry wood': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Dry wood',
+      ),
+      'Green and air dried wood': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Green and air dried wood',
+      ),
+      'Sulphite lyes': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Sulphite lyes',
+      ),
+      Bagasse: createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Bagasse',
+      ),
+      'Biomass, municipal and industrial materials':
+        createStationaryFuelConstantsFromNGAFByMass(
+          ngafSolidFuelData,
+          'Biomass, municipal and industrial materials, if combusted to produce heat or electricity',
+        ),
+      Charcoal: createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Charcoal',
+      ),
+      'Other primary solid biomass fuels':
+        createStationaryFuelConstantsFromNGAFByMass(
+          ngafSolidFuelData,
+          'Primary solid biomass fuels other than those mentioned in the items above',
+        ),
     },
-
-    // NGAF Table 8
     'Liquid fuels': {
-      'Crude oil and condensates': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(45.3)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.6)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.08)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(69.88)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)), // N)E
-      },
-      'Other natural gas liquids': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(46.5)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(61.0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.08)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(61.28)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(0)), // N)E
-      },
-
-      'Petroleum coke': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(34.2)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(92.6)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.08)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(92.88)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Refinery gas and liquids': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(42.9)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(54.7)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(54.76)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Refinery coke': {
-        ENERGY_CONTENT_FACTOR: energyPerMass('Fuel', gjPerTonneToJPerKg(34.2)),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(92.6)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.08)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(92.88)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
+      'Crude oil and condensates': createStationaryFuelConstantsFromNGAFByMass(
+        ngafLiquidFuelData,
+        'Crude oil including crude oil condensates',
+      ),
+      'Other natural gas liquids': createStationaryFuelConstantsFromNGAFByMass(
+        ngafLiquidFuelData,
+        'Other natural gas liquids',
+      ),
+      'Petroleum coke': createStationaryFuelConstantsFromNGAFByMass(
+        ngafLiquidFuelData,
+        'Petroleum coke',
+      ),
+      'Refinery gas and liquids': createStationaryFuelConstantsFromNGAFByMass(
+        ngafLiquidFuelData,
+        'Refinery gas and liquids',
+      ),
+      'Refinery coke': createStationaryFuelConstantsFromNGAFByMass(
+        ngafLiquidFuelData,
+        'Refinery coke',
+      ),
     },
   },
 
   /**
    * @description Stationary fuel emission factors for each liquid fuel type by volume, in kg CO2-e/GJ
-   * @ngaf2024 Table 8
-   * @units kg CO2-e/GJ
+   * @ngaf2026 Table 8
+   * @units ENERGY_CONTENT is in J/m^3, other values are in kg CO2-e/GJ
    */
   STATIONARY_FUEL_FACTORS_BY_VOLUME: {
     'Liquid fuels': {
-      Naphtha: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(31.4),
+      'Petroleum based oils other than fuels':
+        createStationaryFuelConstantsFromNGAFByVolume(
+          ngafLiquidFuelData,
+          'Petroleum based oils (other than petroleum based oil used as fuel), e.g. lubricants',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.8)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.01)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.01)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(69.82)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Other petroleum products': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(34.4),
+      'Petroleum based greases': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Petroleum based greases',
+      ),
+      'Automotive gasoline/petrol':
+        createStationaryFuelConstantsFromNGAFByVolume(
+          ngafLiquidFuelData,
+          'Automotive gasoline/petrol (other than for use as fuel in an aircraft)',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.8)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.02)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.1)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(69.92)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Petroleum based oils other than fuels': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.8),
+      'Aviation gasoline': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Aviation gasoline',
+      ),
+      Kerosene: createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Kerosene (other than for use as fuel in an aircraft)',
+      ),
+      'Aviation turbine fuel/kerosene':
+        createStationaryFuelConstantsFromNGAFByVolume(
+          ngafLiquidFuelData,
+          'Aviation turbine fuel/kerosene',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(13.9)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.0)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.0)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(13.9)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Petroleum based greases': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.8),
+      'Heating oil': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Heating oil',
+      ),
+      'Diesel oil': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Diesel oil',
+      ),
+      'Fuel oil': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Fuel oil',
+      ),
+      'Liquefied aromatic hydrocarbons':
+        createStationaryFuelConstantsFromNGAFByVolume(
+          ngafLiquidFuelData,
+          'Liquefied aromatic hydrocarbons',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(3.5)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.0)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.0)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(3.5)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Automotive gasoline/petrol': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(34.2),
+      'Solvents: mineral turpentine or white spirits':
+        createStationaryFuelConstantsFromNGAFByVolume(
+          ngafLiquidFuelData,
+          'Solvents: mineral turpentine or white spirits',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(67.4)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(67.8)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(17.2)),
-      },
-      'Aviation gasoline': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(33.1),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(67.0)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(67.4)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      Kerosene: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(37.5),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(68.9)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.01)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(69.11)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Aviation turbine fuel/kerosene': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(36.8),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.6)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.02)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(69.82)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Heating oil': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(37.3),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.5)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(69.73)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Diesel oil': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(38.6),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.9)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.1)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(70.2)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(17.3)),
-      },
-      'Fuel oil': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(39.7),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(73.6)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.04)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(73.84)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Liquefied aromatic hydrocarbons': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(34.4),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.7)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(69.93)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Solvents: mineral turpentine or white spirits': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(34.4),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(69.7)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(69.93)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(18.0)),
-      },
-      'Liquefied petroleum gas': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(25.7),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy('CO2e', perGjToPerJ(60.2)),
-          CH4: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          N2O: massPerEnergy('CO2e', perGjToPerJ(0.2)),
-          CO2e: massPerEnergy('CO2e', perGjToPerJ(60.6)),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(20.2)),
-      },
+      'Liquefied petroleum gas': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Liquefied petroleum gas (LPG)',
+      ),
+      Naphtha: createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Naphtha',
+      ),
+      'Other petroleum products': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Petroleum based products other than mentioned in the items above',
+      ),
     },
   },
 
@@ -1237,27 +753,79 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description Stationary fuel emission factors for natural gas by volume, in kg CO2-e/GJ
-   * @ngaf2024 Table 5 and 6
+   * @ngaf2026 Table 5 and Table 6 (Non-Metro values)
    * @units kg CO2-e/GJ
    */
   NATURAL_GAS_FACTORS: {
-    ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', gjPerKlToJPerLitre(25.3)), // GJ/kL
+    ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', gjPerKlToJPerLitre(25.3)),
     SCOPE1_EF: {
-      CO2: massPerEnergy('CO2e', perGjToPerJ(51.4)),
-      CH4: massPerEnergy('CO2e', perGjToPerJ(0.1)),
-      N2O: massPerEnergy('CO2e', perGjToPerJ(0.03)),
-      CO2e: massPerEnergy('CO2e', perGjToPerJ(51.53)),
+      CO2: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(
+          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
+            .CO2,
+        ),
+      ),
+      CH4: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(
+          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
+            .CH4,
+        ),
+      ),
+      N2O: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(
+          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
+            .N2O,
+        ),
+      ),
+      CO2e: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(
+          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
+            .COMBINED,
+        ),
+      ),
     },
     // Uses NGAF Table 6 non-metro values
     SCOPE3_EF: {
-      NSW: massPerEnergy('CO2e', perGjToPerJ(14.0)),
-      ACT: massPerEnergy('CO2e', perGjToPerJ(14.0)),
-      VIC: massPerEnergy('CO2e', perGjToPerJ(4)),
-      QLD: massPerEnergy('CO2e', perGjToPerJ(7.9)),
-      SA: massPerEnergy('CO2e', perGjToPerJ(10.6)),
-      WA: massPerEnergy('CO2e', perGjToPerJ(4.0)),
-      TAS: massPerEnergy('CO2e', perGjToPerJ(4)), // based on victoria
-      NT: massPerEnergy('CO2e', perGjToPerJ(4.0)), // based on WA
+      NSW: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(
+          ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
+        ),
+      ),
+      ACT: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(
+          ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
+        ),
+      ),
+      VIC: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
+      ),
+      QLD: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(ngafTables['Table 6'].table.Queensland.NON_METRO),
+      ),
+      SA: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(ngafTables['Table 6'].table['South Australia'].NON_METRO),
+      ),
+      WA: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].NON_METRO),
+      ),
+      TAS: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
+      ), // Based on victoria
+      NT: massPerEnergy(
+        'CO2e',
+        perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].NON_METRO),
+      ), // based on WA (TODO: Why not QLD?)
     },
   },
 
@@ -1266,10 +834,12 @@ export const commonConstants: CommonConstants = {
       /**
        * @description Emission factors for solid waste treatment
        * @appendixA A.4.1.3, A.4.1.4
-       * @ngaf2024 Table 19, Table 29
+       * @reference National Greenhouse and Energy Reporting (Measurement) Determination 2008
        *
-       * Anaerobic digestion & composting factors come from NGAF 2024 Table 19, and are
+       * Anaerobic digestion & composting factors come from the NGER (2008) and are
        * converted to CH4 and N2O factors respectively by dividing by AR5 GWP values.
+       *
+       * These factors are repeated in NGAF as aggregated factors.
        */
       FACILITY_FACTORS: {
         Composting: {
@@ -1277,7 +847,7 @@ export const commonConstants: CommonConstants = {
           N2O: massPerMass('N2O', 'Solid Waste', 0.0000943),
         },
         'Anaerobic Digestion': {
-          CH4: massPerMass('CH4', 'Solid Waste', 0.0001),
+          CH4: massPerMass('CH4', 'Solid Waste', 0.001),
           N2O: massPerMass('N2O', 'Solid Waste', 0),
         },
         Incineration: massPerMass('Carbon', 'Solid Waste', 0.0505),
