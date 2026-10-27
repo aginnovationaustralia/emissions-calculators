@@ -406,6 +406,26 @@ export const isMassPerHeadPerDay = (
   return unit.__unitType === 'MassPerHeadPerDay';
 };
 
+export type MassPerHeadPerYear<S extends Substance> = NumberUnitBase & {
+  __unitType: 'MassPerHeadPerYear';
+  substance: S;
+};
+export const massPerHeadPerYear = <S extends Substance>(
+  substance: S,
+  initialValueKgPerHeadPerYear?: number | Decimal | ValueStore,
+): MassPerHeadPerYear<S> => {
+  return {
+    __unitType: 'MassPerHeadPerYear',
+    substance,
+    store: values(initialValueKgPerHeadPerYear),
+  };
+};
+export const isMassPerHeadPerYear = (
+  unit: NumberUnit,
+): unit is MassPerHeadPerYear<Substance> => {
+  return unit.__unitType === 'MassPerHeadPerYear';
+};
+
 export type LiveweightGain = MassPerHeadPerDay<'Liveweight'>;
 
 export const liveweightGain = (
@@ -706,6 +726,7 @@ export type NumberUnit =
   | MassPerTime<Substance>
   | MassPerElectricity<Substance>
   | MassPerHeadPerDay<Substance>
+  | MassPerHeadPerYear<Substance>
   | MassPerDay<Substance>
   | VolumePerHeadPerDay<Substance>
   | MassPerHead<Substance>

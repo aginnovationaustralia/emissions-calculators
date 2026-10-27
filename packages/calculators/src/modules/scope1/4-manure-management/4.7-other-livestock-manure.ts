@@ -5,7 +5,7 @@ import { OtherLivestockManureAndEntericHerdInputTransformed } from '@/modules/sc
 import { selectConstant } from '@/tools/constants';
 import { ifTrueElse } from '@/tools/if-else';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { daysInYear, one, zero } from '@/tools/sentinels';
+import { daysInYear, one, oneYear, zero } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 
 type ConstantsForOtherLivestockManure = HasConstants<
@@ -124,6 +124,8 @@ export function calculateManureManagementCH4ForOtherLivestockHerd(
 
 /**
  * Calculates annual nitrogen excreted *AE* by a herd of 'other' livestock (4.7.1.3 (2))
+ *
+ * AE = SUM[j] (Nj * NEj), where NEj is kg N per head per year, taken over one year
  */
 const calculateAnnualNitrogenExcretionForHerd = (
   herd: OtherLivestockManureAndEntericHerdInputTransformed,
@@ -142,8 +144,8 @@ const calculateAnnualNitrogenExcretionForHerd = (
       'NITROGEN_EXCRETED',
     ).named(`NEj=${number}`);
 
-    return NEj.multiply(Nj)
-      .multiply(daysInYear)
+    return Nj.multiply(NEj)
+      .multiply(oneYear)
       .named(`AEj=${number}`)
       .reference('4.7.1.3 (2)');
   });

@@ -27,6 +27,7 @@ import {
   massPerEnergy,
   massPerHead,
   massPerHeadPerDay,
+  massPerHeadPerYear,
   massPerMass,
   massPerMassDistance,
   massPerVolume,
@@ -3067,49 +3068,50 @@ export const livestockConstants: LivestockConstants = {
   },
 
   /**
-   * @description Emissions factors for "Other livestock" types
+   * @description Emissions factors for "Other livestock" types. ENTERIC is kg CH4 per head per year,
+   * VOLATILE_SOLIDS is kg VS per head per day, and NITROGEN_EXCRETED is kg N per head per year.
    * @appendixA A.1.5.1, A.1.5.2, A.1.5.3
    */
   OTHER_LIVESTOCK_EMISSION_FACTORS: {
     'Emus/ostriches': {
       ENTERIC: massPerHead('CH4', 5),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.34),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N', 7),
+      NITROGEN_EXCRETED: massPerHeadPerYear('N', 7),
     },
     'Mules/asses': {
       ENTERIC: massPerHead('CH4', 10),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.91),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N', 13.2),
+      NITROGEN_EXCRETED: massPerHeadPerYear('N', 13.2),
     },
     Alpacas: {
       ENTERIC: massPerHead('CH4', 8),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.34),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N', 7),
+      NITROGEN_EXCRETED: massPerHeadPerYear('N', 7),
     },
     Horses: {
       ENTERIC: massPerHead('CH4', 18),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 2.73),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N', 39.5),
+      NITROGEN_EXCRETED: massPerHeadPerYear('N', 39.5),
     },
     Camels: {
       ENTERIC: massPerHead('CH4', 46),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 2.73),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N', 39.5),
+      NITROGEN_EXCRETED: massPerHeadPerYear('N', 39.5),
     },
     Buffalo: {
       ENTERIC: massPerHead('CH4', 68),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 2.73),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N', 39.5),
+      NITROGEN_EXCRETED: massPerHeadPerYear('N', 39.5),
     },
     Goats: {
       ENTERIC: massPerHead('CH4', 5),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.34),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N', 7),
+      NITROGEN_EXCRETED: massPerHeadPerYear('N', 7),
     },
     Deer: {
       ENTERIC: massPerHead('CH4', 20),
       VOLATILE_SOLIDS: massPerHeadPerDay('Volatile Solids', 0.91),
-      NITROGEN_EXCRETED: massPerHeadPerDay('N', 13.2),
+      NITROGEN_EXCRETED: massPerHeadPerYear('N', 13.2),
     },
   },
 

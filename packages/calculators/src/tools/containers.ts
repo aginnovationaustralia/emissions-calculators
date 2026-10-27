@@ -43,6 +43,7 @@ import {
   isMassPerEnergy,
   isMassPerHead,
   isMassPerHeadPerDay,
+  isMassPerHeadPerYear,
   isMassPerMass,
   isMassPerMassDistance,
   isMassPerTime,
@@ -73,6 +74,7 @@ import {
   MassPerHead,
   massPerHeadPerDay,
   MassPerHeadPerDay,
+  MassPerHeadPerYear,
   massPerMass,
   MassPerMass,
   MassPerMassDistance,
@@ -327,6 +329,18 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     right: Container<MassPerHead<S>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S>>;
+  // Head * MassPerHeadPerYear<S> = MassPerYear<S>
+  multiply<S extends Substance>(
+    this: BaseContainer<Head>,
+    right: Container<MassPerHeadPerYear<S>>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerYear<S>>;
+  // MassPerHeadPerYear<S> * Years = MassPerHead<S>
+  multiply<S extends Substance>(
+    this: BaseContainer<MassPerHeadPerYear<S>>,
+    right: Container<Years>,
+    baseOrigin?: Metadata,
+  ): BinaryContainer<MassPerHead<S>>;
   // MassPerEnergy<S1> * EnergyPerMass<S1> = RealNumber
   multiply<S extends Substance>(
     this: BaseContainer<MassPerEnergy<S>>,
@@ -466,6 +480,10 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
         unit = massPerHeadPerDay(rightUnit.mass);
       } else if (isHead(leftUnit) && isMassPerHead(rightUnit)) {
         unit = mass(rightUnit.substance);
+      } else if (isHead(leftUnit) && isMassPerHeadPerYear(rightUnit)) {
+        unit = massPerYear(rightUnit.substance);
+      } else if (isMassPerHeadPerYear(leftUnit) && isYears(rightUnit)) {
+        unit = massPerHead(leftUnit.substance);
       } else if (isMassPerEnergy(leftUnit) && isEnergyPerMass(rightUnit)) {
         unit = realNumber();
       } else if (isMassPerVolume(leftUnit) && isVolume(rightUnit)) {

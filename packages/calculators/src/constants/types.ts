@@ -15,6 +15,7 @@ import {
   MassPerEnergy,
   MassPerHead,
   MassPerHeadPerDay,
+  MassPerHeadPerYear,
   MassPerMass,
   MassPerMassDistance,
   MassPerVolume,
@@ -566,7 +567,7 @@ export type PoultryConstants = NamedConstants & {
 type OtherLivestockFactors = {
   ENTERIC: MassPerHead<'CH4'>;
   VOLATILE_SOLIDS: MassPerHeadPerDay<'Volatile Solids'>;
-  NITROGEN_EXCRETED: MassPerHeadPerDay<'N'>;
+  NITROGEN_EXCRETED: MassPerHeadPerYear<'N'>;
 };
 
 type OtherLivestockMMSFactors = {

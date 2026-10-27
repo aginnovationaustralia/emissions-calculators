@@ -3,8 +3,9 @@ import { isPerennialWoodyCropContainerFull } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { Container, root } from '@/tools/containers';
 import { captureMethod1Or2Value } from '@/tools/multi';
+import { oneYear } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { mass, MassPerAreaPerYear, years, Years } from '@/tools/units';
+import { mass, MassPerAreaPerYear, Years } from '@/tools/units';
 import { ConstantsForLULUCF } from './constants';
 import { LULUCFParentInputTransformed } from './input';
 import { PerennialCropPlantingInputTransformed } from './perennial-crop-planting-input';
@@ -138,7 +139,7 @@ export const calculate_16_6_1_1_RemovalsFromPerennialCrops = (
   /* NOTE: The equation calculates the sum of areas removing carbon per year. For a final result,
   we want to take a year of all removals */
   return sum(annualCropRemovals)
-    .multiply(root(years(1)))
+    .multiply(oneYear)
     .named('RLU,c (all)');
 };
 

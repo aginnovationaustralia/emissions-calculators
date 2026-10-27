@@ -41,6 +41,8 @@ export function formatUnit(unit: AnyUnit): string {
       return `Mass(${unit.substance}) / Time`;
     case 'MassPerHeadPerDay':
       return `Mass(${unit.substance}) / Head / Day`;
+    case 'MassPerHeadPerYear':
+      return `Mass(${unit.substance}) / Head / Year`;
     case 'MassPerDay':
       return `Mass(${unit.substance}) / Day`;
     case 'VolumePerHeadPerDay':

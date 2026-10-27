@@ -16,6 +16,7 @@ import {
   massPerElectricity,
   massPerHead,
   massPerHeadPerDay,
+  massPerHeadPerYear,
   massPerMass,
   massPerMassDistance,
   massPerTime,
@@ -80,6 +81,20 @@ describe('BaseContainer.multiply', () => {
     expect(result.unit.__unitType).toBe('Mass');
     expect(result.unit.substance).toBe('CO2e');
     expect(result.unit.store.toNumber()).toBe(6);
+  });
+
+  it('Head * MassPerHeadPerYear => MassPerYear(substance)', () => {
+    const result = root(head(4)).multiply(root(massPerHeadPerYear('N', 7)));
+    expect(result.unit.__unitType).toBe('MassPerYear');
+    expect(result.unit.substance).toBe('N');
+    expect(result.unit.store.toNumber()).toBe(28);
+  });
+
+  it('MassPerHeadPerYear * Years => MassPerHead(substance)', () => {
+    const result = root(massPerHeadPerYear('N', 7)).multiply(root(years(2)));
+    expect(result.unit.__unitType).toBe('MassPerHead');
+    expect(result.unit.substance).toBe('N');
+    expect(result.unit.store.toNumber()).toBe(14);
   });
 
   it('MassPerHeadPerDay * Head => MassPerDay(substance)', () => {
