@@ -313,7 +313,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -453,7 +453,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -593,7 +593,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -733,7 +733,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -873,7 +873,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -1013,7 +1013,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -1153,7 +1153,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -1991,7 +1991,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -2131,7 +2131,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -2271,7 +2271,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -2411,7 +2411,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -2551,7 +2551,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -2691,7 +2691,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -2831,7 +2831,7 @@
                                     "type": "object",
                                     "properties": {
                                       "value": {
-                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                        "$ref": "#/components/schemas/ProportionNumberInput"
                                       },
                                       "quality": {
                                         "default": {},
@@ -3888,7 +3888,7 @@
                                 "type": "object",
                                 "properties": {
                                   "value": {
-                                    "$ref": "#/components/schemas/PositiveNumberInput"
+                                    "$ref": "#/components/schemas/ProportionNumberInput"
                                   },
                                   "quality": {
                                     "default": {},
@@ -4392,7 +4392,7 @@
                                 "type": "object",
                                 "properties": {
                                   "value": {
-                                    "$ref": "#/components/schemas/PositiveNumberInput"
+                                    "$ref": "#/components/schemas/ProportionNumberInput"
                                   },
                                   "quality": {
                                     "default": {},
@@ -4487,7 +4487,7 @@
                                 "type": "object",
                                 "properties": {
                                   "value": {
-                                    "$ref": "#/components/schemas/PositiveNumberInput"
+                                    "$ref": "#/components/schemas/ProportionNumberInput"
                                   },
                                   "quality": {
                                     "default": {},
@@ -4991,7 +4991,7 @@
                                 "type": "object",
                                 "properties": {
                                   "value": {
-                                    "$ref": "#/components/schemas/PositiveNumberInput"
+                                    "$ref": "#/components/schemas/ProportionNumberInput"
                                   },
                                   "quality": {
                                     "default": {},
@@ -5086,7 +5086,7 @@
                                 "type": "object",
                                 "properties": {
                                   "value": {
-                                    "$ref": "#/components/schemas/PositiveNumberInput"
+                                    "$ref": "#/components/schemas/ProportionNumberInput"
                                   },
                                   "quality": {
                                     "default": {},
@@ -5590,7 +5590,7 @@
                                 "type": "object",
                                 "properties": {
                                   "value": {
-                                    "$ref": "#/components/schemas/PositiveNumberInput"
+                                    "$ref": "#/components/schemas/ProportionNumberInput"
                                   },
                                   "quality": {
                                     "default": {},
@@ -5685,7 +5685,7 @@
                                 "type": "object",
                                 "properties": {
                                   "value": {
-                                    "$ref": "#/components/schemas/PositiveNumberInput"
+                                    "$ref": "#/components/schemas/ProportionNumberInput"
                                   },
                                   "quality": {
                                     "default": {},
@@ -6189,7 +6189,7 @@
                                 "type": "object",
                                 "properties": {
                                   "value": {
-                                    "$ref": "#/components/schemas/PositiveNumberInput"
+                                    "$ref": "#/components/schemas/ProportionNumberInput"
                                   },
                                   "quality": {
                                     "default": {},
@@ -14942,7 +14942,7 @@
                           "x-units": "0-1"
                         },
                         "purchasedFeed": {
-                          "$ref": "#/components/schemas/PurchasedFeedListInput"
+                          "$ref": "#/components/schemas/AquaculturePurchasedFeedListInput"
                         },
                         "fuel": {
                           "$ref": "#/components/schemas/FuelInput"
@@ -23408,14 +23408,14 @@
                               ]
                             },
                             "fractionSeedCottonLint": {
-                              "description": "Fraction of the harvested cotton crop that is lint, as opposed to cotton seed. (number)",
+                              "description": "Fraction of the harvested cotton crop that is lint, as opposed to cotton seed. (0-1)",
                               "x-modules": [
                                 "Intensities"
                               ],
                               "type": "object",
                               "properties": {
                                 "value": {
-                                  "$ref": "#/components/schemas/NumberInput"
+                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                 },
                                 "quality": {
                                   "default": {},
@@ -23426,7 +23426,7 @@
                                 "value"
                               ],
                               "additionalProperties": false,
-                              "x-units": "number"
+                              "x-units": "0-1"
                             }
                           },
                           "required": [
@@ -23511,7 +23511,7 @@
                                                           "type": "object",
                                                           "properties": {
                                                             "fractionOfFertiliser": {
-                                                              "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                                              "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                               "x-modules": [
                                                                 "5.1",
                                                                 "5.5",
@@ -23520,7 +23520,7 @@
                                                               "type": "object",
                                                               "properties": {
                                                                 "value": {
-                                                                  "$ref": "#/components/schemas/PercentageNumberInput"
+                                                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                                                 },
                                                                 "quality": {
                                                                   "default": {},
@@ -23531,7 +23531,7 @@
                                                                 "value"
                                                               ],
                                                               "additionalProperties": false,
-                                                              "x-units": "number"
+                                                              "x-units": "0-1"
                                                             },
                                                             "componentType": {
                                                               "type": "string",
@@ -23571,7 +23571,7 @@
                                                           "type": "object",
                                                           "properties": {
                                                             "fractionOfFertiliser": {
-                                                              "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                                              "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                               "x-modules": [
                                                                 "5.1",
                                                                 "5.5",
@@ -23580,7 +23580,7 @@
                                                               "type": "object",
                                                               "properties": {
                                                                 "value": {
-                                                                  "$ref": "#/components/schemas/PercentageNumberInput"
+                                                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                                                 },
                                                                 "quality": {
                                                                   "default": {},
@@ -23591,7 +23591,7 @@
                                                                 "value"
                                                               ],
                                                               "additionalProperties": false,
-                                                              "x-units": "number"
+                                                              "x-units": "0-1"
                                                             },
                                                             "componentType": {
                                                               "type": "string",
@@ -23633,7 +23633,7 @@
                                                       "type": "object",
                                                       "properties": {
                                                         "fractionOfFertiliser": {
-                                                          "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                           "x-modules": [
                                                             "5.1",
                                                             "5.5",
@@ -24052,7 +24052,7 @@
                                                           "type": "object",
                                                           "properties": {
                                                             "fractionOfFertiliser": {
-                                                              "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                                              "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                               "x-modules": [
                                                                 "5.1",
                                                                 "5.5",
@@ -24061,7 +24061,7 @@
                                                               "type": "object",
                                                               "properties": {
                                                                 "value": {
-                                                                  "$ref": "#/components/schemas/PercentageNumberInput"
+                                                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                                                 },
                                                                 "quality": {
                                                                   "default": {},
@@ -24072,7 +24072,7 @@
                                                                 "value"
                                                               ],
                                                               "additionalProperties": false,
-                                                              "x-units": "number"
+                                                              "x-units": "0-1"
                                                             },
                                                             "componentType": {
                                                               "type": "string",
@@ -24112,7 +24112,7 @@
                                                           "type": "object",
                                                           "properties": {
                                                             "fractionOfFertiliser": {
-                                                              "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                                              "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                               "x-modules": [
                                                                 "5.1",
                                                                 "5.5",
@@ -24121,7 +24121,7 @@
                                                               "type": "object",
                                                               "properties": {
                                                                 "value": {
-                                                                  "$ref": "#/components/schemas/PercentageNumberInput"
+                                                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                                                 },
                                                                 "quality": {
                                                                   "default": {},
@@ -24132,7 +24132,7 @@
                                                                 "value"
                                                               ],
                                                               "additionalProperties": false,
-                                                              "x-units": "number"
+                                                              "x-units": "0-1"
                                                             },
                                                             "componentType": {
                                                               "type": "string",
@@ -24174,7 +24174,7 @@
                                                       "type": "object",
                                                       "properties": {
                                                         "fractionOfFertiliser": {
-                                                          "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                           "x-modules": [
                                                             "5.1",
                                                             "5.5",
@@ -29805,7 +29805,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -29945,7 +29945,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -30085,7 +30085,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -30225,7 +30225,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -30365,7 +30365,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -30505,7 +30505,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -30645,7 +30645,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -33993,7 +33993,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -34133,7 +34133,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -34273,7 +34273,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -34413,7 +34413,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -34553,7 +34553,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -34693,7 +34693,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -34833,7 +34833,7 @@
                                       "type": "object",
                                       "properties": {
                                         "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
                                         },
                                         "quality": {
                                           "default": {},
@@ -51247,7 +51247,7 @@
                                                       "type": "object",
                                                       "properties": {
                                                         "fractionOfFertiliser": {
-                                                          "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                           "x-modules": [
                                                             "5.1",
                                                             "5.5",
@@ -51256,7 +51256,7 @@
                                                           "type": "object",
                                                           "properties": {
                                                             "value": {
-                                                              "$ref": "#/components/schemas/PercentageNumberInput"
+                                                              "$ref": "#/components/schemas/ProportionNumberInput"
                                                             },
                                                             "quality": {
                                                               "default": {},
@@ -51267,7 +51267,7 @@
                                                             "value"
                                                           ],
                                                           "additionalProperties": false,
-                                                          "x-units": "number"
+                                                          "x-units": "0-1"
                                                         },
                                                         "componentType": {
                                                           "type": "string",
@@ -51307,7 +51307,7 @@
                                                       "type": "object",
                                                       "properties": {
                                                         "fractionOfFertiliser": {
-                                                          "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                           "x-modules": [
                                                             "5.1",
                                                             "5.5",
@@ -51316,7 +51316,7 @@
                                                           "type": "object",
                                                           "properties": {
                                                             "value": {
-                                                              "$ref": "#/components/schemas/PercentageNumberInput"
+                                                              "$ref": "#/components/schemas/ProportionNumberInput"
                                                             },
                                                             "quality": {
                                                               "default": {},
@@ -51327,7 +51327,7 @@
                                                             "value"
                                                           ],
                                                           "additionalProperties": false,
-                                                          "x-units": "number"
+                                                          "x-units": "0-1"
                                                         },
                                                         "componentType": {
                                                           "type": "string",
@@ -51369,7 +51369,7 @@
                                                   "type": "object",
                                                   "properties": {
                                                     "fractionOfFertiliser": {
-                                                      "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                       "x-modules": [
                                                         "5.1",
                                                         "5.5",
@@ -64551,7 +64551,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -65055,7 +65055,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -65150,7 +65150,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -65654,7 +65654,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -65749,7 +65749,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -66253,7 +66253,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -66348,7 +66348,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -66852,7 +66852,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -71664,7 +71664,7 @@
                                                       "type": "object",
                                                       "properties": {
                                                         "fractionOfFertiliser": {
-                                                          "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                           "x-modules": [
                                                             "5.1",
                                                             "5.5",
@@ -71673,7 +71673,7 @@
                                                           "type": "object",
                                                           "properties": {
                                                             "value": {
-                                                              "$ref": "#/components/schemas/PercentageNumberInput"
+                                                              "$ref": "#/components/schemas/ProportionNumberInput"
                                                             },
                                                             "quality": {
                                                               "default": {},
@@ -71684,7 +71684,7 @@
                                                             "value"
                                                           ],
                                                           "additionalProperties": false,
-                                                          "x-units": "number"
+                                                          "x-units": "0-1"
                                                         },
                                                         "componentType": {
                                                           "type": "string",
@@ -71724,7 +71724,7 @@
                                                       "type": "object",
                                                       "properties": {
                                                         "fractionOfFertiliser": {
-                                                          "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                           "x-modules": [
                                                             "5.1",
                                                             "5.5",
@@ -71733,7 +71733,7 @@
                                                           "type": "object",
                                                           "properties": {
                                                             "value": {
-                                                              "$ref": "#/components/schemas/PercentageNumberInput"
+                                                              "$ref": "#/components/schemas/ProportionNumberInput"
                                                             },
                                                             "quality": {
                                                               "default": {},
@@ -71744,7 +71744,7 @@
                                                             "value"
                                                           ],
                                                           "additionalProperties": false,
-                                                          "x-units": "number"
+                                                          "x-units": "0-1"
                                                         },
                                                         "componentType": {
                                                           "type": "string",
@@ -71786,7 +71786,7 @@
                                                   "type": "object",
                                                   "properties": {
                                                     "fractionOfFertiliser": {
-                                                      "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                       "x-modules": [
                                                         "5.1",
                                                         "5.5",
@@ -79223,7 +79223,7 @@
                                                       "type": "object",
                                                       "properties": {
                                                         "fractionOfFertiliser": {
-                                                          "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                           "x-modules": [
                                                             "5.1",
                                                             "5.5",
@@ -79232,7 +79232,7 @@
                                                           "type": "object",
                                                           "properties": {
                                                             "value": {
-                                                              "$ref": "#/components/schemas/PercentageNumberInput"
+                                                              "$ref": "#/components/schemas/ProportionNumberInput"
                                                             },
                                                             "quality": {
                                                               "default": {},
@@ -79243,7 +79243,7 @@
                                                             "value"
                                                           ],
                                                           "additionalProperties": false,
-                                                          "x-units": "number"
+                                                          "x-units": "0-1"
                                                         },
                                                         "componentType": {
                                                           "type": "string",
@@ -79283,7 +79283,7 @@
                                                       "type": "object",
                                                       "properties": {
                                                         "fractionOfFertiliser": {
-                                                          "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                           "x-modules": [
                                                             "5.1",
                                                             "5.5",
@@ -79292,7 +79292,7 @@
                                                           "type": "object",
                                                           "properties": {
                                                             "value": {
-                                                              "$ref": "#/components/schemas/PercentageNumberInput"
+                                                              "$ref": "#/components/schemas/ProportionNumberInput"
                                                             },
                                                             "quality": {
                                                               "default": {},
@@ -79303,7 +79303,7 @@
                                                             "value"
                                                           ],
                                                           "additionalProperties": false,
-                                                          "x-units": "number"
+                                                          "x-units": "0-1"
                                                         },
                                                         "componentType": {
                                                           "type": "string",
@@ -79345,7 +79345,7 @@
                                                   "type": "object",
                                                   "properties": {
                                                     "fractionOfFertiliser": {
-                                                      "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                       "x-modules": [
                                                         "5.1",
                                                         "5.5",
@@ -82030,7 +82030,7 @@
                                                       "type": "object",
                                                       "properties": {
                                                         "fractionOfFertiliser": {
-                                                          "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                           "x-modules": [
                                                             "5.1",
                                                             "5.5",
@@ -82039,7 +82039,7 @@
                                                           "type": "object",
                                                           "properties": {
                                                             "value": {
-                                                              "$ref": "#/components/schemas/PercentageNumberInput"
+                                                              "$ref": "#/components/schemas/ProportionNumberInput"
                                                             },
                                                             "quality": {
                                                               "default": {},
@@ -82050,7 +82050,7 @@
                                                             "value"
                                                           ],
                                                           "additionalProperties": false,
-                                                          "x-units": "number"
+                                                          "x-units": "0-1"
                                                         },
                                                         "componentType": {
                                                           "type": "string",
@@ -82090,7 +82090,7 @@
                                                       "type": "object",
                                                       "properties": {
                                                         "fractionOfFertiliser": {
-                                                          "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                           "x-modules": [
                                                             "5.1",
                                                             "5.5",
@@ -82099,7 +82099,7 @@
                                                           "type": "object",
                                                           "properties": {
                                                             "value": {
-                                                              "$ref": "#/components/schemas/PercentageNumberInput"
+                                                              "$ref": "#/components/schemas/ProportionNumberInput"
                                                             },
                                                             "quality": {
                                                               "default": {},
@@ -82110,7 +82110,7 @@
                                                             "value"
                                                           ],
                                                           "additionalProperties": false,
-                                                          "x-units": "number"
+                                                          "x-units": "0-1"
                                                         },
                                                         "componentType": {
                                                           "type": "string",
@@ -82152,7 +82152,7 @@
                                                   "type": "object",
                                                   "properties": {
                                                     "fractionOfFertiliser": {
-                                                      "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                                       "x-modules": [
                                                         "5.1",
                                                         "5.5",
@@ -83395,7 +83395,7 @@
                           "x-units": "0-1"
                         },
                         "purchasedFeed": {
-                          "$ref": "#/components/schemas/PurchasedFeedListInput"
+                          "$ref": "#/components/schemas/AquaculturePurchasedFeedListInput"
                         },
                         "fuel": {
                           "$ref": "#/components/schemas/FuelInput"
@@ -102410,7 +102410,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -102453,7 +102453,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -102617,7 +102617,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -102660,7 +102660,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -102824,7 +102824,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -102867,7 +102867,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -103031,7 +103031,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -103074,7 +103074,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -103296,7 +103296,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -103339,7 +103339,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -103479,7 +103479,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -103522,7 +103522,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -103662,7 +103662,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -103705,7 +103705,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -103845,7 +103845,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -103888,7 +103888,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104086,7 +104086,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104129,7 +104129,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104293,7 +104293,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104336,7 +104336,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104500,7 +104500,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104543,7 +104543,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104707,7 +104707,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104750,7 +104750,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -104995,7 +104995,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105038,7 +105038,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105202,7 +105202,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105245,7 +105245,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105409,7 +105409,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105452,7 +105452,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105616,7 +105616,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105659,7 +105659,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105823,7 +105823,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -105866,7 +105866,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106030,7 +106030,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106073,7 +106073,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106237,7 +106237,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106280,7 +106280,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106444,7 +106444,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106487,7 +106487,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106651,7 +106651,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106694,7 +106694,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106858,7 +106858,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -106901,7 +106901,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -107065,7 +107065,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -107108,7 +107108,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -107272,7 +107272,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -107315,7 +107315,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -107545,7 +107545,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -107588,7 +107588,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -107728,7 +107728,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -107771,7 +107771,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -107911,7 +107911,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -107954,7 +107954,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -108094,7 +108094,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -108137,7 +108137,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -108277,7 +108277,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -108320,7 +108320,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -108460,7 +108460,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -108503,7 +108503,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -108643,7 +108643,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -108686,7 +108686,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -108826,7 +108826,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -108869,7 +108869,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -109009,7 +109009,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -109052,7 +109052,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -109192,7 +109192,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -109235,7 +109235,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -109375,7 +109375,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -109418,7 +109418,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -109558,7 +109558,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -109601,7 +109601,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -109807,7 +109807,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -109850,7 +109850,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110014,7 +110014,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110057,7 +110057,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110221,7 +110221,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110264,7 +110264,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110428,7 +110428,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110471,7 +110471,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110635,7 +110635,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110678,7 +110678,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110842,7 +110842,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -110885,7 +110885,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111049,7 +111049,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111092,7 +111092,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111256,7 +111256,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111299,7 +111299,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111463,7 +111463,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111506,7 +111506,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111670,7 +111670,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111713,7 +111713,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111877,7 +111877,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -111920,7 +111920,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -112084,7 +112084,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -112127,7 +112127,7 @@
                             "type": "object",
                             "properties": {
                               "value": {
-                                "$ref": "#/components/schemas/NumberInput"
+                                "$ref": "#/components/schemas/ProportionNumberInput"
                               },
                               "quality": {
                                 "default": {},
@@ -112402,7 +112402,7 @@
             "type": "object",
             "properties": {
               "value": {
-                "$ref": "#/components/schemas/NumberInput"
+                "$ref": "#/components/schemas/ProportionNumberInput"
               },
               "quality": {
                 "default": {},
@@ -112445,7 +112445,7 @@
             "type": "object",
             "properties": {
               "value": {
-                "$ref": "#/components/schemas/NumberInput"
+                "$ref": "#/components/schemas/ProportionNumberInput"
               },
               "quality": {
                 "default": {},
@@ -119329,7 +119329,7 @@
                                         "type": "object",
                                         "properties": {
                                           "fractionOfFertiliser": {
-                                            "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                            "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                             "x-modules": [
                                               "5.1",
                                               "5.5",
@@ -119338,7 +119338,7 @@
                                             "type": "object",
                                             "properties": {
                                               "value": {
-                                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                                "$ref": "#/components/schemas/ProportionNumberInput"
                                               },
                                               "quality": {
                                                 "default": {},
@@ -119349,7 +119349,7 @@
                                               "value"
                                             ],
                                             "additionalProperties": false,
-                                            "x-units": "number"
+                                            "x-units": "0-1"
                                           },
                                           "componentType": {
                                             "type": "string",
@@ -119389,7 +119389,7 @@
                                         "type": "object",
                                         "properties": {
                                           "fractionOfFertiliser": {
-                                            "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                            "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                             "x-modules": [
                                               "5.1",
                                               "5.5",
@@ -119398,7 +119398,7 @@
                                             "type": "object",
                                             "properties": {
                                               "value": {
-                                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                                "$ref": "#/components/schemas/ProportionNumberInput"
                                               },
                                               "quality": {
                                                 "default": {},
@@ -119409,7 +119409,7 @@
                                               "value"
                                             ],
                                             "additionalProperties": false,
-                                            "x-units": "number"
+                                            "x-units": "0-1"
                                           },
                                           "componentType": {
                                             "type": "string",
@@ -119451,7 +119451,7 @@
                                     "type": "object",
                                     "properties": {
                                       "fractionOfFertiliser": {
-                                        "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                        "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                         "x-modules": [
                                           "5.1",
                                           "5.5",
@@ -119884,7 +119884,7 @@
                                         "type": "object",
                                         "properties": {
                                           "fractionOfFertiliser": {
-                                            "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                            "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                             "x-modules": [
                                               "5.1",
                                               "5.5",
@@ -119893,7 +119893,7 @@
                                             "type": "object",
                                             "properties": {
                                               "value": {
-                                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                                "$ref": "#/components/schemas/ProportionNumberInput"
                                               },
                                               "quality": {
                                                 "default": {},
@@ -119904,7 +119904,7 @@
                                               "value"
                                             ],
                                             "additionalProperties": false,
-                                            "x-units": "number"
+                                            "x-units": "0-1"
                                           },
                                           "componentType": {
                                             "type": "string",
@@ -119944,7 +119944,7 @@
                                         "type": "object",
                                         "properties": {
                                           "fractionOfFertiliser": {
-                                            "description": "Fraction of inorganic fertiliser that is applied (number)",
+                                            "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                             "x-modules": [
                                               "5.1",
                                               "5.5",
@@ -119953,7 +119953,7 @@
                                             "type": "object",
                                             "properties": {
                                               "value": {
-                                                "$ref": "#/components/schemas/PercentageNumberInput"
+                                                "$ref": "#/components/schemas/ProportionNumberInput"
                                               },
                                               "quality": {
                                                 "default": {},
@@ -119964,7 +119964,7 @@
                                               "value"
                                             ],
                                             "additionalProperties": false,
-                                            "x-units": "number"
+                                            "x-units": "0-1"
                                           },
                                           "componentType": {
                                             "type": "string",
@@ -120006,7 +120006,7 @@
                                     "type": "object",
                                     "properties": {
                                       "fractionOfFertiliser": {
-                                        "description": "Fraction of inorganic fertiliser that is applied (0-1)",
+                                        "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
                                         "x-modules": [
                                           "5.1",
                                           "5.5",
@@ -127447,7 +127447,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -127594,7 +127594,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -127741,7 +127741,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -127888,7 +127888,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -128035,7 +128035,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -128182,7 +128182,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -128329,7 +128329,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -128898,7 +128898,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -129045,7 +129045,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -129192,7 +129192,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -129339,7 +129339,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -129486,7 +129486,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -129633,7 +129633,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -129780,7 +129780,7 @@
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -130635,7 +130635,7 @@
                               "type": "object",
                               "properties": {
                                 "value": {
-                                  "$ref": "#/components/schemas/PositiveNumberInput"
+                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                 },
                                 "quality": {
                                   "default": {},
@@ -131259,7 +131259,7 @@
                               "type": "object",
                               "properties": {
                                 "value": {
-                                  "$ref": "#/components/schemas/PositiveNumberInput"
+                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                 },
                                 "quality": {
                                   "default": {},
@@ -131883,7 +131883,7 @@
                               "type": "object",
                               "properties": {
                                 "value": {
-                                  "$ref": "#/components/schemas/PositiveNumberInput"
+                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                 },
                                 "quality": {
                                   "default": {},
@@ -132507,7 +132507,7 @@
                               "type": "object",
                               "properties": {
                                 "value": {
-                                  "$ref": "#/components/schemas/PositiveNumberInput"
+                                  "$ref": "#/components/schemas/ProportionNumberInput"
                                 },
                                 "quality": {
                                   "default": {},
@@ -135017,6 +135017,112 @@
               ],
               "title": "Method 1 (by feed type)",
               "type": "object"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
+                  "x-modules": [
+                    "15.2"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                    },
+                    "quality": {
+                      "default": {},
+                      "$ref": "#/components/schemas/QualityTable"
+                    }
+                  },
+                  "required": [
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "x-units": "tonnes purchased feed"
+                },
+                "customEmissionsFactor": {
+                  "description": "Method 2: Emission factor of the type of feed purchased. (kilograms CO2e per kilogram purchased feed)",
+                  "x-modules": [
+                    "15.2"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                    },
+                    "quality": {
+                      "default": {},
+                      "$ref": "#/components/schemas/QualityTable"
+                    }
+                  },
+                  "required": [
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "x-units": "kilograms CO2e per kilogram purchased feed"
+                }
+              },
+              "required": [
+                "amount",
+                "customEmissionsFactor"
+              ],
+              "additionalProperties": false,
+              "title": "Method 2 (custom emissions factor)"
+            }
+          ]
+        }
+      },
+      "AquaculturePurchasedFeedListInput": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
+                  "x-modules": [
+                    "15.2"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                    },
+                    "quality": {
+                      "default": {},
+                      "$ref": "#/components/schemas/QualityTable"
+                    }
+                  },
+                  "required": [
+                    "value"
+                  ],
+                  "additionalProperties": false,
+                  "x-units": "tonnes purchased feed"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Whole Sardines",
+                    "Low Animal Protein Formulated Feed",
+                    "Squid",
+                    "Whole Fish",
+                    "Custom Bait"
+                  ],
+                  "description": "The type of feed purchased.",
+                  "x-modules": [
+                    "15.2"
+                  ]
+                }
+              },
+              "required": [
+                "amount",
+                "type"
+              ],
+              "additionalProperties": false,
+              "title": "Aquaculture feed"
             },
             {
               "type": "object",

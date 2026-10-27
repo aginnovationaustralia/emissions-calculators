@@ -4,6 +4,7 @@ import {
   HasStateInputTransformed,
 } from '@/calculators/types/has-state.input';
 import { getSheet } from '@/test/common/sheets';
+import { testContext } from '@/test/Grains/context';
 import { nv } from '@/tools/inputs';
 import { SERVICES_15_7 } from '@/tools/modules';
 import XLSX from 'xlsx-populate';
@@ -14,9 +15,14 @@ import {
 } from '../scope1/8-fuel-use';
 import { StationaryFuelInput } from '../scope1/8-fuel-use/stationaryFuel.input';
 import { TransportFuelInput } from '../scope1/8-fuel-use/transportFuel.input';
-import { calculateScope3Services } from '../scope3/15.7-services';
+import {
+  calculateScope3Services,
+  calculateScope3ServicesForActivity,
+} from '../scope3/15.7-services';
+import { ServicesInputSchema } from '../scope3/15.7-services/services.input';
 import { checkVehicleType } from './fuel-domain';
 import { checkState } from './livestock-domain';
+import { expectInputsTaggedForModule } from './module-tagging';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
@@ -154,5 +160,75 @@ describe('15.7.1.1 Services - stationary fuel', () => {
     const inputsAndOutputs = extractStationaryInputsAndOutputs(sheet, 5, '1');
 
     compareInputsAndOutputs(inputsAndOutputs, calculateScope3Services, '15.7');
+  });
+});
+
+describe('15.7.1.1 Services - for an industry calculator activity', () => {
+  // An activity (crop, herd, ...) carries its own fuel alongside the contractor fuel
+  const activity = (services: HasFuelInput['fuel']) => ({
+    ...hasStateInputSchema([SERVICES_15_7]).parse({ state: 'QLD' }),
+    ...hasFuelInputSchema('fuel').parse({
+      fuel: {
+        transport: [
+          {
+            vehicleType: 'Off-road Agriculture and forestry equipment',
+            fuelType: 'Diesel',
+            amountKilolitres: nv(18),
+          },
+        ],
+        stationary: [
+          {
+            fuelClass: 'Liquid fuels',
+            fuelType: 'Diesel oil',
+            amountKilolitres: nv(6),
+          },
+        ],
+      },
+    }),
+    ...ServicesInputSchema.parse({ services: { fuel: services } }),
+  });
+
+  const contractorFuel: HasFuelInput['fuel'] = {
+    transport: [
+      {
+        vehicleType: 'Off-road Agriculture and forestry equipment',
+        fuelType: 'Diesel',
+        amountKilolitres: nv(25),
+      },
+    ],
+    stationary: [
+      {
+        fuelClass: 'Gaseous fuels',
+        fuelType: 'Natural gas',
+        amountKilolitres: nv(100),
+      },
+    ],
+  };
+
+  // Natural gas has a state-specific scope 3 factor, so this also exercises the state
+  it('calculates from services.fuel and the activity state, ignoring the own fuel', () => {
+    const context = testContext();
+    const input = activity(contractorFuel);
+
+    const actual = calculateScope3ServicesForActivity(input, context);
+    const expected = calculateScope3Services(
+      { state: input.state, fuel: input.services.fuel },
+      context,
+    );
+
+    expect(actual.unit.store.value.toNumber()).toBeGreaterThan(0);
+    expect(actual.unit.store.value.toNumber()).toEqual(
+      expected.unit.store.value.toNumber(),
+    );
+    expectInputsTaggedForModule(actual, SERVICES_15_7);
+  });
+
+  it('is zero when there is no services fuel, even if the activity has its own fuel', () => {
+    const actual = calculateScope3ServicesForActivity(
+      activity({ transport: [], stationary: [] }),
+      testContext(),
+    );
+
+    expect(actual.unit.store.value.toNumber()).toBe(0);
   });
 });

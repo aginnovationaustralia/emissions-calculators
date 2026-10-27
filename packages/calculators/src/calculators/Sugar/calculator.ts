@@ -23,7 +23,7 @@ import { calculateScope3SolidWasteEmissions } from '@/modules/scope3/15.12-waste
 import { calculateScope3Fertiliser } from '@/modules/scope3/15.4-fertiliser';
 import { calculateScope3Agrichemicals } from '@/modules/scope3/15.5-agrichemicals';
 import { calculateScope3SoilAmeliorants } from '@/modules/scope3/15.6-lime';
-import { calculateScope3Services } from '@/modules/scope3/15.7-services';
+import { calculateScope3ServicesForActivity } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
@@ -162,7 +162,7 @@ const calculateScope3Sugar = (
   const soilAmeliorants = calculateScope3SoilAmeliorants(crop, context);
 
   // Purchased Services/Contractors 15.7
-  const services = calculateScope3Services(crop, context);
+  const services = calculateScope3ServicesForActivity(crop, context);
 
   // Other Purchased Goods and Services 15.9
   const otherPurchasedGoodsAndServices =

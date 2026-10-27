@@ -29,7 +29,7 @@ import { calculatePurchasedMineralSupplements } from '@/modules/scope3/15.3-purc
 import { calculateScope3Fertiliser } from '@/modules/scope3/15.4-fertiliser';
 import { calculateScope3Agrichemicals } from '@/modules/scope3/15.5-agrichemicals';
 import { calculateScope3SoilAmeliorants } from '@/modules/scope3/15.6-lime';
-import { calculateScope3Services } from '@/modules/scope3/15.7-services';
+import { calculateScope3ServicesForActivity } from '@/modules/scope3/15.7-services';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { selectConstant } from '@/tools/constants';
@@ -328,7 +328,7 @@ const calculateScope3SheepFlock = (
   const soilAmeliorants = calculateScope3SoilAmeliorants(flock, context);
 
   // Purchased Services/Contractors 15.7
-  const services = calculateScope3Services(flock, context);
+  const services = calculateScope3ServicesForActivity(flock, context);
 
   // Other Purchased Goods and Services 15.9
   const otherPurchasedGoodsAndServices =
