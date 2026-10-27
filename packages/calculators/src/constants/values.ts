@@ -45,6 +45,8 @@ import {
   CropConstants,
   DairyConstants,
   FeedlotConstants,
+  FuelFactorByMass,
+  FuelFactorByVolume,
   LivestockConstants,
   LULUCFConstants,
   PigsConstants,
@@ -58,6 +60,113 @@ const ngafElectricityData = ngaf2026['Table 1'].table;
 const ngafTransportFuelData = ngaf2026['Table 9'].table;
 const ngafSolidFuelData = ngaf2026['Table 4'].table;
 const ngafLiquidFuelData = ngaf2026['Table 8'].table;
+const ngafRefrigerantLeakageData = ngaf2026['Table 10'].table;
+
+const createTransportFuelConstantsFromNGAF = (
+  row: keyof typeof ngafTransportFuelData,
+): FuelFactorByVolume => ({
+  ENERGY_CONTENT_FACTOR: energyPerVolume(
+    'Fuel',
+    gjPerCubicMetreToJPerLitre(ngafTransportFuelData[row].ENERGY_CONTENT),
+  ),
+  SCOPE1_EF: {
+    CO2: massPerEnergy('CO2e', perGjToPerJ(ngafTransportFuelData[row].CO2)),
+    CH4: massPerEnergy('CO2e', perGjToPerJ(ngafTransportFuelData[row].CH4)),
+    N2O: massPerEnergy('CO2e', perGjToPerJ(ngafTransportFuelData[row].N2O)),
+    CO2e: massPerEnergy(
+      'CO2e',
+      perGjToPerJ(ngafTransportFuelData[row].COMBINED),
+    ),
+  },
+  SCOPE3_EF: massPerEnergy(
+    'CO2e',
+    perGjToPerJ(ngafTransportFuelData[row].SCOPE_3),
+  ),
+});
+
+/**
+ * These are NOT the pre-2004 values, they're the values for fuel types that DO have
+ * different values for 'Cars and light commercial vehicles' manufactured before 2004.
+ */
+const transportFuelsWithPre2004Factors = {
+  Gasoline: createTransportFuelConstantsFromNGAF(
+    'Cars and light commercial vehicles, Gasoline',
+  ),
+  'Diesel oil': createTransportFuelConstantsFromNGAF(
+    'Cars and light commercial vehicles, Diesel oil',
+  ),
+  'Liquefied petroleum gas (LPG)': createTransportFuelConstantsFromNGAF(
+    'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)',
+  ),
+  Ethanol: createTransportFuelConstantsFromNGAF(
+    'Cars and light commercial vehicles, Ethanol',
+  ),
+  'Renewable diesel': createTransportFuelConstantsFromNGAF(
+    'Cars and light commercial vehicles, Renewable diesel',
+  ),
+};
+
+const createStationaryFuelConstantsFromNGAFByVolume = <
+  F extends keyof typeof ngafLiquidFuelData | keyof typeof ngafSolidFuelData,
+>(
+  table: Record<
+    F,
+    {
+      ENERGY_CONTENT: number;
+      CO2: number;
+      CH4: number;
+      N2O: number;
+      COMBINED: number;
+      SCOPE_3: number;
+    }
+  >,
+  row: F,
+): FuelFactorByVolume => ({
+  ENERGY_CONTENT_FACTOR: energyPerVolume(
+    'Fuel',
+    gjPerCubicMetreToJPerLitre(table[row].ENERGY_CONTENT),
+  ),
+  SCOPE1_EF: {
+    CO2: massPerEnergy('CO2e', perGjToPerJ(table[row].CO2)),
+    CH4: massPerEnergy('CO2e', perGjToPerJ(table[row].CH4)),
+    N2O: massPerEnergy('CO2e', perGjToPerJ(table[row].N2O)),
+    CO2e: massPerEnergy('CO2e', perGjToPerJ(table[row].COMBINED)),
+  },
+  SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(table[row].SCOPE_3)),
+});
+
+const createStationaryFuelConstantsFromNGAFByMass = <
+  F extends keyof typeof ngafLiquidFuelData | keyof typeof ngafSolidFuelData,
+>(
+  table: Record<
+    F,
+    {
+      ENERGY_CONTENT: number;
+      CO2: number;
+      CH4: number;
+      N2O: number;
+      COMBINED: number;
+      SCOPE_3: number;
+    }
+  >,
+  row: F,
+): FuelFactorByMass => ({
+  ENERGY_CONTENT_FACTOR: energyPerMass(
+    'Fuel',
+    gjPerTonneToJPerKg(table[row].ENERGY_CONTENT),
+  ),
+  SCOPE1_EF: {
+    CO2: massPerEnergy('CO2e', perGjToPerJ(table[row].CO2)),
+    CH4: massPerEnergy('CO2e', perGjToPerJ(table[row].CH4)),
+    N2O: massPerEnergy('CO2e', perGjToPerJ(table[row].N2O)),
+    CO2e: massPerEnergy('CO2e', perGjToPerJ(table[row].COMBINED)),
+  },
+  SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(table[row].SCOPE_3)),
+});
+
+const getRefrigerantLeakageRateFromNGAF = (
+  row: keyof typeof ngafRefrigerantLeakageData,
+) => percentage(ngafRefrigerantLeakageData[row]['Annual leakage rate (%)']);
 
 const allStatesWithValue = (rawValue: number): Record<State, RealNumber> => {
   const value = realNumber(rawValue);
@@ -89,41 +198,22 @@ export const commonConstants: CommonConstants = {
    * @units percentage
    */
   REFRIGERATION_LEAKAGE_RATES: {
-    'Domestic refrigerators': percentage(
-      ngaf2026['Table 10'].table['Domestic refrigerators'][
-        'Annual leakage rate (%)'
-      ],
+    'Domestic refrigerators': getRefrigerantLeakageRateFromNGAF(
+      'Domestic refrigerators',
     ),
-    'Transport refrigeration': percentage(
-      ngaf2026['Table 10'].table['Transport refrigeration'][
-        'Annual leakage rate (%)'
-      ],
+    'Transport refrigeration': getRefrigerantLeakageRateFromNGAF(
+      'Transport refrigeration',
     ),
-    'Domestic A/C portable': percentage(
-      ngaf2026['Table 10'].table['Domestic A/C portable'][
-        'Annual leakage rate (%)'
-      ],
+    'Domestic A/C portable': getRefrigerantLeakageRateFromNGAF(
+      'Domestic A/C portable',
     ),
-    'Domestic A/C split': percentage(
-      ngaf2026['Table 10'].table['Domestic A/C split'][
-        'Annual leakage rate (%)'
-      ],
+    'Domestic A/C split':
+      getRefrigerantLeakageRateFromNGAF('Domestic A/C split'),
+    'Domestic A/C packaged': getRefrigerantLeakageRateFromNGAF(
+      'Domestic A/C packaged',
     ),
-    'Domestic A/C packaged': percentage(
-      ngaf2026['Table 10'].table['Domestic A/C packaged'][
-        'Annual leakage rate (%)'
-      ],
-    ),
-    'Light vehicle A/C': percentage(
-      ngaf2026['Table 10'].table['Light vehicle A/C'][
-        'Annual leakage rate (%)'
-      ],
-    ),
-    'Heavy vehicle A/C': percentage(
-      ngaf2026['Table 10'].table['Heavy vehicle A/C'][
-        'Annual leakage rate (%)'
-      ],
-    ),
+    'Light vehicle A/C': getRefrigerantLeakageRateFromNGAF('Light vehicle A/C'),
+    'Heavy vehicle A/C': getRefrigerantLeakageRateFromNGAF('Heavy vehicle A/C'),
   },
 
   /**
@@ -481,45 +571,16 @@ export const commonConstants: CommonConstants = {
      */
     'Cars and light commercial vehicles (pre 2004)': {
       Gasoline: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Gasoline'
-            ].ENERGY_CONTENT,
-          ),
-        ),
+        ...transportFuelsWithPre2004Factors['Gasoline'],
         SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Gasoline'
-              ].CO2,
-            ),
-          ),
+          ...transportFuelsWithPre2004Factors['Gasoline'].SCOPE1_EF,
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.6)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(1.6)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(69.6)),
         },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Gasoline'
-            ].SCOPE_3,
-          ),
-        ),
       },
       'Diesel oil': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Diesel oil'
-            ].ENERGY_CONTENT,
-          ),
-        ),
+        ...transportFuelsWithPre2004Factors['Diesel oil'],
         SCOPE1_EF: {
           CO2: massPerEnergy(
             'CO2e',
@@ -533,1175 +594,109 @@ export const commonConstants: CommonConstants = {
           N2O: massPerEnergy('CO2e', perGjToPerJ(0.4)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(70.4)),
         },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Diesel oil'
-            ].SCOPE_3,
-          ),
-        ),
       },
       'Liquefied petroleum gas (LPG)': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)'
-            ].ENERGY_CONTENT,
-          ),
-        ),
+        ...transportFuelsWithPre2004Factors['Liquefied petroleum gas (LPG)'],
         SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)'
-              ].CO2,
-            ),
-          ),
+          ...transportFuelsWithPre2004Factors['Liquefied petroleum gas (LPG)']
+            .SCOPE1_EF,
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.7)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(0.6)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(61.5)),
         },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)'
-            ].SCOPE_3,
-          ),
-        ),
       },
       Ethanol: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData['Cars and light commercial vehicles, Ethanol']
-              .ENERGY_CONTENT,
-          ),
-        ),
+        ...transportFuelsWithPre2004Factors['Ethanol'],
         SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Ethanol'
-              ].CO2,
-            ),
-          ),
+          ...transportFuelsWithPre2004Factors['Ethanol'].SCOPE1_EF,
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.8)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(1.7)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(2.5)),
         },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData['Cars and light commercial vehicles, Ethanol']
-              .SCOPE_3,
-          ),
-        ),
       },
       'Renewable diesel': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Renewable diesel'
-            ].ENERGY_CONTENT,
-          ),
-        ),
+        ...transportFuelsWithPre2004Factors['Renewable diesel'],
         SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Renewable diesel'
-              ].CO2,
-            ),
-          ),
+          ...transportFuelsWithPre2004Factors['Renewable diesel'].SCOPE1_EF,
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.01)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(0.5)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(0.51)),
         },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Renewable diesel'
-            ].SCOPE_3,
-          ),
-        ),
       },
     },
     'Cars and light commercial vehicles': {
-      Gasoline: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Gasoline'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Gasoline'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Gasoline'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Gasoline'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Gasoline'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(17.2)),
-      },
-      'Diesel oil': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Diesel oil'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Diesel oil'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Diesel oil'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Diesel oil'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Diesel oil'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Diesel oil'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Liquefied petroleum gas (LPG)': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Fuel oil': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Fuel oil'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Fuel oil'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Fuel oil'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Fuel oil'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Fuel oil'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Fuel oil'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      Ethanol: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData['Cars and light commercial vehicles, Ethanol']
-              .ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Ethanol'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Ethanol'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Ethanol'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Ethanol'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData['Cars and light commercial vehicles, Ethanol']
-              .SCOPE_3,
-          ),
-        ),
-      },
-      Biodiesel: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Biodiesel'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Biodiesel'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Biodiesel'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Biodiesel'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Biodiesel'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Biodiesel'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Renewable diesel': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Renewable diesel'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Renewable diesel'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Renewable diesel'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Renewable diesel'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Renewable diesel'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Renewable diesel'
-            ].SCOPE_3,
-          ),
-        ), // NE
-      },
-      'Other biofuels': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Other biofuels'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Other biofuels'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Other biofuels'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Other biofuels'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Other biofuels'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Cars and light commercial vehicles, Other biofuels'
-            ].SCOPE_3,
-          ),
-        ),
-      },
+      Gasoline: createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Gasoline',
+      ),
+      'Diesel oil': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Diesel oil',
+      ),
+      'Liquefied petroleum gas (LPG)': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)',
+      ),
+      'Fuel oil': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Fuel oil',
+      ),
+      Ethanol: createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Ethanol',
+      ),
+      Biodiesel: createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Biodiesel',
+      ),
+      'Renewable diesel': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Renewable diesel',
+      ),
+      'Other biofuels': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Other biofuels',
+      ),
     },
     'Light duty vehicles': {
-      'Compressed natural gas': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerCubicMetreToJPerLitre(
-            ngafTransportFuelData['Light duty vehicles, Compressed natural gas']
-              .ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Light duty vehicles, Compressed natural gas'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Light duty vehicles, Compressed natural gas'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Light duty vehicles, Compressed natural gas'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Light duty vehicles, Compressed natural gas'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData['Light duty vehicles, Compressed natural gas']
-              .SCOPE_3,
-          ),
-        ),
-      },
-      'Liquefied natural gas': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData['Light duty vehicles, Liquefied natural gas']
-              .ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Light duty vehicles, Liquefied natural gas'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Light duty vehicles, Liquefied natural gas'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Light duty vehicles, Liquefied natural gas'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Light duty vehicles, Liquefied natural gas'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData['Light duty vehicles, Liquefied natural gas']
-              .SCOPE_3,
-          ),
-        ),
-      },
+      'Compressed natural gas': createTransportFuelConstantsFromNGAF(
+        'Light duty vehicles, Compressed natural gas',
+      ),
+      'Liquefied natural gas': createTransportFuelConstantsFromNGAF(
+        'Light duty vehicles, Liquefied natural gas',
+      ),
     },
     'Heavy duty vehicles': {
-      'Compressed natural gas': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerCubicMetreToJPerLitre(
-            ngafTransportFuelData['Heavy duty vehicles, Compressed natural gas']
-              .ENERGY_CONTENT,
-          ),
+      'Compressed natural gas': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Compressed natural gas',
+      ),
+      'Liquefied natural gas': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Liquefied natural gas',
+      ),
+      'Diesel oil - Euro iv or higher': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Diesel oil - Euro iv or higher',
+      ),
+      'Diesel oil - Euro iii': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Diesel oil - Euro iii',
+      ),
+      'Diesel oil - Euro i': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Diesel oil - Euro i',
+      ),
+      'Renewable diesel - Euro iv or higher':
+        createTransportFuelConstantsFromNGAF(
+          'Heavy duty vehicles, Renewable diesel - Euro iv or higher',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Compressed natural gas'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Compressed natural gas'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Compressed natural gas'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Compressed natural gas'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData['Heavy duty vehicles, Compressed natural gas']
-              .SCOPE_3,
-          ),
-        ),
-      },
-      'Liquefied natural gas': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData['Heavy duty vehicles, Liquefied natural gas']
-              .ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Liquefied natural gas'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Liquefied natural gas'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Liquefied natural gas'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Liquefied natural gas'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData['Heavy duty vehicles, Liquefied natural gas']
-              .SCOPE_3,
-          ),
-        ),
-      },
-      'Diesel oil - Euro iv or higher': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Heavy duty vehicles, Diesel oil - Euro iv or higher'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Diesel oil - Euro iv or higher'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Diesel oil - Euro iv or higher'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Diesel oil - Euro iv or higher'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Diesel oil - Euro iv or higher'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Heavy duty vehicles, Diesel oil - Euro iv or higher'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Diesel oil - Euro iii': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData['Heavy duty vehicles, Diesel oil - Euro iii']
-              .ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Diesel oil - Euro iii'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Diesel oil - Euro iii'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Diesel oil - Euro iii'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Diesel oil - Euro iii'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData['Heavy duty vehicles, Diesel oil - Euro iii']
-              .SCOPE_3,
-          ),
-        ),
-      },
-      'Diesel oil - Euro i': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData['Heavy duty vehicles, Diesel oil - Euro i']
-              .ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData['Heavy duty vehicles, Diesel oil - Euro i']
-                .CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData['Heavy duty vehicles, Diesel oil - Euro i']
-                .CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData['Heavy duty vehicles, Diesel oil - Euro i']
-                .N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData['Heavy duty vehicles, Diesel oil - Euro i']
-                .COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData['Heavy duty vehicles, Diesel oil - Euro i']
-              .SCOPE_3,
-          ),
-        ),
-      },
-      'Renewable diesel - Euro iv or higher': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Heavy duty vehicles, Renewable diesel - Euro iv or higher'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Renewable diesel - Euro iv or higher'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Renewable diesel - Euro iv or higher'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Renewable diesel - Euro iv or higher'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Renewable diesel - Euro iv or higher'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Heavy duty vehicles, Renewable diesel - Euro iv or higher'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Renewable diesel - Euro iii': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Heavy duty vehicles, Renewable diesel - Euro iii'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Renewable diesel - Euro iii'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Renewable diesel - Euro iii'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Renewable diesel - Euro iii'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Renewable diesel - Euro iii'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Heavy duty vehicles, Renewable diesel - Euro iii'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Renewable diesel - Euro i': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Heavy duty vehicles, Renewable diesel - Euro i'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Renewable diesel - Euro i'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Renewable diesel - Euro i'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Renewable diesel - Euro i'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Heavy duty vehicles, Renewable diesel - Euro i'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Heavy duty vehicles, Renewable diesel - Euro i'
-            ].SCOPE_3,
-          ),
-        ),
-      },
+      'Renewable diesel - Euro iii': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Renewable diesel - Euro iii',
+      ),
+      'Renewable diesel - Euro i': createTransportFuelConstantsFromNGAF(
+        'Heavy duty vehicles, Renewable diesel - Euro i',
+      ),
     },
     Aviation: {
-      'Gasoline for use as fuel in an aircraft': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Aviation, Gasoline for use as fuel in an aircraft'
-            ].ENERGY_CONTENT,
-          ),
+      'Gasoline for use as fuel in an aircraft':
+        createTransportFuelConstantsFromNGAF(
+          'Aviation, Gasoline for use as fuel in an aircraft',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Aviation, Gasoline for use as fuel in an aircraft'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Aviation, Gasoline for use as fuel in an aircraft'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Aviation, Gasoline for use as fuel in an aircraft'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Aviation, Gasoline for use as fuel in an aircraft'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Aviation, Gasoline for use as fuel in an aircraft'
-            ].SCOPE_3,
-          ),
+      'Kerosene for use as fuel in an aircraft':
+        createTransportFuelConstantsFromNGAF(
+          'Aviation, Kerosene for use as fuel in an aircraft',
         ),
-      },
-      'Kerosene for use as fuel in an aircraft': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData[
-              'Aviation, Kerosene for use as fuel in an aircraft'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Aviation, Kerosene for use as fuel in an aircraft'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Aviation, Kerosene for use as fuel in an aircraft'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Aviation, Kerosene for use as fuel in an aircraft'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Aviation, Kerosene for use as fuel in an aircraft'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData[
-              'Aviation, Kerosene for use as fuel in an aircraft'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Renewable aviation kerosene': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafTransportFuelData['Aviation, Renewable aviation kerosene']
-              .ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData['Aviation, Renewable aviation kerosene']
-                .CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData['Aviation, Renewable aviation kerosene']
-                .CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData['Aviation, Renewable aviation kerosene']
-                .N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData['Aviation, Renewable aviation kerosene']
-                .COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafTransportFuelData['Aviation, Renewable aviation kerosene']
-              .SCOPE_3,
-          ),
-        ),
-      },
+      'Renewable aviation kerosene': createTransportFuelConstantsFromNGAF(
+        'Aviation, Renewable aviation kerosene',
+      ),
     },
     Vessel: {
       Petrol: {
@@ -1763,1485 +758,188 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description Stationary fuel emission factors for each solid fuel type by mass, in kg CO2-e/GJ
-   * @ngaf2026 Table 4
-   * @units kg CO2-e/GJ
+   * @ngaf2026 Table 4 (solid fuels) & Table 8 (liquid fuels)
+   * @units ENERGY_CONTENT is in J/kg, other values are in kg CO2-e/GJ
    */
   STATIONARY_FUEL_FACTORS_BY_MASS: {
-    // NGAF table 4
     'Solid fuels': {
-      'Bituminous coal': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafSolidFuelData['Bituminous coal'].ENERGY_CONTENT,
-          ),
+      'Bituminous coal': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Bituminous coal',
+      ),
+      'Sub-bituminous coal': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Sub-bituminous coal',
+      ),
+      Anthracite: createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Anthracite',
+      ),
+      'Brown coal (lignite)': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Brown coal (lignite)',
+      ),
+      'Coking coal': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Coking coal',
+      ),
+      'Coal briquettes': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Coal briquettes',
+      ),
+      'Coal coke': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Coal coke',
+      ),
+      'Coal tar': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Coal tar',
+      ),
+      'Other solid fossil fuels': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Solid fossil fuels other than those mentioned in the items above',
+      ),
+      'Industrial materials derived from fossil fuels':
+        createStationaryFuelConstantsFromNGAFByMass(
+          ngafSolidFuelData,
+          'Industrial materials that are derived from fossil fuels, if recycled and combusted to produce heat or electricity',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Bituminous coal'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Bituminous coal'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Bituminous coal'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Bituminous coal'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Bituminous coal'].SCOPE_3),
+      'Passenger car tyres': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Passenger car tyres, if recycled and combusted to produce heat or electricity',
+      ),
+      'Truck and off-road tyres': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Truck and off-road tyres, if recycled and combusted to produce heat or electricity',
+      ),
+      'Non-biomass municipal materials':
+        createStationaryFuelConstantsFromNGAFByMass(
+          ngafSolidFuelData,
+          'Non-biomass municipal materials, if combusted to produce heat or electricity',
         ),
-      },
-      'Sub-bituminous coal': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafSolidFuelData['Sub-bituminous coal'].ENERGY_CONTENT,
-          ),
+      'Dry wood': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Dry wood',
+      ),
+      'Green and air dried wood': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Green and air dried wood',
+      ),
+      'Sulphite lyes': createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Sulphite lyes',
+      ),
+      Bagasse: createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Bagasse',
+      ),
+      'Biomass, municipal and industrial materials':
+        createStationaryFuelConstantsFromNGAFByMass(
+          ngafSolidFuelData,
+          'Biomass, municipal and industrial materials, if combusted to produce heat or electricity',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Sub-bituminous coal'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Sub-bituminous coal'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Sub-bituminous coal'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Sub-bituminous coal'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Sub-bituminous coal'].SCOPE_3),
+      Charcoal: createStationaryFuelConstantsFromNGAFByMass(
+        ngafSolidFuelData,
+        'Charcoal',
+      ),
+      'Other primary solid biomass fuels':
+        createStationaryFuelConstantsFromNGAFByMass(
+          ngafSolidFuelData,
+          'Primary solid biomass fuels other than those mentioned in the items above',
         ),
-      },
-      Anthracite: {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(ngafSolidFuelData['Anthracite'].ENERGY_CONTENT),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Anthracite'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Anthracite'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Anthracite'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Anthracite'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Anthracite'].SCOPE_3),
-        ),
-      },
-      'Brown coal (lignite)': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafSolidFuelData['Brown coal (lignite)'].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Brown coal (lignite)'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Brown coal (lignite)'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Brown coal (lignite)'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Brown coal (lignite)'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Brown coal (lignite)'].SCOPE_3),
-        ),
-      },
-      'Coking coal': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(ngafSolidFuelData['Coking coal'].ENERGY_CONTENT),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coking coal'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coking coal'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coking coal'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coking coal'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Coking coal'].SCOPE_3),
-        ),
-      },
-      'Coal briquettes': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafSolidFuelData['Coal briquettes'].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coal briquettes'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coal briquettes'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coal briquettes'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coal briquettes'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Coal briquettes'].SCOPE_3),
-        ),
-      },
-      'Coal coke': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(ngafSolidFuelData['Coal coke'].ENERGY_CONTENT),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coal coke'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coal coke'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coal coke'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coal coke'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Coal coke'].SCOPE_3),
-        ),
-      },
-      'Coal tar': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(ngafSolidFuelData['Coal tar'].ENERGY_CONTENT),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coal tar'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coal tar'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coal tar'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Coal tar'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Coal tar'].SCOPE_3),
-        ),
-      },
-      'Other solid fossil fuels': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafSolidFuelData[
-              'Solid fossil fuels other than those mentioned in the items above'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Solid fossil fuels other than those mentioned in the items above'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Solid fossil fuels other than those mentioned in the items above'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Solid fossil fuels other than those mentioned in the items above'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Solid fossil fuels other than those mentioned in the items above'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafSolidFuelData[
-              'Solid fossil fuels other than those mentioned in the items above'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Industrial materials derived from fossil fuels': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafSolidFuelData[
-              'Industrial materials that are derived from fossil fuels, if recycled and combusted to produce heat or electricity'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Industrial materials that are derived from fossil fuels, if recycled and combusted to produce heat or electricity'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Industrial materials that are derived from fossil fuels, if recycled and combusted to produce heat or electricity'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Industrial materials that are derived from fossil fuels, if recycled and combusted to produce heat or electricity'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Industrial materials that are derived from fossil fuels, if recycled and combusted to produce heat or electricity'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafSolidFuelData[
-              'Industrial materials that are derived from fossil fuels, if recycled and combusted to produce heat or electricity'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Passenger car tyres': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafSolidFuelData[
-              'Passenger car tyres, if recycled and combusted to produce heat or electricity'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Passenger car tyres, if recycled and combusted to produce heat or electricity'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Passenger car tyres, if recycled and combusted to produce heat or electricity'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Passenger car tyres, if recycled and combusted to produce heat or electricity'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Passenger car tyres, if recycled and combusted to produce heat or electricity'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafSolidFuelData[
-              'Passenger car tyres, if recycled and combusted to produce heat or electricity'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Truck and off-road tyres': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafSolidFuelData[
-              'Truck and off-road tyres, if recycled and combusted to produce heat or electricity'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Truck and off-road tyres, if recycled and combusted to produce heat or electricity'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Truck and off-road tyres, if recycled and combusted to produce heat or electricity'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Truck and off-road tyres, if recycled and combusted to produce heat or electricity'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Truck and off-road tyres, if recycled and combusted to produce heat or electricity'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafSolidFuelData[
-              'Truck and off-road tyres, if recycled and combusted to produce heat or electricity'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Non-biomass municipal materials': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafSolidFuelData[
-              'Non-biomass municipal materials, if combusted to produce heat or electricity'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Non-biomass municipal materials, if combusted to produce heat or electricity'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Non-biomass municipal materials, if combusted to produce heat or electricity'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Non-biomass municipal materials, if combusted to produce heat or electricity'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Non-biomass municipal materials, if combusted to produce heat or electricity'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafSolidFuelData[
-              'Non-biomass municipal materials, if combusted to produce heat or electricity'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Dry wood': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(ngafSolidFuelData['Dry wood'].ENERGY_CONTENT),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Dry wood'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Dry wood'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Dry wood'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Dry wood'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Dry wood'].SCOPE_3),
-        ),
-      },
-      'Green and air dried wood': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafSolidFuelData['Green and air dried wood'].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Green and air dried wood'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Green and air dried wood'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Green and air dried wood'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Green and air dried wood'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Green and air dried wood'].SCOPE_3),
-        ),
-      },
-      'Sulphite lyes': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(ngafSolidFuelData['Sulphite lyes'].ENERGY_CONTENT),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Sulphite lyes'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Sulphite lyes'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Sulphite lyes'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Sulphite lyes'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Sulphite lyes'].SCOPE_3),
-        ),
-      },
-      Bagasse: {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(ngafSolidFuelData['Bagasse'].ENERGY_CONTENT),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Bagasse'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Bagasse'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Bagasse'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Bagasse'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Bagasse'].SCOPE_3),
-        ),
-      },
-      'Biomass, municipal and industrial materials': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafSolidFuelData[
-              'Biomass, municipal and industrial materials, if combusted to produce heat or electricity'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Biomass, municipal and industrial materials, if combusted to produce heat or electricity'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Biomass, municipal and industrial materials, if combusted to produce heat or electricity'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Biomass, municipal and industrial materials, if combusted to produce heat or electricity'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Biomass, municipal and industrial materials, if combusted to produce heat or electricity'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafSolidFuelData[
-              'Biomass, municipal and industrial materials, if combusted to produce heat or electricity'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      Charcoal: {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(ngafSolidFuelData['Charcoal'].ENERGY_CONTENT),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Charcoal'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Charcoal'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Charcoal'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafSolidFuelData['Charcoal'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafSolidFuelData['Charcoal'].SCOPE_3),
-        ),
-      },
-      'Other primary solid biomass fuels': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafSolidFuelData[
-              'Primary solid biomass fuels other than those mentioned in the items above'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Primary solid biomass fuels other than those mentioned in the items above'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Primary solid biomass fuels other than those mentioned in the items above'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Primary solid biomass fuels other than those mentioned in the items above'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafSolidFuelData[
-                'Primary solid biomass fuels other than those mentioned in the items above'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafSolidFuelData[
-              'Primary solid biomass fuels other than those mentioned in the items above'
-            ].SCOPE_3,
-          ),
-        ),
-      },
     },
-
-    // NGAF Table 8
     'Liquid fuels': {
-      'Crude oil and condensates': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafLiquidFuelData['Crude oil including crude oil condensates']
-              .ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Crude oil including crude oil condensates']
-                .CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Crude oil including crude oil condensates']
-                .CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Crude oil including crude oil condensates']
-                .N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Crude oil including crude oil condensates']
-                .COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafLiquidFuelData['Crude oil including crude oil condensates']
-              .SCOPE_3,
-          ),
-        ),
-      },
-      'Other natural gas liquids': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafLiquidFuelData['Other natural gas liquids'].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Other natural gas liquids'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Other natural gas liquids'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Other natural gas liquids'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Other natural gas liquids'].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafLiquidFuelData['Other natural gas liquids'].SCOPE_3),
-        ),
-      },
-      'Petroleum coke': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafLiquidFuelData['Petroleum coke'].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Petroleum coke'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Petroleum coke'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Petroleum coke'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Petroleum coke'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafLiquidFuelData['Petroleum coke'].SCOPE_3),
-        ),
-      },
-      'Refinery gas and liquids': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafLiquidFuelData['Refinery gas and liquids'].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Refinery gas and liquids'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Refinery gas and liquids'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Refinery gas and liquids'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Refinery gas and liquids'].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafLiquidFuelData['Refinery gas and liquids'].SCOPE_3),
-        ),
-      },
-      'Refinery coke': {
-        ENERGY_CONTENT_FACTOR: energyPerMass(
-          'Fuel',
-          gjPerTonneToJPerKg(
-            ngafLiquidFuelData['Refinery coke'].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Refinery coke'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Refinery coke'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Refinery coke'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Refinery coke'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafLiquidFuelData['Refinery coke'].SCOPE_3),
-        ),
-      },
+      'Crude oil and condensates': createStationaryFuelConstantsFromNGAFByMass(
+        ngafLiquidFuelData,
+        'Crude oil including crude oil condensates',
+      ),
+      'Other natural gas liquids': createStationaryFuelConstantsFromNGAFByMass(
+        ngafLiquidFuelData,
+        'Other natural gas liquids',
+      ),
+      'Petroleum coke': createStationaryFuelConstantsFromNGAFByMass(
+        ngafLiquidFuelData,
+        'Petroleum coke',
+      ),
+      'Refinery gas and liquids': createStationaryFuelConstantsFromNGAFByMass(
+        ngafLiquidFuelData,
+        'Refinery gas and liquids',
+      ),
+      'Refinery coke': createStationaryFuelConstantsFromNGAFByMass(
+        ngafLiquidFuelData,
+        'Refinery coke',
+      ),
     },
   },
 
   /**
    * @description Stationary fuel emission factors for each liquid fuel type by volume, in kg CO2-e/GJ
    * @ngaf2026 Table 8
-   * @units kg CO2-e/GJ
+   * @units ENERGY_CONTENT is in J/m^3, other values are in kg CO2-e/GJ
    */
   STATIONARY_FUEL_FACTORS_BY_VOLUME: {
     'Liquid fuels': {
-      'Petroleum based oils other than fuels': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafLiquidFuelData[
-              'Petroleum based oils (other than petroleum based oil used as fuel), e.g. lubricants'
-            ].ENERGY_CONTENT,
-          ),
+      'Petroleum based oils other than fuels':
+        createStationaryFuelConstantsFromNGAFByVolume(
+          ngafLiquidFuelData,
+          'Petroleum based oils (other than petroleum based oil used as fuel), e.g. lubricants',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Petroleum based oils (other than petroleum based oil used as fuel), e.g. lubricants'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Petroleum based oils (other than petroleum based oil used as fuel), e.g. lubricants'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Petroleum based oils (other than petroleum based oil used as fuel), e.g. lubricants'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Petroleum based oils (other than petroleum based oil used as fuel), e.g. lubricants'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafLiquidFuelData[
-              'Petroleum based oils (other than petroleum based oil used as fuel), e.g. lubricants'
-            ].SCOPE_3,
-          ),
+      'Petroleum based greases': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Petroleum based greases',
+      ),
+      'Automotive gasoline/petrol':
+        createStationaryFuelConstantsFromNGAFByVolume(
+          ngafLiquidFuelData,
+          'Automotive gasoline/petrol (other than for use as fuel in an aircraft)',
         ),
-      },
-      'Petroleum based greases': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafLiquidFuelData['Petroleum based greases'].ENERGY_CONTENT,
-          ),
+      'Aviation gasoline': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Aviation gasoline',
+      ),
+      Kerosene: createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Kerosene (other than for use as fuel in an aircraft)',
+      ),
+      'Aviation turbine fuel/kerosene':
+        createStationaryFuelConstantsFromNGAFByVolume(
+          ngafLiquidFuelData,
+          'Aviation turbine fuel/kerosene',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Petroleum based greases'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Petroleum based greases'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Petroleum based greases'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Petroleum based greases'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafLiquidFuelData['Petroleum based greases'].SCOPE_3),
+      'Heating oil': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Heating oil',
+      ),
+      'Diesel oil': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Diesel oil',
+      ),
+      'Fuel oil': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Fuel oil',
+      ),
+      'Liquefied aromatic hydrocarbons':
+        createStationaryFuelConstantsFromNGAFByVolume(
+          ngafLiquidFuelData,
+          'Liquefied aromatic hydrocarbons',
         ),
-      },
-      'Automotive gasoline/petrol': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafLiquidFuelData[
-              'Automotive gasoline/petrol (other than for use as fuel in an aircraft)'
-            ].ENERGY_CONTENT,
-          ),
+      'Solvents: mineral turpentine or white spirits':
+        createStationaryFuelConstantsFromNGAFByVolume(
+          ngafLiquidFuelData,
+          'Solvents: mineral turpentine or white spirits',
         ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Automotive gasoline/petrol (other than for use as fuel in an aircraft)'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Automotive gasoline/petrol (other than for use as fuel in an aircraft)'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Automotive gasoline/petrol (other than for use as fuel in an aircraft)'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Automotive gasoline/petrol (other than for use as fuel in an aircraft)'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafLiquidFuelData[
-              'Automotive gasoline/petrol (other than for use as fuel in an aircraft)'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Aviation gasoline': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafLiquidFuelData['Aviation gasoline'].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Aviation gasoline'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Aviation gasoline'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Aviation gasoline'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Aviation gasoline'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafLiquidFuelData['Aviation gasoline'].SCOPE_3),
-        ),
-      },
-      Kerosene: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafLiquidFuelData[
-              'Kerosene (other than for use as fuel in an aircraft)'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Kerosene (other than for use as fuel in an aircraft)'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Kerosene (other than for use as fuel in an aircraft)'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Kerosene (other than for use as fuel in an aircraft)'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Kerosene (other than for use as fuel in an aircraft)'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafLiquidFuelData[
-              'Kerosene (other than for use as fuel in an aircraft)'
-            ].SCOPE_3,
-          ),
-        ),
-      },
-      'Aviation turbine fuel/kerosene': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafLiquidFuelData['Aviation turbine fuel/kerosene'].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Aviation turbine fuel/kerosene'].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Aviation turbine fuel/kerosene'].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Aviation turbine fuel/kerosene'].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Aviation turbine fuel/kerosene'].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafLiquidFuelData['Aviation turbine fuel/kerosene'].SCOPE_3,
-          ),
-        ),
-      },
-      'Heating oil': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(ngafLiquidFuelData['Heating oil'].ENERGY_CONTENT),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Heating oil'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Heating oil'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Heating oil'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Heating oil'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafLiquidFuelData['Heating oil'].SCOPE_3),
-        ),
-      },
-      'Diesel oil': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(ngafLiquidFuelData['Diesel oil'].ENERGY_CONTENT),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Diesel oil'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Diesel oil'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Diesel oil'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Diesel oil'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafLiquidFuelData['Diesel oil'].SCOPE_3),
-        ),
-      },
-      'Fuel oil': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(ngafLiquidFuelData['Fuel oil'].ENERGY_CONTENT),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Fuel oil'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Fuel oil'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Fuel oil'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Fuel oil'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafLiquidFuelData['Fuel oil'].SCOPE_3),
-        ),
-      },
-      'Liquefied aromatic hydrocarbons': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafLiquidFuelData['Liquefied aromatic hydrocarbons']
-              .ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Liquefied aromatic hydrocarbons'].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Liquefied aromatic hydrocarbons'].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Liquefied aromatic hydrocarbons'].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Liquefied aromatic hydrocarbons'].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafLiquidFuelData['Liquefied aromatic hydrocarbons'].SCOPE_3,
-          ),
-        ),
-      },
-      'Solvents: mineral turpentine or white spirits': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafLiquidFuelData['Solvents: mineral turpentine or white spirits']
-              .ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Solvents: mineral turpentine or white spirits'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Solvents: mineral turpentine or white spirits'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Solvents: mineral turpentine or white spirits'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Solvents: mineral turpentine or white spirits'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafLiquidFuelData['Solvents: mineral turpentine or white spirits']
-              .SCOPE_3,
-          ),
-        ),
-      },
-      'Liquefied petroleum gas': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafLiquidFuelData['Liquefied petroleum gas (LPG)'].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Liquefied petroleum gas (LPG)'].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Liquefied petroleum gas (LPG)'].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Liquefied petroleum gas (LPG)'].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData['Liquefied petroleum gas (LPG)'].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafLiquidFuelData['Liquefied petroleum gas (LPG)'].SCOPE_3,
-          ),
-        ),
-      },
-      Naphtha: {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(ngafLiquidFuelData['Naphtha'].ENERGY_CONTENT),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Naphtha'].CO2),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Naphtha'].CH4),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Naphtha'].N2O),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(ngafLiquidFuelData['Naphtha'].COMBINED),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(ngafLiquidFuelData['Naphtha'].SCOPE_3),
-        ),
-      },
-      'Other petroleum products': {
-        ENERGY_CONTENT_FACTOR: energyPerVolume(
-          'Fuel',
-          gjPerKlToJPerLitre(
-            ngafLiquidFuelData[
-              'Petroleum based products other than mentioned in the items above'
-            ].ENERGY_CONTENT,
-          ),
-        ),
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Petroleum based products other than mentioned in the items above'
-              ].CO2,
-            ),
-          ),
-          CH4: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Petroleum based products other than mentioned in the items above'
-              ].CH4,
-            ),
-          ),
-          N2O: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Petroleum based products other than mentioned in the items above'
-              ].N2O,
-            ),
-          ),
-          CO2e: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafLiquidFuelData[
-                'Petroleum based products other than mentioned in the items above'
-              ].COMBINED,
-            ),
-          ),
-        },
-        SCOPE3_EF: massPerEnergy(
-          'CO2e',
-          perGjToPerJ(
-            ngafLiquidFuelData[
-              'Petroleum based products other than mentioned in the items above'
-            ].SCOPE_3,
-          ),
-        ),
-      },
+      'Liquefied petroleum gas': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Liquefied petroleum gas (LPG)',
+      ),
+      Naphtha: createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Naphtha',
+      ),
+      'Other petroleum products': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Petroleum based products other than mentioned in the items above',
+      ),
     },
   },
 
@@ -3270,11 +968,11 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description Stationary fuel emission factors for natural gas by volume, in kg CO2-e/GJ
-   * @ngaf2026 Table 5 and 6
+   * @ngaf2026 Table 5 and Table 6 (Non-Metro values)
    * @units kg CO2-e/GJ
    */
   NATURAL_GAS_FACTORS: {
-    ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', gjPerKlToJPerLitre(25.3)), // GJ/kL
+    ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', gjPerKlToJPerLitre(25.3)),
     SCOPE1_EF: {
       CO2: massPerEnergy(
         'CO2e',

@@ -1,5 +1,6 @@
 import {
   entriesFromObject,
+  ObjectEntry,
   objectFromEntries,
 } from '@/calculators/common/tools';
 import { isDefined } from '@/common/filters';
@@ -258,10 +259,7 @@ export const generateExtract = async (
     const mapping = mappings?.[name];
     const table = readTable(sheet, mapping);
 
-    return [name, table] as [
-      string,
-      { name: string; table: TableMapping<string> },
-    ];
+    return [name, table] as ObjectEntry<Record<string, TableMapping<string>>>;
   });
 
   return { year, tables: objectFromEntries(tableEntries) };
