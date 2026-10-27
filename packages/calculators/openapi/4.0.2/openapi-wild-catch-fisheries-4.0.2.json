@@ -241,7 +241,7 @@
                           "x-units": "0-1"
                         },
                         "purchasedFeed": {
-                          "$ref": "#/components/schemas/PurchasedFeedListInput"
+                          "$ref": "#/components/schemas/AquaculturePurchasedFeedListInput"
                         },
                         "fuel": {
                           "$ref": "#/components/schemas/FuelInput"
@@ -3193,580 +3193,55 @@
         "minimum": 0,
         "maximum": 1
       },
-      "PurchasedFeedListInput": {
+      "AquaculturePurchasedFeedListInput": {
         "type": "array",
         "items": {
           "oneOf": [
             {
-              "oneOf": [
-                {
-                  "oneOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "amount": {
-                          "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
-                          "x-modules": [
-                            "15.2"
-                          ],
-                          "type": "object",
-                          "properties": {
-                            "value": {
-                              "$ref": "#/components/schemas/NonNegativeNumberInput"
-                            },
-                            "quality": {
-                              "default": {},
-                              "$ref": "#/components/schemas/QualityTable"
-                            }
-                          },
-                          "required": [
-                            "value"
-                          ],
-                          "additionalProperties": false,
-                          "x-units": "tonnes purchased feed"
-                        },
-                        "type": {
-                          "description": "The type of feed purchased.",
-                          "type": "string",
-                          "enum": [
-                            "Bentonite",
-                            "Meat Meal",
-                            "Blood Meal",
-                            "Millrun"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "amount",
-                        "type"
-                      ],
-                      "additionalProperties": false,
-                      "title": "Regionless feed type"
-                    },
-                    {
-                      "oneOf": [
-                        {
-                          "type": "object",
-                          "properties": {
-                            "amount": {
-                              "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
-                              "x-modules": [
-                                "15.2"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "tonnes purchased feed"
-                            },
-                            "type": {
-                              "description": "The type of feed purchased.",
-                              "type": "string",
-                              "const": "Soybean meal"
-                            },
-                            "region": {
-                              "description": "The region of origin of the purchased feed",
-                              "type": "string",
-                              "const": "Brazil"
-                            }
-                          },
-                          "required": [
-                            "amount",
-                            "type",
-                            "region"
-                          ],
-                          "additionalProperties": false,
-                          "title": "Purchased from Brazil"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "amount": {
-                              "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
-                              "x-modules": [
-                                "15.2"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "tonnes purchased feed"
-                            },
-                            "type": {
-                              "description": "The type of feed purchased.",
-                              "type": "string",
-                              "enum": [
-                                "Barley grain",
-                                "Maize grain",
-                                "Sorghum grain",
-                                "Wheat grain",
-                                "Cereal hay",
-                                "Cereal silage",
-                                "Lucerne hay",
-                                "Oaten hay",
-                                "Pasture hay",
-                                "Wheat bran",
-                                "Canola meal",
-                                "Feed for chickens",
-                                "Feed for pigs",
-                                "Feed for dairy calves",
-                                "Feed for dairy cows",
-                                "Canola oil",
-                                "Cotton seed"
-                              ]
-                            },
-                            "region": {
-                              "description": "The region of origin of the purchased feed",
-                              "type": "string",
-                              "const": "Australia"
-                            }
-                          },
-                          "required": [
-                            "amount",
-                            "type",
-                            "region"
-                          ],
-                          "additionalProperties": false,
-                          "title": "Purchased from Australia"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "amount": {
-                              "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
-                              "x-modules": [
-                                "15.2"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "tonnes purchased feed"
-                            },
-                            "type": {
-                              "description": "The type of feed purchased.",
-                              "type": "string",
-                              "enum": [
-                                "Barley grain",
-                                "Maize grain",
-                                "Sorghum grain",
-                                "Wheat grain",
-                                "Cereal hay",
-                                "Cereal silage",
-                                "Lucerne hay",
-                                "Oaten hay",
-                                "Pasture hay"
-                              ]
-                            },
-                            "region": {
-                              "description": "The region of origin of the purchased feed",
-                              "type": "string",
-                              "const": "NSW"
-                            }
-                          },
-                          "required": [
-                            "amount",
-                            "type",
-                            "region"
-                          ],
-                          "additionalProperties": false,
-                          "title": "Purchased from NSW"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "amount": {
-                              "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
-                              "x-modules": [
-                                "15.2"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "tonnes purchased feed"
-                            },
-                            "type": {
-                              "description": "The type of feed purchased.",
-                              "type": "string",
-                              "enum": [
-                                "Barley grain",
-                                "Maize grain",
-                                "Wheat grain"
-                              ]
-                            },
-                            "region": {
-                              "description": "The region of origin of the purchased feed",
-                              "type": "string",
-                              "const": "NT"
-                            }
-                          },
-                          "required": [
-                            "amount",
-                            "type",
-                            "region"
-                          ],
-                          "additionalProperties": false,
-                          "title": "Purchased from NT"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "amount": {
-                              "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
-                              "x-modules": [
-                                "15.2"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "tonnes purchased feed"
-                            },
-                            "type": {
-                              "description": "The type of feed purchased.",
-                              "type": "string",
-                              "enum": [
-                                "Barley grain",
-                                "Maize grain",
-                                "Sorghum grain",
-                                "Wheat grain",
-                                "Cereal hay",
-                                "Cereal silage",
-                                "Lucerne hay",
-                                "Oaten hay",
-                                "Pasture hay",
-                                "Molasses"
-                              ]
-                            },
-                            "region": {
-                              "description": "The region of origin of the purchased feed",
-                              "type": "string",
-                              "const": "QLD"
-                            }
-                          },
-                          "required": [
-                            "amount",
-                            "type",
-                            "region"
-                          ],
-                          "additionalProperties": false,
-                          "title": "Purchased from QLD"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "amount": {
-                              "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
-                              "x-modules": [
-                                "15.2"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "tonnes purchased feed"
-                            },
-                            "type": {
-                              "description": "The type of feed purchased.",
-                              "type": "string",
-                              "enum": [
-                                "Barley grain",
-                                "Maize grain",
-                                "Sorghum grain",
-                                "Wheat grain",
-                                "Cereal hay",
-                                "Cereal silage",
-                                "Lucerne hay",
-                                "Oaten hay",
-                                "Pasture hay"
-                              ]
-                            },
-                            "region": {
-                              "description": "The region of origin of the purchased feed",
-                              "type": "string",
-                              "const": "SA"
-                            }
-                          },
-                          "required": [
-                            "amount",
-                            "type",
-                            "region"
-                          ],
-                          "additionalProperties": false,
-                          "title": "Purchased from SA"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "amount": {
-                              "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
-                              "x-modules": [
-                                "15.2"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "tonnes purchased feed"
-                            },
-                            "type": {
-                              "description": "The type of feed purchased.",
-                              "type": "string",
-                              "enum": [
-                                "Barley grain",
-                                "Wheat grain",
-                                "Cereal hay",
-                                "Cereal silage",
-                                "Lucerne hay",
-                                "Pasture hay"
-                              ]
-                            },
-                            "region": {
-                              "description": "The region of origin of the purchased feed",
-                              "type": "string",
-                              "const": "TAS"
-                            }
-                          },
-                          "required": [
-                            "amount",
-                            "type",
-                            "region"
-                          ],
-                          "additionalProperties": false,
-                          "title": "Purchased from TAS"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "amount": {
-                              "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
-                              "x-modules": [
-                                "15.2"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "tonnes purchased feed"
-                            },
-                            "type": {
-                              "description": "The type of feed purchased.",
-                              "type": "string",
-                              "enum": [
-                                "Barley grain",
-                                "Maize grain",
-                                "Sorghum grain",
-                                "Wheat grain",
-                                "Cereal hay",
-                                "Cereal silage",
-                                "Lucerne hay",
-                                "Maize silage",
-                                "Oaten hay",
-                                "Pasture hay"
-                              ]
-                            },
-                            "region": {
-                              "description": "The region of origin of the purchased feed",
-                              "type": "string",
-                              "const": "VIC"
-                            }
-                          },
-                          "required": [
-                            "amount",
-                            "type",
-                            "region"
-                          ],
-                          "additionalProperties": false,
-                          "title": "Purchased from VIC"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "amount": {
-                              "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
-                              "x-modules": [
-                                "15.2"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "tonnes purchased feed"
-                            },
-                            "type": {
-                              "description": "The type of feed purchased.",
-                              "type": "string",
-                              "enum": [
-                                "Barley grain",
-                                "Maize grain",
-                                "Wheat grain",
-                                "Cereal hay",
-                                "Oaten hay",
-                                "Pasture hay"
-                              ]
-                            },
-                            "region": {
-                              "description": "The region of origin of the purchased feed",
-                              "type": "string",
-                              "const": "WA"
-                            }
-                          },
-                          "required": [
-                            "amount",
-                            "type",
-                            "region"
-                          ],
-                          "additionalProperties": false,
-                          "title": "Purchased from WA"
-                        }
-                      ],
-                      "title": "Regional feed type",
-                      "type": "object"
-                    }
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
+                  "x-modules": [
+                    "15.2"
                   ],
-                  "title": "Livestock feed",
-                  "type": "object"
-                },
-                {
                   "type": "object",
                   "properties": {
-                    "amount": {
-                      "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
-                      "x-modules": [
-                        "15.2"
-                      ],
-                      "type": "object",
-                      "properties": {
-                        "value": {
-                          "$ref": "#/components/schemas/NonNegativeNumberInput"
-                        },
-                        "quality": {
-                          "default": {},
-                          "$ref": "#/components/schemas/QualityTable"
-                        }
-                      },
-                      "required": [
-                        "value"
-                      ],
-                      "additionalProperties": false,
-                      "x-units": "tonnes purchased feed"
+                    "value": {
+                      "$ref": "#/components/schemas/NonNegativeNumberInput"
                     },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "Whole Sardines",
-                        "Low Animal Protein Formulated Feed",
-                        "Squid",
-                        "Whole Fish",
-                        "Custom Bait"
-                      ],
-                      "description": "The type of feed purchased.",
-                      "x-modules": [
-                        "15.2"
-                      ]
+                    "quality": {
+                      "default": {},
+                      "$ref": "#/components/schemas/QualityTable"
                     }
                   },
                   "required": [
-                    "amount",
-                    "type"
+                    "value"
                   ],
                   "additionalProperties": false,
-                  "title": "Aquaculture feed"
+                  "x-units": "tonnes purchased feed"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Whole Sardines",
+                    "Low Animal Protein Formulated Feed",
+                    "Squid",
+                    "Whole Fish",
+                    "Custom Bait"
+                  ],
+                  "description": "The type of feed purchased.",
+                  "x-modules": [
+                    "15.2"
+                  ]
                 }
+              },
+              "required": [
+                "amount",
+                "type"
               ],
-              "title": "Method 1 (by feed type)",
-              "type": "object"
+              "additionalProperties": false,
+              "title": "Aquaculture feed"
             },
             {
               "type": "object",
