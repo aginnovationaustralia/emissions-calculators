@@ -39,7 +39,6 @@ const cottonInput = ({
     crop: {
       totalYieldKg: nv(3_000_000),
       fractionSeedCottonLint: nv(fractionSeedCottonLint),
-      fractionOfAnnualCropBurnt: nv(0),
       residues: { calculationMethod: '1' },
     },
     fertiliser: {

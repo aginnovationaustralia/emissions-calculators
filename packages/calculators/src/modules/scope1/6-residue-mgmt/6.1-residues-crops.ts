@@ -2,16 +2,14 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { HasClimateZoneInputTransformed } from '@/calculators/types/has-climate-zone.input';
 import { HasStateInputTransformed } from '@/calculators/types/has-state.input';
 import { selectConstant } from '@/tools/constants';
-import { root } from '@/tools/containers';
-import { ifTrueElse } from '@/tools/if-else';
 import { captureMethod1Or2Value } from '@/tools/multi';
 import { one, zero, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { booleanUnit } from '@/tools/units';
 import { ConstantsForResidueManagement, HasCropConstants } from './constants';
 import {
   HasCropOrPastureResidueInputTransformed,
   HasCropResidueInputTransformed,
+  isBurnableCropResidueInput,
   isPastureResidueInput,
   residueIsByMass,
 } from './crop-residue.input';
@@ -47,27 +45,10 @@ export const calculateMassNCropAppliedToSoil = (
     'residueCropRatio',
   );
 
-  /**
-   * Table A.2.1.1 gives no fraction of residue remaining at burning (Sc is
-   * n/a, stored as 0) for crops whose residues the methodology does not burn,
-   * e.g. cotton and hops and grape vines. Field burning (6.4) is always zero
-   * for these crops, so a burnt fraction must not take residue away from the
-   * soil either, or entering a burn would lower total emissions.
-   */
-  const sc = selectConstant(
-    constants.CROP,
-    'CROPRESIDUE',
-    crop.type,
-    'fractionOfResidueAtBurning',
-  );
-  const cropCanBeBurnt = root(booleanUnit(!sc.unit.store.value.isZero())).named(
-    'Crop residue can be burnt (Sc > 0)',
-  );
-  const fc = ifTrueElse(
-    cropCanBeBurnt,
-    crop.fractionOfAnnualCropBurnt,
-    zero,
-  ).named('Fc');
+  // Crops that can't be burnt have no burnt fraction (see BurnableCropTypes)
+  const fc = isBurnableCropResidueInput(crop)
+    ? crop.fractionOfAnnualCropBurnt
+    : zero;
   const ffodc = captureMethod1Or2Value(
     selectConstant(
       constants.CROP,

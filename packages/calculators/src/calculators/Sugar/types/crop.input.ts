@@ -1,6 +1,6 @@
 import { BaseCroppingActivityInputSchema } from '@/calculators/types/cropping-activity.input';
 import { FertiliserInputInorganicScope1Method1Schema } from '@/modules/scope1/5-fertiliser';
-import { BaseCropResidueInputSchema } from '@/modules/scope1/6-residue-mgmt/crop-residue.input';
+import { BaseBurnableCropResidueInputSchema } from '@/modules/scope1/6-residue-mgmt/crop-residue.input';
 import { input } from '@/tools/inputs';
 import {
   FERT_INORGANIC_5_1,
@@ -10,15 +10,14 @@ import {
 } from '@/tools/modules';
 import { z } from 'zod';
 
-export const SugarCropResidueInputSchema = BaseCropResidueInputSchema.transform(
-  (val) => ({
+export const SugarCropResidueInputSchema =
+  BaseBurnableCropResidueInputSchema.transform((val) => ({
     ...val,
     type: input('Sugar Cane' as const, {
       name: 'Sugar Cane',
       modules: [RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3, RESIDUE_BURN_6_4],
     }),
-  }),
-);
+  }));
 
 export type SugarCropResidueInput = z.input<typeof SugarCropResidueInputSchema>;
 

@@ -1652,29 +1652,6 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter"
                             },
-                            "fractionOfAnnualCropBurnt": {
-                              "description": "Fraction of annual production of crop that is burnt, from 0 to 1 (0-1)",
-                              "x-modules": [
-                                "6.1",
-                                "6.3",
-                                "6.4"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/ProportionNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "0-1"
-                            },
                             "residues": {
                               "oneOf": [
                                 {
@@ -1768,7 +1745,6 @@
                           },
                           "required": [
                             "totalYieldKg",
-                            "fractionOfAnnualCropBurnt",
                             "residues"
                           ],
                           "additionalProperties": false
