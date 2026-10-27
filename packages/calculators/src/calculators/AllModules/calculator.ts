@@ -243,22 +243,14 @@ const calculateScope1AllModules = (
     : { fertiliserLeachingAndRunoffN2O: zeroN2O };
 
   // 6 residue management
-  // The rice crop's residues count alongside `crop`, as they do in the Rice calculator.
-  // Rice's state, climate zone and leaching zone are optional (see types/input.ts), so
-  // each of 6.1 and 6.3 only runs for rice once the keys it needs are supplied.
+  // The rice crop's residues count alongside `crop` and `pasture`, as they do in the Rice
+  // calculator.
   const { rice } = input;
-  const riceState = rice?.state;
   // 6.1 Return of crop residues to soils
   const cropResidueN2O = addSupplied(
     [
       input.crop && calculate61CropResidueN2O(input.crop, context),
-      rice &&
-        riceState &&
-        rice.climateZone &&
-        calculate61CropResidueN2O(
-          { ...rice, state: riceState, climateZone: rice.climateZone },
-          context,
-        ),
+      rice && calculate61CropResidueN2O(rice, context),
     ],
     zeroN2O,
   );
@@ -271,17 +263,7 @@ const calculateScope1AllModules = (
     [
       input.pasture &&
         calculate63ResidueLeachingAndRunoffN2O(input.pasture, context),
-      rice &&
-        riceState &&
-        rice.isInLeachingZone &&
-        calculate63ResidueLeachingAndRunoffN2O(
-          {
-            ...rice,
-            state: riceState,
-            isInLeachingZone: rice.isInLeachingZone,
-          },
-          context,
-        ),
+      rice && calculate63ResidueLeachingAndRunoffN2O(rice, context),
     ],
     zeroN2O,
   );

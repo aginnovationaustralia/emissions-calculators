@@ -20,8 +20,6 @@ import {
   hasStateInputSchema,
   HasStateInputTransformed,
 } from '@/calculators/types/has-state.input';
-import { ClimateZoneOrZoneTypes, States } from '@/constants/enums';
-import { climateZoneOrZoneTypeToClimateZoneType } from '@/constants/translations';
 import { LULUCFInputSchema } from '@/modules';
 import { LULUCFInput, LULUCFInputTransformed } from '@/modules/lulucf/input';
 import {
@@ -57,7 +55,11 @@ import {
   PastureResidueInputSchema,
   PastureResidueInputTransformed,
 } from '@/modules/scope1/6-residue-mgmt/crop-residue.input';
-import { HasRiceCultivationInputSchema } from '@/modules/scope1/7-rice-cultivation/rice-cultivation.input';
+import {
+  HasRiceCultivationInput,
+  HasRiceCultivationInputSchema,
+  HasRiceCultivationInputTransformed,
+} from '@/modules/scope1/7-rice-cultivation/rice-cultivation.input';
 import {
   HasFuelInput,
   hasFuelInputSchema,
@@ -148,7 +150,6 @@ import {
   OtherPurchasedGoodsAndServicesInputTransformed,
   OtherPurchasedGoodsAndServicesSchema,
 } from '@/modules/scope3/15.9-other-purchases';
-import { booleanInputOptional, enumInputOptional } from '@/tools/inputs';
 import {
   FERT_ORGANIC_5_2,
   PURCH_FUEL_15_10,
@@ -157,7 +158,6 @@ import {
   RESIDUE_PASTURE_6_2,
   SERVICES_15_7,
 } from '@/tools/modules';
-import { mapOptional } from '@/tools/zod';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 
@@ -256,36 +256,20 @@ const AllModulesServicesInputSchema = object({
   ...hasFuelInputSchema('services').shape,
 });
 
-// The Rice calculator reads state, climate zone and leaching zone from the rice crop
-// activity for its crop residues (6.1, 6.3). These keys were added to the All-modules rice
-// input after release, so they're optional to keep existing inputs valid: field burning
-// (6.4) needs only the crop, crop residue N2O (6.1) runs once `state` and `climateZone` are
-// supplied, and residue leaching and runoff (6.3) once `state` is supplied with
-// `isInLeachingZone: true`.
 const AllModulesRiceInputSchema = object({
   ...HasRiceCultivationInputSchema.shape,
-  state: enumInputOptional(States, {
-    name: 'Activity state or territory',
-    description:
-      'The state or territory the rice crop is grown in. Required, with climateZone, to calculate rice crop residue N2O.',
-    modules: [RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3],
-  }),
-  climateZone: enumInputOptional(ClimateZoneOrZoneTypes, {
-    name: 'Activity climate zone',
-    description:
-      'The climate zone the rice crop is grown in (like "Warm temperate dry") or the basic zone type ("dry" or "wet"). See Chapter 1 section 1.8.2 for more details. Required, with state, to calculate rice crop residue N2O.',
-    modules: [RESIDUE_CROPS_6_1],
-  }).transform(mapOptional(climateZoneOrZoneTypeToClimateZoneType)),
-  isInLeachingZone: booleanInputOptional(
-    'isInLeachingZone',
-    'Is the rice crop in a leaching zone. See chapter 1.8.2 for more details on leaching zones. Defaults to false when omitted.',
-    [RESIDUE_LEACH_6_3],
-  ),
+  ...hasStateInputSchema([RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3]).shape,
+  ...hasClimateZoneInputSchema(RESIDUE_CROPS_6_1).shape,
+  ...hasIsInLeachingZoneInputSchema(RESIDUE_LEACH_6_3).shape,
 });
-export type AllModulesRiceInput = z.input<typeof AllModulesRiceInputSchema>;
-type AllModulesRiceInputTransformed = z.output<
-  typeof AllModulesRiceInputSchema
->;
+export type AllModulesRiceInput = HasRiceCultivationInput &
+  HasStateInput &
+  HasClimateZoneInput &
+  HasIsInLeachingZoneInput;
+type AllModulesRiceInputTransformed = HasRiceCultivationInputTransformed &
+  HasStateInputTransformed &
+  HasClimateZoneInputTransformed &
+  HasIsInLeachingZoneInputTransformed;
 
 // Every top-level key is optional for this calculator only: callers may supply just the
 // activities relevant to them rather than the whole farm. This is applied locally here

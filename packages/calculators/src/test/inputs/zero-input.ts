@@ -314,7 +314,12 @@ export const ZERO_ALL_MODULES_INPUT: Required<AllModulesInput> = {
     state: 'NSW',
     isInLeachingZone: false,
   },
-  rice: zeroRice,
+  rice: {
+    ...zeroRice,
+    state: 'NSW',
+    climateZone: 'dry',
+    isInLeachingZone: false,
+  },
   fuel: {
     state: 'NSW',
     fuel: zeroFuel,

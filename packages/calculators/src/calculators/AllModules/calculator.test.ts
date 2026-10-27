@@ -174,21 +174,4 @@ describe('calculateAllModules rice crop residues (6.1, 6.3, 6.4)', () => {
     );
   });
 
-  it('keeps accepting rice without state, climate zone or leaching zone, and still includes field burning', () => {
-    const riceWithoutLocation = { crop: riceCrop };
-    const expected = scope1({ rice });
-    const actual = scope1({ rice: riceWithoutLocation });
-
-    expect(actual.fieldBurningN2O.amountGasKg).toBeGreaterThan(0);
-    expect(actual.cropResidueN2O.amountGasKg).toBe(0);
-    expect(actual.residueLeachingAndRunoffN2O.amountGasKg).toBe(0);
-    expect(actual.fieldBurningN2O.amountGasKg).toBeCloseTo(
-      expected.fieldBurningN2O.amountGasKg,
-      6,
-    );
-    expect(actual.fieldBurningCH4.amountGasKg).toBeCloseTo(
-      expected.fieldBurningCH4.amountGasKg,
-      6,
-    );
-  });
 });

@@ -7918,11 +7918,6 @@
                         "additionalProperties": false
                       },
                       "state": {
-                        "description": "The state or territory the rice crop is grown in. Required, with climateZone, to calculate rice crop residue N2O.",
-                        "x-modules": [
-                          "6.1",
-                          "6.3"
-                        ],
                         "type": "string",
                         "enum": [
                           "ACT",
@@ -7933,13 +7928,14 @@
                           "SA",
                           "WA",
                           "NT"
+                        ],
+                        "description": "The state or territory the activity is based in",
+                        "x-modules": [
+                          "6.1",
+                          "6.3"
                         ]
                       },
                       "climateZone": {
-                        "description": "The climate zone the rice crop is grown in (like \"Warm temperate dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details. Required, with state, to calculate rice crop residue N2O.",
-                        "x-modules": [
-                          "6.1"
-                        ],
                         "type": "string",
                         "enum": [
                           "Tropical montane",
@@ -7954,18 +7950,25 @@
                           "Boreal dry",
                           "dry",
                           "wet"
+                        ],
+                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
+                        "x-modules": [
+                          "6.1"
                         ]
                       },
                       "isInLeachingZone": {
-                        "description": "Is the rice crop in a leaching zone. See chapter 1.8.2 for more details on leaching zones. Defaults to false when omitted.",
+                        "type": "boolean",
+                        "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                         "x-modules": [
                           "6.3"
-                        ],
-                        "type": "boolean"
+                        ]
                       }
                     },
                     "required": [
-                      "crop"
+                      "crop",
+                      "state",
+                      "climateZone",
+                      "isInLeachingZone"
                     ],
                     "additionalProperties": false
                   },
