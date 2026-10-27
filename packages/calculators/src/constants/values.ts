@@ -3,7 +3,6 @@ import {
   cubicMetresToLitres,
   gjPerCubicMetreToJPerLitre,
   gjPerKlToJPerLitre,
-  gjPerTonneToJPerKg,
   gramsToKg,
   megaJoulesToJoules,
   perCubicMetresToPerLitres,
@@ -37,7 +36,16 @@ import {
   years,
 } from '@/tools/units';
 import { MeanAnnualTemperature, State } from './enums';
-import * as ngaf from './ngaf/2026.json';
+import {
+  createStationaryFuelConstantsFromNGAFByMass,
+  createStationaryFuelConstantsFromNGAFByVolume,
+  createTransportFuelConstantsFromNGAF,
+  getElectricityFactorsFromNGAF,
+  getRefrigerantLeakageRateFromNGAF,
+  ngafLiquidFuelData,
+  ngafSolidFuelData,
+  ngafTables,
+} from './ngaf';
 import {
   AquacultureConstants,
   BeefPastureConstants,
@@ -45,8 +53,6 @@ import {
   CropConstants,
   DairyConstants,
   FeedlotConstants,
-  FuelFactorByMass,
-  FuelFactorByVolume,
   LivestockConstants,
   LULUCFConstants,
   PigsConstants,
@@ -54,119 +60,6 @@ import {
   RiceConstants,
   SheepConstants,
 } from './types';
-
-const ngaf2026 = ngaf.tables;
-const ngafElectricityData = ngaf2026['Table 1'].table;
-const ngafTransportFuelData = ngaf2026['Table 9'].table;
-const ngafSolidFuelData = ngaf2026['Table 4'].table;
-const ngafLiquidFuelData = ngaf2026['Table 8'].table;
-const ngafRefrigerantLeakageData = ngaf2026['Table 10'].table;
-
-const createTransportFuelConstantsFromNGAF = (
-  row: keyof typeof ngafTransportFuelData,
-): FuelFactorByVolume => ({
-  ENERGY_CONTENT_FACTOR: energyPerVolume(
-    'Fuel',
-    gjPerCubicMetreToJPerLitre(ngafTransportFuelData[row].ENERGY_CONTENT),
-  ),
-  SCOPE1_EF: {
-    CO2: massPerEnergy('CO2e', perGjToPerJ(ngafTransportFuelData[row].CO2)),
-    CH4: massPerEnergy('CO2e', perGjToPerJ(ngafTransportFuelData[row].CH4)),
-    N2O: massPerEnergy('CO2e', perGjToPerJ(ngafTransportFuelData[row].N2O)),
-    CO2e: massPerEnergy(
-      'CO2e',
-      perGjToPerJ(ngafTransportFuelData[row].COMBINED),
-    ),
-  },
-  SCOPE3_EF: massPerEnergy(
-    'CO2e',
-    perGjToPerJ(ngafTransportFuelData[row].SCOPE_3),
-  ),
-});
-
-/**
- * These are NOT the pre-2004 values, they're the values for fuel types that DO have
- * different values for 'Cars and light commercial vehicles' manufactured before 2004.
- */
-const transportFuelsWithPre2004Factors = {
-  Gasoline: createTransportFuelConstantsFromNGAF(
-    'Cars and light commercial vehicles, Gasoline',
-  ),
-  'Diesel oil': createTransportFuelConstantsFromNGAF(
-    'Cars and light commercial vehicles, Diesel oil',
-  ),
-  'Liquefied petroleum gas (LPG)': createTransportFuelConstantsFromNGAF(
-    'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)',
-  ),
-  Ethanol: createTransportFuelConstantsFromNGAF(
-    'Cars and light commercial vehicles, Ethanol',
-  ),
-  'Renewable diesel': createTransportFuelConstantsFromNGAF(
-    'Cars and light commercial vehicles, Renewable diesel',
-  ),
-};
-
-const createStationaryFuelConstantsFromNGAFByVolume = <
-  F extends keyof typeof ngafLiquidFuelData | keyof typeof ngafSolidFuelData,
->(
-  table: Record<
-    F,
-    {
-      ENERGY_CONTENT: number;
-      CO2: number;
-      CH4: number;
-      N2O: number;
-      COMBINED: number;
-      SCOPE_3: number;
-    }
-  >,
-  row: F,
-): FuelFactorByVolume => ({
-  ENERGY_CONTENT_FACTOR: energyPerVolume(
-    'Fuel',
-    gjPerCubicMetreToJPerLitre(table[row].ENERGY_CONTENT),
-  ),
-  SCOPE1_EF: {
-    CO2: massPerEnergy('CO2e', perGjToPerJ(table[row].CO2)),
-    CH4: massPerEnergy('CO2e', perGjToPerJ(table[row].CH4)),
-    N2O: massPerEnergy('CO2e', perGjToPerJ(table[row].N2O)),
-    CO2e: massPerEnergy('CO2e', perGjToPerJ(table[row].COMBINED)),
-  },
-  SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(table[row].SCOPE_3)),
-});
-
-const createStationaryFuelConstantsFromNGAFByMass = <
-  F extends keyof typeof ngafLiquidFuelData | keyof typeof ngafSolidFuelData,
->(
-  table: Record<
-    F,
-    {
-      ENERGY_CONTENT: number;
-      CO2: number;
-      CH4: number;
-      N2O: number;
-      COMBINED: number;
-      SCOPE_3: number;
-    }
-  >,
-  row: F,
-): FuelFactorByMass => ({
-  ENERGY_CONTENT_FACTOR: energyPerMass(
-    'Fuel',
-    gjPerTonneToJPerKg(table[row].ENERGY_CONTENT),
-  ),
-  SCOPE1_EF: {
-    CO2: massPerEnergy('CO2e', perGjToPerJ(table[row].CO2)),
-    CH4: massPerEnergy('CO2e', perGjToPerJ(table[row].CH4)),
-    N2O: massPerEnergy('CO2e', perGjToPerJ(table[row].N2O)),
-    CO2e: massPerEnergy('CO2e', perGjToPerJ(table[row].COMBINED)),
-  },
-  SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(table[row].SCOPE_3)),
-});
-
-const getRefrigerantLeakageRateFromNGAF = (
-  row: keyof typeof ngafRefrigerantLeakageData,
-) => percentage(ngafRefrigerantLeakageData[row]['Annual leakage rate (%)']);
 
 const allStatesWithValue = (rawValue: number): Record<State, RealNumber> => {
   const value = realNumber(rawValue);
@@ -397,122 +290,26 @@ export const commonConstants: CommonConstants = {
    * @units kg CO2-e/kWh
    */
   ELECTRICITY: {
-    NSW: {
-      SCOPE2_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData['New South Wales and Australian Capital Territory']
-          .SCOPE_2,
-      ),
-      SCOPE3_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData['New South Wales and Australian Capital Territory']
-          .SCOPE_3,
-      ),
-    },
-    ACT: {
-      SCOPE2_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData['New South Wales and Australian Capital Territory']
-          .SCOPE_2,
-      ),
-      SCOPE3_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData['New South Wales and Australian Capital Territory']
-          .SCOPE_3,
-      ),
-    },
-    VIC: {
-      SCOPE2_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData.Victoria.SCOPE_2,
-      ),
-      SCOPE3_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData.Victoria.SCOPE_3,
-      ),
-    },
-    QLD: {
-      SCOPE2_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData.Queensland.SCOPE_2,
-      ),
-      SCOPE3_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData.Queensland.SCOPE_3,
-      ),
-    },
-    SA: {
-      SCOPE2_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData['South Australia'].SCOPE_2,
-      ),
-      SCOPE3_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData['South Australia'].SCOPE_3,
-      ),
-    },
-    WA_SW: {
-      SCOPE2_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData[
-          'Western Australia - South West Interconnected System (SWIS)'
-        ].SCOPE_2,
-      ),
-      SCOPE3_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData[
-          'Western Australia - South West Interconnected System (SWIS)'
-        ].SCOPE_3,
-      ),
-    },
-    WA_NW: {
-      SCOPE2_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData[
-          'Western Australia - North Western Interconnected System (NWIS)'
-        ].SCOPE_2,
-      ),
-      SCOPE3_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData[
-          'Western Australia - North Western Interconnected System (NWIS)'
-        ].SCOPE_3,
-      ),
-    },
-    TAS: {
-      SCOPE2_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData.Tasmania.SCOPE_2,
-      ),
-      SCOPE3_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData.Tasmania.SCOPE_3,
-      ),
-    },
-    NT: {
-      SCOPE2_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData[
-          'Northern territory - Darwin Katherine Interconnected System (DKIS)'
-        ].SCOPE_2,
-      ),
-      SCOPE3_EF: massPerElectricity(
-        'CO2e',
-        ngafElectricityData[
-          'Northern territory - Darwin Katherine Interconnected System (DKIS)'
-        ].SCOPE_3,
-      ),
-    },
-    National: {
-      SCOPE2_EF: massPerElectricity(
-        'CO2e',
-        ngaf2026['Table 1'].table.National.SCOPE_2,
-      ),
-      SCOPE3_EF: massPerElectricity(
-        'CO2e',
-        ngaf2026['Table 1'].table.National.SCOPE_3,
-      ),
-    },
+    NSW: getElectricityFactorsFromNGAF(
+      'New South Wales and Australian Capital Territory',
+    ),
+    ACT: getElectricityFactorsFromNGAF(
+      'New South Wales and Australian Capital Territory',
+    ),
+    VIC: getElectricityFactorsFromNGAF('Victoria'),
+    QLD: getElectricityFactorsFromNGAF('Queensland'),
+    SA: getElectricityFactorsFromNGAF('South Australia'),
+    WA_SW: getElectricityFactorsFromNGAF(
+      'Western Australia - South West Interconnected System (SWIS)',
+    ),
+    WA_NW: getElectricityFactorsFromNGAF(
+      'Western Australia - North Western Interconnected System (NWIS)',
+    ),
+    TAS: getElectricityFactorsFromNGAF('Tasmania'),
+    NT: getElectricityFactorsFromNGAF(
+      'Northern territory - Darwin Katherine Interconnected System (DKIS)',
+    ),
+    National: getElectricityFactorsFromNGAF('National'),
   },
 
   /**
@@ -522,7 +319,7 @@ export const commonConstants: CommonConstants = {
    */
   ELECTRICITY_RMF_SCOPE2_EF: massPerElectricity(
     'CO2e',
-    ngaf2026['Table 2'].table.National.SCOPE_2,
+    ngafTables['Table 2'].table.National.SCOPE_2,
   ),
   /**
    * @description Electricity scope 3 emission factors for Renewable Energy Market Framework (RMF) in kg CO2-e/kWh
@@ -531,7 +328,7 @@ export const commonConstants: CommonConstants = {
    */
   ELECTRICITY_RMF_SCOPE3_EF: massPerElectricity(
     'CO2e',
-    ngaf2026['Table 2'].table.National.SCOPE_3,
+    ngafTables['Table 2'].table.National.SCOPE_3,
   ),
 
   /**
@@ -570,59 +367,46 @@ export const commonConstants: CommonConstants = {
      * - Renewable diesel CH4 = 0.1, N2O = 0.4."
      */
     'Cars and light commercial vehicles (pre 2004)': {
-      Gasoline: {
-        ...transportFuelsWithPre2004Factors['Gasoline'],
-        SCOPE1_EF: {
-          ...transportFuelsWithPre2004Factors['Gasoline'].SCOPE1_EF,
+      Gasoline: createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Gasoline',
+        {
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.6)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(1.6)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(69.6)),
         },
-      },
-      'Diesel oil': {
-        ...transportFuelsWithPre2004Factors['Diesel oil'],
-        SCOPE1_EF: {
-          CO2: massPerEnergy(
-            'CO2e',
-            perGjToPerJ(
-              ngafTransportFuelData[
-                'Cars and light commercial vehicles, Diesel oil'
-              ].CO2,
-            ),
-          ),
+      ),
+      'Diesel oil': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Diesel oil',
+        {
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.1)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(0.4)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(70.4)),
         },
-      },
-      'Liquefied petroleum gas (LPG)': {
-        ...transportFuelsWithPre2004Factors['Liquefied petroleum gas (LPG)'],
-        SCOPE1_EF: {
-          ...transportFuelsWithPre2004Factors['Liquefied petroleum gas (LPG)']
-            .SCOPE1_EF,
+      ),
+      'Liquefied petroleum gas (LPG)': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Liquefied petroleum gas (LPG)',
+        {
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.7)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(0.6)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(61.5)),
         },
-      },
-      Ethanol: {
-        ...transportFuelsWithPre2004Factors['Ethanol'],
-        SCOPE1_EF: {
-          ...transportFuelsWithPre2004Factors['Ethanol'].SCOPE1_EF,
+      ),
+      Ethanol: createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Ethanol',
+        {
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.8)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(1.7)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(2.5)),
         },
-      },
-      'Renewable diesel': {
-        ...transportFuelsWithPre2004Factors['Renewable diesel'],
-        SCOPE1_EF: {
-          ...transportFuelsWithPre2004Factors['Renewable diesel'].SCOPE1_EF,
+      ),
+      'Renewable diesel': createTransportFuelConstantsFromNGAF(
+        'Cars and light commercial vehicles, Ethanol',
+        {
           CH4: massPerEnergy('CO2e', perGjToPerJ(0.01)),
           N2O: massPerEnergy('CO2e', perGjToPerJ(0.5)),
           CO2e: massPerEnergy('CO2e', perGjToPerJ(0.51)),
         },
-      },
+      ),
     },
     'Cars and light commercial vehicles': {
       Gasoline: createTransportFuelConstantsFromNGAF(
@@ -977,28 +761,28 @@ export const commonConstants: CommonConstants = {
       CO2: massPerEnergy(
         'CO2e',
         perGjToPerJ(
-          ngaf2026['Table 5'].table['Natural gas distributed in a pipeline']
+          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
             .CO2,
         ),
       ),
       CH4: massPerEnergy(
         'CO2e',
         perGjToPerJ(
-          ngaf2026['Table 5'].table['Natural gas distributed in a pipeline']
+          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
             .CH4,
         ),
       ),
       N2O: massPerEnergy(
         'CO2e',
         perGjToPerJ(
-          ngaf2026['Table 5'].table['Natural gas distributed in a pipeline']
+          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
             .N2O,
         ),
       ),
       CO2e: massPerEnergy(
         'CO2e',
         perGjToPerJ(
-          ngaf2026['Table 5'].table['Natural gas distributed in a pipeline']
+          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
             .COMBINED,
         ),
       ),
@@ -1008,38 +792,38 @@ export const commonConstants: CommonConstants = {
       NSW: massPerEnergy(
         'CO2e',
         perGjToPerJ(
-          ngaf2026['Table 6'].table['New South Wales and ACT'].NON_METRO,
+          ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
         ),
       ),
       ACT: massPerEnergy(
         'CO2e',
         perGjToPerJ(
-          ngaf2026['Table 6'].table['New South Wales and ACT'].NON_METRO,
+          ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
         ),
       ),
       VIC: massPerEnergy(
         'CO2e',
-        perGjToPerJ(ngaf2026['Table 6'].table.Victoria.NON_METRO),
+        perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
       ),
       QLD: massPerEnergy(
         'CO2e',
-        perGjToPerJ(ngaf2026['Table 6'].table.Queensland.NON_METRO),
+        perGjToPerJ(ngafTables['Table 6'].table.Queensland.NON_METRO),
       ),
       SA: massPerEnergy(
         'CO2e',
-        perGjToPerJ(ngaf2026['Table 6'].table['South Australia'].NON_METRO),
+        perGjToPerJ(ngafTables['Table 6'].table['South Australia'].NON_METRO),
       ),
       WA: massPerEnergy(
         'CO2e',
-        perGjToPerJ(ngaf2026['Table 6'].table['Western Australia'].NON_METRO),
+        perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].NON_METRO),
       ),
       TAS: massPerEnergy(
         'CO2e',
-        perGjToPerJ(ngaf2026['Table 6'].table.Victoria.NON_METRO),
+        perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
       ), // Based on victoria
       NT: massPerEnergy(
         'CO2e',
-        perGjToPerJ(ngaf2026['Table 6'].table['Western Australia'].NON_METRO),
+        perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].NON_METRO),
       ), // based on WA (TODO: Why not QLD?)
     },
   },
