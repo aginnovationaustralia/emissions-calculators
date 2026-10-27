@@ -100,6 +100,12 @@ const getTableHeader = (
   return { columnKeys, header };
 };
 
+/**
+ * Iterate over one row at a time to create unique
+ * names for each column.
+ *
+ * Returns a new record of column references to names.
+ */
 const applyHeaderRowToColumnMapping = (
   mapping: Record<string, string>,
   header: (string | undefined)[],
@@ -150,15 +156,18 @@ export const getColumnMapping = <C extends string>(
     columnKeys.slice(numColumnsInHeader).map((c) => [c, '']),
   );
 
+  const columnRefs = columnKeys.slice(numColumnsInHeader);
+
   for (const row of header) {
     mapping = applyHeaderRowToColumnMapping(
       mapping,
       row.slice(numColumnsInHeader),
-      columnKeys.slice(numColumnsInHeader),
+      columnRefs,
     );
   }
 
-  return mapping;
+  // If there are any duplicates, the letter of the column (B, C, etc.) will be appended.
+  return applyHeaderRowToColumnMapping(mapping, columnRefs, columnRefs);
 };
 
 const getRowName = (sheet: XLSX.Sheet, headerCols: string, row: number) => {
