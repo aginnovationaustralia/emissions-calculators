@@ -50,6 +50,7 @@ export type {
   AllModulesFertiliserInput,
   AllModulesFuelInput,
   AllModulesPastureInput,
+  AllModulesRiceInput,
   AllModulesServicesInput,
   AllModulesSheepInput,
 } from './types/input';

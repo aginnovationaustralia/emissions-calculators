@@ -6,6 +6,7 @@ import {
   AllModulesFuelInput,
   AllModulesInput,
   AllModulesPastureInput,
+  AllModulesRiceInput,
   AllModulesServicesInput,
   AllModulesSheepInput,
   AquacultureSystemInput,
@@ -42,7 +43,6 @@ import {
   FreightMethod1Input,
   FreightMethod2Input,
   FuelInput,
-  HasRiceCultivationInput,
   InorganicFertiliserComponentInput,
   InorganicFertiliserInputScope3Method1,
   InorganicFertiliserScope1Method2Input,
@@ -1001,11 +1001,15 @@ const riceCropMethod2: RiceCropInput = {
   residues: riceCropResiduesMethod2,
 };
 
-const riceMethod1: HasRiceCultivationInput = {
+const riceMethod1: AllModulesRiceInput = {
   crop: riceCropMethod1,
+  state: 'NSW',
+  climateZone: 'Warm temperate moist',
+  isInLeachingZone: true,
 };
 
-const riceMethod2: HasRiceCultivationInput = {
+const riceMethod2: AllModulesRiceInput = {
+  ...riceMethod1,
   crop: riceCropMethod2,
 };
 

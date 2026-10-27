@@ -55,6 +55,7 @@ import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculatePurchasedPackaging } from '@/modules/scope3/15.8-purchased-packaging';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
+import { NumberContainer } from '@/tools/containers';
 import {
   buildCalculatorLedger,
   exposeTonnesCO2e,
@@ -62,11 +63,28 @@ import {
   sumCO2e,
 } from '@/tools/ledger';
 import { zeroCH4, zeroCO2, zeroCO2e, zeroN2O } from '@/tools/sentinels';
+import { sum } from '@/tools/sum';
+import { NumberUnit } from '@/tools/units';
 import { ExecutionContext } from '../executionContext';
 import { Scope2Output } from '../types/scope2.output';
 import { AllModulesInputTransformed } from './types/input';
 import { AllModulesScope1Output } from './types/scope1.output';
 import { AllModulesScope3Output } from './types/scope3.output';
+
+// Adds up one module's results across the activities that were supplied. A single result
+// is passed through unchanged, and if none were supplied the zero sentinel is returned.
+const addSupplied = <
+  C extends NumberContainer<NumberUnit>,
+  Z extends NumberContainer<NumberUnit>,
+>(
+  results: (C | undefined)[],
+  zero: Z,
+) => {
+  const supplied = results.filter(
+    (result): result is C => result !== undefined,
+  );
+  return supplied.length > 1 ? sum(supplied) : (supplied[0] ?? zero);
+};
 
 // Every top-level key of AllModulesInputTransformed is optional (see types/input.ts), so
 // that callers only need to supply the activities relevant to them. Rather than default
@@ -225,22 +243,42 @@ const calculateScope1AllModules = (
     : { fertiliserLeachingAndRunoffN2O: zeroN2O };
 
   // 6 residue management
+  // The rice crop's residues count alongside `crop` and `pasture`, as they do in the Rice
+  // calculator.
+  const { rice } = input;
   // 6.1 Return of crop residues to soils
-  const cropResidueN2O = input.crop
-    ? calculate61CropResidueN2O(input.crop, context)
-    : zeroN2O;
+  const cropResidueN2O = addSupplied(
+    [
+      input.crop && calculate61CropResidueN2O(input.crop, context),
+      rice && calculate61CropResidueN2O(rice, context),
+    ],
+    zeroN2O,
+  );
   // 6.2 Return of pasture residues to soils
   const pastureResidueN2O = input.pasture
     ? calculate62PastureResidueN2O(input.pasture, context)
     : zeroN2O;
   // 6.3 Residue leaching and run-off from crop and pasture residues
-  const residueLeachingAndRunoffN2O = input.pasture
-    ? calculate63ResidueLeachingAndRunoffN2O(input.pasture, context)
-    : zeroN2O;
+  const residueLeachingAndRunoffN2O = addSupplied(
+    [
+      input.pasture &&
+        calculate63ResidueLeachingAndRunoffN2O(input.pasture, context),
+      rice && calculate63ResidueLeachingAndRunoffN2O(rice, context),
+    ],
+    zeroN2O,
+  );
   // 6.4 Field burning of crop residues
-  const { fieldBurningN2O, fieldBurningCH4 } = input.crop
-    ? calculate64FieldBurning(input.crop, context)
-    : { fieldBurningN2O: zeroN2O, fieldBurningCH4: zeroCH4 };
+  const cropFieldBurning =
+    input.crop && calculate64FieldBurning(input.crop, context);
+  const riceFieldBurning = rice && calculate64FieldBurning(rice, context);
+  const fieldBurningN2O = addSupplied(
+    [cropFieldBurning?.fieldBurningN2O, riceFieldBurning?.fieldBurningN2O],
+    zeroN2O,
+  );
+  const fieldBurningCH4 = addSupplied(
+    [cropFieldBurning?.fieldBurningCH4, riceFieldBurning?.fieldBurningCH4],
+    zeroCH4,
+  );
 
   // Chapter 7 rice
   const riceCultivationCH4 = input.rice

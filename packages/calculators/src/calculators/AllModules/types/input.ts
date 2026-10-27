@@ -256,6 +256,21 @@ const AllModulesServicesInputSchema = object({
   ...hasFuelInputSchema('services').shape,
 });
 
+const AllModulesRiceInputSchema = object({
+  ...HasRiceCultivationInputSchema.shape,
+  ...hasStateInputSchema([RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3]).shape,
+  ...hasClimateZoneInputSchema(RESIDUE_CROPS_6_1).shape,
+  ...hasIsInLeachingZoneInputSchema(RESIDUE_LEACH_6_3).shape,
+});
+export type AllModulesRiceInput = HasRiceCultivationInput &
+  HasStateInput &
+  HasClimateZoneInput &
+  HasIsInLeachingZoneInput;
+type AllModulesRiceInputTransformed = HasRiceCultivationInputTransformed &
+  HasStateInputTransformed &
+  HasClimateZoneInputTransformed &
+  HasIsInLeachingZoneInputTransformed;
+
 // Every top-level key is optional for this calculator only: callers may supply just the
 // activities relevant to them rather than the whole farm. This is applied locally here
 // (via `Partial<>` on the types and `.partial()` on the schema) rather than in any of
@@ -271,7 +286,7 @@ type AllModulesInputCore = {
   fertiliser: AllModulesFertiliserInput;
   crop: AllModulesCropInput;
   pasture: AllModulesPastureInput;
-  rice: HasRiceCultivationInput;
+  rice: AllModulesRiceInput;
   fuel: AllModulesFuelInput;
   services: AllModulesServicesInput;
   electricity: ElectricityInputs;
@@ -301,7 +316,7 @@ type AllModulesInputCoreTransformed = {
   fertiliser: AllModulesFertiliserInputTransformed;
   crop: AllModulesCropInputTransformed;
   pasture: AllModulesPastureInputTransformed;
-  rice: HasRiceCultivationInputTransformed;
+  rice: AllModulesRiceInputTransformed;
   fuel: AllModulesFuelInputTransformed;
   services: AllModulesServicesInputTransformed;
   electricity: ElectricityInputsTransformed;
@@ -349,7 +364,7 @@ export const AllModulesInputSchema: z.ZodObject<
   ...HasLimeInputSchema.shape,
   crop: AllModulesCropInputSchema,
   pasture: AllModulesPastureInputSchema,
-  rice: HasRiceCultivationInputSchema,
+  rice: AllModulesRiceInputSchema,
   fuel: AllModulesFuelInputSchema,
   services: AllModulesServicesInputSchema,
   ...RefrigerantsInputSchema.shape,

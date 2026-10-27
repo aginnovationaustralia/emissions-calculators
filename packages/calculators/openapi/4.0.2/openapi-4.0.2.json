@@ -7916,10 +7916,59 @@
                           "cultivationPeriodDays"
                         ],
                         "additionalProperties": false
+                      },
+                      "state": {
+                        "type": "string",
+                        "enum": [
+                          "ACT",
+                          "TAS",
+                          "NSW",
+                          "VIC",
+                          "QLD",
+                          "SA",
+                          "WA",
+                          "NT"
+                        ],
+                        "description": "The state or territory the activity is based in",
+                        "x-modules": [
+                          "6.1",
+                          "6.3"
+                        ]
+                      },
+                      "climateZone": {
+                        "type": "string",
+                        "enum": [
+                          "Tropical montane",
+                          "Tropical wet",
+                          "Tropical moist",
+                          "Warm temperate moist",
+                          "Cool temperate moist",
+                          "Boreal moist",
+                          "Tropical dry",
+                          "Warm temperate dry",
+                          "Cool temperate dry",
+                          "Boreal dry",
+                          "dry",
+                          "wet"
+                        ],
+                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
+                        "x-modules": [
+                          "6.1"
+                        ]
+                      },
+                      "isInLeachingZone": {
+                        "type": "boolean",
+                        "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
+                        "x-modules": [
+                          "6.3"
+                        ]
                       }
                     },
                     "required": [
-                      "crop"
+                      "crop",
+                      "state",
+                      "climateZone",
+                      "isInLeachingZone"
                     ],
                     "additionalProperties": false
                   },
