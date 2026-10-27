@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js-light';
 import { num, root, RootContainer, TypedContainer } from './containers';
-import { days, mass, RealNumber, realNumber } from './units';
+import { days, mass, RealNumber, realNumber, years } from './units';
 
 export const one = num(1).named('one');
 
@@ -46,6 +46,7 @@ export const percentageToFraction = (x: TypedContainer<RealNumber>) =>
   x.divide(num(100));
 
 export const daysInYear = root(days(365));
+export const oneYear = root(years(1));
 export const daysPostWeaning = root(days(281));
 export const daysPreWeaning = root(days(84));
 export const daysInSeason = root(days(91.25)).named('daysInSeason');

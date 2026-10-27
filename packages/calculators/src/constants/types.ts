@@ -15,6 +15,7 @@ import {
   MassPerEnergy,
   MassPerHead,
   MassPerHeadPerDay,
+  MassPerHeadPerYear,
   MassPerMass,
   MassPerMassDistance,
   MassPerVolume,
@@ -564,12 +565,9 @@ export type PoultryConstants = NamedConstants & {
 };
 
 type OtherLivestockFactors = {
-  /** Enteric methane, kg CH4 per head per year (Mj) */
   ENTERIC: MassPerHead<'CH4'>;
-  /** Volatile solids, kg VS per head per day (VSj) */
   VOLATILE_SOLIDS: MassPerHeadPerDay<'Volatile Solids'>;
-  /** Nitrogen excreted, kg N per head per year (NEj) */
-  NITROGEN_EXCRETED: MassPerHead<'N'>;
+  NITROGEN_EXCRETED: MassPerHeadPerYear<'N'>;
 };
 
 type OtherLivestockMMSFactors = {

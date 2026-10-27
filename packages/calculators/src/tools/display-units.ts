@@ -13,6 +13,7 @@ import {
   MassPerEnergy,
   MassPerHead,
   MassPerHeadPerDay,
+  MassPerHeadPerYear,
   MassPerMass,
   MassPerMassDistance,
   MassPerTime,
@@ -56,6 +57,7 @@ const UNITLESS = 'unitless';
 const NUMBER = 'number';
 const PERCENTAGE = 'percentage';
 const HEAD_PER_DAY = `${HEAD} per ${DAY}`;
+const HEAD_PER_YEAR = `${HEAD} per ${YEAR}`;
 
 type OrderStrings = Record<number, string>;
 
@@ -125,6 +127,7 @@ type DynamicUnitTypes =
   | 'MassPerEnergy'
   | 'MassPerHead'
   | 'MassPerHeadPerDay'
+  | 'MassPerHeadPerYear'
   | 'MassPerMass'
   | 'MassPerMassDistance'
   | 'MassPerTime'
@@ -271,6 +274,16 @@ const massPerHeadPerDayString = <U extends MassPerHeadPerDay<Substance>>(
 ): string | undefined => {
   if (scaledValue === 1) {
     return perString(KILOGRAMS, unit.substance, HEAD_PER_DAY);
+  }
+  return undefined;
+};
+
+const massPerHeadPerYearString = <U extends MassPerHeadPerYear<Substance>>(
+  unit: U,
+  scaledValue: number,
+): string | undefined => {
+  if (scaledValue === 1) {
+    return perString(KILOGRAMS, unit.substance, HEAD_PER_YEAR);
   }
   return undefined;
 };
@@ -466,6 +479,8 @@ const lookupDisplayUnit = <U extends NumberUnit>(
     return massPerMassString(unit, scaledValue);
   } else if (unitType === 'MassPerHeadPerDay') {
     return massPerHeadPerDayString(unit, scaledValue);
+  } else if (unitType === 'MassPerHeadPerYear') {
+    return massPerHeadPerYearString(unit, scaledValue);
   } else if (unitType === 'MassPerEnergy') {
     return massPerEnergyString(unit, scaledValue);
   } else if (unitType === 'VolumePerHeadPerDay') {
