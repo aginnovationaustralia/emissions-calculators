@@ -74,9 +74,9 @@ const getFertilisersInput = (
               }
             : {}),
           customScope3EmissionFactor: nv(0),
-          areaAppliedHectares: nv(areaAppliedHectares),
         },
       ],
+      areaAppliedHectares: nv(areaAppliedHectares),
       calculationMethodScope1: '2',
     },
     organic: {
@@ -118,14 +118,7 @@ const getCalculatorInput = (
   return HasFertiliserInputSchema.parse(fertiliserInput);
 };
 
-const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
-  return Number(sheet.cell(`M${row}`).value());
-};
-
-const extractInputsAndOutput = createSheetExtractor(
-  getCalculatorInput,
-  getExpectedOutput,
-);
+const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'M');
 
 describe('5.1.1.1 Inorganic Fertiliser N2O', () => {
   it('method 1 scenarios match spreadsheet results', async () => {
@@ -143,43 +136,13 @@ describe('5.1.1.1 Inorganic Fertiliser N2O', () => {
     );
   });
 
-  it('method 2 scenarios match spreadsheet results for maize', async () => {
+  it('method 2 scenarios match spreadsheet results', async () => {
     const workbook = await getSheet(
       './src/modules/test/5.1-inorganic-fertiliser.xlsx',
       '5.1.1.1',
     );
 
     const inputsAndOutputs = extractInputsAndOutput(workbook, 10, '2');
-
-    compareInputsAndOutputs(
-      inputsAndOutputs,
-      calculateInorganicFertiliserN2O,
-      '5.1',
-    );
-  });
-
-  it('method 2 scenarios match spreadsheet results for high rainfall zone', async () => {
-    const workbook = await getSheet(
-      './src/modules/test/5.1-inorganic-fertiliser.xlsx',
-      '5.1.1.1',
-    );
-
-    const inputsAndOutputs = extractInputsAndOutput(workbook, 14, '2');
-
-    compareInputsAndOutputs(
-      inputsAndOutputs,
-      calculateInorganicFertiliserN2O,
-      '5.1',
-    );
-  });
-
-  it('method 2 scenarios match spreadsheet results for cotton', async () => {
-    const workbook = await getSheet(
-      './src/modules/test/5.1-inorganic-fertiliser.xlsx',
-      '5.1.1.1',
-    );
-
-    const inputsAndOutputs = extractInputsAndOutput(workbook, 20, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,

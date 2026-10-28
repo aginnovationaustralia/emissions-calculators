@@ -1,4 +1,6 @@
 import {
+  InorganicFertiliserComponentNitrogenType,
+  InorganicFertiliserComponentNitrogenTypes,
   InorganicFertiliserComponentOrigins,
   InorganicFertiliserComponentTypesNonRegional,
   InorganicFertiliserComponentTypesRegional,
@@ -78,6 +80,17 @@ export const isInorganicFertiliserKnownComponent = (
   component: InorganicFertiliserComponentInputTransformed,
 ): component is InorganicFertiliserKnownComponentInputTransformed => {
   return 'componentType' in component;
+};
+
+export const isInorganicFertiliserNitrogenComponent = (
+  component: InorganicFertiliserComponentInputTransformed,
+): boolean => {
+  return (
+    isInorganicFertiliserKnownComponent(component) &&
+    InorganicFertiliserComponentNitrogenTypes.includes(
+      component.componentType.unit as InorganicFertiliserComponentNitrogenType,
+    )
+  );
 };
 
 export const InorganicFertiliserUnknownComponentInputSchema = object({

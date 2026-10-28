@@ -1,12 +1,19 @@
 import { ExecutionContext } from '@/calculators/executionContext';
+import { ProductionSystemsInorganicFertiliser } from '@/constants';
 import { convertToBasicProductionSystem } from '@/constants/translations';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, max, min, num } from '@/tools/containers';
+import { InputContainer } from '@/tools/inputs';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { e, zero } from '@/tools/sentinels';
+import { e, zero, zeroN, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { selectSwitch } from '@/tools/switch';
-import { MassPerMass, massPerMass, realNumber } from '@/tools/units';
+import {
+  MassPerArea,
+  MassPerMass,
+  massPerMass,
+  realNumber,
+} from '@/tools/units';
 import { ConstantsForFertiliser } from './constants';
 import {
   FertiliserInputInorganicScope1Method2Transformed,
@@ -14,30 +21,136 @@ import {
   HasFertiliserInputTransformed,
   isFertilisersInorganicScope1Method2,
 } from './fertiliser.input';
-import { isInorganicFertiliserKnownComponent } from './inorganic-fertiliser-components.input';
+import {
+  isInorganicFertiliserKnownComponent,
+  isInorganicFertiliserNitrogenComponent,
+} from './inorganic-fertiliser-components.input';
 import {
   InorganicFertiliserInputTransformed,
   isInorganicFertiliserInputScope3Method1,
   isInorganicFertiliserTypeOther,
 } from './inorganic-fertiliser.input';
-import {
-  InorganicFertiliserInputWithAreaTransformed,
-  isInorganicFertiliserInputWithArea,
-} from './inorganic-fertilisers.input';
 
-const getEFjN2OForFertiliserMethod2 = (
-  fertiliser: FertiliserInputInorganicScope1Method2Transformed,
-  application: InorganicFertiliserInputWithAreaTransformed,
-): Container<MassPerMass<'N2O', 'N'>> => {
+/**
+ * Wrapper for getting the fraction of nitrogen *FNinorganic,f* for an inorganic
+ * fertiliser application
+ */
+const getNitrogenFraction = (
+  inorganicFertiliser: InorganicFertiliserInputTransformed,
+  constants: ConstantsForFertiliser,
+): Container<MassPerMass<'N', 'Inorganic Fertiliser'>> => {
   /**
-   * NOTE: This value is in kg N/m^2, NOT kg N/ha, and hence must be converted
-   * before calculating the relevant emissions factor.
+   * See description for FNinorganic,f data source:
+   * > Default values for common inorganic fertilisers based on average fertiliser composition from [4], or calculated from product label information.
+   * > Default fraction of nitrogen for common fertiliser types are provided in Table A.2.2.6 of the Appendix.
+   * > If using product information label, nitrogen content by weight per cent (wt%) fertiliser composition is typically stated in the form of N:P:K (the ratio of nitrogen, phosphorus and potassium nutrients."
+   *
+   * Also NOTE: All of these values are method 1, despite the complex search for a particular value
    */
-  const applicationRate = application.massAppliedKg.divide(
-    application.areaAppliedHectares,
+
+  if (isInorganicFertiliserInputScope3Method1(inorganicFertiliser)) {
+    const nitrogenComponents = (inorganicFertiliser.components ?? []).filter(
+      isInorganicFertiliserNitrogenComponent,
+    );
+    if (nitrogenComponents.length > 0) {
+      return sum(
+        nitrogenComponents.map((component) => component.fractionOfFertiliser),
+      )
+        .switchUnit((r) => massPerMass('N', 'Inorganic Fertiliser', r.store))
+        .named('FNinorganic,f (custom component)');
+    }
+  } else if (inorganicFertiliser.customNitrogenFraction !== undefined) {
+    return inorganicFertiliser.customNitrogenFraction;
+  }
+
+  return (
+    isInorganicFertiliserTypeOther(inorganicFertiliser)
+      ? inorganicFertiliser.customNitrogenFraction
+      : selectConstant(
+          constants.CROP,
+          'INORGANIC_FERTILISER_FRACTIONS',
+          inorganicFertiliser.fertiliserType,
+          'N',
+        )
+  ).named('FNinorganic,f');
+};
+
+function getUreaFraction(
+  inorganicFertiliser: InorganicFertiliserInputTransformed,
+  constants: ConstantsForFertiliser,
+) {
+  if (isInorganicFertiliserInputScope3Method1(inorganicFertiliser)) {
+    const ureaComponent = inorganicFertiliser.components?.find(
+      (component) =>
+        isInorganicFertiliserKnownComponent(component) &&
+        component.componentType.unit === 'Urea',
+      // TODO: Do we need to account for 'Urea-Ammonium Nitrate'?
+    );
+    if (ureaComponent) {
+      return ureaComponent.fractionOfFertiliser
+        .switchUnit((r) => massPerMass('Urea', 'Inorganic Fertiliser', r.store))
+        .named('FUf (custom Urea component)');
+    }
+  }
+
+  return (
+    isInorganicFertiliserTypeOther(inorganicFertiliser)
+      ? inorganicFertiliser.customUreaFraction
+      : selectConstant(
+          constants.CROP,
+          'INORGANIC_FERTILISER_FRACTIONS',
+          inorganicFertiliser.fertiliserType,
+          'Urea',
+        )
+  ).named('FUf');
+}
+
+const calculateInorganicFertiliserN2OMethod1 = (
+  fertiliser: FertiliserInputTransformed,
+  constants: ConstantsForFertiliser,
+) => {
+  const basicProductionSystem = convertToBasicProductionSystem(
+    fertiliser.productionSystem,
+  );
+  const emissionFactor = selectConstant(
+    constants.CROP,
+    'EF_N2O_ATMOSPHERIC_DEPOSITION_PRODUCTION_SYSTEM',
+    basicProductionSystem,
+  ).switchUnit((value) => massPerMass('N2O', 'N', value.store));
+  const CN2O = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_N2O');
+
+  const emissionsPerApplication = fertiliser.inorganic.applications.map(
+    (application) => {
+      const totalNitrogen = application.massAppliedKg
+        .multiply(getNitrogenFraction(application, constants))
+        .named(`MNjf`)
+        .reference('5.1.1.1 (2)');
+
+      return totalNitrogen.multiply(emissionFactor).multiply(CN2O);
+    },
   );
 
-  const applicationRateKgPerHectare = num(1e4).multiply(applicationRate);
+  /**
+   * EN2O = SUM[j,f] (MNjf * EFj,N2O * CN2O) * 10^-3
+   */
+  return (
+    emissionsPerApplication.length > 0 ? sum(emissionsPerApplication) : zeroN2O
+  )
+    .named('EN2O')
+    .reference('5.1.1.1 (1)');
+};
+
+const calculateMethod2EmissionsFactor = (
+  productionSystem: InputContainer<ProductionSystemsInorganicFertiliser>,
+  totalNitrogenApplicationRate: Container<MassPerArea<'N'>>,
+): Container<MassPerMass<'N2O', 'N'>> => {
+  /**
+   * NOTE: `totalNitrogenApplicationRate` is in kg N/m^2, NOT kg N/ha, and hence must be
+   * converted before calculating the relevant emissions factor.
+   */
+  const applicationRateKgPerHectare = num(1e4).multiply(
+    totalNitrogenApplicationRate,
+  );
 
   /**
    * For irrigated maize, the emission factor EF j=irrigatedmaize,N2O can be estimated based
@@ -51,6 +164,7 @@ const getEFjN2OForFertiliserMethod2 = (
     zero,
   )
     .switchUnit((r) => massPerMass('N2O', 'N', r.store))
+    .named(`EFfj=irrigatedmaize,N2O`)
     .reference('5.1.1.2 (1)');
 
   /**
@@ -63,15 +177,17 @@ const getEFjN2OForFertiliserMethod2 = (
     .plus(applicationRateKgPerHectare.multiply(num(0.0075)))
     .multiply(num(1e-2))
     .switchUnit((r) => massPerMass('N2O', 'N', r.store))
+    .named(`EFfj=nonirrigatedgrains,N2O`)
     .reference('5.1.1.2 (2)');
 
   /**
    * In equation 5.1.1.1 (1) for cotton, an entity-specific value for EFj=cotton,N2O may be
    * estimated based on the two-component model developed by [[3]](https://connectsci.au/sr/article/54/5/598/46814/Emission-factors-for-estimating-fertiliser-induced) as:
-   * > EF fj=cotton,N2O = (0.29 + (0.007 * (e^(0.037 * Nfj=cotton) - 1) / Nfj=cotton)) * 10^-2
+   * > EFfj=cotton,N2O = (0.29 + (0.007 * (e^(0.037 * Nfj=cotton) - 1) / Nfj=cotton)) * 10^-2
    *
    * This is capped at a maximum of 0.0183 kg CO2e/kg N, equivalent to N application rates of ~300 kg N/ha.
    */
+  const cappedApplicationRate = min(applicationRateKgPerHectare, num(300));
   const efCotton: Container<MassPerMass<'N2O', 'N'>> = br(
     num(0.29).plus(
       br(
@@ -79,91 +195,58 @@ const getEFjN2OForFertiliserMethod2 = (
           e
             .power(
               num(0.037)
-                .multiply(min(applicationRateKgPerHectare, num(300)))
+                .multiply(cappedApplicationRate)
                 .switchUnit((r) => realNumber(r.store)),
             )
             .minus(num(1)),
         ),
-      ).divide(
-        applicationRateKgPerHectare.switchUnit((r) => realNumber(r.store)),
-      ),
+      ).divide(cappedApplicationRate.switchUnit((r) => realNumber(r.store))),
     ),
   )
     .multiply(num(1e-2))
     .switchUnit((r) => massPerMass('N2O', 'N', r.store))
+    .named(`EFfj=cotton,N2O`)
     .reference('5.1.1.2 (3)');
 
-  return selectSwitch(fertiliser.productionSystem, {
+  return selectSwitch(productionSystem, {
     'Irrigated crop (maize)': efMaize,
     'Non-irrigated crop (high rainfall)': efHighRainfall,
     Cotton: efCotton,
   });
 };
 
-const getEFjN2OForFertiliser = (
-  fertiliser: FertiliserInputTransformed,
-  application:
-    | InorganicFertiliserInputTransformed
-    | InorganicFertiliserInputWithAreaTransformed,
+const calculateInorganicFertiliserN2OMethod2 = (
+  fertiliser: FertiliserInputInorganicScope1Method2Transformed,
   constants: ConstantsForFertiliser,
-): Container<MassPerMass<'N2O', 'N'>> => {
-  const basicProductionSystem = convertToBasicProductionSystem(
+) => {
+  const { areaAppliedHectares } = fertiliser.inorganic;
+  const totalNitrogenApplied = sum([
+    zeroN,
+    ...fertiliser.inorganic.applications.map((application) =>
+      application.massAppliedKg.multiply(
+        getNitrogenFraction(application, constants),
+      ),
+    ),
+  ]);
+
+  const nitrogenApplicationRate =
+    totalNitrogenApplied.divide(areaAppliedHectares);
+
+  const emissionsFactor = calculateMethod2EmissionsFactor(
     fertiliser.productionSystem,
+    nitrogenApplicationRate,
   );
 
-  const method1EF = selectConstant(
-    constants.CROP,
-    'EF_N2O_ATMOSPHERIC_DEPOSITION_PRODUCTION_SYSTEM',
-    basicProductionSystem,
-  ).switchUnit((value) => massPerMass('N2O', 'N', value.store));
+  const CN2O = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_N2O');
 
-  const method2EF =
-    !isFertilisersInorganicScope1Method2(fertiliser) ||
-    !isInorganicFertiliserInputWithArea(application)
-      ? undefined
-      : getEFjN2OForFertiliserMethod2(fertiliser, application);
-
-  return captureMethod1Or2Value(method1EF, method2EF);
+  return totalNitrogenApplied.multiply(emissionsFactor).multiply(CN2O);
 };
 
 export const massNitrogenFromInorganicFertiliserAppliedMNjf = (
   inorganicFertiliser: InorganicFertiliserInputTransformed,
   constants: ConstantsForFertiliser,
 ) => {
-  /*
-  See description for FNinorganic,f data source
-  "Default values for common inorganic fertilisers based on average fertiliser composition from [4], or calculated from product label information.
-  Default fraction of nitrogen for common fertiliser types are provided in Table A.2.2.6 of the Appendix.
-  If using product information label, nitrogen content by weight per cent (wt%) fertiliser composition is typically stated in the form of N:P:K (the ratio of nitrogen, phosphorus and potassium nutrients."
-
-  Also NOTE: All of these values are method 1, despite the complex search for a particular value
-  */
-  let fnInorganicF: Container<MassPerMass<'N', 'Inorganic Fertiliser'>> =
-    isInorganicFertiliserTypeOther(inorganicFertiliser)
-      ? inorganicFertiliser.customNitrogenFraction
-      : selectConstant(
-          constants.CROP,
-          'INORGANIC_FERTILISER_FRACTIONS',
-          inorganicFertiliser.fertiliserType,
-          'N',
-        );
-
-  if (isInorganicFertiliserInputScope3Method1(inorganicFertiliser)) {
-    const nitrogenComponent = inorganicFertiliser.components?.find(
-      (component) =>
-        isInorganicFertiliserKnownComponent(component) &&
-        component.componentType.unit === 'Nitrogen - Generic',
-    );
-    if (nitrogenComponent) {
-      fnInorganicF = nitrogenComponent.fractionOfFertiliser
-        .switchUnit((r) => massPerMass('N', 'Inorganic Fertiliser', r.store))
-        .named('fnInorganicF (custom nitrogen component)');
-    }
-  } else {
-    if (inorganicFertiliser.customNitrogenFraction) {
-      fnInorganicF = inorganicFertiliser.customNitrogenFraction;
-    }
-  }
+  const fnInorganicF = getNitrogenFraction(inorganicFertiliser, constants);
 
   const TMjf = inorganicFertiliser.massAppliedKg.named('TMjf');
 
@@ -174,100 +257,34 @@ export const massNitrogenFromInorganicFertiliserAppliedMNjf = (
 };
 
 export const calculateInorganicFertiliserN2O = (
-  input: HasFertiliserInputTransformed,
+  { fertiliser }: HasFertiliserInputTransformed,
   context: ExecutionContext<ConstantsForFertiliser>,
 ) => {
   const { constants } = context;
-  /*
-5.1.1.1 Method 1 - Inorganic Fertiliser Application N2O Emissions
-(1) Nitrous oxide emissions from the application of all inorganic fertiliser types f to all
-production systems j, EN2O (t N2O), are calculated as:
-EN2O = SUMj SUMf (MN jf * EF j,N2O * CN2O * 10^-3)
-Where MN jf = mass of nitrogen in inorganic fertiliser type f applied to production
-system j (kg N)
-EF j,N2O = emission factor for nitrous oxide for inorganic fertilisers (kg N2O-
-N/kg N applied)
-CN2O = factor to convert elemental mass of nitrous oxide to molecular mass
-(dimensionless)
-*/
-  const { applications } = input.fertiliser.inorganic;
-  const emissionRecords = applications.map((inorganicFertiliser) => {
-    const mnjf = massNitrogenFromInorganicFertiliserAppliedMNjf(
-      inorganicFertiliser,
-      constants,
-    );
-
-    const efjN2O = getEFjN2OForFertiliser(
-      input.fertiliser,
-      inorganicFertiliser,
-      constants,
-    );
-
-    const cn2o = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_N2O');
-    return mnjf.multiply(efjN2O).multiply(cn2o);
-  });
-
-  return sum(emissionRecords, { name: 'E n2o' }).reference('5.1.1.1 (1)');
+  return captureMethod1Or2Value(
+    calculateInorganicFertiliserN2OMethod1(fertiliser, constants),
+    isFertilisersInorganicScope1Method2(fertiliser)
+      ? calculateInorganicFertiliserN2OMethod2(fertiliser, constants)
+      : undefined,
+  );
 };
-
-function getUreaComponent(
-  inorganicFertiliser: InorganicFertiliserInputTransformed,
-  constants: ConstantsForFertiliser,
-) {
-  let fUf: Container<MassPerMass<'Urea', 'Inorganic Fertiliser'>> =
-    isInorganicFertiliserTypeOther(inorganicFertiliser)
-      ? inorganicFertiliser.customUreaFraction
-      : selectConstant(
-          constants.CROP,
-          'INORGANIC_FERTILISER_FRACTIONS',
-          inorganicFertiliser.fertiliserType,
-          'Urea',
-        );
-
-  if (isInorganicFertiliserInputScope3Method1(inorganicFertiliser)) {
-    const ureaComponent = inorganicFertiliser.components?.find(
-      (component) =>
-        isInorganicFertiliserKnownComponent(component) &&
-        component.componentType.unit === 'Urea',
-    );
-    if (ureaComponent) {
-      fUf = ureaComponent.fractionOfFertiliser
-        .switchUnit((r) => massPerMass('Urea', 'Inorganic Fertiliser', r.store))
-        .named('fUf (custom Urea component)');
-    }
-  }
-
-  return fUf;
-}
 
 export const calculateInorganicFertiliserCO2 = (
   input: HasFertiliserInputTransformed,
   context: ExecutionContext<ConstantsForFertiliser>,
 ) => {
   const { constants } = context;
-  /*
-  5.1.1.3 Method 1 - Inorganic Fertiliser Application CO2 Emissions
-  Carbon dioxide emissions resulting from the use of inorganic, urea-based fertilisers,
-  E jf,CO2 (t CO2), are calculated as:
-  ECO2 = SUM[j,f] (MU jf * EF urea,CO2 * CCO2) * 10^-3
-  MU jf = mass of urea of inorganic fertiliser type f applied to production system
-  j (kg urea)
-  EF urea,CO2 = emission factor for carbon emissions from urea-based fertilisers
-  (kg C/kg urea)
-  CCO2= factor to convert elemental mass of carbon dioxide to molecular mass
-  (dimensionless)
-
-  Mass of urea applied to production system MU jf is calculated as:
-  MU jf = TM jf * FU f
-  Where TM jf = the total mass of inorganic fertiliser type f applied to production system
-  j (kg)
-  FU f = the fraction of urea in fertiliser type f (kg urea/kg)
-  */
+  /**
+   * ECO2 = SUM[j,f] (MU jf * EF urea,CO2 * CCO2) * 10^-3
+   */
   const { applications } = input.fertiliser.inorganic;
   const emissionRecords = applications.map((inorganicFertiliser) => {
     const tmjf = inorganicFertiliser.massAppliedKg;
 
-    const fUf = getUreaComponent(inorganicFertiliser, constants);
+    const fUf = getUreaFraction(inorganicFertiliser, constants);
+    /**
+     * MU jf = TM jf * FU f
+     */
     const mujf = tmjf.multiply(fUf, {
       name: 'MUjf',
       references: [`5.1.1.3 (2)`],
@@ -287,7 +304,7 @@ export const calculateInorganicFertiliserCO2 = (
   });
 
   return sum(emissionRecords, {
-    name: 'E jf CO2',
+    name: 'ECO2',
     references: [`5.1.1.3 (1)`],
   });
 };

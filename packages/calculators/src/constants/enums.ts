@@ -81,6 +81,7 @@ export const InorganicFertiliserTypes = [
   'Calcium Ammonium Nitrate (CAN)',
   'Calcium Nitrate',
   'Single Super Phosphate',
+  'Ammonium Sulfate',
 ] as const;
 export type InorganicFertiliserType = (typeof InorganicFertiliserTypes)[number];
 
@@ -308,6 +309,14 @@ export const InorganicFertiliserComponentTypesRegional = [
 export type InorganicFertiliserComponentTypeRegional =
   (typeof InorganicFertiliserComponentTypesRegional)[number];
 
+export const InorganicFertiliserComponentNitrogenTypes = [
+  'Nitrogen - Generic',
+  'Nitrogen - Nitrate',
+  'Nitrogen - Ammonia',
+] as const;
+export type InorganicFertiliserComponentNitrogenType =
+  (typeof InorganicFertiliserComponentNitrogenTypes)[number];
+
 export const InorganicFertiliserComponentTypesNonRegional = [
   'Monoammonium phosphate',
   'Diammonium Phosphate',
@@ -315,9 +324,7 @@ export const InorganicFertiliserComponentTypesNonRegional = [
   'Ammonium Nitrate',
   'Calcium Ammonium Nitrate',
   'Sulphate of Ammonia',
-  'Nitrogen - Generic',
-  'Nitrogen - Nitrate',
-  'Nitrogen - Ammonia',
+  ...InorganicFertiliserComponentNitrogenTypes,
   'Muriate of Potash',
   'Single superphosphate',
   'Double Superphosphate',
@@ -650,8 +657,7 @@ export type PurchasedFeedLivestockRegionalType<
 > = (typeof PurchasedFeedLivestockTypesPerRegion)[R][number];
 
 export type PurchasedFeedLivestockType =
-  | PurchasedFeedLivestockRegionlessType
-  | PurchasedFeedLivestockRegionalType;
+  PurchasedFeedLivestockRegionlessType | PurchasedFeedLivestockRegionalType;
 
 export const PurchasedMineralSupplementTypes = [
   'Lick block, dry season mix',
@@ -678,9 +684,7 @@ export const FeedlotMMSTypes = [
   ...TertiaryFeedlotMMSTypes,
 ] as const;
 export type FeedlotMMSType =
-  | PrimaryFeedlotMMSType
-  | SecondaryFeedlotMMSType
-  | TertiaryFeedlotMMSType;
+  PrimaryFeedlotMMSType | SecondaryFeedlotMMSType | TertiaryFeedlotMMSType;
 
 export const FeedlotDurationTypes = ['0-80 days', '81-200 days', '201+ days'];
 
@@ -1278,8 +1282,7 @@ export type PerennialWoodyCrop = (typeof PerennialWoodyCrops)[number];
 
 export const isPerennialWoodyCropContainerFull = (
   crop:
-    | Container<PerennialWoodyCropFull>
-    | Container<PerennialWoodyCropPartial>,
+    Container<PerennialWoodyCropFull> | Container<PerennialWoodyCropPartial>,
 ): crop is Container<PerennialWoodyCropFull> => {
   return isPerennialWoodyCropFull(crop.unit);
 };
