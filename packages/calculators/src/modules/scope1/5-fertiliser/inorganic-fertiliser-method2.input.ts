@@ -4,6 +4,7 @@ import {
   isProportion,
   numberInput,
   numberInputOptional,
+  literalInput,
 } from '@/tools/inputs';
 import {
   ATMOS_DEPOSIT_5_4,
@@ -77,7 +78,7 @@ export const InorganicFertiliserInputScope3Method2KnownFertiliserSchema =
 
 export const InorganicFertiliserInputScope3Method2OtherFertiliserSchema =
   InorganicFertiliserInputScope3Method2BaseSchema.safeExtend({
-    fertiliserType: enumInput([otherFertilisers], {
+    fertiliserType: literalInput(otherFertilisers, {
       name: 'Inorganic fertiliser type',
       description: 'Type of inorganic fertiliser applied',
       modules: [

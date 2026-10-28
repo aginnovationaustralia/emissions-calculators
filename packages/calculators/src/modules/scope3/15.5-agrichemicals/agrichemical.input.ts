@@ -3,10 +3,11 @@ import { input, numberInput, numberInputOptional } from '@/tools/inputs';
 import { AGRICHEM_15_5 } from '@/tools/modules';
 import { mass, massPerMass } from '@/tools/units';
 import { object } from '@/types/schemas';
+import { enumSchema } from '@/tools/enum-schemas';
 import { z } from 'zod';
 
 export const AgrichemicalInputSchema = object({
-  type: z.literal(AgrochemicalTypes).transform((val) =>
+  type: enumSchema(AgrochemicalTypes).transform((val) =>
     input(val as AgrochemicalType, {
       name: 'agrichemical type',
       modules: [AGRICHEM_15_5],

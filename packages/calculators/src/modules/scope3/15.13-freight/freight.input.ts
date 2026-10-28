@@ -5,11 +5,11 @@ import { FREIGHT_15_13 } from '@/tools/modules';
 import { kilometresToMetres, tonnesToKg } from '@/tools/unit-conversion';
 import { distance, mass } from '@/tools/units';
 import { object } from '@/types/schemas';
+import { enumSchema } from '@/tools/enum-schemas';
 import z from 'zod';
 
 export const FreightBaseInputSchema = object({
-  freightType: z
-    .literal(FreightTypes)
+  freightType: enumSchema(FreightTypes)
     .transform((val) =>
       input(val, { name: 'freightType', modules: [FREIGHT_15_13] }),
     )

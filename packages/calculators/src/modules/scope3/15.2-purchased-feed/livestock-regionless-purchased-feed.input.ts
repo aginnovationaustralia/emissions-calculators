@@ -4,6 +4,7 @@ import {
 } from '@/constants/enums';
 import { input } from '@/tools/inputs';
 import { PURCH_FEED_15_2 } from '@/tools/modules';
+import { enumSchema } from '@/tools/enum-schemas';
 import { z } from 'zod';
 import { BasePurchasedFeedInputSchema } from './base-purchased-feed.input';
 
@@ -12,8 +13,7 @@ import { BasePurchasedFeedInputSchema } from './base-purchased-feed.input';
  */
 export const PurchasedFeedLivestockRegionlessInputSchema =
   BasePurchasedFeedInputSchema.extend({
-    type: z
-      .literal(PurchasedFeedLivestockRegionlessTypes)
+    type: enumSchema(PurchasedFeedLivestockRegionlessTypes)
       .transform((val) =>
         input(val as PurchasedFeedLivestockRegionlessType, {
           name: 'purchased feed type',

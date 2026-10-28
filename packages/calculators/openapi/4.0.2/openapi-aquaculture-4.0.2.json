@@ -75,24 +75,12 @@
                             "x-units": "kilowatt-hours"
                           },
                           "region": {
-                            "type": "string",
-                            "enum": [
-                              "NSW",
-                              "VIC",
-                              "QLD",
-                              "SA",
-                              "WA_NW",
-                              "WA_SW",
-                              "TAS",
-                              "NT",
-                              "ACT",
-                              "National"
-                            ],
                             "description": "The state, territory or electricity grid the electricity is purchased in",
                             "x-modules": [
                               "14.1",
                               "15.11"
-                            ]
+                            ],
+                            "$ref": "#/components/schemas/ElectricityRegion"
                           }
                         },
                         "required": [
@@ -177,24 +165,12 @@
                             "x-units": "megawatt-hours"
                           },
                           "region": {
-                            "type": "string",
-                            "enum": [
-                              "NSW",
-                              "VIC",
-                              "QLD",
-                              "SA",
-                              "WA_NW",
-                              "WA_SW",
-                              "TAS",
-                              "NT",
-                              "ACT",
-                              "National"
-                            ],
                             "description": "The state, territory or electricity grid the electricity is purchased in",
                             "x-modules": [
                               "14.1",
                               "15.11"
-                            ]
+                            ],
+                            "$ref": "#/components/schemas/ElectricityRegion"
                           }
                         },
                         "required": [
@@ -252,78 +228,11 @@
                             "type": "object",
                             "properties": {
                               "refrigerant": {
-                                "type": "string",
-                                "enum": [
-                                  "R-400 50/50",
-                                  "R-400 60/40",
-                                  "R-400 80/20",
-                                  "HFC-23 (R-23)",
-                                  "HFC-32 (R-32)",
-                                  "HFC-41 (R-41)",
-                                  "HFC-43-10mee (R-4310mee)",
-                                  "HFC-125 (R-125)",
-                                  "HFC-134 (R-134)",
-                                  "HFC-134a (R-134a)",
-                                  "HFC-143 (R-143)",
-                                  "HFC-143a (R-143a)",
-                                  "HFC-152a (R-152a)",
-                                  "HFC-227ea (R-227ea)",
-                                  "HFC-236fa (R-236fa)",
-                                  "HFC-245ca (R-245ca)",
-                                  "HFC-245fa (R-245fa)",
-                                  "HFC-365mfc (R-365mfc)",
-                                  "HCFC-22 (R-22)",
-                                  "HCFC-123 (R-123)",
-                                  "HCFC-124 (R-124)",
-                                  "HCFC-141b (R-141b)",
-                                  "HCFC-142b (R-142b)",
-                                  "HCFC-225ca (R-225ca)",
-                                  "HCFC-225cb (R-225cb)",
-                                  "PFC-14 Perfluoromethane (tetrafluoromethane)",
-                                  "PFC-116 Perfluoroethane (hexafluoroethane)",
-                                  "PFC-218 Perfluoropropane",
-                                  "PFC-31-10 Perfluorobutane",
-                                  "PFC-318 Perfluorocyclobutane",
-                                  "PFC-41-12 Perfluoropentane",
-                                  "PFC-51-14 Perfluorohexane",
-                                  "PFC-91-18 Perflunafene",
-                                  "R-401A",
-                                  "R-401B",
-                                  "R-401C",
-                                  "R-404A",
-                                  "R-405A",
-                                  "R-407A",
-                                  "R-407B",
-                                  "R-407C",
-                                  "R-407D",
-                                  "R-407E",
-                                  "R-408A",
-                                  "R-409A",
-                                  "R-409B",
-                                  "R-410A",
-                                  "R-410B",
-                                  "R-412A",
-                                  "R-415A",
-                                  "R-415B",
-                                  "R-420A",
-                                  "R-421A",
-                                  "R-422A",
-                                  "R-422B",
-                                  "R-422C",
-                                  "R-500",
-                                  "R-501",
-                                  "R-502",
-                                  "R-503",
-                                  "R-504",
-                                  "R-507A",
-                                  "R-508A",
-                                  "R-508B",
-                                  "R-509A"
-                                ],
                                 "description": "Refrigerant type",
                                 "x-modules": [
                                   "9.1"
-                                ]
+                                ],
+                                "$ref": "#/components/schemas/RefrigerantType"
                               },
                               "chargeSize": {
                                 "description": "Amount of refrigerant contained in the appliance (kilograms refrigerant)",
@@ -347,20 +256,11 @@
                                 "x-units": "kilograms refrigerant"
                               },
                               "refrigerationType": {
-                                "type": "string",
-                                "enum": [
-                                  "Domestic refrigerators",
-                                  "Transport refrigeration",
-                                  "Domestic A/C portable",
-                                  "Domestic A/C split",
-                                  "Domestic A/C packaged",
-                                  "Light vehicle A/C",
-                                  "Heavy vehicle A/C"
-                                ],
                                 "description": "Type of refrigeration appliance",
                                 "x-modules": [
                                   "9.1"
-                                ]
+                                ],
+                                "$ref": "#/components/schemas/RefrigerationType"
                               }
                             },
                             "required": [
@@ -532,23 +432,11 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Food waste",
-                                                  "Green waste",
-                                                  "Wood products (at time of harvest)",
-                                                  "Wood products (at end of life)",
-                                                  "Sludge",
-                                                  "Paper and cardboard",
-                                                  "Textiles",
-                                                  "Rubber and leather",
-                                                  "Inert waste",
-                                                  "Nappies"
-                                                ],
                                                 "description": "Type of solid waste treated at this facility (Burial)",
                                                 "x-modules": [
                                                   "10.1"
-                                                ]
+                                                ],
+                                                "$ref": "#/components/schemas/SolidWasteNonStreamType"
                                               },
                                               "massWasteTonnes": {
                                                 "description": "Amount of solid waste disposed of through burial (tonnes solid waste)",
@@ -582,23 +470,11 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Food waste",
-                                                  "Green waste",
-                                                  "Wood products (at time of harvest)",
-                                                  "Wood products (at end of life)",
-                                                  "Sludge",
-                                                  "Paper and cardboard",
-                                                  "Textiles",
-                                                  "Rubber and leather",
-                                                  "Inert waste",
-                                                  "Nappies"
-                                                ],
                                                 "description": "Type of solid waste treated at this facility (Burial)",
                                                 "x-modules": [
                                                   "10.1"
-                                                ]
+                                                ],
+                                                "$ref": "#/components/schemas/SolidWasteNonStreamType"
                                               },
                                               "volumeWasteCubicMetres": {
                                                 "description": "Amount of solid waste disposed of through burial (cubic metres solid waste)",
@@ -639,23 +515,11 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Food waste",
-                                                  "Green waste",
-                                                  "Wood products (at time of harvest)",
-                                                  "Wood products (at end of life)",
-                                                  "Sludge",
-                                                  "Paper and cardboard",
-                                                  "Textiles",
-                                                  "Rubber and leather",
-                                                  "Inert waste",
-                                                  "Nappies"
-                                                ],
                                                 "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
                                                 "x-modules": [
                                                   "10.1"
-                                                ]
+                                                ],
+                                                "$ref": "#/components/schemas/SolidWasteNonStreamType"
                                               },
                                               "massWasteTonnes": {
                                                 "description": "Amount of solid waste disposed of in a deep open waste dump. (tonnes solid waste)",
@@ -689,23 +553,11 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Food waste",
-                                                  "Green waste",
-                                                  "Wood products (at time of harvest)",
-                                                  "Wood products (at end of life)",
-                                                  "Sludge",
-                                                  "Paper and cardboard",
-                                                  "Textiles",
-                                                  "Rubber and leather",
-                                                  "Inert waste",
-                                                  "Nappies"
-                                                ],
                                                 "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
                                                 "x-modules": [
                                                   "10.1"
-                                                ]
+                                                ],
+                                                "$ref": "#/components/schemas/SolidWasteNonStreamType"
                                               },
                                               "volumeWasteCubicMetres": {
                                                 "description": "Amount of solid waste disposed of in a deep open waste dump. (cubic metres solid waste)",
@@ -746,23 +598,11 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Food waste",
-                                                  "Green waste",
-                                                  "Wood products (at time of harvest)",
-                                                  "Wood products (at end of life)",
-                                                  "Sludge",
-                                                  "Paper and cardboard",
-                                                  "Textiles",
-                                                  "Rubber and leather",
-                                                  "Inert waste",
-                                                  "Nappies"
-                                                ],
                                                 "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
                                                 "x-modules": [
                                                   "10.1"
-                                                ]
+                                                ],
+                                                "$ref": "#/components/schemas/SolidWasteNonStreamType"
                                               },
                                               "massWasteTonnes": {
                                                 "description": "Amount of solid waste disposed of in a shallow open waste dump. (tonnes solid waste)",
@@ -796,23 +636,11 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Food waste",
-                                                  "Green waste",
-                                                  "Wood products (at time of harvest)",
-                                                  "Wood products (at end of life)",
-                                                  "Sludge",
-                                                  "Paper and cardboard",
-                                                  "Textiles",
-                                                  "Rubber and leather",
-                                                  "Inert waste",
-                                                  "Nappies"
-                                                ],
                                                 "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
                                                 "x-modules": [
                                                   "10.1"
-                                                ]
+                                                ],
+                                                "$ref": "#/components/schemas/SolidWasteNonStreamType"
                                               },
                                               "volumeWasteCubicMetres": {
                                                 "description": "Amount of solid waste disposed of in a shallow open waste dump. (cubic metres solid waste)",
@@ -853,18 +681,11 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Food waste",
-                                                  "Green waste",
-                                                  "Wood products (at time of harvest)",
-                                                  "Wood products (at end of life)",
-                                                  "Sludge"
-                                                ],
                                                 "description": "Type of solid waste treated at this facility (Composting)",
                                                 "x-modules": [
                                                   "10.1"
-                                                ]
+                                                ],
+                                                "$ref": "#/components/schemas/SolidWasteOrganicType"
                                               },
                                               "massWasteTonnes": {
                                                 "description": "Amount of solid waste treated through composting (tonnes solid waste)",
@@ -898,18 +719,11 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Food waste",
-                                                  "Green waste",
-                                                  "Wood products (at time of harvest)",
-                                                  "Wood products (at end of life)",
-                                                  "Sludge"
-                                                ],
                                                 "description": "Type of solid waste treated at this facility (Composting)",
                                                 "x-modules": [
                                                   "10.1"
-                                                ]
+                                                ],
+                                                "$ref": "#/components/schemas/SolidWasteOrganicType"
                                               },
                                               "volumeWasteCubicMetres": {
                                                 "description": "Amount of solid waste treated through composting (cubic metres solid waste)",
@@ -950,18 +764,11 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Food waste",
-                                                  "Green waste",
-                                                  "Wood products (at time of harvest)",
-                                                  "Wood products (at end of life)",
-                                                  "Sludge"
-                                                ],
                                                 "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
                                                 "x-modules": [
                                                   "10.1"
-                                                ]
+                                                ],
+                                                "$ref": "#/components/schemas/SolidWasteOrganicType"
                                               },
                                               "massWasteTonnes": {
                                                 "description": "Amount of solid waste treated through anaerobic digestion (tonnes solid waste)",
@@ -995,18 +802,11 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Food waste",
-                                                  "Green waste",
-                                                  "Wood products (at time of harvest)",
-                                                  "Wood products (at end of life)",
-                                                  "Sludge"
-                                                ],
                                                 "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
                                                 "x-modules": [
                                                   "10.1"
-                                                ]
+                                                ],
+                                                "$ref": "#/components/schemas/SolidWasteOrganicType"
                                               },
                                               "volumeWasteCubicMetres": {
                                                 "description": "Amount of solid waste treated through anaerobic digestion (cubic metres solid waste)",
@@ -1047,23 +847,11 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Food waste",
-                                                  "Green waste",
-                                                  "Wood products (at time of harvest)",
-                                                  "Wood products (at end of life)",
-                                                  "Sludge",
-                                                  "Paper and cardboard",
-                                                  "Textiles",
-                                                  "Rubber and leather",
-                                                  "Inert waste",
-                                                  "Nappies"
-                                                ],
                                                 "description": "Type of solid waste treated at this facility (Incineration)",
                                                 "x-modules": [
                                                   "10.1"
-                                                ]
+                                                ],
+                                                "$ref": "#/components/schemas/SolidWasteNonStreamType"
                                               },
                                               "massWasteTonnes": {
                                                 "description": "Amount of solid waste incinerated (tonnes solid waste)",
@@ -1097,23 +885,11 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Food waste",
-                                                  "Green waste",
-                                                  "Wood products (at time of harvest)",
-                                                  "Wood products (at end of life)",
-                                                  "Sludge",
-                                                  "Paper and cardboard",
-                                                  "Textiles",
-                                                  "Rubber and leather",
-                                                  "Inert waste",
-                                                  "Nappies"
-                                                ],
                                                 "description": "Type of solid waste treated at this facility (Incineration)",
                                                 "x-modules": [
                                                   "10.1"
-                                                ]
+                                                ],
+                                                "$ref": "#/components/schemas/SolidWasteNonStreamType"
                                               },
                                               "volumeWasteCubicMetres": {
                                                 "description": "Amount of solid waste incinerated (cubic metres solid waste)",
@@ -1169,25 +945,11 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
-                                            "type": "string",
-                                            "enum": [
-                                              "Food waste",
-                                              "Green waste",
-                                              "Wood products (at time of harvest)",
-                                              "Wood products (at end of life)",
-                                              "Sludge",
-                                              "Paper and cardboard",
-                                              "Textiles",
-                                              "Rubber and leather",
-                                              "Inert waste",
-                                              "Municipal solid waste",
-                                              "Commercial and industrial waste",
-                                              "Construction and demolition waste"
-                                            ],
                                             "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
                                             "x-modules": [
                                               "15.12"
-                                            ]
+                                            ],
+                                            "$ref": "#/components/schemas/SolidWasteScope3LandfillType"
                                           },
                                           "massWasteTonnes": {
                                             "description": "Amount of solid waste sent to landfill (without gas recovery) (tonnes solid waste)",
@@ -1221,25 +983,11 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
-                                            "type": "string",
-                                            "enum": [
-                                              "Food waste",
-                                              "Green waste",
-                                              "Wood products (at time of harvest)",
-                                              "Wood products (at end of life)",
-                                              "Sludge",
-                                              "Paper and cardboard",
-                                              "Textiles",
-                                              "Rubber and leather",
-                                              "Inert waste",
-                                              "Municipal solid waste",
-                                              "Commercial and industrial waste",
-                                              "Construction and demolition waste"
-                                            ],
                                             "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
                                             "x-modules": [
                                               "15.12"
-                                            ]
+                                            ],
+                                            "$ref": "#/components/schemas/SolidWasteScope3LandfillType"
                                           },
                                           "volumeWasteCubicMetres": {
                                             "description": "Amount of solid waste sent to landfill (without gas recovery) (cubic metres solid waste)",
@@ -1281,25 +1029,11 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
-                                            "type": "string",
-                                            "enum": [
-                                              "Food waste",
-                                              "Green waste",
-                                              "Wood products (at time of harvest)",
-                                              "Wood products (at end of life)",
-                                              "Sludge",
-                                              "Paper and cardboard",
-                                              "Textiles",
-                                              "Rubber and leather",
-                                              "Inert waste",
-                                              "Municipal solid waste",
-                                              "Commercial and industrial waste",
-                                              "Construction and demolition waste"
-                                            ],
                                             "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
                                             "x-modules": [
                                               "15.12"
-                                            ]
+                                            ],
+                                            "$ref": "#/components/schemas/SolidWasteScope3LandfillType"
                                           },
                                           "massWasteTonnes": {
                                             "description": "Amount of solid waste sent to landfill (without gas recovery) (tonnes solid waste)",
@@ -1333,25 +1067,11 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
-                                            "type": "string",
-                                            "enum": [
-                                              "Food waste",
-                                              "Green waste",
-                                              "Wood products (at time of harvest)",
-                                              "Wood products (at end of life)",
-                                              "Sludge",
-                                              "Paper and cardboard",
-                                              "Textiles",
-                                              "Rubber and leather",
-                                              "Inert waste",
-                                              "Municipal solid waste",
-                                              "Commercial and industrial waste",
-                                              "Construction and demolition waste"
-                                            ],
                                             "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
                                             "x-modules": [
                                               "15.12"
-                                            ]
+                                            ],
+                                            "$ref": "#/components/schemas/SolidWasteScope3LandfillType"
                                           },
                                           "volumeWasteCubicMetres": {
                                             "description": "Amount of solid waste sent to landfill (without gas recovery) (cubic metres solid waste)",
@@ -1393,24 +1113,11 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
-                                            "type": "string",
-                                            "enum": [
-                                              "Food waste",
-                                              "Green waste",
-                                              "Wood products (at time of harvest)",
-                                              "Wood products (at end of life)",
-                                              "Sludge",
-                                              "Paper and cardboard",
-                                              "Textiles",
-                                              "Rubber and leather",
-                                              "Inert waste",
-                                              "Municipal solid waste",
-                                              "Commercial and industrial waste"
-                                            ],
                                             "description": "Type of solid waste treated at this facility (Incineration)",
                                             "x-modules": [
                                               "15.12"
-                                            ]
+                                            ],
+                                            "$ref": "#/components/schemas/SolidWasteScope3IncinerationType"
                                           },
                                           "massWasteTonnes": {
                                             "description": "Amount of solid waste incinerated (tonnes solid waste)",
@@ -1444,24 +1151,11 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
-                                            "type": "string",
-                                            "enum": [
-                                              "Food waste",
-                                              "Green waste",
-                                              "Wood products (at time of harvest)",
-                                              "Wood products (at end of life)",
-                                              "Sludge",
-                                              "Paper and cardboard",
-                                              "Textiles",
-                                              "Rubber and leather",
-                                              "Inert waste",
-                                              "Municipal solid waste",
-                                              "Commercial and industrial waste"
-                                            ],
                                             "description": "Type of solid waste treated at this facility (Incineration)",
                                             "x-modules": [
                                               "15.12"
-                                            ]
+                                            ],
+                                            "$ref": "#/components/schemas/SolidWasteScope3IncinerationType"
                                           },
                                           "volumeWasteCubicMetres": {
                                             "description": "Amount of solid waste incinerated (cubic metres solid waste)",
@@ -1503,18 +1197,11 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
-                                            "type": "string",
-                                            "enum": [
-                                              "Food waste",
-                                              "Green waste",
-                                              "Wood products (at time of harvest)",
-                                              "Wood products (at end of life)",
-                                              "Sludge"
-                                            ],
                                             "description": "Type of solid waste treated at this facility (Composting)",
                                             "x-modules": [
                                               "15.12"
-                                            ]
+                                            ],
+                                            "$ref": "#/components/schemas/SolidWasteOrganicType"
                                           },
                                           "massWasteTonnes": {
                                             "description": "Amount of solid waste treated through composting (tonnes solid waste)",
@@ -1548,18 +1235,11 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
-                                            "type": "string",
-                                            "enum": [
-                                              "Food waste",
-                                              "Green waste",
-                                              "Wood products (at time of harvest)",
-                                              "Wood products (at end of life)",
-                                              "Sludge"
-                                            ],
                                             "description": "Type of solid waste treated at this facility (Composting)",
                                             "x-modules": [
                                               "15.12"
-                                            ]
+                                            ],
+                                            "$ref": "#/components/schemas/SolidWasteOrganicType"
                                           },
                                           "volumeWasteCubicMetres": {
                                             "description": "Amount of solid waste treated through composting (cubic metres solid waste)",
@@ -1601,18 +1281,11 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
-                                            "type": "string",
-                                            "enum": [
-                                              "Food waste",
-                                              "Green waste",
-                                              "Wood products (at time of harvest)",
-                                              "Wood products (at end of life)",
-                                              "Sludge"
-                                            ],
                                             "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
                                             "x-modules": [
                                               "15.12"
-                                            ]
+                                            ],
+                                            "$ref": "#/components/schemas/SolidWasteOrganicType"
                                           },
                                           "massWasteTonnes": {
                                             "description": "Amount of solid waste treated through anaerobic digestion (tonnes solid waste)",
@@ -1646,18 +1319,11 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
-                                            "type": "string",
-                                            "enum": [
-                                              "Food waste",
-                                              "Green waste",
-                                              "Wood products (at time of harvest)",
-                                              "Wood products (at end of life)",
-                                              "Sludge"
-                                            ],
                                             "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
                                             "x-modules": [
                                               "15.12"
-                                            ]
+                                            ],
+                                            "$ref": "#/components/schemas/SolidWasteOrganicType"
                                           },
                                           "volumeWasteCubicMetres": {
                                             "description": "Amount of solid waste treated through anaerobic digestion (cubic metres solid waste)",
@@ -1702,15 +1368,8 @@
                               "type": "object",
                               "properties": {
                                 "facilityType": {
-                                  "type": "string",
-                                  "enum": [
-                                    "Managed aerobic treatment",
-                                    "Unmanaged aerobic treatment",
-                                    "Anaerobic digestor/reactor",
-                                    "Shallow anaerobic lagoon",
-                                    "Deep anaerobic lagoon"
-                                  ],
-                                  "description": "The type of facility the wastewater was treated at."
+                                  "description": "The type of facility the wastewater was treated at.",
+                                  "$ref": "#/components/schemas/WastewaterFacilityType"
                                 },
                                 "wastewaterVolume": {
                                   "description": "The volume of wastewater treated. (cubic metres fluid waste)",
@@ -1755,21 +1414,11 @@
                                   "x-units": "0-1"
                                 },
                                 "commodityType": {
-                                  "type": "string",
-                                  "enum": [
-                                    "Dairy products",
-                                    "Pulp, paper and paperboard",
-                                    "Meat and poultry",
-                                    "Raw sugar",
-                                    "Beer",
-                                    "Wine and other alcoholic beverages",
-                                    "Fruit",
-                                    "Vegetables"
-                                  ],
                                   "description": "The type of commodity for which production has resulted in the wastewater being treated",
                                   "x-modules": [
                                     "11.1"
-                                  ]
+                                  ],
+                                  "$ref": "#/components/schemas/WastewaterCommodity"
                                 }
                               },
                               "required": [
@@ -1785,15 +1434,8 @@
                               "type": "object",
                               "properties": {
                                 "facilityType": {
-                                  "type": "string",
-                                  "enum": [
-                                    "Managed aerobic treatment",
-                                    "Unmanaged aerobic treatment",
-                                    "Anaerobic digestor/reactor",
-                                    "Shallow anaerobic lagoon",
-                                    "Deep anaerobic lagoon"
-                                  ],
-                                  "description": "The type of facility the wastewater was treated at."
+                                  "description": "The type of facility the wastewater was treated at.",
+                                  "$ref": "#/components/schemas/WastewaterFacilityType"
                                 },
                                 "wastewaterVolume": {
                                   "description": "The volume of wastewater treated. (cubic metres fluid waste)",
@@ -2006,16 +1648,11 @@
                               "x-units": "tonnes fish"
                             },
                             "location": {
-                              "type": "string",
-                              "enum": [
-                                "Coastal wetland habitat",
-                                "Offshore cages in seagrass meadows",
-                                "Other"
-                              ],
                               "description": "Where is this aquaculture system located?",
                               "x-modules": [
                                 "13.1"
-                              ]
+                              ],
+                              "$ref": "#/components/schemas/AquacultureSystemLocation"
                             }
                           },
                           "required": [
@@ -2081,21 +1718,11 @@
                           }
                         },
                         "state": {
-                          "type": "string",
-                          "enum": [
-                            "ACT",
-                            "TAS",
-                            "NSW",
-                            "VIC",
-                            "QLD",
-                            "SA",
-                            "WA",
-                            "NT"
-                          ],
                           "description": "The state or territory the activity is based in",
                           "x-modules": [
                             "15.10"
-                          ]
+                          ],
+                          "$ref": "#/components/schemas/State"
                         }
                       },
                       "required": [
@@ -3252,6 +2879,21 @@
           "Unknown"
         ]
       },
+      "ElectricityRegion": {
+        "type": "string",
+        "enum": [
+          "NSW",
+          "VIC",
+          "QLD",
+          "SA",
+          "WA_NW",
+          "WA_SW",
+          "TAS",
+          "NT",
+          "ACT",
+          "National"
+        ]
+      },
       "ProportionNumberInput": {
         "type": "number",
         "minimum": 0,
@@ -3286,18 +2928,11 @@
                   "x-units": "tonnes purchased feed"
                 },
                 "type": {
-                  "type": "string",
-                  "enum": [
-                    "Whole Sardines",
-                    "Low Animal Protein Formulated Feed",
-                    "Squid",
-                    "Whole Fish",
-                    "Custom Bait"
-                  ],
                   "description": "The type of feed purchased.",
                   "x-modules": [
                     "15.2"
-                  ]
+                  ],
+                  "$ref": "#/components/schemas/PurchasedFeedAquacultureType"
                 }
               },
               "required": [
@@ -3363,6 +2998,16 @@
           ]
         }
       },
+      "PurchasedFeedAquacultureType": {
+        "type": "string",
+        "enum": [
+          "Whole Sardines",
+          "Low Animal Protein Formulated Feed",
+          "Squid",
+          "Whole Fish",
+          "Custom Bait"
+        ]
+      },
       "FuelInput": {
         "type": "object",
         "properties": {
@@ -3402,22 +3047,12 @@
                           "const": "Cars and light commercial vehicles"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Gasoline",
-                            "Diesel oil",
-                            "Liquefied petroleum gas (LPG)",
-                            "Fuel oil",
-                            "Ethanol",
-                            "Biodiesel",
-                            "Renewable diesel",
-                            "Other biofuels"
-                          ],
                           "description": "Type of fuel used by cars and light commercial vehicles",
                           "x-modules": [
                             "8.1",
                             "15.10"
-                          ]
+                          ],
+                          "$ref": "#/components/schemas/CarsLightCommercialFuelType"
                         }
                       },
                       "required": [
@@ -3457,19 +3092,12 @@
                           "const": "Cars and light commercial vehicles (pre 2004)"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Gasoline",
-                            "Diesel oil",
-                            "Liquefied petroleum gas (LPG)",
-                            "Ethanol",
-                            "Renewable diesel"
-                          ],
                           "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
                           "x-modules": [
                             "8.1",
                             "15.10"
-                          ]
+                          ],
+                          "$ref": "#/components/schemas/CarsLightCommercialPre2004FuelType"
                         }
                       },
                       "required": [
@@ -3509,16 +3137,12 @@
                           "const": "Light duty vehicles"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Compressed natural gas",
-                            "Liquefied natural gas"
-                          ],
                           "description": "Type of fuel used by light duty vehicles",
                           "x-modules": [
                             "8.1",
                             "15.10"
-                          ]
+                          ],
+                          "$ref": "#/components/schemas/LightDutyFuelType"
                         }
                       },
                       "required": [
@@ -3558,22 +3182,12 @@
                           "const": "Heavy duty vehicles"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Compressed natural gas",
-                            "Liquefied natural gas",
-                            "Diesel oil - Euro iv or higher",
-                            "Diesel oil - Euro iii",
-                            "Diesel oil - Euro i",
-                            "Renewable diesel - Euro iv or higher",
-                            "Renewable diesel - Euro iii",
-                            "Renewable diesel - Euro i"
-                          ],
                           "description": "Type of fuel used by heavy duty vehicles",
                           "x-modules": [
                             "8.1",
                             "15.10"
-                          ]
+                          ],
+                          "$ref": "#/components/schemas/HeavyDutyFuelType"
                         }
                       },
                       "required": [
@@ -3613,17 +3227,12 @@
                           "const": "Aviation"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Gasoline for use as fuel in an aircraft",
-                            "Kerosene for use as fuel in an aircraft",
-                            "Renewable aviation kerosene"
-                          ],
                           "description": "Type of fuel used by aircraft",
                           "x-modules": [
                             "8.1",
                             "15.10"
-                          ]
+                          ],
+                          "$ref": "#/components/schemas/AviationFuelType"
                         }
                       },
                       "required": [
@@ -3663,17 +3272,12 @@
                           "const": "Vessel"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Petrol",
-                            "Diesel",
-                            "Fuel Oil"
-                          ],
                           "description": "Type of fuel used by this vessel",
                           "x-modules": [
                             "8.1",
                             "15.10"
-                          ]
+                          ],
+                          "$ref": "#/components/schemas/VesselFuelType"
                         }
                       },
                       "required": [
@@ -3713,15 +3317,12 @@
                           "const": "Off-road Agriculture and forestry equipment"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Diesel"
-                          ],
                           "description": "Type of fuel used by off-road agriculture and forestry equipment",
                           "x-modules": [
                             "8.1",
                             "15.10"
-                          ]
+                          ],
+                          "$ref": "#/components/schemas/OffRoadAgricultureAndForestryEquipmentFuelType"
                         }
                       },
                       "required": [
@@ -3807,34 +3408,12 @@
                       "const": "Solid fuels"
                     },
                     "fuelType": {
-                      "type": "string",
-                      "enum": [
-                        "Bituminous coal",
-                        "Sub-bituminous coal",
-                        "Anthracite",
-                        "Brown coal (lignite)",
-                        "Coking coal",
-                        "Coal briquettes",
-                        "Coal coke",
-                        "Coal tar",
-                        "Other solid fossil fuels",
-                        "Industrial materials derived from fossil fuels",
-                        "Passenger car tyres",
-                        "Truck and off-road tyres",
-                        "Non-biomass municipal materials",
-                        "Dry wood",
-                        "Green and air dried wood",
-                        "Sulphite lyes",
-                        "Bagasse",
-                        "Biomass, municipal and industrial materials",
-                        "Charcoal",
-                        "Other primary solid biomass fuels"
-                      ],
                       "description": "Type of solid fuel used in stationary equipment",
                       "x-modules": [
                         "8.2",
                         "15.10"
-                      ]
+                      ],
+                      "$ref": "#/components/schemas/FuelStationarySolidType"
                     },
                     "amountTonnes": {
                       "description": "Amount of fuel consumed (tonnes fuel)",
@@ -3877,28 +3456,12 @@
                           "const": "Liquid fuels"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Petroleum based oils other than fuels",
-                            "Petroleum based greases",
-                            "Automotive gasoline/petrol",
-                            "Aviation gasoline",
-                            "Kerosene",
-                            "Aviation turbine fuel/kerosene",
-                            "Heating oil",
-                            "Diesel oil",
-                            "Fuel oil",
-                            "Liquefied aromatic hydrocarbons",
-                            "Solvents: mineral turpentine or white spirits",
-                            "Liquefied petroleum gas",
-                            "Naphtha",
-                            "Other petroleum products"
-                          ],
                           "description": "Type of liquid fuel used in stationary equipment",
                           "x-modules": [
                             "8.2",
                             "15.10"
-                          ]
+                          ],
+                          "$ref": "#/components/schemas/FuelStationaryVolumeBasedLiquidType"
                         },
                         "amountKilolitres": {
                           "description": "Amount of fuel consumed (cubic metres fuel)",
@@ -3939,19 +3502,12 @@
                           "const": "Liquid fuels"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Crude oil and condensates",
-                            "Other natural gas liquids",
-                            "Petroleum coke",
-                            "Refinery gas and liquids",
-                            "Refinery coke"
-                          ],
                           "description": "Type of liquid fuel used in stationary equipment",
                           "x-modules": [
                             "8.2",
                             "15.10"
-                          ]
+                          ],
+                          "$ref": "#/components/schemas/FuelStationaryMassBasedLiquidType"
                         },
                         "amountTonnes": {
                           "description": "Amount of fuel consumed (tonnes fuel)",
@@ -4042,8 +3598,311 @@
         ],
         "additionalProperties": false
       },
+      "CarsLightCommercialFuelType": {
+        "type": "string",
+        "enum": [
+          "Gasoline",
+          "Diesel oil",
+          "Liquefied petroleum gas (LPG)",
+          "Fuel oil",
+          "Ethanol",
+          "Biodiesel",
+          "Renewable diesel",
+          "Other biofuels"
+        ]
+      },
+      "CarsLightCommercialPre2004FuelType": {
+        "type": "string",
+        "enum": [
+          "Gasoline",
+          "Diesel oil",
+          "Liquefied petroleum gas (LPG)",
+          "Ethanol",
+          "Renewable diesel"
+        ]
+      },
+      "LightDutyFuelType": {
+        "type": "string",
+        "enum": [
+          "Compressed natural gas",
+          "Liquefied natural gas"
+        ]
+      },
+      "HeavyDutyFuelType": {
+        "type": "string",
+        "enum": [
+          "Compressed natural gas",
+          "Liquefied natural gas",
+          "Diesel oil - Euro iv or higher",
+          "Diesel oil - Euro iii",
+          "Diesel oil - Euro i",
+          "Renewable diesel - Euro iv or higher",
+          "Renewable diesel - Euro iii",
+          "Renewable diesel - Euro i"
+        ]
+      },
+      "AviationFuelType": {
+        "type": "string",
+        "enum": [
+          "Gasoline for use as fuel in an aircraft",
+          "Kerosene for use as fuel in an aircraft",
+          "Renewable aviation kerosene"
+        ]
+      },
+      "VesselFuelType": {
+        "type": "string",
+        "enum": [
+          "Petrol",
+          "Diesel",
+          "Fuel Oil"
+        ]
+      },
+      "OffRoadAgricultureAndForestryEquipmentFuelType": {
+        "type": "string",
+        "enum": [
+          "Diesel"
+        ]
+      },
+      "FuelStationarySolidType": {
+        "type": "string",
+        "enum": [
+          "Bituminous coal",
+          "Sub-bituminous coal",
+          "Anthracite",
+          "Brown coal (lignite)",
+          "Coking coal",
+          "Coal briquettes",
+          "Coal coke",
+          "Coal tar",
+          "Other solid fossil fuels",
+          "Industrial materials derived from fossil fuels",
+          "Passenger car tyres",
+          "Truck and off-road tyres",
+          "Non-biomass municipal materials",
+          "Dry wood",
+          "Green and air dried wood",
+          "Sulphite lyes",
+          "Bagasse",
+          "Biomass, municipal and industrial materials",
+          "Charcoal",
+          "Other primary solid biomass fuels"
+        ]
+      },
+      "FuelStationaryVolumeBasedLiquidType": {
+        "type": "string",
+        "enum": [
+          "Petroleum based oils other than fuels",
+          "Petroleum based greases",
+          "Automotive gasoline/petrol",
+          "Aviation gasoline",
+          "Kerosene",
+          "Aviation turbine fuel/kerosene",
+          "Heating oil",
+          "Diesel oil",
+          "Fuel oil",
+          "Liquefied aromatic hydrocarbons",
+          "Solvents: mineral turpentine or white spirits",
+          "Liquefied petroleum gas",
+          "Naphtha",
+          "Other petroleum products"
+        ]
+      },
+      "FuelStationaryMassBasedLiquidType": {
+        "type": "string",
+        "enum": [
+          "Crude oil and condensates",
+          "Other natural gas liquids",
+          "Petroleum coke",
+          "Refinery gas and liquids",
+          "Refinery coke"
+        ]
+      },
+      "RefrigerantType": {
+        "type": "string",
+        "enum": [
+          "R-400 50/50",
+          "R-400 60/40",
+          "R-400 80/20",
+          "HFC-23 (R-23)",
+          "HFC-32 (R-32)",
+          "HFC-41 (R-41)",
+          "HFC-43-10mee (R-4310mee)",
+          "HFC-125 (R-125)",
+          "HFC-134 (R-134)",
+          "HFC-134a (R-134a)",
+          "HFC-143 (R-143)",
+          "HFC-143a (R-143a)",
+          "HFC-152a (R-152a)",
+          "HFC-227ea (R-227ea)",
+          "HFC-236fa (R-236fa)",
+          "HFC-245ca (R-245ca)",
+          "HFC-245fa (R-245fa)",
+          "HFC-365mfc (R-365mfc)",
+          "HCFC-22 (R-22)",
+          "HCFC-123 (R-123)",
+          "HCFC-124 (R-124)",
+          "HCFC-141b (R-141b)",
+          "HCFC-142b (R-142b)",
+          "HCFC-225ca (R-225ca)",
+          "HCFC-225cb (R-225cb)",
+          "PFC-14 Perfluoromethane (tetrafluoromethane)",
+          "PFC-116 Perfluoroethane (hexafluoroethane)",
+          "PFC-218 Perfluoropropane",
+          "PFC-31-10 Perfluorobutane",
+          "PFC-318 Perfluorocyclobutane",
+          "PFC-41-12 Perfluoropentane",
+          "PFC-51-14 Perfluorohexane",
+          "PFC-91-18 Perflunafene",
+          "R-401A",
+          "R-401B",
+          "R-401C",
+          "R-404A",
+          "R-405A",
+          "R-407A",
+          "R-407B",
+          "R-407C",
+          "R-407D",
+          "R-407E",
+          "R-408A",
+          "R-409A",
+          "R-409B",
+          "R-410A",
+          "R-410B",
+          "R-412A",
+          "R-415A",
+          "R-415B",
+          "R-420A",
+          "R-421A",
+          "R-422A",
+          "R-422B",
+          "R-422C",
+          "R-500",
+          "R-501",
+          "R-502",
+          "R-503",
+          "R-504",
+          "R-507A",
+          "R-508A",
+          "R-508B",
+          "R-509A"
+        ]
+      },
+      "RefrigerationType": {
+        "type": "string",
+        "enum": [
+          "Domestic refrigerators",
+          "Transport refrigeration",
+          "Domestic A/C portable",
+          "Domestic A/C split",
+          "Domestic A/C packaged",
+          "Light vehicle A/C",
+          "Heavy vehicle A/C"
+        ]
+      },
+      "SolidWasteNonStreamType": {
+        "type": "string",
+        "enum": [
+          "Food waste",
+          "Green waste",
+          "Wood products (at time of harvest)",
+          "Wood products (at end of life)",
+          "Sludge",
+          "Paper and cardboard",
+          "Textiles",
+          "Rubber and leather",
+          "Inert waste",
+          "Nappies"
+        ]
+      },
+      "SolidWasteOrganicType": {
+        "type": "string",
+        "enum": [
+          "Food waste",
+          "Green waste",
+          "Wood products (at time of harvest)",
+          "Wood products (at end of life)",
+          "Sludge"
+        ]
+      },
+      "SolidWasteScope3LandfillType": {
+        "type": "string",
+        "enum": [
+          "Food waste",
+          "Green waste",
+          "Wood products (at time of harvest)",
+          "Wood products (at end of life)",
+          "Sludge",
+          "Paper and cardboard",
+          "Textiles",
+          "Rubber and leather",
+          "Inert waste",
+          "Municipal solid waste",
+          "Commercial and industrial waste",
+          "Construction and demolition waste"
+        ]
+      },
+      "SolidWasteScope3IncinerationType": {
+        "type": "string",
+        "enum": [
+          "Food waste",
+          "Green waste",
+          "Wood products (at time of harvest)",
+          "Wood products (at end of life)",
+          "Sludge",
+          "Paper and cardboard",
+          "Textiles",
+          "Rubber and leather",
+          "Inert waste",
+          "Municipal solid waste",
+          "Commercial and industrial waste"
+        ]
+      },
+      "WastewaterFacilityType": {
+        "type": "string",
+        "enum": [
+          "Managed aerobic treatment",
+          "Unmanaged aerobic treatment",
+          "Anaerobic digestor/reactor",
+          "Shallow anaerobic lagoon",
+          "Deep anaerobic lagoon"
+        ]
+      },
+      "WastewaterCommodity": {
+        "type": "string",
+        "enum": [
+          "Dairy products",
+          "Pulp, paper and paperboard",
+          "Meat and poultry",
+          "Raw sugar",
+          "Beer",
+          "Wine and other alcoholic beverages",
+          "Fruit",
+          "Vegetables"
+        ]
+      },
       "NumberInput": {
         "type": "number"
+      },
+      "AquacultureSystemLocation": {
+        "type": "string",
+        "enum": [
+          "Coastal wetland habitat",
+          "Offshore cages in seagrass meadows",
+          "Other"
+        ]
+      },
+      "State": {
+        "type": "string",
+        "enum": [
+          "ACT",
+          "TAS",
+          "NSW",
+          "VIC",
+          "QLD",
+          "SA",
+          "WA",
+          "NT"
+        ]
       },
       "OutputMethod1": {
         "type": "object",

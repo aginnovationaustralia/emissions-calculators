@@ -93,8 +93,11 @@ const findOneOfTitleIssues = (
     if (Array.isArray(obj.oneOf)) {
       obj.oneOf.forEach((branch, i) => {
         if (!branch || typeof branch !== 'object') return;
-        // A $ref branch carries its title on the referenced component
+        // A $ref branch carries its title alongside the $ref or on the referenced component
         const rawBranch = branch as Record<string, unknown>;
+        if (typeof rawBranch.title === 'string' && rawBranch.title.length > 0) {
+          return;
+        }
         const resolvedBranch =
           typeof rawBranch.$ref === 'string'
             ? resolveJsonPointerRef(rawBranch.$ref, root)

@@ -14,6 +14,7 @@ import {
 import { hectaresToSquareMetres } from '@/tools/unit-conversion';
 import { area, days } from '@/tools/units';
 import { object } from '@/types/schemas';
+import { enumSchema } from '@/tools/enum-schemas';
 import z from 'zod';
 import { BaseCropResidueInputSchema } from '../6-residue-mgmt';
 import { RiceCultivationOrganicAmendmentInputSchema } from './organic-amendment.input';
@@ -29,8 +30,7 @@ export const RiceCultivationInputSchema = BaseCropResidueInputSchema.extend({
     },
     (s) => s.min(0),
   ),
-  preSeasonWaterRegimeType: z
-    .literal(RiceCultivationPreSeasonWaterRegimeTypes)
+  preSeasonWaterRegimeType: enumSchema(RiceCultivationPreSeasonWaterRegimeTypes)
     .transform((val) =>
       input(val as RiceCultivationPreSeasonWaterRegimeType, {
         name: 'pre-season water regime type',
@@ -40,8 +40,7 @@ export const RiceCultivationInputSchema = BaseCropResidueInputSchema.extend({
     .meta({
       description: 'The type of pre-season water regime for this rice crop.',
     }),
-  waterRegimeType: z
-    .literal(RiceCultivationSeasonWaterRegimeTypes)
+  waterRegimeType: enumSchema(RiceCultivationSeasonWaterRegimeTypes)
     .transform((val) =>
       input(val as RiceCultivationSeasonWaterRegimeType, {
         name: 'water regime type',

@@ -3,7 +3,7 @@ import {
   IBRA7Regions,
   PastureOnlyProductionSystems,
 } from '@/constants/enums';
-import { enumInput, numberInput } from '@/tools/inputs';
+import { enumInput, numberInput, literalInput } from '@/tools/inputs';
 import {
   hectaresToSquareMetres,
   tonnesPerHectareToKgPerSquareMetres,
@@ -224,7 +224,7 @@ const LandClearingForestToGrasslandInputSchema =
 const LandClearingForestToSettlementsInputSchema =
   LandUseLandClearingBaseInputSchema.extend({
     type: z.literal('landClearingForestToSettlements'),
-    pastureProductionSystem: enumInput(['Non-irrigated pasture'], {
+    pastureProductionSystem: literalInput('Non-irrigated pasture', {
       name: 'Pasture production',
       description: 'Pasture production',
       modules: [N_SOIL_LOSS_16_3],

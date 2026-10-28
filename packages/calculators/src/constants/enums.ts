@@ -1400,3 +1400,5 @@ export type BeefBreed = (typeof BeefBreeds)[number];
 
 export const SoilAmeliorants = ['Limestone', 'Dolomite', 'Gypsum'] as const;
 export type SoilAmeliorant = (typeof SoilAmeliorants)[number];
+/** The soil ameliorants counted as lime in scope 1 */
+export const LimeAmeliorants = ['Limestone', 'Dolomite'] as const;

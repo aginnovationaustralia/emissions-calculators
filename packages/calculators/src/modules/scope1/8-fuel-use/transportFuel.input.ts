@@ -7,7 +7,7 @@ import {
   OffRoadAgricultureAndForestryEquipmentFuelTypes,
   VesselFuelTypes,
 } from '@/constants/enums';
-import { enumInput, numberInput } from '@/tools/inputs';
+import { enumInput, numberInput, literalInput } from '@/tools/inputs';
 import { locateTransportFuel } from '@/tools/modules';
 import {
   cubicMetresToLitres,
@@ -89,7 +89,7 @@ const transportFuelCNGSchema = locateTransportFuel(({ location, modules }) =>
       z.literal('Light duty vehicles'),
       z.literal('Heavy duty vehicles'),
     ]),
-    fuelType: enumInput(['Compressed natural gas'], {
+    fuelType: literalInput('Compressed natural gas', {
       name: 'Transport CNG fuel type',
       description: 'Type of compressed natural gas fuel used by this vehicle',
       modules,
