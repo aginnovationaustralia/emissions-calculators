@@ -1,6 +1,6 @@
 import { BaseContainer, Metadata, NumberContainer } from './containers';
+import { mergeSeeds, MethodValueStore } from './method-value-store';
 import { NumberUnit, VoidUnit } from './units';
-import { mergeSeeds, ValueStore } from './value-store';
 
 /**
  * Container for capturing both a container for default method 1 calculations, and an optional container for method 2 calculations.
@@ -24,7 +24,9 @@ export class Method1And2Container<
     const source = method2 ?? method1;
     const newUnit = {
       ...source.unit,
-      store: new ValueStore(mergeSeeds(method1, method2)),
+      store: new MethodValueStore(
+        mergeSeeds(method1.unit.store, method2?.unit.store),
+      ),
     };
     super(newUnit, baseOrigin);
     this.originType = 'method1and2';
@@ -54,7 +56,7 @@ export class Method2Container<U extends NumberUnit> extends BaseContainer<U> {
   constructor(method2: NumberContainer<U>, baseOrigin?: Metadata) {
     const newUnit = {
       ...method2.unit,
-      store: new ValueStore({ valueMethod2: method2.unit.store.value }),
+      store: new MethodValueStore({ valueMethod2: method2.unit.store.value }),
     };
     super(newUnit, baseOrigin);
     this.originType = 'method2';

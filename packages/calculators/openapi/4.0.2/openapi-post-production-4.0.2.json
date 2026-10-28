@@ -75,6 +75,11 @@
                             "x-units": "kilowatt-hours"
                           },
                           "region": {
+                            "description": "The state, territory or electricity grid the electricity is purchased in",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
                             "type": "string",
                             "enum": [
                               "NSW",
@@ -87,11 +92,6 @@
                               "NT",
                               "ACT",
                               "National"
-                            ],
-                            "description": "The state, territory or electricity grid the electricity is purchased in",
-                            "x-modules": [
-                              "14.1",
-                              "15.11"
                             ]
                           }
                         },
@@ -177,6 +177,11 @@
                             "x-units": "megawatt-hours"
                           },
                           "region": {
+                            "description": "The state, territory or electricity grid the electricity is purchased in",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
                             "type": "string",
                             "enum": [
                               "NSW",
@@ -189,11 +194,6 @@
                               "NT",
                               "ACT",
                               "National"
-                            ],
-                            "description": "The state, territory or electricity grid the electricity is purchased in",
-                            "x-modules": [
-                              "14.1",
-                              "15.11"
                             ]
                           }
                         },
@@ -345,6 +345,10 @@
                             "x-units": "0-1"
                           },
                           "commodityType": {
+                            "description": "The type of commodity for which production has resulted in the wastewater being treated",
+                            "x-modules": [
+                              "11.1"
+                            ],
                             "type": "string",
                             "enum": [
                               "Dairy products",
@@ -355,10 +359,6 @@
                               "Wine and other alcoholic beverages",
                               "Fruit",
                               "Vegetables"
-                            ],
-                            "description": "The type of commodity for which production has resulted in the wastewater being treated",
-                            "x-modules": [
-                              "11.1"
                             ]
                           }
                         },
@@ -579,6 +579,10 @@
                       "type": "object",
                       "properties": {
                         "refrigerant": {
+                          "description": "Refrigerant type",
+                          "x-modules": [
+                            "9.1"
+                          ],
                           "type": "string",
                           "enum": [
                             "R-400 50/50",
@@ -646,10 +650,6 @@
                             "R-508A",
                             "R-508B",
                             "R-509A"
-                          ],
-                          "description": "Refrigerant type",
-                          "x-modules": [
-                            "9.1"
                           ]
                         },
                         "chargeSize": {
@@ -674,6 +674,10 @@
                           "x-units": "kilograms refrigerant"
                         },
                         "refrigerationType": {
+                          "description": "Type of refrigeration appliance",
+                          "x-modules": [
+                            "9.1"
+                          ],
                           "type": "string",
                           "enum": [
                             "Domestic refrigerators",
@@ -683,10 +687,6 @@
                             "Domestic A/C packaged",
                             "Light vehicle A/C",
                             "Heavy vehicle A/C"
-                          ],
-                          "description": "Type of refrigeration appliance",
-                          "x-modules": [
-                            "9.1"
                           ]
                         }
                       },
@@ -859,6 +859,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Burial)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -871,10 +875,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Burial)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "massWasteTonnes": {
@@ -909,6 +909,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Burial)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -921,10 +925,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Burial)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "volumeWasteCubicMetres": {
@@ -966,6 +966,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -978,10 +982,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "massWasteTonnes": {
@@ -1016,6 +1016,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -1028,10 +1032,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "volumeWasteCubicMetres": {
@@ -1073,6 +1073,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -1085,10 +1089,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "massWasteTonnes": {
@@ -1123,6 +1123,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -1135,10 +1139,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "volumeWasteCubicMetres": {
@@ -1180,6 +1180,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Composting)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -1187,10 +1191,6 @@
                                             "Wood products (at time of harvest)",
                                             "Wood products (at end of life)",
                                             "Sludge"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Composting)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "massWasteTonnes": {
@@ -1225,6 +1225,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Composting)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -1232,10 +1236,6 @@
                                             "Wood products (at time of harvest)",
                                             "Wood products (at end of life)",
                                             "Sludge"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Composting)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "volumeWasteCubicMetres": {
@@ -1277,6 +1277,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -1284,10 +1288,6 @@
                                             "Wood products (at time of harvest)",
                                             "Wood products (at end of life)",
                                             "Sludge"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "massWasteTonnes": {
@@ -1322,6 +1322,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -1329,10 +1333,6 @@
                                             "Wood products (at time of harvest)",
                                             "Wood products (at end of life)",
                                             "Sludge"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "volumeWasteCubicMetres": {
@@ -1374,6 +1374,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Incineration)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -1386,10 +1390,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Incineration)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "massWasteTonnes": {
@@ -1424,6 +1424,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Incineration)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -1436,10 +1440,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Incineration)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "volumeWasteCubicMetres": {
@@ -1496,6 +1496,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -1510,10 +1514,6 @@
                                         "Municipal solid waste",
                                         "Commercial and industrial waste",
                                         "Construction and demolition waste"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "massWasteTonnes": {
@@ -1548,6 +1548,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -1562,10 +1566,6 @@
                                         "Municipal solid waste",
                                         "Commercial and industrial waste",
                                         "Construction and demolition waste"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "volumeWasteCubicMetres": {
@@ -1608,6 +1608,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -1622,10 +1626,6 @@
                                         "Municipal solid waste",
                                         "Commercial and industrial waste",
                                         "Construction and demolition waste"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "massWasteTonnes": {
@@ -1660,6 +1660,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -1674,10 +1678,6 @@
                                         "Municipal solid waste",
                                         "Commercial and industrial waste",
                                         "Construction and demolition waste"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "volumeWasteCubicMetres": {
@@ -1720,6 +1720,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Incineration)",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -1733,10 +1737,6 @@
                                         "Inert waste",
                                         "Municipal solid waste",
                                         "Commercial and industrial waste"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Incineration)",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "massWasteTonnes": {
@@ -1771,6 +1771,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Incineration)",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -1784,10 +1788,6 @@
                                         "Inert waste",
                                         "Municipal solid waste",
                                         "Commercial and industrial waste"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Incineration)",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "volumeWasteCubicMetres": {
@@ -1830,6 +1830,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Composting)",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -1837,10 +1841,6 @@
                                         "Wood products (at time of harvest)",
                                         "Wood products (at end of life)",
                                         "Sludge"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Composting)",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "massWasteTonnes": {
@@ -1875,6 +1875,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Composting)",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -1882,10 +1886,6 @@
                                         "Wood products (at time of harvest)",
                                         "Wood products (at end of life)",
                                         "Sludge"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Composting)",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "volumeWasteCubicMetres": {
@@ -1928,6 +1928,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -1935,10 +1939,6 @@
                                         "Wood products (at time of harvest)",
                                         "Wood products (at end of life)",
                                         "Sludge"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "massWasteTonnes": {
@@ -1973,6 +1973,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -1980,10 +1984,6 @@
                                         "Wood products (at time of harvest)",
                                         "Wood products (at end of life)",
                                         "Sludge"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "volumeWasteCubicMetres": {
@@ -2101,6 +2101,10 @@
                     }
                   },
                   "state": {
+                    "description": "The state or territory the activity is based in",
+                    "x-modules": [
+                      "15.10"
+                    ],
                     "type": "string",
                     "enum": [
                       "ACT",
@@ -2111,10 +2115,6 @@
                       "SA",
                       "WA",
                       "NT"
-                    ],
-                    "description": "The state or territory the activity is based in",
-                    "x-modules": [
-                      "15.10"
                     ]
                   },
                   "purchasedPackaging": {
@@ -2468,6 +2468,10 @@
                                           "const": "Cars and light commercial vehicles"
                                         },
                                         "fuelType": {
+                                          "description": "Type of fuel used by cars and light commercial vehicles",
+                                          "x-modules": [
+                                            "15.13"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Gasoline",
@@ -2478,10 +2482,6 @@
                                             "Biodiesel",
                                             "Renewable diesel",
                                             "Other biofuels"
-                                          ],
-                                          "description": "Type of fuel used by cars and light commercial vehicles",
-                                          "x-modules": [
-                                            "15.13"
                                           ]
                                         }
                                       },
@@ -2521,6 +2521,10 @@
                                           "const": "Cars and light commercial vehicles (pre 2004)"
                                         },
                                         "fuelType": {
+                                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
+                                          "x-modules": [
+                                            "15.13"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Gasoline",
@@ -2528,10 +2532,6 @@
                                             "Liquefied petroleum gas (LPG)",
                                             "Ethanol",
                                             "Renewable diesel"
-                                          ],
-                                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
-                                          "x-modules": [
-                                            "15.13"
                                           ]
                                         }
                                       },
@@ -2571,14 +2571,14 @@
                                           "const": "Light duty vehicles"
                                         },
                                         "fuelType": {
+                                          "description": "Type of fuel used by light duty vehicles",
+                                          "x-modules": [
+                                            "15.13"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Compressed natural gas",
                                             "Liquefied natural gas"
-                                          ],
-                                          "description": "Type of fuel used by light duty vehicles",
-                                          "x-modules": [
-                                            "15.13"
                                           ]
                                         }
                                       },
@@ -2618,6 +2618,10 @@
                                           "const": "Heavy duty vehicles"
                                         },
                                         "fuelType": {
+                                          "description": "Type of fuel used by heavy duty vehicles",
+                                          "x-modules": [
+                                            "15.13"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Compressed natural gas",
@@ -2628,10 +2632,6 @@
                                             "Renewable diesel - Euro iv or higher",
                                             "Renewable diesel - Euro iii",
                                             "Renewable diesel - Euro i"
-                                          ],
-                                          "description": "Type of fuel used by heavy duty vehicles",
-                                          "x-modules": [
-                                            "15.13"
                                           ]
                                         }
                                       },
@@ -2671,15 +2671,15 @@
                                           "const": "Aviation"
                                         },
                                         "fuelType": {
+                                          "description": "Type of fuel used by aircraft",
+                                          "x-modules": [
+                                            "15.13"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Gasoline for use as fuel in an aircraft",
                                             "Kerosene for use as fuel in an aircraft",
                                             "Renewable aviation kerosene"
-                                          ],
-                                          "description": "Type of fuel used by aircraft",
-                                          "x-modules": [
-                                            "15.13"
                                           ]
                                         }
                                       },
@@ -2719,15 +2719,15 @@
                                           "const": "Vessel"
                                         },
                                         "fuelType": {
+                                          "description": "Type of fuel used by this vessel",
+                                          "x-modules": [
+                                            "15.13"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Petrol",
                                             "Diesel",
                                             "Fuel Oil"
-                                          ],
-                                          "description": "Type of fuel used by this vessel",
-                                          "x-modules": [
-                                            "15.13"
                                           ]
                                         }
                                       },
@@ -2767,13 +2767,13 @@
                                           "const": "Off-road Agriculture and forestry equipment"
                                         },
                                         "fuelType": {
-                                          "type": "string",
-                                          "enum": [
-                                            "Diesel"
-                                          ],
                                           "description": "Type of fuel used by off-road agriculture and forestry equipment",
                                           "x-modules": [
                                             "15.13"
+                                          ],
+                                          "type": "string",
+                                          "enum": [
+                                            "Diesel"
                                           ]
                                         }
                                       },
@@ -2804,13 +2804,13 @@
                                       ]
                                     },
                                     "fuelType": {
-                                      "type": "string",
-                                      "enum": [
-                                        "Compressed natural gas"
-                                      ],
                                       "description": "Type of compressed natural gas fuel used by this vehicle",
                                       "x-modules": [
                                         "15.13"
+                                      ],
+                                      "type": "string",
+                                      "enum": [
+                                        "Compressed natural gas"
                                       ]
                                     },
                                     "amountCubicMetres": {
@@ -3603,6 +3603,11 @@
                           "const": "Cars and light commercial vehicles"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by cars and light commercial vehicles",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline",
@@ -3613,11 +3618,6 @@
                             "Biodiesel",
                             "Renewable diesel",
                             "Other biofuels"
-                          ],
-                          "description": "Type of fuel used by cars and light commercial vehicles",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -3658,6 +3658,11 @@
                           "const": "Cars and light commercial vehicles (pre 2004)"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline",
@@ -3665,11 +3670,6 @@
                             "Liquefied petroleum gas (LPG)",
                             "Ethanol",
                             "Renewable diesel"
-                          ],
-                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -3710,15 +3710,15 @@
                           "const": "Light duty vehicles"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Compressed natural gas",
-                            "Liquefied natural gas"
-                          ],
                           "description": "Type of fuel used by light duty vehicles",
                           "x-modules": [
                             "8.1",
                             "15.10"
+                          ],
+                          "type": "string",
+                          "enum": [
+                            "Compressed natural gas",
+                            "Liquefied natural gas"
                           ]
                         }
                       },
@@ -3759,6 +3759,11 @@
                           "const": "Heavy duty vehicles"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by heavy duty vehicles",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Compressed natural gas",
@@ -3769,11 +3774,6 @@
                             "Renewable diesel - Euro iv or higher",
                             "Renewable diesel - Euro iii",
                             "Renewable diesel - Euro i"
-                          ],
-                          "description": "Type of fuel used by heavy duty vehicles",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -3814,16 +3814,16 @@
                           "const": "Aviation"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by aircraft",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline for use as fuel in an aircraft",
                             "Kerosene for use as fuel in an aircraft",
                             "Renewable aviation kerosene"
-                          ],
-                          "description": "Type of fuel used by aircraft",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -3864,16 +3864,16 @@
                           "const": "Vessel"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by this vessel",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Petrol",
                             "Diesel",
                             "Fuel Oil"
-                          ],
-                          "description": "Type of fuel used by this vessel",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -3914,14 +3914,14 @@
                           "const": "Off-road Agriculture and forestry equipment"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Diesel"
-                          ],
                           "description": "Type of fuel used by off-road agriculture and forestry equipment",
                           "x-modules": [
                             "8.1",
                             "15.10"
+                          ],
+                          "type": "string",
+                          "enum": [
+                            "Diesel"
                           ]
                         }
                       },
@@ -3952,14 +3952,14 @@
                       ]
                     },
                     "fuelType": {
-                      "type": "string",
-                      "enum": [
-                        "Compressed natural gas"
-                      ],
                       "description": "Type of compressed natural gas fuel used by this vehicle",
                       "x-modules": [
                         "8.1",
                         "15.10"
+                      ],
+                      "type": "string",
+                      "enum": [
+                        "Compressed natural gas"
                       ]
                     },
                     "amountCubicMetres": {
@@ -4008,6 +4008,11 @@
                       "const": "Solid fuels"
                     },
                     "fuelType": {
+                      "description": "Type of solid fuel used in stationary equipment",
+                      "x-modules": [
+                        "8.2",
+                        "15.10"
+                      ],
                       "type": "string",
                       "enum": [
                         "Bituminous coal",
@@ -4030,11 +4035,6 @@
                         "Biomass, municipal and industrial materials",
                         "Charcoal",
                         "Other primary solid biomass fuels"
-                      ],
-                      "description": "Type of solid fuel used in stationary equipment",
-                      "x-modules": [
-                        "8.2",
-                        "15.10"
                       ]
                     },
                     "amountTonnes": {
@@ -4078,6 +4078,11 @@
                           "const": "Liquid fuels"
                         },
                         "fuelType": {
+                          "description": "Type of liquid fuel used in stationary equipment",
+                          "x-modules": [
+                            "8.2",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Petroleum based oils other than fuels",
@@ -4094,11 +4099,6 @@
                             "Liquefied petroleum gas",
                             "Naphtha",
                             "Other petroleum products"
-                          ],
-                          "description": "Type of liquid fuel used in stationary equipment",
-                          "x-modules": [
-                            "8.2",
-                            "15.10"
                           ]
                         },
                         "amountKilolitres": {
@@ -4140,6 +4140,11 @@
                           "const": "Liquid fuels"
                         },
                         "fuelType": {
+                          "description": "Type of liquid fuel used in stationary equipment",
+                          "x-modules": [
+                            "8.2",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Crude oil and condensates",
@@ -4147,11 +4152,6 @@
                             "Petroleum coke",
                             "Refinery gas and liquids",
                             "Refinery coke"
-                          ],
-                          "description": "Type of liquid fuel used in stationary equipment",
-                          "x-modules": [
-                            "8.2",
-                            "15.10"
                           ]
                         },
                         "amountTonnes": {

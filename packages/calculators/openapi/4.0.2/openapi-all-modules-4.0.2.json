@@ -47,6 +47,11 @@
                     "type": "object",
                     "properties": {
                       "region": {
+                        "description": "The state or region the herd is located in",
+                        "x-modules": [
+                          "3.2",
+                          "4.2"
+                        ],
                         "type": "string",
                         "enum": [
                           "ACT",
@@ -64,28 +69,27 @@
                           "QLD - Moderate/High",
                           "QLD - Moderate/Low",
                           "QLD - Low"
-                        ],
-                        "description": "The state or region the herd is located in",
-                        "x-modules": [
-                          "3.2",
-                          "4.2"
                         ]
                       },
                       "classes": {
                         "$ref": "#/components/schemas/BeefClassesInput"
                       },
                       "breed": {
+                        "description": "The basic breed type of the herd",
+                        "x-modules": [
+                          "4.2"
+                        ],
                         "type": "string",
                         "enum": [
                           "Hereford or Shorthorn",
                           "Northern Brahman cross breed"
-                        ],
-                        "description": "The basic breed type of the herd",
-                        "x-modules": [
-                          "4.2"
                         ]
                       },
                       "grazingSystem": {
+                        "description": "The production system which most accurately describes the land used for grazing and feed.",
+                        "x-modules": [
+                          "4.2"
+                        ],
                         "type": "string",
                         "enum": [
                           "Non-irrigated pasture",
@@ -93,10 +97,6 @@
                           "Irrigated crop",
                           "Non-irrigated crop (low rainfall)",
                           "Non-irrigated crop (high rainfall)"
-                        ],
-                        "description": "The production system which most accurately describes the land used for grazing and feed.",
-                        "x-modules": [
-                          "4.2"
                         ]
                       },
                       "method2MeanAnnualTemperature": {
@@ -128,6 +128,10 @@
                         ]
                       },
                       "climateZone": {
+                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
+                        "x-modules": [
+                          "4.2"
+                        ],
                         "type": "string",
                         "enum": [
                           "Tropical montane",
@@ -142,33 +146,29 @@
                           "Boreal dry",
                           "dry",
                           "wet"
-                        ],
-                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
-                        "x-modules": [
-                          "4.2"
                         ]
                       },
                       "isInLeachingZone": {
-                        "type": "boolean",
                         "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                         "x-modules": [
                           "4.2"
-                        ]
+                        ],
+                        "type": "boolean"
                       },
                       "excludedFromNaturalWater": {
-                        "type": "boolean",
                         "description": "Whether the herd is excluded from natural water use. If animals are on bore or reticulated water systems where water is provided in troughs (i.e. no unfenced natural water sources) then set to true",
                         "x-modules": [
                           "4.2"
-                        ]
+                        ],
+                        "type": "boolean"
                       },
                       "isFebruaryInLeapYear": {
-                        "type": "boolean",
                         "description": "For the 12 month period covered by the calculation, is the month of February within a leap year?",
                         "x-modules": [
                           "3.2",
                           "4.2"
-                        ]
+                        ],
+                        "type": "boolean"
                       }
                     },
                     "required": [
@@ -1287,6 +1287,11 @@
                             ]
                           },
                           "breed": {
+                            "description": "Breed of cattle for this dairy herd",
+                            "x-modules": [
+                              "3.3",
+                              "4.3"
+                            ],
                             "type": "string",
                             "enum": [
                               "Medium Friesian",
@@ -1299,11 +1304,6 @@
                               "Guernsey",
                               "Brown Swiss",
                               "Illawarra/Aussie Red"
-                            ],
-                            "description": "Breed of cattle for this dairy herd",
-                            "x-modules": [
-                              "3.3",
-                              "4.3"
                             ]
                           },
                           "manureAllocations": {
@@ -1505,11 +1505,11 @@
                                     "additionalProperties": false
                                   },
                                   "solidsSeparatedPreTreatment": {
-                                    "type": "boolean",
                                     "description": "If solids produced by these cattle were separated by pre-treatment of manure (applicable to anaerobic lagoons only).",
                                     "x-modules": [
                                       "4.3"
-                                    ]
+                                    ],
+                                    "type": "boolean"
                                   }
                                 },
                                 "required": [
@@ -1747,11 +1747,11 @@
                             ]
                           },
                           "isInLeachingZone": {
-                            "type": "boolean",
                             "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                             "x-modules": [
                               "4.3"
-                            ]
+                            ],
+                            "type": "boolean"
                           },
                           "method2MeanAnnualTemperature": {
                             "description": "What is the mean annual temperature of the herd's location? See chapter 1.8.2 for more information on temperature zones.",
@@ -1782,6 +1782,10 @@
                             ]
                           },
                           "grazingSystem": {
+                            "description": "The production system which most accurately describes the land used for grazing and feed.",
+                            "x-modules": [
+                              "4.3"
+                            ],
                             "type": "string",
                             "enum": [
                               "Non-irrigated pasture",
@@ -1789,13 +1793,13 @@
                               "Irrigated crop",
                               "Non-irrigated crop (low rainfall)",
                               "Non-irrigated crop (high rainfall)"
-                            ],
-                            "description": "The production system which most accurately describes the land used for grazing and feed.",
-                            "x-modules": [
-                              "4.3"
                             ]
                           },
                           "climateZone": {
+                            "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
+                            "x-modules": [
+                              "4.3"
+                            ],
                             "type": "string",
                             "enum": [
                               "Tropical montane",
@@ -1810,13 +1814,16 @@
                               "Boreal dry",
                               "dry",
                               "wet"
-                            ],
-                            "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
-                            "x-modules": [
-                              "4.3"
                             ]
                           },
                           "state": {
+                            "description": "The state or territory the activity is based in",
+                            "x-modules": [
+                              "4.3",
+                              "6.3",
+                              "15.7",
+                              "15.10"
+                            ],
                             "type": "string",
                             "enum": [
                               "ACT",
@@ -1827,26 +1834,19 @@
                               "SA",
                               "WA",
                               "NT"
-                            ],
-                            "description": "The state or territory the activity is based in",
-                            "x-modules": [
-                              "4.3",
-                              "6.3",
-                              "15.7",
-                              "15.10"
                             ]
                           },
                           "system": {
+                            "description": "Production system used to manage this dairy herd",
+                            "x-modules": [
+                              "4.3"
+                            ],
                             "type": "string",
                             "enum": [
                               "Grazed only",
                               "Limited feedpad",
                               "Limited grazing",
                               "Zero grazing"
-                            ],
-                            "description": "Production system used to manage this dairy herd",
-                            "x-modules": [
-                              "4.3"
                             ]
                           }
                         },
@@ -2965,6 +2965,11 @@
                             ]
                           },
                           "breed": {
+                            "description": "Breed of cattle for this dairy herd",
+                            "x-modules": [
+                              "3.3",
+                              "4.3"
+                            ],
                             "type": "string",
                             "enum": [
                               "Medium Friesian",
@@ -2977,11 +2982,6 @@
                               "Guernsey",
                               "Brown Swiss",
                               "Illawarra/Aussie Red"
-                            ],
-                            "description": "Breed of cattle for this dairy herd",
-                            "x-modules": [
-                              "3.3",
-                              "4.3"
                             ]
                           },
                           "manureAllocations": {
@@ -3183,11 +3183,11 @@
                                     "additionalProperties": false
                                   },
                                   "solidsSeparatedPreTreatment": {
-                                    "type": "boolean",
                                     "description": "If solids produced by these cattle were separated by pre-treatment of manure (applicable to anaerobic lagoons only).",
                                     "x-modules": [
                                       "4.3"
-                                    ]
+                                    ],
+                                    "type": "boolean"
                                   }
                                 },
                                 "required": [
@@ -3425,11 +3425,11 @@
                             ]
                           },
                           "isInLeachingZone": {
-                            "type": "boolean",
                             "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                             "x-modules": [
                               "4.3"
-                            ]
+                            ],
+                            "type": "boolean"
                           },
                           "method2MeanAnnualTemperature": {
                             "description": "What is the mean annual temperature of the herd's location? See chapter 1.8.2 for more information on temperature zones.",
@@ -3460,6 +3460,10 @@
                             ]
                           },
                           "grazingSystem": {
+                            "description": "The production system which most accurately describes the land used for grazing and feed.",
+                            "x-modules": [
+                              "4.3"
+                            ],
                             "type": "string",
                             "enum": [
                               "Non-irrigated pasture",
@@ -3467,13 +3471,13 @@
                               "Irrigated crop",
                               "Non-irrigated crop (low rainfall)",
                               "Non-irrigated crop (high rainfall)"
-                            ],
-                            "description": "The production system which most accurately describes the land used for grazing and feed.",
-                            "x-modules": [
-                              "4.3"
                             ]
                           },
                           "climateZone": {
+                            "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
+                            "x-modules": [
+                              "4.3"
+                            ],
                             "type": "string",
                             "enum": [
                               "Tropical montane",
@@ -3488,13 +3492,16 @@
                               "Boreal dry",
                               "dry",
                               "wet"
-                            ],
-                            "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
-                            "x-modules": [
-                              "4.3"
                             ]
                           },
                           "state": {
+                            "description": "The state or territory the activity is based in",
+                            "x-modules": [
+                              "4.3",
+                              "6.3",
+                              "15.7",
+                              "15.10"
+                            ],
                             "type": "string",
                             "enum": [
                               "ACT",
@@ -3505,13 +3512,6 @@
                               "SA",
                               "WA",
                               "NT"
-                            ],
-                            "description": "The state or territory the activity is based in",
-                            "x-modules": [
-                              "4.3",
-                              "6.3",
-                              "15.7",
-                              "15.10"
                             ]
                           },
                           "method2TimeSpentInLocations": {
@@ -3611,6 +3611,11 @@
                         "$ref": "#/components/schemas/SheepClassesInput"
                       },
                       "state": {
+                        "description": "The state the flock is located in",
+                        "x-modules": [
+                          "3.4",
+                          "4.4"
+                        ],
                         "type": "string",
                         "enum": [
                           "ACT",
@@ -3621,28 +3626,27 @@
                           "SA",
                           "WA",
                           "NT"
-                        ],
-                        "description": "The state the flock is located in",
-                        "x-modules": [
-                          "3.4",
-                          "4.4"
                         ]
                       },
                       "excludedFromNaturalWater": {
-                        "type": "boolean",
                         "description": "Whether the herd is excluded from natural water use. If animals are on bore or reticulated water systems where water is provided in troughs (i.e. no unfenced natural water sources) then set to true",
                         "x-modules": [
                           "4.4"
-                        ]
+                        ],
+                        "type": "boolean"
                       },
                       "isInLeachingZone": {
-                        "type": "boolean",
                         "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                         "x-modules": [
                           "4.4"
-                        ]
+                        ],
+                        "type": "boolean"
                       },
                       "climateZone": {
+                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
+                        "x-modules": [
+                          "4.4"
+                        ],
                         "type": "string",
                         "enum": [
                           "Tropical montane",
@@ -3657,10 +3661,6 @@
                           "Boreal dry",
                           "dry",
                           "wet"
-                        ],
-                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
-                        "x-modules": [
-                          "4.4"
                         ]
                       },
                       "method2MeanAnnualTemperature": {
@@ -3692,6 +3692,10 @@
                         ]
                       },
                       "grazingSystem": {
+                        "description": "The production system which most accurately describes the land used for grazing and feed.",
+                        "x-modules": [
+                          "4.4"
+                        ],
                         "type": "string",
                         "enum": [
                           "Non-irrigated pasture",
@@ -3699,19 +3703,15 @@
                           "Irrigated crop",
                           "Non-irrigated crop (low rainfall)",
                           "Non-irrigated crop (high rainfall)"
-                        ],
-                        "description": "The production system which most accurately describes the land used for grazing and feed.",
-                        "x-modules": [
-                          "4.4"
                         ]
                       },
                       "isFebruaryInLeapYear": {
-                        "type": "boolean",
                         "description": "For the 12 month period covered by the calculation, is the month of February within a leap year?",
                         "x-modules": [
                           "3.4",
                           "4.4"
-                        ]
+                        ],
+                        "type": "boolean"
                       }
                     },
                     "required": [
@@ -3732,13 +3732,19 @@
                         "$ref": "#/components/schemas/PigsHerdClassesInput"
                       },
                       "isInLeachingZone": {
-                        "type": "boolean",
                         "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                         "x-modules": [
                           "4.5"
-                        ]
+                        ],
+                        "type": "boolean"
                       },
                       "state": {
+                        "description": "The state or territory the activity is based in",
+                        "x-modules": [
+                          "4.5",
+                          "15.7",
+                          "15.10"
+                        ],
                         "type": "string",
                         "enum": [
                           "ACT",
@@ -3749,12 +3755,6 @@
                           "SA",
                           "WA",
                           "NT"
-                        ],
-                        "description": "The state or territory the activity is based in",
-                        "x-modules": [
-                          "4.5",
-                          "15.7",
-                          "15.10"
                         ]
                       },
                       "method2MeanAnnualTemperature": {
@@ -3786,6 +3786,10 @@
                         ]
                       },
                       "grazingSystem": {
+                        "description": "The production system which most accurately describes the land used for grazing and feed.",
+                        "x-modules": [
+                          "4.5"
+                        ],
                         "type": "string",
                         "enum": [
                           "Non-irrigated pasture",
@@ -3793,10 +3797,6 @@
                           "Irrigated crop",
                           "Non-irrigated crop (low rainfall)",
                           "Non-irrigated crop (high rainfall)"
-                        ],
-                        "description": "The production system which most accurately describes the land used for grazing and feed.",
-                        "x-modules": [
-                          "4.5"
                         ]
                       }
                     },
@@ -6214,13 +6214,19 @@
                         "additionalProperties": false
                       },
                       "isInLeachingZone": {
-                        "type": "boolean",
                         "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                         "x-modules": [
                           "4.6"
-                        ]
+                        ],
+                        "type": "boolean"
                       },
                       "state": {
+                        "description": "The state or territory the activity is based in",
+                        "x-modules": [
+                          "4.6",
+                          "15.7",
+                          "15.10"
+                        ],
                         "type": "string",
                         "enum": [
                           "ACT",
@@ -6231,12 +6237,6 @@
                           "SA",
                           "WA",
                           "NT"
-                        ],
-                        "description": "The state or territory the activity is based in",
-                        "x-modules": [
-                          "4.6",
-                          "15.7",
-                          "15.10"
                         ]
                       },
                       "method2MeanAnnualTemperature": {
@@ -6268,6 +6268,10 @@
                         ]
                       },
                       "climateZone": {
+                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
+                        "x-modules": [
+                          "4.6"
+                        ],
                         "type": "string",
                         "enum": [
                           "Tropical montane",
@@ -6282,13 +6286,13 @@
                           "Boreal dry",
                           "dry",
                           "wet"
-                        ],
-                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
-                        "x-modules": [
-                          "4.6"
                         ]
                       },
                       "grazingSystem": {
+                        "description": "The production system which most accurately describes the land used for grazing and feed.",
+                        "x-modules": [
+                          "4.6"
+                        ],
                         "type": "string",
                         "enum": [
                           "Non-irrigated pasture",
@@ -6296,10 +6300,6 @@
                           "Irrigated crop",
                           "Non-irrigated crop (low rainfall)",
                           "Non-irrigated crop (high rainfall)"
-                        ],
-                        "description": "The production system which most accurately describes the land used for grazing and feed.",
-                        "x-modules": [
-                          "4.6"
                         ]
                       }
                     },
@@ -6620,20 +6620,27 @@
                         }
                       },
                       "excludedFromNaturalWater": {
-                        "type": "boolean",
                         "description": "Whether the herd is excluded from natural water use. If animals are on bore or reticulated water systems where water is provided in troughs (i.e. no unfenced natural water sources) then set to true",
                         "x-modules": [
                           "4.7"
-                        ]
+                        ],
+                        "type": "boolean"
                       },
                       "isInLeachingZone": {
-                        "type": "boolean",
                         "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                         "x-modules": [
                           "4.7"
-                        ]
+                        ],
+                        "type": "boolean"
                       },
                       "state": {
+                        "description": "The state or territory the activity is based in",
+                        "x-modules": [
+                          "4.7",
+                          "6.3",
+                          "15.7",
+                          "15.10"
+                        ],
                         "type": "string",
                         "enum": [
                           "ACT",
@@ -6644,16 +6651,13 @@
                           "SA",
                           "WA",
                           "NT"
-                        ],
-                        "description": "The state or territory the activity is based in",
-                        "x-modules": [
-                          "4.7",
-                          "6.3",
-                          "15.7",
-                          "15.10"
                         ]
                       },
                       "climateZone": {
+                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
+                        "x-modules": [
+                          "4.7"
+                        ],
                         "type": "string",
                         "enum": [
                           "Tropical montane",
@@ -6668,10 +6672,6 @@
                           "Boreal dry",
                           "dry",
                           "wet"
-                        ],
-                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
-                        "x-modules": [
-                          "4.7"
                         ]
                       },
                       "method2MeanAnnualTemperature": {
@@ -6703,6 +6703,10 @@
                         ]
                       },
                       "grazingSystem": {
+                        "description": "The production system which most accurately describes the land used for grazing and feed.",
+                        "x-modules": [
+                          "4.7"
+                        ],
                         "type": "string",
                         "enum": [
                           "Non-irrigated pasture",
@@ -6710,10 +6714,6 @@
                           "Irrigated crop",
                           "Non-irrigated crop (low rainfall)",
                           "Non-irrigated crop (high rainfall)"
-                        ],
-                        "description": "The production system which most accurately describes the land used for grazing and feed.",
-                        "x-modules": [
-                          "4.7"
                         ]
                       }
                     },
@@ -6969,6 +6969,10 @@
                         }
                       },
                       "state": {
+                        "description": "State or territory in which the feedlot is located",
+                        "x-modules": [
+                          "4.1"
+                        ],
                         "type": "string",
                         "enum": [
                           "ACT",
@@ -6979,13 +6983,13 @@
                           "SA",
                           "WA",
                           "NT"
-                        ],
-                        "description": "State or territory in which the feedlot is located",
-                        "x-modules": [
-                          "4.1"
                         ]
                       },
                       "grazingSystem": {
+                        "description": "The production system which most accurately describes the land used for grazing and feed.",
+                        "x-modules": [
+                          "4.1"
+                        ],
                         "type": "string",
                         "enum": [
                           "Non-irrigated pasture",
@@ -6993,10 +6997,6 @@
                           "Irrigated crop",
                           "Non-irrigated crop (low rainfall)",
                           "Non-irrigated crop (high rainfall)"
-                        ],
-                        "description": "The production system which most accurately describes the land used for grazing and feed.",
-                        "x-modules": [
-                          "4.1"
                         ]
                       },
                       "method2MeanAnnualTemperature": {
@@ -7039,15 +7039,19 @@
                     "type": "object",
                     "properties": {
                       "isInLeachingZone": {
-                        "type": "boolean",
                         "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                         "x-modules": [
                           "5.2",
                           "5.4",
                           "5.5"
-                        ]
+                        ],
+                        "type": "boolean"
                       },
                       "climateZone": {
+                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
+                        "x-modules": [
+                          "5.2"
+                        ],
                         "type": "string",
                         "enum": [
                           "Tropical montane",
@@ -7062,10 +7066,6 @@
                           "Boreal dry",
                           "dry",
                           "wet"
-                        ],
-                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
-                        "x-modules": [
-                          "5.2"
                         ]
                       },
                       "fertiliser": {
@@ -7155,14 +7155,14 @@
                                   "x-units": "0-1"
                                 },
                                 "type": {
+                                  "description": "Type of soil ameliorant. Note that gypsum applications are not counted in scope 1 emissions, only scope 3",
+                                  "x-modules": [
+                                    "15.6"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "Limestone",
                                     "Dolomite"
-                                  ],
-                                  "description": "Type of soil ameliorant. Note that gypsum applications are not counted in scope 1 emissions, only scope 3",
-                                  "x-modules": [
-                                    "15.6"
                                   ]
                                 }
                               },
@@ -7385,6 +7385,12 @@
                             ]
                           },
                           "type": {
+                            "description": "Type of crop grown in this activity",
+                            "x-modules": [
+                              "6.1",
+                              "6.3",
+                              "6.4"
+                            ],
                             "type": "string",
                             "enum": [
                               "Wheat",
@@ -7405,12 +7411,6 @@
                               "Forage Crops",
                               "Other Annual Crops",
                               "Other Perennial Crops"
-                            ],
-                            "description": "Type of crop grown in this activity",
-                            "x-modules": [
-                              "6.1",
-                              "6.3",
-                              "6.4"
                             ]
                           }
                         },
@@ -7423,6 +7423,10 @@
                         "additionalProperties": false
                       },
                       "state": {
+                        "description": "The state or territory the activity is based in",
+                        "x-modules": [
+                          "6.1"
+                        ],
                         "type": "string",
                         "enum": [
                           "ACT",
@@ -7433,13 +7437,13 @@
                           "SA",
                           "WA",
                           "NT"
-                        ],
-                        "description": "The state or territory the activity is based in",
-                        "x-modules": [
-                          "6.1"
                         ]
                       },
                       "climateZone": {
+                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
+                        "x-modules": [
+                          "6.1"
+                        ],
                         "type": "string",
                         "enum": [
                           "Tropical montane",
@@ -7454,10 +7458,6 @@
                           "Boreal dry",
                           "dry",
                           "wet"
-                        ],
-                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
-                        "x-modules": [
-                          "6.1"
                         ]
                       }
                     },
@@ -7475,6 +7475,11 @@
                         "type": "object",
                         "properties": {
                           "type": {
+                            "description": "Type of pasture managed in this activity",
+                            "x-modules": [
+                              "6.2",
+                              "6.3"
+                            ],
                             "type": "string",
                             "enum": [
                               "Annual grass",
@@ -7482,11 +7487,6 @@
                               "Lucerne",
                               "Other legume",
                               "Perennial pasture"
-                            ],
-                            "description": "Type of pasture managed in this activity",
-                            "x-modules": [
-                              "6.2",
-                              "6.3"
                             ]
                           },
                           "areaManaged": {
@@ -7598,6 +7598,10 @@
                         "additionalProperties": false
                       },
                       "climateZone": {
+                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
+                        "x-modules": [
+                          "6.2"
+                        ],
                         "type": "string",
                         "enum": [
                           "Tropical montane",
@@ -7612,13 +7616,13 @@
                           "Boreal dry",
                           "dry",
                           "wet"
-                        ],
-                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
-                        "x-modules": [
-                          "6.2"
                         ]
                       },
                       "state": {
+                        "description": "The state or territory the activity is based in",
+                        "x-modules": [
+                          "6.3"
+                        ],
                         "type": "string",
                         "enum": [
                           "ACT",
@@ -7629,18 +7633,14 @@
                           "SA",
                           "WA",
                           "NT"
-                        ],
-                        "description": "The state or territory the activity is based in",
-                        "x-modules": [
-                          "6.3"
                         ]
                       },
                       "isInLeachingZone": {
-                        "type": "boolean",
                         "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                         "x-modules": [
                           "6.3"
-                        ]
+                        ],
+                        "type": "boolean"
                       }
                     },
                     "required": [
@@ -7918,6 +7918,11 @@
                         "additionalProperties": false
                       },
                       "state": {
+                        "description": "The state or territory the activity is based in",
+                        "x-modules": [
+                          "6.1",
+                          "6.3"
+                        ],
                         "type": "string",
                         "enum": [
                           "ACT",
@@ -7928,14 +7933,13 @@
                           "SA",
                           "WA",
                           "NT"
-                        ],
-                        "description": "The state or territory the activity is based in",
-                        "x-modules": [
-                          "6.1",
-                          "6.3"
                         ]
                       },
                       "climateZone": {
+                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
+                        "x-modules": [
+                          "6.1"
+                        ],
                         "type": "string",
                         "enum": [
                           "Tropical montane",
@@ -7950,18 +7954,14 @@
                           "Boreal dry",
                           "dry",
                           "wet"
-                        ],
-                        "description": "The climate zone the activity is located in (like \"Tropical dry\") or the basic zone type (\"dry\" or \"wet\"). See Chapter 1 section 1.8.2 for more details.",
-                        "x-modules": [
-                          "6.1"
                         ]
                       },
                       "isInLeachingZone": {
-                        "type": "boolean",
                         "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                         "x-modules": [
                           "6.3"
-                        ]
+                        ],
+                        "type": "boolean"
                       }
                     },
                     "required": [
@@ -7976,6 +7976,10 @@
                     "type": "object",
                     "properties": {
                       "state": {
+                        "description": "The state or territory the activity is based in",
+                        "x-modules": [
+                          "15.10"
+                        ],
                         "type": "string",
                         "enum": [
                           "ACT",
@@ -7986,10 +7990,6 @@
                           "SA",
                           "WA",
                           "NT"
-                        ],
-                        "description": "The state or territory the activity is based in",
-                        "x-modules": [
-                          "15.10"
                         ]
                       },
                       "fuel": {
@@ -8006,6 +8006,10 @@
                     "type": "object",
                     "properties": {
                       "state": {
+                        "description": "The state or territory the activity is based in",
+                        "x-modules": [
+                          "15.7"
+                        ],
                         "type": "string",
                         "enum": [
                           "ACT",
@@ -8016,10 +8020,6 @@
                           "SA",
                           "WA",
                           "NT"
-                        ],
-                        "description": "The state or territory the activity is based in",
-                        "x-modules": [
-                          "15.7"
                         ]
                       },
                       "fuel": {
@@ -8038,6 +8038,10 @@
                       "type": "object",
                       "properties": {
                         "refrigerant": {
+                          "description": "Refrigerant type",
+                          "x-modules": [
+                            "9.1"
+                          ],
                           "type": "string",
                           "enum": [
                             "R-400 50/50",
@@ -8105,10 +8109,6 @@
                             "R-508A",
                             "R-508B",
                             "R-509A"
-                          ],
-                          "description": "Refrigerant type",
-                          "x-modules": [
-                            "9.1"
                           ]
                         },
                         "chargeSize": {
@@ -8133,6 +8133,10 @@
                           "x-units": "kilograms refrigerant"
                         },
                         "refrigerationType": {
+                          "description": "Type of refrigeration appliance",
+                          "x-modules": [
+                            "9.1"
+                          ],
                           "type": "string",
                           "enum": [
                             "Domestic refrigerators",
@@ -8142,10 +8146,6 @@
                             "Domestic A/C packaged",
                             "Light vehicle A/C",
                             "Heavy vehicle A/C"
-                          ],
-                          "description": "Type of refrigeration appliance",
-                          "x-modules": [
-                            "9.1"
                           ]
                         }
                       },
@@ -8318,6 +8318,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Burial)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -8330,10 +8334,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Burial)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "massWasteTonnes": {
@@ -8368,6 +8368,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Burial)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -8380,10 +8384,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Burial)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "volumeWasteCubicMetres": {
@@ -8425,6 +8425,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -8437,10 +8441,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "massWasteTonnes": {
@@ -8475,6 +8475,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -8487,10 +8491,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "volumeWasteCubicMetres": {
@@ -8532,6 +8532,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -8544,10 +8548,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "massWasteTonnes": {
@@ -8582,6 +8582,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -8594,10 +8598,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "volumeWasteCubicMetres": {
@@ -8639,6 +8639,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Composting)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -8646,10 +8650,6 @@
                                             "Wood products (at time of harvest)",
                                             "Wood products (at end of life)",
                                             "Sludge"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Composting)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "massWasteTonnes": {
@@ -8684,6 +8684,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Composting)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -8691,10 +8695,6 @@
                                             "Wood products (at time of harvest)",
                                             "Wood products (at end of life)",
                                             "Sludge"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Composting)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "volumeWasteCubicMetres": {
@@ -8736,6 +8736,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -8743,10 +8747,6 @@
                                             "Wood products (at time of harvest)",
                                             "Wood products (at end of life)",
                                             "Sludge"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "massWasteTonnes": {
@@ -8781,6 +8781,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -8788,10 +8792,6 @@
                                             "Wood products (at time of harvest)",
                                             "Wood products (at end of life)",
                                             "Sludge"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "volumeWasteCubicMetres": {
@@ -8833,6 +8833,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Incineration)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -8845,10 +8849,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Incineration)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "massWasteTonnes": {
@@ -8883,6 +8883,10 @@
                                       "type": "object",
                                       "properties": {
                                         "wasteType": {
+                                          "description": "Type of solid waste treated at this facility (Incineration)",
+                                          "x-modules": [
+                                            "10.1"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Food waste",
@@ -8895,10 +8899,6 @@
                                             "Rubber and leather",
                                             "Inert waste",
                                             "Nappies"
-                                          ],
-                                          "description": "Type of solid waste treated at this facility (Incineration)",
-                                          "x-modules": [
-                                            "10.1"
                                           ]
                                         },
                                         "volumeWasteCubicMetres": {
@@ -8955,6 +8955,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -8969,10 +8973,6 @@
                                         "Municipal solid waste",
                                         "Commercial and industrial waste",
                                         "Construction and demolition waste"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "massWasteTonnes": {
@@ -9007,6 +9007,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -9021,10 +9025,6 @@
                                         "Municipal solid waste",
                                         "Commercial and industrial waste",
                                         "Construction and demolition waste"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "volumeWasteCubicMetres": {
@@ -9067,6 +9067,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -9081,10 +9085,6 @@
                                         "Municipal solid waste",
                                         "Commercial and industrial waste",
                                         "Construction and demolition waste"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "massWasteTonnes": {
@@ -9119,6 +9119,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -9133,10 +9137,6 @@
                                         "Municipal solid waste",
                                         "Commercial and industrial waste",
                                         "Construction and demolition waste"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "volumeWasteCubicMetres": {
@@ -9179,6 +9179,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Incineration)",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -9192,10 +9196,6 @@
                                         "Inert waste",
                                         "Municipal solid waste",
                                         "Commercial and industrial waste"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Incineration)",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "massWasteTonnes": {
@@ -9230,6 +9230,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Incineration)",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -9243,10 +9247,6 @@
                                         "Inert waste",
                                         "Municipal solid waste",
                                         "Commercial and industrial waste"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Incineration)",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "volumeWasteCubicMetres": {
@@ -9289,6 +9289,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Composting)",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -9296,10 +9300,6 @@
                                         "Wood products (at time of harvest)",
                                         "Wood products (at end of life)",
                                         "Sludge"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Composting)",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "massWasteTonnes": {
@@ -9334,6 +9334,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Composting)",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -9341,10 +9345,6 @@
                                         "Wood products (at time of harvest)",
                                         "Wood products (at end of life)",
                                         "Sludge"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Composting)",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "volumeWasteCubicMetres": {
@@ -9387,6 +9387,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -9394,10 +9398,6 @@
                                         "Wood products (at time of harvest)",
                                         "Wood products (at end of life)",
                                         "Sludge"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "massWasteTonnes": {
@@ -9432,6 +9432,10 @@
                                   "type": "object",
                                   "properties": {
                                     "wasteType": {
+                                      "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
+                                      "x-modules": [
+                                        "15.12"
+                                      ],
                                       "type": "string",
                                       "enum": [
                                         "Food waste",
@@ -9439,10 +9443,6 @@
                                         "Wood products (at time of harvest)",
                                         "Wood products (at end of life)",
                                         "Sludge"
-                                      ],
-                                      "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
-                                      "x-modules": [
-                                        "15.12"
                                       ]
                                     },
                                     "volumeWasteCubicMetres": {
@@ -9541,6 +9541,10 @@
                             "x-units": "0-1"
                           },
                           "commodityType": {
+                            "description": "The type of commodity for which production has resulted in the wastewater being treated",
+                            "x-modules": [
+                              "11.1"
+                            ],
                             "type": "string",
                             "enum": [
                               "Dairy products",
@@ -9551,10 +9555,6 @@
                               "Wine and other alcoholic beverages",
                               "Fruit",
                               "Vegetables"
-                            ],
-                            "description": "The type of commodity for which production has resulted in the wastewater being treated",
-                            "x-modules": [
-                              "11.1"
                             ]
                           }
                         },
@@ -9819,6 +9819,11 @@
                             "x-units": "kilowatt-hours"
                           },
                           "region": {
+                            "description": "The state, territory or electricity grid the electricity is purchased in",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
                             "type": "string",
                             "enum": [
                               "NSW",
@@ -9831,11 +9836,6 @@
                               "NT",
                               "ACT",
                               "National"
-                            ],
-                            "description": "The state, territory or electricity grid the electricity is purchased in",
-                            "x-modules": [
-                              "14.1",
-                              "15.11"
                             ]
                           }
                         },
@@ -9921,6 +9921,11 @@
                             "x-units": "megawatt-hours"
                           },
                           "region": {
+                            "description": "The state, territory or electricity grid the electricity is purchased in",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
                             "type": "string",
                             "enum": [
                               "NSW",
@@ -9933,11 +9938,6 @@
                               "NT",
                               "ACT",
                               "National"
-                            ],
-                            "description": "The state, territory or electricity grid the electricity is purchased in",
-                            "x-modules": [
-                              "14.1",
-                              "15.11"
                             ]
                           }
                         },
@@ -9989,17 +9989,21 @@
                                   "x-units": "head"
                                 },
                                 "category": {
+                                  "description": "The category of the purchased animals",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "beefPrime",
                                     "beefWeaned"
-                                  ],
-                                  "description": "The category of the purchased animals",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "region": {
+                                  "description": " The origin of the purchased livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "ACT/NSW",
@@ -10016,13 +10020,13 @@
                                     "QLD - Moderate/High",
                                     "QLD - Moderate/Low",
                                     "QLD - Low"
-                                  ],
-                                  "description": " The origin of the purchased livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "class": {
+                                  "description": "The class of the purchased livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "bullsLt1",
@@ -10035,23 +10039,19 @@
                                     "steers1To2Years",
                                     "steers2To3Years",
                                     "steersGt3Years"
-                                  ],
-                                  "description": "The class of the purchased livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "season": {
+                                  "description": "Season of the livestock purchase",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "spring",
                                     "summer",
                                     "autumn",
                                     "winter"
-                                  ],
-                                  "description": "Season of the livestock purchase",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 }
                               },
@@ -10095,14 +10095,14 @@
                                   "x-units": "head"
                                 },
                                 "category": {
+                                  "description": "The category of the purchased animals",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "beefPrime",
                                     "beefWeaned"
-                                  ],
-                                  "description": "The category of the purchased animals",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "liveweightMethod2": {
@@ -10186,6 +10186,10 @@
                                   "x-units": "kilograms CO2e per kilogram liveweight"
                                 },
                                 "region": {
+                                  "description": " The origin of the purchased livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "ACT/NSW",
@@ -10202,13 +10206,13 @@
                                     "QLD - Moderate/High",
                                     "QLD - Moderate/Low",
                                     "QLD - Low"
-                                  ],
-                                  "description": " The origin of the purchased livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "class": {
+                                  "description": "The class of the purchased livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "bullsLt1",
@@ -10221,23 +10225,19 @@
                                     "steers1To2Years",
                                     "steers2To3Years",
                                     "steersGt3Years"
-                                  ],
-                                  "description": "The class of the purchased livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "season": {
+                                  "description": "Season of the livestock purchase",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "spring",
                                     "summer",
                                     "autumn",
                                     "winter"
-                                  ],
-                                  "description": "Season of the livestock purchase",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 }
                               },
@@ -10366,18 +10366,22 @@
                                   "x-units": "head"
                                 },
                                 "category": {
+                                  "description": "The category of the purchased animals",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "dairySpent",
                                     "beefPrime",
                                     "beefWeaned"
-                                  ],
-                                  "description": "The category of the purchased animals",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "breed": {
+                                  "description": "The breed of the purchased dairy livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "Medium Friesian",
@@ -10390,13 +10394,13 @@
                                     "Guernsey",
                                     "Brown Swiss",
                                     "Illawarra/Aussie Red"
-                                  ],
-                                  "description": "The breed of the purchased dairy livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "class": {
+                                  "description": "The class of the purchased dairy livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "milkingCows",
@@ -10404,10 +10408,6 @@
                                     "bullsGt1",
                                     "bullsLt1",
                                     "heifersLt1"
-                                  ],
-                                  "description": "The class of the purchased dairy livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 }
                               },
@@ -10450,15 +10450,15 @@
                                   "x-units": "head"
                                 },
                                 "category": {
+                                  "description": "The category of the purchased animals",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "dairySpent",
                                     "beefPrime",
                                     "beefWeaned"
-                                  ],
-                                  "description": "The category of the purchased animals",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "liveweightMethod2": {
@@ -10542,6 +10542,10 @@
                                   "x-units": "kilograms CO2e per kilogram liveweight"
                                 },
                                 "breed": {
+                                  "description": "The breed of the purchased dairy livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "Medium Friesian",
@@ -10554,13 +10558,13 @@
                                     "Guernsey",
                                     "Brown Swiss",
                                     "Illawarra/Aussie Red"
-                                  ],
-                                  "description": "The breed of the purchased dairy livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "class": {
+                                  "description": "The class of the purchased dairy livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "milkingCows",
@@ -10568,10 +10572,6 @@
                                     "bullsGt1",
                                     "bullsLt1",
                                     "heifersLt1"
-                                  ],
-                                  "description": "The class of the purchased dairy livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 }
                               },
@@ -10699,6 +10699,10 @@
                                   "x-units": "head"
                                 },
                                 "livestockType": {
+                                  "description": "The specific type of \"Other\" livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "Buffalo",
@@ -10709,10 +10713,6 @@
                                     "Horses",
                                     "Mules/asses",
                                     "Emus/ostriches"
-                                  ],
-                                  "description": "The specific type of \"Other\" livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 }
                               },
@@ -10753,6 +10753,10 @@
                                   "x-units": "head"
                                 },
                                 "livestockType": {
+                                  "description": "The specific type of \"Other\" livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "Buffalo",
@@ -10763,10 +10767,6 @@
                                     "Horses",
                                     "Mules/asses",
                                     "Emus/ostriches"
-                                  ],
-                                  "description": "The specific type of \"Other\" livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "liveweightMethod2": {
@@ -10850,6 +10850,10 @@
                                   "x-units": "kilograms CO2e per kilogram liveweight"
                                 },
                                 "livestockType": {
+                                  "description": "The specific type of \"Other\" livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "Buffalo",
@@ -10860,10 +10864,6 @@
                                     "Horses",
                                     "Mules/asses",
                                     "Emus/ostriches"
-                                  ],
-                                  "description": "The specific type of \"Other\" livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 }
                               },
@@ -10990,6 +10990,10 @@
                                   "x-units": "head"
                                 },
                                 "category": {
+                                  "description": "The category of the purchased pigs",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "pigsDefault",
@@ -10997,13 +11001,13 @@
                                     "pigsConventionalRearingUncoveredEffluentPond",
                                     "pigsDeepLitterRearing",
                                     "pigsOutdoorRearing"
-                                  ],
-                                  "description": "The category of the purchased pigs",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "weightClass": {
+                                  "description": "The weight class of the purchased pigs",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "boars",
@@ -11011,10 +11015,6 @@
                                     "gilts",
                                     "slaughterPigs",
                                     "slaughterPigsAtTurnoff"
-                                  ],
-                                  "description": "The weight class of the purchased pigs",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 }
                               },
@@ -11056,6 +11056,10 @@
                                   "x-units": "head"
                                 },
                                 "category": {
+                                  "description": "The category of the purchased pigs",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "pigsDefault",
@@ -11063,10 +11067,6 @@
                                     "pigsConventionalRearingUncoveredEffluentPond",
                                     "pigsDeepLitterRearing",
                                     "pigsOutdoorRearing"
-                                  ],
-                                  "description": "The category of the purchased pigs",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "liveweightMethod2": {
@@ -11150,6 +11150,10 @@
                                   "x-units": "kilograms CO2e per kilogram liveweight"
                                 },
                                 "weightClass": {
+                                  "description": "The weight class of the purchased pigs",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "boars",
@@ -11157,10 +11161,6 @@
                                     "gilts",
                                     "slaughterPigs",
                                     "slaughterPigsAtTurnoff"
-                                  ],
-                                  "description": "The weight class of the purchased pigs",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 }
                               },
@@ -11287,6 +11287,10 @@
                                   "x-units": "head"
                                 },
                                 "weightClass": {
+                                  "description": "The weight class of the purchased poultry",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "chickens",
@@ -11294,10 +11298,6 @@
                                     "pullets",
                                     "broilers",
                                     "chicks"
-                                  ],
-                                  "description": "The weight class of the purchased poultry",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 }
                               },
@@ -11417,6 +11417,10 @@
                                   "x-units": "kilograms CO2e per kilogram liveweight"
                                 },
                                 "weightClass": {
+                                  "description": "The weight class of the purchased poultry",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "chickens",
@@ -11424,10 +11428,6 @@
                                     "pullets",
                                     "broilers",
                                     "chicks"
-                                  ],
-                                  "description": "The weight class of the purchased poultry",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 }
                               },
@@ -11554,6 +11554,10 @@
                                   "x-units": "head"
                                 },
                                 "class": {
+                                  "description": "The class of the purchased livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "breedingEwes",
@@ -11562,13 +11566,13 @@
                                     "otherEwes",
                                     "rams",
                                     "wethers"
-                                  ],
-                                  "description": "The class of the purchased livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "state": {
+                                  "description": "The origin state of the purchased livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "ACT",
@@ -11579,23 +11583,19 @@
                                     "SA",
                                     "WA",
                                     "NT"
-                                  ],
-                                  "description": "The origin state of the purchased livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "season": {
+                                  "description": "The season of the livestock purchase",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "spring",
                                     "summer",
                                     "autumn",
                                     "winter"
-                                  ],
-                                  "description": "The season of the livestock purchase",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 }
                               },
@@ -11638,6 +11638,10 @@
                                   "x-units": "head"
                                 },
                                 "class": {
+                                  "description": "The class of the purchased livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "breedingEwes",
@@ -11646,10 +11650,6 @@
                                     "otherEwes",
                                     "rams",
                                     "wethers"
-                                  ],
-                                  "description": "The class of the purchased livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "liveweightMethod2": {
@@ -11733,6 +11733,10 @@
                                   "x-units": "kilograms CO2e per kilogram liveweight"
                                 },
                                 "state": {
+                                  "description": "The origin state of the purchased livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "ACT",
@@ -11743,26 +11747,26 @@
                                     "SA",
                                     "WA",
                                     "NT"
-                                  ],
-                                  "description": "The origin state of the purchased livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "season": {
+                                  "description": "The season of the livestock purchase",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "spring",
                                     "summer",
                                     "autumn",
                                     "winter"
-                                  ],
-                                  "description": "The season of the livestock purchase",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 },
                                 "class": {
+                                  "description": "The class of the purchased livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "breedingEwes",
@@ -11771,10 +11775,6 @@
                                     "otherEwes",
                                     "rams",
                                     "wethers"
-                                  ],
-                                  "description": "The class of the purchased livestock",
-                                  "x-modules": [
-                                    "15.1"
                                   ]
                                 }
                               },
@@ -12386,6 +12386,10 @@
                                           "const": "Cars and light commercial vehicles"
                                         },
                                         "fuelType": {
+                                          "description": "Type of fuel used by cars and light commercial vehicles",
+                                          "x-modules": [
+                                            "15.13"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Gasoline",
@@ -12396,10 +12400,6 @@
                                             "Biodiesel",
                                             "Renewable diesel",
                                             "Other biofuels"
-                                          ],
-                                          "description": "Type of fuel used by cars and light commercial vehicles",
-                                          "x-modules": [
-                                            "15.13"
                                           ]
                                         }
                                       },
@@ -12439,6 +12439,10 @@
                                           "const": "Cars and light commercial vehicles (pre 2004)"
                                         },
                                         "fuelType": {
+                                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
+                                          "x-modules": [
+                                            "15.13"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Gasoline",
@@ -12446,10 +12450,6 @@
                                             "Liquefied petroleum gas (LPG)",
                                             "Ethanol",
                                             "Renewable diesel"
-                                          ],
-                                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
-                                          "x-modules": [
-                                            "15.13"
                                           ]
                                         }
                                       },
@@ -12489,14 +12489,14 @@
                                           "const": "Light duty vehicles"
                                         },
                                         "fuelType": {
+                                          "description": "Type of fuel used by light duty vehicles",
+                                          "x-modules": [
+                                            "15.13"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Compressed natural gas",
                                             "Liquefied natural gas"
-                                          ],
-                                          "description": "Type of fuel used by light duty vehicles",
-                                          "x-modules": [
-                                            "15.13"
                                           ]
                                         }
                                       },
@@ -12536,6 +12536,10 @@
                                           "const": "Heavy duty vehicles"
                                         },
                                         "fuelType": {
+                                          "description": "Type of fuel used by heavy duty vehicles",
+                                          "x-modules": [
+                                            "15.13"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Compressed natural gas",
@@ -12546,10 +12550,6 @@
                                             "Renewable diesel - Euro iv or higher",
                                             "Renewable diesel - Euro iii",
                                             "Renewable diesel - Euro i"
-                                          ],
-                                          "description": "Type of fuel used by heavy duty vehicles",
-                                          "x-modules": [
-                                            "15.13"
                                           ]
                                         }
                                       },
@@ -12589,15 +12589,15 @@
                                           "const": "Aviation"
                                         },
                                         "fuelType": {
+                                          "description": "Type of fuel used by aircraft",
+                                          "x-modules": [
+                                            "15.13"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Gasoline for use as fuel in an aircraft",
                                             "Kerosene for use as fuel in an aircraft",
                                             "Renewable aviation kerosene"
-                                          ],
-                                          "description": "Type of fuel used by aircraft",
-                                          "x-modules": [
-                                            "15.13"
                                           ]
                                         }
                                       },
@@ -12637,15 +12637,15 @@
                                           "const": "Vessel"
                                         },
                                         "fuelType": {
+                                          "description": "Type of fuel used by this vessel",
+                                          "x-modules": [
+                                            "15.13"
+                                          ],
                                           "type": "string",
                                           "enum": [
                                             "Petrol",
                                             "Diesel",
                                             "Fuel Oil"
-                                          ],
-                                          "description": "Type of fuel used by this vessel",
-                                          "x-modules": [
-                                            "15.13"
                                           ]
                                         }
                                       },
@@ -12685,13 +12685,13 @@
                                           "const": "Off-road Agriculture and forestry equipment"
                                         },
                                         "fuelType": {
-                                          "type": "string",
-                                          "enum": [
-                                            "Diesel"
-                                          ],
                                           "description": "Type of fuel used by off-road agriculture and forestry equipment",
                                           "x-modules": [
                                             "15.13"
+                                          ],
+                                          "type": "string",
+                                          "enum": [
+                                            "Diesel"
                                           ]
                                         }
                                       },
@@ -12722,13 +12722,13 @@
                                       ]
                                     },
                                     "fuelType": {
-                                      "type": "string",
-                                      "enum": [
-                                        "Compressed natural gas"
-                                      ],
                                       "description": "Type of compressed natural gas fuel used by this vehicle",
                                       "x-modules": [
                                         "15.13"
+                                      ],
+                                      "type": "string",
+                                      "enum": [
+                                        "Compressed natural gas"
                                       ]
                                     },
                                     "amountCubicMetres": {
@@ -12884,15 +12884,15 @@
                         "x-units": "tonnes fish"
                       },
                       "location": {
+                        "description": "Where is this aquaculture system located?",
+                        "x-modules": [
+                          "13.1"
+                        ],
                         "type": "string",
                         "enum": [
                           "Coastal wetland habitat",
                           "Offshore cages in seagrass meadows",
                           "Other"
-                        ],
-                        "description": "Where is this aquaculture system located?",
-                        "x-modules": [
-                          "13.1"
                         ]
                       }
                     },
@@ -39324,11 +39324,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -39459,11 +39459,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -39594,11 +39594,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -40990,11 +40990,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -41125,11 +41125,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -41260,11 +41260,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -42656,11 +42656,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -42791,11 +42791,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -42926,11 +42926,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -44322,11 +44322,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -44457,11 +44457,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -44592,11 +44592,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -45463,6 +45463,11 @@
             "type": "object",
             "properties": {
               "productionSystem": {
+                "description": "Production system of the crop",
+                "x-modules": [
+                  "5.1",
+                  "5.4"
+                ],
                 "type": "string",
                 "enum": [
                   "Rice (continuous flooding)",
@@ -45477,11 +45482,6 @@
                   "Horticultural crops",
                   "Aquaculture",
                   "Forestry"
-                ],
-                "description": "Production system of the crop",
-                "x-modules": [
-                  "5.1",
-                  "5.4"
                 ]
               },
               "inorganic": {
@@ -45519,6 +45519,13 @@
                               "x-units": "kilograms inorganic fertiliser"
                             },
                             "fertiliserType": {
+                              "description": "Type of inorganic fertiliser applied",
+                              "x-modules": [
+                                "5.1",
+                                "5.4",
+                                "5.5",
+                                "15.4"
+                              ],
                               "type": "string",
                               "enum": [
                                 "Monoammonium Phosphate (MAP)",
@@ -45530,13 +45537,6 @@
                                 "Calcium Ammonium Nitrate (CAN)",
                                 "Calcium Nitrate",
                                 "Single Super Phosphate"
-                              ],
-                              "description": "Type of inorganic fertiliser applied",
-                              "x-modules": [
-                                "5.1",
-                                "5.4",
-                                "5.5",
-                                "15.4"
                               ]
                             },
                             "components": {
@@ -45573,28 +45573,28 @@
                                             "x-units": "0-1"
                                           },
                                           "componentType": {
-                                            "type": "string",
-                                            "enum": [
-                                              "Ammonia",
-                                              "Urea"
-                                            ],
                                             "description": "Type of inorganic fertiliser component",
                                             "x-modules": [
                                               "15.4",
                                               "5.1"
+                                            ],
+                                            "type": "string",
+                                            "enum": [
+                                              "Ammonia",
+                                              "Urea"
                                             ]
                                           },
                                           "componentOrigin": {
+                                            "description": "Origin of inorganic fertiliser component",
+                                            "x-modules": [
+                                              "15.4"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Unspecified",
                                               "China",
                                               "Yemen",
                                               "Canada"
-                                            ],
-                                            "description": "Origin of inorganic fertiliser component",
-                                            "x-modules": [
-                                              "15.4"
                                             ]
                                           }
                                         },
@@ -45633,6 +45633,10 @@
                                             "x-units": "0-1"
                                           },
                                           "componentType": {
+                                            "description": "Type of inorganic fertiliser component",
+                                            "x-modules": [
+                                              "15.4"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Monoammonium phosphate",
@@ -45651,10 +45655,6 @@
                                               "Potassium - Generic",
                                               "Sulfur - Generic",
                                               "Zinc - Generic"
-                                            ],
-                                            "description": "Type of inorganic fertiliser component",
-                                            "x-modules": [
-                                              "15.4"
                                             ]
                                           }
                                         },
@@ -45796,6 +45796,13 @@
                                   "description": "Choosing method 2 for calculating scope 3 emissions for this fertiliser"
                                 },
                                 "fertiliserType": {
+                                  "description": "Type of inorganic fertiliser applied",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.4",
+                                    "5.5",
+                                    "15.4"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "Monoammonium Phosphate (MAP)",
@@ -45807,13 +45814,6 @@
                                     "Calcium Ammonium Nitrate (CAN)",
                                     "Calcium Nitrate",
                                     "Single Super Phosphate"
-                                  ],
-                                  "description": "Type of inorganic fertiliser applied",
-                                  "x-modules": [
-                                    "5.1",
-                                    "5.4",
-                                    "5.5",
-                                    "15.4"
                                   ]
                                 },
                                 "customNitrogenFraction": {
@@ -45902,16 +45902,16 @@
                                   "description": "Choosing method 2 for calculating scope 3 emissions for this fertiliser"
                                 },
                                 "fertiliserType": {
-                                  "type": "string",
-                                  "enum": [
-                                    "Other Fertilisers"
-                                  ],
                                   "description": "Type of inorganic fertiliser applied",
                                   "x-modules": [
                                     "5.1",
                                     "5.4",
                                     "5.5",
                                     "15.4"
+                                  ],
+                                  "type": "string",
+                                  "enum": [
+                                    "Other Fertilisers"
                                   ]
                                 },
                                 "customNitrogenFraction": {
@@ -46006,16 +46006,16 @@
             "type": "object",
             "properties": {
               "productionSystem": {
+                "description": "Production system for specific crop types",
+                "x-modules": [
+                  "5.1",
+                  "5.4"
+                ],
                 "type": "string",
                 "enum": [
                   "Irrigated crop (maize)",
                   "Non-irrigated crop (high rainfall)",
                   "Cotton"
-                ],
-                "description": "Production system for specific crop types",
-                "x-modules": [
-                  "5.1",
-                  "5.4"
                 ]
               },
               "inorganic": {
@@ -46074,6 +46074,13 @@
                               "x-units": "kilograms inorganic fertiliser"
                             },
                             "fertiliserType": {
+                              "description": "Type of inorganic fertiliser applied",
+                              "x-modules": [
+                                "5.1",
+                                "5.4",
+                                "5.5",
+                                "15.4"
+                              ],
                               "type": "string",
                               "enum": [
                                 "Monoammonium Phosphate (MAP)",
@@ -46085,13 +46092,6 @@
                                 "Calcium Ammonium Nitrate (CAN)",
                                 "Calcium Nitrate",
                                 "Single Super Phosphate"
-                              ],
-                              "description": "Type of inorganic fertiliser applied",
-                              "x-modules": [
-                                "5.1",
-                                "5.4",
-                                "5.5",
-                                "15.4"
                               ]
                             },
                             "components": {
@@ -46128,28 +46128,28 @@
                                             "x-units": "0-1"
                                           },
                                           "componentType": {
-                                            "type": "string",
-                                            "enum": [
-                                              "Ammonia",
-                                              "Urea"
-                                            ],
                                             "description": "Type of inorganic fertiliser component",
                                             "x-modules": [
                                               "15.4",
                                               "5.1"
+                                            ],
+                                            "type": "string",
+                                            "enum": [
+                                              "Ammonia",
+                                              "Urea"
                                             ]
                                           },
                                           "componentOrigin": {
+                                            "description": "Origin of inorganic fertiliser component",
+                                            "x-modules": [
+                                              "15.4"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Unspecified",
                                               "China",
                                               "Yemen",
                                               "Canada"
-                                            ],
-                                            "description": "Origin of inorganic fertiliser component",
-                                            "x-modules": [
-                                              "15.4"
                                             ]
                                           }
                                         },
@@ -46188,6 +46188,10 @@
                                             "x-units": "0-1"
                                           },
                                           "componentType": {
+                                            "description": "Type of inorganic fertiliser component",
+                                            "x-modules": [
+                                              "15.4"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Monoammonium phosphate",
@@ -46206,10 +46210,6 @@
                                               "Potassium - Generic",
                                               "Sulfur - Generic",
                                               "Zinc - Generic"
-                                            ],
-                                            "description": "Type of inorganic fertiliser component",
-                                            "x-modules": [
-                                              "15.4"
                                             ]
                                           }
                                         },
@@ -46373,6 +46373,13 @@
                                   "description": "Choosing method 2 for calculating scope 3 emissions for this fertiliser"
                                 },
                                 "fertiliserType": {
+                                  "description": "Type of inorganic fertiliser applied",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.4",
+                                    "5.5",
+                                    "15.4"
+                                  ],
                                   "type": "string",
                                   "enum": [
                                     "Monoammonium Phosphate (MAP)",
@@ -46384,13 +46391,6 @@
                                     "Calcium Ammonium Nitrate (CAN)",
                                     "Calcium Nitrate",
                                     "Single Super Phosphate"
-                                  ],
-                                  "description": "Type of inorganic fertiliser applied",
-                                  "x-modules": [
-                                    "5.1",
-                                    "5.4",
-                                    "5.5",
-                                    "15.4"
                                   ]
                                 },
                                 "customNitrogenFraction": {
@@ -46501,16 +46501,16 @@
                                   "description": "Choosing method 2 for calculating scope 3 emissions for this fertiliser"
                                 },
                                 "fertiliserType": {
-                                  "type": "string",
-                                  "enum": [
-                                    "Other Fertilisers"
-                                  ],
                                   "description": "Type of inorganic fertiliser applied",
                                   "x-modules": [
                                     "5.1",
                                     "5.4",
                                     "5.5",
                                     "15.4"
+                                  ],
+                                  "type": "string",
+                                  "enum": [
+                                    "Other Fertilisers"
                                   ]
                                 },
                                 "customNitrogenFraction": {
@@ -46672,6 +46672,10 @@
                     "x-units": "kilograms organic fertiliser"
                   },
                   "organicFertiliserType": {
+                    "description": "Type of organic fertiliser",
+                    "x-modules": [
+                      "5.2"
+                    ],
                     "type": "string",
                     "enum": [
                       "Dairy cattle",
@@ -46680,10 +46684,6 @@
                       "Pigs",
                       "Sheep",
                       "Horses/Mules"
-                    ],
-                    "description": "Type of organic fertiliser",
-                    "x-modules": [
-                      "5.2"
                     ]
                   },
                   "customNitrogenFraction": {
@@ -47272,13 +47272,13 @@
                                           "additionalProperties": false
                                         },
                                         "solidsSeparatedPreTreatment": {
-                                          "type": "boolean",
                                           "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                                           "x-modules": [
                                             "5.2",
                                             "5.4",
                                             "5.5"
-                                          ]
+                                          ],
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -47419,13 +47419,13 @@
                                           "additionalProperties": false
                                         },
                                         "solidsSeparatedPreTreatment": {
-                                          "type": "boolean",
                                           "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                                           "x-modules": [
                                             "5.2",
                                             "5.4",
                                             "5.5"
-                                          ]
+                                          ],
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -47566,13 +47566,13 @@
                                           "additionalProperties": false
                                         },
                                         "solidsSeparatedPreTreatment": {
-                                          "type": "boolean",
                                           "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                                           "x-modules": [
                                             "5.2",
                                             "5.4",
                                             "5.5"
-                                          ]
+                                          ],
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -48954,13 +48954,13 @@
                                           "additionalProperties": false
                                         },
                                         "solidsSeparatedPreTreatment": {
-                                          "type": "boolean",
                                           "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                                           "x-modules": [
                                             "5.2",
                                             "5.4",
                                             "5.5"
-                                          ]
+                                          ],
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -49101,13 +49101,13 @@
                                           "additionalProperties": false
                                         },
                                         "solidsSeparatedPreTreatment": {
-                                          "type": "boolean",
                                           "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                                           "x-modules": [
                                             "5.2",
                                             "5.4",
                                             "5.5"
-                                          ]
+                                          ],
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -49248,13 +49248,13 @@
                                           "additionalProperties": false
                                         },
                                         "solidsSeparatedPreTreatment": {
-                                          "type": "boolean",
                                           "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                                           "x-modules": [
                                             "5.2",
                                             "5.4",
                                             "5.5"
-                                          ]
+                                          ],
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -50636,13 +50636,13 @@
                                           "additionalProperties": false
                                         },
                                         "solidsSeparatedPreTreatment": {
-                                          "type": "boolean",
                                           "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                                           "x-modules": [
                                             "5.2",
                                             "5.4",
                                             "5.5"
-                                          ]
+                                          ],
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -50783,13 +50783,13 @@
                                           "additionalProperties": false
                                         },
                                         "solidsSeparatedPreTreatment": {
-                                          "type": "boolean",
                                           "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                                           "x-modules": [
                                             "5.2",
                                             "5.4",
                                             "5.5"
-                                          ]
+                                          ],
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -50930,13 +50930,13 @@
                                           "additionalProperties": false
                                         },
                                         "solidsSeparatedPreTreatment": {
-                                          "type": "boolean",
                                           "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                                           "x-modules": [
                                             "5.2",
                                             "5.4",
                                             "5.5"
-                                          ]
+                                          ],
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -52318,13 +52318,13 @@
                                           "additionalProperties": false
                                         },
                                         "solidsSeparatedPreTreatment": {
-                                          "type": "boolean",
                                           "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                                           "x-modules": [
                                             "5.2",
                                             "5.4",
                                             "5.5"
-                                          ]
+                                          ],
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -52465,13 +52465,13 @@
                                           "additionalProperties": false
                                         },
                                         "solidsSeparatedPreTreatment": {
-                                          "type": "boolean",
                                           "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                                           "x-modules": [
                                             "5.2",
                                             "5.4",
                                             "5.5"
-                                          ]
+                                          ],
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -52612,13 +52612,13 @@
                                           "additionalProperties": false
                                         },
                                         "solidsSeparatedPreTreatment": {
-                                          "type": "boolean",
                                           "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                                           "x-modules": [
                                             "5.2",
                                             "5.4",
                                             "5.5"
-                                          ]
+                                          ],
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -53474,13 +53474,13 @@
                       "additionalProperties": false
                     },
                     "isInLeachingZone": {
-                      "type": "boolean",
                       "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                       "x-modules": [
                         "5.2",
                         "5.4",
                         "5.5"
-                      ]
+                      ],
+                      "type": "boolean"
                     },
                     "fractionAppliedToSoils": {
                       "description": "The fraction of manure from this source applied to soil within the activity boundary. (0-1)",
@@ -54687,6 +54687,12 @@
                           ]
                         },
                         "breed": {
+                          "description": "Breed of cattle for this dairy herd",
+                          "x-modules": [
+                            "5.2",
+                            "5.4",
+                            "5.5"
+                          ],
                           "type": "string",
                           "enum": [
                             "Medium Friesian",
@@ -54699,12 +54705,6 @@
                             "Guernsey",
                             "Brown Swiss",
                             "Illawarra/Aussie Red"
-                          ],
-                          "description": "Breed of cattle for this dairy herd",
-                          "x-modules": [
-                            "5.2",
-                            "5.4",
-                            "5.5"
                           ]
                         },
                         "manureAllocations": {
@@ -54926,13 +54926,13 @@
                           "additionalProperties": false
                         },
                         "isInLeachingZone": {
-                          "type": "boolean",
                           "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                           "x-modules": [
                             "5.2",
                             "5.4",
                             "5.5"
-                          ]
+                          ],
+                          "type": "boolean"
                         },
                         "fractionAppliedToSoils": {
                           "description": "The fraction of manure from this source applied to soil within the activity boundary. (0-1)",
@@ -54958,18 +54958,18 @@
                           "x-units": "0-1"
                         },
                         "system": {
+                          "description": "Production system used to manage this dairy herd",
+                          "x-modules": [
+                            "5.2",
+                            "5.4",
+                            "5.5"
+                          ],
                           "type": "string",
                           "enum": [
                             "Grazed only",
                             "Limited feedpad",
                             "Limited grazing",
                             "Zero grazing"
-                          ],
-                          "description": "Production system used to manage this dairy herd",
-                          "x-modules": [
-                            "5.2",
-                            "5.4",
-                            "5.5"
                           ]
                         }
                       },
@@ -56138,6 +56138,12 @@
                           ]
                         },
                         "breed": {
+                          "description": "Breed of cattle for this dairy herd",
+                          "x-modules": [
+                            "5.2",
+                            "5.4",
+                            "5.5"
+                          ],
                           "type": "string",
                           "enum": [
                             "Medium Friesian",
@@ -56150,12 +56156,6 @@
                             "Guernsey",
                             "Brown Swiss",
                             "Illawarra/Aussie Red"
-                          ],
-                          "description": "Breed of cattle for this dairy herd",
-                          "x-modules": [
-                            "5.2",
-                            "5.4",
-                            "5.5"
                           ]
                         },
                         "manureAllocations": {
@@ -56377,13 +56377,13 @@
                           "additionalProperties": false
                         },
                         "isInLeachingZone": {
-                          "type": "boolean",
                           "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                           "x-modules": [
                             "5.2",
                             "5.4",
                             "5.5"
-                          ]
+                          ],
+                          "type": "boolean"
                         },
                         "fractionAppliedToSoils": {
                           "description": "The fraction of manure from this source applied to soil within the activity boundary. (0-1)",
@@ -59274,13 +59274,13 @@
                       "additionalProperties": false
                     },
                     "isInLeachingZone": {
-                      "type": "boolean",
                       "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                       "x-modules": [
                         "5.2",
                         "5.4",
                         "5.5"
-                      ]
+                      ],
+                      "type": "boolean"
                     },
                     "fractionAppliedToSoils": {
                       "description": "The fraction of manure from this source applied to soil within the activity boundary. (0-1)",
@@ -59368,6 +59368,11 @@
                           "const": "Cars and light commercial vehicles"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by cars and light commercial vehicles",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline",
@@ -59378,11 +59383,6 @@
                             "Biodiesel",
                             "Renewable diesel",
                             "Other biofuels"
-                          ],
-                          "description": "Type of fuel used by cars and light commercial vehicles",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -59423,6 +59423,11 @@
                           "const": "Cars and light commercial vehicles (pre 2004)"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline",
@@ -59430,11 +59435,6 @@
                             "Liquefied petroleum gas (LPG)",
                             "Ethanol",
                             "Renewable diesel"
-                          ],
-                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -59475,15 +59475,15 @@
                           "const": "Light duty vehicles"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Compressed natural gas",
-                            "Liquefied natural gas"
-                          ],
                           "description": "Type of fuel used by light duty vehicles",
                           "x-modules": [
                             "8.1",
                             "15.10"
+                          ],
+                          "type": "string",
+                          "enum": [
+                            "Compressed natural gas",
+                            "Liquefied natural gas"
                           ]
                         }
                       },
@@ -59524,6 +59524,11 @@
                           "const": "Heavy duty vehicles"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by heavy duty vehicles",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Compressed natural gas",
@@ -59534,11 +59539,6 @@
                             "Renewable diesel - Euro iv or higher",
                             "Renewable diesel - Euro iii",
                             "Renewable diesel - Euro i"
-                          ],
-                          "description": "Type of fuel used by heavy duty vehicles",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -59579,16 +59579,16 @@
                           "const": "Aviation"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by aircraft",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline for use as fuel in an aircraft",
                             "Kerosene for use as fuel in an aircraft",
                             "Renewable aviation kerosene"
-                          ],
-                          "description": "Type of fuel used by aircraft",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -59629,16 +59629,16 @@
                           "const": "Vessel"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by this vessel",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Petrol",
                             "Diesel",
                             "Fuel Oil"
-                          ],
-                          "description": "Type of fuel used by this vessel",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -59679,14 +59679,14 @@
                           "const": "Off-road Agriculture and forestry equipment"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Diesel"
-                          ],
                           "description": "Type of fuel used by off-road agriculture and forestry equipment",
                           "x-modules": [
                             "8.1",
                             "15.10"
+                          ],
+                          "type": "string",
+                          "enum": [
+                            "Diesel"
                           ]
                         }
                       },
@@ -59717,14 +59717,14 @@
                       ]
                     },
                     "fuelType": {
-                      "type": "string",
-                      "enum": [
-                        "Compressed natural gas"
-                      ],
                       "description": "Type of compressed natural gas fuel used by this vehicle",
                       "x-modules": [
                         "8.1",
                         "15.10"
+                      ],
+                      "type": "string",
+                      "enum": [
+                        "Compressed natural gas"
                       ]
                     },
                     "amountCubicMetres": {
@@ -59773,6 +59773,11 @@
                       "const": "Solid fuels"
                     },
                     "fuelType": {
+                      "description": "Type of solid fuel used in stationary equipment",
+                      "x-modules": [
+                        "8.2",
+                        "15.10"
+                      ],
                       "type": "string",
                       "enum": [
                         "Bituminous coal",
@@ -59795,11 +59800,6 @@
                         "Biomass, municipal and industrial materials",
                         "Charcoal",
                         "Other primary solid biomass fuels"
-                      ],
-                      "description": "Type of solid fuel used in stationary equipment",
-                      "x-modules": [
-                        "8.2",
-                        "15.10"
                       ]
                     },
                     "amountTonnes": {
@@ -59843,6 +59843,11 @@
                           "const": "Liquid fuels"
                         },
                         "fuelType": {
+                          "description": "Type of liquid fuel used in stationary equipment",
+                          "x-modules": [
+                            "8.2",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Petroleum based oils other than fuels",
@@ -59859,11 +59864,6 @@
                             "Liquefied petroleum gas",
                             "Naphtha",
                             "Other petroleum products"
-                          ],
-                          "description": "Type of liquid fuel used in stationary equipment",
-                          "x-modules": [
-                            "8.2",
-                            "15.10"
                           ]
                         },
                         "amountKilolitres": {
@@ -59905,6 +59905,11 @@
                           "const": "Liquid fuels"
                         },
                         "fuelType": {
+                          "description": "Type of liquid fuel used in stationary equipment",
+                          "x-modules": [
+                            "8.2",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Crude oil and condensates",
@@ -59912,11 +59917,6 @@
                             "Petroleum coke",
                             "Refinery gas and liquids",
                             "Refinery coke"
-                          ],
-                          "description": "Type of liquid fuel used in stationary equipment",
-                          "x-modules": [
-                            "8.2",
-                            "15.10"
                           ]
                         },
                         "amountTonnes": {
@@ -60046,6 +60046,10 @@
                           "const": "Cars and light commercial vehicles"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by cars and light commercial vehicles",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline",
@@ -60056,10 +60060,6 @@
                             "Biodiesel",
                             "Renewable diesel",
                             "Other biofuels"
-                          ],
-                          "description": "Type of fuel used by cars and light commercial vehicles",
-                          "x-modules": [
-                            "15.7"
                           ]
                         }
                       },
@@ -60099,6 +60099,10 @@
                           "const": "Cars and light commercial vehicles (pre 2004)"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline",
@@ -60106,10 +60110,6 @@
                             "Liquefied petroleum gas (LPG)",
                             "Ethanol",
                             "Renewable diesel"
-                          ],
-                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
-                          "x-modules": [
-                            "15.7"
                           ]
                         }
                       },
@@ -60149,14 +60149,14 @@
                           "const": "Light duty vehicles"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by light duty vehicles",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Compressed natural gas",
                             "Liquefied natural gas"
-                          ],
-                          "description": "Type of fuel used by light duty vehicles",
-                          "x-modules": [
-                            "15.7"
                           ]
                         }
                       },
@@ -60196,6 +60196,10 @@
                           "const": "Heavy duty vehicles"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by heavy duty vehicles",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Compressed natural gas",
@@ -60206,10 +60210,6 @@
                             "Renewable diesel - Euro iv or higher",
                             "Renewable diesel - Euro iii",
                             "Renewable diesel - Euro i"
-                          ],
-                          "description": "Type of fuel used by heavy duty vehicles",
-                          "x-modules": [
-                            "15.7"
                           ]
                         }
                       },
@@ -60249,15 +60249,15 @@
                           "const": "Aviation"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by aircraft",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline for use as fuel in an aircraft",
                             "Kerosene for use as fuel in an aircraft",
                             "Renewable aviation kerosene"
-                          ],
-                          "description": "Type of fuel used by aircraft",
-                          "x-modules": [
-                            "15.7"
                           ]
                         }
                       },
@@ -60297,15 +60297,15 @@
                           "const": "Vessel"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by this vessel",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Petrol",
                             "Diesel",
                             "Fuel Oil"
-                          ],
-                          "description": "Type of fuel used by this vessel",
-                          "x-modules": [
-                            "15.7"
                           ]
                         }
                       },
@@ -60345,13 +60345,13 @@
                           "const": "Off-road Agriculture and forestry equipment"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Diesel"
-                          ],
                           "description": "Type of fuel used by off-road agriculture and forestry equipment",
                           "x-modules": [
                             "15.7"
+                          ],
+                          "type": "string",
+                          "enum": [
+                            "Diesel"
                           ]
                         }
                       },
@@ -60382,13 +60382,13 @@
                       ]
                     },
                     "fuelType": {
-                      "type": "string",
-                      "enum": [
-                        "Compressed natural gas"
-                      ],
                       "description": "Type of compressed natural gas fuel used by this vehicle",
                       "x-modules": [
                         "15.7"
+                      ],
+                      "type": "string",
+                      "enum": [
+                        "Compressed natural gas"
                       ]
                     },
                     "amountCubicMetres": {
@@ -60436,6 +60436,10 @@
                       "const": "Solid fuels"
                     },
                     "fuelType": {
+                      "description": "Type of solid fuel used in stationary equipment",
+                      "x-modules": [
+                        "15.7"
+                      ],
                       "type": "string",
                       "enum": [
                         "Bituminous coal",
@@ -60458,10 +60462,6 @@
                         "Biomass, municipal and industrial materials",
                         "Charcoal",
                         "Other primary solid biomass fuels"
-                      ],
-                      "description": "Type of solid fuel used in stationary equipment",
-                      "x-modules": [
-                        "15.7"
                       ]
                     },
                     "amountTonnes": {
@@ -60504,6 +60504,10 @@
                           "const": "Liquid fuels"
                         },
                         "fuelType": {
+                          "description": "Type of liquid fuel used in stationary equipment",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Petroleum based oils other than fuels",
@@ -60520,10 +60524,6 @@
                             "Liquefied petroleum gas",
                             "Naphtha",
                             "Other petroleum products"
-                          ],
-                          "description": "Type of liquid fuel used in stationary equipment",
-                          "x-modules": [
-                            "15.7"
                           ]
                         },
                         "amountKilolitres": {
@@ -60564,6 +60564,10 @@
                           "const": "Liquid fuels"
                         },
                         "fuelType": {
+                          "description": "Type of liquid fuel used in stationary equipment",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Crude oil and condensates",
@@ -60571,10 +60575,6 @@
                             "Petroleum coke",
                             "Refinery gas and liquids",
                             "Refinery coke"
-                          ],
-                          "description": "Type of liquid fuel used in stationary equipment",
-                          "x-modules": [
-                            "15.7"
                           ]
                         },
                         "amountTonnes": {
@@ -61214,6 +61214,10 @@
                       "x-units": "tonnes purchased feed"
                     },
                     "type": {
+                      "description": "The type of feed purchased.",
+                      "x-modules": [
+                        "15.2"
+                      ],
                       "type": "string",
                       "enum": [
                         "Whole Sardines",
@@ -61221,10 +61225,6 @@
                         "Squid",
                         "Whole Fish",
                         "Custom Bait"
-                      ],
-                      "description": "The type of feed purchased.",
-                      "x-modules": [
-                        "15.2"
                       ]
                     }
                   },
@@ -61415,13 +61415,19 @@
                       "x-units": "tonnes carbon per hectare"
                     },
                     "isInLeachingZone": {
-                      "type": "boolean",
                       "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                       "x-modules": [
                         "16.4"
-                      ]
+                      ],
+                      "type": "boolean"
                     },
                     "region": {
+                      "description": "IBRA7 region of the activity area",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
                       "type": "string",
                       "enum": [
                         "Arnhem Coast",
@@ -61509,12 +61515,6 @@
                         "Warren",
                         "Wet Tropics",
                         "Yalgoo"
-                      ],
-                      "description": "IBRA7 region of the activity area",
-                      "x-modules": [
-                        "16.2",
-                        "16.3",
-                        "16.4"
                       ]
                     },
                     "massCH4FromBiomassBurningPerHectare": {
@@ -61585,15 +61585,15 @@
                       "const": "landClearingForestToCropland"
                     },
                     "cropProductionSystem": {
+                      "description": "Crop production",
+                      "x-modules": [
+                        "16.3"
+                      ],
                       "type": "string",
                       "enum": [
                         "Irrigated crop",
                         "Non-irrigated crop (low rainfall)",
                         "Non-irrigated crop (high rainfall)"
-                      ],
-                      "description": "Crop production",
-                      "x-modules": [
-                        "16.3"
                       ]
                     }
                   },
@@ -61726,13 +61726,19 @@
                       "x-units": "tonnes carbon per hectare"
                     },
                     "isInLeachingZone": {
-                      "type": "boolean",
                       "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                       "x-modules": [
                         "16.4"
-                      ]
+                      ],
+                      "type": "boolean"
                     },
                     "region": {
+                      "description": "IBRA7 region of the activity area",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
                       "type": "string",
                       "enum": [
                         "Arnhem Coast",
@@ -61820,12 +61826,6 @@
                         "Warren",
                         "Wet Tropics",
                         "Yalgoo"
-                      ],
-                      "description": "IBRA7 region of the activity area",
-                      "x-modules": [
-                        "16.2",
-                        "16.3",
-                        "16.4"
                       ]
                     },
                     "massCH4FromBiomassBurningPerHectare": {
@@ -61896,14 +61896,14 @@
                       "const": "landClearingForestToGrassland"
                     },
                     "pastureProductionSystem": {
+                      "description": "Pasture production",
+                      "x-modules": [
+                        "16.3"
+                      ],
                       "type": "string",
                       "enum": [
                         "Irrigated pasture",
                         "Non-irrigated pasture"
-                      ],
-                      "description": "Pasture production",
-                      "x-modules": [
-                        "16.3"
                       ]
                     }
                   },
@@ -62036,13 +62036,19 @@
                       "x-units": "tonnes carbon per hectare"
                     },
                     "isInLeachingZone": {
-                      "type": "boolean",
                       "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                       "x-modules": [
                         "16.4"
-                      ]
+                      ],
+                      "type": "boolean"
                     },
                     "region": {
+                      "description": "IBRA7 region of the activity area",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
                       "type": "string",
                       "enum": [
                         "Arnhem Coast",
@@ -62130,12 +62136,6 @@
                         "Warren",
                         "Wet Tropics",
                         "Yalgoo"
-                      ],
-                      "description": "IBRA7 region of the activity area",
-                      "x-modules": [
-                        "16.2",
-                        "16.3",
-                        "16.4"
                       ]
                     },
                     "massCH4FromBiomassBurningPerHectare": {
@@ -62206,13 +62206,13 @@
                       "const": "landClearingForestToSettlements"
                     },
                     "pastureProductionSystem": {
-                      "type": "string",
-                      "enum": [
-                        "Non-irrigated pasture"
-                      ],
                       "description": "Pasture production",
                       "x-modules": [
                         "16.3"
+                      ],
+                      "type": "string",
+                      "enum": [
+                        "Non-irrigated pasture"
                       ]
                     }
                   },
@@ -63111,6 +63111,10 @@
                 "cropType": {
                   "oneOf": [
                     {
+                      "description": "Type of perennial woody crop planted",
+                      "x-modules": [
+                        "16.6"
+                      ],
                       "title": "Full",
                       "type": "string",
                       "enum": [
@@ -63122,22 +63126,18 @@
                         "Olives",
                         "Avocados",
                         "Mangoes"
-                      ],
-                      "description": "Type of perennial woody crop planted",
-                      "x-modules": [
-                        "16.6"
                       ]
                     },
                     {
+                      "description": "Type of perennial woody crop planted",
+                      "x-modules": [
+                        "16.6"
+                      ],
                       "title": "Partial",
                       "type": "string",
                       "enum": [
                         "Grapes",
                         "Kiwifruits"
-                      ],
-                      "description": "Type of perennial woody crop planted",
-                      "x-modules": [
-                        "16.6"
                       ]
                     }
                   ]
@@ -63290,6 +63290,10 @@
                   }
                 },
                 "cropType": {
+                  "description": "Type of perennial woody crop planted",
+                  "x-modules": [
+                    "16.6"
+                  ],
                   "type": "string",
                   "enum": [
                     "Oranges",
@@ -63300,10 +63304,6 @@
                     "Olives",
                     "Avocados",
                     "Mangoes"
-                  ],
-                  "description": "Type of perennial woody crop planted",
-                  "x-modules": [
-                    "16.6"
                   ]
                 },
                 "calculationMethod": {
@@ -63477,6 +63477,10 @@
                   }
                 },
                 "cropType": {
+                  "description": "Type of perennial woody crop planted",
+                  "x-modules": [
+                    "16.6"
+                  ],
                   "type": "string",
                   "enum": [
                     "Oranges",
@@ -63487,10 +63491,6 @@
                     "Olives",
                     "Avocados",
                     "Mangoes"
-                  ],
-                  "description": "Type of perennial woody crop planted",
-                  "x-modules": [
-                    "16.6"
                   ]
                 },
                 "clearings": {

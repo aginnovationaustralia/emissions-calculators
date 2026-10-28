@@ -6,6 +6,7 @@ import { collectInputs } from '@/tools/collect';
 import { Container } from '@/tools/containers';
 import { formatNamedValues } from '@/tools/format';
 import { ModuleNames } from '@/tools/modules';
+import { seedOf } from '@/tools/method-value-store';
 import { NumberUnit } from '@/tools/units';
 import XLSX from 'xlsx-populate';
 import { expectInputsTaggedForModule } from './module-tagging';
@@ -153,7 +154,9 @@ export const compareInputsAndOutputs = <
     if (!isEscapeHatchValue) {
       const isTestCaseForMethod2 = method === '2';
       try {
-        expect(actual.unit.store.hasMethod2()).toBe(isTestCaseForMethod2);
+        expect(seedOf(actual.unit.store).valueMethod2 !== undefined).toBe(
+          isTestCaseForMethod2,
+        );
       } catch (e) {
         if (isTestCaseForMethod2) {
           console.error(

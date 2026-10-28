@@ -78,6 +78,11 @@
                             "x-units": "kilowatt-hours"
                           },
                           "region": {
+                            "description": "The state, territory or electricity grid the electricity is purchased in",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
                             "type": "string",
                             "enum": [
                               "NSW",
@@ -90,11 +95,6 @@
                               "NT",
                               "ACT",
                               "National"
-                            ],
-                            "description": "The state, territory or electricity grid the electricity is purchased in",
-                            "x-modules": [
-                              "14.1",
-                              "15.11"
                             ]
                           }
                         },
@@ -180,6 +180,11 @@
                             "x-units": "megawatt-hours"
                           },
                           "region": {
+                            "description": "The state, territory or electricity grid the electricity is purchased in",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
                             "type": "string",
                             "enum": [
                               "NSW",
@@ -192,11 +197,6 @@
                               "NT",
                               "ACT",
                               "National"
-                            ],
-                            "description": "The state, territory or electricity grid the electricity is purchased in",
-                            "x-modules": [
-                              "14.1",
-                              "15.11"
                             ]
                           }
                         },
@@ -247,13 +247,19 @@
                           "$ref": "#/components/schemas/PigsHerdClassesInput"
                         },
                         "isInLeachingZone": {
-                          "type": "boolean",
                           "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                           "x-modules": [
                             "4.5"
-                          ]
+                          ],
+                          "type": "boolean"
                         },
                         "state": {
+                          "description": "The state or territory the activity is based in",
+                          "x-modules": [
+                            "4.5",
+                            "15.7",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "ACT",
@@ -264,12 +270,6 @@
                             "SA",
                             "WA",
                             "NT"
-                          ],
-                          "description": "The state or territory the activity is based in",
-                          "x-modules": [
-                            "4.5",
-                            "15.7",
-                            "15.10"
                           ]
                         },
                         "method2MeanAnnualTemperature": {
@@ -301,6 +301,10 @@
                           ]
                         },
                         "grazingSystem": {
+                          "description": "The production system which most accurately describes the land used for grazing and feed.",
+                          "x-modules": [
+                            "4.5"
+                          ],
                           "type": "string",
                           "enum": [
                             "Non-irrigated pasture",
@@ -308,10 +312,6 @@
                             "Irrigated crop",
                             "Non-irrigated crop (low rainfall)",
                             "Non-irrigated crop (high rainfall)"
-                          ],
-                          "description": "The production system which most accurately describes the land used for grazing and feed.",
-                          "x-modules": [
-                            "4.5"
                           ]
                         },
                         "fuel": {
@@ -478,6 +478,10 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
+                                                "description": "Type of solid waste treated at this facility (Burial)",
+                                                "x-modules": [
+                                                  "10.1"
+                                                ],
                                                 "type": "string",
                                                 "enum": [
                                                   "Food waste",
@@ -490,10 +494,6 @@
                                                   "Rubber and leather",
                                                   "Inert waste",
                                                   "Nappies"
-                                                ],
-                                                "description": "Type of solid waste treated at this facility (Burial)",
-                                                "x-modules": [
-                                                  "10.1"
                                                 ]
                                               },
                                               "massWasteTonnes": {
@@ -528,6 +528,10 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
+                                                "description": "Type of solid waste treated at this facility (Burial)",
+                                                "x-modules": [
+                                                  "10.1"
+                                                ],
                                                 "type": "string",
                                                 "enum": [
                                                   "Food waste",
@@ -540,10 +544,6 @@
                                                   "Rubber and leather",
                                                   "Inert waste",
                                                   "Nappies"
-                                                ],
-                                                "description": "Type of solid waste treated at this facility (Burial)",
-                                                "x-modules": [
-                                                  "10.1"
                                                 ]
                                               },
                                               "volumeWasteCubicMetres": {
@@ -585,6 +585,10 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
+                                                "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
+                                                "x-modules": [
+                                                  "10.1"
+                                                ],
                                                 "type": "string",
                                                 "enum": [
                                                   "Food waste",
@@ -597,10 +601,6 @@
                                                   "Rubber and leather",
                                                   "Inert waste",
                                                   "Nappies"
-                                                ],
-                                                "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
-                                                "x-modules": [
-                                                  "10.1"
                                                 ]
                                               },
                                               "massWasteTonnes": {
@@ -635,6 +635,10 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
+                                                "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
+                                                "x-modules": [
+                                                  "10.1"
+                                                ],
                                                 "type": "string",
                                                 "enum": [
                                                   "Food waste",
@@ -647,10 +651,6 @@
                                                   "Rubber and leather",
                                                   "Inert waste",
                                                   "Nappies"
-                                                ],
-                                                "description": "Type of solid waste treated at this facility (Unmanaged - deep)",
-                                                "x-modules": [
-                                                  "10.1"
                                                 ]
                                               },
                                               "volumeWasteCubicMetres": {
@@ -692,6 +692,10 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
+                                                "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
+                                                "x-modules": [
+                                                  "10.1"
+                                                ],
                                                 "type": "string",
                                                 "enum": [
                                                   "Food waste",
@@ -704,10 +708,6 @@
                                                   "Rubber and leather",
                                                   "Inert waste",
                                                   "Nappies"
-                                                ],
-                                                "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
-                                                "x-modules": [
-                                                  "10.1"
                                                 ]
                                               },
                                               "massWasteTonnes": {
@@ -742,6 +742,10 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
+                                                "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
+                                                "x-modules": [
+                                                  "10.1"
+                                                ],
                                                 "type": "string",
                                                 "enum": [
                                                   "Food waste",
@@ -754,10 +758,6 @@
                                                   "Rubber and leather",
                                                   "Inert waste",
                                                   "Nappies"
-                                                ],
-                                                "description": "Type of solid waste treated at this facility (Unmanaged - shallow)",
-                                                "x-modules": [
-                                                  "10.1"
                                                 ]
                                               },
                                               "volumeWasteCubicMetres": {
@@ -799,6 +799,10 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
+                                                "description": "Type of solid waste treated at this facility (Composting)",
+                                                "x-modules": [
+                                                  "10.1"
+                                                ],
                                                 "type": "string",
                                                 "enum": [
                                                   "Food waste",
@@ -806,10 +810,6 @@
                                                   "Wood products (at time of harvest)",
                                                   "Wood products (at end of life)",
                                                   "Sludge"
-                                                ],
-                                                "description": "Type of solid waste treated at this facility (Composting)",
-                                                "x-modules": [
-                                                  "10.1"
                                                 ]
                                               },
                                               "massWasteTonnes": {
@@ -844,6 +844,10 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
+                                                "description": "Type of solid waste treated at this facility (Composting)",
+                                                "x-modules": [
+                                                  "10.1"
+                                                ],
                                                 "type": "string",
                                                 "enum": [
                                                   "Food waste",
@@ -851,10 +855,6 @@
                                                   "Wood products (at time of harvest)",
                                                   "Wood products (at end of life)",
                                                   "Sludge"
-                                                ],
-                                                "description": "Type of solid waste treated at this facility (Composting)",
-                                                "x-modules": [
-                                                  "10.1"
                                                 ]
                                               },
                                               "volumeWasteCubicMetres": {
@@ -896,6 +896,10 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
+                                                "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
+                                                "x-modules": [
+                                                  "10.1"
+                                                ],
                                                 "type": "string",
                                                 "enum": [
                                                   "Food waste",
@@ -903,10 +907,6 @@
                                                   "Wood products (at time of harvest)",
                                                   "Wood products (at end of life)",
                                                   "Sludge"
-                                                ],
-                                                "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
-                                                "x-modules": [
-                                                  "10.1"
                                                 ]
                                               },
                                               "massWasteTonnes": {
@@ -941,6 +941,10 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
+                                                "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
+                                                "x-modules": [
+                                                  "10.1"
+                                                ],
                                                 "type": "string",
                                                 "enum": [
                                                   "Food waste",
@@ -948,10 +952,6 @@
                                                   "Wood products (at time of harvest)",
                                                   "Wood products (at end of life)",
                                                   "Sludge"
-                                                ],
-                                                "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
-                                                "x-modules": [
-                                                  "10.1"
                                                 ]
                                               },
                                               "volumeWasteCubicMetres": {
@@ -993,6 +993,10 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
+                                                "description": "Type of solid waste treated at this facility (Incineration)",
+                                                "x-modules": [
+                                                  "10.1"
+                                                ],
                                                 "type": "string",
                                                 "enum": [
                                                   "Food waste",
@@ -1005,10 +1009,6 @@
                                                   "Rubber and leather",
                                                   "Inert waste",
                                                   "Nappies"
-                                                ],
-                                                "description": "Type of solid waste treated at this facility (Incineration)",
-                                                "x-modules": [
-                                                  "10.1"
                                                 ]
                                               },
                                               "massWasteTonnes": {
@@ -1043,6 +1043,10 @@
                                             "type": "object",
                                             "properties": {
                                               "wasteType": {
+                                                "description": "Type of solid waste treated at this facility (Incineration)",
+                                                "x-modules": [
+                                                  "10.1"
+                                                ],
                                                 "type": "string",
                                                 "enum": [
                                                   "Food waste",
@@ -1055,10 +1059,6 @@
                                                   "Rubber and leather",
                                                   "Inert waste",
                                                   "Nappies"
-                                                ],
-                                                "description": "Type of solid waste treated at this facility (Incineration)",
-                                                "x-modules": [
-                                                  "10.1"
                                                 ]
                                               },
                                               "volumeWasteCubicMetres": {
@@ -1115,6 +1115,10 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
+                                            "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
+                                            "x-modules": [
+                                              "15.12"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Food waste",
@@ -1129,10 +1133,6 @@
                                               "Municipal solid waste",
                                               "Commercial and industrial waste",
                                               "Construction and demolition waste"
-                                            ],
-                                            "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
-                                            "x-modules": [
-                                              "15.12"
                                             ]
                                           },
                                           "massWasteTonnes": {
@@ -1167,6 +1167,10 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
+                                            "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
+                                            "x-modules": [
+                                              "15.12"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Food waste",
@@ -1181,10 +1185,6 @@
                                               "Municipal solid waste",
                                               "Commercial and industrial waste",
                                               "Construction and demolition waste"
-                                            ],
-                                            "description": "Type of solid waste treated at this facility (Landfill (without gas recovery))",
-                                            "x-modules": [
-                                              "15.12"
                                             ]
                                           },
                                           "volumeWasteCubicMetres": {
@@ -1227,6 +1227,10 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
+                                            "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
+                                            "x-modules": [
+                                              "15.12"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Food waste",
@@ -1241,10 +1245,6 @@
                                               "Municipal solid waste",
                                               "Commercial and industrial waste",
                                               "Construction and demolition waste"
-                                            ],
-                                            "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
-                                            "x-modules": [
-                                              "15.12"
                                             ]
                                           },
                                           "massWasteTonnes": {
@@ -1279,6 +1279,10 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
+                                            "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
+                                            "x-modules": [
+                                              "15.12"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Food waste",
@@ -1293,10 +1297,6 @@
                                               "Municipal solid waste",
                                               "Commercial and industrial waste",
                                               "Construction and demolition waste"
-                                            ],
-                                            "description": "Type of solid waste treated at this facility (Landfill (with gas recovery))",
-                                            "x-modules": [
-                                              "15.12"
                                             ]
                                           },
                                           "volumeWasteCubicMetres": {
@@ -1339,6 +1339,10 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
+                                            "description": "Type of solid waste treated at this facility (Incineration)",
+                                            "x-modules": [
+                                              "15.12"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Food waste",
@@ -1352,10 +1356,6 @@
                                               "Inert waste",
                                               "Municipal solid waste",
                                               "Commercial and industrial waste"
-                                            ],
-                                            "description": "Type of solid waste treated at this facility (Incineration)",
-                                            "x-modules": [
-                                              "15.12"
                                             ]
                                           },
                                           "massWasteTonnes": {
@@ -1390,6 +1390,10 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
+                                            "description": "Type of solid waste treated at this facility (Incineration)",
+                                            "x-modules": [
+                                              "15.12"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Food waste",
@@ -1403,10 +1407,6 @@
                                               "Inert waste",
                                               "Municipal solid waste",
                                               "Commercial and industrial waste"
-                                            ],
-                                            "description": "Type of solid waste treated at this facility (Incineration)",
-                                            "x-modules": [
-                                              "15.12"
                                             ]
                                           },
                                           "volumeWasteCubicMetres": {
@@ -1449,6 +1449,10 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
+                                            "description": "Type of solid waste treated at this facility (Composting)",
+                                            "x-modules": [
+                                              "15.12"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Food waste",
@@ -1456,10 +1460,6 @@
                                               "Wood products (at time of harvest)",
                                               "Wood products (at end of life)",
                                               "Sludge"
-                                            ],
-                                            "description": "Type of solid waste treated at this facility (Composting)",
-                                            "x-modules": [
-                                              "15.12"
                                             ]
                                           },
                                           "massWasteTonnes": {
@@ -1494,6 +1494,10 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
+                                            "description": "Type of solid waste treated at this facility (Composting)",
+                                            "x-modules": [
+                                              "15.12"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Food waste",
@@ -1501,10 +1505,6 @@
                                               "Wood products (at time of harvest)",
                                               "Wood products (at end of life)",
                                               "Sludge"
-                                            ],
-                                            "description": "Type of solid waste treated at this facility (Composting)",
-                                            "x-modules": [
-                                              "15.12"
                                             ]
                                           },
                                           "volumeWasteCubicMetres": {
@@ -1547,6 +1547,10 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
+                                            "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
+                                            "x-modules": [
+                                              "15.12"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Food waste",
@@ -1554,10 +1558,6 @@
                                               "Wood products (at time of harvest)",
                                               "Wood products (at end of life)",
                                               "Sludge"
-                                            ],
-                                            "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
-                                            "x-modules": [
-                                              "15.12"
                                             ]
                                           },
                                           "massWasteTonnes": {
@@ -1592,6 +1592,10 @@
                                         "type": "object",
                                         "properties": {
                                           "wasteType": {
+                                            "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
+                                            "x-modules": [
+                                              "15.12"
+                                            ],
                                             "type": "string",
                                             "enum": [
                                               "Food waste",
@@ -1599,10 +1603,6 @@
                                               "Wood products (at time of harvest)",
                                               "Wood products (at end of life)",
                                               "Sludge"
-                                            ],
-                                            "description": "Type of solid waste treated at this facility (Anaerobic Digestion)",
-                                            "x-modules": [
-                                              "15.12"
                                             ]
                                           },
                                           "volumeWasteCubicMetres": {
@@ -1675,6 +1675,10 @@
                                     "x-units": "head"
                                   },
                                   "category": {
+                                    "description": "The category of the purchased pigs",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
                                     "type": "string",
                                     "enum": [
                                       "pigsDefault",
@@ -1682,13 +1686,13 @@
                                       "pigsConventionalRearingUncoveredEffluentPond",
                                       "pigsDeepLitterRearing",
                                       "pigsOutdoorRearing"
-                                    ],
-                                    "description": "The category of the purchased pigs",
-                                    "x-modules": [
-                                      "15.1"
                                     ]
                                   },
                                   "weightClass": {
+                                    "description": "The weight class of the purchased pigs",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
                                     "type": "string",
                                     "enum": [
                                       "boars",
@@ -1696,10 +1700,6 @@
                                       "gilts",
                                       "slaughterPigs",
                                       "slaughterPigsAtTurnoff"
-                                    ],
-                                    "description": "The weight class of the purchased pigs",
-                                    "x-modules": [
-                                      "15.1"
                                     ]
                                   }
                                 },
@@ -1741,6 +1741,10 @@
                                     "x-units": "head"
                                   },
                                   "category": {
+                                    "description": "The category of the purchased pigs",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
                                     "type": "string",
                                     "enum": [
                                       "pigsDefault",
@@ -1748,10 +1752,6 @@
                                       "pigsConventionalRearingUncoveredEffluentPond",
                                       "pigsDeepLitterRearing",
                                       "pigsOutdoorRearing"
-                                    ],
-                                    "description": "The category of the purchased pigs",
-                                    "x-modules": [
-                                      "15.1"
                                     ]
                                   },
                                   "liveweightMethod2": {
@@ -1835,6 +1835,10 @@
                                     "x-units": "kilograms CO2e per kilogram liveweight"
                                   },
                                   "weightClass": {
+                                    "description": "The weight class of the purchased pigs",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
                                     "type": "string",
                                     "enum": [
                                       "boars",
@@ -1842,10 +1846,6 @@
                                       "gilts",
                                       "slaughterPigs",
                                       "slaughterPigsAtTurnoff"
-                                    ],
-                                    "description": "The weight class of the purchased pigs",
-                                    "x-modules": [
-                                      "15.1"
                                     ]
                                   }
                                 },
@@ -3634,13 +3634,19 @@
                       "x-units": "tonnes carbon per hectare"
                     },
                     "isInLeachingZone": {
-                      "type": "boolean",
                       "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                       "x-modules": [
                         "16.4"
-                      ]
+                      ],
+                      "type": "boolean"
                     },
                     "region": {
+                      "description": "IBRA7 region of the activity area",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
                       "type": "string",
                       "enum": [
                         "Arnhem Coast",
@@ -3728,12 +3734,6 @@
                         "Warren",
                         "Wet Tropics",
                         "Yalgoo"
-                      ],
-                      "description": "IBRA7 region of the activity area",
-                      "x-modules": [
-                        "16.2",
-                        "16.3",
-                        "16.4"
                       ]
                     },
                     "massCH4FromBiomassBurningPerHectare": {
@@ -3804,15 +3804,15 @@
                       "const": "landClearingForestToCropland"
                     },
                     "cropProductionSystem": {
+                      "description": "Crop production",
+                      "x-modules": [
+                        "16.3"
+                      ],
                       "type": "string",
                       "enum": [
                         "Irrigated crop",
                         "Non-irrigated crop (low rainfall)",
                         "Non-irrigated crop (high rainfall)"
-                      ],
-                      "description": "Crop production",
-                      "x-modules": [
-                        "16.3"
                       ]
                     }
                   },
@@ -3945,13 +3945,19 @@
                       "x-units": "tonnes carbon per hectare"
                     },
                     "isInLeachingZone": {
-                      "type": "boolean",
                       "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                       "x-modules": [
                         "16.4"
-                      ]
+                      ],
+                      "type": "boolean"
                     },
                     "region": {
+                      "description": "IBRA7 region of the activity area",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
                       "type": "string",
                       "enum": [
                         "Arnhem Coast",
@@ -4039,12 +4045,6 @@
                         "Warren",
                         "Wet Tropics",
                         "Yalgoo"
-                      ],
-                      "description": "IBRA7 region of the activity area",
-                      "x-modules": [
-                        "16.2",
-                        "16.3",
-                        "16.4"
                       ]
                     },
                     "massCH4FromBiomassBurningPerHectare": {
@@ -4115,14 +4115,14 @@
                       "const": "landClearingForestToGrassland"
                     },
                     "pastureProductionSystem": {
+                      "description": "Pasture production",
+                      "x-modules": [
+                        "16.3"
+                      ],
                       "type": "string",
                       "enum": [
                         "Irrigated pasture",
                         "Non-irrigated pasture"
-                      ],
-                      "description": "Pasture production",
-                      "x-modules": [
-                        "16.3"
                       ]
                     }
                   },
@@ -4255,13 +4255,19 @@
                       "x-units": "tonnes carbon per hectare"
                     },
                     "isInLeachingZone": {
-                      "type": "boolean",
                       "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                       "x-modules": [
                         "16.4"
-                      ]
+                      ],
+                      "type": "boolean"
                     },
                     "region": {
+                      "description": "IBRA7 region of the activity area",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
                       "type": "string",
                       "enum": [
                         "Arnhem Coast",
@@ -4349,12 +4355,6 @@
                         "Warren",
                         "Wet Tropics",
                         "Yalgoo"
-                      ],
-                      "description": "IBRA7 region of the activity area",
-                      "x-modules": [
-                        "16.2",
-                        "16.3",
-                        "16.4"
                       ]
                     },
                     "massCH4FromBiomassBurningPerHectare": {
@@ -4425,13 +4425,13 @@
                       "const": "landClearingForestToSettlements"
                     },
                     "pastureProductionSystem": {
-                      "type": "string",
-                      "enum": [
-                        "Non-irrigated pasture"
-                      ],
                       "description": "Pasture production",
                       "x-modules": [
                         "16.3"
+                      ],
+                      "type": "string",
+                      "enum": [
+                        "Non-irrigated pasture"
                       ]
                     }
                   },
@@ -5366,6 +5366,10 @@
                 "cropType": {
                   "oneOf": [
                     {
+                      "description": "Type of perennial woody crop planted",
+                      "x-modules": [
+                        "16.6"
+                      ],
                       "title": "Full",
                       "type": "string",
                       "enum": [
@@ -5377,22 +5381,18 @@
                         "Olives",
                         "Avocados",
                         "Mangoes"
-                      ],
-                      "description": "Type of perennial woody crop planted",
-                      "x-modules": [
-                        "16.6"
                       ]
                     },
                     {
+                      "description": "Type of perennial woody crop planted",
+                      "x-modules": [
+                        "16.6"
+                      ],
                       "title": "Partial",
                       "type": "string",
                       "enum": [
                         "Grapes",
                         "Kiwifruits"
-                      ],
-                      "description": "Type of perennial woody crop planted",
-                      "x-modules": [
-                        "16.6"
                       ]
                     }
                   ]
@@ -5545,6 +5545,10 @@
                   }
                 },
                 "cropType": {
+                  "description": "Type of perennial woody crop planted",
+                  "x-modules": [
+                    "16.6"
+                  ],
                   "type": "string",
                   "enum": [
                     "Oranges",
@@ -5555,10 +5559,6 @@
                     "Olives",
                     "Avocados",
                     "Mangoes"
-                  ],
-                  "description": "Type of perennial woody crop planted",
-                  "x-modules": [
-                    "16.6"
                   ]
                 },
                 "calculationMethod": {
@@ -5732,6 +5732,10 @@
                   }
                 },
                 "cropType": {
+                  "description": "Type of perennial woody crop planted",
+                  "x-modules": [
+                    "16.6"
+                  ],
                   "type": "string",
                   "enum": [
                     "Oranges",
@@ -5742,10 +5746,6 @@
                     "Olives",
                     "Avocados",
                     "Mangoes"
-                  ],
-                  "description": "Type of perennial woody crop planted",
-                  "x-modules": [
-                    "16.6"
                   ]
                 },
                 "clearings": {
@@ -6342,11 +6342,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -6477,11 +6477,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -6612,11 +6612,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -8008,11 +8008,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -8143,11 +8143,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -8278,11 +8278,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -9674,11 +9674,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -9809,11 +9809,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -9944,11 +9944,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -11340,11 +11340,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -11475,11 +11475,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -11610,11 +11610,11 @@
                             "additionalProperties": false
                           },
                           "solidsSeparatedPreTreatment": {
-                            "type": "boolean",
                             "description": "If solids produced by these pigs were separated by pre-treatment of manure (before flowing into the primary MMS).",
                             "x-modules": [
                               "4.5"
-                            ]
+                            ],
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -12514,6 +12514,11 @@
                           "const": "Cars and light commercial vehicles"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by cars and light commercial vehicles",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline",
@@ -12524,11 +12529,6 @@
                             "Biodiesel",
                             "Renewable diesel",
                             "Other biofuels"
-                          ],
-                          "description": "Type of fuel used by cars and light commercial vehicles",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -12569,6 +12569,11 @@
                           "const": "Cars and light commercial vehicles (pre 2004)"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline",
@@ -12576,11 +12581,6 @@
                             "Liquefied petroleum gas (LPG)",
                             "Ethanol",
                             "Renewable diesel"
-                          ],
-                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -12621,15 +12621,15 @@
                           "const": "Light duty vehicles"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Compressed natural gas",
-                            "Liquefied natural gas"
-                          ],
                           "description": "Type of fuel used by light duty vehicles",
                           "x-modules": [
                             "8.1",
                             "15.10"
+                          ],
+                          "type": "string",
+                          "enum": [
+                            "Compressed natural gas",
+                            "Liquefied natural gas"
                           ]
                         }
                       },
@@ -12670,6 +12670,11 @@
                           "const": "Heavy duty vehicles"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by heavy duty vehicles",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Compressed natural gas",
@@ -12680,11 +12685,6 @@
                             "Renewable diesel - Euro iv or higher",
                             "Renewable diesel - Euro iii",
                             "Renewable diesel - Euro i"
-                          ],
-                          "description": "Type of fuel used by heavy duty vehicles",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -12725,16 +12725,16 @@
                           "const": "Aviation"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by aircraft",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline for use as fuel in an aircraft",
                             "Kerosene for use as fuel in an aircraft",
                             "Renewable aviation kerosene"
-                          ],
-                          "description": "Type of fuel used by aircraft",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -12775,16 +12775,16 @@
                           "const": "Vessel"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by this vessel",
+                          "x-modules": [
+                            "8.1",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Petrol",
                             "Diesel",
                             "Fuel Oil"
-                          ],
-                          "description": "Type of fuel used by this vessel",
-                          "x-modules": [
-                            "8.1",
-                            "15.10"
                           ]
                         }
                       },
@@ -12825,14 +12825,14 @@
                           "const": "Off-road Agriculture and forestry equipment"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Diesel"
-                          ],
                           "description": "Type of fuel used by off-road agriculture and forestry equipment",
                           "x-modules": [
                             "8.1",
                             "15.10"
+                          ],
+                          "type": "string",
+                          "enum": [
+                            "Diesel"
                           ]
                         }
                       },
@@ -12863,14 +12863,14 @@
                       ]
                     },
                     "fuelType": {
-                      "type": "string",
-                      "enum": [
-                        "Compressed natural gas"
-                      ],
                       "description": "Type of compressed natural gas fuel used by this vehicle",
                       "x-modules": [
                         "8.1",
                         "15.10"
+                      ],
+                      "type": "string",
+                      "enum": [
+                        "Compressed natural gas"
                       ]
                     },
                     "amountCubicMetres": {
@@ -12919,6 +12919,11 @@
                       "const": "Solid fuels"
                     },
                     "fuelType": {
+                      "description": "Type of solid fuel used in stationary equipment",
+                      "x-modules": [
+                        "8.2",
+                        "15.10"
+                      ],
                       "type": "string",
                       "enum": [
                         "Bituminous coal",
@@ -12941,11 +12946,6 @@
                         "Biomass, municipal and industrial materials",
                         "Charcoal",
                         "Other primary solid biomass fuels"
-                      ],
-                      "description": "Type of solid fuel used in stationary equipment",
-                      "x-modules": [
-                        "8.2",
-                        "15.10"
                       ]
                     },
                     "amountTonnes": {
@@ -12989,6 +12989,11 @@
                           "const": "Liquid fuels"
                         },
                         "fuelType": {
+                          "description": "Type of liquid fuel used in stationary equipment",
+                          "x-modules": [
+                            "8.2",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Petroleum based oils other than fuels",
@@ -13005,11 +13010,6 @@
                             "Liquefied petroleum gas",
                             "Naphtha",
                             "Other petroleum products"
-                          ],
-                          "description": "Type of liquid fuel used in stationary equipment",
-                          "x-modules": [
-                            "8.2",
-                            "15.10"
                           ]
                         },
                         "amountKilolitres": {
@@ -13051,6 +13051,11 @@
                           "const": "Liquid fuels"
                         },
                         "fuelType": {
+                          "description": "Type of liquid fuel used in stationary equipment",
+                          "x-modules": [
+                            "8.2",
+                            "15.10"
+                          ],
                           "type": "string",
                           "enum": [
                             "Crude oil and condensates",
@@ -13058,11 +13063,6 @@
                             "Petroleum coke",
                             "Refinery gas and liquids",
                             "Refinery coke"
-                          ],
-                          "description": "Type of liquid fuel used in stationary equipment",
-                          "x-modules": [
-                            "8.2",
-                            "15.10"
                           ]
                         },
                         "amountTonnes": {
@@ -13708,6 +13708,10 @@
                       "x-units": "tonnes purchased feed"
                     },
                     "type": {
+                      "description": "The type of feed purchased.",
+                      "x-modules": [
+                        "15.2"
+                      ],
                       "type": "string",
                       "enum": [
                         "Whole Sardines",
@@ -13715,10 +13719,6 @@
                         "Squid",
                         "Whole Fish",
                         "Custom Bait"
-                      ],
-                      "description": "The type of feed purchased.",
-                      "x-modules": [
-                        "15.2"
                       ]
                     }
                   },
@@ -13827,6 +13827,10 @@
                           "const": "Cars and light commercial vehicles"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by cars and light commercial vehicles",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline",
@@ -13837,10 +13841,6 @@
                             "Biodiesel",
                             "Renewable diesel",
                             "Other biofuels"
-                          ],
-                          "description": "Type of fuel used by cars and light commercial vehicles",
-                          "x-modules": [
-                            "15.7"
                           ]
                         }
                       },
@@ -13880,6 +13880,10 @@
                           "const": "Cars and light commercial vehicles (pre 2004)"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline",
@@ -13887,10 +13891,6 @@
                             "Liquefied petroleum gas (LPG)",
                             "Ethanol",
                             "Renewable diesel"
-                          ],
-                          "description": "Type of fuel used by cars and light commercial vehicles manufactured before 2004",
-                          "x-modules": [
-                            "15.7"
                           ]
                         }
                       },
@@ -13930,14 +13930,14 @@
                           "const": "Light duty vehicles"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by light duty vehicles",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Compressed natural gas",
                             "Liquefied natural gas"
-                          ],
-                          "description": "Type of fuel used by light duty vehicles",
-                          "x-modules": [
-                            "15.7"
                           ]
                         }
                       },
@@ -13977,6 +13977,10 @@
                           "const": "Heavy duty vehicles"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by heavy duty vehicles",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Compressed natural gas",
@@ -13987,10 +13991,6 @@
                             "Renewable diesel - Euro iv or higher",
                             "Renewable diesel - Euro iii",
                             "Renewable diesel - Euro i"
-                          ],
-                          "description": "Type of fuel used by heavy duty vehicles",
-                          "x-modules": [
-                            "15.7"
                           ]
                         }
                       },
@@ -14030,15 +14030,15 @@
                           "const": "Aviation"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by aircraft",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Gasoline for use as fuel in an aircraft",
                             "Kerosene for use as fuel in an aircraft",
                             "Renewable aviation kerosene"
-                          ],
-                          "description": "Type of fuel used by aircraft",
-                          "x-modules": [
-                            "15.7"
                           ]
                         }
                       },
@@ -14078,15 +14078,15 @@
                           "const": "Vessel"
                         },
                         "fuelType": {
+                          "description": "Type of fuel used by this vessel",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Petrol",
                             "Diesel",
                             "Fuel Oil"
-                          ],
-                          "description": "Type of fuel used by this vessel",
-                          "x-modules": [
-                            "15.7"
                           ]
                         }
                       },
@@ -14126,13 +14126,13 @@
                           "const": "Off-road Agriculture and forestry equipment"
                         },
                         "fuelType": {
-                          "type": "string",
-                          "enum": [
-                            "Diesel"
-                          ],
                           "description": "Type of fuel used by off-road agriculture and forestry equipment",
                           "x-modules": [
                             "15.7"
+                          ],
+                          "type": "string",
+                          "enum": [
+                            "Diesel"
                           ]
                         }
                       },
@@ -14163,13 +14163,13 @@
                       ]
                     },
                     "fuelType": {
-                      "type": "string",
-                      "enum": [
-                        "Compressed natural gas"
-                      ],
                       "description": "Type of compressed natural gas fuel used by this vehicle",
                       "x-modules": [
                         "15.7"
+                      ],
+                      "type": "string",
+                      "enum": [
+                        "Compressed natural gas"
                       ]
                     },
                     "amountCubicMetres": {
@@ -14217,6 +14217,10 @@
                       "const": "Solid fuels"
                     },
                     "fuelType": {
+                      "description": "Type of solid fuel used in stationary equipment",
+                      "x-modules": [
+                        "15.7"
+                      ],
                       "type": "string",
                       "enum": [
                         "Bituminous coal",
@@ -14239,10 +14243,6 @@
                         "Biomass, municipal and industrial materials",
                         "Charcoal",
                         "Other primary solid biomass fuels"
-                      ],
-                      "description": "Type of solid fuel used in stationary equipment",
-                      "x-modules": [
-                        "15.7"
                       ]
                     },
                     "amountTonnes": {
@@ -14285,6 +14285,10 @@
                           "const": "Liquid fuels"
                         },
                         "fuelType": {
+                          "description": "Type of liquid fuel used in stationary equipment",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Petroleum based oils other than fuels",
@@ -14301,10 +14305,6 @@
                             "Liquefied petroleum gas",
                             "Naphtha",
                             "Other petroleum products"
-                          ],
-                          "description": "Type of liquid fuel used in stationary equipment",
-                          "x-modules": [
-                            "15.7"
                           ]
                         },
                         "amountKilolitres": {
@@ -14345,6 +14345,10 @@
                           "const": "Liquid fuels"
                         },
                         "fuelType": {
+                          "description": "Type of liquid fuel used in stationary equipment",
+                          "x-modules": [
+                            "15.7"
+                          ],
                           "type": "string",
                           "enum": [
                             "Crude oil and condensates",
@@ -14352,10 +14356,6 @@
                             "Petroleum coke",
                             "Refinery gas and liquids",
                             "Refinery coke"
-                          ],
-                          "description": "Type of liquid fuel used in stationary equipment",
-                          "x-modules": [
-                            "15.7"
                           ]
                         },
                         "amountTonnes": {

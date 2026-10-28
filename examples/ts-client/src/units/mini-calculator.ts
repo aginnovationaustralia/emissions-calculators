@@ -4,15 +4,13 @@ import {
 } from '@aginnovationaustralia/emissions-calculators/internal/containers';
 import { ifTrueElse } from '@aginnovationaustralia/emissions-calculators/internal/if-else';
 import {
-  booleanInput,
-  enumInput,
+  genericBooleanInput,
+  genericEnumInput,
+  genericNumberInput,
   isNonNegative,
   isProportion,
-  numberInput,
   nv,
 } from '@aginnovationaustralia/emissions-calculators/internal/inputs';
-import { ENTERIC_OTHER_3_6 } from '@aginnovationaustralia/emissions-calculators/internal/modules';
-import { scope1Output } from '@aginnovationaustralia/emissions-calculators/internal/outputs';
 import { sum } from '@aginnovationaustralia/emissions-calculators/internal/sum';
 import { selectSwitch } from '@aginnovationaustralia/emissions-calculators/internal/switch';
 import {
@@ -34,47 +32,41 @@ import { z } from 'zod';
  * combinations that don't balance, such as adding a `Mass<'CH4'>` to a `Head`.
  */
 
-// The module that consumes each input. Every input has to name at least one.
-const modules = [ENTERIC_OTHER_3_6] as const;
-
 const housingTypes = ['Paddock', 'Barn', 'Feedlot'] as const;
 
 export const MiniInputSchema = z.strictObject({
   // Numbers: `{ value, quality? }`, converted to a container of the given unit
-  head: numberInput(
+  head: genericNumberInput(
     head,
-    { name: 'head', description: 'Number of animals', modules: [...modules] },
+    { name: 'head', description: 'Number of animals' },
     isNonNegative,
   ),
-  entericFactor: numberInput(
+  entericFactor: genericNumberInput(
     (value) => massPerHead('CH4', value),
     {
       name: 'entericFactor',
       description: 'Enteric methane per head per year',
-      modules: [...modules],
     },
     isNonNegative,
   ),
-  fractionAbated: numberInput(
+  fractionAbated: genericNumberInput(
     realNumber,
     {
       name: 'fractionAbated',
       description: 'Fraction of enteric methane abated by a feed additive',
-      modules: [...modules],
     },
     isProportion,
   ),
   // Booleans: converted to a boolean container
-  isGrazing: booleanInput(
-    'isGrazing',
-    'Whether the animals graze, which raises enteric methane by 10%',
-    [...modules],
-  ),
+  isGrazing: genericBooleanInput({
+    name: 'isGrazing',
+    description:
+      'Whether the animals graze, which raises enteric methane by 10%',
+  }),
   // Enums: converted to a string container that can drive a switch
-  housing: enumInput(housingTypes, {
+  housing: genericEnumInput(housingTypes, {
     name: 'housing',
     description: 'How the animals are housed',
-    modules: [...modules],
   }),
 });
 
@@ -116,11 +108,11 @@ export const calculateMini = (input: MiniInputTransformed) => {
   const totalFromSum = sum([enteric, housingCH4]).named('totalFromSum');
 
   return {
-    // A raw number, read straight from the container
+    // The containers keep how each value was derived
+    total,
+    // Read a value straight from a container
     totalCH4Kg: total.unit.store.toNumber(),
     totalFromSumCH4Kg: totalFromSum.unit.store.toNumber(),
-    // A full output, with CO2e and the inputs that fed into it
-    output: scope1Output('miniCH4', total),
   };
 };
 
@@ -147,14 +139,8 @@ export const calculateMiniExample = () => {
 
   const result = calculateMini(parsed.data);
   console.log('Mini calculator CH4 (kg)', result.totalCH4Kg);
-  console.log(
-    'Mini calculator CO2e (kg)',
-    result.output.amountKgCO2e.toNumber(),
-  );
-  console.log(
-    'Mini calculator inputs used',
-    result.output.inputs.map((i) => i.name),
-  );
+  console.log('Mini calculator CH4 via sum (kg)', result.totalFromSumCH4Kg);
+  console.log('Mini calculator result name', result.total.core?.name);
 
   return result;
 };

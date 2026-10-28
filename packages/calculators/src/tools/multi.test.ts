@@ -14,7 +14,18 @@ import {
   Method1And2Container,
   Method2Container,
 } from '@/tools/multi';
+import { isValueSeed1And2, seedOf } from '@/tools/method-value-store';
 import { mass, realNumber, voidUnit } from '@/tools/units';
+import { ValueStore } from '@/tools/value-store';
+
+/** The method 1 and 2 values a store holds, as numbers */
+const methods = (store: ValueStore) => {
+  const seed = seedOf(store);
+  return {
+    method1: isValueSeed1And2(seed) ? seed.valueMethod1.toNumber() : undefined,
+    method2: seed.valueMethod2?.toNumber(),
+  };
+};
 
 const seasons = (period: BeefClassPeriodInput) => ({
   spring: period,
@@ -77,7 +88,7 @@ describe('captureMethod1Or2Value', () => {
     const captured = captureMethod1Or2Value(method1, undefined);
 
     expect(captured).toBe(method1);
-    expect(captured.unit.store.hasMethod2()).toBe(false);
+    expect(methods(captured.unit.store).method2).toBeUndefined();
     expect(captured.unit.store.value.toNumber()).toBe(10);
   });
 
@@ -92,9 +103,9 @@ describe('captureMethod1Or2Value', () => {
 
     expect(captured).toBeInstanceOf(Method1And2Container);
     expect(captured.originType).toBe('method1and2');
-    expect(captured.unit.store.hasMethod2()).toBe(true);
-    expect(captured.unit.store.valueMethod1?.toNumber()).toBe(10);
-    expect(captured.unit.store.valueMethod2?.toNumber()).toBe(25);
+    expect(methods(captured.unit.store).method2).toBeDefined();
+    expect(methods(captured.unit.store).method1).toBe(10);
+    expect(methods(captured.unit.store).method2).toBe(25);
     expect(captured.unit.store.value.toNumber()).toBe(25);
   });
 
@@ -108,8 +119,8 @@ describe('captureMethod1Or2Value', () => {
 
     expect(captured).toBeInstanceOf(Method2Container);
     expect(captured.originType).toBe('method2');
-    expect(captured.unit.store.hasMethod1()).toBe(false);
-    expect(captured.unit.store.hasMethod2()).toBe(true);
+    expect(methods(captured.unit.store).method1).toBeUndefined();
+    expect(methods(captured.unit.store).method2).toBeDefined();
     expect(captured.unit.store.value.toNumber()).toBe(25);
   });
 });
@@ -127,8 +138,8 @@ describe('Method1And2Container', () => {
     const switched = captured.switchUnit((u) => realNumber(u.store));
 
     expect(switched).toBeInstanceOf(Method1And2Container);
-    expect(switched.unit.store.valueMethod1?.toNumber()).toBe(100);
-    expect(switched.unit.store.valueMethod2?.toNumber()).toBe(200);
+    expect(methods(switched.unit.store).method1).toBe(100);
+    expect(methods(switched.unit.store).method2).toBe(200);
     expect(switched.unit.store.value.toNumber()).toBe(200);
   });
 
@@ -163,8 +174,8 @@ describe('Method1And2Container', () => {
       efOptionalMethod2InputDownstream,
     ).named('B (with both methods)');
 
-    expect(BWithBothCaptured.unit.store.valueMethod1?.toNumber()).toBe(20);
-    expect(BWithBothCaptured.unit.store.valueMethod2?.toNumber()).toBe(30);
+    expect(methods(BWithBothCaptured.unit.store).method1).toBe(20);
+    expect(methods(BWithBothCaptured.unit.store).method2).toBe(30);
     expect(BWithBothCaptured.unit.store.value.toNumber()).toBe(30);
   });
 });
@@ -178,18 +189,18 @@ describe('Method2Container', () => {
   it('reports no method 1 track', () => {
     const captured = method2Only();
 
-    expect(captured.unit.store.valueMethod1).toBeUndefined();
-    expect(captured.unit.store.hasMethod1()).toBe(false);
-    expect(captured.unit.store.hasMethod2()).toBe(true);
+    expect(methods(captured.unit.store).method1).toBeUndefined();
+    expect(methods(captured.unit.store).method1).toBeUndefined();
+    expect(methods(captured.unit.store).method2).toBeDefined();
     expect(captured.unit.store.value.toNumber()).toBe(100);
   });
 
   it('stays method 2 only through further calculations', () => {
     const captured = method2Only().multiply(num(3));
 
-    expect(captured.unit.store.valueMethod1).toBeUndefined();
-    expect(captured.unit.store.hasMethod1()).toBe(false);
-    expect(captured.unit.store.hasMethod2()).toBe(true);
+    expect(methods(captured.unit.store).method1).toBeUndefined();
+    expect(methods(captured.unit.store).method1).toBeUndefined();
+    expect(methods(captured.unit.store).method2).toBeDefined();
     expect(captured.unit.store.value.toNumber()).toBe(300);
   });
 
@@ -197,7 +208,7 @@ describe('Method2Container', () => {
     const switched = method2Only().switchUnit((u) => realNumber(u.store));
 
     expect(switched).toBeInstanceOf(Method2Container);
-    expect(switched.unit.store.hasMethod1()).toBe(false);
+    expect(methods(switched.unit.store).method1).toBeUndefined();
     expect(switched.unit.store.value.toNumber()).toBe(100);
   });
 });

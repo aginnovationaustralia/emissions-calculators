@@ -4,6 +4,7 @@ import { BaseContainer, Metadata } from './containers';
 import { getDisplayUnit } from './display-units';
 import { ModuleNames } from './modules';
 import { QualityTable, QualityTableSchema } from './quality';
+import { MethodValueStore } from './method-value-store';
 import { AnyUnit, NumberUnit } from './units';
 import { mapOptional } from './zod';
 
@@ -34,7 +35,24 @@ export class InputContainer<U extends AnyUnit> extends BaseContainer<U> {
     const newUnit = converter(this.unit as unknown as UN);
     return new InputContainer(newUnit, this.method, this.modules, this.core);
   }
+
+  /**
+   * Tag this input with the module(s) that consume it and its calculation method. A method 2
+   * number input tracks its value for both methods (see {@link MethodValueStore}).
+   */
+  asCalculatorInput(modules: string[], method: '1' | '2'): InputContainer<U> {
+    const unit: AnyUnit = this.unit;
+    const tagged =
+      method === '2' && isNumberUnit(unit)
+        ? { ...unit, store: MethodValueStore.fromMethod2Input(unit.store) }
+        : unit;
+    return new InputContainer(tagged as U, method, modules, this.core);
+  }
 }
+
+const isNumberUnit = (unit: AnyUnit): unit is NumberUnit =>
+  typeof unit === 'object';
+
 export type NonEmptyArray<T> = [T, ...T[]];
 
 export type InputOptions = {
@@ -90,6 +108,14 @@ export const numberValueOptional = (
 ): NumberInputValue | undefined =>
   value === undefined || value === null ? undefined : nv(value, quality);
 export const nvo = numberValueOptional;
+
+/**
+ * Options for the generic input schemas, which know nothing about the calculator modules.
+ */
+export type GenericInputOptions = {
+  name: string;
+  description: string;
+};
 
 export type TypedInputOptions = Omit<InputOptions, 'modules'> & {
   description: string;
@@ -181,20 +207,10 @@ const resolveNumberInputSchema = (
 const toInputContainer =
   <U extends NumberUnit>(
     unitFactory: (value: number) => U,
-    options: TypedInputOptions,
+    options: GenericInputOptions,
   ) =>
-  ({ value, quality }: RatedValue): InputContainer<U> => {
-    const unit = unitFactory(value);
-    if (options.method === '2') {
-      unit.store.applyMethod2();
-    }
-    return input(unit, {
-      name: options.name,
-      method: options.method,
-      quality,
-      modules: options.modules,
-    });
-  };
+  ({ value, quality }: RatedValue): InputContainer<U> =>
+    input(unitFactory(value), { name: options.name, quality, modules: [] });
 
 type TransformedNumberInputSchemaFactory<U extends NumberUnit> = z.ZodPipe<
   NumberInputObjectSchema,
@@ -209,11 +225,108 @@ type NumberInputSchemaOptional<U extends NumberUnit> = z.ZodPipe<
 const appendUnits = (description: string, units: string) =>
   `${description} (${units})`;
 
-/** Build the `description` + `x-modules` meta fields shared by every input schema. */
-const openapiTags = (description: string, modules: ModuleNames[]) => ({
+/** The `x-modules` meta field added to every calculator input schema. */
+const modulesTag = (modules: ModuleNames[]) => ({ [X_MODULES]: modules });
+
+/**
+ * Tag the input container a schema produces with the module(s) that consume it and its
+ * calculation method.
+ */
+const asCalculatorInput =
+  (modules: ModuleNames[], method: '1' | '2' = '1') =>
+  <C extends InputContainer<AnyUnit> | undefined>(container: C): C =>
+    container?.asCalculatorInput(modules, method) as C;
+
+// -------- Generic inputs -----------------
+// These know nothing about the calculator modules, so they can be used to build inputs for
+// any calculation. The calculator inputs below are built on them.
+
+/**
+ * Zod schema accepting `{ value, quality? }` and returning an input container.
+ */
+export function genericNumberInput<U extends NumberUnit>(
+  unitFactory: (value: number) => U,
+  options: GenericInputOptions,
+  schemaTweaker?: NumberSchemaTweaker,
+): TransformedNumberInputSchemaFactory<U> {
+  const displayUnit = getDisplayUnit(unitFactory, schemaTweaker);
+  return resolveNumberInputSchema(displayUnit, schemaTweaker)
+    .transform(toInputContainer(unitFactory, options))
+    .meta({ description: appendUnits(options.description, displayUnit) });
+}
+
+/**
+ * Optional `{ value, quality? }` number input schema.
+ */
+export function genericNumberInputOptional<U extends NumberUnit>(
+  unitFactory: (value: number) => U,
+  options: GenericInputOptions,
+  schemaTweaker?: NumberSchemaTweaker,
+): NumberInputSchemaOptional<U> {
+  const displayUnit = getDisplayUnit(unitFactory);
+  return resolveNumberInputSchema(displayUnit, schemaTweaker)
+    .optional()
+    .transform(mapOptional(toInputContainer(unitFactory, options)))
+    .meta({ description: appendUnits(options.description, displayUnit) });
+}
+
+export const genericEnumInput = <TEnum extends string>(
+  values: readonly TEnum[],
+  options: GenericInputOptions,
+) => {
+  const { name, description } = options;
+  return z
+    .enum(values)
+    .transform((val): InputContainer<TEnum> =>
+      input(val, { name, modules: [] }),
+    )
+    .meta({ description });
+};
+
+export const genericEnumInputOptional = <TEnum extends string>(
+  values: readonly TEnum[],
+  options: GenericInputOptions,
+) => {
+  const { name, description } = options;
+  return z
+    .enum(values)
+    .optional()
+    .transform(
+      mapOptional((val): InputContainer<TEnum> =>
+        input(val, { name, modules: [] }),
+      ),
+    )
+    .meta({ description });
+};
+
+export const genericBooleanInput = ({
+  name,
   description,
-  [X_MODULES]: modules,
-});
+}: GenericInputOptions) =>
+  z
+    .boolean()
+    .transform((val): InputContainer<boolean> =>
+      input(val, { name, modules: [] }),
+    )
+    .meta({ description });
+
+export const genericBooleanInputOptional = ({
+  name,
+  description,
+}: GenericInputOptions) =>
+  z
+    .boolean()
+    .optional()
+    .transform(
+      mapOptional((val): InputContainer<boolean> =>
+        input(val, { name, modules: [] }),
+      ),
+    )
+    .meta({ description });
+
+// -------- Calculator inputs -----------------
+// The generic inputs, tagged with the module(s) that consume them, both in the OpenAPI
+// schema (`x-modules`) and on the input container.
 
 /**
  * Zod schema accepting `{ value, quality? }` and returning an input container.
@@ -223,15 +336,9 @@ export function numberInput<U extends NumberUnit>(
   options: TypedInputOptions,
   schemaTweaker?: NumberSchemaTweaker,
 ): TransformedNumberInputSchemaFactory<U> {
-  const displayUnit = getDisplayUnit(unitFactory, schemaTweaker);
-  return resolveNumberInputSchema(displayUnit, schemaTweaker)
-    .transform(toInputContainer(unitFactory, options))
-    .meta(
-      openapiTags(
-        appendUnits(options.description, displayUnit),
-        options.modules,
-      ),
-    );
+  return genericNumberInput(unitFactory, options, schemaTweaker)
+    .overwrite(asCalculatorInput(options.modules, options.method))
+    .meta(modulesTag(options.modules));
 }
 
 /**
@@ -242,16 +349,9 @@ export function numberInputOptional<U extends NumberUnit>(
   options: TypedInputOptions,
   schemaTweaker?: NumberSchemaTweaker,
 ): NumberInputSchemaOptional<U> {
-  const displayUnit = getDisplayUnit(unitFactory);
-  return resolveNumberInputSchema(displayUnit, schemaTweaker)
-    .optional()
-    .transform(mapOptional(toInputContainer(unitFactory, options)))
-    .meta(
-      openapiTags(
-        appendUnits(options.description, displayUnit),
-        options.modules,
-      ),
-    );
+  return genericNumberInputOptional(unitFactory, options, schemaTweaker)
+    .overwrite(asCalculatorInput(options.modules, options.method))
+    .meta(modulesTag(options.modules));
 }
 
 export const isNonNegative: NumberSchemaTweaker = (schema) => schema.min(0);
@@ -266,31 +366,18 @@ export const isPercentage: NumberSchemaTweaker = (schema) =>
 export const enumInput = <TEnum extends string>(
   values: readonly TEnum[],
   options: TypedInputOptions,
-) => {
-  const { name, description, method = '1', modules } = options;
-  return z
-    .enum(values)
-    .meta(openapiTags(description, options.modules))
-    .transform((val): InputContainer<TEnum> =>
-      input(val, { name, method, modules }),
-    );
-};
+) =>
+  genericEnumInput(values, options)
+    .overwrite(asCalculatorInput(options.modules, options.method))
+    .meta(modulesTag(options.modules));
 
 export const enumInputOptional = <TEnum extends string>(
   values: readonly TEnum[],
   options: TypedInputOptions,
-) => {
-  const { name, description, method = '1', modules } = options;
-  return z
-    .enum(values)
-    .optional()
-    .meta(openapiTags(description, options.modules))
-    .transform(
-      mapOptional((val): InputContainer<TEnum> =>
-        input(val, { name, method, modules }),
-      ),
-    );
-};
+) =>
+  genericEnumInputOptional(values, options)
+    .overwrite(asCalculatorInput(options.modules, options.method))
+    .meta(modulesTag(options.modules));
 
 // -------- Booleans -----------------
 
@@ -299,24 +386,15 @@ export const booleanInput = (
   description: string,
   modules: NonEmptyArray<ModuleNames>,
 ) =>
-  z
-    .boolean()
-    .meta(openapiTags(description, modules))
-    .transform((val): InputContainer<boolean> =>
-      input(val, { name: inputName, modules }),
-    );
+  genericBooleanInput({ name: inputName, description })
+    .overwrite(asCalculatorInput(modules))
+    .meta(modulesTag(modules));
 
 export const booleanInputOptional = (
   inputName: string,
   description: string,
   modules: NonEmptyArray<ModuleNames>,
 ) =>
-  z
-    .boolean()
-    .optional()
-    .meta(openapiTags(description, modules))
-    .transform(
-      mapOptional((val): InputContainer<boolean> =>
-        input(val, { name: inputName, modules }),
-      ),
-    );
+  genericBooleanInputOptional({ name: inputName, description })
+    .overwrite(asCalculatorInput(modules))
+    .meta(modulesTag(modules));

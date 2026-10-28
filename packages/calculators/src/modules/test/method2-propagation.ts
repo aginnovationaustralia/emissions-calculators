@@ -1,3 +1,4 @@
+import { isValueSeed1And2, seedOf } from '@/tools/method-value-store';
 import { ValueStore } from '@/tools/value-store';
 
 export type Method2Case<TInput> = {
@@ -23,15 +24,13 @@ type DescribeMethod2PropagationOptions<
 };
 
 const method1Value = (store: ValueStore) => {
-  const valueMethod1 = store.valueMethod1;
-  expect(store.hasMethod1()).toBe(true);
-  expect(valueMethod1).toBeDefined();
-  return valueMethod1!.toNumber();
+  const seed = seedOf(store);
+  expect(isValueSeed1And2(seed)).toBe(true);
+  return isValueSeed1And2(seed) ? seed.valueMethod1.toNumber() : undefined;
 };
 
 const assertMethod1Only = (store: ValueStore) => {
-  expect(store.hasMethod2()).toBe(false);
-  expect(store.valueMethod2).toBeUndefined();
+  expect(seedOf(store).valueMethod2).toBeUndefined();
   expect(store.value.toNumber()).toBe(method1Value(store));
 };
 
@@ -39,11 +38,11 @@ const assertMethod2Propagated = (
   store: ValueStore,
   method1OnlyStore: ValueStore,
 ) => {
-  expect(store.hasMethod2()).toBe(true);
-  expect(store.valueMethod2).toBeDefined();
+  const { valueMethod2 } = seedOf(store);
+  expect(valueMethod2).toBeDefined();
   expect(method1Value(store)).toBe(method1Value(method1OnlyStore));
-  expect(store.value.toNumber()).toBe(store.valueMethod2!.toNumber());
-  expect(store.valueMethod2!.toNumber()).not.toBe(method1Value(store));
+  expect(store.value.toNumber()).toBe(valueMethod2!.toNumber());
+  expect(valueMethod2!.toNumber()).not.toBe(method1Value(store));
 };
 
 /**

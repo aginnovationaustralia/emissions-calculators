@@ -10,7 +10,7 @@ import { Container } from './containers';
 import { convertToCO2e } from './gwp';
 import { formatUnit } from './format';
 import { isMass, isVoid, mass, Mass, VoidUnit } from './units';
-import { isValueSeedMethod2 } from './value-store';
+import { isValueSeedMethod2, seedOf } from './method-value-store';
 
 export const makeUnique = <T>(a: T[]): T[] => {
   return [...new Set(a)];
@@ -109,7 +109,7 @@ export const output = <
     : from.unit.store.value;
   const gas = gasOf(name, from);
   const amountKgCO2e = convertToCO2e(gasAmountKg, gas);
-  const seed = from.unit.store.seed;
+  const seed = seedOf(from.unit.store);
 
   // A method-2-only calculation has no method 1 equivalent, so its method 1 slot stays undefined.
   const methodValues: MethodValues = isValueSeedMethod2(seed)

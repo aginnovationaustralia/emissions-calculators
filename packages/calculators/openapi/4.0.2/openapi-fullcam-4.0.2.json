@@ -859,13 +859,19 @@
                       "x-units": "tonnes carbon per hectare"
                     },
                     "isInLeachingZone": {
-                      "type": "boolean",
                       "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                       "x-modules": [
                         "16.4"
-                      ]
+                      ],
+                      "type": "boolean"
                     },
                     "region": {
+                      "description": "IBRA7 region of the activity area",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
                       "type": "string",
                       "enum": [
                         "Arnhem Coast",
@@ -953,12 +959,6 @@
                         "Warren",
                         "Wet Tropics",
                         "Yalgoo"
-                      ],
-                      "description": "IBRA7 region of the activity area",
-                      "x-modules": [
-                        "16.2",
-                        "16.3",
-                        "16.4"
                       ]
                     },
                     "massCH4FromBiomassBurningPerHectare": {
@@ -1029,15 +1029,15 @@
                       "const": "landClearingForestToCropland"
                     },
                     "cropProductionSystem": {
+                      "description": "Crop production",
+                      "x-modules": [
+                        "16.3"
+                      ],
                       "type": "string",
                       "enum": [
                         "Irrigated crop",
                         "Non-irrigated crop (low rainfall)",
                         "Non-irrigated crop (high rainfall)"
-                      ],
-                      "description": "Crop production",
-                      "x-modules": [
-                        "16.3"
                       ]
                     }
                   },
@@ -1170,13 +1170,19 @@
                       "x-units": "tonnes carbon per hectare"
                     },
                     "isInLeachingZone": {
-                      "type": "boolean",
                       "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                       "x-modules": [
                         "16.4"
-                      ]
+                      ],
+                      "type": "boolean"
                     },
                     "region": {
+                      "description": "IBRA7 region of the activity area",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
                       "type": "string",
                       "enum": [
                         "Arnhem Coast",
@@ -1264,12 +1270,6 @@
                         "Warren",
                         "Wet Tropics",
                         "Yalgoo"
-                      ],
-                      "description": "IBRA7 region of the activity area",
-                      "x-modules": [
-                        "16.2",
-                        "16.3",
-                        "16.4"
                       ]
                     },
                     "massCH4FromBiomassBurningPerHectare": {
@@ -1340,14 +1340,14 @@
                       "const": "landClearingForestToGrassland"
                     },
                     "pastureProductionSystem": {
+                      "description": "Pasture production",
+                      "x-modules": [
+                        "16.3"
+                      ],
                       "type": "string",
                       "enum": [
                         "Irrigated pasture",
                         "Non-irrigated pasture"
-                      ],
-                      "description": "Pasture production",
-                      "x-modules": [
-                        "16.3"
                       ]
                     }
                   },
@@ -1480,13 +1480,19 @@
                       "x-units": "tonnes carbon per hectare"
                     },
                     "isInLeachingZone": {
-                      "type": "boolean",
                       "description": "Is the activity in a leaching zone. See chapter 1.8.2 for more details on leaching zones.",
                       "x-modules": [
                         "16.4"
-                      ]
+                      ],
+                      "type": "boolean"
                     },
                     "region": {
+                      "description": "IBRA7 region of the activity area",
+                      "x-modules": [
+                        "16.2",
+                        "16.3",
+                        "16.4"
+                      ],
                       "type": "string",
                       "enum": [
                         "Arnhem Coast",
@@ -1574,12 +1580,6 @@
                         "Warren",
                         "Wet Tropics",
                         "Yalgoo"
-                      ],
-                      "description": "IBRA7 region of the activity area",
-                      "x-modules": [
-                        "16.2",
-                        "16.3",
-                        "16.4"
                       ]
                     },
                     "massCH4FromBiomassBurningPerHectare": {
@@ -1650,13 +1650,13 @@
                       "const": "landClearingForestToSettlements"
                     },
                     "pastureProductionSystem": {
-                      "type": "string",
-                      "enum": [
-                        "Non-irrigated pasture"
-                      ],
                       "description": "Pasture production",
                       "x-modules": [
                         "16.3"
+                      ],
+                      "type": "string",
+                      "enum": [
+                        "Non-irrigated pasture"
                       ]
                     }
                   },
@@ -2591,6 +2591,10 @@
                 "cropType": {
                   "oneOf": [
                     {
+                      "description": "Type of perennial woody crop planted",
+                      "x-modules": [
+                        "16.6"
+                      ],
                       "title": "Full",
                       "type": "string",
                       "enum": [
@@ -2602,22 +2606,18 @@
                         "Olives",
                         "Avocados",
                         "Mangoes"
-                      ],
-                      "description": "Type of perennial woody crop planted",
-                      "x-modules": [
-                        "16.6"
                       ]
                     },
                     {
+                      "description": "Type of perennial woody crop planted",
+                      "x-modules": [
+                        "16.6"
+                      ],
                       "title": "Partial",
                       "type": "string",
                       "enum": [
                         "Grapes",
                         "Kiwifruits"
-                      ],
-                      "description": "Type of perennial woody crop planted",
-                      "x-modules": [
-                        "16.6"
                       ]
                     }
                   ]
@@ -2770,6 +2770,10 @@
                   }
                 },
                 "cropType": {
+                  "description": "Type of perennial woody crop planted",
+                  "x-modules": [
+                    "16.6"
+                  ],
                   "type": "string",
                   "enum": [
                     "Oranges",
@@ -2780,10 +2784,6 @@
                     "Olives",
                     "Avocados",
                     "Mangoes"
-                  ],
-                  "description": "Type of perennial woody crop planted",
-                  "x-modules": [
-                    "16.6"
                   ]
                 },
                 "calculationMethod": {
@@ -2957,6 +2957,10 @@
                   }
                 },
                 "cropType": {
+                  "description": "Type of perennial woody crop planted",
+                  "x-modules": [
+                    "16.6"
+                  ],
                   "type": "string",
                   "enum": [
                     "Oranges",
@@ -2967,10 +2971,6 @@
                     "Olives",
                     "Avocados",
                     "Mangoes"
-                  ],
-                  "description": "Type of perennial woody crop planted",
-                  "x-modules": [
-                    "16.6"
                   ]
                 },
                 "clearings": {
