@@ -7,7 +7,7 @@ import {
   OffRoadAgricultureAndForestryEquipmentFuelTypes,
   VesselFuelTypes,
 } from '@/constants/enums';
-import { enumInput, numberInput, literalInput } from '@/tools/inputs';
+import { enumInput, literalInput, numberInput } from '@/tools/inputs';
 import { locateTransportFuel } from '@/tools/modules';
 import {
   cubicMetresToLitres,

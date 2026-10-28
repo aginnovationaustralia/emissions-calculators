@@ -3,7 +3,7 @@ import {
   IBRA7Regions,
   PastureOnlyProductionSystems,
 } from '@/constants/enums';
-import { enumInput, numberInput, literalInput } from '@/tools/inputs';
+import { enumInput, literalInput, numberInput } from '@/tools/inputs';
 import {
   hectaresToSquareMetres,
   tonnesPerHectareToKgPerSquareMetres,

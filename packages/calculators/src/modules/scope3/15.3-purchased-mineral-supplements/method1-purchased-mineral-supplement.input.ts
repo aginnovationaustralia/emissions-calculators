@@ -2,9 +2,9 @@ import {
   PurchasedMineralSupplementType,
   PurchasedMineralSupplementTypes,
 } from '@/constants/enums';
+import { enumSchema } from '@/tools/enum-schemas';
 import { input } from '@/tools/inputs';
 import { PURCH_MINERAL_15_3 } from '@/tools/modules';
-import { enumSchema } from '@/tools/enum-schemas';
 import { z } from 'zod';
 import { BasePurchasedMineralSupplementInputSchema } from './base-purchased-mineral-supplement.input';
 

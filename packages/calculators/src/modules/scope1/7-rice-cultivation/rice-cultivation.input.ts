@@ -4,6 +4,7 @@ import {
   RiceCultivationSeasonWaterRegimeType,
   RiceCultivationSeasonWaterRegimeTypes,
 } from '@/constants/enums';
+import { enumSchema } from '@/tools/enum-schemas';
 import { input, numberInput } from '@/tools/inputs';
 import {
   RESIDUE_BURN_6_4,
@@ -14,7 +15,6 @@ import {
 import { hectaresToSquareMetres } from '@/tools/unit-conversion';
 import { area, days } from '@/tools/units';
 import { object } from '@/types/schemas';
-import { enumSchema } from '@/tools/enum-schemas';
 import z from 'zod';
 import { BaseCropResidueInputSchema } from '../6-residue-mgmt';
 import { RiceCultivationOrganicAmendmentInputSchema } from './organic-amendment.input';

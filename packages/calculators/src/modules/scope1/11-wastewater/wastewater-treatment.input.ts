@@ -3,6 +3,7 @@ import {
   WastewaterFacilityType,
   WastewaterFacilityTypes,
 } from '@/constants/enums';
+import { enumSchema } from '@/tools/enum-schemas';
 import { enumInput, input, isProportion, numberInput } from '@/tools/inputs';
 import { WASTEWATER_11_1 } from '@/tools/modules';
 import {
@@ -12,7 +13,6 @@ import {
 } from '@/tools/unit-conversion';
 import { massPerVolume, realNumber, volume } from '@/tools/units';
 import { object } from '@/types/schemas';
-import { enumSchema } from '@/tools/enum-schemas';
 import z from 'zod';
 
 const BaseWastewaterTreatmentInputSchema = object({

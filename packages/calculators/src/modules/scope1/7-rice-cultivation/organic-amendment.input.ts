@@ -2,12 +2,12 @@ import {
   RiceCultivationOrganicAmendmentType,
   RiceCultivationOrganicAmendmentTypes,
 } from '@/constants/enums';
+import { enumSchema } from '@/tools/enum-schemas';
 import { input, numberInput } from '@/tools/inputs';
 import { RICE_7_1 } from '@/tools/modules';
 import { tonnesPerHectareToKgPerSquareMetres } from '@/tools/unit-conversion';
 import { massPerArea } from '@/tools/units';
 import { object } from '@/types/schemas';
-import { enumSchema } from '@/tools/enum-schemas';
 import z from 'zod';
 
 export const RiceCultivationOrganicAmendmentInputSchema = object({

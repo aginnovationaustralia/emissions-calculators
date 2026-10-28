@@ -2,9 +2,9 @@ import { InorganicFertiliserTypes } from '@/constants/enums';
 import {
   enumInput,
   isProportion,
+  literalInput,
   numberInput,
   numberInputOptional,
-  literalInput,
 } from '@/tools/inputs';
 import {
   ATMOS_DEPOSIT_5_4,
