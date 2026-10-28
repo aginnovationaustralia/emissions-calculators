@@ -50,6 +50,9 @@ importers:
       '@aginnovationaustralia/emissions-calculators':
         specifier: workspace:*
         version: link:../../packages/calculators
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
     devDependencies:
       '@types/node':
         specifier: ^25.0.1

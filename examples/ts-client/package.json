@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@aginnovationaustralia/emissions-calculator-research": "workspace:*",
-    "@aginnovationaustralia/emissions-calculators": "workspace:*"
+    "@aginnovationaustralia/emissions-calculators": "workspace:*",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^25.0.1",
