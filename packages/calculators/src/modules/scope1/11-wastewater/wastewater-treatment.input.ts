@@ -3,6 +3,7 @@ import {
   WastewaterFacilityType,
   WastewaterFacilityTypes,
 } from '@/constants/enums';
+import { enumSchema } from '@/tools/enum-schemas';
 import { enumInput, input, isProportion, numberInput } from '@/tools/inputs';
 import { WASTEWATER_11_1 } from '@/tools/modules';
 import {
@@ -15,8 +16,7 @@ import { object } from '@/types/schemas';
 import z from 'zod';
 
 const BaseWastewaterTreatmentInputSchema = object({
-  facilityType: z
-    .literal(WastewaterFacilityTypes)
+  facilityType: enumSchema(WastewaterFacilityTypes)
     .meta({
       description: 'The type of facility the wastewater was treated at.',
     })

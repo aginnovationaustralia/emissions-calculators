@@ -4,6 +4,7 @@ import {
   RiceCultivationSeasonWaterRegimeType,
   RiceCultivationSeasonWaterRegimeTypes,
 } from '@/constants/enums';
+import { enumSchema } from '@/tools/enum-schemas';
 import { input, numberInput } from '@/tools/inputs';
 import {
   RESIDUE_BURN_6_4,
@@ -29,8 +30,7 @@ export const RiceCultivationInputSchema = BaseCropResidueInputSchema.extend({
     },
     (s) => s.min(0),
   ),
-  preSeasonWaterRegimeType: z
-    .literal(RiceCultivationPreSeasonWaterRegimeTypes)
+  preSeasonWaterRegimeType: enumSchema(RiceCultivationPreSeasonWaterRegimeTypes)
     .transform((val) =>
       input(val as RiceCultivationPreSeasonWaterRegimeType, {
         name: 'pre-season water regime type',
@@ -40,8 +40,7 @@ export const RiceCultivationInputSchema = BaseCropResidueInputSchema.extend({
     .meta({
       description: 'The type of pre-season water regime for this rice crop.',
     }),
-  waterRegimeType: z
-    .literal(RiceCultivationSeasonWaterRegimeTypes)
+  waterRegimeType: enumSchema(RiceCultivationSeasonWaterRegimeTypes)
     .transform((val) =>
       input(val as RiceCultivationSeasonWaterRegimeType, {
         name: 'water regime type',
