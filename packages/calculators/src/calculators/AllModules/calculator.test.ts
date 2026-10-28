@@ -1,6 +1,5 @@
 import { calculateEmissions, RiceInput } from '@/calculators';
 import { testContext } from '@/test/Grains/context';
-import { nv } from '@/tools/inputs';
 import { ZERO_ALL_MODULES_INPUT } from '@/test/inputs/zero-input';
 import { nv } from '@/tools/inputs';
 import { calculateAllModules } from './calculator';
@@ -210,5 +209,4 @@ describe('calculateAllModules rice crop residues (6.1, 6.3, 6.4)', () => {
       6,
     );
   });
-
 });
