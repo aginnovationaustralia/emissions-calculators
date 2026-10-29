@@ -9,7 +9,7 @@ import { selectConstant } from '@/tools/constants';
 import { br, Container, max, min, num, root } from '@/tools/containers';
 import { InputContainer } from '@/tools/inputs';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { e, zero, zeroN, zeroN2O } from '@/tools/sentinels';
+import { e, zero, zeroN } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { selectSwitch } from '@/tools/switch';
 import {
@@ -169,23 +169,22 @@ const calculateInorganicFertiliserN2OMethod1 = (
   ).switchUnit((value) => massPerMass('N2O', 'N', value.store));
   const CN2O = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_N2O');
 
-  const emissionsPerApplication = fertiliser.inorganic.applications.map(
-    (application) => {
-      const totalNitrogen = application.massAppliedKg
+  const totalNitrogen = sum([
+    zeroN,
+    ...fertiliser.inorganic.applications.map((application) =>
+      application.massAppliedKg
         .multiply(getNitrogenFraction(application, constants))
         .named(`MNjf`)
-        .reference('5.1.1.1 (2)');
-
-      return totalNitrogen.multiply(emissionFactor).multiply(CN2O);
-    },
-  );
+        .reference('5.1.1.1 (2)'),
+    ),
+  ]);
 
   /**
    * EN2O = SUM[j,f] (MNjf * EFj,N2O * CN2O) * 10^-3
    */
-  return (
-    emissionsPerApplication.length > 0 ? sum(emissionsPerApplication) : zeroN2O
-  )
+  return totalNitrogen
+    .multiply(emissionFactor)
+    .multiply(CN2O)
     .named('EN2O')
     .reference('5.1.1.1 (1)');
 };
