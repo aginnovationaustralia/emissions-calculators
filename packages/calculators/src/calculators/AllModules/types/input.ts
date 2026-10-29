@@ -210,17 +210,20 @@ type AllModulesFertiliserInputTransformed =
 // TODO: Double nested inputs here as well
 const AllModulesCropInputSchema = object({
   crop: CropResidueInputSchema,
-  ...hasStateInputSchema([RESIDUE_CROPS_6_1]).shape,
+  ...hasStateInputSchema([RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3]).shape,
   ...hasClimateZoneInputSchema(RESIDUE_CROPS_6_1).shape,
+  ...hasIsInLeachingZoneInputSchema(RESIDUE_LEACH_6_3).shape,
 });
 export type AllModulesCropInput = {
   crop: CropResidueInput;
 } & HasStateInput &
-  HasClimateZoneInput;
+  HasClimateZoneInput &
+  HasIsInLeachingZoneInput;
 type AllModulesCropInputTransformed = {
   crop: CropResidueInputTransformed;
 } & HasStateInputTransformed &
-  HasClimateZoneInputTransformed;
+  HasClimateZoneInputTransformed &
+  HasIsInLeachingZoneInputTransformed;
 
 const AllModulesPastureInputSchema = object({
   pasture: PastureResidueInputSchema,
