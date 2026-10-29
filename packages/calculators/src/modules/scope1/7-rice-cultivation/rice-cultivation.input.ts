@@ -24,7 +24,8 @@ export const RiceCultivationInputSchema = BaseCropResidueInputSchema.extend({
     {
       name: 'areaSown',
       method: '1',
-      description: 'Area sown',
+      description:
+        'Annual area of rice cultivation under water regime during the growing season under the specified water regime and organic amendment conditions.',
       modules: [RICE_7_1],
     },
     (s) => s.min(0),

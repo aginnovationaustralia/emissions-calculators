@@ -2,7 +2,7 @@ import { InorganicFertiliserType } from '@/constants/enums';
 import { getSheet } from '@/test/common/sheets';
 import { nv, nvo } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
-import { calculateInorganicFertiliserN2O } from '../scope1/5-fertiliser/5.1-inorganic-fertiliser';
+import { calculateInorganicFertiliserN2O } from '../../scope1/5-fertiliser/5.1-inorganic-fertiliser';
 import {
   FertiliserInput,
   FertiliserInputInorganicScope1Method1,
@@ -10,16 +10,16 @@ import {
   HasFertiliserInput,
   HasFertiliserInputSchema,
   HasFertiliserInputTransformed,
-} from '../scope1/5-fertiliser/fertiliser.input';
+} from '../../scope1/5-fertiliser/fertiliser.input';
 import {
   checkBasicCropProductionSystem,
   checkInorganicFertiliserType,
   checkProductionSystemsInorganicFertilisers,
-} from './fertiliser-domain';
+} from '../fertiliser-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
-} from './sheet-comparison';
+} from '../sheet-comparison';
 
 const getFertilisersInput = (
   method: '1' | '2',

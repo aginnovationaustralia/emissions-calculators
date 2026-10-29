@@ -1,21 +1,21 @@
 import { getSheet } from '@/test/common/sheets';
 import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
-import { calculateInorganicFertiliserCO2 } from '../scope1/5-fertiliser/5.1-inorganic-fertiliser';
+import { calculateInorganicFertiliserCO2 } from '../../scope1/5-fertiliser/5.1-inorganic-fertiliser';
 import {
   HasFertiliserInput,
   HasFertiliserInputSchema,
   HasFertiliserInputTransformed,
-} from '../scope1/5-fertiliser/fertiliser.input';
-import { InorganicFertilisersScope1Method1Input } from '../scope1/5-fertiliser/inorganic-fertilisers.input';
+} from '../../scope1/5-fertiliser/fertiliser.input';
+import { InorganicFertilisersScope1Method1Input } from '../../scope1/5-fertiliser/inorganic-fertilisers.input';
 import {
   checkBasicCropProductionSystem,
   checkInorganicFertiliserType,
-} from './fertiliser-domain';
+} from '../fertiliser-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
-} from './sheet-comparison';
+} from '../sheet-comparison';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,

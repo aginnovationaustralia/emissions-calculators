@@ -27,7 +27,7 @@ export const InorganicFertilisersScope1Method2InputSchema = object({
     {
       name: 'areaAppliedHectares',
       description:
-        'Area that this application of inorganic fertiliser was applied to',
+        'Method 2: The total area that inorganic fertilisers were applied to',
       method: '2',
       modules: [FERT_INORGANIC_5_1],
     },

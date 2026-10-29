@@ -1,4 +1,5 @@
 import { Container } from '@/tools/containers';
+import { InputContainer } from '@/tools/inputs';
 
 export const CalculationMethods = ['1', '2'] as const;
 export type CalculationMethod = (typeof CalculationMethods)[number];
@@ -317,16 +318,30 @@ export const InorganicFertiliserComponentNitrogenTypes = [
 export type InorganicFertiliserComponentNitrogenType =
   (typeof InorganicFertiliserComponentNitrogenTypes)[number];
 
-export const InorganicFertiliserComponentTypesNonRegional = [
+export const InorganicFertiliserComponentNonRegionalWithEquivalentTypes = [
   'Monoammonium phosphate',
   'Diammonium Phosphate',
   'Urea-Ammonium Nitrate',
   'Ammonium Nitrate',
   'Calcium Ammonium Nitrate',
   'Sulphate of Ammonia',
+  'Single superphosphate',
+] as const;
+export type InorganicFertiliserComponentNonRegionalWithEquivalentType =
+  (typeof InorganicFertiliserComponentNonRegionalWithEquivalentTypes)[number];
+
+// Components that can be mapped back to a fertiliser type.
+export const InorganicFertiliserComponentWithEquivalentTypes = [
+  ...InorganicFertiliserComponentNonRegionalWithEquivalentTypes,
+  'Urea',
+] as const;
+export type InorganicFertiliserComponentWithEquivalentType =
+  (typeof InorganicFertiliserComponentWithEquivalentTypes)[number];
+
+export const InorganicFertiliserComponentTypesNonRegional = [
+  ...InorganicFertiliserComponentNonRegionalWithEquivalentTypes,
   ...InorganicFertiliserComponentNitrogenTypes,
   'Muriate of Potash',
-  'Single superphosphate',
   'Double Superphosphate',
   'Phosphorus - Generic',
   'Potassium - Generic',
@@ -344,6 +359,13 @@ export const InorganicFertiliserComponentTypes = [
 export type InorganicFertiliserComponentType =
   | InorganicFertiliserComponentTypeRegional
   | InorganicFertiliserComponentTypeNonRegional;
+
+export const inorganicFertiliserComponentHasFertiliserEquivalent = (
+  component: InputContainer<InorganicFertiliserComponentType>,
+): component is InputContainer<InorganicFertiliserComponentWithEquivalentType> =>
+  InorganicFertiliserComponentWithEquivalentTypes.includes(
+    component.unit as InorganicFertiliserComponentWithEquivalentType,
+  );
 
 export const isInorganicFertiliserComponentTypeRegional = (
   type: InorganicFertiliserComponentType,

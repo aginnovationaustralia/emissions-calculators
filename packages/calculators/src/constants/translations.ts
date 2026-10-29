@@ -9,6 +9,8 @@ import {
   ExtendedRegion,
   FeedlotDurationType,
   GrazingProductionSystemsWithRainfall,
+  InorganicFertiliserComponentWithEquivalentType,
+  InorganicFertiliserType,
   isClimateZoneType,
   isNTRegion,
   isQLDRegion,
@@ -123,4 +125,23 @@ export const stateOrRegionToState = applyTranslation(
       return 'WA';
     }
   },
+);
+
+const componentToEquivalentFertiliser: Record<
+  InorganicFertiliserComponentWithEquivalentType,
+  InorganicFertiliserType
+> = {
+  'Monoammonium phosphate': 'Monoammonium Phosphate (MAP)',
+  'Diammonium Phosphate': 'Diammonium Phosphate (DAP)',
+  'Urea-Ammonium Nitrate': 'Urea-Ammonium Nitrate (UAN)',
+  'Ammonium Nitrate': 'Ammonium Nitrate (AN)',
+  'Calcium Ammonium Nitrate': 'Calcium Ammonium Nitrate (CAN)',
+  'Sulphate of Ammonia': 'Sulphate of Ammonia (SOA)',
+  'Single superphosphate': 'Single Super Phosphate',
+  Urea: 'Urea',
+};
+
+export const componentToFertiliser = applyTranslation(
+  (component: InorganicFertiliserComponentWithEquivalentType) =>
+    componentToEquivalentFertiliser[component],
 );

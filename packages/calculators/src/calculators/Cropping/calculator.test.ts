@@ -122,7 +122,7 @@ describe('Cropping Calculator', () => {
       ]);
       expect(residueLeachingAndRunoffN2O.constants).toEqual([
         {
-          name: 'FNinorganicf',
+          name: 'FNinorganic,f (Urea)',
           value: 0.46,
           units: 'Mass(N) / Mass(Inorganic Fertiliser)',
         },
