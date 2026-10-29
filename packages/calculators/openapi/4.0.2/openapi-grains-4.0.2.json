@@ -1701,29 +1701,6 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter"
                             },
-                            "fractionOfAnnualCropBurnt": {
-                              "description": "Fraction of annual production of crop that is burnt, from 0 to 1 (0-1)",
-                              "x-modules": [
-                                "6.1",
-                                "6.3",
-                                "6.4"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/ProportionNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "0-1"
-                            },
                             "residues": {
                               "oneOf": [
                                 {
@@ -1814,6 +1791,29 @@
                                 }
                               ]
                             },
+                            "fractionOfAnnualCropBurnt": {
+                              "description": "Fraction of annual production of crop that is burnt, from 0 to 1 (0-1)",
+                              "x-modules": [
+                                "6.1",
+                                "6.3",
+                                "6.4"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/ProportionNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "0-1"
+                            },
                             "type": {
                               "description": "Type of grains crop grown in this activity",
                               "x-modules": [
@@ -1826,8 +1826,8 @@
                           },
                           "required": [
                             "totalYieldKg",
-                            "fractionOfAnnualCropBurnt",
                             "residues",
+                            "fractionOfAnnualCropBurnt",
                             "type"
                           ],
                           "additionalProperties": false

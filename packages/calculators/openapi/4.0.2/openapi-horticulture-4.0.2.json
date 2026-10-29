@@ -1627,161 +1627,300 @@
                           ]
                         },
                         "crop": {
-                          "type": "object",
-                          "properties": {
-                            "totalYieldKg": {
-                              "description": "Total yield of the crop, as dry matter (kilograms dry matter)",
-                              "x-modules": [
-                                "6.1",
-                                "6.3",
-                                "6.4"
-                              ],
+                          "oneOf": [
+                            {
                               "type": "object",
                               "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "kilograms dry matter"
-                            },
-                            "fractionOfAnnualCropBurnt": {
-                              "description": "Fraction of annual production of crop that is burnt, from 0 to 1 (0-1)",
-                              "x-modules": [
-                                "6.1",
-                                "6.3",
-                                "6.4"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/ProportionNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "0-1"
-                            },
-                            "residues": {
-                              "oneOf": [
-                                {
+                                "totalYieldKg": {
+                                  "description": "Total yield of the crop, as dry matter (kilograms dry matter)",
+                                  "x-modules": [
+                                    "6.1",
+                                    "6.3",
+                                    "6.4"
+                                  ],
                                   "type": "object",
                                   "properties": {
-                                    "calculationMethod": {
-                                      "type": "string",
-                                      "const": "1"
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
                                     }
                                   },
                                   "required": [
-                                    "calculationMethod"
+                                    "value"
                                   ],
                                   "additionalProperties": false,
-                                  "title": "Method 1"
+                                  "x-units": "kilograms dry matter"
                                 },
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "calculationMethod": {
-                                      "type": "string",
-                                      "const": "2"
-                                    },
-                                    "massCropResidueRemoved": {
-                                      "description": "Mass of crop residue that is removed. (kilograms crop residue)",
-                                      "x-modules": [
-                                        "6.1"
-                                      ],
+                                "residues": {
+                                  "oneOf": [
+                                    {
                                       "type": "object",
                                       "properties": {
-                                        "value": {
-                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                        },
-                                        "quality": {
-                                          "default": {},
-                                          "$ref": "#/components/schemas/QualityTable"
+                                        "calculationMethod": {
+                                          "type": "string",
+                                          "const": "1"
                                         }
                                       },
                                       "required": [
-                                        "value"
+                                        "calculationMethod"
                                       ],
                                       "additionalProperties": false,
-                                      "x-units": "kilograms crop residue"
-                                    }
-                                  },
-                                  "required": [
-                                    "calculationMethod",
-                                    "massCropResidueRemoved"
-                                  ],
-                                  "additionalProperties": false,
-                                  "title": "Method 2 (by mass)"
-                                },
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "calculationMethod": {
-                                      "type": "string",
-                                      "const": "2"
+                                      "title": "Method 1"
                                     },
-                                    "fractionCropResidueRemoved": {
-                                      "description": "Fraction of crop residue that is removed, from 0 to 1. (0-1)",
-                                      "x-modules": [
-                                        "6.1"
-                                      ],
+                                    {
                                       "type": "object",
                                       "properties": {
-                                        "value": {
-                                          "$ref": "#/components/schemas/ProportionNumberInput"
+                                        "calculationMethod": {
+                                          "type": "string",
+                                          "const": "2"
                                         },
-                                        "quality": {
-                                          "default": {},
-                                          "$ref": "#/components/schemas/QualityTable"
+                                        "massCropResidueRemoved": {
+                                          "description": "Mass of crop residue that is removed. (kilograms crop residue)",
+                                          "x-modules": [
+                                            "6.1"
+                                          ],
+                                          "type": "object",
+                                          "properties": {
+                                            "value": {
+                                              "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                            },
+                                            "quality": {
+                                              "default": {},
+                                              "$ref": "#/components/schemas/QualityTable"
+                                            }
+                                          },
+                                          "required": [
+                                            "value"
+                                          ],
+                                          "additionalProperties": false,
+                                          "x-units": "kilograms crop residue"
                                         }
                                       },
                                       "required": [
-                                        "value"
+                                        "calculationMethod",
+                                        "massCropResidueRemoved"
                                       ],
                                       "additionalProperties": false,
-                                      "x-units": "0-1"
+                                      "title": "Method 2 (by mass)"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "calculationMethod": {
+                                          "type": "string",
+                                          "const": "2"
+                                        },
+                                        "fractionCropResidueRemoved": {
+                                          "description": "Fraction of crop residue that is removed, from 0 to 1. (0-1)",
+                                          "x-modules": [
+                                            "6.1"
+                                          ],
+                                          "type": "object",
+                                          "properties": {
+                                            "value": {
+                                              "$ref": "#/components/schemas/ProportionNumberInput"
+                                            },
+                                            "quality": {
+                                              "default": {},
+                                              "$ref": "#/components/schemas/QualityTable"
+                                            }
+                                          },
+                                          "required": [
+                                            "value"
+                                          ],
+                                          "additionalProperties": false,
+                                          "x-units": "0-1"
+                                        }
+                                      },
+                                      "required": [
+                                        "calculationMethod",
+                                        "fractionCropResidueRemoved"
+                                      ],
+                                      "additionalProperties": false,
+                                      "title": "Method 2 (by fraction)"
+                                    }
+                                  ]
+                                },
+                                "fractionOfAnnualCropBurnt": {
+                                  "description": "Fraction of annual production of crop that is burnt, from 0 to 1 (0-1)",
+                                  "x-modules": [
+                                    "6.1",
+                                    "6.3",
+                                    "6.4"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
                                     }
                                   },
                                   "required": [
-                                    "calculationMethod",
-                                    "fractionCropResidueRemoved"
+                                    "value"
                                   ],
                                   "additionalProperties": false,
-                                  "title": "Method 2 (by fraction)"
+                                  "x-units": "0-1"
+                                },
+                                "type": {
+                                  "description": "Type of horticulture crop grown in this activity",
+                                  "x-modules": [
+                                    "6.1",
+                                    "6.3",
+                                    "6.4"
+                                  ],
+                                  "$ref": "#/components/schemas/HorticultureBurnableCropType"
                                 }
-                              ]
-                            },
-                            "type": {
-                              "description": "Type of horticulture crop grown in this activity",
-                              "x-modules": [
-                                "6.1",
-                                "6.3",
-                                "6.4"
+                              },
+                              "required": [
+                                "totalYieldKg",
+                                "residues",
+                                "fractionOfAnnualCropBurnt",
+                                "type"
                               ],
-                              "$ref": "#/components/schemas/HorticultureCropType"
+                              "additionalProperties": false,
+                              "title": "Crop that can be burnt"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "totalYieldKg": {
+                                  "description": "Total yield of the crop, as dry matter (kilograms dry matter)",
+                                  "x-modules": [
+                                    "6.1",
+                                    "6.3",
+                                    "6.4"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms dry matter"
+                                },
+                                "residues": {
+                                  "oneOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "calculationMethod": {
+                                          "type": "string",
+                                          "const": "1"
+                                        }
+                                      },
+                                      "required": [
+                                        "calculationMethod"
+                                      ],
+                                      "additionalProperties": false,
+                                      "title": "Method 1"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "calculationMethod": {
+                                          "type": "string",
+                                          "const": "2"
+                                        },
+                                        "massCropResidueRemoved": {
+                                          "description": "Mass of crop residue that is removed. (kilograms crop residue)",
+                                          "x-modules": [
+                                            "6.1"
+                                          ],
+                                          "type": "object",
+                                          "properties": {
+                                            "value": {
+                                              "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                            },
+                                            "quality": {
+                                              "default": {},
+                                              "$ref": "#/components/schemas/QualityTable"
+                                            }
+                                          },
+                                          "required": [
+                                            "value"
+                                          ],
+                                          "additionalProperties": false,
+                                          "x-units": "kilograms crop residue"
+                                        }
+                                      },
+                                      "required": [
+                                        "calculationMethod",
+                                        "massCropResidueRemoved"
+                                      ],
+                                      "additionalProperties": false,
+                                      "title": "Method 2 (by mass)"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "calculationMethod": {
+                                          "type": "string",
+                                          "const": "2"
+                                        },
+                                        "fractionCropResidueRemoved": {
+                                          "description": "Fraction of crop residue that is removed, from 0 to 1. (0-1)",
+                                          "x-modules": [
+                                            "6.1"
+                                          ],
+                                          "type": "object",
+                                          "properties": {
+                                            "value": {
+                                              "$ref": "#/components/schemas/ProportionNumberInput"
+                                            },
+                                            "quality": {
+                                              "default": {},
+                                              "$ref": "#/components/schemas/QualityTable"
+                                            }
+                                          },
+                                          "required": [
+                                            "value"
+                                          ],
+                                          "additionalProperties": false,
+                                          "x-units": "0-1"
+                                        }
+                                      },
+                                      "required": [
+                                        "calculationMethod",
+                                        "fractionCropResidueRemoved"
+                                      ],
+                                      "additionalProperties": false,
+                                      "title": "Method 2 (by fraction)"
+                                    }
+                                  ]
+                                },
+                                "type": {
+                                  "description": "Type of horticulture crop grown in this activity",
+                                  "x-modules": [
+                                    "6.1",
+                                    "6.3",
+                                    "6.4"
+                                  ],
+                                  "$ref": "#/components/schemas/HorticultureNonBurnableCropType"
+                                }
+                              },
+                              "required": [
+                                "totalYieldKg",
+                                "residues",
+                                "type"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Crop that cannot be burnt"
                             }
-                          },
-                          "required": [
-                            "totalYieldKg",
-                            "fractionOfAnnualCropBurnt",
-                            "residues",
-                            "type"
-                          ],
-                          "additionalProperties": false
+                          ]
                         },
                         "fertiliser": {
                           "type": "object",
@@ -6474,13 +6613,18 @@
           "wet"
         ]
       },
-      "HorticultureCropType": {
+      "HorticultureBurnableCropType": {
+        "type": "string",
+        "enum": [
+          "Peanuts",
+          "Pulses"
+        ]
+      },
+      "HorticultureNonBurnableCropType": {
         "type": "string",
         "enum": [
           "Hops and grape vines",
-          "Peanuts",
-          "Tubers and Roots",
-          "Pulses"
+          "Tubers and Roots"
         ]
       },
       "InorganicFertiliserType": {

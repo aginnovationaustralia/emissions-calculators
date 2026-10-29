@@ -259,27 +259,43 @@ export const GrainsCropTypes = [
 ] as const;
 export type GrainsCropType = (typeof GrainsCropTypes)[number];
 
-export const HorticultureCropTypes = [
+export const HorticultureBurnableCropTypes = ['Peanuts', 'Pulses'] as const;
+export const HorticultureNonBurnableCropTypes = [
   'Hops and grape vines',
-  'Peanuts',
   'Tubers and Roots',
-  'Pulses',
 ] as const;
 
-export const CropTypes = [
-  ...GrainsCropTypes,
+/**
+ * Table A.2.1.1 gives no fraction of residue remaining at burning (Sc is n/a)
+ * for these crops, so the methodology does not burn their residues.
+ */
+export const NonBurnableCropTypes = [
   'Hops and grape vines',
-  'Peanuts',
   'Tubers and Roots',
-  'Rice',
-  'Sugar Cane',
   'Cotton',
-  'Oilseeds',
   'Forage Crops',
   'Other Annual Crops',
   'Other Perennial Crops',
 ] as const;
+export type NonBurnableCropType = (typeof NonBurnableCropTypes)[number];
+
+export const BurnableCropTypes = [
+  ...GrainsCropTypes,
+  'Peanuts',
+  'Rice',
+  'Sugar Cane',
+  'Oilseeds',
+] as const;
+export type BurnableCropType = (typeof BurnableCropTypes)[number];
+
+export const CropTypes = [
+  ...BurnableCropTypes,
+  ...NonBurnableCropTypes,
+] as const;
 export type CropType = (typeof CropTypes)[number];
+
+export const isBurnableCropType = (type: string): type is BurnableCropType =>
+  (BurnableCropTypes as readonly string[]).includes(type);
 
 export const RefrigerationTypes = [
   'Domestic refrigerators',

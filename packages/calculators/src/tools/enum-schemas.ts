@@ -16,6 +16,7 @@ const namedEnums = {
   BeefBreed: E.BeefBreeds,
   BeefClass: E.BeefClasses,
   BeefPurchaseCategory: E.BeefPurchaseCategories,
+  BurnableCropType: E.BurnableCropTypes,
   CarsLightCommercialFuelType: E.CarsLightCommercialFuelTypes,
   CarsLightCommercialPre2004FuelType: E.CarsLightCommercialPre2004FuelTypes,
   ClimateZoneOrZoneType: E.ClimateZoneOrZoneTypes,
@@ -34,7 +35,8 @@ const namedEnums = {
   GrainsCropType: E.GrainsCropTypes,
   GrazingProductionSystemWithRainfall: E.GrazingProductionSystemsWithRainfall,
   HeavyDutyFuelType: E.HeavyDutyFuelTypes,
-  HorticultureCropType: E.HorticultureCropTypes,
+  HorticultureBurnableCropType: E.HorticultureBurnableCropTypes,
+  HorticultureNonBurnableCropType: E.HorticultureNonBurnableCropTypes,
   IBRA7Region: E.IBRA7Regions,
   InorganicFertiliserComponentOrigin: E.InorganicFertiliserComponentOrigins,
   InorganicFertiliserComponentTypeNonRegional:
@@ -47,6 +49,7 @@ const namedEnums = {
   LimeAmeliorant: E.LimeAmeliorants,
   MatureDairyClass: E.MatureDairyClasses,
   MeanAnnualTemperature: E.MeanAnnualTemperatures,
+  NonBurnableCropType: E.NonBurnableCropTypes,
   OffRoadAgricultureAndForestryEquipmentFuelType:
     E.OffRoadAgricultureAndForestryEquipmentFuelTypes,
   OrganicFertiliserType: E.OrganicFertiliserTypes,

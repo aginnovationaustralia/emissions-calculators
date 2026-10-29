@@ -1,11 +1,12 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { selectConstant } from '@/tools/constants';
-import { zeroCH4, zeroN2O } from '@/tools/sentinels';
+import { zero, zeroCH4, zeroN2O } from '@/tools/sentinels';
 import { ConstantsForResidueManagement } from './constants';
 import {
   CropResidueInputTransformed,
   HasCropOrPastureResidueInputTransformed,
   HasCropResidueInputTransformed,
+  isBurnableCropResidueInput,
   isPastureResidueInput,
 } from './crop-residue.input';
 
@@ -38,7 +39,10 @@ const calculateCropBurnt = (
     crop.type,
     'fractionBurnt',
   );
-  const fc = crop.fractionOfAnnualCropBurnt;
+  // Crops that can't be burnt have no burnt fraction (see BurnableCropTypes)
+  const fc = isBurnableCropResidueInput(crop)
+    ? crop.fractionOfAnnualCropBurnt
+    : zero;
 
   const mburnc = pc
     .multiply(ragc)

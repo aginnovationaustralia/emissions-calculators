@@ -1701,29 +1701,6 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter"
                             },
-                            "fractionOfAnnualCropBurnt": {
-                              "description": "Fraction of annual production of crop that is burnt, from 0 to 1 (0-1)",
-                              "x-modules": [
-                                "6.1",
-                                "6.3",
-                                "6.4"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/ProportionNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "0-1"
-                            },
                             "residues": {
                               "oneOf": [
                                 {
@@ -1814,6 +1791,29 @@
                                 }
                               ]
                             },
+                            "fractionOfAnnualCropBurnt": {
+                              "description": "Fraction of annual production of crop that is burnt, from 0 to 1 (0-1)",
+                              "x-modules": [
+                                "6.1",
+                                "6.3",
+                                "6.4"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/ProportionNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "0-1"
+                            },
                             "areaSown": {
                               "description": "Area sown (hectares)",
                               "x-modules": [
@@ -1837,7 +1837,13 @@
                             },
                             "preSeasonWaterRegimeType": {
                               "description": "The type of pre-season water regime for this rice crop.",
-                              "$ref": "#/components/schemas/RiceCultivationPreSeasonWaterRegimeType"
+                              "type": "string",
+                              "enum": [
+                                "Non flooded pre-season <180 days",
+                                "Non flooded pre-season >180 days",
+                                "Non-flooded pre-season >365 days",
+                                "Flooded pre-season >30 days"
+                              ]
                             },
                             "waterRegimeType": {
                               "description": "The type of water regime for this rice crop",
@@ -1906,8 +1912,8 @@
                           },
                           "required": [
                             "totalYieldKg",
-                            "fractionOfAnnualCropBurnt",
                             "residues",
+                            "fractionOfAnnualCropBurnt",
                             "areaSown",
                             "preSeasonWaterRegimeType",
                             "waterRegimeType",
@@ -6220,15 +6226,6 @@
           "Boreal dry",
           "dry",
           "wet"
-        ]
-      },
-      "RiceCultivationPreSeasonWaterRegimeType": {
-        "type": "string",
-        "enum": [
-          "Non flooded pre-season <180 days",
-          "Non flooded pre-season >180 days",
-          "Non-flooded pre-season >365 days",
-          "Flooded pre-season >30 days"
         ]
       },
       "RiceCultivationSeasonWaterRegimeType": {
