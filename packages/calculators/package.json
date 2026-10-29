@@ -42,6 +42,11 @@
       "import": "./dist/internal.mjs",
       "require": "./dist/internal.cjs"
     },
+    "./internal/tools": {
+      "types": "./dist/internal/tools.d.ts",
+      "import": "./dist/internal/tools.mjs",
+      "require": "./dist/internal/tools.cjs"
+    },
     "./tools": {
       "types": "./dist/tools.d.ts",
       "import": "./dist/tools.mjs",

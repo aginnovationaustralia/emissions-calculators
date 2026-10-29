@@ -1,5 +1,5 @@
 import { valueObject } from './outputs';
-import { Mass, RealNumber, Substance } from './units';
+import { Mass, RealNumber, AnySubstance } from './units';
 
 /**
  * Unwraps the stored value of a container holding a total mass, in kg.
@@ -9,14 +9,14 @@ import { Mass, RealNumber, Substance } from './units';
  * `.unit.store.toNumber()` so that passing a container of any other unit (e.g. mass per
  * head) is a type error rather than a silently wrong intensity.
  */
-export function extractMassAsNumber<S extends Substance>(container: {
+export function extractMassAsNumber<S extends AnySubstance>(container: {
   unit: Mass<S>;
 }): number {
   return container.unit.store.toNumber();
 }
 
 /** A total mass in kg, wrapped as an output value. See `extractMassAsNumber` */
-export function exposeMassValue<S extends Substance>(container: {
+export function exposeMassValue<S extends AnySubstance>(container: {
   unit: Mass<S>;
 }) {
   return valueObject(extractMassAsNumber(container));

@@ -87,7 +87,7 @@ import {
   realNumber,
   RealNumber,
   StringUnit,
-  Substance,
+  AnySubstance,
   Time,
   voidUnit,
   volume,
@@ -233,7 +233,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<UR>;
   // MassPerMass<S1,S2> * Mass<S2> → Mass<S1>
-  multiply<S1 extends Substance, S2 extends Substance>(
+  multiply<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<MassPerMass<S1, S2>>,
     right: Container<Mass<NoInfer<S2>>>,
     baseOrigin?: Metadata,
@@ -246,181 +246,185 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   // wider union - so a mismatched call silently succeeds. `NoInfer` forces S2 to come from `this`
   // alone, so `right`'s actual denominator is checked against that fixed S2 and a mismatch is a
   // real "argument not assignable" error.
-  multiply<S1 extends Substance, S2 extends Substance>(
+  multiply<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<Mass<S2>>,
     right: Container<MassPerMass<S1, NoInfer<S2>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
   // EnergyPerVolume<S> * Volume<S> → Energy
-  multiply<S extends Substance>(
+  multiply<S extends AnySubstance>(
     this: BaseContainer<EnergyPerVolume<S>>,
     right: Container<Volume<NoInfer<S>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Energy>;
   // MassPerEnergy<S1> * EnergyPerVolume<S2> → MassPerVolume<S1, S2>
-  multiply<S1 extends Substance, S2 extends Substance>(
+  multiply<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<MassPerEnergy<S1>>,
     right: Container<EnergyPerVolume<S2>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerVolume<S1, S2>>;
   // MassPerEnergy * Energy → Mass<substance>
-  multiply<UL extends MassPerEnergy<Substance>>(
+  multiply<UL extends MassPerEnergy<AnySubstance>>(
     this: BaseContainer<UL>,
     right: Container<Energy>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<ExtractMassPerEnergySubstance<UL>>>;
   // EnergyPerMass * Mass → Energy
-  multiply<S extends Substance, UL extends EnergyPerMass<S>>(
+  multiply<S extends AnySubstance, UL extends EnergyPerMass<S>>(
     this: BaseContainer<UL>,
     right: Container<Mass<S>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Energy>;
   // MassPerArea * Area → Mass<substance>
-  multiply<UL extends MassPerArea<Substance>>(
+  multiply<UL extends MassPerArea<AnySubstance>>(
     this: BaseContainer<UL>,
     right: Container<Area>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<ExtractMassPerAreaSubstance<UL>>>;
   // MassPerTime * Area → Mass<substance>
-  multiply<UL extends MassPerTime<Substance>>(
+  multiply<UL extends MassPerTime<AnySubstance>>(
     this: BaseContainer<UL>,
     right: Container<Time>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<ExtractMassPerTimeSubstance<UL>>>;
   // MassPerVolume * Volume → Mass<substance>
-  multiply<S1 extends Substance, S2 extends Substance>(
+  multiply<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<MassPerVolume<S1, S2>>,
     right: Container<Volume<NoInfer<S2>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
   // Electricity * MassPerElectricity<S> → Mass<S>
-  multiply<S extends Substance>(
+  multiply<S extends AnySubstance>(
     this: BaseContainer<Electricity>,
     right: Container<MassPerElectricity<S>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S>>;
   // MassPerHead<S1> * MassPerMass<S2, S1> = MassPerHead<S2>
-  multiply<S1 extends Substance, S2 extends Substance>(
+  multiply<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<MassPerHead<S1>>,
     right: Container<MassPerMass<S2, NoInfer<S1>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHead<S2>>;
   // MassPerHeadPerDay<S1> * MassPerMass<S2, S1> = MassPerHeadPerDay<S2>
-  multiply<S1 extends Substance, S2 extends Substance>(
+  multiply<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<MassPerHeadPerDay<S1>>,
     right: Container<MassPerMass<S2, NoInfer<S1>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S2>>;
   // MassPerHeadPerDay<S1> * Head = MassPerDay<S1>
-  multiply<S extends Substance, UL extends MassPerHeadPerDay<S>>(
+  multiply<S extends AnySubstance, UL extends MassPerHeadPerDay<S>>(
     this: BaseContainer<UL>,
     right: Container<Head>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerDay<ExtractMassPerHeadPerDaySubstance<UL>>>;
   // MassPerHeadPerDay<S1> * Day = MassPerHead<S1>
-  multiply<S extends Substance, UL extends MassPerHeadPerDay<S>>(
+  multiply<S extends AnySubstance, UL extends MassPerHeadPerDay<S>>(
     this: BaseContainer<UL>,
     right: Container<Days>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHead<ExtractMassPerHeadPerDaySubstance<UL>>>;
   // Head * MassPerHead<S> = Mass<S>
-  multiply<S extends Substance>(
+  multiply<S extends AnySubstance>(
     this: BaseContainer<Head>,
     right: Container<MassPerHead<S>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S>>;
   // Head * MassPerHeadPerYear<S> = MassPerYear<S>
-  multiply<S extends Substance>(
+  multiply<S extends AnySubstance>(
     this: BaseContainer<Head>,
     right: Container<MassPerHeadPerYear<S>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerYear<S>>;
   // MassPerHeadPerYear<S> * Years = MassPerHead<S>
-  multiply<S extends Substance>(
+  multiply<S extends AnySubstance>(
     this: BaseContainer<MassPerHeadPerYear<S>>,
     right: Container<Years>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHead<S>>;
   // MassPerEnergy<S1> * EnergyPerMass<S1> = RealNumber
-  multiply<S extends Substance>(
+  multiply<S extends AnySubstance>(
     this: BaseContainer<MassPerEnergy<S>>,
     right: Container<EnergyPerMass<NoInfer<S>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<RealNumber>;
   // MassPerDay<S1> * Days = Mass<S1>
-  multiply<S extends Substance, UL extends MassPerDay<S>>(
+  multiply<S extends AnySubstance, UL extends MassPerDay<S>>(
     this: BaseContainer<UL>,
     right: Container<Days>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<ExtractMassPerDaySubstance<UL>>>;
   // MassPerHeadPerDay<S1> * VolumePerMass<S2, S1> = VolumePerHeadPerDay<S2>
-  multiply<S1 extends Substance, S2 extends Substance>(
+  multiply<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<MassPerHeadPerDay<S1>>,
     right: Container<VolumePerMass<S2, NoInfer<S1>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<VolumePerHeadPerDay<S2>>;
   // VolumePerHeadPerDay<S1> * MassPerVolume<S2, S1> = MassPerHeadPerDay<S2>
-  multiply<S1 extends Substance, S2 extends Substance>(
+  multiply<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<VolumePerHeadPerDay<S1>>,
     right: Container<MassPerVolume<S2, NoInfer<S1>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S2>>;
   // MassPerAreaPerDay<S> * Days = MassPerArea<S>
-  multiply<S extends Substance>(
+  multiply<S extends AnySubstance>(
     this: BaseContainer<MassPerAreaPerDay<S>>,
     right: Container<Days>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerArea<S>>;
   // MassPerAreaPerDay<S> * Area = MassPerDay<S>
-  multiply<S extends Substance>(
+  multiply<S extends AnySubstance>(
     this: BaseContainer<MassPerAreaPerDay<S>>,
     right: Container<Area>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerDay<S>>;
   // MassPerAreaPerYear<S1> * Area → MassPerYear<S1>
-  multiply<S extends Substance>(
+  multiply<S extends AnySubstance>(
     this: BaseContainer<MassPerAreaPerYear<S>>,
     right: Container<Area>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerYear<S>>;
   // MassPerYear<S1> * <MassPerMass<S2, S1>> = MassPerYear<S2>
-  multiply<S1 extends Substance, S2 extends Substance>(
+  multiply<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<MassPerYear<S1>>,
     right: Container<MassPerMass<S2, NoInfer<S1>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerYear<S2>>;
   // MassPerYear<S1> * Years = MassPerYear<S1>
-  multiply<S1 extends Substance>(
+  multiply<S1 extends AnySubstance>(
     this: BaseContainer<MassPerYear<S1>>,
     right: Container<Years>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
   // Mass<S> * Distance = MassDistance<S>
-  multiply<S extends Substance>(
+  multiply<S extends AnySubstance>(
     this: BaseContainer<Mass<S>>,
     right: Container<Distance>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassDistance<S>>;
   // MassPerMassDistance<S1, S2> * Distance = MassPerMass<S1, S2>
-  multiply<S1 extends Substance, S2 extends Substance>(
+  multiply<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<MassPerMassDistance<S1, S2>>,
     right: Container<Distance>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerMass<S1, S2>>;
   // MassPerMassDistance<S1, S2> * MassDistance<S2> = Mass<S1>
-  multiply<S1 extends Substance, S2 extends Substance>(
+  multiply<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<MassPerMassDistance<S1, S2>>,
     right: Container<MassDistance<NoInfer<S2>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S1>>;
   // MassPerHeadPerDay<S> * EnergyPerMass<S> = EnergyPerHeadPerDay
-  multiply<S extends Substance>(
+  multiply<S extends AnySubstance>(
     this: BaseContainer<MassPerHeadPerDay<S>>,
     right: Container<EnergyPerMass<NoInfer<S>>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<EnergyPerHeadPerDay>;
   // MassPerVolume<S1, SVol> * MassPerMass<S2, S1> = MassPerVolume<S2, SVol>
-  multiply<S1 extends Substance, S2 extends Substance, SVol extends Substance>(
+  multiply<
+    S1 extends AnySubstance,
+    S2 extends AnySubstance,
+    SVol extends AnySubstance,
+  >(
     this: BaseContainer<MassPerVolume<S1, SVol>>,
     right: Container<MassPerMass<S2, S1>>,
     baseOrigin?: Metadata,
@@ -531,7 +535,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     );
   }
   // Implement divide operation, following the same pattern as multiply
-  // start out with an overload for NumberUnit divided by RealNumber → RealNumber and Mass<Substance> divided by Area → MassPerArea<Substance>
+  // start out with an overload for NumberUnit divided by RealNumber → RealNumber and Mass<AnySubstance> divided by Area → MassPerArea<AnySubstance>
   // NumberUnit / RealNumber → NumberUnit
   divide<UL extends NumberUnit>(
     this: BaseContainer<UL>,
@@ -546,57 +550,57 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<RealNumber>;
 
-  // Mass<Substance> / Area → MassPerArea<Substance>
-  divide<UL extends Mass<Substance>>(
+  // Mass<AnySubstance> / Area → MassPerArea<AnySubstance>
+  divide<UL extends Mass<AnySubstance>>(
     this: BaseContainer<UL>,
     right: Container<Area>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerArea<ExtractMassSubstance<UL>>>;
 
   // Mass<S1> / MassPerMass<S1, S2> = Mass<S2>
-  divide<S1 extends Substance, S2 extends Substance>(
+  divide<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<Mass<S1>>,
     right: Container<MassPerMass<NoInfer<S1>, S2>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Mass<S2>>;
 
   // MassPerArea<S1> / Years = MassPerAreaPerYear<S1>
-  divide<S extends Substance>(
+  divide<S extends AnySubstance>(
     this: BaseContainer<MassPerArea<S>>,
     right: Container<Years>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerAreaPerYear<S>>;
 
   // EnergyPerHeadPerDay<S> / EnergyPerMass<S> = MassPerHeadPerDay<S>
-  divide<S extends Substance>(
+  divide<S extends AnySubstance>(
     this: BaseContainer<EnergyPerHeadPerDay>,
     right: Container<EnergyPerMass<S>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S>>;
 
   // MassPerHead<S> / Days = MassPerHeadPerDay<S>
-  divide<S extends Substance>(
+  divide<S extends AnySubstance>(
     this: BaseContainer<MassPerHead<S>>,
     right: Container<Days>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S>>;
 
   // MassPerHeadPerDay<S1> / MassPerMass<S1, S2> = MassPerHeadPerDay<S2>
-  divide<S1 extends Substance, S2 extends Substance>(
+  divide<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<MassPerHeadPerDay<S1>>,
     right: Container<MassPerMass<NoInfer<S1>, S2>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerHeadPerDay<S2>>;
 
   // Mass<S1> / MassPerVolume<S1, S2> = Volume<S2>
-  divide<S1 extends Substance, S2 extends Substance>(
+  divide<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<Mass<S1>>,
     right: Container<MassPerVolume<S1, S2>>,
     baseOrigin?: Metadata,
   ): BinaryContainer<Volume<S2>>;
 
   // MassPerEnergy<S1> / MassPerMass<S1, S2> => MassPerEnergy<S2>
-  divide<S1 extends Substance, S2 extends Substance>(
+  divide<S1 extends AnySubstance, S2 extends AnySubstance>(
     this: BaseContainer<MassPerEnergy<S1>>,
     right: Container<MassPerMass<NoInfer<S1>, S2>>,
     baseOrigin?: Metadata,
@@ -1019,7 +1023,7 @@ export const translate = <
  * where that equivalence is a deliberate modelling choice (e.g. a mass based allocation between
  * different products), never to get around a genuine unit mismatch.
  */
-export const relabelMass = <S1 extends Substance, S2 extends Substance>(
+export const relabelMass = <S1 extends AnySubstance, S2 extends AnySubstance>(
   from: Container<Mass<S1>>,
   substance: S2,
 ): TranslationContainer<Mass<S1>, Mass<S2>> =>

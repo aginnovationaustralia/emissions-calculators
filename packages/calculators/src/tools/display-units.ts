@@ -21,6 +21,7 @@ import {
   MassPerYear,
   NumberUnit,
   Substance,
+  AnySubstance,
   Volume,
   VolumePerHeadPerDay,
   VolumePerMass,
@@ -213,8 +214,12 @@ const substanceDisplayNames: Record<Substance, string> = {
   Fish: 'fish',
 };
 
-const substanceDisplayName = (substance: Substance): string =>
-  substanceDisplayNames[substance];
+const isKnownSubstance = (substance: AnySubstance): substance is Substance =>
+  substance in substanceDisplayNames;
+
+/** Substances outside the VEERG vocabulary are displayed using their own name. */
+const substanceDisplayName = (substance: AnySubstance): string =>
+  isKnownSubstance(substance) ? substanceDisplayNames[substance] : substance;
 
 /**
  * Builds a "<unitName> <substance> per <perUnitName>[ <perSubstance>]" display string.
@@ -224,9 +229,9 @@ const substanceDisplayName = (substance: Substance): string =>
  */
 const perString = (
   unitName: string,
-  substance: Substance,
+  substance: AnySubstance,
   perUnitName: string,
-  perSubstance?: Substance,
+  perSubstance?: AnySubstance,
 ): string => {
   const perPart = perSubstance
     ? `${perUnitName} ${substanceDisplayName(perSubstance)}`
@@ -234,7 +239,7 @@ const perString = (
   return `${unitName} ${substanceDisplayName(substance)} per ${perPart}`;
 };
 
-const massString = <U extends Mass<Substance>>(
+const massString = <U extends Mass<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -246,7 +251,7 @@ const massString = <U extends Mass<Substance>>(
   return undefined;
 };
 
-const volumeString = <U extends Volume<Substance>>(
+const volumeString = <U extends Volume<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -258,7 +263,7 @@ const volumeString = <U extends Volume<Substance>>(
   return undefined;
 };
 
-const massPerMassString = <U extends MassPerMass<Substance, Substance>>(
+const massPerMassString = <U extends MassPerMass<AnySubstance, AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -268,7 +273,7 @@ const massPerMassString = <U extends MassPerMass<Substance, Substance>>(
   return undefined;
 };
 
-const massPerHeadPerDayString = <U extends MassPerHeadPerDay<Substance>>(
+const massPerHeadPerDayString = <U extends MassPerHeadPerDay<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -278,7 +283,7 @@ const massPerHeadPerDayString = <U extends MassPerHeadPerDay<Substance>>(
   return undefined;
 };
 
-const massPerHeadPerYearString = <U extends MassPerHeadPerYear<Substance>>(
+const massPerHeadPerYearString = <U extends MassPerHeadPerYear<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -288,7 +293,7 @@ const massPerHeadPerYearString = <U extends MassPerHeadPerYear<Substance>>(
   return undefined;
 };
 
-const massPerEnergyString = <U extends MassPerEnergy<Substance>>(
+const massPerEnergyString = <U extends MassPerEnergy<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -298,7 +303,7 @@ const massPerEnergyString = <U extends MassPerEnergy<Substance>>(
   return undefined;
 };
 
-const volumePerHeadPerDayString = <U extends VolumePerHeadPerDay<Substance>>(
+const volumePerHeadPerDayString = <U extends VolumePerHeadPerDay<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -308,7 +313,7 @@ const volumePerHeadPerDayString = <U extends VolumePerHeadPerDay<Substance>>(
   return undefined;
 };
 
-const energyPerMassString = <U extends EnergyPerMass<Substance>>(
+const energyPerMassString = <U extends EnergyPerMass<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -318,7 +323,7 @@ const energyPerMassString = <U extends EnergyPerMass<Substance>>(
   return undefined;
 };
 
-const energyPerVolumeString = <U extends EnergyPerVolume<Substance>>(
+const energyPerVolumeString = <U extends EnergyPerVolume<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -328,7 +333,7 @@ const energyPerVolumeString = <U extends EnergyPerVolume<Substance>>(
   return undefined;
 };
 
-const massPerAreaString = <U extends MassPerArea<Substance>>(
+const massPerAreaString = <U extends MassPerArea<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -340,7 +345,7 @@ const massPerAreaString = <U extends MassPerArea<Substance>>(
   return undefined;
 };
 
-const massPerAreaPerDayString = <U extends MassPerAreaPerDay<Substance>>(
+const massPerAreaPerDayString = <U extends MassPerAreaPerDay<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -350,7 +355,7 @@ const massPerAreaPerDayString = <U extends MassPerAreaPerDay<Substance>>(
   return undefined;
 };
 
-const massPerAreaPerYearString = <U extends MassPerAreaPerYear<Substance>>(
+const massPerAreaPerYearString = <U extends MassPerAreaPerYear<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -360,7 +365,7 @@ const massPerAreaPerYearString = <U extends MassPerAreaPerYear<Substance>>(
   return undefined;
 };
 
-const massPerYearString = <U extends MassPerYear<Substance>>(
+const massPerYearString = <U extends MassPerYear<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -370,7 +375,7 @@ const massPerYearString = <U extends MassPerYear<Substance>>(
   return undefined;
 };
 
-const massPerTimeString = <U extends MassPerTime<Substance>>(
+const massPerTimeString = <U extends MassPerTime<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -380,7 +385,7 @@ const massPerTimeString = <U extends MassPerTime<Substance>>(
   return undefined;
 };
 
-const massPerElectricityString = <U extends MassPerElectricity<Substance>>(
+const massPerElectricityString = <U extends MassPerElectricity<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -390,7 +395,7 @@ const massPerElectricityString = <U extends MassPerElectricity<Substance>>(
   return undefined;
 };
 
-const massPerDayString = <U extends MassPerDay<Substance>>(
+const massPerDayString = <U extends MassPerDay<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -400,7 +405,7 @@ const massPerDayString = <U extends MassPerDay<Substance>>(
   return undefined;
 };
 
-const massPerHeadString = <U extends MassPerHead<Substance>>(
+const massPerHeadString = <U extends MassPerHead<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -410,7 +415,9 @@ const massPerHeadString = <U extends MassPerHead<Substance>>(
   return undefined;
 };
 
-const massPerVolumeString = <U extends MassPerVolume<Substance, Substance>>(
+const massPerVolumeString = <
+  U extends MassPerVolume<AnySubstance, AnySubstance>,
+>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -422,7 +429,9 @@ const massPerVolumeString = <U extends MassPerVolume<Substance, Substance>>(
   return undefined;
 };
 
-const volumePerMassString = <U extends VolumePerMass<Substance, Substance>>(
+const volumePerMassString = <
+  U extends VolumePerMass<AnySubstance, AnySubstance>,
+>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -432,7 +441,7 @@ const volumePerMassString = <U extends VolumePerMass<Substance, Substance>>(
   return undefined;
 };
 
-const countPerAreaString = <U extends CountPerArea<Substance>>(
+const countPerAreaString = <U extends CountPerArea<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -444,7 +453,7 @@ const countPerAreaString = <U extends CountPerArea<Substance>>(
   return undefined;
 };
 
-const massDistanceString = <U extends MassDistance<Substance>>(
+const massDistanceString = <U extends MassDistance<AnySubstance>>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {
@@ -455,7 +464,7 @@ const massDistanceString = <U extends MassDistance<Substance>>(
 };
 
 const massPerMassDistanceString = <
-  U extends MassPerMassDistance<Substance, Substance>,
+  U extends MassPerMassDistance<AnySubstance, AnySubstance>,
 >(
   unit: U,
   scaledValue: number,

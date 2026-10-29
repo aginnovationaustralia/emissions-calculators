@@ -2,7 +2,7 @@ import { divideBySafeFromZero } from '@/calculators/common/tools/calculate';
 import { Container } from './containers';
 import { extractMassAsNumber, extractRealNumberAsNumber } from './extract';
 import { valueObject } from './outputs';
-import { Mass, RealNumber, Substance } from './units';
+import { Mass, RealNumber, AnySubstance } from './units';
 
 /**
  * Emissions intensity in kg CO2e per kg of product, ready for output. Taking containers keeps
@@ -10,7 +10,7 @@ import { Mass, RealNumber, Substance } from './units';
  * and only a total mass (not, say, a mass per head) can be the denominator. Zero production
  * gives an intensity of zero rather than dividing by zero.
  */
-export function generateIntensity<S extends Substance>(
+export function generateIntensity<S extends AnySubstance>(
   emissions: Container<Mass<'CO2e'>>,
   produced: Container<Mass<S>>,
 ) {

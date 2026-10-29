@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js-light';
 import { Container } from './containers';
-import { Mass, Substance } from './units';
+import { Mass, AnySubstance } from './units';
 
 export const tonnesToKg = (tonnes: number | Decimal) =>
   new Decimal(tonnes).mul(1000);
@@ -13,7 +13,7 @@ export const kgToTonnes = (kg: number | Decimal) => new Decimal(kg).div(1000);
 export const cubicMetresToLitres = (cubicMetres: number | Decimal) =>
   new Decimal(cubicMetres).mul(1000);
 
-export const massInTonnes = (mass: Container<Mass<Substance>>) =>
+export const massInTonnes = (mass: Container<Mass<AnySubstance>>) =>
   mass.unit.store.value.div(1000);
 
 export const perTonneToPerKg = (perTonne: number | Decimal) =>
