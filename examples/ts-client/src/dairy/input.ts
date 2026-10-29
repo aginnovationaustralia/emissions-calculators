@@ -32,8 +32,8 @@ import {
   LULUCFInput,
   MarketBasedElectricityInputs,
   OrganicFertiliserInput,
-  OrganicFertiliserTracedInput,
   OrganicFertilisersInput,
+  OrganicFertiliserTracedInput,
   OtherPurchasedGoodOrServiceInput,
   PastureResidueInput,
   PastureResiduesInput,
@@ -436,7 +436,6 @@ const inorganicFertilisersMethod1: InorganicFertilisersScope1Method1Input = {
 const inorganicFertiliserMethod2: InorganicFertiliserScope1Method2Input = {
   calculationMethodScope3: '2',
   fertiliserType: 'Urea',
-  areaAppliedHectares: { value: 20 },
   massAppliedKg: { value: 1000 },
   customScope3EmissionFactor: { value: 2.5 },
   customNitrogenFraction: { value: 0.46 },
@@ -444,6 +443,7 @@ const inorganicFertiliserMethod2: InorganicFertiliserScope1Method2Input = {
 
 const inorganicFertilisersMethod2: InorganicFertilisersScope1Method2Input = {
   calculationMethodScope1: '2',
+  areaAppliedHectares: { value: 20 },
   applications: [inorganicFertiliserMethod2],
 };
 

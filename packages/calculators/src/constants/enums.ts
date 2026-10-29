@@ -1,4 +1,5 @@
 import { Container } from '@/tools/containers';
+import { InputContainer } from '@/tools/inputs';
 
 export const CalculationMethods = ['1', '2'] as const;
 export type CalculationMethod = (typeof CalculationMethods)[number];
@@ -81,6 +82,7 @@ export const InorganicFertiliserTypes = [
   'Calcium Ammonium Nitrate (CAN)',
   'Calcium Nitrate',
   'Single Super Phosphate',
+  'Ammonium Sulfate',
 ] as const;
 export type InorganicFertiliserType = (typeof InorganicFertiliserTypes)[number];
 
@@ -324,18 +326,38 @@ export const InorganicFertiliserComponentTypesRegional = [
 export type InorganicFertiliserComponentTypeRegional =
   (typeof InorganicFertiliserComponentTypesRegional)[number];
 
-export const InorganicFertiliserComponentTypesNonRegional = [
+export const InorganicFertiliserComponentNitrogenTypes = [
+  'Nitrogen - Generic',
+  'Nitrogen - Nitrate',
+  'Nitrogen - Ammonia',
+] as const;
+export type InorganicFertiliserComponentNitrogenType =
+  (typeof InorganicFertiliserComponentNitrogenTypes)[number];
+
+export const InorganicFertiliserComponentNonRegionalWithEquivalentTypes = [
   'Monoammonium phosphate',
   'Diammonium Phosphate',
   'Urea-Ammonium Nitrate',
   'Ammonium Nitrate',
   'Calcium Ammonium Nitrate',
   'Sulphate of Ammonia',
-  'Nitrogen - Generic',
-  'Nitrogen - Nitrate',
-  'Nitrogen - Ammonia',
-  'Muriate of Potash',
   'Single superphosphate',
+] as const;
+export type InorganicFertiliserComponentNonRegionalWithEquivalentType =
+  (typeof InorganicFertiliserComponentNonRegionalWithEquivalentTypes)[number];
+
+// Components that can be mapped back to a fertiliser type.
+export const InorganicFertiliserComponentWithEquivalentTypes = [
+  ...InorganicFertiliserComponentNonRegionalWithEquivalentTypes,
+  'Urea',
+] as const;
+export type InorganicFertiliserComponentWithEquivalentType =
+  (typeof InorganicFertiliserComponentWithEquivalentTypes)[number];
+
+export const InorganicFertiliserComponentTypesNonRegional = [
+  ...InorganicFertiliserComponentNonRegionalWithEquivalentTypes,
+  ...InorganicFertiliserComponentNitrogenTypes,
+  'Muriate of Potash',
   'Double Superphosphate',
   'Phosphorus - Generic',
   'Potassium - Generic',
@@ -353,6 +375,13 @@ export const InorganicFertiliserComponentTypes = [
 export type InorganicFertiliserComponentType =
   | InorganicFertiliserComponentTypeRegional
   | InorganicFertiliserComponentTypeNonRegional;
+
+export const inorganicFertiliserComponentHasFertiliserEquivalent = (
+  component: InputContainer<InorganicFertiliserComponentType>,
+): component is InputContainer<InorganicFertiliserComponentWithEquivalentType> =>
+  InorganicFertiliserComponentWithEquivalentTypes.includes(
+    component.unit as InorganicFertiliserComponentWithEquivalentType,
+  );
 
 export const isInorganicFertiliserComponentTypeRegional = (
   type: InorganicFertiliserComponentType,

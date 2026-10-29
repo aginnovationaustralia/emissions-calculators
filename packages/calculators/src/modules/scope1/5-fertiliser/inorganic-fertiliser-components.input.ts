@@ -1,4 +1,6 @@
 import {
+  InorganicFertiliserComponentNitrogenType,
+  InorganicFertiliserComponentNitrogenTypes,
   InorganicFertiliserComponentOrigins,
   InorganicFertiliserComponentTypesNonRegional,
   InorganicFertiliserComponentTypesRegional,
@@ -57,7 +59,7 @@ export const InorganicFertiliserKnownComponentNoOriginInputSchema = object({
   componentType: enumInput(InorganicFertiliserComponentTypesNonRegional, {
     name: 'Fertiliser component type',
     description: 'Type of inorganic fertiliser component',
-    modules: [PURCH_FERT_15_4],
+    modules: [FERT_INORGANIC_5_1, PURCH_FERT_15_4],
   }),
 }).meta({ title: 'Without origin region' });
 
@@ -78,6 +80,17 @@ export const isInorganicFertiliserKnownComponent = (
   component: InorganicFertiliserComponentInputTransformed,
 ): component is InorganicFertiliserKnownComponentInputTransformed => {
   return 'componentType' in component;
+};
+
+export const isInorganicFertiliserNitrogenComponent = (
+  component: InorganicFertiliserComponentInputTransformed,
+): boolean => {
+  return (
+    isInorganicFertiliserKnownComponent(component) &&
+    InorganicFertiliserComponentNitrogenTypes.includes(
+      component.componentType.unit as InorganicFertiliserComponentNitrogenType,
+    )
+  );
 };
 
 export const InorganicFertiliserUnknownComponentInputSchema = object({
@@ -117,6 +130,7 @@ export type InorganicFertiliserComponentInputTransformed = z.output<
 export type InorganicFertiliserUnknownComponentInputTransformed = z.output<
   typeof InorganicFertiliserUnknownComponentInputSchema
 >;
+
 export type InorganicFertiliserKnownComponentInputTransformed = z.output<
   typeof InorganicFertiliserKnownComponentInputSchema
 >;

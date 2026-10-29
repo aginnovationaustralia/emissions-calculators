@@ -90,9 +90,9 @@ const getFertilisersInput = (
               }
             : {}),
           customScope3EmissionFactor: nv(0),
-          areaAppliedHectares: nv(areaAppliedHectares),
         },
       ],
+      areaAppliedHectares: nv(areaAppliedHectares),
       calculationMethodScope1: '2',
     },
     organic: {

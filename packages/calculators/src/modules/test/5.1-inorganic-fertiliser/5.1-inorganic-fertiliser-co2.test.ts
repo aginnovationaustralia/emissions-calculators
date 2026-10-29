@@ -1,21 +1,21 @@
 import { getSheet } from '@/test/common/sheets';
 import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
-import { calculateInorganicFertiliserCO2 } from '../scope1/5-fertiliser/5.1-inorganic-fertiliser';
+import { calculateInorganicFertiliserCO2 } from '../../scope1/5-fertiliser/5.1-inorganic-fertiliser';
 import {
   HasFertiliserInput,
   HasFertiliserInputSchema,
   HasFertiliserInputTransformed,
-} from '../scope1/5-fertiliser/fertiliser.input';
-import { InorganicFertilisersScope1Method1Input } from '../scope1/5-fertiliser/inorganic-fertilisers.input';
+} from '../../scope1/5-fertiliser/fertiliser.input';
+import { InorganicFertilisersScope1Method1Input } from '../../scope1/5-fertiliser/inorganic-fertilisers.input';
 import {
   checkBasicCropProductionSystem,
   checkInorganicFertiliserType,
-} from './fertiliser-domain';
+} from '../fertiliser-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
-} from './sheet-comparison';
+} from '../sheet-comparison';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -69,7 +69,7 @@ const extractInputsAndOutput = createSheetExtractor(
 describe('5.1.1.3 Inorganic Fertiliser CO2', () => {
   it('method 1 scenarios match spreadsheet results', async () => {
     const sheet = await getSheet(
-      './src/modules/test/5.1-inorganic-fertiliser.xlsx',
+      './src/modules/test/5.1-inorganic-fertiliser/5.1-inorganic-fertiliser.xlsx',
       '5.1.1.3',
     );
 

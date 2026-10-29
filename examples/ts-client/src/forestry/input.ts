@@ -17,8 +17,8 @@ import {
   LULUCFInput,
   MarketBasedElectricityInputs,
   OrganicFertiliserInput,
-  OrganicFertiliserUntracedInput,
   OrganicFertilisersInput,
+  OrganicFertiliserUntracedInput,
   OtherPurchasedGoodOrServiceInput,
   PerennialCropClearingMethod1Input,
   PerennialCropClearingMethod2Input,
@@ -247,7 +247,7 @@ const inorganicFertilisersMethod1: InorganicFertilisersScope1Method1Input = {
 const inorganicFertiliserMethod2: InorganicFertiliserScope1Method2Input = {
   calculationMethodScope3: '2',
   fertiliserType: 'Urea',
-  areaAppliedHectares: { value: 100 },
+
   massAppliedKg: { value: 5000 },
   customScope3EmissionFactor: { value: 2.5 },
   customNitrogenFraction: { value: 0.46 },
@@ -256,6 +256,7 @@ const inorganicFertiliserMethod2: InorganicFertiliserScope1Method2Input = {
 const inorganicFertilisersMethod2: InorganicFertilisersScope1Method2Input = {
   calculationMethodScope1: '2',
   applications: [inorganicFertiliserMethod2],
+  areaAppliedHectares: { value: 100 },
 };
 
 // The nitrogen fraction of untraced purchased manure is a method 1 input
