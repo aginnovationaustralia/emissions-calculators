@@ -41,3 +41,4 @@ The v4 package implements all chapters of the guidance as individual modules. Th
 - stricter handling of addition and subtraction on empty results, to prevent missing gas keys in outputs
 - enums are now registered with an id in the openapi spec files, to improve generated clients (e.g. Python)
 - include any crop leaching emissions with pasture leaching emissions in the all-modules calculator outputs
+- several fixes and improvements to calculating emissions from nitrogen in fertiliser applications. Calculate based on amount of nitrogen instead of total mass applied. Consider nitrogen content of component based fertilisers
