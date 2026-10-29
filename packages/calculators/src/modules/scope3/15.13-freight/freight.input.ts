@@ -1,5 +1,6 @@
 import { FreightTypes } from '@/constants/enums';
 import { transportFuelInputSchema } from '@/modules/scope1/8-fuel-use';
+import { enumSchema } from '@/tools/enum-schemas';
 import { input, numberInput } from '@/tools/inputs';
 import { FREIGHT_15_13 } from '@/tools/modules';
 import { kilometresToMetres, tonnesToKg } from '@/tools/unit-conversion';
@@ -8,8 +9,7 @@ import { object } from '@/types/schemas';
 import z from 'zod';
 
 export const FreightBaseInputSchema = object({
-  freightType: z
-    .literal(FreightTypes)
+  freightType: enumSchema(FreightTypes)
     .transform((val) =>
       input(val, { name: 'freightType', modules: [FREIGHT_15_13] }),
     )

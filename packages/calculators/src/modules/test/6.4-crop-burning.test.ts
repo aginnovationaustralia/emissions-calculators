@@ -8,7 +8,7 @@ import {
   HasCropResidueInputSchema,
   HasCropResidueInputTransformed,
 } from '../scope1/6-residue-mgmt';
-import { checkCropType } from './crop-residue-domain';
+import { checkCropType, cropTypeAndBurntFraction } from './crop-residue-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
@@ -31,9 +31,8 @@ const getCalculatorInput = (
 
   const cropResidueInput: HasCropResidueInput = {
     crop: {
-      type,
+      ...cropTypeAndBurntFraction(type, fractionOfAnnualCropBurnt),
       totalYieldKg,
-      fractionOfAnnualCropBurnt: nv(fractionOfAnnualCropBurnt),
       residues: {
         calculationMethod: '1',
       },

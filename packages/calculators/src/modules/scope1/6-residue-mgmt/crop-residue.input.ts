@@ -1,7 +1,18 @@
-import { CropTypes, PastureTypes } from '@/constants/enums';
+import {
+  BurnableCropType,
+  BurnableCropTypes,
+  NonBurnableCropType,
+  NonBurnableCropTypes,
+  PastureTypes,
+} from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
-import { enumInput, isProportion, numberInput } from '@/tools/inputs';
+import {
+  enumInput,
+  isProportion,
+  numberInput,
+  TypedInputOptions,
+} from '@/tools/inputs';
 import {
   RESIDUE_BURN_6_4,
   RESIDUE_CROPS_6_1,
@@ -50,6 +61,10 @@ const ResiduesMethod2ByFractionSchema = object({
   ),
 }).meta({ title: 'Method 2 (by fraction)' });
 
+/**
+ * Residue inputs common to every crop type. Crops that can be burnt should use
+ * `BaseBurnableCropResidueInputSchema`, which adds `fractionOfAnnualCropBurnt`.
+ */
 export const BaseCropResidueInputSchema = object({
   totalYieldKg: numberInput(
     (val) => mass('DryMatter', val),
@@ -61,23 +76,32 @@ export const BaseCropResidueInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  fractionOfAnnualCropBurnt: numberInput(
-    (val) => realNumber(val),
-    {
-      name: 'fractionOfAnnualCropBurnt',
-      method: '1',
-      description:
-        'Fraction of annual production of crop that is burnt, from 0 to 1',
-      modules: [RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3, RESIDUE_BURN_6_4],
-    },
-    isProportion,
-  ),
   residues: z.xor([
     ResiduesMethod1Schema,
     ResiduesMethod2ByMassSchema,
     ResiduesMethod2ByFractionSchema,
   ]),
 });
+
+/**
+ * Table A.2.1.1 only gives a fraction of residue remaining at burning (Sc) for
+ * some crop types (see `BurnableCropTypes`). A burnt fraction is only accepted
+ * for those crops.
+ */
+export const BaseBurnableCropResidueInputSchema =
+  BaseCropResidueInputSchema.safeExtend({
+    fractionOfAnnualCropBurnt: numberInput(
+      (val) => realNumber(val),
+      {
+        name: 'fractionOfAnnualCropBurnt',
+        method: '1',
+        description:
+          'Fraction of annual production of crop that is burnt, from 0 to 1',
+        modules: [RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3, RESIDUE_BURN_6_4],
+      },
+      isProportion,
+    ),
+  });
 
 type ResiduesMethod1InputTransformed = z.output<typeof ResiduesMethod1Schema>;
 type ResiduesMethod2ByMassInputTransformed = z.output<
@@ -104,19 +128,62 @@ export type BaseCropResidueInput = z.input<typeof BaseCropResidueInputSchema>;
 export type BaseCropResidueInputTransformed = z.output<
   typeof BaseCropResidueInputSchema
 >;
+export type BaseBurnableCropResidueInput = z.input<
+  typeof BaseBurnableCropResidueInputSchema
+>;
+export type BaseBurnableCropResidueInputTransformed = z.output<
+  typeof BaseBurnableCropResidueInputSchema
+>;
 
-export const CropResidueInputSchema = BaseCropResidueInputSchema.extend({
-  type: enumInput(CropTypes, {
+/**
+ * Builds a crop residue schema for a set of crop types, where
+ * `fractionOfAnnualCropBurnt` is required for burnable crop types and
+ * rejected for crop types that can't be burnt.
+ */
+export const cropResidueInputSchemaForTypes = <
+  TBurnable extends BurnableCropType,
+  TNonBurnable extends NonBurnableCropType,
+>(
+  burnableTypes: readonly TBurnable[],
+  nonBurnableTypes: readonly TNonBurnable[],
+  typeOptions: TypedInputOptions,
+) =>
+  z.xor([
+    BaseBurnableCropResidueInputSchema.safeExtend({
+      type: enumInput(burnableTypes, typeOptions),
+    }).meta({ title: 'Crop that can be burnt' }),
+    BaseCropResidueInputSchema.safeExtend({
+      type: enumInput(nonBurnableTypes, typeOptions),
+    }).meta({ title: 'Crop that cannot be burnt' }),
+  ]);
+
+export const CropResidueInputSchema = cropResidueInputSchemaForTypes(
+  BurnableCropTypes,
+  NonBurnableCropTypes,
+  {
     name: 'Crop type',
     description: 'Type of crop grown in this activity',
     modules: [RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3, RESIDUE_BURN_6_4],
-  }),
-});
+  },
+);
 
 export type CropResidueInput = z.input<typeof CropResidueInputSchema>;
 export type CropResidueInputTransformed = z.output<
   typeof CropResidueInputSchema
 >;
+
+/**
+ * Type guard for crop residue inputs that include a burnt fraction, i.e. crops
+ * that can be burnt. Inputs for crops that cannot be burnt have no burnt fraction.
+ */
+export const isBurnableCropResidueInput = <T extends object>(
+  crop: T,
+): crop is Extract<
+  T,
+  Pick<BaseBurnableCropResidueInputTransformed, 'fractionOfAnnualCropBurnt'>
+> => {
+  return 'fractionOfAnnualCropBurnt' in crop;
+};
 
 export const HasCropResidueInputSchema = object({
   crop: CropResidueInputSchema,

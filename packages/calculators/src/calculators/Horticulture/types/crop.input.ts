@@ -1,8 +1,11 @@
 import { BaseCroppingActivityInputSchema } from '@/calculators/types/cropping-activity.input';
-import { HorticultureCropTypes } from '@/constants/enums';
+import {
+  HorticultureBurnableCropTypes,
+  HorticultureNonBurnableCropTypes,
+} from '@/constants/enums';
 import { FertiliserInputInorganicScope1Method1Schema } from '@/modules/scope1/5-fertiliser';
-import { BaseCropResidueInputSchema } from '@/modules/scope1/6-residue-mgmt/crop-residue.input';
-import { enumInput, input } from '@/tools/inputs';
+import { cropResidueInputSchemaForTypes } from '@/modules/scope1/6-residue-mgmt/crop-residue.input';
+import { input } from '@/tools/inputs';
 import {
   FERT_INORGANIC_5_1,
   RESIDUE_BURN_6_4,
@@ -12,13 +15,15 @@ import {
 import { z } from 'zod';
 
 export const HorticultureCropResidueInputSchema =
-  BaseCropResidueInputSchema.extend({
-    type: enumInput(HorticultureCropTypes, {
+  cropResidueInputSchemaForTypes(
+    HorticultureBurnableCropTypes,
+    HorticultureNonBurnableCropTypes,
+    {
       name: 'Horticulture crop type',
       description: 'Type of horticulture crop grown in this activity',
       modules: [RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3, RESIDUE_BURN_6_4],
-    }),
-  });
+    },
+  );
 
 export const HorticultureFertiliserSchema =
   FertiliserInputInorganicScope1Method1Schema.omit({

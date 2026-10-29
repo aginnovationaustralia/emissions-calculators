@@ -2,6 +2,7 @@ import {
   PurchasedPackagingByMassTypes,
   PurchasedPackagingByUnitsTypes,
 } from '@/constants/enums';
+import { enumSchema } from '@/tools/enum-schemas';
 import { input } from '@/tools/inputs';
 import { PACKAGING_15_8 } from '@/tools/modules';
 import { z } from 'zod';
@@ -12,8 +13,7 @@ import {
 
 export const PurchasedPackagingByUnitsMethod1InputSchema =
   BasePurchasedPackagingByUnitsInputSchema.extend({
-    type: z
-      .literal(PurchasedPackagingByUnitsTypes)
+    type: enumSchema(PurchasedPackagingByUnitsTypes)
       .transform((val) =>
         input(val, {
           name: 'Purchased packaging type',
@@ -33,8 +33,7 @@ export type PurchasedPackagingByUnitsMethod1InputTransformed = z.output<
 
 export const PurchasedPackagingByMassMethod1InputSchema =
   BasePurchasedPackagingByMassInputSchema.extend({
-    type: z
-      .literal(PurchasedPackagingByMassTypes)
+    type: enumSchema(PurchasedPackagingByMassTypes)
       .transform((val) =>
         input(val, {
           name: 'Purchased packaging type',

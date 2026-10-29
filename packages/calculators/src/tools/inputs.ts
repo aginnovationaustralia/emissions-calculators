@@ -2,6 +2,7 @@ import { object } from '@/types/schemas';
 import { z } from 'zod';
 import { BaseContainer, Metadata } from './containers';
 import { getDisplayUnit } from './display-units';
+import { enumSchema } from './enum-schemas';
 import { ModuleNames } from './modules';
 import { QualityTable, QualityTableSchema } from './quality';
 import { AnyUnit, NumberUnit } from './units';
@@ -268,8 +269,7 @@ export const enumInput = <TEnum extends string>(
   options: TypedInputOptions,
 ) => {
   const { name, description, method = '1', modules } = options;
-  return z
-    .enum(values)
+  return enumSchema(values)
     .meta(openapiTags(description, options.modules))
     .transform((val): InputContainer<TEnum> =>
       input(val, { name, method, modules }),
@@ -281,14 +281,30 @@ export const enumInputOptional = <TEnum extends string>(
   options: TypedInputOptions,
 ) => {
   const { name, description, method = '1', modules } = options;
-  return z
-    .enum(values)
+  return enumSchema(values)
     .optional()
     .meta(openapiTags(description, options.modules))
     .transform(
       mapOptional((val): InputContainer<TEnum> =>
         input(val, { name, method, modules }),
       ),
+    );
+};
+
+/**
+ * An input that only accepts a single value, typically used to select a variant. It is
+ * emitted inline as a single-value enum, so it does not need to be registered.
+ */
+export const literalInput = <TValue extends string>(
+  value: TValue,
+  options: TypedInputOptions,
+) => {
+  const { name, description, method = '1', modules } = options;
+  return z
+    .enum([value])
+    .meta(openapiTags(description, options.modules))
+    .transform((val): InputContainer<TValue> =>
+      input(val, { name, method, modules }),
     );
 };
 

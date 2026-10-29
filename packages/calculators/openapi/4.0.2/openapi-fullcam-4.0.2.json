@@ -866,100 +866,13 @@
                       ]
                     },
                     "region": {
-                      "type": "string",
-                      "enum": [
-                        "Arnhem Coast",
-                        "Arnhem Plateau",
-                        "Australian Alps",
-                        "Avon Wheatbelt",
-                        "Brigalow Belt North",
-                        "Brigalow Belt South",
-                        "Ben Lomond",
-                        "Broken Hill Complex",
-                        "Burt Plain",
-                        "Carnarvon",
-                        "Central Arnhem",
-                        "Central Kimberley",
-                        "Central Ranges",
-                        "Channel Country",
-                        "Central Mackay Coast",
-                        "Coolgardie",
-                        "Cobar Peneplain",
-                        "Cape York Peninsula",
-                        "Daly Basin",
-                        "Darwin Coastal",
-                        "Dampierland",
-                        "Desert Uplands",
-                        "Davenport Murchison Ranges",
-                        "Darling Riverine Plains",
-                        "Einasleigh Uplands",
-                        "Esperance Plains",
-                        "Eyre Yorke Block",
-                        "Finke",
-                        "Flinders Lofty Block",
-                        "Furneaux",
-                        "Gascoyne",
-                        "Gawler",
-                        "Geraldton Sandplains",
-                        "Gulf Fall and Uplands",
-                        "Gibson Desert",
-                        "Great Sandy Desert",
-                        "Gulf Coastal",
-                        "Gulf Plains",
-                        "Great Victoria Desert",
-                        "Hampton",
-                        "Jarrah Forest",
-                        "Kanmantoo",
-                        "King",
-                        "Little Sandy Desert",
-                        "MacDonnell Ranges",
-                        "Mallee",
-                        "Murray Darling Depression",
-                        "Mitchell Grass Downs",
-                        "Mount Isa Inlier",
-                        "Mulga Lands",
-                        "Murchison",
-                        "Nandewar",
-                        "Naracoorte Coastal Plain",
-                        "New England Tablelands",
-                        "NSW North Coast",
-                        "Northern Kimberley",
-                        "NSW South Western Slopes",
-                        "Nullarbor",
-                        "Ord Victoria Plain",
-                        "Pine Creek",
-                        "Pilbara",
-                        "Riverina",
-                        "South East Coastal Plain",
-                        "South East Corner",
-                        "South Eastern Highlands",
-                        "South Eastern Queensland",
-                        "Simpson Strzelecki Dunefields",
-                        "Stony Plains",
-                        "Sturt Plateau",
-                        "Southern Volcanic Plain",
-                        "Swan Coastal Plain",
-                        "Sydney Basin",
-                        "Tanami",
-                        "Tasmanian Central Highlands",
-                        "Tiwi Cobourg",
-                        "Tasmanian Northern Midlands",
-                        "Tasmanian Northern Slopes",
-                        "Tasmanian South East",
-                        "Tasmanian Southern Ranges",
-                        "Tasmanian West",
-                        "Victoria Bonaparte",
-                        "Victorian Midlands",
-                        "Warren",
-                        "Wet Tropics",
-                        "Yalgoo"
-                      ],
                       "description": "IBRA7 region of the activity area",
                       "x-modules": [
                         "16.2",
                         "16.3",
                         "16.4"
-                      ]
+                      ],
+                      "$ref": "#/components/schemas/IBRA7Region"
                     },
                     "massCH4FromBiomassBurningPerHectare": {
                       "description": "Mass CH4 from biomass burning. Derived from FullCAM output. (tonnes CH4 per hectare)",
@@ -1029,16 +942,11 @@
                       "const": "landClearingForestToCropland"
                     },
                     "cropProductionSystem": {
-                      "type": "string",
-                      "enum": [
-                        "Irrigated crop",
-                        "Non-irrigated crop (low rainfall)",
-                        "Non-irrigated crop (high rainfall)"
-                      ],
                       "description": "Crop production",
                       "x-modules": [
                         "16.3"
-                      ]
+                      ],
+                      "$ref": "#/components/schemas/CropOnlyProductionSystem"
                     }
                   },
                   "required": [
@@ -1177,100 +1085,13 @@
                       ]
                     },
                     "region": {
-                      "type": "string",
-                      "enum": [
-                        "Arnhem Coast",
-                        "Arnhem Plateau",
-                        "Australian Alps",
-                        "Avon Wheatbelt",
-                        "Brigalow Belt North",
-                        "Brigalow Belt South",
-                        "Ben Lomond",
-                        "Broken Hill Complex",
-                        "Burt Plain",
-                        "Carnarvon",
-                        "Central Arnhem",
-                        "Central Kimberley",
-                        "Central Ranges",
-                        "Channel Country",
-                        "Central Mackay Coast",
-                        "Coolgardie",
-                        "Cobar Peneplain",
-                        "Cape York Peninsula",
-                        "Daly Basin",
-                        "Darwin Coastal",
-                        "Dampierland",
-                        "Desert Uplands",
-                        "Davenport Murchison Ranges",
-                        "Darling Riverine Plains",
-                        "Einasleigh Uplands",
-                        "Esperance Plains",
-                        "Eyre Yorke Block",
-                        "Finke",
-                        "Flinders Lofty Block",
-                        "Furneaux",
-                        "Gascoyne",
-                        "Gawler",
-                        "Geraldton Sandplains",
-                        "Gulf Fall and Uplands",
-                        "Gibson Desert",
-                        "Great Sandy Desert",
-                        "Gulf Coastal",
-                        "Gulf Plains",
-                        "Great Victoria Desert",
-                        "Hampton",
-                        "Jarrah Forest",
-                        "Kanmantoo",
-                        "King",
-                        "Little Sandy Desert",
-                        "MacDonnell Ranges",
-                        "Mallee",
-                        "Murray Darling Depression",
-                        "Mitchell Grass Downs",
-                        "Mount Isa Inlier",
-                        "Mulga Lands",
-                        "Murchison",
-                        "Nandewar",
-                        "Naracoorte Coastal Plain",
-                        "New England Tablelands",
-                        "NSW North Coast",
-                        "Northern Kimberley",
-                        "NSW South Western Slopes",
-                        "Nullarbor",
-                        "Ord Victoria Plain",
-                        "Pine Creek",
-                        "Pilbara",
-                        "Riverina",
-                        "South East Coastal Plain",
-                        "South East Corner",
-                        "South Eastern Highlands",
-                        "South Eastern Queensland",
-                        "Simpson Strzelecki Dunefields",
-                        "Stony Plains",
-                        "Sturt Plateau",
-                        "Southern Volcanic Plain",
-                        "Swan Coastal Plain",
-                        "Sydney Basin",
-                        "Tanami",
-                        "Tasmanian Central Highlands",
-                        "Tiwi Cobourg",
-                        "Tasmanian Northern Midlands",
-                        "Tasmanian Northern Slopes",
-                        "Tasmanian South East",
-                        "Tasmanian Southern Ranges",
-                        "Tasmanian West",
-                        "Victoria Bonaparte",
-                        "Victorian Midlands",
-                        "Warren",
-                        "Wet Tropics",
-                        "Yalgoo"
-                      ],
                       "description": "IBRA7 region of the activity area",
                       "x-modules": [
                         "16.2",
                         "16.3",
                         "16.4"
-                      ]
+                      ],
+                      "$ref": "#/components/schemas/IBRA7Region"
                     },
                     "massCH4FromBiomassBurningPerHectare": {
                       "description": "Mass CH4 from biomass burning. Derived from FullCAM output. (tonnes CH4 per hectare)",
@@ -1340,15 +1161,11 @@
                       "const": "landClearingForestToGrassland"
                     },
                     "pastureProductionSystem": {
-                      "type": "string",
-                      "enum": [
-                        "Irrigated pasture",
-                        "Non-irrigated pasture"
-                      ],
                       "description": "Pasture production",
                       "x-modules": [
                         "16.3"
-                      ]
+                      ],
+                      "$ref": "#/components/schemas/PastureOnlyProductionSystem"
                     }
                   },
                   "required": [
@@ -1487,100 +1304,13 @@
                       ]
                     },
                     "region": {
-                      "type": "string",
-                      "enum": [
-                        "Arnhem Coast",
-                        "Arnhem Plateau",
-                        "Australian Alps",
-                        "Avon Wheatbelt",
-                        "Brigalow Belt North",
-                        "Brigalow Belt South",
-                        "Ben Lomond",
-                        "Broken Hill Complex",
-                        "Burt Plain",
-                        "Carnarvon",
-                        "Central Arnhem",
-                        "Central Kimberley",
-                        "Central Ranges",
-                        "Channel Country",
-                        "Central Mackay Coast",
-                        "Coolgardie",
-                        "Cobar Peneplain",
-                        "Cape York Peninsula",
-                        "Daly Basin",
-                        "Darwin Coastal",
-                        "Dampierland",
-                        "Desert Uplands",
-                        "Davenport Murchison Ranges",
-                        "Darling Riverine Plains",
-                        "Einasleigh Uplands",
-                        "Esperance Plains",
-                        "Eyre Yorke Block",
-                        "Finke",
-                        "Flinders Lofty Block",
-                        "Furneaux",
-                        "Gascoyne",
-                        "Gawler",
-                        "Geraldton Sandplains",
-                        "Gulf Fall and Uplands",
-                        "Gibson Desert",
-                        "Great Sandy Desert",
-                        "Gulf Coastal",
-                        "Gulf Plains",
-                        "Great Victoria Desert",
-                        "Hampton",
-                        "Jarrah Forest",
-                        "Kanmantoo",
-                        "King",
-                        "Little Sandy Desert",
-                        "MacDonnell Ranges",
-                        "Mallee",
-                        "Murray Darling Depression",
-                        "Mitchell Grass Downs",
-                        "Mount Isa Inlier",
-                        "Mulga Lands",
-                        "Murchison",
-                        "Nandewar",
-                        "Naracoorte Coastal Plain",
-                        "New England Tablelands",
-                        "NSW North Coast",
-                        "Northern Kimberley",
-                        "NSW South Western Slopes",
-                        "Nullarbor",
-                        "Ord Victoria Plain",
-                        "Pine Creek",
-                        "Pilbara",
-                        "Riverina",
-                        "South East Coastal Plain",
-                        "South East Corner",
-                        "South Eastern Highlands",
-                        "South Eastern Queensland",
-                        "Simpson Strzelecki Dunefields",
-                        "Stony Plains",
-                        "Sturt Plateau",
-                        "Southern Volcanic Plain",
-                        "Swan Coastal Plain",
-                        "Sydney Basin",
-                        "Tanami",
-                        "Tasmanian Central Highlands",
-                        "Tiwi Cobourg",
-                        "Tasmanian Northern Midlands",
-                        "Tasmanian Northern Slopes",
-                        "Tasmanian South East",
-                        "Tasmanian Southern Ranges",
-                        "Tasmanian West",
-                        "Victoria Bonaparte",
-                        "Victorian Midlands",
-                        "Warren",
-                        "Wet Tropics",
-                        "Yalgoo"
-                      ],
                       "description": "IBRA7 region of the activity area",
                       "x-modules": [
                         "16.2",
                         "16.3",
                         "16.4"
-                      ]
+                      ],
+                      "$ref": "#/components/schemas/IBRA7Region"
                     },
                     "massCH4FromBiomassBurningPerHectare": {
                       "description": "Mass CH4 from biomass burning. Derived from FullCAM output. (tonnes CH4 per hectare)",
@@ -2385,6 +2115,111 @@
         "type": "number",
         "minimum": 0
       },
+      "IBRA7Region": {
+        "type": "string",
+        "enum": [
+          "Arnhem Coast",
+          "Arnhem Plateau",
+          "Australian Alps",
+          "Avon Wheatbelt",
+          "Brigalow Belt North",
+          "Brigalow Belt South",
+          "Ben Lomond",
+          "Broken Hill Complex",
+          "Burt Plain",
+          "Carnarvon",
+          "Central Arnhem",
+          "Central Kimberley",
+          "Central Ranges",
+          "Channel Country",
+          "Central Mackay Coast",
+          "Coolgardie",
+          "Cobar Peneplain",
+          "Cape York Peninsula",
+          "Daly Basin",
+          "Darwin Coastal",
+          "Dampierland",
+          "Desert Uplands",
+          "Davenport Murchison Ranges",
+          "Darling Riverine Plains",
+          "Einasleigh Uplands",
+          "Esperance Plains",
+          "Eyre Yorke Block",
+          "Finke",
+          "Flinders Lofty Block",
+          "Furneaux",
+          "Gascoyne",
+          "Gawler",
+          "Geraldton Sandplains",
+          "Gulf Fall and Uplands",
+          "Gibson Desert",
+          "Great Sandy Desert",
+          "Gulf Coastal",
+          "Gulf Plains",
+          "Great Victoria Desert",
+          "Hampton",
+          "Jarrah Forest",
+          "Kanmantoo",
+          "King",
+          "Little Sandy Desert",
+          "MacDonnell Ranges",
+          "Mallee",
+          "Murray Darling Depression",
+          "Mitchell Grass Downs",
+          "Mount Isa Inlier",
+          "Mulga Lands",
+          "Murchison",
+          "Nandewar",
+          "Naracoorte Coastal Plain",
+          "New England Tablelands",
+          "NSW North Coast",
+          "Northern Kimberley",
+          "NSW South Western Slopes",
+          "Nullarbor",
+          "Ord Victoria Plain",
+          "Pine Creek",
+          "Pilbara",
+          "Riverina",
+          "South East Coastal Plain",
+          "South East Corner",
+          "South Eastern Highlands",
+          "South Eastern Queensland",
+          "Simpson Strzelecki Dunefields",
+          "Stony Plains",
+          "Sturt Plateau",
+          "Southern Volcanic Plain",
+          "Swan Coastal Plain",
+          "Sydney Basin",
+          "Tanami",
+          "Tasmanian Central Highlands",
+          "Tiwi Cobourg",
+          "Tasmanian Northern Midlands",
+          "Tasmanian Northern Slopes",
+          "Tasmanian South East",
+          "Tasmanian Southern Ranges",
+          "Tasmanian West",
+          "Victoria Bonaparte",
+          "Victorian Midlands",
+          "Warren",
+          "Wet Tropics",
+          "Yalgoo"
+        ]
+      },
+      "CropOnlyProductionSystem": {
+        "type": "string",
+        "enum": [
+          "Irrigated crop",
+          "Non-irrigated crop (low rainfall)",
+          "Non-irrigated crop (high rainfall)"
+        ]
+      },
+      "PastureOnlyProductionSystem": {
+        "type": "string",
+        "enum": [
+          "Irrigated pasture",
+          "Non-irrigated pasture"
+        ]
+      },
       "BurningInput": {
         "type": "object",
         "properties": {
@@ -2592,33 +2427,19 @@
                   "oneOf": [
                     {
                       "title": "Full",
-                      "type": "string",
-                      "enum": [
-                        "Oranges",
-                        "Macadamias",
-                        "Almonds",
-                        "Apples",
-                        "Peaches",
-                        "Olives",
-                        "Avocados",
-                        "Mangoes"
-                      ],
                       "description": "Type of perennial woody crop planted",
                       "x-modules": [
                         "16.6"
-                      ]
+                      ],
+                      "$ref": "#/components/schemas/PerennialWoodyCropFull"
                     },
                     {
                       "title": "Partial",
-                      "type": "string",
-                      "enum": [
-                        "Grapes",
-                        "Kiwifruits"
-                      ],
                       "description": "Type of perennial woody crop planted",
                       "x-modules": [
                         "16.6"
-                      ]
+                      ],
+                      "$ref": "#/components/schemas/PerennialWoodyCropPartial"
                     }
                   ]
                 },
@@ -2770,21 +2591,11 @@
                   }
                 },
                 "cropType": {
-                  "type": "string",
-                  "enum": [
-                    "Oranges",
-                    "Macadamias",
-                    "Almonds",
-                    "Apples",
-                    "Peaches",
-                    "Olives",
-                    "Avocados",
-                    "Mangoes"
-                  ],
                   "description": "Type of perennial woody crop planted",
                   "x-modules": [
                     "16.6"
-                  ]
+                  ],
+                  "$ref": "#/components/schemas/PerennialWoodyCropFull"
                 },
                 "calculationMethod": {
                   "type": "string",
@@ -2957,21 +2768,11 @@
                   }
                 },
                 "cropType": {
-                  "type": "string",
-                  "enum": [
-                    "Oranges",
-                    "Macadamias",
-                    "Almonds",
-                    "Apples",
-                    "Peaches",
-                    "Olives",
-                    "Avocados",
-                    "Mangoes"
-                  ],
                   "description": "Type of perennial woody crop planted",
                   "x-modules": [
                     "16.6"
-                  ]
+                  ],
+                  "$ref": "#/components/schemas/PerennialWoodyCropFull"
                 },
                 "clearings": {
                   "type": "array",
@@ -3024,6 +2825,26 @@
           ],
           "type": "object"
         }
+      },
+      "PerennialWoodyCropFull": {
+        "type": "string",
+        "enum": [
+          "Oranges",
+          "Macadamias",
+          "Almonds",
+          "Apples",
+          "Peaches",
+          "Olives",
+          "Avocados",
+          "Mangoes"
+        ]
+      },
+      "PerennialWoodyCropPartial": {
+        "type": "string",
+        "enum": [
+          "Grapes",
+          "Kiwifruits"
+        ]
       }
     }
   }

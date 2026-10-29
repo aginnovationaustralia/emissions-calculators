@@ -263,6 +263,7 @@ const calculateScope1AllModules = (
     [
       input.pasture &&
         calculate63ResidueLeachingAndRunoffN2O(input.pasture, context),
+      input.crop && calculate63ResidueLeachingAndRunoffN2O(input.crop, context),
       rice && calculate63ResidueLeachingAndRunoffN2O(rice, context),
     ],
     zeroN2O,

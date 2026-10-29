@@ -307,6 +307,7 @@ export const ZERO_ALL_MODULES_INPUT: Required<AllModulesInput> = {
     crop: zeroCropResidue,
     state: 'NSW',
     climateZone: 'dry',
+    isInLeachingZone: false,
   },
   pasture: {
     pasture: zeroPastureResidue,

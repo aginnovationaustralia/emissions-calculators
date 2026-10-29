@@ -2,9 +2,11 @@ import {
   CropType,
   CropTypes,
   ElectricityRegions,
+  isBurnableCropType,
   PastureType,
   PastureTypes,
 } from '@/constants/enums';
+import { nv } from '@/tools/inputs';
 import { createValueCheck } from './domain';
 
 export const checkCropType = (type: string | undefined): CropType => {
@@ -22,3 +24,15 @@ export const checkPastureType = (type: string | undefined): PastureType => {
 };
 
 export const checkRegion = createValueCheck(ElectricityRegions, 'region');
+
+/**
+ * Crop type and burnt fraction for a crop residue input. The burnt fraction is
+ * only accepted for crops that can be burnt, so it is dropped for other crops.
+ */
+export const cropTypeAndBurntFraction = (
+  type: CropType,
+  fractionOfAnnualCropBurnt: number,
+) =>
+  isBurnableCropType(type)
+    ? { type, fractionOfAnnualCropBurnt: nv(fractionOfAnnualCropBurnt) }
+    : { type };

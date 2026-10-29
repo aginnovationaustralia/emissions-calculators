@@ -1,4 +1,4 @@
-import { calculateEmissions, RiceInput } from '@/calculators';
+import { calculateEmissions, RiceInput, SugarInput } from '@/calculators';
 import { testContext } from '@/test/Grains/context';
 import { ZERO_ALL_MODULES_INPUT } from '@/test/inputs/zero-input';
 import { nv } from '@/tools/inputs';
@@ -73,7 +73,7 @@ describe('calculateAllModules', () => {
   });
 });
 
-describe('calculateAllModules rice crop residues (6.1, 6.3, 6.4)', () => {
+describe('calculateAllModules crop residues (6.1, 6.3, 6.4)', () => {
   // 250 ha of rice in NSW, 10 t/ha, a fifth of the stubble burnt
   const riceCrop = {
     totalYieldKg: nv(2_500_000),
@@ -92,17 +92,29 @@ describe('calculateAllModules rice crop residues (6.1, 6.3, 6.4)', () => {
     isInLeachingZone: true,
   };
 
-  // 9,000 t of sugar cane in NSW, a tenth burnt
-  const crop: NonNullable<AllModulesInput['crop']> = {
+  // 9,000 t of sugar cane in QLD, wet climate, none burnt
+  const caneResidue = {
+    totalYieldKg: nv(9_000_000),
+    fractionOfAnnualCropBurnt: nv(0),
+    residues: { calculationMethod: '1' },
+  } as const;
+
+  const crop = ({
+    isInLeachingZone,
+    fractionOfAnnualCropBurnt = 0,
+  }: {
+    isInLeachingZone: boolean;
+    fractionOfAnnualCropBurnt?: number;
+  }): NonNullable<AllModulesInput['crop']> => ({
     crop: {
+      ...caneResidue,
       type: 'Sugar Cane',
-      totalYieldKg: nv(9_000_000),
-      fractionOfAnnualCropBurnt: nv(0.1),
-      residues: { calculationMethod: '1' },
+      fractionOfAnnualCropBurnt: nv(fractionOfAnnualCropBurnt),
     },
-    state: 'NSW',
+    state: 'QLD',
     climateZone: 'wet',
-  };
+    isInLeachingZone,
+  });
 
   const pasture: NonNullable<AllModulesInput['pasture']> = {
     pasture: {
@@ -111,7 +123,7 @@ describe('calculateAllModules rice crop residues (6.1, 6.3, 6.4)', () => {
       fractionOfAnnualCropBurnt: nv(0),
       residues: { calculationMethod: '1' },
     },
-    state: 'NSW',
+    state: 'QLD',
     climateZone: 'wet',
     isInLeachingZone: true,
   };
@@ -164,6 +176,40 @@ describe('calculateAllModules rice crop residues (6.1, 6.3, 6.4)', () => {
     return result.emissions.scope1;
   };
 
+  const sugarResidueLeaching = () => {
+    const input: SugarInput = {
+      electricity: {
+        method: 'location',
+        electricityPurchasedKWh: nv(0),
+        region: 'QLD',
+      },
+      crops: [
+        {
+          crop: caneResidue,
+          state: 'QLD',
+          climateZone: 'wet',
+          isInLeachingZone: true,
+          electricityAllocation: nv(1),
+          lime: { applications: [] },
+          chemicals: [],
+          refrigerants: [],
+          fertiliser: {
+            inorganic: { applications: [], calculationMethodScope1: '1' },
+            organic: { applications: [] },
+          },
+          fuel: { transport: [], stationary: [] },
+          services: { fuel: { transport: [], stationary: [] } },
+          waste: {},
+        },
+      ],
+    };
+    const result = calculateEmissions('sugar', input, { disableMetrics: true });
+    if (result.status !== 'OK') {
+      throw new Error(JSON.stringify(result));
+    }
+    return result.emissions.scope1.residueLeachingAndRunoffN2O.amountTonnesCO2e;
+  };
+
   it('matches the Rice calculator when only rice is supplied', () => {
     const expected = riceCalculatorScope1();
     const actual = scope1({ rice });
@@ -178,16 +224,38 @@ describe('calculateAllModules rice crop residues (6.1, 6.3, 6.4)', () => {
     );
   });
 
-  it('adds the crop and rice residues together', () => {
-    const cropOnly = scope1({ crop });
-    const riceOnly = scope1({ rice });
-    const both = scope1({ crop, rice });
+  it('matches the Sugar calculator when the crop is in a leaching zone', () => {
+    const expected = sugarResidueLeaching();
+    const { residueLeachingAndRunoffN2O, cropResidueN2O } = scope1({
+      crop: crop({ isInLeachingZone: true }),
+    });
 
-    for (const key of [
-      'cropResidueN2O',
-      'fieldBurningN2O',
-      'fieldBurningCH4',
-    ] as const) {
+    expect(expected).toBeCloseTo(3.954, 3);
+    expect(residueLeachingAndRunoffN2O.amountTonnesCO2e).toBeCloseTo(
+      expected,
+      8,
+    );
+    expect(cropResidueN2O.amountTonnesCO2e).toBeGreaterThan(0);
+  });
+
+  it('has no crop residue leaching when the crop is not in a leaching zone', () => {
+    expect(
+      scope1({ crop: crop({ isInLeachingZone: false }) })
+        .residueLeachingAndRunoffN2O.amountGasKg,
+    ).toBe(0);
+  });
+
+  it('adds the crop and rice residues together', () => {
+    // A tenth of the cane burnt, so the crop contributes to every residue key
+    const leachingBurntCrop = crop({
+      isInLeachingZone: true,
+      fractionOfAnnualCropBurnt: 0.1,
+    });
+    const cropOnly = scope1({ crop: leachingBurntCrop });
+    const riceOnly = scope1({ rice });
+    const both = scope1({ crop: leachingBurntCrop, rice });
+
+    for (const key of residueKeys) {
       expect(cropOnly[key].amountGasKg).toBeGreaterThan(0);
       expect(riceOnly[key].amountGasKg).toBeGreaterThan(0);
       expect(both[key].amountGasKg).toBeCloseTo(
@@ -197,16 +265,19 @@ describe('calculateAllModules rice crop residues (6.1, 6.3, 6.4)', () => {
     }
   });
 
-  it('adds the pasture and rice residue leaching together', () => {
-    const pastureOnly = scope1({ pasture }).residueLeachingAndRunoffN2O;
-    const riceOnly = scope1({ rice }).residueLeachingAndRunoffN2O;
-    const both = scope1({ pasture, rice }).residueLeachingAndRunoffN2O;
+  it('adds crop, pasture and rice residue leaching together', () => {
+    const leachingCrop = crop({ isInLeachingZone: true });
+    const leaching = (input: AllModulesInput) =>
+      scope1(input).residueLeachingAndRunoffN2O.amountGasKg;
 
-    expect(pastureOnly.amountGasKg).toBeGreaterThan(0);
-    expect(riceOnly.amountGasKg).toBeGreaterThan(0);
-    expect(both.amountGasKg).toBeCloseTo(
-      pastureOnly.amountGasKg + riceOnly.amountGasKg,
-      6,
-    );
+    const cropOnly = leaching({ crop: leachingCrop });
+    const pastureOnly = leaching({ pasture });
+    const riceOnly = leaching({ rice });
+    const all = leaching({ crop: leachingCrop, pasture, rice });
+
+    expect(cropOnly).toBeGreaterThan(0);
+    expect(pastureOnly).toBeGreaterThan(0);
+    expect(riceOnly).toBeGreaterThan(0);
+    expect(all).toBeCloseTo(cropOnly + pastureOnly + riceOnly, 6);
   });
 });

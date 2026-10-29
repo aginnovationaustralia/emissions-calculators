@@ -101,7 +101,6 @@ const cropResiduesMethod2: CropResiduesInput = {
 // isn't provided.
 const cropMethod1: ViticultureCropResidueInput = {
   totalYieldKg: { value: 500000, quality },
-  fractionOfAnnualCropBurnt: { value: 0 },
   residues: cropResiduesMethod1,
 };
 

@@ -2,6 +2,7 @@ import {
   RiceCultivationOrganicAmendmentType,
   RiceCultivationOrganicAmendmentTypes,
 } from '@/constants/enums';
+import { enumSchema } from '@/tools/enum-schemas';
 import { input, numberInput } from '@/tools/inputs';
 import { RICE_7_1 } from '@/tools/modules';
 import { tonnesPerHectareToKgPerSquareMetres } from '@/tools/unit-conversion';
@@ -10,8 +11,7 @@ import { object } from '@/types/schemas';
 import z from 'zod';
 
 export const RiceCultivationOrganicAmendmentInputSchema = object({
-  type: z
-    .literal(RiceCultivationOrganicAmendmentTypes)
+  type: enumSchema(RiceCultivationOrganicAmendmentTypes)
     .transform((val) =>
       input(val as RiceCultivationOrganicAmendmentType, {
         name: 'organic amendment type',

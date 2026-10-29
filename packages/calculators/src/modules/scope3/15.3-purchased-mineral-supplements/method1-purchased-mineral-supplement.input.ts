@@ -2,6 +2,7 @@ import {
   PurchasedMineralSupplementType,
   PurchasedMineralSupplementTypes,
 } from '@/constants/enums';
+import { enumSchema } from '@/tools/enum-schemas';
 import { input } from '@/tools/inputs';
 import { PURCH_MINERAL_15_3 } from '@/tools/modules';
 import { z } from 'zod';
@@ -9,8 +10,7 @@ import { BasePurchasedMineralSupplementInputSchema } from './base-purchased-mine
 
 export const PurchasedMineralSupplementMethod1InputSchema =
   BasePurchasedMineralSupplementInputSchema.extend({
-    type: z
-      .literal(PurchasedMineralSupplementTypes)
+    type: enumSchema(PurchasedMineralSupplementTypes)
       .transform((val) =>
         input(val as PurchasedMineralSupplementType, {
           name: 'purchased mineral supplement type',

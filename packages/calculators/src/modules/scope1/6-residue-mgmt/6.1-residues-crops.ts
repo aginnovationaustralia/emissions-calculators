@@ -3,12 +3,13 @@ import { HasClimateZoneInputTransformed } from '@/calculators/types/has-climate-
 import { HasStateInputTransformed } from '@/calculators/types/has-state.input';
 import { selectConstant } from '@/tools/constants';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { one, zeroN2O } from '@/tools/sentinels';
+import { one, zero, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { ConstantsForResidueManagement, HasCropConstants } from './constants';
 import {
   HasCropOrPastureResidueInputTransformed,
   HasCropResidueInputTransformed,
+  isBurnableCropResidueInput,
   isPastureResidueInput,
   residueIsByMass,
 } from './crop-residue.input';
@@ -44,7 +45,10 @@ export const calculateMassNCropAppliedToSoil = (
     'residueCropRatio',
   );
 
-  const fc = crop.fractionOfAnnualCropBurnt;
+  // Crops that can't be burnt have no burnt fraction (see BurnableCropTypes)
+  const fc = isBurnableCropResidueInput(crop)
+    ? crop.fractionOfAnnualCropBurnt
+    : zero;
   const ffodc = captureMethod1Or2Value(
     selectConstant(
       constants.CROP,
