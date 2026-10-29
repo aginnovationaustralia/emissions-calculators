@@ -929,6 +929,7 @@ const cropMethod1: AllModulesCropInput = {
   crop: cropResidueMethod1,
   state: 'NSW',
   climateZone: 'Warm temperate moist',
+  isInLeachingZone: false,
 };
 
 const cropMethod2: AllModulesCropInput = {
