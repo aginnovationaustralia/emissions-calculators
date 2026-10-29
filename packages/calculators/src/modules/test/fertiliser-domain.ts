@@ -6,6 +6,8 @@ import {
   CropOnlyProductionSystems,
   ExtendedCropProductionSystem,
   ExtendedCropProductionSystems,
+  InorganicFertiliserComponentTypeNonRegional,
+  InorganicFertiliserComponentTypesNonRegional,
   InorganicFertiliserType,
   InorganicFertiliserTypes,
   OrganicFertiliserType,
@@ -24,6 +26,21 @@ export const checkInorganicFertiliserType = (
     throw new Error(`Invalid inorganic fertiliser type: ${type}`);
   }
   return type as InorganicFertiliserType;
+};
+
+export const checkInorganicFertiliserComponentNonRegionalType = (
+  type: string | undefined,
+) => {
+  if (
+    !InorganicFertiliserComponentTypesNonRegional.includes(
+      type as InorganicFertiliserComponentTypeNonRegional,
+    )
+  ) {
+    throw new Error(
+      `Invalid inorganic fertiliser non-regional component type: ${type}`,
+    );
+  }
+  return type as InorganicFertiliserComponentTypeNonRegional;
 };
 
 export const checkBasicCropProductionSystem = (

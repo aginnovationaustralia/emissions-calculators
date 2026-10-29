@@ -1,6 +1,10 @@
-import { InorganicFertiliserType } from '@/constants/enums';
+import {
+  InorganicFertiliserComponentInput,
+  InorganicFertiliserInput,
+} from '@/calculators/AllModules';
+import { InorganicFertiliserComponentType } from '@/constants/enums';
 import { getSheet } from '@/test/common/sheets';
-import { nv, nvo } from '@/tools/inputs';
+import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import { calculateInorganicFertiliserN2O } from '../../scope1/5-fertiliser/5.1-inorganic-fertiliser';
 import {
@@ -13,6 +17,7 @@ import {
 } from '../../scope1/5-fertiliser/fertiliser.input';
 import {
   checkBasicCropProductionSystem,
+  checkInorganicFertiliserComponentNonRegionalType,
   checkInorganicFertiliserType,
   checkProductionSystemsInorganicFertilisers,
 } from '../fertiliser-domain';
@@ -21,33 +26,62 @@ import {
   createSheetExtractor,
 } from '../sheet-comparison';
 
+const getComponents = (sheet: XLSX.Sheet, row: number) => {
+  const cell = (column: string, offset = 0) =>
+    sheet
+      .cell(`${column}${row + offset}`)
+      .value()
+      ?.toString();
+
+  if (cell('E') === undefined) return undefined;
+  const components: InorganicFertiliserComponentInput[] = [];
+  for (let offset = 0; offset < 4; offset++) {
+    const componentType: InorganicFertiliserComponentType =
+      checkInorganicFertiliserComponentNonRegionalType(cell('E', offset));
+    components.push({
+      componentType: componentType,
+      fractionOfFertiliser: nv(Number(cell('F', offset))),
+    } as InorganicFertiliserComponentInput);
+  }
+  return components;
+};
+
+const getFertiliserApplication = (
+  sheet: XLSX.Sheet,
+  row: number,
+): InorganicFertiliserInput => {
+  const cell = (column: string, offset = 0) =>
+    sheet
+      .cell(`${column}${row + offset}`)
+      .value()
+      ?.toString();
+  const fertiliserType = checkInorganicFertiliserType(cell('B'));
+  const massAppliedKg = nv(Number(cell('D')));
+
+  return {
+    calculationMethodScope3: '1',
+    fertiliserType,
+    massAppliedKg,
+    components: getComponents(sheet, row),
+  };
+};
+
 const getFertilisersInput = (
+  sheet: XLSX.Sheet,
+  row: number,
   method: '1' | '2',
-  fertiliserType: InorganicFertiliserType,
-  massAppliedKg: number,
-  customNitrogenFraction: number | undefined,
-  cell: (column: string) => string | undefined,
 ): FertiliserInput => {
+  const cell = (column: string, offset = 0) =>
+    sheet
+      .cell(`${column}${row + offset}`)
+      .value()
+      ?.toString();
+  const application = getFertiliserApplication(sheet, row);
   if (method === '1') {
     const result: FertiliserInputInorganicScope1Method1 = {
       productionSystem: checkBasicCropProductionSystem(cell('A')),
       inorganic: {
-        applications: [
-          {
-            calculationMethodScope3: '1',
-            fertiliserType,
-            massAppliedKg: nv(massAppliedKg),
-
-            components: customNitrogenFraction
-              ? [
-                  {
-                    componentType: 'Nitrogen - Generic',
-                    fractionOfFertiliser: nv(customNitrogenFraction),
-                  },
-                ]
-              : undefined,
-          },
-        ],
+        applications: [application],
         calculationMethodScope1: '1',
       },
       organic: {
@@ -63,19 +97,7 @@ const getFertilisersInput = (
   const result: FertiliserInputInorganicScope1Method2 = {
     productionSystem: checkProductionSystemsInorganicFertilisers(cell('A')),
     inorganic: {
-      applications: [
-        {
-          calculationMethodScope3: '2',
-          fertiliserType,
-          massAppliedKg: nv(massAppliedKg),
-          ...(customNitrogenFraction
-            ? {
-                customNitrogenFraction: nvo(customNitrogenFraction),
-              }
-            : {}),
-          customScope3EmissionFactor: nv(0),
-        },
-      ],
+      applications: [application],
       areaAppliedHectares: nv(areaAppliedHectares),
       calculationMethodScope1: '2',
     },
@@ -92,24 +114,17 @@ const getCalculatorInput = (
   row: number,
   method: '1' | '2',
 ): HasFertiliserInputTransformed | undefined => {
-  const cell = (column: string) =>
-    sheet.cell(`${column}${row}`).value()?.toString();
+  const cell = (column: string, offset = 0) =>
+    sheet
+      .cell(`${column}${row + offset}`)
+      .value()
+      ?.toString();
 
   if (cell('A') === undefined) {
     return undefined;
   }
 
-  const fertiliserType = checkInorganicFertiliserType(cell('B'));
-  const massAppliedKg = Number(cell('E'));
-  const customNitrogenFraction = cell('G') ? Number(cell('G')) : undefined;
-
-  const fertiliser = getFertilisersInput(
-    method,
-    fertiliserType,
-    massAppliedKg,
-    customNitrogenFraction,
-    cell,
-  );
+  const fertiliser = getFertilisersInput(sheet, row, method);
 
   const fertiliserInput: HasFertiliserInput = {
     fertiliser,
@@ -118,12 +133,65 @@ const getCalculatorInput = (
   return HasFertiliserInputSchema.parse(fertiliserInput);
 };
 
-const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'M');
+const getMultiFertiliserCalculatorInput = (
+  sheet: XLSX.Sheet,
+  row: number,
+  method: '1' | '2',
+): HasFertiliserInputTransformed | undefined => {
+  const cell = (column: string, offset = 0) =>
+    sheet
+      .cell(`${column}${row + offset}`)
+      .value()
+      ?.toString();
 
-describe('5.1.1.1 Inorganic Fertiliser N2O', () => {
-  it('method 1 scenarios match spreadsheet results', async () => {
+  if (cell('A') === undefined) {
+    return undefined;
+  }
+
+  const applications: InorganicFertiliserInput[] = [];
+  for (let offset = 0; offset < 4; offset++) {
+    applications.push(getFertiliserApplication(sheet, row + offset));
+  }
+
+  if (method === '1') {
+    const fertiliser: FertiliserInputInorganicScope1Method1 = {
+      productionSystem: checkBasicCropProductionSystem(cell('A')),
+      inorganic: {
+        applications,
+        calculationMethodScope1: '1',
+      },
+      organic: {
+        applications: [],
+      },
+    };
+    return HasFertiliserInputSchema.parse({ fertiliser });
+  }
+
+  const areaAppliedHectares = Number(cell('C'));
+
+  const fertiliser: FertiliserInputInorganicScope1Method2 = {
+    productionSystem: checkProductionSystemsInorganicFertilisers(cell('A')),
+    inorganic: {
+      applications,
+      areaAppliedHectares: nv(areaAppliedHectares),
+      calculationMethodScope1: '2',
+    },
+    organic: {
+      applications: [],
+    },
+  };
+
+  return HasFertiliserInputSchema.parse({ fertiliser });
+};
+
+describe('5.1.1.1 Inorganic Fertiliser N2O - Method 1', () => {
+  it('basic scenarios match spreadsheet results', async () => {
+    const extractInputsAndOutput = createSheetExtractor(
+      getCalculatorInput,
+      'L',
+    );
     const sheet = await getSheet(
-      './src/modules/test/5.1-inorganic-fertiliser.xlsx',
+      './src/modules/test/5.1-inorganic-fertiliser/5.1-inorganic-fertiliser.xlsx',
       '5.1.1.1',
     );
 
@@ -135,14 +203,61 @@ describe('5.1.1.1 Inorganic Fertiliser N2O', () => {
       '5.1',
     );
   });
-
-  it('method 2 scenarios match spreadsheet results', async () => {
-    const workbook = await getSheet(
-      './src/modules/test/5.1-inorganic-fertiliser.xlsx',
+  it('scenarios with custom components match spreadsheet results', async () => {
+    const sheet = await getSheet(
+      './src/modules/test/5.1-inorganic-fertiliser/5.1-inorganic-fertiliser.xlsx',
       '5.1.1.1',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput(workbook, 10, '2');
+    const extractInputsAndOutput = createSheetExtractor(
+      getCalculatorInput,
+      'L',
+      { rowInterval: 4 },
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateInorganicFertiliserN2O,
+      '5.1',
+    );
+  });
+});
+
+describe('5.1.1.2 Inorganic Fertiliser N2O - Method 2', () => {
+  it('simple scenarios match spreadsheet results', async () => {
+    const workbook = await getSheet(
+      './src/modules/test/5.1-inorganic-fertiliser/5.1-inorganic-fertiliser.xlsx',
+      '5.1.1.2',
+    );
+
+    const extractInputsAndOutput = createSheetExtractor(
+      getCalculatorInput,
+      'M',
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput(workbook, 4, '2');
+
+    compareInputsAndOutputs(
+      inputsAndOutputs,
+      calculateInorganicFertiliserN2O,
+      '5.1',
+    );
+  });
+  it('multiple N fertiliser scenarios match spreadsheet results', async () => {
+    const workbook = await getSheet(
+      './src/modules/test/5.1-inorganic-fertiliser/5.1-inorganic-fertiliser.xlsx',
+      '5.1.1.2',
+    );
+
+    const extractInputsAndOutput = createSheetExtractor(
+      getMultiFertiliserCalculatorInput,
+      'M',
+      { rowInterval: 4 },
+    );
+
+    const inputsAndOutputs = extractInputsAndOutput(workbook, 19, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
