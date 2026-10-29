@@ -5235,6 +5235,7 @@
                                           "componentType": {
                                             "description": "Type of inorganic fertiliser component",
                                             "x-modules": [
+                                              "5.1",
                                               "15.4"
                                             ],
                                             "$ref": "#/components/schemas/InorganicFertiliserComponentTypeNonRegional"
@@ -5594,27 +5595,6 @@
                         {
                           "type": "object",
                           "properties": {
-                            "areaAppliedHectares": {
-                              "description": "Area that this application of inorganic fertiliser was applied to (hectares)",
-                              "x-modules": [
-                                "5.1"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/PositiveNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "hectares"
-                            },
                             "massAppliedKg": {
                               "description": "Mass of inorganic fertiliser applied (kilograms inorganic fertiliser)",
                               "x-modules": [
@@ -5735,6 +5715,7 @@
                                           "componentType": {
                                             "description": "Type of inorganic fertiliser component",
                                             "x-modules": [
+                                              "5.1",
                                               "15.4"
                                             ],
                                             "$ref": "#/components/schemas/InorganicFertiliserComponentTypeNonRegional"
@@ -5815,7 +5796,6 @@
                             }
                           },
                           "required": [
-                            "areaAppliedHectares",
                             "massAppliedKg",
                             "fertiliserType",
                             "calculationMethodScope3"
@@ -5828,27 +5808,6 @@
                             {
                               "type": "object",
                               "properties": {
-                                "areaAppliedHectares": {
-                                  "description": "Area that this application of inorganic fertiliser was applied to (hectares)",
-                                  "x-modules": [
-                                    "5.1"
-                                  ],
-                                  "type": "object",
-                                  "properties": {
-                                    "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
-                                    },
-                                    "quality": {
-                                      "default": {},
-                                      "$ref": "#/components/schemas/QualityTable"
-                                    }
-                                  },
-                                  "required": [
-                                    "value"
-                                  ],
-                                  "additionalProperties": false,
-                                  "x-units": "hectares"
-                                },
                                 "massAppliedKg": {
                                   "description": "Mass of inorganic fertiliser applied (kilograms inorganic fertiliser)",
                                   "x-modules": [
@@ -5933,7 +5892,6 @@
                                 }
                               },
                               "required": [
-                                "areaAppliedHectares",
                                 "massAppliedKg",
                                 "customScope3EmissionFactor",
                                 "calculationMethodScope3",
@@ -5945,27 +5903,6 @@
                             {
                               "type": "object",
                               "properties": {
-                                "areaAppliedHectares": {
-                                  "description": "Area that this application of inorganic fertiliser was applied to (hectares)",
-                                  "x-modules": [
-                                    "5.1"
-                                  ],
-                                  "type": "object",
-                                  "properties": {
-                                    "value": {
-                                      "$ref": "#/components/schemas/PositiveNumberInput"
-                                    },
-                                    "quality": {
-                                      "default": {},
-                                      "$ref": "#/components/schemas/QualityTable"
-                                    }
-                                  },
-                                  "required": [
-                                    "value"
-                                  ],
-                                  "additionalProperties": false,
-                                  "x-units": "hectares"
-                                },
                                 "massAppliedKg": {
                                   "description": "Mass of inorganic fertiliser applied (kilograms inorganic fertiliser)",
                                   "x-modules": [
@@ -6074,7 +6011,6 @@
                                 }
                               },
                               "required": [
-                                "areaAppliedHectares",
                                 "massAppliedKg",
                                 "customScope3EmissionFactor",
                                 "calculationMethodScope3",
@@ -6098,11 +6034,33 @@
                     "type": "string",
                     "const": "2",
                     "description": "Method of calculating fertiliser emissions"
+                  },
+                  "areaAppliedHectares": {
+                    "description": "Method 2: The total area that inorganic fertilisers were applied to (hectares)",
+                    "x-modules": [
+                      "5.1"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "$ref": "#/components/schemas/PositiveNumberInput"
+                      },
+                      "quality": {
+                        "default": {},
+                        "$ref": "#/components/schemas/QualityTable"
+                      }
+                    },
+                    "required": [
+                      "value"
+                    ],
+                    "additionalProperties": false,
+                    "x-units": "hectares"
                   }
                 },
                 "required": [
                   "applications",
-                  "calculationMethodScope1"
+                  "calculationMethodScope1",
+                  "areaAppliedHectares"
                 ],
                 "additionalProperties": false
               },
@@ -6148,7 +6106,8 @@
           "Ammonium Nitrate (AN)",
           "Calcium Ammonium Nitrate (CAN)",
           "Calcium Nitrate",
-          "Single Super Phosphate"
+          "Single Super Phosphate",
+          "Ammonium Sulfate"
         ]
       },
       "InorganicFertiliserComponentTypeRegional": {
@@ -6176,11 +6135,11 @@
           "Ammonium Nitrate",
           "Calcium Ammonium Nitrate",
           "Sulphate of Ammonia",
+          "Single superphosphate",
           "Nitrogen - Generic",
           "Nitrogen - Nitrate",
           "Nitrogen - Ammonia",
           "Muriate of Potash",
-          "Single superphosphate",
           "Double Superphosphate",
           "Phosphorus - Generic",
           "Potassium - Generic",

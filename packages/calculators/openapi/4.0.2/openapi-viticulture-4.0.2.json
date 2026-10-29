@@ -1889,6 +1889,7 @@
                                                         "componentType": {
                                                           "description": "Type of inorganic fertiliser component",
                                                           "x-modules": [
+                                                            "5.1",
                                                             "15.4"
                                                           ],
                                                           "$ref": "#/components/schemas/InorganicFertiliserComponentTypeNonRegional"
@@ -6459,7 +6460,8 @@
           "Ammonium Nitrate (AN)",
           "Calcium Ammonium Nitrate (CAN)",
           "Calcium Nitrate",
-          "Single Super Phosphate"
+          "Single Super Phosphate",
+          "Ammonium Sulfate"
         ]
       },
       "InorganicFertiliserComponentTypeRegional": {
@@ -6487,11 +6489,11 @@
           "Ammonium Nitrate",
           "Calcium Ammonium Nitrate",
           "Sulphate of Ammonia",
+          "Single superphosphate",
           "Nitrogen - Generic",
           "Nitrogen - Nitrate",
           "Nitrogen - Ammonia",
           "Muriate of Potash",
-          "Single superphosphate",
           "Double Superphosphate",
           "Phosphorus - Generic",
           "Potassium - Generic",
