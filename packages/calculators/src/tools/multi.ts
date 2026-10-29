@@ -1,5 +1,6 @@
 import { BaseContainer, Metadata, NumberContainer } from './containers';
-import { NumberUnit, VoidUnit } from './units';
+import { VoidUnit } from './units';
+import { AnyNumberUnit } from './generic';
 import { mergeSeeds, ValueStore } from './value-store';
 
 /**
@@ -7,7 +8,7 @@ import { mergeSeeds, ValueStore } from './value-store';
  * This just stores the containers that provided the method 1 and 2 based values, not the values themselves.
  */
 export class Method1And2Container<
-  U extends NumberUnit,
+  U extends AnyNumberUnit,
 > extends BaseContainer<U> {
   originType: 'method1and2';
   method1: NumberContainer<U>;
@@ -32,9 +33,10 @@ export class Method1And2Container<
     this.method2 = method2;
   }
 
-  switchUnit<UN extends U extends NumberUnit ? U : never, V extends NumberUnit>(
-    converter: (from: UN) => V,
-  ): Method1And2Container<V> {
+  switchUnit<
+    UN extends (U extends AnyNumberUnit ? U : never),
+    V extends AnyNumberUnit,
+  >(converter: (from: UN) => V): Method1And2Container<V> {
     return new Method1And2Container(
       this.method1.switchUnit(converter),
       this.method2?.switchUnit(converter),
@@ -48,7 +50,9 @@ export class Method1And2Container<
  * of the calculation exists. The method 2 value can come from an arbitrary tree of containers, so
  * the method 2 track is asserted here rather than relying on method 2 inputs deeper in the tree.
  */
-export class Method2Container<U extends NumberUnit> extends BaseContainer<U> {
+export class Method2Container<
+  U extends AnyNumberUnit,
+> extends BaseContainer<U> {
   originType: 'method2';
   method2: NumberContainer<U>;
   constructor(method2: NumberContainer<U>, baseOrigin?: Metadata) {
@@ -61,15 +65,16 @@ export class Method2Container<U extends NumberUnit> extends BaseContainer<U> {
     this.method2 = method2;
   }
 
-  switchUnit<UN extends U extends NumberUnit ? U : never, V extends NumberUnit>(
-    converter: (from: UN) => V,
-  ): Method2Container<V> {
+  switchUnit<
+    UN extends (U extends AnyNumberUnit ? U : never),
+    V extends AnyNumberUnit,
+  >(converter: (from: UN) => V): Method2Container<V> {
     return new Method2Container(this.method2.switchUnit(converter), this.core);
   }
 }
 
 const isVoidUnit = (
-  value: NumberContainer<NumberUnit> | VoidUnit,
+  value: NumberContainer<AnyNumberUnit> | VoidUnit,
 ): value is VoidUnit => '__unitType' in value && value.__unitType === 'Void';
 
 /**
@@ -79,15 +84,15 @@ const isVoidUnit = (
  * @param method2Value - The method 2 value to capture, or undefined if no value is available.
  * @returns Returns the method1 container if method 2 is not provided, a method2 container if method 1 is void, and a method1and2 container if both are provided.
  */
-export function captureMethod1Or2Value<U extends NumberUnit>(
+export function captureMethod1Or2Value<U extends AnyNumberUnit>(
   method1Value: VoidUnit,
   method2Value: NumberContainer<U>,
 ): NumberContainer<U>;
-export function captureMethod1Or2Value<U extends NumberUnit>(
+export function captureMethod1Or2Value<U extends AnyNumberUnit>(
   method1Value: NumberContainer<U>,
   method2Value: NumberContainer<U> | undefined,
 ): NumberContainer<U>;
-export function captureMethod1Or2Value<U extends NumberUnit>(
+export function captureMethod1Or2Value<U extends AnyNumberUnit>(
   method1Value: NumberContainer<U> | VoidUnit,
   method2Value: NumberContainer<U> | undefined,
 ): NumberContainer<U> {

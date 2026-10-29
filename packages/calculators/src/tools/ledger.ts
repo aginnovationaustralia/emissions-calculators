@@ -12,7 +12,8 @@ import { output } from './outputs';
 import { sum } from './sum';
 import { exposeKeysOnOutput, KeysOnOutput } from './totals';
 import { kgToTonnes } from './unit-conversion';
-import { AnyUnit, isVoid, mass, Mass } from './units';
+import { isVoid, mass, Mass } from './units';
+import { AnyUnit } from './generic';
 
 type Gas = 'CO2' | 'CH4' | 'N2O' | 'CO2e';
 type GasContainer = Container<Mass<Gas>>;

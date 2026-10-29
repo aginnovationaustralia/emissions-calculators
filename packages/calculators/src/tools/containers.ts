@@ -11,7 +11,6 @@ import { Method1And2Container, Method2Container } from './multi';
 import { QualityTable } from './quality';
 import { SwitchContainer } from './switch';
 import {
-  AnyUnit,
   Area,
   BooleanUnit,
   Days,
@@ -83,11 +82,9 @@ import {
   MassPerVolume,
   massPerYear,
   MassPerYear,
-  NumberUnit,
   realNumber,
   RealNumber,
   StringUnit,
-  AnySubstance,
   Time,
   voidUnit,
   volume,
@@ -97,6 +94,7 @@ import {
   VolumePerMass,
   Years,
 } from './units';
+import { AnyNumberUnit, AnySubstance, AnyUnit } from './generic';
 
 // Helpers for multiply overload return types (extract from container unit)
 type ExtractMassPerEnergySubstance<U> =
@@ -132,10 +130,10 @@ type NamedMetadata = Metadata & {
  * the unit (and e.g. the gas of a Mass) of whatever it is combined with.
  */
 const additiveUnit = (
-  left: NumberUnit,
-  right: NumberUnit,
+  left: AnyNumberUnit,
+  right: AnyNumberUnit,
   op: 'add' | 'subtract',
-): NumberUnit => {
+): AnyNumberUnit => {
   if (isVoid(left)) {
     return right;
   }
@@ -209,10 +207,10 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   }
 
   /**
-   * Multiply this container's value by `right`. Only valid when this container's unit is a NumberUnit
+   * Multiply this container's value by `right`. Only valid when this container's unit is a AnyNumberUnit
    * (e.g. MassPerArea, Mass, etc.). The generic U on BaseContainer remains AnyUnit so that containers
    * with StringUnit (e.g. for constant selection keys) can still extend BaseContainer; consider
-   * narrowing to U extends NumberUnit for classes that only ever hold numeric units.
+   * narrowing to U extends AnyNumberUnit for classes that only ever hold numeric units.
    */
   // RealNumber * RealNumber → RealNumber
   multiply<UL extends RealNumber>(
@@ -221,13 +219,13 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
   // unit * RealNumber → preserve this.unit
-  multiply<UL extends NumberUnit>(
+  multiply<UL extends AnyNumberUnit>(
     this: BaseContainer<UL>,
     right: Container<RealNumber>,
     baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
   // RealNumber * unit → preserve this.unit
-  multiply<UR extends NumberUnit>(
+  multiply<UR extends AnyNumberUnit>(
     this: BaseContainer<RealNumber>,
     right: Container<UR>,
     baseOrigin?: Metadata,
@@ -431,13 +429,13 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
   ): BinaryContainer<MassPerVolume<S2, SVol>>;
   // Fallback implementation
   multiply(
-    this: BaseContainer<NumberUnit>,
-    right: Container<NumberUnit>,
+    this: BaseContainer<AnyNumberUnit>,
+    right: Container<AnyNumberUnit>,
     baseOrigin?: Metadata,
-  ): BinaryContainer<NumberUnit> {
+  ): BinaryContainer<AnyNumberUnit> {
     const leftUnit = this.unit;
     const rightUnit = right.unit;
-    let unit: NumberUnit;
+    let unit: AnyNumberUnit;
     if (isVoid(leftUnit) || isVoid(rightUnit)) {
       unit = voidUnit();
     } else {
@@ -529,22 +527,22 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     return new BinaryContainer(
       unit,
       'multiply',
-      this as unknown as NumberContainer<NumberUnit>,
+      this as unknown as NumberContainer<AnyNumberUnit>,
       right,
       baseOrigin,
     );
   }
   // Implement divide operation, following the same pattern as multiply
-  // start out with an overload for NumberUnit divided by RealNumber → RealNumber and Mass<AnySubstance> divided by Area → MassPerArea<AnySubstance>
-  // NumberUnit / RealNumber → NumberUnit
-  divide<UL extends NumberUnit>(
+  // start out with an overload for AnyNumberUnit divided by RealNumber → RealNumber and Mass<AnySubstance> divided by Area → MassPerArea<AnySubstance>
+  // AnyNumberUnit / RealNumber → AnyNumberUnit
+  divide<UL extends AnyNumberUnit>(
     this: BaseContainer<UL>,
     right: Container<RealNumber>,
     baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
-  // NumberUnit / NumberUnit → RealNumber
-  divide<UL extends NumberUnit>(
+  // AnyNumberUnit / AnyNumberUnit → RealNumber
+  divide<UL extends AnyNumberUnit>(
     this: BaseContainer<UL>,
     right: Container<NoInfer<UL>>,
     baseOrigin?: Metadata,
@@ -606,14 +604,14 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     baseOrigin?: Metadata,
   ): BinaryContainer<MassPerEnergy<S2>>;
 
-  divide<UL extends NumberUnit>(
-    this: BaseContainer<NumberUnit>,
-    right: Container<NumberUnit>,
+  divide<UL extends AnyNumberUnit>(
+    this: BaseContainer<AnyNumberUnit>,
+    right: Container<AnyNumberUnit>,
     baseOrigin?: Metadata,
   ): BinaryContainer<UL> {
     const leftUnit = this.unit;
     const rightUnit = right.unit;
-    let unit: NumberUnit;
+    let unit: AnyNumberUnit;
     if (isVoid(leftUnit) || isVoid(rightUnit)) {
       unit = voidUnit();
     } else {
@@ -660,32 +658,32 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     );
   }
 
-  minus<UL extends NumberUnit>(
+  minus<UL extends AnyNumberUnit>(
     this: BaseContainer<UL>,
     right: Container<RealNumber>,
     baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
-  minus<UL extends NumberUnit>(
+  minus<UL extends AnyNumberUnit>(
     this: BaseContainer<RealNumber>,
     right: Container<UL>,
     baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
-  minus<UL extends NumberUnit>(
+  minus<UL extends AnyNumberUnit>(
     this: BaseContainer<UL>,
     right: Container<UL>,
     baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
   minus(
-    this: BaseContainer<NumberUnit>,
-    right: Container<NumberUnit>,
+    this: BaseContainer<AnyNumberUnit>,
+    right: Container<AnyNumberUnit>,
     baseOrigin?: Metadata,
-  ): BinaryContainer<NumberUnit> {
+  ): BinaryContainer<AnyNumberUnit> {
     const leftUnit = this.unit;
     const rightUnit = right.unit;
-    const unit: NumberUnit = {
+    const unit: AnyNumberUnit = {
       ...additiveUnit(leftUnit, rightUnit, 'subtract'),
       store: leftUnit.store.minus(rightUnit.store),
     };
@@ -693,39 +691,39 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     return new BinaryContainer(
       unit,
       'subtract',
-      this as unknown as NumberContainer<NumberUnit>,
+      this as unknown as NumberContainer<AnyNumberUnit>,
       right,
       baseOrigin,
     );
   }
 
-  // add overloads to plus so that a RealNumber can be added to a NumberUnit
-  plus<UL extends NumberUnit>(
+  // add overloads to plus so that a RealNumber can be added to a AnyNumberUnit
+  plus<UL extends AnyNumberUnit>(
     this: BaseContainer<UL>,
     right: Container<RealNumber>,
     baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
-  plus<UL extends NumberUnit>(
+  plus<UL extends AnyNumberUnit>(
     this: BaseContainer<RealNumber>,
     right: Container<UL>,
     baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
-  plus<UL extends NumberUnit>(
+  plus<UL extends AnyNumberUnit>(
     this: BaseContainer<UL>,
     right: Container<UL>,
     baseOrigin?: Metadata,
   ): BinaryContainer<UL>;
 
   plus(
-    this: BaseContainer<NumberUnit>,
-    right: Container<NumberUnit>,
+    this: BaseContainer<AnyNumberUnit>,
+    right: Container<AnyNumberUnit>,
     baseOrigin?: Metadata,
-  ): BinaryContainer<NumberUnit> {
+  ): BinaryContainer<AnyNumberUnit> {
     const leftUnit = this.unit;
     const rightUnit = right.unit;
-    const unit: NumberUnit = {
+    const unit: AnyNumberUnit = {
       ...additiveUnit(leftUnit, rightUnit, 'add'),
       store: leftUnit.store.plus(rightUnit.store),
     };
@@ -733,13 +731,13 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     return new BinaryContainer(
       unit,
       'add',
-      this as unknown as NumberContainer<NumberUnit>,
+      this as unknown as NumberContainer<AnyNumberUnit>,
       right,
       baseOrigin,
     );
   }
 
-  power<UL extends NumberUnit>(
+  power<UL extends AnyNumberUnit>(
     this: BaseContainer<UL>,
     right: Container<RealNumber>,
     baseOrigin?: Metadata,
@@ -759,7 +757,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
     );
   }
 
-  squared<UL extends NumberUnit>(
+  squared<UL extends AnyNumberUnit>(
     this: BaseContainer<UL>,
     baseOrigin?: Metadata,
   ): BinaryContainer<UL> {
@@ -785,7 +783,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
    * @param baseOrigin the base origin of the new container
    * @returns a new container with the limited value
    */
-  min<UL extends NumberUnit>(
+  min<UL extends AnyNumberUnit>(
     this: BaseContainer<UL>,
     right: NumberContainer<UL | RealNumber>,
     baseOrigin?: Metadata,
@@ -811,7 +809,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
    * @param baseOrigin the base origin of the new container
    * @returns a new container with the maximum value
    */
-  max<UL extends NumberUnit>(
+  max<UL extends AnyNumberUnit>(
     this: BaseContainer<UL>,
     right: NumberContainer<UL | RealNumber>,
     baseOrigin?: Metadata,
@@ -839,7 +837,7 @@ export class BaseContainer<U extends AnyUnit, M extends Metadata = Metadata> {
  * @param baseOrigin the base origin of the new container
  * @returns a new container with the limited value
  */
-export const min = <U extends NumberUnit>(
+export const min = <U extends AnyNumberUnit>(
   value1: NumberContainer<U>,
   value2: NumberContainer<U | RealNumber>,
 ): BinaryContainer<U> => value1.min(value2);
@@ -852,7 +850,7 @@ export const min = <U extends NumberUnit>(
  * @param baseOrigin the base origin of the new container
  * @returns a new container with the limited value
  */
-export const max = <U extends NumberUnit>(
+export const max = <U extends AnyNumberUnit>(
   value1: NumberContainer<U>,
   value2: NumberContainer<U | RealNumber>,
 ): BinaryContainer<U> => value1.max(value2);
@@ -860,14 +858,14 @@ export const max = <U extends NumberUnit>(
 export class BinaryContainer<U extends AnyUnit> extends BaseContainer<U> {
   originType: 'binary';
   type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'min' | 'max';
-  left: NumberContainer<NumberUnit>;
-  right: NumberContainer<NumberUnit>;
+  left: NumberContainer<AnyNumberUnit>;
+  right: NumberContainer<AnyNumberUnit>;
 
   constructor(
     unit: U,
     type: 'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'min' | 'max',
-    left: NumberContainer<NumberUnit>,
-    right: NumberContainer<NumberUnit>,
+    left: NumberContainer<AnyNumberUnit>,
+    right: NumberContainer<AnyNumberUnit>,
     baseOrigin: Metadata,
   ) {
     super(unit, baseOrigin);
@@ -878,8 +876,8 @@ export class BinaryContainer<U extends AnyUnit> extends BaseContainer<U> {
   }
 
   switchUnit<
-    UN extends (U extends NumberUnit ? U : never),
-    V extends NumberUnit,
+    UN extends (U extends AnyNumberUnit ? U : never),
+    V extends AnyNumberUnit,
   >(converter: (from: UN) => V): BinaryContainer<V> {
     const newUnit = converter(this.unit as unknown as UN);
     return new BinaryContainer(
@@ -892,13 +890,13 @@ export class BinaryContainer<U extends AnyUnit> extends BaseContainer<U> {
   }
 }
 
-export class SummedContainer<N extends NumberUnit> extends BaseContainer<N> {
+export class SummedContainer<N extends AnyNumberUnit> extends BaseContainer<N> {
   originType: 'sum';
-  from: NumberContainer<NumberUnit>[];
+  from: NumberContainer<AnyNumberUnit>[];
 
   constructor(
     unit: N,
-    from: NumberContainer<NumberUnit>[],
+    from: NumberContainer<AnyNumberUnit>[],
     baseOrigin: Metadata,
   ) {
     super(unit, baseOrigin);
@@ -907,8 +905,8 @@ export class SummedContainer<N extends NumberUnit> extends BaseContainer<N> {
   }
 
   switchUnit<
-    UN extends (N extends NumberUnit ? N : never),
-    V extends NumberUnit,
+    UN extends (N extends AnyNumberUnit ? N : never),
+    V extends AnyNumberUnit,
   >(converter: (from: UN) => V): SummedContainer<V> {
     const newUnit = converter(this.unit as unknown as UN);
     return new SummedContainer(newUnit, this.from, this.core);
@@ -916,7 +914,7 @@ export class SummedContainer<N extends NumberUnit> extends BaseContainer<N> {
 }
 
 export class ConstantSelectionContainer<
-  U extends NumberUnit,
+  U extends AnyNumberUnit,
 > extends BaseContainer<U, NamedMetadata> {
   originType: 'constant_selection';
   selectors: (StringContainer<StringUnit> | string)[];
@@ -932,8 +930,8 @@ export class ConstantSelectionContainer<
   }
 
   switchUnit<
-    UN extends (U extends NumberUnit ? U : never),
-    V extends NumberUnit,
+    UN extends (U extends AnyNumberUnit ? U : never),
+    V extends AnyNumberUnit,
   >(converter: (from: UN) => V): ConstantSelectionContainer<V> {
     const newUnit = converter(this.unit as unknown as UN);
     return new ConstantSelectionContainer(
@@ -953,8 +951,8 @@ export class RootContainer<U extends AnyUnit> extends BaseContainer<U> {
   }
 
   switchUnit<
-    UN extends (U extends NumberUnit ? U : never),
-    V extends NumberUnit,
+    UN extends (U extends AnyNumberUnit ? U : never),
+    V extends AnyNumberUnit,
   >(converter: (from: UN) => V): RootContainer<V> {
     const newUnit = converter(this.unit as unknown as UN);
     return new RootContainer(newUnit, this.core);
@@ -966,31 +964,33 @@ export const root = <U extends AnyUnit>(
   baseOrigin?: Metadata,
 ): RootContainer<U> => new RootContainer(unit, baseOrigin);
 
-export class BracketedContainer<U extends NumberUnit> extends BaseContainer<U> {
+export class BracketedContainer<
+  U extends AnyNumberUnit,
+> extends BaseContainer<U> {
   originType: 'bracketed';
-  inner: Container<NumberUnit>;
-  constructor(unit: U, inner: Container<NumberUnit>, baseOrigin?: Metadata) {
+  inner: Container<AnyNumberUnit>;
+  constructor(unit: U, inner: Container<AnyNumberUnit>, baseOrigin?: Metadata) {
     super(unit, baseOrigin);
     this.originType = 'bracketed';
     this.inner = inner;
   }
 
   switchUnit<
-    UN extends (U extends NumberUnit ? U : never),
-    V extends NumberUnit,
+    UN extends (U extends AnyNumberUnit ? U : never),
+    V extends AnyNumberUnit,
   >(converter: (from: UN) => V): BracketedContainer<V> {
     const newUnit = converter(this.unit as unknown as UN);
     return new BracketedContainer(newUnit, this.inner, this.core);
   }
 }
 
-export const br = <U extends NumberUnit>(
+export const br = <U extends AnyNumberUnit>(
   inner: Container<U>,
 ): BracketedContainer<U> => new BracketedContainer(inner.unit, inner);
 
 export class TranslationContainer<
-  TIn extends StringUnit | NumberUnit | BooleanUnit,
-  TOut extends StringUnit | NumberUnit,
+  TIn extends StringUnit | AnyNumberUnit | BooleanUnit,
+  TOut extends StringUnit | AnyNumberUnit,
 > extends BaseContainer<TOut> {
   originType: 'translation';
   from: Container<TIn>;
@@ -1001,8 +1001,8 @@ export class TranslationContainer<
   }
 
   switchUnit<
-    UN extends (TOut extends NumberUnit ? TOut : never),
-    V extends NumberUnit,
+    UN extends (TOut extends AnyNumberUnit ? TOut : never),
+    V extends AnyNumberUnit,
   >(converter: (from: UN) => V): TranslationContainer<TIn, V> {
     const newUnit = converter(this.unit as unknown as UN);
     return new TranslationContainer(newUnit, this.from, this.core);
@@ -1010,8 +1010,8 @@ export class TranslationContainer<
 }
 
 export const translate = <
-  TIn extends StringUnit | NumberUnit | BooleanUnit,
-  TOut extends StringUnit | NumberUnit,
+  TIn extends StringUnit | AnyNumberUnit | BooleanUnit,
+  TOut extends StringUnit | AnyNumberUnit,
 >(
   newValue: TOut,
   from: Container<TIn>,
@@ -1035,7 +1035,7 @@ export const relabelMass = <S1 extends AnySubstance, S2 extends AnySubstance>(
 export const num = (value: number | Decimal): RootContainer<RealNumber> =>
   new RootContainer(realNumber(value));
 
-export type NumberContainer<U extends NumberUnit> =
+export type NumberContainer<U extends AnyNumberUnit> =
   | BracketedContainer<U>
   | BinaryContainer<U>
   | InputContainer<U>
@@ -1046,30 +1046,30 @@ export type NumberContainer<U extends NumberUnit> =
   | ConstantSelectionContainer<U>
   | SwitchContainer<StringUnit, U>
   | IfElseContainer<U>
-  | TranslationContainer<StringUnit | NumberUnit | BooleanUnit, U>;
+  | TranslationContainer<StringUnit | AnyNumberUnit | BooleanUnit, U>;
 
 export type StringContainer<U extends StringUnit> =
   | InputContainer<U>
   | RootContainer<U>
-  | TranslationContainer<StringUnit | NumberUnit | BooleanUnit, U>;
+  | TranslationContainer<StringUnit | AnyNumberUnit | BooleanUnit, U>;
 
 export type BooleanContainer<U extends BooleanUnit = BooleanUnit> =
   InputContainer<U> | RootContainer<U>;
 
-export type TypedContainer<U extends AnyUnit> = [U] extends [NumberUnit]
+export type TypedContainer<U extends AnyUnit> = [U] extends [AnyNumberUnit]
   ? NumberContainer<U>
   : [U] extends [StringUnit]
     ? StringContainer<U>
     : [U] extends [BooleanUnit]
       ? BooleanContainer<U>
-      : | NumberContainer<Extract<U, NumberUnit>>
+      : | NumberContainer<Extract<U, AnyNumberUnit>>
         | StringContainer<Extract<U, StringUnit>>
         | BooleanContainer<Extract<U, BooleanUnit>>;
 
-export type MultiContainer<U extends NumberUnit = NumberUnit> =
+export type MultiContainer<U extends AnyNumberUnit = AnyNumberUnit> =
   SummedContainer<U>;
 
-export type Container<U extends AnyUnit> = [U] extends [NumberUnit]
+export type Container<U extends AnyUnit> = [U] extends [AnyNumberUnit]
   ? NumberContainer<U> | MultiContainer<U>
   : TypedContainer<U>;
 
@@ -1083,15 +1083,15 @@ export type ValuesAsAnyContainer<Input extends object> = {
 };
 
 type MultiplyAllValuesByResult<
-  T extends { [K in keyof T]: Container<NumberUnit> },
+  T extends { [K in keyof T]: Container<AnyNumberUnit> },
 > = {
-  [K in keyof T]: T[K] extends Container<infer U extends NumberUnit>
+  [K in keyof T]: T[K] extends Container<infer U extends AnyNumberUnit>
     ? BinaryContainer<U>
     : never;
 };
 
 export function multiplyAllValuesBy<
-  T extends { [K in keyof T]: Container<NumberUnit> },
+  T extends { [K in keyof T]: Container<AnyNumberUnit> },
 >(object: T, factor: Container<RealNumber>): MultiplyAllValuesByResult<T> {
   return objectFromEntries(
     entriesFromObject(object).map(

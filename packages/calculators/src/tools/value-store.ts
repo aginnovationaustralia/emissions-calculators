@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js-light';
 import { NumberContainer } from './containers';
-import { NumberUnit } from './units';
+import { AnyNumberUnit } from './generic';
 
 const applyBinary = (
   self: ValueStore,
@@ -69,7 +69,7 @@ export const isValueSeedMethod2 = (
   value: ValueSeed1And2 | ValueSeedOnly2,
 ): value is ValueSeedOnly2 => !('valueMethod1' in value);
 
-export const mergeSeeds = <U extends NumberUnit>(
+export const mergeSeeds = <U extends AnyNumberUnit>(
   m1: NumberContainer<U>,
   m2: NumberContainer<U> | undefined,
 ): ValueSeed => {

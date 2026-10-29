@@ -5,7 +5,7 @@ import { getDisplayUnit } from './display-units';
 import { enumSchema } from './enum-schemas';
 import { ModuleNames } from './modules';
 import { QualityTable, QualityTableSchema } from './quality';
-import { AnyUnit, NumberUnit } from './units';
+import { AnyNumberUnit, AnyUnit } from './generic';
 import { mapOptional } from './zod';
 
 const X_MODULES = 'x-modules';
@@ -29,8 +29,8 @@ export class InputContainer<U extends AnyUnit> extends BaseContainer<U> {
   }
 
   switchUnit<
-    UN extends (U extends NumberUnit ? U : never),
-    V extends NumberUnit,
+    UN extends (U extends AnyNumberUnit ? U : never),
+    V extends AnyNumberUnit,
   >(converter: (from: UN) => V): InputContainer<V> {
     const newUnit = converter(this.unit as unknown as UN);
     return new InputContainer(newUnit, this.method, this.modules, this.core);
@@ -180,7 +180,7 @@ const resolveNumberInputSchema = (
 };
 
 const toInputContainer =
-  <U extends NumberUnit>(
+  <U extends AnyNumberUnit>(
     unitFactory: (value: number) => U,
     options: TypedInputOptions,
   ) =>
@@ -197,12 +197,12 @@ const toInputContainer =
     });
   };
 
-type TransformedNumberInputSchemaFactory<U extends NumberUnit> = z.ZodPipe<
+type TransformedNumberInputSchemaFactory<U extends AnyNumberUnit> = z.ZodPipe<
   NumberInputObjectSchema,
   z.ZodTransform<InputContainer<U>, RatedValue>
 >;
 
-type NumberInputSchemaOptional<U extends NumberUnit> = z.ZodPipe<
+type NumberInputSchemaOptional<U extends AnyNumberUnit> = z.ZodPipe<
   z.ZodOptional<NumberInputObjectSchema>,
   z.ZodTransform<InputContainer<U> | undefined, RatedValue | undefined>
 >;
@@ -219,7 +219,7 @@ const openapiTags = (description: string, modules: ModuleNames[]) => ({
 /**
  * Zod schema accepting `{ value, quality? }` and returning an input container.
  */
-export function numberInput<U extends NumberUnit>(
+export function numberInput<U extends AnyNumberUnit>(
   unitFactory: (value: number) => U,
   options: TypedInputOptions,
   schemaTweaker?: NumberSchemaTweaker,
@@ -238,7 +238,7 @@ export function numberInput<U extends NumberUnit>(
 /**
  * Optional `{ value, quality? }` number input schema.
  */
-export function numberInputOptional<U extends NumberUnit>(
+export function numberInputOptional<U extends AnyNumberUnit>(
   unitFactory: (value: number) => U,
   options: TypedInputOptions,
   schemaTweaker?: NumberSchemaTweaker,

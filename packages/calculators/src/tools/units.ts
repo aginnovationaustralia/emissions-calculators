@@ -1,4 +1,10 @@
 import Decimal from 'decimal.js-light';
+import type {
+  AnyNumberUnit,
+  AnySubstance,
+  AnyUnit,
+  GenericNumberUnit,
+} from './generic';
 import { values, ValueStore } from './value-store';
 
 export type Substance =
@@ -38,13 +44,6 @@ export type Substance =
   | 'Freight Goods'
   | 'Eggs'
   | 'Fish';
-
-/**
- * The constraint used by every substance-parameterised unit. Calculators supply their own
- * vocabulary of literal substance names (VEERG uses `Substance` above); the tools only need
- * the names to be string literals so that mismatches are caught by `NoInfer` checks.
- */
-export type AnySubstance = string;
 
 export type NumberUnitBase = {
   store: ValueStore;
@@ -96,7 +95,7 @@ export const massCO2ePerMassRefrigerant = (
 };
 
 export const isMassPerMass = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerMass<AnySubstance, AnySubstance> => {
   return unit.__unitType === 'MassPerMass';
 };
@@ -115,7 +114,7 @@ export const mass = <S extends AnySubstance>(
     store: values(initialValueKg),
   };
 };
-export const isMass = (unit: NumberUnit): unit is Mass<AnySubstance> => {
+export const isMass = (unit: AnyNumberUnit): unit is Mass<AnySubstance> => {
   return unit.__unitType === 'Mass';
 };
 export type Volume<S extends AnySubstance> = NumberUnitBase & {
@@ -132,7 +131,7 @@ export const volume = <S extends AnySubstance>(
     store: values(initialValueLitres),
   };
 };
-export const isVolume = (unit: NumberUnit): unit is Volume<AnySubstance> => {
+export const isVolume = (unit: AnyNumberUnit): unit is Volume<AnySubstance> => {
   return unit.__unitType === 'Volume';
 };
 
@@ -145,7 +144,7 @@ export const energy = (initialValueJoules?: number | Decimal): Energy => {
     store: values(initialValueJoules),
   };
 };
-export const isEnergy = (unit: NumberUnit): unit is Energy => {
+export const isEnergy = (unit: AnyNumberUnit): unit is Energy => {
   return unit.__unitType === 'Energy';
 };
 export type Area = NumberUnitBase & {
@@ -157,7 +156,7 @@ export const area = (initialValueMetresSquared?: number | Decimal): Area => {
     store: values(initialValueMetresSquared),
   };
 };
-export const isArea = (unit: NumberUnit): unit is Area => {
+export const isArea = (unit: AnyNumberUnit): unit is Area => {
   return unit.__unitType === 'Area';
 };
 
@@ -170,7 +169,7 @@ export const time = (initialValueSeconds?: number | Decimal): Time => {
     store: values(initialValueSeconds),
   };
 };
-export const isTime = (unit: NumberUnit): unit is Time => {
+export const isTime = (unit: AnyNumberUnit): unit is Time => {
   return unit.__unitType === 'Time';
 };
 
@@ -185,7 +184,7 @@ export const electricity = (
     store: values(initialValueKWh),
   };
 };
-export const isElectricity = (unit: NumberUnit): unit is Electricity => {
+export const isElectricity = (unit: AnyNumberUnit): unit is Electricity => {
   return unit.__unitType === 'Electricity';
 };
 
@@ -204,7 +203,7 @@ export const massPerEnergy = <S extends AnySubstance>(
   };
 };
 export const isMassPerEnergy = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerEnergy<AnySubstance> => {
   return unit.__unitType === 'MassPerEnergy';
 };
@@ -225,7 +224,7 @@ export const massPerElectricity = <S extends AnySubstance>(
 };
 
 export const isMassPerElectricity = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerElectricity<AnySubstance> => {
   return unit.__unitType === 'MassPerElectricity';
 };
@@ -244,7 +243,7 @@ export const energyPerVolume = <S extends AnySubstance>(
   };
 };
 export const isEnergyPerVolume = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is EnergyPerVolume<AnySubstance> => {
   return unit.__unitType === 'EnergyPerVolume';
 };
@@ -264,7 +263,7 @@ export const energyPerMass = <S extends AnySubstance>(
   };
 };
 export const isEnergyPerMass = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is EnergyPerMass<AnySubstance> => {
   return unit.__unitType === 'EnergyPerMass';
 };
@@ -281,7 +280,7 @@ export const energyPerHeadPerDay = (
   };
 };
 export const isEnergyPerHeadPerDay = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is EnergyPerHeadPerDay => {
   return unit.__unitType === 'EnergyPerHeadPerDay';
 };
@@ -310,7 +309,7 @@ export const massPerVolume = <
   };
 };
 export const isMassPerVolume = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerVolume<AnySubstance, AnySubstance> => {
   return unit.__unitType === 'MassPerVolume';
 };
@@ -330,7 +329,7 @@ export const massPerArea = <S extends AnySubstance>(
   };
 };
 export const isMassPerArea = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerArea<AnySubstance> => {
   return unit.__unitType === 'MassPerArea';
 };
@@ -350,7 +349,7 @@ export const massPerAreaPerYear = <S extends AnySubstance>(
   };
 };
 export const isMassPerAreaPerYear = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerAreaPerYear<AnySubstance> => {
   return unit.__unitType === 'MassPerAreaPerYear';
 };
@@ -371,7 +370,7 @@ export const massPerYear = <S extends AnySubstance>(
   };
 };
 export const isMassPerYear = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerYear<AnySubstance> => {
   return unit.__unitType === 'MassPerYear';
 };
@@ -391,7 +390,7 @@ export const massPerTime = <S extends AnySubstance>(
   };
 };
 export const isMassPerTime = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerTime<AnySubstance> => {
   return unit.__unitType === 'MassPerTime';
 };
@@ -411,7 +410,7 @@ export const massPerHeadPerDay = <S extends AnySubstance>(
   };
 };
 export const isMassPerHeadPerDay = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerHeadPerDay<AnySubstance> => {
   return unit.__unitType === 'MassPerHeadPerDay';
 };
@@ -431,7 +430,7 @@ export const massPerHeadPerYear = <S extends AnySubstance>(
   };
 };
 export const isMassPerHeadPerYear = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerHeadPerYear<AnySubstance> => {
   return unit.__unitType === 'MassPerHeadPerYear';
 };
@@ -443,7 +442,9 @@ export const liveweightGain = (
 ): LiveweightGain =>
   massPerHeadPerDay('Liveweight', initialValueKgPerHeadPerDay);
 
-export const isLiveweightGain = (unit: NumberUnit): unit is LiveweightGain => {
+export const isLiveweightGain = (
+  unit: AnyNumberUnit,
+): unit is LiveweightGain => {
   return (
     unit.__unitType === 'MassPerHeadPerDay' && unit.substance === 'Liveweight'
   );
@@ -464,7 +465,7 @@ export const volumePerHeadPerDay = <S extends AnySubstance>(
   };
 };
 export const isVolumePerHeadPerDay = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is VolumePerHeadPerDay<AnySubstance> => {
   return unit.__unitType === 'VolumePerHeadPerDay';
 };
@@ -484,7 +485,7 @@ export const massPerHead = <S extends AnySubstance>(
   };
 };
 export const isMassPerHead = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerHead<AnySubstance> => {
   return unit.__unitType === 'MassPerHead';
 };
@@ -495,7 +496,7 @@ export const liveweight = (
   initialValueKgPerHead?: number | Decimal,
 ): Liveweight => massPerHead('Liveweight', initialValueKgPerHead);
 
-export const isLiveweight = (unit: NumberUnit): unit is Liveweight => {
+export const isLiveweight = (unit: AnyNumberUnit): unit is Liveweight => {
   return unit.__unitType === 'MassPerHead' && unit.substance === 'Liveweight';
 };
 
@@ -520,7 +521,7 @@ export const volumePerMass = <SV extends AnySubstance, SM extends AnySubstance>(
   };
 };
 export const isVolumePerMass = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is VolumePerMass<AnySubstance, AnySubstance> => {
   return unit.__unitType === 'VolumePerMass';
 };
@@ -540,7 +541,7 @@ export const massPerDay = <S extends AnySubstance>(
   };
 };
 export const isMassPerDay = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerDay<AnySubstance> => {
   return unit.__unitType === 'MassPerDay';
 };
@@ -554,7 +555,7 @@ export const days = (initialValueDays?: number | Decimal): Days => {
     store: values(initialValueDays),
   };
 };
-export const isDays = (unit: NumberUnit): unit is Days => {
+export const isDays = (unit: AnyNumberUnit): unit is Days => {
   return unit.__unitType === 'Days';
 };
 
@@ -567,7 +568,7 @@ export const years = (initialValueYears?: number | Decimal): Years => {
     store: values(initialValueYears),
   };
 };
-export const isYears = (unit: NumberUnit): unit is Years => {
+export const isYears = (unit: AnyNumberUnit): unit is Years => {
   return unit.__unitType === 'Years';
 };
 
@@ -586,7 +587,7 @@ export const countPerArea = <S extends AnySubstance>(
   };
 };
 export const isCountPerArea = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is CountPerArea<AnySubstance> => {
   return unit.__unitType === 'CountPerArea';
 };
@@ -600,7 +601,7 @@ export const head = (initialValueHeads?: number | Decimal): Head => {
     store: values(initialValueHeads),
   };
 };
-export const isHead = (unit: NumberUnit): unit is Head => {
+export const isHead = (unit: AnyNumberUnit): unit is Head => {
   return unit.__unitType === 'Head';
 };
 
@@ -619,7 +620,7 @@ export const massPerAreaPerDay = <S extends AnySubstance>(
   };
 };
 export const isMassPerAreaPerDay = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerAreaPerDay<AnySubstance> => {
   return unit.__unitType === 'MassPerAreaPerDay';
 };
@@ -633,7 +634,7 @@ export const distance = (initialValueMetres?: number | Decimal): Distance => {
     store: values(initialValueMetres),
   };
 };
-export const isDistance = (unit: NumberUnit): unit is Distance => {
+export const isDistance = (unit: AnyNumberUnit): unit is Distance => {
   return unit.__unitType === 'Distance';
 };
 
@@ -652,7 +653,7 @@ export const massDistance = <S extends AnySubstance>(
   };
 };
 export const isMassDistance = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassDistance<AnySubstance> => {
   return unit.__unitType === 'MassDistance';
 };
@@ -681,7 +682,7 @@ export const massPerMassDistance = <
   };
 };
 export const isMassPerMassDistance = (
-  unit: NumberUnit,
+  unit: AnyNumberUnit,
 ): unit is MassPerMassDistance<AnySubstance, AnySubstance> => {
   return unit.__unitType === 'MassPerMassDistance';
 };
@@ -697,7 +698,7 @@ export const realNumber = (
     store: values(initialValue),
   };
 };
-export const isRealNumber = (unit: NumberUnit): unit is RealNumber => {
+export const isRealNumber = (unit: AnyNumberUnit): unit is RealNumber => {
   return unit.__unitType === 'RealNumber';
 };
 export const percentage = (initialValue?: number | Decimal): RealNumber => {
@@ -722,40 +723,8 @@ export const isVoid = (unit: AnyUnit): unit is VoidUnit => {
   );
 };
 
-export type NumberUnit =
-  | MassPerMass<AnySubstance, AnySubstance>
-  | Mass<AnySubstance>
-  | MassPerEnergy<AnySubstance>
-  | EnergyPerMass<AnySubstance>
-  | EnergyPerHeadPerDay
-  | MassPerVolume<AnySubstance, AnySubstance>
-  | MassPerArea<AnySubstance>
-  | MassPerAreaPerDay<AnySubstance>
-  | MassPerAreaPerYear<AnySubstance>
-  | MassPerYear<AnySubstance>
-  | MassPerTime<AnySubstance>
-  | MassPerElectricity<AnySubstance>
-  | MassPerHeadPerDay<AnySubstance>
-  | MassPerHeadPerYear<AnySubstance>
-  | MassPerDay<AnySubstance>
-  | VolumePerHeadPerDay<AnySubstance>
-  | MassPerHead<AnySubstance>
-  | VolumePerMass<AnySubstance, AnySubstance>
-  | CountPerArea<AnySubstance>
-  | Days
-  | Years
-  | Head
-  | EnergyPerVolume<AnySubstance>
-  | Volume<AnySubstance>
-  | Energy
-  | Area
-  | Electricity
-  | Time
-  | Distance
-  | MassDistance<AnySubstance>
-  | MassPerMassDistance<AnySubstance, AnySubstance>
-  | VoidUnit
-  | RealNumber;
+/** VEERG's number units, restricted to the VEERG substance vocabulary. */
+export type NumberUnit = GenericNumberUnit<Substance>;
 
 export type StringUnit<V extends string = string> = V;
 
@@ -776,5 +745,3 @@ export const booleanUnit = (value: boolean): BooleanUnit => value;
 export const isBooleanUnit = (unit: AnyUnit): unit is BooleanUnit => {
   return typeof unit === 'boolean';
 };
-
-export type AnyUnit = NumberUnit | StringUnit | BooleanUnit;

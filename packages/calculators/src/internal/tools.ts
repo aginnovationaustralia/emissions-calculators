@@ -8,6 +8,7 @@
 // instanceof failures when the consumer resolves a different copy (e.g. CJS vs ESM) of the library.
 export { default as Decimal } from 'decimal.js-light';
 
+export * from '../tools/generic';
 export * from '../tools/units';
 export * from '../tools/unit-conversion';
 export * from '../tools/value-store';

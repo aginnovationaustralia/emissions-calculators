@@ -1,9 +1,10 @@
 import { Metadata, NumberContainer, SummedContainer } from './containers';
-import { NumberUnit, VoidUnit, voidUnit } from './units';
+import { VoidUnit, voidUnit } from './units';
+import { AnyNumberUnit } from './generic';
 
 // Extract the unit type from an origin (for preserving unit when summing)
 export type ExtractOriginUnit<T> = T extends {
-  unit: VoidUnit | (infer U extends NumberUnit);
+  unit: VoidUnit | (infer U extends AnyNumberUnit);
 }
   ? U
   : never;
@@ -11,18 +12,18 @@ export type ExtractOriginUnit<T> = T extends {
 // Sum function with type inference to preserve specific unit types.
 // NOTE: an empty array sums to a void unit at runtime, which this signature does not reflect.
 // Anything that consumes a sum must therefore handle void, as `plus`, `minus` and `output` do.
-export function sum<U extends NumberContainer<NumberUnit>>(
+export function sum<U extends NumberContainer<AnyNumberUnit>>(
   array: U[],
   baseOrigin?: Metadata,
 ): SummedContainer<ExtractOriginUnit<U>>;
 
 export function sum(
-  array: NumberContainer<NumberUnit>[],
+  array: NumberContainer<AnyNumberUnit>[],
   baseOrigin?: Metadata,
-): SummedContainer<NumberUnit> {
+): SummedContainer<AnyNumberUnit> {
   const [first, ...rest] = array;
-  const rootUnit: NumberUnit = first ? first.unit : voidUnit();
-  const unit: NumberUnit = {
+  const rootUnit: AnyNumberUnit = first ? first.unit : voidUnit();
+  const unit: AnyNumberUnit = {
     ...rootUnit,
     store: rest.reduce(
       (acc, curr) => acc.plus(curr.unit.store),

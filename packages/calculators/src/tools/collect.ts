@@ -1,7 +1,8 @@
 import { Container } from './containers';
 import { formatUnit } from './format';
 import { QualityTable } from './quality';
-import { AnyUnit, isBooleanUnit, isStringUnit } from './units';
+import { isBooleanUnit, isStringUnit } from './units';
+import { AnyUnit } from './generic';
 
 export type ConstantDefinition = {
   name: string;

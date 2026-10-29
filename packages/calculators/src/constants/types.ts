@@ -1,6 +1,5 @@
 import { WasteTypesForFacility } from '@/modules/scope1/10-solid-waste/solid-waste-units.input';
 import {
-  AnyUnit,
   CountPerArea,
   Days,
   EnergyPerMass,
@@ -24,6 +23,7 @@ import {
   VolumePerMass,
   Years,
 } from '@/tools/units';
+import { AnyUnit } from '@/tools/generic';
 import {
   AgrochemicalType,
   AquacultureSystemLocation,

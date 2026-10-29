@@ -19,13 +19,12 @@ import {
   MassPerTime,
   MassPerVolume,
   MassPerYear,
-  NumberUnit,
   Substance,
-  AnySubstance,
   Volume,
   VolumePerHeadPerDay,
   VolumePerMass,
 } from './units';
+import { AnyNumberUnit, AnySubstance } from './generic';
 
 // Base unit name strings - defined once here and reused across the static
 // and dynamic display strings below, so each word only appears once in the file.
@@ -110,7 +109,7 @@ const Years: OrderStrings = {
   1: YEARS,
 };
 
-type NumberUnitTypes = NumberUnit['__unitType'];
+type NumberUnitTypes = AnyNumberUnit['__unitType'];
 
 // Any unit type with a substance (or two) has its display string built dynamically,
 // so it can include the substance's display name. See the *String functions below.
@@ -154,7 +153,7 @@ const bigMap: Record<UnitsWithScaledStrings, OrderStrings> = {
   Years,
 };
 
-export const getDisplayUnit = <U extends NumberUnit>(
+export const getDisplayUnit = <U extends AnyNumberUnit>(
   factory: (n: number) => U,
   schemaTweaker?: NumberSchemaTweaker,
 ): string => {
@@ -475,7 +474,7 @@ const massPerMassDistanceString = <
   return undefined;
 };
 
-const lookupDisplayUnit = <U extends NumberUnit>(
+const lookupDisplayUnit = <U extends AnyNumberUnit>(
   unit: U,
   scaledValue: number,
 ): string | undefined => {

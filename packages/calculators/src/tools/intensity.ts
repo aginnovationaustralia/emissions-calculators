@@ -2,7 +2,8 @@ import { divideBySafeFromZero } from '@/calculators/common/tools/calculate';
 import { Container } from './containers';
 import { extractMassAsNumber, extractRealNumberAsNumber } from './extract';
 import { valueObject } from './outputs';
-import { Mass, RealNumber, AnySubstance } from './units';
+import { Mass, RealNumber } from './units';
+import { AnySubstance } from './generic';
 
 /**
  * Emissions intensity in kg CO2e per kg of product, ready for output. Taking containers keeps

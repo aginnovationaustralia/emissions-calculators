@@ -4,9 +4,10 @@ import {
   Metadata,
   NumberContainer,
 } from './containers';
-import { BooleanUnit, NumberUnit } from './units';
+import { BooleanUnit } from './units';
+import { AnyNumberUnit } from './generic';
 
-export class IfElseContainer<U extends NumberUnit> extends BaseContainer<U> {
+export class IfElseContainer<U extends AnyNumberUnit> extends BaseContainer<U> {
   originType: 'if_else';
   condition: BooleanContainer<BooleanUnit>;
   selected: NumberContainer<U>;
@@ -28,9 +29,10 @@ export class IfElseContainer<U extends NumberUnit> extends BaseContainer<U> {
     this.whenFalse = whenFalse;
   }
 
-  switchUnit<UN extends U extends NumberUnit ? U : never, V extends NumberUnit>(
-    converter: (from: UN) => V,
-  ): IfElseContainer<V> {
+  switchUnit<
+    UN extends (U extends AnyNumberUnit ? U : never),
+    V extends AnyNumberUnit,
+  >(converter: (from: UN) => V): IfElseContainer<V> {
     return new IfElseContainer(
       this.condition,
       this.selected.switchUnit(converter),
@@ -41,7 +43,7 @@ export class IfElseContainer<U extends NumberUnit> extends BaseContainer<U> {
   }
 }
 
-export const ifTrueElse = <U extends NumberUnit>(
+export const ifTrueElse = <U extends AnyNumberUnit>(
   condition: BooleanContainer<BooleanUnit>,
   whenTrue: NumberContainer<U>,
   whenFalse: NumberContainer<U>,

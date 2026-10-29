@@ -5,11 +5,12 @@ import {
   StringContainer,
 } from './containers';
 import { InputContainer } from './inputs';
-import { NumberUnit, StringUnit } from './units';
+import { StringUnit } from './units';
+import { AnyNumberUnit } from './generic';
 
 export class SwitchContainer<
   TSubject extends StringUnit,
-  TSelected extends NumberUnit,
+  TSelected extends AnyNumberUnit,
 > extends BaseContainer<TSelected> {
   originType: 'switch';
   subject: StringContainer<TSubject>;
@@ -27,8 +28,8 @@ export class SwitchContainer<
   }
 
   switchUnit<
-    UN extends TSelected extends NumberUnit ? TSelected : never,
-    V extends NumberUnit,
+    UN extends (TSelected extends AnyNumberUnit ? TSelected : never),
+    V extends AnyNumberUnit,
   >(converter: (from: UN) => V): SwitchContainer<TSubject, V> {
     return new SwitchContainer(
       this.selected.switchUnit(converter),
@@ -40,7 +41,7 @@ export class SwitchContainer<
 
 export const selectSwitch = <
   TSubject extends StringUnit,
-  TSelected extends NumberUnit,
+  TSelected extends AnyNumberUnit,
 >(
   subject: InputContainer<TSubject>,
   cases: Record<TSubject, NumberContainer<TSelected>>,

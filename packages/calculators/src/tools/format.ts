@@ -1,5 +1,6 @@
 import { Container, isNamedOrigin } from './containers';
-import { AnyUnit, isBooleanUnit, isStringUnit, isVoid } from './units';
+import { isBooleanUnit, isStringUnit, isVoid } from './units';
+import { AnyUnit } from './generic';
 
 export function formatUnit(unit: AnyUnit): string {
   if (isVoid(unit)) {
