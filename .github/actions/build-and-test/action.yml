@@ -31,6 +31,24 @@ runs:
       run: pnpm run build
       shell: bash
 
+    - name: Install oasdiff
+      env:
+        OASDIFF_VERSION: 1.35.0
+        OASDIFF_SHA256: a8023002fcb2eaa7f5758148a9303cb63d33b939886df312268bc0fc7b939140
+      run: |
+        archive="oasdiff_${OASDIFF_VERSION}_linux_amd64.tar.gz"
+        curl -fsSL -o "$RUNNER_TEMP/$archive" \
+          "https://github.com/oasdiff/oasdiff/releases/download/v${OASDIFF_VERSION}/$archive"
+        echo "$OASDIFF_SHA256  $RUNNER_TEMP/$archive" | sha256sum -c -
+        mkdir -p "$RUNNER_TEMP/oasdiff"
+        tar -xzf "$RUNNER_TEMP/$archive" -C "$RUNNER_TEMP/oasdiff" oasdiff
+        echo "$RUNNER_TEMP/oasdiff" >> "$GITHUB_PATH"
+      shell: bash
+
+    - name: Check OpenAPI breaking changes
+      run: pnpm --filter @aginnovationaustralia/emissions-calculators run check:openapi-breaking
+      shell: bash
+
     - name: Lint
       run: pnpm run lint
       shell: bash
