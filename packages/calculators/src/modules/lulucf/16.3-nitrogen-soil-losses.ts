@@ -71,7 +71,7 @@ const calculateN2OFromClearingToCrops = (
     return mineralisedNitrogen.multiply(EFcrop);
   });
 
-  return sum(activityRecords);
+  return sum(activityRecords, zeroN2O);
 };
 
 export const calculateMineralisedNitrogenFromClearingToOpen = (
@@ -125,7 +125,7 @@ const calculateN2OFromClearingToOpen = (
     return mineralisedNitrogen.multiply(EFpasture);
   });
 
-  return sum(activityRecords);
+  return sum(activityRecords, zeroN2O);
 };
 
 export const calculate_16_3_1_1_NitrogenMineralisationSoilLosses = (

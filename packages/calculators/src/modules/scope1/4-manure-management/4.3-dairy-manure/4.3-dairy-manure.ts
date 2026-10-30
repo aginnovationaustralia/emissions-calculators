@@ -20,10 +20,16 @@ import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, max, num, root } from '@/tools/containers';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { oneMinus, zero } from '@/tools/sentinels';
+import {
+  oneMinus,
+  zero,
+  zeroMassPerHeadPerDayCH4,
+  zeroMassVolatilisedN,
+  zeroN,
+  zeroN2O,
+} from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
-  mass,
   Mass,
   MassPerHeadPerDay,
   massPerHeadPerDay,
@@ -477,7 +483,7 @@ export const calculateManureManagementCH4ForClass = (
       .reference('4.3.1.1 (2)');
   });
 
-  return sum(methaneProductionPerSystem)
+  return sum(methaneProductionPerSystem, zeroMassPerHeadPerDayCH4)
     .multiply(head)
     .multiply(days)
     .named(`ECH4 (j=${dairyClass.number})`)
@@ -536,7 +542,7 @@ export const calculateDirectN2OEmissionsForClass = (
     .named(`EN2O,dir (j=${dairyClass.number}, PRP; m=14)`)
     .reference('4.3.1.3 (1)');
 
-  return sum(directN2OPerMMS)
+  return sum(directN2OPerMMS, zeroN2O)
     .plus(directN2OFromPasture)
     .named(`EN2O,dir (j=${dairyClass.number})`);
 };
@@ -588,9 +594,10 @@ export const calculateAtmosphericDepositionN2OEmissionsForClass = (
       .multiply(fracGASM)
       .named(`MNATMOS (j=${dairyClass.number}, m=${subscriptNotation[mms]})`);
   });
-  const volatilisedNitrogen = sum(volatilisedNitrogenPerMMS).named(
-    `MNATMOS (j=${dairyClass.number})`,
-  );
+  const volatilisedNitrogen = sum(
+    volatilisedNitrogenPerMMS,
+    zeroMassVolatilisedN,
+  ).named(`MNATMOS (j=${dairyClass.number})`);
 
   const fracGASMsoil = selectConstant(
     constants.CROP,
@@ -724,7 +731,7 @@ export const calculateMassOfNitrogenAppliedToSoilsForClass = (
     const nitrogenLostThroughLeaching = (
       mms === 'solidStorage'
         ? nitrogenPerMMS[mms].multiply(fracWET).multiply(fracLeachMS)
-        : root(mass('N', 0))
+        : zeroN
     ).named(`Mleach,m=${subscriptNotation[mms]}`);
 
     return nitrogenPerMMS[mms]
@@ -736,6 +743,6 @@ export const calculateMassOfNitrogenAppliedToSoilsForClass = (
       .minus(nitrogenLostThroughLeaching);
   });
 
-  const manureAppliedToSoil = sum(applicableNitrogenPerMMS);
+  const manureAppliedToSoil = sum(applicableNitrogenPerMMS, zeroN);
   return manureAppliedToSoil;
 };

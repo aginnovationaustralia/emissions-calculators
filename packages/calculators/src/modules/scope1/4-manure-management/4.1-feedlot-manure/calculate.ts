@@ -1,6 +1,6 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { HasConstants } from '@/constants/types';
-import { zeroN, zeroN2O } from '@/tools/sentinels';
+import { zeroCH4, zeroN, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
   FeedlotLotFertiliserInputTransformed,
@@ -30,7 +30,7 @@ export function calculateManureManagementCH4ForFeedlot(
       context.constants,
     ),
   );
-  return sum(emissionsPerGroup).named('ECH4');
+  return sum(emissionsPerGroup, zeroCH4).named('ECH4');
 }
 
 /**
@@ -44,7 +44,7 @@ export function calculateDirectN2OEmissionsForFeedlot(
   const emissionsPerGroup = input.groups.map((group) =>
     calculateDirectN2OEmissionsForGroup(group, context.constants),
   );
-  return sum(emissionsPerGroup).named('EN2O,dir');
+  return sum(emissionsPerGroup, zeroN2O).named('EN2O,dir');
 }
 
 /**
@@ -64,7 +64,7 @@ export function calculateAtmosphericDepositionN2OEmissionsForFeedlot(
       context.constants,
     ),
   );
-  return sum(emissionsPerGroup).named('EN2O,dir');
+  return sum(emissionsPerGroup, zeroN2O).named('EN2O,dir');
 }
 
 export const calculate41BeefFeedlotManureManagement = (
@@ -100,6 +100,7 @@ export function calculateMassOfNitrogenAppliedToSoilsForFeedlot(
           input.groups.map((group) =>
             calculateMassOfNitrogenAppliedToSoilsForGroup(group, constants),
           ),
+          zeroN,
         ).multiply(input.fractionAppliedToSoils)
   )
     .named(`MNSoil`)

@@ -29,6 +29,7 @@ import { IntermediateScope1 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
 import { exposeMassValue } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
+import { zeroMassDryMatter } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
@@ -61,6 +62,7 @@ function getTotalIntensities(
   const { constants } = context;
   const harvested = sum(
     crops.map((crop) => getAmountProduced(crop, constants)),
+    zeroMassDryMatter,
   );
 
   return {

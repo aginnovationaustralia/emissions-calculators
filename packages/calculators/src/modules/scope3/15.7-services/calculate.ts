@@ -9,6 +9,7 @@ import {
 } from '@/modules/scope1/8-fuel-use';
 import { calculateScope3EmissionsFromFuelStationary } from '@/modules/scope3/15.10-fuel';
 import { br } from '@/tools/containers';
+import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { ServicesInputTransformed } from './services.input';
 
@@ -36,7 +37,7 @@ const calculateScope3ServicesTransportFuel = (
     return br(efTrans1tqg.plus(efTrans3Q)).multiply(energyFromFuel);
   });
 
-  return sum(emissionsRecords);
+  return sum(emissionsRecords, zeroCO2e);
 };
 
 const calculateScope3ServicesStationaryFuel = (

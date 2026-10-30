@@ -7,6 +7,7 @@ import { captureMethod1Or2Value } from './multi';
 import { selectSwitch } from './switch';
 import { sum } from './sum';
 import { mass, realNumber } from './units';
+import { zero } from './sentinels';
 
 // These tree-walkers back every calculator's `output()` provenance (references/constants/
 // inputs shown to end users), and they dispatch on `originType` with no default case. A branch
@@ -44,7 +45,7 @@ describe('collectReferences', () => {
       num(2).attach({ references: ['REF-B'] }),
       num(3),
     ];
-    expect(collectReferences(sum(items))).toEqual(['REF-A', 'REF-B']);
+    expect(collectReferences(sum(items, zero))).toEqual(['REF-A', 'REF-B']);
   });
 
   it('only visits the method-2 branch of a method1and2 node when method 2 is present', () => {

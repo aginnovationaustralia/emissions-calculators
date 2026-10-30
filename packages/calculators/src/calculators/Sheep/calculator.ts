@@ -33,12 +33,16 @@ import { calculateScope3ServicesForActivity } from '@/modules/scope3/15.7-servic
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { selectConstant } from '@/tools/constants';
-import { Container, NumberContainer, root, num } from '@/tools/containers';
+import { Container, num, NumberContainer } from '@/tools/containers';
 import { exposeMassValue, extractMassAsNumber } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
-import { daysInYear } from '@/tools/sentinels';
+import {
+  daysInYear,
+  zeroMassCleanWool,
+  zeroMassLiveweight,
+} from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { mass, Mass } from '@/tools/units';
+import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
 import { divideBySafeFromZero } from '../common/tools';
 import { ExecutionContext } from '../executionContext';
@@ -62,7 +66,7 @@ function calculateCleanWoolProducedInPeriod(
   const { flock, className, periodInput } = periodProps;
   const classInput = flock.classes[className];
   if (!classInput) {
-    return root(mass('Clean Wool', 0));
+    return zeroMassCleanWool;
   }
   const { greasyWoolProduction, cleanWoolYieldProportion } = classInput;
 
@@ -87,6 +91,7 @@ function getCleanWoolProducedForFlock(
       classResultName: (className) => `cleanWoolProduced=${className}`,
       flockResultName: 'cleanWoolProduced',
       isFebruaryInLeapYear,
+      fallback: zeroMassCleanWool,
     },
   );
 }
@@ -176,11 +181,15 @@ export function getTotalIntensities(
   input: Pick<SheepInputTransformed, 'isFebruaryInLeapYear'>,
 ): SheepIntensitiesOutput {
   const { constants } = context;
-  const liveweightProduced = sum(flocks.map((flock) => flock.liveweightSoldKg));
+  const liveweightProduced = sum(
+    flocks.map((flock) => flock.liveweightSoldKg),
+    zeroMassLiveweight,
+  );
   const cleanWoolProduced = sum(
     flocks.map((flock) =>
       getCleanWoolProducedForFlock(flock, context, input.isFebruaryInLeapYear),
     ),
+    zeroMassCleanWool,
   );
 
   const { meatAllocation, woolAllocation } = getMeatWoolAllocation(

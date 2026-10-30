@@ -13,8 +13,9 @@ import {
   objectFromEntries,
 } from '@/calculators/common/tools/object';
 import z from 'zod';
-import { TypedContainer } from './containers';
+import { Container, TypedContainer } from './containers';
 import { output, Output, scope1Output, Scope1Output } from './outputs';
+import { zeroCO2e, zeroOfGas } from './sentinels';
 import { sum } from './sum';
 import { Mass } from './units';
 
@@ -26,17 +27,34 @@ type Scope123ExcludedKeys =
   | 'total'
   | 'totalOtherGases';
 
+/** The gas of a scope 1 output key, from its suffix. Keys without a gas suffix are CO2e. */
+export type GasOfKey<K> = K extends `${string}CO2`
+  ? 'CO2'
+  : K extends `${string}CH4`
+    ? 'CH4'
+    : K extends `${string}N2O`
+      ? 'N2O'
+      : 'CO2e';
+
+/** The runtime equivalent of `GasOfKey` */
+const gasOfKey = <K extends string>(key: K): GasOfKey<K> => {
+  const gas = key.endsWith('CO2')
+    ? 'CO2'
+    : key.endsWith('CH4')
+      ? 'CH4'
+      : key.endsWith('N2O')
+        ? 'N2O'
+        : 'CO2e';
+  return gas as GasOfKey<K>;
+};
+
+/** The zero sentinel for a scope 1 output key, so an empty sum still carries the key's gas */
+const zeroForKey = <K extends string>(key: K): Container<Mass<GasOfKey<K>>> =>
+  zeroOfGas[gasOfKey(key)];
+
 export type IntermediateScope1<O extends Record<string, unknown>> = {
   [K in Exclude<keyof O, Scope123ExcludedKeys>]: TypedContainer<
-    Mass<
-      K extends `${string}CO2`
-        ? 'CO2'
-        : K extends `${string}CH4`
-          ? 'CH4'
-          : K extends `${string}N2O`
-            ? 'N2O'
-            : 'CO2e'
-    >
+    Mass<GasOfKey<K>>
   >;
 };
 
@@ -138,21 +156,30 @@ export function mergeScopeOutputs<
     .filter(([key]) => !excludedKeys.has(String(key)))
     .map(([key, _value]): ObjectEntry<Scope1> => [
       key as keyof Scope1,
-      sum(intermediates.map((s) => s.scope1[key as keyof Scope1])),
+      sum(
+        intermediates.map((s) => s.scope1[key as keyof Scope1]),
+        zeroForKey(key as keyof Scope1),
+      ),
     ]);
 
   const scope2Entries = entriesFromObject(schema.scope2.shape)
     .filter(([key]) => !excludedKeys.has(String(key)))
     .map(([key, _value]): ObjectEntry<Scope2> => [
       key as keyof Scope2,
-      sum(intermediates.map((s) => s.scope2[key as keyof Scope2])),
+      sum(
+        intermediates.map((s) => s.scope2[key as keyof Scope2]),
+        zeroCO2e,
+      ),
     ]);
 
   const scope3Entries = entriesFromObject(schema.scope3.shape)
     .filter(([key]) => !excludedKeys.has(String(key)))
     .map(([key, _value]): ObjectEntry<Scope3> => [
       key as keyof Scope3,
-      sum(intermediates.map((s) => s.scope3[key as keyof Scope3])),
+      sum(
+        intermediates.map((s) => s.scope3[key as keyof Scope3]),
+        zeroCO2e,
+      ),
     ]);
 
   return {

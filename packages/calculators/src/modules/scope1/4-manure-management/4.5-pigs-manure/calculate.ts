@@ -3,7 +3,7 @@ import {
   PigsHerdFertiliserInputTransformed,
   PigsHerdLivestockInputTransformed,
 } from '@/modules/scope1/shared/pigs/input';
-import { zeroN } from '@/tools/sentinels';
+import { zeroCH4, zeroN, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
   calculateAtmosphericDepositionN2OEmissionsForClass,
@@ -31,7 +31,7 @@ export function calculateManureManagementCH4ForPigsHerd(
       context.constants,
     ),
   );
-  return sum(pigsClassEmissions).named('ECH4');
+  return sum(pigsClassEmissions, zeroCH4).named('ECH4');
 }
 
 /**
@@ -46,7 +46,7 @@ export function calculateDirectN2OEmissionsForPigsHerd(
     calculateDirectN2OEmissionsForClass(pigsClass, context.constants),
   );
 
-  return sum(pigsClassEmissions).named('EN2O,dir');
+  return sum(pigsClassEmissions, zeroN2O).named('EN2O,dir');
 }
 
 /**
@@ -65,7 +65,7 @@ export function calculateAtmosphericDepositionN2OEmissionsForPigsHerd(
       context.constants,
     ),
   );
-  return sum(pigsClassEmissions).named('EN2O,ad');
+  return sum(pigsClassEmissions, zeroN2O).named('EN2O,ad');
 }
 
 /**
@@ -83,7 +83,7 @@ export function calculateLeachingAndRunoffN2OEmissionsForPigsHerd(
       context.constants,
     ),
   );
-  return sum(pigsClassEmissions).named('EN2O,leach');
+  return sum(pigsClassEmissions, zeroN2O).named('EN2O,leach');
 }
 
 export function calculate45PigsManureManagement(
@@ -119,6 +119,7 @@ function calculateMassOfNitrogenAppliedToSoilsForPigsHerd(
         constants,
       ),
     ),
+    zeroN,
   );
   return nitrogenProducedByPigsHerd
     .multiply(herdInput.fractionAppliedToSoils)
@@ -140,5 +141,6 @@ export function calculateMassOfNitrogenAppliedToSoilsForPigs(
         input.herds.map((herd) =>
           calculateMassOfNitrogenAppliedToSoilsForPigsHerd(herd, constants),
         ),
+        zeroN,
       );
 }

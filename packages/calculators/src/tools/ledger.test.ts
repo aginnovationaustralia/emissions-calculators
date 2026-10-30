@@ -13,13 +13,17 @@ import { output, scope1Output } from './outputs';
 import { sum } from './sum';
 import { addScope1Totals, addScope23Totals } from './totals';
 import { mass } from './units';
+import { zeroCO2 } from './sentinels';
 
 const emissions = {
   entericCH4: root(mass('CH4', 10)),
   manureDirectN2O: root(mass('N2O', 2)),
   limeCO2: root(mass('CO2', 300)),
   savannaFireBiomassBurningCO2e: root(mass('CO2e', 40)),
-  emptyCO2: sum<ReturnType<typeof root<ReturnType<typeof mass<'CO2'>>>>>([]),
+  emptyCO2: sum<ReturnType<typeof root<ReturnType<typeof mass<'CO2'>>>>>(
+    [],
+    zeroCO2,
+  ),
 };
 
 describe('scope ledger', () => {

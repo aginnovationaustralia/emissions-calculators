@@ -15,6 +15,7 @@ import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
 import { exposeMassValue } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
+import { zeroMassLiveweight } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
@@ -44,7 +45,10 @@ function getTotalIntensities(
   netLulucf: Container<Mass<'CO2e'>>,
   herds: PigsHerdInputTransformed[],
 ): PigsIntensitiesOutput {
-  const liveweightProduced = sum(herds.map((herd) => herd.liveweightSoldKg));
+  const liveweightProduced = sum(
+    herds.map((herd) => herd.liveweightSoldKg),
+    zeroMassLiveweight,
+  );
 
   return {
     liveweightProducedKg: exposeMassValue(liveweightProduced),

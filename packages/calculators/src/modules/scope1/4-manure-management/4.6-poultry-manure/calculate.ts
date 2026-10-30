@@ -1,5 +1,6 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { PoultryFlockLivestockInputTransformed } from '@/modules/scope1/shared/poultry/input';
+import { zeroCH4, zeroN, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
   calculateAtmosphericDepositionN2OEmissionsForClass,
@@ -28,6 +29,7 @@ export function calculateManureManagementCH4ForPoultryFlock(
         context.constants,
       ).named(`ECH4 (j = ${classInput.classNumber})`),
     ),
+    zeroCH4,
   ).named('ECH4');
 }
 
@@ -47,6 +49,7 @@ export function calculateDirectN2OEmissionsForPoultryFlock(
         context.constants,
       ).named(`EN2O,dir (j = ${classInput.classNumber})`),
     ),
+    zeroN2O,
   ).named('EN2O,dir');
 }
 
@@ -66,6 +69,7 @@ export function calculateAtmosphericDepositionN2OEmissionsForPoultryFlock(
         context.constants,
       ).named(`EN2O,ad (j = ${classInput.classNumber})`),
     ),
+    zeroN2O,
   ).named('EN2O,ad');
 }
 
@@ -85,6 +89,7 @@ export function calculateLeachingAndRunoffN2OEmissionsForPoultryFlock(
         context.constants,
       ).named(`EN2O,leach (j = ${classInput.classNumber})`),
     ),
+    zeroN2O,
   ).named('EN2O,leach');
 }
 
@@ -107,8 +112,10 @@ export function calculateMassOfNitrogenAppliedToSoilsForPoultry(
             constants,
           ),
         ),
+        zeroN,
       ).multiply(fractionAppliedToSoils);
     }),
+    zeroN,
   )
     .named('MNSoilscope1')
     .reference('4.6.1.9 (1)');

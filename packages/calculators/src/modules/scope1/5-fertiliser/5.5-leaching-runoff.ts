@@ -80,14 +80,12 @@ export const calculateLeachingAndRunoffN2O = (
     ),
   );
 
-  const inorganicMass =
-    inorganicNitrogen.length === 0 ? zeroN : sum(inorganicNitrogen);
+  const inorganicMass = sum(inorganicNitrogen, zeroN);
 
   const organicNitrogen = organic.applications.map((organicFertiliser) =>
     calculateMNSoilForOrganicFertiliser(organicFertiliser, constants),
   );
-  const organicMass =
-    organicNitrogen.length === 0 ? zeroN : sum(organicNitrogen);
+  const organicMass = sum(organicNitrogen, zeroN);
 
   /**
    * NOTE: The calculation of mass of nitrogen lost through leaching is the same for a

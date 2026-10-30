@@ -313,7 +313,7 @@ describe('BaseContainer.minus / plus', () => {
     expect(result.unit.store.toNumber()).toBe(7);
   });
 
-  // Void is what `sum([])` produces, so it must act as the identity and keep the other side's
+  // Void must act as the identity and keep the other side's
   // unit; falling back to RealNumber here drops e.g. the gas of a Mass from calculator outputs.
   // A literal void container matches no overload, so build these with `bypassOverloads`.
   const voidC = () => bypassOverloads(root(voidUnit()));

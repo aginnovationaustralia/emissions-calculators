@@ -4,6 +4,7 @@ import { ClimateZoneType } from '@/constants/enums';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
+import { zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { calculateMassOfNitrogenAppliedToSoils } from '../4-manure-management/calculate';
@@ -91,7 +92,7 @@ export const calculate52OrganicFertiliser = (
     );
   });
 
-  return sum(emissionRecords, {
+  return sum(emissionRecords, zeroN2O, {
     name: 'Sum E N2O',
     references: [`5.2.1.1 (1)`],
   });

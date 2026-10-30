@@ -1,6 +1,7 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { HasIsFebruaryInLeapYearInputTransformed } from '@/calculators/types/has-is-february-in-leap-year.input';
 import { selectConstant } from '@/tools/constants';
+import { zeroCH4 } from '@/tools/sentinels';
 import { calculateOrGetFeedIntakeForBeef } from '../shared/beef/calculate';
 import {
   BeefConstants,
@@ -62,6 +63,7 @@ export function calculate32BeefPastureEntericMethaneForHerd(
       classResultName: (className) => `Eenteric=${className}`,
       herdResultName: 'Eenteric (herd)',
       isFebruaryInLeapYear: herd.isFebruaryInLeapYear,
+      fallback: zeroCH4,
     },
   );
 }

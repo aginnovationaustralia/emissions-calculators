@@ -36,7 +36,7 @@ const calculateAvailableMineralisedNitrogenFromClearing = (
     return mineralisedNitrogen.multiply(FracWET);
   });
 
-  return sum(activityRecords);
+  return sum(activityRecords, zeroN);
 };
 
 export const calculate_16_4_1_1_NitrogenLeachingAndRunoff = (

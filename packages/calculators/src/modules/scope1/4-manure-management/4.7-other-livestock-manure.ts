@@ -5,7 +5,15 @@ import { OtherLivestockManureAndEntericHerdInputTransformed } from '@/modules/sc
 import { selectConstant } from '@/tools/constants';
 import { ifTrueElse } from '@/tools/if-else';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { daysInYear, one, oneYear, zero } from '@/tools/sentinels';
+import {
+  daysInYear,
+  one,
+  oneYear,
+  zero,
+  zeroCH4,
+  zeroMassPerHeadPerDayCH4,
+  zeroN,
+} from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 
 type ConstantsForOtherLivestockManure = HasConstants<
@@ -111,7 +119,9 @@ export function calculateManureManagementCH4ForOtherLivestockHerd(
       .named(`Mjm=14 (${type})`)
       .reference('4.7.1.1 (2)');
 
-    const Mjm = sum([Mjm1, Mjm14], { name: `Mjm (${type})` });
+    const Mjm = sum([Mjm1, Mjm14], zeroMassPerHeadPerDayCH4, {
+      name: `Mjm (${type})`,
+    });
 
     return Mjm.multiply(Nj)
       .multiply(daysInYear)
@@ -119,7 +129,7 @@ export function calculateManureManagementCH4ForOtherLivestockHerd(
       .reference('4.7.1.1 (1)');
   });
 
-  return sum(emissionsFromClasses, { name: 'EMCH4 (herd)' });
+  return sum(emissionsFromClasses, zeroCH4, { name: 'EMCH4 (herd)' });
 }
 
 /**
@@ -150,7 +160,7 @@ const calculateAnnualNitrogenExcretionForHerd = (
       .reference('4.7.1.3 (2)');
   });
 
-  const nitrogenExcreted = sum(nitrogenExcretedByClasses).named('AE');
+  const nitrogenExcreted = sum(nitrogenExcretedByClasses, zeroN).named('AE');
 
   return nitrogenExcreted;
 };

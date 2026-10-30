@@ -2,6 +2,7 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { HasConstants } from '@/constants/types';
 import { OtherLivestockManureAndEntericHerdInputTransformed } from '@/modules/scope1/shared/other-livestock/input';
 import { selectConstant } from '@/tools/constants';
+import { zeroCH4 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 
 export function calculate36OtherLivestockEntericMethaneForHerd(
@@ -24,5 +25,5 @@ export function calculate36OtherLivestockEntericMethaneForHerd(
     return head.multiply(Mj).reference('3.6.1.1 (1)').named('Eenteric');
   });
 
-  return sum(emissionsFromClasses);
+  return sum(emissionsFromClasses, zeroCH4);
 }

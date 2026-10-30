@@ -28,6 +28,7 @@ import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
 import { exposeMassValue } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
+import { zeroMassDryMatter } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
@@ -58,7 +59,10 @@ function getTotalIntensities(
   netLulucf: Container<Mass<'CO2e'>>,
   crops: RiceCropInputTransformed[],
 ) {
-  const riceHarvested = sum(crops.map(({ crop }) => crop.totalYieldKg));
+  const riceHarvested = sum(
+    crops.map(({ crop }) => crop.totalYieldKg),
+    zeroMassDryMatter,
+  );
 
   return {
     riceExcludingLULUCF: generateIntensity(

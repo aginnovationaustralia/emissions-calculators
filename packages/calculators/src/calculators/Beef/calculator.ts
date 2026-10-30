@@ -41,6 +41,7 @@ import { BeefInputTransformed } from './types/input';
 import { BeefOutputSchema } from './types/output';
 import { BeefScope1Output } from './types/scope1.output';
 import { BeefScope3Output } from './types/scope3.output';
+import { zeroMassLiveweight } from '@/tools/sentinels';
 
 function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
@@ -59,7 +60,10 @@ function getTotalIntensities(
   netLulucf: Container<Mass<'CO2e'>>,
   herds: BeefHerdInputTransformed[],
 ) {
-  const liveweightProduced = sum(herds.map((herd) => herd.liveweightSoldKg));
+  const liveweightProduced = sum(
+    herds.map((herd) => herd.liveweightSoldKg),
+    zeroMassLiveweight,
+  );
 
   return {
     liveweightProducedKg: exposeMassValue(liveweightProduced),
