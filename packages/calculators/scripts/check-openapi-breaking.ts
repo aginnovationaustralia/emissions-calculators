@@ -85,21 +85,17 @@ function resolveRef(ref: string, repoRoot: string): string {
   }
 
   console.log(`  Fetching ${ref} from origin...`);
+  // Only the tip is needed; keep shallow CI clones shallow
+  const isShallow =
+    git(['rev-parse', '--is-shallow-repository'], repoRoot) === 'true';
+  const fetch = ['fetch', '--quiet', ...(isShallow ? ['--depth=1'] : [])];
   try {
     git(
-      [
-        'fetch',
-        '--quiet',
-        'origin',
-        `+refs/heads/${ref}:refs/remotes/origin/${ref}`,
-      ],
+      [...fetch, 'origin', `+refs/heads/${ref}:refs/remotes/origin/${ref}`],
       repoRoot,
     );
   } catch {
-    git(
-      ['fetch', '--quiet', 'origin', `+refs/tags/${ref}:refs/tags/${ref}`],
-      repoRoot,
-    );
+    git([...fetch, 'origin', `+refs/tags/${ref}:refs/tags/${ref}`], repoRoot);
   }
 
   const fetched = find();
