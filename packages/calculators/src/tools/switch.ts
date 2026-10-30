@@ -4,9 +4,8 @@ import {
   NumberContainer,
   StringContainer,
 } from './containers';
-import { InputContainer } from './inputs';
-import { StringUnit } from './units';
 import { AnyNumberUnit } from './generic';
+import { StringUnit } from './units';
 
 export class SwitchContainer<
   TSubject extends StringUnit,
@@ -43,7 +42,7 @@ export const selectSwitch = <
   TSubject extends StringUnit,
   TSelected extends AnyNumberUnit,
 >(
-  subject: InputContainer<TSubject>,
+  subject: StringContainer<TSubject>,
   cases: Record<TSubject, NumberContainer<TSelected>>,
 ): SwitchContainer<TSubject, TSelected> => {
   const selected = cases[subject.unit];

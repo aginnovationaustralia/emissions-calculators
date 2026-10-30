@@ -1,4 +1,5 @@
-import { Container } from './containers';
+import { Container, InputLike } from './containers';
+import { InputContainer } from './inputs';
 import { formatUnit } from './format';
 import { QualityTable } from './quality';
 import { isBooleanUnit, isStringUnit } from './units';
@@ -85,27 +86,34 @@ export type InputDefinition = {
   quality: QualityTable | undefined;
 };
 
-export const collectInputs = <O extends Container<AnyUnit>>(
+/** Every input container reached by `origin`, whichever input container class it uses. */
+export const collectInputContainers = <O extends Container<AnyUnit>>(
   origin: O | undefined,
-): InputDefinition[] => {
+): InputLike<AnyUnit>[] => {
   if (origin === undefined) {
     return [];
   }
-  const local: InputDefinition[] =
-    origin.originType === 'input'
-      ? [
-          {
-            name: origin.core?.name ?? 'Unknown input',
-            value: isStringUnit(origin.unit)
-              ? origin.unit
-              : isBooleanUnit(origin.unit)
-                ? origin.unit
-                : origin.unit.store.toNumber(),
-            method: origin.method,
-            modules: origin.modules,
-            quality: origin.core?.quality,
-          },
-        ]
-      : [];
-  return local.concat(traverseContainerChildren(origin, collectInputs));
+  const local = origin.originType === 'input' ? [origin] : [];
+  return local.concat(
+    traverseContainerChildren(origin, collectInputContainers),
+  );
 };
+
+const inputValue = (unit: AnyUnit): InputDefinition['value'] =>
+  isStringUnit(unit)
+    ? unit
+    : isBooleanUnit(unit)
+      ? unit
+      : unit.store.toNumber();
+
+export const collectInputs = <O extends Container<AnyUnit>>(
+  origin: O | undefined,
+): InputDefinition[] =>
+  collectInputContainers(origin).map((input) => ({
+    name: input.core?.name ?? 'Unknown input',
+    value: inputValue(input.unit),
+    // Inputs built with another calculator's input container have no VEERG method or modules
+    method: input instanceof InputContainer ? input.method : '1',
+    modules: input instanceof InputContainer ? input.modules : [],
+    quality: input.core?.quality,
+  }));

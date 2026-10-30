@@ -6,7 +6,6 @@ import {
 import Decimal from 'decimal.js-light';
 import { formatUnit } from './format';
 import { IfElseContainer } from './if-else';
-import { InputContainer } from './inputs';
 import { Method1And2Container, Method2Container } from './multi';
 import { QualityTable } from './quality';
 import { SwitchContainer } from './switch';
@@ -1035,10 +1034,46 @@ export const relabelMass = <S1 extends AnySubstance, S2 extends AnySubstance>(
 export const num = (value: number | Decimal): RootContainer<RealNumber> =>
   new RootContainer(realNumber(value));
 
-export type NumberContainer<U extends AnyNumberUnit> =
+/**
+ * What the shared tools require of an input container. A calculator can supply its own input
+ * container class (VEERG's is `InputContainer` in inputs.ts), as long as it extends
+ * `BaseContainer` and has an `originType` of `'input'`.
+ */
+export interface InputLike<U extends AnyUnit> extends BaseContainer<U> {
+  originType: 'input';
+}
+
+/**
+ * Chooses the input container type for each unit, so the container unions can be narrowed to one
+ * calculator's input container. TypeScript has no type parameters that take type parameters, so
+ * this uses `this['unit']` to stand for the unit, e.g.
+ *
+ *   interface MyInputKind extends InputKind {
+ *     readonly container: MyInputContainer<this['unit']>;
+ *   }
+ */
+export interface InputKind {
+  readonly unit: AnyUnit;
+  readonly container: InputLike<AnyUnit>;
+}
+
+/** Accepts any input container. The shared tools use this. */
+export interface AnyInputKind extends InputKind {
+  readonly container: InputLike<this['unit']>;
+}
+
+/** The input container type that input kind `K` uses for unit `U`. */
+export type InputOf<K extends InputKind, U extends AnyUnit> = (K & {
+  readonly unit: U;
+})['container'];
+
+export type GenericNumberContainer<
+  U extends AnyNumberUnit,
+  K extends InputKind = AnyInputKind,
+> =
   | BracketedContainer<U>
   | BinaryContainer<U>
-  | InputContainer<U>
+  | InputOf<K, U>
   | RootContainer<U>
   | Method1And2Container<U>
   | Method2Container<U>
@@ -1048,30 +1083,50 @@ export type NumberContainer<U extends AnyNumberUnit> =
   | IfElseContainer<U>
   | TranslationContainer<StringUnit | AnyNumberUnit | BooleanUnit, U>;
 
-export type StringContainer<U extends StringUnit> =
-  | InputContainer<U>
+export type GenericStringContainer<
+  U extends StringUnit,
+  K extends InputKind = AnyInputKind,
+> =
+  | InputOf<K, U>
   | RootContainer<U>
   | TranslationContainer<StringUnit | AnyNumberUnit | BooleanUnit, U>;
 
-export type BooleanContainer<U extends BooleanUnit = BooleanUnit> =
-  InputContainer<U> | RootContainer<U>;
+export type GenericBooleanContainer<
+  U extends BooleanUnit = BooleanUnit,
+  K extends InputKind = AnyInputKind,
+> = InputOf<K, U> | RootContainer<U>;
 
-export type TypedContainer<U extends AnyUnit> = [U] extends [AnyNumberUnit]
-  ? NumberContainer<U>
+export type GenericTypedContainer<
+  U extends AnyUnit,
+  K extends InputKind = AnyInputKind,
+> = [U] extends [AnyNumberUnit]
+  ? GenericNumberContainer<U, K>
   : [U] extends [StringUnit]
-    ? StringContainer<U>
+    ? GenericStringContainer<U, K>
     : [U] extends [BooleanUnit]
-      ? BooleanContainer<U>
-      : | NumberContainer<Extract<U, AnyNumberUnit>>
-        | StringContainer<Extract<U, StringUnit>>
-        | BooleanContainer<Extract<U, BooleanUnit>>;
+      ? GenericBooleanContainer<U, K>
+      : | GenericNumberContainer<Extract<U, AnyNumberUnit>, K>
+        | GenericStringContainer<Extract<U, StringUnit>, K>
+        | GenericBooleanContainer<Extract<U, BooleanUnit>, K>;
 
 export type MultiContainer<U extends AnyNumberUnit = AnyNumberUnit> =
   SummedContainer<U>;
 
-export type Container<U extends AnyUnit> = [U] extends [AnyNumberUnit]
-  ? NumberContainer<U> | MultiContainer<U>
-  : TypedContainer<U>;
+export type GenericContainer<
+  U extends AnyUnit,
+  K extends InputKind = AnyInputKind,
+> = [U] extends [AnyNumberUnit]
+  ? GenericNumberContainer<U, K> | MultiContainer<U>
+  : GenericTypedContainer<U, K>;
+
+// The shared tools accept containers built from any input container.
+export type NumberContainer<U extends AnyNumberUnit> =
+  GenericNumberContainer<U>;
+export type StringContainer<U extends StringUnit> = GenericStringContainer<U>;
+export type BooleanContainer<U extends BooleanUnit = BooleanUnit> =
+  GenericBooleanContainer<U>;
+export type TypedContainer<U extends AnyUnit> = GenericTypedContainer<U>;
+export type Container<U extends AnyUnit> = GenericContainer<U>;
 
 export type AsAnyContainer<C extends Container<AnyUnit>> = Container<C['unit']>;
 export type ValuesAsAnyContainer<Input extends object> = {
