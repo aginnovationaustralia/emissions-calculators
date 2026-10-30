@@ -16,7 +16,7 @@
     "@aginnovationaustralia/emissions-calculators": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^25.0.1",
+    "@types/node": "^26.6.5",
     "typescript": "^5.9.3",
     "ts-node": "^10.9.2"
   },
