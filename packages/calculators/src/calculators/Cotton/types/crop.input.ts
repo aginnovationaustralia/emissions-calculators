@@ -18,7 +18,7 @@ import {
   RESIDUE_CROPS_6_1,
   RESIDUE_LEACH_6_3,
 } from '@/tools/modules';
-import { realNumber } from '@/tools/units';
+import { mass, realNumber } from '@/tools/units';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 
@@ -79,8 +79,10 @@ const CottonFertiliserInputSchema: z.ZodType<
     }),
   }));
 
-export const CottonCropResidueInputSchema =
-  BaseCropResidueInputSchema.safeExtend({
+export const CottonCropResidueInputSchema = BaseCropResidueInputSchema.omit({
+  totalYieldKg: true,
+})
+  .safeExtend({
     fractionSeedCottonLint: numberInput(
       realNumber,
       {
@@ -91,7 +93,24 @@ export const CottonCropResidueInputSchema =
       },
       isProportion,
     ),
-  }).transform((val) => ({
+    totalYieldKg: numberInput(
+      (val) => mass('DryMatter', val),
+      {
+        name: 'Pc',
+        method: '1',
+        description:
+          'Total yield of the cotton crop, as dry matter. For accurate cotton intensity values, this value must exclude the total mass of trash',
+        modules: [
+          RESIDUE_CROPS_6_1,
+          RESIDUE_LEACH_6_3,
+          RESIDUE_BURN_6_4,
+          INTENSITIES,
+        ],
+      },
+      (s) => s.min(0),
+    ),
+  })
+  .transform((val) => ({
     ...val,
     type: input('Cotton' as const, {
       name: 'Cotton',
