@@ -38,7 +38,7 @@
     "husky": "^9.1.7",
     "prettier": "^3.9.7",
     "turbo": "^2.10.13",
-    "typescript-eslint": "^8.70.0",
+    "typescript-eslint": "^8.72.0",
     "@aginnovationaustralia/eslint-plugin-emissions-calculators": "workspace:*",
     "typescript": "^5.9.3"
   }
