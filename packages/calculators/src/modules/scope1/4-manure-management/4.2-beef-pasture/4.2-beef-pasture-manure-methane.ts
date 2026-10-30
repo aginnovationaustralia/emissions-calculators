@@ -6,7 +6,7 @@ import { selectConstant } from '@/tools/constants';
 import { br, num, root, StringContainer } from '@/tools/containers';
 import { ifTrueElse } from '@/tools/if-else';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { oneMinus } from '@/tools/sentinels';
+import { oneMinus, zeroCH4, zeroMassPerHeadPerDayCH4 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { massPerHeadPerDay, realNumber } from '@/tools/units';
 import { calculateOrGetFeedIntakeForBeef } from '../../shared/beef/calculate';
@@ -139,7 +139,7 @@ const calculateTotalMethaneFromClassSeason = (periodProps: BeefPeriodProps) => {
     '14',
   ).named(`Mjklm=14,j=${periodName},k=${className}`);
 
-  const Mjkl = sum([Mjklm1, Mjklm14], {
+  const Mjkl = sum([Mjklm1, Mjklm14], zeroMassPerHeadPerDayCH4, {
     name: `Mjkl j=${periodName},k=${className}`,
   });
 
@@ -166,6 +166,7 @@ export const calculate42BeefPastureManureCH4ForHerd = (
       classResultName: (className) => `ECH4j=${className}`,
       herdResultName: 'ECH4 (herd)',
       isFebruaryInLeapYear: herd.isFebruaryInLeapYear,
+      fallback: zeroCH4,
     },
   );
 };

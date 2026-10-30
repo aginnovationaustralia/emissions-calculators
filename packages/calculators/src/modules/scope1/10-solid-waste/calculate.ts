@@ -89,10 +89,12 @@ const calculateSolidWasteBiologicalTreatmentEmissions = (
 
   const bioSolidWasteCH4 = sum(
     bioTreatmentEmissions.map(({ bioSolidWasteCH4 }) => bioSolidWasteCH4),
+    zeroCH4,
   ).named(`ECH4 (t)`);
 
   const bioSolidWasteN2O = sum(
     bioTreatmentEmissions.map(({ bioSolidWasteN2O }) => bioSolidWasteN2O),
+    zeroN2O,
   ).named(`EN2O (t)`);
 
   return { bioSolidWasteCH4, bioSolidWasteN2O };
@@ -209,7 +211,7 @@ const calculateSolidWasteIncinerationEmissionsMethod2 = (
     calculateSolidWasteIncinerationEmissionsMethod1(input, constants),
     incinerationEmissions.length === 0
       ? zeroCO2
-      : sum(incinerationEmissions).named(`ECO2`),
+      : sum(incinerationEmissions, zeroCO2).named(`ECO2`),
   );
 };
 
@@ -257,7 +259,7 @@ const calculateUnmanagedSolidWasteEmissionsMethod1 = (
   );
 
   return captureMethod1Or2Value(
-    sum(unmanagedEmissions).named(`ECH4 (u)`),
+    sum(unmanagedEmissions, zeroCH4).named(`ECH4 (u)`),
     undefined,
   );
 };
@@ -342,12 +344,13 @@ const calculateUnmanagedSolidWasteEmissionsMethod2 = (
 
       return emissionsPerWasteType.length === 0
         ? zeroCH4
-        : sum(emissionsPerWasteType);
+        : sum(emissionsPerWasteType, zeroCH4);
     });
 
-  const unmanagedEmissions = sum(emissionsPerUnmanagedTreatmentType).named(
-    `ECH4 (u)`,
-  );
+  const unmanagedEmissions = sum(
+    emissionsPerUnmanagedTreatmentType,
+    zeroCH4,
+  ).named(`ECH4 (u)`);
 
   return captureMethod1Or2Value(
     calculateUnmanagedSolidWasteEmissionsMethod1(input, constants),

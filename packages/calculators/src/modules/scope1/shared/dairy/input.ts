@@ -15,12 +15,13 @@ import {
 } from '@/tools/inputs';
 import {
   LivestockLocation,
+  livestockModuleOrFertiliser,
   MANURE_DAIRY_4_3,
   PURCH_FUEL_15_10,
   RESIDUE_LEACH_6_3,
   SERVICES_15_7,
-  livestockModuleOrFertiliser,
 } from '@/tools/modules';
+import { zero } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { realNumber } from '@/tools/units';
 import { object } from '@/types/schemas';
@@ -166,11 +167,10 @@ export const dairyTimeInLocationsInnerSchema = (location: LivestockLocation) =>
       { timeSpentOnFeedpad, timeSpentOnMilkingShed, timeSpentOnPasture },
       context,
     ) => {
-      const totalTime = sum([
-        timeSpentOnFeedpad,
-        timeSpentOnMilkingShed,
-        timeSpentOnPasture,
-      ]);
+      const totalTime = sum(
+        [timeSpentOnFeedpad, timeSpentOnMilkingShed, timeSpentOnPasture],
+        zero,
+      );
       if (!totalTime.unit.store.value.eq(1)) {
         context.addIssue({
           code: 'custom',

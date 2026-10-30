@@ -5,8 +5,13 @@ import {
 import { ExecutionContext } from '@/calculators/executionContext';
 import { HasIsFebruaryInLeapYearInputTransformed } from '@/calculators/types/has-is-february-in-leap-year.input';
 import { selectConstant } from '@/tools/constants';
-import { br, max, num, root } from '@/tools/containers';
-import { tenToPowMinus4, zero } from '@/tools/sentinels';
+import { br, max, num } from '@/tools/containers';
+import {
+  tenToPowMinus4,
+  zero,
+  zeroMassPerHeadPerDayMilk,
+  zeroN,
+} from '@/tools/sentinels';
 import { massPerHeadPerDay } from '@/tools/units';
 import {
   calculateNitrogenRetentionForCattle,
@@ -64,7 +69,7 @@ const calculateMilkProduction = (periodProps: BeefPeriodProps) => {
       .reference('4.2.1.3 (5)');
   }
 
-  return root(massPerHeadPerDay('Milk', 0)).named(
+  return zeroMassPerHeadPerDayMilk.named(
     `MPjk=${classInput.number} (${className}, non-calving class)`,
   );
 };
@@ -77,7 +82,7 @@ const calculateMilkIntake = (periodProps: BeefPeriodProps) => {
   const { breed } = herd;
   const { constants } = context;
   if (!isBeefCalfClassPeriodInput(currentPeriod)) {
-    return root(massPerHeadPerDay('Milk', 0)).named(
+    return zeroMassPerHeadPerDayMilk.named(
       `MCjk=${classInput.number} (non-calf class)`,
     );
   }
@@ -218,6 +223,7 @@ export const calculateManureManagementSoilDirectN2OForHerd = (
       classResultName: (className) => `AE=${className}`,
       herdResultName: 'AE (herd)',
       isFebruaryInLeapYear: herd.isFebruaryInLeapYear,
+      fallback: zeroN,
     },
   );
 

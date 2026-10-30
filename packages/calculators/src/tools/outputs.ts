@@ -76,7 +76,7 @@ export type Output<
 > = OutputMethod1<Scope, S> | OutputMethod2<Scope, S>;
 
 /**
- * The gas an output reports. A void unit (e.g. from summing an empty list) has no gas of its own,
+ * The gas an output reports. A void unit (e.g. from a method-2-only value) has no gas of its own,
  * so it is reported as zero CO2. Anything other than a Mass or void means an upstream operation
  * produced a unit its type does not admit, which would otherwise surface as a missing `gas` key.
  */

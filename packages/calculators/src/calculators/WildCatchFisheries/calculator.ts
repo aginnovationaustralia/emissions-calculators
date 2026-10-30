@@ -23,6 +23,7 @@ import {
   buildCalculatorLedger,
   serialiseCalculatorLedger,
 } from '@/tools/ledger';
+import { zeroMassFish } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { calculateScope2 } from '../common/calculator';
@@ -44,6 +45,7 @@ function getIntensities(
 ): WildCatchFisheriesIntensitiesOutput {
   const fishHarvested = sum(
     fisheries.map((fishery) => fishery.amountHarvested),
+    zeroMassFish,
   );
   return {
     fishHarvestedKg: exposeMassValue(fishHarvested),

@@ -176,11 +176,14 @@ export const calculateScope3SolidWasteEmissions = (
   );
 
   // Because composting/anaerobic will always be a non-void unit, empty arrays don't need separate handling
-  return sum([
-    compostingEmissions,
-    anaerobicDigestionEmissions,
-    ...incinerationEmissions,
-    ...landfillWithGasEmissions,
-    ...landfillWithoutGasEmissions,
-  ]).named(`Ewaste`);
+  return sum(
+    [
+      compostingEmissions,
+      anaerobicDigestionEmissions,
+      ...incinerationEmissions,
+      ...landfillWithGasEmissions,
+      ...landfillWithoutGasEmissions,
+    ],
+    zeroCO2e,
+  ).named(`Ewaste`);
 };

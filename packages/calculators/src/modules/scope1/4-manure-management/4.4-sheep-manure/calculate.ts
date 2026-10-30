@@ -3,7 +3,7 @@ import { isSheepClassPeriodInputWithProportionLambsBorn } from '@/calculators/Sh
 import { HasIsFebruaryInLeapYearInputTransformed } from '@/calculators/types/has-is-february-in-leap-year.input';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
-import { br, max, num, NumberContainer, root } from '@/tools/containers';
+import { br, max, num, NumberContainer } from '@/tools/containers';
 import { ifTrueElse } from '@/tools/if-else';
 import { captureMethod1Or2Value } from '@/tools/multi';
 import {
@@ -13,6 +13,10 @@ import {
   oneMinus,
   tenToPowMinus3,
   zero,
+  zeroCH4,
+  zeroMassPerHeadPerDayMilk,
+  zeroMassPerHeadPerDayN,
+  zeroN,
 } from '@/tools/sentinels';
 import {
   MassPerHeadPerDay,
@@ -171,6 +175,7 @@ export function calculateManureManagementCH4ForSheepFlock(
       classResultName: (className) => `ECH4=${className}`,
       flockResultName: 'ECH4 (flock)',
       isFebruaryInLeapYear: flock.isFebruaryInLeapYear,
+      fallback: zeroCH4,
     },
   );
 }
@@ -185,9 +190,7 @@ function calculateNitrogenRetentionForSheep(periodProps: SheepPeriodProps) {
   const { constants } = context;
   const classInput = flock.classes[className];
   if (!classInput) {
-    return root(massPerHeadPerDay('N', 0)).named(
-      `NRjk=${className},${periodName}`,
-    );
+    return zeroMassPerHeadPerDayN.named(`NRjk=${className},${periodName}`);
   }
   const { greasyWoolProduction, cleanWoolYieldProportion } = classInput;
   const { state } = flock;
@@ -300,9 +303,7 @@ function calculateMilkIntakeMCjk(
   const { className, periodInput, periodName, context } = periodProps;
   const { constants } = context;
   if (!isSheepClassPeriodInputWithProportionLambsBorn(periodInput)) {
-    return root(massPerHeadPerDay('Milk', 0)).named(
-      `MCjk=${className},${periodName}`,
-    );
+    return zeroMassPerHeadPerDayMilk.named(`MCjk=${className},${periodName}`);
   }
   const { proportionOfLambsBorn } = periodInput;
 
@@ -405,6 +406,7 @@ function calculateTotalNitrogenExcretedAnnually(
       classResultName: (className) => `AE (j = ${className})`,
       flockResultName: 'AE',
       isFebruaryInLeapYear: flock.isFebruaryInLeapYear,
+      fallback: zeroN,
     },
   );
 }

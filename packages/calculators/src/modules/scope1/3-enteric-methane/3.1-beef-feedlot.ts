@@ -3,7 +3,7 @@ import { FeedlotGroupLivestockInputTransformed } from '@/calculators/Feedlot/typ
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { br, num } from '@/tools/containers';
-import { tenToPowMinus3 } from '@/tools/sentinels';
+import { tenToPowMinus3, zeroCH4 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { massPerHeadPerDay, realNumber } from '@/tools/units';
 import {
@@ -81,5 +81,6 @@ export function calculate31BeefFeedlotEntericMethane(
     input.groups.map((group) =>
       calculateEntericMethaneForGroup(group, context.constants),
     ),
+    zeroCH4,
   ).named(`Eenteric`);
 }

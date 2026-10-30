@@ -454,6 +454,14 @@ describe('Cropping Calculator', () => {
       });
     });
 
+    it('keeps the N2O gas on an emission summed from no applications', () => {
+      const [first] = emissions.intermediate;
+      expect(first.scope1.inorganicFertiliserN2O).toMatchObject({
+        gas: 'N2O',
+        amountGasKg: 0,
+      });
+    });
+
     it("carries the second crop's agrichemicals into the enterprise total", () => {
       const [first, second] = emissions.intermediate;
       expect(first.scope3.agrichemicals.amountGasKg).toBe(0);
@@ -461,6 +469,34 @@ describe('Cropping Calculator', () => {
       expect(emissions.scope3.agrichemicals.amountGasKg).toBe(
         second.scope3.agrichemicals.amountGasKg,
       );
+    });
+  });
+
+  describe('with no crops', () => {
+    let emissions: CroppingOutput;
+
+    beforeAll(() => {
+      const input = CroppingInputSchema.parse({
+        ...lulucfCroppingTestInput,
+        crops: [],
+      } satisfies CroppingInput);
+      emissions = calculateCropping(input, testContext('Cropping'));
+    });
+
+    it.each([
+      ['fuelTransportCO2', 'CO2'],
+      ['fuelTransportCH4', 'CH4'],
+      ['inorganicFertiliserN2O', 'N2O'],
+      ['refrigerantHFCs', 'CO2e'],
+    ] as const)('keeps the gas of %s from its key name', (key, gas) => {
+      expect(emissions.scope1[key]).toMatchObject({ gas, amountGasKg: 0 });
+    });
+
+    it('reports scope 3 emissions in CO2e', () => {
+      expect(emissions.scope3.agrichemicals).toMatchObject({
+        gas: 'CO2e',
+        amountGasKg: 0,
+      });
     });
   });
 });

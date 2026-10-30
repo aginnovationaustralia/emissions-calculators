@@ -1,25 +1,37 @@
 import { RootContainer, root } from './containers';
 import { input } from './inputs';
+import { zeroCH4, zeroCO2, zeroN2O } from './sentinels';
 import { sum } from './sum';
-import { Area, area, isVoid, mass, Mass, realNumber } from './units';
+import {
+  Area,
+  area,
+  mass,
+  Mass,
+  realNumber,
+  Substance,
+  voidUnit,
+} from './units';
 
 // `sum` underlies every aggregation across seasons/classes/herds in the calculators. Its
-// unit-inference for the empty-array case, and its use of the first item's unit as the "root"
-// for the rest, are easy to get subtly wrong.
+// unit-inference for the empty-array case, and its choice of unit across the items, are easy to
+// get subtly wrong.
+
+// A void item, e.g. a method-2-only value with no method 1 track, typed as the Mass it stands in for
+const voidMass = <S extends Substance>() =>
+  root(voidUnit()) as unknown as RootContainer<Mass<S>>;
 
 describe('sum', () => {
-  it('returns a void, zero-valued container for an empty array', () => {
-    // The generic can't be inferred from an empty array literal; pin it to any NumberContainer
-    // so `result.unit` is typed, even though the runtime value is void regardless of the pin.
-    const result = sum<RootContainer<Mass<'CO2'>>>([]);
-    expect(isVoid(result.unit)).toBe(true);
+  it('returns the fallback unit, zero-valued, for an empty array', () => {
+    // The generic can't be inferred from an empty array literal, so pin it
+    const result = sum<RootContainer<Mass<'N2O'>>>([], zeroN2O);
+    expect(result.unit).toMatchObject({ __unitType: 'Mass', substance: 'N2O' });
     expect(result.unit.store.toNumber()).toBe(0);
     expect(result.from).toEqual([]);
   });
 
   it('returns the single item unchanged in value and unit for a one-item array', () => {
     const item = root(mass('CO2', 7));
-    const result = sum([item]);
+    const result = sum([item], zeroCO2);
     expect(result.unit.__unitType).toBe('Mass');
     expect(result.unit.substance).toBe('CO2');
     expect(result.unit.store.toNumber()).toBe(7);
@@ -31,7 +43,7 @@ describe('sum', () => {
       root(mass('CO2', 2)),
       root(mass('CO2', 3)),
     ];
-    const result = sum(items);
+    const result = sum(items, zeroCO2);
     expect(result.unit.substance).toBe('CO2');
     expect(result.unit.store.toNumber()).toBe(6);
     expect(result.from).toBe(items);
@@ -45,39 +57,35 @@ describe('sum', () => {
       method: '2',
       modules: [],
     });
-    const result = sum([method1Only, dualTrack]);
+    const result = sum([method1Only, dualTrack], zeroCH4);
     expect(result.unit.store.toNumber()).toBe(7);
   });
-  it('takes the unit from a later item when the first item is an empty sum', () => {
-    // e.g. the first crop has no fertiliser applications, so its own figure is an empty sum
-    const emptyFirst = sum<RootContainer<Mass<'N2O'>>>([]);
-    const result = sum([emptyFirst, root(mass('N2O', 15.6))]);
+  it('takes the unit from a later item when the first item is void', () => {
+    const result = sum([voidMass<'N2O'>(), root(mass('N2O', 15.6))], zeroN2O);
     expect(result.unit.__unitType).toBe('Mass');
     expect(result.unit.substance).toBe('N2O');
     expect(result.unit.store.toNumber()).toBe(15.6);
   });
 
   it('keeps every item when void items are interleaved', () => {
-    const empty = sum<RootContainer<Mass<'CO2'>>>([]);
-    const result = sum([
-      empty,
-      root(mass('CO2', 2)),
-      empty,
-      root(mass('CO2', 3)),
-    ]);
+    const empty = voidMass<'CO2'>();
+    const result = sum(
+      [empty, root(mass('CO2', 2)), empty, root(mass('CO2', 3))],
+      zeroCO2,
+    );
     expect(result.unit.substance).toBe('CO2');
     expect(result.unit.store.toNumber()).toBe(5);
   });
 
-  it('stays void when every item is void', () => {
-    const empty = sum<RootContainer<Mass<'CO2'>>>([]);
-    const result = sum([empty, empty]);
-    expect(isVoid(result.unit)).toBe(true);
+  it('takes the fallback unit when every item is void', () => {
+    const empty = voidMass<'CO2'>();
+    const result = sum([empty, empty], zeroCO2);
+    expect(result.unit).toMatchObject({ __unitType: 'Mass', substance: 'CO2' });
     expect(result.unit.store.toNumber()).toBe(0);
   });
 
   it('takes the unit from a later item when the first item is a plain number', () => {
-    const result = sum([root(realNumber(0)), root(mass('CH4', 4))]);
+    const result = sum([root(realNumber(0)), root(mass('CH4', 4))], zeroCH4);
     expect(result.unit).toMatchObject({ __unitType: 'Mass', substance: 'CH4' });
     expect(result.unit.store.toNumber()).toBe(4);
   });
@@ -87,10 +95,10 @@ describe('sum', () => {
       .spyOn(console, 'error')
       .mockImplementation(() => {});
     try {
-      const result = sum<RootContainer<Mass<'CO2'> | Area>>([
-        root(mass('CO2', 1)),
-        root(area(2)),
-      ]);
+      const result = sum<RootContainer<Mass<'CO2'> | Area>>(
+        [root(mass('CO2', 1)), root(area(2))],
+        zeroCO2,
+      );
       expect(consoleError).toHaveBeenCalledWith(
         expect.stringContaining('add does not support'),
       );

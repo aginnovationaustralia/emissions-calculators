@@ -9,7 +9,14 @@ import { selectConstant } from '@/tools/constants';
 import { br, Container, max, min, num, root } from '@/tools/containers';
 import { InputContainer } from '@/tools/inputs';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { e, zero, zeroN } from '@/tools/sentinels';
+import {
+  e,
+  zero,
+  zeroCO2,
+  zeroMassPerMassNInorganicFertiliser,
+  zeroMassPerMassUreaInorganicFertiliser,
+  zeroN,
+} from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { selectSwitch } from '@/tools/switch';
 import {
@@ -90,7 +97,7 @@ const getNitrogenFraction = (
      * an empty array as "not at all" here.
      */
     if (nitrogenInComponents.length > 0) {
-      return sum(nitrogenInComponents)
+      return sum(nitrogenInComponents, zeroMassPerMassNInorganicFertiliser)
         .switchUnit((r) => massPerMass('N', 'Inorganic Fertiliser', r.store))
         .named('FNinorganic,f (custom components)');
     }
@@ -139,7 +146,10 @@ function getUreaFraction(
      * an empty array as "not at all" here.
      */
     if (ureaInComponents.length > 0) {
-      return sum(ureaInComponents).named('FUf (custom components)');
+      return sum(
+        ureaInComponents,
+        zeroMassPerMassUreaInorganicFertiliser,
+      ).named('FUf (custom components)');
     }
   }
 
@@ -169,15 +179,15 @@ const calculateInorganicFertiliserN2OMethod1 = (
   ).switchUnit((value) => massPerMass('N2O', 'N', value.store));
   const CN2O = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_N2O');
 
-  const totalNitrogen = sum([
-    zeroN,
-    ...fertiliser.inorganic.applications.map((application) =>
+  const totalNitrogen = sum(
+    fertiliser.inorganic.applications.map((application) =>
       application.massAppliedKg
         .multiply(getNitrogenFraction(application, constants))
         .named(`MNjf`)
         .reference('5.1.1.1 (2)'),
     ),
-  ]);
+    zeroN,
+  );
 
   /**
    * EN2O = SUM[j,f] (MNjf * EFj,N2O * CN2O) * 10^-3
@@ -269,14 +279,14 @@ const calculateInorganicFertiliserN2OMethod2 = (
   constants: ConstantsForFertiliser,
 ) => {
   const { areaAppliedHectares } = fertiliser.inorganic;
-  const totalNitrogenApplied = sum([
-    zeroN,
-    ...fertiliser.inorganic.applications.map((application) =>
+  const totalNitrogenApplied = sum(
+    fertiliser.inorganic.applications.map((application) =>
       application.massAppliedKg.multiply(
         getNitrogenFraction(application, constants),
       ),
     ),
-  ]);
+    zeroN,
+  );
 
   const nitrogenApplicationRate =
     totalNitrogenApplied.divide(areaAppliedHectares);
@@ -352,7 +362,7 @@ export const calculateInorganicFertiliserCO2 = (
     return mujf.multiply(efUreaCO2).multiply(cgCO2);
   });
 
-  return sum(emissionRecords, {
+  return sum(emissionRecords, zeroCO2, {
     name: 'ECO2',
     references: [`5.1.1.3 (1)`],
   });

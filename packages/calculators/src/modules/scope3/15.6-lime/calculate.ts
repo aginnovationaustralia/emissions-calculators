@@ -1,7 +1,7 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { selectConstant } from '@/tools/constants';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { oneMinus } from '@/tools/sentinels';
+import { oneMinus, zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { HasLimeInputTransformed } from '../../scope1/5-fertiliser/lime.input';
 
@@ -66,7 +66,7 @@ export const calculateScope3SoilAmeliorants = (
       .reference('15.6.1.1 (1)');
   });
 
-  return sum(emissionRecords, {
+  return sum(emissionRecords, zeroCO2e, {
     name: 'E',
   });
 };

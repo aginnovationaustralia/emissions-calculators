@@ -1,6 +1,6 @@
+import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { OtherPurchasedGoodsAndServicesInputTransformed } from './input';
-import { zeroCO2e } from '@/tools/sentinels';
 
 export function calculateOtherPurchasedGoodsAndServicesEmissions(
   input: OtherPurchasedGoodsAndServicesInputTransformed,
@@ -15,5 +15,5 @@ export function calculateOtherPurchasedGoodsAndServicesEmissions(
     item.quantity.multiply(item.emissionsFactor),
   );
   // Guarantees preservation of the unit (i.e. no 'void' unit)
-  return sum([zeroCO2e, ...emissions]);
+  return sum(emissions, zeroCO2e);
 }

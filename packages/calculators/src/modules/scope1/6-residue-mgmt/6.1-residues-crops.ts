@@ -3,7 +3,7 @@ import { HasClimateZoneInputTransformed } from '@/calculators/types/has-climate-
 import { HasStateInputTransformed } from '@/calculators/types/has-state.input';
 import { selectConstant } from '@/tools/constants';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { one, zero, zeroN2O } from '@/tools/sentinels';
+import { one, zero, zeroN, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { ConstantsForResidueManagement, HasCropConstants } from './constants';
 import {
@@ -89,7 +89,7 @@ export const calculateMassNCropAppliedToSoil = (
     .multiply(dmc)
     .multiply(ncbgc);
 
-  const mc = sum([aboveGroundNitrogen, belowGroundNitrogen], {
+  const mc = sum([aboveGroundNitrogen, belowGroundNitrogen], zeroN, {
     name: 'Mc',
     references: ['6.1.1.1 (2)'],
   });

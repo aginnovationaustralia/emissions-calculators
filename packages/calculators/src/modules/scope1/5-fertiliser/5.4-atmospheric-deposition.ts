@@ -4,6 +4,7 @@ import { convertToBasicProductionSystem } from '@/constants/translations';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
+import { zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { ConstantsForManureManagement } from '../4-manure-management/constants';
@@ -100,7 +101,7 @@ export const calculateInorganicFertiliserAtmosphericDepositionN2O = (
     return mVolInorganic.multiply(efN2Oj).multiply(cn2o);
   });
 
-  return sum(emissionRecords, {
+  return sum(emissionRecords, zeroN2O, {
     name: 'E ad,inorganic',
     references: [`5.4.1.1 (1)`],
   });
@@ -139,7 +140,7 @@ export const calculateOrganicFertiliserAtmosphericDepositionN2O = (
       constants,
     );
   });
-  return sum(emissionRecords, {
+  return sum(emissionRecords, zeroN2O, {
     name: 'E ad,organic',
     references: [`5.4.1.3 (1)`],
   });

@@ -30,7 +30,7 @@ import { selectConstant } from '@/tools/constants';
 import { Container, num } from '@/tools/containers';
 import { exposeMassValue, extractMassAsNumber } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
-import { oneMinus } from '@/tools/sentinels';
+import { oneMinus, zeroMassDryMatter } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
@@ -138,12 +138,15 @@ function getTotalIntensities(
   const { constants } = context;
   const cottonHarvested = sum(
     crops.map((crop) => getCottonHarvestedForCrop(crop, constants)),
+    zeroMassDryMatter,
   );
   const cottonLintHarvested = sum(
     crops.map((crop) => getCottonLintHarvestedForCrop(crop, constants)),
+    zeroMassDryMatter,
   );
   const cottonSeedHarvested = sum(
     crops.map((crop) => getCottonSeedHarvestedForCrop(crop, constants)),
+    zeroMassDryMatter,
   );
 
   const netEmissionsExcludingLulucf = netTotalEmissions.minus(netLulucf);

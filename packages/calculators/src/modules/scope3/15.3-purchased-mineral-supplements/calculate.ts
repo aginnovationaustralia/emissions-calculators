@@ -2,6 +2,7 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { captureMethod1Or2Value } from '@/tools/multi';
+import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { voidUnit } from '@/tools/units';
 import {
@@ -48,5 +49,5 @@ export const calculatePurchasedMineralSupplements = (
     },
   );
 
-  return sum(mineralEmissions);
+  return sum(mineralEmissions, zeroCO2e);
 };

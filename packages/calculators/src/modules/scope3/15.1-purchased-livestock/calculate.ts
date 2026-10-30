@@ -3,6 +3,7 @@ import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
 import { captureMethod1Or2Value } from '@/tools/multi';
+import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { selectSwitch } from '@/tools/switch';
 import { Liveweight, MassPerMass, voidUnit } from '@/tools/units';
@@ -209,5 +210,5 @@ export const calculatePurchasedLivestockEmissions = (
       .multiply(p.headPurchased.multiply(liveweight))
       .reference('15.1.1.1 (1)');
   });
-  return sum(purchaseEmissions).named('E');
+  return sum(purchaseEmissions, zeroCO2e).named('E');
 };

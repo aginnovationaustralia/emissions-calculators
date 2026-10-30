@@ -55,7 +55,7 @@ import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculatePurchasedPackaging } from '@/modules/scope3/15.8-purchased-packaging';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
-import { NumberContainer } from '@/tools/containers';
+import { Container, NumberContainer } from '@/tools/containers';
 import {
   buildCalculatorLedger,
   exposeTonnesCO2e,
@@ -63,7 +63,7 @@ import {
   sumCO2e,
 } from '@/tools/ledger';
 import { zeroCH4, zeroCO2, zeroCO2e, zeroN2O } from '@/tools/sentinels';
-import { sum } from '@/tools/sum';
+import { ExtractOriginUnit, sum } from '@/tools/sum';
 import { NumberUnit } from '@/tools/units';
 import { ExecutionContext } from '../executionContext';
 import { Scope2Output } from '../types/scope2.output';
@@ -73,17 +73,14 @@ import { AllModulesScope3Output } from './types/scope3.output';
 
 // Adds up one module's results across the activities that were supplied. A single result
 // is passed through unchanged, and if none were supplied the zero sentinel is returned.
-const addSupplied = <
-  C extends NumberContainer<NumberUnit>,
-  Z extends NumberContainer<NumberUnit>,
->(
+const addSupplied = <C extends NumberContainer<NumberUnit>>(
   results: (C | undefined)[],
-  zero: Z,
+  zero: Container<ExtractOriginUnit<C>>,
 ) => {
   const supplied = results.filter(
     (result): result is C => result !== undefined,
   );
-  return supplied.length > 1 ? sum(supplied) : (supplied[0] ?? zero);
+  return supplied.length > 1 ? sum(supplied, zero) : (supplied[0] ?? zero);
 };
 
 // Every top-level key of AllModulesInputTransformed is optional (see types/input.ts), so

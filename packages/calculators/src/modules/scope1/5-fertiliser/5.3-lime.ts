@@ -1,6 +1,6 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { selectConstant } from '@/tools/constants';
-import { oneMinus } from '@/tools/sentinels';
+import { oneMinus, zeroMassCarbon, zeroMassLime } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { limeApplicationIsNotGypsum } from './lime-application.input';
 import { HasLimeInputTransformed } from './lime.input';
@@ -30,11 +30,13 @@ const calculateLimeCO2 = (
 
   const hasCountableLime = applications.filter(limeApplicationIsNotGypsum);
 
-  const mlime = sum(hasCountableLime.map((a) => a.massAppliedKg)).named(
-    'Mlime',
-  );
+  const mlime = sum(
+    hasCountableLime.map((a) => a.massAppliedKg),
+    zeroMassLime,
+  ).named('Mlime');
   const totalLimestone = sum(
     hasCountableLime.map((a) => a.massAppliedKg.multiply(a.limestoneFraction)),
+    zeroMassLime,
   ).named('Total Limestone');
 
   const fracLime = totalLimestone.divide(mlime).named('FracLime');
@@ -49,7 +51,7 @@ const calculateLimeCO2 = (
     .multiply(oneMinus(fracLime))
     .multiply(pdol)
     .multiply(efDol);
-  const elime = sum([limePart, dolomitePart]).multiply(cco2, {
+  const elime = sum([limePart, dolomitePart], zeroMassCarbon).multiply(cco2, {
     name: 'E Lime',
     references: [`5.3.1.1 (1)`],
   });

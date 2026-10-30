@@ -2,6 +2,7 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForRiceCalculator } from '@/calculators/Rice/constants';
 import { selectConstant } from '@/tools/constants';
 import { num } from '@/tools/containers';
+import { zero } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { HasRiceCultivationInputTransformed } from './rice-cultivation.input';
 
@@ -42,17 +43,20 @@ const calculateSpecificRiceCultivationEmissionsFactor = (
    */
   const cumulativeOrganicAmendmentsScalingFactor = !organicAmendments
     ? num(1)
-    : sum([
-        num(0.1),
-        ...organicAmendments.map((amendment) => {
-          const conversionFactor = selectConstant(
-            constants.RICE,
-            'ORGANIC_AMENDMENT_SCALING_FACTORS',
-            amendment.type,
-          );
-          return amendment.rateOfApplication.multiply(conversionFactor);
-        }),
-      ])
+    : sum(
+        [
+          num(0.1),
+          ...organicAmendments.map((amendment) => {
+            const conversionFactor = selectConstant(
+              constants.RICE,
+              'ORGANIC_AMENDMENT_SCALING_FACTORS',
+              amendment.type,
+            );
+            return amendment.rateOfApplication.multiply(conversionFactor);
+          }),
+        ],
+        zero,
+      )
         .multiply(num(10))
         .power(num(0.59))
         .named('SFo')

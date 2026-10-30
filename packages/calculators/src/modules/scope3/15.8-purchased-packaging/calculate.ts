@@ -2,6 +2,7 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { HasCommonConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { captureMethod1Or2Value } from '@/tools/multi';
+import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { voidUnit } from '@/tools/units';
 import { isPurchasedPackagingByUnits } from './base-purchased-packaging.input';
@@ -98,5 +99,5 @@ export const calculatePurchasedPackaging = (
       : getEmissionsByMass(packaging, constants);
   });
 
-  return sum(packagingEmissions);
+  return sum(packagingEmissions, zeroCO2e);
 };

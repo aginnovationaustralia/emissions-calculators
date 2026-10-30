@@ -1,7 +1,7 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { DairyMMSTypeWithPasture } from '@/constants/enums';
 import { Container, num } from '@/tools/containers';
-import { zeroN } from '@/tools/sentinels';
+import { zeroCH4, zeroN, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { RealNumber } from '@/tools/units';
 import { calculateMilkProduction } from '../../shared/dairy/calculate';
@@ -63,7 +63,7 @@ export function calculateDairyManureCH4ForHerd(
     ),
   );
 
-  return sum(classEmissions).named('ECH4');
+  return sum(classEmissions, zeroCH4).named('ECH4');
 }
 
 /**
@@ -96,7 +96,7 @@ export function calculateDirectN2OEmissionsForDairyHerd(
     ),
   );
 
-  return sum(classEmissions).named('EN2O,dir');
+  return sum(classEmissions, zeroN2O).named('EN2O,dir');
 }
 
 /**
@@ -129,7 +129,7 @@ export function calculateAtmosphericDepositionN2OEmissionsForDairyHerd(
     ),
   );
 
-  return sum(classEmissions).named('EN2O,ad');
+  return sum(classEmissions, zeroN2O).named('EN2O,ad');
 }
 
 /**
@@ -162,7 +162,7 @@ export function calculateLeachingAndRunoffN2OEmissionsForDairyHerd(
     ),
   );
 
-  return sum(classEmissions).named('EN2O,leach');
+  return sum(classEmissions, zeroN2O).named('EN2O,leach');
 }
 
 /**
@@ -193,6 +193,7 @@ export function calculateMassOfNitrogenAppliedToSoilsForDairyHerd(
         constants,
       ),
     ),
+    zeroN,
   )
     .multiply(herd.fractionAppliedToSoils)
     .reference('4.3.1.8 (1)');
@@ -210,6 +211,7 @@ export function calculateMassOfNitrogenAppliedToSoilsForDairy(
         manureInput.herds.map((herd) =>
           calculateMassOfNitrogenAppliedToSoilsForDairyHerd(herd, constants),
         ),
+        zeroN,
       );
 }
 

@@ -5,6 +5,7 @@ import { output, scope1Output } from './outputs';
 import { sum } from './sum';
 import { addScope1Totals, addScope23Totals } from './totals';
 import { mass } from './units';
+import { zeroCO2e } from './sentinels';
 
 // These functions build the `total`/`totalCO2`/`totalCH4`/`totalN2O` figures every calculator
 // reports, and decide which of `amountGasKgMethod1`/`amountGasKgMethod2` is exposed under each key. A bug
@@ -102,11 +103,14 @@ describe('addScope23Totals', () => {
   });
 
   // Mirrors scope 3 fuel/services, which add a transport sum to a stationary sum. When only one
-  // of those fuel lists is empty, its `sum([])` is void, and adding it to a Mass must keep the
-  // Mass's gas, otherwise `gas` is undefined and dropped from the JSON response.
+  // of those fuel lists is empty, adding its empty sum to a Mass must keep the Mass's gas,
+  // otherwise `gas` is undefined and dropped from the JSON response.
   describe('with a non-empty sum added to an empty sum', () => {
-    const transport = sum([root(mass('CO2e', 600)), root(mass('CO2e', 67.78))]);
-    const stationary = sum<typeof transport>([]);
+    const transport = sum(
+      [root(mass('CO2e', 600)), root(mass('CO2e', 67.78))],
+      zeroCO2e,
+    );
+    const stationary = sum<typeof transport>([], zeroCO2e);
 
     it.each([
       ['transport only', () => transport.plus(stationary)],
