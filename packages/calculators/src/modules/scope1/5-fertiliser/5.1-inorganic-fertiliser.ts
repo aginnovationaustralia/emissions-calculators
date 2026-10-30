@@ -97,9 +97,10 @@ const getNitrogenFraction = (
      * an empty array as "not at all" here.
      */
     if (nitrogenInComponents.length > 0) {
-      return sum(nitrogenInComponents, zeroMassPerMassNInorganicFertiliser)
-        .switchUnit((r) => massPerMass('N', 'Inorganic Fertiliser', r.store))
-        .named('FNinorganic,f (custom components)');
+      return sum(
+        nitrogenInComponents,
+        zeroMassPerMassNInorganicFertiliser,
+      ).named('FNinorganic,f (custom components)');
     }
   } else if (inorganicFertiliser.customNitrogenFraction !== undefined) {
     return inorganicFertiliser.customNitrogenFraction;

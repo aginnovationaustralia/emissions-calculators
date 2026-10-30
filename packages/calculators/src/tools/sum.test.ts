@@ -1,6 +1,6 @@
 import { RootContainer, root } from './containers';
 import { input } from './inputs';
-import { zeroCH4, zeroCO2, zeroN2O } from './sentinels';
+import { zero, zeroCH4, zeroCO2, zeroN2O } from './sentinels';
 import { sum } from './sum';
 import {
   Area,
@@ -16,7 +16,7 @@ import {
 // unit-inference for the empty-array case, and its choice of unit across the items, are easy to
 // get subtly wrong.
 
-// A void item, e.g. a method-2-only value with no method 1 track, typed as the Mass it stands in for
+// A void item, which the calculators no longer produce, typed as the Mass it stands in for
 const voidMass = <S extends Substance>() =>
   root(voidUnit()) as unknown as RootContainer<Mass<S>>;
 
@@ -84,10 +84,29 @@ describe('sum', () => {
     expect(result.unit.store.toNumber()).toBe(0);
   });
 
+  it('keeps the fallback unit out of a sum of plain numbers', () => {
+    const result = sum([root(realNumber(1)), root(realNumber(2))], zero);
+    expect(result.unit.__unitType).toBe('RealNumber');
+    expect(result.unit.store.toNumber()).toBe(3);
+  });
+
+  // The tests below sum mixed units, which the types reject, to pin down what happens at runtime
+  // if a mix gets through anyway, e.g. via a cast
+
   it('takes the unit from a later item when the first item is a plain number', () => {
+    // @ts-expect-error: mixed units
     const result = sum([root(realNumber(0)), root(mass('CH4', 4))], zeroCH4);
     expect(result.unit).toMatchObject({ __unitType: 'Mass', substance: 'CH4' });
     expect(result.unit.store.toNumber()).toBe(4);
+  });
+
+  it('takes the substance of the first item', () => {
+    const result = sum<RootContainer<Mass<'CO2'> | Mass<'CH4'>>>(
+      [root(mass('CO2', 1)), root(mass('CH4', 2))],
+      // @ts-expect-error: mixed units
+      zeroCH4,
+    );
+    expect(result.unit.substance).toBe('CO2');
   });
 
   it('reports mismatched units the same way `plus` does', () => {
@@ -97,6 +116,7 @@ describe('sum', () => {
     try {
       const result = sum<RootContainer<Mass<'CO2'> | Area>>(
         [root(mass('CO2', 1)), root(area(2))],
+        // @ts-expect-error: mixed units
         zeroCO2,
       );
       expect(consoleError).toHaveBeenCalledWith(

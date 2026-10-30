@@ -2,7 +2,8 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { ConstantsForRiceCalculator } from '@/calculators/Rice/constants';
 import { selectConstant } from '@/tools/constants';
 import { num } from '@/tools/containers';
-import { zero } from '@/tools/sentinels';
+import { zeroMassPerAreaOrganicAmendment } from '@/tools/sentinels';
+import { realNumber } from '@/tools/units';
 import { sum } from '@/tools/sum';
 import { HasRiceCultivationInputTransformed } from './rice-cultivation.input';
 
@@ -36,27 +37,25 @@ const calculateSpecificRiceCultivationEmissionsFactor = (
    * expected unit of our `MassPerArea` type, we can factorise the 10 out (which means
    * that we add everything to 0.1, NOT 1.)
    *
-   * The result of the sum *shouldn't* be considered a `MassPerArea`. As a shortcut, we
-   * can tell the code that the result of the sum is a `RealNumber` unit by making
-   * the first element of the array a `RealNumber`. Once we raise it to the power,
-   * Typescript will know it's a real (dimensionless) number.
+   * The result of the sum *shouldn't* be considered a `MassPerArea`, so it is switched to a
+   * `RealNumber` before being added to 0.1, and the result is a real (dimensionless) number.
    */
   const cumulativeOrganicAmendmentsScalingFactor = !organicAmendments
     ? num(1)
-    : sum(
-        [
-          num(0.1),
-          ...organicAmendments.map((amendment) => {
-            const conversionFactor = selectConstant(
-              constants.RICE,
-              'ORGANIC_AMENDMENT_SCALING_FACTORS',
-              amendment.type,
-            );
-            return amendment.rateOfApplication.multiply(conversionFactor);
-          }),
-        ],
-        zero,
-      )
+    : num(0.1)
+        .plus(
+          sum(
+            organicAmendments.map((amendment) => {
+              const conversionFactor = selectConstant(
+                constants.RICE,
+                'ORGANIC_AMENDMENT_SCALING_FACTORS',
+                amendment.type,
+              );
+              return amendment.rateOfApplication.multiply(conversionFactor);
+            }),
+            zeroMassPerAreaOrganicAmendment,
+          ).switchUnit((r) => realNumber(r.store)),
+        )
         .multiply(num(10))
         .power(num(0.59))
         .named('SFo')

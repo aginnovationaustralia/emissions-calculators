@@ -1,3 +1,4 @@
+import { isDefined } from '@/common/filters';
 import { AllConstants } from '@/constants/types';
 import { calculateLULUCF } from '@/modules/lulucf/calculate';
 import { LULUCFOutput } from '@/modules/lulucf/output';
@@ -55,7 +56,6 @@ import { calculateScope3Services } from '@/modules/scope3/15.7-services';
 import { calculatePurchasedPackaging } from '@/modules/scope3/15.8-purchased-packaging';
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
-import { Container, NumberContainer } from '@/tools/containers';
 import {
   buildCalculatorLedger,
   exposeTonnesCO2e,
@@ -63,25 +63,12 @@ import {
   sumCO2e,
 } from '@/tools/ledger';
 import { zeroCH4, zeroCO2, zeroCO2e, zeroN2O } from '@/tools/sentinels';
-import { ExtractOriginUnit, sum } from '@/tools/sum';
-import { NumberUnit } from '@/tools/units';
+import { sum } from '@/tools/sum';
 import { ExecutionContext } from '../executionContext';
 import { Scope2Output } from '../types/scope2.output';
 import { AllModulesInputTransformed } from './types/input';
 import { AllModulesScope1Output } from './types/scope1.output';
 import { AllModulesScope3Output } from './types/scope3.output';
-
-// Adds up one module's results across the activities that were supplied. A single result
-// is passed through unchanged, and if none were supplied the zero sentinel is returned.
-const addSupplied = <C extends NumberContainer<NumberUnit>>(
-  results: (C | undefined)[],
-  zero: Container<ExtractOriginUnit<C>>,
-) => {
-  const supplied = results.filter(
-    (result): result is C => result !== undefined,
-  );
-  return supplied.length > 1 ? sum(supplied, zero) : (supplied[0] ?? zero);
-};
 
 // Every top-level key of AllModulesInputTransformed is optional (see types/input.ts), so
 // that callers only need to supply the activities relevant to them. Rather than default
@@ -244,11 +231,11 @@ const calculateScope1AllModules = (
   // calculator.
   const { rice } = input;
   // 6.1 Return of crop residues to soils
-  const cropResidueN2O = addSupplied(
+  const cropResidueN2O = sum(
     [
       input.crop && calculate61CropResidueN2O(input.crop, context),
       rice && calculate61CropResidueN2O(rice, context),
-    ],
+    ].filter(isDefined),
     zeroN2O,
   );
   // 6.2 Return of pasture residues to soils
@@ -256,25 +243,31 @@ const calculateScope1AllModules = (
     ? calculate62PastureResidueN2O(input.pasture, context)
     : zeroN2O;
   // 6.3 Residue leaching and run-off from crop and pasture residues
-  const residueLeachingAndRunoffN2O = addSupplied(
+  const residueLeachingAndRunoffN2O = sum(
     [
       input.pasture &&
         calculate63ResidueLeachingAndRunoffN2O(input.pasture, context),
       input.crop && calculate63ResidueLeachingAndRunoffN2O(input.crop, context),
       rice && calculate63ResidueLeachingAndRunoffN2O(rice, context),
-    ],
+    ].filter(isDefined),
     zeroN2O,
   );
   // 6.4 Field burning of crop residues
   const cropFieldBurning =
     input.crop && calculate64FieldBurning(input.crop, context);
   const riceFieldBurning = rice && calculate64FieldBurning(rice, context);
-  const fieldBurningN2O = addSupplied(
-    [cropFieldBurning?.fieldBurningN2O, riceFieldBurning?.fieldBurningN2O],
+  const fieldBurningN2O = sum(
+    [
+      cropFieldBurning?.fieldBurningN2O,
+      riceFieldBurning?.fieldBurningN2O,
+    ].filter(isDefined),
     zeroN2O,
   );
-  const fieldBurningCH4 = addSupplied(
-    [cropFieldBurning?.fieldBurningCH4, riceFieldBurning?.fieldBurningCH4],
+  const fieldBurningCH4 = sum(
+    [
+      cropFieldBurning?.fieldBurningCH4,
+      riceFieldBurning?.fieldBurningCH4,
+    ].filter(isDefined),
     zeroCH4,
   );
 

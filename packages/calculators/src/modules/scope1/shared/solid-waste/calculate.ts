@@ -8,8 +8,6 @@ import { Mass } from '@/tools/units';
 import { SolidWasteSpecificScope1Method2InputTransformed } from '../../10-solid-waste/solid-waste-method2.input';
 import { isMassBasedAmount } from '../../10-solid-waste/solid-waste-units.input';
 
-export const zeroSolidWaste = zeroMassSolidWaste;
-
 /**
  * Helper for getting total mass of some specific waste input
  */
@@ -52,7 +50,5 @@ export const getTotalMassInWasteTreatmentFacility = (
   const massPerItem = (wasteItems ?? []).map((waste) =>
     wasteAmountAsMass(waste, constants).named(`Q (${waste.facilityType.unit})`),
   );
-  return massPerItem.length === 0
-    ? zeroSolidWaste
-    : sum(massPerItem, zeroMassSolidWaste);
+  return sum(massPerItem, zeroMassSolidWaste);
 };

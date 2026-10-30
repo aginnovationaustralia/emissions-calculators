@@ -7,13 +7,18 @@ import { HasCommonConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { oneMinus, zeroCH4, zeroCO2, zeroN2O } from '@/tools/sentinels';
+import {
+  oneMinus,
+  zeroCH4,
+  zeroCO2,
+  zeroMassSolidWaste,
+  zeroN2O,
+} from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import {
   getTotalMassInWasteTreatmentFacility,
   wasteAmountAsMass,
-  zeroSolidWaste,
 } from '../shared/solid-waste/calculate';
 import { HasSolidWasteInputTransformed } from '../shared/solid-waste/input';
 import { SolidWasteMethod2InputTransformed } from './solid-waste-method2.input';
@@ -73,7 +78,7 @@ const calculateSolidWasteBiologicalTreatmentEmissions = (
       const wasteAmount = (
         solidWasteScope1InputSchemaIsMethod1(input)
           ? (input[treatmentTypeToKeyName[treatmentType]] ??
-            captureMethod1Or2Value(zeroSolidWaste, undefined))
+            captureMethod1Or2Value(zeroMassSolidWaste, undefined))
           : getTotalMassInWasteTreatmentFacility(
               input[treatmentTypeToKeyName[treatmentType]],
               constants,
@@ -112,7 +117,7 @@ const calculateSolidWasteIncinerationEmissionsMethod1 = (
     (solidWasteScope1InputSchemaIsMethod1(input)
       ? input.incineration
       : getTotalMassInWasteTreatmentFacility(input.incineration, constants)) ??
-    zeroSolidWaste
+    zeroMassSolidWaste
   ).named(`Qburn`);
 
   const burnEF = selectConstant(
@@ -209,9 +214,7 @@ const calculateSolidWasteIncinerationEmissionsMethod2 = (
 
   return captureMethod1Or2Value(
     calculateSolidWasteIncinerationEmissionsMethod1(input, constants),
-    incinerationEmissions.length === 0
-      ? zeroCO2
-      : sum(incinerationEmissions, zeroCO2).named(`ECO2`),
+    sum(incinerationEmissions, zeroCO2).named(`ECO2`),
   );
 };
 
@@ -242,7 +245,7 @@ const calculateUnmanagedSolidWasteEmissionsMethod1 = (
           : getTotalMassInWasteTreatmentFacility(
               input[treatmentTypeToKeyName[treatmentType]],
               constants,
-            )) ?? zeroSolidWaste
+            )) ?? zeroMassSolidWaste
       ).named(`Qu (${treatmentType})`);
 
       const EFCH4 = selectConstant(
@@ -342,9 +345,7 @@ const calculateUnmanagedSolidWasteEmissionsMethod2 = (
           .reference('10.1.8 (1)');
       });
 
-      return emissionsPerWasteType.length === 0
-        ? zeroCH4
-        : sum(emissionsPerWasteType, zeroCH4);
+      return sum(emissionsPerWasteType, zeroCH4);
     });
 
   const unmanagedEmissions = sum(

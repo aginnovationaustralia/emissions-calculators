@@ -76,8 +76,8 @@ export type Output<
 > = OutputMethod1<Scope, S> | OutputMethod2<Scope, S>;
 
 /**
- * The gas an output reports. A void unit (e.g. from a method-2-only value) has no gas of its own,
- * so it is reported as zero CO2. Anything other than a Mass or void means an upstream operation
+ * The gas an output reports. A void unit has no gas of its own, so it is reported as zero CO2.
+ * Nothing in the calculators produces void now that `sum` takes a fallback, so this is defensive. Anything other than a Mass or void means an upstream operation
  * produced a unit its type does not admit, which would otherwise surface as a missing `gas` key.
  */
 const gasOf = <S extends 'CO2' | 'CH4' | 'N2O' | 'CO2e'>(

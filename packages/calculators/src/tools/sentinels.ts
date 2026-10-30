@@ -7,11 +7,13 @@ import {
   energy,
   mass,
   Mass,
+  massPerArea,
   massPerHeadPerDay,
   massPerMass,
   massPerYear,
   RealNumber,
   realNumber,
+  Substance,
   years,
 } from './units';
 
@@ -45,107 +47,65 @@ export const zeroN = root(mass('N', new Decimal(0)), {
   name: 'zeroN',
 });
 
-export const zeroMassCarbon = root(mass('Carbon', new Decimal(0)), {
-  name: 'zeroMassCarbon',
-});
+// Zeros named after their unit and substance, e.g. `zeroMassFish`, for use as `sum` fallbacks
+const nameOf = (substance: Substance) => substance.replace(/ /g, '');
+const zeroMass = <S extends Substance>(substance: S) =>
+  root(mass(substance, 0), { name: `zeroMass${nameOf(substance)}` });
+const zeroMassPerMass = <SNum extends Substance, SDenom extends Substance>(
+  snum: SNum,
+  sdenom: SDenom,
+) =>
+  root(massPerMass(snum, sdenom, 0), {
+    name: `zeroMassPerMass${nameOf(snum)}${nameOf(sdenom)}`,
+  });
+const zeroMassPerHeadPerDay = <S extends Substance>(substance: S) =>
+  root(massPerHeadPerDay(substance, 0), {
+    name: `zeroMassPerHeadPerDay${nameOf(substance)}`,
+  });
+const zeroMassPerArea = <S extends Substance>(substance: S) =>
+  root(massPerArea(substance, 0), {
+    name: `zeroMassPerArea${nameOf(substance)}`,
+  });
+const zeroMassPerYear = <S extends Substance>(substance: S) =>
+  root(massPerYear(substance, 0), {
+    name: `zeroMassPerYear${nameOf(substance)}`,
+  });
 
-export const zeroMassCleanWool = root(mass('Clean Wool', new Decimal(0)), {
-  name: 'zeroMassCleanWool',
-});
+export const zeroMassCarbon = zeroMass('Carbon');
+export const zeroMassCleanWool = zeroMass('Clean Wool');
+export const zeroMassDryMatter = zeroMass('DryMatter');
+export const zeroMassEggs = zeroMass('Eggs');
+export const zeroMassFish = zeroMass('Fish');
+export const zeroMassLime = zeroMass('Lime');
+export const zeroMassLiveweight = zeroMass('Liveweight');
+export const zeroMassMilk = zeroMass('Milk');
+export const zeroMassSolidWaste = zeroMass('Solid Waste');
+export const zeroMassVolatilisedN = zeroMass('Volatilised N');
 
-export const zeroMassDryMatter = root(mass('DryMatter', new Decimal(0)), {
-  name: 'zeroMassDryMatter',
-});
-
-export const zeroMassEggs = root(mass('Eggs', new Decimal(0)), {
-  name: 'zeroMassEggs',
-});
-
-export const zeroMassFish = root(mass('Fish', new Decimal(0)), {
-  name: 'zeroMassFish',
-});
-
-export const zeroMassLime = root(mass('Lime', new Decimal(0)), {
-  name: 'zeroMassLime',
-});
-
-export const zeroMassLiveweight = root(mass('Liveweight', new Decimal(0)), {
-  name: 'zeroMassLiveweight',
-});
-
-export const zeroMassMilk = root(mass('Milk', new Decimal(0)), {
-  name: 'zeroMassMilk',
-});
-
-export const zeroMassSolidWaste = root(mass('Solid Waste', new Decimal(0)), {
-  name: 'zeroMassSolidWaste',
-});
-
-export const zeroMassVolatilisedN = root(
-  mass('Volatilised N', new Decimal(0)),
-  {
-    name: 'zeroMassVolatilisedN',
-  },
+export const zeroMassPerMassNInorganicFertiliser = zeroMassPerMass(
+  'N',
+  'Inorganic Fertiliser',
+);
+export const zeroMassPerMassUreaInorganicFertiliser = zeroMassPerMass(
+  'Urea',
+  'Inorganic Fertiliser',
 );
 
-export const zeroMassPerMassNInorganicFertiliser = root(
-  massPerMass('N', 'Inorganic Fertiliser', new Decimal(0)),
-  {
-    name: 'zeroMassPerMassNInorganicFertiliser',
-  },
-);
+export const zeroMassPerHeadPerDayCH4 = zeroMassPerHeadPerDay('CH4');
+export const zeroMassPerHeadPerDayDryMatter =
+  zeroMassPerHeadPerDay('DryMatter');
+export const zeroMassPerHeadPerDayMilk = zeroMassPerHeadPerDay('Milk');
+export const zeroMassPerHeadPerDayN = zeroMassPerHeadPerDay('N');
+export const zeroMassPerHeadPerDayVolatileSolids =
+  zeroMassPerHeadPerDay('Volatile Solids');
 
-export const zeroMassPerMassUreaInorganicFertiliser = root(
-  massPerMass('Urea', 'Inorganic Fertiliser', new Decimal(0)),
-  {
-    name: 'zeroMassPerMassUreaInorganicFertiliser',
-  },
-);
+export const zeroMassPerAreaOrganicAmendment =
+  zeroMassPerArea('Organic Amendment');
 
-export const zeroMassPerHeadPerDayCH4 = root(
-  massPerHeadPerDay('CH4', new Decimal(0)),
-  {
-    name: 'zeroMassPerHeadPerDayCH4',
-  },
-);
+export const zeroMassPerYearCO2 = zeroMassPerYear('CO2');
 
-export const zeroMassPerHeadPerDayDryMatter = root(
-  massPerHeadPerDay('DryMatter', new Decimal(0)),
-  { name: 'zeroMassPerHeadPerDayDryMatter' },
-);
-
-export const zeroMassPerHeadPerDayMilk = root(
-  massPerHeadPerDay('Milk', new Decimal(0)),
-  {
-    name: 'zeroMassPerHeadPerDayMilk',
-  },
-);
-
-export const zeroMassPerHeadPerDayN = root(
-  massPerHeadPerDay('N', new Decimal(0)),
-  {
-    name: 'zeroMassPerHeadPerDayN',
-  },
-);
-
-export const zeroMassPerHeadPerDayVolatileSolids = root(
-  massPerHeadPerDay('Volatile Solids', new Decimal(0)),
-  {
-    name: 'zeroMassPerHeadPerDayVolatileSolids',
-  },
-);
-
-export const zeroMassPerYearCO2 = root(massPerYear('CO2', new Decimal(0)), {
-  name: 'zeroMassPerYearCO2',
-});
-
-export const zeroEnergy = root(energy(new Decimal(0)), {
-  name: 'zeroEnergy',
-});
-
-export const zeroArea = root(area(new Decimal(0)), {
-  name: 'zeroArea',
-});
+export const zeroEnergy = root(energy(0), { name: 'zeroEnergy' });
+export const zeroArea = root(area(0), { name: 'zeroArea' });
 
 export const oneMinus = (x: TypedContainer<RealNumber>) =>
   num(1).named('one').minus(x);

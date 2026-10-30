@@ -175,7 +175,6 @@ export const calculateScope3SolidWasteEmissions = (
     anaerobicDigestionRecoveryFraction,
   );
 
-  // Because composting/anaerobic will always be a non-void unit, empty arrays don't need separate handling
   return sum(
     [
       compostingEmissions,

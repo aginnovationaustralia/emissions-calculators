@@ -128,8 +128,9 @@ type NamedMetadata = Metadata & {
 
 /**
  * Picks the unit of the result when adding or subtracting two units. Void and RealNumber both
- * adopt the other side's unit: void (e.g. a method-2-only value) must not erase the unit (and e.g.
- * the gas of a Mass) of whatever it is combined with. `sum` uses the same rule.
+ * adopt the other side's unit, so neither erases the unit (and e.g. the gas of a Mass) of whatever
+ * it is combined with. `sum` uses the same rule. Nothing in the calculators produces void now that
+ * `sum` takes a fallback, so its handling here is defensive.
  */
 export const additiveUnit = (
   left: NumberUnit,
