@@ -874,11 +874,10 @@ export class BinaryContainer<U extends AnyUnit> extends BaseContainer<U> {
     this.right = right;
   }
 
-  switchUnit<
-    UN extends (U extends AnyNumberUnit ? U : never),
-    V extends AnyNumberUnit,
-  >(converter: (from: UN) => V): BinaryContainer<V> {
-    const newUnit = converter(this.unit as unknown as UN);
+  switchUnit<V extends AnyNumberUnit>(
+    converter: (from: NoInfer<U>) => V,
+  ): BinaryContainer<V> {
+    const newUnit = converter(this.unit);
     return new BinaryContainer(
       newUnit,
       this.type,
@@ -903,11 +902,10 @@ export class SummedContainer<N extends AnyNumberUnit> extends BaseContainer<N> {
     this.from = from;
   }
 
-  switchUnit<
-    UN extends (N extends AnyNumberUnit ? N : never),
-    V extends AnyNumberUnit,
-  >(converter: (from: UN) => V): SummedContainer<V> {
-    const newUnit = converter(this.unit as unknown as UN);
+  switchUnit<V extends AnyNumberUnit>(
+    converter: (from: NoInfer<N>) => V,
+  ): SummedContainer<V> {
+    const newUnit = converter(this.unit);
     return new SummedContainer(newUnit, this.from, this.core);
   }
 }
@@ -928,11 +926,10 @@ export class ConstantSelectionContainer<
     this.selectors = selectors;
   }
 
-  switchUnit<
-    UN extends (U extends AnyNumberUnit ? U : never),
-    V extends AnyNumberUnit,
-  >(converter: (from: UN) => V): ConstantSelectionContainer<V> {
-    const newUnit = converter(this.unit as unknown as UN);
+  switchUnit<V extends AnyNumberUnit>(
+    converter: (from: NoInfer<U>) => V,
+  ): ConstantSelectionContainer<V> {
+    const newUnit = converter(this.unit);
     return new ConstantSelectionContainer(
       newUnit,
       this.selectors,
@@ -949,11 +946,10 @@ export class RootContainer<U extends AnyUnit> extends BaseContainer<U> {
     this.originType = 'root';
   }
 
-  switchUnit<
-    UN extends (U extends AnyNumberUnit ? U : never),
-    V extends AnyNumberUnit,
-  >(converter: (from: UN) => V): RootContainer<V> {
-    const newUnit = converter(this.unit as unknown as UN);
+  switchUnit<V extends AnyNumberUnit>(
+    converter: (from: NoInfer<U>) => V,
+  ): RootContainer<V> {
+    const newUnit = converter(this.unit);
     return new RootContainer(newUnit, this.core);
   }
 }
@@ -974,11 +970,10 @@ export class BracketedContainer<
     this.inner = inner;
   }
 
-  switchUnit<
-    UN extends (U extends AnyNumberUnit ? U : never),
-    V extends AnyNumberUnit,
-  >(converter: (from: UN) => V): BracketedContainer<V> {
-    const newUnit = converter(this.unit as unknown as UN);
+  switchUnit<V extends AnyNumberUnit>(
+    converter: (from: NoInfer<U>) => V,
+  ): BracketedContainer<V> {
+    const newUnit = converter(this.unit);
     return new BracketedContainer(newUnit, this.inner, this.core);
   }
 }
@@ -999,11 +994,10 @@ export class TranslationContainer<
     this.from = from;
   }
 
-  switchUnit<
-    UN extends (TOut extends AnyNumberUnit ? TOut : never),
-    V extends AnyNumberUnit,
-  >(converter: (from: UN) => V): TranslationContainer<TIn, V> {
-    const newUnit = converter(this.unit as unknown as UN);
+  switchUnit<V extends AnyNumberUnit>(
+    converter: (from: NoInfer<TOut>) => V,
+  ): TranslationContainer<TIn, V> {
+    const newUnit = converter(this.unit);
     return new TranslationContainer(newUnit, this.from, this.core);
   }
 }
@@ -1036,17 +1030,74 @@ export const num = (value: number | Decimal): RootContainer<RealNumber> =>
 
 /**
  * What the shared tools require of an input container. A calculator can supply its own input
- * container class (VEERG's is `InputContainer` in inputs.ts), as long as it extends
- * `BaseContainer` and has an `originType` of `'input'`.
+ * container class (VEERG's is `InputContainer` in inputs.ts): extend `BaseContainer`, set
+ * `originType` to `'input'`, and implement `switchUnit`.
  */
 export interface InputLike<U extends AnyUnit> extends BaseContainer<U> {
   originType: 'input';
+  switchUnit<V extends AnyNumberUnit>(
+    converter: (from: NoInfer<U>) => V,
+  ): InputLike<V>;
 }
 
+/*
+ * The container unions, with the input container as a slot. The shared tools fill the slot with
+ * `InputLike<U>`, so they accept any input container. A calculator can narrow the slot to its own
+ * input container with the `Generic*` types below.
+ */
+type NumberContainerWith<U extends AnyNumberUnit, I> =
+  | BracketedContainer<U>
+  | BinaryContainer<U>
+  | I
+  | RootContainer<U>
+  | Method1And2Container<U>
+  | Method2Container<U>
+  | SummedContainer<U>
+  | ConstantSelectionContainer<U>
+  | SwitchContainer<StringUnit, U>
+  | IfElseContainer<U>
+  | TranslationContainer<StringUnit | AnyNumberUnit | BooleanUnit, U>;
+
+type StringContainerWith<U extends StringUnit, I> =
+  | I
+  | RootContainer<U>
+  | TranslationContainer<StringUnit | AnyNumberUnit | BooleanUnit, U>;
+
+type BooleanContainerWith<U extends BooleanUnit, I> = I | RootContainer<U>;
+
+export type NumberContainer<U extends AnyNumberUnit> = NumberContainerWith<
+  U,
+  InputLike<U>
+>;
+
+export type StringContainer<U extends StringUnit> = StringContainerWith<
+  U,
+  InputLike<U>
+>;
+
+export type BooleanContainer<U extends BooleanUnit = BooleanUnit> =
+  BooleanContainerWith<U, InputLike<U>>;
+
+export type TypedContainer<U extends AnyUnit> = [U] extends [AnyNumberUnit]
+  ? NumberContainer<U>
+  : [U] extends [StringUnit]
+    ? StringContainer<U>
+    : [U] extends [BooleanUnit]
+      ? BooleanContainer<U>
+      : | NumberContainer<Extract<U, AnyNumberUnit>>
+        | StringContainer<Extract<U, StringUnit>>
+        | BooleanContainer<Extract<U, BooleanUnit>>;
+
+export type MultiContainer<U extends AnyNumberUnit = AnyNumberUnit> =
+  SummedContainer<U>;
+
+export type Container<U extends AnyUnit> = [U] extends [AnyNumberUnit]
+  ? NumberContainer<U> | MultiContainer<U>
+  : TypedContainer<U>;
+
 /**
- * Chooses the input container type for each unit, so the container unions can be narrowed to one
- * calculator's input container. TypeScript has no type parameters that take type parameters, so
- * this uses `this['unit']` to stand for the unit, e.g.
+ * Chooses a calculator's input container class for each unit. TypeScript has no type parameters
+ * that take type parameters, so `this['unit']` stands for the unit, e.g.
  *
  *   interface MyInputKind extends InputKind {
  *     readonly container: MyInputContainer<this['unit']>;
@@ -1057,50 +1108,32 @@ export interface InputKind {
   readonly container: InputLike<AnyUnit>;
 }
 
-/** Accepts any input container. The shared tools use this. */
-export interface AnyInputKind extends InputKind {
-  readonly container: InputLike<this['unit']>;
-}
-
-/** The input container type that input kind `K` uses for unit `U`. */
+/** The input container class that input kind `K` uses for unit `U`. */
 export type InputOf<K extends InputKind, U extends AnyUnit> = (K & {
   readonly unit: U;
 })['container'];
 
+// The container types, narrowed to the input container class of one calculator.
+
 export type GenericNumberContainer<
   U extends AnyNumberUnit,
-  K extends InputKind = AnyInputKind,
-> =
-  | BracketedContainer<U>
-  | BinaryContainer<U>
-  | InputOf<K, U>
-  | RootContainer<U>
-  | Method1And2Container<U>
-  | Method2Container<U>
-  | SummedContainer<U>
-  | ConstantSelectionContainer<U>
-  | SwitchContainer<StringUnit, U>
-  | IfElseContainer<U>
-  | TranslationContainer<StringUnit | AnyNumberUnit | BooleanUnit, U>;
+  K extends InputKind,
+> = NumberContainerWith<U, InputOf<K, U>>;
 
 export type GenericStringContainer<
   U extends StringUnit,
-  K extends InputKind = AnyInputKind,
-> =
-  | InputOf<K, U>
-  | RootContainer<U>
-  | TranslationContainer<StringUnit | AnyNumberUnit | BooleanUnit, U>;
+  K extends InputKind,
+> = StringContainerWith<U, InputOf<K, U>>;
 
 export type GenericBooleanContainer<
-  U extends BooleanUnit = BooleanUnit,
-  K extends InputKind = AnyInputKind,
-> = InputOf<K, U> | RootContainer<U>;
+  U extends BooleanUnit,
+  K extends InputKind,
+> = BooleanContainerWith<U, InputOf<K, U>>;
 
-export type GenericTypedContainer<
-  U extends AnyUnit,
-  K extends InputKind = AnyInputKind,
-> = [U] extends [AnyNumberUnit]
-  ? GenericNumberContainer<U, K>
+export type GenericContainer<U extends AnyUnit, K extends InputKind> = [
+  U,
+] extends [AnyNumberUnit]
+  ? GenericNumberContainer<U, K> | MultiContainer<U>
   : [U] extends [StringUnit]
     ? GenericStringContainer<U, K>
     : [U] extends [BooleanUnit]
@@ -1108,25 +1141,6 @@ export type GenericTypedContainer<
       : | GenericNumberContainer<Extract<U, AnyNumberUnit>, K>
         | GenericStringContainer<Extract<U, StringUnit>, K>
         | GenericBooleanContainer<Extract<U, BooleanUnit>, K>;
-
-export type MultiContainer<U extends AnyNumberUnit = AnyNumberUnit> =
-  SummedContainer<U>;
-
-export type GenericContainer<
-  U extends AnyUnit,
-  K extends InputKind = AnyInputKind,
-> = [U] extends [AnyNumberUnit]
-  ? GenericNumberContainer<U, K> | MultiContainer<U>
-  : GenericTypedContainer<U, K>;
-
-// The shared tools accept containers built from any input container.
-export type NumberContainer<U extends AnyNumberUnit> =
-  GenericNumberContainer<U>;
-export type StringContainer<U extends StringUnit> = GenericStringContainer<U>;
-export type BooleanContainer<U extends BooleanUnit = BooleanUnit> =
-  GenericBooleanContainer<U>;
-export type TypedContainer<U extends AnyUnit> = GenericTypedContainer<U>;
-export type Container<U extends AnyUnit> = GenericContainer<U>;
 
 export type AsAnyContainer<C extends Container<AnyUnit>> = Container<C['unit']>;
 export type ValuesAsAnyContainer<Input extends object> = {

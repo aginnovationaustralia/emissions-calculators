@@ -33,10 +33,9 @@ export class Method1And2Container<
     this.method2 = method2;
   }
 
-  switchUnit<
-    UN extends (U extends AnyNumberUnit ? U : never),
-    V extends AnyNumberUnit,
-  >(converter: (from: UN) => V): Method1And2Container<V> {
+  switchUnit<V extends AnyNumberUnit>(
+    converter: (from: NoInfer<U>) => V,
+  ): Method1And2Container<V> {
     return new Method1And2Container(
       this.method1.switchUnit(converter),
       this.method2?.switchUnit(converter),
@@ -65,10 +64,9 @@ export class Method2Container<
     this.method2 = method2;
   }
 
-  switchUnit<
-    UN extends (U extends AnyNumberUnit ? U : never),
-    V extends AnyNumberUnit,
-  >(converter: (from: UN) => V): Method2Container<V> {
+  switchUnit<V extends AnyNumberUnit>(
+    converter: (from: NoInfer<U>) => V,
+  ): Method2Container<V> {
     return new Method2Container(this.method2.switchUnit(converter), this.core);
   }
 }

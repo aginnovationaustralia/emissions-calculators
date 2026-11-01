@@ -29,10 +29,9 @@ export class IfElseContainer<U extends AnyNumberUnit> extends BaseContainer<U> {
     this.whenFalse = whenFalse;
   }
 
-  switchUnit<
-    UN extends (U extends AnyNumberUnit ? U : never),
-    V extends AnyNumberUnit,
-  >(converter: (from: UN) => V): IfElseContainer<V> {
+  switchUnit<V extends AnyNumberUnit>(
+    converter: (from: NoInfer<U>) => V,
+  ): IfElseContainer<V> {
     return new IfElseContainer(
       this.condition,
       this.selected.switchUnit(converter),

@@ -28,11 +28,10 @@ export class InputContainer<U extends AnyUnit> extends BaseContainer<U> {
     this.modules = modules;
   }
 
-  switchUnit<
-    UN extends (U extends AnyNumberUnit ? U : never),
-    V extends AnyNumberUnit,
-  >(converter: (from: UN) => V): InputContainer<V> {
-    const newUnit = converter(this.unit as unknown as UN);
+  switchUnit<V extends AnyNumberUnit>(
+    converter: (from: NoInfer<U>) => V,
+  ): InputContainer<V> {
+    const newUnit = converter(this.unit);
     return new InputContainer(newUnit, this.method, this.modules, this.core);
   }
 }

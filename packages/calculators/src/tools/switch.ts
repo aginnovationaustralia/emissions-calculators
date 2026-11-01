@@ -26,10 +26,9 @@ export class SwitchContainer<
     this.subject = subject;
   }
 
-  switchUnit<
-    UN extends (TSelected extends AnyNumberUnit ? TSelected : never),
-    V extends AnyNumberUnit,
-  >(converter: (from: UN) => V): SwitchContainer<TSubject, V> {
+  switchUnit<V extends AnyNumberUnit>(
+    converter: (from: NoInfer<TSelected>) => V,
+  ): SwitchContainer<TSubject, V> {
     return new SwitchContainer(
       this.selected.switchUnit(converter),
       this.subject,

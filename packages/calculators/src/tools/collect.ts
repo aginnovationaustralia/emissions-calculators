@@ -93,26 +93,24 @@ export const collectInputContainers = <O extends Container<AnyUnit>>(
   if (origin === undefined) {
     return [];
   }
-  const local = origin.originType === 'input' ? [origin] : [];
+  const local: InputLike<AnyUnit>[] =
+    origin.originType === 'input' ? [origin] : [];
   return local.concat(
     traverseContainerChildren(origin, collectInputContainers),
   );
 };
-
-const inputValue = (unit: AnyUnit): InputDefinition['value'] =>
-  isStringUnit(unit)
-    ? unit
-    : isBooleanUnit(unit)
-      ? unit
-      : unit.store.toNumber();
 
 export const collectInputs = <O extends Container<AnyUnit>>(
   origin: O | undefined,
 ): InputDefinition[] =>
   collectInputContainers(origin).map((input) => ({
     name: input.core?.name ?? 'Unknown input',
-    value: inputValue(input.unit),
-    // Inputs built with another calculator's input container have no VEERG method or modules
+    value: isStringUnit(input.unit)
+      ? input.unit
+      : isBooleanUnit(input.unit)
+        ? input.unit
+        : input.unit.store.toNumber(),
+    // Inputs from another calculator's input container have no VEERG method or modules
     method: input instanceof InputContainer ? input.method : '1',
     modules: input instanceof InputContainer ? input.modules : [],
     quality: input.core?.quality,
