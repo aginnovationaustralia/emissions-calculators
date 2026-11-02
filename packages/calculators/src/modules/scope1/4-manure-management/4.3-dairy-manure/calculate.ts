@@ -205,14 +205,12 @@ export function calculateMassOfNitrogenAppliedToSoilsForDairy(
   manureInput: DairyManureInputTransformed,
   constants: ConstantsForDairyManure,
 ) {
-  return manureInput.herds.length === 0
-    ? zeroN
-    : sum(
-        manureInput.herds.map((herd) =>
-          calculateMassOfNitrogenAppliedToSoilsForDairyHerd(herd, constants),
-        ),
-        zeroN,
-      );
+  return sum(
+    manureInput.herds.map((herd) =>
+      calculateMassOfNitrogenAppliedToSoilsForDairyHerd(herd, constants),
+    ),
+    zeroN,
+  );
 }
 
 export function calculate43DairyManureManagement(

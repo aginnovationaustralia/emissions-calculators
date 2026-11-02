@@ -135,12 +135,10 @@ export function calculateMassOfNitrogenAppliedToSoilsForPigs(
   input: PigsManureInputTransformed,
   constants: ConstantsForPigsManure,
 ) {
-  return input.herds.length === 0
-    ? zeroN
-    : sum(
-        input.herds.map((herd) =>
-          calculateMassOfNitrogenAppliedToSoilsForPigsHerd(herd, constants),
-        ),
-        zeroN,
-      );
+  return sum(
+    input.herds.map((herd) =>
+      calculateMassOfNitrogenAppliedToSoilsForPigsHerd(herd, constants),
+    ),
+    zeroN,
+  );
 }

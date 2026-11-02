@@ -93,16 +93,13 @@ export function calculateMassOfNitrogenAppliedToSoilsForFeedlot(
   input: FeedlotLotFertiliserInputTransformed,
   constants: HasConstants<'FEEDLOT' | 'COMMON' | 'LIVESTOCK'>,
 ) {
-  return (
-    input.groups.length === 0
-      ? zeroN
-      : sum(
-          input.groups.map((group) =>
-            calculateMassOfNitrogenAppliedToSoilsForGroup(group, constants),
-          ),
-          zeroN,
-        ).multiply(input.fractionAppliedToSoils)
+  return sum(
+    input.groups.map((group) =>
+      calculateMassOfNitrogenAppliedToSoilsForGroup(group, constants),
+    ),
+    zeroN,
   )
+    .multiply(input.fractionAppliedToSoils)
     .named(`MNSoil`)
     .reference('4.1.1.9 (1)');
 }
