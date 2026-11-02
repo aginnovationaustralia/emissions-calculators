@@ -48,6 +48,7 @@ export const grainWheat: GrainsCropInput = {
       applications: [
         {
           massAppliedKg: nv(100),
+          massPurchasedKg: nv(100),
           fertiliserType: 'Urea',
           calculationMethodScope3: '1',
         },
@@ -358,6 +359,7 @@ export const grainsTestData102: GrainsInput = {
             {
               fertiliserType: 'Urea',
               massAppliedKg: nv(100),
+              massPurchasedKg: nv(100),
               calculationMethodScope3: '1',
             },
           ],

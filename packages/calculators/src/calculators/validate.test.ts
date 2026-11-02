@@ -85,6 +85,7 @@ describe('validateCalculatorInput', () => {
 
       expect(issues.map((x) => x.path)).toEqual([
         'herds.0.fertiliser.inorganic.applications.0.massAppliedKg',
+        'herds.0.fertiliser.inorganic.applications.0.massPurchasedKg',
       ]);
     });
 

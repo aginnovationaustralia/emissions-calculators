@@ -51,6 +51,7 @@ const getFertilisersInput = (
             calculationMethodScope3: '1',
             fertiliserType,
             massAppliedKg: nv(massAppliedKg),
+            massPurchasedKg: nv(massAppliedKg),
 
             components: customNitrogenFraction
               ? [
@@ -84,6 +85,7 @@ const getFertilisersInput = (
           calculationMethodScope3: '2',
           fertiliserType,
           massAppliedKg: nv(massAppliedKg),
+          massPurchasedKg: nv(massAppliedKg),
           ...(customNitrogenFraction
             ? {
                 customNitrogenFraction: nvo(customNitrogenFraction),

@@ -170,6 +170,7 @@ export const zeroInorganicFertiliserMethod1: InorganicFertilisersScope1Method1In
     applications: [
       {
         massAppliedKg: nv(0),
+        massPurchasedKg: nv(0),
         fertiliserType: 'Urea',
         calculationMethodScope3: '1',
       },

@@ -18852,7 +18852,27 @@
                               "x-modules": [
                                 "5.1",
                                 "5.4",
-                                "5.5",
+                                "5.5"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "kilograms inorganic fertiliser"
+                            },
+                            "massPurchasedKg": {
+                              "description": "Mass of inorganic fertiliser purchased (kilograms inorganic fertiliser)",
+                              "x-modules": [
                                 "15.4"
                               ],
                               "type": "object",
@@ -19049,6 +19069,7 @@
                           },
                           "required": [
                             "massAppliedKg",
+                            "massPurchasedKg",
                             "fertiliserType",
                             "calculationMethodScope3"
                           ],
@@ -19065,7 +19086,27 @@
                                   "x-modules": [
                                     "5.1",
                                     "5.4",
-                                    "5.5",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms inorganic fertiliser"
+                                },
+                                "massPurchasedKg": {
+                                  "description": "Mass of inorganic fertiliser purchased (kilograms inorganic fertiliser)",
+                                  "x-modules": [
                                     "15.4"
                                   ],
                                   "type": "object",
@@ -19145,6 +19186,7 @@
                               },
                               "required": [
                                 "massAppliedKg",
+                                "massPurchasedKg",
                                 "customScope3EmissionFactor",
                                 "calculationMethodScope3",
                                 "fertiliserType"
@@ -19160,7 +19202,27 @@
                                   "x-modules": [
                                     "5.1",
                                     "5.4",
-                                    "5.5",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms inorganic fertiliser"
+                                },
+                                "massPurchasedKg": {
+                                  "description": "Mass of inorganic fertiliser purchased (kilograms inorganic fertiliser)",
+                                  "x-modules": [
                                     "15.4"
                                   ],
                                   "type": "object",
@@ -19264,6 +19326,7 @@
                               },
                               "required": [
                                 "massAppliedKg",
+                                "massPurchasedKg",
                                 "customScope3EmissionFactor",
                                 "calculationMethodScope3",
                                 "fertiliserType",
@@ -19332,7 +19395,27 @@
                               "x-modules": [
                                 "5.1",
                                 "5.4",
-                                "5.5",
+                                "5.5"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "kilograms inorganic fertiliser"
+                            },
+                            "massPurchasedKg": {
+                              "description": "Mass of inorganic fertiliser purchased (kilograms inorganic fertiliser)",
+                              "x-modules": [
                                 "15.4"
                               ],
                               "type": "object",
@@ -19529,6 +19612,7 @@
                           },
                           "required": [
                             "massAppliedKg",
+                            "massPurchasedKg",
                             "fertiliserType",
                             "calculationMethodScope3"
                           ],
@@ -19545,7 +19629,27 @@
                                   "x-modules": [
                                     "5.1",
                                     "5.4",
-                                    "5.5",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms inorganic fertiliser"
+                                },
+                                "massPurchasedKg": {
+                                  "description": "Mass of inorganic fertiliser purchased (kilograms inorganic fertiliser)",
+                                  "x-modules": [
                                     "15.4"
                                   ],
                                   "type": "object",
@@ -19625,6 +19729,7 @@
                               },
                               "required": [
                                 "massAppliedKg",
+                                "massPurchasedKg",
                                 "customScope3EmissionFactor",
                                 "calculationMethodScope3",
                                 "fertiliserType"
@@ -19640,7 +19745,27 @@
                                   "x-modules": [
                                     "5.1",
                                     "5.4",
-                                    "5.5",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms inorganic fertiliser"
+                                },
+                                "massPurchasedKg": {
+                                  "description": "Mass of inorganic fertiliser purchased (kilograms inorganic fertiliser)",
+                                  "x-modules": [
                                     "15.4"
                                   ],
                                   "type": "object",
@@ -19744,6 +19869,7 @@
                               },
                               "required": [
                                 "massAppliedKg",
+                                "massPurchasedKg",
                                 "customScope3EmissionFactor",
                                 "calculationMethodScope3",
                                 "fertiliserType",
