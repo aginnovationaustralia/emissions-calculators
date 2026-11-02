@@ -34,11 +34,16 @@ import { calculateScope3ServicesForActivity } from '@/modules/scope3/15.7-servic
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { selectConstant } from '@/tools/constants';
-import { Container, root, num } from '@/tools/containers';
+import { Container, num } from '@/tools/containers';
 import { exposeMassValue } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
+import {
+  zeroEnergy,
+  zeroMassLiveweight,
+  zeroMassMilk,
+} from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { mass, Mass } from '@/tools/units';
+import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForDairyCalculator } from './constants';
@@ -204,6 +209,7 @@ function getLiveweightProducedKgForHerd(
     herd.livestockSales.map((sale) =>
       totalLiveweightFromSale(sale, herd.breed, context.constants),
     ),
+    zeroMassLiveweight,
   );
 }
 
@@ -212,7 +218,7 @@ function getMilkProducedKgForHerd(
   context: ExecutionContext<ConstantsForDairyCalculator>,
 ) {
   if (!herd.classes.milkingCows) {
-    return root(mass('Milk', 0));
+    return zeroMassMilk;
   }
   const densityOfMilk = selectConstant(
     context.constants.DAIRY,
@@ -275,8 +281,10 @@ function getAllocationToMilkProduction(
 
           return energyForGrowth.multiply(totalLiveweight);
         }),
+        zeroEnergy,
       ),
     ),
+    zeroEnergy,
   );
 
   // See constants/values.ts for notes on the difference between this and `NET_ENERGY`.
@@ -288,6 +296,7 @@ function getAllocationToMilkProduction(
 
   const milkProduced = sum(
     herds.map((herd) => getMilkProducedKgForHerd(herd, context)),
+    zeroMassMilk,
   );
 
   const energyForMilkProduction = milkNetEnergy.multiply(milkProduced);
@@ -335,9 +344,11 @@ function getTotalIntensities(
 ): DairyIntensitiesOutput {
   const liveweightProduced = sum(
     herds.map((herd) => getLiveweightProducedKgForHerd(herd, context)),
+    zeroMassLiveweight,
   );
   const milkProduced = sum(
     herds.map((herd) => getMilkProducedKgForHerd(herd, context)),
+    zeroMassMilk,
   );
 
   const allocationToMilk = getAllocationToMilkProduction(herds, context);

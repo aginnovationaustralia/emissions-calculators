@@ -4,13 +4,15 @@ import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, num, root } from '@/tools/containers';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { percentageToFraction } from '@/tools/sentinels';
+import {
+  percentageToFraction,
+  zeroMassPerHeadPerDayDryMatter,
+} from '@/tools/sentinels';
 import {
   Liveweight,
   LiveweightGain,
   liveweightGain,
   MassPerHeadPerDay,
-  massPerHeadPerDay,
   RealNumber,
   VolumePerHeadPerDay,
   volumePerHeadPerDay,
@@ -171,7 +173,7 @@ export const calculateOrGetFeedIntakeForDairy = (
         )
           .named(`MIj=${dairyClass.number}`)
           .reference('3.3.1.1 (4)')
-      : root(massPerHeadPerDay('DryMatter', 0));
+      : zeroMassPerHeadPerDayDryMatter;
   const metabolicRateIncrease = getMetabolicRateIncrease(dairyClass, constants);
 
   const defaultFeedIntake = calculateFeedIntakeForDairy(
@@ -214,7 +216,7 @@ export const calculateRelativeFeedIntakeForDairy = (
           getDryMatterDigestibility(dairyClass, constants),
           constants,
         ).named(`MIj=${dairyClass.number}`)
-      : root(massPerHeadPerDay('DryMatter', 0));
+      : zeroMassPerHeadPerDayDryMatter;
   const metabolicRateIncrease = getMetabolicRateIncrease(dairyClass, constants);
 
   const intakeForMaintenance = calculateFeedIntakeForDairy(

@@ -62,6 +62,8 @@ export function calculateForAllClassPeriods<N extends NumberUnit>(
     classResultName: (className: BeefClass) => string;
     herdResultName: string;
     isFebruaryInLeapYear: InputContainer<boolean>;
+    /** The result when there are no classes to sum, e.g. zeroCH4 */
+    fallback: Container<N>;
   },
 ): SummedContainer<N> {
   const { herd } = herdProps;
@@ -88,7 +90,7 @@ export function calculateForAllClassPeriods<N extends NumberUnit>(
           });
         });
 
-        return sum(seasonalResults, {
+        return sum(seasonalResults, options.fallback, {
           name: options.classResultName(className),
         });
       }
@@ -106,11 +108,13 @@ export function calculateForAllClassPeriods<N extends NumberUnit>(
         });
       });
 
-      return sum(monthlyResults, { name: options.classResultName(className) });
+      return sum(monthlyResults, options.fallback, {
+        name: options.classResultName(className),
+      });
     })
     .filter(isDefined);
 
-  return sum(classResults, { name: options.herdResultName });
+  return sum(classResults, options.fallback, { name: options.herdResultName });
 }
 
 export const getDurationDays = ({

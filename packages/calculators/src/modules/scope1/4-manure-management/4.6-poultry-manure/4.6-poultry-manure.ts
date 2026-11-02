@@ -17,12 +17,18 @@ import {
 import { isInLeachingZoneToFracWET } from '@/constants/translations';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
-import { Container, root } from '@/tools/containers';
+import { Container } from '@/tools/containers';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { oneMinus } from '@/tools/sentinels';
+import {
+  oneMinus,
+  zeroMassPerHeadPerDayCH4,
+  zeroMassPerHeadPerDayVolatileSolids,
+  zeroMassVolatilisedN,
+  zeroN,
+  zeroN2O,
+} from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
-  mass,
   Mass,
   massPerHeadPerDay,
   MassPerHeadPerDay,
@@ -240,7 +246,7 @@ const calculateMethaneProductionInStage1MMSForClass = (
       .named(`Mj=${poultryClass.classNumber}m=${subscriptNotation[mms]}T=1`);
   });
 
-  return sum(methaneProductionPerSystem);
+  return sum(methaneProductionPerSystem, zeroMassPerHeadPerDayCH4);
 };
 
 /**
@@ -278,6 +284,7 @@ const calculateMethaneProductionInStage2MMSForClass = (
           poultryClass.manureAllocations[mms1].treatmentStage2Allocations[mms2],
         ),
       ),
+      zeroMassPerHeadPerDayVolatileSolids,
     );
     const methaneConversionFactor = (
       meanAnnualTemperature === undefined
@@ -302,7 +309,7 @@ const calculateMethaneProductionInStage2MMSForClass = (
       .named(`Mj=${poultryClass.classNumber}m=${subscriptNotation[mms2]}T=2`);
   });
 
-  return sum(methaneProductionPerSystem);
+  return sum(methaneProductionPerSystem, zeroMassPerHeadPerDayCH4);
 };
 
 /**
@@ -493,7 +500,7 @@ export const calculateNitrogenPerStage2MMSForClass = (
         );
       return n;
     });
-    return sum(nFromEachPrimarySystem).named(
+    return sum(nFromEachPrimarySystem, zeroN).named(
       `MNj=${poultryClass.classNumber}m=${subscriptNotation[mms2]}T=2`,
     );
   };
@@ -590,8 +597,8 @@ export const calculateDirectN2OEmissionsForClass = (
   /**
    * EN2O,dir + EMN2O,PRP,dir
    */
-  return sum(n2oFromPrimarySystems)
-    .plus(sum(n2oFromSecondarySystems))
+  return sum(n2oFromPrimarySystems, zeroN2O)
+    .plus(sum(n2oFromSecondarySystems, zeroN2O))
     .plus(additionalN2OFromPasture);
 };
 
@@ -665,8 +672,9 @@ export const calculateAtmosphericDepositionN2OEmissionsForClass = (
 
   const totalVolatisedNitrogenExcludingPasture = sum(
     volatilisedNitrogenFromPrimarySystemsWithoutPasture,
+    zeroMassVolatilisedN,
   )
-    .plus(sum(volatilisedNitrogenFromSecondarySystems))
+    .plus(sum(volatilisedNitrogenFromSecondarySystems, zeroMassVolatilisedN))
     .named('MMS_ATMOS');
 
   const CN2O = selectConstant(
@@ -798,7 +806,7 @@ export const calculateMassOfNitrogenAppliedToSoilsForClass = (
           ? nitrogenInSecondarySystems[mms]
               .multiply(fracWETSoil)
               .multiply(fracLeachMS)
-          : root(mass('N', 0))
+          : zeroN
       ).named(`'Mleach,m=${subscriptNotation[mms]}'`);
 
       const nitrousOxideEmissionsFactor = selectConstant(
@@ -824,5 +832,5 @@ export const calculateMassOfNitrogenAppliedToSoilsForClass = (
     },
   );
 
-  return sum(nitrogenFromSecondarySystemsAppliedToSoils);
+  return sum(nitrogenFromSecondarySystemsAppliedToSoils, zeroN);
 };

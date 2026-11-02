@@ -2,6 +2,7 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { captureMethod1Or2Value } from '@/tools/multi';
+import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { voidUnit } from '@/tools/units';
 import { HasPurchasedFeedInputTransformed } from './has-purchased-feed.input';
@@ -150,5 +151,5 @@ export const calculatePurchasedFeed = (
     return feed.amount.multiply(EFj).reference('15.2.1.1 (1)');
   });
 
-  return sum(emissionsFromPurchases);
+  return sum(emissionsFromPurchases, zeroCO2e);
 };

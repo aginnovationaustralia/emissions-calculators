@@ -1,6 +1,7 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { HasIsFebruaryInLeapYearInputTransformed } from '@/calculators/types/has-is-february-in-leap-year.input';
 import { selectConstant } from '@/tools/constants';
+import { zeroMassVolatilisedN } from '@/tools/sentinels';
 import {
   BeefPeriodProps,
   calculateForAllClassPeriods,
@@ -42,6 +43,7 @@ export const calculateManureManagementSoilAtmosphericDepositionN2OForHerd = (
       classResultName: (className) => `Mvol=${className}`,
       herdResultName: 'Mvol (herd)',
       isFebruaryInLeapYear: herd.isFebruaryInLeapYear,
+      fallback: zeroMassVolatilisedN,
     },
   );
 

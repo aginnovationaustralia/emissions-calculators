@@ -15,7 +15,13 @@ import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { br, Container } from '@/tools/containers';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { oneMinus } from '@/tools/sentinels';
+import {
+  oneMinus,
+  zeroMassPerHeadPerDayCH4,
+  zeroMassVolatilisedN,
+  zeroN,
+  zeroN2O,
+} from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
   Mass,
@@ -185,11 +191,14 @@ export const calculateManureManagementCH4ForGroup = (
     .named(`Mjm=1T=3 `)
     .reference('4.1.1.1 (4)');
 
-  const totalMethaneProduction = sum([
-    primaryMethaneProduction,
-    ...secondaryMethaneProduction,
-    tertiaryMethaneProduction,
-  ]).named(`MjmT`);
+  const totalMethaneProduction = sum(
+    [
+      primaryMethaneProduction,
+      ...secondaryMethaneProduction,
+      tertiaryMethaneProduction,
+    ],
+    zeroMassPerHeadPerDayCH4,
+  ).named(`MjmT`);
 
   /**
    * ECH4 = SUM[j,m,T] (Dj * MjmT * Nj) * 10^-3
@@ -327,7 +336,7 @@ export const calculateDirectN2OEmissionsForGroup = (
       .reference('4.1.1.3 (1)');
   });
 
-  return sum(directN2OPerMMS).named(`EN2O,dir`);
+  return sum(directN2OPerMMS, zeroN2O).named(`EN2O,dir`);
 };
 
 /**
@@ -355,6 +364,7 @@ export const calculateAtmosphericDepositionN2OEmissionsForGroup = (
        */
       return nitrogenPerMMS[mms].multiply(FracGASM);
     }),
+    zeroMassVolatilisedN,
   ).named('MMSATMOS');
 
   const EFN2O = selectConstant(
@@ -408,5 +418,5 @@ export const calculateMassOfNitrogenAppliedToSoilsForGroup = (
     );
   });
 
-  return sum(applicableNitrogenPerMMS);
+  return sum(applicableNitrogenPerMMS, zeroN);
 };

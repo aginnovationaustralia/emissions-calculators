@@ -5,14 +5,15 @@ import {
 } from '@/calculators/common/tools/object';
 import { Scope1Totals } from '@/calculators/types/scope1.output';
 import { z } from 'zod';
-import { Container, root } from './containers';
+import { Container } from './containers';
 import { extractMassAsNumber } from './extract';
 import { CH4GWPByMass, CO2GWPByMass, N2OGWPByMass } from './gwp';
 import { output } from './outputs';
 import { sum } from './sum';
 import { exposeKeysOnOutput, KeysOnOutput } from './totals';
 import { kgToTonnes } from './unit-conversion';
-import { AnyUnit, isVoid, mass, Mass } from './units';
+import { AnyUnit, isVoid, Mass } from './units';
+import { zeroCO2e } from './sentinels';
 
 type Gas = 'CO2' | 'CH4' | 'N2O' | 'CO2e';
 type GasContainer = Container<Mass<Gas>>;
@@ -49,7 +50,7 @@ function hasGas<G extends Gas>(
   container: GasContainer,
   gas: G,
 ): container is Container<Mass<G>> {
-  // `sum([])` yields a Void unit at runtime despite its Mass type, so guard for it first
+  // A container can still hold a Void unit at runtime despite its Mass type, so guard for it first
   return !isVoid(container.unit as AnyUnit) && container.unit.substance === gas;
 }
 
@@ -59,11 +60,11 @@ export function toCO2e(container: GasContainer): CO2eContainer {
   if (hasGas(container, 'CH4')) return container.multiply(CH4GWPByMass);
   if (hasGas(container, 'N2O')) return container.multiply(N2OGWPByMass);
   if (hasGas(container, 'CO2')) return container.multiply(CO2GWPByMass);
-  return root(mass('CO2e', 0));
+  return zeroCO2e;
 }
 
 export const sumCO2e = (containers: GasContainer[]): CO2eContainer =>
-  sum(containers.map(toCO2e));
+  sum(containers.map(toCO2e), zeroCO2e);
 
 const sumOfGas =
   (gas: Gas): TotalRule =>
@@ -155,11 +156,10 @@ export function buildCalculatorLedger<
   const scope1 = buildScopeLedger(scopes.scope1, scope1TotalRules);
   const scope2 = buildScopeLedger(scopes.scope2, scope23TotalRules);
   const scope3 = buildScopeLedger(scopes.scope3, scope23TotalRules);
-  const net = sum([
-    scope1.totals.total,
-    scope2.totals.total,
-    scope3.totals.total,
-  ]);
+  const net = sum(
+    [scope1.totals.total, scope2.totals.total, scope3.totals.total],
+    zeroCO2e,
+  );
   return { scope1, scope2, scope3, net };
 }
 

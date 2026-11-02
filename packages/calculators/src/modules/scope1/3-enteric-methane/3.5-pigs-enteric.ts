@@ -69,5 +69,5 @@ export function calculate35PigsEntericMethane(
       context.constants,
     );
   });
-  return sum(classResults).named('Eenteric');
+  return sum(classResults, zeroCH4).named('Eenteric');
 }

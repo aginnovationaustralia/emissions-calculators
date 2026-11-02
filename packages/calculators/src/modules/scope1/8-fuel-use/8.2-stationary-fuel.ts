@@ -3,6 +3,7 @@ import { FuelEmissionsGasType } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { BinaryContainer, Container } from '@/tools/containers';
 import { massCO2eToMassGHGGas } from '@/tools/gwp';
+import { zeroOfGas } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { ConstantsForFuel } from './constants';
@@ -144,7 +145,7 @@ const stationaryEmissionsForGas = <G extends FuelEmissionsGasType>(
   const stationaryEmissions = fuel.stationary.map((fuel) => {
     return emissionsOfGasForFuel(fuel, constants, gasType);
   });
-  return sum(stationaryEmissions, {
+  return sum(stationaryEmissions, zeroOfGas[gasType], {
     name: `EtransGHG${gasType}`,
     references: [`8.2.1.1 (1)`],
   });

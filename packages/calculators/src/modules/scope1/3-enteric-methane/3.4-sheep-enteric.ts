@@ -1,6 +1,7 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { HasIsFebruaryInLeapYearInputTransformed } from '@/calculators/types/has-is-february-in-leap-year.input';
 import { br, num, NumberContainer } from '@/tools/containers';
+import { zeroCH4 } from '@/tools/sentinels';
 import { Mass, massPerHeadPerDay } from '@/tools/units';
 import { calculateDailyFeedIntakeIjk } from '../shared/sheep/calculate';
 import {
@@ -57,6 +58,7 @@ export function calculate34SheepEntericMethane(
       classResultName: (className) => `Eenteric,k=${className}`,
       flockResultName: `Eenteric (flock)`,
       isFebruaryInLeapYear: flock.isFebruaryInLeapYear,
+      fallback: zeroCH4,
     },
   );
 }

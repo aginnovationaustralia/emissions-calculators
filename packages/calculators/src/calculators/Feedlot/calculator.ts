@@ -16,6 +16,7 @@ import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
 import { exposeMassValue } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
+import { zeroMassLiveweight } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
@@ -47,6 +48,7 @@ function getTotalIntensities(
 ): FeedlotIntensitiesOutput {
   const liveweightProduced = sum(
     feedlots.map((feedlot) => feedlot.liveweightSoldKg),
+    zeroMassLiveweight,
   );
 
   return {

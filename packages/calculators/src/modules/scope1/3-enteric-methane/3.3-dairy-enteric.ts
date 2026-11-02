@@ -6,6 +6,7 @@ import {
 import { ExecutionContext } from '@/calculators/executionContext';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
+import { zeroCH4 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
   calculateMilkProduction,
@@ -84,5 +85,5 @@ export const calculate33EntericMethaneForHerd = (
   const classResults = Object.values(herd.classes).map((classInput) => {
     return calculateEntericMethaneForClass(herd, classInput, context.constants);
   });
-  return sum(classResults).named('Eenteric (herd)');
+  return sum(classResults, zeroCH4).named('Eenteric (herd)');
 };

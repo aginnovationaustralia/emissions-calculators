@@ -15,6 +15,7 @@ import {
 } from '@/modules/scope1/8-fuel-use/stationaryFuel.input';
 import { isTransportFuelCNGBased } from '@/modules/scope1/8-fuel-use/transportFuel.input';
 import { selectConstant } from '@/tools/constants';
+import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 
 export const calculateScope3EmissionsFromFuelTransport = (
@@ -36,7 +37,7 @@ export const calculateScope3EmissionsFromFuelTransport = (
     const energyFromFuel = ecTransQ.multiply(qTransTQ);
     return efTrans3Q.multiply(energyFromFuel);
   });
-  return sum(emissionsRecords, {
+  return sum(emissionsRecords, zeroCO2e, {
     name: 'EWTT,trans,q',
     references: ['15.10.1.1 (2)'],
   });
@@ -147,7 +148,7 @@ export const calculateScope3EmissionsFromFuelStationary = (
       context,
     );
   });
-  return sum(emissionsRecords, {
+  return sum(emissionsRecords, zeroCO2e, {
     name: 'EWTT,SC,q',
     references: ['15.10.1.1 (3)'],
   });

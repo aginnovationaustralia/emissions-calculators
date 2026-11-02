@@ -3,6 +3,7 @@ import { FuelEmissionsGasType } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { Container, SummedContainer } from '@/tools/containers';
 import { massCO2eToMassGHGGas } from '@/tools/gwp';
+import { zeroOfGas } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { ConstantsForFuel } from './constants';
@@ -347,7 +348,7 @@ const transportEmissionsForGas = <G extends FuelEmissionsGasType>(
     return emissionsOfGasForFuel(fuel, constants, gasType);
   });
 
-  return sum(transportFuelEmissions, {
+  return sum(transportFuelEmissions, zeroOfGas[gasType], {
     name: `Eg=${gasType}`,
     references: [`8.1.1.1 (1)`],
   });

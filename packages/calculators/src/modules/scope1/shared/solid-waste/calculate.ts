@@ -1,13 +1,12 @@
 import { HasCommonConstants } from '@/constants/types';
 import { SolidWasteSpecificScope3InputTransformed } from '@/modules/scope3/15.12-waste/solid-waste-scope3.input';
 import { selectConstant } from '@/tools/constants';
-import { Container, root } from '@/tools/containers';
+import { Container } from '@/tools/containers';
+import { zeroMassSolidWaste } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { mass, Mass } from '@/tools/units';
+import { Mass } from '@/tools/units';
 import { SolidWasteSpecificScope1Method2InputTransformed } from '../../10-solid-waste/solid-waste-method2.input';
 import { isMassBasedAmount } from '../../10-solid-waste/solid-waste-units.input';
-
-export const zeroSolidWaste = root(mass('Solid Waste', 0));
 
 /**
  * Helper for getting total mass of some specific waste input
@@ -51,5 +50,5 @@ export const getTotalMassInWasteTreatmentFacility = (
   const massPerItem = (wasteItems ?? []).map((waste) =>
     wasteAmountAsMass(waste, constants).named(`Q (${waste.facilityType.unit})`),
   );
-  return massPerItem.length === 0 ? zeroSolidWaste : sum(massPerItem);
+  return sum(massPerItem, zeroMassSolidWaste);
 };

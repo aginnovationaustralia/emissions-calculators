@@ -13,6 +13,7 @@ import {
   LivestockLocation,
   MANURE_FEEDLOT_4_1,
 } from '@/tools/modules';
+import { zero } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
   days,
@@ -61,7 +62,7 @@ export const feedlotMMSAllocationSchema = (location: LivestockLocation) =>
       isProportion,
     ),
   }).superRefine(({ solidStorage, composting, directApplication }, context) => {
-    const total = sum([solidStorage, composting, directApplication]);
+    const total = sum([solidStorage, composting, directApplication], zero);
     if (!total.unit.store.value.eq(1)) {
       context.addIssue('Manure allocations must sum to 1!');
     }

@@ -14,6 +14,7 @@ import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { Container, num, relabelMass } from '@/tools/containers';
 import { exposeMassValue } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
+import { zeroMassEggs, zeroMassLiveweight } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
@@ -75,8 +76,14 @@ export function getTotalIntensities(
   netLulucf: Container<Mass<'CO2e'>>,
   flocks: PoultryFlockInputTransformed[],
 ): PoultryIntensitiesOutput {
-  const eggsProduced = sum(flocks.map((flock) => flock.eggsSoldKg));
-  const liveweightProduced = sum(flocks.map((flock) => flock.liveweightSoldKg));
+  const eggsProduced = sum(
+    flocks.map((flock) => flock.eggsSoldKg),
+    zeroMassEggs,
+  );
+  const liveweightProduced = sum(
+    flocks.map((flock) => flock.liveweightSoldKg),
+    zeroMassLiveweight,
+  );
 
   const { meatAllocation, eggAllocation } = getMeatEggAllocation(
     liveweightProduced,

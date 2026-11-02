@@ -2,6 +2,7 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { HasCommonConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { captureMethod1Or2Value } from '@/tools/multi';
+import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { AgrichemicalsInputTransformed } from './agrichemicals.input';
 
@@ -27,6 +28,6 @@ EF h = emission factor of purchased agrichemical (kg CO2e/kg)
     return qh.multiply(emissionsFactor).named('E').reference('15.5.1.1 (1)');
   });
 
-  const agrichemicals = sum(emissionsFromPurchases);
+  const agrichemicals = sum(emissionsFromPurchases, zeroCO2e);
   return agrichemicals;
 };

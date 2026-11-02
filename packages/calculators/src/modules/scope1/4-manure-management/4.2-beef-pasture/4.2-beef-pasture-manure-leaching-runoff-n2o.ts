@@ -2,6 +2,7 @@ import { ExecutionContext } from '@/calculators/executionContext';
 import { HasIsFebruaryInLeapYearInputTransformed } from '@/calculators/types/has-is-february-in-leap-year.input';
 import { isInLeachingZoneToFracWET } from '@/constants/translations';
 import { selectConstant } from '@/tools/constants';
+import { zeroN } from '@/tools/sentinels';
 import {
   BeefPeriodProps,
   calculateForAllClassPeriods,
@@ -48,6 +49,7 @@ export const calculateManureManagementSoilLeachingRunoffN2OForHerd = (
       classResultName: (className) => `Mleach=${className}`,
       herdResultName: 'Mleach (herd)',
       isFebruaryInLeapYear: herd.isFebruaryInLeapYear,
+      fallback: zeroN,
     },
   );
 

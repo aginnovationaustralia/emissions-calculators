@@ -1,7 +1,7 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { num, root } from '@/tools/containers';
+import { num } from '@/tools/containers';
+import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { mass } from '@/tools/units';
 import { ConstantsForLULUCF } from './constants';
 import { LULUCFParentInputTransformed } from './input';
 
@@ -16,7 +16,7 @@ export const calculate_16_5_1_2_SavannaCarbonChange = (
   const burning = input.landUse?.burning;
 
   if (!burning) {
-    return root(mass('CO2e', 0)).named('CSFM,y');
+    return zeroCO2e.named('CSFM,y');
   }
 
   const carbonStockChangeRecords = burning.map((burning) => {
@@ -25,7 +25,7 @@ export const calculate_16_5_1_2_SavannaCarbonChange = (
       .reference('16.5.1.2 (2)');
   });
 
-  return sum(carbonStockChangeRecords)
+  return sum(carbonStockChangeRecords, zeroCO2e)
     .multiply(num(-1))
     .named('CSFM,y')
     .reference('16.5.1.2 (1)');
@@ -41,7 +41,7 @@ export const calculate_16_5_1_4_SavannaBiomassBurning = (
   const burning = input.landUse?.burning;
 
   if (!burning) {
-    return root(mass('CO2e', 0)).named('ESFM,y');
+    return zeroCO2e.named('ESFM,y');
   }
 
   const emissionsRecords = burning.map((burning) => {
@@ -49,5 +49,5 @@ export const calculate_16_5_1_4_SavannaBiomassBurning = (
       .plus(burning.emissionsFromBurningHighRainfallZone)
       .reference('16.5.1.4 (1)');
   });
-  return sum(emissionsRecords).named('ESFM,y');
+  return sum(emissionsRecords, zeroCO2e).named('ESFM,y');
 };

@@ -21,7 +21,14 @@ import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
 import { ifTrueElse } from '@/tools/if-else';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { oneMinus, zero, zeroN } from '@/tools/sentinels';
+import {
+  oneMinus,
+  zero,
+  zeroMassPerHeadPerDayCH4,
+  zeroMassVolatilisedN,
+  zeroN,
+  zeroN2O,
+} from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass, realNumber, RealNumber, voidUnit } from '@/tools/units';
 
@@ -175,6 +182,7 @@ const calculateFractionVolatileSolidsInPrimarySystems = (
         solidSeparationRates[mms],
       ),
     ),
+    zero,
   )
     .plus(pigsClass.manureAllocations.solidStorage.manureAllocated)
     .named(`FVSj=${pigsClass.number}m=4T=1`);
@@ -294,6 +302,7 @@ export const calculateFractionVolatileSolidsInSecondarySystems = (
                 );
         }
       }),
+      zero,
     ).named(`MMSj=${pigsClass.number}m=${subscriptNotation[secondaryMMS]}T=2`);
 
   return {
@@ -333,6 +342,7 @@ const calculateFractionNitrogenInPrimarySystems = (
         nitrogenSeparationRates[mms],
       ),
     ),
+    zero,
   )
     .plus(pigsClass.manureAllocations.solidStorage.manureAllocated)
     .named(`FNj=${pigsClass.number}m=4T=1`);
@@ -495,6 +505,7 @@ const calculateNitrogenPerStage2MMSForClass = (
                 );
         }
       }),
+      zeroN,
     );
 
   return {
@@ -634,10 +645,13 @@ export const calculateManureManagementCH4ForClass = (
    * ECH4j = SUM[m,T] (Dj * MjmT * Nj) * 10^-3
    *       = Dj * Nj * SUM[m,T] (MjmT) * 10^-3
    */
-  return sum([
-    ...methaneProductionPerPrimarySystem,
-    ...methaneProductionPerSecondarySystem,
-  ])
+  return sum(
+    [
+      ...methaneProductionPerPrimarySystem,
+      ...methaneProductionPerSecondarySystem,
+    ],
+    zeroMassPerHeadPerDayCH4,
+  )
     .multiply(pigsClass.head)
     .multiply(pigsClass.days)
     .named(`ECH4 (j=${pigsClass.number})`)
@@ -699,9 +713,10 @@ export const calculateDirectN2OEmissionsForClass = (
   /**
    * EN2O,dir = SUM[j,m,T] (MNjmT * EFjm * CN2O) * 10^-3
    */
-  return sum([...n2oFromPrimarySystems, ...n2oFromSecondarySystems]).reference(
-    '4.5.1.3 (1)',
-  );
+  return sum(
+    [...n2oFromPrimarySystems, ...n2oFromSecondarySystems],
+    zeroN2O,
+  ).reference('4.5.1.3 (1)');
 };
 
 /**
@@ -759,10 +774,13 @@ export const calculateAtmosphericDepositionN2OEmissionsForClass = (
       return nitrogenInSystem.multiply(fracGASM);
     });
 
-  const totalVolatisedNitrogen = sum([
-    ...volatilisedNitrogenFromPrimarySystems,
-    ...volatilisedNitrogenFromSecondarySystems,
-  ]).named('MMS_ATMOS');
+  const totalVolatisedNitrogen = sum(
+    [
+      ...volatilisedNitrogenFromPrimarySystems,
+      ...volatilisedNitrogenFromSecondarySystems,
+    ],
+    zeroMassVolatilisedN,
+  ).named('MMS_ATMOS');
 
   const CN2O = selectConstant(
     constants.COMMON,
@@ -913,6 +931,7 @@ export const calculateMassOfNitrogenAppliedToSoilsForClass = (
         ),
       );
     }),
+    zeroN,
   )
     .minus(nitrogenLostOutdoors)
     .named(`MNSoil (j=${pigsClass.number})`);

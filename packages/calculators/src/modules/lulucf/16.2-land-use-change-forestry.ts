@@ -1,10 +1,10 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { selectConstant } from '@/tools/constants';
-import { br, num, root } from '@/tools/containers';
+import { br, num } from '@/tools/containers';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { zeroCH4, zeroN2O } from '@/tools/sentinels';
+import { zeroCH4, zeroCO2, zeroMassCarbon, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { mass, voidUnit } from '@/tools/units';
+import { voidUnit } from '@/tools/units';
 import { ConstantsForLULUCF } from './constants';
 import { LULUCFParentInputTransformed } from './input';
 import {
@@ -27,7 +27,7 @@ export const calculate_16_2_1_2_ChangesInWoodyCarbonStocks = (
   const activities = input.landUse?.activities;
 
   if (!activities) {
-    return root(mass('CO2', 0)).named('CLUC,j,y');
+    return zeroCO2.named('CLUC,j,y');
   }
 
   const CgCO2 = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_CO2');
@@ -55,7 +55,7 @@ export const calculate_16_2_1_2_ChangesInWoodyCarbonStocks = (
 
     return netChange;
   });
-  return sum(netChangeInActivities)
+  return sum(netChangeInActivities, zeroMassCarbon)
     .multiply(CgCO2)
     .multiply(num(-1))
     .named('CLUC,j,y')
@@ -85,7 +85,7 @@ export const calculate_16_2_1_4_BiomassBurningCH4 = (
         .reference('16.2.1.4 (1)');
     });
 
-  return sum(ch4FromBurnings).named('ELUC,g=ch4,j,y');
+  return sum(ch4FromBurnings, zeroCH4).named('ELUC,g=ch4,j,y');
 };
 
 export const calculate_16_2_1_4_BiomassBurningN2O = (
@@ -111,7 +111,7 @@ export const calculate_16_2_1_4_BiomassBurningN2O = (
         .reference('16.2.1.4 (1)');
     });
 
-  return sum(n2oFromBurnings).named('ELUC,g=n2o,j,y');
+  return sum(n2oFromBurnings, zeroN2O).named('ELUC,g=n2o,j,y');
 };
 
 export const calculate_16_2_1_5_SoilOrganicStockLosses = (
@@ -126,7 +126,7 @@ export const calculate_16_2_1_5_SoilOrganicStockLosses = (
   const activities = input.landUse?.activities;
 
   if (!activities) {
-    return root(mass('CO2', 0)).named('SLUC,j=1-3,y');
+    return zeroCO2.named('SLUC,j=1-3,y');
   }
 
   const CgCO2 = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_CO2');
@@ -145,7 +145,7 @@ export const calculate_16_2_1_5_SoilOrganicStockLosses = (
       return Or.multiply(activityAreaHectares).reference('16.2.1.5 (2)');
     });
 
-  return sum(soilLosses)
+  return sum(soilLosses, zeroMassCarbon)
     .multiply(CgCO2)
     .multiply(num(-1))
     .named('SLUC,j=1-3,y')
@@ -163,7 +163,7 @@ export const calculate_16_2_1_7_HarvestedWoodProducts = (
   const activities = input.landUse?.activities;
 
   if (!activities) {
-    return root(mass('CO2', 0)).named('CHWP,j=6-7,y');
+    return zeroCO2.named('CHWP,j=6-7,y');
   }
 
   const CgCO2 = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_CO2');
@@ -189,7 +189,7 @@ export const calculate_16_2_1_7_HarvestedWoodProducts = (
       return massPerHectare.multiply(activityAreaHectares);
     });
 
-  return sum(harvestedWoodEmissions)
+  return sum(harvestedWoodEmissions, zeroMassCarbon)
     .multiply(CgCO2)
     .multiply(num(-1))
     .named('CHWP,j=6-7,y')

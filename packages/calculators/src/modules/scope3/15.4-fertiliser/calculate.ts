@@ -15,6 +15,7 @@ import {
 } from '@/modules/scope1/5-fertiliser/inorganic-fertiliser.input';
 import { selectConstant } from '@/tools/constants';
 import { captureMethod1Or2Value } from '@/tools/multi';
+import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { voidUnit } from '@/tools/units';
 
@@ -121,7 +122,7 @@ export const calculateScope3FertiliserMethod1Components = (
       );
     }
   });
-  return sum(componentEmissions);
+  return sum(componentEmissions, zeroCO2e);
 };
 
 export const calculateScope3FertiliserMethod1 = (
@@ -172,5 +173,5 @@ export const calculateScope3Fertiliser = (
     }
   });
 
-  return sum(emissionsRecords);
+  return sum(emissionsRecords, zeroCO2e);
 };

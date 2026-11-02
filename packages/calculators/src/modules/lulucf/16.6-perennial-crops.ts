@@ -1,11 +1,17 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { isPerennialWoodyCropContainerFull } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
-import { Container, root } from '@/tools/containers';
+import { Container } from '@/tools/containers';
 import { captureMethod1Or2Value } from '@/tools/multi';
-import { oneYear } from '@/tools/sentinels';
+import {
+  oneYear,
+  zeroArea,
+  zeroCO2,
+  zeroMassCarbon,
+  zeroMassPerYearCO2,
+} from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { mass, MassPerAreaPerYear, Years } from '@/tools/units';
+import { MassPerAreaPerYear, Years } from '@/tools/units';
 import { ConstantsForLULUCF } from './constants';
 import { LULUCFParentInputTransformed } from './input';
 import { PerennialCropPlantingInputTransformed } from './perennial-crop-planting-input';
@@ -105,7 +111,7 @@ export const calculate_16_6_1_1_RemovalsFromPerennialCrops = (
   const perennialCrops = input.landUse?.perennialCrops;
 
   if (perennialCrops === undefined) {
-    return root(mass('CO2', 0)).named('RLU,c');
+    return zeroCO2.named('RLU,c');
   }
 
   const annualCropRemovals = perennialCrops.map((crop) => {
@@ -130,7 +136,7 @@ export const calculate_16_6_1_1_RemovalsFromPerennialCrops = (
       Mc,
     ).map((planting) => planting.areaPlanted);
 
-    return BARc.multiply(sum(plantingsToInclude))
+    return BARc.multiply(sum(plantingsToInclude, zeroArea))
       .multiply(CgCO2)
       .named(`RLU,c (${crop.cropType.unit})`)
       .reference('16.6.1.1 (1)');
@@ -138,7 +144,7 @@ export const calculate_16_6_1_1_RemovalsFromPerennialCrops = (
 
   /* NOTE: The equation calculates the sum of areas removing carbon per year. For a final result,
   we want to take a year of all removals */
-  return sum(annualCropRemovals)
+  return sum(annualCropRemovals, zeroMassPerYearCO2)
     .multiply(oneYear)
     .named('RLU,c (all)');
 };
@@ -176,7 +182,7 @@ export const calculate_16_6_1_3_EmissionsFromPerennialCrops = (
   const perennialCrops = input.landUse?.perennialCrops;
 
   if (perennialCrops === undefined) {
-    return root(mass('CO2', 0)).named('ELU,c (all)');
+    return zeroCO2.named('ELU,c (all)');
   }
 
   const CgCO2 = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_CO2');
@@ -201,6 +207,7 @@ export const calculate_16_6_1_3_EmissionsFromPerennialCrops = (
       crop.clearings.map((clearing) =>
         BAMcDefault.multiply(clearing.areaCleared).named('BAMc'),
       ),
+      zeroMassCarbon,
     );
 
     const carbonRecordsMethod2 = calculateCarbonFromClearingsMethod2(
@@ -210,11 +217,13 @@ export const calculate_16_6_1_3_EmissionsFromPerennialCrops = (
 
     return captureMethod1Or2Value(
       carbonFromClearingsMethod1,
-      carbonRecordsMethod2 ? sum(carbonRecordsMethod2) : undefined,
+      carbonRecordsMethod2
+        ? sum(carbonRecordsMethod2, zeroMassCarbon)
+        : undefined,
     ).named('ELU,c (crop)');
   });
 
-  return sum(clearingsForCropRecords)
+  return sum(clearingsForCropRecords, zeroMassCarbon)
     .multiply(CgCO2)
     .named('ELU,c (all)')
     .reference('16.6.1.3 (1)');
