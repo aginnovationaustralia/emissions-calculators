@@ -99,7 +99,7 @@ export const CottonCropResidueInputSchema = BaseCropResidueInputSchema.omit({
         name: 'Pc',
         method: '1',
         description:
-          'Total yield of the cotton crop, as dry matter. For accurate cotton intensity values, this value must exclude the total mass of trash',
+          'Total yield of the cotton crop, as dry matter. This value must exclude the total mass of trash.',
         modules: [
           RESIDUE_CROPS_6_1,
           RESIDUE_LEACH_6_3,
