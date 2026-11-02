@@ -352,7 +352,7 @@
     "dependency-cruiser": "^18.3.1",
     "eslint": "^10.10.0",
     "glob": "^13.0.6",
-    "jest": "^30.5.1",
+    "jest": "^30.5.2",
     "nanoclone": "^1.0.2",
     "publint": "^0.3.24",
     "rollup": "^4.63.3",
