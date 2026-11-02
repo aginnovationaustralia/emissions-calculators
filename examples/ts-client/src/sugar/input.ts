@@ -290,6 +290,7 @@ const inorganicFertiliserMethod1: InorganicFertiliserInputScope3Method1 = {
   calculationMethodScope3: '1',
   fertiliserType: 'Urea',
   massAppliedKg: { value: 90000 },
+  massPurchasedKg: { value: 90000 },
   components: [inorganicFertiliserComponent],
 };
 
@@ -302,6 +303,7 @@ const inorganicFertiliserMethod2: InorganicFertiliserInputScope3Method2 = {
   calculationMethodScope3: '2',
   fertiliserType: 'Urea',
   massAppliedKg: { value: 90000 },
+  massPurchasedKg: { value: 90000 },
   customScope3EmissionFactor: { value: 2.5 },
   customNitrogenFraction: { value: 0.46 },
 };

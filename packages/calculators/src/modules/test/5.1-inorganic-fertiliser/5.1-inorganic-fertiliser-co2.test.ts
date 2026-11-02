@@ -38,6 +38,7 @@ const getCalculatorInput = (
         calculationMethodScope3: '1',
         fertiliserType,
         massAppliedKg: nv(massAppliedKg),
+        massPurchasedKg: nv(massAppliedKg),
         components: undefined,
       },
     ],

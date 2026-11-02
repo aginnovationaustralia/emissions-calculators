@@ -33,7 +33,8 @@ const getCalculatorInput = (
   }
 
   const fertiliserType = checkInorganicFertiliserType(cell('A'));
-  const massAppliedKg = Number(cell('B'));
+  const massPurchasedKg = Number(cell('B'));
+  const massAppliedKg = Number(cell(method === '1' ? 'L' : 'C'));
 
   const application: InorganicFertiliserInput =
     method === '1'
@@ -41,6 +42,7 @@ const getCalculatorInput = (
           calculationMethodScope3: '1',
           fertiliserType,
           massAppliedKg: nv(massAppliedKg),
+          massPurchasedKg: nv(massPurchasedKg),
           components: cell('D')
             ? [
                 {
@@ -69,6 +71,7 @@ const getCalculatorInput = (
           calculationMethodScope3: '2',
           fertiliserType,
           massAppliedKg: nv(massAppliedKg),
+          massPurchasedKg: nv(massPurchasedKg),
           customScope3EmissionFactor: nv(Number(cell('D'))),
         };
 

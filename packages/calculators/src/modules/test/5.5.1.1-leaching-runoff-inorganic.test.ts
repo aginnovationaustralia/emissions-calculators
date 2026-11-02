@@ -4,8 +4,14 @@ import {
   HasIsInLeachingZoneInputTransformed,
 } from '@/calculators/types/has-is-in-leaching.input';
 import { InorganicFertiliserType } from '@/constants';
+import {
+  BasicCropProductionSystem,
+  BasicCropProductionSystems,
+  ProductionSystemsInorganicFertiliser,
+  ProductionSystemsInorganicFertilisers,
+} from '@/constants/enums';
 import { getSheet } from '@/test/common/sheets';
-import { nv, nvo } from '@/tools/inputs';
+import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import {
   calculateLeachingAndRunoffN2O,
@@ -16,6 +22,7 @@ import {
   HasFertiliserInputSchema,
   HasFertiliserInputTransformed,
 } from '../scope1/5-fertiliser';
+import { InorganicFertiliserInputScope3Method1 } from '../scope1/5-fertiliser/inorganic-fertiliser.input';
 import {
   checkBasicCropProductionSystem,
   checkInorganicFertiliserType,
@@ -28,41 +35,68 @@ import {
 
 const columnProductionSystem = 'A';
 const columnFertiliserType = 'B';
+const columnAreaApplied = 'C';
 const columnMassAppliedTMjf = 'E';
 const columnCustomNitrogen = 'G';
 const columnIsInLeachingZone = 'I';
 const columnResult = 'P';
 
+const isBasicCropProductionSystem = (
+  system: string | undefined,
+): system is BasicCropProductionSystem =>
+  BasicCropProductionSystems.includes(system as BasicCropProductionSystem);
+
+const isProductionSystemInorganicFertiliser = (
+  system: string | undefined,
+): system is ProductionSystemsInorganicFertiliser =>
+  ProductionSystemsInorganicFertilisers.includes(
+    system as ProductionSystemsInorganicFertiliser,
+  );
+
+/**
+ * 5.5 has no method 2 of its own, but the production system in the sheet determines
+ * which scope 1 inorganic fertiliser input shape is valid. Some systems (e.g. 'Cotton')
+ * are valid for both shapes, so an application area is used to pick the method 2 shape.
+ * Either way, the application itself only uses method 1 inputs, with any custom nitrogen
+ * fraction supplied as a component.
+ */
 const getFertilisersInput = (
-  method: '1' | '2',
   fertiliserType: InorganicFertiliserType,
   massAppliedKg: number,
   customNitrogenFraction: number | undefined,
   cell: (column: string) => string | undefined,
 ): FertiliserInput => {
-  if (method === '1') {
-    const result: FertiliserInputInorganicScope1Method1 = {
-      productionSystem: checkBasicCropProductionSystem(
-        cell(columnProductionSystem),
-      ),
-      inorganic: {
-        applications: [
-          {
-            calculationMethodScope3: '1',
-            fertiliserType,
-            massAppliedKg: nv(massAppliedKg),
+  const productionSystem = cell(columnProductionSystem);
+  const areaAppliedHectares = cell(columnAreaApplied);
 
-            components: customNitrogenFraction
-              ? [
-                  {
-                    componentType: 'Nitrogen - Generic',
-                    fractionOfFertiliser: nv(customNitrogenFraction),
-                  },
-                ]
-              : undefined,
+  const application: InorganicFertiliserInputScope3Method1 = {
+    calculationMethodScope3: '1',
+    fertiliserType,
+    massAppliedKg: nv(massAppliedKg),
+    massPurchasedKg: nv(massAppliedKg),
+    components: customNitrogenFraction
+      ? [
+          {
+            componentType: 'Nitrogen - Generic',
+            fractionOfFertiliser: nv(customNitrogenFraction),
           },
-        ],
-        calculationMethodScope1: '1',
+        ]
+      : undefined,
+  };
+
+  const useScope1Method2 =
+    isProductionSystemInorganicFertiliser(productionSystem) &&
+    (areaAppliedHectares !== undefined ||
+      !isBasicCropProductionSystem(productionSystem));
+
+  if (useScope1Method2) {
+    const result: FertiliserInputInorganicScope1Method2 = {
+      productionSystem:
+        checkProductionSystemsInorganicFertilisers(productionSystem),
+      inorganic: {
+        applications: [application],
+        areaAppliedHectares: nv(Number(areaAppliedHectares)),
+        calculationMethodScope1: '2',
       },
       organic: {
         applications: [],
@@ -72,28 +106,11 @@ const getFertilisersInput = (
     return result;
   }
 
-  const areaAppliedHectares = Number(cell('C'));
-
-  const result: FertiliserInputInorganicScope1Method2 = {
-    productionSystem: checkProductionSystemsInorganicFertilisers(
-      cell(columnProductionSystem),
-    ),
+  const result: FertiliserInputInorganicScope1Method1 = {
+    productionSystem: checkBasicCropProductionSystem(productionSystem),
     inorganic: {
-      applications: [
-        {
-          calculationMethodScope3: '2',
-          fertiliserType,
-          massAppliedKg: nv(massAppliedKg),
-          ...(customNitrogenFraction
-            ? {
-                customNitrogenFraction: nvo(customNitrogenFraction),
-              }
-            : {}),
-          customScope3EmissionFactor: nv(0),
-        },
-      ],
-      areaAppliedHectares: nv(areaAppliedHectares),
-      calculationMethodScope1: '2',
+      applications: [application],
+      calculationMethodScope1: '1',
     },
     organic: {
       applications: [],
@@ -106,7 +123,6 @@ const getFertilisersInput = (
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
   row: number,
-  method: '1' | '2',
 ):
   | (HasFertiliserInputTransformed & HasIsInLeachingZoneInputTransformed)
   | undefined => {
@@ -126,7 +142,6 @@ const getCalculatorInput = (
     : undefined;
 
   const fertiliser = getFertilisersInput(
-    method,
     fertiliserType,
     massAppliedKg,
     customNitrogenFraction,
@@ -166,21 +181,6 @@ describe('5.5.1.1 Fertiliser leaching and runoff N2O (inorganic)', () => {
     );
 
     const inputsAndOutputs = extractInputsAndOutput(sheet, 4, '1');
-
-    compareInputsAndOutputs(
-      inputsAndOutputs,
-      calculateLeachingAndRunoffN2O,
-      '5.5',
-    );
-  });
-
-  it('method 2 matches spreadsheet results', async () => {
-    const sheet = await getSheet(
-      './src/modules/test/5.5-leaching-runoff.xlsx',
-      '5.5.1.1 (inorganic)',
-    );
-
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 10, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,

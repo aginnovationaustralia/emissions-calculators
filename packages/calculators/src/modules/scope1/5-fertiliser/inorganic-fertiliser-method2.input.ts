@@ -12,45 +12,30 @@ import {
   LEACH_RUNOFF_5_5,
   PURCH_FERT_15_4,
 } from '@/tools/modules';
-import { mass, massPerMass } from '@/tools/units';
-import { object } from '@/types/schemas';
+import { massPerMass } from '@/tools/units';
 import { z } from 'zod';
+import { InorganicFertiliserInputBaseSchema } from './inorganic-fertiliser-shared.input';
 
 export const otherFertilisers = 'Other Fertilisers' as const;
 
-const InorganicFertiliserInputScope3Method2BaseSchema = object({
-  massAppliedKg: numberInput(
-    (val) => mass('Inorganic Fertiliser', val),
-    {
-      name: 'massAppliedKg',
-      method: '2',
-      description: 'Mass of inorganic fertiliser applied',
-      modules: [
-        FERT_INORGANIC_5_1,
-        ATMOS_DEPOSIT_5_4,
-        LEACH_RUNOFF_5_5,
-        PURCH_FERT_15_4,
-      ],
-    },
-    (s) => s.min(0),
-  ),
-
-  customScope3EmissionFactor: numberInput(
-    (val) => massPerMass('CO2e', 'Inorganic Fertiliser', val),
-    {
-      name: 'customScope3EmissionFactor',
-      method: '2',
-      scope: '3',
-      description: 'Custom scope 3 emission factor for this fertiliser',
-      modules: [PURCH_FERT_15_4],
-    },
-    (s) => s.min(0),
-  ),
-  calculationMethodScope3: z.literal('2').meta({
-    description:
-      'Choosing method 2 for calculating scope 3 emissions for this fertiliser',
-  }),
-});
+const InorganicFertiliserInputScope3Method2BaseSchema =
+  InorganicFertiliserInputBaseSchema.safeExtend({
+    customScope3EmissionFactor: numberInput(
+      (val) => massPerMass('CO2e', 'Inorganic Fertiliser', val),
+      {
+        name: 'customScope3EmissionFactor',
+        method: '2',
+        scope: '3',
+        description: 'Custom scope 3 emission factor for this fertiliser',
+        modules: [PURCH_FERT_15_4],
+      },
+      (s) => s.min(0),
+    ),
+    calculationMethodScope3: z.literal('2').meta({
+      description:
+        'Choosing method 2 for calculating scope 3 emissions for this fertiliser',
+    }),
+  });
 
 export const InorganicFertiliserInputScope3Method2KnownFertiliserSchema =
   InorganicFertiliserInputScope3Method2BaseSchema.safeExtend({

@@ -1770,11 +1770,31 @@
                                         "type": "object",
                                         "properties": {
                                           "massAppliedKg": {
-                                            "description": "Mass of inorganic fertiliser applied (kilograms inorganic fertiliser)",
+                                            "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKg), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                                             "x-modules": [
                                               "5.1",
                                               "5.4",
-                                              "5.5",
+                                              "5.5"
+                                            ],
+                                            "type": "object",
+                                            "properties": {
+                                              "value": {
+                                                "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                              },
+                                              "quality": {
+                                                "default": {},
+                                                "$ref": "#/components/schemas/QualityTable"
+                                              }
+                                            },
+                                            "required": [
+                                              "value"
+                                            ],
+                                            "additionalProperties": false,
+                                            "x-units": "kilograms inorganic fertiliser"
+                                          },
+                                          "massPurchasedKg": {
+                                            "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKg), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                            "x-modules": [
                                               "15.4"
                                             ],
                                             "type": "object",
@@ -1971,6 +1991,7 @@
                                         },
                                         "required": [
                                           "massAppliedKg",
+                                          "massPurchasedKg",
                                           "fertiliserType",
                                           "calculationMethodScope3"
                                         ],
@@ -1983,11 +2004,31 @@
                                             "type": "object",
                                             "properties": {
                                               "massAppliedKg": {
-                                                "description": "Mass of inorganic fertiliser applied (kilograms inorganic fertiliser)",
+                                                "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKg), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                                                 "x-modules": [
                                                   "5.1",
                                                   "5.4",
-                                                  "5.5",
+                                                  "5.5"
+                                                ],
+                                                "type": "object",
+                                                "properties": {
+                                                  "value": {
+                                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                                  },
+                                                  "quality": {
+                                                    "default": {},
+                                                    "$ref": "#/components/schemas/QualityTable"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "value"
+                                                ],
+                                                "additionalProperties": false,
+                                                "x-units": "kilograms inorganic fertiliser"
+                                              },
+                                              "massPurchasedKg": {
+                                                "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKg), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                                "x-modules": [
                                                   "15.4"
                                                 ],
                                                 "type": "object",
@@ -2067,6 +2108,7 @@
                                             },
                                             "required": [
                                               "massAppliedKg",
+                                              "massPurchasedKg",
                                               "customScope3EmissionFactor",
                                               "calculationMethodScope3",
                                               "fertiliserType"
@@ -2078,11 +2120,31 @@
                                             "type": "object",
                                             "properties": {
                                               "massAppliedKg": {
-                                                "description": "Mass of inorganic fertiliser applied (kilograms inorganic fertiliser)",
+                                                "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKg), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                                                 "x-modules": [
                                                   "5.1",
                                                   "5.4",
-                                                  "5.5",
+                                                  "5.5"
+                                                ],
+                                                "type": "object",
+                                                "properties": {
+                                                  "value": {
+                                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                                  },
+                                                  "quality": {
+                                                    "default": {},
+                                                    "$ref": "#/components/schemas/QualityTable"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "value"
+                                                ],
+                                                "additionalProperties": false,
+                                                "x-units": "kilograms inorganic fertiliser"
+                                              },
+                                              "massPurchasedKg": {
+                                                "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKg), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                                "x-modules": [
                                                   "15.4"
                                                 ],
                                                 "type": "object",
@@ -2186,6 +2248,7 @@
                                             },
                                             "required": [
                                               "massAppliedKg",
+                                              "massPurchasedKg",
                                               "customScope3EmissionFactor",
                                               "calculationMethodScope3",
                                               "fertiliserType",

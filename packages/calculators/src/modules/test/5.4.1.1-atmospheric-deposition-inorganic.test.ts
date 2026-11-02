@@ -34,6 +34,7 @@ const getCalculatorInput = (
 
   const application: InorganicFertiliserInputScope3Method1 = {
     massAppliedKg: nv(massAppliedKg),
+    massPurchasedKg: nv(massAppliedKg),
     fertiliserType,
     calculationMethodScope3: '1',
   };

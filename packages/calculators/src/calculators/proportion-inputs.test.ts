@@ -49,6 +49,7 @@ const cottonInput = ({
             calculationMethodScope3: '1',
             fertiliserType: 'Urea',
             massAppliedKg: nv(1000),
+            massPurchasedKg: nv(1000),
             components: [
               {
                 componentType: 'Urea',
