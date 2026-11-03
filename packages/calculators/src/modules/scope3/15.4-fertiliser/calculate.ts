@@ -129,7 +129,11 @@ export const calculateScope3FertiliserMethod1 = (
   fertiliser: InorganicFertiliserInputScope3Method1Transformed,
   context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
 ) => {
-  if (fertiliser.components) {
+  /**
+   * NOTE: An empty components array is treated as "not supplied", consistent with how
+   * scope 1 (5.1) derives the nitrogen and urea fractions.
+   */
+  if (fertiliser.components?.length) {
     return calculateScope3FertiliserMethod1Components(
       fertiliser,
       fertiliser.components,
