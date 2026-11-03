@@ -12,6 +12,7 @@ import {
   InorganicFertiliserInputScope3Method1Transformed,
   InorganicFertiliserInputScope3Method2Transformed,
   isInorganicFertiliserInputScope3Method2,
+  isInorganicFertiliserTypeOther,
 } from '@/modules/scope1/5-fertiliser/inorganic-fertiliser.input';
 import { selectConstant } from '@/tools/constants';
 import { captureMethod1Or2Value } from '@/tools/multi';
@@ -20,7 +21,10 @@ import { sum } from '@/tools/sum';
 import { voidUnit } from '@/tools/units';
 
 export const calculateScope3FertiliserMethod1EmissionsFactor = (
-  fertiliser: InorganicFertiliserInputScope3Method1Transformed,
+  fertiliser: Pick<
+    InorganicFertiliserInputScope3Method1Transformed,
+    'massPurchasedKg' | 'fertiliserType'
+  >,
   context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
 ) => {
   /*
@@ -153,6 +157,25 @@ export const calculateScope3FertiliserMethod2 = (
   return e;
 };
 
+/**
+ * Method 1 value for an application reported with a supplier emission factor (method 2),
+ * so the method 1 total stays complete when method 2 figures are supplied. Known fertiliser
+ * types use their default emission factor. 'Other Fertilisers' have no method 1 equivalent.
+ */
+const calculateScope3FertiliserMethod2WithMethod1 = (
+  fertiliser: InorganicFertiliserInputScope3Method2Transformed,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
+) => {
+  const method2 = calculateScope3FertiliserMethod2(fertiliser);
+  if (isInorganicFertiliserTypeOther(fertiliser)) {
+    return captureMethod1Or2Value(voidUnit(), method2);
+  }
+  return captureMethod1Or2Value(
+    calculateScope3FertiliserMethod1EmissionsFactor(fertiliser, context),
+    method2,
+  );
+};
+
 export const calculateScope3Fertiliser = (
   activity: HasFertiliserInputTransformed,
   context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
@@ -161,10 +184,7 @@ export const calculateScope3Fertiliser = (
 
   const emissionsRecords = inorganic.applications.map((fertiliser) => {
     if (isInorganicFertiliserInputScope3Method2(fertiliser)) {
-      return captureMethod1Or2Value(
-        voidUnit(),
-        calculateScope3FertiliserMethod2(fertiliser),
-      );
+      return calculateScope3FertiliserMethod2WithMethod1(fertiliser, context);
     } else {
       return captureMethod1Or2Value(
         calculateScope3FertiliserMethod1(fertiliser, context),
