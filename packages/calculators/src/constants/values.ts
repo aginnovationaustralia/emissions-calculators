@@ -1288,6 +1288,17 @@ const fracGasfNitrateBased = massPerMass('Volatilised N', 'N', 0.01);
 const fracGasfAmmoniumNitrateBased = massPerMass('Volatilised N', 'N', 0.05);
 const fracGasfOtherFertilisers = massPerMass('Volatilised N', 'N', 0.11);
 
+/**
+ * Sulphate of ammonia (SOA) and ammonium sulfate are the same product, so both fertiliser
+ * types share these fractions.
+ */
+const sulphateOfAmmoniaFractions = {
+  N: massPerMass('N', 'Inorganic Fertiliser', 0.21),
+  Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
+  Volatilises: fracGasfAmmoniumBased,
+  Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.47), // AusLCI entry for "Ammonium sulfate"
+};
+
 export const cropConstants: CropConstants = {
   name: 'CROP',
 
@@ -1320,12 +1331,7 @@ export const cropConstants: CropConstants = {
       Volatilises: fracGasfUreaBased,
       Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 1.5),
     },
-    'Sulphate of Ammonia (SOA)': {
-      N: massPerMass('N', 'Inorganic Fertiliser', 0.21),
-      Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
-      Volatilises: fracGasfAmmoniumBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.47), // AusLCI entry for "Ammonium sulfate"
-    },
+    'Sulphate of Ammonia (SOA)': sulphateOfAmmoniaFractions,
     'Urea-Ammonium Nitrate (UAN)': {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.32),
       Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0.35),
@@ -1356,12 +1362,8 @@ export const cropConstants: CropConstants = {
       Volatilises: massPerMass('Volatilised N', 'N', 0),
       Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.45),
     },
-    'Ammonium Sulfate': {
-      N: massPerMass('N', 'Inorganic Fertiliser', 0.21),
-      Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
-      Volatilises: fracGasfAmmoniumBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 2.21),
-    },
+    // Alias of 'Sulphate of Ammonia (SOA)', kept so existing inputs remain valid
+    'Ammonium Sulfate': sulphateOfAmmoniaFractions,
   },
 
   // Lifecycles GHG Emission Intensities for Material Inputs to AUS Ag Fisheries Forestry V48 (March 2026)
