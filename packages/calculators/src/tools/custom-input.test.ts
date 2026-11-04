@@ -7,7 +7,7 @@ import {
   InputKind,
   Metadata,
 } from './containers';
-import { AnyNumberUnit, AnyUnit } from './generic';
+import { AnyNumberUnit, AnyUnit } from './generic/units';
 import { input, InputContainer } from './inputs';
 import { sum } from './sum';
 import {

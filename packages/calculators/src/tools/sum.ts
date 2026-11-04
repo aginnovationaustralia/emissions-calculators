@@ -1,6 +1,6 @@
 import { Metadata, NumberContainer, SummedContainer } from './containers';
 import { VoidUnit, voidUnit } from './units';
-import { AnyNumberUnit } from './generic';
+import { AnyNumberUnit } from './generic/units';
 
 // Extract the unit type from an origin (for preserving unit when summing)
 export type ExtractOriginUnit<T> = T extends {

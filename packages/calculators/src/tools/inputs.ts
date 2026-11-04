@@ -1,54 +1,66 @@
-import { object } from '@/types/schemas';
-import { z } from 'zod';
-import { BaseContainer, Metadata } from './containers';
+import { Metadata } from './containers';
 import { getDisplayUnit } from './display-units';
 import { enumSchema } from './enum-schemas';
+import {
+  genericBooleanInput,
+  genericBooleanInputOptional,
+  genericEnumInput,
+  genericEnumInputOptional,
+  GenericInputContainer,
+  GenericInputFields,
+  genericLiteralInput,
+  genericNumberInput,
+  genericNumberInputOptional,
+  GenericNumberInputSchema,
+  GenericNumberInputSchemaOptional,
+  NumberInputValue,
+  NumberSchemaTweaker,
+} from './generic/inputs';
+import { AnyNumberUnit, AnyUnit } from './generic/units';
 import { ModuleNames } from './modules';
-import { QualityTable, QualityTableSchema } from './quality';
-import { AnyNumberUnit, AnyUnit } from './generic';
-import { mapOptional } from './zod';
+import { QualityTable } from './quality';
+
+export type {
+  NumberInputValue,
+  NumberSchemaTweaker,
+  RatedValue,
+} from './generic/inputs';
 
 const X_MODULES = 'x-modules';
 
-export class InputContainer<U extends AnyUnit> extends BaseContainer<U> {
-  originType: 'input';
-  method: '1' | '2';
+type Method = '1' | '2';
+
+export class InputContainer<U extends AnyUnit> extends GenericInputContainer<
+  U,
+  Method
+> {
   /** Which module(s) (e.g. '3.1') consume this input. */
   modules: string[];
   quality?: QualityTable;
 
   constructor(
     unit: U,
-    method: '1' | '2',
+    method: Method,
     modules: string[],
     quality?: QualityTable,
     baseOrigin?: Metadata,
   ) {
-    super(unit, baseOrigin);
-    this.originType = 'input';
-    this.method = method;
+    super(unit, method, baseOrigin);
     this.modules = modules;
     this.quality = quality;
   }
 
-  switchUnit<V extends AnyNumberUnit>(
+  override switchUnit<V extends AnyNumberUnit>(
     converter: (from: NoInfer<U>) => V,
   ): InputContainer<V> {
-    const newUnit = converter(this.unit);
-    return new InputContainer(
-      newUnit,
-      this.method,
-      this.modules,
-      this.quality,
-      this.core,
-    );
+    return super.switchUnit(converter) as InputContainer<V>;
   }
 }
 export type NonEmptyArray<T> = [T, ...T[]];
 
 export type InputOptions = {
   name: string;
-  method?: '1' | '2';
+  method?: Method;
   quality?: QualityTable;
   /**
    * Which module(s) (e.g. '3.1') consume this input. Input schemas require at least one
@@ -72,18 +84,6 @@ export const input = <T extends AnyUnit>(
 };
 
 export type RateableInputValue = number;
-
-/** Wire form for number inputs: always an object; quality is optional. */
-export type NumberInputValue<T extends RateableInputValue = number> = {
-  value: T;
-  quality?: QualityTable;
-};
-
-/** Parsed number input with quality always present (defaults to `{}`). */
-export type RatedValue<T extends RateableInputValue = number> = {
-  value: T;
-  quality: QualityTable;
-};
 
 /** Build a number input value. */
 export const numberValue = (
@@ -111,109 +111,14 @@ export type TypedInputOptions = Omit<InputOptions, 'modules'> & {
   modules: NonEmptyArray<ModuleNames>;
 };
 
-export type NumberSchemaTweaker = (schema: z.ZodNumber) => z.ZodNumber;
-
-// -------- Number input OpenAPI components --------
-// Stable, description-free schemas so zod-openapi can emit shared $refs.
-
-const qualityField = QualityTableSchema.optional().default({});
-
-const NumberInputSchema = z.number().meta({ id: 'NumberInput' });
-
-const NonNegativeNumberInputSchema = z
-  .number()
-  .min(0)
-  .meta({ id: 'NonNegativeNumberInput' });
-
-const ProportionNumberInputSchema = z
-  .number()
-  .min(0)
-  .max(1)
-  .meta({ id: 'ProportionNumberInput' });
-
-const PercentageNumberInputSchema = z
-  .number()
-  .min(0)
-  .max(100)
-  .meta({ id: 'PercentageNumberInput' });
-
-const PositiveNumberInputSchema = z
-  .number()
-  .gt(0)
-  .meta({ id: 'PositiveNumberInput' });
-
-const MinOneNumberInputSchema = z
-  .number()
-  .min(1)
-  .meta({ id: 'MinOneNumberInput' });
-
-/** Fingerprint a number schema's JSON Schema constraints (ignoring $schema). */
-const numberConstraintKey = (schema: z.ZodNumber): string => {
-  const json = z.toJSONSchema(schema) as Record<string, unknown>;
-  const { $schema: _schema, ...rest } = json;
-  return JSON.stringify(rest);
-};
-
-type NumberInputObjectSchema = z.ZodType<RatedValue, NumberInputValue>;
-
-type NumberInputSchema = z.ZodType<number, number>;
-
-/* Create a map of number input schemas by constraint key. This lets the user define rules with zod syntax,
- * and for most scenarios we will match it to a stable schema snippet. This allows a clean OpenAPI file to be generated
- */
-const numberInputByConstraint = new Map<string, NumberInputSchema>([
-  [numberConstraintKey(z.number()), NumberInputSchema],
-  [numberConstraintKey(z.number().min(0)), NonNegativeNumberInputSchema],
-  [numberConstraintKey(z.number().min(0).max(1)), ProportionNumberInputSchema],
-  [
-    numberConstraintKey(z.number().min(0).max(100)),
-    PercentageNumberInputSchema,
-  ],
-  [numberConstraintKey(z.number().gt(0)), PositiveNumberInputSchema],
-  [numberConstraintKey(z.number().min(1)), MinOneNumberInputSchema],
-]);
-
-const resolveNumberInputSchema = (
-  displayUnit: string,
-  schemaTweaker?: NumberSchemaTweaker,
-): NumberInputObjectSchema => {
-  const valueSchema = schemaTweaker ? schemaTweaker(z.number()) : z.number();
-
-  const known = numberInputByConstraint.get(numberConstraintKey(valueSchema));
-  const baseSchema = known ?? valueSchema;
-  return object({
-    value: baseSchema,
-    quality: qualityField,
-  }).meta({ 'x-units': displayUnit });
-};
-
-const toInputContainer =
-  <U extends AnyNumberUnit>(
-    unitFactory: (value: number) => U,
-    options: TypedInputOptions,
-  ) =>
-  ({ value, quality }: RatedValue): InputContainer<U> => {
-    const unit = unitFactory(value);
-    if (options.method === '2') {
-      unit.store.applyMethod2();
-    }
-    return input(unit, {
-      name: options.name,
-      method: options.method,
-      quality,
-      modules: options.modules,
-    });
-  };
-
-type TransformedNumberInputSchemaFactory<U extends AnyNumberUnit> = z.ZodPipe<
-  NumberInputObjectSchema,
-  z.ZodTransform<InputContainer<U>, RatedValue>
->;
-
-type NumberInputSchemaOptional<U extends AnyNumberUnit> = z.ZodPipe<
-  z.ZodOptional<NumberInputObjectSchema>,
-  z.ZodTransform<InputContainer<U> | undefined, RatedValue | undefined>
->;
+/** Builds VEERG's input container, with the modules from the input options. */
+const buildInput =
+  (modules: ModuleNames[], quality?: QualityTable) =>
+  <U extends AnyUnit>(
+    unit: U,
+    { name, method }: GenericInputFields<Method>,
+  ): InputContainer<U> =>
+    input(unit, { name, method, quality, modules });
 
 const appendUnits = (description: string, units: string) =>
   `${description} (${units})`;
@@ -224,6 +129,8 @@ const openapiTags = (description: string, modules: ModuleNames[]) => ({
   [X_MODULES]: modules,
 });
 
+// -------- Numbers -----------------
+
 /**
  * Zod schema accepting `{ value, quality? }` and returning an input container.
  */
@@ -231,16 +138,21 @@ export function numberInput<U extends AnyNumberUnit>(
   unitFactory: (value: number) => U,
   options: TypedInputOptions,
   schemaTweaker?: NumberSchemaTweaker,
-): TransformedNumberInputSchemaFactory<U> {
+): GenericNumberInputSchema<InputContainer<U>> {
   const displayUnit = getDisplayUnit(unitFactory, schemaTweaker);
-  return resolveNumberInputSchema(displayUnit, schemaTweaker)
-    .transform(toInputContainer(unitFactory, options))
-    .meta(
-      openapiTags(
+  return genericNumberInput(
+    unitFactory,
+    options,
+    {
+      schemaTweaker,
+      displayUnit,
+      meta: openapiTags(
         appendUnits(options.description, displayUnit),
         options.modules,
       ),
-    );
+    },
+    buildInput(options.modules)<U>,
+  );
 }
 
 /**
@@ -250,17 +162,21 @@ export function numberInputOptional<U extends AnyNumberUnit>(
   unitFactory: (value: number) => U,
   options: TypedInputOptions,
   schemaTweaker?: NumberSchemaTweaker,
-): NumberInputSchemaOptional<U> {
+): GenericNumberInputSchemaOptional<InputContainer<U>> {
   const displayUnit = getDisplayUnit(unitFactory);
-  return resolveNumberInputSchema(displayUnit, schemaTweaker)
-    .optional()
-    .transform(mapOptional(toInputContainer(unitFactory, options)))
-    .meta(
-      openapiTags(
+  return genericNumberInputOptional(
+    unitFactory,
+    options,
+    {
+      schemaTweaker,
+      displayUnit,
+      meta: openapiTags(
         appendUnits(options.description, displayUnit),
         options.modules,
       ),
-    );
+    },
+    buildInput(options.modules)<U>,
+  );
 }
 
 export const isNonNegative: NumberSchemaTweaker = (schema) => schema.min(0);
@@ -275,29 +191,26 @@ export const isPercentage: NumberSchemaTweaker = (schema) =>
 export const enumInput = <TEnum extends string>(
   values: readonly TEnum[],
   options: TypedInputOptions,
-) => {
-  const { name, description, method = '1', modules } = options;
-  return enumSchema(values)
-    .meta(openapiTags(description, options.modules))
-    .transform((val): InputContainer<TEnum> =>
-      input(val, { name, method, modules }),
-    );
-};
+) =>
+  genericEnumInput(
+    enumSchema,
+    values,
+    options,
+    { meta: openapiTags(options.description, options.modules) },
+    buildInput(options.modules)<TEnum>,
+  );
 
 export const enumInputOptional = <TEnum extends string>(
   values: readonly TEnum[],
   options: TypedInputOptions,
-) => {
-  const { name, description, method = '1', modules } = options;
-  return enumSchema(values)
-    .optional()
-    .meta(openapiTags(description, options.modules))
-    .transform(
-      mapOptional((val): InputContainer<TEnum> =>
-        input(val, { name, method, modules }),
-      ),
-    );
-};
+) =>
+  genericEnumInputOptional(
+    enumSchema,
+    values,
+    options,
+    { meta: openapiTags(options.description, options.modules) },
+    buildInput(options.modules)<TEnum>,
+  );
 
 /**
  * An input that only accepts a single value, typically used to select a variant. It is
@@ -306,15 +219,13 @@ export const enumInputOptional = <TEnum extends string>(
 export const literalInput = <TValue extends string>(
   value: TValue,
   options: TypedInputOptions,
-) => {
-  const { name, description, method = '1', modules } = options;
-  return z
-    .enum([value])
-    .meta(openapiTags(description, options.modules))
-    .transform((val): InputContainer<TValue> =>
-      input(val, { name, method, modules }),
-    );
-};
+) =>
+  genericLiteralInput(
+    value,
+    options,
+    { meta: openapiTags(options.description, options.modules) },
+    buildInput(options.modules)<TValue>,
+  );
 
 // -------- Booleans -----------------
 
@@ -323,24 +234,19 @@ export const booleanInput = (
   description: string,
   modules: NonEmptyArray<ModuleNames>,
 ) =>
-  z
-    .boolean()
-    .meta(openapiTags(description, modules))
-    .transform((val): InputContainer<boolean> =>
-      input(val, { name: inputName, modules }),
-    );
+  genericBooleanInput(
+    { name: inputName },
+    { meta: openapiTags(description, modules) },
+    buildInput(modules)<boolean>,
+  );
 
 export const booleanInputOptional = (
   inputName: string,
   description: string,
   modules: NonEmptyArray<ModuleNames>,
 ) =>
-  z
-    .boolean()
-    .optional()
-    .meta(openapiTags(description, modules))
-    .transform(
-      mapOptional((val): InputContainer<boolean> =>
-        input(val, { name: inputName, modules }),
-      ),
-    );
+  genericBooleanInputOptional(
+    { name: inputName },
+    { meta: openapiTags(description, modules) },
+    buildInput(modules)<boolean>,
+  );
