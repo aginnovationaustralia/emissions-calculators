@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { Metadata } from './containers';
 import { getDisplayUnit } from './display-units';
 import { enumSchema } from './enum-schemas';
@@ -11,20 +12,13 @@ import {
   genericLiteralInput,
   genericNumberInput,
   genericNumberInputOptional,
-  GenericNumberInputSchema,
-  GenericNumberInputSchemaOptional,
-  NumberInputValue,
   NumberSchemaTweaker,
 } from './generic/inputs';
 import { AnyNumberUnit, AnyUnit } from './generic/units';
 import { ModuleNames } from './modules';
-import { QualityTable } from './quality';
+import { QualityTable, QualityTableSchema } from './quality';
 
-export type {
-  NumberInputValue,
-  NumberSchemaTweaker,
-  RatedValue,
-} from './generic/inputs';
+export type { NumberSchemaTweaker } from './generic/inputs';
 
 const X_MODULES = 'x-modules';
 
@@ -85,6 +79,37 @@ export const input = <T extends AnyUnit>(
 
 export type RateableInputValue = number;
 
+/** The extra field of VEERG's number inputs: data quality ratings, defaulting to `{}`. */
+const qualityExtension = {
+  quality: QualityTableSchema.optional().default({}),
+};
+
+/** Wire form for number inputs: always an object; quality is optional. */
+export type NumberInputValue = {
+  value: number;
+  quality?: QualityTable;
+};
+
+/** Parsed number input with quality always present (defaults to `{}`). */
+export type RatedValue = {
+  value: number;
+  quality: QualityTable;
+};
+
+// NOTE: Named here rather than derived from the generic types, which expand to types too large to
+// serialize in the declarations of the bigger input schemas.
+type NumberInputObjectSchema = z.ZodType<RatedValue, NumberInputValue>;
+
+export type NumberInputSchema<U extends AnyNumberUnit> = z.ZodPipe<
+  NumberInputObjectSchema,
+  z.ZodTransform<InputContainer<U>, RatedValue>
+>;
+
+export type NumberInputSchemaOptional<U extends AnyNumberUnit> = z.ZodPipe<
+  z.ZodOptional<NumberInputObjectSchema>,
+  z.ZodTransform<InputContainer<U> | undefined, RatedValue | undefined>
+>;
+
 /** Build a number input value. */
 export const numberValue = (
   value: number,
@@ -111,12 +136,16 @@ export type TypedInputOptions = Omit<InputOptions, 'modules'> & {
   modules: NonEmptyArray<ModuleNames>;
 };
 
-/** Builds VEERG's input container, with the modules from the input options. */
+/**
+ * Builds VEERG's input container, with the modules from the input options, and the quality from
+ * the parsed value of a number input.
+ */
 const buildInput =
-  (modules: ModuleNames[], quality?: QualityTable) =>
+  (modules: ModuleNames[]) =>
   <U extends AnyUnit>(
     unit: U,
     { name, method }: GenericInputFields<Method>,
+    { quality }: { quality?: QualityTable } = {},
   ): InputContainer<U> =>
     input(unit, { name, method, quality, modules });
 
@@ -138,7 +167,7 @@ export function numberInput<U extends AnyNumberUnit>(
   unitFactory: (value: number) => U,
   options: TypedInputOptions,
   schemaTweaker?: NumberSchemaTweaker,
-): GenericNumberInputSchema<InputContainer<U>> {
+): NumberInputSchema<U> {
   const displayUnit = getDisplayUnit(unitFactory, schemaTweaker);
   return genericNumberInput(
     unitFactory,
@@ -146,6 +175,7 @@ export function numberInput<U extends AnyNumberUnit>(
     {
       schemaTweaker,
       displayUnit,
+      extend: qualityExtension,
       meta: openapiTags(
         appendUnits(options.description, displayUnit),
         options.modules,
@@ -162,7 +192,7 @@ export function numberInputOptional<U extends AnyNumberUnit>(
   unitFactory: (value: number) => U,
   options: TypedInputOptions,
   schemaTweaker?: NumberSchemaTweaker,
-): GenericNumberInputSchemaOptional<InputContainer<U>> {
+): NumberInputSchemaOptional<U> {
   const displayUnit = getDisplayUnit(unitFactory);
   return genericNumberInputOptional(
     unitFactory,
@@ -170,6 +200,7 @@ export function numberInputOptional<U extends AnyNumberUnit>(
     {
       schemaTweaker,
       displayUnit,
+      extend: qualityExtension,
       meta: openapiTags(
         appendUnits(options.description, displayUnit),
         options.modules,

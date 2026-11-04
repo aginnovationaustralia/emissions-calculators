@@ -13,7 +13,7 @@ import {
   genericNumberInput,
   genericNumberInputOptional,
 } from './inputs';
-import { QualityTable } from '../quality';
+import { z } from 'zod';
 import { input, numberInput } from '../inputs';
 import { mass, volume } from '../units';
 
@@ -28,10 +28,9 @@ class SectionInput<U extends AnyUnit> extends GenericInputContainer<
     unit: U,
     method: GenericMethod,
     section: string,
-    quality?: QualityTable,
     baseOrigin?: Metadata,
   ) {
-    super(unit, method, quality, baseOrigin);
+    super(unit, method, baseOrigin);
     this.section = section;
   }
 
@@ -46,11 +45,9 @@ const sectionInput =
   (section: string) =>
   <U extends AnyUnit>(
     unit: U,
-    fields: { name: string; method: GenericMethod; quality?: QualityTable },
+    fields: { name: string; method: GenericMethod },
   ) =>
-    new SectionInput(unit, fields.method, section, fields.quality, {
-      name: fields.name,
-    });
+    new SectionInput(unit, fields.method, section, { name: fields.name });
 
 const fuelEnums = createEnumSchemas(
   { FuelState: ['Liquid', 'Gaseous'] },
@@ -58,17 +55,32 @@ const fuelEnums = createEnumSchemas(
 );
 
 describe('genericNumberInput', () => {
-  it('builds a GenericInputContainer by default, with the quality from the value', () => {
+  it('builds a GenericInputContainer by default, from an object with only a value', () => {
     const schema = genericNumberInput((v) => volume('Liquid fuel', v), {
       name: 'Qi',
     });
-    const result = schema.parse({ value: 10, quality: { Temporal: '2' } });
+    const result = schema.parse({ value: 10 });
 
     expect(result).toBeInstanceOf(GenericInputContainer);
     expect(result.core?.name).toBe('Qi');
     expect(result.method).toBe('1');
-    expect(result.quality).toEqual({ Temporal: '2' });
     expect(result.unit.store.toNumber()).toBe(10);
+    expect(() => schema.parse({ value: 10, quality: {} })).toThrow();
+  });
+
+  it('accepts extra fields from the extension, and passes their values to the builder', () => {
+    const schema = genericNumberInput(
+      (v) => volume('Liquid fuel', v),
+      { name: 'Qi' },
+      { extend: { source: z.string().default('measured') } },
+      (unit, fields, { source }) =>
+        new SectionInput(unit, fields.method, source, { name: fields.name }),
+    );
+
+    expect(schema.parse({ value: 10, source: 'invoice' }).section).toBe(
+      'invoice',
+    );
+    expect(schema.parse({ value: 10 }).section).toBe('measured');
   });
 
   it('builds a custom input container, keeping its extra field across a unit switch', () => {

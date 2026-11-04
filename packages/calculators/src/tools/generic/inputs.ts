@@ -1,7 +1,6 @@
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 import { BaseContainer, InputLike, Metadata } from '../containers';
-import { QualityTable, QualityTableSchema } from '../quality';
 import { mapOptional } from '../zod';
 import { AnyNumberUnit, AnyUnit } from './units';
 
@@ -58,7 +57,8 @@ export type InputBuilder<
   U extends AnyUnit,
   M extends GenericMethod,
   C extends InputLike<U>,
-> = (unit: U, fields: GenericInputFields<M>) => C;
+  X = object,
+> = (unit: U, fields: GenericInputFields<M>, extra: X) => C;
 
 const buildGenericInput = <U extends AnyUnit, M extends GenericMethod>(
   unit: U,
@@ -72,9 +72,10 @@ const builderOrDefault = <
   U extends AnyUnit,
   M extends GenericMethod,
   C extends InputLike<U>,
+  X,
 >(
-  build: InputBuilder<U, M, C> | undefined,
-) => build ?? (buildGenericInput as unknown as InputBuilder<U, M, C>);
+  build: InputBuilder<U, M, C, X> | undefined,
+) => build ?? (buildGenericInput as unknown as InputBuilder<U, M, C, X>);
 
 const methodOf = <M extends GenericMethod>(options: GenericInputOptions<M>) =>
   options.method ?? ('1' as M);
@@ -95,27 +96,39 @@ const toValueInputContainer =
     build: InputBuilder<U, M, C>,
   ) =>
   (value: U): C =>
-    build(value, { name: options.name, method: methodOf(options) });
+    build(value, { name: options.name, method: methodOf(options) }, {});
 
 // -------- Numbers -----------------
 
-/** Wire form for number inputs: always an object; quality is optional. */
-export type NumberInputValue<T extends number = number> = {
-  value: T;
-  quality?: QualityTable;
-};
+/**
+ * Extra fields a calculator adds to the object of its number inputs, alongside `value`. Their
+ * parsed values are passed to the input builder.
+ */
+export type NumberInputExtension = z.core.$ZodLooseShape;
 
-/** Parsed number input with quality always present (defaults to `{}`). */
-export type RatedValue<T extends number = number> = {
-  value: T;
-  quality: QualityTable;
-};
+// NOTE: `value` is part of the object shape, rather than intersected with it, because Zod infers an
+// object with an empty shape as `Record<string, never>`, which no `{ value }` would satisfy.
+type NumberInputShape<E extends NumberInputExtension> = {
+  value: z.ZodNumber;
+} & E;
+
+/** Wire form for number inputs: always an object, with any extra fields alongside `value`. */
+export type GenericNumberInputValue<E extends NumberInputExtension = object> =
+  z.input<z.ZodObject<NumberInputShape<E>, z.core.$strict>>;
+
+/** The parsed values of the extra fields of a number input. */
+export type NumberInputExtra<E extends NumberInputExtension> = Omit<
+  z.output<z.ZodObject<NumberInputShape<E>, z.core.$strict>>,
+  'value'
+>;
+
+/** Parsed number input. */
+export type GenericParsedNumberInput<E extends NumberInputExtension = object> =
+  { value: number } & NumberInputExtra<E>;
 
 export type NumberSchemaTweaker = (schema: z.ZodNumber) => z.ZodNumber;
 
 // Stable, description-free schemas so zod-openapi can emit shared $refs.
-
-const qualityField = QualityTableSchema.optional().default({});
 
 const NumberInputSchema = z.number().meta({ id: 'NumberInput' });
 
@@ -153,7 +166,10 @@ const numberConstraintKey = (schema: z.ZodNumber): string => {
   return JSON.stringify(rest);
 };
 
-type NumberInputObjectSchema = z.ZodType<RatedValue, NumberInputValue>;
+type NumberInputObjectSchema<E extends NumberInputExtension> = z.ZodType<
+  GenericParsedNumberInput<E>,
+  GenericNumberInputValue<E>
+>;
 
 type NumberValueSchema = z.ZodType<number, number>;
 
@@ -173,65 +189,88 @@ const numberInputByConstraint = new Map<string, NumberValueSchema>([
 ]);
 
 /** How the value of a number input is validated and described. */
-export type NumberSchemaOptions = SchemaOptions & {
-  schemaTweaker?: NumberSchemaTweaker;
-  /** The units of the value, described to API users as `x-units`. */
-  displayUnit?: string;
-};
+export type NumberSchemaOptions<E extends NumberInputExtension = object> =
+  SchemaOptions & {
+    schemaTweaker?: NumberSchemaTweaker;
+    /** The units of the value, described to API users as `x-units`. */
+    displayUnit?: string;
+    /** Extra fields of the input object, alongside `value`. */
+    extend?: E;
+  };
 
-const resolveNumberInputSchema = ({
+const resolveNumberInputSchema = <E extends NumberInputExtension>({
   schemaTweaker,
   displayUnit,
-}: NumberSchemaOptions): NumberInputObjectSchema => {
+  extend,
+}: NumberSchemaOptions<E>): NumberInputObjectSchema<E> => {
   const valueSchema = schemaTweaker ? schemaTweaker(z.number()) : z.number();
 
   const known = numberInputByConstraint.get(numberConstraintKey(valueSchema));
   const baseSchema = known ?? valueSchema;
   const schema = object({
     value: baseSchema,
-    quality: qualityField,
-  });
+    ...extend,
+  }) as unknown as NumberInputObjectSchema<E>;
   return displayUnit === undefined
     ? schema
     : schema.meta({ 'x-units': displayUnit });
 };
 
 const toNumberInputContainer =
-  <U extends AnyNumberUnit, M extends GenericMethod, C extends InputLike<U>>(
+  <
+    U extends AnyNumberUnit,
+    M extends GenericMethod,
+    E extends NumberInputExtension,
+    C extends InputLike<U>,
+  >(
     unitFactory: (value: number) => U,
     options: GenericInputOptions<M>,
-    build: InputBuilder<U, M, C>,
+    build: InputBuilder<U, M, C, NumberInputExtra<E>>,
   ) =>
-  ({ value }: RatedValue): C => {
+  ({ value, ...extra }: GenericParsedNumberInput<E>): C => {
     const unit = unitFactory(value);
     const method = methodOf(options);
     if (method !== '1') {
       unit.store.applyMethod2();
     }
-    return build(unit, { name: options.name, method });
+    return build(
+      unit,
+      { name: options.name, method },
+      extra as NumberInputExtra<E>,
+    );
   };
 
-export type GenericNumberInputSchema<C> = z.ZodPipe<
-  NumberInputObjectSchema,
-  z.ZodTransform<C, RatedValue>
+export type GenericNumberInputSchema<
+  C,
+  E extends NumberInputExtension = object,
+> = z.ZodPipe<
+  NumberInputObjectSchema<E>,
+  z.ZodTransform<C, GenericParsedNumberInput<E>>
 >;
 
-export type GenericNumberInputSchemaOptional<C> = z.ZodPipe<
-  z.ZodOptional<NumberInputObjectSchema>,
-  z.ZodTransform<C | undefined, RatedValue | undefined>
+export type GenericNumberInputSchemaOptional<
+  C,
+  E extends NumberInputExtension = object,
+> = z.ZodPipe<
+  z.ZodOptional<NumberInputObjectSchema<E>>,
+  z.ZodTransform<C | undefined, GenericParsedNumberInput<E> | undefined>
 >;
 
-/** Zod schema accepting `{ value, quality? }` and returning an input container. */
+/**
+ * Zod schema accepting `{ value }`, plus any extra fields in `schema.extend`, and returning an
+ * input container.
+ */
 export const genericNumberInput = <
   U extends AnyNumberUnit,
   M extends GenericMethod = GenericMethod,
+  E extends NumberInputExtension = object,
   C extends InputLike<U> = GenericInputContainer<U, M>,
 >(
   unitFactory: (value: number) => U,
   options: GenericInputOptions<M>,
-  schema: NumberSchemaOptions = {},
-  build?: InputBuilder<U, M, C>,
-): GenericNumberInputSchema<C> =>
+  schema: NumberSchemaOptions<E> = {},
+  build?: InputBuilder<U, M, C, NumberInputExtra<E>>,
+): GenericNumberInputSchema<C, E> =>
   withMeta(
     resolveNumberInputSchema(schema).transform(
       toNumberInputContainer(unitFactory, options, builderOrDefault(build)),
@@ -239,17 +278,18 @@ export const genericNumberInput = <
     schema.meta,
   );
 
-/** Optional `{ value, quality? }` number input schema. */
+/** Optional number input schema, as for `genericNumberInput`. */
 export const genericNumberInputOptional = <
   U extends AnyNumberUnit,
   M extends GenericMethod = GenericMethod,
+  E extends NumberInputExtension = object,
   C extends InputLike<U> = GenericInputContainer<U, M>,
 >(
   unitFactory: (value: number) => U,
   options: GenericInputOptions<M>,
-  schema: NumberSchemaOptions = {},
-  build?: InputBuilder<U, M, C>,
-): GenericNumberInputSchemaOptional<C> =>
+  schema: NumberSchemaOptions<E> = {},
+  build?: InputBuilder<U, M, C, NumberInputExtra<E>>,
+): GenericNumberInputSchemaOptional<C, E> =>
   withMeta(
     resolveNumberInputSchema(schema)
       .optional()
@@ -272,13 +312,21 @@ export const genericNumberInputOptional = <
 const valuesKey = (values: readonly string[]) =>
   JSON.stringify([...values].sort());
 
-const makeEnumSchema = <TEnum extends string>(values: readonly TEnum[]) =>
-  z.enum(values);
+// NOTE: Named with Zod's own `ToEnum`, rather than inferred from `z.enum`, so the emitted declaration
+// stays assignable from a consumer's `z.enum(values)` when TEnum is generic.
+/** The Zod schema for an enum of the given values. */
+export type EnumSchema<TEnum extends string> = z.ZodEnum<
+  z.core.util.ToEnum<TEnum>
+>;
+
+const makeEnumSchema = <TEnum extends string>(
+  values: readonly TEnum[],
+): EnumSchema<TEnum> => z.enum(values);
 
 /** Looks up the shared Zod schema for a registered enum. */
 export type EnumSchemas = <TEnum extends string>(
   values: readonly TEnum[],
-) => ReturnType<typeof makeEnumSchema<TEnum>>;
+) => EnumSchema<TEnum>;
 
 /**
  * Registers a calculator's named enums, and returns a lookup of the shared Zod schema for each.
@@ -309,7 +357,7 @@ export const createEnumSchemas = (
         `Enum values ${JSON.stringify(values)} are not registered. Add them with a name in ${registeredIn}`,
       );
     }
-    return schema as ReturnType<typeof makeEnumSchema<TEnum>>;
+    return schema as EnumSchema<TEnum>;
   };
 };
 
