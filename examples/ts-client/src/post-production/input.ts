@@ -54,16 +54,16 @@ const quality: QualityTable = {
 
 const electricityMethod1: LocationBasedElectricityInputs = {
   method: 'location',
-  electricityPurchasedKWh: { value: 250000, quality },
+  electricityPurchasedKilowattHours: { value: 250000, quality },
   region: 'VIC',
 };
 
 const electricityMethod2: MarketBasedElectricityInputs = {
   method: 'market',
-  electricityPurchasedKWh: { value: 250000, quality },
+  electricityPurchasedKilowattHours: { value: 250000, quality },
   // RECs are in MWh
-  recsSurrendered: { value: 50 },
-  recsOnsite: { value: 20 },
+  recsSurrenderedMegawattHours: { value: 50 },
+  recsOnsiteMegawattHours: { value: 20 },
   region: 'VIC',
 };
 
@@ -71,7 +71,7 @@ const electricityMethod2: MarketBasedElectricityInputs = {
 
 const intensities: PostProductionIntensitiesInput = {
   unitsProduced: { value: 1000000 },
-  productionEmissionsKgCO2e: { value: 2000000 },
+  productionEmissionsCO2eKilograms: { value: 2000000 },
   postProductionAllocation: { value: 0.8 },
 };
 
@@ -80,21 +80,21 @@ const intensities: PostProductionIntensitiesInput = {
 // Volume is in cubic metres, COD in kg/m3 and methane quantities in tonnes
 const wastewaterMethod1: WastewaterTreatmentMethod1Input = {
   facilityType: 'Anaerobic digestor/reactor',
-  wastewaterVolume: { value: 20000, quality },
+  wastewaterVolumeCubicMetres: { value: 20000, quality },
   fractionRemoved: { value: 0.1 },
   commodityType: 'Dairy products',
 };
 
 const wastewaterMethod2: WastewaterTreatmentMethod2Input = {
   facilityType: 'Anaerobic digestor/reactor',
-  wastewaterVolume: { value: 20000, quality },
+  wastewaterVolumeCubicMetres: { value: 20000, quality },
   fractionRemoved: { value: 0.1 },
-  inletCOD: { value: 3 },
-  outletCOD: { value: 0.5 },
+  inletCODKilogramsPerCubicMetre: { value: 3 },
+  outletCODKilogramsPerCubicMetre: { value: 0.5 },
   fractionSludge: { value: 0.1 },
-  methaneCaptured: { value: 2 },
-  methaneFlared: { value: 1 },
-  methaneOut: { value: 0.5 },
+  methaneCapturedCubicMetres: { value: 2 },
+  methaneFlaredCubicMetres: { value: 1 },
+  methaneOutCubicMetres: { value: 0.5 },
 };
 
 // -------- Fuel --------
@@ -120,7 +120,7 @@ const fuel: FuelInput = {
 
 const refrigerant: RefrigerantInput = {
   refrigerant: 'HFC-134a (R-134a)',
-  chargeSize: { value: 5 },
+  chargeSizeKilograms: { value: 5 },
   refrigerationType: 'Transport refrigeration',
 };
 
@@ -128,12 +128,12 @@ const refrigerant: RefrigerantInput = {
 
 const solidWasteTreatedOnsiteMethod1: SolidWasteMethod1Input = {
   method: '1',
-  unmanagedBurial: { value: 2 },
-  unmanagedDeep: { value: 1 },
-  unmanagedShallow: { value: 3 },
-  composting: { value: 4 },
-  anaerobicDigestion: { value: 5 },
-  incineration: { value: 1 },
+  unmanagedBurialTonnes: { value: 2 },
+  unmanagedDeepTonnes: { value: 1 },
+  unmanagedShallowTonnes: { value: 3 },
+  compostingTonnes: { value: 4 },
+  anaerobicDigestionTonnes: { value: 5 },
+  incinerationTonnes: { value: 1 },
 };
 
 const solidWasteUnmanagedBurial: SolidWasteUnmanagedBurialMethod2Input = {
@@ -227,18 +227,18 @@ const wasteMethod2: SolidWasteInput = {
 
 const otherPurchasedGoodOrService: OtherPurchasedGoodOrServiceInput = {
   quantity: { value: 10 },
-  emissionsFactor: { value: 1.5 },
+  emissionFactor: { value: 1.5 },
 };
 
 // Packaging mass is in kg, and the method 2 emissions factor in kg CO2e per kg
 const purchasedPackagingMethod1: PurchasedPackagingByMassMethod1Input = {
   type: 'Corrugated board',
-  amountMass: { value: 20000 },
+  amountKilograms: { value: 20000 },
 };
 
 const purchasedPackagingMethod2: PurchasedPackagingByMassMethod2Input = {
-  amountMass: { value: 20000 },
-  customEmissionsFactor: { value: 0.8 },
+  amountKilograms: { value: 20000 },
+  emissionFactor: { value: 0.8 },
 };
 
 // -------- Freight --------
@@ -247,8 +247,8 @@ const purchasedPackagingMethod2: PurchasedPackagingByMassMethod2Input = {
 const freightMethod1: FreightMethod1Input = {
   calculationMethod: '1',
   freightType: 'Truck > 3.5 tonnes refrigerated (diesel)',
-  distance: { value: 300 },
-  weight: { value: 500 },
+  distanceKilometres: { value: 300 },
+  weightTonnes: { value: 500 },
 };
 
 const freightFuel: TransportFuelInput = {
@@ -272,7 +272,7 @@ export const postProductionInputDataMethod1: PostProductionInput = {
   fuel,
   refrigerants: [refrigerant],
   waste: wasteMethod1,
-  supplementaryCO2Kg: { value: 1000 },
+  supplementaryCO2Kilograms: { value: 1000 },
   otherPurchasedGoodsAndServices: [otherPurchasedGoodOrService],
   state: 'VIC',
   purchasedPackaging: [purchasedPackagingMethod1],

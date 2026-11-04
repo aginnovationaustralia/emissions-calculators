@@ -76,15 +76,15 @@ const quality: QualityTable = {
 
 const electricityMethod1: LocationBasedElectricityInputs = {
   method: 'location',
-  electricityPurchasedKWh: { value: 40000, quality },
+  electricityPurchasedKilowattHours: { value: 40000, quality },
   region: 'NSW',
 };
 
 const electricityMethod2: MarketBasedElectricityInputs = {
   method: 'market',
-  electricityPurchasedKWh: { value: 40000, quality },
-  recsSurrendered: { value: 10 },
-  recsOnsite: { value: 5 },
+  electricityPurchasedKilowattHours: { value: 40000, quality },
+  recsSurrenderedMegawattHours: { value: 10 },
+  recsOnsiteMegawattHours: { value: 5 },
   region: 'NSW',
 };
 
@@ -101,15 +101,15 @@ const cropResiduesMethod2: RiceCropResiduesInput = {
 
 const organicAmendment: RiceCultivationOrganicAmendmentInput = {
   type: 'Straw incorporated long (>30 days) before cultivation',
-  rateOfApplication: { value: 5 },
+  rateOfApplicationTonnesPerHectare: { value: 5 },
 };
 
 // The rice calculator always uses the 'Rice' crop type, so it isn't provided.
 const cropMethod1: RiceCropInput = {
-  totalYieldKg: { value: 3000000, quality },
+  totalYieldKilograms: { value: 3000000, quality },
   fractionOfAnnualCropBurnt: { value: 0 },
   residues: cropResiduesMethod1,
-  areaSown: { value: 300 },
+  areaSownHectares: { value: 300 },
   preSeasonWaterRegimeType: 'Non flooded pre-season <180 days',
   waterRegimeType: 'Continuously flooded',
   cultivationPeriodDays: { value: 150 },
@@ -125,17 +125,17 @@ const cropMethod2: RiceCropInput = {
 
 const chemicalMethod1: AgrichemicalInput = {
   type: 'Herbicide (paraquat, diquat, glyphosate)',
-  amountKg: { value: 400 },
+  amountKilograms: { value: 400 },
 };
 
 const chemicalMethod2: AgrichemicalInput = {
   ...chemicalMethod1,
-  customEmissionsFactor: { value: 10 },
+  emissionFactor: { value: 10 },
 };
 
 const refrigerant: RefrigerantInput = {
   refrigerant: 'HFC-134a (R-134a)',
-  chargeSize: { value: 1.5 },
+  chargeSizeKilograms: { value: 1.5 },
   refrigerationType: 'Heavy vehicle A/C',
 };
 
@@ -166,13 +166,13 @@ const services: ServicesFuelInput = {
 
 const limeApplicationMethod1: LimeApplicationInput = {
   type: 'Limestone',
-  massAppliedKg: { value: 100000 },
+  massAppliedKilograms: { value: 100000 },
   limestoneFraction: { value: 0.9 },
 };
 
 const limeApplicationMethod2: LimeApplicationInput = {
   ...limeApplicationMethod1,
-  customScope3EmissionsFactor: { value: 0.05 },
+  scope3EmissionFactor: { value: 0.05 },
 };
 
 const limeMethod1: LimeInput = {
@@ -187,19 +187,19 @@ const limeMethod2: LimeInput = {
 
 const otherPurchasedGoodOrService: OtherPurchasedGoodOrServiceInput = {
   quantity: { value: 10 },
-  emissionsFactor: { value: 1.5 },
+  emissionFactor: { value: 1.5 },
 };
 
 // -------- Solid waste --------
 
 const solidWasteTreatedOnsiteMethod1: SolidWasteMethod1Input = {
   method: '1',
-  unmanagedBurial: { value: 2 },
-  unmanagedDeep: { value: 1 },
-  unmanagedShallow: { value: 3 },
-  composting: { value: 4 },
-  anaerobicDigestion: { value: 5 },
-  incineration: { value: 1 },
+  unmanagedBurialTonnes: { value: 2 },
+  unmanagedDeepTonnes: { value: 1 },
+  unmanagedShallowTonnes: { value: 3 },
+  compostingTonnes: { value: 4 },
+  anaerobicDigestionTonnes: { value: 5 },
+  incinerationTonnes: { value: 1 },
 };
 
 const solidWasteUnmanagedBurial: SolidWasteUnmanagedBurialMethod2Input = {
@@ -300,8 +300,8 @@ const inorganicFertiliserComponent: InorganicFertiliserComponentInput = {
 const inorganicFertiliserMethod1: InorganicFertiliserInputScope3Method1 = {
   calculationMethodScope3: '1',
   fertiliserType: 'Urea',
-  massAppliedKg: { value: 60000 },
-  massPurchasedKg: { value: 60000 },
+  massAppliedKilograms: { value: 60000 },
+  massPurchasedKilograms: { value: 60000 },
   components: [inorganicFertiliserComponent],
 };
 
@@ -313,10 +313,10 @@ const inorganicFertilisersMethod1: InorganicFertilisersScope1Method1Input = {
 const inorganicFertiliserMethod2: InorganicFertiliserInputScope3Method2 = {
   calculationMethodScope3: '2',
   fertiliserType: 'Urea',
-  massAppliedKg: { value: 60000 },
-  massPurchasedKg: { value: 60000 },
-  customScope3EmissionFactor: { value: 2.5 },
-  customNitrogenFraction: { value: 0.46 },
+  massAppliedKilograms: { value: 60000 },
+  massPurchasedKilograms: { value: 60000 },
+  scope3EmissionFactor: { value: 2.5 },
+  fractionNitrogen: { value: 0.46 },
 };
 
 // Only scope 1 method 1 is available for inorganic fertiliser, but scope 3 method 2 can
@@ -341,9 +341,9 @@ const feedlotManureGroupMethod1: FeedlotManureGroupInput = {
 
 const feedlotManureGroupMethod2: FeedlotManureGroupInput = {
   ...feedlotManureGroupMethod1,
-  method2DryMatterIntake: { value: 10 },
-  method2CrudeProtein: { value: 0.14 },
-  method2NitrogenRetentionRate: { value: 0.1 },
+  dailyDryMatterIntakeKilograms: { value: 10 },
+  fractionCrudeProteinContent: { value: 0.14 },
+  fractionNitrogenRetentionRate: { value: 0.1 },
 };
 
 const feedlotManureMethod1: FeedlotManureInput = {
@@ -429,22 +429,22 @@ const riceCropMethod2: RiceCropActivityInput = {
 const carbonMassOfWoodProductsMethod1: CarbonMassOfWoodProductsFromFullCAMInput =
   {
     calculationMethod: '1',
-    carbonMassPerHectareFromFullCAM: { value: 1 },
+    carbonMassFromFullCAMTonnesPerHectare: { value: 1 },
   };
 
 const carbonMassOfWoodProductsMethod2: CarbonMassOfWoodProductsFromRecordsInput =
   {
     calculationMethod: '2',
-    carbonMassPerHectareFromRecords: { value: 1.2 },
+    carbonMassFromRecordsTonnesPerHectare: { value: 1.2 },
   };
 
 const landUseChangeActivityMethod1: FarmForestryInput = {
   type: 'farmForestry',
   activityAreaHectares: { value: 10 },
-  carbonMassInTreesCurrentYear: { value: 102 },
-  carbonMassInTreesPreviousYear: { value: 100 },
-  carbonMassInDebrisCurrentYear: { value: 10.5 },
-  carbonMassInDebrisPreviousYear: { value: 10 },
+  carbonMassInTreesCurrentYearTonnesPerHectare: { value: 102 },
+  carbonMassInTreesPreviousYearTonnesPerHectare: { value: 100 },
+  carbonMassInDebrisCurrentYearTonnesPerHectare: { value: 10.5 },
+  carbonMassInDebrisPreviousYearTonnesPerHectare: { value: 10 },
   carbonMassOfWoodProducts: carbonMassOfWoodProductsMethod1,
 };
 
@@ -454,24 +454,24 @@ const landUseChangeActivityMethod2: FarmForestryInput = {
 };
 
 const burning: BurningInput = {
-  emissionsFromBurningLowRainfallZone: { value: 1 },
-  emissionsFromBurningHighRainfallZone: { value: 2 },
-  carbonStockChangeLowRainfallZone: { value: 3 },
-  carbonStockChangeHighRainfallZone: { value: 4 },
+  emissionsFromBurningLowRainfallZoneTonnes: { value: 1 },
+  emissionsFromBurningHighRainfallZoneTonnes: { value: 2 },
+  carbonStockChangeLowRainfallZoneTonnes: { value: 3 },
+  carbonStockChangeHighRainfallZoneTonnes: { value: 4 },
 };
 
 const perennialCropPlanting: PerennialCropPlantingInput = {
-  areaPlanted: { value: 5 },
+  areaPlantedHectares: { value: 5 },
   yearsSincePlanting: { value: 3 },
 };
 
 const perennialCropClearingMethod1: PerennialCropClearingMethod1Input = {
-  areaCleared: { value: 1 },
+  areaClearedHectares: { value: 1 },
 };
 
 const perennialCropClearingMethod2: PerennialCropClearingMethod2Input = {
-  areaCleared: { value: 1 },
-  method2AgeAtClearing: { value: 5 },
+  areaClearedHectares: { value: 1 },
+  ageAtClearingYears: { value: 5 },
 };
 
 const perennialCropMethod1: PerennialCropMethod1Input = {
@@ -484,8 +484,8 @@ const perennialCropMethod1: PerennialCropMethod1Input = {
 const perennialCropMethod2: PerennialCropFullMethod2StemDensityInput = {
   calculationMethod: '2 (stem density)',
   cropType: 'Almonds',
-  method2ActualStemDensity: { value: 300 },
-  method2BiomassAtMaturity: { value: 50 },
+  actualStemDensityPerHectare: { value: 300 },
+  biomassAtMaturityTonnesPerHectare: { value: 50 },
   plantings: [perennialCropPlanting],
   clearings: [perennialCropClearingMethod2],
 };

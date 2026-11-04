@@ -8,14 +8,14 @@ import { ResearchCalculatorOptions } from './environment';
 const croppingTestData: CroppingInput = {
   electricity: {
     method: 'location',
-    electricityPurchasedKWh: { value: 4000 },
+    electricityPurchasedKilowattHours: { value: 4000 },
     region: 'NSW',
   },
   crops: [
     {
       crop: {
         type: 'Wheat',
-        totalYieldKg: { value: 3000 },
+        totalYieldKilograms: { value: 3000 },
         residues: { calculationMethod: '1' },
         fractionOfAnnualCropBurnt: { value: 1 },
       },
