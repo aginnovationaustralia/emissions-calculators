@@ -110,8 +110,8 @@ export const collectInputs = <O extends Container<AnyUnit>>(
       : isBooleanUnit(input.unit)
         ? input.unit
         : input.unit.store.toNumber(),
-    // Inputs from another calculator's input container have no VEERG method or modules
+    // Inputs from another calculator's input container have no VEERG method, modules or quality
     method: input instanceof InputContainer ? input.method : '1',
     modules: input instanceof InputContainer ? input.modules : [],
-    quality: input.core?.quality,
+    quality: input instanceof InputContainer ? input.quality : undefined,
   }));

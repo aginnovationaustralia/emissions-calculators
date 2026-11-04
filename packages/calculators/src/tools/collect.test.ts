@@ -140,6 +140,23 @@ describe('collectInputs', () => {
     ]);
   });
 
+  it('collects the quality of an input, carried across a unit switch', () => {
+    const container = input(realNumber(5), {
+      name: 'rated',
+      quality: { Temporal: '1' },
+      modules: [],
+    }).switchUnit(() => mass('CO2', 5));
+    expect(collectInputs(container)).toEqual([
+      {
+        name: 'rated',
+        value: 5,
+        method: '1',
+        modules: [],
+        quality: { Temporal: '1' },
+      },
+    ]);
+  });
+
   it('collects a string input, using the raw string value', () => {
     const container = input('A' as const, {
       name: 'my string',

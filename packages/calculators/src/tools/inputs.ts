@@ -15,24 +15,33 @@ export class InputContainer<U extends AnyUnit> extends BaseContainer<U> {
   method: '1' | '2';
   /** Which module(s) (e.g. '3.1') consume this input. */
   modules: string[];
+  quality?: QualityTable;
 
   constructor(
     unit: U,
     method: '1' | '2',
     modules: string[],
+    quality?: QualityTable,
     baseOrigin?: Metadata,
   ) {
     super(unit, baseOrigin);
     this.originType = 'input';
     this.method = method;
     this.modules = modules;
+    this.quality = quality;
   }
 
   switchUnit<V extends AnyNumberUnit>(
     converter: (from: NoInfer<U>) => V,
   ): InputContainer<V> {
     const newUnit = converter(this.unit);
-    return new InputContainer(newUnit, this.method, this.modules, this.core);
+    return new InputContainer(
+      newUnit,
+      this.method,
+      this.modules,
+      this.quality,
+      this.core,
+    );
   }
 }
 export type NonEmptyArray<T> = [T, ...T[]];
@@ -59,7 +68,7 @@ export const input = <T extends AnyUnit>(
   value: T,
   { name, method = '1', quality, modules }: InputOptions,
 ): InputContainer<T> => {
-  return new InputContainer(value, method, modules, { name, quality });
+  return new InputContainer(value, method, modules, quality, { name });
 };
 
 export type RateableInputValue = number;

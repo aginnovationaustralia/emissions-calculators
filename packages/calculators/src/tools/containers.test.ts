@@ -388,17 +388,14 @@ describe('BaseContainer metadata: attach / named / clone', () => {
   });
 
   it('attach merges metadata onto a clone, preserving existing fields not overridden', () => {
-    const original = num(1)
-      .named('one')
-      .attach({ references: ['REF-A'] });
-    const attached = original.attach({ quality: { Temporal: '1' } });
+    const original = num(1).named('one');
+    const attached = original.attach({ references: ['REF-A'] });
 
     expect(attached).not.toBe(original);
     expect(attached.core?.name).toBe('one');
     expect(attached.core?.references).toEqual(['REF-A']);
-    expect(attached.core?.quality).toEqual({ Temporal: '1' });
     // original is untouched
-    expect(original.core?.quality).toBeUndefined();
+    expect(original.core?.references).toBeUndefined();
   });
 
   it('clone preserves the concrete class / prototype of the container', () => {

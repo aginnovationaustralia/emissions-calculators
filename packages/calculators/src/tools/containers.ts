@@ -7,7 +7,6 @@ import Decimal from 'decimal.js-light';
 import { formatUnit } from './format';
 import { IfElseContainer } from './if-else';
 import { Method1And2Container, Method2Container } from './multi';
-import { QualityTable } from './quality';
 import { SwitchContainer } from './switch';
 import {
   Area,
@@ -115,7 +114,6 @@ export type Metadata =
   | {
       name?: string;
       references?: string[];
-      quality?: QualityTable;
     }
   | undefined;
 
