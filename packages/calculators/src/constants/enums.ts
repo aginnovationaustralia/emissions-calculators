@@ -82,6 +82,7 @@ export const InorganicFertiliserTypes = [
   'Calcium Ammonium Nitrate (CAN)',
   'Calcium Nitrate',
   'Single Super Phosphate',
+  /** Same product as 'Sulphate of Ammonia (SOA)', which is the preferred value */
   'Ammonium Sulfate',
 ] as const;
 export type InorganicFertiliserType = (typeof InorganicFertiliserTypes)[number];
