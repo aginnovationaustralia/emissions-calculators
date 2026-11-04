@@ -358,7 +358,7 @@
     "rollup": "^4.67.3",
     "rollup-plugin-copy": "^3.5.0",
     "ts-jest": "^29.4.12",
-    "tsc-alias": "^1.9.5",
+    "tsc-alias": "^1.9.10",
     "tsx": "^4.23.13",
     "typescript": "^5.9.3",
     "xlsx-populate": "^1.21.0"
