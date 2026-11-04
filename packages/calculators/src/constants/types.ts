@@ -23,7 +23,7 @@ import {
   VolumePerMass,
   Years,
 } from '@/tools/units';
-import { AnyUnit } from '@/tools/generic';
+import { AnyUnit } from '@/tools/generic/units';
 import {
   AgrochemicalType,
   AquacultureSystemLocation,

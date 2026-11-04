@@ -1,5 +1,5 @@
+import { values, ValueStore } from '@/tools/generic/value-store';
 import { NumberUnitBase } from '@/tools/units';
-import { values, ValueStore } from '@/tools/value-store';
 import { AllConstants } from './types';
 
 /**

@@ -1,4 +1,4 @@
-import { ValueStore } from '@/tools/value-store';
+import { ValueStore } from '@/tools/generic/value-store';
 
 export type Method2Case<TInput> = {
   name: string;

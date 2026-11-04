@@ -6,7 +6,7 @@ import {
   StringContainer,
 } from './containers';
 import { StringUnit } from './units';
-import { AnyNumberUnit, AnyUnit } from './generic';
+import { AnyNumberUnit, AnyUnit } from './generic/units';
 
 export const constant = <U extends AnyUnit>(
   name: string,

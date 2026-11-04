@@ -3,7 +3,7 @@ import { InputContainer } from './inputs';
 import { formatUnit } from './format';
 import { QualityTable } from './quality';
 import { isBooleanUnit, isStringUnit } from './units';
-import { AnyUnit } from './generic';
+import { AnyUnit } from './generic/units';
 
 export type ConstantDefinition = {
   name: string;

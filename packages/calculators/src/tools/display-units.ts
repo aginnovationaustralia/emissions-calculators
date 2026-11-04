@@ -24,7 +24,7 @@ import {
   VolumePerHeadPerDay,
   VolumePerMass,
 } from './units';
-import { AnyNumberUnit, AnySubstance } from './generic';
+import { AnyNumberUnit, AnySubstance } from './generic/units';
 
 // Base unit name strings - defined once here and reused across the static
 // and dynamic display strings below, so each word only appears once in the file.

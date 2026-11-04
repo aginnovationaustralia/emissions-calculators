@@ -1,6 +1,6 @@
 import { valueObject } from './outputs';
 import { Mass, RealNumber } from './units';
-import { AnySubstance } from './generic';
+import { AnySubstance } from './generic/units';
 
 /**
  * Unwraps the stored value of a container holding a total mass, in kg.

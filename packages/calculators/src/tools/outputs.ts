@@ -7,10 +7,10 @@ import {
   InputDefinition,
 } from './collect';
 import { Container } from './containers';
-import { convertToCO2e } from './gwp';
 import { formatUnit } from './format';
+import { isValueSeedMethod2 } from './generic/value-store';
+import { convertToCO2e } from './gwp';
 import { isMass, isVoid, mass, Mass, VoidUnit } from './units';
-import { isValueSeedMethod2 } from './value-store';
 
 export const makeUnique = <T>(a: T[]): T[] => {
   return [...new Set(a)];

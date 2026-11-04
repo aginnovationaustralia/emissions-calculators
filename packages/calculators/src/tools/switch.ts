@@ -4,7 +4,7 @@ import {
   NumberContainer,
   StringContainer,
 } from './containers';
-import { AnyNumberUnit } from './generic';
+import { AnyNumberUnit } from './generic/units';
 import { StringUnit } from './units';
 
 export class SwitchContainer<

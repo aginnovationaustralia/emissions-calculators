@@ -92,7 +92,7 @@ import {
   VolumePerMass,
   Years,
 } from './units';
-import { AnyNumberUnit, AnySubstance, AnyUnit } from './generic';
+import { AnyNumberUnit, AnySubstance, AnyUnit } from './generic/units';
 
 // Helpers for multiply overload return types (extract from container unit)
 type ExtractMassPerEnergySubstance<U> =

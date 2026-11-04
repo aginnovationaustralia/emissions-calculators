@@ -1,4 +1,4 @@
-import { ValueStore, values } from '@/tools/value-store';
+import { values, ValueStore } from '@/tools/generic/value-store';
 import Decimal from 'decimal.js-light';
 
 const d = (n: number) => new Decimal(n);

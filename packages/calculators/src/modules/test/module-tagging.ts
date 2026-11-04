@@ -1,6 +1,6 @@
 import { collectInputs } from '@/tools/collect';
 import { Container } from '@/tools/containers';
-import { AnyUnit } from '@/tools/generic';
+import { AnyUnit } from '@/tools/generic/units';
 
 /**
  * Walks every `InputContainer` reached by `container` (via `collectInputs`) and

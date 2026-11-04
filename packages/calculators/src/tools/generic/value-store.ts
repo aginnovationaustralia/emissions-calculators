@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js-light';
-import { NumberContainer } from './containers';
-import { AnyNumberUnit } from './generic';
+import { NumberContainer } from '../containers';
+import { AnyNumberUnit } from './units';
 
 const applyBinary = (
   self: ValueStore,

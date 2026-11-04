@@ -5,7 +5,7 @@ import {
   NumberContainer,
 } from './containers';
 import { BooleanUnit } from './units';
-import { AnyNumberUnit } from './generic';
+import { AnyNumberUnit } from './generic/units';
 
 export class IfElseContainer<U extends AnyNumberUnit> extends BaseContainer<U> {
   originType: 'if_else';

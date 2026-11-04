@@ -1,7 +1,7 @@
 import { BaseContainer, Metadata, NumberContainer } from './containers';
+import { AnyNumberUnit } from './generic/units';
+import { mergeSeeds, ValueStore } from './generic/value-store';
 import { VoidUnit } from './units';
-import { AnyNumberUnit } from './generic';
-import { mergeSeeds, ValueStore } from './value-store';
 
 /**
  * Container for capturing both a container for default method 1 calculations, and an optional container for method 2 calculations.

@@ -3,7 +3,7 @@ import { Container } from './containers';
 import { extractMassAsNumber, extractRealNumberAsNumber } from './extract';
 import { valueObject } from './outputs';
 import { Mass, RealNumber } from './units';
-import { AnySubstance } from './generic';
+import { AnySubstance } from './generic/units';
 
 /**
  * Emissions intensity in kg CO2e per kg of product, ready for output. Taking containers keeps

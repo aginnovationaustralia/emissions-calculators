@@ -1,6 +1,6 @@
-import { root } from './containers';
-import { AnyNumberUnit, GenericNumberUnit } from './generic';
-import { energyPerVolume, mass, NumberUnit, volume } from './units';
+import { root } from '../containers';
+import { AnyNumberUnit, GenericNumberUnit } from './units';
+import { energyPerVolume, mass, NumberUnit, volume } from '../units';
 
 type TestSubstance = 'Liquid fuel' | 'Gaseous fuel';
 type TestNumberUnit = GenericNumberUnit<TestSubstance>;
