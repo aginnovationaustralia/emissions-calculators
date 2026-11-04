@@ -35,11 +35,11 @@ const readDairyClass = (
 
   return {
     head: nv(head),
-    durationDays: nvo(Number(cell('AA')) || undefined),
-    liveweightKilograms: nvo(Number(cell('AB')) || undefined),
-    dailyLiveweightGainKilograms: nvo(Number(cell('AC')) || undefined),
-    fractionDryMatterDigestibility: nvo(Number(cell('AD')) || undefined),
-    fractionCrudeProteinContent: nvo(Number(cell('AE')) || undefined),
+    method2DurationDays: nvo(Number(cell('AA')) || undefined),
+    method2LiveweightKilograms: nvo(Number(cell('AB')) || undefined),
+    method2DailyLiveweightGainKilograms: nvo(Number(cell('AC')) || undefined),
+    method2FractionDryMatterDigestibility: nvo(Number(cell('AD')) || undefined),
+    method2FractionCrudeProteinContent: nvo(Number(cell('AE')) || undefined),
   };
 };
 
@@ -88,10 +88,10 @@ const readDairyHerdShared = (
       ? { dailyVolumeProducedLitres: nv(Number(milkProdLUnchecked)) }
       : {
           dailySolidsProducedKilograms: nv(Number(cell('T'))),
-          percentFatContent: nvo(
+          method2PercentFatContent: nvo(
             method === '2' ? Number(cell('U')) : undefined,
           ),
-          percentProteinContent: nvo(
+          method2PercentProteinContent: nvo(
             method === '2' ? Number(cell('V')) : undefined,
           ),
         };
@@ -144,7 +144,9 @@ export const readDairyHerd = (
       ...manureAllocations,
       ...(method === '1'
         ? { solidsSeparatedPreTreatment: cell('R') === 'true' }
-        : { fractionSolidsSeparatedPreTreatment: nv(Number(cell('S'))) }),
+        : {
+            method2FractionSolidsSeparatedPreTreatment: nv(Number(cell('S'))),
+          }),
     },
   });
 };

@@ -22,7 +22,7 @@ function calculateEntericMethaneForClass(
   const {
     head,
     durationDays: days,
-    dailyAverageFeedIntakeKilograms: method2AverageFeedIntake,
+    method2DailyAverageFeedIntakeKilograms: method2AverageFeedIntake,
   } = classInput;
   const Nj = head.named(`Nj=${className}`);
   const Dj = days.named(`Dj=${className}`);

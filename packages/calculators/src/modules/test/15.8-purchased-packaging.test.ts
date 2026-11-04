@@ -37,7 +37,7 @@ const getCalculatorInputByUnits = (
       purchasedPackaging: [
         {
           amountUnits,
-          emissionFactorKilograms: nv(Number(cell('D'))),
+          method2EmissionFactorKilograms: nv(Number(cell('D'))),
         },
       ],
     });
@@ -73,7 +73,7 @@ const getCalculatorInputByMass = (
       purchasedPackaging: [
         {
           amountKilograms: amountMass,
-          emissionFactor: nv(Number(cell('D'))),
+          method2EmissionFactor: nv(Number(cell('D'))),
         },
       ],
     });

@@ -9,7 +9,7 @@ import {
 
 export const PurchasedPackagingByUnitsMethod2InputSchema =
   BasePurchasedPackagingByUnitsInputSchema.extend({
-    emissionFactorKilograms: numberInput(
+    method2EmissionFactorKilograms: numberInput(
       (val) => mass('CO2e', val),
       {
         name: 'custom emissions factor',
@@ -32,7 +32,7 @@ export type PurchasedPackagingByUnitsMethod2InputTransformed = z.output<
 
 export const PurchasedPackagingByMassMethod2InputSchema =
   BasePurchasedPackagingByMassInputSchema.extend({
-    emissionFactor: numberInput(
+    method2EmissionFactor: numberInput(
       (val) => massPerMass('CO2e', 'Packaging', val),
       {
         name: 'custom emissions factor',

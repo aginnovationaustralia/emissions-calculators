@@ -44,7 +44,7 @@ const getCalculatorInput = (
           purchasedMineralSupplements: [
             {
               amountTonnes: amount,
-              emissionFactor: nv(Number(cell('C'))),
+              method2EmissionFactor: nv(Number(cell('C'))),
             },
           ],
         };

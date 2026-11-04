@@ -140,18 +140,18 @@ describe('Sheep method 2 dry matter digestibility and crude protein', () => {
   test('accepts fractions', () => {
     const result = calculateSheep(
       sheepInput({
-        fractionDryMatterDigestibility: nv(0.7),
-        fractionCrudeProteinContent: nv(0.15),
+        method2FractionDryMatterDigestibility: nv(0.7),
+        method2FractionCrudeProteinContent: nv(0.15),
       }),
     );
     expect(result.status).toBe('OK');
   });
 
   test.each([
-    ['fractionDryMatterDigestibility', 1.5],
-    ['fractionDryMatterDigestibility', -0.2],
-    ['fractionCrudeProteinContent', 1.5],
-    ['fractionCrudeProteinContent', -0.2],
+    ['method2FractionDryMatterDigestibility', 1.5],
+    ['method2FractionDryMatterDigestibility', -0.2],
+    ['method2FractionCrudeProteinContent', 1.5],
+    ['method2FractionCrudeProteinContent', -0.2],
   ])('rejects %s of %p with INVALID_INPUT', (key, value) => {
     const result = calculateSheep(sheepInput({ [key]: nv(value) }));
     expect(result.status).toBe('INVALID_INPUT');
@@ -170,7 +170,7 @@ describe('Dairy method 2 crude protein', () => {
         classes: {
           milkingCows: {
             head: nv(10),
-            fractionCrudeProteinContent: nv(method2CrudeProtein),
+            method2FractionCrudeProteinContent: nv(method2CrudeProtein),
           },
         },
       }),
@@ -185,7 +185,7 @@ describe('Dairy method 2 crude protein', () => {
     const result = calculateDairy(dairyInput(value));
     expect(result.status).toBe('INVALID_INPUT');
     expect(issuePaths(result)).toEqual([
-      'herds.0.classes.milkingCows.fractionCrudeProteinContent.value',
+      'herds.0.classes.milkingCows.method2FractionCrudeProteinContent.value',
     ]);
   });
 });
@@ -227,16 +227,16 @@ describe('Poultry method 2 dry matter digestibility and crude protein', () => {
   test('accepts fractions', () => {
     const result = calculatePoultry(
       poultryInput({
-        fractionDryMatterDigestibility: nv(0.8),
-        fractionCrudeProteinContent: nv(0.2),
+        method2FractionDryMatterDigestibility: nv(0.8),
+        method2FractionCrudeProteinContent: nv(0.2),
       }),
     );
     expect(result.status).toBe('OK');
   });
 
   test.each([
-    ['fractionDryMatterDigestibility', 1.5],
-    ['fractionCrudeProteinContent', 1.5],
+    ['method2FractionDryMatterDigestibility', 1.5],
+    ['method2FractionCrudeProteinContent', 1.5],
   ])('rejects %s of %p with INVALID_INPUT', (key, value) => {
     const result = calculatePoultry(poultryInput({ [key]: nv(value) }));
     expect(result.status).toBe('INVALID_INPUT');

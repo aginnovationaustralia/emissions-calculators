@@ -26,7 +26,7 @@ export const getDryMatterDigestibility = (
       getGroupDuration(group),
       'dryMatterDigestibility',
     ).named(`DMDj`),
-    group.fractionDryMatterDigestibility,
+    group.method2FractionDryMatterDigestibility,
   );
 
 /**
@@ -43,7 +43,7 @@ export const getCrudeProtein = (
       getGroupDuration(group),
       'crudeProtein',
     ).named(`CPj`),
-    group.fractionCrudeProteinContent,
+    group.method2FractionCrudeProteinContent,
   );
 
 /**
@@ -60,7 +60,7 @@ export const getDryMatterIntake = (
       getGroupDuration(group),
       'dryMatterIntake',
     ).named('Ij'),
-    group.dailyDryMatterIntakeKilograms,
+    group.method2DailyDryMatterIntakeKilograms,
   );
 
 /**
@@ -77,7 +77,7 @@ export const getNitrogenRetentionRate = (
       getGroupDuration(group),
       'nitrogenRetentionRate',
     ).named(`NRj`),
-    group.fractionNitrogenRetentionRate,
+    group.method2FractionNitrogenRetentionRate,
   );
 
 /**
@@ -95,5 +95,5 @@ export const getNeutralDetergentFibrePercentage = (
       getGroupDuration(group),
       'neutralDetergentFibrePercentage',
     ).named(`NDFj`),
-    group.percentAverageNeutralDetergentFibre,
+    group.method2PercentAverageNeutralDetergentFibre,
   );

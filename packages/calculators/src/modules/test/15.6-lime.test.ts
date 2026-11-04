@@ -49,7 +49,7 @@ const getCalculatorInput = (
           ...application,
           ...(method === '2' && customEmissionsFactor
             ? {
-                scope3EmissionFactor: nvo(Number(customEmissionsFactor)),
+                method2Scope3EmissionFactor: nvo(Number(customEmissionsFactor)),
               }
             : {}),
         },

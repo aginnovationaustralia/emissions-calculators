@@ -122,7 +122,7 @@ const chemicalMethod1: AgrichemicalInput = {
 
 const chemicalMethod2: AgrichemicalInput = {
   ...chemicalMethod1,
-  emissionFactor: { value: 10 },
+  method2EmissionFactor: { value: 10 },
 };
 
 // -------- Solid waste --------

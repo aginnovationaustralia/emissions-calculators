@@ -267,7 +267,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "dailyDryMatterIntakeKilograms": {
+                                "method2DailyDryMatterIntakeKilograms": {
                                   "description": "Dry matter intake (kilograms dry matter per head per day)",
                                   "x-modules": [
                                     "4.6"
@@ -288,7 +288,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms dry matter per head per day"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Crude protein content of the diet for this class (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "4.6"
@@ -792,7 +792,7 @@
                                   ],
                                   "additionalProperties": false
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Dry matter digestibility of the feed for this class (number)",
                                   "x-modules": [
                                     "4.6"
@@ -866,7 +866,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "dailyDryMatterIntakeKilograms": {
+                                "method2DailyDryMatterIntakeKilograms": {
                                   "description": "Dry matter intake (kilograms dry matter per head per day)",
                                   "x-modules": [
                                     "4.6"
@@ -887,7 +887,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms dry matter per head per day"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Crude protein content of the diet for this class (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "4.6"
@@ -1391,7 +1391,7 @@
                                   ],
                                   "additionalProperties": false
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Dry matter digestibility of the feed for this class (number)",
                                   "x-modules": [
                                     "4.6"
@@ -1465,7 +1465,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "dailyDryMatterIntakeKilograms": {
+                                "method2DailyDryMatterIntakeKilograms": {
                                   "description": "Dry matter intake (kilograms dry matter per head per day)",
                                   "x-modules": [
                                     "4.6"
@@ -1486,7 +1486,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms dry matter per head per day"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Crude protein content of the diet for this class (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "4.6"
@@ -1990,7 +1990,7 @@
                                   ],
                                   "additionalProperties": false
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Dry matter digestibility of the feed for this class (number)",
                                   "x-modules": [
                                     "4.6"
@@ -2064,7 +2064,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "dailyDryMatterIntakeKilograms": {
+                                "method2DailyDryMatterIntakeKilograms": {
                                   "description": "Dry matter intake (kilograms dry matter per head per day)",
                                   "x-modules": [
                                     "4.6"
@@ -2085,7 +2085,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms dry matter per head per day"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Crude protein content of the diet for this class (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "4.6"
@@ -2589,7 +2589,7 @@
                                   ],
                                   "additionalProperties": false
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Dry matter digestibility of the feed for this class (number)",
                                   "x-modules": [
                                     "4.6"
@@ -3828,7 +3828,7 @@
                                     "additionalProperties": false,
                                     "x-units": "head"
                                   },
-                                  "liveweightKilograms": {
+                                  "method2LiveweightKilograms": {
                                     "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                     "x-modules": [
                                       "15.1"
@@ -3853,7 +3853,7 @@
                                 "required": [
                                   "type",
                                   "headPurchased",
-                                  "liveweightKilograms"
+                                  "method2LiveweightKilograms"
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 1 emission factor, method 2 liveweight"
@@ -3886,7 +3886,7 @@
                                     "additionalProperties": false,
                                     "x-units": "head"
                                   },
-                                  "emissionFactor": {
+                                  "method2EmissionFactor": {
                                     "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                     "x-modules": [
                                       "15.1"
@@ -3918,7 +3918,7 @@
                                 "required": [
                                   "type",
                                   "headPurchased",
-                                  "emissionFactor",
+                                  "method2EmissionFactor",
                                   "weightClass"
                                 ],
                                 "additionalProperties": false,
@@ -3952,7 +3952,7 @@
                                     "additionalProperties": false,
                                     "x-units": "head"
                                   },
-                                  "emissionFactor": {
+                                  "method2EmissionFactor": {
                                     "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                     "x-modules": [
                                       "15.1"
@@ -3973,7 +3973,7 @@
                                     "additionalProperties": false,
                                     "x-units": "kilograms CO2e per kilogram liveweight"
                                   },
-                                  "liveweightKilograms": {
+                                  "method2LiveweightKilograms": {
                                     "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                     "x-modules": [
                                       "15.1"
@@ -3998,8 +3998,8 @@
                                 "required": [
                                   "type",
                                   "headPurchased",
-                                  "emissionFactor",
-                                  "liveweightKilograms"
+                                  "method2EmissionFactor",
+                                  "method2LiveweightKilograms"
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 2 emission factor, method 2 liveweight"
@@ -4529,7 +4529,7 @@
                           "intensities": {
                             "type": "object",
                             "properties": {
-                              "liveweightProducedKg": {
+                              "liveweightProducedKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -4555,7 +4555,7 @@
                                 "additionalProperties": false,
                                 "description": "Poultry liveweight emissions intensity for this activity, in kg-CO2e/kg liveweight"
                               },
-                              "eggsProducedKg": {
+                              "eggsProducedKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -4583,9 +4583,9 @@
                               }
                             },
                             "required": [
-                              "liveweightProducedKg",
+                              "liveweightProducedKilograms",
                               "liveweightIntensity",
-                              "eggsProducedKg",
+                              "eggsProducedKilograms",
                               "eggsIntensity"
                             ],
                             "additionalProperties": false
@@ -4628,7 +4628,7 @@
                     "intensities": {
                       "type": "object",
                       "properties": {
-                        "liveweightProducedKg": {
+                        "liveweightProducedKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -4667,7 +4667,7 @@
                           "additionalProperties": false,
                           "description": "Poultry liveweight emissions intensity including LULUCF, in kg-CO2e/kg liveweight"
                         },
-                        "eggsProducedKg": {
+                        "eggsProducedKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -4708,10 +4708,10 @@
                         }
                       },
                       "required": [
-                        "liveweightProducedKg",
+                        "liveweightProducedKilograms",
                         "liveweightIntensityExcludingLULUCF",
                         "liveweightIntensityIncludingLULUCF",
-                        "eggsProducedKg",
+                        "eggsProducedKilograms",
                         "eggsIntensityExcludingLULUCF",
                         "eggsIntensityIncludingLULUCF"
                       ],
@@ -8299,7 +8299,7 @@
                   "additionalProperties": false,
                   "x-units": "tonnes purchased feed"
                 },
-                "emissionFactor": {
+                "method2EmissionFactor": {
                   "description": "Method 2: Emission factor of the type of feed purchased. (kilograms CO2e per kilogram purchased feed)",
                   "x-modules": [
                     "15.2"
@@ -8323,7 +8323,7 @@
               },
               "required": [
                 "amountTonnes",
-                "emissionFactor"
+                "method2EmissionFactor"
               ],
               "additionalProperties": false,
               "title": "Method 2 (custom emissions factor)"

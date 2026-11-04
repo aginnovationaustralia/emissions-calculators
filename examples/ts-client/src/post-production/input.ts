@@ -89,12 +89,12 @@ const wastewaterMethod2: WastewaterTreatmentMethod2Input = {
   facilityType: 'Anaerobic digestor/reactor',
   wastewaterVolumeCubicMetres: { value: 20000, quality },
   fractionRemoved: { value: 0.1 },
-  inletCODKilogramsPerCubicMetre: { value: 3 },
-  outletCODKilogramsPerCubicMetre: { value: 0.5 },
-  fractionSludge: { value: 0.1 },
-  methaneCapturedCubicMetres: { value: 2 },
-  methaneFlaredCubicMetres: { value: 1 },
-  methaneOutCubicMetres: { value: 0.5 },
+  method2InletCODKilogramsPerCubicMetre: { value: 3 },
+  method2OutletCODKilogramsPerCubicMetre: { value: 0.5 },
+  method2FractionSludge: { value: 0.1 },
+  method2MethaneCapturedCubicMetres: { value: 2 },
+  method2MethaneFlaredCubicMetres: { value: 1 },
+  method2MethaneOutCubicMetres: { value: 0.5 },
 };
 
 // -------- Fuel --------
@@ -238,7 +238,7 @@ const purchasedPackagingMethod1: PurchasedPackagingByMassMethod1Input = {
 
 const purchasedPackagingMethod2: PurchasedPackagingByMassMethod2Input = {
   amountKilograms: { value: 20000 },
-  emissionFactor: { value: 0.8 },
+  method2EmissionFactor: { value: 0.8 },
 };
 
 // -------- Freight --------

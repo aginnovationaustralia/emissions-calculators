@@ -112,28 +112,32 @@ export const readPigsClass = (
   return {
     head,
     durationDays: days,
-    dailyAverageFeedIntakeKilograms: nvo(Number(cell('H')) || undefined),
-    dailyVolatileSolidProductionKilograms: nvo(Number(cell('I')) || undefined),
-    dailyNitrogenWasteProductionKilograms: nvo(Number(cell('J')) || undefined),
+    method2DailyAverageFeedIntakeKilograms: nvo(Number(cell('H')) || undefined),
+    method2DailyVolatileSolidProductionKilograms: nvo(
+      Number(cell('I')) || undefined,
+    ),
+    method2DailyNitrogenWasteProductionKilograms: nvo(
+      Number(cell('J')) || undefined,
+    ),
 
     manureAllocations: {
       anaerobicLagoon: {
         ...anaerobicLagoon,
-        fractionSolidsSeparatedPreTreatment: nv(numOrZero('R')),
-        fractionNitrogenSeparatedPreTreatment: nv(numOrZero('S')),
+        method2FractionSolidsSeparatedPreTreatment: nv(numOrZero('R')),
+        method2FractionNitrogenSeparatedPreTreatment: nv(numOrZero('S')),
       },
       solidStorage,
       outdoorAndFreeRange,
       digester: {
         ...digester,
-        fractionSolidsSeparatedPreTreatment: nv(numOrZero('U')),
-        fractionNitrogenSeparatedPreTreatment: nv(numOrZero('V')),
+        method2FractionSolidsSeparatedPreTreatment: nv(numOrZero('U')),
+        method2FractionNitrogenSeparatedPreTreatment: nv(numOrZero('V')),
       },
       deepLitter,
       pitStorage: {
         ...pitStorage,
-        fractionSolidsSeparatedPreTreatment: nv(numOrZero('X')),
-        fractionNitrogenSeparatedPreTreatment: nv(numOrZero('Y')),
+        method2FractionSolidsSeparatedPreTreatment: nv(numOrZero('X')),
+        method2FractionNitrogenSeparatedPreTreatment: nv(numOrZero('Y')),
       },
     },
   };

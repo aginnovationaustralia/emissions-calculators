@@ -30,7 +30,7 @@ export const SheepClassPeriodInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  liveweightKilograms: numberInputOptional(
+  method2LiveweightKilograms: numberInputOptional(
     (val) => liveweight(val),
     {
       name: 'Wjk',
@@ -41,7 +41,7 @@ export const SheepClassPeriodInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  dailyLiveweightGainKilograms: numberInputOptional(
+  method2DailyLiveweightGainKilograms: numberInputOptional(
     (val) => liveweightGain(val),
     {
       name: 'LWGjk',
@@ -51,7 +51,7 @@ export const SheepClassPeriodInputSchema = object({
       modules: [MANURE_SHEEP_4_4],
     },
   ),
-  dryMatterAvailabilityTonnesPerHectare: numberInputOptional(
+  method2DryMatterAvailabilityTonnesPerHectare: numberInputOptional(
     (val) => massPerArea('DryMatter', tonnesPerHectareToKgPerSquareMetres(val)),
     {
       name: 'DMAjk',
@@ -61,7 +61,7 @@ export const SheepClassPeriodInputSchema = object({
       modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
     },
   ),
-  fractionDryMatterDigestibility: numberInputOptional(
+  method2FractionDryMatterDigestibility: numberInputOptional(
     (val) => realNumber(val),
     {
       name: 'DMDjk',
@@ -72,14 +72,14 @@ export const SheepClassPeriodInputSchema = object({
     },
     isProportion,
   ),
-  durationDays: numberInputOptional((val) => days(val), {
+  method2DurationDays: numberInputOptional((val) => days(val), {
     name: 'Dj',
     method: '2',
     description:
       'Method 2: supply an exact value for average duration for this class for this period based on farm records',
     modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
   }),
-  fractionCrudeProteinContent: numberInputOptional(
+  method2FractionCrudeProteinContent: numberInputOptional(
     (val) => massPerMass('CrudeProtein', 'DryMatter', val),
     {
       name: 'CPjk',

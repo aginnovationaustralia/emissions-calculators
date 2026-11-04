@@ -268,7 +268,7 @@
                                 "additionalProperties": false,
                                 "x-units": "days"
                               },
-                              "dailyDryMatterIntakeKilograms": {
+                              "method2DailyDryMatterIntakeKilograms": {
                                 "description": "Method 2: Average dry matter intake (kilograms dry matter per head per day)",
                                 "x-modules": [
                                   "3.1",
@@ -290,7 +290,7 @@
                                 "additionalProperties": false,
                                 "x-units": "kilograms dry matter per head per day"
                               },
-                              "fractionCrudeProteinContent": {
+                              "method2FractionCrudeProteinContent": {
                                 "description": "Method 2: Average crude protein content of the feed given to this cattle group, as a fraction (kilograms crude protein per kilogram dry matter)",
                                 "x-modules": [
                                   "4.1"
@@ -311,7 +311,7 @@
                                 "additionalProperties": false,
                                 "x-units": "kilograms crude protein per kilogram dry matter"
                               },
-                              "fractionNitrogenRetentionRate": {
+                              "method2FractionNitrogenRetentionRate": {
                                 "description": "Method 2: Nitrogen retention rate (number)",
                                 "x-modules": [
                                   "4.1"
@@ -406,7 +406,7 @@
                                 ],
                                 "additionalProperties": false
                               },
-                              "percentAverageNeutralDetergentFibre": {
+                              "method2PercentAverageNeutralDetergentFibre": {
                                 "description": "Method 2: Average neutral detergent fibre as a proportion of feed intake (percentage)",
                                 "x-modules": [
                                   "3.1"
@@ -427,7 +427,7 @@
                                 "additionalProperties": false,
                                 "x-units": "percentage"
                               },
-                              "fractionDryMatterDigestibility": {
+                              "method2FractionDryMatterDigestibility": {
                                 "description": "Method 2: Dry matter digestibility of diet used within feedlot system for this cattle group (number)",
                                 "x-modules": [
                                   "4.1"
@@ -1679,7 +1679,7 @@
                                     ],
                                     "$ref": "#/components/schemas/BeefPurchaseCategory"
                                   },
-                                  "liveweightKilograms": {
+                                  "method2LiveweightKilograms": {
                                     "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                     "x-modules": [
                                       "15.1"
@@ -1705,7 +1705,7 @@
                                   "type",
                                   "headPurchased",
                                   "category",
-                                  "liveweightKilograms"
+                                  "method2LiveweightKilograms"
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 1 emission factor, method 2 liveweight"
@@ -1738,7 +1738,7 @@
                                     "additionalProperties": false,
                                     "x-units": "head"
                                   },
-                                  "emissionFactor": {
+                                  "method2EmissionFactor": {
                                     "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                     "x-modules": [
                                       "15.1"
@@ -1784,7 +1784,7 @@
                                 "required": [
                                   "type",
                                   "headPurchased",
-                                  "emissionFactor",
+                                  "method2EmissionFactor",
                                   "region",
                                   "class",
                                   "season"
@@ -1820,7 +1820,7 @@
                                     "additionalProperties": false,
                                     "x-units": "head"
                                   },
-                                  "emissionFactor": {
+                                  "method2EmissionFactor": {
                                     "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                     "x-modules": [
                                       "15.1"
@@ -1841,7 +1841,7 @@
                                     "additionalProperties": false,
                                     "x-units": "kilograms CO2e per kilogram liveweight"
                                   },
-                                  "liveweightKilograms": {
+                                  "method2LiveweightKilograms": {
                                     "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                     "x-modules": [
                                       "15.1"
@@ -1866,8 +1866,8 @@
                                 "required": [
                                   "type",
                                   "headPurchased",
-                                  "emissionFactor",
-                                  "liveweightKilograms"
+                                  "method2EmissionFactor",
+                                  "method2LiveweightKilograms"
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 2 emission factor, method 2 liveweight"
@@ -1943,7 +1943,7 @@
                                     "additionalProperties": false,
                                     "x-units": "tonnes purchased mineral supplement"
                                   },
-                                  "emissionFactor": {
+                                  "method2EmissionFactor": {
                                     "description": "Method 2: Emission factor of the type of mineral supplement purchased. (kilograms CO2e per kilogram purchased mineral supplement)",
                                     "x-modules": [
                                       "15.3"
@@ -1967,7 +1967,7 @@
                                 },
                                 "required": [
                                   "amountTonnes",
-                                  "emissionFactor"
+                                  "method2EmissionFactor"
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 2"
@@ -3442,7 +3442,7 @@
                           "intensities": {
                             "type": "object",
                             "properties": {
-                              "liveweightProducedKg": {
+                              "liveweightProducedKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -3470,7 +3470,7 @@
                               }
                             },
                             "required": [
-                              "liveweightProducedKg",
+                              "liveweightProducedKilograms",
                               "liveweightIntensity"
                             ],
                             "additionalProperties": false
@@ -3513,7 +3513,7 @@
                     "intensities": {
                       "type": "object",
                       "properties": {
-                        "liveweightProducedKg": {
+                        "liveweightProducedKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -3554,7 +3554,7 @@
                         }
                       },
                       "required": [
-                        "liveweightProducedKg",
+                        "liveweightProducedKilograms",
                         "liveweightIntensityExcludingLULUCF",
                         "liveweightIntensityIncludingLULUCF"
                       ],
@@ -7170,7 +7170,7 @@
                   "additionalProperties": false,
                   "x-units": "tonnes purchased feed"
                 },
-                "emissionFactor": {
+                "method2EmissionFactor": {
                   "description": "Method 2: Emission factor of the type of feed purchased. (kilograms CO2e per kilogram purchased feed)",
                   "x-modules": [
                     "15.2"
@@ -7194,7 +7194,7 @@
               },
               "required": [
                 "amountTonnes",
-                "emissionFactor"
+                "method2EmissionFactor"
               ],
               "additionalProperties": false,
               "title": "Method 2 (custom emissions factor)"

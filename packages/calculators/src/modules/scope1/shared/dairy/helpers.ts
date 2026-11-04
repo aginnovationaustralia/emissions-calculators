@@ -31,7 +31,7 @@ export const getLiveweight = (
       breed,
       dairyClass.className,
     ),
-    dairyClass.liveweightKilograms,
+    dairyClass.method2LiveweightKilograms,
   ).named(`Wj=${dairyClass.number}`);
 };
 
@@ -49,7 +49,7 @@ export const getLiveweightGain = (
       dairyClass.className,
       'liveweightGain',
     ),
-    dairyClass.dailyLiveweightGainKilograms,
+    dairyClass.method2DailyLiveweightGainKilograms,
   ).named(`LWGj=${dairyClass.number}`);
 
 /**
@@ -59,7 +59,7 @@ export const getLengthOfStay = (
   dairyClass: DairyClassInputTransformed,
   constants: HasConstants<'DAIRY'>,
 ) => {
-  if (dairyClass.durationDays) return dairyClass.durationDays;
+  if (dairyClass.method2DurationDays) return dairyClass.method2DurationDays;
   if (isClassMature(dairyClass)) {
     return selectConstant(
       constants.DAIRY,
@@ -90,7 +90,7 @@ export const getDryMatterDigestibility = (
       'DIETARY_CONSTANTS',
       'dryMatterDigestibility',
     ),
-    dairyClass.fractionDryMatterDigestibility,
+    dairyClass.method2FractionDryMatterDigestibility,
   ).named(`DMDj=${dairyClass.number}`);
 };
 
@@ -103,7 +103,7 @@ export const getCrudeProtein = (
 ) => {
   return captureMethod1Or2Value(
     selectConstant(constants.DAIRY, 'DIETARY_CONSTANTS', 'crudeProtein'),
-    dairyClass.fractionCrudeProteinContent,
+    dairyClass.method2FractionCrudeProteinContent,
   ).named(`CPj=${dairyClass.number}`);
 };
 
@@ -150,7 +150,7 @@ export const getSolidSeparationRate = (
   constants: HasConstants<'DAIRY'>,
 ) => {
   if (allocations.solidSeparationInputMethod === '2')
-    return allocations.fractionSolidsSeparatedPreTreatment;
+    return allocations.method2FractionSolidsSeparatedPreTreatment;
   return ifTrueElse(
     allocations.solidsSeparatedPreTreatment,
     selectConstant(constants.DAIRY, 'DEFAULT_SOLID_SEPARATION_RATE'),

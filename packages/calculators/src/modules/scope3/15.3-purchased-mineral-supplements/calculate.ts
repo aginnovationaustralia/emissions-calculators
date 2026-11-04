@@ -16,7 +16,7 @@ const getEmissionsFactor = (
   constants: HasConstants<'LIVESTOCK'>,
 ) => {
   if (purchasedMineralSupplementIsMethod2(mineral)) {
-    return captureMethod1Or2Value(voidUnit(), mineral.emissionFactor);
+    return captureMethod1Or2Value(voidUnit(), mineral.method2EmissionFactor);
   }
   return captureMethod1Or2Value(
     selectConstant(

@@ -45,7 +45,7 @@ export const dairyMilkSolidsInputSchema = (location: LivestockLocation) =>
       },
       (s) => s.gt(0),
     ),
-    percentFatContent: numberInputOptional(
+    method2PercentFatContent: numberInputOptional(
       (val) => realNumber(val),
       {
         name: 'FCj',
@@ -55,7 +55,7 @@ export const dairyMilkSolidsInputSchema = (location: LivestockLocation) =>
       },
       isPercentage,
     ),
-    percentProteinContent: numberInputOptional(
+    method2PercentProteinContent: numberInputOptional(
       (val) => realNumber(val),
       {
         name: 'PCj',

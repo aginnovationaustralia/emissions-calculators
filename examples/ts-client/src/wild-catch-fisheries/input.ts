@@ -75,7 +75,7 @@ const purchasedFeedMethod1: PurchasedFeedAquacultureInput = {
 
 const purchasedFeedMethod2: PurchasedFeedMethod2Input = {
   amountTonnes: { value: 20 },
-  emissionFactor: { value: 1.2 },
+  method2EmissionFactor: { value: 1.2 },
 };
 
 // -------- Fuel --------
@@ -218,12 +218,12 @@ const wastewaterMethod2: WastewaterTreatmentMethod2Input = {
   facilityType: 'Shallow anaerobic lagoon',
   wastewaterVolumeCubicMetres: { value: 1000 },
   fractionRemoved: { value: 0.1 },
-  inletCODKilogramsPerCubicMetre: { value: 4 },
-  outletCODKilogramsPerCubicMetre: { value: 1 },
-  fractionSludge: { value: 0.1 },
-  methaneCapturedCubicMetres: { value: 0.1 },
-  methaneFlaredCubicMetres: { value: 0.05 },
-  methaneOutCubicMetres: { value: 0.01 },
+  method2InletCODKilogramsPerCubicMetre: { value: 4 },
+  method2OutletCODKilogramsPerCubicMetre: { value: 1 },
+  method2FractionSludge: { value: 0.1 },
+  method2MethaneCapturedCubicMetres: { value: 0.1 },
+  method2MethaneFlaredCubicMetres: { value: 0.05 },
+  method2MethaneOutCubicMetres: { value: 0.01 },
 };
 
 // -------- Purchases --------

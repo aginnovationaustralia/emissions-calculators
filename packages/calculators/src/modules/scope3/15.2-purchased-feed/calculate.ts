@@ -128,7 +128,7 @@ const getEmissionsFactor = (
   constants: HasConstants<'LIVESTOCK'>,
 ) => {
   if (purchasedFeedIsMethod2(feed)) {
-    return captureMethod1Or2Value(voidUnit(), feed.emissionFactor);
+    return captureMethod1Or2Value(voidUnit(), feed.method2EmissionFactor);
   }
   return captureMethod1Or2Value(
     getEmissionsFactorForMethod1(feed, constants),

@@ -13,7 +13,10 @@ const barleyGrain = {
   amountTonnes: nv(1),
 };
 const meatMeal = { type: 'Meat Meal', amountTonnes: nv(1) };
-const customEmissionsFactor = { amountTonnes: nv(1), emissionFactor: nv(0.5) };
+const customEmissionsFactor = {
+  amountTonnes: nv(1),
+  method2EmissionFactor: nv(0.5),
+};
 
 describe.each([
   ['Wild catch fisheries', WildCatchFisheryInputSchema],

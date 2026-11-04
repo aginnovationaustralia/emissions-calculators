@@ -35,7 +35,7 @@ export const purchasedMineralSupplementIsMethod2 = (
 ): mineral is PurchasedMineralSupplementMethod2InputTransformed => {
   return (
     (mineral as PurchasedMineralSupplementMethod2InputTransformed)
-      .emissionFactor !== undefined
+      .method2EmissionFactor !== undefined
   );
 };
 

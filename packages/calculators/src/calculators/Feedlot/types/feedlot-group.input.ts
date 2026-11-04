@@ -94,7 +94,7 @@ export const feedlotGroupSharedInputSchema = (location: LivestockLocation) =>
       },
       (s) => s.min(0),
     ),
-    dailyDryMatterIntakeKilograms: numberInputOptional(
+    method2DailyDryMatterIntakeKilograms: numberInputOptional(
       (val) => massPerHeadPerDay('DryMatter', val),
       {
         name: 'Ij',
@@ -104,7 +104,7 @@ export const feedlotGroupSharedInputSchema = (location: LivestockLocation) =>
       },
       (s) => s.min(0),
     ),
-    fractionCrudeProteinContent: numberInputOptional(
+    method2FractionCrudeProteinContent: numberInputOptional(
       (val) => massPerMass('CrudeProtein', 'DryMatter', val),
       {
         name: 'CPj',
@@ -115,7 +115,7 @@ export const feedlotGroupSharedInputSchema = (location: LivestockLocation) =>
       },
       isProportion,
     ),
-    fractionNitrogenRetentionRate: numberInputOptional(
+    method2FractionNitrogenRetentionRate: numberInputOptional(
       (val) => realNumber(val),
       {
         name: 'NRj',
@@ -140,7 +140,7 @@ export type FeedlotGroupSharedInputTransformed = z.output<
 export const FeedlotGroupLivestockInputSchema = feedlotGroupSharedInputSchema(
   'livestock',
 ).extend({
-  percentAverageNeutralDetergentFibre: numberInputOptional(
+  method2PercentAverageNeutralDetergentFibre: numberInputOptional(
     (val) => percentage(val),
     {
       name: 'NDFj',
@@ -151,7 +151,7 @@ export const FeedlotGroupLivestockInputSchema = feedlotGroupSharedInputSchema(
     },
     isPercentage,
   ),
-  fractionDryMatterDigestibility: numberInputOptional(
+  method2FractionDryMatterDigestibility: numberInputOptional(
     (val) => realNumber(val),
     {
       name: 'DMDj',

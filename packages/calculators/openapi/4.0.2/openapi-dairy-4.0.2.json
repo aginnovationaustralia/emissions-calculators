@@ -250,7 +250,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -272,7 +272,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -294,7 +294,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -316,7 +316,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -338,7 +338,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -390,7 +390,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -412,7 +412,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -434,7 +434,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -456,7 +456,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -478,7 +478,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -530,7 +530,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -552,7 +552,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -574,7 +574,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -596,7 +596,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -618,7 +618,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -670,7 +670,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -692,7 +692,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -714,7 +714,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -736,7 +736,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -758,7 +758,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -810,7 +810,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -832,7 +832,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -854,7 +854,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -876,7 +876,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -898,7 +898,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -950,7 +950,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -972,7 +972,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -994,7 +994,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -1016,7 +1016,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -1038,7 +1038,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -1090,7 +1090,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -1112,7 +1112,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -1134,7 +1134,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -1156,7 +1156,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -1178,7 +1178,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -1267,7 +1267,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms milk solids per head per day"
                                     },
-                                    "percentFatContent": {
+                                    "method2PercentFatContent": {
                                       "description": "Fat content in fat and protein corrected milk (number)",
                                       "x-modules": [
                                         "3.3",
@@ -1289,7 +1289,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "percentProteinContent": {
+                                    "method2PercentProteinContent": {
                                       "description": "Protein content in fat and protein corrected milk (number)",
                                       "x-modules": [
                                         "3.3",
@@ -1736,7 +1736,7 @@
                                       ],
                                       "additionalProperties": false
                                     },
-                                    "fractionSolidsSeparatedPreTreatment": {
+                                    "method2FractionSolidsSeparatedPreTreatment": {
                                       "description": "Fraction of volatile solids separated by pre-treatment of manure (applicable to anaerobic lagoons only). (0-1)",
                                       "x-modules": [
                                         "4.3"
@@ -1761,7 +1761,7 @@
                                   "required": [
                                     "milkingShedMMSAllocation",
                                     "feedPadMMSAllocation",
-                                    "fractionSolidsSeparatedPreTreatment"
+                                    "method2FractionSolidsSeparatedPreTreatment"
                                   ],
                                   "additionalProperties": false
                                 }
@@ -1840,7 +1840,7 @@
                                             "additionalProperties": false,
                                             "x-units": "kilograms lime"
                                           },
-                                          "scope3EmissionFactor": {
+                                          "method2Scope3EmissionFactor": {
                                             "description": "Method 2: supply a custom scope 3 emissions factor for lime based on supplier records (kilograms CO2e per kilogram lime)",
                                             "x-modules": [
                                               "15.6"
@@ -1924,7 +1924,7 @@
                                             "additionalProperties": false,
                                             "x-units": "kilograms lime"
                                           },
-                                          "scope3EmissionFactor": {
+                                          "method2Scope3EmissionFactor": {
                                             "description": "Method 2: supply a custom scope 3 emissions factor for lime based on supplier records (kilograms CO2e per kilogram lime)",
                                             "x-modules": [
                                               "15.6"
@@ -3328,7 +3328,7 @@
                                         ],
                                         "$ref": "#/components/schemas/DairyPurchaseCategory"
                                       },
-                                      "liveweightKilograms": {
+                                      "method2LiveweightKilograms": {
                                         "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                         "x-modules": [
                                           "15.1"
@@ -3354,7 +3354,7 @@
                                       "type",
                                       "headPurchased",
                                       "category",
-                                      "liveweightKilograms"
+                                      "method2LiveweightKilograms"
                                     ],
                                     "additionalProperties": false,
                                     "title": "Method 1 emission factor, method 2 liveweight"
@@ -3387,7 +3387,7 @@
                                         "additionalProperties": false,
                                         "x-units": "head"
                                       },
-                                      "emissionFactor": {
+                                      "method2EmissionFactor": {
                                         "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                         "x-modules": [
                                           "15.1"
@@ -3426,7 +3426,7 @@
                                     "required": [
                                       "type",
                                       "headPurchased",
-                                      "emissionFactor",
+                                      "method2EmissionFactor",
                                       "breed",
                                       "class"
                                     ],
@@ -3461,7 +3461,7 @@
                                         "additionalProperties": false,
                                         "x-units": "head"
                                       },
-                                      "emissionFactor": {
+                                      "method2EmissionFactor": {
                                         "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                         "x-modules": [
                                           "15.1"
@@ -3482,7 +3482,7 @@
                                         "additionalProperties": false,
                                         "x-units": "kilograms CO2e per kilogram liveweight"
                                       },
-                                      "liveweightKilograms": {
+                                      "method2LiveweightKilograms": {
                                         "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                         "x-modules": [
                                           "15.1"
@@ -3507,8 +3507,8 @@
                                     "required": [
                                       "type",
                                       "headPurchased",
-                                      "emissionFactor",
-                                      "liveweightKilograms"
+                                      "method2EmissionFactor",
+                                      "method2LiveweightKilograms"
                                     ],
                                     "additionalProperties": false,
                                     "title": "Method 2 emission factor, method 2 liveweight"
@@ -3584,7 +3584,7 @@
                                         "additionalProperties": false,
                                         "x-units": "tonnes purchased mineral supplement"
                                       },
-                                      "emissionFactor": {
+                                      "method2EmissionFactor": {
                                         "description": "Method 2: Emission factor of the type of mineral supplement purchased. (kilograms CO2e per kilogram purchased mineral supplement)",
                                         "x-modules": [
                                           "15.3"
@@ -3608,7 +3608,7 @@
                                     },
                                     "required": [
                                       "amountTonnes",
-                                      "emissionFactor"
+                                      "method2EmissionFactor"
                                     ],
                                     "additionalProperties": false,
                                     "title": "Method 2"
@@ -3645,7 +3645,7 @@
                                     "additionalProperties": false,
                                     "x-units": "kilograms chemical"
                                   },
-                                  "emissionFactor": {
+                                  "method2EmissionFactor": {
                                     "description": "Method 2: supply a custom emissions factor for this agrichemical based on supplier records (kilograms CO2e per kilogram chemical)",
                                     "x-modules": [
                                       "15.5"
@@ -3967,7 +3967,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -3989,7 +3989,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -4011,7 +4011,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -4033,7 +4033,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -4055,7 +4055,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -4107,7 +4107,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -4129,7 +4129,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -4151,7 +4151,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -4173,7 +4173,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -4195,7 +4195,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -4247,7 +4247,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -4269,7 +4269,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -4291,7 +4291,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -4313,7 +4313,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -4335,7 +4335,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -4387,7 +4387,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -4409,7 +4409,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -4431,7 +4431,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -4453,7 +4453,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -4475,7 +4475,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -4527,7 +4527,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -4549,7 +4549,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -4571,7 +4571,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -4593,7 +4593,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -4615,7 +4615,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -4667,7 +4667,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -4689,7 +4689,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -4711,7 +4711,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -4733,7 +4733,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -4755,7 +4755,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -4807,7 +4807,7 @@
                                       "additionalProperties": false,
                                       "x-units": "head"
                                     },
-                                    "liveweightKilograms": {
+                                    "method2LiveweightKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                       "x-modules": [
                                         "3.3",
@@ -4829,7 +4829,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head"
                                     },
-                                    "dailyLiveweightGainKilograms": {
+                                    "method2DailyLiveweightGainKilograms": {
                                       "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                       "x-modules": [
                                         "3.3",
@@ -4851,7 +4851,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms liveweight per head per day"
                                     },
-                                    "durationDays": {
+                                    "method2DurationDays": {
                                       "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                       "x-modules": [
                                         "3.3",
@@ -4873,7 +4873,7 @@
                                       "additionalProperties": false,
                                       "x-units": "days"
                                     },
-                                    "fractionDryMatterDigestibility": {
+                                    "method2FractionDryMatterDigestibility": {
                                       "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                       "x-modules": [
                                         "3.3",
@@ -4895,7 +4895,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "fractionCrudeProteinContent": {
+                                    "method2FractionCrudeProteinContent": {
                                       "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                       "x-modules": [
                                         "4.3"
@@ -4984,7 +4984,7 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms milk solids per head per day"
                                     },
-                                    "percentFatContent": {
+                                    "method2PercentFatContent": {
                                       "description": "Fat content in fat and protein corrected milk (number)",
                                       "x-modules": [
                                         "3.3",
@@ -5006,7 +5006,7 @@
                                       "additionalProperties": false,
                                       "x-units": "number"
                                     },
-                                    "percentProteinContent": {
+                                    "method2PercentProteinContent": {
                                       "description": "Protein content in fat and protein corrected milk (number)",
                                       "x-modules": [
                                         "3.3",
@@ -5453,7 +5453,7 @@
                                       ],
                                       "additionalProperties": false
                                     },
-                                    "fractionSolidsSeparatedPreTreatment": {
+                                    "method2FractionSolidsSeparatedPreTreatment": {
                                       "description": "Fraction of volatile solids separated by pre-treatment of manure (applicable to anaerobic lagoons only). (0-1)",
                                       "x-modules": [
                                         "4.3"
@@ -5478,7 +5478,7 @@
                                   "required": [
                                     "milkingShedMMSAllocation",
                                     "feedPadMMSAllocation",
-                                    "fractionSolidsSeparatedPreTreatment"
+                                    "method2FractionSolidsSeparatedPreTreatment"
                                   ],
                                   "additionalProperties": false
                                 }
@@ -5557,7 +5557,7 @@
                                             "additionalProperties": false,
                                             "x-units": "kilograms lime"
                                           },
-                                          "scope3EmissionFactor": {
+                                          "method2Scope3EmissionFactor": {
                                             "description": "Method 2: supply a custom scope 3 emissions factor for lime based on supplier records (kilograms CO2e per kilogram lime)",
                                             "x-modules": [
                                               "15.6"
@@ -5641,7 +5641,7 @@
                                             "additionalProperties": false,
                                             "x-units": "kilograms lime"
                                           },
-                                          "scope3EmissionFactor": {
+                                          "method2Scope3EmissionFactor": {
                                             "description": "Method 2: supply a custom scope 3 emissions factor for lime based on supplier records (kilograms CO2e per kilogram lime)",
                                             "x-modules": [
                                               "15.6"
@@ -7045,7 +7045,7 @@
                                         ],
                                         "$ref": "#/components/schemas/DairyPurchaseCategory"
                                       },
-                                      "liveweightKilograms": {
+                                      "method2LiveweightKilograms": {
                                         "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                         "x-modules": [
                                           "15.1"
@@ -7071,7 +7071,7 @@
                                       "type",
                                       "headPurchased",
                                       "category",
-                                      "liveweightKilograms"
+                                      "method2LiveweightKilograms"
                                     ],
                                     "additionalProperties": false,
                                     "title": "Method 1 emission factor, method 2 liveweight"
@@ -7104,7 +7104,7 @@
                                         "additionalProperties": false,
                                         "x-units": "head"
                                       },
-                                      "emissionFactor": {
+                                      "method2EmissionFactor": {
                                         "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                         "x-modules": [
                                           "15.1"
@@ -7143,7 +7143,7 @@
                                     "required": [
                                       "type",
                                       "headPurchased",
-                                      "emissionFactor",
+                                      "method2EmissionFactor",
                                       "breed",
                                       "class"
                                     ],
@@ -7178,7 +7178,7 @@
                                         "additionalProperties": false,
                                         "x-units": "head"
                                       },
-                                      "emissionFactor": {
+                                      "method2EmissionFactor": {
                                         "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                         "x-modules": [
                                           "15.1"
@@ -7199,7 +7199,7 @@
                                         "additionalProperties": false,
                                         "x-units": "kilograms CO2e per kilogram liveweight"
                                       },
-                                      "liveweightKilograms": {
+                                      "method2LiveweightKilograms": {
                                         "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                         "x-modules": [
                                           "15.1"
@@ -7224,8 +7224,8 @@
                                     "required": [
                                       "type",
                                       "headPurchased",
-                                      "emissionFactor",
-                                      "liveweightKilograms"
+                                      "method2EmissionFactor",
+                                      "method2LiveweightKilograms"
                                     ],
                                     "additionalProperties": false,
                                     "title": "Method 2 emission factor, method 2 liveweight"
@@ -7301,7 +7301,7 @@
                                         "additionalProperties": false,
                                         "x-units": "tonnes purchased mineral supplement"
                                       },
-                                      "emissionFactor": {
+                                      "method2EmissionFactor": {
                                         "description": "Method 2: Emission factor of the type of mineral supplement purchased. (kilograms CO2e per kilogram purchased mineral supplement)",
                                         "x-modules": [
                                           "15.3"
@@ -7325,7 +7325,7 @@
                                     },
                                     "required": [
                                       "amountTonnes",
-                                      "emissionFactor"
+                                      "method2EmissionFactor"
                                     ],
                                     "additionalProperties": false,
                                     "title": "Method 2"
@@ -7362,7 +7362,7 @@
                                     "additionalProperties": false,
                                     "x-units": "kilograms chemical"
                                   },
-                                  "emissionFactor": {
+                                  "method2EmissionFactor": {
                                     "description": "Method 2: supply a custom emissions factor for this agrichemical based on supplier records (kilograms CO2e per kilogram chemical)",
                                     "x-modules": [
                                       "15.5"
@@ -9579,7 +9579,7 @@
                           "intensities": {
                             "type": "object",
                             "properties": {
-                              "liveweightProducedKg": {
+                              "liveweightProducedKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -9605,7 +9605,7 @@
                                 "additionalProperties": false,
                                 "description": "Dairy liveweight emissions intensity for this activity, in kg-CO2e/kg liveweight"
                               },
-                              "milkProducedKg": {
+                              "milkProducedKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -9633,9 +9633,9 @@
                               }
                             },
                             "required": [
-                              "liveweightProducedKg",
+                              "liveweightProducedKilograms",
                               "liveweightIntensity",
-                              "milkProducedKg",
+                              "milkProducedKilograms",
                               "milkIntensity"
                             ],
                             "additionalProperties": false
@@ -9678,7 +9678,7 @@
                     "intensities": {
                       "type": "object",
                       "properties": {
-                        "liveweightProducedKg": {
+                        "liveweightProducedKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -9717,7 +9717,7 @@
                           "additionalProperties": false,
                           "description": "Dairy liveweight emissions intensity including LULUCF, in kg-CO2e/kg liveweight"
                         },
-                        "milkProducedKg": {
+                        "milkProducedKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -9758,10 +9758,10 @@
                         }
                       },
                       "required": [
-                        "liveweightProducedKg",
+                        "liveweightProducedKilograms",
                         "liveweightIntensityExcludingLULUCF",
                         "liveweightIntensityIncludingLULUCF",
-                        "milkProducedKg",
+                        "milkProducedKilograms",
                         "milkIntensityExcludingLULUCF",
                         "milkIntensityIncludingLULUCF"
                       ],
@@ -13366,7 +13366,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "dailyNitrogenWasteProductionKilograms": {
+                            "method2DailyNitrogenWasteProductionKilograms": {
                               "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -14624,7 +14624,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -14651,7 +14651,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -14785,7 +14785,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -14812,7 +14812,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -14946,7 +14946,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -14973,7 +14973,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     }
@@ -15048,7 +15048,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "dailyNitrogenWasteProductionKilograms": {
+                            "method2DailyNitrogenWasteProductionKilograms": {
                               "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -16306,7 +16306,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -16333,7 +16333,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -16467,7 +16467,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -16494,7 +16494,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -16628,7 +16628,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -16655,7 +16655,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     }
@@ -16730,7 +16730,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "dailyNitrogenWasteProductionKilograms": {
+                            "method2DailyNitrogenWasteProductionKilograms": {
                               "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -17988,7 +17988,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -18015,7 +18015,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -18149,7 +18149,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -18176,7 +18176,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -18310,7 +18310,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -18337,7 +18337,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     }
@@ -18412,7 +18412,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "dailyNitrogenWasteProductionKilograms": {
+                            "method2DailyNitrogenWasteProductionKilograms": {
                               "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -19670,7 +19670,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -19697,7 +19697,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -19831,7 +19831,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -19858,7 +19858,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -19992,7 +19992,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -20019,7 +20019,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     }
@@ -20141,7 +20141,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -20164,7 +20164,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -20187,7 +20187,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -20210,7 +20210,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -20233,7 +20233,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -20288,7 +20288,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -20311,7 +20311,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -20334,7 +20334,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -20357,7 +20357,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -20380,7 +20380,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -20435,7 +20435,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -20458,7 +20458,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -20481,7 +20481,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -20504,7 +20504,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -20527,7 +20527,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -20582,7 +20582,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -20605,7 +20605,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -20628,7 +20628,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -20651,7 +20651,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -20674,7 +20674,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -20729,7 +20729,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -20752,7 +20752,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -20775,7 +20775,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -20798,7 +20798,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -20821,7 +20821,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -20876,7 +20876,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -20899,7 +20899,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -20922,7 +20922,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -20945,7 +20945,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -20968,7 +20968,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -21023,7 +21023,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -21046,7 +21046,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -21069,7 +21069,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -21092,7 +21092,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -21115,7 +21115,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -21207,7 +21207,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms milk solids per head per day"
                                 },
-                                "percentFatContent": {
+                                "method2PercentFatContent": {
                                   "description": "Fat content in fat and protein corrected milk (number)",
                                   "x-modules": [
                                     "5.2",
@@ -21230,7 +21230,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "percentProteinContent": {
+                                "method2PercentProteinContent": {
                                   "description": "Protein content in fat and protein corrected milk (number)",
                                   "x-modules": [
                                     "5.2",
@@ -21574,7 +21574,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -21597,7 +21597,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -21620,7 +21620,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -21643,7 +21643,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -21666,7 +21666,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -21721,7 +21721,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -21744,7 +21744,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -21767,7 +21767,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -21790,7 +21790,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -21813,7 +21813,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -21868,7 +21868,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -21891,7 +21891,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -21914,7 +21914,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -21937,7 +21937,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -21960,7 +21960,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -22015,7 +22015,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -22038,7 +22038,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -22061,7 +22061,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -22084,7 +22084,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -22107,7 +22107,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -22162,7 +22162,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -22185,7 +22185,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -22208,7 +22208,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -22231,7 +22231,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -22254,7 +22254,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -22309,7 +22309,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -22332,7 +22332,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -22355,7 +22355,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -22378,7 +22378,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -22401,7 +22401,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -22456,7 +22456,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "liveweightKilograms": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -22479,7 +22479,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "dailyLiveweightGainKilograms": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -22502,7 +22502,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head per day"
                                 },
-                                "durationDays": {
+                                "method2DurationDays": {
                                   "description": "Method 2: supply an exact value for the number of days for this time period based on farm records (days)",
                                   "x-modules": [
                                     "5.2",
@@ -22525,7 +22525,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "fractionDryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -22548,7 +22548,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "fractionCrudeProteinContent": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -22640,7 +22640,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms milk solids per head per day"
                                 },
-                                "percentFatContent": {
+                                "method2PercentFatContent": {
                                   "description": "Fat content in fat and protein corrected milk (number)",
                                   "x-modules": [
                                     "5.2",
@@ -22663,7 +22663,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "percentProteinContent": {
+                                "method2PercentProteinContent": {
                                   "description": "Protein content in fat and protein corrected milk (number)",
                                   "x-modules": [
                                     "5.2",
@@ -23110,7 +23110,7 @@
                       "additionalProperties": false,
                       "x-units": "days"
                     },
-                    "dailyDryMatterIntakeKilograms": {
+                    "method2DailyDryMatterIntakeKilograms": {
                       "description": "Method 2: Average dry matter intake (kilograms dry matter per head per day)",
                       "x-modules": [
                         "5.2",
@@ -23133,7 +23133,7 @@
                       "additionalProperties": false,
                       "x-units": "kilograms dry matter per head per day"
                     },
-                    "fractionCrudeProteinContent": {
+                    "method2FractionCrudeProteinContent": {
                       "description": "Method 2: Average crude protein content of the feed given to this cattle group, as a fraction (kilograms crude protein per kilogram dry matter)",
                       "x-modules": [
                         "5.2",
@@ -23156,7 +23156,7 @@
                       "additionalProperties": false,
                       "x-units": "kilograms crude protein per kilogram dry matter"
                     },
-                    "fractionNitrogenRetentionRate": {
+                    "method2FractionNitrogenRetentionRate": {
                       "description": "Method 2: Nitrogen retention rate (number)",
                       "x-modules": [
                         "5.2",
@@ -23368,7 +23368,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "dailyDryMatterIntakeKilograms": {
+                            "method2DailyDryMatterIntakeKilograms": {
                               "description": "Dry matter intake (kilograms dry matter per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -23391,7 +23391,7 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter per head per day"
                             },
-                            "fractionCrudeProteinContent": {
+                            "method2FractionCrudeProteinContent": {
                               "description": "Crude protein content of the diet for this class (kilograms crude protein per kilogram dry matter)",
                               "x-modules": [
                                 "5.2",
@@ -23992,7 +23992,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "dailyDryMatterIntakeKilograms": {
+                            "method2DailyDryMatterIntakeKilograms": {
                               "description": "Dry matter intake (kilograms dry matter per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -24015,7 +24015,7 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter per head per day"
                             },
-                            "fractionCrudeProteinContent": {
+                            "method2FractionCrudeProteinContent": {
                               "description": "Crude protein content of the diet for this class (kilograms crude protein per kilogram dry matter)",
                               "x-modules": [
                                 "5.2",
@@ -24616,7 +24616,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "dailyDryMatterIntakeKilograms": {
+                            "method2DailyDryMatterIntakeKilograms": {
                               "description": "Dry matter intake (kilograms dry matter per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -24639,7 +24639,7 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter per head per day"
                             },
-                            "fractionCrudeProteinContent": {
+                            "method2FractionCrudeProteinContent": {
                               "description": "Crude protein content of the diet for this class (kilograms crude protein per kilogram dry matter)",
                               "x-modules": [
                                 "5.2",
@@ -25240,7 +25240,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "dailyDryMatterIntakeKilograms": {
+                            "method2DailyDryMatterIntakeKilograms": {
                               "description": "Dry matter intake (kilograms dry matter per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -25263,7 +25263,7 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter per head per day"
                             },
-                            "fractionCrudeProteinContent": {
+                            "method2FractionCrudeProteinContent": {
                               "description": "Crude protein content of the diet for this class (kilograms crude protein per kilogram dry matter)",
                               "x-modules": [
                                 "5.2",
@@ -27368,7 +27368,7 @@
                   "additionalProperties": false,
                   "x-units": "tonnes purchased feed"
                 },
-                "emissionFactor": {
+                "method2EmissionFactor": {
                   "description": "Method 2: Emission factor of the type of feed purchased. (kilograms CO2e per kilogram purchased feed)",
                   "x-modules": [
                     "15.2"
@@ -27392,7 +27392,7 @@
               },
               "required": [
                 "amountTonnes",
-                "emissionFactor"
+                "method2EmissionFactor"
               ],
               "additionalProperties": false,
               "title": "Method 2 (custom emissions factor)"

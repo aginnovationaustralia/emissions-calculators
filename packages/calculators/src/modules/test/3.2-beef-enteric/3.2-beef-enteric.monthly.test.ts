@@ -53,22 +53,22 @@ const readBeefClassFn =
       );
       return {
         head: nv(Number(cell(columnHeadN, rowOffset))),
-        liveweightKilograms: nvo(
+        method2LiveweightKilograms: nvo(
           method === '2' && customLiveweight
             ? Number(customLiveweight)
             : undefined,
         ),
-        dailyLiveweightGainKilograms: nvo(
+        method2DailyLiveweightGainKilograms: nvo(
           method === '2' && customLiveweightGain
             ? Number(customLiveweightGain)
             : undefined,
         ),
-        durationDays: nvo(
+        method2DurationDays: nvo(
           method === '2' && customDurationDays
             ? Number(customDurationDays)
             : undefined,
         ),
-        dailyDryMatterIntakeKilograms: nvo(
+        method2DailyDryMatterIntakeKilograms: nvo(
           method === '2' && customDryMatterIntake
             ? Number(customDryMatterIntake)
             : undefined,
@@ -113,22 +113,22 @@ const readBeefCalfClassFn =
       );
       return {
         head: nv(Number(cell(columnHeadN, rowOffset))),
-        liveweightKilograms: nvo(
+        method2LiveweightKilograms: nvo(
           method === '2' && customLiveweight
             ? Number(customLiveweight)
             : undefined,
         ),
-        dailyLiveweightGainKilograms: nvo(
+        method2DailyLiveweightGainKilograms: nvo(
           method === '2' && customLiveweightGain
             ? Number(customLiveweightGain)
             : undefined,
         ),
-        durationDays: nvo(
+        method2DurationDays: nvo(
           method === '2' && customDurationDays
             ? Number(customDurationDays)
             : undefined,
         ),
-        dailyDryMatterIntakeKilograms: nvo(
+        method2DailyDryMatterIntakeKilograms: nvo(
           method === '2' && customDryMatterIntake
             ? Number(customDryMatterIntake)
             : undefined,
@@ -182,22 +182,22 @@ const readBeefClassWithCalvesFn =
         fractionCowsPreviousSeasonInCalf: nv(
           Number(cell(columnProportionCowsPreviousSeasonInCalf, rowOffset)),
         ),
-        liveweightKilograms: nvo(
+        method2LiveweightKilograms: nvo(
           method === '2' && customLiveweight
             ? Number(customLiveweight)
             : undefined,
         ),
-        dailyLiveweightGainKilograms: nvo(
+        method2DailyLiveweightGainKilograms: nvo(
           method === '2' && customLiveweightGain
             ? Number(customLiveweightGain)
             : undefined,
         ),
-        durationDays: nvo(
+        method2DurationDays: nvo(
           method === '2' && customDurationDays
             ? Number(customDurationDays)
             : undefined,
         ),
-        dailyDryMatterIntakeKilograms: nvo(
+        method2DailyDryMatterIntakeKilograms: nvo(
           method === '2' && customDryMatterIntake
             ? Number(customDryMatterIntake)
             : undefined,

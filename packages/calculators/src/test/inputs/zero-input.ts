@@ -152,7 +152,7 @@ export const zeroRefrigerants: RefrigerantInput[] = [
 ];
 
 export const zeroPurchasedFeed: PurchasedFeedMethod2Input[] = [
-  { amountTonnes: nv(0), emissionFactor: nv(0) },
+  { amountTonnes: nv(0), method2EmissionFactor: nv(0) },
 ];
 
 export const zeroPurchasedMineralSupplements: PurchasedMineralSupplementMethod1Input[] =
@@ -331,13 +331,13 @@ export const ZERO_ALL_MODULES_INPUT: Required<AllModulesInput> = {
   wastewater: {
     facilityType: 'Managed aerobic treatment',
     wastewaterVolumeCubicMetres: nv(0),
-    inletCODKilogramsPerCubicMetre: nv(0),
-    outletCODKilogramsPerCubicMetre: nv(0),
-    fractionSludge: nv(0),
+    method2InletCODKilogramsPerCubicMetre: nv(0),
+    method2OutletCODKilogramsPerCubicMetre: nv(0),
+    method2FractionSludge: nv(0),
     fractionRemoved: nv(0),
-    methaneCapturedCubicMetres: nv(0),
-    methaneFlaredCubicMetres: nv(0),
-    methaneOutCubicMetres: nv(0),
+    method2MethaneCapturedCubicMetres: nv(0),
+    method2MethaneFlaredCubicMetres: nv(0),
+    method2MethaneOutCubicMetres: nv(0),
   },
   supplementaryCO2Kilograms: nv(0),
   electricity: {

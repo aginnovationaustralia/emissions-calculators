@@ -244,7 +244,7 @@ describe('Multi method integration', () => {
         period: 'seasonal',
         bullsGt1: seasons({
           head: nv(5),
-          liveweightKilograms: nvo(method2Liveweight),
+          method2LiveweightKilograms: nvo(method2Liveweight),
         }),
       },
     });
@@ -265,7 +265,7 @@ describe('Multi method integration', () => {
         period: 'seasonal',
         bullsGt1: seasons({
           head: nv(5),
-          liveweightKilograms: nvo(method2Liveweight),
+          method2LiveweightKilograms: nvo(method2Liveweight),
         }),
       },
     });
@@ -291,7 +291,7 @@ describe('Multi method integration', () => {
         period: 'seasonal',
         bullsGt1: seasons({
           head: nv(5),
-          dailyDryMatterIntakeKilograms: nvo(method2DryMatterIntake),
+          method2DailyDryMatterIntakeKilograms: nvo(method2DryMatterIntake),
         }),
       },
     });
@@ -301,7 +301,7 @@ describe('Multi method integration', () => {
         period: 'seasonal',
         bullsGt1: seasons({
           head: nv(5),
-          liveweightKilograms: nvo(method2Liveweight),
+          method2LiveweightKilograms: nvo(method2Liveweight),
         }),
       },
     });
@@ -330,7 +330,7 @@ describe('Multi method integration', () => {
         bullsGt1: {
           spring: {
             head: nv(5),
-            liveweightKilograms: nvo(method2Liveweight),
+            method2LiveweightKilograms: nvo(method2Liveweight),
           },
           summer: { head: nv(5) },
           autumn: { head: nv(5) },

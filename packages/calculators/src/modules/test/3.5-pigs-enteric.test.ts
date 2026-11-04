@@ -49,7 +49,7 @@ const getCalculatorInput = (
     return {
       head: nv(Number(cell(columnHead, offset))),
       durationDays: nv(Number(cell(columnAverageDuration, offset))),
-      dailyAverageFeedIntakeKilograms: nvo(method2AverageFeedIntake),
+      method2DailyAverageFeedIntakeKilograms: nvo(method2AverageFeedIntake),
       // No effect on enteric fermentation calculation.
       manureAllocations: zeroPigsManureAllocation,
     };

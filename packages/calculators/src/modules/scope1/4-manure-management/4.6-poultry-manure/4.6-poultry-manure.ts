@@ -61,7 +61,7 @@ const getDryMatterIntake = (
       poultryClass.className,
       'dryMatterIntake',
     ),
-    poultryClass.dailyDryMatterIntakeKilograms,
+    poultryClass.method2DailyDryMatterIntakeKilograms,
   ).named(`Ij=${poultryClass.classNumber}`);
 
 /**
@@ -78,7 +78,7 @@ const getDryMatterDigestibility = (
       poultryClass.className,
       'dryMatterDigestibility',
     ),
-    poultryClass.fractionDryMatterDigestibility,
+    poultryClass.method2FractionDryMatterDigestibility,
   ).named(`DMDj=${poultryClass.classNumber}`);
 
 /**
@@ -95,7 +95,7 @@ const getCrudeProtein = (
       poultryClass.className,
       'crudeProtein',
     ),
-    poultryClass.fractionCrudeProteinContent,
+    poultryClass.method2FractionCrudeProteinContent,
   ).named(`CPj=${poultryClass.classNumber}`);
 
 /**

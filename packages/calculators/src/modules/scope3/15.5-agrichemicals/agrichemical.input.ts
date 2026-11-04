@@ -22,7 +22,7 @@ export const AgrichemicalInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  emissionFactor: numberInputOptional(
+  method2EmissionFactor: numberInputOptional(
     (val) => massPerMass('CO2e', 'Chemical', val),
     {
       name: 'EF',

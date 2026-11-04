@@ -120,7 +120,7 @@ const chemicalMethod1: AgrichemicalInput = {
 
 const chemicalMethod2: AgrichemicalInput = {
   ...chemicalMethod1,
-  emissionFactor: { value: 10 },
+  method2EmissionFactor: { value: 10 },
 };
 
 const refrigerant: RefrigerantInput = {
@@ -162,7 +162,7 @@ const limeApplicationMethod1: LimeApplicationInput = {
 
 const limeApplicationMethod2: LimeApplicationInput = {
   ...limeApplicationMethod1,
-  scope3EmissionFactor: { value: 0.05 },
+  method2Scope3EmissionFactor: { value: 0.05 },
 };
 
 const limeMethod1: LimeInput = {
@@ -330,9 +330,9 @@ const feedlotManureGroupMethod1: FeedlotManureGroupInput = {
 
 const feedlotManureGroupMethod2: FeedlotManureGroupInput = {
   ...feedlotManureGroupMethod1,
-  dailyDryMatterIntakeKilograms: { value: 10 },
-  fractionCrudeProteinContent: { value: 0.14 },
-  fractionNitrogenRetentionRate: { value: 0.1 },
+  method2DailyDryMatterIntakeKilograms: { value: 10 },
+  method2FractionCrudeProteinContent: { value: 0.14 },
+  method2FractionNitrogenRetentionRate: { value: 0.1 },
 };
 
 const feedlotManureMethod1: FeedlotManureInput = {

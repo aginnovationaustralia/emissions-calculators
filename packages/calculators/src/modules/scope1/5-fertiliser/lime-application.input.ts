@@ -21,10 +21,10 @@ const LimeApplicationBaseInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  scope3EmissionFactor: numberInputOptional(
+  method2Scope3EmissionFactor: numberInputOptional(
     (val) => massPerMass('CO2e', 'Lime', val),
     {
-      name: 'scope3EmissionFactor',
+      name: 'method2Scope3EmissionFactor',
       method: '2',
       scope: '3',
       description:

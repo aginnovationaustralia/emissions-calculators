@@ -54,17 +54,17 @@ const getCalculatorInput = (
     );
     return {
       head: nv(Number(cell(col.columnHead, offsetRows))),
-      liveweightKilograms: nvo(
+      method2LiveweightKilograms: nvo(
         method === '2' && customLiveweight
           ? Number(customLiveweight)
           : undefined,
       ),
-      dryMatterAvailabilityTonnesPerHectare: nvo(
+      method2DryMatterAvailabilityTonnesPerHectare: nvo(
         method === '2' && customDryMatterAvailability
           ? Number(customDryMatterAvailability)
           : undefined,
       ),
-      fractionDryMatterDigestibility: nvo(
+      method2FractionDryMatterDigestibility: nvo(
         method === '2' && customDryMatterDigestibility
           ? Number(customDryMatterDigestibility)
           : undefined,

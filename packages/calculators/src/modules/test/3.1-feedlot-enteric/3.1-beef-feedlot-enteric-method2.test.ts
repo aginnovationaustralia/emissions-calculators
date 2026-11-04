@@ -38,17 +38,17 @@ describeMethod2Propagation({
   run: (parsed) => calculate31BeefFeedlotEntericMethane(parsed, testContext()),
   cases: [
     {
-      name: 'dailyDryMatterIntakeKilograms',
+      name: 'method2DailyDryMatterIntakeKilograms',
       apply: (base) =>
         withGroupOverride(base, {
-          dailyDryMatterIntakeKilograms: nvo(12),
+          method2DailyDryMatterIntakeKilograms: nvo(12),
         }),
     },
     {
-      name: 'percentAverageNeutralDetergentFibre',
+      name: 'method2PercentAverageNeutralDetergentFibre',
       apply: (base) =>
         withGroupOverride(base, {
-          percentAverageNeutralDetergentFibre: nv(30),
+          method2PercentAverageNeutralDetergentFibre: nv(30),
         }),
     },
   ],

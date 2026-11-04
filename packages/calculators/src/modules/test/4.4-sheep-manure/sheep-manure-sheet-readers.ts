@@ -102,32 +102,32 @@ export function createSheepManureSheetReaders<
     );
     return {
       head: nv(Number(cell(col.columnHead, offsetRows))),
-      liveweightKilograms: nvo(
+      method2LiveweightKilograms: nvo(
         method === '2' && customLiveweight
           ? Number(customLiveweight)
           : undefined,
       ),
-      dryMatterAvailabilityTonnesPerHectare: nvo(
+      method2DryMatterAvailabilityTonnesPerHectare: nvo(
         method === '2' && customDryMatterAvailability
           ? Number(customDryMatterAvailability)
           : undefined,
       ),
-      fractionDryMatterDigestibility: nvo(
+      method2FractionDryMatterDigestibility: nvo(
         method === '2' && customDryMatterDigestibility
           ? Number(customDryMatterDigestibility)
           : undefined,
       ),
-      durationDays: nvo(
+      method2DurationDays: nvo(
         method === '2' && customAverageDurationDays
           ? Number(customAverageDurationDays)
           : undefined,
       ),
-      fractionCrudeProteinContent: nvo(
+      method2FractionCrudeProteinContent: nvo(
         method === '2' && customCrudeProteinContent
           ? Number(customCrudeProteinContent)
           : undefined,
       ),
-      dailyLiveweightGainKilograms: nvo(
+      method2DailyLiveweightGainKilograms: nvo(
         method === '2' && customLiveweightGain
           ? Number(customLiveweightGain)
           : undefined,

@@ -93,11 +93,11 @@ const groupMethod1: FeedlotGroupLivestockInput = {
 
 const groupMethod2: FeedlotGroupLivestockInput = {
   ...groupMethod1,
-  dailyDryMatterIntakeKilograms: { value: 10 },
-  fractionCrudeProteinContent: { value: 0.14 },
-  fractionNitrogenRetentionRate: { value: 0.1 },
-  percentAverageNeutralDetergentFibre: { value: 30 },
-  fractionDryMatterDigestibility: { value: 0.75 },
+  method2DailyDryMatterIntakeKilograms: { value: 10 },
+  method2FractionCrudeProteinContent: { value: 0.14 },
+  method2FractionNitrogenRetentionRate: { value: 0.1 },
+  method2PercentAverageNeutralDetergentFibre: { value: 30 },
+  method2FractionDryMatterDigestibility: { value: 0.75 },
 };
 
 // -------- Fuel and services --------
@@ -137,8 +137,8 @@ const purchasedLivestockMethod1: BeefPurchasedLivestockInput = {
 const purchasedLivestockMethod2: BeefPurchasedLivestockInput = {
   type: 'Beef',
   headPurchased: { value: 1000 },
-  emissionFactor: { value: 5 },
-  liveweightKilograms: { value: 300 },
+  method2EmissionFactor: { value: 5 },
+  method2LiveweightKilograms: { value: 300 },
 };
 
 const purchasedFeedMethod1: PurchasedFeedAustralianInput = {
@@ -149,7 +149,7 @@ const purchasedFeedMethod1: PurchasedFeedAustralianInput = {
 
 const purchasedFeedMethod2: PurchasedFeedMethod2Input = {
   amountTonnes: { value: 1000 },
-  emissionFactor: { value: 0.3 },
+  method2EmissionFactor: { value: 0.3 },
 };
 
 const purchasedMineralSupplementMethod1: PurchasedMineralSupplementMethod1Input =
@@ -161,7 +161,7 @@ const purchasedMineralSupplementMethod1: PurchasedMineralSupplementMethod1Input 
 const purchasedMineralSupplementMethod2: PurchasedMineralSupplementMethod2Input =
   {
     amountTonnes: { value: 5 },
-    emissionFactor: { value: 0.5 },
+    method2EmissionFactor: { value: 0.5 },
   };
 
 const otherPurchasedGoodOrService: OtherPurchasedGoodOrServiceInput = {

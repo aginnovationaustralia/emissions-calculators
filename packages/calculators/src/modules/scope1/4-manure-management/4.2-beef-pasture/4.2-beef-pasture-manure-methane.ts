@@ -127,7 +127,7 @@ const calculateTotalMethaneFromClassSeason = (periodProps: BeefPeriodProps) => {
   const Njkl = currentPeriod.head;
   const Dj = captureMethod1Or2Value(
     periodDuration,
-    currentPeriod.durationDays,
+    currentPeriod.method2DurationDays,
   ).named(`Dj=${periodName}`);
 
   const Mjklm1 = calculateTotalMethaneProductionFromClassSeasonM(

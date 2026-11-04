@@ -111,9 +111,9 @@ const classMethod1: PoultryClassInput = {
 
 const classMethod2: PoultryClassInput = {
   ...classMethod1,
-  dailyDryMatterIntakeKilograms: { value: 0.1 },
-  fractionCrudeProteinContent: { value: 0.2 },
-  fractionDryMatterDigestibility: { value: 0.8 },
+  method2DailyDryMatterIntakeKilograms: { value: 0.1 },
+  method2FractionCrudeProteinContent: { value: 0.2 },
+  method2FractionDryMatterDigestibility: { value: 0.8 },
 };
 
 const classesMethod1: PoultryClassesLivestockInput = {
@@ -164,8 +164,8 @@ const purchasedLivestockMethod1: PoultryPurchasedLivestockInput = {
 const purchasedLivestockMethod2: PoultryPurchasedLivestockInput = {
   type: 'Poultry',
   headPurchased: { value: 5000 },
-  emissionFactor: { value: 3 },
-  liveweightKilograms: { value: 1.5 },
+  method2EmissionFactor: { value: 3 },
+  method2LiveweightKilograms: { value: 1.5 },
 };
 
 const purchasedFeedMethod1: PurchasedFeedAustralianInput = {
@@ -176,7 +176,7 @@ const purchasedFeedMethod1: PurchasedFeedAustralianInput = {
 
 const purchasedFeedMethod2: PurchasedFeedMethod2Input = {
   amountTonnes: { value: 1000 },
-  emissionFactor: { value: 0.5 },
+  method2EmissionFactor: { value: 0.5 },
 };
 
 const otherPurchasedGoodOrService: OtherPurchasedGoodOrServiceInput = {

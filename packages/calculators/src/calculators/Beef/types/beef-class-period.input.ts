@@ -29,7 +29,7 @@ export const BeefClassPeriodInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  liveweightKilograms: numberInputOptional(
+  method2LiveweightKilograms: numberInputOptional(
     (value) => liveweight(value),
     {
       name: 'Wijkln',
@@ -40,7 +40,7 @@ export const BeefClassPeriodInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  dailyLiveweightGainKilograms: numberInputOptional(
+  method2DailyLiveweightGainKilograms: numberInputOptional(
     (val) => liveweightGain(val),
     {
       name: 'LWGijkln',
@@ -50,7 +50,7 @@ export const BeefClassPeriodInputSchema = object({
       modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
     },
   ),
-  durationDays: numberInputOptional(
+  method2DurationDays: numberInputOptional(
     (val) => days(val),
     {
       name: 'Djk',
@@ -61,7 +61,7 @@ export const BeefClassPeriodInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  dailyDryMatterIntakeKilograms: numberInputOptional(
+  method2DailyDryMatterIntakeKilograms: numberInputOptional(
     (val) => massPerHeadPerDay('DryMatter', val),
     {
       name: 'Ijk',
@@ -72,7 +72,7 @@ export const BeefClassPeriodInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  fractionDryMatterDigestibility: numberInputOptional(
+  method2FractionDryMatterDigestibility: numberInputOptional(
     realNumber,
     {
       name: 'DMDijk',
@@ -83,7 +83,7 @@ export const BeefClassPeriodInputSchema = object({
     },
     isProportion,
   ),
-  fractionCrudeProteinContent: numberInputOptional(
+  method2FractionCrudeProteinContent: numberInputOptional(
     (val) => massPerMass('CrudeProtein', 'DryMatter', val),
     {
       name: 'CPijk=spring',

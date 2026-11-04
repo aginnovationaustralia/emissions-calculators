@@ -36,7 +36,7 @@ const getCalculatorInput = (
         type,
         ...(method === '2' && customEmissionsFactor
           ? {
-              emissionFactor: nvo(Number(customEmissionsFactor)),
+              method2EmissionFactor: nvo(Number(customEmissionsFactor)),
             }
           : {}),
       },

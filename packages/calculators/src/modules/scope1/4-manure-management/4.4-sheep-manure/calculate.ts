@@ -327,7 +327,7 @@ function calculateCrudeProteinIntakeCPIjk(periodProps: SheepPeriodProps) {
     periodProps;
   const { constants } = context;
   const { state } = flock;
-  const { fractionCrudeProteinContent: method2CrudeProteinContent } =
+  const { method2FractionCrudeProteinContent: method2CrudeProteinContent } =
     periodInput;
   const Ijk = calculateDailyFeedIntakeIjk(periodProps);
 
@@ -363,7 +363,7 @@ function calculateTotalNitrogenExcretedInPeriod(periodProps: SheepPeriodProps) {
     periodProps;
   const { constants } = context;
 
-  const { head, durationDays: method2AverageDurationDays } = periodInput;
+  const { head, method2DurationDays: method2AverageDurationDays } = periodInput;
 
   const Njk = head.named(`Njk=${className},${periodName}`);
 

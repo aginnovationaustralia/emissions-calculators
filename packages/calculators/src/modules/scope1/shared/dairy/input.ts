@@ -104,7 +104,7 @@ const DairyMMSAllocationLivestockMethod1Schema =
 
 const DairyMMSAllocationLivestockMethod2Schema =
   DairyMMSAllocationLivestockBaseSchema.extend({
-    fractionSolidsSeparatedPreTreatment: numberInput(
+    method2FractionSolidsSeparatedPreTreatment: numberInput(
       (val) => realNumber(val),
       {
         name: 'SSj',

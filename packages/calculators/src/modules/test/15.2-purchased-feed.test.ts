@@ -38,7 +38,7 @@ const getCalculatorInput = (
       purchasedFeed: [
         {
           amountTonnes: amount,
-          emissionFactor: nv(Number(cell('D'))),
+          method2EmissionFactor: nv(Number(cell('D'))),
         },
       ],
     });

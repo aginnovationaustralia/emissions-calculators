@@ -116,23 +116,23 @@ export const readBeefClassFn =
     return {
       spring: {
         head: nv(springHead),
-        liveweightKilograms: nvo(springLiveweight),
-        dailyLiveweightGainKilograms: nvo(springLiveweightGain),
+        method2LiveweightKilograms: nvo(springLiveweight),
+        method2DailyLiveweightGainKilograms: nvo(springLiveweightGain),
       },
       summer: {
         head: nv(summerHead),
-        liveweightKilograms: nvo(summerLiveweight),
-        dailyLiveweightGainKilograms: nvo(summerLiveweightGain),
+        method2LiveweightKilograms: nvo(summerLiveweight),
+        method2DailyLiveweightGainKilograms: nvo(summerLiveweightGain),
       },
       autumn: {
         head: nv(autumnHead),
-        liveweightKilograms: nvo(autumnLiveweight),
-        dailyLiveweightGainKilograms: nvo(autumnLiveweightGain),
+        method2LiveweightKilograms: nvo(autumnLiveweight),
+        method2DailyLiveweightGainKilograms: nvo(autumnLiveweightGain),
       },
       winter: {
         head: nv(winterHead),
-        liveweightKilograms: nvo(winterLiveweight),
-        dailyLiveweightGainKilograms: nvo(winterLiveweightGain),
+        method2LiveweightKilograms: nvo(winterLiveweight),
+        method2DailyLiveweightGainKilograms: nvo(winterLiveweightGain),
       },
     };
   };
@@ -215,8 +215,8 @@ export const readBeefClassWithCalvesFn =
         fractionCowsPreviousSeasonInCalf: nv(
           springproportionCowsPreviousSeasonInCalf,
         ),
-        liveweightKilograms: nvo(springLiveweight),
-        dailyLiveweightGainKilograms: nvo(springLiveweightGain),
+        method2LiveweightKilograms: nvo(springLiveweight),
+        method2DailyLiveweightGainKilograms: nvo(springLiveweightGain),
       },
       summer: {
         head: nv(summerHead),
@@ -224,8 +224,8 @@ export const readBeefClassWithCalvesFn =
         fractionCowsPreviousSeasonInCalf: nv(
           summerProportionCowsPreviousSeasonInCalf,
         ),
-        liveweightKilograms: nvo(summerLiveweight),
-        dailyLiveweightGainKilograms: nvo(summerLiveweightGain),
+        method2LiveweightKilograms: nvo(summerLiveweight),
+        method2DailyLiveweightGainKilograms: nvo(summerLiveweightGain),
       },
       autumn: {
         head: nv(autumnHead),
@@ -233,8 +233,8 @@ export const readBeefClassWithCalvesFn =
         fractionCowsPreviousSeasonInCalf: nv(
           autumnproportionCowsPreviousSeasonInCalf,
         ),
-        liveweightKilograms: nvo(autumnLiveweight),
-        dailyLiveweightGainKilograms: nvo(autumnLiveweightGain),
+        method2LiveweightKilograms: nvo(autumnLiveweight),
+        method2DailyLiveweightGainKilograms: nvo(autumnLiveweightGain),
       },
       winter: {
         head: nv(winterHead),
@@ -242,8 +242,8 @@ export const readBeefClassWithCalvesFn =
         fractionCowsPreviousSeasonInCalf: nv(
           winterproportionCowsPreviousSeasonInCalf,
         ),
-        liveweightKilograms: nvo(winterLiveweight),
-        dailyLiveweightGainKilograms: nvo(winterLiveweightGain),
+        method2LiveweightKilograms: nvo(winterLiveweight),
+        method2DailyLiveweightGainKilograms: nvo(winterLiveweightGain),
       },
     };
   };
@@ -324,29 +324,29 @@ export const readBeefCalfClassFn =
         head: nv(springHead),
         fractionCalvesBornThisSeason: nv(springProportionBorn),
         fractionCalvesBornPreviousSeason: nv(springProportionBornPrevious),
-        liveweightKilograms: nvo(springLiveweight),
-        dailyLiveweightGainKilograms: nvo(springLiveweightGain),
+        method2LiveweightKilograms: nvo(springLiveweight),
+        method2DailyLiveweightGainKilograms: nvo(springLiveweightGain),
       },
       summer: {
         head: nv(summerHead),
         fractionCalvesBornThisSeason: nv(summerProportionBorn),
         fractionCalvesBornPreviousSeason: nv(summerProportionBornPrevious),
-        liveweightKilograms: nvo(summerLiveweight),
-        dailyLiveweightGainKilograms: nvo(summerLiveweightGain),
+        method2LiveweightKilograms: nvo(summerLiveweight),
+        method2DailyLiveweightGainKilograms: nvo(summerLiveweightGain),
       },
       autumn: {
         head: nv(autumnHead),
         fractionCalvesBornThisSeason: nv(autumnProportionBorn),
         fractionCalvesBornPreviousSeason: nv(autumnProportionBornPrevious),
-        liveweightKilograms: nvo(autumnLiveweight),
-        dailyLiveweightGainKilograms: nvo(autumnLiveweightGain),
+        method2LiveweightKilograms: nvo(autumnLiveweight),
+        method2DailyLiveweightGainKilograms: nvo(autumnLiveweightGain),
       },
       winter: {
         head: nv(winterHead),
         fractionCalvesBornThisSeason: nv(winterProportionBorn),
         fractionCalvesBornPreviousSeason: nv(winterProportionBornPrevious),
-        liveweightKilograms: nvo(winterLiveweight),
-        dailyLiveweightGainKilograms: nvo(winterLiveweightGain),
+        method2LiveweightKilograms: nvo(winterLiveweight),
+        method2DailyLiveweightGainKilograms: nvo(winterLiveweightGain),
       },
     };
   };
@@ -400,17 +400,17 @@ export const readMonthlyBeefClassFn =
             : undefined;
       return {
         head: nv(Number(cell(columnHeadN, rowOffset))),
-        liveweightKilograms: nvo(liveweight),
-        dailyLiveweightGainKilograms: nvo(liveweightGain),
-        durationDays: nvo(
+        method2LiveweightKilograms: nvo(liveweight),
+        method2DailyLiveweightGainKilograms: nvo(liveweightGain),
+        method2DurationDays: nvo(
           method === '2' && customDurationDays
             ? Number(customDurationDays)
             : method === '2' && durationDays
               ? Number(durationDays)
               : undefined,
         ),
-        fractionDryMatterDigestibility: nvo(method2Dmd),
-        fractionCrudeProteinContent: nvo(method2CrudeProteinContent),
+        method2FractionDryMatterDigestibility: nvo(method2Dmd),
+        method2FractionCrudeProteinContent: nvo(method2CrudeProteinContent),
       };
     };
 
@@ -466,9 +466,9 @@ export const readMonthlyBeefClassWithCalvesFn =
         fractionCowsPreviousSeasonInCalf: nv(
           Number(cell(columnProportionCowsPreviousSeasonInCalfLC, rowOffset)),
         ),
-        liveweightKilograms: nvo(liveweight),
-        dailyLiveweightGainKilograms: nvo(liveweightGain),
-        durationDays: nvo(
+        method2LiveweightKilograms: nvo(liveweight),
+        method2DailyLiveweightGainKilograms: nvo(liveweightGain),
+        method2DurationDays: nvo(
           method === '2' && customDurationDays
             ? Number(customDurationDays)
             : method === '2' && durationDays
@@ -545,17 +545,17 @@ export const readMonthlyBeefCalfClassFn =
 
       return {
         head: nv(Number(cell(columnHeadN, rowOffset))),
-        liveweightKilograms: nvo(liveweight),
-        dailyLiveweightGainKilograms: nvo(liveweightGain),
-        durationDays: nvo(
+        method2LiveweightKilograms: nvo(liveweight),
+        method2DailyLiveweightGainKilograms: nvo(liveweightGain),
+        method2DurationDays: nvo(
           method === '2' && customDurationDays
             ? Number(customDurationDays)
             : method === '2' && durationDays
               ? Number(durationDays)
               : undefined,
         ),
-        fractionDryMatterDigestibility: nvo(method2Dmd),
-        fractionCrudeProteinContent: nvo(method2CrudeProteinContent),
+        method2FractionDryMatterDigestibility: nvo(method2Dmd),
+        method2FractionCrudeProteinContent: nvo(method2CrudeProteinContent),
         fractionCalvesBornThisSeason: nv(proportionBorn),
         fractionCalvesBornPreviousSeason: nv(proportionBornPrevious),
       };

@@ -18,7 +18,7 @@ const pigBaseFields = {
 };
 
 // Emission factor: method 1 (`category`, looked up against constants) xor
-// method 2 (`emissionFactor`, supplied directly).
+// method 2 (`method2EmissionFactor`, supplied directly).
 const pigEmissionFactorMethod1Fields = {
   category: enumInput(PigPurchaseCategories, {
     name: 'Purchase category',
@@ -31,7 +31,7 @@ const pigEmissionFactorMethod2Fields =
   PurchasedLivestockEmissionFactorMethod2Schema.shape;
 
 // Liveweight: method 1 (`weightClass`, looked up against constants) xor
-// method 2 (`liveweightKilograms`, supplied directly).
+// method 2 (`method2LiveweightKilograms`, supplied directly).
 const pigLiveweightMethod1Fields = {
   weightClass: enumInput(PigsLiveweightClasses, {
     name: 'Pig class',

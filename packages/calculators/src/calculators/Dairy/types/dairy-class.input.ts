@@ -27,7 +27,7 @@ export const dairyClassBaseInputSchema = (location: LivestockLocation) =>
       },
       (s) => s.gt(0),
     ),
-    liveweightKilograms: numberInputOptional(
+    method2LiveweightKilograms: numberInputOptional(
       (val) => liveweight(val),
       {
         name: 'Wj',
@@ -38,7 +38,7 @@ export const dairyClassBaseInputSchema = (location: LivestockLocation) =>
       },
       (s) => s.gt(0),
     ),
-    dailyLiveweightGainKilograms: numberInputOptional(
+    method2DailyLiveweightGainKilograms: numberInputOptional(
       (val) => liveweightGain(val),
       {
         name: 'LWGj',
@@ -48,7 +48,7 @@ export const dairyClassBaseInputSchema = (location: LivestockLocation) =>
         modules: dairyEntericAndManureModules(location),
       },
     ),
-    durationDays: numberInputOptional(
+    method2DurationDays: numberInputOptional(
       (val) => days(val),
       {
         name: 'Dj',
@@ -59,7 +59,7 @@ export const dairyClassBaseInputSchema = (location: LivestockLocation) =>
       },
       (s) => s.min(0),
     ),
-    fractionDryMatterDigestibility: numberInputOptional(
+    method2FractionDryMatterDigestibility: numberInputOptional(
       (val) => realNumber(val),
       {
         name: 'DMDj',
@@ -70,7 +70,7 @@ export const dairyClassBaseInputSchema = (location: LivestockLocation) =>
       },
       (s) => s.min(0),
     ),
-    fractionCrudeProteinContent: numberInputOptional(
+    method2FractionCrudeProteinContent: numberInputOptional(
       (val) => massPerMass('CrudeProtein', 'DryMatter', val),
       {
         name: 'CPj',

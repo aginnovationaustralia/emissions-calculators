@@ -134,7 +134,7 @@ const limeApplicationMethod1: LimeApplicationInput = {
 
 const limeApplicationMethod2: LimeApplicationInput = {
   ...limeApplicationMethod1,
-  scope3EmissionFactor: { value: 0.05 },
+  method2Scope3EmissionFactor: { value: 0.05 },
 };
 
 const limeMethod1: LimeInput = {
@@ -179,8 +179,8 @@ const purchasedLivestockMethod1: OtherPurchasedLivestockInput = {
 const purchasedLivestockMethod2: OtherPurchasedLivestockInput = {
   type: 'Other',
   headPurchased: { value: 50 },
-  emissionFactor: { value: 5 },
-  liveweightKilograms: { value: 40 },
+  method2EmissionFactor: { value: 5 },
+  method2LiveweightKilograms: { value: 40 },
 };
 
 const purchasedFeedMethod1: PurchasedFeedAustralianInput = {
@@ -191,7 +191,7 @@ const purchasedFeedMethod1: PurchasedFeedAustralianInput = {
 
 const purchasedFeedMethod2: PurchasedFeedMethod2Input = {
   amountTonnes: { value: 20 },
-  emissionFactor: { value: 0.3 },
+  method2EmissionFactor: { value: 0.3 },
 };
 
 const purchasedMineralSupplementMethod1: PurchasedMineralSupplementMethod1Input =
@@ -203,7 +203,7 @@ const purchasedMineralSupplementMethod1: PurchasedMineralSupplementMethod1Input 
 const purchasedMineralSupplementMethod2: PurchasedMineralSupplementMethod2Input =
   {
     amountTonnes: { value: 1 },
-    emissionFactor: { value: 0.5 },
+    method2EmissionFactor: { value: 0.5 },
   };
 
 const otherPurchasedGoodOrService: OtherPurchasedGoodOrServiceInput = {
@@ -220,7 +220,7 @@ const chemicalMethod1: AgrichemicalInput = {
 
 const chemicalMethod2: AgrichemicalInput = {
   ...chemicalMethod1,
-  emissionFactor: { value: 10 },
+  method2EmissionFactor: { value: 10 },
 };
 
 // -------- Solid waste --------
@@ -373,9 +373,9 @@ const feedlotManureGroupMethod1: FeedlotManureGroupInput = {
 
 const feedlotManureGroupMethod2: FeedlotManureGroupInput = {
   ...feedlotManureGroupMethod1,
-  dailyDryMatterIntakeKilograms: { value: 10 },
-  fractionCrudeProteinContent: { value: 0.14 },
-  fractionNitrogenRetentionRate: { value: 0.1 },
+  method2DailyDryMatterIntakeKilograms: { value: 10 },
+  method2FractionCrudeProteinContent: { value: 0.14 },
+  method2FractionNitrogenRetentionRate: { value: 0.1 },
 };
 
 const feedlotManureMethod1: FeedlotManureInput = {

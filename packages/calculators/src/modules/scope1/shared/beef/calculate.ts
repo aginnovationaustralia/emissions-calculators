@@ -189,7 +189,7 @@ export const calculateAdditionalIntakeForMilkProduction = (
 export const calculateOrGetFeedIntakeForBeef = (
   periodProps: BeefPeriodProps,
 ): Container<MassPerHeadPerDay<'DryMatter'>> => {
-  const { dailyDryMatterIntakeKilograms: method2DryMatterIntake } =
+  const { method2DailyDryMatterIntakeKilograms: method2DryMatterIntake } =
     periodProps.currentPeriod;
 
   const liveweight = getLiveweight(periodProps);

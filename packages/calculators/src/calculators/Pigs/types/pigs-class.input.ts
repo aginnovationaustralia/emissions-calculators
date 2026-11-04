@@ -46,7 +46,7 @@ const pigsClassSharedShape = (
     },
     (s) => s.min(0),
   ),
-  dailyNitrogenWasteProductionKilograms: numberInputOptional(
+  method2DailyNitrogenWasteProductionKilograms: numberInputOptional(
     (val) => massPerHeadPerDay('N', val),
     {
       name: `NWj=${number}`,
@@ -99,7 +99,7 @@ const createPigsClassLivestockInputSchema = <
   withPigsClassName(
     object({
       ...pigsClassSharedShape(number, 'livestock'),
-      dailyAverageFeedIntakeKilograms: numberInputOptional(
+      method2DailyAverageFeedIntakeKilograms: numberInputOptional(
         (val) => massPerHeadPerDay('DryMatter', val),
         {
           name: `Ij=${number}`,
@@ -109,7 +109,7 @@ const createPigsClassLivestockInputSchema = <
         },
         (s) => s.min(0),
       ),
-      dailyVolatileSolidProductionKilograms: numberInputOptional(
+      method2DailyVolatileSolidProductionKilograms: numberInputOptional(
         (val) => massPerHeadPerDay('Volatile Solids', val),
         {
           name: `VSj=${number}`,

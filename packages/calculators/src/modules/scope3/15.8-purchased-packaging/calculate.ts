@@ -35,7 +35,10 @@ const getEmissionsFactorByUnits = (
       undefined,
     );
   }
-  return captureMethod1Or2Value(voidUnit(), packaging.emissionFactorKilograms);
+  return captureMethod1Or2Value(
+    voidUnit(),
+    packaging.method2EmissionFactorKilograms,
+  );
 };
 
 const getEmissionsFactorByMass = (
@@ -54,7 +57,7 @@ const getEmissionsFactorByMass = (
       undefined,
     );
   }
-  return captureMethod1Or2Value(voidUnit(), packaging.emissionFactor);
+  return captureMethod1Or2Value(voidUnit(), packaging.method2EmissionFactor);
 };
 
 const getEmissionsByUnits = (

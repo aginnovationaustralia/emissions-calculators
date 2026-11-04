@@ -1437,7 +1437,7 @@
                                     ],
                                     "$ref": "#/components/schemas/PigPurchaseCategory"
                                   },
-                                  "liveweightKilograms": {
+                                  "method2LiveweightKilograms": {
                                     "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                     "x-modules": [
                                       "15.1"
@@ -1463,7 +1463,7 @@
                                   "type",
                                   "headPurchased",
                                   "category",
-                                  "liveweightKilograms"
+                                  "method2LiveweightKilograms"
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 1 emission factor, method 2 liveweight"
@@ -1496,7 +1496,7 @@
                                     "additionalProperties": false,
                                     "x-units": "head"
                                   },
-                                  "emissionFactor": {
+                                  "method2EmissionFactor": {
                                     "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                     "x-modules": [
                                       "15.1"
@@ -1528,7 +1528,7 @@
                                 "required": [
                                   "type",
                                   "headPurchased",
-                                  "emissionFactor",
+                                  "method2EmissionFactor",
                                   "weightClass"
                                 ],
                                 "additionalProperties": false,
@@ -1562,7 +1562,7 @@
                                     "additionalProperties": false,
                                     "x-units": "head"
                                   },
-                                  "emissionFactor": {
+                                  "method2EmissionFactor": {
                                     "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                     "x-modules": [
                                       "15.1"
@@ -1583,7 +1583,7 @@
                                     "additionalProperties": false,
                                     "x-units": "kilograms CO2e per kilogram liveweight"
                                   },
-                                  "liveweightKilograms": {
+                                  "method2LiveweightKilograms": {
                                     "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                     "x-modules": [
                                       "15.1"
@@ -1608,8 +1608,8 @@
                                 "required": [
                                   "type",
                                   "headPurchased",
-                                  "emissionFactor",
-                                  "liveweightKilograms"
+                                  "method2EmissionFactor",
+                                  "method2LiveweightKilograms"
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 2 emission factor, method 2 liveweight"
@@ -3048,7 +3048,7 @@
                           "intensities": {
                             "type": "object",
                             "properties": {
-                              "liveweightProducedKg": {
+                              "liveweightProducedKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -3076,7 +3076,7 @@
                               }
                             },
                             "required": [
-                              "liveweightProducedKg",
+                              "liveweightProducedKilograms",
                               "liveweightIntensity"
                             ],
                             "additionalProperties": false
@@ -3119,7 +3119,7 @@
                     "intensities": {
                       "type": "object",
                       "properties": {
-                        "liveweightProducedKg": {
+                        "liveweightProducedKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -3160,7 +3160,7 @@
                         }
                       },
                       "required": [
-                        "liveweightProducedKg",
+                        "liveweightProducedKilograms",
                         "liveweightIntensityExcludingLULUCF",
                         "liveweightIntensityIncludingLULUCF"
                       ],
@@ -5367,7 +5367,7 @@
                 "additionalProperties": false,
                 "x-units": "days"
               },
-              "dailyNitrogenWasteProductionKilograms": {
+              "method2DailyNitrogenWasteProductionKilograms": {
                 "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                 "x-modules": [
                   "4.5"
@@ -5388,7 +5388,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms nitrogen per head per day"
               },
-              "dailyAverageFeedIntakeKilograms": {
+              "method2DailyAverageFeedIntakeKilograms": {
                 "description": "Average feed intake for this class (kilograms dry matter per head per day)",
                 "x-modules": [
                   "3.5"
@@ -5409,7 +5409,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms dry matter per head per day"
               },
-              "dailyVolatileSolidProductionKilograms": {
+              "method2DailyVolatileSolidProductionKilograms": {
                 "description": "Method 2: Volatile solid production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms volatile solids per head per day)",
                 "x-modules": [
                   "4.5"
@@ -6454,7 +6454,7 @@
                       "anaerobicLagoon": {
                         "type": "object",
                         "properties": {
-                          "fractionSolidsSeparatedPreTreatment": {
+                          "method2FractionSolidsSeparatedPreTreatment": {
                             "description": "Fraction of volatile solids separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -6592,7 +6592,7 @@
                             ],
                             "additionalProperties": false
                           },
-                          "fractionNitrogenSeparatedPreTreatment": {
+                          "method2FractionNitrogenSeparatedPreTreatment": {
                             "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -6615,17 +6615,17 @@
                           }
                         },
                         "required": [
-                          "fractionSolidsSeparatedPreTreatment",
+                          "method2FractionSolidsSeparatedPreTreatment",
                           "manureAllocated",
                           "treatmentStage2Allocations",
-                          "fractionNitrogenSeparatedPreTreatment"
+                          "method2FractionNitrogenSeparatedPreTreatment"
                         ],
                         "additionalProperties": false
                       },
                       "digester": {
                         "type": "object",
                         "properties": {
-                          "fractionSolidsSeparatedPreTreatment": {
+                          "method2FractionSolidsSeparatedPreTreatment": {
                             "description": "Fraction of volatile solids separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -6763,7 +6763,7 @@
                             ],
                             "additionalProperties": false
                           },
-                          "fractionNitrogenSeparatedPreTreatment": {
+                          "method2FractionNitrogenSeparatedPreTreatment": {
                             "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -6786,17 +6786,17 @@
                           }
                         },
                         "required": [
-                          "fractionSolidsSeparatedPreTreatment",
+                          "method2FractionSolidsSeparatedPreTreatment",
                           "manureAllocated",
                           "treatmentStage2Allocations",
-                          "fractionNitrogenSeparatedPreTreatment"
+                          "method2FractionNitrogenSeparatedPreTreatment"
                         ],
                         "additionalProperties": false
                       },
                       "pitStorage": {
                         "type": "object",
                         "properties": {
-                          "fractionSolidsSeparatedPreTreatment": {
+                          "method2FractionSolidsSeparatedPreTreatment": {
                             "description": "Fraction of volatile solids separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -6934,7 +6934,7 @@
                             ],
                             "additionalProperties": false
                           },
-                          "fractionNitrogenSeparatedPreTreatment": {
+                          "method2FractionNitrogenSeparatedPreTreatment": {
                             "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -6957,10 +6957,10 @@
                           }
                         },
                         "required": [
-                          "fractionSolidsSeparatedPreTreatment",
+                          "method2FractionSolidsSeparatedPreTreatment",
                           "manureAllocated",
                           "treatmentStage2Allocations",
-                          "fractionNitrogenSeparatedPreTreatment"
+                          "method2FractionNitrogenSeparatedPreTreatment"
                         ],
                         "additionalProperties": false
                       }
@@ -7033,7 +7033,7 @@
                 "additionalProperties": false,
                 "x-units": "days"
               },
-              "dailyNitrogenWasteProductionKilograms": {
+              "method2DailyNitrogenWasteProductionKilograms": {
                 "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                 "x-modules": [
                   "4.5"
@@ -7054,7 +7054,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms nitrogen per head per day"
               },
-              "dailyAverageFeedIntakeKilograms": {
+              "method2DailyAverageFeedIntakeKilograms": {
                 "description": "Average feed intake for this class (kilograms dry matter per head per day)",
                 "x-modules": [
                   "3.5"
@@ -7075,7 +7075,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms dry matter per head per day"
               },
-              "dailyVolatileSolidProductionKilograms": {
+              "method2DailyVolatileSolidProductionKilograms": {
                 "description": "Method 2: Volatile solid production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms volatile solids per head per day)",
                 "x-modules": [
                   "4.5"
@@ -8120,7 +8120,7 @@
                       "anaerobicLagoon": {
                         "type": "object",
                         "properties": {
-                          "fractionSolidsSeparatedPreTreatment": {
+                          "method2FractionSolidsSeparatedPreTreatment": {
                             "description": "Fraction of volatile solids separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -8258,7 +8258,7 @@
                             ],
                             "additionalProperties": false
                           },
-                          "fractionNitrogenSeparatedPreTreatment": {
+                          "method2FractionNitrogenSeparatedPreTreatment": {
                             "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -8281,17 +8281,17 @@
                           }
                         },
                         "required": [
-                          "fractionSolidsSeparatedPreTreatment",
+                          "method2FractionSolidsSeparatedPreTreatment",
                           "manureAllocated",
                           "treatmentStage2Allocations",
-                          "fractionNitrogenSeparatedPreTreatment"
+                          "method2FractionNitrogenSeparatedPreTreatment"
                         ],
                         "additionalProperties": false
                       },
                       "digester": {
                         "type": "object",
                         "properties": {
-                          "fractionSolidsSeparatedPreTreatment": {
+                          "method2FractionSolidsSeparatedPreTreatment": {
                             "description": "Fraction of volatile solids separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -8429,7 +8429,7 @@
                             ],
                             "additionalProperties": false
                           },
-                          "fractionNitrogenSeparatedPreTreatment": {
+                          "method2FractionNitrogenSeparatedPreTreatment": {
                             "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -8452,17 +8452,17 @@
                           }
                         },
                         "required": [
-                          "fractionSolidsSeparatedPreTreatment",
+                          "method2FractionSolidsSeparatedPreTreatment",
                           "manureAllocated",
                           "treatmentStage2Allocations",
-                          "fractionNitrogenSeparatedPreTreatment"
+                          "method2FractionNitrogenSeparatedPreTreatment"
                         ],
                         "additionalProperties": false
                       },
                       "pitStorage": {
                         "type": "object",
                         "properties": {
-                          "fractionSolidsSeparatedPreTreatment": {
+                          "method2FractionSolidsSeparatedPreTreatment": {
                             "description": "Fraction of volatile solids separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -8600,7 +8600,7 @@
                             ],
                             "additionalProperties": false
                           },
-                          "fractionNitrogenSeparatedPreTreatment": {
+                          "method2FractionNitrogenSeparatedPreTreatment": {
                             "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -8623,10 +8623,10 @@
                           }
                         },
                         "required": [
-                          "fractionSolidsSeparatedPreTreatment",
+                          "method2FractionSolidsSeparatedPreTreatment",
                           "manureAllocated",
                           "treatmentStage2Allocations",
-                          "fractionNitrogenSeparatedPreTreatment"
+                          "method2FractionNitrogenSeparatedPreTreatment"
                         ],
                         "additionalProperties": false
                       }
@@ -8699,7 +8699,7 @@
                 "additionalProperties": false,
                 "x-units": "days"
               },
-              "dailyNitrogenWasteProductionKilograms": {
+              "method2DailyNitrogenWasteProductionKilograms": {
                 "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                 "x-modules": [
                   "4.5"
@@ -8720,7 +8720,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms nitrogen per head per day"
               },
-              "dailyAverageFeedIntakeKilograms": {
+              "method2DailyAverageFeedIntakeKilograms": {
                 "description": "Average feed intake for this class (kilograms dry matter per head per day)",
                 "x-modules": [
                   "3.5"
@@ -8741,7 +8741,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms dry matter per head per day"
               },
-              "dailyVolatileSolidProductionKilograms": {
+              "method2DailyVolatileSolidProductionKilograms": {
                 "description": "Method 2: Volatile solid production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms volatile solids per head per day)",
                 "x-modules": [
                   "4.5"
@@ -9786,7 +9786,7 @@
                       "anaerobicLagoon": {
                         "type": "object",
                         "properties": {
-                          "fractionSolidsSeparatedPreTreatment": {
+                          "method2FractionSolidsSeparatedPreTreatment": {
                             "description": "Fraction of volatile solids separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -9924,7 +9924,7 @@
                             ],
                             "additionalProperties": false
                           },
-                          "fractionNitrogenSeparatedPreTreatment": {
+                          "method2FractionNitrogenSeparatedPreTreatment": {
                             "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -9947,17 +9947,17 @@
                           }
                         },
                         "required": [
-                          "fractionSolidsSeparatedPreTreatment",
+                          "method2FractionSolidsSeparatedPreTreatment",
                           "manureAllocated",
                           "treatmentStage2Allocations",
-                          "fractionNitrogenSeparatedPreTreatment"
+                          "method2FractionNitrogenSeparatedPreTreatment"
                         ],
                         "additionalProperties": false
                       },
                       "digester": {
                         "type": "object",
                         "properties": {
-                          "fractionSolidsSeparatedPreTreatment": {
+                          "method2FractionSolidsSeparatedPreTreatment": {
                             "description": "Fraction of volatile solids separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -10095,7 +10095,7 @@
                             ],
                             "additionalProperties": false
                           },
-                          "fractionNitrogenSeparatedPreTreatment": {
+                          "method2FractionNitrogenSeparatedPreTreatment": {
                             "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -10118,17 +10118,17 @@
                           }
                         },
                         "required": [
-                          "fractionSolidsSeparatedPreTreatment",
+                          "method2FractionSolidsSeparatedPreTreatment",
                           "manureAllocated",
                           "treatmentStage2Allocations",
-                          "fractionNitrogenSeparatedPreTreatment"
+                          "method2FractionNitrogenSeparatedPreTreatment"
                         ],
                         "additionalProperties": false
                       },
                       "pitStorage": {
                         "type": "object",
                         "properties": {
-                          "fractionSolidsSeparatedPreTreatment": {
+                          "method2FractionSolidsSeparatedPreTreatment": {
                             "description": "Fraction of volatile solids separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -10266,7 +10266,7 @@
                             ],
                             "additionalProperties": false
                           },
-                          "fractionNitrogenSeparatedPreTreatment": {
+                          "method2FractionNitrogenSeparatedPreTreatment": {
                             "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -10289,10 +10289,10 @@
                           }
                         },
                         "required": [
-                          "fractionSolidsSeparatedPreTreatment",
+                          "method2FractionSolidsSeparatedPreTreatment",
                           "manureAllocated",
                           "treatmentStage2Allocations",
-                          "fractionNitrogenSeparatedPreTreatment"
+                          "method2FractionNitrogenSeparatedPreTreatment"
                         ],
                         "additionalProperties": false
                       }
@@ -10365,7 +10365,7 @@
                 "additionalProperties": false,
                 "x-units": "days"
               },
-              "dailyNitrogenWasteProductionKilograms": {
+              "method2DailyNitrogenWasteProductionKilograms": {
                 "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                 "x-modules": [
                   "4.5"
@@ -10386,7 +10386,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms nitrogen per head per day"
               },
-              "dailyAverageFeedIntakeKilograms": {
+              "method2DailyAverageFeedIntakeKilograms": {
                 "description": "Average feed intake for this class (kilograms dry matter per head per day)",
                 "x-modules": [
                   "3.5"
@@ -10407,7 +10407,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms dry matter per head per day"
               },
-              "dailyVolatileSolidProductionKilograms": {
+              "method2DailyVolatileSolidProductionKilograms": {
                 "description": "Method 2: Volatile solid production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms volatile solids per head per day)",
                 "x-modules": [
                   "4.5"
@@ -11452,7 +11452,7 @@
                       "anaerobicLagoon": {
                         "type": "object",
                         "properties": {
-                          "fractionSolidsSeparatedPreTreatment": {
+                          "method2FractionSolidsSeparatedPreTreatment": {
                             "description": "Fraction of volatile solids separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -11590,7 +11590,7 @@
                             ],
                             "additionalProperties": false
                           },
-                          "fractionNitrogenSeparatedPreTreatment": {
+                          "method2FractionNitrogenSeparatedPreTreatment": {
                             "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -11613,17 +11613,17 @@
                           }
                         },
                         "required": [
-                          "fractionSolidsSeparatedPreTreatment",
+                          "method2FractionSolidsSeparatedPreTreatment",
                           "manureAllocated",
                           "treatmentStage2Allocations",
-                          "fractionNitrogenSeparatedPreTreatment"
+                          "method2FractionNitrogenSeparatedPreTreatment"
                         ],
                         "additionalProperties": false
                       },
                       "digester": {
                         "type": "object",
                         "properties": {
-                          "fractionSolidsSeparatedPreTreatment": {
+                          "method2FractionSolidsSeparatedPreTreatment": {
                             "description": "Fraction of volatile solids separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -11761,7 +11761,7 @@
                             ],
                             "additionalProperties": false
                           },
-                          "fractionNitrogenSeparatedPreTreatment": {
+                          "method2FractionNitrogenSeparatedPreTreatment": {
                             "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -11784,17 +11784,17 @@
                           }
                         },
                         "required": [
-                          "fractionSolidsSeparatedPreTreatment",
+                          "method2FractionSolidsSeparatedPreTreatment",
                           "manureAllocated",
                           "treatmentStage2Allocations",
-                          "fractionNitrogenSeparatedPreTreatment"
+                          "method2FractionNitrogenSeparatedPreTreatment"
                         ],
                         "additionalProperties": false
                       },
                       "pitStorage": {
                         "type": "object",
                         "properties": {
-                          "fractionSolidsSeparatedPreTreatment": {
+                          "method2FractionSolidsSeparatedPreTreatment": {
                             "description": "Fraction of volatile solids separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -11932,7 +11932,7 @@
                             ],
                             "additionalProperties": false
                           },
-                          "fractionNitrogenSeparatedPreTreatment": {
+                          "method2FractionNitrogenSeparatedPreTreatment": {
                             "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                             "x-modules": [
                               "4.5"
@@ -11955,10 +11955,10 @@
                           }
                         },
                         "required": [
-                          "fractionSolidsSeparatedPreTreatment",
+                          "method2FractionSolidsSeparatedPreTreatment",
                           "manureAllocated",
                           "treatmentStage2Allocations",
-                          "fractionNitrogenSeparatedPreTreatment"
+                          "method2FractionNitrogenSeparatedPreTreatment"
                         ],
                         "additionalProperties": false
                       }
@@ -13411,7 +13411,7 @@
                   "additionalProperties": false,
                   "x-units": "tonnes purchased feed"
                 },
-                "emissionFactor": {
+                "method2EmissionFactor": {
                   "description": "Method 2: Emission factor of the type of feed purchased. (kilograms CO2e per kilogram purchased feed)",
                   "x-modules": [
                     "15.2"
@@ -13435,7 +13435,7 @@
               },
               "required": [
                 "amountTonnes",
-                "emissionFactor"
+                "method2EmissionFactor"
               ],
               "additionalProperties": false,
               "title": "Method 2 (custom emissions factor)"

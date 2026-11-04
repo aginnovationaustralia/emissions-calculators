@@ -132,8 +132,8 @@ const anaerobicLagoonAllocationMethod1: PigsAnaerobicLagoonAllocationInput = {
 const anaerobicLagoonAllocationMethod2: PigsAnaerobicLagoonAllocationInput = {
   manureAllocated: { value: 0.3 },
   treatmentStage2Allocations: anaerobicLagoonTreatmentStage2Allocations,
-  fractionNitrogenSeparatedPreTreatment: { value: 0.1 },
-  fractionSolidsSeparatedPreTreatment: { value: 0.2 },
+  method2FractionNitrogenSeparatedPreTreatment: { value: 0.1 },
+  method2FractionSolidsSeparatedPreTreatment: { value: 0.2 },
 };
 
 const digesterTreatmentStage2Allocations: PigsDigesterTreatmentStage2AllocationsInput =
@@ -153,8 +153,8 @@ const digesterAllocationMethod1: PigsDigesterAllocationInput = {
 const digesterAllocationMethod2: PigsDigesterAllocationInput = {
   manureAllocated: { value: 0.2 },
   treatmentStage2Allocations: digesterTreatmentStage2Allocations,
-  fractionNitrogenSeparatedPreTreatment: { value: 0.1 },
-  fractionSolidsSeparatedPreTreatment: { value: 0.2 },
+  method2FractionNitrogenSeparatedPreTreatment: { value: 0.1 },
+  method2FractionSolidsSeparatedPreTreatment: { value: 0.2 },
 };
 
 const pitStorageTreatmentStage2Allocations: PigsPitStorageTreatmentStage2AllocationsInput =
@@ -174,8 +174,8 @@ const pitStorageAllocationMethod1: PigsPitStorageAllocationInput = {
 const pitStorageAllocationMethod2: PigsPitStorageAllocationInput = {
   manureAllocated: { value: 0.1 },
   treatmentStage2Allocations: pitStorageTreatmentStage2Allocations,
-  fractionNitrogenSeparatedPreTreatment: { value: 0.1 },
-  fractionSolidsSeparatedPreTreatment: { value: 0.2 },
+  method2FractionNitrogenSeparatedPreTreatment: { value: 0.1 },
+  method2FractionSolidsSeparatedPreTreatment: { value: 0.2 },
 };
 
 const manureAllocationsMethod1: PigsClassManureAllocationLivestockInput = {
@@ -206,9 +206,9 @@ const classMethod1: PigsClassLivestockInput = {
 
 const classMethod2: PigsClassLivestockInput = {
   ...classMethod1,
-  dailyNitrogenWasteProductionKilograms: { value: 0.03 },
-  dailyAverageFeedIntakeKilograms: { value: 2.5 },
-  dailyVolatileSolidProductionKilograms: { value: 0.3 },
+  method2DailyNitrogenWasteProductionKilograms: { value: 0.03 },
+  method2DailyAverageFeedIntakeKilograms: { value: 2.5 },
+  method2DailyVolatileSolidProductionKilograms: { value: 0.3 },
   manureAllocations: manureAllocationsMethod2,
 };
 
@@ -261,8 +261,8 @@ const purchasedLivestockMethod1: PigPurchasedLivestockInput = {
 const purchasedLivestockMethod2: PigPurchasedLivestockInput = {
   type: 'Pig',
   headPurchased: { value: 50 },
-  emissionFactor: { value: 5 },
-  liveweightKilograms: { value: 120 },
+  method2EmissionFactor: { value: 5 },
+  method2LiveweightKilograms: { value: 120 },
 };
 
 const purchasedFeedMethod1: PurchasedFeedAustralianInput = {
@@ -273,7 +273,7 @@ const purchasedFeedMethod1: PurchasedFeedAustralianInput = {
 
 const purchasedFeedMethod2: PurchasedFeedMethod2Input = {
   amountTonnes: { value: 500 },
-  emissionFactor: { value: 0.5 },
+  method2EmissionFactor: { value: 0.5 },
 };
 
 const otherPurchasedGoodOrService: OtherPurchasedGoodOrServiceInput = {

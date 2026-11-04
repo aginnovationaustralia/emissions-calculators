@@ -19,7 +19,7 @@ const dairyBaseFields = {
 };
 
 // Emission factor: method 1 (`category`, looked up against constants) xor
-// method 2 (`emissionFactor`, supplied directly).
+// method 2 (`method2EmissionFactor`, supplied directly).
 const dairyEmissionFactorMethod1Fields = {
   category: enumInput(DairyPurchaseCategories, {
     name: 'Purchase category',
@@ -32,7 +32,7 @@ const dairyEmissionFactorMethod2Fields =
   PurchasedLivestockEmissionFactorMethod2Schema.shape;
 
 // Liveweight: method 1 (`breed` + `class`, looked up against constants) xor
-// method 2 (`liveweightKilograms`, supplied directly).
+// method 2 (`method2LiveweightKilograms`, supplied directly).
 const dairyLiveweightMethod1Fields = {
   breed: enumInput(DairyCattleBreeds, {
     name: 'Dairy breed',

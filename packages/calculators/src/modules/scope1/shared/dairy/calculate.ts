@@ -43,11 +43,11 @@ export const calculateMilkProduction = (
 
   const fatContent = captureMethod1Or2Value(
     selectConstant(constants.DAIRY, 'MILK_CONSTANTS', 'FAT_CONTENT'),
-    input.percentFatContent,
+    input.method2PercentFatContent,
   );
   const proteinContent = captureMethod1Or2Value(
     selectConstant(constants.DAIRY, 'MILK_CONSTANTS', 'PROTEIN_CONTENT'),
-    input.percentProteinContent,
+    input.method2PercentProteinContent,
   );
 
   /**

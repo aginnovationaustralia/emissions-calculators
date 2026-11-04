@@ -110,11 +110,11 @@ const classMethod1: DairyClassInput = {
 
 const classMethod2: DairyClassInput = {
   ...classMethod1,
-  liveweightKilograms: { value: 550 },
-  dailyLiveweightGainKilograms: { value: 0.2 },
-  durationDays: { value: 365 },
-  fractionDryMatterDigestibility: { value: 0.7 },
-  fractionCrudeProteinContent: { value: 0.18 },
+  method2LiveweightKilograms: { value: 550 },
+  method2DailyLiveweightGainKilograms: { value: 0.2 },
+  method2DurationDays: { value: 365 },
+  method2FractionDryMatterDigestibility: { value: 0.7 },
+  method2FractionCrudeProteinContent: { value: 0.18 },
 };
 
 const classesMethod1: DairyClassesInput = {
@@ -145,8 +145,8 @@ const milkProductionMethod1: DairyMilkVolumeInput = {
 
 const milkProductionMethod2: DairyMilkSolidsInput = {
   dailySolidsProducedKilograms: { value: 2 },
-  percentFatContent: { value: 4.2 },
-  percentProteinContent: { value: 3.4 },
+  method2PercentFatContent: { value: 4.2 },
+  method2PercentProteinContent: { value: 3.4 },
 };
 
 // -------- Manure management --------
@@ -167,7 +167,7 @@ const manureAllocationsMethod1: DairyManureAllocationsInput = {
 const manureAllocationsMethod2: DairyManureAllocationsInput = {
   milkingShedMMSAllocation: mmsAllocation,
   feedPadMMSAllocation: mmsAllocation,
-  fractionSolidsSeparatedPreTreatment: { value: 0.1 },
+  method2FractionSolidsSeparatedPreTreatment: { value: 0.1 },
 };
 
 const timeSpentInLocations: DairyTimeSpentInLocationsInput = {
@@ -217,7 +217,7 @@ const limeApplicationMethod1: LimeApplicationInput = {
 
 const limeApplicationMethod2: LimeApplicationInput = {
   ...limeApplicationMethod1,
-  scope3EmissionFactor: { value: 0.05 },
+  method2Scope3EmissionFactor: { value: 0.05 },
 };
 
 const limeMethod1: LimeInput = {
@@ -264,8 +264,8 @@ const purchasedLivestockMethod1: DairyPurchasedLivestockInput = {
 const purchasedLivestockMethod2: DairyPurchasedLivestockInput = {
   type: 'Dairy',
   headPurchased: { value: 20 },
-  emissionFactor: { value: 5 },
-  liveweightKilograms: { value: 450 },
+  method2EmissionFactor: { value: 5 },
+  method2LiveweightKilograms: { value: 450 },
 };
 
 const livestockSale: DairyMatureSaleInput = {
@@ -282,7 +282,7 @@ const purchasedFeedMethod1: PurchasedFeedAustralianInput = {
 
 const purchasedFeedMethod2: PurchasedFeedMethod2Input = {
   amountTonnes: { value: 100 },
-  emissionFactor: { value: 0.3 },
+  method2EmissionFactor: { value: 0.3 },
 };
 
 const purchasedMineralSupplementMethod1: PurchasedMineralSupplementMethod1Input =
@@ -294,7 +294,7 @@ const purchasedMineralSupplementMethod1: PurchasedMineralSupplementMethod1Input 
 const purchasedMineralSupplementMethod2: PurchasedMineralSupplementMethod2Input =
   {
     amountTonnes: { value: 2 },
-    emissionFactor: { value: 0.5 },
+    method2EmissionFactor: { value: 0.5 },
   };
 
 const otherPurchasedGoodOrService: OtherPurchasedGoodOrServiceInput = {
@@ -311,7 +311,7 @@ const chemicalMethod1: AgrichemicalInput = {
 
 const chemicalMethod2: AgrichemicalInput = {
   ...chemicalMethod1,
-  emissionFactor: { value: 10 },
+  method2EmissionFactor: { value: 10 },
 };
 
 // -------- Solid waste --------
@@ -464,9 +464,9 @@ const feedlotManureGroupMethod1: FeedlotManureGroupInput = {
 
 const feedlotManureGroupMethod2: FeedlotManureGroupInput = {
   ...feedlotManureGroupMethod1,
-  dailyDryMatterIntakeKilograms: { value: 10 },
-  fractionCrudeProteinContent: { value: 0.14 },
-  fractionNitrogenRetentionRate: { value: 0.1 },
+  method2DailyDryMatterIntakeKilograms: { value: 10 },
+  method2FractionCrudeProteinContent: { value: 0.14 },
+  method2FractionNitrogenRetentionRate: { value: 0.1 },
 };
 
 const feedlotManureMethod1: FeedlotManureInput = {

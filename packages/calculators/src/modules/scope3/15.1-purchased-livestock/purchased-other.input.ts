@@ -26,13 +26,13 @@ const livestockTypeField = {
 };
 
 // Emission factor: method 1 (`livestockType`) xor method 2
-// (`emissionFactor`, supplied directly).
+// (`method2EmissionFactor`, supplied directly).
 const otherEmissionFactorMethod1Fields = livestockTypeField;
 
 const otherEmissionFactorMethod2Fields =
   PurchasedLivestockEmissionFactorMethod2Schema.shape;
 
-// Liveweight: method 1 (`livestockType`) xor method 2 (`liveweightKilograms`,
+// Liveweight: method 1 (`livestockType`) xor method 2 (`method2LiveweightKilograms`,
 // supplied directly).
 const otherLiveweightMethod1Fields = livestockTypeField;
 

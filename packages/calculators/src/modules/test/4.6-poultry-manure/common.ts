@@ -69,9 +69,9 @@ export const readPoultryClass = (
 
   if (method === '1') return classInput;
 
-  classInput.dailyDryMatterIntakeKilograms = nvo(Number(cell('I')));
-  classInput.fractionDryMatterDigestibility = nvo(Number(cell('J')));
-  classInput.fractionCrudeProteinContent = nvo(Number(cell('K')));
+  classInput.method2DailyDryMatterIntakeKilograms = nvo(Number(cell('I')));
+  classInput.method2FractionDryMatterDigestibility = nvo(Number(cell('J')));
+  classInput.method2FractionCrudeProteinContent = nvo(Number(cell('K')));
 
   return classInput;
 };
