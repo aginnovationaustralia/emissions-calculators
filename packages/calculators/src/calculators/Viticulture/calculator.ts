@@ -47,7 +47,7 @@ function getSingleIntensities(
 
   return {
     grapesIntensity: generateIntensity(netEmissions, harvested),
-    grapesHarvestedKg: exposeMassValue(harvested),
+    grapesHarvestedKilograms: exposeMassValue(harvested),
   };
 }
 
@@ -69,7 +69,7 @@ function getTotalIntensities(
       harvested,
     ),
     grapesIncludingLULUCF: generateIntensity(netTotalEmissions, harvested),
-    grapesHarvestedKg: exposeMassValue(harvested),
+    grapesHarvestedKilograms: exposeMassValue(harvested),
   };
 }
 

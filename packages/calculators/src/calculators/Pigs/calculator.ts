@@ -36,7 +36,7 @@ function getSingleIntensities(
 
   return {
     liveweightIntensity: generateIntensity(netEmissions, liveweightProduced),
-    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
   };
 }
 
@@ -51,7 +51,7 @@ function getTotalIntensities(
   );
 
   return {
-    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     liveweightIntensityExcludingLULUCF: generateIntensity(
       netTotalEmissions.minus(netLulucf),
       liveweightProduced,

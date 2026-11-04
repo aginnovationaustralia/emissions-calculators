@@ -48,7 +48,7 @@ function getSingleIntensities(
 
   return {
     sugarCaneIntensity: generateIntensity(netEmissions, harvested),
-    sugarCaneHarvestedKg: exposeMassValue(harvested),
+    sugarCaneHarvestedKilograms: exposeMassValue(harvested),
   };
 }
 
@@ -70,7 +70,7 @@ function getTotalIntensities(
       harvested,
     ),
     sugarCaneIncludingLULUCF: generateIntensity(netTotalEmissions, harvested),
-    sugarCaneHarvestedKg: exposeMassValue(harvested),
+    sugarCaneHarvestedKilograms: exposeMassValue(harvested),
   };
 }
 

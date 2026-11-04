@@ -85,11 +85,13 @@ describe('getTotalIntensities', () => {
   const meatAllocation = 1 - woolAllocation;
 
   it('totals clean wool produced across all classes, periods and flocks', () => {
-    expect(result.woolProducedKg.value).toBeCloseTo(expectedWoolKg);
+    expect(result.woolProducedKilograms.value).toBeCloseTo(expectedWoolKg);
   });
 
   it('totals liveweight produced across all flocks', () => {
-    expect(result.liveweightProducedKg.value).toBeCloseTo(expectedLiveweightKg);
+    expect(result.liveweightProducedKilograms.value).toBeCloseTo(
+      expectedLiveweightKg,
+    );
   });
 
   it('allocates emissions to wool by protein mass', () => {
@@ -122,8 +124,8 @@ describe('getSingleIntensities', () => {
       input,
     );
 
-    expect(result.woolProducedKg.value).toBeCloseTo(200 + 75);
-    expect(result.liveweightProducedKg.value).toBeCloseTo(500);
+    expect(result.woolProducedKilograms.value).toBeCloseTo(200 + 75);
+    expect(result.liveweightProducedKilograms.value).toBeCloseTo(500);
   });
 
   it('calculates clean wool produced for a monthly flock', () => {
@@ -155,6 +157,6 @@ describe('getSingleIntensities', () => {
       input,
     );
 
-    expect(result.woolProducedKg.value).toBeCloseTo(12 * 5 * 0.6);
+    expect(result.woolProducedKilograms.value).toBeCloseTo(12 * 5 * 0.6);
   });
 });

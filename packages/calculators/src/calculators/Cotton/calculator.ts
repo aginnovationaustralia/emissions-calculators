@@ -100,9 +100,9 @@ function getSingleIntensities(
   );
 
   return {
-    cottonHarvestedKg: exposeMassValue(cottonHarvested),
-    cottonLintHarvestedKg: exposeMassValue(cottonLintHarvested),
-    cottonSeedHarvestedKg: exposeMassValue(cottonSeedHarvested),
+    cottonHarvestedKilograms: exposeMassValue(cottonHarvested),
+    cottonLintHarvestedKilograms: exposeMassValue(cottonLintHarvested),
+    cottonSeedHarvestedKilograms: exposeMassValue(cottonSeedHarvested),
     cottonIntensity: generateIntensity(netEmissions, cottonHarvested),
     // Lint and cottonseed intensities based on economic allocation of 83%
     economicIntensities: {
@@ -171,9 +171,9 @@ function getTotalIntensities(
   );
 
   return {
-    cottonHarvestedKg: exposeMassValue(cottonHarvested),
-    cottonLintHarvestedKg: exposeMassValue(cottonLintHarvested),
-    cottonSeedHarvestedKg: exposeMassValue(cottonSeedHarvested),
+    cottonHarvestedKilograms: exposeMassValue(cottonHarvested),
+    cottonLintHarvestedKilograms: exposeMassValue(cottonLintHarvested),
+    cottonSeedHarvestedKilograms: exposeMassValue(cottonSeedHarvested),
     cottonExcludingLULUCF: generateIntensity(
       netEmissionsExcludingLulucf,
       cottonHarvested,

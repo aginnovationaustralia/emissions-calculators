@@ -163,12 +163,12 @@ export function getSingleIntensities(
   );
 
   return {
-    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     liveweightIntensity: generateIntensity(
       netEmissions.multiply(num(meatAllocation)),
       liveweightProduced,
     ),
-    woolProducedKg: exposeMassValue(cleanWoolProduced),
+    woolProducedKilograms: exposeMassValue(cleanWoolProduced),
     woolIntensity: generateIntensity(
       netEmissions.multiply(num(woolAllocation)),
       cleanWoolProduced,
@@ -205,7 +205,7 @@ export function getTotalIntensities(
   const netEmissionsExcludingLulucf = netTotalEmissions.minus(netLulucf);
 
   return {
-    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     liveweightIntensityExcludingLULUCF: generateIntensity(
       netEmissionsExcludingLulucf.multiply(meat),
       liveweightProduced,
@@ -214,7 +214,7 @@ export function getTotalIntensities(
       netTotalEmissions.multiply(meat),
       liveweightProduced,
     ),
-    woolProducedKg: exposeMassValue(cleanWoolProduced),
+    woolProducedKilograms: exposeMassValue(cleanWoolProduced),
     woolIntensityExcludingLULUCF: generateIntensity(
       netEmissionsExcludingLulucf.multiply(wool),
       cleanWoolProduced,

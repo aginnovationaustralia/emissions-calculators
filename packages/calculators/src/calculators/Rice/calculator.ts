@@ -50,7 +50,7 @@ function getSingleIntensities(
 
   return {
     riceIntensity: generateIntensity(netEmissions, riceHarvested),
-    riceHarvestedKg: exposeMassValue(riceHarvested),
+    riceHarvestedKilograms: exposeMassValue(riceHarvested),
   };
 }
 
@@ -70,7 +70,7 @@ function getTotalIntensities(
       riceHarvested,
     ),
     riceIncludingLULUCF: generateIntensity(netTotalEmissions, riceHarvested),
-    riceHarvestedKg: exposeMassValue(riceHarvested),
+    riceHarvestedKilograms: exposeMassValue(riceHarvested),
   };
 }
 

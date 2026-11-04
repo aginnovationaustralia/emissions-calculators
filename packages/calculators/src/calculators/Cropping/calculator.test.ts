@@ -183,7 +183,7 @@ describe('Cropping Calculator', () => {
 
     it('calculates top-level intensities including and excluding LULUCF', () => {
       const {
-        cropHarvestedKg: grainProducedKg,
+        cropHarvestedKilograms: grainProducedKg,
         cropIntensityIncludingLULUCF: grainsIncludingLULUCF,
         cropIntensityExcludingLULUCF: grainsExcludingLULUCF,
       } = emissions.intensities;
@@ -212,7 +212,7 @@ describe('Cropping Calculator', () => {
       const [cropA, cropB] = emissions.intermediate;
 
       [cropA, cropB].forEach((crop, index) => {
-        const { cropHarvestedKg: grainProducedKg, cropIntensity } =
+        const { cropHarvestedKilograms: grainProducedKg, cropIntensity } =
           crop.intensities;
 
         expect(grainProducedKg.value).toBe(
@@ -303,7 +303,7 @@ describe('Cropping Calculator', () => {
 
     it('reports a higher intensity when sequestration is excluded', () => {
       const {
-        cropHarvestedKg: harvested,
+        cropHarvestedKilograms: harvested,
         cropIntensityIncludingLULUCF,
         cropIntensityExcludingLULUCF,
       } = emissions.intensities;

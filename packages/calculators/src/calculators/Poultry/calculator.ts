@@ -58,12 +58,12 @@ export function getSingleIntensities(
   );
 
   return {
-    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     liveweightIntensity: generateIntensity(
       netEmissions.multiply(meatAllocation),
       liveweightProduced,
     ),
-    eggsProducedKg: exposeMassValue(eggsProduced),
+    eggsProducedKilograms: exposeMassValue(eggsProduced),
     eggsIntensity: generateIntensity(
       netEmissions.multiply(eggAllocation),
       eggsProduced,
@@ -92,7 +92,7 @@ export function getTotalIntensities(
   const netEmissionsExcludingLulucf = netTotalEmissions.minus(netLulucf);
 
   return {
-    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     liveweightIntensityExcludingLULUCF: generateIntensity(
       netEmissionsExcludingLulucf.multiply(meatAllocation),
       liveweightProduced,
@@ -101,7 +101,7 @@ export function getTotalIntensities(
       netTotalEmissions.multiply(meatAllocation),
       liveweightProduced,
     ),
-    eggsProducedKg: exposeMassValue(eggsProduced),
+    eggsProducedKilograms: exposeMassValue(eggsProduced),
     eggsIntensityExcludingLULUCF: generateIntensity(
       netEmissionsExcludingLulucf.multiply(eggAllocation),
       eggsProduced,

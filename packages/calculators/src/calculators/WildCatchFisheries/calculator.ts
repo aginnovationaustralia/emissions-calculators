@@ -48,7 +48,7 @@ function getIntensities(
     zeroMassFish,
   );
   return {
-    fishHarvestedKg: exposeMassValue(fishHarvested),
+    fishHarvestedKilograms: exposeMassValue(fishHarvested),
     emissionsIntensity: generateIntensity(netEmissions, fishHarvested),
   };
 }

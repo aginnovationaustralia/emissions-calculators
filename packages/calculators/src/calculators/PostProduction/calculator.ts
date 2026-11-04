@@ -37,12 +37,14 @@ export function getIntensities(
   if (!input) {
     return {
       unitsProduced: { value: 0 },
-      productionEmissionsKgCO2e: { value: 0 },
+      productionEmissionsKilogramsCO2e: { value: 0 },
       postProductionAllocation: { value: 0 },
-      postProductionEmissionsKgCO2e: exposeMassValue(postProductionEmissions),
-      productionIntensityKgCO2ePerUnit: { value: 0 },
-      postProductionIntensityKgCO2ePerUnit: { value: 0 },
-      combinedIntensityKgCO2ePerUnit: { value: 0 },
+      postProductionEmissionsKilogramsCO2e: exposeMassValue(
+        postProductionEmissions,
+      ),
+      productionIntensityKilogramsCO2ePerUnit: { value: 0 },
+      postProductionIntensityKilogramsCO2ePerUnit: { value: 0 },
+      combinedIntensityKilogramsCO2ePerUnit: { value: 0 },
     };
   }
 
@@ -58,20 +60,22 @@ export function getIntensities(
   );
 
   return {
-    combinedIntensityKgCO2ePerUnit: generateIntensityPerUnit(
+    combinedIntensityKilogramsCO2ePerUnit: generateIntensityPerUnit(
       productionEmissions.plus(allocatedPostProductionEmissions),
       unitsProduced,
     ),
-    postProductionIntensityKgCO2ePerUnit: generateIntensityPerUnit(
+    postProductionIntensityKilogramsCO2ePerUnit: generateIntensityPerUnit(
       allocatedPostProductionEmissions,
       unitsProduced,
     ),
-    productionIntensityKgCO2ePerUnit: generateIntensityPerUnit(
+    productionIntensityKilogramsCO2ePerUnit: generateIntensityPerUnit(
       productionEmissions,
       unitsProduced,
     ),
-    postProductionEmissionsKgCO2e: exposeMassValue(postProductionEmissions),
-    productionEmissionsKgCO2e: exposeMassValue(productionEmissions),
+    postProductionEmissionsKilogramsCO2e: exposeMassValue(
+      postProductionEmissions,
+    ),
+    productionEmissionsKilogramsCO2e: exposeMassValue(productionEmissions),
     unitsProduced: exposeRealNumberValue(unitsProduced),
     postProductionAllocation: postProductionAllocation
       ? exposeRealNumberValue(postProductionAllocation)

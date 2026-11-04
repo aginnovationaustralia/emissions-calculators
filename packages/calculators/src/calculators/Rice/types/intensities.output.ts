@@ -2,7 +2,7 @@ import { outputValue } from '@/tools/zod';
 import { z } from 'zod';
 
 export const RiceIntensitiesOutputSchema = z.object({
-  riceHarvestedKg: outputValue('Rice harvested in kg'),
+  riceHarvestedKilograms: outputValue('Rice harvested in kg'),
   riceExcludingLULUCF: outputValue(
     'Rice emissions intensity excluding LULUCF, in kg-CO2e/kg rice',
   ),
