@@ -44,7 +44,7 @@ function getIntensities(
   fisheries: WildCatchFisheryInputTransformed[],
 ): WildCatchFisheriesIntensitiesOutput {
   const fishHarvested = sum(
-    fisheries.map((fishery) => fishery.amountHarvested),
+    fisheries.map((fishery) => fishery.amountHarvestedTonnes),
     zeroMassFish,
   );
   return {

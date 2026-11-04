@@ -32,11 +32,11 @@ const getCalculatorInput = (
   const agrichemicalsInput: AgrichemicalsInput = {
     chemicals: [
       {
-        amountKg: nv(amountKg),
+        amountKilograms: nv(amountKg),
         type,
         ...(method === '2' && customEmissionsFactor
           ? {
-              customEmissionsFactor: nvo(Number(customEmissionsFactor)),
+              emissionFactor: nvo(Number(customEmissionsFactor)),
             }
           : {}),
       },

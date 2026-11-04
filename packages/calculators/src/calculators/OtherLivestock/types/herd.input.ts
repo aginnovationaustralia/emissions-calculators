@@ -29,10 +29,10 @@ export const OtherLivestockHerdCoreInputSchema =
     ...hasFuelInputSchema('fuel').shape,
     ...HasPastureResidueInputSchema.shape,
     ...HasLimeInputSchema.shape,
-    liveweightSoldKg: numberInput(
+    liveweightSoldKilograms: numberInput(
       (val) => mass('Liveweight', val),
       {
-        name: 'liveweightSoldKg',
+        name: 'liveweightSoldKilograms',
         description:
           'The liveweight of the animals sold during the reporting period',
         modules: [INTENSITIES],

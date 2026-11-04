@@ -41,13 +41,13 @@ const getCalculatorInput = (
   const pastureResidueInput: HasPastureResidueInput = {
     pasture: {
       type,
-      areaManaged: nv(areaManaged),
+      areaManagedHectares: nv(areaManaged),
       fractionOfAnnualCropBurnt: nv(0),
       residues:
         calculationMethod === '2'
           ? {
               calculationMethod,
-              averageYieldPerHectare: nv(averageYield),
+              averageYieldTonnesPerHectare: nv(averageYield),
             }
           : {
               calculationMethod,

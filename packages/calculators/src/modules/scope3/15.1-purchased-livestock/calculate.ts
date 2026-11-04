@@ -81,7 +81,7 @@ function getEmissionFactor(
   constants: ConstantsForPurchasedLivestock,
 ): Container<MassPerMass<'CO2e', 'Liveweight'>> {
   if (emissionFactorIsMethod2(purchase)) {
-    return captureMethod1Or2Value(voidUnit(), purchase.emissionFactorMethod2);
+    return captureMethod1Or2Value(voidUnit(), purchase.emissionFactor);
   }
 
   switch (purchase.type) {
@@ -123,7 +123,7 @@ function getLiveweight(
   constants: ConstantsForPurchasedLivestock,
 ): Container<Liveweight> {
   if (liveweightIsMethod2(purchase)) {
-    return captureMethod1Or2Value(voidUnit(), purchase.liveweightMethod2);
+    return captureMethod1Or2Value(voidUnit(), purchase.liveweightKilograms);
   }
 
   switch (purchase.type) {

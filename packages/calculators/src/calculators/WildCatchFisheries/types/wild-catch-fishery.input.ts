@@ -20,11 +20,14 @@ export const WildCatchFisheryInputSchema = ActivityInputSchema.safeExtend({
   ...HasWastewaterTreatmentInputSchema.shape,
   ...OtherPurchasedGoodsAndServicesSchema.shape,
   ...hasStateInputSchema([PURCH_FUEL_15_10]).shape,
-  amountHarvested: numberInput((value) => mass('Fish', tonnesToKg(value)), {
-    name: 'amountHarvested',
-    description: 'Quantity of fish or crustaceans harvested, in tonnes.',
-    modules: [INTENSITIES],
-  }),
+  amountHarvestedTonnes: numberInput(
+    (value) => mass('Fish', tonnesToKg(value)),
+    {
+      name: 'amountHarvestedTonnes',
+      description: 'Quantity of fish or crustaceans harvested, in tonnes.',
+      modules: [INTENSITIES],
+    },
+  ),
 });
 export type WildCatchFisheryInput = z.input<typeof WildCatchFisheryInputSchema>;
 export type WildCatchFisheryInputTransformed = z.output<

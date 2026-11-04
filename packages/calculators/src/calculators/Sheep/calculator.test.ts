@@ -19,8 +19,8 @@ const seasonalClass = (
   cleanWoolYieldProportion: number,
   head: { spring: number; summer: number; autumn: number; winter: number },
 ): SheepClassSeasonalInput => ({
-  greasyWoolProduction: nv(greasyWoolKgPerHead),
-  cleanWoolYieldProportion: nv(cleanWoolYieldProportion),
+  greasyWoolProductionKilograms: nv(greasyWoolKgPerHead),
+  fractionOfYieldCleanWool: nv(cleanWoolYieldProportion),
   spring: { head: nv(head.spring) },
   summer: { head: nv(head.summer) },
   autumn: { head: nv(head.autumn) },
@@ -37,7 +37,7 @@ const allSeasons = (head: number) => ({
 // Clean wool: rams 10 head * 5kg * 0.6 = 30kg, wethers avg 30 head * 6kg * 0.7 = 126kg
 const flockA = SheepFlockInputSchema.parse(
   createSheepFlockInput({
-    liveweightSoldKg: nv(1000),
+    liveweightSoldKilograms: nv(1000),
     classes: {
       period: 'seasonal',
       rams: seasonalClass(5, 0.6, allSeasons(10)),
@@ -54,7 +54,7 @@ const flockA = SheepFlockInputSchema.parse(
 // Clean wool: other ewes 100 head * 4kg * 0.5 = 200kg, wethers 50 head * 3kg * 0.5 = 75kg
 const flockB = SheepFlockInputSchema.parse(
   createSheepFlockInput({
-    liveweightSoldKg: nv(500),
+    liveweightSoldKilograms: nv(500),
     classes: {
       period: 'seasonal',
       otherEwes: seasonalClass(4, 0.5, allSeasons(100)),
@@ -129,8 +129,8 @@ describe('getSingleIntensities', () => {
   it('calculates clean wool produced for a monthly flock', () => {
     const monthlyHead = { head: nv(12) };
     const rams: SheepClassMonthlyInput = {
-      greasyWoolProduction: nv(5),
-      cleanWoolYieldProportion: nv(0.6),
+      greasyWoolProductionKilograms: nv(5),
+      fractionOfYieldCleanWool: nv(0.6),
       january: monthlyHead,
       february: monthlyHead,
       march: monthlyHead,

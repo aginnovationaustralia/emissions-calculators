@@ -19,20 +19,20 @@ export const PoultryFlockInputSchema = LivestockActivityInputSchema.extend({
   ...HasPurchasedFeedInputSchema.shape,
   ...ServicesInputSchema.shape,
   ...OtherPurchasedGoodsAndServicesSchema.shape,
-  liveweightSoldKg: numberInput(
+  liveweightSoldKilograms: numberInput(
     (val) => mass('Liveweight', val),
     {
-      name: 'liveweightSoldKg',
+      name: 'liveweightSoldKilograms',
       description:
         'The liveweight of the animals sold during the reporting period',
       modules: [INTENSITIES],
     },
     (s) => s.min(0),
   ),
-  eggsSoldKg: numberInput(
+  eggsSoldKilograms: numberInput(
     (val) => mass('Eggs', val),
     {
-      name: 'eggsSoldKg',
+      name: 'eggsSoldKilograms',
       description: 'Total weight of eggs sold',
       modules: [INTENSITIES],
     },

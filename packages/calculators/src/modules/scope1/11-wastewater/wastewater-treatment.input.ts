@@ -26,7 +26,7 @@ const BaseWastewaterTreatmentInputSchema = object({
         modules: [WASTEWATER_11_1],
       }),
     ),
-  wastewaterVolume: numberInput(
+  wastewaterVolumeCubicMetres: numberInput(
     (val) => volume('FluidWaste', cubicMetresToLitres(val)),
     {
       name: 'Wt',
@@ -70,7 +70,7 @@ export type WastewaterTreatmentMethod1InputTransformed = z.output<
 
 const WastewaterTreatmentMethod2InputSchema =
   BaseWastewaterTreatmentInputSchema.safeExtend({
-    inletCOD: numberInput(
+    inletCODKilogramsPerCubicMetre: numberInput(
       (val) =>
         massPerVolume('COD', 'FluidWaste', perCubicMetresToPerLitres(val)),
       {
@@ -81,7 +81,7 @@ const WastewaterTreatmentMethod2InputSchema =
       },
       (s) => s.min(0),
     ),
-    outletCOD: numberInput(
+    outletCODKilogramsPerCubicMetre: numberInput(
       (val) =>
         massPerVolume('COD', 'FluidWaste', perCubicMetresToPerLitres(val)),
       {
@@ -105,7 +105,7 @@ const WastewaterTreatmentMethod2InputSchema =
       isProportion,
     ),
 
-    methaneCaptured: numberInput(
+    methaneCapturedCubicMetres: numberInput(
       (val) => volume('CH4', tonnesToKg(val)),
       {
         name: 'Qcap',
@@ -116,7 +116,7 @@ const WastewaterTreatmentMethod2InputSchema =
       },
       (s) => s.min(0),
     ),
-    methaneFlared: numberInput(
+    methaneFlaredCubicMetres: numberInput(
       (val) => volume('CH4', tonnesToKg(val)),
       {
         name: 'Qflared',
@@ -127,7 +127,7 @@ const WastewaterTreatmentMethod2InputSchema =
       },
       (s) => s.min(0),
     ),
-    methaneOut: numberInput(
+    methaneOutCubicMetres: numberInput(
       (val) => volume('CH4', tonnesToKg(val)),
       {
         name: 'Qout',
@@ -139,16 +139,24 @@ const WastewaterTreatmentMethod2InputSchema =
       (s) => s.min(0),
     ),
   })
-    .superRefine(({ inletCOD, outletCOD }, context) => {
-      if (outletCOD.unit.store.value.gt(inletCOD.unit.store.value)) {
-        context.addIssue({
-          code: 'custom',
-          message:
-            'Outlet COD concentration cannot exceed inlet COD concentration.',
-          path: ['outletCOD'],
-        });
-      }
-    })
+    .superRefine(
+      (
+        {
+          inletCODKilogramsPerCubicMetre: inletCOD,
+          outletCODKilogramsPerCubicMetre: outletCOD,
+        },
+        context,
+      ) => {
+        if (outletCOD.unit.store.value.gt(inletCOD.unit.store.value)) {
+          context.addIssue({
+            code: 'custom',
+            message:
+              'Outlet COD concentration cannot exceed inlet COD concentration.',
+            path: ['outletCODKilogramsPerCubicMetre'],
+          });
+        }
+      },
+    )
     .meta({
       title: 'Wastewater treatment - method 2',
     });
@@ -179,7 +187,7 @@ export const wastewaterInputIsMethod1 = (
 export const wastewaterInputIsMethod2 = (
   wastewater: WastewaterTreatmentInputTransformed,
 ): wastewater is WastewaterTreatmentMethod2InputTransformed => {
-  return 'methaneCaptured' in wastewater;
+  return 'methaneCapturedCubicMetres' in wastewater;
 };
 
 export const HasWastewaterTreatmentInputSchema = object({

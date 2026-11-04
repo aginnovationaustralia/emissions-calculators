@@ -17,7 +17,7 @@ export const BasePurchasedPackagingByUnitsInputSchema = object({
 });
 
 export const BasePurchasedPackagingByMassInputSchema = object({
-  amountMass: numberInput(
+  amountKilograms: numberInput(
     (val) => mass('Packaging', val),
     {
       name: 'Qp (mass)',

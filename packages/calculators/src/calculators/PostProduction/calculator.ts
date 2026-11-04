@@ -48,7 +48,7 @@ export function getIntensities(
 
   const {
     unitsProduced,
-    productionEmissionsKgCO2e: productionEmissions,
+    productionEmissionsCO2eKilograms: productionEmissions,
     postProductionAllocation,
   } = input;
 

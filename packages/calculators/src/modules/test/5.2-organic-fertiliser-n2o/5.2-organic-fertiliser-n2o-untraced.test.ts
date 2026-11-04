@@ -53,11 +53,11 @@ const getCalculatorInput = (
           {
             origin: {
               origin: 'Untraced',
-              massAppliedKg: nv(massAppliedKg),
+              massAppliedKilograms: nv(massAppliedKg),
               organicFertiliserType: livestockManureType,
               ...(customNitrogenFraction
                 ? {
-                    customNitrogenFraction: nvo(customNitrogenFraction),
+                    fractionNitrogen: nvo(customNitrogenFraction),
                   }
                 : {}),
             },

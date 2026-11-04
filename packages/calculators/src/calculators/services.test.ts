@@ -57,7 +57,7 @@ const noFuel: FuelInput = { transport: [], stationary: [] };
 
 const electricity = {
   method: 'location',
-  electricityPurchasedKWh: nv(0),
+  electricityPurchasedKilowattHours: nv(0),
   region: 'QLD',
 } as const;
 
@@ -66,7 +66,7 @@ const sugarInput = (fuel: FuelInput, servicesFuel: FuelInput): SugarInput => ({
   crops: [
     {
       crop: {
-        totalYieldKg: nv(9_000_000),
+        totalYieldKilograms: nv(9_000_000),
         fractionOfAnnualCropBurnt: nv(0),
         residues: { calculationMethod: '1' },
       },
@@ -105,7 +105,7 @@ const horticultureInput = (
     {
       crop: {
         type: 'Peanuts',
-        totalYieldKg: nv(2000),
+        totalYieldKilograms: nv(2000),
         fractionOfAnnualCropBurnt: nv(0),
         residues: { calculationMethod: '1' },
       },

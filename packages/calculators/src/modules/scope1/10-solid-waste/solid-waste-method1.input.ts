@@ -19,27 +19,27 @@ export const createWasteMassSchema = (symbol: string, description: string) =>
 
 export const SolidWasteMethod1InputSchema = object({
   method: z.literal('1'),
-  unmanagedBurial: createWasteMassSchema(
+  unmanagedBurialTonnes: createWasteMassSchema(
     'Qu (burial)',
     'Amount of waste disposed of through burial',
   ),
-  unmanagedDeep: createWasteMassSchema(
+  unmanagedDeepTonnes: createWasteMassSchema(
     'Qu (deep)',
     'Amount of solid waste disposed of in a deep open waste dump.',
   ),
-  unmanagedShallow: createWasteMassSchema(
+  unmanagedShallowTonnes: createWasteMassSchema(
     'Qu (shallow)',
     'Amount of solid waste disposed of in a shallow open waste dump.',
   ),
-  composting: createWasteMassSchema(
+  compostingTonnes: createWasteMassSchema(
     'Qt (composting)',
     'Amount of waste treated through composting',
   ),
-  anaerobicDigestion: createWasteMassSchema(
+  anaerobicDigestionTonnes: createWasteMassSchema(
     'Qt (anaerobic)',
     'Amount of waste treated through anaerobic digestion',
   ),
-  incineration: createWasteMassSchema(
+  incinerationTonnes: createWasteMassSchema(
     'Qburn',
     'Amount of solid waste disposed of by incineration.',
   ),

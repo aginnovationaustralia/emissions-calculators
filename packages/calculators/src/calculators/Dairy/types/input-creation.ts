@@ -13,11 +13,11 @@ export type { DairyMilkProductionInput } from './milk.input';
 export type DairyClassInput = Prop<DairyClassesInput, 'milkingCows'>;
 export type DairyMilkVolumeInput = Extract<
   DairyMilkProductionInput,
-  { litresPerHeadPerDay: unknown }
+  { dailyVolumeProducedLitres: unknown }
 >;
 export type DairyMilkSolidsInput = Extract<
   DairyMilkProductionInput,
-  { kgSolidsPerHeadPerDay: unknown }
+  { dailySolidsProducedKilograms: unknown }
 >;
 export type DairyManureAllocationsInput = Prop<
   DairyHerdLivestockInput,

@@ -6,7 +6,7 @@ import { object } from '@/types/schemas';
 import { z } from 'zod';
 
 export const PerennialCropPlantingInputSchema = object({
-  areaPlanted: numberInput(
+  areaPlantedHectares: numberInput(
     (val) => area(hectaresToSquareMetres(val)),
     {
       name: 'Ac,t',

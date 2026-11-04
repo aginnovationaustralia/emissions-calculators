@@ -73,7 +73,7 @@ export const readPoultryClass = (
 
   const classInput: PoultryClassesLivestockInput[PoultryClass] = {
     head: nv(head),
-    days: nv(days),
+    durationDays: nv(days),
     manureAllocations,
   };
 

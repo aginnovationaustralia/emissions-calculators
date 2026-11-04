@@ -4,14 +4,14 @@ import { nv } from '@/tools/inputs';
 const horticultureInput: HorticultureInput = {
   electricity: {
     method: 'location',
-    electricityPurchasedKWh: nv(1000),
+    electricityPurchasedKilowattHours: nv(1000),
     region: 'NSW',
   },
   crops: [
     {
       crop: {
         type: 'Peanuts',
-        totalYieldKg: nv(2000),
+        totalYieldKilograms: nv(2000),
         fractionOfAnnualCropBurnt: nv(0),
         residues: { calculationMethod: '1' },
       },

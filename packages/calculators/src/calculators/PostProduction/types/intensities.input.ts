@@ -15,7 +15,7 @@ export const PostProductionIntensitiesSchema = object({
     description: 'The total number of units produced in the year.',
     modules: [INTENSITIES],
   }),
-  productionEmissionsKgCO2e: numberInput((v) => mass('CO2e', v), {
+  productionEmissionsCO2eKilograms: numberInput((v) => mass('CO2e', v), {
     name: 'Production emissions (kg CO2e)',
     description: 'The emissions from production of all units in the year.',
     modules: [INTENSITIES],

@@ -72,8 +72,8 @@ const getFertilisersInput = (
   const application: InorganicFertiliserInputScope3Method1 = {
     calculationMethodScope3: '1',
     fertiliserType,
-    massAppliedKg: nv(massAppliedKg),
-    massPurchasedKg: nv(massAppliedKg),
+    massAppliedKilograms: nv(massAppliedKg),
+    massPurchasedKilograms: nv(massAppliedKg),
     components: customNitrogenFraction
       ? [
           {

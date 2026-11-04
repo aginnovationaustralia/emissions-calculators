@@ -29,7 +29,7 @@ export const LandUseChangeActivityBaseInputSchema = object({
     },
     (s) => s.min(0.2), // chapter 16.1.2.5 "An activity area must be a minimum of 0.2 hectares"
   ),
-  carbonMassInTreesCurrentYear: numberInput(
+  carbonMassInTreesCurrentYearTonnesPerHectare: numberInput(
     (val) => massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
     {
       name: 'Ctijy',
@@ -40,7 +40,7 @@ export const LandUseChangeActivityBaseInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  carbonMassInTreesPreviousYear: numberInput(
+  carbonMassInTreesPreviousYearTonnesPerHectare: numberInput(
     (val) => massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
     {
       name: 'Ctijy-1',
@@ -51,7 +51,7 @@ export const LandUseChangeActivityBaseInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  carbonMassInDebrisCurrentYear: numberInput(
+  carbonMassInDebrisCurrentYearTonnesPerHectare: numberInput(
     (val) => massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
     {
       name: 'Cdijy',
@@ -62,7 +62,7 @@ export const LandUseChangeActivityBaseInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  carbonMassInDebrisPreviousYear: numberInput(
+  carbonMassInDebrisPreviousYearTonnesPerHectare: numberInput(
     (val) => massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
     {
       name: 'Cdijy-1',
@@ -84,7 +84,7 @@ const LandUseLandClearingBaseInputSchema =
       modules: [LAND_USE_16_2, N_SOIL_LOSS_16_3, N_LEACHING_16_4],
     }),
 
-    massCH4FromBiomassBurningPerHectare: numberInput(
+    massCH4FromBiomassBurningTonnesPerHectare: numberInput(
       (val) => massPerArea('CH4', tonnesPerHectareToKgPerSquareMetres(val)),
       {
         name: 'Eg=ch4,i,j,y',
@@ -95,7 +95,7 @@ const LandUseLandClearingBaseInputSchema =
       },
       (s) => s.min(0),
     ),
-    massN2OFromBiomassBurningPerHectare: numberInput(
+    massN2OFromBiomassBurningTonnesPerHectare: numberInput(
       (val) => massPerArea('N2O', tonnesPerHectareToKgPerSquareMetres(val)),
       {
         name: 'Eg=n2o,i,j,y',
@@ -107,7 +107,7 @@ const LandUseLandClearingBaseInputSchema =
       (s) => s.min(0),
     ),
 
-    areaBurnt: numberInput(
+    areaBurntHectares: numberInput(
       (val) => area(hectaresToSquareMetres(val)),
       {
         name: 'ag,i,j,y',
@@ -120,7 +120,7 @@ const LandUseLandClearingBaseInputSchema =
 
 const carbonMassOfWoodProductsFromFullCAMSchema = z
   .object({
-    carbonMassPerHectareFromFullCAM: numberInput(
+    carbonMassFromFullCAMTonnesPerHectare: numberInput(
       (val) => massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
       {
         name: 'Cp,i,j,y',
@@ -136,7 +136,7 @@ const carbonMassOfWoodProductsFromFullCAMSchema = z
 
 const carbonMassOfWoodProductsFromRecordsSchema = z
   .object({
-    carbonMassPerHectareFromRecords: numberInput(
+    carbonMassFromRecordsTonnesPerHectare: numberInput(
       (val) => massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(val)),
       {
         name: 'Cp,i,j,y',

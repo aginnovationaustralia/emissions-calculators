@@ -24,7 +24,7 @@ export function calculateScope1AquaticN2O(
    * only be accounted for in aquaculture systems located in coastal wetland habitats.
    * Off-shore installations of fish cages in seagrass meadows are included in this."
    */
-  return fishery.amountProduced
+  return fishery.amountProducedTonnes
     .multiply(EF)
     .multiply(CN2O)
     .named('E')

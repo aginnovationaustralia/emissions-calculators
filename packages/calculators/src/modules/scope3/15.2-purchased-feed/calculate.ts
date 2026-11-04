@@ -128,7 +128,7 @@ const getEmissionsFactor = (
   constants: HasConstants<'LIVESTOCK'>,
 ) => {
   if (purchasedFeedIsMethod2(feed)) {
-    return captureMethod1Or2Value(voidUnit(), feed.customEmissionsFactor);
+    return captureMethod1Or2Value(voidUnit(), feed.emissionFactor);
   }
   return captureMethod1Or2Value(
     getEmissionsFactorForMethod1(feed, constants),
@@ -148,7 +148,7 @@ export const calculatePurchasedFeed = (
    */
   const emissionsFromPurchases = purchasedFeed.map((feed) => {
     const EFj = getEmissionsFactor(feed, constants).named('EFj');
-    return feed.amount.multiply(EFj).reference('15.2.1.1 (1)');
+    return feed.amountTonnes.multiply(EFj).reference('15.2.1.1 (1)');
   });
 
   return sum(emissionsFromPurchases, zeroCO2e);

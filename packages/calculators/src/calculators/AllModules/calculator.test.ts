@@ -76,10 +76,10 @@ describe('calculateAllModules', () => {
 describe('calculateAllModules crop residues (6.1, 6.3, 6.4)', () => {
   // 250 ha of rice in NSW, 10 t/ha, a fifth of the stubble burnt
   const riceCrop = {
-    totalYieldKg: nv(2_500_000),
+    totalYieldKilograms: nv(2_500_000),
     fractionOfAnnualCropBurnt: nv(0.2),
     residues: { calculationMethod: '1' },
-    areaSown: nv(250),
+    areaSownHectares: nv(250),
     preSeasonWaterRegimeType: 'Non flooded pre-season <180 days',
     waterRegimeType: 'Continuously flooded',
     cultivationPeriodDays: nv(150),
@@ -94,7 +94,7 @@ describe('calculateAllModules crop residues (6.1, 6.3, 6.4)', () => {
 
   // 9,000 t of sugar cane in QLD, wet climate, none burnt
   const caneResidue = {
-    totalYieldKg: nv(9_000_000),
+    totalYieldKilograms: nv(9_000_000),
     fractionOfAnnualCropBurnt: nv(0),
     residues: { calculationMethod: '1' },
   } as const;
@@ -119,7 +119,7 @@ describe('calculateAllModules crop residues (6.1, 6.3, 6.4)', () => {
   const pasture: NonNullable<AllModulesInput['pasture']> = {
     pasture: {
       type: 'Annual grass',
-      areaManaged: nv(100),
+      areaManagedHectares: nv(100),
       fractionOfAnnualCropBurnt: nv(0),
       residues: { calculationMethod: '1' },
     },
@@ -145,7 +145,7 @@ describe('calculateAllModules crop residues (6.1, 6.3, 6.4)', () => {
     const input: RiceInput = {
       electricity: {
         method: 'location',
-        electricityPurchasedKWh: nv(0),
+        electricityPurchasedKilowattHours: nv(0),
         region: 'NSW',
       },
       crops: [
@@ -180,7 +180,7 @@ describe('calculateAllModules crop residues (6.1, 6.3, 6.4)', () => {
     const input: SugarInput = {
       electricity: {
         method: 'location',
-        electricityPurchasedKWh: nv(0),
+        electricityPurchasedKilowattHours: nv(0),
         region: 'QLD',
       },
       crops: [

@@ -46,7 +46,7 @@ function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
   crop: RiceCropInputTransformed,
 ): RiceIntermediateIntensitiesOutput {
-  const riceHarvested = crop.crop.totalYieldKg;
+  const riceHarvested = crop.crop.totalYieldKilograms;
 
   return {
     riceIntensity: generateIntensity(netEmissions, riceHarvested),
@@ -60,7 +60,7 @@ function getTotalIntensities(
   crops: RiceCropInputTransformed[],
 ) {
   const riceHarvested = sum(
-    crops.map(({ crop }) => crop.totalYieldKg),
+    crops.map(({ crop }) => crop.totalYieldKilograms),
     zeroMassDryMatter,
   );
 

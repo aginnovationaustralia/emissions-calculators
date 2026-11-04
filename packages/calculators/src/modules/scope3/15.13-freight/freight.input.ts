@@ -18,7 +18,7 @@ export const FreightBaseInputSchema = object({
     }),
 });
 export const FreightMethod1InputSchema = FreightBaseInputSchema.safeExtend({
-  distance: numberInput(
+  distanceKilometres: numberInput(
     (val) => distance(kilometresToMetres(val)),
     {
       name: 'total distance',
@@ -27,7 +27,7 @@ export const FreightMethod1InputSchema = FreightBaseInputSchema.safeExtend({
     },
     (s) => s.min(0),
   ),
-  weight: numberInput(
+  weightTonnes: numberInput(
     (val) => mass('Freight Goods', tonnesToKg(val)),
     {
       name: 'total weight transported',

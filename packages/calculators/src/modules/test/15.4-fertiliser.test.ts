@@ -41,8 +41,8 @@ const getCalculatorInput = (
       ? {
           calculationMethodScope3: '1',
           fertiliserType,
-          massAppliedKg: nv(massAppliedKg),
-          massPurchasedKg: nv(massPurchasedKg),
+          massAppliedKilograms: nv(massAppliedKg),
+          massPurchasedKilograms: nv(massPurchasedKg),
           components: cell('D')
             ? [
                 {
@@ -70,9 +70,9 @@ const getCalculatorInput = (
       : {
           calculationMethodScope3: '2',
           fertiliserType,
-          massAppliedKg: nv(massAppliedKg),
-          massPurchasedKg: nv(massPurchasedKg),
-          customScope3EmissionFactor: nv(Number(cell('D'))),
+          massAppliedKilograms: nv(massAppliedKg),
+          massPurchasedKilograms: nv(massPurchasedKg),
+          scope3EmissionFactor: nv(Number(cell('D'))),
         };
 
   const raw: FertiliserInputInorganicScope1Method1 = {

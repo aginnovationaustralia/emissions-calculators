@@ -8,8 +8,8 @@ import { PoultryFlockInputSchema } from './types/poultry-flock.input';
 const flock = (liveweightSoldKg: number, eggsSoldKg: number) =>
   PoultryFlockInputSchema.parse(
     createPoultryInput({
-      liveweightSoldKg: nv(liveweightSoldKg),
-      eggsSoldKg: nv(eggsSoldKg),
+      liveweightSoldKilograms: nv(liveweightSoldKg),
+      eggsSoldKilograms: nv(eggsSoldKg),
     }),
   );
 

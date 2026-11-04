@@ -50,7 +50,7 @@ const getCalculatorInput = (
   const cropResidueInput: HasPastureResidueInput = {
     pasture: {
       type,
-      areaManaged: nv(areaManaged),
+      areaManagedHectares: nv(areaManaged),
       fractionOfAnnualCropBurnt: nv(0),
       residues,
     },

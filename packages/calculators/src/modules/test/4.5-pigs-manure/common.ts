@@ -88,7 +88,7 @@ export const readPigsClass = (
   if (method === '1') {
     return {
       head,
-      days,
+      durationDays: days,
       manureAllocations: {
         anaerobicLagoon: {
           ...anaerobicLagoon,
@@ -111,10 +111,10 @@ export const readPigsClass = (
 
   return {
     head,
-    days,
-    method2AverageFeedIntake: nvo(Number(cell('H')) || undefined),
-    method2VolatileSolidProductionRate: nvo(Number(cell('I')) || undefined),
-    method2NitrogenWasteProductionRate: nvo(Number(cell('J')) || undefined),
+    durationDays: days,
+    dailyAverageFeedIntakeKilograms: nvo(Number(cell('H')) || undefined),
+    dailyVolatileSolidProductionKilograms: nvo(Number(cell('I')) || undefined),
+    dailyNitrogenWasteProductionKilograms: nvo(Number(cell('J')) || undefined),
 
     manureAllocations: {
       anaerobicLagoon: {

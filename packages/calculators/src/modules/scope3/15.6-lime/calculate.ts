@@ -40,15 +40,15 @@ export const calculateScope3SoilAmeliorants = (
     if (application.type === 'Gypsum') {
       const ef = captureMethod1Or2Value(
         efGypsum,
-        application.customScope3EmissionsFactor,
+        application.scope3EmissionFactor,
       ).named('EFa');
 
-      const Ma = application.massAppliedKg.named('Ma (Gypsum)');
+      const Ma = application.massAppliedKilograms.named('Ma (Gypsum)');
 
       return Ma.multiply(ef).named('E').reference('15.6.1.1 (1)');
     }
 
-    const Ma = application.massAppliedKg.named('Ma');
+    const Ma = application.massAppliedKilograms.named('Ma');
     const MaLimestone = Ma.multiply(application.limestoneFraction).named(
       'Ma (Limestone)',
     );
@@ -60,7 +60,7 @@ export const calculateScope3SoilAmeliorants = (
     const EDolomite = MaDolomite.multiply(efDolomite).named('E (Dolomite)');
     return captureMethod1Or2Value(
       ELimestone.plus(EDolomite),
-      application.customScope3EmissionsFactor?.multiply(Ma),
+      application.scope3EmissionFactor?.multiply(Ma),
     )
       .named('E')
       .reference('15.6.1.1 (1)');

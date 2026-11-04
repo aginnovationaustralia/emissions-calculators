@@ -51,7 +51,9 @@ const calculateSpecificRiceCultivationEmissionsFactor = (
                 'ORGANIC_AMENDMENT_SCALING_FACTORS',
                 amendment.type,
               );
-              return amendment.rateOfApplication.multiply(conversionFactor);
+              return amendment.rateOfApplicationTonnesPerHectare.multiply(
+                conversionFactor,
+              );
             }),
             zeroMassPerAreaOrganicAmendment,
           ).switchUnit((r) => realNumber(r.store)),
@@ -93,7 +95,7 @@ export const calculateScope1RiceCultivation = (
   input: HasRiceCultivationInputTransformed,
   context: ExecutionContext<ConstantsForRiceCalculator>,
 ) => {
-  const { areaSown, cultivationPeriodDays } = input.crop;
+  const { areaSownHectares: areaSown, cultivationPeriodDays } = input.crop;
   const riceEmissionsFactor = calculateSpecificRiceCultivationEmissionsFactor(
     input,
     context,

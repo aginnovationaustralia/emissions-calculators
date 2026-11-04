@@ -102,7 +102,6 @@ export const purchasedFeedIsMethod2 = (
   feed: PurchasedFeedInputTransformed,
 ): feed is PurchasedFeedMethod2InputTransformed => {
   return (
-    (feed as PurchasedFeedMethod2InputTransformed).customEmissionsFactor !==
-    undefined
+    (feed as PurchasedFeedMethod2InputTransformed).emissionFactor !== undefined
   );
 };

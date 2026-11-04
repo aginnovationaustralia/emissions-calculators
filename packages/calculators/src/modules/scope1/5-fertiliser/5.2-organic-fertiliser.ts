@@ -48,7 +48,7 @@ export const calculateMNSoilForOrganicFertiliser = (
   if (origin.origin === 'Traced') {
     return calculateMassOfNitrogenAppliedToSoils(origin.details, constants);
   } else {
-    const { customNitrogenFraction } = origin;
+    const { fractionNitrogen: customNitrogenFraction } = origin;
     const fnOrganicF = selectConstant(
       constants.CROP,
       'ORGANIC_FERTILISER_FRACTIONS',
@@ -57,7 +57,7 @@ export const calculateMNSoilForOrganicFertiliser = (
     );
     // NOTE: This is definitely method 1, even though it feels like a method 2 input
     const nitrogenFraction = customNitrogenFraction ?? fnOrganicF;
-    return origin.massAppliedKg.multiply(nitrogenFraction);
+    return origin.massAppliedKilograms.multiply(nitrogenFraction);
   }
 };
 

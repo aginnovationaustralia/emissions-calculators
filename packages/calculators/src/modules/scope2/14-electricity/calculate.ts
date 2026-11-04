@@ -35,13 +35,13 @@ const calculateMarketBasedElectricityScope2 = (
    * entity equivalent to megawatt hours (MWh)
    *
    */
-  const qelec = electricity.electricityPurchasedKWh;
+  const qelec = electricity.electricityPurchasedKilowattHours;
   const efrmf2elec = selectConstant(
     constants.COMMON,
     'ELECTRICITY_RMF_SCOPE2_EF',
   );
-  const recSurrendered = electricity.recsSurrendered;
-  const recOnsite = electricity.recsOnsite;
+  const recSurrendered = electricity.recsSurrenderedMegawattHours;
+  const recOnsite = electricity.recsOnsiteMegawattHours;
   const rpp = selectConstant(constants.COMMON, 'RENEWABLE_POWER_PERCENTAGE');
   const jrppFactor = electricityRegionToJRPPFactor(electricity.region).named(
     'JRPP factor',
@@ -78,7 +78,7 @@ const calculateLocationBasedElectricityScope2 = (
   EF 2,elec = location-based Scope 2 emission factor for electricity (kg CO2e/kWh)
   */
 
-  const qelec = electricity.electricityPurchasedKWh;
+  const qelec = electricity.electricityPurchasedKilowattHours;
   const ef2elec = selectConstant(
     constants.COMMON,
     'ELECTRICITY',

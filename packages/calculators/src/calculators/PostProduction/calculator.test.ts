@@ -20,7 +20,7 @@ describe('getIntensities', () => {
   it('calculates production, post-production, and combined intensities', () => {
     const input = PostProductionIntensitiesSchema.parse({
       unitsProduced: nv(100),
-      productionEmissionsKgCO2e: nv(200),
+      productionEmissionsCO2eKilograms: nv(200),
       postProductionAllocation: nv(0.25),
     });
 
@@ -39,7 +39,7 @@ describe('getIntensities', () => {
   it('allocates all post-production emissions when no allocation is given', () => {
     const input = PostProductionIntensitiesSchema.parse({
       unitsProduced: nv(100),
-      productionEmissionsKgCO2e: nv(200),
+      productionEmissionsCO2eKilograms: nv(200),
     });
 
     expect(getIntensities(input, root(mass('CO2e', 300)))).toMatchObject({
@@ -52,7 +52,7 @@ describe('getIntensities', () => {
   it('returns zero intensities when no units were produced', () => {
     const input = PostProductionIntensitiesSchema.parse({
       unitsProduced: nv(0),
-      productionEmissionsKgCO2e: nv(200),
+      productionEmissionsCO2eKilograms: nv(200),
     });
 
     expect(getIntensities(input, root(mass('CO2e', 300)))).toEqual({

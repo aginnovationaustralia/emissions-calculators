@@ -40,7 +40,7 @@ const calculateMilkProduction = (periodProps: BeefPeriodProps) => {
   const { breed } = herd;
 
   if (isBeefClassPeriodInputWithCalves(currentPeriod)) {
-    const LCCalving = currentPeriod.proportionCowsThisSeasonInCalf;
+    const LCCalving = currentPeriod.fractionCowsThisSeasonInCalf;
     const DMPCalving = selectConstant(
       constants.BEEF_PASTURE,
       'MILK_FACTORS',
@@ -51,7 +51,7 @@ const calculateMilkProduction = (periodProps: BeefPeriodProps) => {
 
     const milkProductionFromCalvingCows = br(LCCalving.multiply(DMPCalving));
 
-    const LCAfterCalving = currentPeriod.proportionCowsPreviousSeasonInCalf;
+    const LCAfterCalving = currentPeriod.fractionCowsPreviousSeasonInCalf;
     const DMPAfterCalving = selectConstant(
       constants.BEEF_PASTURE,
       'MILK_FACTORS',
@@ -95,9 +95,7 @@ const calculateMilkIntake = (periodProps: BeefPeriodProps) => {
     'calving',
   );
   const milkIntakeForCalvesBornThisSeason = br(
-    milkProductionCalving.multiply(
-      currentPeriod.proportionCalvesBornThisSeason,
-    ),
+    milkProductionCalving.multiply(currentPeriod.fractionCalvesBornThisSeason),
   );
 
   const milkProductionPostCalving = selectConstant(
@@ -109,7 +107,7 @@ const calculateMilkIntake = (periodProps: BeefPeriodProps) => {
   );
   const milkIntakeForCalvesBornPreviousSeason = br(
     milkProductionPostCalving.multiply(
-      currentPeriod.proportionCalvesBornPreviousSeason,
+      currentPeriod.fractionCalvesBornPreviousSeason,
     ),
   );
 

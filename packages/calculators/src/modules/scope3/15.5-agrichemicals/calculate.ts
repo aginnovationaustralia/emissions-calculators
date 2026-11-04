@@ -20,10 +20,10 @@ EF h = emission factor of purchased agrichemical (kg CO2e/kg)
 */
   const emissionsFromPurchases = crop.chemicals.map((chemical) => {
     const type = chemical.type;
-    const qh = chemical.amountKg;
+    const qh = chemical.amountKilograms;
     const emissionsFactor = captureMethod1Or2Value(
       selectConstant(constants.COMMON, 'AGROCHEMICAL_FACTORS', type),
-      chemical.customEmissionsFactor,
+      chemical.emissionFactor,
     ).named('EFh');
     return qh.multiply(emissionsFactor).named('E').reference('15.5.1.1 (1)');
   });

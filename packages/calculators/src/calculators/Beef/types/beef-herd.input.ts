@@ -84,7 +84,7 @@ export type BeefHerdInputWithoutState = ActivityInput &
   OtherPurchasedGoodsAndServicesInput &
   HasFertiliserInput &
   HasSolidWasteInput & {
-    liveweightSoldKg: NumberInputValue;
+    liveweightSoldKilograms: NumberInputValue;
   };
 export type BeefHerdInputTransformedWithoutState = ActivityInputTransformed &
   BeefManureAndEntericHerdInputTransformed &
@@ -99,7 +99,7 @@ export type BeefHerdInputTransformedWithoutState = ActivityInputTransformed &
   OtherPurchasedGoodsAndServicesInputTransformed &
   HasFertiliserInputTransformed &
   HasSolidWasteInputTransformed & {
-    liveweightSoldKg: InputContainer<Mass<'Liveweight'>>;
+    liveweightSoldKilograms: InputContainer<Mass<'Liveweight'>>;
   };
 
 export const BeefHerdInputSchemaWithoutState: z.ZodType<
@@ -115,10 +115,10 @@ export const BeefHerdInputSchemaWithoutState: z.ZodType<
    * reporting period should be attributed to liveweight sold during the reporting
    * period."
    */
-  liveweightSoldKg: numberInput(
+  liveweightSoldKilograms: numberInput(
     (val) => mass('Liveweight', val),
     {
-      name: 'liveweightSoldKg',
+      name: 'liveweightSoldKilograms',
       description:
         'The liveweight of the animals sold during the reporting period',
       modules: [INTENSITIES],

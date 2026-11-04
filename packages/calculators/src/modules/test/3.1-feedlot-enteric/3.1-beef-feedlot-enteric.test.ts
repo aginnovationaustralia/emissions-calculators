@@ -53,8 +53,8 @@ const getCalculatorInput = (
     const feedlotGroupInput: FeedlotGroupLivestockInput = {
       head: nv(head),
       averageLengthOfStayDays: nv(averageLengthOfStayDays),
-      method2DryMatterIntake: nvo(method2DryMatterIntake),
-      method2AverageNeutralDetergentFibrePercentage: nvo(
+      dailyDryMatterIntakeKilograms: nvo(method2DryMatterIntake),
+      percentAverageNeutralDetergentFibre: nvo(
         method2AverageNeutralDetergentFibrePercentage,
       ),
       manureAllocations: {

@@ -31,11 +31,13 @@ const calculateLimeCO2 = (
   const hasCountableLime = applications.filter(limeApplicationIsNotGypsum);
 
   const mlime = sum(
-    hasCountableLime.map((a) => a.massAppliedKg),
+    hasCountableLime.map((a) => a.massAppliedKilograms),
     zeroMassLime,
   ).named('Mlime');
   const totalLimestone = sum(
-    hasCountableLime.map((a) => a.massAppliedKg.multiply(a.limestoneFraction)),
+    hasCountableLime.map((a) =>
+      a.massAppliedKilograms.multiply(a.limestoneFraction),
+    ),
     zeroMassLime,
   ).named('Total Limestone');
 

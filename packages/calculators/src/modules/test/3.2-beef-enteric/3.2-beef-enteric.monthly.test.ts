@@ -53,22 +53,22 @@ const readBeefClassFn =
       );
       return {
         head: nv(Number(cell(columnHeadN, rowOffset))),
-        method2Liveweight: nvo(
+        liveweightKilograms: nvo(
           method === '2' && customLiveweight
             ? Number(customLiveweight)
             : undefined,
         ),
-        method2LiveweightGain: nvo(
+        dailyLiveweightGainKilograms: nvo(
           method === '2' && customLiveweightGain
             ? Number(customLiveweightGain)
             : undefined,
         ),
-        method2DurationDays: nvo(
+        durationDays: nvo(
           method === '2' && customDurationDays
             ? Number(customDurationDays)
             : undefined,
         ),
-        method2DryMatterIntake: nvo(
+        dailyDryMatterIntakeKilograms: nvo(
           method === '2' && customDryMatterIntake
             ? Number(customDryMatterIntake)
             : undefined,
@@ -113,29 +113,29 @@ const readBeefCalfClassFn =
       );
       return {
         head: nv(Number(cell(columnHeadN, rowOffset))),
-        method2Liveweight: nvo(
+        liveweightKilograms: nvo(
           method === '2' && customLiveweight
             ? Number(customLiveweight)
             : undefined,
         ),
-        method2LiveweightGain: nvo(
+        dailyLiveweightGainKilograms: nvo(
           method === '2' && customLiveweightGain
             ? Number(customLiveweightGain)
             : undefined,
         ),
-        method2DurationDays: nvo(
+        durationDays: nvo(
           method === '2' && customDurationDays
             ? Number(customDurationDays)
             : undefined,
         ),
-        method2DryMatterIntake: nvo(
+        dailyDryMatterIntakeKilograms: nvo(
           method === '2' && customDryMatterIntake
             ? Number(customDryMatterIntake)
             : undefined,
         ),
         // Milk intake has no bearing on this module
-        proportionCalvesBornThisSeason: nv(0),
-        proportionCalvesBornPreviousSeason: nv(0),
+        fractionCalvesBornThisSeason: nv(0),
+        fractionCalvesBornPreviousSeason: nv(0),
       };
     };
 
@@ -176,28 +176,28 @@ const readBeefClassWithCalvesFn =
       );
       return {
         head: nv(Number(cell(columnHeadN, rowOffset))),
-        proportionCowsThisSeasonInCalf: nv(
+        fractionCowsThisSeasonInCalf: nv(
           Number(cell(columnProportionCowsThisSeasonInCalf, rowOffset)),
         ),
-        proportionCowsPreviousSeasonInCalf: nv(
+        fractionCowsPreviousSeasonInCalf: nv(
           Number(cell(columnProportionCowsPreviousSeasonInCalf, rowOffset)),
         ),
-        method2Liveweight: nvo(
+        liveweightKilograms: nvo(
           method === '2' && customLiveweight
             ? Number(customLiveweight)
             : undefined,
         ),
-        method2LiveweightGain: nvo(
+        dailyLiveweightGainKilograms: nvo(
           method === '2' && customLiveweightGain
             ? Number(customLiveweightGain)
             : undefined,
         ),
-        method2DurationDays: nvo(
+        durationDays: nvo(
           method === '2' && customDurationDays
             ? Number(customDurationDays)
             : undefined,
         ),
-        method2DryMatterIntake: nvo(
+        dailyDryMatterIntakeKilograms: nvo(
           method === '2' && customDryMatterIntake
             ? Number(customDryMatterIntake)
             : undefined,

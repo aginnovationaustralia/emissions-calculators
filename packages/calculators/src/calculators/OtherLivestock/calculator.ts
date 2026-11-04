@@ -48,7 +48,7 @@ function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
   herd: OtherLivestockHerdInputTransformed,
 ): OtherLivestockIntermediateIntensitiesOutput {
-  const liveweightProduced = herd.liveweightSoldKg;
+  const liveweightProduced = herd.liveweightSoldKilograms;
 
   return {
     liveweightIntensity: generateIntensity(netEmissions, liveweightProduced),
@@ -62,7 +62,7 @@ function getTotalIntensities(
   herds: OtherLivestockHerdInputTransformed[],
 ): OtherLivestockIntensitiesOutput {
   const liveweightProduced = sum(
-    herds.map((herd) => herd.liveweightSoldKg),
+    herds.map((herd) => herd.liveweightSoldKilograms),
     zeroMassLiveweight,
   );
 

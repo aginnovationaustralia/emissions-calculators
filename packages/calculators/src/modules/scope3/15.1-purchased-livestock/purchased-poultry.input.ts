@@ -15,14 +15,14 @@ const poultryBaseFields = {
 };
 
 // Emission factor: method 1 looks up a single flat constant, so it needs no
-// input of its own; method 2 (`emissionFactorMethod2`) overrides it directly.
+// input of its own; method 2 (`emissionFactor`) overrides it directly.
 const poultryEmissionFactorMethod1Fields = {};
 
 const poultryEmissionFactorMethod2Fields =
   PurchasedLivestockEmissionFactorMethod2Schema.shape;
 
 // Liveweight: method 1 (`weightClass`, looked up against constants) xor
-// method 2 (`liveweightMethod2`, supplied directly).
+// method 2 (`liveweightKilograms`, supplied directly).
 const poultryLiveweightMethod1Fields = {
   weightClass: enumInput(PoultryWeightClasses, {
     name: 'Poultry class',

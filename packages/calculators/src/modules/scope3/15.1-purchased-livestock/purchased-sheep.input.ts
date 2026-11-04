@@ -17,7 +17,7 @@ const sheepBaseFields = {
 // Emission factor: method 1 has no input of its own - the purchase category
 // (prime lamb vs mutton) is derived from `class` (see
 // `calculate.ts#getSheepEmissionFactor`), which method 1 liveweight already
-// requires - xor method 2 (`emissionFactorMethod2`, supplied directly).
+// requires - xor method 2 (`emissionFactor`, supplied directly).
 const sheepEmissionFactorMethod1Fields = {
   class: enumInput(SheepClasses, {
     name: 'Sheep class',
@@ -30,7 +30,7 @@ const sheepEmissionFactorMethod2Fields =
   PurchasedLivestockEmissionFactorMethod2Schema.shape;
 
 // Liveweight: method 1 (`state` + `season` + `class`, looked up against
-// constants) xor method 2 (`liveweightMethod2`, supplied directly).
+// constants) xor method 2 (`liveweightKilograms`, supplied directly).
 const sheepLiveweightMethod1Fields = {
   state: enumInput(States, {
     name: 'Origin state',

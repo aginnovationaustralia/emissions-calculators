@@ -16,7 +16,7 @@ export const OtherPurchasedGoodOrServiceSchema = object({
     },
     (s) => s.min(0),
   ),
-  emissionsFactor: numberInput(
+  emissionFactor: numberInput(
     (val) => mass('CO2e', tonnesToKg(val)),
     {
       name: 'Emissions factor per quantity of other item',

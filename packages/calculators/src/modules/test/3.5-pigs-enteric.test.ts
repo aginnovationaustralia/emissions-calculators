@@ -48,10 +48,11 @@ const getCalculatorInput = (
 
     return {
       head: nv(Number(cell(columnHead, offset))),
-      days: nv(Number(cell(columnAverageDuration, offset))),
-      method2AverageFeedIntake: nvo(method2AverageFeedIntake),
+      durationDays: nv(Number(cell(columnAverageDuration, offset))),
+      dailyAverageFeedIntakeKilograms: nvo(method2AverageFeedIntake),
       // No effect on enteric fermentation calculation.
-      manureAllocations: zeroPigsManureAllocation}
+      manureAllocations: zeroPigsManureAllocation,
+    };
   };
 
   const pigsInput: PigsHerdInput = createPigsInput({

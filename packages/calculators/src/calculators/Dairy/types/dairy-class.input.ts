@@ -27,7 +27,7 @@ export const dairyClassBaseInputSchema = (location: LivestockLocation) =>
       },
       (s) => s.gt(0),
     ),
-    method2Liveweight: numberInputOptional(
+    liveweightKilograms: numberInputOptional(
       (val) => liveweight(val),
       {
         name: 'Wj',
@@ -38,14 +38,17 @@ export const dairyClassBaseInputSchema = (location: LivestockLocation) =>
       },
       (s) => s.gt(0),
     ),
-    method2LiveweightGain: numberInputOptional((val) => liveweightGain(val), {
-      name: 'LWGj',
-      method: '2',
-      description:
-        'Method 2: supply an exact value for the liveweight gain for this class based on farm records',
-      modules: dairyEntericAndManureModules(location),
-    }),
-    method2DurationDays: numberInputOptional(
+    dailyLiveweightGainKilograms: numberInputOptional(
+      (val) => liveweightGain(val),
+      {
+        name: 'LWGj',
+        method: '2',
+        description:
+          'Method 2: supply an exact value for the liveweight gain for this class based on farm records',
+        modules: dairyEntericAndManureModules(location),
+      },
+    ),
+    durationDays: numberInputOptional(
       (val) => days(val),
       {
         name: 'Dj',
@@ -56,7 +59,7 @@ export const dairyClassBaseInputSchema = (location: LivestockLocation) =>
       },
       (s) => s.min(0),
     ),
-    method2DryMatterDigestibility: numberInputOptional(
+    fractionDryMatterDigestibility: numberInputOptional(
       (val) => realNumber(val),
       {
         name: 'DMDj',
@@ -67,7 +70,7 @@ export const dairyClassBaseInputSchema = (location: LivestockLocation) =>
       },
       (s) => s.min(0),
     ),
-    method2CrudeProtein: numberInputOptional(
+    fractionCrudeProteinContent: numberInputOptional(
       (val) => massPerMass('CrudeProtein', 'DryMatter', val),
       {
         name: 'CPj',

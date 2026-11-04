@@ -9,5 +9,5 @@ export const calculate12Scope1SupplementaryCO2 = (
     E = Q * 10^-3
     Where Q = quantity of supplementary CO2 used within the operations (kg CO2)
     */
-  return input.supplementaryCO2Kg.named('E').reference('12.1.1 (1)');
+  return input.supplementaryCO2Kilograms.named('E').reference('12.1.1 (1)');
 };

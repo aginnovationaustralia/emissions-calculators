@@ -34,10 +34,14 @@ export const calculate_16_2_1_2_ChangesInWoodyCarbonStocks = (
 
   const netChangeInActivities = activities.map((activity) => {
     const {
-      carbonMassInTreesCurrentYear,
-      carbonMassInTreesPreviousYear,
-      carbonMassInDebrisCurrentYear,
-      carbonMassInDebrisPreviousYear,
+      carbonMassInTreesCurrentYearTonnesPerHectare:
+        carbonMassInTreesCurrentYear,
+      carbonMassInTreesPreviousYearTonnesPerHectare:
+        carbonMassInTreesPreviousYear,
+      carbonMassInDebrisCurrentYearTonnesPerHectare:
+        carbonMassInDebrisCurrentYear,
+      carbonMassInDebrisPreviousYearTonnesPerHectare:
+        carbonMassInDebrisPreviousYear,
       activityAreaHectares,
     } = activity;
 
@@ -78,7 +82,11 @@ export const calculate_16_2_1_4_BiomassBurningCH4 = (
   const ch4FromBurnings = activities
     .filter(isLandClearingActivity)
     .map((activity) => {
-      const { massCH4FromBiomassBurningPerHectare, areaBurnt } = activity;
+      const {
+        massCH4FromBiomassBurningTonnesPerHectare:
+          massCH4FromBiomassBurningPerHectare,
+        areaBurntHectares: areaBurnt,
+      } = activity;
 
       return massCH4FromBiomassBurningPerHectare
         .multiply(areaBurnt)
@@ -104,7 +112,11 @@ export const calculate_16_2_1_4_BiomassBurningN2O = (
   const n2oFromBurnings = activities
     .filter(isLandClearingActivity)
     .map((activity) => {
-      const { massN2OFromBiomassBurningPerHectare, areaBurnt } = activity;
+      const {
+        massN2OFromBiomassBurningTonnesPerHectare:
+          massN2OFromBiomassBurningPerHectare,
+        areaBurntHectares: areaBurnt,
+      } = activity;
 
       return massN2OFromBiomassBurningPerHectare
         .multiply(areaBurnt)
@@ -178,12 +190,12 @@ export const calculate_16_2_1_7_HarvestedWoodProducts = (
         carbonMassOfWoodProducts,
       )
         ? captureMethod1Or2Value(
-            carbonMassOfWoodProducts.carbonMassPerHectareFromFullCAM,
+            carbonMassOfWoodProducts.carbonMassFromFullCAMTonnesPerHectare,
             undefined,
           )
         : captureMethod1Or2Value(
             voidUnit(),
-            carbonMassOfWoodProducts.carbonMassPerHectareFromRecords,
+            carbonMassOfWoodProducts.carbonMassFromRecordsTonnesPerHectare,
           );
 
       return massPerHectare.multiply(activityAreaHectares);

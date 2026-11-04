@@ -4,7 +4,7 @@ import { nv } from '@/tools/inputs';
 
 export const wheatCropKey: GrainsCropResidueInput = {
   type: 'Wheat',
-  totalYieldKg: nv(3000),
+  totalYieldKilograms: nv(3000),
   residues: {
     calculationMethod: '1',
   },
@@ -19,7 +19,7 @@ export const grainWheat: GrainsCropInput = {
   lime: {
     applications: [
       {
-        massAppliedKg: nv(360),
+        massAppliedKilograms: nv(360),
         limestoneFraction: nv(0.5),
         type: 'Limestone',
       },
@@ -28,16 +28,16 @@ export const grainWheat: GrainsCropInput = {
   chemicals: [
     {
       type: 'Herbicide (paraquat, diquat, glyphosate)',
-      amountKg: nv(8.5),
+      amountKilograms: nv(8.5),
     },
     {
       type: 'Other herbicide',
-      amountKg: nv(3.6),
+      amountKilograms: nv(3.6),
     },
   ],
   refrigerants: [
     {
-      chargeSize: nv(100),
+      chargeSizeKilograms: nv(100),
       refrigerant: 'HFC-134 (R-134)',
       refrigerationType: 'Domestic A/C packaged',
     },
@@ -47,8 +47,8 @@ export const grainWheat: GrainsCropInput = {
     inorganic: {
       applications: [
         {
-          massAppliedKg: nv(100),
-          massPurchasedKg: nv(100),
+          massAppliedKilograms: nv(100),
+          massPurchasedKilograms: nv(100),
           fertiliserType: 'Urea',
           calculationMethodScope3: '1',
         },
@@ -86,7 +86,7 @@ export const grainWheat: GrainsCropInput = {
 export const grainSorghum: GrainsCropInput = {
   crop: {
     type: 'Sorghum',
-    totalYieldKg: nv(2500),
+    totalYieldKilograms: nv(2500),
     fractionOfAnnualCropBurnt: nv(0.5),
     residues: {
       calculationMethod: '1',
@@ -99,7 +99,7 @@ export const grainSorghum: GrainsCropInput = {
   lime: {
     applications: [
       {
-        massAppliedKg: nv(360),
+        massAppliedKilograms: nv(360),
         limestoneFraction: nv(0.5),
         type: 'Limestone',
       },
@@ -108,11 +108,11 @@ export const grainSorghum: GrainsCropInput = {
   chemicals: [
     {
       type: 'Herbicide (paraquat, diquat, glyphosate)',
-      amountKg: nv(4.25),
+      amountKilograms: nv(4.25),
     },
     {
       type: 'Other herbicide',
-      amountKg: nv(10.8),
+      amountKilograms: nv(10.8),
     },
   ],
   refrigerants: [],
@@ -140,7 +140,7 @@ export const grainSorghum: GrainsCropInput = {
 export const grainLegume: GrainsCropInput = {
   crop: {
     type: 'Pulses',
-    totalYieldKg: nv(2000),
+    totalYieldKilograms: nv(2000),
     fractionOfAnnualCropBurnt: nv(0),
     residues: {
       calculationMethod: '1',
@@ -153,7 +153,7 @@ export const grainLegume: GrainsCropInput = {
   lime: {
     applications: [
       {
-        massAppliedKg: nv(360),
+        massAppliedKilograms: nv(360),
         limestoneFraction: nv(0.5),
         type: 'Limestone',
       },
@@ -162,11 +162,11 @@ export const grainLegume: GrainsCropInput = {
   chemicals: [
     {
       type: 'Herbicide (paraquat, diquat, glyphosate)',
-      amountKg: nv(2.12),
+      amountKilograms: nv(2.12),
     },
     {
       type: 'Other herbicide',
-      amountKg: nv(3.6),
+      amountKilograms: nv(3.6),
     },
   ],
   refrigerants: [],
@@ -194,7 +194,7 @@ export const grainLegume: GrainsCropInput = {
 export const grainGrass: GrainsCropInput = {
   crop: {
     type: 'Other Cereals',
-    totalYieldKg: nv(6000),
+    totalYieldKilograms: nv(6000),
     fractionOfAnnualCropBurnt: nv(0),
     residues: {
       calculationMethod: '1',
@@ -207,7 +207,7 @@ export const grainGrass: GrainsCropInput = {
   lime: {
     applications: [
       {
-        massAppliedKg: nv(360),
+        massAppliedKilograms: nv(360),
         limestoneFraction: nv(0.5),
         type: 'Limestone',
       },
@@ -216,11 +216,11 @@ export const grainGrass: GrainsCropInput = {
   chemicals: [
     {
       type: 'Herbicide (paraquat, diquat, glyphosate)',
-      amountKg: nv(4.25),
+      amountKilograms: nv(4.25),
     },
     {
       type: 'Other herbicide',
-      amountKg: nv(18),
+      amountKilograms: nv(18),
     },
   ],
   refrigerants: [],
@@ -247,7 +247,7 @@ export const grainGrass: GrainsCropInput = {
 export const grainTriticale: GrainsCropInput = {
   crop: {
     type: 'Triticale',
-    totalYieldKg: nv(4000),
+    totalYieldKilograms: nv(4000),
     fractionOfAnnualCropBurnt: nv(0),
     residues: {
       calculationMethod: '1',
@@ -260,7 +260,7 @@ export const grainTriticale: GrainsCropInput = {
   lime: {
     applications: [
       {
-        massAppliedKg: nv(360),
+        massAppliedKilograms: nv(360),
         limestoneFraction: nv(0.5),
         type: 'Limestone',
       },
@@ -269,11 +269,11 @@ export const grainTriticale: GrainsCropInput = {
   chemicals: [
     {
       type: 'Herbicide (paraquat, diquat, glyphosate)',
-      amountKg: nv(8.5),
+      amountKilograms: nv(8.5),
     },
     {
       type: 'Other herbicide',
-      amountKg: nv(5.4),
+      amountKilograms: nv(5.4),
     },
   ],
   refrigerants: [],
@@ -301,7 +301,7 @@ export const grainsTestData: GrainsInput = {
   crops: [grainWheat, grainSorghum, grainLegume, grainGrass, grainTriticale],
   electricity: {
     method: 'location',
-    electricityPurchasedKWh: nv(4000),
+    electricityPurchasedKilowattHours: nv(4000),
     region: 'NSW',
   },
 };
@@ -309,14 +309,14 @@ export const grainsTestData: GrainsInput = {
 export const grainsTestData102: GrainsInput = {
   electricity: {
     method: 'location',
-    electricityPurchasedKWh: nv(2650),
+    electricityPurchasedKilowattHours: nv(2650),
     region: 'NSW',
   },
   crops: [
     {
       crop: {
         type: 'Other Cereals',
-        totalYieldKg: nv(2500),
+        totalYieldKilograms: nv(2500),
         fractionOfAnnualCropBurnt: nv(0.1),
         residues: {
           calculationMethod: '1',
@@ -329,7 +329,7 @@ export const grainsTestData102: GrainsInput = {
       lime: {
         applications: [
           {
-            massAppliedKg: nv(360),
+            massAppliedKilograms: nv(360),
             limestoneFraction: nv(0.5),
             type: 'Limestone',
           },
@@ -338,17 +338,17 @@ export const grainsTestData102: GrainsInput = {
       chemicals: [
         {
           type: 'Herbicide (paraquat, diquat, glyphosate)',
-          amountKg: nv(54.504),
+          amountKilograms: nv(54.504),
         },
         {
           type: 'Other herbicide',
-          amountKg: nv(100),
+          amountKilograms: nv(100),
         },
       ],
       refrigerants: [
         {
           refrigerant: 'HCFC-141b (R-141b)',
-          chargeSize: nv(100),
+          chargeSizeKilograms: nv(100),
           refrigerationType: 'Domestic refrigerators',
         },
       ],
@@ -358,8 +358,8 @@ export const grainsTestData102: GrainsInput = {
           applications: [
             {
               fertiliserType: 'Urea',
-              massAppliedKg: nv(100),
-              massPurchasedKg: nv(100),
+              massAppliedKilograms: nv(100),
+              massPurchasedKilograms: nv(100),
               calculationMethodScope3: '1',
             },
           ],

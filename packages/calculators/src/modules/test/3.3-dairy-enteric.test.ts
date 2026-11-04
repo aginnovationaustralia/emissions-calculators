@@ -61,10 +61,10 @@ const getCalculatorInput = (
       : undefined;
     return {
       head: nv(head),
-      method2Liveweight: nvo(method2Liveweight),
-      method2LiveweightGain: nvo(method2LiveweightGain),
-      method2DurationDays: nvo(method2DurationDays),
-      method2DryMatterDigestibility: nvo(method2DryMatterDigestibility),
+      liveweightKilograms: nvo(method2Liveweight),
+      dailyLiveweightGainKilograms: nvo(method2LiveweightGain),
+      durationDays: nvo(method2DurationDays),
+      fractionDryMatterDigestibility: nvo(method2DryMatterDigestibility),
     };
   };
 
@@ -75,9 +75,9 @@ const getCalculatorInput = (
 
     if (milkSolids) {
       return {
-        kgSolidsPerHeadPerDay: nv(Number(milkSolids)),
-        fatContent: nvo(fatContent ? Number(fatContent) : undefined),
-        proteinContent: nvo(
+        dailySolidsProducedKilograms: nv(Number(milkSolids)),
+        percentFatContent: nvo(fatContent ? Number(fatContent) : undefined),
+        percentProteinContent: nvo(
           proteinContent ? Number(proteinContent) : undefined,
         ),
       };
@@ -86,7 +86,7 @@ const getCalculatorInput = (
     const milkProduction = cell(columnMilkProduction);
 
     return {
-      litresPerHeadPerDay: nv(Number(milkProduction)),
+      dailyVolumeProducedLitres: nv(Number(milkProduction)),
     };
   };
 

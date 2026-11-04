@@ -37,7 +37,7 @@ const getCalculatorInputByUnits = (
       purchasedPackaging: [
         {
           amountUnits,
-          customEmissionsFactor: nv(Number(cell('D'))),
+          emissionFactorKilograms: nv(Number(cell('D'))),
         },
       ],
     });
@@ -72,15 +72,15 @@ const getCalculatorInputByMass = (
     return PurchasedPackagingsInputSchema.parse({
       purchasedPackaging: [
         {
-          amountMass,
-          customEmissionsFactor: nv(Number(cell('D'))),
+          amountKilograms: amountMass,
+          emissionFactor: nv(Number(cell('D'))),
         },
       ],
     });
   return PurchasedPackagingsInputSchema.parse({
     purchasedPackaging: [
       {
-        amountMass,
+        amountKilograms: amountMass,
         type: checkPurchasedPackagingByMassType(cell('A')),
       },
     ],

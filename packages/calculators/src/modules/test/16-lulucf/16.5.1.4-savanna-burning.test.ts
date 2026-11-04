@@ -31,14 +31,14 @@ const getCalculatorInput = (
   }
 
   const burning: BurningInput = {
-    emissionsFromBurningLowRainfallZone: nv(
+    emissionsFromBurningLowRainfallZoneTonnes: nv(
       Number(cell(columnEmissionsLowRainfallZone)),
     ),
-    emissionsFromBurningHighRainfallZone: nv(
+    emissionsFromBurningHighRainfallZoneTonnes: nv(
       Number(cell(columnEmissionsHighRainfallZone)),
     ),
-    carbonStockChangeLowRainfallZone: nv(0),
-    carbonStockChangeHighRainfallZone: nv(0),
+    carbonStockChangeLowRainfallZoneTonnes: nv(0),
+    carbonStockChangeHighRainfallZoneTonnes: nv(0),
   };
 
   const lulucfInput: LULUCFParentInput = {

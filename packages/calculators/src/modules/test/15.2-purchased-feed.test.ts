@@ -37,8 +37,8 @@ const getCalculatorInput = (
     return HasPurchasedFeedInputSchema.parse({
       purchasedFeed: [
         {
-          amount,
-          customEmissionsFactor: nv(Number(cell('D'))),
+          amountTonnes: amount,
+          emissionFactor: nv(Number(cell('D'))),
         },
       ],
     });
@@ -47,10 +47,10 @@ const getCalculatorInput = (
     region === undefined
       ? {
           type: checkPurchasedFeedTypeInRegion(cell('A')),
-          amount,
+          amountTonnes: amount,
         }
       : {
-          amount,
+          amountTonnes: amount,
           type: checkPurchasedFeedTypeInRegion(cell('A'), region),
           region,
         };

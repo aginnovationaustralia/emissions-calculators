@@ -38,7 +38,7 @@ const getCalculatorInput = (
   if (method === '1') {
     const input: WastewaterTreatmentMethod1Input = {
       facilityType,
-      wastewaterVolume,
+      wastewaterVolumeCubicMetres: wastewaterVolume,
       fractionRemoved: nv(Number(cell('I'))),
       commodityType: checkWastewaterCommodityType(cell('B')),
     };
@@ -48,14 +48,14 @@ const getCalculatorInput = (
 
   const input: WastewaterTreatmentMethod2Input = {
     facilityType,
-    wastewaterVolume,
-    inletCOD: nv(Number(cell('D'))),
+    wastewaterVolumeCubicMetres: wastewaterVolume,
+    inletCODKilogramsPerCubicMetre: nv(Number(cell('D'))),
     fractionSludge: nv(Number(cell('E'))),
-    outletCOD: nv(Number(cell('F'))),
+    outletCODKilogramsPerCubicMetre: nv(Number(cell('F'))),
     fractionRemoved: nv(Number(cell('I'))),
-    methaneCaptured: nv(Number(cell('M'))),
-    methaneFlared: nv(Number(cell('N'))),
-    methaneOut: nv(Number(cell('O'))),
+    methaneCapturedCubicMetres: nv(Number(cell('M'))),
+    methaneFlaredCubicMetres: nv(Number(cell('N'))),
+    methaneOutCubicMetres: nv(Number(cell('O'))),
   };
 
   return WastewaterTreatmentInputSchema.parse(input);

@@ -5,7 +5,7 @@ import { mass } from '@/tools/units';
 import { object } from '@/types/schemas';
 
 export const BasePurchasedMineralSupplementInputSchema = object({
-  amount: numberInput(
+  amountTonnes: numberInput(
     (val) => mass('Purchased Mineral Supplement', tonnesToKg(val)),
     {
       name: 'feed quantity',

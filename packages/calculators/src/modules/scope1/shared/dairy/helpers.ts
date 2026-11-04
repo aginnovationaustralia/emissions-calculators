@@ -31,7 +31,7 @@ export const getLiveweight = (
       breed,
       dairyClass.className,
     ),
-    dairyClass.method2Liveweight,
+    dairyClass.liveweightKilograms,
   ).named(`Wj=${dairyClass.number}`);
 };
 
@@ -49,7 +49,7 @@ export const getLiveweightGain = (
       dairyClass.className,
       'liveweightGain',
     ),
-    dairyClass.method2LiveweightGain,
+    dairyClass.dailyLiveweightGainKilograms,
   ).named(`LWGj=${dairyClass.number}`);
 
 /**
@@ -59,7 +59,7 @@ export const getLengthOfStay = (
   dairyClass: DairyClassInputTransformed,
   constants: HasConstants<'DAIRY'>,
 ) => {
-  if (dairyClass.method2DurationDays) return dairyClass.method2DurationDays;
+  if (dairyClass.durationDays) return dairyClass.durationDays;
   if (isClassMature(dairyClass)) {
     return selectConstant(
       constants.DAIRY,
@@ -90,7 +90,7 @@ export const getDryMatterDigestibility = (
       'DIETARY_CONSTANTS',
       'dryMatterDigestibility',
     ),
-    dairyClass.method2DryMatterDigestibility,
+    dairyClass.fractionDryMatterDigestibility,
   ).named(`DMDj=${dairyClass.number}`);
 };
 
@@ -103,7 +103,7 @@ export const getCrudeProtein = (
 ) => {
   return captureMethod1Or2Value(
     selectConstant(constants.DAIRY, 'DIETARY_CONSTANTS', 'crudeProtein'),
-    dairyClass.method2CrudeProtein,
+    dairyClass.fractionCrudeProteinContent,
   ).named(`CPj=${dairyClass.number}`);
 };
 
@@ -168,9 +168,10 @@ export const getProportionOfTimeSpentInLocationForHerd = (
 ): Record<DairyTimeInLocations, Container<RealNumber>> => {
   if (herdInput.timeSpentInLocationsInputMethod === '2')
     return {
-      pasture: herdInput.method2TimeSpentInLocations.timeSpentOnPasture,
-      feedpad: herdInput.method2TimeSpentInLocations.timeSpentOnFeedpad,
-      milkingShed: herdInput.method2TimeSpentInLocations.timeSpentOnMilkingShed,
+      pasture: herdInput.method2TimeSpentInLocations.fractionTimeSpentOnPasture,
+      feedpad: herdInput.method2TimeSpentInLocations.fractionTimeSpentOnFeedpad,
+      milkingShed:
+        herdInput.method2TimeSpentInLocations.fractionTimeSpentOnMilkingShed,
     };
 
   return {
@@ -201,7 +202,7 @@ export const totalLiveweightFromSale = (
   constants: HasConstants<'DAIRY'>,
 ) => {
   const liveweight =
-    sale.averageLiveweight ??
+    sale.averageLiveweightKilograms ??
     selectConstant(constants.DAIRY, 'LIVEWEIGHTS_BY_BREED', breed, sale.class);
 
   return sale.numberSold.multiply(liveweight);

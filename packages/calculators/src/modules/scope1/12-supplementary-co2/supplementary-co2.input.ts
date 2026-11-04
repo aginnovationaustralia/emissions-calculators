@@ -5,7 +5,7 @@ import { object } from '@/types/schemas';
 import { z } from 'zod';
 
 export const HasSupplementaryCO2InputSchema = object({
-  supplementaryCO2Kg: numberInput(
+  supplementaryCO2Kilograms: numberInput(
     (val) => mass('CO2', val),
     {
       name: 'Q',

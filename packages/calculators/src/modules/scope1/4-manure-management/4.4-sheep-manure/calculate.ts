@@ -192,7 +192,10 @@ function calculateNitrogenRetentionForSheep(periodProps: SheepPeriodProps) {
   if (!classInput) {
     return zeroMassPerHeadPerDayN.named(`NRjk=${className},${periodName}`);
   }
-  const { greasyWoolProduction, cleanWoolYieldProportion } = classInput;
+  const {
+    greasyWoolProductionKilograms: greasyWoolProduction,
+    fractionOfYieldCleanWool: cleanWoolYieldProportion,
+  } = classInput;
   const { state } = flock;
 
   const LEjk = calculateProportionLactatingLEjk(periodProps);
@@ -305,7 +308,7 @@ function calculateMilkIntakeMCjk(
   if (!isSheepClassPeriodInputWithProportionLambsBorn(periodInput)) {
     return zeroMassPerHeadPerDayMilk.named(`MCjk=${className},${periodName}`);
   }
-  const { proportionOfLambsBorn } = periodInput;
+  const { fractionLambsBorn: proportionOfLambsBorn } = periodInput;
 
   const milkIntakeForLambs = selectConstant(constants.SHEEP, 'MILK_PRODUCTION');
 
@@ -324,7 +327,8 @@ function calculateCrudeProteinIntakeCPIjk(periodProps: SheepPeriodProps) {
     periodProps;
   const { constants } = context;
   const { state } = flock;
-  const { method2CrudeProteinContent } = periodInput;
+  const { fractionCrudeProteinContent: method2CrudeProteinContent } =
+    periodInput;
   const Ijk = calculateDailyFeedIntakeIjk(periodProps);
 
   const CPjk = captureMethod1Or2Value(
@@ -359,7 +363,7 @@ function calculateTotalNitrogenExcretedInPeriod(periodProps: SheepPeriodProps) {
     periodProps;
   const { constants } = context;
 
-  const { head, method2AverageDurationDays } = periodInput;
+  const { head, durationDays: method2AverageDurationDays } = periodInput;
 
   const Njk = head.named(`Njk=${className},${periodName}`);
 

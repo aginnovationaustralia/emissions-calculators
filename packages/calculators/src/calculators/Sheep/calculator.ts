@@ -68,7 +68,10 @@ function calculateCleanWoolProducedInPeriod(
   if (!classInput) {
     return zeroMassCleanWool;
   }
-  const { greasyWoolProduction, cleanWoolYieldProportion } = classInput;
+  const {
+    greasyWoolProductionKilograms: greasyWoolProduction,
+    fractionOfYieldCleanWool: cleanWoolYieldProportion,
+  } = classInput;
 
   const cleanWoolPerHeadPerDay = greasyWoolProduction
     .multiply(cleanWoolYieldProportion)
@@ -146,7 +149,7 @@ export function getSingleIntensities(
   input: Pick<SheepInputTransformed, 'isFebruaryInLeapYear'>,
 ): SheepIntermediateIntensitiesOutput {
   const { constants } = context;
-  const liveweightProduced = flock.liveweightSoldKg;
+  const liveweightProduced = flock.liveweightSoldKilograms;
   const cleanWoolProduced = getCleanWoolProducedForFlock(
     flock,
     context,
@@ -182,7 +185,7 @@ export function getTotalIntensities(
 ): SheepIntensitiesOutput {
   const { constants } = context;
   const liveweightProduced = sum(
-    flocks.map((flock) => flock.liveweightSoldKg),
+    flocks.map((flock) => flock.liveweightSoldKilograms),
     zeroMassLiveweight,
   );
   const cleanWoolProduced = sum(

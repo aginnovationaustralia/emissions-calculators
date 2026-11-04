@@ -20,8 +20,8 @@ export const calculate_16_5_1_2_SavannaCarbonChange = (
   }
 
   const carbonStockChangeRecords = burning.map((burning) => {
-    return burning.carbonStockChangeLowRainfallZone
-      .plus(burning.carbonStockChangeHighRainfallZone)
+    return burning.carbonStockChangeLowRainfallZoneTonnes
+      .plus(burning.carbonStockChangeHighRainfallZoneTonnes)
       .reference('16.5.1.2 (2)');
   });
 
@@ -45,8 +45,8 @@ export const calculate_16_5_1_4_SavannaBiomassBurning = (
   }
 
   const emissionsRecords = burning.map((burning) => {
-    return burning.emissionsFromBurningLowRainfallZone
-      .plus(burning.emissionsFromBurningHighRainfallZone)
+    return burning.emissionsFromBurningLowRainfallZoneTonnes
+      .plus(burning.emissionsFromBurningHighRainfallZoneTonnes)
       .reference('16.5.1.4 (1)');
   });
   return sum(emissionsRecords, zeroCO2e).named('ESFM,y');

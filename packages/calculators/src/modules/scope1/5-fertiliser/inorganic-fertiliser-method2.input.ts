@@ -20,10 +20,10 @@ export const otherFertilisers = 'Other Fertilisers' as const;
 
 const InorganicFertiliserInputScope3Method2BaseSchema =
   InorganicFertiliserInputBaseSchema.safeExtend({
-    customScope3EmissionFactor: numberInput(
+    scope3EmissionFactor: numberInput(
       (val) => massPerMass('CO2e', 'Inorganic Fertiliser', val),
       {
-        name: 'customScope3EmissionFactor',
+        name: 'scope3EmissionFactor',
         method: '2',
         scope: '3',
         description: 'Custom scope 3 emission factor for this fertiliser',
@@ -49,10 +49,10 @@ export const InorganicFertiliserInputScope3Method2KnownFertiliserSchema =
         PURCH_FERT_15_4,
       ],
     }),
-    customNitrogenFraction: numberInputOptional(
+    fractionNitrogen: numberInputOptional(
       (val) => massPerMass('N', 'Inorganic Fertiliser', val),
       {
-        name: 'customNitrogenFraction',
+        name: 'fractionNitrogen',
         method: '2',
         description: 'Custom nitrogen fraction for the fertiliser',
         modules: [FERT_INORGANIC_5_1, LEACH_RUNOFF_5_5],
@@ -73,20 +73,20 @@ export const InorganicFertiliserInputScope3Method2OtherFertiliserSchema =
         PURCH_FERT_15_4,
       ],
     }),
-    customNitrogenFraction: numberInput(
+    fractionNitrogen: numberInput(
       (val) => massPerMass('N', 'Inorganic Fertiliser', val),
       {
-        name: 'customNitrogenFraction',
+        name: 'fractionNitrogen',
         method: '2',
         description: 'Custom nitrogen fraction for the fertiliser',
         modules: [FERT_INORGANIC_5_1, LEACH_RUNOFF_5_5],
       },
       isProportion,
     ),
-    customUreaFraction: numberInput(
+    fractionUrea: numberInput(
       (val) => massPerMass('Urea', 'Inorganic Fertiliser', val),
       {
-        name: 'customUreaFraction',
+        name: 'fractionUrea',
         method: '2',
         description: 'Custom urea fraction for the fertiliser',
         modules: [FERT_INORGANIC_5_1],

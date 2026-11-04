@@ -29,11 +29,11 @@ describe('15.9 Other Purchased Goods and Services', () => {
       otherPurchasedGoodsAndServices: [
         {
           quantity: nv(1),
-          emissionsFactor: nv(2),
+          emissionFactor: nv(2),
         },
         {
           quantity: nv(100),
-          emissionsFactor: nv(0.2),
+          emissionFactor: nv(0.2),
         },
       ],
     };

@@ -21,10 +21,10 @@ import { RiceCultivationOrganicAmendmentInputSchema } from './organic-amendment.
 
 export const RiceCultivationInputSchema =
   BaseBurnableCropResidueInputSchema.safeExtend({
-    areaSown: numberInput(
+    areaSownHectares: numberInput(
       (val) => area(hectaresToSquareMetres(val)),
       {
-        name: 'areaSown',
+        name: 'areaSownHectares',
         method: '1',
         description:
           'Annual area of rice cultivation under water regime during the growing season under the specified water regime and organic amendment conditions.',

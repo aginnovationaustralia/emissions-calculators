@@ -21,7 +21,7 @@ export const RiceCultivationOrganicAmendmentInputSchema = object({
     .meta({
       description: 'The type of organic amendment applied.',
     }),
-  rateOfApplication: numberInput(
+  rateOfApplicationTonnesPerHectare: numberInput(
     (val) =>
       massPerArea(
         'Organic Amendment',

@@ -45,7 +45,7 @@ function getIntensities(
   fisheries: AquacultureFisheryInputTransformed[],
 ): AquacultureIntensitiesOutput {
   const fishHarvested = sum(
-    fisheries.map(({ fishery }) => fishery.amountProduced),
+    fisheries.map(({ fishery }) => fishery.amountProducedTonnes),
     zeroMassFish,
   );
   return {

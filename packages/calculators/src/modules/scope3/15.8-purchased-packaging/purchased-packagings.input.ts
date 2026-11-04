@@ -33,9 +33,12 @@ export const purchasedPackagingIsMethod1 = (
 export const purchasedPackagingIsMethod2 = (
   packaging: PurchasedPackagingInputTransformed,
 ): packaging is PurchasedPackagingMethod2InputTransformed => {
+  const method2Packaging = packaging as Partial<
+    Record<'emissionFactor' | 'emissionFactorKilograms', unknown>
+  >;
   return (
-    (packaging as PurchasedPackagingMethod2InputTransformed)
-      .customEmissionsFactor !== undefined
+    method2Packaging.emissionFactor !== undefined ||
+    method2Packaging.emissionFactorKilograms !== undefined
   );
 };
 

@@ -10,10 +10,10 @@ import {
 const barleyGrain = {
   type: 'Barley grain',
   region: 'Australia',
-  amount: nv(1),
+  amountTonnes: nv(1),
 };
-const meatMeal = { type: 'Meat Meal', amount: nv(1) };
-const customEmissionsFactor = { amount: nv(1), customEmissionsFactor: nv(0.5) };
+const meatMeal = { type: 'Meat Meal', amountTonnes: nv(1) };
+const customEmissionsFactor = { amountTonnes: nv(1), emissionFactor: nv(0.5) };
 
 describe.each([
   ['Wild catch fisheries', WildCatchFisheryInputSchema],
@@ -29,7 +29,7 @@ describe.each([
 
   test.each(PurchasedFeedAquacultureTypes)('accepts %s', (type) => {
     expect(
-      purchasedFeedSchema.safeParse([{ type, amount: nv(1) }]).success,
+      purchasedFeedSchema.safeParse([{ type, amountTonnes: nv(1) }]).success,
     ).toBe(true);
   });
 
@@ -55,7 +55,7 @@ describe('livestock purchased feed', () => {
         purchasedFeed: [
           barleyGrain,
           meatMeal,
-          { type: 'Squid', amount: nv(1) },
+          { type: 'Squid', amountTonnes: nv(1) },
           customEmissionsFactor,
         ],
       }).success,

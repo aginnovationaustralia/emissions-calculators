@@ -49,8 +49,8 @@ export function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
   flock: PoultryFlockInputTransformed,
 ): PoultryIntermediateIntensitiesOutput {
-  const eggsProduced = flock.eggsSoldKg;
-  const liveweightProduced = flock.liveweightSoldKg;
+  const eggsProduced = flock.eggsSoldKilograms;
+  const liveweightProduced = flock.liveweightSoldKilograms;
 
   const { meatAllocation, eggAllocation } = getMeatEggAllocation(
     liveweightProduced,
@@ -77,11 +77,11 @@ export function getTotalIntensities(
   flocks: PoultryFlockInputTransformed[],
 ): PoultryIntensitiesOutput {
   const eggsProduced = sum(
-    flocks.map((flock) => flock.eggsSoldKg),
+    flocks.map((flock) => flock.eggsSoldKilograms),
     zeroMassEggs,
   );
   const liveweightProduced = sum(
-    flocks.map((flock) => flock.liveweightSoldKg),
+    flocks.map((flock) => flock.liveweightSoldKilograms),
     zeroMassLiveweight,
   );
 

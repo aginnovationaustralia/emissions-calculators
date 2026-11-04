@@ -33,11 +33,11 @@ const getCalculatorInput = (
   const application =
     type === 'Gypsum'
       ? {
-          massAppliedKg,
+          massAppliedKilograms: massAppliedKg,
           type,
         }
       : {
-          massAppliedKg,
+          massAppliedKilograms: massAppliedKg,
           limestoneFraction: nv(limestoneFraction),
           type,
         };
@@ -49,7 +49,7 @@ const getCalculatorInput = (
           ...application,
           ...(method === '2' && customEmissionsFactor
             ? {
-                customScope3EmissionsFactor: nvo(Number(customEmissionsFactor)),
+                scope3EmissionFactor: nvo(Number(customEmissionsFactor)),
               }
             : {}),
         },

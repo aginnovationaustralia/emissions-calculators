@@ -10,7 +10,7 @@ import { z } from 'zod';
 
 export const MarketBasedElectricityInputsSchema = object({
   method: z.literal('market'),
-  electricityPurchasedKWh: numberInput(
+  electricityPurchasedKilowattHours: numberInput(
     (val) => electricity(val),
     {
       name: 'Qelec',
@@ -20,7 +20,7 @@ export const MarketBasedElectricityInputsSchema = object({
     },
     (s) => s.min(0),
   ),
-  recsSurrendered: numberInput(
+  recsSurrenderedMegawattHours: numberInput(
     (val) => electricity(megawattHoursToKilowattHours(val)),
     {
       name: 'RECsurrendered',
@@ -30,7 +30,7 @@ export const MarketBasedElectricityInputsSchema = object({
     },
     (s) => s.min(0),
   ),
-  recsOnsite: numberInput(
+  recsOnsiteMegawattHours: numberInput(
     (val) => electricity(megawattHoursToKilowattHours(val)),
     {
       name: 'REConsite',

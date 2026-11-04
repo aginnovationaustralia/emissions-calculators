@@ -154,8 +154,8 @@ const getMethod2Fields = (cellFn: (col: string) => string | undefined) => {
   const liveweightMethod2 = nv(Number(cellFn('G')));
   const emissionFactorMethod2 = nv(Number(cellFn('I')));
   return {
-    liveweightMethod2,
-    emissionFactorMethod2,
+    liveweightKilograms: liveweightMethod2,
+    emissionFactor: emissionFactorMethod2,
   };
 };
 

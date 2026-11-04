@@ -102,32 +102,32 @@ export function createSheepManureSheetReaders<
     );
     return {
       head: nv(Number(cell(col.columnHead, offsetRows))),
-      method2Liveweight: nvo(
+      liveweightKilograms: nvo(
         method === '2' && customLiveweight
           ? Number(customLiveweight)
           : undefined,
       ),
-      method2DryMatterAvailability: nvo(
+      dryMatterAvailabilityTonnesPerHectare: nvo(
         method === '2' && customDryMatterAvailability
           ? Number(customDryMatterAvailability)
           : undefined,
       ),
-      method2DryMatterDigestibility: nvo(
+      fractionDryMatterDigestibility: nvo(
         method === '2' && customDryMatterDigestibility
           ? Number(customDryMatterDigestibility)
           : undefined,
       ),
-      method2AverageDurationDays: nvo(
+      durationDays: nvo(
         method === '2' && customAverageDurationDays
           ? Number(customAverageDurationDays)
           : undefined,
       ),
-      method2CrudeProteinContent: nvo(
+      fractionCrudeProteinContent: nvo(
         method === '2' && customCrudeProteinContent
           ? Number(customCrudeProteinContent)
           : undefined,
       ),
-      method2LiveweightGain: nvo(
+      dailyLiveweightGainKilograms: nvo(
         method === '2' && customLiveweightGain
           ? Number(customLiveweightGain)
           : undefined,
@@ -136,10 +136,10 @@ export function createSheepManureSheetReaders<
   };
 
   const readSheepClassBase = (offsetRows: number) => ({
-    greasyWoolProduction: nv(
+    greasyWoolProductionKilograms: nv(
       Number(cell(col.columnGreasyWoolProduction, offsetRows) ?? 0),
     ),
-    cleanWoolYieldProportion: nv(
+    fractionOfYieldCleanWool: nv(
       Number(cell(col.columnCleanWoolYieldProportion, offsetRows) ?? 0),
     ),
   });
@@ -187,7 +187,7 @@ export function createSheepManureSheetReaders<
       ...readSheepClassBase(offsetRows),
       ...readPeriods(periodKeys, offsetRows, (rowOffset) => ({
         ...readSheepClassPeriod(rowOffset),
-        proportionOfLambsBorn: nv(
+        fractionLambsBorn: nv(
           Number(cell(col.columnProportionOfLambsBornPL, rowOffset)),
         ),
       })),

@@ -20,7 +20,7 @@ const beefBaseFields = {
 };
 
 // Emission factor: method 1 (`category`, looked up against constants) xor
-// method 2 (`emissionFactorMethod2`, supplied directly).
+// method 2 (`emissionFactor`, supplied directly).
 const beefEmissionFactorMethod1Fields = {
   category: enumInput(BeefPurchaseCategories, {
     name: 'Purchase category',
@@ -33,7 +33,7 @@ const beefEmissionFactorMethod2Fields =
   PurchasedLivestockEmissionFactorMethod2Schema.shape;
 
 // Liveweight: method 1 (`region` + `class` + `season`, looked up against
-// constants) xor method 2 (`liveweightMethod2`, supplied directly).
+// constants) xor method 2 (`liveweightKilograms`, supplied directly).
 const beefLiveweightMethod1Fields = {
   region: enumInput(ExtendedRegions, {
     name: 'Origin of purchase',

@@ -116,10 +116,9 @@ export const getDurationDays = ({
   periodName,
   className,
 }: SheepPeriodProps) =>
-  captureMethod1Or2Value(
-    periodDuration,
-    periodInput.method2AverageDurationDays,
-  ).named(`Dj=${periodName}k=${className}`);
+  captureMethod1Or2Value(periodDuration, periodInput.durationDays).named(
+    `Dj=${periodName}k=${className}`,
+  );
 
 /**
  * Wrapper for getting average liveweight *Wjk* for a sheep class within a given period.
@@ -141,7 +140,7 @@ export const getLiveweight = ({
       seasonName,
       'liveweight',
     ),
-    periodInput.method2Liveweight,
+    periodInput.liveweightKilograms,
   ).named(`Wj=${periodName},k=${className}`);
 
 /**
@@ -164,7 +163,7 @@ export const getLiveweightGain = ({
       seasonName,
       'liveweightGain',
     ),
-    periodInput.method2LiveweightGain,
+    periodInput.dailyLiveweightGainKilograms,
   ).named(`Wj=${periodName},k=${className}`);
 
 /**
@@ -188,7 +187,7 @@ export const getDryMatterAvailability = ({
       seasonName,
       'dryMatterAvailability',
     ),
-    periodInput.method2DryMatterAvailability,
+    periodInput.dryMatterAvailabilityTonnesPerHectare,
   ).named(`DMAj=${periodName},k=${className}`);
 
 /**
@@ -212,5 +211,5 @@ export const getDryMatterDigestibility = ({
       seasonName,
       'dryMatterDigestibility',
     ),
-    periodInput.method2DryMatterDigestibility,
+    periodInput.fractionDryMatterDigestibility,
   ).named(`DMDj=${periodName},k=${className}`);

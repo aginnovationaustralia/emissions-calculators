@@ -121,7 +121,7 @@ describe('5.4.1.3 Organic fertiliser atmospheric deposition N2O', () => {
             classes: {
               slaughterPigs: {
                 head: nv(100),
-                days: nv(365),
+                durationDays: nv(365),
                 manureAllocations: zeroPigsManureAllocation,
               },
             },
@@ -176,7 +176,7 @@ describe('5.4.1.3 Organic fertiliser atmospheric deposition N2O', () => {
               },
             },
             milkProduction: {
-              litresPerHeadPerDay: nv(20),
+              dailyVolumeProducedLitres: nv(20),
             },
             breed: 'Holstein-Friesian',
             manureAllocations: {
@@ -238,7 +238,7 @@ describe('5.4.1.3 Organic fertiliser atmospheric deposition N2O', () => {
             classes: {
               layers: {
                 head: nv(1000),
-                days: nv(365),
+                durationDays: nv(365),
                 manureAllocations: {
                   manureWithLitter: {
                     manureAllocated: nv(0),

@@ -12,10 +12,10 @@ import { z } from 'zod';
 
 export const OrganicFertiliserUntracedInputSchema = object({
   origin: z.literal('Untraced'),
-  massAppliedKg: numberInput(
+  massAppliedKilograms: numberInput(
     (val) => mass('Organic Fertiliser', val),
     {
-      name: 'massAppliedKg',
+      name: 'massAppliedKilograms',
       method: '1',
       description: 'Mass of organic fertiliser applied',
       modules: [FERT_ORGANIC_5_2],
@@ -27,10 +27,10 @@ export const OrganicFertiliserUntracedInputSchema = object({
     description: 'Type of organic fertiliser',
     modules: [FERT_ORGANIC_5_2],
   }),
-  customNitrogenFraction: numberInputOptional(
+  fractionNitrogen: numberInputOptional(
     (val) => massPerMass('N', 'Organic Fertiliser', val),
     {
-      name: 'customNitrogenFraction',
+      name: 'fractionNitrogen',
       method: '1', // NOTE: This is definitely method 1, even though it feels like a method 2 input
       description: 'Custom nitrogen fraction for the organic fertiliser',
       modules: [FERT_ORGANIC_5_2],

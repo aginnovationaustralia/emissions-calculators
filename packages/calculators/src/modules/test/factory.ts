@@ -53,7 +53,7 @@ function emptyFuel(): HasFuelInput['fuel'] {
 function defaultPasture(areaManaged = 0): HasPastureResidueInput['pasture'] {
   return {
     type: 'Annual grass',
-    areaManaged: nv(areaManaged),
+    areaManagedHectares: nv(areaManaged),
     fractionOfAnnualCropBurnt: nv(0),
     residues: {
       calculationMethod: '1',
@@ -65,7 +65,7 @@ function defaultLime(): HasLimeInput['lime'] {
   return {
     applications: [
       {
-        massAppliedKg: nv(0),
+        massAppliedKilograms: nv(0),
         limestoneFraction: nv(0),
         type: 'Limestone',
       },
@@ -100,7 +100,7 @@ export function createBeefHerdInput(
     classes: {},
 
     electricityAllocation: nv(0),
-    liveweightSoldKg: nv(0),
+    liveweightSoldKilograms: nv(0),
     climateZone: 'Boreal dry',
     isInLeachingZone: false,
     grazingSystem: 'Irrigated crop',
@@ -135,7 +135,7 @@ export function createBeefInput(overrides: Partial<BeefInput> = {}): BeefInput {
     herds: [createBeefHerdInput()],
     electricity: {
       method: 'location',
-      electricityPurchasedKWh: nv(0),
+      electricityPurchasedKilowattHours: nv(0),
       region: 'NSW',
     },
     isFebruaryInLeapYear: false,
@@ -198,7 +198,7 @@ const defaultDairyHerdLivestockInput: DairyHerdLivestockInput = {
     solidsSeparatedPreTreatment: false,
   },
   milkProduction: {
-    litresPerHeadPerDay: nv(0),
+    dailyVolumeProducedLitres: nv(0),
   },
   breed: 'Ayrshire',
   classes: {},
@@ -336,7 +336,7 @@ export const createSheepFlockInput = (
     pasture: defaultPasture(100),
     lime: defaultLime(),
     fertiliser: defaultFertiliser(),
-    liveweightSoldKg: nv(0),
+    liveweightSoldKilograms: nv(0),
     grazingSystem: 'Irrigated pasture',
     state: 'NSW',
     isInLeachingZone: true,
@@ -357,7 +357,7 @@ export const createPigsInput = (
     purchasedFeed: [],
     waste: {},
     fuel: emptyFuel(),
-    liveweightSoldKg: nv(0),
+    liveweightSoldKilograms: nv(0),
     state: 'NSW',
     classes: {},
     isInLeachingZone: false,
@@ -381,8 +381,8 @@ export const createPoultryInput = (
     classes: {},
     isInLeachingZone: false,
     grazingSystem: 'Non-irrigated pasture',
-    liveweightSoldKg: nv(0),
-    eggsSoldKg: nv(0),
+    liveweightSoldKilograms: nv(0),
+    eggsSoldKilograms: nv(0),
     purchasedLivestock: [],
     ...partial,
   };
@@ -402,7 +402,7 @@ export const createFeedlotInput = (
     waste: {},
     fuel: emptyFuel(),
     groups: [],
-    liveweightSoldKg: nv(0),
+    liveweightSoldKilograms: nv(0),
     ...partial,
   };
 };
@@ -422,7 +422,7 @@ export const createOtherLivestockInput = (
     lime: defaultLime(),
     fertiliser: defaultFertiliser(),
     livestock: [],
-    liveweightSoldKg: nv(0),
+    liveweightSoldKilograms: nv(0),
     purchasedLivestock: [],
     state: 'NSW',
     grazingSystem: 'Irrigated crop',

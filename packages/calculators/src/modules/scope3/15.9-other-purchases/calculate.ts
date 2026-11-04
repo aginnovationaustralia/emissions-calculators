@@ -6,7 +6,7 @@ export function calculateOtherPurchasedGoodsAndServicesEmissions(
   input: OtherPurchasedGoodsAndServicesInputTransformed,
 ) {
   const emissions = (input.otherPurchasedGoodsAndServices ?? []).map((item) =>
-    item.quantity.multiply(item.emissionsFactor),
+    item.quantity.multiply(item.emissionFactor),
   );
   return sum(emissions, zeroCO2e);
 }

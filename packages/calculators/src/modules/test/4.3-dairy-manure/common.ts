@@ -35,11 +35,11 @@ const readDairyClass = (
 
   return {
     head: nv(head),
-    method2DurationDays: nvo(Number(cell('AA')) || undefined),
-    method2Liveweight: nvo(Number(cell('AB')) || undefined),
-    method2LiveweightGain: nvo(Number(cell('AC')) || undefined),
-    method2DryMatterDigestibility: nvo(Number(cell('AD')) || undefined),
-    method2CrudeProtein: nvo(Number(cell('AE')) || undefined),
+    durationDays: nvo(Number(cell('AA')) || undefined),
+    liveweightKilograms: nvo(Number(cell('AB')) || undefined),
+    dailyLiveweightGainKilograms: nvo(Number(cell('AC')) || undefined),
+    fractionDryMatterDigestibility: nvo(Number(cell('AD')) || undefined),
+    fractionCrudeProteinContent: nvo(Number(cell('AE')) || undefined),
   };
 };
 
@@ -85,11 +85,15 @@ const readDairyHerdShared = (
   const milkProdLUnchecked = cell('W');
   const milkProduction: DairyMilkProductionInput =
     milkProdLUnchecked !== undefined
-      ? { litresPerHeadPerDay: nv(Number(milkProdLUnchecked)) }
+      ? { dailyVolumeProducedLitres: nv(Number(milkProdLUnchecked)) }
       : {
-          kgSolidsPerHeadPerDay: nv(Number(cell('T'))),
-          fatContent: nvo(method === '2' ? Number(cell('U')) : undefined),
-          proteinContent: nvo(method === '2' ? Number(cell('V')) : undefined),
+          dailySolidsProducedKilograms: nv(Number(cell('T'))),
+          percentFatContent: nvo(
+            method === '2' ? Number(cell('U')) : undefined,
+          ),
+          percentProteinContent: nvo(
+            method === '2' ? Number(cell('V')) : undefined,
+          ),
         };
 
   const systemUnchecked = cell('F');
@@ -98,9 +102,9 @@ const readDairyHerdShared = (
       ? { system: checkDairySystem(systemUnchecked) }
       : {
           method2TimeSpentInLocations: {
-            timeSpentOnPasture: nv(Number(cell('G'))),
-            timeSpentOnMilkingShed: nv(Number(cell('H'))),
-            timeSpentOnFeedpad: nv(Number(cell('I'))),
+            fractionTimeSpentOnPasture: nv(Number(cell('G'))),
+            fractionTimeSpentOnMilkingShed: nv(Number(cell('H'))),
+            fractionTimeSpentOnFeedpad: nv(Number(cell('I'))),
           },
         };
 
