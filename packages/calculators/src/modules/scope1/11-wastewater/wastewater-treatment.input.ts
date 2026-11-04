@@ -131,7 +131,7 @@ const WastewaterTreatmentMethod2InputSchema =
       (val) => volume('CH4', tonnesToKg(val)),
       {
         name: 'Qout',
-        method: '1',
+        method: '2',
         description:
           'Quantity of methane in sludge biogas transferred out of the treatment facility',
         modules: [WASTEWATER_11_1],
