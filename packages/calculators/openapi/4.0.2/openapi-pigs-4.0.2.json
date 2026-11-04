@@ -55,7 +55,7 @@
                             "type": "string",
                             "const": "location"
                           },
-                          "electricityPurchasedKWh": {
+                          "electricityPurchasedKilowattHours": {
                             "description": "Electricity use (kilowatt-hours)",
                             "x-modules": [
                               "14.1",
@@ -88,7 +88,7 @@
                         },
                         "required": [
                           "method",
-                          "electricityPurchasedKWh",
+                          "electricityPurchasedKilowattHours",
                           "region"
                         ],
                         "additionalProperties": false,
@@ -101,7 +101,7 @@
                             "type": "string",
                             "const": "market"
                           },
-                          "electricityPurchasedKWh": {
+                          "electricityPurchasedKilowattHours": {
                             "description": "Electricity use (kilowatt-hours)",
                             "x-modules": [
                               "14.1",
@@ -123,7 +123,7 @@
                             "additionalProperties": false,
                             "x-units": "kilowatt-hours"
                           },
-                          "recsSurrendered": {
+                          "recsSurrenderedMegawattHours": {
                             "description": "Number of eligible Renewable Energy Certificates voluntarily surrendered in the reporting year (megawatt-hours)",
                             "x-modules": [
                               "14.1",
@@ -145,7 +145,7 @@
                             "additionalProperties": false,
                             "x-units": "megawatt-hours"
                           },
-                          "recsOnsite": {
+                          "recsOnsiteMegawattHours": {
                             "description": "Number eligible Renewable Energy Certificates that have been or will be issued for electricity produced on-site during the year and consumed by the entity (megawatt-hours)",
                             "x-modules": [
                               "14.1",
@@ -178,9 +178,9 @@
                         },
                         "required": [
                           "method",
-                          "electricityPurchasedKWh",
-                          "recsSurrendered",
-                          "recsOnsite",
+                          "electricityPurchasedKilowattHours",
+                          "recsSurrenderedMegawattHours",
+                          "recsOnsiteMegawattHours",
                           "region"
                         ],
                         "additionalProperties": false,
@@ -268,7 +268,7 @@
                                       "type": "string",
                                       "const": "1"
                                     },
-                                    "unmanagedBurial": {
+                                    "unmanagedBurialTonnes": {
                                       "description": "Amount of waste disposed of through burial (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -289,7 +289,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "unmanagedDeep": {
+                                    "unmanagedDeepTonnes": {
                                       "description": "Amount of solid waste disposed of in a deep open waste dump. (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -310,7 +310,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "unmanagedShallow": {
+                                    "unmanagedShallowTonnes": {
                                       "description": "Amount of solid waste disposed of in a shallow open waste dump. (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -331,7 +331,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "composting": {
+                                    "compostingTonnes": {
                                       "description": "Amount of waste treated through composting (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -352,7 +352,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "anaerobicDigestion": {
+                                    "anaerobicDigestionTonnes": {
                                       "description": "Amount of waste treated through anaerobic digestion (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -373,7 +373,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "incineration": {
+                                    "incinerationTonnes": {
                                       "description": "Amount of solid waste disposed of by incineration. (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -1437,7 +1437,7 @@
                                     ],
                                     "$ref": "#/components/schemas/PigPurchaseCategory"
                                   },
-                                  "liveweightMethod2": {
+                                  "liveweightKilograms": {
                                     "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                     "x-modules": [
                                       "15.1"
@@ -1463,7 +1463,7 @@
                                   "type",
                                   "headPurchased",
                                   "category",
-                                  "liveweightMethod2"
+                                  "liveweightKilograms"
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 1 emission factor, method 2 liveweight"
@@ -1496,7 +1496,7 @@
                                     "additionalProperties": false,
                                     "x-units": "head"
                                   },
-                                  "emissionFactorMethod2": {
+                                  "emissionFactor": {
                                     "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                     "x-modules": [
                                       "15.1"
@@ -1528,7 +1528,7 @@
                                 "required": [
                                   "type",
                                   "headPurchased",
-                                  "emissionFactorMethod2",
+                                  "emissionFactor",
                                   "weightClass"
                                 ],
                                 "additionalProperties": false,
@@ -1562,7 +1562,7 @@
                                     "additionalProperties": false,
                                     "x-units": "head"
                                   },
-                                  "emissionFactorMethod2": {
+                                  "emissionFactor": {
                                     "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                     "x-modules": [
                                       "15.1"
@@ -1583,7 +1583,7 @@
                                     "additionalProperties": false,
                                     "x-units": "kilograms CO2e per kilogram liveweight"
                                   },
-                                  "liveweightMethod2": {
+                                  "liveweightKilograms": {
                                     "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                     "x-modules": [
                                       "15.1"
@@ -1608,8 +1608,8 @@
                                 "required": [
                                   "type",
                                   "headPurchased",
-                                  "emissionFactorMethod2",
-                                  "liveweightMethod2"
+                                  "emissionFactor",
+                                  "liveweightKilograms"
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 2 emission factor, method 2 liveweight"
@@ -1660,7 +1660,7 @@
                                 "additionalProperties": false,
                                 "x-units": "number"
                               },
-                              "emissionsFactor": {
+                              "emissionFactor": {
                                 "description": "The emissions factor for the purchased goods or services, per unit of good or service. (tonnes CO2e)",
                                 "x-modules": [
                                   "15.9"
@@ -1684,12 +1684,12 @@
                             },
                             "required": [
                               "quantity",
-                              "emissionsFactor"
+                              "emissionFactor"
                             ],
                             "additionalProperties": false
                           }
                         },
-                        "liveweightSoldKg": {
+                        "liveweightSoldKilograms": {
                           "description": "The liveweight of the animals sold during the reporting period (kilograms liveweight)",
                           "x-modules": [
                             "Intensities"
@@ -1721,7 +1721,7 @@
                         "purchasedLivestock",
                         "purchasedFeed",
                         "services",
-                        "liveweightSoldKg"
+                        "liveweightSoldKilograms"
                       ],
                       "additionalProperties": false
                     }
@@ -3225,7 +3225,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3246,7 +3246,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3267,7 +3267,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3288,7 +3288,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3325,7 +3325,7 @@
                       ],
                       "$ref": "#/components/schemas/IBRA7Region"
                     },
-                    "massCH4FromBiomassBurningPerHectare": {
+                    "massCH4FromBiomassBurningTonnesPerHectare": {
                       "description": "Mass CH4 from biomass burning. Derived from FullCAM output. (tonnes CH4 per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3346,7 +3346,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes CH4 per hectare"
                     },
-                    "massN2OFromBiomassBurningPerHectare": {
+                    "massN2OFromBiomassBurningTonnesPerHectare": {
                       "description": "Mass N2O from biomass burning. Derived from FullCAM output. (tonnes N2O per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3367,7 +3367,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes N2O per hectare"
                     },
-                    "areaBurnt": {
+                    "areaBurntHectares": {
                       "description": "Area burnt. Derived from FullCAM output. (hectares)",
                       "x-modules": [
                         "16.2"
@@ -3402,15 +3402,15 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "isInLeachingZone",
                     "region",
-                    "massCH4FromBiomassBurningPerHectare",
-                    "massN2OFromBiomassBurningPerHectare",
-                    "areaBurnt",
+                    "massCH4FromBiomassBurningTonnesPerHectare",
+                    "massN2OFromBiomassBurningTonnesPerHectare",
+                    "areaBurntHectares",
                     "type",
                     "cropProductionSystem"
                   ],
@@ -3444,7 +3444,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3465,7 +3465,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3486,7 +3486,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3507,7 +3507,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3544,7 +3544,7 @@
                       ],
                       "$ref": "#/components/schemas/IBRA7Region"
                     },
-                    "massCH4FromBiomassBurningPerHectare": {
+                    "massCH4FromBiomassBurningTonnesPerHectare": {
                       "description": "Mass CH4 from biomass burning. Derived from FullCAM output. (tonnes CH4 per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3565,7 +3565,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes CH4 per hectare"
                     },
-                    "massN2OFromBiomassBurningPerHectare": {
+                    "massN2OFromBiomassBurningTonnesPerHectare": {
                       "description": "Mass N2O from biomass burning. Derived from FullCAM output. (tonnes N2O per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3586,7 +3586,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes N2O per hectare"
                     },
-                    "areaBurnt": {
+                    "areaBurntHectares": {
                       "description": "Area burnt. Derived from FullCAM output. (hectares)",
                       "x-modules": [
                         "16.2"
@@ -3621,15 +3621,15 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "isInLeachingZone",
                     "region",
-                    "massCH4FromBiomassBurningPerHectare",
-                    "massN2OFromBiomassBurningPerHectare",
-                    "areaBurnt",
+                    "massCH4FromBiomassBurningTonnesPerHectare",
+                    "massN2OFromBiomassBurningTonnesPerHectare",
+                    "areaBurntHectares",
                     "type",
                     "pastureProductionSystem"
                   ],
@@ -3663,7 +3663,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3684,7 +3684,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3705,7 +3705,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3726,7 +3726,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3763,7 +3763,7 @@
                       ],
                       "$ref": "#/components/schemas/IBRA7Region"
                     },
-                    "massCH4FromBiomassBurningPerHectare": {
+                    "massCH4FromBiomassBurningTonnesPerHectare": {
                       "description": "Mass CH4 from biomass burning. Derived from FullCAM output. (tonnes CH4 per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3784,7 +3784,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes CH4 per hectare"
                     },
-                    "massN2OFromBiomassBurningPerHectare": {
+                    "massN2OFromBiomassBurningTonnesPerHectare": {
                       "description": "Mass N2O from biomass burning. Derived from FullCAM output. (tonnes N2O per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3805,7 +3805,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes N2O per hectare"
                     },
-                    "areaBurnt": {
+                    "areaBurntHectares": {
                       "description": "Area burnt. Derived from FullCAM output. (hectares)",
                       "x-modules": [
                         "16.2"
@@ -3843,15 +3843,15 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "isInLeachingZone",
                     "region",
-                    "massCH4FromBiomassBurningPerHectare",
-                    "massN2OFromBiomassBurningPerHectare",
-                    "areaBurnt",
+                    "massCH4FromBiomassBurningTonnesPerHectare",
+                    "massN2OFromBiomassBurningTonnesPerHectare",
+                    "areaBurntHectares",
                     "type",
                     "pastureProductionSystem"
                   ],
@@ -3885,7 +3885,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3906,7 +3906,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3927,7 +3927,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3948,7 +3948,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -3976,10 +3976,10 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "type"
                   ],
                   "additionalProperties": false
@@ -4012,7 +4012,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4033,7 +4033,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4054,7 +4054,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4075,7 +4075,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4103,10 +4103,10 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "type"
                   ],
                   "additionalProperties": false
@@ -4139,7 +4139,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4160,7 +4160,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4181,7 +4181,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4202,7 +4202,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4228,7 +4228,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "carbonMassPerHectareFromFullCAM": {
+                            "carbonMassFromFullCAMTonnesPerHectare": {
                               "description": "Carbon mass of wood products harvested. Derived from a FullCAM simulation, using default simulation parameters. (tonnes carbon per hectare)",
                               "x-modules": [
                                 "16.2"
@@ -4255,7 +4255,7 @@
                             }
                           },
                           "required": [
-                            "carbonMassPerHectareFromFullCAM",
+                            "carbonMassFromFullCAMTonnesPerHectare",
                             "calculationMethod"
                           ],
                           "title": "From FullCAM simulation"
@@ -4263,7 +4263,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "carbonMassPerHectareFromRecords": {
+                            "carbonMassFromRecordsTonnesPerHectare": {
                               "description": "Carbon mass of wood products harvested. Derived from FullCAM output, where FullCAM simulation parameters are populated from detailed records or site specific research. (tonnes carbon per hectare)",
                               "x-modules": [
                                 "16.2"
@@ -4290,7 +4290,7 @@
                             }
                           },
                           "required": [
-                            "carbonMassPerHectareFromRecords",
+                            "carbonMassFromRecordsTonnesPerHectare",
                             "calculationMethod"
                           ],
                           "title": "From farm records"
@@ -4305,10 +4305,10 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "carbonMassOfWoodProducts",
                     "type"
                   ],
@@ -4342,7 +4342,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4363,7 +4363,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4384,7 +4384,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4405,7 +4405,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4431,7 +4431,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "carbonMassPerHectareFromFullCAM": {
+                            "carbonMassFromFullCAMTonnesPerHectare": {
                               "description": "Carbon mass of wood products harvested. Derived from a FullCAM simulation, using default simulation parameters. (tonnes carbon per hectare)",
                               "x-modules": [
                                 "16.2"
@@ -4458,7 +4458,7 @@
                             }
                           },
                           "required": [
-                            "carbonMassPerHectareFromFullCAM",
+                            "carbonMassFromFullCAMTonnesPerHectare",
                             "calculationMethod"
                           ],
                           "title": "From FullCAM simulation"
@@ -4466,7 +4466,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "carbonMassPerHectareFromRecords": {
+                            "carbonMassFromRecordsTonnesPerHectare": {
                               "description": "Carbon mass of wood products harvested. Derived from FullCAM output, where FullCAM simulation parameters are populated from detailed records or site specific research. (tonnes carbon per hectare)",
                               "x-modules": [
                                 "16.2"
@@ -4493,7 +4493,7 @@
                             }
                           },
                           "required": [
-                            "carbonMassPerHectareFromRecords",
+                            "carbonMassFromRecordsTonnesPerHectare",
                             "calculationMethod"
                           ],
                           "title": "From farm records"
@@ -4508,10 +4508,10 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "carbonMassOfWoodProducts",
                     "type"
                   ],
@@ -4674,7 +4674,7 @@
       "BurningInput": {
         "type": "object",
         "properties": {
-          "emissionsFromBurningLowRainfallZone": {
+          "emissionsFromBurningLowRainfallZoneTonnes": {
             "description": "Emissions from biomass burning in the Low Rainfall Zone. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
@@ -4695,7 +4695,7 @@
             "additionalProperties": false,
             "x-units": "tonnes CO2e"
           },
-          "emissionsFromBurningHighRainfallZone": {
+          "emissionsFromBurningHighRainfallZoneTonnes": {
             "description": "Emissions from biomass burning in the High Rainfall Zone. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
@@ -4716,7 +4716,7 @@
             "additionalProperties": false,
             "x-units": "tonnes CO2e"
           },
-          "carbonStockChangeLowRainfallZone": {
+          "carbonStockChangeLowRainfallZoneTonnes": {
             "description": "Change in carbon stock in the Low Rainfall Zone for the activity area. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
@@ -4737,7 +4737,7 @@
             "additionalProperties": false,
             "x-units": "tonnes CO2e"
           },
-          "carbonStockChangeHighRainfallZone": {
+          "carbonStockChangeHighRainfallZoneTonnes": {
             "description": "Change in carbon stock in the High Rainfall Zone for the activity area. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
@@ -4760,10 +4760,10 @@
           }
         },
         "required": [
-          "emissionsFromBurningLowRainfallZone",
-          "emissionsFromBurningHighRainfallZone",
-          "carbonStockChangeLowRainfallZone",
-          "carbonStockChangeHighRainfallZone"
+          "emissionsFromBurningLowRainfallZoneTonnes",
+          "emissionsFromBurningHighRainfallZoneTonnes",
+          "carbonStockChangeLowRainfallZoneTonnes",
+          "carbonStockChangeHighRainfallZoneTonnes"
         ],
         "additionalProperties": false
       },
@@ -4777,7 +4777,7 @@
             {
               "type": "object",
               "properties": {
-                "method2ActualStemDensity": {
+                "actualStemDensityPerHectare": {
                   "description": "Method 2: supply an exact value for the actual stem density of this planting based on farm records (trees per hectare)",
                   "x-modules": [
                     "16.6"
@@ -4798,7 +4798,7 @@
                   "additionalProperties": false,
                   "x-units": "trees per hectare"
                 },
-                "method2BiomassAtMaturity": {
+                "biomassAtMaturityTonnesPerHectare": {
                   "description": "Method 2: supply an exact value for the biomass at maturity for this planting based on farm records (tonnes carbon per hectare)",
                   "x-modules": [
                     "16.6"
@@ -4824,7 +4824,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "areaPlanted": {
+                      "areaPlantedHectares": {
                         "description": "Area planted t years ago (hectares)",
                         "x-modules": [
                           "16.6"
@@ -4868,7 +4868,7 @@
                       }
                     },
                     "required": [
-                      "areaPlanted",
+                      "areaPlantedHectares",
                       "yearsSincePlanting"
                     ],
                     "additionalProperties": false
@@ -4899,7 +4899,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "areaCleared": {
+                      "areaClearedHectares": {
                         "description": "Area cleared (hectares)",
                         "x-modules": [
                           "16.6"
@@ -4922,7 +4922,7 @@
                       }
                     },
                     "required": [
-                      "areaCleared"
+                      "areaClearedHectares"
                     ],
                     "additionalProperties": false
                   }
@@ -4944,7 +4944,7 @@
             {
               "type": "object",
               "properties": {
-                "method2ActualStemDensity": {
+                "actualStemDensityPerHectare": {
                   "description": "Method 2: supply an exact value for the actual stem density of this planting based on farm records (trees per hectare)",
                   "x-modules": [
                     "16.6"
@@ -4965,7 +4965,7 @@
                   "additionalProperties": false,
                   "x-units": "trees per hectare"
                 },
-                "method2BiomassAtMaturity": {
+                "biomassAtMaturityTonnesPerHectare": {
                   "description": "Method 2: supply an exact value for the biomass at maturity for this planting based on farm records (tonnes carbon per hectare)",
                   "x-modules": [
                     "16.6"
@@ -4991,7 +4991,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "areaPlanted": {
+                      "areaPlantedHectares": {
                         "description": "Area planted t years ago (hectares)",
                         "x-modules": [
                           "16.6"
@@ -5035,7 +5035,7 @@
                       }
                     },
                     "required": [
-                      "areaPlanted",
+                      "areaPlantedHectares",
                       "yearsSincePlanting"
                     ],
                     "additionalProperties": false
@@ -5057,7 +5057,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "areaCleared": {
+                      "areaClearedHectares": {
                         "description": "Area cleared (hectares)",
                         "x-modules": [
                           "16.6"
@@ -5078,7 +5078,7 @@
                         "additionalProperties": false,
                         "x-units": "hectares"
                       },
-                      "method2AgeAtClearing": {
+                      "ageAtClearingYears": {
                         "description": "Time since original planting when clearing occurs. This must be less than the maturity age for the crop type (years)",
                         "x-modules": [
                           "16.6"
@@ -5101,15 +5101,15 @@
                       }
                     },
                     "required": [
-                      "areaCleared",
-                      "method2AgeAtClearing"
+                      "areaClearedHectares",
+                      "ageAtClearingYears"
                     ],
                     "additionalProperties": false
                   }
                 }
               },
               "required": [
-                "method2ActualStemDensity",
+                "actualStemDensityPerHectare",
                 "plantings",
                 "cropType",
                 "calculationMethod",
@@ -5121,7 +5121,7 @@
             {
               "type": "object",
               "properties": {
-                "method2ActualStemDensity": {
+                "actualStemDensityPerHectare": {
                   "description": "Method 2: supply an exact value for the actual stem density of this planting based on farm records (trees per hectare)",
                   "x-modules": [
                     "16.6"
@@ -5142,7 +5142,7 @@
                   "additionalProperties": false,
                   "x-units": "trees per hectare"
                 },
-                "method2BiomassAtMaturity": {
+                "biomassAtMaturityTonnesPerHectare": {
                   "description": "Method 2: supply an exact value for the biomass at maturity for this planting based on farm records (tonnes carbon per hectare)",
                   "x-modules": [
                     "16.6"
@@ -5168,7 +5168,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "areaPlanted": {
+                      "areaPlantedHectares": {
                         "description": "Area planted t years ago (hectares)",
                         "x-modules": [
                           "16.6"
@@ -5212,7 +5212,7 @@
                       }
                     },
                     "required": [
-                      "areaPlanted",
+                      "areaPlantedHectares",
                       "yearsSincePlanting"
                     ],
                     "additionalProperties": false
@@ -5230,7 +5230,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "areaCleared": {
+                      "areaClearedHectares": {
                         "description": "Area cleared (hectares)",
                         "x-modules": [
                           "16.6"
@@ -5253,7 +5253,7 @@
                       }
                     },
                     "required": [
-                      "areaCleared"
+                      "areaClearedHectares"
                     ],
                     "additionalProperties": false
                   }
@@ -5264,7 +5264,7 @@
                 }
               },
               "required": [
-                "method2BiomassAtMaturity",
+                "biomassAtMaturityTonnesPerHectare",
                 "plantings",
                 "cropType",
                 "clearings",
@@ -5345,7 +5345,7 @@
                 "additionalProperties": false,
                 "x-units": "head"
               },
-              "days": {
+              "durationDays": {
                 "description": "Average duration on farm for this class (days)",
                 "x-modules": [
                   "3.5",
@@ -5367,7 +5367,7 @@
                 "additionalProperties": false,
                 "x-units": "days"
               },
-              "method2NitrogenWasteProductionRate": {
+              "dailyNitrogenWasteProductionKilograms": {
                 "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                 "x-modules": [
                   "4.5"
@@ -5388,7 +5388,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms nitrogen per head per day"
               },
-              "method2AverageFeedIntake": {
+              "dailyAverageFeedIntakeKilograms": {
                 "description": "Average feed intake for this class (kilograms dry matter per head per day)",
                 "x-modules": [
                   "3.5"
@@ -5409,7 +5409,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms dry matter per head per day"
               },
-              "method2VolatileSolidProductionRate": {
+              "dailyVolatileSolidProductionKilograms": {
                 "description": "Method 2: Volatile solid production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms volatile solids per head per day)",
                 "x-modules": [
                   "4.5"
@@ -6981,7 +6981,7 @@
             },
             "required": [
               "head",
-              "days",
+              "durationDays",
               "manureAllocations"
             ],
             "additionalProperties": false
@@ -7011,7 +7011,7 @@
                 "additionalProperties": false,
                 "x-units": "head"
               },
-              "days": {
+              "durationDays": {
                 "description": "Average duration on farm for this class (days)",
                 "x-modules": [
                   "3.5",
@@ -7033,7 +7033,7 @@
                 "additionalProperties": false,
                 "x-units": "days"
               },
-              "method2NitrogenWasteProductionRate": {
+              "dailyNitrogenWasteProductionKilograms": {
                 "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                 "x-modules": [
                   "4.5"
@@ -7054,7 +7054,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms nitrogen per head per day"
               },
-              "method2AverageFeedIntake": {
+              "dailyAverageFeedIntakeKilograms": {
                 "description": "Average feed intake for this class (kilograms dry matter per head per day)",
                 "x-modules": [
                   "3.5"
@@ -7075,7 +7075,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms dry matter per head per day"
               },
-              "method2VolatileSolidProductionRate": {
+              "dailyVolatileSolidProductionKilograms": {
                 "description": "Method 2: Volatile solid production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms volatile solids per head per day)",
                 "x-modules": [
                   "4.5"
@@ -8647,7 +8647,7 @@
             },
             "required": [
               "head",
-              "days",
+              "durationDays",
               "manureAllocations"
             ],
             "additionalProperties": false
@@ -8677,7 +8677,7 @@
                 "additionalProperties": false,
                 "x-units": "head"
               },
-              "days": {
+              "durationDays": {
                 "description": "Average duration on farm for this class (days)",
                 "x-modules": [
                   "3.5",
@@ -8699,7 +8699,7 @@
                 "additionalProperties": false,
                 "x-units": "days"
               },
-              "method2NitrogenWasteProductionRate": {
+              "dailyNitrogenWasteProductionKilograms": {
                 "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                 "x-modules": [
                   "4.5"
@@ -8720,7 +8720,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms nitrogen per head per day"
               },
-              "method2AverageFeedIntake": {
+              "dailyAverageFeedIntakeKilograms": {
                 "description": "Average feed intake for this class (kilograms dry matter per head per day)",
                 "x-modules": [
                   "3.5"
@@ -8741,7 +8741,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms dry matter per head per day"
               },
-              "method2VolatileSolidProductionRate": {
+              "dailyVolatileSolidProductionKilograms": {
                 "description": "Method 2: Volatile solid production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms volatile solids per head per day)",
                 "x-modules": [
                   "4.5"
@@ -10313,7 +10313,7 @@
             },
             "required": [
               "head",
-              "days",
+              "durationDays",
               "manureAllocations"
             ],
             "additionalProperties": false
@@ -10343,7 +10343,7 @@
                 "additionalProperties": false,
                 "x-units": "head"
               },
-              "days": {
+              "durationDays": {
                 "description": "Average duration on farm for this class (days)",
                 "x-modules": [
                   "3.5",
@@ -10365,7 +10365,7 @@
                 "additionalProperties": false,
                 "x-units": "days"
               },
-              "method2NitrogenWasteProductionRate": {
+              "dailyNitrogenWasteProductionKilograms": {
                 "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                 "x-modules": [
                   "4.5"
@@ -10386,7 +10386,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms nitrogen per head per day"
               },
-              "method2AverageFeedIntake": {
+              "dailyAverageFeedIntakeKilograms": {
                 "description": "Average feed intake for this class (kilograms dry matter per head per day)",
                 "x-modules": [
                   "3.5"
@@ -10407,7 +10407,7 @@
                 "additionalProperties": false,
                 "x-units": "kilograms dry matter per head per day"
               },
-              "method2VolatileSolidProductionRate": {
+              "dailyVolatileSolidProductionKilograms": {
                 "description": "Method 2: Volatile solid production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms volatile solids per head per day)",
                 "x-modules": [
                   "4.5"
@@ -11979,7 +11979,7 @@
             },
             "required": [
               "head",
-              "days",
+              "durationDays",
               "manureAllocations"
             ],
             "additionalProperties": false
@@ -12836,7 +12836,7 @@
                     {
                       "type": "object",
                       "properties": {
-                        "amount": {
+                        "amountTonnes": {
                           "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                           "x-modules": [
                             "15.2"
@@ -12863,7 +12863,7 @@
                         }
                       },
                       "required": [
-                        "amount",
+                        "amountTonnes",
                         "type"
                       ],
                       "additionalProperties": false,
@@ -12874,7 +12874,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -12907,7 +12907,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -12917,7 +12917,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -12968,7 +12968,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -12978,7 +12978,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -13021,7 +13021,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -13031,7 +13031,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -13068,7 +13068,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -13078,7 +13078,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -13122,7 +13122,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -13132,7 +13132,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -13175,7 +13175,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -13185,7 +13185,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -13225,7 +13225,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -13235,7 +13235,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -13279,7 +13279,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -13289,7 +13289,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -13329,7 +13329,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -13347,7 +13347,7 @@
                 {
                   "type": "object",
                   "properties": {
-                    "amount": {
+                    "amountTonnes": {
                       "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                       "x-modules": [
                         "15.2"
@@ -13377,7 +13377,7 @@
                     }
                   },
                   "required": [
-                    "amount",
+                    "amountTonnes",
                     "type"
                   ],
                   "additionalProperties": false,
@@ -13390,7 +13390,7 @@
             {
               "type": "object",
               "properties": {
-                "amount": {
+                "amountTonnes": {
                   "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                   "x-modules": [
                     "15.2"
@@ -13411,7 +13411,7 @@
                   "additionalProperties": false,
                   "x-units": "tonnes purchased feed"
                 },
-                "customEmissionsFactor": {
+                "emissionFactor": {
                   "description": "Method 2: Emission factor of the type of feed purchased. (kilograms CO2e per kilogram purchased feed)",
                   "x-modules": [
                     "15.2"
@@ -13434,8 +13434,8 @@
                 }
               },
               "required": [
-                "amount",
-                "customEmissionsFactor"
+                "amountTonnes",
+                "emissionFactor"
               ],
               "additionalProperties": false,
               "title": "Method 2 (custom emissions factor)"
