@@ -1288,6 +1288,49 @@ const fracGasfNitrateBased = massPerMass('Volatilised N', 'N', 0.01);
 const fracGasfAmmoniumNitrateBased = massPerMass('Volatilised N', 'N', 0.05);
 const fracGasfOtherFertilisers = massPerMass('Volatilised N', 'N', 0.11);
 
+// Lifecycles GHG Emission Intensities for Material Inputs to AUS Ag Fisheries Forestry V48 (March 2026)
+const scope3EfMonoammoniumPhosphate = massPerMass(
+  'CO2e',
+  'Inorganic Fertiliser',
+  0.827,
+);
+const scope3EfDiammoniumPhosphate = massPerMass(
+  'CO2e',
+  'Inorganic Fertiliser',
+  1.34,
+);
+const scope3EfUreaAmmoniumNitrate = massPerMass(
+  'CO2e',
+  'Inorganic Fertiliser',
+  1.75,
+);
+const scope3EfAmmoniumNitrate = massPerMass(
+  'CO2e',
+  'Inorganic Fertiliser',
+  2.21,
+);
+const scope3EfCalciumAmmoniumNitrate = massPerMass(
+  'CO2e',
+  'Inorganic Fertiliser',
+  1.15,
+);
+// AusLCI entry for "Ammonium sulfate"
+const scope3EfSulphateOfAmmonia = massPerMass(
+  'CO2e',
+  'Inorganic Fertiliser',
+  0.865,
+);
+const scope3EfSingleSuperphosphate = massPerMass(
+  'CO2e',
+  'Inorganic Fertiliser',
+  0.227,
+);
+const scope3EfUreaUnspecified = massPerMass(
+  'CO2e',
+  'Inorganic Fertiliser',
+  0.968,
+);
+
 export const cropConstants: CropConstants = {
   name: 'CROP',
 
@@ -1298,7 +1341,7 @@ export const cropConstants: CropConstants = {
   INORGANIC_FERTILISER_OTHER_VOLATILISES: fracGasfOtherFertilisers,
 
   /**
-   * @description Fraction of N in inorganic fertiliser types. Appendix Tables A.2.2.3, A.2.2.4, A.2.2.6. Scope 3 values taken from AusLCI v46 May 2026
+   * @description Fraction of N in inorganic fertiliser types. Appendix Tables A.2.2.3, A.2.2.4, A.2.2.6. Scope 3 values taken from AusLCI v48 March 2026
    * @appendixA A.2.2.3, A.2.2.4, A.2.2.6
    */
   INORGANIC_FERTILISER_FRACTIONS: {
@@ -1306,61 +1349,55 @@ export const cropConstants: CropConstants = {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.1),
       Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
       Volatilises: fracGasfAmmoniumBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.83),
+      Scope3EF: scope3EfMonoammoniumPhosphate,
     },
     'Diammonium Phosphate (DAP)': {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.18),
       Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
       Volatilises: fracGasfAmmoniumBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 1.34),
+      Scope3EF: scope3EfDiammoniumPhosphate,
     },
     Urea: {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.46),
       Urea: massPerMass('Urea', 'Inorganic Fertiliser', 1),
       Volatilises: fracGasfUreaBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 1.5),
+      Scope3EF: scope3EfUreaUnspecified,
     },
     'Sulphate of Ammonia (SOA)': {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.21),
       Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
       Volatilises: fracGasfAmmoniumBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.47), // AusLCI entry for "Ammonium sulfate"
+      Scope3EF: scope3EfSulphateOfAmmonia,
     },
     'Urea-Ammonium Nitrate (UAN)': {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.32),
       Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0.35),
       Volatilises: fracGasfUreaBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 1.46),
+      Scope3EF: scope3EfUreaAmmoniumNitrate,
     },
     'Ammonium Nitrate (AN)': {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.337),
       Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
       Volatilises: fracGasfAmmoniumNitrateBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 2.12),
+      Scope3EF: scope3EfAmmoniumNitrate,
     },
     'Calcium Ammonium Nitrate (CAN)': {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.27),
       Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
       Volatilises: fracGasfAmmoniumNitrateBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 1.25),
+      Scope3EF: scope3EfCalciumAmmoniumNitrate,
     },
     'Calcium Nitrate': {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.155),
       Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
       Volatilises: fracGasfNitrateBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.53),
+      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.53), // Taken from V48 May 2026
     },
     'Single Super Phosphate': {
       N: massPerMass('N', 'Inorganic Fertiliser', 0),
       Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
       Volatilises: massPerMass('Volatilised N', 'N', 0),
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.45),
-    },
-    'Ammonium Sulfate': {
-      N: massPerMass('N', 'Inorganic Fertiliser', 0.21),
-      Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
-      Volatilises: fracGasfAmmoniumBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 2.21),
+      Scope3EF: scope3EfSingleSuperphosphate,
     },
   },
 
@@ -1379,7 +1416,7 @@ export const cropConstants: CropConstants = {
       China: massPerMass('CO2e', 'Inorganic Fertiliser', 2.09),
       Yemen: massPerMass('CO2e', 'Inorganic Fertiliser', 0.963),
       Canada: massPerMass('CO2e', 'Inorganic Fertiliser', 0.823),
-      Unspecified: massPerMass('CO2e', 'Inorganic Fertiliser', 0.968),
+      Unspecified: scope3EfUreaUnspecified,
     },
   },
   /**
@@ -1387,25 +1424,17 @@ export const cropConstants: CropConstants = {
    */
   INORGANIC_FERTILISER_FRACTIONS_BY_NON_REGIONAL: {
     // Lifecycles GHG Emission Intensities for Material Inputs to AUS Ag Fisheries Forestry V48 (March 2026)
-    'Monoammonium phosphate': massPerMass(
-      'CO2e',
-      'Inorganic Fertiliser',
-      0.827,
-    ),
-    'Diammonium Phosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 1.34),
-    'Urea-Ammonium Nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 1.75),
-    'Ammonium Nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 2.21),
-    'Calcium Ammonium Nitrate': massPerMass(
-      'CO2e',
-      'Inorganic Fertiliser',
-      1.15,
-    ),
-    'Sulphate of Ammonia': massPerMass('CO2e', 'Inorganic Fertiliser', 0.865),
+    'Monoammonium phosphate': scope3EfMonoammoniumPhosphate,
+    'Diammonium Phosphate': scope3EfDiammoniumPhosphate,
+    'Urea-Ammonium Nitrate': scope3EfUreaAmmoniumNitrate,
+    'Ammonium Nitrate': scope3EfAmmoniumNitrate,
+    'Calcium Ammonium Nitrate': scope3EfCalciumAmmoniumNitrate,
+    'Sulphate of Ammonia': scope3EfSulphateOfAmmonia,
     'Nitrogen - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 4.2),
     'Nitrogen - Nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 5.47),
     'Nitrogen - Ammonia': massPerMass('CO2e', 'Inorganic Fertiliser', 2.83),
     'Muriate of Potash': massPerMass('CO2e', 'Inorganic Fertiliser', 0.549),
-    'Single superphosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.227),
+    'Single superphosphate': scope3EfSingleSuperphosphate,
     'Double Superphosphate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.392),
     'Phosphorus - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 3.96),
     'Potassium - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 0.909),
