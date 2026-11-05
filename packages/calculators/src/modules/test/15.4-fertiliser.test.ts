@@ -4,6 +4,7 @@ import {
   InorganicFertiliserComponentOrigin,
 } from '@/constants/enums';
 import { getSheet } from '@/test/common/sheets';
+import { testContext } from '@/test/Grains/context';
 import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import { calculateScope3Fertiliser } from '../scope3/15.4-fertiliser/calculate';
@@ -132,6 +133,42 @@ describe('15.4.1 Purchased fertiliser (scope 3)', () => {
       inputsAndOutputs,
       calculateScope3Fertiliser,
       '15.4',
+    );
+  });
+});
+
+describe('15.4.1 Purchased fertiliser components', () => {
+  const inputWithComponents = (components?: []) =>
+    HasFertiliserInputSchema.parse({
+      fertiliser: {
+        productionSystem: 'Irrigated crop',
+        inorganic: {
+          calculationMethodScope1: '1',
+          applications: [
+            {
+              calculationMethodScope3: '1',
+              fertiliserType: 'Urea',
+              massAppliedKg: nv(1000),
+              massPurchasedKg: nv(1000),
+              components,
+            },
+          ],
+        },
+        organic: { applications: [] },
+      },
+    } satisfies HasFertiliserInput);
+
+  it('treats an empty components array the same as omitting components', () => {
+    const context = testContext();
+    const omitted = calculateScope3Fertiliser(
+      inputWithComponents(undefined),
+      context,
+    );
+    const empty = calculateScope3Fertiliser(inputWithComponents([]), context);
+
+    expect(omitted.unit.store.value.toNumber()).toBeGreaterThan(0);
+    expect(empty.unit.store.value.toNumber()).toEqual(
+      omitted.unit.store.value.toNumber(),
     );
   });
 });
