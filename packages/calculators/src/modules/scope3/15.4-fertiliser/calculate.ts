@@ -23,7 +23,7 @@ import { voidUnit } from '@/tools/units';
 export const calculateScope3FertiliserMethod1EmissionsFactor = (
   fertiliser: Pick<
     InorganicFertiliserInputScope3Method1Transformed,
-    'massPurchasedKg' | 'fertiliserType'
+    'massPurchasedKilograms' | 'fertiliserType'
   >,
   context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
 ) => {

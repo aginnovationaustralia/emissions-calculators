@@ -1,36 +1,36 @@
 import { testContext } from '@/test/Grains/context';
 import { nv } from '@/tools/inputs';
-import { calculateScope3Fertiliser } from '../scope3/15.4-fertiliser/calculate';
 import {
   HasFertiliserInput,
   HasFertiliserInputSchema,
 } from '../scope1/5-fertiliser/fertiliser.input';
 import { InorganicFertiliserInput } from '../scope1/5-fertiliser/inorganic-fertiliser.input';
+import { calculateScope3Fertiliser } from '../scope3/15.4-fertiliser/calculate';
 
 const urea = (calculationMethodScope3: '1' | '2'): InorganicFertiliserInput =>
   calculationMethodScope3 === '1'
     ? {
         calculationMethodScope3,
         fertiliserType: 'Urea',
-        massAppliedKg: nv(1000),
-        massPurchasedKg: nv(1000),
+        massAppliedKilograms: nv(1000),
+        massPurchasedKilograms: nv(1000),
       }
     : {
         calculationMethodScope3,
         fertiliserType: 'Urea',
-        massAppliedKg: nv(1000),
-        massPurchasedKg: nv(1000),
-        customScope3EmissionFactor: nv(0.5),
+        massAppliedKilograms: nv(1000),
+        massPurchasedKilograms: nv(1000),
+        scope3EmissionFactor: nv(0.5),
       };
 
 const otherFertiliser: InorganicFertiliserInput = {
   calculationMethodScope3: '2',
   fertiliserType: 'Other Fertilisers',
-  massAppliedKg: nv(1000),
-  massPurchasedKg: nv(1000),
-  customScope3EmissionFactor: nv(0.5),
-  customNitrogenFraction: nv(0.3),
-  customUreaFraction: nv(0.2),
+  massAppliedKilograms: nv(1000),
+  massPurchasedKilograms: nv(1000),
+  scope3EmissionFactor: nv(0.5),
+  fractionNitrogen: nv(0.3),
+  fractionUrea: nv(0.2),
 };
 
 const calculate = (applications: InorganicFertiliserInput[]) =>
