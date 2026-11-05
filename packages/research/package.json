@@ -57,6 +57,6 @@
     "jest": "^30.5.2",
     "publint": "^0.3.24",
     "ts-jest": "^29.4.12",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }
