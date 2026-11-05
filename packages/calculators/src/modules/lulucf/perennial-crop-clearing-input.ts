@@ -26,7 +26,7 @@ export type PerennialCropClearingMethod1InputTransformed = z.output<
 
 export const PerennialCropClearingMethod2InputSchema =
   PerennialCropClearingMethod1InputSchema.extend({
-    ageAtClearingYears: numberInput(
+    method2AgeAtClearingYears: numberInput(
       (val) => years(val),
       {
         name: 't',
@@ -56,5 +56,5 @@ export type PerennialCropClearingInputTransformed =
 export const isPerennialCropClearingMethod2 = (
   clearing: PerennialCropClearingInputTransformed,
 ): clearing is PerennialCropClearingMethod2InputTransformed => {
-  return 'ageAtClearingYears' in clearing;
+  return 'method2AgeAtClearingYears' in clearing;
 };

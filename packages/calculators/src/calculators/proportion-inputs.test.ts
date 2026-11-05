@@ -166,7 +166,7 @@ describe('Dairy method 2 crude protein', () => {
     electricity,
     herds: [
       createDairyHerdInput({
-        milkProduction: { dailyVolumeProducedLitres: nv(20) },
+        milkProduction: { litresPerHeadPerDay: nv(20) },
         classes: {
           milkingCows: {
             head: nv(10),

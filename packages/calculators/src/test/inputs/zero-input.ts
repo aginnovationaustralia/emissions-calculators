@@ -240,7 +240,7 @@ export const ZERO_ALL_MODULES_INPUT: Required<AllModulesInput> = {
     // gt(0) is enforced by the schema for milk production, so this cannot be zeroed;
     // it has no effect on totals since `classes` has no milkingCows entry (head count
     // of zero drives every downstream calculation to zero regardless).
-    milkProduction: { dailyVolumeProducedLitres: nv(1) },
+    milkProduction: { litresPerHeadPerDay: nv(1) },
     breed: 'Medium Friesian',
     manureAllocations: {
       milkingShedMMSAllocation: zeroDairyMMSAllocation,

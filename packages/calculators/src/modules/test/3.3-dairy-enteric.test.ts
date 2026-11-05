@@ -75,7 +75,7 @@ const getCalculatorInput = (
 
     if (milkSolids) {
       return {
-        dailySolidsProducedKilograms: nv(Number(milkSolids)),
+        solidsKilogramsPerHeadPerDay: nv(Number(milkSolids)),
         method2PercentFatContent: nvo(
           fatContent ? Number(fatContent) : undefined,
         ),
@@ -88,7 +88,7 @@ const getCalculatorInput = (
     const milkProduction = cell(columnMilkProduction);
 
     return {
-      dailyVolumeProducedLitres: nv(Number(milkProduction)),
+      litresPerHeadPerDay: nv(Number(milkProduction)),
     };
   };
 

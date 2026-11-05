@@ -198,7 +198,7 @@ const defaultDairyHerdLivestockInput: DairyHerdLivestockInput = {
     solidsSeparatedPreTreatment: false,
   },
   milkProduction: {
-    dailyVolumeProducedLitres: nv(0),
+    litresPerHeadPerDay: nv(0),
   },
   breed: 'Ayrshire',
   classes: {},

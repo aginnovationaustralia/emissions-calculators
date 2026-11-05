@@ -176,7 +176,7 @@ describe('5.4.1.3 Organic fertiliser atmospheric deposition N2O', () => {
               },
             },
             milkProduction: {
-              dailyVolumeProducedLitres: nv(20),
+              litresPerHeadPerDay: nv(20),
             },
             breed: 'Holstein-Friesian',
             manureAllocations: {

@@ -17,7 +17,7 @@ import { z } from 'zod';
 
 export const dairyMilkVolumeInputSchema = (location: LivestockLocation) =>
   object({
-    dailyVolumeProducedLitres: numberInput(
+    litresPerHeadPerDay: numberInput(
       (val) => volumePerHeadPerDay('Milk', val),
       {
         name: 'MPj',
@@ -35,7 +35,7 @@ export const dairyMilkVolumeInputSchema = (location: LivestockLocation) =>
 
 export const dairyMilkSolidsInputSchema = (location: LivestockLocation) =>
   object({
-    dailySolidsProducedKilograms: numberInput(
+    solidsKilogramsPerHeadPerDay: numberInput(
       (val) => massPerHeadPerDay('Milk Solids', val),
       {
         name: 'MSj',
@@ -90,5 +90,5 @@ export type DairyMilkProductionInputTransformed = z.output<
 export const isMilkVolumeBased = (
   input: DairyMilkProductionInputTransformed,
 ): input is DairyMilkVolumeInputTransformed => {
-  return 'dailyVolumeProducedLitres' in input;
+  return 'litresPerHeadPerDay' in input;
 };

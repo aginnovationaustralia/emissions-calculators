@@ -85,9 +85,9 @@ const readDairyHerdShared = (
   const milkProdLUnchecked = cell('W');
   const milkProduction: DairyMilkProductionInput =
     milkProdLUnchecked !== undefined
-      ? { dailyVolumeProducedLitres: nv(Number(milkProdLUnchecked)) }
+      ? { litresPerHeadPerDay: nv(Number(milkProdLUnchecked)) }
       : {
-          dailySolidsProducedKilograms: nv(Number(cell('T'))),
+          solidsKilogramsPerHeadPerDay: nv(Number(cell('T'))),
           method2PercentFatContent: nvo(
             method === '2' ? Number(cell('U')) : undefined,
           ),

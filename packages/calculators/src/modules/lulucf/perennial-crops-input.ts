@@ -103,11 +103,13 @@ export const PerennialCropFullMethod2StemDensityInputSchema =
       const mc = lulucfConstants.WOODY_PERENNIAL_CROPS_FULL[cropType].Mc;
 
       data.clearings.forEach((clearing, index) => {
-        if (clearing.ageAtClearingYears.unit.store.value.gt(mc.store.value)) {
+        if (
+          clearing.method2AgeAtClearingYears.unit.store.value.gt(mc.store.value)
+        ) {
           ctx.addIssue({
             code: 'custom',
             message: `Age at clearing must be less than or equal to the maturity age for this crop type (${cropType})`,
-            path: ['clearings', index, 'ageAtClearingYears'],
+            path: ['clearings', index, 'method2AgeAtClearingYears'],
           });
         }
       });

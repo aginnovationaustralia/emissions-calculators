@@ -202,7 +202,7 @@ describe('5.5.1.1 Fertiliser leaching and runoff N2O (organic)', () => {
               },
             },
             milkProduction: {
-              dailyVolumeProducedLitres: nv(20),
+              litresPerHeadPerDay: nv(20),
             },
             breed: 'Holstein-Friesian',
             manureAllocations: {

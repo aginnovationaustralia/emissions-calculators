@@ -38,7 +38,7 @@ export const calculateMilkProduction = (
   constants: HasConstants<'DAIRY'>,
 ): Container<VolumePerHeadPerDay<'Milk'>> => {
   if (isMilkVolumeBased(input)) {
-    return input.dailyVolumeProducedLitres;
+    return input.litresPerHeadPerDay;
   }
 
   const fatContent = captureMethod1Or2Value(
@@ -55,7 +55,7 @@ export const calculateMilkProduction = (
    * MPj = MSj / 0.01 * (FCj + PCj)
    */
   const litresPerHeadPerDay: Container<VolumePerHeadPerDay<'Milk'>> =
-    input.dailySolidsProducedKilograms
+    input.solidsKilogramsPerHeadPerDay
       .divide(percentageToFraction(fatContent.plus(proteinContent)))
       .switchUnit((v) => volumePerHeadPerDay('Milk', v.store))
       .named('MP')

@@ -164,7 +164,7 @@ const calculateCarbonFromClearingsMethod2 = (
     return crop.clearings.map((clearing) => {
       const BARc = getBiomassAccumulationRateBARcForRemovals(crop, constants);
       return BARc.multiply(clearing.areaClearedHectares)
-        .multiply(clearing.ageAtClearingYears)
+        .multiply(clearing.method2AgeAtClearingYears)
         .reference('16.6.1.4 (1)');
     });
   }

@@ -108,7 +108,7 @@ const getCalculatorInput = (
 
     return {
       areaClearedHectares: nv(areaCleared),
-      ageAtClearingYears: nv(method2AgeAtClearing),
+      method2AgeAtClearingYears: nv(method2AgeAtClearing),
     };
   };
 
