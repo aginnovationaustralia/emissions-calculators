@@ -1420,8 +1420,8 @@ export const cropConstants: CropConstants = {
   ORGANIC_FERTILISER_FRACTIONS: {
     'Dairy cattle': { N: massPerMass('N', 'Organic Fertiliser', 0.029) },
     'Beef cattle': { N: massPerMass('N', 'Organic Fertiliser', 0.023) },
-    Poultry: { N: massPerMass('N', 'Organic Fertiliser', 0.51) },
-    Pigs: { N: massPerMass('N', 'Organic Fertiliser', 0.41) },
+    Poultry: { N: massPerMass('N', 'Organic Fertiliser', 0.051) },
+    Pigs: { N: massPerMass('N', 'Organic Fertiliser', 0.041) },
     Sheep: { N: massPerMass('N', 'Organic Fertiliser', 0.033) },
     'Horses/Mules': { N: massPerMass('N', 'Organic Fertiliser', 0.013) },
   },
