@@ -1399,12 +1399,6 @@ export const cropConstants: CropConstants = {
       Volatilises: massPerMass('Volatilised N', 'N', 0),
       Scope3EF: scope3EfSingleSuperphosphate,
     },
-    'Ammonium Sulfate': {
-      N: massPerMass('N', 'Inorganic Fertiliser', 0.21),
-      Urea: massPerMass('Urea', 'Inorganic Fertiliser', 0),
-      Volatilises: fracGasfAmmoniumBased,
-      Scope3EF: scope3EfSulphateOfAmmonia,
-    },
   },
 
   // Lifecycles GHG Emission Intensities for Material Inputs to AUS Ag Fisheries Forestry V48 (March 2026)
