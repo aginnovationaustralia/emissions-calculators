@@ -22,7 +22,7 @@ export const HeadPurchasedSchema = object({
 });
 
 export const PurchasedLivestockEmissionFactorMethod2Schema = object({
-  emissionFactorMethod2: numberInput(
+  method2EmissionFactor: numberInput(
     (v) => massPerMass('CO2e', 'Liveweight', v),
     {
       name: 'EFco',
@@ -35,7 +35,7 @@ export const PurchasedLivestockEmissionFactorMethod2Schema = object({
 });
 
 export const PurchasedLivestockLiveweightMethod2Schema = object({
-  liveweightMethod2: numberInput(
+  method2LiveweightKilograms: numberInput(
     (v) => liveweight(v),
     {
       name: 'Wco',
@@ -56,12 +56,12 @@ export const PurchasedLivestockLiveweightMethod2Schema = object({
  */
 export const emissionFactorIsMethod2 = <T extends object>(
   purchase: T,
-): purchase is Extract<T, { emissionFactorMethod2: unknown }> => {
-  return 'emissionFactorMethod2' in purchase;
+): purchase is Extract<T, { method2EmissionFactor: unknown }> => {
+  return 'method2EmissionFactor' in purchase;
 };
 
 export const liveweightIsMethod2 = <T extends object>(
   purchase: T,
-): purchase is Extract<T, { liveweightMethod2: unknown }> => {
-  return 'liveweightMethod2' in purchase;
+): purchase is Extract<T, { method2LiveweightKilograms: unknown }> => {
+  return 'method2LiveweightKilograms' in purchase;
 };

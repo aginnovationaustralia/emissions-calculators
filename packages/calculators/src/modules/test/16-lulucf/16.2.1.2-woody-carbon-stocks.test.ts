@@ -35,10 +35,18 @@ const getCalculatorInput = (
 
   const activity: LandUseChangeActivityInput = {
     type: 'revegetationByPlanting',
-    carbonMassInTreesCurrentYear: nv(Number(cell(columnMassTreesY))),
-    carbonMassInTreesPreviousYear: nv(Number(cell(columnMassTreesYMinus1))),
-    carbonMassInDebrisCurrentYear: nv(Number(cell(columnMassDebrisY))),
-    carbonMassInDebrisPreviousYear: nv(Number(cell(columnMassDebrisYMinus1))),
+    carbonMassInTreesCurrentYearTonnesPerHectare: nv(
+      Number(cell(columnMassTreesY)),
+    ),
+    carbonMassInTreesPreviousYearTonnesPerHectare: nv(
+      Number(cell(columnMassTreesYMinus1)),
+    ),
+    carbonMassInDebrisCurrentYearTonnesPerHectare: nv(
+      Number(cell(columnMassDebrisY)),
+    ),
+    carbonMassInDebrisPreviousYearTonnesPerHectare: nv(
+      Number(cell(columnMassDebrisYMinus1)),
+    ),
     activityAreaHectares: nv(Number(cell(columnActivityArea))),
   };
 

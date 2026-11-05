@@ -261,7 +261,7 @@ const withSolidSeparation = <S extends z.ZodRawShape, E extends z.ZodRawShape>(
   method2: object({
     ...method2LivestockShape,
     ...base.shape,
-    fractionNitrogenSeparatedPreTreatment: numberInput(
+    method2FractionNitrogenSeparatedPreTreatment: numberInput(
       (val) => realNumber(val),
       {
         name: nitrogenSeparationName,
@@ -380,7 +380,7 @@ export const PigsClassManureAllocationLivestockInputSchema =
   createPigsClassManureAllocationSchema(
     'livestock',
     (solidsSeparationName) => ({
-      fractionSolidsSeparatedPreTreatment: numberInput(
+      method2FractionSolidsSeparatedPreTreatment: numberInput(
         (val) => realNumber(val),
         {
           name: solidsSeparationName,

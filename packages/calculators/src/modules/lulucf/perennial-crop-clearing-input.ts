@@ -6,7 +6,7 @@ import { object } from '@/types/schemas';
 import { z } from 'zod';
 
 export const PerennialCropClearingMethod1InputSchema = object({
-  areaCleared: numberInput(
+  areaClearedHectares: numberInput(
     (val) => area(hectaresToSquareMetres(val)),
     {
       name: 'Ac,t',
@@ -26,7 +26,7 @@ export type PerennialCropClearingMethod1InputTransformed = z.output<
 
 export const PerennialCropClearingMethod2InputSchema =
   PerennialCropClearingMethod1InputSchema.extend({
-    method2AgeAtClearing: numberInput(
+    method2AgeAtClearingYears: numberInput(
       (val) => years(val),
       {
         name: 't',
@@ -47,8 +47,7 @@ export type PerennialCropClearingMethod2InputTransformed = z.output<
 >;
 
 export type PerennialCropClearingInput =
-  | PerennialCropClearingMethod1Input
-  | PerennialCropClearingMethod2Input;
+  PerennialCropClearingMethod1Input | PerennialCropClearingMethod2Input;
 
 export type PerennialCropClearingInputTransformed =
   | PerennialCropClearingMethod1InputTransformed
@@ -57,5 +56,5 @@ export type PerennialCropClearingInputTransformed =
 export const isPerennialCropClearingMethod2 = (
   clearing: PerennialCropClearingInputTransformed,
 ): clearing is PerennialCropClearingMethod2InputTransformed => {
-  return 'method2AgeAtClearing' in clearing;
+  return 'method2AgeAtClearingYears' in clearing;
 };

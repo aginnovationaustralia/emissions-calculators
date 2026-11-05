@@ -8,7 +8,7 @@ import { PoultryPurchasedLivestockSchema } from './purchased-poultry.input';
 import { SheepPurchasedLivestockSchema } from './purchased-sheep.input';
 
 // `BeefPurchasedLivestockSchema` is itself a `z.xor` (method 1's `category` vs
-// method 2's `emissionFactorMethod2`), and `z.xor` options don't expose the
+// method 2's `method2EmissionFactor`), and `z.xor` options don't expose the
 // propValues `z.discriminatedUnion` needs to fast-path on `type` - so every
 // option here has to be combined the same way, via `z.xor`, rather than
 // `z.discriminatedUnion('type', [...])`. Both render identically in the

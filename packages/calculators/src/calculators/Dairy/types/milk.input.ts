@@ -35,7 +35,7 @@ export const dairyMilkVolumeInputSchema = (location: LivestockLocation) =>
 
 export const dairyMilkSolidsInputSchema = (location: LivestockLocation) =>
   object({
-    kgSolidsPerHeadPerDay: numberInput(
+    solidsKilogramsPerHeadPerDay: numberInput(
       (val) => massPerHeadPerDay('Milk Solids', val),
       {
         name: 'MSj',
@@ -45,7 +45,7 @@ export const dairyMilkSolidsInputSchema = (location: LivestockLocation) =>
       },
       (s) => s.gt(0),
     ),
-    fatContent: numberInputOptional(
+    method2PercentFatContent: numberInputOptional(
       (val) => realNumber(val),
       {
         name: 'FCj',
@@ -55,7 +55,7 @@ export const dairyMilkSolidsInputSchema = (location: LivestockLocation) =>
       },
       isPercentage,
     ),
-    proteinContent: numberInputOptional(
+    method2PercentProteinContent: numberInputOptional(
       (val) => realNumber(val),
       {
         name: 'PCj',

@@ -36,10 +36,10 @@ const readDairyClass = (
   return {
     head: nv(head),
     method2DurationDays: nvo(Number(cell('AA')) || undefined),
-    method2Liveweight: nvo(Number(cell('AB')) || undefined),
-    method2LiveweightGain: nvo(Number(cell('AC')) || undefined),
-    method2DryMatterDigestibility: nvo(Number(cell('AD')) || undefined),
-    method2CrudeProtein: nvo(Number(cell('AE')) || undefined),
+    method2LiveweightKilograms: nvo(Number(cell('AB')) || undefined),
+    method2DailyLiveweightGainKilograms: nvo(Number(cell('AC')) || undefined),
+    method2FractionDryMatterDigestibility: nvo(Number(cell('AD')) || undefined),
+    method2FractionCrudeProteinContent: nvo(Number(cell('AE')) || undefined),
   };
 };
 
@@ -87,9 +87,13 @@ const readDairyHerdShared = (
     milkProdLUnchecked !== undefined
       ? { litresPerHeadPerDay: nv(Number(milkProdLUnchecked)) }
       : {
-          kgSolidsPerHeadPerDay: nv(Number(cell('T'))),
-          fatContent: nvo(method === '2' ? Number(cell('U')) : undefined),
-          proteinContent: nvo(method === '2' ? Number(cell('V')) : undefined),
+          solidsKilogramsPerHeadPerDay: nv(Number(cell('T'))),
+          method2PercentFatContent: nvo(
+            method === '2' ? Number(cell('U')) : undefined,
+          ),
+          method2PercentProteinContent: nvo(
+            method === '2' ? Number(cell('V')) : undefined,
+          ),
         };
 
   const systemUnchecked = cell('F');
@@ -98,9 +102,9 @@ const readDairyHerdShared = (
       ? { system: checkDairySystem(systemUnchecked) }
       : {
           method2TimeSpentInLocations: {
-            timeSpentOnPasture: nv(Number(cell('G'))),
-            timeSpentOnMilkingShed: nv(Number(cell('H'))),
-            timeSpentOnFeedpad: nv(Number(cell('I'))),
+            fractionTimeSpentOnPasture: nv(Number(cell('G'))),
+            fractionTimeSpentOnMilkingShed: nv(Number(cell('H'))),
+            fractionTimeSpentOnFeedpad: nv(Number(cell('I'))),
           },
         };
 
@@ -140,7 +144,9 @@ export const readDairyHerd = (
       ...manureAllocations,
       ...(method === '1'
         ? { solidsSeparatedPreTreatment: cell('R') === 'true' }
-        : { fractionSolidsSeparatedPreTreatment: nv(Number(cell('S'))) }),
+        : {
+            method2FractionSolidsSeparatedPreTreatment: nv(Number(cell('S'))),
+          }),
     },
   });
 };

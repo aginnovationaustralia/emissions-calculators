@@ -6,7 +6,7 @@ import { object } from '@/types/schemas';
 import { z } from 'zod';
 
 export const BurningInputSchema = object({
-  emissionsFromBurningLowRainfallZone: numberInput(
+  emissionsFromBurningLowRainfallZoneTonnes: numberInput(
     (val) => mass('CO2e', tonnesToKg(val)),
     {
       name: 'ELRZ,i,y',
@@ -16,7 +16,7 @@ export const BurningInputSchema = object({
       modules: [BURNING_16_5],
     },
   ),
-  emissionsFromBurningHighRainfallZone: numberInput(
+  emissionsFromBurningHighRainfallZoneTonnes: numberInput(
     (val) => mass('CO2e', tonnesToKg(val)),
     {
       name: 'EHRZ,i,y',
@@ -26,7 +26,7 @@ export const BurningInputSchema = object({
       modules: [BURNING_16_5],
     },
   ),
-  carbonStockChangeLowRainfallZone: numberInput(
+  carbonStockChangeLowRainfallZoneTonnes: numberInput(
     (val) => mass('CO2e', tonnesToKg(val)),
     {
       name: 'CLRZ,i,y',
@@ -36,7 +36,7 @@ export const BurningInputSchema = object({
       modules: [BURNING_16_5],
     },
   ),
-  carbonStockChangeHighRainfallZone: numberInput(
+  carbonStockChangeHighRainfallZoneTonnes: numberInput(
     (val) => mass('CO2e', tonnesToKg(val)),
     {
       name: 'CHRZ,i,y',

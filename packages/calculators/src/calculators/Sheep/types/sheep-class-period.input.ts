@@ -30,7 +30,7 @@ export const SheepClassPeriodInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  method2Liveweight: numberInputOptional(
+  method2LiveweightKilograms: numberInputOptional(
     (val) => liveweight(val),
     {
       name: 'Wjk',
@@ -41,14 +41,17 @@ export const SheepClassPeriodInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  method2LiveweightGain: numberInputOptional((val) => liveweightGain(val), {
-    name: 'LWGjk',
-    method: '2',
-    description:
-      'Method 2: supply an exact value for liveweight gain for this class for this season based on farm records',
-    modules: [MANURE_SHEEP_4_4],
-  }),
-  method2DryMatterAvailability: numberInputOptional(
+  method2DailyLiveweightGainKilograms: numberInputOptional(
+    (val) => liveweightGain(val),
+    {
+      name: 'LWGjk',
+      method: '2',
+      description:
+        'Method 2: supply an exact value for liveweight gain for this class for this season based on farm records',
+      modules: [MANURE_SHEEP_4_4],
+    },
+  ),
+  method2DryMatterAvailabilityTonnesPerHectare: numberInputOptional(
     (val) => massPerArea('DryMatter', tonnesPerHectareToKgPerSquareMetres(val)),
     {
       name: 'DMAjk',
@@ -58,7 +61,7 @@ export const SheepClassPeriodInputSchema = object({
       modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
     },
   ),
-  method2DryMatterDigestibility: numberInputOptional(
+  method2FractionDryMatterDigestibility: numberInputOptional(
     (val) => realNumber(val),
     {
       name: 'DMDjk',
@@ -69,14 +72,14 @@ export const SheepClassPeriodInputSchema = object({
     },
     isProportion,
   ),
-  method2AverageDurationDays: numberInputOptional((val) => days(val), {
+  method2DurationDays: numberInputOptional((val) => days(val), {
     name: 'Dj',
     method: '2',
     description:
       'Method 2: supply an exact value for average duration for this class for this period based on farm records',
     modules: [ENTERIC_SHEEP_3_4, MANURE_SHEEP_4_4],
   }),
-  method2CrudeProteinContent: numberInputOptional(
+  method2FractionCrudeProteinContent: numberInputOptional(
     (val) => massPerMass('CrudeProtein', 'DryMatter', val),
     {
       name: 'CPjk',
@@ -117,7 +120,7 @@ export const SheepClassWithLambingPeriodInputSchema =
 
 export const SheepClassWithProportionLambsBornPeriodInputSchema =
   SheepClassPeriodInputSchema.extend({
-    proportionOfLambsBorn: numberInput(
+    fractionLambsBorn: numberInput(
       (val) => realNumber(val),
       {
         name: 'PLBjk',
@@ -138,7 +141,7 @@ export const isSheepClassPeriodInputWithLambing = (
 export const isSheepClassPeriodInputWithProportionLambsBorn = (
   period: SheepClassPeriodExtendedInputTransformed,
 ): period is SheepClassWithProportionLambsBornPeriodInputTransformed => {
-  return 'proportionOfLambsBorn' in period;
+  return 'fractionLambsBorn' in period;
 };
 
 export type SheepClassPeriodInput = z.input<typeof SheepClassPeriodInputSchema>;

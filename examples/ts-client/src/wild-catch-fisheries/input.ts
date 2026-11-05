@@ -52,16 +52,16 @@ const quality: QualityTable = {
 
 const electricityMethod1: LocationBasedElectricityInputs = {
   method: 'location',
-  electricityPurchasedKWh: { value: 15000, quality },
+  electricityPurchasedKilowattHours: { value: 15000, quality },
   region: 'SA',
 };
 
 const electricityMethod2: MarketBasedElectricityInputs = {
   method: 'market',
-  electricityPurchasedKWh: { value: 15000, quality },
+  electricityPurchasedKilowattHours: { value: 15000, quality },
   // RECs are in MWh
-  recsSurrendered: { value: 5 },
-  recsOnsite: { value: 2 },
+  recsSurrenderedMegawattHours: { value: 5 },
+  recsOnsiteMegawattHours: { value: 2 },
   region: 'SA',
 };
 
@@ -70,12 +70,12 @@ const electricityMethod2: MarketBasedElectricityInputs = {
 // Feed amounts are in tonnes, and the method 2 emissions factor in kg CO2e per kg
 const purchasedFeedMethod1: PurchasedFeedAquacultureInput = {
   type: 'Squid',
-  amount: { value: 20 },
+  amountTonnes: { value: 20 },
 };
 
 const purchasedFeedMethod2: PurchasedFeedMethod2Input = {
-  amount: { value: 20 },
-  customEmissionsFactor: { value: 1.2 },
+  amountTonnes: { value: 20 },
+  method2EmissionFactor: { value: 1.2 },
 };
 
 // -------- Fuel --------
@@ -101,7 +101,7 @@ const fuel: FuelInput = {
 
 const refrigerant: RefrigerantInput = {
   refrigerant: 'HFC-134a (R-134a)',
-  chargeSize: { value: 20 },
+  chargeSizeKilograms: { value: 20 },
   refrigerationType: 'Transport refrigeration',
 };
 
@@ -109,12 +109,12 @@ const refrigerant: RefrigerantInput = {
 
 const solidWasteTreatedOnsiteMethod1: SolidWasteMethod1Input = {
   method: '1',
-  unmanagedBurial: { value: 2 },
-  unmanagedDeep: { value: 1 },
-  unmanagedShallow: { value: 3 },
-  composting: { value: 4 },
-  anaerobicDigestion: { value: 5 },
-  incineration: { value: 1 },
+  unmanagedBurialTonnes: { value: 2 },
+  unmanagedDeepTonnes: { value: 1 },
+  unmanagedShallowTonnes: { value: 3 },
+  compostingTonnes: { value: 4 },
+  anaerobicDigestionTonnes: { value: 5 },
+  incinerationTonnes: { value: 1 },
 };
 
 const solidWasteUnmanagedBurial: SolidWasteUnmanagedBurialMethod2Input = {
@@ -209,28 +209,28 @@ const wasteMethod2: SolidWasteInput = {
 // Volume is in cubic metres, COD in kg/m3 and methane quantities in tonnes
 const wastewaterMethod1: WastewaterTreatmentMethod1Input = {
   facilityType: 'Shallow anaerobic lagoon',
-  wastewaterVolume: { value: 1000 },
+  wastewaterVolumeCubicMetres: { value: 1000 },
   fractionRemoved: { value: 0.1 },
   commodityType: 'Meat and poultry',
 };
 
 const wastewaterMethod2: WastewaterTreatmentMethod2Input = {
   facilityType: 'Shallow anaerobic lagoon',
-  wastewaterVolume: { value: 1000 },
+  wastewaterVolumeCubicMetres: { value: 1000 },
   fractionRemoved: { value: 0.1 },
-  inletCOD: { value: 4 },
-  outletCOD: { value: 1 },
-  fractionSludge: { value: 0.1 },
-  methaneCaptured: { value: 0.1 },
-  methaneFlared: { value: 0.05 },
-  methaneOut: { value: 0.01 },
+  method2InletCODKilogramsPerCubicMetre: { value: 4 },
+  method2OutletCODKilogramsPerCubicMetre: { value: 1 },
+  method2FractionSludge: { value: 0.1 },
+  method2MethaneCapturedCubicMetres: { value: 0.1 },
+  method2MethaneFlaredCubicMetres: { value: 0.05 },
+  method2MethaneOutCubicMetres: { value: 0.01 },
 };
 
 // -------- Purchases --------
 
 const otherPurchasedGoodOrService: OtherPurchasedGoodOrServiceInput = {
   quantity: { value: 10 },
-  emissionsFactor: { value: 1.5 },
+  emissionFactor: { value: 1.5 },
 };
 
 // -------- Fisheries --------
@@ -240,7 +240,7 @@ const fisheryMethod1: WildCatchFisheryInput = {
   electricityAllocation: { value: 1 },
   state: 'SA',
   // Tonnes of fish or crustaceans harvested
-  amountHarvested: { value: 500 },
+  amountHarvestedTonnes: { value: 500 },
   purchasedFeed: [purchasedFeedMethod1],
   fuel,
   refrigerants: [refrigerant],

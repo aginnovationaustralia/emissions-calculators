@@ -33,11 +33,11 @@ function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
   feedlot: FeedlotLotInputTransformed,
 ): FeedlotIntermediateIntensitiesOutput {
-  const liveweightProduced = feedlot.liveweightSoldKg;
+  const liveweightProduced = feedlot.liveweightSoldKilograms;
 
   return {
     liveweightIntensity: generateIntensity(netEmissions, liveweightProduced),
-    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
   };
 }
 
@@ -47,12 +47,12 @@ function getTotalIntensities(
   feedlots: FeedlotLotInputTransformed[],
 ): FeedlotIntensitiesOutput {
   const liveweightProduced = sum(
-    feedlots.map((feedlot) => feedlot.liveweightSoldKg),
+    feedlots.map((feedlot) => feedlot.liveweightSoldKilograms),
     zeroMassLiveweight,
   );
 
   return {
-    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     liveweightIntensityExcludingLULUCF: generateIntensity(
       netTotalEmissions.minus(netLulucf),
       liveweightProduced,

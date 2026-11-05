@@ -14,7 +14,7 @@ const calculateCropBurnt = (
   crop: CropResidueInputTransformed,
   constants: ConstantsForResidueManagement,
 ) => {
-  const pc = crop.totalYieldKg;
+  const pc = crop.totalYieldKilograms;
   const ragc = selectConstant(
     constants.CROP,
     'CROPRESIDUE',

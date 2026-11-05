@@ -70,16 +70,16 @@ const quality: QualityTable = {
 
 const electricityMethod1: LocationBasedElectricityInputs = {
   method: 'location',
-  electricityPurchasedKWh: { value: 20000, quality },
+  electricityPurchasedKilowattHours: { value: 20000, quality },
   region: 'TAS',
 };
 
 const electricityMethod2: MarketBasedElectricityInputs = {
   method: 'market',
-  electricityPurchasedKWh: { value: 20000, quality },
+  electricityPurchasedKilowattHours: { value: 20000, quality },
   // RECs are in MWh
-  recsSurrendered: { value: 5 },
-  recsOnsite: { value: 2 },
+  recsSurrenderedMegawattHours: { value: 5 },
+  recsOnsiteMegawattHours: { value: 2 },
   region: 'TAS',
 };
 
@@ -110,31 +110,31 @@ const services: ServicesFuelInput = {
 
 const otherPurchasedGoodOrService: OtherPurchasedGoodOrServiceInput = {
   quantity: { value: 10 },
-  emissionsFactor: { value: 1.5 },
+  emissionFactor: { value: 1.5 },
 };
 
 // -------- Agrichemicals --------
 
 const chemicalMethod1: AgrichemicalInput = {
   type: 'Herbicide (paraquat, diquat, glyphosate)',
-  amountKg: { value: 200 },
+  amountKilograms: { value: 200 },
 };
 
 const chemicalMethod2: AgrichemicalInput = {
   ...chemicalMethod1,
-  customEmissionsFactor: { value: 10 },
+  method2EmissionFactor: { value: 10 },
 };
 
 // -------- Solid waste --------
 
 const solidWasteTreatedOnsiteMethod1: SolidWasteMethod1Input = {
   method: '1',
-  unmanagedBurial: { value: 2 },
-  unmanagedDeep: { value: 1 },
-  unmanagedShallow: { value: 3 },
-  composting: { value: 4 },
-  anaerobicDigestion: { value: 5 },
-  incineration: { value: 1 },
+  unmanagedBurialTonnes: { value: 2 },
+  unmanagedDeepTonnes: { value: 1 },
+  unmanagedShallowTonnes: { value: 3 },
+  compostingTonnes: { value: 4 },
+  anaerobicDigestionTonnes: { value: 5 },
+  incinerationTonnes: { value: 1 },
 };
 
 const solidWasteUnmanagedBurial: SolidWasteUnmanagedBurialMethod2Input = {
@@ -235,8 +235,8 @@ const inorganicFertiliserComponent: InorganicFertiliserComponentInput = {
 const inorganicFertiliserMethod1: InorganicFertiliserInputScope3Method1 = {
   calculationMethodScope3: '1',
   fertiliserType: 'Urea',
-  massAppliedKg: { value: 5000 },
-  massPurchasedKg: { value: 5000 },
+  massAppliedKilograms: { value: 5000 },
+  massPurchasedKilograms: { value: 5000 },
   components: [inorganicFertiliserComponent],
 };
 
@@ -249,10 +249,10 @@ const inorganicFertiliserMethod2: InorganicFertiliserScope1Method2Input = {
   calculationMethodScope3: '2',
   fertiliserType: 'Urea',
 
-  massAppliedKg: { value: 5000 },
-  massPurchasedKg: { value: 5000 },
-  customScope3EmissionFactor: { value: 2.5 },
-  customNitrogenFraction: { value: 0.46 },
+  massAppliedKilograms: { value: 5000 },
+  massPurchasedKilograms: { value: 5000 },
+  scope3EmissionFactor: { value: 2.5 },
+  fractionNitrogen: { value: 0.46 },
 };
 
 const inorganicFertilisersMethod2: InorganicFertilisersScope1Method2Input = {
@@ -265,8 +265,8 @@ const inorganicFertilisersMethod2: InorganicFertilisersScope1Method2Input = {
 const organicFertiliserOrigin: OrganicFertiliserUntracedInput = {
   origin: 'Untraced',
   organicFertiliserType: 'Poultry',
-  massAppliedKg: { value: 2000 },
-  customNitrogenFraction: { value: 0.03 },
+  massAppliedKilograms: { value: 2000 },
+  fractionNitrogen: { value: 0.03 },
 };
 
 const organicFertiliser: OrganicFertiliserInput = {
@@ -294,23 +294,23 @@ const fertiliserMethod2: FertiliserInputInorganicScope1Method2 = {
 const carbonMassOfWoodProductsMethod1: CarbonMassOfWoodProductsFromFullCAMInput =
   {
     calculationMethod: '1',
-    carbonMassPerHectareFromFullCAM: { value: 2 },
+    carbonMassFromFullCAMTonnesPerHectare: { value: 2 },
   };
 
 const carbonMassOfWoodProductsMethod2: CarbonMassOfWoodProductsFromRecordsInput =
   {
     calculationMethod: '2',
-    carbonMassPerHectareFromRecords: { value: 2.5 },
+    carbonMassFromRecordsTonnesPerHectare: { value: 2.5 },
   };
 
 // Carbon masses are in tonnes of carbon per hectare
 const landUseChangeActivityMethod1: PlantationForestryInput = {
   type: 'plantationForestry',
   activityAreaHectares: { value: 500 },
-  carbonMassInTreesCurrentYear: { value: 104 },
-  carbonMassInTreesPreviousYear: { value: 100 },
-  carbonMassInDebrisCurrentYear: { value: 10.5 },
-  carbonMassInDebrisPreviousYear: { value: 10 },
+  carbonMassInTreesCurrentYearTonnesPerHectare: { value: 104 },
+  carbonMassInTreesPreviousYearTonnesPerHectare: { value: 100 },
+  carbonMassInDebrisCurrentYearTonnesPerHectare: { value: 10.5 },
+  carbonMassInDebrisPreviousYearTonnesPerHectare: { value: 10 },
   carbonMassOfWoodProducts: carbonMassOfWoodProductsMethod1,
 };
 
@@ -320,24 +320,24 @@ const landUseChangeActivityMethod2: PlantationForestryInput = {
 };
 
 const burning: BurningInput = {
-  emissionsFromBurningLowRainfallZone: { value: 1 },
-  emissionsFromBurningHighRainfallZone: { value: 2 },
-  carbonStockChangeLowRainfallZone: { value: 3 },
-  carbonStockChangeHighRainfallZone: { value: 4 },
+  emissionsFromBurningLowRainfallZoneTonnes: { value: 1 },
+  emissionsFromBurningHighRainfallZoneTonnes: { value: 2 },
+  carbonStockChangeLowRainfallZoneTonnes: { value: 3 },
+  carbonStockChangeHighRainfallZoneTonnes: { value: 4 },
 };
 
 const perennialCropPlanting: PerennialCropPlantingInput = {
-  areaPlanted: { value: 5 },
+  areaPlantedHectares: { value: 5 },
   yearsSincePlanting: { value: 3 },
 };
 
 const perennialCropClearingMethod1: PerennialCropClearingMethod1Input = {
-  areaCleared: { value: 1 },
+  areaClearedHectares: { value: 1 },
 };
 
 const perennialCropClearingMethod2: PerennialCropClearingMethod2Input = {
-  areaCleared: { value: 1 },
-  method2AgeAtClearing: { value: 5 },
+  areaClearedHectares: { value: 1 },
+  method2AgeAtClearingYears: { value: 5 },
 };
 
 const perennialCropMethod1: PerennialCropMethod1Input = {
@@ -350,8 +350,8 @@ const perennialCropMethod1: PerennialCropMethod1Input = {
 const perennialCropMethod2: PerennialCropFullMethod2StemDensityInput = {
   calculationMethod: '2 (stem density)',
   cropType: 'Macadamias',
-  method2ActualStemDensity: { value: 300 },
-  method2BiomassAtMaturity: { value: 60 },
+  actualStemDensityPerHectare: { value: 300 },
+  biomassAtMaturityTonnesPerHectare: { value: 60 },
   plantings: [perennialCropPlanting],
   clearings: [perennialCropClearingMethod2],
 };

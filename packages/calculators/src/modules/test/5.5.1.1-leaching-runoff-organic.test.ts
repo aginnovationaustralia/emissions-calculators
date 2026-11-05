@@ -145,7 +145,7 @@ describe('5.5.1.1 Fertiliser leaching and runoff N2O (organic)', () => {
             classes: {
               slaughterPigs: {
                 head: nv(100),
-                days: nv(365),
+                durationDays: nv(365),
                 manureAllocations: zeroPigsManureAllocation,
               },
             },
@@ -266,7 +266,7 @@ describe('5.5.1.1 Fertiliser leaching and runoff N2O (organic)', () => {
             classes: {
               layers: {
                 head: nv(1000),
-                days: nv(365),
+                durationDays: nv(365),
                 manureAllocations: {
                   manureWithLitter: {
                     manureAllocated: nv(0),

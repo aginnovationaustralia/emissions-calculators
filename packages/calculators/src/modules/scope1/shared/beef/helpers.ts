@@ -154,7 +154,7 @@ export const getLiveweight = ({
       seasonName,
       'liveweight',
     ),
-    currentPeriod.method2Liveweight,
+    currentPeriod.method2LiveweightKilograms,
   ).named(`Wjk=${classInput.number} (j=${periodName})`);
 };
 
@@ -171,8 +171,8 @@ export const getLiveweightGain = ({
   seasonName,
   periodName,
 }: BeefPeriodProps) => {
-  if (currentPeriod.method2LiveweightGain !== undefined) {
-    return currentPeriod.method2LiveweightGain.named(
+  if (currentPeriod.method2DailyLiveweightGainKilograms !== undefined) {
+    return currentPeriod.method2DailyLiveweightGainKilograms.named(
       `LWGjk=${classInput.number} (j=${periodName})`,
     );
   }
@@ -190,7 +190,7 @@ export const getLiveweightGain = ({
       seasonName,
       'liveweightGain',
     ),
-    currentPeriod.method2LiveweightGain,
+    currentPeriod.method2DailyLiveweightGainKilograms,
   ).named(`LWGjk=${classInput.number} (j=${periodName})`);
 };
 
@@ -230,7 +230,7 @@ export const getCrudeProtein = ({
   const limitedRegion = stateOrRegionToLimitedRegion(region);
   return captureMethod1Or2Value(
     selectConstant(constants.BEEF_PASTURE, 'CP', limitedRegion, seasonName),
-    currentPeriod.method2CrudeProteinContent,
+    currentPeriod.method2FractionCrudeProteinContent,
   ).named(`CPj (j = ${seasonName})`);
 };
 
@@ -252,6 +252,6 @@ export const getDryMatterDigestibilityDMD = ({
       limitedStateOrRegion,
       seasonName,
     ),
-    currentPeriod.method2DryMatterDigestibility,
+    currentPeriod.method2FractionDryMatterDigestibility,
   ).named(`DMDjkl=${periodName},k=${className}`);
 };

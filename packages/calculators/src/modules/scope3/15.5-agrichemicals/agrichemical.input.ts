@@ -13,7 +13,7 @@ export const AgrichemicalInputSchema = object({
       modules: [AGRICHEM_15_5],
     }),
   ),
-  amountKg: numberInput(
+  amountKilograms: numberInput(
     (val) => mass('Chemical', val),
     {
       name: 'agrichemical amount',
@@ -22,7 +22,7 @@ export const AgrichemicalInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  customEmissionsFactor: numberInputOptional(
+  method2EmissionFactor: numberInputOptional(
     (val) => massPerMass('CO2e', 'Chemical', val),
     {
       name: 'EF',

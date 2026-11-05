@@ -14,12 +14,16 @@ import type {
 } from './types';
 
 const carbonMassFields = (keyFields: FullCAMOutputKeyFields) => ({
-  carbonMassInDebrisCurrentYear: nv(keyFields.carbonMassInDebrisPerHectare),
-  carbonMassInDebrisPreviousYear: nv(
+  carbonMassInDebrisCurrentYearTonnesPerHectare: nv(
+    keyFields.carbonMassInDebrisPerHectare,
+  ),
+  carbonMassInDebrisPreviousYearTonnesPerHectare: nv(
     keyFields.carbonMassInDebrisPerHectarePrevYear,
   ),
-  carbonMassInTreesCurrentYear: nv(keyFields.carbonMassInTreesPerHectare),
-  carbonMassInTreesPreviousYear: nv(
+  carbonMassInTreesCurrentYearTonnesPerHectare: nv(
+    keyFields.carbonMassInTreesPerHectare,
+  ),
+  carbonMassInTreesPreviousYearTonnesPerHectare: nv(
     keyFields.carbonMassInTreesPerHectarePrevYear,
   ),
 });
@@ -46,12 +50,12 @@ export function generateLulucfInput(
             const farmForestryEvent: FarmForestryInput = {
               type: 'farmForestry',
               activityAreaHectares: nv(input.areaHectares),
-              carbonMassInDebrisCurrentYear: nv(0),
-              carbonMassInDebrisPreviousYear: nv(0),
-              carbonMassInTreesCurrentYear: nv(0),
-              carbonMassInTreesPreviousYear: nv(0),
+              carbonMassInDebrisCurrentYearTonnesPerHectare: nv(0),
+              carbonMassInDebrisPreviousYearTonnesPerHectare: nv(0),
+              carbonMassInTreesCurrentYearTonnesPerHectare: nv(0),
+              carbonMassInTreesPreviousYearTonnesPerHectare: nv(0),
               carbonMassOfWoodProducts: {
-                carbonMassPerHectareFromFullCAM: nv(
+                carbonMassFromFullCAMTonnesPerHectare: nv(
                   keyFields.carbonMassInForestProductsPerHectare,
                 ),
                 calculationMethod: '1',
@@ -66,13 +70,13 @@ export function generateLulucfInput(
               type: 'landClearingForestToCropland',
               ...carbonMassFields(keyFields),
               activityAreaHectares: nv(input.areaHectares),
-              areaBurnt: nv(input.areaHectares),
+              areaBurntHectares: nv(input.areaHectares),
               cropProductionSystem: clearingEvent.cropProductionSystem,
               isInLeachingZone: input.isInLeachingZone,
-              massCH4FromBiomassBurningPerHectare: nv(
+              massCH4FromBiomassBurningTonnesPerHectare: nv(
                 keyFields.ch4FromBiomassBurningPerHectare,
               ),
-              massN2OFromBiomassBurningPerHectare: nv(
+              massN2OFromBiomassBurningTonnesPerHectare: nv(
                 keyFields.n2oFromBiomassBurningPerHectare,
               ),
               region: input.region,
@@ -84,13 +88,13 @@ export function generateLulucfInput(
               type: 'landClearingForestToGrassland',
               ...carbonMassFields(keyFields),
               activityAreaHectares: nv(input.areaHectares),
-              areaBurnt: nv(input.areaHectares),
+              areaBurntHectares: nv(input.areaHectares),
               pastureProductionSystem: clearingEvent.pastureProductionSystem,
               isInLeachingZone: input.isInLeachingZone,
-              massCH4FromBiomassBurningPerHectare: nv(
+              massCH4FromBiomassBurningTonnesPerHectare: nv(
                 keyFields.ch4FromBiomassBurningPerHectare,
               ),
-              massN2OFromBiomassBurningPerHectare: nv(
+              massN2OFromBiomassBurningTonnesPerHectare: nv(
                 keyFields.n2oFromBiomassBurningPerHectare,
               ),
               region: input.region,
@@ -102,13 +106,13 @@ export function generateLulucfInput(
               type: 'landClearingForestToSettlements',
               ...carbonMassFields(keyFields),
               activityAreaHectares: nv(input.areaHectares),
-              areaBurnt: nv(input.areaHectares),
+              areaBurntHectares: nv(input.areaHectares),
               pastureProductionSystem: 'Non-irrigated pasture',
               isInLeachingZone: input.isInLeachingZone,
-              massCH4FromBiomassBurningPerHectare: nv(
+              massCH4FromBiomassBurningTonnesPerHectare: nv(
                 keyFields.ch4FromBiomassBurningPerHectare,
               ),
-              massN2OFromBiomassBurningPerHectare: nv(
+              massN2OFromBiomassBurningTonnesPerHectare: nv(
                 keyFields.n2oFromBiomassBurningPerHectare,
               ),
               region: input.region,

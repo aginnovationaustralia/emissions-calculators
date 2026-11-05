@@ -31,14 +31,14 @@ const getCarbonMassOfWoodProducts = (
   if (method === '1') {
     return {
       calculationMethod: '1',
-      carbonMassPerHectareFromFullCAM: nv(
+      carbonMassFromFullCAMTonnesPerHectare: nv(
         Number(cell(columnCarbonMassFromFullCAM)),
       ),
     };
   } else {
     return {
       calculationMethod: '2',
-      carbonMassPerHectareFromRecords: nv(
+      carbonMassFromRecordsTonnesPerHectare: nv(
         Number(cell(columnCarbonMassFromRecords)),
       ),
     };
@@ -66,10 +66,10 @@ const getCalculatorInput = (
     type: 'plantationForestry',
     carbonMassOfWoodProducts: getCarbonMassOfWoodProducts(cell, method),
     activityAreaHectares: nv(activityAreaHectares),
-    carbonMassInTreesCurrentYear: nv(0),
-    carbonMassInTreesPreviousYear: nv(0),
-    carbonMassInDebrisCurrentYear: nv(0),
-    carbonMassInDebrisPreviousYear: nv(0),
+    carbonMassInTreesCurrentYearTonnesPerHectare: nv(0),
+    carbonMassInTreesPreviousYearTonnesPerHectare: nv(0),
+    carbonMassInDebrisCurrentYearTonnesPerHectare: nv(0),
+    carbonMassInDebrisPreviousYearTonnesPerHectare: nv(0),
   };
 
   const lulucfInput: LULUCFParentInput = {

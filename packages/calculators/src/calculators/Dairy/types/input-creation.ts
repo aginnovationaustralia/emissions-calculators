@@ -17,7 +17,7 @@ export type DairyMilkVolumeInput = Extract<
 >;
 export type DairyMilkSolidsInput = Extract<
   DairyMilkProductionInput,
-  { kgSolidsPerHeadPerDay: unknown }
+  { solidsKilogramsPerHeadPerDay: unknown }
 >;
 export type DairyManureAllocationsInput = Prop<
   DairyHerdLivestockInput,

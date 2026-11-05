@@ -35,7 +35,10 @@ const getEmissionsFactorByUnits = (
       undefined,
     );
   }
-  return captureMethod1Or2Value(voidUnit(), packaging.customEmissionsFactor);
+  return captureMethod1Or2Value(
+    voidUnit(),
+    packaging.method2EmissionFactorKilograms,
+  );
 };
 
 const getEmissionsFactorByMass = (
@@ -54,7 +57,7 @@ const getEmissionsFactorByMass = (
       undefined,
     );
   }
-  return captureMethod1Or2Value(voidUnit(), packaging.customEmissionsFactor);
+  return captureMethod1Or2Value(voidUnit(), packaging.method2EmissionFactor);
 };
 
 const getEmissionsByUnits = (
@@ -81,7 +84,7 @@ const getEmissionsByMass = (
     'EFp',
   );
   return emissionsFactor
-    .multiply(packaging.amountMass)
+    .multiply(packaging.amountKilograms)
     .reference('15.8.1.1 (1)');
 };
 

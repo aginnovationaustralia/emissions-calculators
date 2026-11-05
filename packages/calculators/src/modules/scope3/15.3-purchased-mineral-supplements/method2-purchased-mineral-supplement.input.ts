@@ -6,7 +6,7 @@ import { BasePurchasedMineralSupplementInputSchema } from './base-purchased-mine
 
 export const PurchasedMineralSupplementMethod2InputSchema =
   BasePurchasedMineralSupplementInputSchema.extend({
-    customEmissionsFactor: numberInput(
+    method2EmissionFactor: numberInput(
       (val) => massPerMass('CO2e', 'Purchased Mineral Supplement', val),
       {
         name: 'custom emissions factor',

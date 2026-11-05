@@ -49,13 +49,16 @@ const getBiomassAccumulationRateBARcMethod2 = (
       'STEM_DENSITY',
     );
     return BARcDefault.multiply(
-      crop.method2ActualStemDensity.divide(defaultStemDensity),
+      crop.actualStemDensityPerHectare.divide(defaultStemDensity),
     )
       .named('BARc')
       .reference('16.6.1.2 (1)');
   }
 
-  const { cropType, method2BiomassAtMaturity } = crop;
+  const {
+    cropType,
+    biomassAtMaturityTonnesPerHectare: method2BiomassAtMaturity,
+  } = crop;
 
   const Mc = selectConstant(
     constants.LULUCF,
@@ -134,7 +137,7 @@ export const calculate_16_6_1_1_RemovalsFromPerennialCrops = (
     const plantingsToInclude = getPlantingsLessThanYears(
       crop.plantings,
       Mc,
-    ).map((planting) => planting.areaPlanted);
+    ).map((planting) => planting.areaPlantedHectares);
 
     return BARc.multiply(sum(plantingsToInclude, zeroArea))
       .multiply(CgCO2)
@@ -160,13 +163,15 @@ const calculateCarbonFromClearingsMethod2 = (
   if (isPerennialCropCalculationMethod2StemDensity(crop)) {
     return crop.clearings.map((clearing) => {
       const BARc = getBiomassAccumulationRateBARcForRemovals(crop, constants);
-      return BARc.multiply(clearing.areaCleared)
-        .multiply(clearing.method2AgeAtClearing)
+      return BARc.multiply(clearing.areaClearedHectares)
+        .multiply(clearing.method2AgeAtClearingYears)
         .reference('16.6.1.4 (1)');
     });
   }
   return crop.clearings.map((clearing) =>
-    crop.method2BiomassAtMaturity.multiply(clearing.areaCleared),
+    crop.biomassAtMaturityTonnesPerHectare.multiply(
+      clearing.areaClearedHectares,
+    ),
   );
 };
 
@@ -205,7 +210,7 @@ export const calculate_16_6_1_3_EmissionsFromPerennialCrops = (
 
     const carbonFromClearingsMethod1 = sum(
       crop.clearings.map((clearing) =>
-        BAMcDefault.multiply(clearing.areaCleared).named('BAMc'),
+        BAMcDefault.multiply(clearing.areaClearedHectares).named('BAMc'),
       ),
       zeroMassCarbon,
     );

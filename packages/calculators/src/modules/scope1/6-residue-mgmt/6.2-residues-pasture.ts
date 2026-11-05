@@ -14,7 +14,7 @@ export const calculateMassNPastureAppliedToSoil = (
   pasture: PastureResidueInputTransformed,
   constants: HasCropConstants,
 ) => {
-  const ap = pasture.areaManaged;
+  const ap = pasture.areaManagedHectares;
   const yp = getAverageYieldForPasture(pasture, constants);
 
   const ncagp = selectConstant(

@@ -1,13 +1,12 @@
 import {
+  InorganicFertiliserComponentOrigin,
   InorganicFertiliserComponentTypeNonRegional,
   InorganicFertiliserComponentTypeRegional,
-  InorganicFertiliserComponentOrigin,
 } from '@/constants/enums';
 import { getSheet } from '@/test/common/sheets';
 import { testContext } from '@/test/Grains/context';
 import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
-import { calculateScope3Fertiliser } from '../scope3/15.4-fertiliser/calculate';
 import {
   FertiliserInputInorganicScope1Method1,
   HasFertiliserInput,
@@ -15,11 +14,12 @@ import {
   HasFertiliserInputTransformed,
 } from '../scope1/5-fertiliser/fertiliser.input';
 import { InorganicFertiliserInput } from '../scope1/5-fertiliser/inorganic-fertiliser.input';
+import { calculateScope3Fertiliser } from '../scope3/15.4-fertiliser/calculate';
+import { checkInorganicFertiliserType } from './fertiliser-domain';
 import {
   compareInputsAndOutputs,
   createSheetExtractor,
 } from './sheet-comparison';
-import { checkInorganicFertiliserType } from './fertiliser-domain';
 
 const getCalculatorInput = (
   sheet: XLSX.Sheet,
@@ -34,16 +34,16 @@ const getCalculatorInput = (
   }
 
   const fertiliserType = checkInorganicFertiliserType(cell('A'));
-  const massPurchasedKg = Number(cell('B'));
-  const massAppliedKg = Number(cell(method === '1' ? 'L' : 'C'));
+  const massPurchasedKilograms = Number(cell('B'));
+  const massAppliedKilograms = Number(cell(method === '1' ? 'L' : 'C'));
 
   const application: InorganicFertiliserInput =
     method === '1'
       ? {
           calculationMethodScope3: '1',
           fertiliserType,
-          massAppliedKg: nv(massAppliedKg),
-          massPurchasedKg: nv(massPurchasedKg),
+          massAppliedKilograms: nv(massAppliedKilograms),
+          massPurchasedKilograms: nv(massPurchasedKilograms),
           components: cell('D')
             ? [
                 {
@@ -71,9 +71,9 @@ const getCalculatorInput = (
       : {
           calculationMethodScope3: '2',
           fertiliserType,
-          massAppliedKg: nv(massAppliedKg),
-          massPurchasedKg: nv(massPurchasedKg),
-          customScope3EmissionFactor: nv(Number(cell('D'))),
+          massAppliedKilograms: nv(massAppliedKilograms),
+          massPurchasedKilograms: nv(massPurchasedKilograms),
+          scope3EmissionFactor: nv(Number(cell('D'))),
         };
 
   const raw: FertiliserInputInorganicScope1Method1 = {
@@ -148,8 +148,8 @@ describe('15.4.1 Purchased fertiliser components', () => {
             {
               calculationMethodScope3: '1',
               fertiliserType: 'Urea',
-              massAppliedKg: nv(1000),
-              massPurchasedKg: nv(1000),
+              massAppliedKilograms: nv(1000),
+              massPurchasedKilograms: nv(1000),
               components,
             },
           ],

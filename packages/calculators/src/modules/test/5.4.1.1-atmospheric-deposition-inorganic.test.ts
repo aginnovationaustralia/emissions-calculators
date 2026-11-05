@@ -33,8 +33,8 @@ const getCalculatorInput = (
   const massAppliedKg = Number(cell('C'));
 
   const application: InorganicFertiliserInputScope3Method1 = {
-    massAppliedKg: nv(massAppliedKg),
-    massPurchasedKg: nv(massAppliedKg),
+    massAppliedKilograms: nv(massAppliedKg),
+    massPurchasedKilograms: nv(massAppliedKg),
     fertiliserType,
     calculationMethodScope3: '1',
   };

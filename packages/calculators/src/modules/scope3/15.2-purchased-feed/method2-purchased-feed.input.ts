@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { BasePurchasedFeedInputSchema } from './base-purchased-feed.input';
 export const PurchasedFeedMethod2InputSchema =
   BasePurchasedFeedInputSchema.extend({
-    customEmissionsFactor: numberInput(
+    method2EmissionFactor: numberInput(
       (val) => massPerMass('CO2e', 'Purchased Feed', val),
       {
         name: 'custom emissions factor',

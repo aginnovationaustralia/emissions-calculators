@@ -9,8 +9,8 @@ const period: SheepClassPeriodInput = {
   head: nv(1),
 };
 const monthlyClass: SheepClassMonthlyInput = {
-  greasyWoolProduction: nv(0),
-  cleanWoolYieldProportion: nv(0),
+  greasyWoolProductionKilograms: nv(0),
+  fractionOfYieldCleanWool: nv(0),
   january: period,
   february: period,
   march: period,
@@ -25,8 +25,8 @@ const monthlyClass: SheepClassMonthlyInput = {
   december: period,
 };
 const seasonalClass: SheepClassSeasonalInput = {
-  greasyWoolProduction: nv(0),
-  cleanWoolYieldProportion: nv(0),
+  greasyWoolProductionKilograms: nv(0),
+  fractionOfYieldCleanWool: nv(0),
   spring: period,
   summer: period,
   winter: period,

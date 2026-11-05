@@ -63,10 +63,10 @@ const getCalculatorInput = (
                   {
                     averageLengthOfStayDays: nv(lengthOfStayDays),
                     head: nv(numberOfCattle),
-                    method2DryMatterIntake: nvo(
+                    method2DailyDryMatterIntakeKilograms: nvo(
                       dryMatterIntake ? Number(dryMatterIntake) : undefined,
                     ),
-                    method2CrudeProtein: nvo(
+                    method2FractionCrudeProteinContent: nvo(
                       crudeProteinContent
                         ? Number(crudeProteinContent)
                         : undefined,

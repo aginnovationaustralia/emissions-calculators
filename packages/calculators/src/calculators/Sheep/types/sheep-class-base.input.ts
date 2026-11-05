@@ -4,7 +4,7 @@ import { massPerHead, massPerMass } from '@/tools/units';
 import { object } from '@/types/schemas';
 
 export const SheepClassBaseInputSchema = object({
-  greasyWoolProduction: numberInput(
+  greasyWoolProductionKilograms: numberInput(
     (val) => massPerHead('Greasy Wool', val),
     {
       name: 'GWk',
@@ -14,7 +14,7 @@ export const SheepClassBaseInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  cleanWoolYieldProportion: numberInput(
+  fractionOfYieldCleanWool: numberInput(
     (val) => massPerMass('Clean Wool', 'Greasy Wool', val),
     {
       name: 'Yk',

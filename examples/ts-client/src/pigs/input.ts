@@ -74,15 +74,15 @@ const quality: QualityTable = {
 
 const electricityMethod1: LocationBasedElectricityInputs = {
   method: 'location',
-  electricityPurchasedKWh: { value: 60000, quality },
+  electricityPurchasedKilowattHours: { value: 60000, quality },
   region: 'QLD',
 };
 
 const electricityMethod2: MarketBasedElectricityInputs = {
   method: 'market',
-  electricityPurchasedKWh: { value: 60000, quality },
-  recsSurrendered: { value: 10 },
-  recsOnsite: { value: 5 },
+  electricityPurchasedKilowattHours: { value: 60000, quality },
+  recsSurrenderedMegawattHours: { value: 10 },
+  recsOnsiteMegawattHours: { value: 5 },
   region: 'QLD',
 };
 
@@ -132,8 +132,8 @@ const anaerobicLagoonAllocationMethod1: PigsAnaerobicLagoonAllocationInput = {
 const anaerobicLagoonAllocationMethod2: PigsAnaerobicLagoonAllocationInput = {
   manureAllocated: { value: 0.3 },
   treatmentStage2Allocations: anaerobicLagoonTreatmentStage2Allocations,
-  fractionNitrogenSeparatedPreTreatment: { value: 0.1 },
-  fractionSolidsSeparatedPreTreatment: { value: 0.2 },
+  method2FractionNitrogenSeparatedPreTreatment: { value: 0.1 },
+  method2FractionSolidsSeparatedPreTreatment: { value: 0.2 },
 };
 
 const digesterTreatmentStage2Allocations: PigsDigesterTreatmentStage2AllocationsInput =
@@ -153,8 +153,8 @@ const digesterAllocationMethod1: PigsDigesterAllocationInput = {
 const digesterAllocationMethod2: PigsDigesterAllocationInput = {
   manureAllocated: { value: 0.2 },
   treatmentStage2Allocations: digesterTreatmentStage2Allocations,
-  fractionNitrogenSeparatedPreTreatment: { value: 0.1 },
-  fractionSolidsSeparatedPreTreatment: { value: 0.2 },
+  method2FractionNitrogenSeparatedPreTreatment: { value: 0.1 },
+  method2FractionSolidsSeparatedPreTreatment: { value: 0.2 },
 };
 
 const pitStorageTreatmentStage2Allocations: PigsPitStorageTreatmentStage2AllocationsInput =
@@ -174,8 +174,8 @@ const pitStorageAllocationMethod1: PigsPitStorageAllocationInput = {
 const pitStorageAllocationMethod2: PigsPitStorageAllocationInput = {
   manureAllocated: { value: 0.1 },
   treatmentStage2Allocations: pitStorageTreatmentStage2Allocations,
-  fractionNitrogenSeparatedPreTreatment: { value: 0.1 },
-  fractionSolidsSeparatedPreTreatment: { value: 0.2 },
+  method2FractionNitrogenSeparatedPreTreatment: { value: 0.1 },
+  method2FractionSolidsSeparatedPreTreatment: { value: 0.2 },
 };
 
 const manureAllocationsMethod1: PigsClassManureAllocationLivestockInput = {
@@ -200,15 +200,15 @@ const manureAllocationsMethod2: PigsClassManureAllocationLivestockInput = {
 
 const classMethod1: PigsClassLivestockInput = {
   head: { value: 1000, quality },
-  days: { value: 365 },
+  durationDays: { value: 365 },
   manureAllocations: manureAllocationsMethod1,
 };
 
 const classMethod2: PigsClassLivestockInput = {
   ...classMethod1,
-  method2NitrogenWasteProductionRate: { value: 0.03 },
-  method2AverageFeedIntake: { value: 2.5 },
-  method2VolatileSolidProductionRate: { value: 0.3 },
+  method2DailyNitrogenWasteProductionKilograms: { value: 0.03 },
+  method2DailyAverageFeedIntakeKilograms: { value: 2.5 },
+  method2DailyVolatileSolidProductionKilograms: { value: 0.3 },
   manureAllocations: manureAllocationsMethod2,
 };
 
@@ -261,36 +261,36 @@ const purchasedLivestockMethod1: PigPurchasedLivestockInput = {
 const purchasedLivestockMethod2: PigPurchasedLivestockInput = {
   type: 'Pig',
   headPurchased: { value: 50 },
-  emissionFactorMethod2: { value: 5 },
-  liveweightMethod2: { value: 120 },
+  method2EmissionFactor: { value: 5 },
+  method2LiveweightKilograms: { value: 120 },
 };
 
 const purchasedFeedMethod1: PurchasedFeedAustralianInput = {
   type: 'Feed for pigs',
   region: 'Australia',
-  amount: { value: 500 },
+  amountTonnes: { value: 500 },
 };
 
 const purchasedFeedMethod2: PurchasedFeedMethod2Input = {
-  amount: { value: 500 },
-  customEmissionsFactor: { value: 0.5 },
+  amountTonnes: { value: 500 },
+  method2EmissionFactor: { value: 0.5 },
 };
 
 const otherPurchasedGoodOrService: OtherPurchasedGoodOrServiceInput = {
   quantity: { value: 10 },
-  emissionsFactor: { value: 1.5 },
+  emissionFactor: { value: 1.5 },
 };
 
 // -------- Solid waste --------
 
 const solidWasteTreatedOnsiteMethod1: SolidWasteMethod1Input = {
   method: '1',
-  unmanagedBurial: { value: 2 },
-  unmanagedDeep: { value: 1 },
-  unmanagedShallow: { value: 3 },
-  composting: { value: 4 },
-  anaerobicDigestion: { value: 5 },
-  incineration: { value: 1 },
+  unmanagedBurialTonnes: { value: 2 },
+  unmanagedDeepTonnes: { value: 1 },
+  unmanagedShallowTonnes: { value: 3 },
+  compostingTonnes: { value: 4 },
+  anaerobicDigestionTonnes: { value: 5 },
+  incinerationTonnes: { value: 1 },
 };
 
 const solidWasteUnmanagedBurial: SolidWasteUnmanagedBurialMethod2Input = {
@@ -389,7 +389,7 @@ const herdMethod1: PigsHerdInput = {
   isInLeachingZone: false,
   state: 'QLD',
   grazingSystem: 'Non-irrigated pasture',
-  liveweightSoldKg: { value: 300000 },
+  liveweightSoldKilograms: { value: 300000 },
   fuel,
   waste: wasteMethod1,
   purchasedLivestock: [purchasedLivestockMethod1],
@@ -413,22 +413,22 @@ const herdMethod2: PigsHerdInput = {
 const carbonMassOfWoodProductsMethod1: CarbonMassOfWoodProductsFromFullCAMInput =
   {
     calculationMethod: '1',
-    carbonMassPerHectareFromFullCAM: { value: 1 },
+    carbonMassFromFullCAMTonnesPerHectare: { value: 1 },
   };
 
 const carbonMassOfWoodProductsMethod2: CarbonMassOfWoodProductsFromRecordsInput =
   {
     calculationMethod: '2',
-    carbonMassPerHectareFromRecords: { value: 1.2 },
+    carbonMassFromRecordsTonnesPerHectare: { value: 1.2 },
   };
 
 const landUseChangeActivityMethod1: FarmForestryInput = {
   type: 'farmForestry',
   activityAreaHectares: { value: 10 },
-  carbonMassInTreesCurrentYear: { value: 102 },
-  carbonMassInTreesPreviousYear: { value: 100 },
-  carbonMassInDebrisCurrentYear: { value: 10.5 },
-  carbonMassInDebrisPreviousYear: { value: 10 },
+  carbonMassInTreesCurrentYearTonnesPerHectare: { value: 102 },
+  carbonMassInTreesPreviousYearTonnesPerHectare: { value: 100 },
+  carbonMassInDebrisCurrentYearTonnesPerHectare: { value: 10.5 },
+  carbonMassInDebrisPreviousYearTonnesPerHectare: { value: 10 },
   carbonMassOfWoodProducts: carbonMassOfWoodProductsMethod1,
 };
 
@@ -438,24 +438,24 @@ const landUseChangeActivityMethod2: FarmForestryInput = {
 };
 
 const burning: BurningInput = {
-  emissionsFromBurningLowRainfallZone: { value: 1 },
-  emissionsFromBurningHighRainfallZone: { value: 2 },
-  carbonStockChangeLowRainfallZone: { value: 3 },
-  carbonStockChangeHighRainfallZone: { value: 4 },
+  emissionsFromBurningLowRainfallZoneTonnes: { value: 1 },
+  emissionsFromBurningHighRainfallZoneTonnes: { value: 2 },
+  carbonStockChangeLowRainfallZoneTonnes: { value: 3 },
+  carbonStockChangeHighRainfallZoneTonnes: { value: 4 },
 };
 
 const perennialCropPlanting: PerennialCropPlantingInput = {
-  areaPlanted: { value: 5 },
+  areaPlantedHectares: { value: 5 },
   yearsSincePlanting: { value: 3 },
 };
 
 const perennialCropClearingMethod1: PerennialCropClearingMethod1Input = {
-  areaCleared: { value: 1 },
+  areaClearedHectares: { value: 1 },
 };
 
 const perennialCropClearingMethod2: PerennialCropClearingMethod2Input = {
-  areaCleared: { value: 1 },
-  method2AgeAtClearing: { value: 5 },
+  areaClearedHectares: { value: 1 },
+  method2AgeAtClearingYears: { value: 5 },
 };
 
 const perennialCropMethod1: PerennialCropMethod1Input = {
@@ -468,8 +468,8 @@ const perennialCropMethod1: PerennialCropMethod1Input = {
 const perennialCropMethod2: PerennialCropFullMethod2StemDensityInput = {
   calculationMethod: '2 (stem density)',
   cropType: 'Apples',
-  method2ActualStemDensity: { value: 400 },
-  method2BiomassAtMaturity: { value: 50 },
+  actualStemDensityPerHectare: { value: 400 },
+  biomassAtMaturityTonnesPerHectare: { value: 50 },
   plantings: [perennialCropPlanting],
   clearings: [perennialCropClearingMethod2],
 };

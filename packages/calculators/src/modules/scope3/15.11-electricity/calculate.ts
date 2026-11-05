@@ -25,7 +25,7 @@ export const calculateElectricityScope3LocationBased = (
   used in Section 14.1)
   EF3,elec = Scope 3 emission factor for purchased electricity (kg CO2e/kWh)
   */
-  const qelec = electricity.electricityPurchasedKWh;
+  const qelec = electricity.electricityPurchasedKilowattHours;
   const ef3elec = selectConstant(
     constants.COMMON,
     'ELECTRICITY',
@@ -85,11 +85,12 @@ export const calculateElectricityScope3MarketBased = (
     name: 'JRPP',
   });
 
-  const nonRenewablesPurchased = electricity.electricityPurchasedKWh.multiply(
-    oneMinus(RPP.plus(JRPP)),
-  );
-  const renewableRecs = electricity.recsSurrendered.minus(
-    electricity.recsOnsite,
+  const nonRenewablesPurchased =
+    electricity.electricityPurchasedKilowattHours.multiply(
+      oneMinus(RPP.plus(JRPP)),
+    );
+  const renewableRecs = electricity.recsSurrenderedMegawattHours.minus(
+    electricity.recsOnsiteMegawattHours,
   );
 
   const efrmf3elec = selectConstant(

@@ -61,10 +61,10 @@ const getCalculatorInput = (
       : undefined;
     return {
       head: nv(head),
-      method2Liveweight: nvo(method2Liveweight),
-      method2LiveweightGain: nvo(method2LiveweightGain),
+      method2LiveweightKilograms: nvo(method2Liveweight),
+      method2DailyLiveweightGainKilograms: nvo(method2LiveweightGain),
       method2DurationDays: nvo(method2DurationDays),
-      method2DryMatterDigestibility: nvo(method2DryMatterDigestibility),
+      method2FractionDryMatterDigestibility: nvo(method2DryMatterDigestibility),
     };
   };
 
@@ -75,9 +75,11 @@ const getCalculatorInput = (
 
     if (milkSolids) {
       return {
-        kgSolidsPerHeadPerDay: nv(Number(milkSolids)),
-        fatContent: nvo(fatContent ? Number(fatContent) : undefined),
-        proteinContent: nvo(
+        solidsKilogramsPerHeadPerDay: nv(Number(milkSolids)),
+        method2PercentFatContent: nvo(
+          fatContent ? Number(fatContent) : undefined,
+        ),
+        method2PercentProteinContent: nvo(
           proteinContent ? Number(proteinContent) : undefined,
         ),
       };

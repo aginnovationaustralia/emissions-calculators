@@ -34,13 +34,13 @@ export const getLandClearingEvent = (
   const productionSystem = cell(columnProductionSystem);
 
   const baseFields = {
-    carbonMassInTreesCurrentYear: nv(0),
-    carbonMassInTreesPreviousYear: nv(0),
-    carbonMassInDebrisCurrentYear: nv(0),
-    carbonMassInDebrisPreviousYear: nv(0),
-    massCH4FromBiomassBurningPerHectare: nv(0),
-    massN2OFromBiomassBurningPerHectare: nv(0),
-    areaBurnt: nv(0),
+    carbonMassInTreesCurrentYearTonnesPerHectare: nv(0),
+    carbonMassInTreesPreviousYearTonnesPerHectare: nv(0),
+    carbonMassInDebrisCurrentYearTonnesPerHectare: nv(0),
+    carbonMassInDebrisPreviousYearTonnesPerHectare: nv(0),
+    massCH4FromBiomassBurningTonnesPerHectare: nv(0),
+    massN2OFromBiomassBurningTonnesPerHectare: nv(0),
+    areaBurntHectares: nv(0),
     region,
     activityAreaHectares: nv(activityAreaHectares),
     isInLeachingZone,

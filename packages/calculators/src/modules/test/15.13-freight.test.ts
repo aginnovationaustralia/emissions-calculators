@@ -35,8 +35,8 @@ const getCalculatorInputMethod1 = (
 
   const freightMethod1: FreightMethod1Input = {
     freightType,
-    distance,
-    weight,
+    distanceKilometres: distance,
+    weightTonnes: weight,
     calculationMethod: '1',
   };
 

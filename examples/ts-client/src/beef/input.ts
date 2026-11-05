@@ -88,15 +88,15 @@ const quality: QualityTable = {
 
 const electricityMethod1: LocationBasedElectricityInputs = {
   method: 'location',
-  electricityPurchasedKWh: { value: 30000, quality },
+  electricityPurchasedKilowattHours: { value: 30000, quality },
   region: 'QLD',
 };
 
 const electricityMethod2: MarketBasedElectricityInputs = {
   method: 'market',
-  electricityPurchasedKWh: { value: 30000, quality },
-  recsSurrendered: { value: 5 },
-  recsOnsite: { value: 2 },
+  electricityPurchasedKilowattHours: { value: 30000, quality },
+  recsSurrenderedMegawattHours: { value: 5 },
+  recsOnsiteMegawattHours: { value: 2 },
   region: 'QLD',
 };
 
@@ -108,18 +108,18 @@ const classPeriodMethod1: BeefClassPeriodInput = {
 
 const classPeriodMethod2: BeefClassPeriodInput = {
   ...classPeriodMethod1,
-  method2Liveweight: { value: 450 },
-  method2LiveweightGain: { value: 0.5 },
+  method2LiveweightKilograms: { value: 450 },
+  method2DailyLiveweightGainKilograms: { value: 0.5 },
   method2DurationDays: { value: 91 },
-  method2DryMatterIntake: { value: 9 },
-  method2DryMatterDigestibility: { value: 0.65 },
-  method2CrudeProteinContent: { value: 0.12 },
+  method2DailyDryMatterIntakeKilograms: { value: 9 },
+  method2FractionDryMatterDigestibility: { value: 0.65 },
+  method2FractionCrudeProteinContent: { value: 0.12 },
 };
 
 const calfClassPeriodMethod1: BeefCalfClassPeriodInput = {
   ...classPeriodMethod1,
-  proportionCalvesBornThisSeason: { value: 0.6 },
-  proportionCalvesBornPreviousSeason: { value: 0.4 },
+  fractionCalvesBornThisSeason: { value: 0.6 },
+  fractionCalvesBornPreviousSeason: { value: 0.4 },
 };
 
 const calfClassPeriodMethod2: BeefCalfClassPeriodInput = {
@@ -129,8 +129,8 @@ const calfClassPeriodMethod2: BeefCalfClassPeriodInput = {
 
 const classWithCalvesPeriodMethod1: BeefClassPeriodWithCalvesInput = {
   ...classPeriodMethod1,
-  proportionCowsThisSeasonInCalf: { value: 0.3 },
-  proportionCowsPreviousSeasonInCalf: { value: 0.2 },
+  fractionCowsThisSeasonInCalf: { value: 0.3 },
+  fractionCowsPreviousSeasonInCalf: { value: 0.2 },
 };
 
 const classWithCalvesPeriodMethod2: BeefClassPeriodWithCalvesInput = {
@@ -235,13 +235,13 @@ const services: ServicesFuelInput = {
 
 const limeApplicationMethod1: LimeApplicationInput = {
   type: 'Limestone',
-  massAppliedKg: { value: 5000 },
+  massAppliedKilograms: { value: 5000 },
   limestoneFraction: { value: 0.9 },
 };
 
 const limeApplicationMethod2: LimeApplicationInput = {
   ...limeApplicationMethod1,
-  customScope3EmissionsFactor: { value: 0.05 },
+  method2Scope3EmissionFactor: { value: 0.05 },
 };
 
 const limeMethod1: LimeInput = {
@@ -260,12 +260,12 @@ const pastureResiduesMethod1: PastureResiduesInput = {
 
 const pastureResiduesMethod2: PastureResiduesInput = {
   calculationMethod: '2',
-  averageYieldPerHectare: { value: 2 },
+  averageYieldTonnesPerHectare: { value: 2 },
 };
 
 const pastureMethod1: PastureResidueInput = {
   type: 'Grass clover mixture',
-  areaManaged: { value: 500 },
+  areaManagedHectares: { value: 500 },
   fractionOfAnnualCropBurnt: { value: 0 },
   residues: pastureResiduesMethod1,
 };
@@ -289,60 +289,60 @@ const purchasedLivestockMethod1: BeefPurchasedLivestockInput = {
 const purchasedLivestockMethod2: BeefPurchasedLivestockInput = {
   type: 'Beef',
   headPurchased: { value: 20 },
-  emissionFactorMethod2: { value: 5 },
-  liveweightMethod2: { value: 250 },
+  method2EmissionFactor: { value: 5 },
+  method2LiveweightKilograms: { value: 250 },
 };
 
 const purchasedFeedMethod1: PurchasedFeedAustralianInput = {
   type: 'Barley grain',
   region: 'Australia',
-  amount: { value: 10 },
+  amountTonnes: { value: 10 },
 };
 
 const purchasedFeedMethod2: PurchasedFeedMethod2Input = {
-  amount: { value: 10 },
-  customEmissionsFactor: { value: 0.3 },
+  amountTonnes: { value: 10 },
+  method2EmissionFactor: { value: 0.3 },
 };
 
 const purchasedMineralSupplementMethod1: PurchasedMineralSupplementMethod1Input =
   {
     type: 'Lick block, weaner',
-    amount: { value: 2 },
+    amountTonnes: { value: 2 },
   };
 
 const purchasedMineralSupplementMethod2: PurchasedMineralSupplementMethod2Input =
   {
-    amount: { value: 2 },
-    customEmissionsFactor: { value: 0.5 },
+    amountTonnes: { value: 2 },
+    method2EmissionFactor: { value: 0.5 },
   };
 
 const otherPurchasedGoodOrService: OtherPurchasedGoodOrServiceInput = {
   quantity: { value: 10 },
-  emissionsFactor: { value: 1.5 },
+  emissionFactor: { value: 1.5 },
 };
 
 // -------- Agrichemicals --------
 
 const chemicalMethod1: AgrichemicalInput = {
   type: 'Herbicide (paraquat, diquat, glyphosate)',
-  amountKg: { value: 50 },
+  amountKilograms: { value: 50 },
 };
 
 const chemicalMethod2: AgrichemicalInput = {
   ...chemicalMethod1,
-  customEmissionsFactor: { value: 10 },
+  method2EmissionFactor: { value: 10 },
 };
 
 // -------- Solid waste --------
 
 const solidWasteTreatedOnsiteMethod1: SolidWasteMethod1Input = {
   method: '1',
-  unmanagedBurial: { value: 2 },
-  unmanagedDeep: { value: 1 },
-  unmanagedShallow: { value: 3 },
-  composting: { value: 4 },
-  anaerobicDigestion: { value: 5 },
-  incineration: { value: 1 },
+  unmanagedBurialTonnes: { value: 2 },
+  unmanagedDeepTonnes: { value: 1 },
+  unmanagedShallowTonnes: { value: 3 },
+  compostingTonnes: { value: 4 },
+  anaerobicDigestionTonnes: { value: 5 },
+  incinerationTonnes: { value: 1 },
 };
 
 const solidWasteUnmanagedBurial: SolidWasteUnmanagedBurialMethod2Input = {
@@ -443,8 +443,8 @@ const inorganicFertiliserComponent: InorganicFertiliserComponentInput = {
 const inorganicFertiliserMethod1: InorganicFertiliserInputScope3Method1 = {
   calculationMethodScope3: '1',
   fertiliserType: 'Urea',
-  massAppliedKg: { value: 1000 },
-  massPurchasedKg: { value: 1000 },
+  massAppliedKilograms: { value: 1000 },
+  massPurchasedKilograms: { value: 1000 },
   components: [inorganicFertiliserComponent],
 };
 
@@ -456,10 +456,10 @@ const inorganicFertilisersMethod1: InorganicFertilisersScope1Method1Input = {
 const inorganicFertiliserMethod2: InorganicFertiliserScope1Method2Input = {
   calculationMethodScope3: '2',
   fertiliserType: 'Urea',
-  massAppliedKg: { value: 1000 },
-  massPurchasedKg: { value: 1000 },
-  customScope3EmissionFactor: { value: 2.5 },
-  customNitrogenFraction: { value: 0.46 },
+  massAppliedKilograms: { value: 1000 },
+  massPurchasedKilograms: { value: 1000 },
+  scope3EmissionFactor: { value: 2.5 },
+  fractionNitrogen: { value: 0.46 },
 };
 
 const inorganicFertilisersMethod2: InorganicFertilisersScope1Method2Input = {
@@ -483,9 +483,9 @@ const feedlotManureGroupMethod1: FeedlotManureGroupInput = {
 
 const feedlotManureGroupMethod2: FeedlotManureGroupInput = {
   ...feedlotManureGroupMethod1,
-  method2DryMatterIntake: { value: 10 },
-  method2CrudeProtein: { value: 0.14 },
-  method2NitrogenRetentionRate: { value: 0.1 },
+  method2DailyDryMatterIntakeKilograms: { value: 10 },
+  method2FractionCrudeProteinContent: { value: 0.14 },
+  method2FractionNitrogenRetentionRate: { value: 0.1 },
 };
 
 const feedlotManureMethod1: FeedlotManureInput = {
@@ -549,7 +549,7 @@ const herdMethod1: BeefHerdInput = {
   climateZone: 'Warm temperate moist',
   isInLeachingZone: false,
   excludedFromNaturalWater: false,
-  liveweightSoldKg: { value: 200000 },
+  liveweightSoldKilograms: { value: 200000 },
   fuel,
   lime: limeMethod1,
   pasture: pastureMethod1,
@@ -583,22 +583,22 @@ const herdMethod2: BeefHerdInput = {
 const carbonMassOfWoodProductsMethod1: CarbonMassOfWoodProductsFromFullCAMInput =
   {
     calculationMethod: '1',
-    carbonMassPerHectareFromFullCAM: { value: 1 },
+    carbonMassFromFullCAMTonnesPerHectare: { value: 1 },
   };
 
 const carbonMassOfWoodProductsMethod2: CarbonMassOfWoodProductsFromRecordsInput =
   {
     calculationMethod: '2',
-    carbonMassPerHectareFromRecords: { value: 1.2 },
+    carbonMassFromRecordsTonnesPerHectare: { value: 1.2 },
   };
 
 const landUseChangeActivityMethod1: FarmForestryInput = {
   type: 'farmForestry',
   activityAreaHectares: { value: 10 },
-  carbonMassInTreesCurrentYear: { value: 102 },
-  carbonMassInTreesPreviousYear: { value: 100 },
-  carbonMassInDebrisCurrentYear: { value: 10.5 },
-  carbonMassInDebrisPreviousYear: { value: 10 },
+  carbonMassInTreesCurrentYearTonnesPerHectare: { value: 102 },
+  carbonMassInTreesPreviousYearTonnesPerHectare: { value: 100 },
+  carbonMassInDebrisCurrentYearTonnesPerHectare: { value: 10.5 },
+  carbonMassInDebrisPreviousYearTonnesPerHectare: { value: 10 },
   carbonMassOfWoodProducts: carbonMassOfWoodProductsMethod1,
 };
 
@@ -608,24 +608,24 @@ const landUseChangeActivityMethod2: FarmForestryInput = {
 };
 
 const burning: BurningInput = {
-  emissionsFromBurningLowRainfallZone: { value: 1 },
-  emissionsFromBurningHighRainfallZone: { value: 2 },
-  carbonStockChangeLowRainfallZone: { value: 3 },
-  carbonStockChangeHighRainfallZone: { value: 4 },
+  emissionsFromBurningLowRainfallZoneTonnes: { value: 1 },
+  emissionsFromBurningHighRainfallZoneTonnes: { value: 2 },
+  carbonStockChangeLowRainfallZoneTonnes: { value: 3 },
+  carbonStockChangeHighRainfallZoneTonnes: { value: 4 },
 };
 
 const perennialCropPlanting: PerennialCropPlantingInput = {
-  areaPlanted: { value: 5 },
+  areaPlantedHectares: { value: 5 },
   yearsSincePlanting: { value: 3 },
 };
 
 const perennialCropClearingMethod1: PerennialCropClearingMethod1Input = {
-  areaCleared: { value: 1 },
+  areaClearedHectares: { value: 1 },
 };
 
 const perennialCropClearingMethod2: PerennialCropClearingMethod2Input = {
-  areaCleared: { value: 1 },
-  method2AgeAtClearing: { value: 5 },
+  areaClearedHectares: { value: 1 },
+  method2AgeAtClearingYears: { value: 5 },
 };
 
 const perennialCropMethod1: PerennialCropMethod1Input = {
@@ -638,8 +638,8 @@ const perennialCropMethod1: PerennialCropMethod1Input = {
 const perennialCropMethod2: PerennialCropFullMethod2StemDensityInput = {
   calculationMethod: '2 (stem density)',
   cropType: 'Oranges',
-  method2ActualStemDensity: { value: 400 },
-  method2BiomassAtMaturity: { value: 50 },
+  actualStemDensityPerHectare: { value: 400 },
+  biomassAtMaturityTonnesPerHectare: { value: 50 },
   plantings: [perennialCropPlanting],
   clearings: [perennialCropClearingMethod2],
 };

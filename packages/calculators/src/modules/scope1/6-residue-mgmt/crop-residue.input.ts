@@ -35,7 +35,7 @@ const ResiduesMethod1Schema = object({
 
 const ResiduesMethod2ByMassSchema = object({
   calculationMethod: z.literal('2'),
-  massCropResidueRemoved: numberInput(
+  massCropResidueRemovedKilograms: numberInput(
     (val) => mass('CropResidue', val),
     {
       name: 'Mremoved',
@@ -66,7 +66,7 @@ const ResiduesMethod2ByFractionSchema = object({
  * `BaseBurnableCropResidueInputSchema`, which adds `fractionOfAnnualCropBurnt`.
  */
 export const BaseCropResidueInputSchema = object({
-  totalYieldKg: numberInput(
+  totalYieldKilograms: numberInput(
     (val) => mass('DryMatter', val),
     {
       name: 'Pc',
@@ -120,7 +120,8 @@ export const residueIsByMass = (
   residues: ResiduesInputTransformed,
 ): residues is ResiduesMethod2ByMassInputTransformed => {
   return (
-    residues.calculationMethod === '2' && 'massCropResidueRemoved' in residues
+    residues.calculationMethod === '2' &&
+    'massCropResidueRemovedKilograms' in residues
   );
 };
 
@@ -199,10 +200,10 @@ export const PastureResidueInputSchema = object({
     description: 'Type of pasture managed in this activity',
     modules: [RESIDUE_PASTURE_6_2, RESIDUE_LEACH_6_3],
   }),
-  areaManaged: numberInput(
+  areaManagedHectares: numberInput(
     (val) => area(hectaresToSquareMetres(val)),
     {
-      name: 'areaManaged',
+      name: 'areaManagedHectares',
       method: '1',
       description: 'Area managed',
       modules: [RESIDUE_PASTURE_6_2, RESIDUE_LEACH_6_3],
@@ -226,11 +227,11 @@ export const PastureResidueInputSchema = object({
     }).meta({ title: 'Method 1' }),
     object({
       calculationMethod: z.literal('2'),
-      averageYieldPerHectare: numberInput(
+      averageYieldTonnesPerHectare: numberInput(
         (val) =>
           massPerArea('DryMatter', tonnesPerHectareToKgPerSquareMetres(val)),
         {
-          name: 'averageYieldPerHectare',
+          name: 'averageYieldTonnesPerHectare',
           method: '2',
           description: 'Custom average pasture yield',
           modules: [RESIDUE_PASTURE_6_2],
@@ -295,7 +296,7 @@ export const getAverageYieldForPasture = (
   return captureMethod1Or2Value(
     defaultAverageYield,
     pasture.residues.calculationMethod === '2'
-      ? pasture.residues.averageYieldPerHectare
+      ? pasture.residues.averageYieldTonnesPerHectare
       : undefined,
   );
 };
@@ -305,9 +306,9 @@ export const getAmountProduced = (
   constants: HasCropConstants,
 ): Container<Mass<'DryMatter'>> => {
   if (isCropResidueInput(input)) {
-    return input.crop.totalYieldKg;
+    return input.crop.totalYieldKilograms;
   }
   return getAverageYieldForPasture(input.pasture, constants).multiply(
-    input.pasture.areaManaged,
+    input.pasture.areaManagedHectares,
   );
 };

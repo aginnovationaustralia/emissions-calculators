@@ -86,19 +86,22 @@ const getCalculatorInput = (
   if (method === '1') {
     const input: SolidWasteScope1Input = {
       method: '1',
-      composting: nvo(Number(cell('A')) || undefined),
-      anaerobicDigestion: nvo(Number(cell('B')) || undefined),
-      incineration: nvo(Number(cell('C')) || undefined),
-      unmanagedDeep: nvo(Number(cell('D')) || undefined),
-      unmanagedShallow: nvo(Number(cell('E')) || undefined),
-      unmanagedBurial: nvo(Number(cell('F')) || undefined),
+      compostingTonnes: nvo(Number(cell('A')) || undefined),
+      anaerobicDigestionTonnes: nvo(Number(cell('B')) || undefined),
+      incinerationTonnes: nvo(Number(cell('C')) || undefined),
+      unmanagedDeepTonnes: nvo(Number(cell('D')) || undefined),
+      unmanagedShallowTonnes: nvo(Number(cell('E')) || undefined),
+      unmanagedBurialTonnes: nvo(Number(cell('F')) || undefined),
     };
 
     return HasSolidWasteInputSchema.parse({ waste: { treatedOnsite: input } });
   }
 
   const input: Partial<
-    Record<Exclude<keyof SolidWasteScope1Input, 'method'>, object[]>
+    Record<
+      Exclude<keyof Extract<SolidWasteScope1Input, { method: '2' }>, 'method'>,
+      object[]
+    >
   > & {
     method: '2';
   } = {

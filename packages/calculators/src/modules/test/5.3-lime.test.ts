@@ -31,11 +31,11 @@ const getCalculatorInput = (
   const application =
     type === 'Gypsum'
       ? {
-          massAppliedKg,
+          massAppliedKilograms: massAppliedKg,
           type,
         }
       : {
-          massAppliedKg,
+          massAppliedKilograms: massAppliedKg,
           limestoneFraction: nv(limestoneFraction),
           type,
         };

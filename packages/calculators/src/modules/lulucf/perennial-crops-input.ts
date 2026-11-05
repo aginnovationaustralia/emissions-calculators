@@ -20,7 +20,7 @@ import {
 import { PerennialCropPlantingInputSchema } from './perennial-crop-planting-input';
 
 const PerennialCropBaseSchema = object({
-  method2ActualStemDensity: numberInputOptional(
+  actualStemDensityPerHectare: numberInputOptional(
     (value) => countPerArea('Trees', perHectareToPerSqMetre(value)),
     {
       name: 'Actual stem density',
@@ -30,7 +30,7 @@ const PerennialCropBaseSchema = object({
       modules: [PERENNIAL_16_6],
     },
   ),
-  method2BiomassAtMaturity: numberInputOptional(
+  biomassAtMaturityTonnesPerHectare: numberInputOptional(
     (value) =>
       massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(value)),
     {
@@ -82,7 +82,7 @@ export const PerennialCropFullMethod2StemDensityInputSchema =
       modules: [PERENNIAL_16_6],
     }),
     calculationMethod: z.literal('2 (stem density)'),
-    method2ActualStemDensity: numberInput(
+    actualStemDensityPerHectare: numberInput(
       (value) => countPerArea('Trees', perHectareToPerSqMetre(value)),
       {
         name: 'Actual stem density',
@@ -103,11 +103,13 @@ export const PerennialCropFullMethod2StemDensityInputSchema =
       const mc = lulucfConstants.WOODY_PERENNIAL_CROPS_FULL[cropType].Mc;
 
       data.clearings.forEach((clearing, index) => {
-        if (clearing.method2AgeAtClearing.unit.store.value.gt(mc.store.value)) {
+        if (
+          clearing.method2AgeAtClearingYears.unit.store.value.gt(mc.store.value)
+        ) {
           ctx.addIssue({
             code: 'custom',
             message: `Age at clearing must be less than or equal to the maturity age for this crop type (${cropType})`,
-            path: ['clearings', index, 'method2AgeAtClearing'],
+            path: ['clearings', index, 'method2AgeAtClearingYears'],
           });
         }
       });
@@ -130,7 +132,7 @@ export const PerennialCropFullMethod2BAMInputSchema =
     }),
     clearings: z.array(PerennialCropClearingMethod1InputSchema),
     calculationMethod: z.literal('2 (BAM)'),
-    method2BiomassAtMaturity: numberInput(
+    biomassAtMaturityTonnesPerHectare: numberInput(
       (value) =>
         massPerArea('Carbon', tonnesPerHectareToKgPerSquareMetres(value)),
       {

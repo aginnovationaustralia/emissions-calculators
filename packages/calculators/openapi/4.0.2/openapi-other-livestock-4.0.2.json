@@ -55,7 +55,7 @@
                             "type": "string",
                             "const": "location"
                           },
-                          "electricityPurchasedKWh": {
+                          "electricityPurchasedKilowattHours": {
                             "description": "Electricity use (kilowatt-hours)",
                             "x-modules": [
                               "14.1",
@@ -88,7 +88,7 @@
                         },
                         "required": [
                           "method",
-                          "electricityPurchasedKWh",
+                          "electricityPurchasedKilowattHours",
                           "region"
                         ],
                         "additionalProperties": false,
@@ -101,7 +101,7 @@
                             "type": "string",
                             "const": "market"
                           },
-                          "electricityPurchasedKWh": {
+                          "electricityPurchasedKilowattHours": {
                             "description": "Electricity use (kilowatt-hours)",
                             "x-modules": [
                               "14.1",
@@ -123,7 +123,7 @@
                             "additionalProperties": false,
                             "x-units": "kilowatt-hours"
                           },
-                          "recsSurrendered": {
+                          "recsSurrenderedMegawattHours": {
                             "description": "Number of eligible Renewable Energy Certificates voluntarily surrendered in the reporting year (megawatt-hours)",
                             "x-modules": [
                               "14.1",
@@ -145,7 +145,7 @@
                             "additionalProperties": false,
                             "x-units": "megawatt-hours"
                           },
-                          "recsOnsite": {
+                          "recsOnsiteMegawattHours": {
                             "description": "Number eligible Renewable Energy Certificates that have been or will be issued for electricity produced on-site during the year and consumed by the entity (megawatt-hours)",
                             "x-modules": [
                               "14.1",
@@ -178,9 +178,9 @@
                         },
                         "required": [
                           "method",
-                          "electricityPurchasedKWh",
-                          "recsSurrendered",
-                          "recsOnsite",
+                          "electricityPurchasedKilowattHours",
+                          "recsSurrenderedMegawattHours",
+                          "recsOnsiteMegawattHours",
                           "region"
                         ],
                         "additionalProperties": false,
@@ -651,7 +651,7 @@
                                     ],
                                     "$ref": "#/components/schemas/OtherLivestockType"
                                   },
-                                  "liveweightMethod2": {
+                                  "method2LiveweightKilograms": {
                                     "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                     "x-modules": [
                                       "15.1"
@@ -677,7 +677,7 @@
                                   "type",
                                   "headPurchased",
                                   "livestockType",
-                                  "liveweightMethod2"
+                                  "method2LiveweightKilograms"
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 1 emission factor, method 2 liveweight"
@@ -710,7 +710,7 @@
                                     "additionalProperties": false,
                                     "x-units": "head"
                                   },
-                                  "emissionFactorMethod2": {
+                                  "method2EmissionFactor": {
                                     "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                     "x-modules": [
                                       "15.1"
@@ -742,7 +742,7 @@
                                 "required": [
                                   "type",
                                   "headPurchased",
-                                  "emissionFactorMethod2",
+                                  "method2EmissionFactor",
                                   "livestockType"
                                 ],
                                 "additionalProperties": false,
@@ -776,7 +776,7 @@
                                     "additionalProperties": false,
                                     "x-units": "head"
                                   },
-                                  "emissionFactorMethod2": {
+                                  "method2EmissionFactor": {
                                     "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                     "x-modules": [
                                       "15.1"
@@ -797,7 +797,7 @@
                                     "additionalProperties": false,
                                     "x-units": "kilograms CO2e per kilogram liveweight"
                                   },
-                                  "liveweightMethod2": {
+                                  "method2LiveweightKilograms": {
                                     "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                     "x-modules": [
                                       "15.1"
@@ -822,8 +822,8 @@
                                 "required": [
                                   "type",
                                   "headPurchased",
-                                  "emissionFactorMethod2",
-                                  "liveweightMethod2"
+                                  "method2EmissionFactor",
+                                  "method2LiveweightKilograms"
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 2 emission factor, method 2 liveweight"
@@ -859,7 +859,7 @@
                                 "additionalProperties": false,
                                 "x-units": "number"
                               },
-                              "emissionsFactor": {
+                              "emissionFactor": {
                                 "description": "The emissions factor for the purchased goods or services, per unit of good or service. (tonnes CO2e)",
                                 "x-modules": [
                                   "15.9"
@@ -883,7 +883,7 @@
                             },
                             "required": [
                               "quantity",
-                              "emissionsFactor"
+                              "emissionFactor"
                             ],
                             "additionalProperties": false
                           }
@@ -908,7 +908,7 @@
                               "type": {
                                 "$ref": "#/components/schemas/AgrochemicalType"
                               },
-                              "amountKg": {
+                              "amountKilograms": {
                                 "description": "Amount of this agrichemical purchased (kilograms chemical)",
                                 "x-modules": [
                                   "15.5"
@@ -929,7 +929,7 @@
                                 "additionalProperties": false,
                                 "x-units": "kilograms chemical"
                               },
-                              "customEmissionsFactor": {
+                              "method2EmissionFactor": {
                                 "description": "Method 2: supply a custom emissions factor for this agrichemical based on supplier records (kilograms CO2e per kilogram chemical)",
                                 "x-modules": [
                                   "15.5"
@@ -953,7 +953,7 @@
                             },
                             "required": [
                               "type",
-                              "amountKg"
+                              "amountKilograms"
                             ],
                             "additionalProperties": false
                           }
@@ -965,7 +965,7 @@
                               {
                                 "type": "object",
                                 "properties": {
-                                  "amount": {
+                                  "amountTonnes": {
                                     "description": "Quantity of this type of mineral supplement purchased. (tonnes purchased mineral supplement)",
                                     "x-modules": [
                                       "15.3"
@@ -992,7 +992,7 @@
                                   }
                                 },
                                 "required": [
-                                  "amount",
+                                  "amountTonnes",
                                   "type"
                                 ],
                                 "additionalProperties": false,
@@ -1001,7 +1001,7 @@
                               {
                                 "type": "object",
                                 "properties": {
-                                  "amount": {
+                                  "amountTonnes": {
                                     "description": "Quantity of this type of mineral supplement purchased. (tonnes purchased mineral supplement)",
                                     "x-modules": [
                                       "15.3"
@@ -1022,7 +1022,7 @@
                                     "additionalProperties": false,
                                     "x-units": "tonnes purchased mineral supplement"
                                   },
-                                  "customEmissionsFactor": {
+                                  "method2EmissionFactor": {
                                     "description": "Method 2: Emission factor of the type of mineral supplement purchased. (kilograms CO2e per kilogram purchased mineral supplement)",
                                     "x-modules": [
                                       "15.3"
@@ -1045,8 +1045,8 @@
                                   }
                                 },
                                 "required": [
-                                  "amount",
-                                  "customEmissionsFactor"
+                                  "amountTonnes",
+                                  "method2EmissionFactor"
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 2"
@@ -1070,7 +1070,7 @@
                                       "type": "string",
                                       "const": "1"
                                     },
-                                    "unmanagedBurial": {
+                                    "unmanagedBurialTonnes": {
                                       "description": "Amount of waste disposed of through burial (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -1091,7 +1091,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "unmanagedDeep": {
+                                    "unmanagedDeepTonnes": {
                                       "description": "Amount of solid waste disposed of in a deep open waste dump. (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -1112,7 +1112,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "unmanagedShallow": {
+                                    "unmanagedShallowTonnes": {
                                       "description": "Amount of solid waste disposed of in a shallow open waste dump. (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -1133,7 +1133,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "composting": {
+                                    "compostingTonnes": {
                                       "description": "Amount of waste treated through composting (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -1154,7 +1154,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "anaerobicDigestion": {
+                                    "anaerobicDigestionTonnes": {
                                       "description": "Amount of waste treated through anaerobic digestion (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -1175,7 +1175,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "incineration": {
+                                    "incinerationTonnes": {
                                       "description": "Amount of solid waste disposed of by incineration. (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -2162,7 +2162,7 @@
                               ],
                               "$ref": "#/components/schemas/PastureType"
                             },
-                            "areaManaged": {
+                            "areaManagedHectares": {
                               "description": "Area managed (hectares)",
                               "x-modules": [
                                 "6.2",
@@ -2230,7 +2230,7 @@
                                       "type": "string",
                                       "const": "2"
                                     },
-                                    "averageYieldPerHectare": {
+                                    "averageYieldTonnesPerHectare": {
                                       "description": "Custom average pasture yield (tonnes dry matter per hectare)",
                                       "x-modules": [
                                         "6.2"
@@ -2254,7 +2254,7 @@
                                   },
                                   "required": [
                                     "calculationMethod",
-                                    "averageYieldPerHectare"
+                                    "averageYieldTonnesPerHectare"
                                   ],
                                   "additionalProperties": false,
                                   "title": "Method 2"
@@ -2264,7 +2264,7 @@
                           },
                           "required": [
                             "type",
-                            "areaManaged",
+                            "areaManagedHectares",
                             "fractionOfAnnualCropBurnt",
                             "residues"
                           ],
@@ -2280,7 +2280,7 @@
                                   {
                                     "type": "object",
                                     "properties": {
-                                      "massAppliedKg": {
+                                      "massAppliedKilograms": {
                                         "description": "Total mass of lime applied (kilograms lime)",
                                         "x-modules": [
                                           "15.6",
@@ -2302,7 +2302,7 @@
                                         "additionalProperties": false,
                                         "x-units": "kilograms lime"
                                       },
-                                      "customScope3EmissionsFactor": {
+                                      "method2Scope3EmissionFactor": {
                                         "description": "Method 2: supply a custom scope 3 emissions factor for lime based on supplier records (kilograms CO2e per kilogram lime)",
                                         "x-modules": [
                                           "15.6"
@@ -2354,7 +2354,7 @@
                                       }
                                     },
                                     "required": [
-                                      "massAppliedKg",
+                                      "massAppliedKilograms",
                                       "limestoneFraction",
                                       "type"
                                     ],
@@ -2364,7 +2364,7 @@
                                   {
                                     "type": "object",
                                     "properties": {
-                                      "massAppliedKg": {
+                                      "massAppliedKilograms": {
                                         "description": "Total mass of lime applied (kilograms lime)",
                                         "x-modules": [
                                           "15.6",
@@ -2386,7 +2386,7 @@
                                         "additionalProperties": false,
                                         "x-units": "kilograms lime"
                                       },
-                                      "customScope3EmissionsFactor": {
+                                      "method2Scope3EmissionFactor": {
                                         "description": "Method 2: supply a custom scope 3 emissions factor for lime based on supplier records (kilograms CO2e per kilogram lime)",
                                         "x-modules": [
                                           "15.6"
@@ -2413,7 +2413,7 @@
                                       }
                                     },
                                     "required": [
-                                      "massAppliedKg",
+                                      "massAppliedKilograms",
                                       "type"
                                     ],
                                     "additionalProperties": false,
@@ -2429,7 +2429,7 @@
                           ],
                           "additionalProperties": false
                         },
-                        "liveweightSoldKg": {
+                        "liveweightSoldKilograms": {
                           "description": "The liveweight of the animals sold during the reporting period (kilograms liveweight)",
                           "x-modules": [
                             "Intensities"
@@ -2470,7 +2470,7 @@
                         "fuel",
                         "pasture",
                         "lime",
-                        "liveweightSoldKg",
+                        "liveweightSoldKilograms",
                         "fertiliser"
                       ],
                       "additionalProperties": false
@@ -4398,7 +4398,7 @@
                           "intensities": {
                             "type": "object",
                             "properties": {
-                              "liveweightProducedKg": {
+                              "liveweightProducedKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -4426,7 +4426,7 @@
                               }
                             },
                             "required": [
-                              "liveweightProducedKg",
+                              "liveweightProducedKilograms",
                               "liveweightIntensity"
                             ],
                             "additionalProperties": false
@@ -4469,7 +4469,7 @@
                     "intensities": {
                       "type": "object",
                       "properties": {
-                        "liveweightProducedKg": {
+                        "liveweightProducedKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -4510,7 +4510,7 @@
                         }
                       },
                       "required": [
-                        "liveweightProducedKg",
+                        "liveweightProducedKilograms",
                         "liveweightIntensityExcludingLULUCF",
                         "liveweightIntensityIncludingLULUCF"
                       ],
@@ -4575,7 +4575,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4596,7 +4596,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4617,7 +4617,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4638,7 +4638,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4675,7 +4675,7 @@
                       ],
                       "$ref": "#/components/schemas/IBRA7Region"
                     },
-                    "massCH4FromBiomassBurningPerHectare": {
+                    "massCH4FromBiomassBurningTonnesPerHectare": {
                       "description": "Mass CH4 from biomass burning. Derived from FullCAM output. (tonnes CH4 per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4696,7 +4696,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes CH4 per hectare"
                     },
-                    "massN2OFromBiomassBurningPerHectare": {
+                    "massN2OFromBiomassBurningTonnesPerHectare": {
                       "description": "Mass N2O from biomass burning. Derived from FullCAM output. (tonnes N2O per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4717,7 +4717,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes N2O per hectare"
                     },
-                    "areaBurnt": {
+                    "areaBurntHectares": {
                       "description": "Area burnt. Derived from FullCAM output. (hectares)",
                       "x-modules": [
                         "16.2"
@@ -4752,15 +4752,15 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "isInLeachingZone",
                     "region",
-                    "massCH4FromBiomassBurningPerHectare",
-                    "massN2OFromBiomassBurningPerHectare",
-                    "areaBurnt",
+                    "massCH4FromBiomassBurningTonnesPerHectare",
+                    "massN2OFromBiomassBurningTonnesPerHectare",
+                    "areaBurntHectares",
                     "type",
                     "cropProductionSystem"
                   ],
@@ -4794,7 +4794,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4815,7 +4815,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4836,7 +4836,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4857,7 +4857,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4894,7 +4894,7 @@
                       ],
                       "$ref": "#/components/schemas/IBRA7Region"
                     },
-                    "massCH4FromBiomassBurningPerHectare": {
+                    "massCH4FromBiomassBurningTonnesPerHectare": {
                       "description": "Mass CH4 from biomass burning. Derived from FullCAM output. (tonnes CH4 per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4915,7 +4915,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes CH4 per hectare"
                     },
-                    "massN2OFromBiomassBurningPerHectare": {
+                    "massN2OFromBiomassBurningTonnesPerHectare": {
                       "description": "Mass N2O from biomass burning. Derived from FullCAM output. (tonnes N2O per hectare)",
                       "x-modules": [
                         "16.2"
@@ -4936,7 +4936,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes N2O per hectare"
                     },
-                    "areaBurnt": {
+                    "areaBurntHectares": {
                       "description": "Area burnt. Derived from FullCAM output. (hectares)",
                       "x-modules": [
                         "16.2"
@@ -4971,15 +4971,15 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "isInLeachingZone",
                     "region",
-                    "massCH4FromBiomassBurningPerHectare",
-                    "massN2OFromBiomassBurningPerHectare",
-                    "areaBurnt",
+                    "massCH4FromBiomassBurningTonnesPerHectare",
+                    "massN2OFromBiomassBurningTonnesPerHectare",
+                    "areaBurntHectares",
                     "type",
                     "pastureProductionSystem"
                   ],
@@ -5013,7 +5013,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5034,7 +5034,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5055,7 +5055,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5076,7 +5076,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5113,7 +5113,7 @@
                       ],
                       "$ref": "#/components/schemas/IBRA7Region"
                     },
-                    "massCH4FromBiomassBurningPerHectare": {
+                    "massCH4FromBiomassBurningTonnesPerHectare": {
                       "description": "Mass CH4 from biomass burning. Derived from FullCAM output. (tonnes CH4 per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5134,7 +5134,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes CH4 per hectare"
                     },
-                    "massN2OFromBiomassBurningPerHectare": {
+                    "massN2OFromBiomassBurningTonnesPerHectare": {
                       "description": "Mass N2O from biomass burning. Derived from FullCAM output. (tonnes N2O per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5155,7 +5155,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes N2O per hectare"
                     },
-                    "areaBurnt": {
+                    "areaBurntHectares": {
                       "description": "Area burnt. Derived from FullCAM output. (hectares)",
                       "x-modules": [
                         "16.2"
@@ -5193,15 +5193,15 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "isInLeachingZone",
                     "region",
-                    "massCH4FromBiomassBurningPerHectare",
-                    "massN2OFromBiomassBurningPerHectare",
-                    "areaBurnt",
+                    "massCH4FromBiomassBurningTonnesPerHectare",
+                    "massN2OFromBiomassBurningTonnesPerHectare",
+                    "areaBurntHectares",
                     "type",
                     "pastureProductionSystem"
                   ],
@@ -5235,7 +5235,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5256,7 +5256,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5277,7 +5277,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5298,7 +5298,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5326,10 +5326,10 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "type"
                   ],
                   "additionalProperties": false
@@ -5362,7 +5362,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5383,7 +5383,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5404,7 +5404,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5425,7 +5425,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5453,10 +5453,10 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "type"
                   ],
                   "additionalProperties": false
@@ -5489,7 +5489,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5510,7 +5510,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5531,7 +5531,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5552,7 +5552,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5578,7 +5578,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "carbonMassPerHectareFromFullCAM": {
+                            "carbonMassFromFullCAMTonnesPerHectare": {
                               "description": "Carbon mass of wood products harvested. Derived from a FullCAM simulation, using default simulation parameters. (tonnes carbon per hectare)",
                               "x-modules": [
                                 "16.2"
@@ -5605,7 +5605,7 @@
                             }
                           },
                           "required": [
-                            "carbonMassPerHectareFromFullCAM",
+                            "carbonMassFromFullCAMTonnesPerHectare",
                             "calculationMethod"
                           ],
                           "title": "From FullCAM simulation"
@@ -5613,7 +5613,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "carbonMassPerHectareFromRecords": {
+                            "carbonMassFromRecordsTonnesPerHectare": {
                               "description": "Carbon mass of wood products harvested. Derived from FullCAM output, where FullCAM simulation parameters are populated from detailed records or site specific research. (tonnes carbon per hectare)",
                               "x-modules": [
                                 "16.2"
@@ -5640,7 +5640,7 @@
                             }
                           },
                           "required": [
-                            "carbonMassPerHectareFromRecords",
+                            "carbonMassFromRecordsTonnesPerHectare",
                             "calculationMethod"
                           ],
                           "title": "From farm records"
@@ -5655,10 +5655,10 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "carbonMassOfWoodProducts",
                     "type"
                   ],
@@ -5692,7 +5692,7 @@
                       "additionalProperties": false,
                       "x-units": "hectares"
                     },
-                    "carbonMassInTreesCurrentYear": {
+                    "carbonMassInTreesCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5713,7 +5713,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInTreesPreviousYear": {
+                    "carbonMassInTreesPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in trees in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5734,7 +5734,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisCurrentYear": {
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in current year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5755,7 +5755,7 @@
                       "additionalProperties": false,
                       "x-units": "tonnes carbon per hectare"
                     },
-                    "carbonMassInDebrisPreviousYear": {
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare": {
                       "description": "Carbon mass in debris in previous year. Derived from FullCAM output. (tonnes carbon per hectare)",
                       "x-modules": [
                         "16.2"
@@ -5781,7 +5781,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "carbonMassPerHectareFromFullCAM": {
+                            "carbonMassFromFullCAMTonnesPerHectare": {
                               "description": "Carbon mass of wood products harvested. Derived from a FullCAM simulation, using default simulation parameters. (tonnes carbon per hectare)",
                               "x-modules": [
                                 "16.2"
@@ -5808,7 +5808,7 @@
                             }
                           },
                           "required": [
-                            "carbonMassPerHectareFromFullCAM",
+                            "carbonMassFromFullCAMTonnesPerHectare",
                             "calculationMethod"
                           ],
                           "title": "From FullCAM simulation"
@@ -5816,7 +5816,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "carbonMassPerHectareFromRecords": {
+                            "carbonMassFromRecordsTonnesPerHectare": {
                               "description": "Carbon mass of wood products harvested. Derived from FullCAM output, where FullCAM simulation parameters are populated from detailed records or site specific research. (tonnes carbon per hectare)",
                               "x-modules": [
                                 "16.2"
@@ -5843,7 +5843,7 @@
                             }
                           },
                           "required": [
-                            "carbonMassPerHectareFromRecords",
+                            "carbonMassFromRecordsTonnesPerHectare",
                             "calculationMethod"
                           ],
                           "title": "From farm records"
@@ -5858,10 +5858,10 @@
                   },
                   "required": [
                     "activityAreaHectares",
-                    "carbonMassInTreesCurrentYear",
-                    "carbonMassInTreesPreviousYear",
-                    "carbonMassInDebrisCurrentYear",
-                    "carbonMassInDebrisPreviousYear",
+                    "carbonMassInTreesCurrentYearTonnesPerHectare",
+                    "carbonMassInTreesPreviousYearTonnesPerHectare",
+                    "carbonMassInDebrisCurrentYearTonnesPerHectare",
+                    "carbonMassInDebrisPreviousYearTonnesPerHectare",
                     "carbonMassOfWoodProducts",
                     "type"
                   ],
@@ -6024,7 +6024,7 @@
       "BurningInput": {
         "type": "object",
         "properties": {
-          "emissionsFromBurningLowRainfallZone": {
+          "emissionsFromBurningLowRainfallZoneTonnes": {
             "description": "Emissions from biomass burning in the Low Rainfall Zone. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
@@ -6045,7 +6045,7 @@
             "additionalProperties": false,
             "x-units": "tonnes CO2e"
           },
-          "emissionsFromBurningHighRainfallZone": {
+          "emissionsFromBurningHighRainfallZoneTonnes": {
             "description": "Emissions from biomass burning in the High Rainfall Zone. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
@@ -6066,7 +6066,7 @@
             "additionalProperties": false,
             "x-units": "tonnes CO2e"
           },
-          "carbonStockChangeLowRainfallZone": {
+          "carbonStockChangeLowRainfallZoneTonnes": {
             "description": "Change in carbon stock in the Low Rainfall Zone for the activity area. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
@@ -6087,7 +6087,7 @@
             "additionalProperties": false,
             "x-units": "tonnes CO2e"
           },
-          "carbonStockChangeHighRainfallZone": {
+          "carbonStockChangeHighRainfallZoneTonnes": {
             "description": "Change in carbon stock in the High Rainfall Zone for the activity area. Derived from a SavCAM abatement report (tonnes CO2e)",
             "x-modules": [
               "16.5"
@@ -6110,10 +6110,10 @@
           }
         },
         "required": [
-          "emissionsFromBurningLowRainfallZone",
-          "emissionsFromBurningHighRainfallZone",
-          "carbonStockChangeLowRainfallZone",
-          "carbonStockChangeHighRainfallZone"
+          "emissionsFromBurningLowRainfallZoneTonnes",
+          "emissionsFromBurningHighRainfallZoneTonnes",
+          "carbonStockChangeLowRainfallZoneTonnes",
+          "carbonStockChangeHighRainfallZoneTonnes"
         ],
         "additionalProperties": false
       },
@@ -6127,7 +6127,7 @@
             {
               "type": "object",
               "properties": {
-                "method2ActualStemDensity": {
+                "actualStemDensityPerHectare": {
                   "description": "Method 2: supply an exact value for the actual stem density of this planting based on farm records (trees per hectare)",
                   "x-modules": [
                     "16.6"
@@ -6148,7 +6148,7 @@
                   "additionalProperties": false,
                   "x-units": "trees per hectare"
                 },
-                "method2BiomassAtMaturity": {
+                "biomassAtMaturityTonnesPerHectare": {
                   "description": "Method 2: supply an exact value for the biomass at maturity for this planting based on farm records (tonnes carbon per hectare)",
                   "x-modules": [
                     "16.6"
@@ -6174,7 +6174,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "areaPlanted": {
+                      "areaPlantedHectares": {
                         "description": "Area planted t years ago (hectares)",
                         "x-modules": [
                           "16.6"
@@ -6218,7 +6218,7 @@
                       }
                     },
                     "required": [
-                      "areaPlanted",
+                      "areaPlantedHectares",
                       "yearsSincePlanting"
                     ],
                     "additionalProperties": false
@@ -6249,7 +6249,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "areaCleared": {
+                      "areaClearedHectares": {
                         "description": "Area cleared (hectares)",
                         "x-modules": [
                           "16.6"
@@ -6272,7 +6272,7 @@
                       }
                     },
                     "required": [
-                      "areaCleared"
+                      "areaClearedHectares"
                     ],
                     "additionalProperties": false
                   }
@@ -6294,7 +6294,7 @@
             {
               "type": "object",
               "properties": {
-                "method2ActualStemDensity": {
+                "actualStemDensityPerHectare": {
                   "description": "Method 2: supply an exact value for the actual stem density of this planting based on farm records (trees per hectare)",
                   "x-modules": [
                     "16.6"
@@ -6315,7 +6315,7 @@
                   "additionalProperties": false,
                   "x-units": "trees per hectare"
                 },
-                "method2BiomassAtMaturity": {
+                "biomassAtMaturityTonnesPerHectare": {
                   "description": "Method 2: supply an exact value for the biomass at maturity for this planting based on farm records (tonnes carbon per hectare)",
                   "x-modules": [
                     "16.6"
@@ -6341,7 +6341,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "areaPlanted": {
+                      "areaPlantedHectares": {
                         "description": "Area planted t years ago (hectares)",
                         "x-modules": [
                           "16.6"
@@ -6385,7 +6385,7 @@
                       }
                     },
                     "required": [
-                      "areaPlanted",
+                      "areaPlantedHectares",
                       "yearsSincePlanting"
                     ],
                     "additionalProperties": false
@@ -6407,7 +6407,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "areaCleared": {
+                      "areaClearedHectares": {
                         "description": "Area cleared (hectares)",
                         "x-modules": [
                           "16.6"
@@ -6428,7 +6428,7 @@
                         "additionalProperties": false,
                         "x-units": "hectares"
                       },
-                      "method2AgeAtClearing": {
+                      "method2AgeAtClearingYears": {
                         "description": "Time since original planting when clearing occurs. This must be less than the maturity age for the crop type (years)",
                         "x-modules": [
                           "16.6"
@@ -6451,15 +6451,15 @@
                       }
                     },
                     "required": [
-                      "areaCleared",
-                      "method2AgeAtClearing"
+                      "areaClearedHectares",
+                      "method2AgeAtClearingYears"
                     ],
                     "additionalProperties": false
                   }
                 }
               },
               "required": [
-                "method2ActualStemDensity",
+                "actualStemDensityPerHectare",
                 "plantings",
                 "cropType",
                 "calculationMethod",
@@ -6471,7 +6471,7 @@
             {
               "type": "object",
               "properties": {
-                "method2ActualStemDensity": {
+                "actualStemDensityPerHectare": {
                   "description": "Method 2: supply an exact value for the actual stem density of this planting based on farm records (trees per hectare)",
                   "x-modules": [
                     "16.6"
@@ -6492,7 +6492,7 @@
                   "additionalProperties": false,
                   "x-units": "trees per hectare"
                 },
-                "method2BiomassAtMaturity": {
+                "biomassAtMaturityTonnesPerHectare": {
                   "description": "Method 2: supply an exact value for the biomass at maturity for this planting based on farm records (tonnes carbon per hectare)",
                   "x-modules": [
                     "16.6"
@@ -6518,7 +6518,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "areaPlanted": {
+                      "areaPlantedHectares": {
                         "description": "Area planted t years ago (hectares)",
                         "x-modules": [
                           "16.6"
@@ -6562,7 +6562,7 @@
                       }
                     },
                     "required": [
-                      "areaPlanted",
+                      "areaPlantedHectares",
                       "yearsSincePlanting"
                     ],
                     "additionalProperties": false
@@ -6580,7 +6580,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "areaCleared": {
+                      "areaClearedHectares": {
                         "description": "Area cleared (hectares)",
                         "x-modules": [
                           "16.6"
@@ -6603,7 +6603,7 @@
                       }
                     },
                     "required": [
-                      "areaCleared"
+                      "areaClearedHectares"
                     ],
                     "additionalProperties": false
                   }
@@ -6614,7 +6614,7 @@
                 }
               },
               "required": [
-                "method2BiomassAtMaturity",
+                "biomassAtMaturityTonnesPerHectare",
                 "plantings",
                 "cropType",
                 "clearings",
@@ -7474,7 +7474,7 @@
                     {
                       "type": "object",
                       "properties": {
-                        "amount": {
+                        "amountTonnes": {
                           "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                           "x-modules": [
                             "15.2"
@@ -7501,7 +7501,7 @@
                         }
                       },
                       "required": [
-                        "amount",
+                        "amountTonnes",
                         "type"
                       ],
                       "additionalProperties": false,
@@ -7512,7 +7512,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -7545,7 +7545,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -7555,7 +7555,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -7606,7 +7606,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -7616,7 +7616,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -7659,7 +7659,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -7669,7 +7669,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -7706,7 +7706,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -7716,7 +7716,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -7760,7 +7760,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -7770,7 +7770,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -7813,7 +7813,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -7823,7 +7823,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -7863,7 +7863,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -7873,7 +7873,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -7917,7 +7917,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -7927,7 +7927,7 @@
                         {
                           "type": "object",
                           "properties": {
-                            "amount": {
+                            "amountTonnes": {
                               "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                               "x-modules": [
                                 "15.2"
@@ -7967,7 +7967,7 @@
                             }
                           },
                           "required": [
-                            "amount",
+                            "amountTonnes",
                             "type",
                             "region"
                           ],
@@ -7985,7 +7985,7 @@
                 {
                   "type": "object",
                   "properties": {
-                    "amount": {
+                    "amountTonnes": {
                       "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                       "x-modules": [
                         "15.2"
@@ -8015,7 +8015,7 @@
                     }
                   },
                   "required": [
-                    "amount",
+                    "amountTonnes",
                     "type"
                   ],
                   "additionalProperties": false,
@@ -8028,7 +8028,7 @@
             {
               "type": "object",
               "properties": {
-                "amount": {
+                "amountTonnes": {
                   "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                   "x-modules": [
                     "15.2"
@@ -8049,7 +8049,7 @@
                   "additionalProperties": false,
                   "x-units": "tonnes purchased feed"
                 },
-                "customEmissionsFactor": {
+                "method2EmissionFactor": {
                   "description": "Method 2: Emission factor of the type of feed purchased. (kilograms CO2e per kilogram purchased feed)",
                   "x-modules": [
                     "15.2"
@@ -8072,8 +8072,8 @@
                 }
               },
               "required": [
-                "amount",
-                "customEmissionsFactor"
+                "amountTonnes",
+                "method2EmissionFactor"
               ],
               "additionalProperties": false,
               "title": "Method 2 (custom emissions factor)"
@@ -8788,8 +8788,8 @@
                         {
                           "type": "object",
                           "properties": {
-                            "massAppliedKg": {
-                              "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKg), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                            "massAppliedKilograms": {
+                              "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                               "x-modules": [
                                 "5.1",
                                 "5.4",
@@ -8811,8 +8811,8 @@
                               "additionalProperties": false,
                               "x-units": "kilograms inorganic fertiliser"
                             },
-                            "massPurchasedKg": {
-                              "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKg), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                            "massPurchasedKilograms": {
+                              "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                               "x-modules": [
                                 "15.4"
                               ],
@@ -9009,8 +9009,8 @@
                             }
                           },
                           "required": [
-                            "massAppliedKg",
-                            "massPurchasedKg",
+                            "massAppliedKilograms",
+                            "massPurchasedKilograms",
                             "fertiliserType",
                             "calculationMethodScope3"
                           ],
@@ -9022,8 +9022,8 @@
                             {
                               "type": "object",
                               "properties": {
-                                "massAppliedKg": {
-                                  "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKg), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                "massAppliedKilograms": {
+                                  "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                                   "x-modules": [
                                     "5.1",
                                     "5.4",
@@ -9045,8 +9045,8 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms inorganic fertiliser"
                                 },
-                                "massPurchasedKg": {
-                                  "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKg), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                "massPurchasedKilograms": {
+                                  "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                                   "x-modules": [
                                     "15.4"
                                   ],
@@ -9066,7 +9066,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms inorganic fertiliser"
                                 },
-                                "customScope3EmissionFactor": {
+                                "scope3EmissionFactor": {
                                   "description": "Custom scope 3 emission factor for this fertiliser (kilograms CO2e per kilogram inorganic fertiliser)",
                                   "x-modules": [
                                     "15.4"
@@ -9102,7 +9102,7 @@
                                   ],
                                   "$ref": "#/components/schemas/InorganicFertiliserType"
                                 },
-                                "customNitrogenFraction": {
+                                "fractionNitrogen": {
                                   "description": "Custom nitrogen fraction for the fertiliser (kilograms nitrogen per kilogram inorganic fertiliser)",
                                   "x-modules": [
                                     "5.1",
@@ -9126,9 +9126,9 @@
                                 }
                               },
                               "required": [
-                                "massAppliedKg",
-                                "massPurchasedKg",
-                                "customScope3EmissionFactor",
+                                "massAppliedKilograms",
+                                "massPurchasedKilograms",
+                                "scope3EmissionFactor",
                                 "calculationMethodScope3",
                                 "fertiliserType"
                               ],
@@ -9138,8 +9138,8 @@
                             {
                               "type": "object",
                               "properties": {
-                                "massAppliedKg": {
-                                  "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKg), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                "massAppliedKilograms": {
+                                  "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                                   "x-modules": [
                                     "5.1",
                                     "5.4",
@@ -9161,8 +9161,8 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms inorganic fertiliser"
                                 },
-                                "massPurchasedKg": {
-                                  "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKg), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                "massPurchasedKilograms": {
+                                  "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                                   "x-modules": [
                                     "15.4"
                                   ],
@@ -9182,7 +9182,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms inorganic fertiliser"
                                 },
-                                "customScope3EmissionFactor": {
+                                "scope3EmissionFactor": {
                                   "description": "Custom scope 3 emission factor for this fertiliser (kilograms CO2e per kilogram inorganic fertiliser)",
                                   "x-modules": [
                                     "15.4"
@@ -9221,7 +9221,7 @@
                                     "15.4"
                                   ]
                                 },
-                                "customNitrogenFraction": {
+                                "fractionNitrogen": {
                                   "description": "Custom nitrogen fraction for the fertiliser (kilograms nitrogen per kilogram inorganic fertiliser)",
                                   "x-modules": [
                                     "5.1",
@@ -9243,7 +9243,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms nitrogen per kilogram inorganic fertiliser"
                                 },
-                                "customUreaFraction": {
+                                "fractionUrea": {
                                   "description": "Custom urea fraction for the fertiliser (kilograms urea per kilogram inorganic fertiliser)",
                                   "x-modules": [
                                     "5.1"
@@ -9266,13 +9266,13 @@
                                 }
                               },
                               "required": [
-                                "massAppliedKg",
-                                "massPurchasedKg",
-                                "customScope3EmissionFactor",
+                                "massAppliedKilograms",
+                                "massPurchasedKilograms",
+                                "scope3EmissionFactor",
                                 "calculationMethodScope3",
                                 "fertiliserType",
-                                "customNitrogenFraction",
-                                "customUreaFraction"
+                                "fractionNitrogen",
+                                "fractionUrea"
                               ],
                               "additionalProperties": false,
                               "title": "Scope 3 method 2 (other fertiliser type)"
@@ -9331,8 +9331,8 @@
                         {
                           "type": "object",
                           "properties": {
-                            "massAppliedKg": {
-                              "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKg), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                            "massAppliedKilograms": {
+                              "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                               "x-modules": [
                                 "5.1",
                                 "5.4",
@@ -9354,8 +9354,8 @@
                               "additionalProperties": false,
                               "x-units": "kilograms inorganic fertiliser"
                             },
-                            "massPurchasedKg": {
-                              "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKg), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                            "massPurchasedKilograms": {
+                              "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                               "x-modules": [
                                 "15.4"
                               ],
@@ -9552,8 +9552,8 @@
                             }
                           },
                           "required": [
-                            "massAppliedKg",
-                            "massPurchasedKg",
+                            "massAppliedKilograms",
+                            "massPurchasedKilograms",
                             "fertiliserType",
                             "calculationMethodScope3"
                           ],
@@ -9565,8 +9565,8 @@
                             {
                               "type": "object",
                               "properties": {
-                                "massAppliedKg": {
-                                  "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKg), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                "massAppliedKilograms": {
+                                  "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                                   "x-modules": [
                                     "5.1",
                                     "5.4",
@@ -9588,8 +9588,8 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms inorganic fertiliser"
                                 },
-                                "massPurchasedKg": {
-                                  "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKg), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                "massPurchasedKilograms": {
+                                  "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                                   "x-modules": [
                                     "15.4"
                                   ],
@@ -9609,7 +9609,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms inorganic fertiliser"
                                 },
-                                "customScope3EmissionFactor": {
+                                "scope3EmissionFactor": {
                                   "description": "Custom scope 3 emission factor for this fertiliser (kilograms CO2e per kilogram inorganic fertiliser)",
                                   "x-modules": [
                                     "15.4"
@@ -9645,7 +9645,7 @@
                                   ],
                                   "$ref": "#/components/schemas/InorganicFertiliserType"
                                 },
-                                "customNitrogenFraction": {
+                                "fractionNitrogen": {
                                   "description": "Custom nitrogen fraction for the fertiliser (kilograms nitrogen per kilogram inorganic fertiliser)",
                                   "x-modules": [
                                     "5.1",
@@ -9669,9 +9669,9 @@
                                 }
                               },
                               "required": [
-                                "massAppliedKg",
-                                "massPurchasedKg",
-                                "customScope3EmissionFactor",
+                                "massAppliedKilograms",
+                                "massPurchasedKilograms",
+                                "scope3EmissionFactor",
                                 "calculationMethodScope3",
                                 "fertiliserType"
                               ],
@@ -9681,8 +9681,8 @@
                             {
                               "type": "object",
                               "properties": {
-                                "massAppliedKg": {
-                                  "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKg), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                "massAppliedKilograms": {
+                                  "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                                   "x-modules": [
                                     "5.1",
                                     "5.4",
@@ -9704,8 +9704,8 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms inorganic fertiliser"
                                 },
-                                "massPurchasedKg": {
-                                  "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKg), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                "massPurchasedKilograms": {
+                                  "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
                                   "x-modules": [
                                     "15.4"
                                   ],
@@ -9725,7 +9725,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms inorganic fertiliser"
                                 },
-                                "customScope3EmissionFactor": {
+                                "scope3EmissionFactor": {
                                   "description": "Custom scope 3 emission factor for this fertiliser (kilograms CO2e per kilogram inorganic fertiliser)",
                                   "x-modules": [
                                     "15.4"
@@ -9764,7 +9764,7 @@
                                     "15.4"
                                   ]
                                 },
-                                "customNitrogenFraction": {
+                                "fractionNitrogen": {
                                   "description": "Custom nitrogen fraction for the fertiliser (kilograms nitrogen per kilogram inorganic fertiliser)",
                                   "x-modules": [
                                     "5.1",
@@ -9786,7 +9786,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms nitrogen per kilogram inorganic fertiliser"
                                 },
-                                "customUreaFraction": {
+                                "fractionUrea": {
                                   "description": "Custom urea fraction for the fertiliser (kilograms urea per kilogram inorganic fertiliser)",
                                   "x-modules": [
                                     "5.1"
@@ -9809,13 +9809,13 @@
                                 }
                               },
                               "required": [
-                                "massAppliedKg",
-                                "massPurchasedKg",
-                                "customScope3EmissionFactor",
+                                "massAppliedKilograms",
+                                "massPurchasedKilograms",
+                                "scope3EmissionFactor",
                                 "calculationMethodScope3",
                                 "fertiliserType",
-                                "customNitrogenFraction",
-                                "customUreaFraction"
+                                "fractionNitrogen",
+                                "fractionUrea"
                               ],
                               "additionalProperties": false,
                               "title": "Scope 3 method 2 (other fertiliser type)"
@@ -9992,7 +9992,7 @@
                     "type": "string",
                     "const": "Untraced"
                   },
-                  "massAppliedKg": {
+                  "massAppliedKilograms": {
                     "description": "Mass of organic fertiliser applied (kilograms organic fertiliser)",
                     "x-modules": [
                       "5.2"
@@ -10020,7 +10020,7 @@
                     ],
                     "$ref": "#/components/schemas/OrganicFertiliserType"
                   },
-                  "customNitrogenFraction": {
+                  "fractionNitrogen": {
                     "description": "Custom nitrogen fraction for the organic fertiliser (kilograms nitrogen per kilogram organic fertiliser)",
                     "x-modules": [
                       "5.2"
@@ -10044,7 +10044,7 @@
                 },
                 "required": [
                   "origin",
-                  "massAppliedKg",
+                  "massAppliedKilograms",
                   "organicFertiliserType"
                 ],
                 "additionalProperties": false,
@@ -10102,7 +10102,7 @@
                               "additionalProperties": false,
                               "x-units": "head"
                             },
-                            "days": {
+                            "durationDays": {
                               "description": "Average duration on farm for this class (days)",
                               "x-modules": [
                                 "5.2",
@@ -10125,7 +10125,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "method2NitrogenWasteProductionRate": {
+                            "method2DailyNitrogenWasteProductionKilograms": {
                               "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -11383,7 +11383,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -11410,7 +11410,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -11544,7 +11544,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -11571,7 +11571,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -11705,7 +11705,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -11732,7 +11732,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     }
@@ -11753,7 +11753,7 @@
                           },
                           "required": [
                             "head",
-                            "days",
+                            "durationDays",
                             "manureAllocations"
                           ],
                           "additionalProperties": false
@@ -11784,7 +11784,7 @@
                               "additionalProperties": false,
                               "x-units": "head"
                             },
-                            "days": {
+                            "durationDays": {
                               "description": "Average duration on farm for this class (days)",
                               "x-modules": [
                                 "5.2",
@@ -11807,7 +11807,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "method2NitrogenWasteProductionRate": {
+                            "method2DailyNitrogenWasteProductionKilograms": {
                               "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -13065,7 +13065,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -13092,7 +13092,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -13226,7 +13226,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -13253,7 +13253,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -13387,7 +13387,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -13414,7 +13414,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     }
@@ -13435,7 +13435,7 @@
                           },
                           "required": [
                             "head",
-                            "days",
+                            "durationDays",
                             "manureAllocations"
                           ],
                           "additionalProperties": false
@@ -13466,7 +13466,7 @@
                               "additionalProperties": false,
                               "x-units": "head"
                             },
-                            "days": {
+                            "durationDays": {
                               "description": "Average duration on farm for this class (days)",
                               "x-modules": [
                                 "5.2",
@@ -13489,7 +13489,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "method2NitrogenWasteProductionRate": {
+                            "method2DailyNitrogenWasteProductionKilograms": {
                               "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -14747,7 +14747,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -14774,7 +14774,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -14908,7 +14908,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -14935,7 +14935,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -15069,7 +15069,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -15096,7 +15096,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     }
@@ -15117,7 +15117,7 @@
                           },
                           "required": [
                             "head",
-                            "days",
+                            "durationDays",
                             "manureAllocations"
                           ],
                           "additionalProperties": false
@@ -15148,7 +15148,7 @@
                               "additionalProperties": false,
                               "x-units": "head"
                             },
-                            "days": {
+                            "durationDays": {
                               "description": "Average duration on farm for this class (days)",
                               "x-modules": [
                                 "5.2",
@@ -15171,7 +15171,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "method2NitrogenWasteProductionRate": {
+                            "method2DailyNitrogenWasteProductionKilograms": {
                               "description": "Method 2: Average nitrogen waste production, including both animal and feed waste. PigBal may be used to calculate this value. (kilograms nitrogen per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -16429,7 +16429,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -16456,7 +16456,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -16590,7 +16590,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -16617,7 +16617,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     },
@@ -16751,7 +16751,7 @@
                                           ],
                                           "additionalProperties": false
                                         },
-                                        "fractionNitrogenSeparatedPreTreatment": {
+                                        "method2FractionNitrogenSeparatedPreTreatment": {
                                           "description": "Fraction of nitrogen separated by pre-treatment of manure (before flowing into the primary MMS). PigBal may be used to support the estimation of this fraction. (0-1)",
                                           "x-modules": [
                                             "5.2",
@@ -16778,7 +16778,7 @@
                                       "required": [
                                         "manureAllocated",
                                         "treatmentStage2Allocations",
-                                        "fractionNitrogenSeparatedPreTreatment"
+                                        "method2FractionNitrogenSeparatedPreTreatment"
                                       ],
                                       "additionalProperties": false
                                     }
@@ -16799,7 +16799,7 @@
                           },
                           "required": [
                             "head",
-                            "days",
+                            "durationDays",
                             "manureAllocations"
                           ],
                           "additionalProperties": false
@@ -16900,7 +16900,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -16923,7 +16923,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -16969,7 +16969,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -16992,7 +16992,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -17047,7 +17047,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -17070,7 +17070,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -17116,7 +17116,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -17139,7 +17139,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -17194,7 +17194,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -17217,7 +17217,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -17263,7 +17263,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -17286,7 +17286,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -17341,7 +17341,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -17364,7 +17364,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -17410,7 +17410,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -17433,7 +17433,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -17488,7 +17488,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -17511,7 +17511,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -17557,7 +17557,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -17580,7 +17580,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -17635,7 +17635,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -17658,7 +17658,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -17704,7 +17704,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -17727,7 +17727,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -17782,7 +17782,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -17805,7 +17805,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -17851,7 +17851,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -17874,7 +17874,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -17943,7 +17943,7 @@
                             {
                               "type": "object",
                               "properties": {
-                                "kgSolidsPerHeadPerDay": {
+                                "solidsKilogramsPerHeadPerDay": {
                                   "description": "Mass of milk solids produced for this class (kilograms milk solids per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -17966,7 +17966,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms milk solids per head per day"
                                 },
-                                "fatContent": {
+                                "method2PercentFatContent": {
                                   "description": "Fat content in fat and protein corrected milk (number)",
                                   "x-modules": [
                                     "5.2",
@@ -17989,7 +17989,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "proteinContent": {
+                                "method2PercentProteinContent": {
                                   "description": "Protein content in fat and protein corrected milk (number)",
                                   "x-modules": [
                                     "5.2",
@@ -18014,7 +18014,7 @@
                                 }
                               },
                               "required": [
-                                "kgSolidsPerHeadPerDay"
+                                "solidsKilogramsPerHeadPerDay"
                               ],
                               "additionalProperties": false
                             }
@@ -18333,7 +18333,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -18356,7 +18356,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -18402,7 +18402,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -18425,7 +18425,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -18480,7 +18480,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -18503,7 +18503,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -18549,7 +18549,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -18572,7 +18572,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -18627,7 +18627,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -18650,7 +18650,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -18696,7 +18696,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -18719,7 +18719,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -18774,7 +18774,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -18797,7 +18797,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -18843,7 +18843,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -18866,7 +18866,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -18921,7 +18921,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -18944,7 +18944,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -18990,7 +18990,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -19013,7 +19013,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -19068,7 +19068,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -19091,7 +19091,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -19137,7 +19137,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -19160,7 +19160,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -19215,7 +19215,7 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
-                                "method2Liveweight": {
+                                "method2LiveweightKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight for this class based on farm records (kilograms liveweight per head)",
                                   "x-modules": [
                                     "5.2",
@@ -19238,7 +19238,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms liveweight per head"
                                 },
-                                "method2LiveweightGain": {
+                                "method2DailyLiveweightGainKilograms": {
                                   "description": "Method 2: supply an exact value for the liveweight gain for this class based on farm records (kilograms liveweight per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -19284,7 +19284,7 @@
                                   "additionalProperties": false,
                                   "x-units": "days"
                                 },
-                                "method2DryMatterDigestibility": {
+                                "method2FractionDryMatterDigestibility": {
                                   "description": "Method 2: supply an exact value for the dry matter digestibility for this class based on farm records (number)",
                                   "x-modules": [
                                     "5.2",
@@ -19307,7 +19307,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "method2CrudeProtein": {
+                                "method2FractionCrudeProteinContent": {
                                   "description": "Method 2: supply an exact value for the crude protein content of the diet for this class based on farm records (kilograms crude protein per kilogram dry matter)",
                                   "x-modules": [
                                     "5.2",
@@ -19376,7 +19376,7 @@
                             {
                               "type": "object",
                               "properties": {
-                                "kgSolidsPerHeadPerDay": {
+                                "solidsKilogramsPerHeadPerDay": {
                                   "description": "Mass of milk solids produced for this class (kilograms milk solids per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -19399,7 +19399,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms milk solids per head per day"
                                 },
-                                "fatContent": {
+                                "method2PercentFatContent": {
                                   "description": "Fat content in fat and protein corrected milk (number)",
                                   "x-modules": [
                                     "5.2",
@@ -19422,7 +19422,7 @@
                                   "additionalProperties": false,
                                   "x-units": "number"
                                 },
-                                "proteinContent": {
+                                "method2PercentProteinContent": {
                                   "description": "Protein content in fat and protein corrected milk (number)",
                                   "x-modules": [
                                     "5.2",
@@ -19447,7 +19447,7 @@
                                 }
                               },
                               "required": [
-                                "kgSolidsPerHeadPerDay"
+                                "solidsKilogramsPerHeadPerDay"
                               ],
                               "additionalProperties": false
                             }
@@ -19715,7 +19715,7 @@
                         "method2TimeSpentInLocations": {
                           "type": "object",
                           "properties": {
-                            "timeSpentOnPasture": {
+                            "fractionTimeSpentOnPasture": {
                               "description": "Fraction of time this herd spends on pasture (0-1)",
                               "x-modules": [
                                 "5.2",
@@ -19738,7 +19738,7 @@
                               "additionalProperties": false,
                               "x-units": "0-1"
                             },
-                            "timeSpentOnFeedpad": {
+                            "fractionTimeSpentOnFeedpad": {
                               "description": "Fraction of time this herd spends on the feedpad (0-1)",
                               "x-modules": [
                                 "5.2",
@@ -19761,7 +19761,7 @@
                               "additionalProperties": false,
                               "x-units": "0-1"
                             },
-                            "timeSpentOnMilkingShed": {
+                            "fractionTimeSpentOnMilkingShed": {
                               "description": "Fraction of time this herd spends in the milking shed (0-1)",
                               "x-modules": [
                                 "5.2",
@@ -19786,9 +19786,9 @@
                             }
                           },
                           "required": [
-                            "timeSpentOnPasture",
-                            "timeSpentOnFeedpad",
-                            "timeSpentOnMilkingShed"
+                            "fractionTimeSpentOnPasture",
+                            "fractionTimeSpentOnFeedpad",
+                            "fractionTimeSpentOnMilkingShed"
                           ],
                           "additionalProperties": false
                         }
@@ -19869,7 +19869,7 @@
                       "additionalProperties": false,
                       "x-units": "days"
                     },
-                    "method2DryMatterIntake": {
+                    "method2DailyDryMatterIntakeKilograms": {
                       "description": "Method 2: Average dry matter intake (kilograms dry matter per head per day)",
                       "x-modules": [
                         "5.2",
@@ -19892,7 +19892,7 @@
                       "additionalProperties": false,
                       "x-units": "kilograms dry matter per head per day"
                     },
-                    "method2CrudeProtein": {
+                    "method2FractionCrudeProteinContent": {
                       "description": "Method 2: Average crude protein content of the feed given to this cattle group, as a fraction (kilograms crude protein per kilogram dry matter)",
                       "x-modules": [
                         "5.2",
@@ -19915,7 +19915,7 @@
                       "additionalProperties": false,
                       "x-units": "kilograms crude protein per kilogram dry matter"
                     },
-                    "method2NitrogenRetentionRate": {
+                    "method2FractionNitrogenRetentionRate": {
                       "description": "Method 2: Nitrogen retention rate (number)",
                       "x-modules": [
                         "5.2",
@@ -20104,7 +20104,7 @@
                               "additionalProperties": false,
                               "x-units": "head"
                             },
-                            "days": {
+                            "durationDays": {
                               "description": "Duration of this class in the reporting period (days)",
                               "x-modules": [
                                 "5.2",
@@ -20127,7 +20127,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "method2DryMatterIntake": {
+                            "method2DailyDryMatterIntakeKilograms": {
                               "description": "Dry matter intake (kilograms dry matter per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -20150,7 +20150,7 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter per head per day"
                             },
-                            "method2CrudeProtein": {
+                            "method2FractionCrudeProteinContent": {
                               "description": "Crude protein content of the diet for this class (kilograms crude protein per kilogram dry matter)",
                               "x-modules": [
                                 "5.2",
@@ -20697,7 +20697,7 @@
                           },
                           "required": [
                             "head",
-                            "days",
+                            "durationDays",
                             "manureAllocations"
                           ],
                           "additionalProperties": false
@@ -20728,7 +20728,7 @@
                               "additionalProperties": false,
                               "x-units": "head"
                             },
-                            "days": {
+                            "durationDays": {
                               "description": "Duration of this class in the reporting period (days)",
                               "x-modules": [
                                 "5.2",
@@ -20751,7 +20751,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "method2DryMatterIntake": {
+                            "method2DailyDryMatterIntakeKilograms": {
                               "description": "Dry matter intake (kilograms dry matter per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -20774,7 +20774,7 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter per head per day"
                             },
-                            "method2CrudeProtein": {
+                            "method2FractionCrudeProteinContent": {
                               "description": "Crude protein content of the diet for this class (kilograms crude protein per kilogram dry matter)",
                               "x-modules": [
                                 "5.2",
@@ -21321,7 +21321,7 @@
                           },
                           "required": [
                             "head",
-                            "days",
+                            "durationDays",
                             "manureAllocations"
                           ],
                           "additionalProperties": false
@@ -21352,7 +21352,7 @@
                               "additionalProperties": false,
                               "x-units": "head"
                             },
-                            "days": {
+                            "durationDays": {
                               "description": "Duration of this class in the reporting period (days)",
                               "x-modules": [
                                 "5.2",
@@ -21375,7 +21375,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "method2DryMatterIntake": {
+                            "method2DailyDryMatterIntakeKilograms": {
                               "description": "Dry matter intake (kilograms dry matter per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -21398,7 +21398,7 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter per head per day"
                             },
-                            "method2CrudeProtein": {
+                            "method2FractionCrudeProteinContent": {
                               "description": "Crude protein content of the diet for this class (kilograms crude protein per kilogram dry matter)",
                               "x-modules": [
                                 "5.2",
@@ -21945,7 +21945,7 @@
                           },
                           "required": [
                             "head",
-                            "days",
+                            "durationDays",
                             "manureAllocations"
                           ],
                           "additionalProperties": false
@@ -21976,7 +21976,7 @@
                               "additionalProperties": false,
                               "x-units": "head"
                             },
-                            "days": {
+                            "durationDays": {
                               "description": "Duration of this class in the reporting period (days)",
                               "x-modules": [
                                 "5.2",
@@ -21999,7 +21999,7 @@
                               "additionalProperties": false,
                               "x-units": "days"
                             },
-                            "method2DryMatterIntake": {
+                            "method2DailyDryMatterIntakeKilograms": {
                               "description": "Dry matter intake (kilograms dry matter per head per day)",
                               "x-modules": [
                                 "5.2",
@@ -22022,7 +22022,7 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter per head per day"
                             },
-                            "method2CrudeProtein": {
+                            "method2FractionCrudeProteinContent": {
                               "description": "Crude protein content of the diet for this class (kilograms crude protein per kilogram dry matter)",
                               "x-modules": [
                                 "5.2",
@@ -22569,7 +22569,7 @@
                           },
                           "required": [
                             "head",
-                            "days",
+                            "durationDays",
                             "manureAllocations"
                           ],
                           "additionalProperties": false

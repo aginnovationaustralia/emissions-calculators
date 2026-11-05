@@ -27,6 +27,15 @@ import {
   SolidWasteScope1InputTransformed,
 } from './solid-waste-scope1.input';
 
+const method1TreatmentTypeToKeyName = {
+  Burial: 'unmanagedBurialTonnes',
+  'Unmanaged - deep': 'unmanagedDeepTonnes',
+  'Unmanaged - shallow': 'unmanagedShallowTonnes',
+  Composting: 'compostingTonnes',
+  'Anaerobic Digestion': 'anaerobicDigestionTonnes',
+  Incineration: 'incinerationTonnes',
+} as const;
+
 const treatmentTypeToKeyName = {
   Burial: 'unmanagedBurial',
   'Unmanaged - deep': 'unmanagedDeep',
@@ -77,7 +86,7 @@ const calculateSolidWasteBiologicalTreatmentEmissions = (
 
       const wasteAmount = (
         solidWasteScope1InputSchemaIsMethod1(input)
-          ? (input[treatmentTypeToKeyName[treatmentType]] ??
+          ? (input[method1TreatmentTypeToKeyName[treatmentType]] ??
             captureMethod1Or2Value(zeroMassSolidWaste, undefined))
           : getTotalMassInWasteTreatmentFacility(
               input[treatmentTypeToKeyName[treatmentType]],
@@ -115,7 +124,7 @@ const calculateSolidWasteIncinerationEmissionsMethod1 = (
   // Allow method 2 inputs, for comparison.
   const incineration = (
     (solidWasteScope1InputSchemaIsMethod1(input)
-      ? input.incineration
+      ? input.incinerationTonnes
       : getTotalMassInWasteTreatmentFacility(input.incineration, constants)) ??
     zeroMassSolidWaste
   ).named(`Qburn`);
@@ -241,7 +250,7 @@ const calculateUnmanagedSolidWasteEmissionsMethod1 = (
       // Allow method 2 inputs, for comparison.
       const wasteAmount = (
         (solidWasteScope1InputSchemaIsMethod1(input)
-          ? input[treatmentTypeToKeyName[treatmentType]]
+          ? input[method1TreatmentTypeToKeyName[treatmentType]]
           : getTotalMassInWasteTreatmentFacility(
               input[treatmentTypeToKeyName[treatmentType]],
               constants,

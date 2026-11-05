@@ -314,9 +314,9 @@ const calculateScope1AllModules = (
 
   // Supplementary CO2 12.1
   const supplementaryCO2 =
-    input.supplementaryCO2Kg !== undefined
+    input.supplementaryCO2Kilograms !== undefined
       ? calculate12Scope1SupplementaryCO2({
-          supplementaryCO2Kg: input.supplementaryCO2Kg,
+          supplementaryCO2Kilograms: input.supplementaryCO2Kilograms,
         })
       : zeroCO2;
 

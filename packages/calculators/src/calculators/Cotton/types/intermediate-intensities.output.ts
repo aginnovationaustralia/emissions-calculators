@@ -15,9 +15,9 @@ export type CottonIntermediateSeedAndLintIntensitiesOutput = z.infer<
 >;
 
 export const CottonIntermediateIntensitiesOutputSchema = z.object({
-  cottonHarvestedKg: outputValue('Seed cotton harvested in kg.'),
-  cottonLintHarvestedKg: outputValue('Cotton lint harvested in kg.'),
-  cottonSeedHarvestedKg: outputValue('Cotton seed harvested in kg.'),
+  cottonHarvestedKilograms: outputValue('Seed cotton harvested in kg.'),
+  cottonLintHarvestedKilograms: outputValue('Cotton lint harvested in kg.'),
+  cottonSeedHarvestedKilograms: outputValue('Cotton seed harvested in kg.'),
 
   cottonIntensity: outputValue(
     'Cotton emissions intensity for this activity, in kg-CO2e/kg seed cotton.',

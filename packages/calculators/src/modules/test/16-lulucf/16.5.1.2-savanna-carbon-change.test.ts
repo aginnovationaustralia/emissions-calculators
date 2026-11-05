@@ -31,12 +31,12 @@ const getCalculatorInput = (
   }
 
   const burning: BurningInput = {
-    emissionsFromBurningLowRainfallZone: nv(0),
-    emissionsFromBurningHighRainfallZone: nv(0),
-    carbonStockChangeLowRainfallZone: nv(
+    emissionsFromBurningLowRainfallZoneTonnes: nv(0),
+    emissionsFromBurningHighRainfallZoneTonnes: nv(0),
+    carbonStockChangeLowRainfallZoneTonnes: nv(
       Number(cell(columnCarbonStockChangeLowRainfallZone)),
     ),
-    carbonStockChangeHighRainfallZone: nv(
+    carbonStockChangeHighRainfallZoneTonnes: nv(
       Number(cell(columnCarbonStockChangeHighRainfallZone)),
     ),
   };

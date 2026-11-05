@@ -34,7 +34,7 @@ const getCalculatorInput = (
   const refrigerantInput: RefrigerantInput = {
     refrigerant,
     refrigerationType,
-    chargeSize: nv(chargeSize),
+    chargeSizeKilograms: nv(chargeSize),
   };
 
   return RefrigerantsInputSchema.parse({ refrigerants: [refrigerantInput] });

@@ -327,12 +327,12 @@ function getSingleIntensities(
       netEmissions.multiply(allocationToMeat),
       liveweightProduced,
     ),
-    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     milkIntensity: generateIntensity(
       netEmissions.multiply(allocationToMilk),
       milkProduced,
     ),
-    milkProducedKg: exposeMassValue(milkProduced),
+    milkProducedKilograms: exposeMassValue(milkProduced),
   };
 }
 
@@ -364,7 +364,7 @@ function getTotalIntensities(
       netTotalEmissions.multiply(allocationToMeat),
       liveweightProduced,
     ),
-    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     milkIntensityExcludingLULUCF: generateIntensity(
       netEmissionsExcludingLulucf.multiply(allocationToMilk),
       milkProduced,
@@ -373,7 +373,7 @@ function getTotalIntensities(
       netTotalEmissions.multiply(allocationToMilk),
       milkProduced,
     ),
-    milkProducedKg: exposeMassValue(milkProduced),
+    milkProducedKilograms: exposeMassValue(milkProduced),
   };
 }
 

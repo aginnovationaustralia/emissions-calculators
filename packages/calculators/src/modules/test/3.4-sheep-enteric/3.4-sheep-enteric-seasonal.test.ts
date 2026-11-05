@@ -54,17 +54,17 @@ const getCalculatorInput = (
     );
     return {
       head: nv(Number(cell(col.columnHead, offsetRows))),
-      method2Liveweight: nvo(
+      method2LiveweightKilograms: nvo(
         method === '2' && customLiveweight
           ? Number(customLiveweight)
           : undefined,
       ),
-      method2DryMatterAvailability: nvo(
+      method2DryMatterAvailabilityTonnesPerHectare: nvo(
         method === '2' && customDryMatterAvailability
           ? Number(customDryMatterAvailability)
           : undefined,
       ),
-      method2DryMatterDigestibility: nvo(
+      method2FractionDryMatterDigestibility: nvo(
         method === '2' && customDryMatterDigestibility
           ? Number(customDryMatterDigestibility)
           : undefined,
@@ -80,8 +80,8 @@ const getCalculatorInput = (
       return undefined;
     }
     return {
-      greasyWoolProduction: nv(0),
-      cleanWoolYieldProportion: nv(0),
+      greasyWoolProductionKilograms: nv(0),
+      fractionOfYieldCleanWool: nv(0),
       spring: readSheepClassPeriod(offsetRows),
       summer: readSheepClassPeriod(offsetRows + 1),
       autumn: readSheepClassPeriod(offsetRows + 2),
@@ -97,8 +97,8 @@ const getCalculatorInput = (
       return undefined;
     }
     return {
-      greasyWoolProduction: nv(0),
-      cleanWoolYieldProportion: nv(0),
+      greasyWoolProductionKilograms: nv(0),
+      fractionOfYieldCleanWool: nv(0),
       spring: {
         ...readSheepClassPeriod(offsetRows),
         percentLambing: nv(Number(cell(col.columnLambingRate, offsetRows))),
@@ -136,23 +136,23 @@ const getCalculatorInput = (
       return undefined;
     }
     return {
-      greasyWoolProduction: nv(0),
-      cleanWoolYieldProportion: nv(0),
+      greasyWoolProductionKilograms: nv(0),
+      fractionOfYieldCleanWool: nv(0),
       spring: {
         ...readSheepClassPeriod(offsetRows),
-        proportionOfLambsBorn: nv(0),
+        fractionLambsBorn: nv(0),
       },
       summer: {
         ...readSheepClassPeriod(offsetRows + 1),
-        proportionOfLambsBorn: nv(0),
+        fractionLambsBorn: nv(0),
       },
       autumn: {
         ...readSheepClassPeriod(offsetRows + 2),
-        proportionOfLambsBorn: nv(0),
+        fractionLambsBorn: nv(0),
       },
       winter: {
         ...readSheepClassPeriod(offsetRows + 3),
-        proportionOfLambsBorn: nv(0),
+        fractionLambsBorn: nv(0),
       },
     };
   };

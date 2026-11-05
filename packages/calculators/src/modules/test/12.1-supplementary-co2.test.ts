@@ -9,7 +9,7 @@ import { collectInputs } from '@/tools/collect';
 describe('12.1.1 Supplementary CO2', () => {
   it('accepts inputs for method 1 calculation', async () => {
     const input: HasSupplementaryCO2Input = {
-      supplementaryCO2Kg: nv(100),
+      supplementaryCO2Kilograms: nv(100),
     };
 
     const parsed = HasSupplementaryCO2InputSchema.parse(input);

@@ -155,20 +155,20 @@ export const calculateAdditionalIntakeForMilkProduction = (
     ).named(`FAjk=${classInput.number} (previously calving)`);
 
     const calvingCowAdjustment = br(
-      currentPeriod.proportionCowsThisSeasonInCalf.multiply(
+      currentPeriod.fractionCowsThisSeasonInCalf.multiply(
         calvingFeedAdjustment,
       ),
     );
 
     const postCalvingCowAdjustment = br(
-      currentPeriod.proportionCowsPreviousSeasonInCalf.multiply(
+      currentPeriod.fractionCowsPreviousSeasonInCalf.multiply(
         postCalvingFeedAdjustment,
       ),
     );
 
     const nonCalvingCowAdjustment = br(
-      oneMinus(currentPeriod.proportionCowsThisSeasonInCalf).minus(
-        currentPeriod.proportionCowsPreviousSeasonInCalf,
+      oneMinus(currentPeriod.fractionCowsThisSeasonInCalf).minus(
+        currentPeriod.fractionCowsPreviousSeasonInCalf,
       ),
     );
 
@@ -189,7 +189,8 @@ export const calculateAdditionalIntakeForMilkProduction = (
 export const calculateOrGetFeedIntakeForBeef = (
   periodProps: BeefPeriodProps,
 ): Container<MassPerHeadPerDay<'DryMatter'>> => {
-  const { method2DryMatterIntake } = periodProps.currentPeriod;
+  const { method2DailyDryMatterIntakeKilograms: method2DryMatterIntake } =
+    periodProps.currentPeriod;
 
   const liveweight = getLiveweight(periodProps);
   const liveweightGain = getLiveweightGain(periodProps);

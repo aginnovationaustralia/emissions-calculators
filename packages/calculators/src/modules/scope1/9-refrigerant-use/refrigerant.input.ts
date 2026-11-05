@@ -12,10 +12,10 @@ export const RefrigerantInputSchema = object({
     description: DESCRIPTIONS.REFRIGERANT,
     modules: [REFRIGERANT_9_1],
   }),
-  chargeSize: numberInput(
+  chargeSizeKilograms: numberInput(
     (c) => mass('Refrigerant', c),
     {
-      name: 'chargeSize',
+      name: 'chargeSizeKilograms',
       method: '1',
       description: 'Amount of refrigerant contained in the appliance',
       modules: [REFRIGERANT_9_1],

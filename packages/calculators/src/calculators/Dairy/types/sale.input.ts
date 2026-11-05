@@ -21,10 +21,10 @@ const BaseDairySaleInputSchema = object({
     description: 'The number of cattle sold.',
     modules: [INTENSITIES],
   }),
-  averageLiveweight: numberInputOptional(
+  averageLiveweightKilograms: numberInputOptional(
     (val) => liveweight(val),
     {
-      name: 'averageLiveweight',
+      name: 'averageLiveweightKilograms',
       description: 'The average liveweight of cattle sold.',
       modules: [INTENSITIES],
     },

@@ -48,7 +48,7 @@ function getSingleIntensities(
 
   return {
     grainsIntensity: generateIntensity(netEmissions, harvested),
-    grainHarvestedKg: exposeMassValue(harvested),
+    grainHarvestedKilograms: exposeMassValue(harvested),
   };
 }
 
@@ -70,7 +70,7 @@ function getTotalIntensities(
       harvested,
     ),
     grainsIncludingLULUCF: generateIntensity(netTotalEmissions, harvested),
-    grainHarvestedKg: exposeMassValue(harvested),
+    grainHarvestedKilograms: exposeMassValue(harvested),
   };
 }
 

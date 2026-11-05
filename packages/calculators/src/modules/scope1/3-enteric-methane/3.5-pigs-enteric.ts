@@ -19,7 +19,11 @@ function calculateEntericMethaneForClass(
   if (!classInput) {
     return zeroCH4;
   }
-  const { head, days, method2AverageFeedIntake } = classInput;
+  const {
+    head,
+    durationDays: days,
+    method2DailyAverageFeedIntakeKilograms: method2AverageFeedIntake,
+  } = classInput;
   const Nj = head.named(`Nj=${className}`);
   const Dj = days.named(`Dj=${className}`);
   const Ij = captureMethod1Or2Value(

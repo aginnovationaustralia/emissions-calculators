@@ -104,7 +104,7 @@ const DairyMMSAllocationLivestockMethod1Schema =
 
 const DairyMMSAllocationLivestockMethod2Schema =
   DairyMMSAllocationLivestockBaseSchema.extend({
-    fractionSolidsSeparatedPreTreatment: numberInput(
+    method2FractionSolidsSeparatedPreTreatment: numberInput(
       (val) => realNumber(val),
       {
         name: 'SSj',
@@ -132,7 +132,7 @@ export type DairyMMSAllocationLivestockInputTransformed = z.output<
 
 export const dairyTimeInLocationsInnerSchema = (location: LivestockLocation) =>
   object({
-    timeSpentOnPasture: numberInput(
+    fractionTimeSpentOnPasture: numberInput(
       (val) => realNumber(val),
       {
         name: 'fmPasture',
@@ -142,7 +142,7 @@ export const dairyTimeInLocationsInnerSchema = (location: LivestockLocation) =>
       },
       isProportion,
     ),
-    timeSpentOnFeedpad: numberInput(
+    fractionTimeSpentOnFeedpad: numberInput(
       (val) => realNumber(val),
       {
         name: 'fmFeedpad',
@@ -152,7 +152,7 @@ export const dairyTimeInLocationsInnerSchema = (location: LivestockLocation) =>
       },
       isProportion,
     ),
-    timeSpentOnMilkingShed: numberInput(
+    fractionTimeSpentOnMilkingShed: numberInput(
       (val) => realNumber(val),
       {
         name: 'fmMilkingShed',
@@ -164,7 +164,11 @@ export const dairyTimeInLocationsInnerSchema = (location: LivestockLocation) =>
     ),
   }).superRefine(
     (
-      { timeSpentOnFeedpad, timeSpentOnMilkingShed, timeSpentOnPasture },
+      {
+        fractionTimeSpentOnFeedpad: timeSpentOnFeedpad,
+        fractionTimeSpentOnMilkingShed: timeSpentOnMilkingShed,
+        fractionTimeSpentOnPasture: timeSpentOnPasture,
+      },
       context,
     ) => {
       const totalTime = sum(

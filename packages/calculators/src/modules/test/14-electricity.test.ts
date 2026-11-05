@@ -33,14 +33,14 @@ const getCalculatorInput = (
     recsSurrendered === undefined
       ? {
           method: 'location',
-          electricityPurchasedKWh: nv(electricityPurchasedKWh),
+          electricityPurchasedKilowattHours: nv(electricityPurchasedKWh),
           region,
         }
       : {
           method: 'market',
-          electricityPurchasedKWh: nv(electricityPurchasedKWh),
-          recsSurrendered: nv(Number(recsSurrendered)),
-          recsOnsite: nv(recsOnsite),
+          electricityPurchasedKilowattHours: nv(electricityPurchasedKWh),
+          recsSurrenderedMegawattHours: nv(Number(recsSurrendered)),
+          recsOnsiteMegawattHours: nv(recsOnsite),
           region,
         };
 

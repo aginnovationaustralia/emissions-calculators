@@ -21,7 +21,7 @@ export const calculateScope1RefrigerantUse = (
 */
 
   const emissionsRecords = input.refrigerants.map((refrigerant) => {
-    const chargeRa = refrigerant.chargeSize.named('chargeRa');
+    const chargeRa = refrigerant.chargeSizeKilograms.named('chargeRa');
     const leakageRatea = selectConstant(
       constants.COMMON,
       'REFRIGERATION_LEAKAGE_RATES',

@@ -122,7 +122,7 @@ export const zeroFuel: FuelInput = {
 export const zeroLime: LimeInput = {
   applications: [
     {
-      massAppliedKg: nv(0),
+      massAppliedKilograms: nv(0),
       limestoneFraction: nv(0),
       type: 'Limestone',
     },
@@ -131,14 +131,14 @@ export const zeroLime: LimeInput = {
 
 export const zeroPastureResidue: PastureResidueInput = {
   type: 'Annual grass',
-  areaManaged: nv(0),
+  areaManagedHectares: nv(0),
   fractionOfAnnualCropBurnt: nv(0),
   residues: { calculationMethod: '1' },
 };
 
 export const zeroCropResidue: CropResidueInput = {
   type: 'Wheat',
-  totalYieldKg: nv(0),
+  totalYieldKilograms: nv(0),
   fractionOfAnnualCropBurnt: nv(0),
   residues: { calculationMethod: '1' },
 };
@@ -146,20 +146,20 @@ export const zeroCropResidue: CropResidueInput = {
 export const zeroRefrigerants: RefrigerantInput[] = [
   {
     refrigerant: 'R-400 50/50',
-    chargeSize: nv(0),
+    chargeSizeKilograms: nv(0),
     refrigerationType: 'Domestic refrigerators',
   },
 ];
 
 export const zeroPurchasedFeed: PurchasedFeedMethod2Input[] = [
-  { amount: nv(0), customEmissionsFactor: nv(0) },
+  { amountTonnes: nv(0), method2EmissionFactor: nv(0) },
 ];
 
 export const zeroPurchasedMineralSupplements: PurchasedMineralSupplementMethod1Input[] =
-  [{ type: 'Lick block, dry season mix', amount: nv(0) }];
+  [{ type: 'Lick block, dry season mix', amountTonnes: nv(0) }];
 
 export const zeroAgrichemicals: AgrichemicalInput[] = [
-  { type: 'Herbicide (paraquat, diquat, glyphosate)', amountKg: nv(0) },
+  { type: 'Herbicide (paraquat, diquat, glyphosate)', amountKilograms: nv(0) },
 ];
 
 export const zeroWaste: HasSolidWasteInput['waste'] = {};
@@ -169,8 +169,8 @@ export const zeroInorganicFertiliserMethod1: InorganicFertilisersScope1Method1In
     calculationMethodScope1: '1',
     applications: [
       {
-        massAppliedKg: nv(0),
-        massPurchasedKg: nv(0),
+        massAppliedKilograms: nv(0),
+        massPurchasedKilograms: nv(0),
         fertiliserType: 'Urea',
         calculationMethodScope3: '1',
       },
@@ -182,7 +182,7 @@ export const zeroOrganicFertiliser: OrganicFertilisersInput = {
     {
       origin: {
         origin: 'Untraced',
-        massAppliedKg: nv(0),
+        massAppliedKilograms: nv(0),
         organicFertiliserType: 'Dairy cattle',
       },
     },
@@ -202,21 +202,21 @@ export const zeroFertiliser: FertiliserInput = {
 export const zeroLivestockPurchases: PurchasedLivestockInput[] = [];
 
 export const zeroFishery: AquacultureSystemInput = {
-  amountProduced: nv(0),
+  amountProducedTonnes: nv(0),
   location: 'Other',
 };
 
 export const zeroRice: HasRiceCultivationInput = {
   crop: {
-    totalYieldKg: nv(0),
+    totalYieldKilograms: nv(0),
     fractionOfAnnualCropBurnt: nv(0),
     residues: { calculationMethod: '1' },
-    areaSown: nv(0),
+    areaSownHectares: nv(0),
     preSeasonWaterRegimeType: 'Non flooded pre-season <180 days',
     waterRegimeType: 'Paddy rotation',
     // Unlike every other zeroed number below, this is enforced to be at least 1 day by
-    // the schema, so it can't be zeroed - it has no effect on totals since areaSown and
-    // totalYieldKg are both zero.
+    // the schema, so it can't be zeroed - it has no effect on totals since areaSownHectares and
+    // totalYieldKilograms are both zero.
     cultivationPeriodDays: nv(1),
   },
 };
@@ -330,19 +330,19 @@ export const ZERO_ALL_MODULES_INPUT: Required<AllModulesInput> = {
   waste: zeroWaste,
   wastewater: {
     facilityType: 'Managed aerobic treatment',
-    wastewaterVolume: nv(0),
-    inletCOD: nv(0),
-    outletCOD: nv(0),
-    fractionSludge: nv(0),
+    wastewaterVolumeCubicMetres: nv(0),
+    method2InletCODKilogramsPerCubicMetre: nv(0),
+    method2OutletCODKilogramsPerCubicMetre: nv(0),
+    method2FractionSludge: nv(0),
     fractionRemoved: nv(0),
-    methaneCaptured: nv(0),
-    methaneFlared: nv(0),
-    methaneOut: nv(0),
+    method2MethaneCapturedCubicMetres: nv(0),
+    method2MethaneFlaredCubicMetres: nv(0),
+    method2MethaneOutCubicMetres: nv(0),
   },
-  supplementaryCO2Kg: nv(0),
+  supplementaryCO2Kilograms: nv(0),
   electricity: {
     method: 'location',
-    electricityPurchasedKWh: nv(0),
+    electricityPurchasedKilowattHours: nv(0),
     region: 'NSW',
   },
   purchasedLivestock: zeroLivestockPurchases,
@@ -352,15 +352,15 @@ export const ZERO_ALL_MODULES_INPUT: Required<AllModulesInput> = {
     state: 'NSW',
     fuel: zeroFuel,
   },
-  otherPurchasedGoodsAndServices: [{ quantity: nv(0), emissionsFactor: nv(0) }],
+  otherPurchasedGoodsAndServices: [{ quantity: nv(0), emissionFactor: nv(0) }],
   purchasedPackaging: [
     { type: '1 tonne polypropylene bag', amountUnits: nv(0) },
   ],
   freight: [
     {
       freightType: 'Cargo ship (bulk carrier)',
-      distance: nv(0),
-      weight: nv(0),
+      distanceKilometres: nv(0),
+      weightTonnes: nv(0),
       calculationMethod: '1',
     },
   ],
@@ -371,10 +371,10 @@ export const ZERO_ALL_MODULES_INPUT: Required<AllModulesInput> = {
       {
         type: 'revegetationByPlanting',
         activityAreaHectares: nv(0.25),
-        carbonMassInTreesCurrentYear: nv(0),
-        carbonMassInTreesPreviousYear: nv(0),
-        carbonMassInDebrisCurrentYear: nv(0),
-        carbonMassInDebrisPreviousYear: nv(0),
+        carbonMassInTreesCurrentYearTonnesPerHectare: nv(0),
+        carbonMassInTreesPreviousYearTonnesPerHectare: nv(0),
+        carbonMassInDebrisCurrentYearTonnesPerHectare: nv(0),
+        carbonMassInDebrisPreviousYearTonnesPerHectare: nv(0),
       },
     ],
     burning: [],

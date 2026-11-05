@@ -63,15 +63,15 @@ export const readPoultryClass = (
 
   const classInput: PoultryClassesLivestockInput[PoultryClass] = {
     head: nv(head),
-    days: nv(days),
+    durationDays: nv(days),
     manureAllocations,
   };
 
   if (method === '1') return classInput;
 
-  classInput.method2DryMatterIntake = nvo(Number(cell('I')));
-  classInput.method2DryMatterDigestibility = nvo(Number(cell('J')));
-  classInput.method2CrudeProtein = nvo(Number(cell('K')));
+  classInput.method2DailyDryMatterIntakeKilograms = nvo(Number(cell('I')));
+  classInput.method2FractionDryMatterDigestibility = nvo(Number(cell('J')));
+  classInput.method2FractionCrudeProteinContent = nvo(Number(cell('K')));
 
   return classInput;
 };

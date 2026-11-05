@@ -53,7 +53,7 @@ const getCalculatorInput = (
   const cropResidueInput: HasCropResidueInput = {
     crop: {
       ...cropTypeAndBurntFraction(type, fractionOfAnnualCropBurnt),
-      totalYieldKg,
+      totalYieldKilograms: totalYieldKg,
       residues,
     },
   };

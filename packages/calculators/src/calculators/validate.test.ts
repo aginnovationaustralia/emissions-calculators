@@ -84,8 +84,8 @@ describe('validateCalculatorInput', () => {
       const { issues } = invalidIssues(BeefInputSchema, input);
 
       expect(issues.map((x) => x.path)).toEqual([
-        'herds.0.fertiliser.inorganic.applications.0.massAppliedKg',
-        'herds.0.fertiliser.inorganic.applications.0.massPurchasedKg',
+        'herds.0.fertiliser.inorganic.applications.0.massAppliedKilograms',
+        'herds.0.fertiliser.inorganic.applications.0.massPurchasedKilograms',
       ]);
     });
 

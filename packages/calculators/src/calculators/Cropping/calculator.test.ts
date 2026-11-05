@@ -25,14 +25,14 @@ const lulucfLandUseInput: LULUCFInput = {
       type: 'landClearingForestToCropland',
       isInLeachingZone: false,
       cropProductionSystem: 'Irrigated crop',
-      carbonMassInTreesCurrentYear: nv(10),
-      carbonMassInTreesPreviousYear: nv(50),
-      carbonMassInDebrisCurrentYear: nv(5),
-      carbonMassInDebrisPreviousYear: nv(20),
-      massCH4FromBiomassBurningPerHectare: nv(0),
-      massN2OFromBiomassBurningPerHectare: nv(0),
+      carbonMassInTreesCurrentYearTonnesPerHectare: nv(10),
+      carbonMassInTreesPreviousYearTonnesPerHectare: nv(50),
+      carbonMassInDebrisCurrentYearTonnesPerHectare: nv(5),
+      carbonMassInDebrisPreviousYearTonnesPerHectare: nv(20),
+      massCH4FromBiomassBurningTonnesPerHectare: nv(0),
+      massN2OFromBiomassBurningTonnesPerHectare: nv(0),
       region: 'Arnhem Coast',
-      areaBurnt: nv(0),
+      areaBurntHectares: nv(0),
       activityAreaHectares: nv(100),
     },
   ],
@@ -41,18 +41,18 @@ const lulucfLandUseInput: LULUCFInput = {
 const cropInputKeys: GrainsCropResidueInput[] = [
   {
     ...wheatCropKey,
-    totalYieldKg: nv(1000 * 1000),
+    totalYieldKilograms: nv(1000 * 1000),
   },
   {
     ...wheatCropKey,
-    totalYieldKg: nv(800 * 1000),
+    totalYieldKilograms: nv(800 * 1000),
   },
 ];
 
 const lulucfCroppingTestInput: CroppingInput = {
   electricity: {
     method: 'location',
-    electricityPurchasedKWh: nv(1000),
+    electricityPurchasedKilowattHours: nv(1000),
     region: 'NSW',
   },
   landUse: lulucfLandUseInput,
@@ -183,7 +183,7 @@ describe('Cropping Calculator', () => {
 
     it('calculates top-level intensities including and excluding LULUCF', () => {
       const {
-        cropHarvestedKg: grainProducedKg,
+        cropHarvestedKilograms: grainProducedKg,
         cropIntensityIncludingLULUCF: grainsIncludingLULUCF,
         cropIntensityExcludingLULUCF: grainsExcludingLULUCF,
       } = emissions.intensities;
@@ -212,12 +212,12 @@ describe('Cropping Calculator', () => {
       const [cropA, cropB] = emissions.intermediate;
 
       [cropA, cropB].forEach((crop, index) => {
-        const { cropHarvestedKg: grainProducedKg, cropIntensity } =
+        const { cropHarvestedKilograms: grainProducedKg, cropIntensity } =
           crop.intensities;
 
         expect(grainProducedKg.value).toBe(
           // Convert tonnes to kg
-          cropInputKeys[index].totalYieldKg.value,
+          cropInputKeys[index].totalYieldKilograms.value,
         );
         expect(cropIntensity.value).toBeCloseTo(
           divideBySafeFromZero(
@@ -237,7 +237,7 @@ describe('Cropping Calculator', () => {
       const sequestrationInput: CroppingInput = {
         electricity: {
           method: 'location',
-          electricityPurchasedKWh: nv(0),
+          electricityPurchasedKilowattHours: nv(0),
           region: 'NSW',
         },
         landUse: {
@@ -245,10 +245,10 @@ describe('Cropping Calculator', () => {
             {
               type: 'revegetationByPlanting',
               // Trees and debris gain carbon, so LULUCF is a net removal (negative)
-              carbonMassInTreesCurrentYear: nv(50),
-              carbonMassInTreesPreviousYear: nv(10),
-              carbonMassInDebrisCurrentYear: nv(20),
-              carbonMassInDebrisPreviousYear: nv(5),
+              carbonMassInTreesCurrentYearTonnesPerHectare: nv(50),
+              carbonMassInTreesPreviousYearTonnesPerHectare: nv(10),
+              carbonMassInDebrisCurrentYearTonnesPerHectare: nv(20),
+              carbonMassInDebrisPreviousYearTonnesPerHectare: nv(5),
               activityAreaHectares: nv(10),
             },
           ],
@@ -260,7 +260,7 @@ describe('Cropping Calculator', () => {
             electricityAllocation: nv(1),
             crop: {
               type: 'Wheat',
-              totalYieldKg: nv(cropHarvestedKg),
+              totalYieldKilograms: nv(cropHarvestedKg),
               residues: { calculationMethod: '1' },
               fractionOfAnnualCropBurnt: nv(0),
             },
@@ -303,7 +303,7 @@ describe('Cropping Calculator', () => {
 
     it('reports a higher intensity when sequestration is excluded', () => {
       const {
-        cropHarvestedKg: harvested,
+        cropHarvestedKilograms: harvested,
         cropIntensityIncludingLULUCF,
         cropIntensityExcludingLULUCF,
       } = emissions.intensities;

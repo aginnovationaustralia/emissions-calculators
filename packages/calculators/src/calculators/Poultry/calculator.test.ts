@@ -8,8 +8,8 @@ import { PoultryFlockInputSchema } from './types/poultry-flock.input';
 const flock = (liveweightSoldKg: number, eggsSoldKg: number) =>
   PoultryFlockInputSchema.parse(
     createPoultryInput({
-      liveweightSoldKg: nv(liveweightSoldKg),
-      eggsSoldKg: nv(eggsSoldKg),
+      liveweightSoldKilograms: nv(liveweightSoldKg),
+      eggsSoldKilograms: nv(eggsSoldKg),
     }),
   );
 
@@ -23,8 +23,8 @@ describe('getTotalIntensities', () => {
       flock(100, 60),
     ]);
 
-    expect(result.liveweightProducedKg.value).toBe(300);
-    expect(result.eggsProducedKg.value).toBe(100);
+    expect(result.liveweightProducedKilograms.value).toBe(300);
+    expect(result.eggsProducedKilograms.value).toBe(100);
     expect(result.liveweightIntensityIncludingLULUCF.value).toBeCloseTo(
       (10_000 * 0.75) / 300,
     );

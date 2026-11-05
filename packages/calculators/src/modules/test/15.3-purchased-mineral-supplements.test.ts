@@ -35,7 +35,7 @@ const getCalculatorInput = (
       ? {
           purchasedMineralSupplements: [
             {
-              amount,
+              amountTonnes: amount,
               type: checkPurchasedMineralSupplementType(cell('A')),
             },
           ],
@@ -43,8 +43,8 @@ const getCalculatorInput = (
       : {
           purchasedMineralSupplements: [
             {
-              amount,
-              customEmissionsFactor: nv(Number(cell('C'))),
+              amountTonnes: amount,
+              method2EmissionFactor: nv(Number(cell('C'))),
             },
           ],
         };

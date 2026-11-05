@@ -80,7 +80,7 @@ const CottonFertiliserInputSchema: z.ZodType<
   }));
 
 export const CottonCropResidueInputSchema = BaseCropResidueInputSchema.omit({
-  totalYieldKg: true,
+  totalYieldKilograms: true,
 })
   .safeExtend({
     fractionSeedCottonLint: numberInput(
@@ -93,7 +93,7 @@ export const CottonCropResidueInputSchema = BaseCropResidueInputSchema.omit({
       },
       isProportion,
     ),
-    totalYieldKg: numberInput(
+    totalYieldKilograms: numberInput(
       (val) => mass('DryMatter', val),
       {
         name: 'Pc',

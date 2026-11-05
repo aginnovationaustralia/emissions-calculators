@@ -41,7 +41,7 @@ const createPerennialCropInputMethod1 = (
         plantings: [],
         clearings,
         calculationMethod: '2 (BAM)',
-        method2BiomassAtMaturity: nv(method2BiomassAtMaturity),
+        biomassAtMaturityTonnesPerHectare: nv(method2BiomassAtMaturity),
       };
     }
 
@@ -71,7 +71,7 @@ const createPerennialCropInputMethod2 = (
     plantings: [],
     clearings,
     calculationMethod: '2 (stem density)',
-    method2ActualStemDensity: nv(method2ActualStemDensity),
+    actualStemDensityPerHectare: nv(method2ActualStemDensity),
   };
 };
 
@@ -96,7 +96,7 @@ const getCalculatorInput = (
     const areaCleared = Number(cell(columnAreaCleared, offset));
 
     return {
-      areaCleared: nv(areaCleared),
+      areaClearedHectares: nv(areaCleared),
     };
   };
 
@@ -107,8 +107,8 @@ const getCalculatorInput = (
     const method2AgeAtClearing = Number(cell(columnAgeAtClearing, offset));
 
     return {
-      areaCleared: nv(areaCleared),
-      method2AgeAtClearing: nv(method2AgeAtClearing),
+      areaClearedHectares: nv(areaCleared),
+      method2AgeAtClearingYears: nv(method2AgeAtClearing),
     };
   };
 

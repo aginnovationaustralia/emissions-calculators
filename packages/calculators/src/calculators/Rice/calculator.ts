@@ -46,11 +46,11 @@ function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
   crop: RiceCropInputTransformed,
 ): RiceIntermediateIntensitiesOutput {
-  const riceHarvested = crop.crop.totalYieldKg;
+  const riceHarvested = crop.crop.totalYieldKilograms;
 
   return {
     riceIntensity: generateIntensity(netEmissions, riceHarvested),
-    riceHarvestedKg: exposeMassValue(riceHarvested),
+    riceHarvestedKilograms: exposeMassValue(riceHarvested),
   };
 }
 
@@ -60,7 +60,7 @@ function getTotalIntensities(
   crops: RiceCropInputTransformed[],
 ) {
   const riceHarvested = sum(
-    crops.map(({ crop }) => crop.totalYieldKg),
+    crops.map(({ crop }) => crop.totalYieldKilograms),
     zeroMassDryMatter,
   );
 
@@ -70,7 +70,7 @@ function getTotalIntensities(
       riceHarvested,
     ),
     riceIncludingLULUCF: generateIntensity(netTotalEmissions, riceHarvested),
-    riceHarvestedKg: exposeMassValue(riceHarvested),
+    riceHarvestedKilograms: exposeMassValue(riceHarvested),
   };
 }
 

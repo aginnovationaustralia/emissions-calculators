@@ -33,7 +33,10 @@ const getInletCOD = (
         ),
         undefined,
       )
-    : captureMethod1Or2Value(voidUnit(), wastewater.inletCOD)
+    : captureMethod1Or2Value(
+        voidUnit(),
+        wastewater.method2InletCODKilogramsPerCubicMetre,
+      )
   ).named(`CODin,c`);
 
 /**
@@ -54,7 +57,10 @@ const getOutletCOD = (
         ),
         undefined,
       )
-    : captureMethod1Or2Value(voidUnit(), wastewater.outletCOD)
+    : captureMethod1Or2Value(
+        voidUnit(),
+        wastewater.method2OutletCODKilogramsPerCubicMetre,
+      )
   ).named(`CODout`);
 
 /**
@@ -65,12 +71,13 @@ const calculateMethaneGeneratedInWastewaterTreatment = (
   wastewater: WastewaterTreatmentInputTransformed,
   constants: HasCommonConstants,
 ) => {
-  const { wastewaterVolume, fractionRemoved } = wastewater;
+  const { wastewaterVolumeCubicMetres: wastewaterVolume, fractionRemoved } =
+    wastewater;
 
   const fractionSludge = captureMethod1Or2Value(
     selectConstant(constants.COMMON, 'WASTEWATER_TREATMENT', 'FRAC_SLUDGE'),
     wastewaterInputIsMethod2(wastewater)
-      ? wastewater.fractionSludge
+      ? wastewater.method2FractionSludge
       : undefined,
   );
   const inletCOD = getInletCOD(wastewater, constants);
@@ -205,7 +212,11 @@ export const calculateScope1Method2WastewaterCH4 = (
     constants,
   );
 
-  const { methaneCaptured, methaneFlared, methaneOut } = wastewater;
+  const {
+    method2MethaneCapturedCubicMetres: methaneCaptured,
+    method2MethaneFlaredCubicMetres: methaneFlared,
+    method2MethaneOutCubicMetres: methaneOut,
+  } = wastewater;
   const densityOfMethane = selectConstant(
     constants.COMMON,
     'DENSITY_OF_METHANE',
@@ -354,7 +365,7 @@ export const calculateScope1Method2WastewaterN2O = (
 ): Container<Mass<'N2O'>> => {
   const { constants } = context;
 
-  const methaneFlared = wastewater.methaneFlared;
+  const methaneFlared = wastewater.method2MethaneFlaredCubicMetres;
 
   const sludgeBiogasEnergyContentFlared = selectConstant(
     constants.COMMON,

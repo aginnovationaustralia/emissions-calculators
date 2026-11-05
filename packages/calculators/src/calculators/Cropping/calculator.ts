@@ -49,7 +49,7 @@ function getSingleIntensities(
 
   return {
     cropIntensity: generateIntensity(netEmissions, harvested),
-    cropHarvestedKg: exposeMassValue(harvested),
+    cropHarvestedKilograms: exposeMassValue(harvested),
   };
 }
 
@@ -74,7 +74,7 @@ function getTotalIntensities(
       netTotalEmissions,
       harvested,
     ),
-    cropHarvestedKg: exposeMassValue(harvested),
+    cropHarvestedKilograms: exposeMassValue(harvested),
   };
 }
 

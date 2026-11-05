@@ -58,14 +58,14 @@ export const calculateMassNCropAppliedToSoil = (
     ),
     residues.calculationMethod === '2'
       ? residueIsByMass(residues)
-        ? residues.massCropResidueRemoved.divide(
-            crop.totalYieldKg.multiply(ragc).reference('6.1.1.2 (1)'),
+        ? residues.massCropResidueRemovedKilograms.divide(
+            crop.totalYieldKilograms.multiply(ragc).reference('6.1.1.2 (1)'),
           )
         : residues.fractionCropResidueRemoved
       : undefined,
   ).named('FFODc');
 
-  const pc = crop.totalYieldKg;
+  const pc = crop.totalYieldKilograms;
   const rbgc = selectConstant(
     constants.CROP,
     'CROPRESIDUE',

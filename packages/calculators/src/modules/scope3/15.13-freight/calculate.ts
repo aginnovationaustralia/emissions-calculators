@@ -38,8 +38,8 @@ export const calculateFreightEmissions = (
       );
       return captureMethod1Or2Value(
         emissionsFactor
-          .multiply(freight.distance)
-          .multiply(freight.weight)
+          .multiply(freight.distanceKilometres)
+          .multiply(freight.weightTonnes)
           .reference('15.13.1.1 (1)'),
         undefined,
       );

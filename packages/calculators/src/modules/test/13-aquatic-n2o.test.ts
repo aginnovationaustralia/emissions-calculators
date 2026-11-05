@@ -13,19 +13,19 @@ describe('13.1.1 Aquatic N2O', () => {
   it('accepts inputs for method 1 calculation', async () => {
     const coastalInput: HasAquacultureSystemInput = {
       fishery: {
-        amountProduced: nv(100),
+        amountProducedTonnes: nv(100),
         location: 'Coastal wetland habitat',
       },
     };
     const seagrassInput: HasAquacultureSystemInput = {
       fishery: {
-        amountProduced: nv(100),
+        amountProducedTonnes: nv(100),
         location: 'Offshore cages in seagrass meadows',
       },
     };
     const otherInput: HasAquacultureSystemInput = {
       fishery: {
-        amountProduced: nv(100),
+        amountProducedTonnes: nv(100),
         location: 'Other',
       },
     };

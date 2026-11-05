@@ -60,7 +60,7 @@ const getVolatileSolidsProductionForClass = (
       pigsClass.name,
       'VOLATILE_SOLIDS',
     ),
-    pigsClass.method2VolatileSolidProductionRate,
+    pigsClass.method2DailyVolatileSolidProductionKilograms,
   ).named(`VSj=${pigsClass.number}`);
 };
 
@@ -78,7 +78,7 @@ const getNitrogenWasteProductionForClass = (
       pigsClass.name,
       'NITROGEN_IN_WASTE',
     ),
-    pigsClass.method2NitrogenWasteProductionRate,
+    pigsClass.method2DailyNitrogenWasteProductionKilograms,
   ).named(`NWj=${pigsClass.number}`);
 };
 
@@ -94,7 +94,7 @@ const getSolidSeparationRate = (
   if (manureAllocation.solidSeparationInputMethod === '2') {
     return captureMethod1Or2Value(
       voidUnit(),
-      manureAllocation.fractionSolidsSeparatedPreTreatment,
+      manureAllocation.method2FractionSolidsSeparatedPreTreatment,
     );
   }
 
@@ -128,7 +128,7 @@ const getNitrogenSeparationRate = (
   if (manureAllocation.solidSeparationInputMethod === '2') {
     return captureMethod1Or2Value(
       defaultSeparatedRate,
-      manureAllocation.fractionNitrogenSeparatedPreTreatment,
+      manureAllocation.method2FractionNitrogenSeparatedPreTreatment,
     );
   }
 
@@ -150,7 +150,7 @@ const calculateAnnualNitrogenExcretionForClass = (
 ) =>
   getNitrogenWasteProductionForClass(pigsClass, constants)
     .multiply(pigsClass.head)
-    .multiply(pigsClass.days)
+    .multiply(pigsClass.durationDays)
     .named(`AEj=${pigsClass.number}`);
 
 /**
@@ -653,7 +653,7 @@ export const calculateManureManagementCH4ForClass = (
     zeroMassPerHeadPerDayCH4,
   )
     .multiply(pigsClass.head)
-    .multiply(pigsClass.days)
+    .multiply(pigsClass.durationDays)
     .named(`ECH4 (j=${pigsClass.number})`)
     .reference('4.5.1.1 (1)');
 };

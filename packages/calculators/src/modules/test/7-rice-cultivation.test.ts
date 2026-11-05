@@ -44,7 +44,7 @@ const getCalculatorInput = (
 
     organicAmendments.push({
       type: checkOrganicAmendmentType(cell('D', amendmentOffset)),
-      rateOfApplication: nv(Number(cell('G', amendmentOffset))),
+      rateOfApplicationTonnesPerHectare: nv(Number(cell('G', amendmentOffset))),
     });
 
     amendmentOffset++;
@@ -52,8 +52,8 @@ const getCalculatorInput = (
 
   const riceCropInput: HasRiceCultivationInput = {
     crop: {
-      areaSown,
-      totalYieldKg: nv(0),
+      areaSownHectares: areaSown,
+      totalYieldKilograms: nv(0),
       fractionOfAnnualCropBurnt: nv(0.5),
       residues: {
         calculationMethod: '1',

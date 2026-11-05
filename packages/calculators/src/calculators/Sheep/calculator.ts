@@ -68,7 +68,10 @@ function calculateCleanWoolProducedInPeriod(
   if (!classInput) {
     return zeroMassCleanWool;
   }
-  const { greasyWoolProduction, cleanWoolYieldProportion } = classInput;
+  const {
+    greasyWoolProductionKilograms: greasyWoolProduction,
+    fractionOfYieldCleanWool: cleanWoolYieldProportion,
+  } = classInput;
 
   const cleanWoolPerHeadPerDay = greasyWoolProduction
     .multiply(cleanWoolYieldProportion)
@@ -146,7 +149,7 @@ export function getSingleIntensities(
   input: Pick<SheepInputTransformed, 'isFebruaryInLeapYear'>,
 ): SheepIntermediateIntensitiesOutput {
   const { constants } = context;
-  const liveweightProduced = flock.liveweightSoldKg;
+  const liveweightProduced = flock.liveweightSoldKilograms;
   const cleanWoolProduced = getCleanWoolProducedForFlock(
     flock,
     context,
@@ -160,12 +163,12 @@ export function getSingleIntensities(
   );
 
   return {
-    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     liveweightIntensity: generateIntensity(
       netEmissions.multiply(num(meatAllocation)),
       liveweightProduced,
     ),
-    woolProducedKg: exposeMassValue(cleanWoolProduced),
+    woolProducedKilograms: exposeMassValue(cleanWoolProduced),
     woolIntensity: generateIntensity(
       netEmissions.multiply(num(woolAllocation)),
       cleanWoolProduced,
@@ -182,7 +185,7 @@ export function getTotalIntensities(
 ): SheepIntensitiesOutput {
   const { constants } = context;
   const liveweightProduced = sum(
-    flocks.map((flock) => flock.liveweightSoldKg),
+    flocks.map((flock) => flock.liveweightSoldKilograms),
     zeroMassLiveweight,
   );
   const cleanWoolProduced = sum(
@@ -202,7 +205,7 @@ export function getTotalIntensities(
   const netEmissionsExcludingLulucf = netTotalEmissions.minus(netLulucf);
 
   return {
-    liveweightProducedKg: exposeMassValue(liveweightProduced),
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     liveweightIntensityExcludingLULUCF: generateIntensity(
       netEmissionsExcludingLulucf.multiply(meat),
       liveweightProduced,
@@ -211,7 +214,7 @@ export function getTotalIntensities(
       netTotalEmissions.multiply(meat),
       liveweightProduced,
     ),
-    woolProducedKg: exposeMassValue(cleanWoolProduced),
+    woolProducedKilograms: exposeMassValue(cleanWoolProduced),
     woolIntensityExcludingLULUCF: generateIntensity(
       netEmissionsExcludingLulucf.multiply(wool),
       cleanWoolProduced,

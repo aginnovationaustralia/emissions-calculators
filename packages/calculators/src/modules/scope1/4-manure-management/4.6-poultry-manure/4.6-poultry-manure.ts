@@ -61,7 +61,7 @@ const getDryMatterIntake = (
       poultryClass.className,
       'dryMatterIntake',
     ),
-    poultryClass.method2DryMatterIntake,
+    poultryClass.method2DailyDryMatterIntakeKilograms,
   ).named(`Ij=${poultryClass.classNumber}`);
 
 /**
@@ -78,7 +78,7 @@ const getDryMatterDigestibility = (
       poultryClass.className,
       'dryMatterDigestibility',
     ),
-    poultryClass.method2DryMatterDigestibility,
+    poultryClass.method2FractionDryMatterDigestibility,
   ).named(`DMDj=${poultryClass.classNumber}`);
 
 /**
@@ -95,7 +95,7 @@ const getCrudeProtein = (
       poultryClass.className,
       'crudeProtein',
     ),
-    poultryClass.method2CrudeProtein,
+    poultryClass.method2FractionCrudeProteinContent,
   ).named(`CPj=${poultryClass.classNumber}`);
 
 /**
@@ -349,7 +349,7 @@ export const calculateManureManagementCH4ForClass = (
 
   return totalMethaneProductionPerBirdPerDay
     .multiply(poultryClass.head)
-    .multiply(poultryClass.days)
+    .multiply(poultryClass.durationDays)
     .named(`ECH4 (j=${poultryClass.classNumber})`)
     .reference('4.6.1.1 (1)');
 };
@@ -409,7 +409,12 @@ export const calculateNitrogenPerStage1MMSForClass = (
   poultryClass: PoultryClassSharedInputTransformed,
   constants: HasConstants<'COMMON' | 'POULTRY'>,
 ): Record<PoultryMMS1TypeWithPasture, Container<Mass<'N'>>> => {
-  const { head, days, manureAllocations, classNumber } = poultryClass;
+  const {
+    head,
+    durationDays: days,
+    manureAllocations,
+    classNumber,
+  } = poultryClass;
 
   const nitrogenExcretionRate = calculateNitrogenExcretionForClass(
     poultryClass,

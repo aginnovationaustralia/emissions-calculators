@@ -62,7 +62,7 @@ const getCalculatorInput = (
     calculationMethod === '2'
       ? {
           calculationMethod,
-          massCropResidueRemoved: nv(customMassCropResidueRemoved),
+          massCropResidueRemovedKilograms: nv(customMassCropResidueRemoved),
         }
       : {
           calculationMethod,
@@ -71,7 +71,7 @@ const getCalculatorInput = (
   const cropResidueInput: HasCropResidueInput = {
     crop: {
       ...cropTypeAndBurntFraction(type, fractionOfAnnualCropBurnt),
-      totalYieldKg,
+      totalYieldKilograms: totalYieldKg,
       residues,
     },
   };
@@ -130,7 +130,7 @@ describe('6.1.1.1 Crop residue N2O with a burnt fraction', () => {
   const cropInput = (type: CropType, burnt?: number) => ({
     crop: {
       type,
-      totalYieldKg: nv(1_000_000),
+      totalYieldKilograms: nv(1_000_000),
       ...(burnt === undefined ? {} : { fractionOfAnnualCropBurnt: nv(burnt) }),
       residues: { calculationMethod: '1' },
     },

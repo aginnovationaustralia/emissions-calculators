@@ -23,7 +23,7 @@ import { voidUnit } from '@/tools/units';
 export const calculateScope3FertiliserMethod1EmissionsFactor = (
   fertiliser: Pick<
     InorganicFertiliserInputScope3Method1Transformed,
-    'massPurchasedKg' | 'fertiliserType'
+    'massPurchasedKilograms' | 'fertiliserType'
   >,
   context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
 ) => {
@@ -37,7 +37,7 @@ export const calculateScope3FertiliserMethod1EmissionsFactor = (
     EF f = emission factor of purchased inorganic fertiliser (kg CO2e/kg)
     */
   const { constants } = context;
-  const tmjf = fertiliser.massPurchasedKg;
+  const tmjf = fertiliser.massPurchasedKilograms;
   const ef = selectConstant(
     constants.CROP,
     'INORGANIC_FERTILISER_FRACTIONS',
@@ -82,7 +82,7 @@ export const calculateScope3FertiliserMethod1KnownComponent = (
   context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
 ) => {
   const fcf = component.fractionOfFertiliser;
-  const tmjf = fertiliser.massPurchasedKg;
+  const tmjf = fertiliser.massPurchasedKilograms;
   const efc = emissionsFactorForComponent(component, context);
   return fcf.multiply(tmjf).multiply(efc);
 };
@@ -92,7 +92,7 @@ export const calculateScope3FertiliserMethod1UnknownComponent = (
   component: InorganicFertiliserUnknownComponentInputTransformed,
 ) => {
   const fcf = component.fractionOfFertiliser;
-  const tmjf = fertiliser.massPurchasedKg;
+  const tmjf = fertiliser.massPurchasedKilograms;
   const efc = component.emissionFactor;
   return fcf.multiply(tmjf).multiply(efc).named('E').reference('15.4.1.1 (2)');
 };
@@ -155,8 +155,8 @@ export const calculateScope3FertiliserMethod2 = (
   15.4.1.2 Method 2 -- Purchased Fertiliser
   Method 2 is the same as Method 1, except that a verified supplier-provided value for EF f is required.
   */
-  const tmjf = fertiliser.massPurchasedKg;
-  const ef = fertiliser.customScope3EmissionFactor;
+  const tmjf = fertiliser.massPurchasedKilograms;
+  const ef = fertiliser.scope3EmissionFactor;
   const e = tmjf.multiply(ef).attach({ references: ['15.4.1.1 (1)'] });
   return e;
 };

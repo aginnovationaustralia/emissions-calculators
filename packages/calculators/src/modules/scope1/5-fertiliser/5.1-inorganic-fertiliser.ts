@@ -102,13 +102,13 @@ const getNitrogenFraction = (
         zeroMassPerMassNInorganicFertiliser,
       ).named('FNinorganic,f (custom components)');
     }
-  } else if (inorganicFertiliser.customNitrogenFraction !== undefined) {
-    return inorganicFertiliser.customNitrogenFraction;
+  } else if (inorganicFertiliser.fractionNitrogen !== undefined) {
+    return inorganicFertiliser.fractionNitrogen;
   }
 
   return (
     isInorganicFertiliserTypeOther(inorganicFertiliser)
-      ? inorganicFertiliser.customNitrogenFraction
+      ? inorganicFertiliser.fractionNitrogen
       : selectConstant(
           constants.CROP,
           'INORGANIC_FERTILISER_FRACTIONS',
@@ -156,7 +156,7 @@ function getUreaFraction(
 
   return (
     isInorganicFertiliserTypeOther(inorganicFertiliser)
-      ? inorganicFertiliser.customUreaFraction
+      ? inorganicFertiliser.fractionUrea
       : selectConstant(
           constants.CROP,
           'INORGANIC_FERTILISER_FRACTIONS',
@@ -182,7 +182,7 @@ const calculateInorganicFertiliserN2OMethod1 = (
 
   const totalNitrogen = sum(
     fertiliser.inorganic.applications.map((application) =>
-      application.massAppliedKg
+      application.massAppliedKilograms
         .multiply(getNitrogenFraction(application, constants))
         .named(`MNjf`)
         .reference('5.1.1.1 (2)'),
@@ -282,7 +282,7 @@ const calculateInorganicFertiliserN2OMethod2 = (
   const { areaAppliedHectares } = fertiliser.inorganic;
   const totalNitrogenApplied = sum(
     fertiliser.inorganic.applications.map((application) =>
-      application.massAppliedKg.multiply(
+      application.massAppliedKilograms.multiply(
         getNitrogenFraction(application, constants),
       ),
     ),
@@ -308,7 +308,7 @@ export const massNitrogenFromInorganicFertiliserAppliedMNjf = (
 ) => {
   const fnInorganicF = getNitrogenFraction(inorganicFertiliser, constants);
 
-  const TMjf = inorganicFertiliser.massAppliedKg.named('TMjf');
+  const TMjf = inorganicFertiliser.massAppliedKilograms.named('TMjf');
 
   const mnjf = TMjf.multiply(fnInorganicF.named('FNinorganicf'))
     .named('MNjf')
@@ -339,7 +339,7 @@ export const calculateInorganicFertiliserCO2 = (
    */
   const { applications } = input.fertiliser.inorganic;
   const emissionRecords = applications.map((inorganicFertiliser) => {
-    const tmjf = inorganicFertiliser.massAppliedKg;
+    const tmjf = inorganicFertiliser.massAppliedKilograms;
 
     const fUf = getUreaFraction(inorganicFertiliser, constants);
     /**

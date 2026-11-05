@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 export const LocationBasedElectricityInputsSchema = object({
   method: z.literal('location'),
-  electricityPurchasedKWh: numberInput(
+  electricityPurchasedKilowattHours: numberInput(
     (val) => electricity(val),
     {
       name: 'electricityPurchased',

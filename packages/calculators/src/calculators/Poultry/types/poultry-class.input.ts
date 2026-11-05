@@ -34,7 +34,7 @@ const createPoultryClassSharedFieldsSchema = (
       },
       (s) => s.min(0),
     ),
-    days: numberInput(
+    durationDays: numberInput(
       (val) => days(val),
       {
         name: `Dj=${classNumbers[className]}`,
@@ -43,7 +43,7 @@ const createPoultryClassSharedFieldsSchema = (
       },
       (s) => s.min(0),
     ),
-    method2DryMatterIntake: numberInputOptional(
+    method2DailyDryMatterIntakeKilograms: numberInputOptional(
       (val) => massPerHeadPerDay('DryMatter', val),
       {
         name: `Ij=${classNumbers[className]}`,
@@ -53,7 +53,7 @@ const createPoultryClassSharedFieldsSchema = (
       },
       (s) => s.gt(0),
     ),
-    method2CrudeProtein: numberInputOptional(
+    method2FractionCrudeProteinContent: numberInputOptional(
       (val) => massPerMass('CrudeProtein', 'DryMatter', val),
       {
         name: `CPj=${classNumbers[className]}`,
@@ -98,7 +98,7 @@ const createPoultryClassLivestockInputSchema = <P extends PoultryClass>(
 ) =>
   withPoultryClassName(
     createPoultryClassSharedFieldsSchema(className, 'livestock').extend({
-      method2DryMatterDigestibility: numberInputOptional(
+      method2FractionDryMatterDigestibility: numberInputOptional(
         (val) => realNumber(val),
         {
           name: `DMDj=${classNumbers[className]}`,

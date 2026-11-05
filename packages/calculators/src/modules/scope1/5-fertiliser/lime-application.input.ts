@@ -11,7 +11,7 @@ import { object } from '@/types/schemas';
 import { z } from 'zod';
 
 const LimeApplicationBaseInputSchema = object({
-  massAppliedKg: numberInput(
+  massAppliedKilograms: numberInput(
     (val) => mass('Lime', val),
     {
       name: 'Mlime',
@@ -21,10 +21,10 @@ const LimeApplicationBaseInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  customScope3EmissionsFactor: numberInputOptional(
+  method2Scope3EmissionFactor: numberInputOptional(
     (val) => massPerMass('CO2e', 'Lime', val),
     {
-      name: 'customScope3EmissionsFactor',
+      name: 'method2Scope3EmissionFactor',
       method: '2',
       scope: '3',
       description:

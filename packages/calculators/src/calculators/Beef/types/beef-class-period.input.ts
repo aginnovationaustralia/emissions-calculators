@@ -29,7 +29,7 @@ export const BeefClassPeriodInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  method2Liveweight: numberInputOptional(
+  method2LiveweightKilograms: numberInputOptional(
     (value) => liveweight(value),
     {
       name: 'Wijkln',
@@ -40,13 +40,16 @@ export const BeefClassPeriodInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  method2LiveweightGain: numberInputOptional((val) => liveweightGain(val), {
-    name: 'LWGijkln',
-    method: '2',
-    description:
-      'Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records',
-    modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
-  }),
+  method2DailyLiveweightGainKilograms: numberInputOptional(
+    (val) => liveweightGain(val),
+    {
+      name: 'LWGijkln',
+      method: '2',
+      description:
+        'Method 2: supply an exact value for liveweight gain for this class for this time period based on farm records',
+      modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
+    },
+  ),
   method2DurationDays: numberInputOptional(
     (val) => days(val),
     {
@@ -58,7 +61,7 @@ export const BeefClassPeriodInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  method2DryMatterIntake: numberInputOptional(
+  method2DailyDryMatterIntakeKilograms: numberInputOptional(
     (val) => massPerHeadPerDay('DryMatter', val),
     {
       name: 'Ijk',
@@ -69,7 +72,7 @@ export const BeefClassPeriodInputSchema = object({
     },
     (s) => s.min(0),
   ),
-  method2DryMatterDigestibility: numberInputOptional(
+  method2FractionDryMatterDigestibility: numberInputOptional(
     realNumber,
     {
       name: 'DMDijk',
@@ -80,7 +83,7 @@ export const BeefClassPeriodInputSchema = object({
     },
     isProportion,
   ),
-  method2CrudeProteinContent: numberInputOptional(
+  method2FractionCrudeProteinContent: numberInputOptional(
     (val) => massPerMass('CrudeProtein', 'DryMatter', val),
     {
       name: 'CPijk=spring',
@@ -102,7 +105,7 @@ export const createBeefClassSeasonalPeriodWithCalvesInputSchema = (
   thisSeason: Season,
 ) =>
   BeefClassPeriodInputSchema.extend({
-    proportionCowsThisSeasonInCalf: numberInput(
+    fractionCowsThisSeasonInCalf: numberInput(
       (val) => realNumber(val),
       {
         name: 'LC (calving)',
@@ -112,7 +115,7 @@ export const createBeefClassSeasonalPeriodWithCalvesInputSchema = (
       },
       isProportion,
     ),
-    proportionCowsPreviousSeasonInCalf: numberInput(
+    fractionCowsPreviousSeasonInCalf: numberInput(
       (val) => realNumber(val),
       {
         name: 'LC (post-calving)',
@@ -123,12 +126,12 @@ export const createBeefClassSeasonalPeriodWithCalvesInputSchema = (
       isProportion,
     ),
   }).superRefine((val, ctx) => {
-    const totalCalving = val.proportionCowsThisSeasonInCalf.plus(
-      val.proportionCowsPreviousSeasonInCalf,
+    const totalCalving = val.fractionCowsThisSeasonInCalf.plus(
+      val.fractionCowsPreviousSeasonInCalf,
     ).unit.store.value;
     if (totalCalving.toNumber() > 1) {
       ctx.addIssue(
-        `The sum of ${thisSeason}.proportionCowsThisSeasonInCalf and ${thisSeason}.proportionCowsPreviousSeasonInCalf should not exceed 1 (current total: ${totalCalving}). Adjust either or both keys so they are equal to or less than 1.`,
+        `The sum of ${thisSeason}.fractionCowsThisSeasonInCalf and ${thisSeason}.fractionCowsPreviousSeasonInCalf should not exceed 1 (current total: ${totalCalving}). Adjust either or both keys so they are equal to or less than 1.`,
       );
     }
   });
@@ -143,7 +146,7 @@ export const createBeefClassMonthlyPeriodWithCalvesInputSchema = (
   const previousMonth5 = getPreviousMonth(thisMonth, 5);
 
   return BeefClassPeriodInputSchema.extend({
-    proportionCowsThisSeasonInCalf: numberInput(
+    fractionCowsThisSeasonInCalf: numberInput(
       (val) => realNumber(val),
       {
         name: 'Cows calving this season',
@@ -153,7 +156,7 @@ export const createBeefClassMonthlyPeriodWithCalvesInputSchema = (
       },
       isProportion,
     ),
-    proportionCowsPreviousSeasonInCalf: numberInput(
+    fractionCowsPreviousSeasonInCalf: numberInput(
       (val) => realNumber(val),
       {
         name: 'Cows calving previous season',
@@ -164,12 +167,12 @@ export const createBeefClassMonthlyPeriodWithCalvesInputSchema = (
       isProportion,
     ),
   }).superRefine((val, ctx) => {
-    const totalCalving = val.proportionCowsThisSeasonInCalf.plus(
-      val.proportionCowsPreviousSeasonInCalf,
+    const totalCalving = val.fractionCowsThisSeasonInCalf.plus(
+      val.fractionCowsPreviousSeasonInCalf,
     ).unit.store.value;
     if (totalCalving.toNumber() > 1) {
       ctx.addIssue(
-        `The sum of ${thisMonth}.proportionCowsThisSeasonInCalf and ${thisMonth}.proportionCowsPreviousSeasonInCalf should not exceed 1 (current total: ${totalCalving}). Adjust either or both keys so they are equal to or less than 1.`,
+        `The sum of ${thisMonth}.fractionCowsThisSeasonInCalf and ${thisMonth}.fractionCowsPreviousSeasonInCalf should not exceed 1 (current total: ${totalCalving}). Adjust either or both keys so they are equal to or less than 1.`,
       );
     }
   });
@@ -188,20 +191,20 @@ export const createBeefCalfClassSeasonalPeriodWithInputSchema = (
   thisSeason: Season,
 ) =>
   BeefClassPeriodInputSchema.extend({
-    proportionCalvesBornThisSeason: numberInput(
+    fractionCalvesBornThisSeason: numberInput(
       (val) => realNumber(val),
       {
-        name: 'proportionCalvesBornThisSeason',
+        name: 'fractionCalvesBornThisSeason',
         method: '1',
         description: `Proportion of calves in ${thisSeason} in this class that were born in this season.`,
         modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
       },
       isProportion,
     ),
-    proportionCalvesBornPreviousSeason: numberInput(
+    fractionCalvesBornPreviousSeason: numberInput(
       (val) => realNumber(val),
       {
-        name: 'proportionCalvesBornPreviousSeason',
+        name: 'fractionCalvesBornPreviousSeason',
         method: '1',
         description: `Proportion of calves in ${thisSeason} in this class that were born in the previous season (${getPreviousSeason(thisSeason)}).`,
         modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
@@ -209,12 +212,12 @@ export const createBeefCalfClassSeasonalPeriodWithInputSchema = (
       isProportion,
     ),
   }).superRefine((val, ctx) => {
-    const totalCalving = val.proportionCalvesBornThisSeason.plus(
-      val.proportionCalvesBornPreviousSeason,
+    const totalCalving = val.fractionCalvesBornThisSeason.plus(
+      val.fractionCalvesBornPreviousSeason,
     ).unit.store.value;
     if (totalCalving.toNumber() > 1) {
       ctx.addIssue(
-        `The sum of ${thisSeason}.proportionCalvesBornThisSeason and ${thisSeason}.proportionCalvesBornPreviousSeason cannot exceed 1 (current total: ${totalCalving}). Adjust either or both keys so they are equal to or less than 1.`,
+        `The sum of ${thisSeason}.fractionCalvesBornThisSeason and ${thisSeason}.fractionCalvesBornPreviousSeason cannot exceed 1 (current total: ${totalCalving}). Adjust either or both keys so they are equal to or less than 1.`,
       );
     }
   });
@@ -229,20 +232,20 @@ export const createBeefCalfClassMonthlyPeriodInputSchema = (
   const previousMonth5 = getPreviousMonth(thisMonth, 5);
 
   return BeefClassPeriodInputSchema.extend({
-    proportionCalvesBornThisSeason: numberInput(
+    fractionCalvesBornThisSeason: numberInput(
       (val) => realNumber(val),
       {
-        name: 'proportionCalvesBornThisSeason',
+        name: 'fractionCalvesBornThisSeason',
         method: '1',
         description: `Proportion of calves in this class during ${thisMonth} that were born in this month (${thisMonth}), or the immediate prior 2 months (${previousMonth1} or ${previousMonth2}).`,
         modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
       },
       isProportion,
     ),
-    proportionCalvesBornPreviousSeason: numberInput(
+    fractionCalvesBornPreviousSeason: numberInput(
       (val) => realNumber(val),
       {
-        name: 'proportionCalvesBornPreviousSeason',
+        name: 'fractionCalvesBornPreviousSeason',
         method: '1',
         description: `Proportion of calves in this class during ${thisMonth} that were born in the "previous season", which means the previous ${previousMonth3}, ${previousMonth4} or ${previousMonth5}.`,
         modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
@@ -250,12 +253,12 @@ export const createBeefCalfClassMonthlyPeriodInputSchema = (
       isProportion,
     ),
   }).superRefine((val, ctx) => {
-    const totalCalving = val.proportionCalvesBornThisSeason.plus(
-      val.proportionCalvesBornPreviousSeason,
+    const totalCalving = val.fractionCalvesBornThisSeason.plus(
+      val.fractionCalvesBornPreviousSeason,
     ).unit.store.value;
     if (totalCalving.toNumber() > 1) {
       ctx.addIssue(
-        `The sum of ${thisMonth}.proportionCalvesBornThisSeason and ${thisMonth}.proportionCalvesBornPreviousSeason cannot exceed 1 (current total: ${totalCalving}). Adjust either or both keys so they are equal to or less than 1.`,
+        `The sum of ${thisMonth}.fractionCalvesBornThisSeason and ${thisMonth}.fractionCalvesBornPreviousSeason cannot exceed 1 (current total: ${totalCalving}). Adjust either or both keys so they are equal to or less than 1.`,
       );
     }
   });
@@ -277,11 +280,11 @@ export type BeefClassPeriodExtendedInputTransformed =
 export const isBeefClassPeriodInputWithCalves = (
   period: BeefClassPeriodExtendedInputTransformed,
 ): period is BeefClassPeriodWithCalvesInputTransformed => {
-  return 'proportionCowsThisSeasonInCalf' in period;
+  return 'fractionCowsThisSeasonInCalf' in period;
 };
 
 export const isBeefCalfClassPeriodInput = (
   period: BeefClassPeriodExtendedInputTransformed,
 ): period is BeefCalfClassPeriodInputTransformed => {
-  return 'proportionCalvesBornThisSeason' in period;
+  return 'fractionCalvesBornThisSeason' in period;
 };

@@ -32,10 +32,10 @@ export const readFeedlotGroup = (
   };
 
   if (method === '2') {
-    group.method2DryMatterIntake = nvo(Number(cell('J')));
-    group.method2NitrogenRetentionRate = nvo(Number(cell('K')));
-    group.method2DryMatterDigestibility = nvo(Number(cell('L')));
-    group.method2CrudeProtein = nvo(Number(cell('M')));
+    group.method2DailyDryMatterIntakeKilograms = nvo(Number(cell('J')));
+    group.method2FractionNitrogenRetentionRate = nvo(Number(cell('K')));
+    group.method2FractionDryMatterDigestibility = nvo(Number(cell('L')));
+    group.method2FractionCrudeProteinContent = nvo(Number(cell('M')));
   }
   return group;
 };

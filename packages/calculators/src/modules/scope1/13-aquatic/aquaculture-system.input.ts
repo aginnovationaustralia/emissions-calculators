@@ -7,7 +7,7 @@ import { object } from '@/types/schemas';
 import z from 'zod';
 
 export const AquacultureSystemInputSchema = object({
-  amountProduced: numberInput((val) => mass('Fish', tonnesToKg(val)), {
+  amountProducedTonnes: numberInput((val) => mass('Fish', tonnesToKg(val)), {
     name: 'Q',
     scope: '1',
     description:

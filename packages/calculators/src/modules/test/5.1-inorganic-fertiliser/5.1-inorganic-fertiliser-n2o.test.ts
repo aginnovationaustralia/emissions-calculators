@@ -61,8 +61,8 @@ const getFertiliserApplication = (
   return {
     calculationMethodScope3: '1',
     fertiliserType,
-    massAppliedKg,
-    massPurchasedKg: massAppliedKg,
+    massAppliedKilograms: massAppliedKg,
+    massPurchasedKilograms: massAppliedKg,
     components: getComponents(sheet, row),
   };
 };

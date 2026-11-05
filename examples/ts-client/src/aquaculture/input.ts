@@ -53,15 +53,15 @@ const quality: QualityTable = {
 
 const electricityMethod1: LocationBasedElectricityInputs = {
   method: 'location',
-  electricityPurchasedKWh: { value: 20000, quality },
+  electricityPurchasedKilowattHours: { value: 20000, quality },
   region: 'TAS',
 };
 
 const electricityMethod2: MarketBasedElectricityInputs = {
   method: 'market',
-  electricityPurchasedKWh: { value: 20000, quality },
-  recsSurrendered: { value: 5 },
-  recsOnsite: { value: 2 },
+  electricityPurchasedKilowattHours: { value: 20000, quality },
+  recsSurrenderedMegawattHours: { value: 5 },
+  recsOnsiteMegawattHours: { value: 2 },
   region: 'TAS',
 };
 
@@ -69,12 +69,12 @@ const electricityMethod2: MarketBasedElectricityInputs = {
 
 const purchasedFeedMethod1: PurchasedFeedAquacultureInput = {
   type: 'Whole Sardines',
-  amount: { value: 50 },
+  amountTonnes: { value: 50 },
 };
 
 const purchasedFeedMethod2: PurchasedFeedMethod2Input = {
-  amount: { value: 50 },
-  customEmissionsFactor: { value: 1.2 },
+  amountTonnes: { value: 50 },
+  method2EmissionFactor: { value: 1.2 },
 };
 
 // -------- Fuel --------
@@ -100,7 +100,7 @@ const fuel: FuelInput = {
 
 const refrigerant: RefrigerantInput = {
   refrigerant: 'HFC-23 (R-23)',
-  chargeSize: { value: 5 },
+  chargeSizeKilograms: { value: 5 },
   refrigerationType: 'Transport refrigeration',
 };
 
@@ -108,12 +108,12 @@ const refrigerant: RefrigerantInput = {
 
 const solidWasteTreatedOnsiteMethod1: SolidWasteMethod1Input = {
   method: '1',
-  unmanagedBurial: { value: 2 },
-  unmanagedDeep: { value: 1 },
-  unmanagedShallow: { value: 3 },
-  composting: { value: 4 },
-  anaerobicDigestion: { value: 5 },
-  incineration: { value: 1 },
+  unmanagedBurialTonnes: { value: 2 },
+  unmanagedDeepTonnes: { value: 1 },
+  unmanagedShallowTonnes: { value: 3 },
+  compostingTonnes: { value: 4 },
+  anaerobicDigestionTonnes: { value: 5 },
+  incinerationTonnes: { value: 1 },
 };
 
 const solidWasteUnmanagedBurial: SolidWasteUnmanagedBurialMethod2Input = {
@@ -207,27 +207,27 @@ const wasteMethod2: SolidWasteInput = {
 
 const wastewaterMethod1: WastewaterTreatmentMethod1Input = {
   facilityType: 'Shallow anaerobic lagoon',
-  wastewaterVolume: { value: 500 },
+  wastewaterVolumeCubicMetres: { value: 500 },
   fractionRemoved: { value: 0.1 },
   commodityType: 'Meat and poultry',
 };
 
 const wastewaterMethod2: WastewaterTreatmentMethod2Input = {
   facilityType: 'Shallow anaerobic lagoon',
-  wastewaterVolume: { value: 500 },
+  wastewaterVolumeCubicMetres: { value: 500 },
   fractionRemoved: { value: 0.1 },
-  inletCOD: { value: 3 },
-  outletCOD: { value: 0.5 },
-  fractionSludge: { value: 0.1 },
-  methaneCaptured: { value: 0.2 },
-  methaneFlared: { value: 0.1 },
-  methaneOut: { value: 0.05 },
+  method2InletCODKilogramsPerCubicMetre: { value: 3 },
+  method2OutletCODKilogramsPerCubicMetre: { value: 0.5 },
+  method2FractionSludge: { value: 0.1 },
+  method2MethaneCapturedCubicMetres: { value: 0.2 },
+  method2MethaneFlaredCubicMetres: { value: 0.1 },
+  method2MethaneOutCubicMetres: { value: 0.05 },
 };
 
 // -------- Aquaculture system --------
 
 const fishery: AquacultureSystemInput = {
-  amountProduced: { value: 1000 },
+  amountProducedTonnes: { value: 1000 },
   location: 'Offshore cages in seagrass meadows',
 };
 
@@ -235,7 +235,7 @@ const fishery: AquacultureSystemInput = {
 
 const otherPurchasedGoodOrService: OtherPurchasedGoodOrServiceInput = {
   quantity: { value: 10 },
-  emissionsFactor: { value: 1.5 },
+  emissionFactor: { value: 1.5 },
 };
 
 // -------- Fisheries --------

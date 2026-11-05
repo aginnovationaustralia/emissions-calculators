@@ -52,7 +52,7 @@
                             "type": "string",
                             "const": "location"
                           },
-                          "electricityPurchasedKWh": {
+                          "electricityPurchasedKilowattHours": {
                             "description": "Electricity use (kilowatt-hours)",
                             "x-modules": [
                               "14.1",
@@ -85,7 +85,7 @@
                         },
                         "required": [
                           "method",
-                          "electricityPurchasedKWh",
+                          "electricityPurchasedKilowattHours",
                           "region"
                         ],
                         "additionalProperties": false,
@@ -98,7 +98,7 @@
                             "type": "string",
                             "const": "market"
                           },
-                          "electricityPurchasedKWh": {
+                          "electricityPurchasedKilowattHours": {
                             "description": "Electricity use (kilowatt-hours)",
                             "x-modules": [
                               "14.1",
@@ -120,7 +120,7 @@
                             "additionalProperties": false,
                             "x-units": "kilowatt-hours"
                           },
-                          "recsSurrendered": {
+                          "recsSurrenderedMegawattHours": {
                             "description": "Number of eligible Renewable Energy Certificates voluntarily surrendered in the reporting year (megawatt-hours)",
                             "x-modules": [
                               "14.1",
@@ -142,7 +142,7 @@
                             "additionalProperties": false,
                             "x-units": "megawatt-hours"
                           },
-                          "recsOnsite": {
+                          "recsOnsiteMegawattHours": {
                             "description": "Number eligible Renewable Energy Certificates that have been or will be issued for electricity produced on-site during the year and consumed by the entity (megawatt-hours)",
                             "x-modules": [
                               "14.1",
@@ -175,9 +175,9 @@
                         },
                         "required": [
                           "method",
-                          "electricityPurchasedKWh",
-                          "recsSurrendered",
-                          "recsOnsite",
+                          "electricityPurchasedKilowattHours",
+                          "recsSurrenderedMegawattHours",
+                          "recsOnsiteMegawattHours",
                           "region"
                         ],
                         "additionalProperties": false,
@@ -234,7 +234,7 @@
                                 ],
                                 "$ref": "#/components/schemas/RefrigerantType"
                               },
-                              "chargeSize": {
+                              "chargeSizeKilograms": {
                                 "description": "Amount of refrigerant contained in the appliance (kilograms refrigerant)",
                                 "x-modules": [
                                   "9.1"
@@ -265,7 +265,7 @@
                             },
                             "required": [
                               "refrigerant",
-                              "chargeSize",
+                              "chargeSizeKilograms",
                               "refrigerationType"
                             ],
                             "additionalProperties": false
@@ -284,7 +284,7 @@
                                       "type": "string",
                                       "const": "1"
                                     },
-                                    "unmanagedBurial": {
+                                    "unmanagedBurialTonnes": {
                                       "description": "Amount of waste disposed of through burial (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -305,7 +305,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "unmanagedDeep": {
+                                    "unmanagedDeepTonnes": {
                                       "description": "Amount of solid waste disposed of in a deep open waste dump. (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -326,7 +326,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "unmanagedShallow": {
+                                    "unmanagedShallowTonnes": {
                                       "description": "Amount of solid waste disposed of in a shallow open waste dump. (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -347,7 +347,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "composting": {
+                                    "compostingTonnes": {
                                       "description": "Amount of waste treated through composting (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -368,7 +368,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "anaerobicDigestion": {
+                                    "anaerobicDigestionTonnes": {
                                       "description": "Amount of waste treated through anaerobic digestion (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -389,7 +389,7 @@
                                       "additionalProperties": false,
                                       "x-units": "tonnes solid waste"
                                     },
-                                    "incineration": {
+                                    "incinerationTonnes": {
                                       "description": "Amount of solid waste disposed of by incineration. (tonnes solid waste)",
                                       "x-modules": [
                                         "10.1"
@@ -1371,7 +1371,7 @@
                                   "description": "The type of facility the wastewater was treated at.",
                                   "$ref": "#/components/schemas/WastewaterFacilityType"
                                 },
-                                "wastewaterVolume": {
+                                "wastewaterVolumeCubicMetres": {
                                   "description": "The volume of wastewater treated. (cubic metres fluid waste)",
                                   "x-modules": [
                                     "11.1"
@@ -1423,7 +1423,7 @@
                               },
                               "required": [
                                 "facilityType",
-                                "wastewaterVolume",
+                                "wastewaterVolumeCubicMetres",
                                 "fractionRemoved",
                                 "commodityType"
                               ],
@@ -1437,7 +1437,7 @@
                                   "description": "The type of facility the wastewater was treated at.",
                                   "$ref": "#/components/schemas/WastewaterFacilityType"
                                 },
-                                "wastewaterVolume": {
+                                "wastewaterVolumeCubicMetres": {
                                   "description": "The volume of wastewater treated. (cubic metres fluid waste)",
                                   "x-modules": [
                                     "11.1"
@@ -1479,7 +1479,7 @@
                                   "additionalProperties": false,
                                   "x-units": "0-1"
                                 },
-                                "inletCOD": {
+                                "method2InletCODKilogramsPerCubicMetre": {
                                   "description": "Average inlet COD concentration of wastewater (kilograms COD per cubic metre fluid waste)",
                                   "x-modules": [
                                     "11.1"
@@ -1500,7 +1500,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms COD per cubic metre fluid waste"
                                 },
-                                "outletCOD": {
+                                "method2OutletCODKilogramsPerCubicMetre": {
                                   "description": "Average outlet COD concentration of wastewater. If not provided, it will be estimated based on inlet COD concentration. (kilograms COD per cubic metre fluid waste)",
                                   "x-modules": [
                                     "11.1"
@@ -1521,7 +1521,7 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms COD per cubic metre fluid waste"
                                 },
-                                "fractionSludge": {
+                                "method2FractionSludge": {
                                   "description": "Fraction of COD removed from the wastewater treatment facility as sludge (0-1)",
                                   "x-modules": [
                                     "11.1"
@@ -1542,7 +1542,7 @@
                                   "additionalProperties": false,
                                   "x-units": "0-1"
                                 },
-                                "methaneCaptured": {
+                                "method2MethaneCapturedCubicMetres": {
                                   "description": "Quantity of methane in sludge biogas captured for combustion for the operation of the treatment facility (cubic metres CH4)",
                                   "x-modules": [
                                     "11.1"
@@ -1563,7 +1563,7 @@
                                   "additionalProperties": false,
                                   "x-units": "cubic metres CH4"
                                 },
-                                "methaneFlared": {
+                                "method2MethaneFlaredCubicMetres": {
                                   "description": "Quantity of methane in sludge biogas flared by the treatment facility (cubic metres CH4)",
                                   "x-modules": [
                                     "11.1"
@@ -1584,7 +1584,7 @@
                                   "additionalProperties": false,
                                   "x-units": "cubic metres CH4"
                                 },
-                                "methaneOut": {
+                                "method2MethaneOutCubicMetres": {
                                   "description": "Quantity of methane in sludge biogas transferred out of the treatment facility (cubic metres CH4)",
                                   "x-modules": [
                                     "11.1"
@@ -1608,14 +1608,14 @@
                               },
                               "required": [
                                 "facilityType",
-                                "wastewaterVolume",
+                                "wastewaterVolumeCubicMetres",
                                 "fractionRemoved",
-                                "inletCOD",
-                                "outletCOD",
-                                "fractionSludge",
-                                "methaneCaptured",
-                                "methaneFlared",
-                                "methaneOut"
+                                "method2InletCODKilogramsPerCubicMetre",
+                                "method2OutletCODKilogramsPerCubicMetre",
+                                "method2FractionSludge",
+                                "method2MethaneCapturedCubicMetres",
+                                "method2MethaneFlaredCubicMetres",
+                                "method2MethaneOutCubicMetres"
                               ],
                               "additionalProperties": false,
                               "title": "Wastewater treatment - method 2"
@@ -1625,7 +1625,7 @@
                         "fishery": {
                           "type": "object",
                           "properties": {
-                            "amountProduced": {
+                            "amountProducedTonnes": {
                               "description": "Quantity of fish or crustaceans harvested from this operation, in tonnes. (tonnes fish)",
                               "x-modules": [
                                 "13.1",
@@ -1656,7 +1656,7 @@
                             }
                           },
                           "required": [
-                            "amountProduced",
+                            "amountProducedTonnes",
                             "location"
                           ],
                           "additionalProperties": false
@@ -1688,7 +1688,7 @@
                                 "additionalProperties": false,
                                 "x-units": "number"
                               },
-                              "emissionsFactor": {
+                              "emissionFactor": {
                                 "description": "The emissions factor for the purchased goods or services, per unit of good or service. (tonnes CO2e)",
                                 "x-modules": [
                                   "15.9"
@@ -1712,7 +1712,7 @@
                             },
                             "required": [
                               "quantity",
-                              "emissionsFactor"
+                              "emissionFactor"
                             ],
                             "additionalProperties": false
                           }
@@ -2718,7 +2718,7 @@
                           "intensities": {
                             "type": "object",
                             "properties": {
-                              "fishHarvestedKg": {
+                              "fishHarvestedKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -2746,7 +2746,7 @@
                               }
                             },
                             "required": [
-                              "fishHarvestedKg",
+                              "fishHarvestedKilograms",
                               "emissionsIntensity"
                             ],
                             "additionalProperties": false
@@ -2789,7 +2789,7 @@
                     "intensities": {
                       "type": "object",
                       "properties": {
-                        "fishHarvestedKg": {
+                        "fishHarvestedKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -2817,7 +2817,7 @@
                         }
                       },
                       "required": [
-                        "fishHarvestedKg",
+                        "fishHarvestedKilograms",
                         "emissionsIntensity"
                       ],
                       "additionalProperties": false
@@ -2906,7 +2906,7 @@
             {
               "type": "object",
               "properties": {
-                "amount": {
+                "amountTonnes": {
                   "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                   "x-modules": [
                     "15.2"
@@ -2936,7 +2936,7 @@
                 }
               },
               "required": [
-                "amount",
+                "amountTonnes",
                 "type"
               ],
               "additionalProperties": false,
@@ -2945,7 +2945,7 @@
             {
               "type": "object",
               "properties": {
-                "amount": {
+                "amountTonnes": {
                   "description": "Quantity of this type of feed purchased. (tonnes purchased feed)",
                   "x-modules": [
                     "15.2"
@@ -2966,7 +2966,7 @@
                   "additionalProperties": false,
                   "x-units": "tonnes purchased feed"
                 },
-                "customEmissionsFactor": {
+                "method2EmissionFactor": {
                   "description": "Method 2: Emission factor of the type of feed purchased. (kilograms CO2e per kilogram purchased feed)",
                   "x-modules": [
                     "15.2"
@@ -2989,8 +2989,8 @@
                 }
               },
               "required": [
-                "amount",
-                "customEmissionsFactor"
+                "amountTonnes",
+                "method2EmissionFactor"
               ],
               "additionalProperties": false,
               "title": "Method 2 (custom emissions factor)"
