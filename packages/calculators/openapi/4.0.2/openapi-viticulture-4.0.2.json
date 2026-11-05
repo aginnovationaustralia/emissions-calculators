@@ -4881,7 +4881,7 @@
                         "additionalProperties": false,
                         "x-units": "hectares"
                       },
-                      "ageAtClearingYears": {
+                      "method2AgeAtClearingYears": {
                         "description": "Time since original planting when clearing occurs. This must be less than the maturity age for the crop type (years)",
                         "x-modules": [
                           "16.6"
@@ -4905,7 +4905,7 @@
                     },
                     "required": [
                       "areaClearedHectares",
-                      "ageAtClearingYears"
+                      "method2AgeAtClearingYears"
                     ],
                     "additionalProperties": false
                   }
@@ -14529,7 +14529,7 @@
                             {
                               "type": "object",
                               "properties": {
-                                "dailyVolumeProducedLitres": {
+                                "litresPerHeadPerDay": {
                                   "description": "Volume of milk produced for this class (litres milk per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -14554,14 +14554,14 @@
                                 }
                               },
                               "required": [
-                                "dailyVolumeProducedLitres"
+                                "litresPerHeadPerDay"
                               ],
                               "additionalProperties": false
                             },
                             {
                               "type": "object",
                               "properties": {
-                                "dailySolidsProducedKilograms": {
+                                "solidsKilogramsPerHeadPerDay": {
                                   "description": "Mass of milk solids produced for this class (kilograms milk solids per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -14632,7 +14632,7 @@
                                 }
                               },
                               "required": [
-                                "dailySolidsProducedKilograms"
+                                "solidsKilogramsPerHeadPerDay"
                               ],
                               "additionalProperties": false
                             }
@@ -15962,7 +15962,7 @@
                             {
                               "type": "object",
                               "properties": {
-                                "dailyVolumeProducedLitres": {
+                                "litresPerHeadPerDay": {
                                   "description": "Volume of milk produced for this class (litres milk per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -15987,14 +15987,14 @@
                                 }
                               },
                               "required": [
-                                "dailyVolumeProducedLitres"
+                                "litresPerHeadPerDay"
                               ],
                               "additionalProperties": false
                             },
                             {
                               "type": "object",
                               "properties": {
-                                "dailySolidsProducedKilograms": {
+                                "solidsKilogramsPerHeadPerDay": {
                                   "description": "Mass of milk solids produced for this class (kilograms milk solids per head per day)",
                                   "x-modules": [
                                     "5.2",
@@ -16065,7 +16065,7 @@
                                 }
                               },
                               "required": [
-                                "dailySolidsProducedKilograms"
+                                "solidsKilogramsPerHeadPerDay"
                               ],
                               "additionalProperties": false
                             }

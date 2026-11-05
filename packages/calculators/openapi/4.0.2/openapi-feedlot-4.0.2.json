@@ -5472,7 +5472,7 @@
                         "additionalProperties": false,
                         "x-units": "hectares"
                       },
-                      "ageAtClearingYears": {
+                      "method2AgeAtClearingYears": {
                         "description": "Time since original planting when clearing occurs. This must be less than the maturity age for the crop type (years)",
                         "x-modules": [
                           "16.6"
@@ -5496,7 +5496,7 @@
                     },
                     "required": [
                       "areaClearedHectares",
-                      "ageAtClearingYears"
+                      "method2AgeAtClearingYears"
                     ],
                     "additionalProperties": false
                   }
