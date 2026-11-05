@@ -513,7 +513,7 @@ const perennialCropClearingMethod1: PerennialCropClearingMethod1Input = {
 
 const perennialCropClearingMethod2: PerennialCropClearingMethod2Input = {
   areaClearedHectares: { value: 1 },
-  ageAtClearingYears: { value: 5 },
+  method2AgeAtClearingYears: { value: 5 },
 };
 
 const perennialCropMethod1: PerennialCropMethod1Input = {

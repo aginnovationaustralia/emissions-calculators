@@ -140,11 +140,11 @@ const classesMethod2: DairyClassesInput = {
 // -------- Milk production --------
 
 const milkProductionMethod1: DairyMilkVolumeInput = {
-  dailyVolumeProducedLitres: { value: 25 },
+  litresPerHeadPerDay: { value: 25 },
 };
 
 const milkProductionMethod2: DairyMilkSolidsInput = {
-  dailySolidsProducedKilograms: { value: 2 },
+  solidsKilogramsPerHeadPerDay: { value: 2 },
   method2PercentFatContent: { value: 4.2 },
   method2PercentProteinContent: { value: 3.4 },
 };
@@ -622,7 +622,7 @@ const perennialCropClearingMethod1: PerennialCropClearingMethod1Input = {
 
 const perennialCropClearingMethod2: PerennialCropClearingMethod2Input = {
   areaClearedHectares: { value: 1 },
-  ageAtClearingYears: { value: 5 },
+  method2AgeAtClearingYears: { value: 5 },
 };
 
 const perennialCropMethod1: PerennialCropMethod1Input = {
