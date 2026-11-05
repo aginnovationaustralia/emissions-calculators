@@ -40,6 +40,6 @@
     "turbo": "^2.10.13",
     "typescript-eslint": "^8.72.1",
     "@aginnovationaustralia/eslint-plugin-emissions-calculators": "workspace:*",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }
