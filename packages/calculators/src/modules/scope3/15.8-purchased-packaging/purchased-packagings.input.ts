@@ -25,20 +25,14 @@ export type PurchasedPackagingInputTransformed = z.output<
 export const purchasedPackagingIsMethod1 = (
   packaging: PurchasedPackagingInputTransformed,
 ): packaging is PurchasedPackagingMethod1InputTransformed => {
-  return (
-    (packaging as PurchasedPackagingMethod1InputTransformed).type !== undefined
-  );
+  return 'type' in packaging;
 };
-
 export const purchasedPackagingIsMethod2 = (
   packaging: PurchasedPackagingInputTransformed,
 ): packaging is PurchasedPackagingMethod2InputTransformed => {
-  const method2Packaging = packaging as Partial<
-    Record<'method2EmissionFactor' | 'method2EmissionFactorKilograms', unknown>
-  >;
   return (
-    method2Packaging.method2EmissionFactor !== undefined ||
-    method2Packaging.method2EmissionFactorKilograms !== undefined
+    'method2EmissionFactor' in packaging ||
+    'method2EmissionFactorKilograms' in packaging
   );
 };
 
