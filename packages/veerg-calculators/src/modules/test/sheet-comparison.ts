@@ -157,11 +157,11 @@ export const compareInputsAndOutputs = <
       } catch (e) {
         if (isTestCaseForMethod2) {
           console.error(
-            `Row ${outputRow} (0-based sheet row): Calculation result '${actual.core?.name}' did not include a method 2 value, when it should have`,
+            `Row ${outputRow} (0-based sheet row): Calculation result '${actual.meta.name}' did not include a method 2 value, when it should have`,
           );
         } else {
           console.error(
-            `Row ${outputRow} (0-based sheet row): Calculation result '${actual.core?.name}' included a method 2 value, when it should not have`,
+            `Row ${outputRow} (0-based sheet row): Calculation result '${actual.meta.name}' included a method 2 value, when it should not have`,
           );
         }
         throw e;

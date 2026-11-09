@@ -72,6 +72,7 @@ const extended = defaultUnitSystem.extend({
 export interface FarmRules extends RuleSetOf<typeof extended> {}
 
 export const units: UnitSystem<FarmRules> = extended;
-export const { root, num } = units;
+export const root: typeof units.root = units.root;
+export const num: typeof units.num = units.num;
 
 export type Container<U> = BaseContainer<U, FarmRules>;

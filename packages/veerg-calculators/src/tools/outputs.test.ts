@@ -1,6 +1,6 @@
 import { root } from './containers';
 import { input } from './inputs';
-import { captureMethod1Or2Value, Method2Container } from './multi';
+import { captureMethod1Or2Value } from './multi';
 import { makeUnique, makeUniqueByName, output, scope1Output } from './outputs';
 import { mass, voidUnit } from './units';
 
@@ -20,7 +20,8 @@ describe('output', () => {
   });
 
   it('reports method 2 when a method-2-only value is provided', () => {
-    const method2 = new Method2Container(
+    const method2 = captureMethod1Or2Value(
+      voidUnit(),
       input(mass('CH4', 3), { name: 'derived', modules: [] }),
     );
     const result = output('myOutput', 1, method2);

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type -- the named schema interfaces below are deliberately empty, see the comment on them */
 import { object } from '@/types/schemas';
 import { core, z } from 'zod';
-import { BaseContainer, Metadata } from './containers';
+import { Container, units } from './containers';
 import { getDisplayUnit } from './display-units';
 import { enumSchema } from './enum-schemas';
 import { ModuleNames } from './modules';
@@ -11,32 +11,12 @@ import { mapOptional } from './zod';
 
 const X_MODULES = 'x-modules';
 
-export class InputContainer<U extends AnyUnit> extends BaseContainer<U> {
-  originType: 'input';
-  method: '1' | '2';
-  /** Which module(s) (e.g. '3.1') consume this input. */
-  modules: string[];
+/**
+ * A value supplied by the user, recorded with an `origin.kind` of `input` and the method it is for.
+ * Its name, quality and modules are in `meta`.
+ */
+export type InputContainer<U> = Container<U>;
 
-  constructor(
-    unit: U,
-    method: '1' | '2',
-    modules: string[],
-    baseOrigin?: Metadata,
-  ) {
-    super(unit, baseOrigin);
-    this.originType = 'input';
-    this.method = method;
-    this.modules = modules;
-  }
-
-  switchUnit<
-    UN extends (U extends NumberUnit ? U : never),
-    V extends NumberUnit,
-  >(converter: (from: UN) => V): InputContainer<V> {
-    const newUnit = converter(this.unit as unknown as UN);
-    return new InputContainer(newUnit, this.method, this.modules, this.core);
-  }
-}
 export type NonEmptyArray<T> = [T, ...T[]];
 
 export type InputOptions = {
@@ -60,9 +40,8 @@ export type InputOptions = {
 export const input = <T extends AnyUnit>(
   value: T,
   { name, method = '1', quality, modules }: InputOptions,
-): InputContainer<T> => {
-  return new InputContainer(value, method, modules, { name, quality });
-};
+): InputContainer<T> =>
+  units.input(value, { name, method, quality, modules });
 
 export type RateableInputValue = number;
 
