@@ -14,6 +14,17 @@
       "component": "emissions-calculator-research",
       "include-component-in-tag": true,
       "include-v-in-tag": true
+    },
+    "packages/veerg-calculators": {
+      "changelog-path": "CHANGELOG.md",
+      "release-type": "node",
+      "component": "veerg-calculators",
+      "include-component-in-tag": true,
+      "include-v-in-tag": true,
+      "prerelease": true,
+      "versioning": "prerelease",
+      "prerelease-type": "beta",
+      "release-as": "1.0.0-beta.1"
     }
   },
   "pull-request-title-pattern": "chore(main): release ${version}"
