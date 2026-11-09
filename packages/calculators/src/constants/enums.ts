@@ -944,22 +944,21 @@ export type PurchasedPackagingByMassType =
   (typeof PurchasedPackagingByMassTypes)[number];
 
 export const FreightTypes = [
-  'Van < 3.5 tonnes (diesel)',
-  'Van < 3.5 tonnes (petrol)',
-  'Van < 3.5 tonnes (CNG)',
-  'Van < 3.5 tonnes (LPG)',
-  'Van < 3.5 tonnes (PHEV)',
-  'Van < 3.5 tonnes (BEV)',
-  'Truck > 3.5 tonnes non-refrigerated (diesel)',
-  'Truck > 3.5 tonnes refrigerated (diesel)',
-  'Freight flight (domestic)',
-  'Freight flight (short haul)',
-  'Freight flight (international)',
-  'Rail',
-  'Cargo ship (bulk carrier)',
-  'Cargo ship (general cargo)',
-  'Cargo ship (container)',
-  'Cargo ship (refrigerated)',
+  'Air freight, domestic',
+  'Air freight, general aviation',
+  'Air freight, international',
+  'Operation, freight train',
+  'Transport, freight, rail',
+  'Transport, truck, 16 to 28t with 11t load',
+  'Transport, truck, 16 to 28t, fleet average',
+  'Transport, truck, 16 to 40t, customisable',
+  'Transport, truck, 28t, fleet average',
+  'Transport, truck, 3,5 to 16t with 12t load',
+  'Transport, truck, 3,5 to 16t, fleet average',
+  'Transport, truck, 3.5 to 16t, customisable',
+  'Transport, truck, 40t load',
+  'Transport, truck, 60t load',
+  'Transport, van 3,5t',
 ] as const;
 export type FreightType = (typeof FreightTypes)[number];
 

@@ -1249,14 +1249,13 @@ const purchasedPackagingMethod2: PurchasedPackagingByUnitsMethod2Input = {
 
 const freightMethod1: FreightMethod1Input = {
   calculationMethod: '1',
-  freightType: 'Truck > 3.5 tonnes non-refrigerated (diesel)',
+  freightType: 'Transport, truck, 3,5 to 16t with 12t load',
   distanceKilometres: { value: 200 },
   weightTonnes: { value: 10 },
 };
 
 const freightMethod2: FreightMethod2Input = {
   calculationMethod: '2',
-  freightType: 'Truck > 3.5 tonnes non-refrigerated (diesel)',
   fuel: transportFuel,
 };
 

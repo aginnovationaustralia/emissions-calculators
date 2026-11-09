@@ -358,7 +358,7 @@ export const ZERO_ALL_MODULES_INPUT: Required<AllModulesInput> = {
   ],
   freight: [
     {
-      freightType: 'Cargo ship (bulk carrier)',
+      freightType: 'Operation, freight train',
       distanceKilometres: nv(0),
       weightTonnes: nv(0),
       calculationMethod: '1',

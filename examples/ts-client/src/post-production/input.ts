@@ -246,9 +246,9 @@ const purchasedPackagingMethod2: PurchasedPackagingByMassMethod2Input = {
 // Distance is in km and weight in tonnes
 const freightMethod1: FreightMethod1Input = {
   calculationMethod: '1',
-  freightType: 'Truck > 3.5 tonnes refrigerated (diesel)',
-  distanceKilometres: { value: 300 },
-  weightTonnes: { value: 500 },
+  freightType: 'Transport, truck, 3,5 to 16t with 12t load',
+  distanceKilometres: { value: 200 },
+  weightTonnes: { value: 10 },
 };
 
 const freightFuel: TransportFuelInput = {
@@ -259,7 +259,6 @@ const freightFuel: TransportFuelInput = {
 
 const freightMethod2: FreightMethod2Input = {
   calculationMethod: '2',
-  freightType: 'Truck > 3.5 tonnes refrigerated (diesel)',
   fuel: freightFuel,
 };
 

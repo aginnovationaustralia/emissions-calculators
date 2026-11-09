@@ -57,10 +57,9 @@ const getCalculatorInputMethod2 = (
   const cell = (column: string) =>
     sheet.cell(`${column}${row}`).value()?.toString();
 
-  if (cell('A') === undefined) {
+  if (cell('B') === undefined) {
     return undefined;
   }
-  const freightType = checkFreightType(cell('A'));
 
   const vehicleType = checkVehicleType(cell('B'));
   const fuelType = cell('C');
@@ -78,7 +77,6 @@ const getCalculatorInputMethod2 = (
   } as unknown as TransportFuelInput;
 
   const freightMethod2: FreightMethod2Input = {
-    freightType,
     fuel,
     calculationMethod: '2',
   };
