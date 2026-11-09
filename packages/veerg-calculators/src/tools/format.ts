@@ -160,9 +160,7 @@ export const formatIntermediates = (container: AnyContainer): string => {
   return [formatValueAndName(container)].concat(intermediates).join('\n');
 };
 
-const formatIntermediatesRecursive = (
-  container: AnyContainer,
-): string[] => {
+const formatIntermediatesRecursive = (container: AnyContainer): string[] => {
   switch (container.origin.kind) {
     case 'binary':
       return formatIntermediatesRecursive(container.origin.left).concat(
@@ -352,8 +350,14 @@ const formatNamedValuesRecursive = (
     switch (container.origin.kind) {
       case 'binary': {
         const op = formatOperator(container.origin.operation);
-        const leftResults = formatNamedValuesRecursive(container.origin.left, depth);
-        const rightResults = formatNamedValuesRecursive(container.origin.right, depth);
+        const leftResults = formatNamedValuesRecursive(
+          container.origin.left,
+          depth,
+        );
+        const rightResults = formatNamedValuesRecursive(
+          container.origin.right,
+          depth,
+        );
         const children = leftResults.concat(rightResults);
         return [
           {

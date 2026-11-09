@@ -1,0 +1,68 @@
+{
+  "name": "@aginnovationaustralia/calculator-inputs",
+  "version": "0.1.0",
+  "description": "Zod schemas that turn user supplied values into @aginnovationaustralia/calculator-units containers, with stable OpenAPI components",
+  "keywords": [
+    "units",
+    "zod",
+    "openapi",
+    "inputs",
+    "calculator"
+  ],
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "pnpm run clean && tsc -p tsconfig.build.json && pnpm run check:package",
+    "check:package": "publint && attw --pack . --profile node16",
+    "prepublishOnly": "pnpm run check:package",
+    "clean": "rm -rf dist",
+    "check:types": "tsc --noEmit",
+    "lint": "eslint . && pnpm run check:types",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aginnovationaustralia/emissions-calculators.git",
+    "directory": "packages/calculator-inputs"
+  },
+  "homepage": "https://github.com/aginnovationaustralia/emissions-calculators/tree/main/packages/calculator-inputs#readme",
+  "bugs": {
+    "url": "https://github.com/aginnovationaustralia/emissions-calculators/issues"
+  },
+  "author": "Agricultural Innovation Australia",
+  "license": "CC-BY-4.0",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "devDependencies": {
+    "@aginnovationaustralia/calculator-units": "workspace:*",
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.9.7",
+    "decimal.js-light": "^2.5.1",
+    "jest": "^30.5.2",
+    "publint": "^0.3.24",
+    "ts-jest": "^29.4.12",
+    "typescript": "^5.9.3",
+    "zod": "^4.6.7"
+  },
+  "peerDependencies": {
+    "@aginnovationaustralia/calculator-units": "workspace:^",
+    "zod": "^4.6.7"
+  }
+}
