@@ -730,7 +730,7 @@ export const commonConstants: CommonConstants = {
   },
 
   /**
-   * @description Emissions factor for freighting of goods by land, sea or air. Sourced from AusLCI V48 (May 2026)
+   * @description Emissions factor for freighting of goods by land, sea or air. Sourced from AusLCI V48 (March 2026)
    */
   FREIGHT_EMISSIONS: {
     'Air freight, domestic': freightEmissions(1.96),
