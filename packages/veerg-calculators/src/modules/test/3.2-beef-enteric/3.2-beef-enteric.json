@@ -1,0 +1,108 @@
+{
+  "records": [
+    {
+      "symbol": "Dj",
+      "name": "number of days the animal is on the farm in each time-period",
+      "units": "days",
+      "type": "constant",
+      "expression": "",
+      "line": "161",
+      "method2Input": true,
+      "notes": "",
+      "values": "91.25"
+    },
+    {
+      "symbol": "Njkl",
+      "name": "number of beef cattle in each time-period, class and sub class",
+      "units": "head",
+      "type": "input",
+      "expression": "",
+      "line": "157",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "LCjk=4,5",
+      "name": "proportion of cows > 1 years (k=4,5) in calf in the season of calving",
+      "units": "d",
+      "type": "input",
+      "expression": "",
+      "line": "159",
+      "method2Input": false,
+      "notes": "For other seasons, = 0"
+    },
+    {
+      "symbol": "FAjk=4,5",
+      "name": "feed adjustment value for cows > 1 years lactating for the season of calving and the season immediately after calving",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "166",
+      "method2Input": false,
+      "notes": "",
+      "values": "A.1.2.7"
+    },
+    {
+      "symbol": "Wjkl",
+      "name": "liveweight",
+      "units": "kg",
+      "type": "constant",
+      "expression": "",
+      "line": "163",
+      "method2Input": true,
+      "notes": "",
+      "values": "A.1.2.1"
+    },
+    {
+      "symbol": "LWGjkl",
+      "name": "live weight gain",
+      "units": "kg/head/day",
+      "type": "constant",
+      "expression": "",
+      "line": "164",
+      "method2Input": true,
+      "notes": "",
+      "values": "A.1.2.3"
+    },
+    {
+      "symbol": "MAjk=4,5",
+      "name": "additional intake for milk production in cows >2 years",
+      "units": "kg/head/day",
+      "type": "expression",
+      "expression": "(LCjk=4,5 * FAjk=4,5) + (1 - LCjk=4,5 )",
+      "line": "138",
+      "method2Input": false,
+      "notes": "1 for other classes"
+    },
+    {
+      "symbol": "Ijkl",
+      "name": "dry matter intake",
+      "units": "kg DM/head/day",
+      "type": "expression",
+      "expression": "(1.185 + 0.00454 * Wjkl- 0.0000026 * Wjkl^2 + 0.315 * LWGjkl )^2 * MAjk=4,5",
+      "line": "128,162",
+      "method2Input": true,
+      "notes": ""
+    },
+    {
+      "symbol": "Mjkl",
+      "name": "daily production of enteric methane in each time-period, class and sub class",
+      "units": "kg CH4/head/day",
+      "type": "expression",
+      "expression": "20.7 * Ijkl * 10^-3",
+      "line": "124",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "Eenteric",
+      "name": "Total annual methane production from enteric fermentation",
+      "units": "t CH4",
+      "type": "expression",
+      "expression": "SUM SUM SUM (Dj * Mjkl * Njkl) * 10^-3",
+      "line": "116",
+      "method2Input": false,
+      "notes": ""
+    }
+  ]
+}

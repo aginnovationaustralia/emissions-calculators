@@ -1,0 +1,334 @@
+{
+  "records": [
+    {
+      "symbol": "PF",
+      "name": "Fraction of manure from MMS applied to soil",
+      "units": "d",
+      "type": "input",
+      "expression": "",
+      "line": "904",
+      "notes": ""
+    },
+    {
+      "symbol": "Nj=1,2,4",
+      "name": "Head milking cows, heifers > 1 year, Bulls > 1 year",
+      "units": "head",
+      "type": "input",
+      "expression": "",
+      "line": "897",
+      "notes": ""
+    },
+    {
+      "symbol": "Nj=3,5",
+      "name": "Head Heifers < 1 year, Bulls < 1 year",
+      "units": "head",
+      "type": "input",
+      "expression": "",
+      "line": "897",
+      "notes": ""
+    },
+    {
+      "symbol": "Nj=1,2,4,6",
+      "name": "Head milking cows, heifers > 1 year, Bulls > 1 year (not sure about 6)",
+      "units": "head",
+      "type": "input",
+      "expression": "",
+      "line": "897",
+      "notes": ""
+    },
+    {
+      "symbol": "Nj=7,8",
+      "name": "Head for cattle class 7,8 (not sure)",
+      "units": "head",
+      "type": "input",
+      "expression": "",
+      "line": "897",
+      "notes": ""
+    },
+    {
+      "symbol": "fim=1-13",
+      "name": "Fraction of volatile solids voided to each MMS",
+      "units": "d",
+      "type": "input",
+      "expression": "",
+      "line": "902",
+      "notes": "Based on time spent in each system"
+    },
+    {
+      "symbol": "MPj",
+      "name": "Milk production",
+      "units": "L / head / day",
+      "type": "input",
+      "expression": "",
+      "line": "899",
+      "notes": "Milk production may be described in terms of solids, see section 3.3"
+    },
+    {
+      "symbol": "AUMMS",
+      "name": "urinary nitrogen in solid storage",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "SUM ((Nj=1,2,4 * Uj=1,2,4 * 365) + (Nj=3,5 * Uj=3,5 * 281)  + (Nj=3,5 * UPWj=3,5 * 84)) *fim=1-13",
+      "line": "830",
+      "notes": ""
+    },
+    {
+      "symbol": "AFMMS",
+      "name": "Faecal nitrogen in solid storage",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "SUM ((Nj=1,2,4,6 * Fij=1,2,4,6 * 365) + (Nj=3,5 * Fij=3,5 * 281) + (Nj=7,8 * FPWj=7,8 * 84)) * fim=1-13",
+      "line": "823",
+      "notes": ""
+    },
+    {
+      "symbol": "EFm=1-13",
+      "name": "Emissions factor for nitrous oxide emissions per MMS",
+      "units": "kg N2O-N/kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "949",
+      "notes": ""
+    },
+    {
+      "symbol": "FracGASMm=1-13",
+      "name": "Fraction of nitrous oxide volatilised from each MMS",
+      "units": "kg volatile N / kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "952",
+      "notes": ""
+    },
+    {
+      "symbol": "Mleach,MMS",
+      "name": "Mass of nitrogen lost to leaching and runoff",
+      "units": "Mass N",
+      "type": "expression",
+      "expression": "(AUMMS+ AFMMS) * FracWET,soil,i * FracLEACH_MS",
+      "line": "857",
+      "notes": ""
+    },
+    {
+      "symbol": "MNSoil",
+      "name": "Mass of nitrogen applied to soil",
+      "units": "Mass N",
+      "type": "expression",
+      "expression": "SUM SUM (MNjm=1-13 * (1 - EFm=1-13- FracGASMm=1-13) - MNLeachjM) * PF",
+      "line": "866",
+      "notes": ""
+    },
+    {
+      "symbol": "FracWET,soil,i",
+      "name": "Fraction of nitrogen available for leaching and run-off",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "913",
+      "notes": "",
+      "values": "Method 1: 1, method 2: 1 or 0 based on input"
+    },
+    {
+      "symbol": "FracLEACH_MS",
+      "name": "Fraction of N lost through leaching and runoff for solid storage",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "952",
+      "notes": "",
+      "values": "0.02"
+    },
+    {
+      "symbol": "Uj",
+      "name": "Nitrogen excreted in urine of weaned dairy cattle",
+      "units": "kg N/head/day",
+      "type": "expression",
+      "expression": "(CPIj / 6.25) - NRj - Fj - (1.1 * 10^-4 * Wj ^0.75 / 6.25)",
+      "line": "750",
+      "notes": ""
+    },
+    {
+      "symbol": "Uj=1,2,4",
+      "name": "Nitrogen excreted in urine of weaned dairy cattle",
+      "units": "kg N/head/day",
+      "type": "expression",
+      "expression": "Uj",
+      "line": "750",
+      "notes": ""
+    },
+    {
+      "symbol": "Uj=3,5",
+      "name": "Nitrogen excreted in urine of weaned dairy cattle",
+      "units": "kg N/head/day",
+      "type": "expression",
+      "expression": "Uj",
+      "line": "750",
+      "notes": ""
+    },
+    {
+      "symbol": "Fij=1,2,4,6",
+      "name": "Nitrogen excreted by specific classes",
+      "units": "kg N / head / day",
+      "type": "expression",
+      "expression": "Fj",
+      "line": "730",
+      "notes": ""
+    },
+    {
+      "symbol": "Fij=3,5",
+      "name": "Nitrogen excreted by specific classes",
+      "units": "kg N / head / day",
+      "type": "expression",
+      "expression": "Fj",
+      "line": "730",
+      "notes": ""
+    },
+    {
+      "symbol": "FPWj=7,8",
+      "name": "Nitrogen excreted in pre-weaned calves",
+      "units": "kg/head/day",
+      "type": "constant",
+      "expression": "",
+      "line": "930",
+      "notes": "",
+      "values": "Table A5.5.1.5 NIR vol 2"
+    },
+    {
+      "symbol": "CPIj",
+      "name": "Crude protein intake",
+      "units": "kg / head / day",
+      "type": "expression",
+      "expression": "Ij * CPj",
+      "line": "740",
+      "notes": ""
+    },
+    {
+      "symbol": "NRj",
+      "name": "Amount of nitrogen retained by the body",
+      "units": "Mass N",
+      "type": "expression",
+      "expression": "(0.032 * MPj * 1.03 / 6.38) + ((0.212 - 0.008 * (Lj - 2) - ((0.14 - 0.008 * (Lj - 2)/ (1 + e ^-6 * Zj - 0.4)) * (LWGj * 0.92)) * 1 / 6.25",
+      "line": "755",
+      "notes": ""
+    },
+    {
+      "symbol": "Fj",
+      "name": "Nitrogen excreted in faeces for each animal class",
+      "units": "kg N / head / day",
+      "type": "expression",
+      "expression": "(0.3 * (CPIj * (1 - (DMDj+ 0.1))) + 0.105 * (MEj * Ij * 0.008) + (0.0152 * Ij)) * 1/6.25",
+      "line": "730",
+      "notes": "Weaned classes j=1-6"
+    },
+    {
+      "symbol": "Wj",
+      "name": "Liveweight",
+      "units": "kg",
+      "type": "constant",
+      "expression": "",
+      "line": "910",
+      "notes": "A custom value can be supplied"
+    },
+    {
+      "symbol": "Lj",
+      "name": "intake relative to that needed for maintenance",
+      "units": "d",
+      "type": "expression",
+      "expression": "Ij / (((1.185 + 0.00454 * Wj- 0.0000026 * Wj ^2 )^2 * MRj + MIj)",
+      "line": "767",
+      "notes": ""
+    },
+    {
+      "symbol": "Zj",
+      "name": "Relative size",
+      "units": "d",
+      "type": "expression",
+      "expression": "Wj / WRj",
+      "line": "774",
+      "notes": ""
+    },
+    {
+      "symbol": "LWGj",
+      "name": "Liveweight gain",
+      "units": "kg / day",
+      "type": "constant",
+      "expression": "",
+      "line": "912",
+      "notes": "A custom value can be supplied"
+    },
+    {
+      "symbol": "WRj",
+      "name": "Reference weight",
+      "units": "kg",
+      "type": "constant",
+      "expression": "",
+      "line": "937",
+      "notes": "NIR vol 2 A5.5.1.3"
+    },
+    {
+      "symbol": "DMDj",
+      "name": "Dry matter digestibility",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "904",
+      "notes": "A custom value can be supplied",
+      "values": "0.75"
+    },
+    {
+      "symbol": "MEj",
+      "name": "Metabolizable energy",
+      "units": "MJ / kg Dry matter",
+      "type": "expression",
+      "expression": "0.1604 * DMDj * 100 - 1.037",
+      "line": "737",
+      "notes": ""
+    },
+    {
+      "symbol": "Ij",
+      "name": "Dry matter feed intake",
+      "units": "kg DM / head / day",
+      "type": "expression",
+      "expression": "",
+      "line": "681",
+      "notes": "Refer to chapter 3.3"
+    },
+    {
+      "symbol": "CPj",
+      "name": "Crude protein content of feed intake",
+      "units": "d",
+      "type": "constant",
+      "expression": "",
+      "line": "905",
+      "notes": "Custom value can be supplied",
+      "values": "0.2"
+    },
+    {
+      "symbol": "MRj",
+      "name": "Increase in metabolic rate when producing milk",
+      "units": "kg DM / head / day",
+      "type": "constant",
+      "expression": "",
+      "line": "933",
+      "notes": "",
+      "values": "1.1 for j=1, else 1.0"
+    },
+    {
+      "symbol": "MIj",
+      "name": "Additional intake required for milk production",
+      "units": "kg DM / head / day",
+      "type": "expression",
+      "expression": "",
+      "line": "771",
+      "notes": "Refer to chapter 3.3"
+    },
+    {
+      "symbol": "UPWj=3,5",
+      "name": "Nitrogen excreted in urin in pre-weaned calves",
+      "units": "kg / head / day",
+      "type": "constant",
+      "expression": "",
+      "line": "932",
+      "notes": "NIR vol 2 A5.5.1.5"
+    }
+  ]
+}

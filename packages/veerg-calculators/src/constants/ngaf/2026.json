@@ -1,0 +1,2049 @@
+{
+  "year": 2026,
+  "tables": {
+    "Table 1": {
+      "name": "Table 1 Indirect (scope 2 and scope 3) location-based emission factors associated with the consumption and losses of purchased or acquired electricity",
+      "table": {
+        "New South Wales and Australian Capital Territory": {
+          "SCOPE_2": 0.6,
+          "SCOPE_3": 0.07
+        },
+        "Victoria": { "SCOPE_2": 0.74, "SCOPE_3": 0.11 },
+        "Queensland": { "SCOPE_2": 0.65, "SCOPE_3": 0.11 },
+        "South Australia": { "SCOPE_2": 0.21, "SCOPE_3": 0.03 },
+        "Western Australia - South West Interconnected System (SWIS)": {
+          "SCOPE_2": 0.45,
+          "SCOPE_3": 0.1
+        },
+        "Western Australia - North Western Interconnected System (NWIS)": {
+          "SCOPE_2": 0.56,
+          "SCOPE_3": 0.09
+        },
+        "Tasmania": { "SCOPE_2": 0.21, "SCOPE_3": 0.03 },
+        "Northern territory - Darwin Katherine Interconnected System (DKIS)": {
+          "SCOPE_2": 0.55,
+          "SCOPE_3": 0.13
+        },
+        "National": { "SCOPE_2": 0.59, "SCOPE_3": 0.1 }
+      }
+    },
+    "Table 2": {
+      "name": "Table 2 Indirect (scope 2 and scope 3) market-based emission factors associated with the consumption and losses of purchased or acquired electricity",
+      "table": { "National": { "SCOPE_2": 0.79, "SCOPE_3": 0.11 } }
+    },
+    "Table 3": {
+      "name": "Table 3: Indirect (scope 2) emission factors for electricity grids",
+      "table": {
+        "National Electricity Market (NEM)": { "Emission factor": 0.6 },
+        "Western Australia - South West Interconnected System (SWIS)": {
+          "Emission factor": 0.45
+        },
+        "Northern territory - Darwin Katherine Interconnected System (DKIS)": {
+          "Emission factor": 0.55
+        },
+        "Western Australia - North Western Interconnected System (NWIS)": {
+          "Emission factor": 0.56
+        },
+        "Off-grid": { "Emission factor": 0.67 }
+      }
+    },
+    "Table 4": {
+      "name": "Table 4 Direct (scope 1) and Indirect (scope 3) emission factors for the combustion of solid fuels - including certain coal based products",
+      "table": {
+        "Bituminous coal": {
+          "ENERGY_CONTENT": 27,
+          "CO2": 90,
+          "CH4": 0.04,
+          "N2O": 0.2,
+          "COMBINED": 90.24,
+          "SCOPE_3": 3
+        },
+        "Sub-bituminous coal": {
+          "ENERGY_CONTENT": 21,
+          "CO2": 90,
+          "CH4": 0.04,
+          "N2O": 0.2,
+          "COMBINED": 90.24,
+          "SCOPE_3": 2.5
+        },
+        "Anthracite": {
+          "ENERGY_CONTENT": 29,
+          "CO2": 90,
+          "CH4": 0.04,
+          "N2O": 0.2,
+          "COMBINED": 90.24,
+          "SCOPE_3": 0
+        },
+        "Brown coal (lignite)": {
+          "ENERGY_CONTENT": 10.2,
+          "CO2": 93.5,
+          "CH4": 0.02,
+          "N2O": 0.3,
+          "COMBINED": 93.82,
+          "SCOPE_3": 0.4
+        },
+        "Coking coal": {
+          "ENERGY_CONTENT": 30,
+          "CO2": 91.8,
+          "CH4": 0.03,
+          "N2O": 0.2,
+          "COMBINED": 92.03,
+          "SCOPE_3": 6.4
+        },
+        "Coal briquettes": {
+          "ENERGY_CONTENT": 22.1,
+          "CO2": 95,
+          "CH4": 0.08,
+          "N2O": 0.3,
+          "COMBINED": 95.38,
+          "SCOPE_3": 0
+        },
+        "Coal coke": {
+          "ENERGY_CONTENT": 27,
+          "CO2": 107,
+          "CH4": 0.03,
+          "N2O": 0.2,
+          "COMBINED": 107.23,
+          "SCOPE_3": 0
+        },
+        "Coal tar": {
+          "ENERGY_CONTENT": 37.5,
+          "CO2": 81.8,
+          "CH4": 0.03,
+          "N2O": 0.2,
+          "COMBINED": 82.03,
+          "SCOPE_3": 0
+        },
+        "Solid fossil fuels other than those mentioned in the items above": {
+          "ENERGY_CONTENT": 22.1,
+          "CO2": 95,
+          "CH4": 0.08,
+          "N2O": 0.2,
+          "COMBINED": 95.28,
+          "SCOPE_3": 0
+        },
+        "Industrial materials that are derived from fossil fuels, if recycled and combusted to produce heat or electricity": {
+          "ENERGY_CONTENT": 26.3,
+          "CO2": 81.6,
+          "CH4": 0.03,
+          "N2O": 0.2,
+          "COMBINED": 81.83,
+          "SCOPE_3": 0
+        },
+        "Passenger car tyres, if recycled and combusted to produce heat or electricity": {
+          "ENERGY_CONTENT": 32,
+          "CO2": 62.8,
+          "CH4": 0.03,
+          "N2O": 0.2,
+          "COMBINED": 63.03,
+          "SCOPE_3": 0
+        },
+        "Truck and off-road tyres, if recycled and combusted to produce heat or electricity": {
+          "ENERGY_CONTENT": 27.1,
+          "CO2": 55.9,
+          "CH4": 0.03,
+          "N2O": 0.2,
+          "COMBINED": 56.13,
+          "SCOPE_3": 0
+        },
+        "Non-biomass municipal materials, if combusted to produce heat or electricity": {
+          "ENERGY_CONTENT": 10.5,
+          "CO2": 87.1,
+          "CH4": 0.8,
+          "N2O": 1,
+          "COMBINED": 88.9,
+          "SCOPE_3": 0
+        },
+        "Dry wood": {
+          "ENERGY_CONTENT": 16.2,
+          "CO2": 0,
+          "CH4": 0.1,
+          "N2O": 1.1,
+          "COMBINED": 1.2,
+          "SCOPE_3": 0
+        },
+        "Green and air dried wood": {
+          "ENERGY_CONTENT": 10.4,
+          "CO2": 0,
+          "CH4": 0.1,
+          "N2O": 1.1,
+          "COMBINED": 1.2,
+          "SCOPE_3": 0
+        },
+        "Sulphite lyes": {
+          "ENERGY_CONTENT": 12.4,
+          "CO2": 0,
+          "CH4": 0.08,
+          "N2O": 0.5,
+          "COMBINED": 0.58,
+          "SCOPE_3": 0
+        },
+        "Bagasse": {
+          "ENERGY_CONTENT": 9.6,
+          "CO2": 0,
+          "CH4": 0.3,
+          "N2O": 1.1,
+          "COMBINED": 1.4,
+          "SCOPE_3": 0
+        },
+        "Biomass, municipal and industrial materials, if combusted to produce heat or electricity": {
+          "ENERGY_CONTENT": 12.2,
+          "CO2": 0,
+          "CH4": 0.8,
+          "N2O": 1,
+          "COMBINED": 1.8,
+          "SCOPE_3": 0
+        },
+        "Charcoal": {
+          "ENERGY_CONTENT": 31.1,
+          "CO2": 0,
+          "CH4": 5.3,
+          "N2O": 1,
+          "COMBINED": 6.3,
+          "SCOPE_3": 0
+        },
+        "Primary solid biomass fuels other than those mentioned in the items above": {
+          "ENERGY_CONTENT": 12.2,
+          "CO2": 0,
+          "CH4": 0.8,
+          "N2O": 1,
+          "COMBINED": 1.8,
+          "SCOPE_3": 0
+        }
+      }
+    },
+    "Table 5": {
+      "name": "Table 5 Direct (Scope 1) emission factors for the consumption of gaseous fuels including liquefied natural gas",
+      "table": {
+        "Natural gas distributed in a pipeline": {
+          "ENERGY_CONTENT": 0.0393,
+          "CO2": 51.4,
+          "CH4": 0.1,
+          "N2O": 0.03,
+          "COMBINED": 51.53
+        },
+        "Coal seam methane that is captured for combustion": {
+          "ENERGY_CONTENT": 0.0377,
+          "CO2": 51.4,
+          "CH4": 0.2,
+          "N2O": 0.03,
+          "COMBINED": 51.63
+        },
+        "Coal mine waste gas that is captured for combustion": {
+          "ENERGY_CONTENT": 0.0377,
+          "CO2": 51.9,
+          "CH4": 4.6,
+          "N2O": 0.3,
+          "COMBINED": 56.8
+        },
+        "Compressed natural gas (reverting to standard conditions)": {
+          "ENERGY_CONTENT": 0.0393,
+          "CO2": 51.4,
+          "CH4": 0.1,
+          "N2O": 0.03,
+          "COMBINED": 51.53
+        },
+        "Unprocessed natural gas": {
+          "ENERGY_CONTENT": 0.0393,
+          "CO2": 51.4,
+          "CH4": 0.1,
+          "N2O": 0.03,
+          "COMBINED": 51.53
+        },
+        "Ethane": {
+          "ENERGY_CONTENT": 0.0629,
+          "CO2": 56.5,
+          "CH4": 0.03,
+          "N2O": 0.03,
+          "COMBINED": 56.56
+        },
+        "Coke oven gas": {
+          "ENERGY_CONTENT": 0.0181,
+          "CO2": 37,
+          "CH4": 0.03,
+          "N2O": 0.05,
+          "COMBINED": 37.08
+        },
+        "Blast furnace gas": {
+          "ENERGY_CONTENT": 0.004,
+          "CO2": 234,
+          "CH4": 0.03,
+          "N2O": 0.02,
+          "COMBINED": 234.05
+        },
+        "Town gas": {
+          "ENERGY_CONTENT": 0.039,
+          "CO2": 60.2,
+          "CH4": 0.04,
+          "N2O": 0.03,
+          "COMBINED": 60.27
+        },
+        "Liquefied natural gas": {
+          "ENERGY_CONTENT": 25.3,
+          "CO2": 51.4,
+          "CH4": 0.1,
+          "N2O": 0.03,
+          "COMBINED": 51.53
+        },
+        "Gaseous fossil fuels other than those mentioned in the items above": {
+          "ENERGY_CONTENT": 0.039,
+          "CO2": 51.4,
+          "CH4": 0.1,
+          "N2O": 0.03,
+          "COMBINED": 51.53
+        },
+        "Landfill biogas that is captured for combustion (methane only)": {
+          "ENERGY_CONTENT": 0.0377,
+          "CO2": 0,
+          "CH4": 6.4,
+          "N2O": 0.03,
+          "COMBINED": 6.43
+        },
+        "Sludge biogas that is captured for combustion (methane only)": {
+          "ENERGY_CONTENT": 0.0377,
+          "CO2": 0,
+          "CH4": 6.4,
+          "N2O": 0.03,
+          "COMBINED": 6.43
+        },
+        "A biogas that is captured for combustion, other than those mentioned in the items above": {
+          "ENERGY_CONTENT": 0.037,
+          "CO2": 0,
+          "CH4": 6.4,
+          "N2O": 0.03,
+          "COMBINED": 6.43
+        },
+        "Biomethane": {
+          "ENERGY_CONTENT": 0.0393,
+          "CO2": 0,
+          "CH4": 0.1,
+          "N2O": 0.03,
+          "COMBINED": 0.13
+        },
+        "Hydrogen": {
+          "ENERGY_CONTENT": 0.0122,
+          "CO2": 0,
+          "CH4": 0,
+          "N2O": 0.05,
+          "COMBINED": 0.05
+        }
+      }
+    },
+    "Table 6": {
+      "name": "Table 6 Indirect (Scope 3) emission factors for the consumption of natural gas",
+      "table": {
+        "New South Wales and ACT": { "METRO": 13.1, "NON_METRO": 14 },
+        "Victoria": { "METRO": 4, "NON_METRO": 4 },
+        "Queensland": { "METRO": 8.8, "NON_METRO": 7.9 },
+        "South Australia": { "METRO": 10.7, "NON_METRO": 10.6 },
+        "Western Australia": { "METRO": 4.1, "NON_METRO": 4 },
+        "Tasmania": { "METRO": 0, "NON_METRO": 0 },
+        "Northern Territory": { "METRO": 0, "NON_METRO": 0 }
+      }
+    },
+    "Table 7": {
+      "name": "Table 7 Indirect (Scope 3) emission factors for the consumption of ethane",
+      "table": {
+        "New South Wales": {
+          "Scope 3 Emission Factors for Ethane (kg CO2-e /GJ)": 23.7
+        },
+        "Victoria": {
+          "Scope 3 Emission Factors for Ethane (kg CO2-e /GJ)": 5.7
+        }
+      }
+    },
+    "Table 8": {
+      "name": "Table 8 Direct (Scope 1) and indirect (scope 3) emission factors for the consumption of liquid fuels, including certain petroleum based products for stationary energy purposes",
+      "table": {
+        "Petroleum based oils (other than petroleum based oil used as fuel), e.g. lubricants": {
+          "ENERGY_CONTENT": 38.8,
+          "CO2": 13.9,
+          "CH4": 0,
+          "N2O": 0,
+          "COMBINED": 13.9,
+          "SCOPE_3": 18
+        },
+        "Petroleum based greases": {
+          "ENERGY_CONTENT": 38.8,
+          "CO2": 3.5,
+          "CH4": 0,
+          "N2O": 0,
+          "COMBINED": 3.5,
+          "SCOPE_3": 18
+        },
+        "Crude oil including crude oil condensates": {
+          "ENERGY_CONTENT": 45.3,
+          "CO2": 69.6,
+          "CH4": 0.08,
+          "N2O": 0.2,
+          "COMBINED": 69.88,
+          "SCOPE_3": 0
+        },
+        "Other natural gas liquids": {
+          "ENERGY_CONTENT": 46.5,
+          "CO2": 61,
+          "CH4": 0.08,
+          "N2O": 0.2,
+          "COMBINED": 61.28,
+          "SCOPE_3": 0
+        },
+        "Automotive gasoline/petrol (other than for use as fuel in an aircraft)": {
+          "ENERGY_CONTENT": 34.2,
+          "CO2": 67.4,
+          "CH4": 0.2,
+          "N2O": 0.2,
+          "COMBINED": 67.8,
+          "SCOPE_3": 17.2
+        },
+        "Aviation gasoline": {
+          "ENERGY_CONTENT": 33.1,
+          "CO2": 67,
+          "CH4": 0.2,
+          "N2O": 0.2,
+          "COMBINED": 67.4,
+          "SCOPE_3": 18
+        },
+        "Kerosene (other than for use as fuel in an aircraft)": {
+          "ENERGY_CONTENT": 37.5,
+          "CO2": 68.9,
+          "CH4": 0.01,
+          "N2O": 0.2,
+          "COMBINED": 69.11,
+          "SCOPE_3": 18
+        },
+        "Aviation turbine fuel/kerosene": {
+          "ENERGY_CONTENT": 36.8,
+          "CO2": 69.6,
+          "CH4": 0.02,
+          "N2O": 0.2,
+          "COMBINED": 69.82,
+          "SCOPE_3": 18
+        },
+        "Heating oil": {
+          "ENERGY_CONTENT": 37.3,
+          "CO2": 69.5,
+          "CH4": 0.03,
+          "N2O": 0.2,
+          "COMBINED": 69.73,
+          "SCOPE_3": 18
+        },
+        "Diesel oil": {
+          "ENERGY_CONTENT": 38.6,
+          "CO2": 69.9,
+          "CH4": 0.1,
+          "N2O": 0.2,
+          "COMBINED": 70.2,
+          "SCOPE_3": 17.3
+        },
+        "Fuel oil": {
+          "ENERGY_CONTENT": 39.7,
+          "CO2": 73.6,
+          "CH4": 0.04,
+          "N2O": 0.2,
+          "COMBINED": 73.84,
+          "SCOPE_3": 18
+        },
+        "Liquefied aromatic hydrocarbons": {
+          "ENERGY_CONTENT": 34.4,
+          "CO2": 69.7,
+          "CH4": 0.03,
+          "N2O": 0.2,
+          "COMBINED": 69.93,
+          "SCOPE_3": 18
+        },
+        "Solvents: mineral turpentine or white spirits": {
+          "ENERGY_CONTENT": 34.4,
+          "CO2": 69.7,
+          "CH4": 0.03,
+          "N2O": 0.2,
+          "COMBINED": 69.93,
+          "SCOPE_3": 18
+        },
+        "Liquefied petroleum gas (LPG)": {
+          "ENERGY_CONTENT": 25.7,
+          "CO2": 60.2,
+          "CH4": 0.2,
+          "N2O": 0.2,
+          "COMBINED": 60.6,
+          "SCOPE_3": 20.2
+        },
+        "Naphtha": {
+          "ENERGY_CONTENT": 31.4,
+          "CO2": 69.8,
+          "CH4": 0.01,
+          "N2O": 0.01,
+          "COMBINED": 69.82,
+          "SCOPE_3": 18
+        },
+        "Petroleum coke": {
+          "ENERGY_CONTENT": 34.2,
+          "CO2": 92.6,
+          "CH4": 0.08,
+          "N2O": 0.2,
+          "COMBINED": 92.88,
+          "SCOPE_3": 18
+        },
+        "Refinery gas and liquids": {
+          "ENERGY_CONTENT": 42.9,
+          "CO2": 54.7,
+          "CH4": 0.03,
+          "N2O": 0.03,
+          "COMBINED": 54.76,
+          "SCOPE_3": 18
+        },
+        "Refinery coke": {
+          "ENERGY_CONTENT": 34.2,
+          "CO2": 92.6,
+          "CH4": 0.08,
+          "N2O": 0.2,
+          "COMBINED": 92.88,
+          "SCOPE_3": 18
+        },
+        "Petroleum based products other than mentioned in the items above": {
+          "ENERGY_CONTENT": 34.4,
+          "CO2": 69.8,
+          "CH4": 0.02,
+          "N2O": 0.1,
+          "COMBINED": 69.92,
+          "SCOPE_3": 18
+        },
+        "Biodiesel": {
+          "ENERGY_CONTENT": 34.6,
+          "CO2": 0,
+          "CH4": 0.08,
+          "N2O": 0.2,
+          "COMBINED": 0.28,
+          "SCOPE_3": 0
+        },
+        "Ethanol for use as a fuel in an internal combustion engine": {
+          "ENERGY_CONTENT": 23.4,
+          "CO2": 0,
+          "CH4": 0.08,
+          "N2O": 0.2,
+          "COMBINED": 0.28,
+          "SCOPE_3": 0
+        },
+        "Biofuels other than those mentioned in the items above and below": {
+          "ENERGY_CONTENT": 23.4,
+          "CO2": 0,
+          "CH4": 0.08,
+          "N2O": 0.2,
+          "COMBINED": 0.28,
+          "SCOPE_3": 0
+        },
+        "Renewable aviation kerosene": {
+          "ENERGY_CONTENT": 36.8,
+          "CO2": 0,
+          "CH4": 0.02,
+          "N2O": 0.2,
+          "COMBINED": 0.22,
+          "SCOPE_3": 0
+        },
+        "Renewable diesel": {
+          "ENERGY_CONTENT": 38.6,
+          "CO2": 0,
+          "CH4": 0.1,
+          "N2O": 0.2,
+          "COMBINED": 0.3,
+          "SCOPE_3": 0
+        }
+      }
+    },
+    "Table 9": {
+      "name": "Table 9 Direct (scope 1) and indirect (scope 3) emission factors for the consumption of transport fuels in different transport equipment",
+      "table": {
+        "Cars and light commercial vehicles, Gasoline": {
+          "ENERGY_CONTENT": 34.2,
+          "CO2": 67.4,
+          "CH4": 0.02,
+          "N2O": 0.2,
+          "COMBINED": 67.62,
+          "SCOPE_3": 17.2
+        },
+        "Cars and light commercial vehicles, Diesel oil": {
+          "ENERGY_CONTENT": 38.6,
+          "CO2": 69.9,
+          "CH4": 0.01,
+          "N2O": 0.5,
+          "COMBINED": 70.41,
+          "SCOPE_3": 17.3
+        },
+        "Cars and light commercial vehicles, Liquefied petroleum gas (LPG)": {
+          "ENERGY_CONTENT": 26.2,
+          "CO2": 60.2,
+          "CH4": 0.5,
+          "N2O": 0.3,
+          "COMBINED": 61,
+          "SCOPE_3": 20.2
+        },
+        "Cars and light commercial vehicles, Fuel oil": {
+          "ENERGY_CONTENT": 39.7,
+          "CO2": 73.6,
+          "CH4": 0.08,
+          "N2O": 0.5,
+          "COMBINED": 74.18,
+          "SCOPE_3": 18
+        },
+        "Cars and light commercial vehicles, Ethanol": {
+          "ENERGY_CONTENT": 23.4,
+          "CO2": 0,
+          "CH4": 0.2,
+          "N2O": 0.2,
+          "COMBINED": 0.4,
+          "SCOPE_3": 0
+        },
+        "Cars and light commercial vehicles, Biodiesel": {
+          "ENERGY_CONTENT": 34.6,
+          "CO2": 0,
+          "CH4": 0.8,
+          "N2O": 1.7,
+          "COMBINED": 2.5,
+          "SCOPE_3": 0
+        },
+        "Cars and light commercial vehicles, Renewable diesel": {
+          "ENERGY_CONTENT": 38.6,
+          "CO2": 0,
+          "CH4": 0.01,
+          "N2O": 0.5,
+          "COMBINED": 0.51,
+          "SCOPE_3": 0
+        },
+        "Cars and light commercial vehicles, Other biofuels": {
+          "ENERGY_CONTENT": 23.4,
+          "CO2": 0,
+          "CH4": 0.8,
+          "N2O": 1.7,
+          "COMBINED": 2.5,
+          "SCOPE_3": 0
+        },
+        "Light duty vehicles, Compressed natural gas": {
+          "ENERGY_CONTENT": 0.0393,
+          "CO2": 51.4,
+          "CH4": 7.3,
+          "N2O": 0.3,
+          "COMBINED": 59,
+          "SCOPE_3": 18
+        },
+        "Light duty vehicles, Liquefied natural gas": {
+          "ENERGY_CONTENT": 25.3,
+          "CO2": 51.4,
+          "CH4": 7.3,
+          "N2O": 0.3,
+          "COMBINED": 59,
+          "SCOPE_3": 18
+        },
+        "Heavy duty vehicles, Compressed natural gas": {
+          "ENERGY_CONTENT": 0.0393,
+          "CO2": 51.4,
+          "CH4": 2.8,
+          "N2O": 0.3,
+          "COMBINED": 54.5,
+          "SCOPE_3": 18
+        },
+        "Heavy duty vehicles, Liquefied natural gas": {
+          "ENERGY_CONTENT": 25.3,
+          "CO2": 51.4,
+          "CH4": 2.8,
+          "N2O": 0.3,
+          "COMBINED": 54.5,
+          "SCOPE_3": 18
+        },
+        "Heavy duty vehicles, Diesel oil - Euro iv or higher": {
+          "ENERGY_CONTENT": 38.6,
+          "CO2": 69.9,
+          "CH4": 0.07,
+          "N2O": 0.4,
+          "COMBINED": 70.37,
+          "SCOPE_3": 17.3
+        },
+        "Heavy duty vehicles, Diesel oil - Euro iii": {
+          "ENERGY_CONTENT": 38.6,
+          "CO2": 69.9,
+          "CH4": 0.1,
+          "N2O": 0.4,
+          "COMBINED": 70.4,
+          "SCOPE_3": 17.3
+        },
+        "Heavy duty vehicles, Diesel oil - Euro i": {
+          "ENERGY_CONTENT": 38.6,
+          "CO2": 69.9,
+          "CH4": 0.2,
+          "N2O": 0.4,
+          "COMBINED": 70.5,
+          "SCOPE_3": 17.3
+        },
+        "Heavy duty vehicles, Renewable diesel - Euro iv or higher": {
+          "ENERGY_CONTENT": 38.6,
+          "CO2": 0,
+          "CH4": 0.07,
+          "N2O": 0.4,
+          "COMBINED": 0.47,
+          "SCOPE_3": 0
+        },
+        "Heavy duty vehicles, Renewable diesel - Euro iii": {
+          "ENERGY_CONTENT": 38.6,
+          "CO2": 0,
+          "CH4": 0.1,
+          "N2O": 0.4,
+          "COMBINED": 0.5,
+          "SCOPE_3": 0
+        },
+        "Heavy duty vehicles, Renewable diesel - Euro i": {
+          "ENERGY_CONTENT": 38.6,
+          "CO2": 0,
+          "CH4": 0.2,
+          "N2O": 0.4,
+          "COMBINED": 0.6,
+          "SCOPE_3": 0
+        },
+        "Aviation, Gasoline for use as fuel in an aircraft": {
+          "ENERGY_CONTENT": 33.1,
+          "CO2": 67,
+          "CH4": 0.06,
+          "N2O": 0.6,
+          "COMBINED": 67.66,
+          "SCOPE_3": 18
+        },
+        "Aviation, Kerosene for use as fuel in an aircraft": {
+          "ENERGY_CONTENT": 36.8,
+          "CO2": 69.6,
+          "CH4": 0.01,
+          "N2O": 0.6,
+          "COMBINED": 70.21,
+          "SCOPE_3": 18
+        },
+        "Aviation, Renewable aviation kerosene": {
+          "ENERGY_CONTENT": 36.8,
+          "CO2": 0,
+          "CH4": 0.01,
+          "N2O": 0.6,
+          "COMBINED": 0.61,
+          "SCOPE_3": 0
+        }
+      }
+    },
+    "Table 10": {
+      "name": "Table 10 Indicative leakage rates for common refrigeration and air-conditioning equipment",
+      "table": {
+        "Domestic refrigerators": { "Annual leakage rate (%)": 1.7 },
+        "Transport refrigeration": { "Annual leakage rate (%)": 15.7 },
+        "Domestic A/C portable": { "Annual leakage rate (%)": 2.5 },
+        "Domestic A/C split": { "Annual leakage rate (%)": 3.5 },
+        "Domestic A/C packaged": { "Annual leakage rate (%)": 2.5 },
+        "Light vehicle A/C": { "Annual leakage rate (%)": 6.7 },
+        "Heavy vehicle A/C": { "Annual leakage rate (%)": 10.8 }
+      }
+    },
+    "Table 11": {
+      "name": "Table 11 Global warming potentials of common refrigerants",
+      "table": {
+        "R22 (HCFC-22)": { "Global Warming Potentials (AR5)": 1760 },
+        "R32 (HFC-32)": { "Global Warming Potentials (AR5)": 677 },
+        "R134A (HFC-134A)": { "Global Warming Potentials (AR5)": 1300 },
+        "R410A (HFC blend)": { "Global Warming Potentials (AR5)": 1924 },
+        "R404A (HFC blend)": { "Global Warming Potentials (AR5)": 3943 }
+      }
+    },
+    "Table 12": {
+      "name": "Table 12 Direct (scope 1) emission factors for the calcination of carbonates",
+      "table": {
+        "Limestone (calcium carbonate)": {
+          "Emission factor (t CO2/tonne)": 0.44
+        },
+        "Magnesium carbonate": { "Emission factor (t CO2/tonne)": 0.522 },
+        "Dolomite": { "Emission factor (t CO2/tonne)": 0.477 }
+      }
+    },
+    "Table 13": {
+      "name": "Table 13 Direct (scope 1) emission factors for use of carbonates in clay materials by state and territory",
+      "table": {
+        "New South Wales": {
+          "Inorganic carbon content factor": 0.0061,
+          "Scope 1 emission factor t CO2-e/t clay material": 0.0222
+        },
+        "Victoria": {
+          "Inorganic carbon content factor": 0.0002,
+          "Scope 1 emission factor t CO2-e/t clay material": 0.0009
+        },
+        "Queensland": {
+          "Inorganic carbon content factor": 0.0025,
+          "Scope 1 emission factor t CO2-e/t clay material": 0.0092
+        },
+        "Western Australia": {
+          "Inorganic carbon content factor": 0.0003,
+          "Scope 1 emission factor t CO2-e/t clay material": 0.0012
+        },
+        "South Australia": {
+          "Inorganic carbon content factor": 0.0005,
+          "Scope 1 emission factor t CO2-e/t clay material": 0.0019
+        },
+        "Tasmania": {
+          "Inorganic carbon content factor": 0.0011,
+          "Scope 1 emission factor t CO2-e/t clay material": 0.0038
+        },
+        "Australian Capital Territory": {
+          "Inorganic carbon content factor": 0.0061,
+          "Scope 1 emission factor t CO2-e/t clay material": 0.0222
+        },
+        "Northern Territory": {
+          "Inorganic carbon content factor": 0.0005,
+          "Scope 1 emission factor t CO2-e/t clay material": 0.0019
+        }
+      }
+    },
+    "Table 14": {
+      "name": "Table 14 Direct (scope 1) emission factors for the consumption of soda ash",
+      "table": {
+        "Soda Ash Use": { "Scope 1 emission factor (t CO2-e/t)": 0.415 }
+      }
+    },
+    "Table 15": {
+      "name": "Table 15 Waste mix methane conversion factors and emission factors",
+      "table": {
+        "Food": {
+          "Scope 3 emission factor (t CO2-e/t)": 2.1,
+          "Volume to mass conversion factor (t/m3)": 0.5
+        },
+        "Paper and cardboard": {
+          "Scope 3 emission factor (t CO2-e/t)": 3.3,
+          "Volume to mass conversion factor (t/m3)": 0.09
+        },
+        "Garden and green": {
+          "Scope 3 emission factor (t CO2-e/t)": 1.6,
+          "Volume to mass conversion factor (t/m3)": 0.24
+        },
+        "Wood": {
+          "Scope 3 emission factor (t CO2-e/t)": 0.7,
+          "Volume to mass conversion factor (t/m3)": 0.15
+        },
+        "Textiles": {
+          "Scope 3 emission factor (t CO2-e/t)": 2,
+          "Volume to mass conversion factor (t/m3)": 0.14
+        },
+        "Sludge": {
+          "Scope 3 emission factor (t CO2-e/t)": 0.4,
+          "Volume to mass conversion factor (t/m3)": 0.72
+        },
+        "Nappies": {
+          "Scope 3 emission factor (t CO2-e/t)": 2,
+          "Volume to mass conversion factor (t/m3)": 0.39
+        },
+        "Rubber and leather": {
+          "Scope 3 emission factor (t CO2-e/t)": 3.3,
+          "Volume to mass conversion factor (t/m3)": 0.14
+        },
+        "Inert waste (including concrete/metal/plastics/glass)": {
+          "Scope 3 emission factor (t CO2-e/t)": 0,
+          "Volume to mass conversion factor (t/m3)": 0.42
+        }
+      }
+    },
+    "Table 16": {
+      "name": "Table 16 Indirect (scope 3) waste emission factors for total waste disposed to landfill by broad waste stream category",
+      "table": {
+        "Municipal solid waste": {
+          "Scope 3 emission factor (t CO2-e/t)": 1.5,
+          "Volume to mass conversion factor (t/m3)": 0.36
+        },
+        "Commercial and industrial waste": {
+          "Scope 3 emission factor (t CO2-e/t)": 1.2,
+          "Volume to mass conversion factor (t/m3)": 0.33
+        },
+        "Construction and demolition waste": {
+          "Scope 3 emission factor (t CO2-e/t)": 0.2,
+          "Volume to mass conversion factor (t/m3)": 0.39
+        }
+      }
+    },
+    "Table 17": {
+      "name": "Table 17 Emission factors by wastewater treatment type",
+      "table": {
+        "Managed aerobic treatment": {
+          "Emission factors (t CO2-e per person)": 0
+        },
+        "Unmanaged aerobic treatment": {
+          "Emission factors (t CO2-e per person)": 0.1229
+        },
+        "Anaerobic digester/reactor": {
+          "Emission factors (t CO2-e per person)": 0.3276
+        },
+        "Anaerobic lagoon shallow (<2 metres)": {
+          "Emission factors (t CO2-e per person)": 0.0819
+        },
+        "Anaerobic lagoon deep (>2 metres)": {
+          "Emission factors (t CO2-e per person)": 0.3276
+        }
+      }
+    },
+    "Table 18": {
+      "name": "Table 18 Direct (scope 1) emission factors for the incineration of waste",
+      "table": {
+        "Clinical Waste": { "Emission factors (t CO2-e/t)": 0.879 },
+        "Sewage Sludge": { "Emission factors (t CO2-e/t)": 0 },
+        "Fossil Liquid": { "Emission factors (t CO2-e/t)": 2.931 },
+        "Industrial Waste": { "Emission factors (t CO2-e/t)": 1.649 },
+        "Municipal Solid Waste": { "Emission factors (t CO2-e/t)": 0.0537 }
+      }
+    },
+    "Table 19": {
+      "name": "Table 19 Direct emission factors (scope 1) for biological treatment of waste",
+      "table": {
+        "Composting": { "Scope 1 emission factors (t CO2-e/t)": 0.046 },
+        "Anaerobic digestion": { "Scope 1 emission factors (t CO2-e/t)": 0.028 }
+      }
+    },
+    "Table 20": {
+      "name": "Table 20 Implied emission factors (scope 1) from beef cattle on pasture (kg/head)",
+      "table": {
+        "CH4": {
+          "ACT": 52.95,
+          "NSW": 52.42,
+          "NT": 48.22,
+          "Qld": 50.61,
+          "SA": 50.55,
+          "Tas": 52.94,
+          "Vic": 56.07,
+          "WA": 49.48
+        },
+        "N2O": {
+          "ACT": 0.3,
+          "NSW": 0.26,
+          "NT": 0.18,
+          "Qld": 0.18,
+          "SA": 0.31,
+          "Tas": 0.53,
+          "Vic": 0.52,
+          "WA": 0.29
+        },
+        "CO2-e": {
+          "ACT": 1562.82,
+          "NSW": 1535.42,
+          "NT": 1397.37,
+          "Qld": 1463.69,
+          "SA": 1496.7,
+          "Tas": 1623.65,
+          "Vic": 1706.61,
+          "WA": 1461.72
+        }
+      }
+    },
+    "Table 21": {
+      "name": "Table 21 Implied emission factors (scope 1) from feedlot beef cattle (kg/head)",
+      "table": {
+        "CH4": {
+          "ACT": 0,
+          "NSW": 31.22,
+          "NT": 0,
+          "Qld": 32.73,
+          "SA": 31.22,
+          "Tas": 0,
+          "Vic": 31.22,
+          "WA": 31.25
+        },
+        "N2O": {
+          "ACT": 0,
+          "NSW": 1.29,
+          "NT": 0,
+          "Qld": 1.28,
+          "SA": 1.3,
+          "Tas": 0,
+          "Vic": 1.31,
+          "WA": 1.29
+        },
+        "CO2-e": {
+          "ACT": 0,
+          "NSW": 1216.73,
+          "NT": 0,
+          "Qld": 1256.05,
+          "SA": 1218.48,
+          "Tas": 0,
+          "Vic": 1221.65,
+          "WA": 1218.1
+        }
+      }
+    },
+    "Table 22": {
+      "name": "Table 22 Implied emission factors (scope 1) from dairy cattle (kg/head)",
+      "table": {
+        "CH4": {
+          "ACT": 0,
+          "NSW": 112.75,
+          "NT": 0,
+          "Qld": 95.96,
+          "SA": 117.81,
+          "Tas": 101.02,
+          "Vic": 113.1,
+          "WA": 103.23
+        },
+        "N2O": {
+          "ACT": 0,
+          "NSW": 1.61,
+          "NT": 0,
+          "Qld": 1.45,
+          "SA": 1.64,
+          "Tas": 1.44,
+          "Vic": 1.55,
+          "WA": 1.47
+        },
+        "CO2-e": {
+          "ACT": 0,
+          "NSW": 3584.42,
+          "NT": 0,
+          "Qld": 3071.06,
+          "SA": 3733.65,
+          "Tas": 3210.73,
+          "Vic": 3577.72,
+          "WA": 3280.5
+        }
+      }
+    },
+    "Table 23": {
+      "name": "Table 23 Implied emission factors (scope 1) from sheep (kg/head)",
+      "table": {
+        "CH4": {
+          "ACT": 7.45,
+          "NSW": 7.27,
+          "NT": 0,
+          "Qld": 5.36,
+          "SA": 6.65,
+          "Tas": 6.65,
+          "Vic": 6.63,
+          "WA": 6.31
+        },
+        "N2O": {
+          "ACT": 0.08,
+          "NSW": 0.06,
+          "NT": 0,
+          "Qld": 0.02,
+          "SA": 0.04,
+          "Tas": 0.05,
+          "Vic": 0.04,
+          "WA": 0.04
+        },
+        "CO2-e": {
+          "ACT": 229.45,
+          "NSW": 218.3,
+          "NT": 0,
+          "Qld": 154.55,
+          "SA": 196.43,
+          "Tas": 200.73,
+          "Vic": 194.89,
+          "WA": 187.41
+        }
+      }
+    },
+    "Table 24": {
+      "name": "Table 24 Implied emission factors (scope 1) from pigs (kg/head)",
+      "table": {
+        "CH4": {
+          "ACT": 0,
+          "NSW": 21.02,
+          "NT": 31.85,
+          "Qld": 28.92,
+          "SA": 26.36,
+          "Tas": 24.83,
+          "Vic": 21.47,
+          "WA": 24.98
+        },
+        "N2O": {
+          "ACT": 0,
+          "NSW": 0.25,
+          "NT": 0.23,
+          "Qld": 0.19,
+          "SA": 0.21,
+          "Tas": 0.23,
+          "Vic": 0.25,
+          "WA": 0.25
+        },
+        "CO2-e": {
+          "ACT": 0,
+          "NSW": 654.69,
+          "NT": 953.73,
+          "Qld": 860.27,
+          "SA": 794.24,
+          "Tas": 756.84,
+          "Vic": 668.22,
+          "WA": 765.01
+        }
+      }
+    },
+    "Table 25": {
+      "name": "Table 25 Implied emission factors (scope 1) from other livestock (kg/head)",
+      "table": {
+        "Alpacas": {
+          "ACT": 0,
+          "NSW": 0,
+          "NT": 0,
+          "Qld": 0,
+          "SA": 0,
+          "Tas": 0,
+          "Vic": 0,
+          "WA": 0
+        },
+        "CH4": {
+          "ACT": 0,
+          "NSW": 5.11,
+          "NT": 0,
+          "Qld": 5.12,
+          "SA": 5.11,
+          "Tas": 5.14,
+          "Vic": 5.11,
+          "WA": 5.11
+        },
+        "N2O": {
+          "ACT": 0,
+          "NSW": 0.04,
+          "NT": 0,
+          "Qld": 0.05,
+          "SA": 0.05,
+          "Tas": 0.06,
+          "Vic": 0.05,
+          "WA": 0.04
+        },
+        "CO2-e": {
+          "ACT": 0,
+          "NSW": 154.79,
+          "NT": 0,
+          "Qld": 155.46,
+          "SA": 156.6,
+          "Tas": 160.37,
+          "Vic": 156.69,
+          "WA": 154.6
+        },
+        "Buffalo": {
+          "ACT": 0,
+          "NSW": 0,
+          "NT": 0,
+          "Qld": 0,
+          "SA": 0,
+          "Tas": 0,
+          "Vic": 0,
+          "WA": 0
+        },
+        "Camels": {
+          "ACT": 0,
+          "NSW": 0,
+          "NT": 0,
+          "Qld": 0,
+          "SA": 0,
+          "Tas": 0,
+          "Vic": 0,
+          "WA": 0
+        },
+        "Deer": {
+          "ACT": 0,
+          "NSW": 0,
+          "NT": 0,
+          "Qld": 0,
+          "SA": 0,
+          "Tas": 0,
+          "Vic": 0,
+          "WA": 0
+        },
+        "Donkeys and mules": {
+          "ACT": 0,
+          "NSW": 0,
+          "NT": 0,
+          "Qld": 0,
+          "SA": 0,
+          "Tas": 0,
+          "Vic": 0,
+          "WA": 0
+        },
+        "Goats": {
+          "ACT": 0,
+          "NSW": 0,
+          "NT": 0,
+          "Qld": 0,
+          "SA": 0,
+          "Tas": 0,
+          "Vic": 0,
+          "WA": 0
+        },
+        "Horses": {
+          "ACT": 0,
+          "NSW": 0,
+          "NT": 0,
+          "Qld": 0,
+          "SA": 0,
+          "Tas": 0,
+          "Vic": 0,
+          "WA": 0
+        },
+        "Ostriches and emus": {
+          "ACT": 0,
+          "NSW": 0,
+          "NT": 0,
+          "Qld": 0,
+          "SA": 0,
+          "Tas": 0,
+          "Vic": 0,
+          "WA": 0
+        }
+      }
+    },
+    "Table 26": {
+      "name": "Table 26 Implied emission factors (scope 1) poultry (kg/head)",
+      "table": {
+        "Layers": {
+          "ACT": 0,
+          "NSW": 0,
+          "NT": 0,
+          "Qld": 0,
+          "SA": 0,
+          "Tas": 0,
+          "Vic": 0,
+          "WA": 0
+        },
+        "CH4": {
+          "ACT": 0,
+          "NSW": 0.035,
+          "NT": 0.035,
+          "Qld": 0.035,
+          "SA": 0.035,
+          "Tas": 0.033,
+          "Vic": 0.035,
+          "WA": 0.035
+        },
+        "N2O": {
+          "ACT": 0,
+          "NSW": 0.012,
+          "NT": 0.013,
+          "Qld": 0.013,
+          "SA": 0.012,
+          "Tas": 0.013,
+          "Vic": 0.012,
+          "WA": 0.012
+        },
+        "CO2-e": {
+          "ACT": 0,
+          "NSW": 4.207,
+          "NT": 4.463,
+          "Qld": 4.361,
+          "SA": 4.059,
+          "Tas": 4.315,
+          "Vic": 4.207,
+          "WA": 4.249
+        },
+        "Meat": {
+          "ACT": 0,
+          "NSW": 0,
+          "NT": 0,
+          "Qld": 0,
+          "SA": 0,
+          "Tas": 0,
+          "Vic": 0,
+          "WA": 0
+        }
+      }
+    },
+    "Table 27": {
+      "name": "Table 27 Direct emission factors (scope 1) for rice cultivation",
+      "table": {
+        "Rice cultivation": { "Scope 1 emission factor (t CO2-e/ha)": 3.714 }
+      }
+    },
+    "Table 28": {
+      "name": "Table 28 Implied emission factors (scope 1) for inorganic fertiliser (t CO2-e/t N)",
+      "table": {
+        "Cotton": {
+          "Emission factor (kg N2O/ t N)": 11.9,
+          "Emission factor (t CO2-e/ t N)": 3.15
+        },
+        "Horticulture / vegetables": {
+          "Emission factor (kg N2O/ t N)": 12.38,
+          "Emission factor (t CO2-e/ t N)": 3.28
+        },
+        "Irrigated crops": {
+          "Emission factor (kg N2O/ t N)": 16.36,
+          "Emission factor (t CO2-e/ t N)": 4.34
+        },
+        "Irrigated pasture": {
+          "Emission factor (kg N2O/ t N)": 14.44,
+          "Emission factor (t CO2-e/ t N)": 3.83
+        },
+        "Non-irrigated crops": {
+          "Emission factor (kg N2O/ t N)": 7.37,
+          "Emission factor (t CO2-e/ t N)": 1.95
+        },
+        "Non-irrigated pasture": {
+          "Emission factor (kg N2O/ t N)": 4.08,
+          "Emission factor (t CO2-e/ t N)": 1.08
+        },
+        "Sugar cane": {
+          "Emission factor (kg N2O/ t N)": 38.26,
+          "Emission factor (t CO2-e/ t N)": 10.14
+        }
+      }
+    },
+    "Table 29": {
+      "name": "Table 29 Implied emission factors (scope 1) for crop residues",
+      "table": {
+        "Barley": {
+          "Emission factor (kg N2O/ t N)": 0.07655,
+          "Emission factor (t CO2-e/ t N)": 0.02029
+        },
+        "Maize": {
+          "Emission factor (kg N2O/ t N)": 0.03793,
+          "Emission factor (t CO2-e/ t N)": 0.01005
+        },
+        "Wheat": {
+          "Emission factor (kg N2O/ t N)": 0.08095,
+          "Emission factor (t CO2-e/ t N)": 0.02145
+        },
+        "Oats": {
+          "Emission factor (kg N2O/ t N)": 0.09245,
+          "Emission factor (t CO2-e/ t N)": 0.0245
+        },
+        "Rice": {
+          "Emission factor (kg N2O/ t N)": 0.03115,
+          "Emission factor (t CO2-e/ t N)": 0.00826
+        },
+        "Sorghum": {
+          "Emission factor (kg N2O/ t N)": 0.08071,
+          "Emission factor (t CO2-e/ t N)": 0.02139
+        },
+        "Triticale": {
+          "Emission factor (kg N2O/ t N)": 0.09484,
+          "Emission factor (t CO2-e/ t N)": 0.02513
+        },
+        "Other Cereals": {
+          "Emission factor (kg N2O/ t N)": 0.08896,
+          "Emission factor (t CO2-e/ t N)": 0.02357
+        },
+        "Pulses": {
+          "Emission factor (kg N2O/ t N)": 0.11538,
+          "Emission factor (t CO2-e/ t N)": 0.03057
+        },
+        "Roots and Tubers": {
+          "Emission factor (kg N2O/ t N)": 0.00369,
+          "Emission factor (t CO2-e/ t N)": 0.00098
+        },
+        "Sugar Cane": {
+          "Emission factor (kg N2O/ t N)": 0.00406,
+          "Emission factor (t CO2-e/ t N)": 0.00108
+        },
+        "Peanuts": {
+          "Emission factor (kg N2O/ t N)": 0.13417,
+          "Emission factor (t CO2-e/ t N)": 0.03556
+        },
+        "Cotton": {
+          "Emission factor (kg N2O/ t N)": 0.23371,
+          "Emission factor (t CO2-e/ t N)": 0.06193
+        },
+        "Oilseeds": {
+          "Emission factor (kg N2O/ t N)": 0.16705,
+          "Emission factor (t CO2-e/ t N)": 0.04427
+        },
+        "Hops": {
+          "Emission factor (kg N2O/ t N)": 0.07106,
+          "Emission factor (t CO2-e/ t N)": 0.01883
+        },
+        "Forage Crops": {
+          "Emission factor (kg N2O/ t N)": 0.04796,
+          "Emission factor (t CO2-e/ t N)": 0.01271
+        }
+      }
+    },
+    "Table 30": {
+      "name": "Table 30 Implied emission factors (scope 1) for pasture residues",
+      "table": {
+        "Lucerne": {
+          "Emission factor (kg N2O/ ha)": 0.0593,
+          "Emission factor (t CO2-e/ ha)": 0.0157
+        },
+        "Other Legume Pastures": {
+          "Emission factor (kg N2O/ ha)": 0.0285,
+          "Emission factor (t CO2-e/ ha)": 0.0075
+        },
+        "Grass Clover Mixture": {
+          "Emission factor (kg N2O/ ha)": 0.092,
+          "Emission factor (t CO2-e/ ha)": 0.0244
+        },
+        "Perennial Pasture": {
+          "Emission factor (kg N2O/ ha)": 0.0397,
+          "Emission factor (t CO2-e/ ha)": 0.0105
+        },
+        "Annual Grasses": {
+          "Emission factor (kg N2O/ ha)": 0.0118,
+          "Emission factor (t CO2-e/ ha)": 0.0031
+        }
+      }
+    },
+    "Table 31": {
+      "name": "Table 31 Direct emission factors (scope 1) and default purity for liming",
+      "table": {
+        "Limestone": { "Scope 1 emission factor": 0.108, "Purity": 0.9 },
+        "Dolomite": { "Scope 1 emission factor": 0.124, "Purity": 0.95 }
+      }
+    },
+    "Table 32": {
+      "name": "Table 32 Direct emission factors (scope 1) for urea application",
+      "table": {
+        "Urea application": { "Scope 1 emission factor (t CO2-e/t)": 0.733 }
+      }
+    },
+    "Table 33": {
+      "name": "Table 33 Emission factors for forest clearing by bioregion and biome",
+      "table": {
+        "Avon Wheatbelt": {
+          "Primary Clearing (t CO2-e/ha)": 166.51,
+          "Secondary Clearing (t CO2-e/ha)": 28.54,
+          "Ongoing decay (t CO2-e/ha/year)": 0.89
+        },
+        "Brigalow Belt North": {
+          "Primary Clearing (t CO2-e/ha)": 132.98,
+          "Secondary Clearing (t CO2-e/ha)": 21.85,
+          "Ongoing decay (t CO2-e/ha/year)": 1.37
+        },
+        "Brigalow Belt South": {
+          "Primary Clearing (t CO2-e/ha)": 181.63,
+          "Secondary Clearing (t CO2-e/ha)": 29.75,
+          "Ongoing decay (t CO2-e/ha/year)": 1.57
+        },
+        "Ben Lomond": {
+          "Primary Clearing (t CO2-e/ha)": 406.46,
+          "Secondary Clearing (t CO2-e/ha)": 58.98,
+          "Ongoing decay (t CO2-e/ha/year)": 4.97
+        },
+        "Central Mackay Coast": {
+          "Primary Clearing (t CO2-e/ha)": 287.1,
+          "Secondary Clearing (t CO2-e/ha)": 33.86,
+          "Ongoing decay (t CO2-e/ha/year)": 2.3
+        },
+        "Cobar Peneplain": {
+          "Primary Clearing (t CO2-e/ha)": 148.02,
+          "Secondary Clearing (t CO2-e/ha)": 27.09,
+          "Ongoing decay (t CO2-e/ha/year)": 0.69
+        },
+        "Daly Basin": {
+          "Primary Clearing (t CO2-e/ha)": 194.29,
+          "Secondary Clearing (t CO2-e/ha)": 20.15,
+          "Ongoing decay (t CO2-e/ha/year)": 1.31
+        },
+        "Desert Uplands": {
+          "Primary Clearing (t CO2-e/ha)": 86.03,
+          "Secondary Clearing (t CO2-e/ha)": 18,
+          "Ongoing decay (t CO2-e/ha/year)": 0.91
+        },
+        "Darling Riverine Plains": {
+          "Primary Clearing (t CO2-e/ha)": 213.03,
+          "Secondary Clearing (t CO2-e/ha)": 25.12,
+          "Ongoing decay (t CO2-e/ha/year)": 0.64
+        },
+        "Einasleigh Uplands": {
+          "Primary Clearing (t CO2-e/ha)": 137.91,
+          "Secondary Clearing (t CO2-e/ha)": 19.02,
+          "Ongoing decay (t CO2-e/ha/year)": 2.1
+        },
+        "Esperance Plains": {
+          "Primary Clearing (t CO2-e/ha)": 207.15,
+          "Secondary Clearing (t CO2-e/ha)": 31.3,
+          "Ongoing decay (t CO2-e/ha/year)": 1.35
+        },
+        "Eyre Yorke Block": {
+          "Primary Clearing (t CO2-e/ha)": 201.25,
+          "Secondary Clearing (t CO2-e/ha)": 28.64,
+          "Ongoing decay (t CO2-e/ha/year)": 0.71
+        },
+        "Furneaux": {
+          "Primary Clearing (t CO2-e/ha)": 274.92,
+          "Secondary Clearing (t CO2-e/ha)": 31.5,
+          "Ongoing decay (t CO2-e/ha/year)": 5.44
+        },
+        "Geraldton Sandplains": {
+          "Primary Clearing (t CO2-e/ha)": 156.93,
+          "Secondary Clearing (t CO2-e/ha)": 27.23,
+          "Ongoing decay (t CO2-e/ha/year)": 0.93
+        },
+        "Jarrah Forest": {
+          "Primary Clearing (t CO2-e/ha)": 480.65,
+          "Secondary Clearing (t CO2-e/ha)": 75.51,
+          "Ongoing decay (t CO2-e/ha/year)": 2.93
+        },
+        "Kanmantoo": {
+          "Primary Clearing (t CO2-e/ha)": 268.52,
+          "Secondary Clearing (t CO2-e/ha)": 45.95,
+          "Ongoing decay (t CO2-e/ha/year)": 2.03
+        },
+        "King": {
+          "Primary Clearing (t CO2-e/ha)": 421.88,
+          "Secondary Clearing (t CO2-e/ha)": 65.51,
+          "Ongoing decay (t CO2-e/ha/year)": 4.33
+        },
+        "Mallee": {
+          "Primary Clearing (t CO2-e/ha)": 157.48,
+          "Secondary Clearing (t CO2-e/ha)": 25.96,
+          "Ongoing decay (t CO2-e/ha/year)": 0.81
+        },
+        "Murray Darling Depression": {
+          "Primary Clearing (t CO2-e/ha)": 114.99,
+          "Secondary Clearing (t CO2-e/ha)": 20.81,
+          "Ongoing decay (t CO2-e/ha/year)": 0.53
+        },
+        "Mitchell Grass Downs": {
+          "Primary Clearing (t CO2-e/ha)": 122.99,
+          "Secondary Clearing (t CO2-e/ha)": 21.31,
+          "Ongoing decay (t CO2-e/ha/year)": 1.03
+        },
+        "Mulga Lands": {
+          "Primary Clearing (t CO2-e/ha)": 125.42,
+          "Secondary Clearing (t CO2-e/ha)": 23.14,
+          "Ongoing decay (t CO2-e/ha/year)": 1.34
+        },
+        "Nandewar": {
+          "Primary Clearing (t CO2-e/ha)": 238.35,
+          "Secondary Clearing (t CO2-e/ha)": 38.66,
+          "Ongoing decay (t CO2-e/ha/year)": 1.34
+        },
+        "Naracoorte Coastal Plain": {
+          "Primary Clearing (t CO2-e/ha)": 215.62,
+          "Secondary Clearing (t CO2-e/ha)": 32.55,
+          "Ongoing decay (t CO2-e/ha/year)": 0.91
+        },
+        "New England Tablelands": {
+          "Primary Clearing (t CO2-e/ha)": 496.48,
+          "Secondary Clearing (t CO2-e/ha)": 66.48,
+          "Ongoing decay (t CO2-e/ha/year)": 2.16
+        },
+        "NSW North Coast": {
+          "Primary Clearing (t CO2-e/ha)": 602.76,
+          "Secondary Clearing (t CO2-e/ha)": 84.11,
+          "Ongoing decay (t CO2-e/ha/year)": 3.54
+        },
+        "NSW South Western Slopes": {
+          "Primary Clearing (t CO2-e/ha)": 372.4,
+          "Secondary Clearing (t CO2-e/ha)": 46.71,
+          "Ongoing decay (t CO2-e/ha/year)": 1.22
+        },
+        "Riverina": {
+          "Primary Clearing (t CO2-e/ha)": 242,
+          "Secondary Clearing (t CO2-e/ha)": 25.76,
+          "Ongoing decay (t CO2-e/ha/year)": 0.81
+        },
+        "South East Coastal Plain": {
+          "Primary Clearing (t CO2-e/ha)": 428.56,
+          "Secondary Clearing (t CO2-e/ha)": 56.92,
+          "Ongoing decay (t CO2-e/ha/year)": 2.79
+        },
+        "South East Corner": {
+          "Primary Clearing (t CO2-e/ha)": 667.51,
+          "Secondary Clearing (t CO2-e/ha)": 89.18,
+          "Ongoing decay (t CO2-e/ha/year)": 5.17
+        },
+        "South Eastern Highlands": {
+          "Primary Clearing (t CO2-e/ha)": 620.51,
+          "Secondary Clearing (t CO2-e/ha)": 84.56,
+          "Ongoing decay (t CO2-e/ha/year)": 2.61
+        },
+        "South Eastern Queensland": {
+          "Primary Clearing (t CO2-e/ha)": 333.33,
+          "Secondary Clearing (t CO2-e/ha)": 56.82,
+          "Ongoing decay (t CO2-e/ha/year)": 2.89
+        },
+        "Southern Volcanic Plain": {
+          "Primary Clearing (t CO2-e/ha)": 315.33,
+          "Secondary Clearing (t CO2-e/ha)": 33.14,
+          "Ongoing decay (t CO2-e/ha/year)": 1.77
+        },
+        "Swan Coastal Plain": {
+          "Primary Clearing (t CO2-e/ha)": 320.03,
+          "Secondary Clearing (t CO2-e/ha)": 59.72,
+          "Ongoing decay (t CO2-e/ha/year)": 2.53
+        },
+        "Sydney Basin": {
+          "Primary Clearing (t CO2-e/ha)": 493.59,
+          "Secondary Clearing (t CO2-e/ha)": 61.5,
+          "Ongoing decay (t CO2-e/ha/year)": 2.64
+        },
+        "Tasmanian Central Highlands": {
+          "Primary Clearing (t CO2-e/ha)": 592.42,
+          "Secondary Clearing (t CO2-e/ha)": 75.19,
+          "Ongoing decay (t CO2-e/ha/year)": 7.9
+        },
+        "Tasmanian Northern Midlands": {
+          "Primary Clearing (t CO2-e/ha)": 299.36,
+          "Secondary Clearing (t CO2-e/ha)": 36.19,
+          "Ongoing decay (t CO2-e/ha/year)": 2.15
+        },
+        "Tasmanian Northern Slopes": {
+          "Primary Clearing (t CO2-e/ha)": 634.26,
+          "Secondary Clearing (t CO2-e/ha)": 128.53,
+          "Ongoing decay (t CO2-e/ha/year)": 8.8
+        },
+        "Tasmanian South East": {
+          "Primary Clearing (t CO2-e/ha)": 287.64,
+          "Secondary Clearing (t CO2-e/ha)": 42.96,
+          "Ongoing decay (t CO2-e/ha/year)": 2.44
+        },
+        "Tasmanian Southern Ranges": {
+          "Primary Clearing (t CO2-e/ha)": 466.88,
+          "Secondary Clearing (t CO2-e/ha)": 57.31,
+          "Ongoing decay (t CO2-e/ha/year)": 4.69
+        },
+        "Victorian Midlands": {
+          "Primary Clearing (t CO2-e/ha)": 270.16,
+          "Secondary Clearing (t CO2-e/ha)": 31.11,
+          "Ongoing decay (t CO2-e/ha/year)": 1.25
+        },
+        "Warren": {
+          "Primary Clearing (t CO2-e/ha)": 565.97,
+          "Secondary Clearing (t CO2-e/ha)": 81.52,
+          "Ongoing decay (t CO2-e/ha/year)": 5.58
+        },
+        "Wet Tropics": {
+          "Primary Clearing (t CO2-e/ha)": 451.93,
+          "Secondary Clearing (t CO2-e/ha)": 59.25,
+          "Ongoing decay (t CO2-e/ha/year)": 4.8
+        },
+        "Tropical & Subtropical Moist Broadleaf Forests*": {
+          "Primary Clearing (t CO2-e/ha)": 369.51,
+          "Secondary Clearing (t CO2-e/ha)": 46.55,
+          "Ongoing decay (t CO2-e/ha/year)": 3.55
+        },
+        "Temperate Broadleaf & Mixed Forests*": {
+          "Primary Clearing (t CO2-e/ha)": 470.66,
+          "Secondary Clearing (t CO2-e/ha)": 66.9,
+          "Ongoing decay (t CO2-e/ha/year)": 4.13
+        },
+        "Tropical & Subtropical Grasslands, Savannas & Shrublands*": {
+          "Primary Clearing (t CO2-e/ha)": 164.72,
+          "Secondary Clearing (t CO2-e/ha)": 21.65,
+          "Ongoing decay (t CO2-e/ha/year)": 1.48
+        },
+        "Temperate Grasslands, Savannas and Shrublands*": {
+          "Primary Clearing (t CO2-e/ha)": 182.12,
+          "Secondary Clearing (t CO2-e/ha)": 25.28,
+          "Ongoing decay (t CO2-e/ha/year)": 0.87
+        },
+        "Montane Grasslands & Shrublands*": {
+          "Primary Clearing (t CO2-e/ha)": 741.79,
+          "Secondary Clearing (t CO2-e/ha)": 110.78,
+          "Ongoing decay (t CO2-e/ha/year)": 5.72
+        },
+        "Mediterranean Forests, Woodlands & Scrub*": {
+          "Primary Clearing (t CO2-e/ha)": 223.59,
+          "Secondary Clearing (t CO2-e/ha)": 36.42,
+          "Ongoing decay (t CO2-e/ha/year)": 1.53
+        },
+        "Deserts & Xeric Shrublands*": {
+          "Primary Clearing (t CO2-e/ha)": 46.14,
+          "Secondary Clearing (t CO2-e/ha)": 8.05,
+          "Ongoing decay (t CO2-e/ha/year)": 0.35
+        }
+      }
+    },
+    "Table 34": {
+      "name": "Table 34 Emission factors for forest regeneration by bioregion and biome",
+      "table": {
+        "Avon Wheatbelt": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 1.68,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 2.21
+        },
+        "Brigalow Belt North": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 2.39,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 2.75
+        },
+        "Brigalow Belt South": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 3.43,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 4.33
+        },
+        "Ben Lomond": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 3.57,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 5.36
+        },
+        "Central Mackay Coast": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 4.96,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 6.1
+        },
+        "Cobar Peneplain": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 1.29,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 2.44
+        },
+        "Daly Basin": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 1.87,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 2.41
+        },
+        "Desert Uplands": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 1.4,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 1.93
+        },
+        "Darling Riverine Plains": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 3.83,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 4.71
+        },
+        "Einasleigh Uplands": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 2.3,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 3
+        },
+        "Esperance Plains": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 3,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 3.7
+        },
+        "Eyre Yorke Block": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 2.17,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 2.69
+        },
+        "Furneaux": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 2.26,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 4.86
+        },
+        "Geraldton Sandplains": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 1.25,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 1.4
+        },
+        "Jarrah Forest": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 5.78,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 8.05
+        },
+        "Kanmantoo": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 2.59,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 4.06
+        },
+        "King": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 4.11,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 5.74
+        },
+        "Mallee": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 1.69,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 1.79
+        },
+        "Murray Darling Depression": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 1.21,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 1.81
+        },
+        "Mitchell Grass Downs": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 2.21,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 3.1
+        },
+        "Mulga Lands": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 1.09,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 1.66
+        },
+        "Nandewar": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 3.41,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 4.26
+        },
+        "Naracoorte Coastal Plain": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 2.4,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 3.55
+        },
+        "New England Tablelands": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 8.86,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 10.87
+        },
+        "NSW North Coast": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 10.96,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 13.37
+        },
+        "NSW South Western Slopes": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 5.97,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 8.27
+        },
+        "Riverina": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 1.49,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 3.42
+        },
+        "South East Coastal Plain": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 4.51,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 5.95
+        },
+        "South East Corner": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 11.06,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 11.76
+        },
+        "South Eastern Highlands": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 10.25,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 13.35
+        },
+        "South Eastern Queensland": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 4.15,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 5.85
+        },
+        "Southern Volcanic Plain": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 3.1,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 5.28
+        },
+        "Swan Coastal Plain": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 3.25,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 4.03
+        },
+        "Sydney Basin": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 9.47,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 11.75
+        },
+        "Tasmanian Central Highlands": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 3.74,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 11.39
+        },
+        "Tasmanian Northern Midlands": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 2.18,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 3.53
+        },
+        "Tasmanian Northern Slopes": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 6.18,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 8.73
+        },
+        "Tasmanian South East": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 1.95,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 3.38
+        },
+        "Tasmanian Southern Ranges": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 2.43,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 7.19
+        },
+        "Victorian Midlands": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 2.73,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 4.2
+        },
+        "Warren": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 5.95,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 9.4
+        },
+        "Wet Tropics": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 5.39,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 6.95
+        },
+        "Tropical & Subtropical Moist Broadleaf Forests*": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 5.18,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 6.52
+        },
+        "Temperate Broadleaf & Mixed Forests*": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 5.22,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 7.89
+        },
+        "Tropical & Subtropical Grasslands, Savannas & Shrublands*": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 2.15,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 2.76
+        },
+        "Temperate Grasslands, Savannas and Shrublands*": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 1.92,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 3.06
+        },
+        "Montane Grasslands & Shrublands*": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 9.06,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 11.88
+        },
+        "Mediterranean Forests, Woodlands & Scrub*": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 2.28,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 3.15
+        },
+        "Deserts & Xeric Shrublands*": {
+          "Regeneration for ages 0-15 years old (t CO2-e/ha/year)": 0.34,
+          "Regeneration for ages > 15 years (t CO2-e/ha/year)": 0.98
+        }
+      }
+    },
+    "Table 40": {
+      "name": "Table 40 Transmission and distribution losses",
+      "table": {
+        "New South Wales and Australian Capital Territory": {
+          "Transmission and distribution losses kg CO2‑e/kWh": 0.05
+        },
+        "Victoria": {
+          "Transmission and distribution losses kg CO2‑e/kWh": 0.11
+        },
+        "Queensland": {
+          "Transmission and distribution losses kg CO2‑e/kWh": 0.08
+        },
+        "South Australia": {
+          "Transmission and distribution losses kg CO2‑e/kWh": 0.01
+        },
+        "Western Australia -": {
+          "Transmission and distribution losses kg CO2‑e/kWh": 0.04
+        },
+        "South-West Interconnected System (SWIS)": {
+          "Transmission and distribution losses kg CO2‑e/kWh": 0
+        },
+        "Tasmania": {
+          "Transmission and distribution losses kg CO2‑e/kWh": 0.02
+        },
+        "Northern territory -": {
+          "Transmission and distribution losses kg CO2‑e/kWh": 0.04
+        },
+        "Darwin Katherine Interconnected System (DKIS)": {
+          "Transmission and distribution losses kg CO2‑e/kWh": 0
+        },
+        "Western Australia - North-Western Interconnected System (NWIS)": {
+          "Transmission and distribution losses kg CO2‑e/kWh": 0.05
+        }
+      }
+    },
+    "Table 41": {
+      "name": "Table 41 Simplification of emissions equations for wastewater treatment methods",
+      "table": {
+        "Managed aerobic treatment": {
+          "Methane correction factor (MCFw)": 0,
+          "Default Chemical Oxygen Demand (t/person/": 0.0585,
+          "Default methane emissions in wastewater": 7,
+          "Emission factor": 0
+        },
+        "Unmanaged aerobic treatment": {
+          "Methane correction factor (MCFw)": 0.3,
+          "Default Chemical Oxygen Demand (t/person/": 0.0585,
+          "Default methane emissions in wastewater": 7,
+          "Emission factor": 0.1229
+        },
+        "Anaerobic digester/reactor": {
+          "Methane correction factor (MCFw)": 0.8,
+          "Default Chemical Oxygen Demand (t/person/": 0.0585,
+          "Default methane emissions in wastewater": 7,
+          "Emission factor": 0.3276
+        },
+        "Anaerobic lagoon shallow (<2 metres)": {
+          "Methane correction factor (MCFw)": 0.2,
+          "Default Chemical Oxygen Demand (t/person/": 0.0585,
+          "Default methane emissions in wastewater": 7,
+          "Emission factor": 0.0819
+        },
+        "Anaerobic lagoon deep (>2 metres)": {
+          "Methane correction factor (MCFw)": 0.8,
+          "Default Chemical Oxygen Demand (t/person/": 0.0585,
+          "Default methane emissions in wastewater": 7,
+          "Emission factor": 0.3276
+        }
+      }
+    },
+    "Table 42": {
+      "name": "Table 42 Simplification of emissions equations for waste incineration",
+      "table": {
+        "Clinical Waste": {
+          "Carbon Content": 0.6,
+          "Fossil Origin": 0.4,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2-e": 3.664,
+          "Emission factor t CO2-e": 0.88
+        },
+        "Sewage Sludge": {
+          "Carbon Content": 0.5,
+          "Fossil Origin": 0,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2-e": 3.664,
+          "Emission factor t CO2-e": 0
+        },
+        "Fossil Liquid": {
+          "Carbon Content": 0.8,
+          "Fossil Origin": 1,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2-e": 3.664,
+          "Emission factor t CO2-e": 2.93
+        },
+        "Industrial Waste": {
+          "Carbon Content": 0.5,
+          "Fossil Origin": 0.9,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2-e": 3.664,
+          "Emission factor t CO2-e": 1.65
+        }
+      }
+    },
+    "Table 43": {
+      "name": "Table 43 Simplification of emissions equations for waste incineration - municipal waste",
+      "table": {
+        "Food": {
+          "Proportion of waste stream": 0.356,
+          "Carbon Content": 0.38,
+          "Fossil Origin": 0,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2": 3.664,
+          "Weighted Emission factor t CO2-e": 0
+        },
+        "Paper": {
+          "Proportion of waste stream": 0.106,
+          "Carbon Content": 0.46,
+          "Fossil Origin": 0.01,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2": 3.664,
+          "Weighted Emission factor t CO2-e": 0.0017865664
+        },
+        "Garden and Green": {
+          "Proportion of waste stream": 0.145,
+          "Carbon Content": 0.49,
+          "Fossil Origin": 0,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2": 3.664,
+          "Weighted Emission factor t CO2-e": 0
+        },
+        "Wood": {
+          "Proportion of waste stream": 0.012,
+          "Carbon Content": 0.5,
+          "Fossil Origin": 0,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2": 3.664,
+          "Weighted Emission factor t CO2-e": 0
+        },
+        "Textiles": {
+          "Proportion of waste stream": 0.039,
+          "Carbon Content": 0.5,
+          "Fossil Origin": 0.2,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2": 3.664,
+          "Weighted Emission factor t CO2-e": 0.014289600000000001
+        },
+        "Sludge": {
+          "Proportion of waste stream": 0,
+          "Carbon Content": 0.5,
+          "Fossil Origin": 0,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2": 3.664,
+          "Weighted Emission factor t CO2-e": 0
+        },
+        "Nappies": {
+          "Proportion of waste stream": 0.058,
+          "Carbon Content": 0.7,
+          "Fossil Origin": 0.1,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2": 3.664,
+          "Weighted Emission factor t CO2-e": 0.014875840000000001
+        },
+        "Rubber and Leather": {
+          "Proportion of waste stream": 0.001,
+          "Carbon Content": 0.67,
+          "Fossil Origin": 0.2,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2": 3.664,
+          "Weighted Emission factor t CO2-e": 0.0004909760000000001
+        },
+        "Plastics": {
+          "Proportion of waste stream": 0.07454,
+          "Carbon Content": 0.75,
+          "Fossil Origin": 1,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2": 3.664,
+          "Weighted Emission factor t CO2-e": 0.20483592
+        },
+        "Other": {
+          "Proportion of waste stream": 0.20846153846153848,
+          "Carbon Content": 0.03,
+          "Fossil Origin": 1,
+          "Default Oxidation Factor": 1,
+          "Convert to t CO2": 3.664,
+          "Weighted Emission factor t CO2-e": 0.02291409230769231
+        }
+      }
+    },
+    "Table 44": {
+      "name": "Table 44 Simplification of emissions equations for biological treatment of waste",
+      "table": {
+        "Composting": {
+          "CH4 emission factor": 0.021,
+          "N2O emission factor": 0.025,
+          "Scope 1 emission factor": 0.046
+        },
+        "Anaerobic Digestion": {
+          "CH4 emission factor": 0.028,
+          "N2O emission factor": 0,
+          "Scope 1 emission factor": 0.028
+        }
+      }
+    },
+    "Energy - Scope 1 ": {
+      "name": "Energy - Scope 1 ",
+      "table": { "Solid fuels": {}, "Gaseous fuels": {}, "Liquid fuels": {} }
+    },
+    "Energy - Scope 3": {
+      "name": "Energy - Scope 3",
+      "table": { "Solid fuels": {}, "Gaseous fuels": {}, "Liquid fuels": {} }
+    }
+  }
+}

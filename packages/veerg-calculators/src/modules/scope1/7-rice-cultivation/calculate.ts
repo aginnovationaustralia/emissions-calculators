@@ -1,0 +1,111 @@
+import { ExecutionContext } from '@/calculators/executionContext';
+import { ConstantsForRiceCalculator } from '@/calculators/Rice/constants';
+import { selectConstant } from '@/tools/constants';
+import { num } from '@/tools/containers';
+import { zeroMassPerAreaOrganicAmendment } from '@/tools/sentinels';
+import { realNumber } from '@/tools/units';
+import { sum } from '@/tools/sum';
+import { HasRiceCultivationInputTransformed } from './rice-cultivation.input';
+
+const calculateSpecificRiceCultivationEmissionsFactor = (
+  input: HasRiceCultivationInputTransformed,
+  context: ExecutionContext<ConstantsForRiceCalculator>,
+) => {
+  /**
+   * EFrice,wpo = EFc * SFw * SFp * SF
+   *
+   * Where EFc = baseline EF for continuously flooded fields without organic amendments (kg CH4/ha/day)
+   * SFw = scaling factor for water regime employed during the growing season cultivation period
+   * SFp = scaling factor for water regime employed in the pre-season before the
+   * cultivation period
+   * SFo= scaling factor for the type and amount of organic amendments applied.
+   *
+   * Where inorganic fertiliser is applied to the rice fields rather than organic
+   * amendments, SFo is set to 1.
+   */
+
+  const { constants } = context;
+  const { preSeasonWaterRegimeType, waterRegimeType, organicAmendments } =
+    input.crop;
+
+  /**
+   * SFo = (1 + SUMo(ROAo * CFOAo)) ^ 0.59
+   *
+   * NOTE: We have the rate of application in kg/m^2, but the original equation expects
+   * this value to be in t/ha (1 kg/m^2 = 10 t/ha). Hence, we have to make a few
+   * modifications to calculate the correct scaling factor. Instead of violating the
+   * expected unit of our `MassPerArea` type, we can factorise the 10 out (which means
+   * that we add everything to 0.1, NOT 1.)
+   *
+   * The result of the sum *shouldn't* be considered a `MassPerArea`, so it is switched to a
+   * `RealNumber` before being added to 0.1, and the result is a real (dimensionless) number.
+   */
+  const cumulativeOrganicAmendmentsScalingFactor = !organicAmendments
+    ? num(1)
+    : num(0.1)
+        .plus(
+          sum(
+            organicAmendments.map((amendment) => {
+              const conversionFactor = selectConstant(
+                constants.RICE,
+                'ORGANIC_AMENDMENT_SCALING_FACTORS',
+                amendment.type,
+              );
+              return amendment.rateOfApplicationTonnesPerHectare.multiply(
+                conversionFactor,
+              );
+            }),
+            zeroMassPerAreaOrganicAmendment,
+          ).switchUnit((r) => realNumber(r.store)),
+        )
+        .multiply(num(10))
+        .power(num(0.59))
+        .named('SFo')
+        .reference('7.1.1 (3)');
+
+  const waterRegimeScalingFactor = selectConstant(
+    constants.RICE,
+    'WATER_REGIME_SCALING_FACTORS',
+    waterRegimeType,
+  );
+
+  const preSeasonWaterRegimeScalingFactor = selectConstant(
+    constants.RICE,
+    'PRE_SEASON_WATER_REGIME_SCALING_FACTORS',
+    preSeasonWaterRegimeType,
+  );
+
+  const baselineEmissionsFactor = selectConstant(
+    constants.RICE,
+    'BASELINE_CONTINUOUSLY_FLOODED_EF',
+  );
+
+  /**
+   * EFrice,wpo = EFc * SFw * SFp * SFo
+   */
+  return baselineEmissionsFactor
+    .multiply(waterRegimeScalingFactor)
+    .multiply(preSeasonWaterRegimeScalingFactor)
+    .multiply(cumulativeOrganicAmendmentsScalingFactor)
+    .named('EFrice,wpo')
+    .reference('7.1.1 (2)');
+};
+
+export const calculateScope1RiceCultivation = (
+  input: HasRiceCultivationInputTransformed,
+  context: ExecutionContext<ConstantsForRiceCalculator>,
+) => {
+  const { areaSownHectares: areaSown, cultivationPeriodDays } = input.crop;
+  const riceEmissionsFactor = calculateSpecificRiceCultivationEmissionsFactor(
+    input,
+    context,
+  );
+
+  /**
+   * Erice,wpo = Arice,wpo * EFrice,wpo * trice,wpo
+   */
+  return riceEmissionsFactor
+    .multiply(areaSown)
+    .multiply(cultivationPeriodDays)
+    .attach({ name: 'Erice', references: ['7.1.1 (1)'] });
+};

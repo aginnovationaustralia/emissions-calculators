@@ -1,0 +1,229 @@
+{
+  "records": [
+    {
+      "symbol": "Njk",
+      "name": "Number of poultry in each class j and subclass k",
+      "units": "head",
+      "type": "input",
+      "expression": "",
+      "line": "680",
+      "notes": ""
+    },
+    {
+      "symbol": "Djk",
+      "name": "Duration of stay for each class and subclass of poultry",
+      "units": "days",
+      "type": "input",
+      "expression": "",
+      "line": "682",
+      "notes": ""
+    },
+    {
+      "symbol": "MMSjmT=1",
+      "name": "Fraction of manure in each primary MMS",
+      "units": "fraction",
+      "type": "input",
+      "expression": "",
+      "line": "687",
+      "notes": ""
+    },
+    {
+      "symbol": "MMSmT=2",
+      "name": "Fraction of manure in each primary MMS",
+      "units": "fraction",
+      "type": "input",
+      "expression": "",
+      "line": "687",
+      "notes": ""
+    },
+    {
+      "symbol": "PF",
+      "name": "Fraction of manure applied to soil within farm boundary",
+      "units": "fraction",
+      "type": "input",
+      "expression": "",
+      "line": "689",
+      "notes": ""
+    },
+    {
+      "symbol": "NRjk",
+      "name": "nitrogen retention expressed as a fraction of intake",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "698",
+      "notes": "method 2 allows custom values",
+      "values": "Table A.1.7.1"
+    },
+    {
+      "symbol": "Ijk",
+      "name": "Dry matter intake for each class and subclass",
+      "units": "kg DM / head / day",
+      "type": "constant",
+      "expression": "",
+      "line": "694",
+      "notes": "method 2 allows custom values",
+      "values": "Table A.1.7.1"
+    },
+    {
+      "symbol": "CPjk",
+      "name": "crude protein content of feed",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "697",
+      "notes": "method 2 allows custom values",
+      "values": "Table A.1.7.1"
+    },
+    {
+      "symbol": "FracGASMmT=1",
+      "name": "fraction of N volatilised from MMS treatment at stage 1",
+      "units": "kg volatilised N / kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "708",
+      "notes": "",
+      "values": "Table A.1.7.2"
+    },
+    {
+      "symbol": "EFmT=1",
+      "name": "Nitrous oxide emission factor for MMS treatment at stage 1",
+      "units": "kg N2O / kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "706",
+      "notes": "",
+      "values": "Table A.1.7.3"
+    },
+    {
+      "symbol": "EFmT=2",
+      "name": "Nitrous oxide emission factor for MMS treatment at stage 2",
+      "units": "kg N2O / kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "706",
+      "notes": "",
+      "values": "Table A.1.7.3"
+    },
+    {
+      "symbol": "FracGASMT=2",
+      "name": "fraction of N volatilised from MMS treatment at stage 2",
+      "units": "kg volatilised N / kg N",
+      "type": "constant",
+      "expression": "",
+      "line": "708",
+      "notes": "",
+      "values": "Table A.1.7.2"
+    },
+    {
+      "symbol": "FracWet",
+      "name": "Fraction of N available for leaching and runoff",
+      "units": "Fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "712",
+      "notes": "",
+      "values": "f leaching ? 1 : 0"
+    },
+    {
+      "symbol": "FracLEACHMS",
+      "name": "Fraction of N that is lost through leaching and runoff",
+      "units": "Fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "713",
+      "notes": "",
+      "values": "0.02"
+    },
+    {
+      "symbol": "NIjk",
+      "name": "nitrogen intake",
+      "units": "kg N / head / day",
+      "type": "expression",
+      "expression": "Ijk * CPjk / 6.25",
+      "line": "530",
+      "notes": ""
+    },
+    {
+      "symbol": "NEjk",
+      "name": "nitrogen excretion",
+      "units": "kg N / head / day",
+      "type": "expression",
+      "expression": "NIjk * (1 - NRjk)",
+      "line": "523",
+      "notes": ""
+    },
+    {
+      "symbol": "AEjk",
+      "name": "total nitrogen excreted by each poultry class and subclass",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "Njk * NEjk * Djk",
+      "line": "518",
+      "notes": ""
+    },
+    {
+      "symbol": "MNjkmT=1",
+      "name": "nitrogen in MMS treatment stage 1",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "AEjk * MMSjmT=1",
+      "line": "507",
+      "notes": ""
+    },
+    {
+      "symbol": "NTjkmT=2",
+      "name": "nitrogen transferred to secondary treatment MMS",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "(MNjkmT=1 * (1 - FracGASMmT=1- EFmT=1))",
+      "line": "545",
+      "notes": ""
+    },
+    {
+      "symbol": "MNjkmT=2",
+      "name": "mass of N in secondary treatment stage",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "NTjkmT=2 * MMSmT=2",
+      "line": "538",
+      "notes": ""
+    },
+    {
+      "symbol": "Mleach,MMS",
+      "name": "Mass of nitrogen lost to leaching in an MMS",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "Mleach,m14",
+      "line": "672",
+      "notes": ""
+    },
+    {
+      "symbol": "MNSoil (scope1)",
+      "name": "Mass of nitrogen applied to soils",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "SUM SUM (MNjkmT=2 * (1 - EFmT=2 - FracGASMT=2) - Mleach,MMS) * PF",
+      "line": "618",
+      "notes": ""
+    },
+    {
+      "symbol": "MNjkm=14T=1",
+      "name": "",
+      "units": "",
+      "type": "unknown",
+      "expression": "",
+      "line": "",
+      "notes": ""
+    },
+    {
+      "symbol": "Mleach,m14",
+      "name": "The mass of nitrogen lost to leaching and runoff on pasture",
+      "units": "kg N",
+      "type": "expression",
+      "expression": "SUM SUM MNjkm=14T=1 * FracWet * FracLEACHMS",
+      "line": "672",
+      "notes": ""
+    }
+  ]
+}
