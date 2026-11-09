@@ -960,24 +960,6 @@ export const FreightTypes = [
   'Transport, truck, 60t load',
   'Transport, van 3,5t',
 ] as const;
-// [
-//   'Van < 3.5 tonnes (diesel)',
-//   'Van < 3.5 tonnes (petrol)',
-//   'Van < 3.5 tonnes (CNG)',
-//   'Van < 3.5 tonnes (LPG)',
-//   'Van < 3.5 tonnes (PHEV)',
-//   'Van < 3.5 tonnes (BEV)',
-//   'Truck > 3.5 tonnes non-refrigerated (diesel)',
-//   'Truck > 3.5 tonnes refrigerated (diesel)',
-//   'Freight flight (domestic)',
-//   'Freight flight (short haul)',
-//   'Freight flight (international)',
-//   'Rail',
-//   'Cargo ship (bulk carrier)',
-//   'Cargo ship (general cargo)',
-//   'Cargo ship (container)',
-//   'Cargo ship (refrigerated)',
-// ] as const;
 export type FreightType = (typeof FreightTypes)[number];
 
 export const WetClimateZones = [
