@@ -1,6 +1,7 @@
 /*
- * A typical calculation. This file is identical in ../calculator-units and
- * ../calculator-units-globals: only ./units differs. Diff the two folders to compare the setup.
+ * A typical calculation. Apart from how values are given (here inside the unit, e.g.
+ * `root(mass('CO2', 5))`), this matches ../calculator-units-globals/farm-emissions.ts: diff the two
+ * folders to compare the setup.
  *
  * Every helper only names the units it expects. The return types are never written out: they are
  * inferred from the rules, e.g. `fuelEmissions` returns Container<Mass<'CO2e'>>.
@@ -101,27 +102,27 @@ export type FarmInput = {
 export const calculateFarmEmissions = (input: FarmInput) => {
   // In real code these come from inputs and selectConstant. Here they are roots.
   const freight = fuelEmissions(
-    root(distance(), input.freightKm * 1000).named('D'),
-    root(massPerDistance('Diesel'), 0.00025).named('FC'),
-    root(massPerMass('CO2e', 'Diesel'), 3.2).named('EFfuel'),
+    root(distance(input.freightKm * 1000)).named('D'),
+    root(massPerDistance('Diesel', 0.00025)).named('FC'),
+    root(massPerMass('CO2e', 'Diesel', 3.2)).named('EFfuel'),
   );
 
   const fertiliser = fertiliserEmissions(
-    root(area(), input.fertilisedHectares * 10_000).named('A'),
-    root(massPerArea('N'), input.nitrogenKgPerHa / 10_000).named('Napplied'),
-    root(massPerMass('N2O', 'N'), 0.01 * (44 / 28)).named('EF'),
-    root(massPerMass('CO2e', 'N2O'), 273).named('GWP_N2O'),
+    root(area(input.fertilisedHectares * 10_000)).named('A'),
+    root(massPerArea('N', input.nitrogenKgPerHa / 10_000)).named('Napplied'),
+    root(massPerMass('N2O', 'N', 0.01 * (44 / 28))).named('EF'),
+    root(massPerMass('CO2e', 'N2O', 273)).named('GWP_N2O'),
   );
 
   const enteric = entericEmissions(
-    root(head(), input.herdSize).named('H'),
-    root(massPerHeadPerDay('DryMatter'), input.dryMatterKgPerHeadPerDay).named(
+    root(head(input.herdSize)).named('H'),
+    root(massPerHeadPerDay('DryMatter', input.dryMatterKgPerHeadPerDay)).named(
       'DMI',
     ),
-    root(days(), 365).named('D'),
-    root(massPerMass('CH4', 'DryMatter'), 0.0207).named('Ym'),
+    root(days(365)).named('D'),
+    root(massPerMass('CH4', 'DryMatter', 0.0207)).named('Ym'),
     num(input.methaneReductionPercent / 100).named('Rf'),
-    root(massPerMass('CO2e', 'CH4'), 28).named('GWP_CH4'),
+    root(massPerMass('CO2e', 'CH4', 28)).named('GWP_CH4'),
   );
 
   // All three are Mass<'CO2e'>, so they can be added. Adding the raw methane would not compile.

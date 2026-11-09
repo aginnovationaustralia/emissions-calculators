@@ -1,4 +1,4 @@
-import type { RealNumber, UnitLike } from './units.js';
+import type { NumberUnit, RealNumber } from './units.js';
 
 /**
  * What a rule says about a particular left unit: which right unit it accepts, and the unit that
@@ -48,24 +48,31 @@ export type ResultOf<F, L, R> = ProducedResult<ApplyRule<F, L, R>, R>;
 
 /** L * RealNumber = L, and L / RealNumber = L */
 export interface ScaleRight extends RuleType {
-  rule: Rule<RealNumber, this['L']>;
+  rule: this['L'] extends NumberUnit ? Rule<RealNumber, this['L']> : never;
 }
 
 /** RealNumber * R = R */
 export interface ScaleLeft extends RuleType {
-  rule: this['L'] extends RealNumber ? Rule<UnitLike, this['R']> : never;
+  rule: this['L'] extends RealNumber ? Rule<NumberUnit, this['R']> : never;
 }
 
 /** L / L = RealNumber */
 export interface SameUnit extends RuleType {
-  rule: Rule<this['L'], RealNumber>;
+  rule: this['L'] extends NumberUnit ? Rule<this['L'], RealNumber> : never;
 }
 
-/** plus/minus: the same unit on both sides, or a RealNumber on either side. */
-export type AdditiveRight<L> = L extends RealNumber ? UnitLike : L | RealNumber;
+/** plus/minus: the same unit on both sides, or a RealNumber on either side. Numbers only. */
+export type AdditiveRight<L> = L extends RealNumber
+  ? NumberUnit
+  : L extends NumberUnit
+    ? L | RealNumber
+    : never;
 export type AdditiveResult<L, R> = L extends RealNumber ? R : L;
 
-type RuntimeApply = (left: never, right: never) => UnitLike | undefined;
+/** min/max: limited by the same unit or a RealNumber. Numbers only. */
+export type LimitRight<L> = L extends NumberUnit ? L | RealNumber : never;
+
+type RuntimeApply = (left: never, right: never) => NumberUnit | undefined;
 
 /**
  * A complete rule: the runtime implementation plus, in the phantom `__rule` property, its type.
@@ -96,7 +103,9 @@ export type RuleTypeOf<T> =
       : never;
 
 /**
- * Pairs a rule type with its runtime implementation. Curried so the rule type can be given
+ * Pairs a rule type with its runtime implementation. The callback only builds the resulting unit's
+ * descriptor, e.g. with a unit constructor such as `mass(l.snum)`; the operation replaces its store
+ * with the calculated value. Curried so the rule type can be given
  * explicitly while the unit types are inferred from the callback's parameter annotations:
  *
  *   export const massPerMassTimesMass = multiplyRule<MassPerMassTimesMass>()(
@@ -111,7 +120,7 @@ export type RuleTypeOf<T> =
  */
 export const multiplyRule =
   <F extends RuleType>() =>
-  <L extends UnitLike, R extends UnitLike>(
+  <L extends NumberUnit, R extends NumberUnit>(
     left: L['__unitType'],
     right: R['__unitType'],
     apply: (left: L, right: R) => ResultOf<F, L, R> | undefined,
@@ -125,7 +134,7 @@ export const multiplyRule =
 /** The division counterpart of `multiplyRule`. */
 export const divideRule =
   <F extends RuleType>() =>
-  <L extends UnitLike, R extends UnitLike>(
+  <L extends NumberUnit, R extends NumberUnit>(
     left: L['__unitType'],
     right: R['__unitType'],
     apply: (left: L, right: R) => ResultOf<F, L, R> | undefined,

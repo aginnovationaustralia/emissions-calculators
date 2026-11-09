@@ -13,27 +13,42 @@ import {
   RuleType,
   Substance,
   UnitError,
+  values,
+  ValueStore,
 } from './index.js';
 import { Equal, expectType } from './test-helpers.js';
 
 // No substances are declared, so any string is accepted
 expectType<Equal<Substance, string>>(true);
 
-type Litres<S extends string = string> = { __unitType: 'Litres'; liquid: S };
-type Dollars = { __unitType: 'Dollars' };
+type Litres<S extends string = string> = {
+  __unitType: 'Litres';
+  liquid: S;
+  store: ValueStore;
+};
+type Dollars = { __unitType: 'Dollars'; store: ValueStore };
 type DollarsPerLitre<S extends string = string> = {
   __unitType: 'DollarsPerLitre';
   liquid: S;
+  store: ValueStore;
 };
 
-const litres = <S extends string>(liquid: S): Litres<S> => ({
+const litres = <S extends string>(liquid: S, value?: number): Litres<S> => ({
   __unitType: 'Litres',
   liquid,
+  store: values(value),
 });
-const dollars = (): Dollars => ({ __unitType: 'Dollars' });
-const dollarsPerLitre = <S extends string>(liquid: S): DollarsPerLitre<S> => ({
+const dollars = (value?: number): Dollars => ({
+  __unitType: 'Dollars',
+  store: values(value),
+});
+const dollarsPerLitre = <S extends string>(
+  liquid: S,
+  value?: number,
+): DollarsPerLitre<S> => ({
   __unitType: 'DollarsPerLitre',
   liquid,
+  store: values(value),
 });
 
 // DollarsPerLitre<S> * Litres<S> = Dollars
@@ -52,11 +67,11 @@ const priceTimesVolume = multiplyRule<PriceTimesVolume>()(
 describe('blank slate', () => {
   test('a system with no rules still scales and adds', () => {
     const units = createUnitSystem();
-    const doubled = units.root(litres('Milk'), 2).multiply(units.num(2));
+    const doubled = units.root(litres('Milk', 2)).multiply(units.num(2));
     expectType<
       Equal<typeof doubled, ContainerOf<typeof units, Litres<'Milk'>>>
     >(true);
-    expect(doubled.plus(doubled).value.toNumber()).toBe(8);
+    expect(doubled.plus(doubled).unit.store.value.toNumber()).toBe(8);
     // @ts-expect-error no rules at all
     expect(() => doubled.multiply(doubled)).toThrow(UnitError);
   });
@@ -66,14 +81,14 @@ describe('blank slate', () => {
     type Container<U> = ContainerOf<typeof units, U>;
 
     const cost = units
-      .root(dollarsPerLitre('Milk'), 1.5)
-      .multiply(units.root(litres('Milk'), 1000));
+      .root(dollarsPerLitre('Milk', 1.5))
+      .multiply(units.root(litres('Milk', 1000)));
     expectType<Equal<typeof cost, Container<Dollars>>>(true);
-    expect(cost.unit).toEqual(dollars());
-    expect(cost.value.toNumber()).toBe(1500);
+    expect(cost.unit.__unitType).toBe('Dollars');
+    expect(cost.unit.store.value.toNumber()).toBe(1500);
 
-    const milkPrice = units.root(dollarsPerLitre('Milk'), 1.5);
-    const fuel = units.root(litres('Fuel'), 1);
+    const milkPrice = units.root(dollarsPerLitre('Milk', 1.5));
+    const fuel = units.root(litres('Fuel', 1));
     // @ts-expect-error price of milk times a volume of fuel
     expect(() => milkPrice.multiply(fuel)).toThrow(UnitError);
   });

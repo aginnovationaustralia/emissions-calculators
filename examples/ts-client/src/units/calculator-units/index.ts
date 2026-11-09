@@ -1,3 +1,4 @@
+import { describeUnit } from '@aginnovationaustralia/calculator-units';
 import { calculateFarmEmissions } from './farm-emissions';
 
 const result = calculateFarmEmissions({
@@ -11,6 +12,6 @@ const result = calculateFarmEmissions({
 
 for (const [key, container] of Object.entries(result)) {
   console.log(
-    `${key}: ${container.value.toFixed(2)} ${JSON.stringify(container.unit)}`,
+    `${key}: ${container.unit.store.value.toFixed(2)} ${describeUnit(container.unit)}`,
   );
 }

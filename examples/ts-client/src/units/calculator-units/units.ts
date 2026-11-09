@@ -6,12 +6,15 @@
  */
 import {
   Container as BaseContainer,
+  InitialValue,
   multiplyRule,
   Rule,
   RuleSetOf,
   RuleType,
   Substance,
   UnitSystem,
+  values,
+  ValueStore,
 } from '@aginnovationaustralia/calculator-units';
 import {
   defaultUnitSystem,
@@ -35,11 +38,17 @@ declare module '@aginnovationaustralia/calculator-units' {
 export type MassPerDistance<S extends Substance = Substance> = {
   __unitType: 'MassPerDistance';
   substance: S;
+  store: ValueStore;
 };
 
 export const massPerDistance = <S extends Substance>(
   substance: S,
-): MassPerDistance<S> => ({ __unitType: 'MassPerDistance', substance });
+  initialValue?: InitialValue,
+): MassPerDistance<S> => ({
+  __unitType: 'MassPerDistance',
+  substance,
+  store: values(initialValue),
+});
 
 // MassPerDistance<S> * Distance = Mass<S>
 interface MassPerDistanceTimesDistance extends RuleType {

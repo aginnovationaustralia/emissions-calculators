@@ -14,10 +14,10 @@ import {
   root,
 } from './units';
 
-const methane = root(mass('CH4'), 100);
-const co2e = root(mass('CO2e'), 1000);
-const gwpN2O = root(massPerMass('CO2e', 'N2O'), 273);
-const dieselRate = root(massPerDistance('Diesel'), 0.00025);
+const methane = root(mass('CH4', 100));
+const co2e = root(mass('CO2e', 1000));
+const gwpN2O = root(massPerMass('CO2e', 'N2O', 273));
+const dieselRate = root(massPerDistance('Diesel', 0.00025));
 
 // TypeScript reports:
 //   Argument of type 'Container<Mass<"CH4">, FarmRules>' is not assignable to parameter of type 'Container<RealNumber | Mass<"CO2e">, FarmRules>'.
@@ -50,10 +50,10 @@ export const noDivideRule = co2e.divide(methane);
 //   Types of property '__unitType' are incompatible.
 //   Type '"Area"' is not assignable to type '"RealNumber"'.
 // @ts-expect-error Multiplying by a unit with no rule
-export const noMultiplyRule = dieselRate.multiply(root(area(), 1));
+export const noMultiplyRule = dieselRate.multiply(root(area(1)));
 
 // TypeScript reports:
 //   Argument of type '"Deisel"' is not assignable to parameter of type '"Liveweight" | "DryMatter" | "CrudeProtein" | "Milk" | "Milk Solids" | "Greasy Wool" | "Clean Wool" | "Volatile Solids" | "N" | "Inorganic Fertiliser" | "Urea" | "CO2e" | "Organic Fertiliser" | ... 23 more ... | "Yield"'.
 // @ts-expect-error A substance typo
 export const typo = mass('Deisel');
-export const fine = dieselRate.multiply(root(distance(), 1000));
+export const fine = dieselRate.multiply(root(distance(1000)));

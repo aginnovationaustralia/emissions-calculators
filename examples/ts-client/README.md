@@ -208,13 +208,13 @@ This project is licensed under a [Creative Commons Attribution 4.0](https://crea
 
 Each folder contains:
 
-| File                | Purpose                                                                                                                                                  |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `units.ts`          | The project's unit setup: the defaults plus a `Diesel` substance, a `MassPerDistance` unit and a rule. This is the only real difference between the two. |
-| `farm-emissions.ts` | The calculation. Identical in both folders.                                                                                                              |
-| `mistakes.ts`       | Typical mistakes, each annotated with the error TypeScript reports, for comparing error messages. Typechecked, never run.                                |
-| `pitfall.ts`        | Uses the extra rule without importing `units.ts`. The globals version typechecks and then throws at runtime; the other is rejected by the compiler.      |
-| `index.ts`          | Runs the calculation and prints the results.                                                                                                             |
+| File                | Purpose                                                                                                                                                                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `units.ts`          | The project's unit setup: the defaults plus a `Diesel` substance, a `MassPerDistance` unit and a rule. This is the only real difference between the two.                                                    |
+| `farm-emissions.ts` | The calculation. The same in both folders, apart from how values are given: inside the unit for `calculator-units` (`root(mass('CO2', 5))`), alongside it for the globals package (`root(mass('CO2'), 5)`). |
+| `mistakes.ts`       | Typical mistakes, each annotated with the error TypeScript reports, for comparing error messages. Typechecked, never run.                                                                                   |
+| `pitfall.ts`        | Uses the extra rule without importing `units.ts`. The globals version typechecks and then throws at runtime; the other is rejected by the compiler.                                                         |
+| `index.ts`          | Runs the calculation and prints the results.                                                                                                                                                                |
 
 ```bash
 pnpm units:generics          # or units:globals
