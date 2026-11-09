@@ -8,15 +8,6 @@ import { distance, mass } from '@/tools/units';
 import { object } from '@/types/schemas';
 import z from 'zod';
 
-export const FreightBaseInputSchema = object({
-  freightType: enumSchema(FreightTypes)
-    .transform((val) =>
-      input(val, { name: 'freightType', modules: [FREIGHT_15_13] }),
-    )
-    .meta({
-      description: 'The type of vehicle used to transport this freight.',
-    }),
-});
 export const FreightMethod1InputSchema = object({
   freightType: enumSchema(FreightTypes)
     .transform((val) =>
