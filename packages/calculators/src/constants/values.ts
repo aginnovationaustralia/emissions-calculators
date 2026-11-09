@@ -9,6 +9,7 @@ import {
   perGjToPerJ,
   perHectareToPerSqMetre,
   perKilometreToPerMetre,
+  perTonneToPerKg,
   tonnesPerHectareToKgPerSquareMetres,
 } from '@/tools/unit-conversion';
 import {
@@ -76,11 +77,11 @@ const allStatesWithValue = (rawValue: number): Record<State, RealNumber> => {
   };
 };
 
-const freightEmissions = (tCO2ePerTKm: number) =>
+const freightEmissions = (kgCO2ePerTonneKm: number) =>
   massPerMassDistance(
     'CO2e',
     'Freight Goods',
-    perKilometreToPerMetre(tCO2ePerTKm),
+    perTonneToPerKg(perKilometreToPerMetre(kgCO2ePerTonneKm)),
   );
 
 export const commonConstants: CommonConstants = {
@@ -729,26 +730,24 @@ export const commonConstants: CommonConstants = {
   },
 
   /**
-   * @description Emissions factor for freighting of goods by land, sea or air. Sourced from the UK Government "Greenhouse gas reporting: conversion factors 2026" (Freighting goods)
-   * @reference https://assets.publishing.service.gov.uk/media/6a29392bade52dc0882218a8/ghg-conversion-factors-2026-full-set.xlsx
+   * @description Emissions factor for freighting of goods by land, sea or air. Sourced from AusLCI V48 (May 2026)
    */
   FREIGHT_EMISSIONS: {
-    'Van < 3.5 tonnes (diesel)': freightEmissions(0.63511),
-    'Van < 3.5 tonnes (petrol)': freightEmissions(0.8381),
-    'Van < 3.5 tonnes (CNG)': freightEmissions(0.62503),
-    'Van < 3.5 tonnes (LPG)': freightEmissions(0.68715),
-    'Van < 3.5 tonnes (PHEV)': freightEmissions(0.39716),
-    'Van < 3.5 tonnes (BEV)': freightEmissions(0.14699),
-    'Truck > 3.5 tonnes non-refrigerated (diesel)': freightEmissions(0.10356),
-    'Truck > 3.5 tonnes refrigerated (diesel)': freightEmissions(0.12122),
-    'Freight flight (domestic)': freightEmissions(4.60397),
-    'Freight flight (short haul)': freightEmissions(1.27835),
-    'Freight flight (international)': freightEmissions(0.89939),
-    Rail: freightEmissions(0.02583),
-    'Cargo ship (bulk carrier)': freightEmissions(0.00353),
-    'Cargo ship (general cargo)': freightEmissions(0.01321),
-    'Cargo ship (container)': freightEmissions(0.01612),
-    'Cargo ship (refrigerated)': freightEmissions(0.01306),
+    'Air freight, domestic': freightEmissions(1.96),
+    'Air freight, general aviation': freightEmissions(0.973),
+    'Air freight, international': freightEmissions(1.74),
+    'Operation, freight train': freightEmissions(0.0241),
+    'Transport, freight, rail': freightEmissions(0.0241),
+    'Transport, truck, 16 to 28t with 11t load': freightEmissions(0.271),
+    'Transport, truck, 16 to 28t, fleet average': freightEmissions(0.135),
+    'Transport, truck, 16 to 40t, customisable': freightEmissions(0.091),
+    'Transport, truck, 28t, fleet average': freightEmissions(0.0913),
+    'Transport, truck, 3,5 to 16t with 12t load': freightEmissions(0.132),
+    'Transport, truck, 3,5 to 16t, fleet average': freightEmissions(0.228),
+    'Transport, truck, 3.5 to 16t, customisable': freightEmissions(0.194),
+    'Transport, truck, 40t load': freightEmissions(0.0725),
+    'Transport, truck, 60t load': freightEmissions(0.0413),
+    'Transport, van 3,5t': freightEmissions(1.52),
   },
 
   /**
