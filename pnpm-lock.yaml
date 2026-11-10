@@ -298,6 +298,124 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/veerg-calculators:
+    dependencies:
+      decimal.js-light:
+        specifier: ^2.5.1
+        version: 2.5.1
+      fflate:
+        specifier: ^0.8.3
+        version: 0.8.3
+      mixpanel:
+        specifier: ^0.24.0
+        version: 0.24.0
+      mixpanel-browser:
+        specifier: ^2.83.0
+        version: 2.83.0
+      openapi3-ts:
+        specifier: ^4.6.1
+        version: 4.6.1
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+      semver:
+        specifier: ^7.8.5
+        version: 7.8.5
+      ts-deepmerge:
+        specifier: ^8.0.0
+        version: 8.0.0
+      tslib:
+        specifier: ^2.8.1
+        version: 2.8.1
+      type-fest:
+        specifier: ^5.9.0
+        version: 5.9.0
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
+      zod-openapi:
+        specifier: ^5.4.6
+        version: 5.4.6(zod@4.6.7)
+    devDependencies:
+      '@aginnovationaustralia/eslint-plugin-emissions-calculators':
+        specifier: workspace:*
+        version: link:../eslint-plugin-emissions-calculators
+      '@arethetypeswrong/cli':
+        specifier: ^0.18.5
+        version: 0.18.5
+      '@rollup/plugin-alias':
+        specifier: ^6.0.1
+        version: 6.0.1(rollup@4.67.4)
+      '@rollup/plugin-commonjs':
+        specifier: ^29.0.3
+        version: 29.0.3(rollup@4.67.4)
+      '@rollup/plugin-json':
+        specifier: ^6.1.0
+        version: 6.1.0(rollup@4.67.4)
+      '@rollup/plugin-node-resolve':
+        specifier: ^16.0.3
+        version: 16.0.3(rollup@4.67.4)
+      '@rollup/plugin-replace':
+        specifier: ^6.0.3
+        version: 6.0.3(rollup@4.67.4)
+      '@rollup/plugin-typescript':
+        specifier: ^12.3.0
+        version: 12.3.0(rollup@4.67.4)(tslib@2.8.1)(typescript@5.9.3)
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
+      '@types/node':
+        specifier: ^25.9.7
+        version: 25.9.7
+      '@types/semver':
+        specifier: ^7.8.0
+        version: 7.8.0
+      '@types/xlsx-populate':
+        specifier: github:JanLoebel/types-xlsx-populate
+        version: https://codeload.github.com/JanLoebel/types-xlsx-populate/tar.gz/7ef81174e495fe9ef2689bd329499f81a2a93d43
+      '@typescript-eslint/parser':
+        specifier: ^8.72.1
+        version: 8.72.1(eslint@10.10.0(jiti@2.6.1))(typescript@5.9.3)
+      dependency-cruiser:
+        specifier: ^18.3.1
+        version: 18.3.1
+      eslint:
+        specifier: ^10.10.0
+        version: 10.10.0(jiti@2.6.1)
+      glob:
+        specifier: ^13.0.6
+        version: 13.0.6
+      jest:
+        specifier: ^30.5.2
+        version: 30.5.2(@types/node@25.9.7)(ts-node@10.9.2(@types/node@25.9.7)(typescript@5.9.3))
+      nanoclone:
+        specifier: ^1.0.2
+        version: 1.0.2
+      publint:
+        specifier: ^0.3.25
+        version: 0.3.25
+      rollup:
+        specifier: ^4.67.3
+        version: 4.67.4
+      rollup-plugin-copy:
+        specifier: ^3.5.0
+        version: 3.5.0
+      ts-jest:
+        specifier: ^29.4.12
+        version: 29.4.12(@babel/core@7.29.7)(@jest/transform@30.5.2)(@jest/types@30.5.1)(babel-jest@30.5.2(@babel/core@7.29.7))(jest-util@30.5.1)(jest@30.5.2(@types/node@25.9.7)(ts-node@10.9.2(@types/node@25.9.7)(typescript@5.9.3)))(typescript@5.9.3)
+      tsc-alias:
+        specifier: ^1.9.10
+        version: 1.9.10
+      tsx:
+        specifier: ^4.23.13
+        version: 4.23.13
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      xlsx-populate:
+        specifier: ^1.21.0
+        version: 1.21.0
+
 packages:
 
   '@andrewbranch/untar.js@1.0.4':

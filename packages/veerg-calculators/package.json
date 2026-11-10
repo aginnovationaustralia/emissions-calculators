@@ -1,0 +1,396 @@
+{
+  "name": "@aginnovationaustralia/veerg-calculators",
+  "version": "1.1.0-beta.1",
+  "description": "Agricultural emissions calculators implementing the Australian Government Voluntary Emissions Estimation and Reporting Guidelines (VEERG)",
+  "keywords": [
+    "veerg",
+    "emissions",
+    "greenhouse gas",
+    "agriculture",
+    "carbon accounting",
+    "australia"
+  ],
+  "homepage": "https://github.com/aginnovationaustralia/emissions-calculators/tree/main/packages/veerg-calculators#readme",
+  "bugs": {
+    "url": "https://github.com/aginnovationaustralia/emissions-calculators/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aginnovationaustralia/emissions-calculators.git",
+    "directory": "packages/veerg-calculators"
+  },
+  "author": "Agricultural Innovation Australia",
+  "license": "CC-BY-4.0",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "browser": "dist/browser.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "browser": "./dist/browser.mjs",
+      "import": {
+        "browser": "./dist/browser.mjs",
+        "default": "./dist/index.mjs"
+      },
+      "require": "./dist/index.cjs"
+    },
+    "./browser": {
+      "types": "./dist/browser.d.ts",
+      "import": "./dist/browser.mjs",
+      "require": "./dist/browser.cjs"
+    },
+    "./calculators": {
+      "import": {
+        "types": "./dist/calculators/index.d.ts",
+        "browser": "./dist/calculators/browser.mjs",
+        "default": "./dist/calculators/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/index.d.ts",
+        "browser": "./dist/calculators/browser.cjs",
+        "default": "./dist/calculators/index.cjs"
+      }
+    },
+    "./validate": {
+      "types": "./dist/calculators/validate.d.ts",
+      "import": "./dist/calculators/validate.mjs",
+      "require": "./dist/calculators/validate.cjs"
+    },
+    "./internal": {
+      "types": "./dist/internal.d.ts",
+      "import": "./dist/internal.mjs",
+      "require": "./dist/internal.cjs"
+    },
+    "./tools": {
+      "types": "./dist/tools.d.ts",
+      "import": "./dist/tools.mjs",
+      "require": "./dist/tools.cjs"
+    },
+    "./all-modules": {
+      "import": {
+        "types": "./dist/calculators/AllModules/index.d.ts",
+        "browser": "./dist/calculators/AllModules/browser.mjs",
+        "default": "./dist/calculators/AllModules/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/AllModules/index.d.ts",
+        "browser": "./dist/calculators/AllModules/browser.cjs",
+        "default": "./dist/calculators/AllModules/index.cjs"
+      }
+    },
+    "./aquaculture": {
+      "import": {
+        "types": "./dist/calculators/Aquaculture/index.d.ts",
+        "browser": "./dist/calculators/Aquaculture/browser.mjs",
+        "default": "./dist/calculators/Aquaculture/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Aquaculture/index.d.ts",
+        "browser": "./dist/calculators/Aquaculture/browser.cjs",
+        "default": "./dist/calculators/Aquaculture/index.cjs"
+      }
+    },
+    "./beef": {
+      "import": {
+        "types": "./dist/calculators/Beef/index.d.ts",
+        "browser": "./dist/calculators/Beef/browser.mjs",
+        "default": "./dist/calculators/Beef/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Beef/index.d.ts",
+        "browser": "./dist/calculators/Beef/browser.cjs",
+        "default": "./dist/calculators/Beef/index.cjs"
+      }
+    },
+    "./cotton": {
+      "import": {
+        "types": "./dist/calculators/Cotton/index.d.ts",
+        "browser": "./dist/calculators/Cotton/browser.mjs",
+        "default": "./dist/calculators/Cotton/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Cotton/index.d.ts",
+        "browser": "./dist/calculators/Cotton/browser.cjs",
+        "default": "./dist/calculators/Cotton/index.cjs"
+      }
+    },
+    "./cropping": {
+      "import": {
+        "types": "./dist/calculators/Cropping/index.d.ts",
+        "browser": "./dist/calculators/Cropping/browser.mjs",
+        "default": "./dist/calculators/Cropping/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Cropping/index.d.ts",
+        "browser": "./dist/calculators/Cropping/browser.cjs",
+        "default": "./dist/calculators/Cropping/index.cjs"
+      }
+    },
+    "./dairy": {
+      "import": {
+        "types": "./dist/calculators/Dairy/index.d.ts",
+        "browser": "./dist/calculators/Dairy/browser.mjs",
+        "default": "./dist/calculators/Dairy/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Dairy/index.d.ts",
+        "browser": "./dist/calculators/Dairy/browser.cjs",
+        "default": "./dist/calculators/Dairy/index.cjs"
+      }
+    },
+    "./feedlot": {
+      "import": {
+        "types": "./dist/calculators/Feedlot/index.d.ts",
+        "browser": "./dist/calculators/Feedlot/browser.mjs",
+        "default": "./dist/calculators/Feedlot/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Feedlot/index.d.ts",
+        "browser": "./dist/calculators/Feedlot/browser.cjs",
+        "default": "./dist/calculators/Feedlot/index.cjs"
+      }
+    },
+    "./forestry": {
+      "import": {
+        "types": "./dist/calculators/Forestry/index.d.ts",
+        "browser": "./dist/calculators/Forestry/browser.mjs",
+        "default": "./dist/calculators/Forestry/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Forestry/index.d.ts",
+        "browser": "./dist/calculators/Forestry/browser.cjs",
+        "default": "./dist/calculators/Forestry/index.cjs"
+      }
+    },
+    "./grains": {
+      "import": {
+        "types": "./dist/calculators/Grains/index.d.ts",
+        "browser": "./dist/calculators/Grains/browser.mjs",
+        "default": "./dist/calculators/Grains/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Grains/index.d.ts",
+        "browser": "./dist/calculators/Grains/browser.cjs",
+        "default": "./dist/calculators/Grains/index.cjs"
+      }
+    },
+    "./horticulture": {
+      "import": {
+        "types": "./dist/calculators/Horticulture/index.d.ts",
+        "browser": "./dist/calculators/Horticulture/browser.mjs",
+        "default": "./dist/calculators/Horticulture/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Horticulture/index.d.ts",
+        "browser": "./dist/calculators/Horticulture/browser.cjs",
+        "default": "./dist/calculators/Horticulture/index.cjs"
+      }
+    },
+    "./post-production": {
+      "import": {
+        "types": "./dist/calculators/PostProduction/index.d.ts",
+        "browser": "./dist/calculators/PostProduction/browser.mjs",
+        "default": "./dist/calculators/PostProduction/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/PostProduction/index.d.ts",
+        "browser": "./dist/calculators/PostProduction/browser.cjs",
+        "default": "./dist/calculators/PostProduction/index.cjs"
+      }
+    },
+    "./sheep": {
+      "import": {
+        "types": "./dist/calculators/Sheep/index.d.ts",
+        "browser": "./dist/calculators/Sheep/browser.mjs",
+        "default": "./dist/calculators/Sheep/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Sheep/index.d.ts",
+        "browser": "./dist/calculators/Sheep/browser.cjs",
+        "default": "./dist/calculators/Sheep/index.cjs"
+      }
+    },
+    "./other-livestock": {
+      "import": {
+        "types": "./dist/calculators/OtherLivestock/index.d.ts",
+        "browser": "./dist/calculators/OtherLivestock/browser.mjs",
+        "default": "./dist/calculators/OtherLivestock/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/OtherLivestock/index.d.ts",
+        "browser": "./dist/calculators/OtherLivestock/browser.cjs",
+        "default": "./dist/calculators/OtherLivestock/index.cjs"
+      }
+    },
+    "./rice": {
+      "import": {
+        "types": "./dist/calculators/Rice/index.d.ts",
+        "browser": "./dist/calculators/Rice/browser.mjs",
+        "default": "./dist/calculators/Rice/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Rice/index.d.ts",
+        "browser": "./dist/calculators/Rice/browser.cjs",
+        "default": "./dist/calculators/Rice/index.cjs"
+      }
+    },
+    "./poultry": {
+      "import": {
+        "types": "./dist/calculators/Poultry/index.d.ts",
+        "browser": "./dist/calculators/Poultry/browser.mjs",
+        "default": "./dist/calculators/Poultry/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Poultry/index.d.ts",
+        "browser": "./dist/calculators/Poultry/browser.cjs",
+        "default": "./dist/calculators/Poultry/index.cjs"
+      }
+    },
+    "./sugar": {
+      "import": {
+        "types": "./dist/calculators/Sugar/index.d.ts",
+        "browser": "./dist/calculators/Sugar/browser.mjs",
+        "default": "./dist/calculators/Sugar/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Sugar/index.d.ts",
+        "browser": "./dist/calculators/Sugar/browser.cjs",
+        "default": "./dist/calculators/Sugar/index.cjs"
+      }
+    },
+    "./pigs": {
+      "import": {
+        "types": "./dist/calculators/Pigs/index.d.ts",
+        "browser": "./dist/calculators/Pigs/browser.mjs",
+        "default": "./dist/calculators/Pigs/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Pigs/index.d.ts",
+        "browser": "./dist/calculators/Pigs/browser.cjs",
+        "default": "./dist/calculators/Pigs/index.cjs"
+      }
+    },
+    "./viticulture": {
+      "import": {
+        "types": "./dist/calculators/Viticulture/index.d.ts",
+        "browser": "./dist/calculators/Viticulture/browser.mjs",
+        "default": "./dist/calculators/Viticulture/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/Viticulture/index.d.ts",
+        "browser": "./dist/calculators/Viticulture/browser.cjs",
+        "default": "./dist/calculators/Viticulture/index.cjs"
+      }
+    },
+    "./wild-catch-fisheries": {
+      "import": {
+        "types": "./dist/calculators/WildCatchFisheries/index.d.ts",
+        "browser": "./dist/calculators/WildCatchFisheries/browser.mjs",
+        "default": "./dist/calculators/WildCatchFisheries/index.mjs"
+      },
+      "require": {
+        "types": "./dist/calculators/WildCatchFisheries/index.d.ts",
+        "browser": "./dist/calculators/WildCatchFisheries/browser.cjs",
+        "default": "./dist/calculators/WildCatchFisheries/index.cjs"
+      }
+    },
+    "./fullcam": {
+      "import": {
+        "types": "./dist/fullcam/index.d.ts",
+        "browser": "./dist/fullcam/index.mjs",
+        "default": "./dist/fullcam/index.mjs"
+      },
+      "require": {
+        "types": "./dist/fullcam/index.d.ts",
+        "browser": "./dist/fullcam/index.cjs",
+        "default": "./dist/fullcam/index.cjs"
+      }
+    },
+    "./openapi": {
+      "import": {
+        "types": "./dist/types/openapi/index.d.ts",
+        "browser": "./dist/types/openapi/index.mjs",
+        "default": "./dist/types/openapi/index.mjs"
+      },
+      "require": {
+        "types": "./dist/types/openapi/index.d.ts",
+        "browser": "./dist/types/openapi/index.cjs",
+        "default": "./dist/types/openapi/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist/**/*",
+    "assets/**/*"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "pnpm run clean && rollup -c && tsc-alias -p tsconfig.json && pnpm run fix:declarations && pnpm run check:package && pnpm run generate:openapi",
+    "fix:declarations": "tsx scripts/fix-declaration-imports.ts",
+    "check:package": "publint && attw --pack .",
+    "check:browser-deps": "depcruise src --config .dependency-cruiser.cjs",
+    "prepublishOnly": "pnpm run check:package",
+    "dev": "rollup -c --watch",
+    "clean": "rm -rf dist",
+    "check:types": "tsc --noEmit",
+    "lint": "eslint . && pnpm run check:types && pnpm run check:browser-deps",
+    "test": "jest",
+    "test:fullcam": "jest --config jest.config.fullcam.cjs",
+    "version": "npm version --no-git-tag-version",
+    "build:docs": "tsx scripts/build-docs/index.ts",
+    "generate:exports": "tsx scripts/generate-exports.ts",
+    "generate:openapi": "tsx scripts/generate-openapi.ts",
+    "check:openapi-breaking": "pnpm run generate:openapi && tsx scripts/check-openapi-breaking.ts",
+    "dump:sheet": "tsx scripts/dump-test-sheet.ts",
+    "prepare:release": "pnpm run build && pnpm run generate:exports && pnpm run generate:openapi && pnpm run check:openapi-breaking",
+    "sync:ngaf": "tsx scripts/sync-ngaf/index.ts"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "devDependencies": {
+    "@aginnovationaustralia/eslint-plugin-emissions-calculators": "workspace:*",
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@rollup/plugin-alias": "^6.0.1",
+    "@rollup/plugin-commonjs": "^29.0.3",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-replace": "^6.0.3",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.9.7",
+    "@types/semver": "^7.8.0",
+    "@types/xlsx-populate": "github:JanLoebel/types-xlsx-populate",
+    "@typescript-eslint/parser": "^8.72.1",
+    "dependency-cruiser": "^18.3.1",
+    "eslint": "^10.10.0",
+    "glob": "^13.0.6",
+    "jest": "^30.5.2",
+    "nanoclone": "^1.0.2",
+    "publint": "^0.3.25",
+    "rollup": "^4.67.3",
+    "rollup-plugin-copy": "^3.5.0",
+    "ts-jest": "^29.4.12",
+    "tsc-alias": "^1.9.10",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3",
+    "xlsx-populate": "^1.21.0"
+  },
+  "dependencies": {
+    "decimal.js-light": "^2.5.1",
+    "fflate": "^0.8.3",
+    "mixpanel": "^0.24.0",
+    "mixpanel-browser": "^2.83.0",
+    "openapi3-ts": "^4.6.1",
+    "reflect-metadata": "^0.2.2",
+    "semver": "^7.8.5",
+    "ts-deepmerge": "^8.0.0",
+    "tslib": "^2.8.1",
+    "type-fest": "^5.9.0",
+    "zod": "^4.6.7",
+    "zod-openapi": "^5.4.6"
+  }
+}

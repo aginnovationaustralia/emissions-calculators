@@ -1,0 +1,166 @@
+{
+  "records": [
+    {
+      "symbol": "LRjk=3,4",
+      "name": "Lamb rate of ewes and maidens",
+      "units": "percent",
+      "type": "input",
+      "expression": "",
+      "line": "342",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "LMRjk=3,4",
+      "name": "Lamb marking rate per ewe mated",
+      "units": "percent",
+      "type": "input",
+      "expression": "",
+      "line": "344",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "LEjk=3,4",
+      "name": "Proportion of ewes and maidens lactating",
+      "units": "fraction",
+      "type": "expression",
+      "expression": "(LRjk=3,4 * min( LMRjk=3,4  100)) / 100",
+      "line": "321",
+      "method2Input": false,
+      "notes": "The lamb marking percentage may not exceed 100%, so that no more than 100% of the breeding flock can be lactating at one time."
+    },
+    {
+      "symbol": "FAk=3,4",
+      "name": "feed adjustment value",
+      "units": "fraction",
+      "type": "constant",
+      "expression": "",
+      "line": "351",
+      "method2Input": false,
+      "notes": "",
+      "values": "1.3"
+    },
+    {
+      "symbol": "DMAjk",
+      "name": "Dry matter availability",
+      "units": "t / ha",
+      "type": "constant",
+      "expression": "",
+      "line": "349",
+      "method2Input": true,
+      "notes": "Method 2 allows custom values"
+    },
+    {
+      "symbol": "DMDjk",
+      "name": "Dry matter digestibility",
+      "units": "percent",
+      "type": "constant",
+      "expression": "",
+      "line": "348",
+      "method2Input": true,
+      "notes": "Method 2 allows custom values"
+    },
+    {
+      "symbol": "qmjk",
+      "name": "metabolizability of the diet",
+      "units": "d",
+      "type": "expression",
+      "expression": "(0.795 * DMDjk) - 0.0014",
+      "line": "302",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "Wjk",
+      "name": "liveweight",
+      "units": "kg",
+      "type": "constant",
+      "expression": "",
+      "line": "347",
+      "method2Input": true,
+      "notes": "Method 2 allows custom inputs"
+    },
+    {
+      "symbol": "PIjk",
+      "name": "Potential intake",
+      "units": "kg DM/head/day",
+      "type": "expression",
+      "expression": "(104.7 * qmjk + 0.307 * Wjk- 15) * Wjk * 10^-3",
+      "line": "296",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "RIjk",
+      "name": "Relative intake",
+      "units": "d",
+      "type": "expression",
+      "expression": "1 - e ^ -2( DMAjk ) ^ 2",
+      "line": "308",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "MAjk=3,4",
+      "name": "Additional intake for milk production",
+      "units": "d",
+      "type": "expression",
+      "expression": "(LEjk=3,4 * FAk=3,4) + (1 - LEjk=3,4)",
+      "line": "314",
+      "method2Input": false,
+      "notes": "Additional intake for milk production for non-lactating sheep 𝑀𝐴𝑗𝑘=1,2,5,6 should be set to 1."
+    },
+    {
+      "symbol": "Ijk",
+      "name": "Daily feed intake",
+      "units": "kg DM/head/day",
+      "type": "expression",
+      "expression": "PIjk * RIjk * MAjk=3,4",
+      "line": "291",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "Njk",
+      "name": "Number of sheep",
+      "units": "head",
+      "type": "input",
+      "expression": "",
+      "line": "341",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "Mijk",
+      "name": "Daily methane production",
+      "units": "kg CH4/head/day",
+      "type": "expression",
+      "expression": "(Ijk * 0.0188) + 0.00158",
+      "line": "288",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "Dj",
+      "name": "Days in each time period",
+      "units": "days",
+      "type": "constant",
+      "expression": "",
+      "line": "346",
+      "method2Input": true,
+      "notes": "Method 2 allows custom durations",
+      "values": "91.25"
+    },
+    {
+      "symbol": "Eenteric",
+      "name": "Total annual methane production",
+      "units": "t CH4",
+      "type": "expression",
+      "expression": "SUM SUM (Njk * Mijk * Dj) * 10^-3",
+      "line": "281",
+      "method2Input": false,
+      "notes": ""
+    }
+  ]
+}

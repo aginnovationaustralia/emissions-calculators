@@ -1,0 +1,66 @@
+{
+  "records": [
+    {
+      "symbol": "Ij",
+      "name": "Average feed intake per head per class",
+      "units": "kg / head / day",
+      "type": "constant",
+      "expression": "",
+      "line": "397",
+      "method2Input": true,
+      "notes": "",
+      "values": "Appendix A.1.6.1"
+    },
+    {
+      "symbol": "F",
+      "name": "Megajoules per kilogram of methane",
+      "units": "MJ / kg CH4",
+      "type": "constant",
+      "expression": "",
+      "line": "399",
+      "method2Input": false,
+      "notes": "",
+      "values": "55.22"
+    },
+    {
+      "symbol": "Nj",
+      "name": "Number of each class",
+      "units": "head",
+      "type": "input",
+      "expression": "",
+      "line": "388",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "Mj",
+      "name": "Daily methane production",
+      "units": "kg CH4 / head / day",
+      "type": "expression",
+      "expression": "(Ij * 18.6 * 0.007) / F",
+      "line": "374",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "Dj",
+      "name": "Average number of days on farm",
+      "units": "days",
+      "type": "input",
+      "expression": "",
+      "line": "389",
+      "method2Input": false,
+      "notes": ""
+    },
+    {
+      "symbol": "Eenteric",
+      "name": "Annual methane production",
+      "units": "t CH4",
+      "type": "expression",
+      "expression": "SUM  (Nj * Mj * Dj) * 10^-3",
+      "line": "367",
+      "method2Input": false,
+      "notes": ""
+    }
+  ]
+}

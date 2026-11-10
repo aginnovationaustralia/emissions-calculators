@@ -1,0 +1,27 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/**/*",
+    "src/**/*.test.ts",
+    "src/**/test/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules",
+    "src/_raw"
+  ],
+  "compilerOptions": {
+    "types": [
+      "node",
+      "jest"
+    ],
+    "noEmit": true,
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "target": "es2017",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true
+  }
+}

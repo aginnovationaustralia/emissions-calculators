@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+      - 'veerg-calculators-v*'
 
 permissions:
   id-token: write # Required for OIDC
@@ -50,6 +51,12 @@ jobs:
           TAG=${GITHUB_REF#refs/tags/}
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
+          if [[ "$TAG" == veerg-calculators-v* ]]; then
+            echo "package_dir=packages/veerg-calculators" >> $GITHUB_OUTPUT
+          else
+            echo "package_dir=packages/calculators" >> $GITHUB_OUTPUT
+          fi
+
           if [[ "$TAG" == *"-beta"* ]]; then
             echo "npm_tag=beta" >> $GITHUB_OUTPUT
             echo "is_prerelease=true" >> $GITHUB_OUTPUT
@@ -67,13 +74,14 @@ jobs:
 
       - name: Publish
         run: npm publish --tag ${{ steps.release-type.outputs.npm_tag }}
-        working-directory: packages/calculators
+        working-directory: ${{ steps.release-type.outputs.package_dir }}
         shell: bash
 
       - name: Summary
         run: |
           echo "### 📦 Published Package" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Package:** ${{ steps.release-type.outputs.package_dir }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Tag:** ${{ steps.release-type.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
           echo "- **npm tag:** \`${{ steps.release-type.outputs.npm_tag }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Prerelease:** ${{ steps.release-type.outputs.is_prerelease }}" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,201 @@
+import { ExecutionContext } from '@/calculators/executionContext';
+import { HasConstants } from '@/constants/types';
+import { HasFertiliserInputTransformed } from '@/modules/scope1/5-fertiliser';
+import {
+  InorganicFertiliserComponentInputTransformed,
+  InorganicFertiliserKnownComponentInputTransformed,
+  InorganicFertiliserUnknownComponentInputTransformed,
+  isInorganicFertiliserKnownComponent,
+  isInorganicFertiliserKnownComponentWithOrigin,
+} from '@/modules/scope1/5-fertiliser/inorganic-fertiliser-components.input';
+import {
+  InorganicFertiliserInputScope3Method1Transformed,
+  InorganicFertiliserInputScope3Method2Transformed,
+  isInorganicFertiliserInputScope3Method2,
+  isInorganicFertiliserTypeOther,
+} from '@/modules/scope1/5-fertiliser/inorganic-fertiliser.input';
+import { selectConstant } from '@/tools/constants';
+import { captureMethod1Or2Value } from '@/tools/multi';
+import { zeroCO2e } from '@/tools/sentinels';
+import { sum } from '@/tools/sum';
+import { voidUnit } from '@/tools/units';
+
+export const calculateScope3FertiliserMethod1EmissionsFactor = (
+  fertiliser: Pick<
+    InorganicFertiliserInputScope3Method1Transformed,
+    'massPurchasedKilograms' | 'fertiliserType'
+  >,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
+) => {
+  /*
+    15.4.1.1 Method 1 -- Purchased Fertiliser
+    (1) Emissions from purchased fertiliser E (t CO2e) are estimated as the sum of
+    embedded emissions of all purchased inorganic fertilisers as:
+    E = SUMf SUMj TM jf * EF f
+    Where TMjf = quantity of inorganic fertiliser type f purchased and applied to
+    production system j (t) (calculated in Section 5.1.1)
+    EF f = emission factor of purchased inorganic fertiliser (kg CO2e/kg)
+    */
+  const { constants } = context;
+  const tmjf = fertiliser.massPurchasedKilograms;
+  const ef = selectConstant(
+    constants.CROP,
+    'INORGANIC_FERTILISER_FRACTIONS',
+    fertiliser.fertiliserType,
+    'Scope3EF',
+  );
+  const e = tmjf.multiply(ef, {
+    name: 'E',
+    references: ['15.4.1.1 (1)'],
+  });
+  return e;
+};
+
+const emissionsFactorForComponent = (
+  component: InorganicFertiliserComponentInputTransformed,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
+) => {
+  const { constants } = context;
+  if (isInorganicFertiliserKnownComponent(component)) {
+    if (isInorganicFertiliserKnownComponentWithOrigin(component)) {
+      return selectConstant(
+        constants.CROP,
+        'INORGANIC_FERTILISER_FRACTIONS_BY_REGION',
+        component.componentType,
+        component.componentOrigin,
+      );
+    } else {
+      return selectConstant(
+        constants.CROP,
+        'INORGANIC_FERTILISER_FRACTIONS_BY_NON_REGIONAL',
+        component.componentType,
+      );
+    }
+  } else {
+    return component.emissionFactor;
+  }
+};
+
+export const calculateScope3FertiliserMethod1KnownComponent = (
+  fertiliser: InorganicFertiliserInputScope3Method1Transformed,
+  component: InorganicFertiliserKnownComponentInputTransformed,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
+) => {
+  const fcf = component.fractionOfFertiliser;
+  const tmjf = fertiliser.massPurchasedKilograms;
+  const efc = emissionsFactorForComponent(component, context);
+  return fcf.multiply(tmjf).multiply(efc);
+};
+
+export const calculateScope3FertiliserMethod1UnknownComponent = (
+  fertiliser: InorganicFertiliserInputScope3Method1Transformed,
+  component: InorganicFertiliserUnknownComponentInputTransformed,
+) => {
+  const fcf = component.fractionOfFertiliser;
+  const tmjf = fertiliser.massPurchasedKilograms;
+  const efc = component.emissionFactor;
+  return fcf.multiply(tmjf).multiply(efc).named('E').reference('15.4.1.1 (2)');
+};
+
+export const calculateScope3FertiliserMethod1Components = (
+  fertiliser: InorganicFertiliserInputScope3Method1Transformed,
+  components: InorganicFertiliserComponentInputTransformed[],
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
+) => {
+  /*
+  Where emission factors for the purchased fertiliser are not available, the emissions can be
+  estimated using the approach from Horticulture Australia Ltd [13], which estimates the
+  embedded emissions in the fertiliser based on the embedded emissions of each of the
+  individual components contained in the fertiliser.
+  (1) Emissions from purchased fertiliser E (t CO2e) are estimated as the sum of the emissions from all of its components as:
+  E = SUMf SUMc SUMj (F cf * TM jf * EF c)
+  Where F cf = fraction of component c contained within the inorganic fertiliser f (wt%)
+  EF c = emission factor for the production of component (kg CO2e/kg component)
+  */
+  const componentEmissions = components.map((component) => {
+    if (isInorganicFertiliserKnownComponent(component)) {
+      return calculateScope3FertiliserMethod1KnownComponent(
+        fertiliser,
+        component,
+        context,
+      );
+    } else {
+      return calculateScope3FertiliserMethod1UnknownComponent(
+        fertiliser,
+        component,
+      );
+    }
+  });
+  return sum(componentEmissions, zeroCO2e);
+};
+
+export const calculateScope3FertiliserMethod1 = (
+  fertiliser: InorganicFertiliserInputScope3Method1Transformed,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
+) => {
+  /**
+   * NOTE: An empty components array is treated as "not supplied", consistent with how
+   * scope 1 (5.1) derives the nitrogen and urea fractions.
+   */
+  if (fertiliser.components?.length) {
+    return calculateScope3FertiliserMethod1Components(
+      fertiliser,
+      fertiliser.components,
+      context,
+    );
+  } else {
+    return calculateScope3FertiliserMethod1EmissionsFactor(fertiliser, context);
+  }
+};
+
+export const calculateScope3FertiliserMethod2 = (
+  fertiliser: InorganicFertiliserInputScope3Method2Transformed,
+) => {
+  /*
+  15.4.1.2 Method 2 -- Purchased Fertiliser
+  Method 2 is the same as Method 1, except that a verified supplier-provided value for EF f is required.
+  */
+  const tmjf = fertiliser.massPurchasedKilograms;
+  const ef = fertiliser.scope3EmissionFactor;
+  const e = tmjf.multiply(ef).attach({ references: ['15.4.1.1 (1)'] });
+  return e;
+};
+
+/**
+ * Method 1 value for an application reported with a supplier emission factor (method 2),
+ * so the method 1 total stays complete when method 2 figures are supplied. Known fertiliser
+ * types use their default emission factor. 'Other Fertilisers' have no method 1 equivalent.
+ */
+const calculateScope3FertiliserMethod2WithMethod1 = (
+  fertiliser: InorganicFertiliserInputScope3Method2Transformed,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
+) => {
+  const method2 = calculateScope3FertiliserMethod2(fertiliser);
+  if (isInorganicFertiliserTypeOther(fertiliser)) {
+    return captureMethod1Or2Value(voidUnit(), method2);
+  }
+  return captureMethod1Or2Value(
+    calculateScope3FertiliserMethod1EmissionsFactor(fertiliser, context),
+    method2,
+  );
+};
+
+export const calculateScope3Fertiliser = (
+  activity: HasFertiliserInputTransformed,
+  context: ExecutionContext<HasConstants<'CROP' | 'COMMON'>>,
+) => {
+  const { inorganic } = activity.fertiliser;
+
+  const emissionsRecords = inorganic.applications.map((fertiliser) => {
+    if (isInorganicFertiliserInputScope3Method2(fertiliser)) {
+      return calculateScope3FertiliserMethod2WithMethod1(fertiliser, context);
+    } else {
+      return captureMethod1Or2Value(
+        calculateScope3FertiliserMethod1(fertiliser, context),
+        undefined,
+      );
+    }
+  });
+
+  return sum(emissionsRecords, zeroCO2e);
+};

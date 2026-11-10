@@ -1,0 +1,209 @@
+import { ExecutionContext } from '@/calculators/executionContext';
+import { selectConstant } from '@/tools/constants';
+import { br, num } from '@/tools/containers';
+import { captureMethod1Or2Value } from '@/tools/multi';
+import { zeroCH4, zeroCO2, zeroMassCarbon, zeroN2O } from '@/tools/sentinels';
+import { sum } from '@/tools/sum';
+import { voidUnit } from '@/tools/units';
+import { ConstantsForLULUCF } from './constants';
+import { LULUCFParentInputTransformed } from './input';
+import {
+  isCarbonMassOfWoodProductsFromFullCAM,
+  isForestryActivity,
+  isLandClearingActivity,
+} from './land-use-change-activity-input';
+
+export const calculate_16_2_1_2_ChangesInWoodyCarbonStocks = (
+  input: LULUCFParentInputTransformed,
+  context: ExecutionContext<ConstantsForLULUCF>,
+) => {
+  /*
+    CLUC,j,y = SUM ∆Ci,j,y * Cg,CO2 * -1
+    ∆Ci,j,y = (∆Ct,i,j,y + ∆Cd,i,j,y) * ai,j,y
+    ∆Ct,i,j,y = Ct,i,j,y - Ct,i,j,y-1
+    ∆Cd,i,j,y = Cd,i,j,y - Cd,i,j,y-1
+*/
+  const { constants } = context;
+  const activities = input.landUse?.activities;
+
+  if (!activities) {
+    return zeroCO2.named('CLUC,j,y');
+  }
+
+  const CgCO2 = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_CO2');
+
+  const netChangeInActivities = activities.map((activity) => {
+    const {
+      carbonMassInTreesCurrentYearTonnesPerHectare:
+        carbonMassInTreesCurrentYear,
+      carbonMassInTreesPreviousYearTonnesPerHectare:
+        carbonMassInTreesPreviousYear,
+      carbonMassInDebrisCurrentYearTonnesPerHectare:
+        carbonMassInDebrisCurrentYear,
+      carbonMassInDebrisPreviousYearTonnesPerHectare:
+        carbonMassInDebrisPreviousYear,
+      activityAreaHectares,
+    } = activity;
+
+    const changeInTrees = carbonMassInTreesCurrentYear
+      .minus(carbonMassInTreesPreviousYear)
+      .reference('16.2.1.1 (3)');
+
+    const changeInDebris = carbonMassInDebrisCurrentYear
+      .minus(carbonMassInDebrisPreviousYear)
+      .reference('16.2.1.1 (4)');
+
+    const netChange = br(changeInTrees.plus(changeInDebris))
+      .multiply(activityAreaHectares)
+      .reference('16.2.1.2 (2)');
+
+    return netChange;
+  });
+  return sum(netChangeInActivities, zeroMassCarbon)
+    .multiply(CgCO2)
+    .multiply(num(-1))
+    .named('CLUC,j,y')
+    .reference('16.2.1.2 (1)');
+};
+
+export const calculate_16_2_1_4_BiomassBurningCH4 = (
+  input: LULUCFParentInputTransformed,
+  _context: ExecutionContext<ConstantsForLULUCF>,
+) => {
+  /*
+  ELUC,g,j,y = SUM (Eg,i,j,y * ag,i,j,y)
+  */
+  const activities = input.landUse?.activities;
+
+  if (!activities) {
+    return zeroCH4.named('ELUC,g=ch4,j,y');
+  }
+
+  const ch4FromBurnings = activities
+    .filter(isLandClearingActivity)
+    .map((activity) => {
+      const {
+        massCH4FromBiomassBurningTonnesPerHectare:
+          massCH4FromBiomassBurningPerHectare,
+        areaBurntHectares: areaBurnt,
+      } = activity;
+
+      return massCH4FromBiomassBurningPerHectare
+        .multiply(areaBurnt)
+        .reference('16.2.1.4 (1)');
+    });
+
+  return sum(ch4FromBurnings, zeroCH4).named('ELUC,g=ch4,j,y');
+};
+
+export const calculate_16_2_1_4_BiomassBurningN2O = (
+  input: LULUCFParentInputTransformed,
+  _context: ExecutionContext<ConstantsForLULUCF>,
+) => {
+  /*
+  ELUC,g,j,y = SUM (Eg,i,j,y * ag,i,j,y)
+  */
+  const activities = input.landUse?.activities;
+
+  if (!activities) {
+    return zeroN2O.named('ELUC,g=n2o,j,y');
+  }
+
+  const n2oFromBurnings = activities
+    .filter(isLandClearingActivity)
+    .map((activity) => {
+      const {
+        massN2OFromBiomassBurningTonnesPerHectare:
+          massN2OFromBiomassBurningPerHectare,
+        areaBurntHectares: areaBurnt,
+      } = activity;
+
+      return massN2OFromBiomassBurningPerHectare
+        .multiply(areaBurnt)
+        .reference('16.2.1.4 (1)');
+    });
+
+  return sum(n2oFromBurnings, zeroN2O).named('ELUC,g=n2o,j,y');
+};
+
+export const calculate_16_2_1_5_SoilOrganicStockLosses = (
+  input: LULUCFParentInputTransformed,
+  context: ExecutionContext<ConstantsForLULUCF>,
+) => {
+  const { constants } = context;
+  /*
+  SLUC,j=1-3,y = SUM ∆Si,j=1-3,y * Cg,CO2
+  ∆Si,j=1-3,y = Or * ai,j=1-3,y
+  */
+  const activities = input.landUse?.activities;
+
+  if (!activities) {
+    return zeroCO2.named('SLUC,j=1-3,y');
+  }
+
+  const CgCO2 = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_CO2');
+
+  const soilLosses = activities
+    .filter(isLandClearingActivity)
+    .map((activity) => {
+      const { region, activityAreaHectares } = activity;
+
+      const Or = selectConstant(
+        constants.LULUCF,
+        'ORGANIC_STOCK_LOSS_FACTORS',
+        region,
+      );
+
+      return Or.multiply(activityAreaHectares).reference('16.2.1.5 (2)');
+    });
+
+  return sum(soilLosses, zeroMassCarbon)
+    .multiply(CgCO2)
+    .multiply(num(-1))
+    .named('SLUC,j=1-3,y')
+    .reference('16.2.1.5 (1)');
+};
+
+export const calculate_16_2_1_7_HarvestedWoodProducts = (
+  input: LULUCFParentInputTransformed,
+  context: ExecutionContext<ConstantsForLULUCF>,
+) => {
+  /*
+  CHWP,j=6-7,y = SUM (Cp,i,j=6-7,y * ai,j=6-7,y) * Cg,CO2 * -1
+  */
+  const { constants } = context;
+  const activities = input.landUse?.activities;
+
+  if (!activities) {
+    return zeroCO2.named('CHWP,j=6-7,y');
+  }
+
+  const CgCO2 = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_CO2');
+  const harvestedWoodEmissions = activities
+    .filter(isForestryActivity)
+    .map((activity) => {
+      const { carbonMassOfWoodProducts, activityAreaHectares } = activity;
+
+      // There are separate, mandatory inputs needed for both method 1 and 2. Users will not be supplying both of the needed values.
+      // So it's not possible to calculate both of these methods at the same time.
+      const massPerHectare = isCarbonMassOfWoodProductsFromFullCAM(
+        carbonMassOfWoodProducts,
+      )
+        ? captureMethod1Or2Value(
+            carbonMassOfWoodProducts.carbonMassFromFullCAMTonnesPerHectare,
+            undefined,
+          )
+        : captureMethod1Or2Value(
+            voidUnit(),
+            carbonMassOfWoodProducts.carbonMassFromRecordsTonnesPerHectare,
+          );
+
+      return massPerHectare.multiply(activityAreaHectares);
+    });
+
+  return sum(harvestedWoodEmissions, zeroMassCarbon)
+    .multiply(CgCO2)
+    .multiply(num(-1))
+    .named('CHWP,j=6-7,y')
+    .reference('16.2.1.7 (1)');
+};
