@@ -1,4 +1,4 @@
-import { tryCalculate } from '@/calculate';
+import { CalculateEmissionsResult, tryCalculate } from '@/calculate';
 import { AllConstants } from '@/constants/types';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -23,7 +23,10 @@ function calculateCottonParsed(
   );
 }
 
-function calculateCotton(input: CottonInput, options?: CalculatorOptions) {
+function calculateCotton(
+  input: CottonInput,
+  options?: CalculatorOptions,
+): CalculateEmissionsResult<CottonOutput> {
   return tryCalculate(CottonInputSchema, input, calculateCottonParsed, options);
 }
 
