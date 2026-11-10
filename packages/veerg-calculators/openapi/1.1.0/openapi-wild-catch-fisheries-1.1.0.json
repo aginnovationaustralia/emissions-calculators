@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "AIA Calculator API - wild-catch-fisheries",
+    "title": "AIA VEERG Emissions Calculator API - wild-catch-fisheries",
     "version": "1.1.0",
-    "description": "Emissions Calculators for various farming activities",
+    "description": "Emissions Calculators for various farming activities, implementing the VEERG guidance and methodology",
     "contact": {
       "name": "AIA",
       "url": "https://aginnovationaustralia.com.au/contact-us/",
@@ -22,8 +22,8 @@
   ],
   "tags": [
     {
-      "name": "AIA emissions calculators",
-      "description": "AIA Calculator API - wild-catch-fisheries"
+      "name": "AIA VEERG Emissions Calculators",
+      "description": "AIA VEERG Emissions Calculator API - wild-catch-fisheries"
     }
   ],
   "paths": {

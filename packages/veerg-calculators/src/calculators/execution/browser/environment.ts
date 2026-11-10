@@ -1,5 +1,6 @@
 import { AllConstants } from '@/calculators/Grains/browser';
 import { loadConstants } from '@/calculators/executionContext';
+import { PACKAGE_NAME } from '../constants';
 import { CalculatorOptions, Environment } from '../types';
 import { packageVersion } from '../version';
 import { trackCalculatorExecution } from './metrics';
@@ -35,6 +36,7 @@ export class BrowserEnvironment implements Environment {
       calculator: calculatorName,
       failed,
       calculatorVersion: packageVersion(),
+      packageName: PACKAGE_NAME,
       packageVersion: packageVersion(),
       organisation: this.getOrganisation(),
     });

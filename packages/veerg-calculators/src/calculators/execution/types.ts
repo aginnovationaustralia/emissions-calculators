@@ -4,6 +4,7 @@ export type MetricsProperties = {
   calculator: string;
   calculatorVersion: string;
   failed: boolean;
+  packageName: string;
   packageVersion: string;
   organisation: string | undefined;
 };

@@ -324,6 +324,9 @@
     "dist/**/*",
     "assets/**/*"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "pnpm run clean && rollup -c && tsc-alias -p tsconfig.json && pnpm run fix:declarations && pnpm run check:package && pnpm run generate:openapi",
     "fix:declarations": "tsx scripts/fix-declaration-imports.ts",

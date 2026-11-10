@@ -1,9 +1,10 @@
 import { loadConstants } from '@/calculators/executionContext';
 import { AllConstants } from '@/constants/types';
 import { AsyncLocalStorage } from 'async_hooks';
+import { PACKAGE_NAME } from '../constants';
 import { CalculatorOptions, Environment } from '../types';
 import { packageVersion } from '../version';
-import { getMixpanelInstance } from './mixpanel';
+import { trackCalculatorExecution } from './metrics';
 
 type CalculationEnvironmentParameters = {
   organisation?: string;
@@ -74,10 +75,11 @@ class NodeEnvironment implements Environment {
   }
 
   trackCalculatorExecution(calculatorName: string, failed: boolean) {
-    getMixpanelInstance().track('Execute package calculation', {
+    trackCalculatorExecution({
       calculator: calculatorName,
       failed,
       organisation: this.getOrganisation(),
+      packageName: PACKAGE_NAME,
       packageVersion: packageVersion(),
       calculatorVersion: packageVersion(),
     });
