@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.0-beta.1] - 2026-11-10
+## [1.1.0-beta.1] - 2026-11-10
 
 Initial release of the `@aginnovationaustralia/veerg-calculators` package, implementing the Australian Government's Voluntary Emissions Estimation and Reporting Guidelines (VEERG).
 

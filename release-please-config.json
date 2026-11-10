@@ -24,7 +24,7 @@
       "prerelease": true,
       "versioning": "prerelease",
       "prerelease-type": "beta",
-      "release-as": "1.0.0-beta.1"
+      "release-as": "1.1.0-beta.1"
     }
   },
   "pull-request-title-pattern": "chore(main): release ${version}"

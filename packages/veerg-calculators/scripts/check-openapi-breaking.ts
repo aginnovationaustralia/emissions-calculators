@@ -24,9 +24,9 @@ type VersionMap = Record<string, SpecEntry[]>;
 const OPENAPI_VERSIONS: VersionMap = {
   combined: [
     {
-      version: '1.0.0',
+      version: '1.1.0',
       ref: LOCAL_REF,
-      path: 'packages/veerg-calculators/openapi/1.0.0/openapi-1.0.0.json',
+      path: 'packages/veerg-calculators/openapi/1.1.0/openapi-1.1.0.json',
     },
   ],
 };

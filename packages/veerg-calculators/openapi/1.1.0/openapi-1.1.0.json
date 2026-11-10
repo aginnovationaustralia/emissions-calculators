@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "AIA Calculator API",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Emissions Calculators for various farming activities",
     "contact": {
       "name": "AIA",
@@ -16,7 +16,7 @@
   },
   "servers": [
     {
-      "url": "https://emissionscalculator-mtls.production.aiaapi.com/veerg/1.0.0",
+      "url": "https://emissionscalculator-mtls.production.aiaapi.com/veerg/1.1.0",
       "description": "Production Server"
     }
   ],

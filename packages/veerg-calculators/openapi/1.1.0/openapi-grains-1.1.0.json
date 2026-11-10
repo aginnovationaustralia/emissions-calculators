@@ -1,8 +1,8 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "AIA Calculator API - sugar",
-    "version": "1.0.0",
+    "title": "AIA Calculator API - grains",
+    "version": "1.1.0",
     "description": "Emissions Calculators for various farming activities",
     "contact": {
       "name": "AIA",
@@ -16,22 +16,22 @@
   },
   "servers": [
     {
-      "url": "https://emissionscalculator-mtls.production.aiaapi.com/veerg/1.0.0",
+      "url": "https://emissionscalculator-mtls.production.aiaapi.com/veerg/1.1.0",
       "description": "Production Server"
     }
   ],
   "tags": [
     {
       "name": "AIA emissions calculators",
-      "description": "AIA Calculator API - sugar"
+      "description": "AIA Calculator API - grains"
     }
   ],
   "paths": {
-    "/sugar": {
+    "/grains": {
       "post": {
-        "summary": "Perform sugar calculation",
+        "summary": "Perform grains calculation",
         "description": "Retrieve a simple JSON response",
-        "operationId": "post-sugar",
+        "operationId": "post-grains",
         "deprecated": false,
         "tags": [
           "emissions-calculators"
@@ -1813,547 +1813,27 @@
                               ],
                               "additionalProperties": false,
                               "x-units": "0-1"
+                            },
+                            "type": {
+                              "description": "Type of grains crop grown in this activity",
+                              "x-modules": [
+                                "6.1",
+                                "6.3",
+                                "6.4"
+                              ],
+                              "$ref": "#/components/schemas/GrainsCropType"
                             }
                           },
                           "required": [
                             "totalYieldKilograms",
                             "residues",
-                            "fractionOfAnnualCropBurnt"
+                            "fractionOfAnnualCropBurnt",
+                            "type"
                           ],
                           "additionalProperties": false
                         },
                         "fertiliser": {
-                          "type": "object",
-                          "properties": {
-                            "inorganic": {
-                              "type": "object",
-                              "properties": {
-                                "applications": {
-                                  "type": "array",
-                                  "items": {
-                                    "oneOf": [
-                                      {
-                                        "type": "object",
-                                        "properties": {
-                                          "massAppliedKilograms": {
-                                            "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
-                                            "x-modules": [
-                                              "5.1",
-                                              "5.4",
-                                              "5.5"
-                                            ],
-                                            "type": "object",
-                                            "properties": {
-                                              "value": {
-                                                "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                              },
-                                              "quality": {
-                                                "default": {},
-                                                "$ref": "#/components/schemas/QualityTable"
-                                              }
-                                            },
-                                            "required": [
-                                              "value"
-                                            ],
-                                            "additionalProperties": false,
-                                            "x-units": "kilograms inorganic fertiliser"
-                                          },
-                                          "massPurchasedKilograms": {
-                                            "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
-                                            "x-modules": [
-                                              "15.4"
-                                            ],
-                                            "type": "object",
-                                            "properties": {
-                                              "value": {
-                                                "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                              },
-                                              "quality": {
-                                                "default": {},
-                                                "$ref": "#/components/schemas/QualityTable"
-                                              }
-                                            },
-                                            "required": [
-                                              "value"
-                                            ],
-                                            "additionalProperties": false,
-                                            "x-units": "kilograms inorganic fertiliser"
-                                          },
-                                          "fertiliserType": {
-                                            "description": "Type of inorganic fertiliser applied",
-                                            "x-modules": [
-                                              "5.1",
-                                              "5.4",
-                                              "5.5",
-                                              "15.4"
-                                            ],
-                                            "$ref": "#/components/schemas/InorganicFertiliserType"
-                                          },
-                                          "components": {
-                                            "description": "Components of the inorganic fertiliser applied.\n    NOTE: 5.1.2.1 FNinorganic,f data source allows you to supply a custom nitrogen fraction for the fertiliser. This is currently\n   implemented via the components field. This means you must supply all components if you want this scenario. If you only supply\n   a custom nitrogen fraction, scope 3 emissions will be under calculated. Do not supply a partial list of components.",
-                                            "type": "array",
-                                            "items": {
-                                              "oneOf": [
-                                                {
-                                                  "oneOf": [
-                                                    {
-                                                      "type": "object",
-                                                      "properties": {
-                                                        "fractionOfFertiliser": {
-                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
-                                                          "x-modules": [
-                                                            "5.1",
-                                                            "5.5",
-                                                            "15.4"
-                                                          ],
-                                                          "type": "object",
-                                                          "properties": {
-                                                            "value": {
-                                                              "$ref": "#/components/schemas/ProportionNumberInput"
-                                                            },
-                                                            "quality": {
-                                                              "default": {},
-                                                              "$ref": "#/components/schemas/QualityTable"
-                                                            }
-                                                          },
-                                                          "required": [
-                                                            "value"
-                                                          ],
-                                                          "additionalProperties": false,
-                                                          "x-units": "0-1"
-                                                        },
-                                                        "componentType": {
-                                                          "description": "Type of inorganic fertiliser component",
-                                                          "x-modules": [
-                                                            "15.4",
-                                                            "5.1"
-                                                          ],
-                                                          "$ref": "#/components/schemas/InorganicFertiliserComponentTypeRegional"
-                                                        },
-                                                        "componentOrigin": {
-                                                          "description": "Origin of inorganic fertiliser component",
-                                                          "x-modules": [
-                                                            "15.4"
-                                                          ],
-                                                          "$ref": "#/components/schemas/InorganicFertiliserComponentOrigin"
-                                                        }
-                                                      },
-                                                      "required": [
-                                                        "fractionOfFertiliser",
-                                                        "componentType",
-                                                        "componentOrigin"
-                                                      ],
-                                                      "additionalProperties": false,
-                                                      "title": "With origin region"
-                                                    },
-                                                    {
-                                                      "type": "object",
-                                                      "properties": {
-                                                        "fractionOfFertiliser": {
-                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
-                                                          "x-modules": [
-                                                            "5.1",
-                                                            "5.5",
-                                                            "15.4"
-                                                          ],
-                                                          "type": "object",
-                                                          "properties": {
-                                                            "value": {
-                                                              "$ref": "#/components/schemas/ProportionNumberInput"
-                                                            },
-                                                            "quality": {
-                                                              "default": {},
-                                                              "$ref": "#/components/schemas/QualityTable"
-                                                            }
-                                                          },
-                                                          "required": [
-                                                            "value"
-                                                          ],
-                                                          "additionalProperties": false,
-                                                          "x-units": "0-1"
-                                                        },
-                                                        "componentType": {
-                                                          "description": "Type of inorganic fertiliser component",
-                                                          "x-modules": [
-                                                            "5.1",
-                                                            "15.4"
-                                                          ],
-                                                          "$ref": "#/components/schemas/InorganicFertiliserComponentTypeNonRegional"
-                                                        }
-                                                      },
-                                                      "required": [
-                                                        "fractionOfFertiliser",
-                                                        "componentType"
-                                                      ],
-                                                      "additionalProperties": false,
-                                                      "title": "Without origin region"
-                                                    }
-                                                  ],
-                                                  "title": "Known component"
-                                                },
-                                                {
-                                                  "type": "object",
-                                                  "properties": {
-                                                    "fractionOfFertiliser": {
-                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
-                                                      "x-modules": [
-                                                        "5.1",
-                                                        "5.5",
-                                                        "15.4"
-                                                      ],
-                                                      "type": "object",
-                                                      "properties": {
-                                                        "value": {
-                                                          "$ref": "#/components/schemas/ProportionNumberInput"
-                                                        },
-                                                        "quality": {
-                                                          "default": {},
-                                                          "$ref": "#/components/schemas/QualityTable"
-                                                        }
-                                                      },
-                                                      "required": [
-                                                        "value"
-                                                      ],
-                                                      "additionalProperties": false,
-                                                      "x-units": "0-1"
-                                                    },
-                                                    "emissionFactor": {
-                                                      "description": "Emission factor for inorganic fertiliser component (kilograms CO2e per kilogram inorganic fertiliser)",
-                                                      "x-modules": [
-                                                        "15.4"
-                                                      ],
-                                                      "type": "object",
-                                                      "properties": {
-                                                        "value": {
-                                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                                        },
-                                                        "quality": {
-                                                          "default": {},
-                                                          "$ref": "#/components/schemas/QualityTable"
-                                                        }
-                                                      },
-                                                      "required": [
-                                                        "value"
-                                                      ],
-                                                      "additionalProperties": false,
-                                                      "x-units": "kilograms CO2e per kilogram inorganic fertiliser"
-                                                    }
-                                                  },
-                                                  "required": [
-                                                    "fractionOfFertiliser",
-                                                    "emissionFactor"
-                                                  ],
-                                                  "additionalProperties": false,
-                                                  "title": "Unknown component (custom emission factor)"
-                                                }
-                                              ]
-                                            }
-                                          },
-                                          "calculationMethodScope3": {
-                                            "type": "string",
-                                            "const": "1",
-                                            "description": "Choosing method 1 for calculating scope 3 emissions for this fertiliser"
-                                          }
-                                        },
-                                        "required": [
-                                          "massAppliedKilograms",
-                                          "massPurchasedKilograms",
-                                          "fertiliserType",
-                                          "calculationMethodScope3"
-                                        ],
-                                        "additionalProperties": false,
-                                        "title": "Scope 3 method 1"
-                                      },
-                                      {
-                                        "oneOf": [
-                                          {
-                                            "type": "object",
-                                            "properties": {
-                                              "massAppliedKilograms": {
-                                                "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
-                                                "x-modules": [
-                                                  "5.1",
-                                                  "5.4",
-                                                  "5.5"
-                                                ],
-                                                "type": "object",
-                                                "properties": {
-                                                  "value": {
-                                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                                  },
-                                                  "quality": {
-                                                    "default": {},
-                                                    "$ref": "#/components/schemas/QualityTable"
-                                                  }
-                                                },
-                                                "required": [
-                                                  "value"
-                                                ],
-                                                "additionalProperties": false,
-                                                "x-units": "kilograms inorganic fertiliser"
-                                              },
-                                              "massPurchasedKilograms": {
-                                                "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
-                                                "x-modules": [
-                                                  "15.4"
-                                                ],
-                                                "type": "object",
-                                                "properties": {
-                                                  "value": {
-                                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                                  },
-                                                  "quality": {
-                                                    "default": {},
-                                                    "$ref": "#/components/schemas/QualityTable"
-                                                  }
-                                                },
-                                                "required": [
-                                                  "value"
-                                                ],
-                                                "additionalProperties": false,
-                                                "x-units": "kilograms inorganic fertiliser"
-                                              },
-                                              "scope3EmissionFactor": {
-                                                "description": "Custom scope 3 emission factor for this fertiliser (kilograms CO2e per kilogram inorganic fertiliser)",
-                                                "x-modules": [
-                                                  "15.4"
-                                                ],
-                                                "type": "object",
-                                                "properties": {
-                                                  "value": {
-                                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                                  },
-                                                  "quality": {
-                                                    "default": {},
-                                                    "$ref": "#/components/schemas/QualityTable"
-                                                  }
-                                                },
-                                                "required": [
-                                                  "value"
-                                                ],
-                                                "additionalProperties": false,
-                                                "x-units": "kilograms CO2e per kilogram inorganic fertiliser"
-                                              },
-                                              "calculationMethodScope3": {
-                                                "type": "string",
-                                                "const": "2",
-                                                "description": "Choosing method 2 for calculating scope 3 emissions for this fertiliser"
-                                              },
-                                              "fertiliserType": {
-                                                "description": "Type of inorganic fertiliser applied",
-                                                "x-modules": [
-                                                  "5.1",
-                                                  "5.4",
-                                                  "5.5",
-                                                  "15.4"
-                                                ],
-                                                "$ref": "#/components/schemas/InorganicFertiliserType"
-                                              },
-                                              "fractionNitrogen": {
-                                                "description": "Custom nitrogen fraction for the fertiliser (kilograms nitrogen per kilogram inorganic fertiliser)",
-                                                "x-modules": [
-                                                  "5.1",
-                                                  "5.5"
-                                                ],
-                                                "type": "object",
-                                                "properties": {
-                                                  "value": {
-                                                    "$ref": "#/components/schemas/ProportionNumberInput"
-                                                  },
-                                                  "quality": {
-                                                    "default": {},
-                                                    "$ref": "#/components/schemas/QualityTable"
-                                                  }
-                                                },
-                                                "required": [
-                                                  "value"
-                                                ],
-                                                "additionalProperties": false,
-                                                "x-units": "kilograms nitrogen per kilogram inorganic fertiliser"
-                                              }
-                                            },
-                                            "required": [
-                                              "massAppliedKilograms",
-                                              "massPurchasedKilograms",
-                                              "scope3EmissionFactor",
-                                              "calculationMethodScope3",
-                                              "fertiliserType"
-                                            ],
-                                            "additionalProperties": false,
-                                            "title": "Scope 3 method 2 (known fertiliser type)"
-                                          },
-                                          {
-                                            "type": "object",
-                                            "properties": {
-                                              "massAppliedKilograms": {
-                                                "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
-                                                "x-modules": [
-                                                  "5.1",
-                                                  "5.4",
-                                                  "5.5"
-                                                ],
-                                                "type": "object",
-                                                "properties": {
-                                                  "value": {
-                                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                                  },
-                                                  "quality": {
-                                                    "default": {},
-                                                    "$ref": "#/components/schemas/QualityTable"
-                                                  }
-                                                },
-                                                "required": [
-                                                  "value"
-                                                ],
-                                                "additionalProperties": false,
-                                                "x-units": "kilograms inorganic fertiliser"
-                                              },
-                                              "massPurchasedKilograms": {
-                                                "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
-                                                "x-modules": [
-                                                  "15.4"
-                                                ],
-                                                "type": "object",
-                                                "properties": {
-                                                  "value": {
-                                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                                  },
-                                                  "quality": {
-                                                    "default": {},
-                                                    "$ref": "#/components/schemas/QualityTable"
-                                                  }
-                                                },
-                                                "required": [
-                                                  "value"
-                                                ],
-                                                "additionalProperties": false,
-                                                "x-units": "kilograms inorganic fertiliser"
-                                              },
-                                              "scope3EmissionFactor": {
-                                                "description": "Custom scope 3 emission factor for this fertiliser (kilograms CO2e per kilogram inorganic fertiliser)",
-                                                "x-modules": [
-                                                  "15.4"
-                                                ],
-                                                "type": "object",
-                                                "properties": {
-                                                  "value": {
-                                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                                  },
-                                                  "quality": {
-                                                    "default": {},
-                                                    "$ref": "#/components/schemas/QualityTable"
-                                                  }
-                                                },
-                                                "required": [
-                                                  "value"
-                                                ],
-                                                "additionalProperties": false,
-                                                "x-units": "kilograms CO2e per kilogram inorganic fertiliser"
-                                              },
-                                              "calculationMethodScope3": {
-                                                "type": "string",
-                                                "const": "2",
-                                                "description": "Choosing method 2 for calculating scope 3 emissions for this fertiliser"
-                                              },
-                                              "fertiliserType": {
-                                                "type": "string",
-                                                "enum": [
-                                                  "Other Fertilisers"
-                                                ],
-                                                "description": "Type of inorganic fertiliser applied",
-                                                "x-modules": [
-                                                  "5.1",
-                                                  "5.4",
-                                                  "5.5",
-                                                  "15.4"
-                                                ]
-                                              },
-                                              "fractionNitrogen": {
-                                                "description": "Custom nitrogen fraction for the fertiliser (kilograms nitrogen per kilogram inorganic fertiliser)",
-                                                "x-modules": [
-                                                  "5.1",
-                                                  "5.5"
-                                                ],
-                                                "type": "object",
-                                                "properties": {
-                                                  "value": {
-                                                    "$ref": "#/components/schemas/ProportionNumberInput"
-                                                  },
-                                                  "quality": {
-                                                    "default": {},
-                                                    "$ref": "#/components/schemas/QualityTable"
-                                                  }
-                                                },
-                                                "required": [
-                                                  "value"
-                                                ],
-                                                "additionalProperties": false,
-                                                "x-units": "kilograms nitrogen per kilogram inorganic fertiliser"
-                                              },
-                                              "fractionUrea": {
-                                                "description": "Custom urea fraction for the fertiliser (kilograms urea per kilogram inorganic fertiliser)",
-                                                "x-modules": [
-                                                  "5.1"
-                                                ],
-                                                "type": "object",
-                                                "properties": {
-                                                  "value": {
-                                                    "$ref": "#/components/schemas/ProportionNumberInput"
-                                                  },
-                                                  "quality": {
-                                                    "default": {},
-                                                    "$ref": "#/components/schemas/QualityTable"
-                                                  }
-                                                },
-                                                "required": [
-                                                  "value"
-                                                ],
-                                                "additionalProperties": false,
-                                                "x-units": "kilograms urea per kilogram inorganic fertiliser"
-                                              }
-                                            },
-                                            "required": [
-                                              "massAppliedKilograms",
-                                              "massPurchasedKilograms",
-                                              "scope3EmissionFactor",
-                                              "calculationMethodScope3",
-                                              "fertiliserType",
-                                              "fractionNitrogen",
-                                              "fractionUrea"
-                                            ],
-                                            "additionalProperties": false,
-                                            "title": "Scope 3 method 2 (other fertiliser type)"
-                                          }
-                                        ],
-                                        "title": "Scope 3 method 2",
-                                        "type": "object"
-                                      }
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "description": "Inorganic fertiliser applications"
-                                },
-                                "calculationMethodScope1": {
-                                  "type": "string",
-                                  "const": "1",
-                                  "description": "Method of calculating fertiliser emissions"
-                                }
-                              },
-                              "required": [
-                                "applications",
-                                "calculationMethodScope1"
-                              ],
-                              "additionalProperties": false
-                            },
-                            "organic": {
-                              "$ref": "#/components/schemas/OrganicFertilisersInput"
-                            }
-                          },
-                          "required": [
-                            "inorganic",
-                            "organic"
-                          ],
-                          "additionalProperties": false
+                          "$ref": "#/components/schemas/FertiliserInput"
                         }
                       },
                       "required": [
@@ -2406,7 +1886,7 @@
                         "properties": {
                           "id": {
                             "type": "string",
-                            "description": "Unique identifier for this Sugar activity"
+                            "description": "Unique identifier for this Grains activity"
                           },
                           "scope1": {
                             "$ref": "#/components/schemas/GrainsScope1Output"
@@ -2442,7 +1922,7 @@
                           "intensities": {
                             "type": "object",
                             "properties": {
-                              "sugarCaneHarvestedKilograms": {
+                              "grainHarvestedKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -2453,9 +1933,9 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Sugarcane harvested in kg"
+                                "description": "Grain harvested in kg"
                               },
-                              "sugarCaneIntensity": {
+                              "grainsIntensity": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -2466,12 +1946,12 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Sugar emissions intensity for this activity, in kg-CO2e/kg sugarcane"
+                                "description": "Grains emissions intensity for this activity, in kg-CO2e/kg grain"
                               }
                             },
                             "required": [
-                              "sugarCaneHarvestedKilograms",
-                              "sugarCaneIntensity"
+                              "grainHarvestedKilograms",
+                              "grainsIntensity"
                             ],
                             "additionalProperties": false
                           }
@@ -2485,7 +1965,7 @@
                           "intensities"
                         ],
                         "additionalProperties": false,
-                        "description": "Intermediate emissions calculation output for the Sugar calculator"
+                        "description": "Intermediate emissions calculation output for the Grains calculator"
                       }
                     },
                     "net": {
@@ -2513,7 +1993,7 @@
                     "intensities": {
                       "type": "object",
                       "properties": {
-                        "sugarCaneHarvestedKilograms": {
+                        "grainHarvestedKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -2524,9 +2004,9 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Sugarcane harvested in kg"
+                          "description": "Grain harvested in kg"
                         },
-                        "sugarCaneExcludingLULUCF": {
+                        "grainsExcludingLULUCF": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -2537,9 +2017,9 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Sugar emissions intensity excluding LULUCF, in kg-CO2e/kg sugarcane"
+                          "description": "Grains emissions intensity excluding LULUCF, in kg-CO2e/kg grain"
                         },
-                        "sugarCaneIncludingLULUCF": {
+                        "grainsIncludingLULUCF": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -2550,13 +2030,13 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Sugar emissions intensity including LULUCF, in kg-CO2e/kg sugarcane"
+                          "description": "Grains emissions intensity including LULUCF, in kg-CO2e/kg grain"
                         }
                       },
                       "required": [
-                        "sugarCaneHarvestedKilograms",
-                        "sugarCaneExcludingLULUCF",
-                        "sugarCaneIncludingLULUCF"
+                        "grainHarvestedKilograms",
+                        "grainsExcludingLULUCF",
+                        "grainsIncludingLULUCF"
                       ],
                       "additionalProperties": false
                     }
@@ -2570,7 +2050,7 @@
                     "intensities"
                   ],
                   "additionalProperties": false,
-                  "description": "Emissions calculation output for the Sugar calculator"
+                  "description": "Emissions calculation output for the Grains calculator"
                 }
               }
             }
@@ -6183,6 +5663,1148 @@
           "Boreal dry",
           "dry",
           "wet"
+        ]
+      },
+      "GrainsCropType": {
+        "type": "string",
+        "enum": [
+          "Wheat",
+          "Barley",
+          "Maize",
+          "Oats",
+          "Sorghum",
+          "Triticale",
+          "Other Cereals",
+          "Pulses"
+        ]
+      },
+      "FertiliserInput": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "productionSystem": {
+                "description": "Production system of the crop",
+                "x-modules": [
+                  "5.1",
+                  "5.4"
+                ],
+                "$ref": "#/components/schemas/BasicCropProductionSystem"
+              },
+              "inorganic": {
+                "type": "object",
+                "properties": {
+                  "applications": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "massAppliedKilograms": {
+                              "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                              "x-modules": [
+                                "5.1",
+                                "5.4",
+                                "5.5"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "kilograms inorganic fertiliser"
+                            },
+                            "massPurchasedKilograms": {
+                              "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                              "x-modules": [
+                                "15.4"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "kilograms inorganic fertiliser"
+                            },
+                            "fertiliserType": {
+                              "description": "Type of inorganic fertiliser applied",
+                              "x-modules": [
+                                "5.1",
+                                "5.4",
+                                "5.5",
+                                "15.4"
+                              ],
+                              "$ref": "#/components/schemas/InorganicFertiliserType"
+                            },
+                            "components": {
+                              "description": "Components of the inorganic fertiliser applied.\n    NOTE: 5.1.2.1 FNinorganic,f data source allows you to supply a custom nitrogen fraction for the fertiliser. This is currently\n   implemented via the components field. This means you must supply all components if you want this scenario. If you only supply\n   a custom nitrogen fraction, scope 3 emissions will be under calculated. Do not supply a partial list of components.",
+                              "type": "array",
+                              "items": {
+                                "oneOf": [
+                                  {
+                                    "oneOf": [
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "fractionOfFertiliser": {
+                                            "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                            "x-modules": [
+                                              "5.1",
+                                              "5.5",
+                                              "15.4"
+                                            ],
+                                            "type": "object",
+                                            "properties": {
+                                              "value": {
+                                                "$ref": "#/components/schemas/ProportionNumberInput"
+                                              },
+                                              "quality": {
+                                                "default": {},
+                                                "$ref": "#/components/schemas/QualityTable"
+                                              }
+                                            },
+                                            "required": [
+                                              "value"
+                                            ],
+                                            "additionalProperties": false,
+                                            "x-units": "0-1"
+                                          },
+                                          "componentType": {
+                                            "description": "Type of inorganic fertiliser component",
+                                            "x-modules": [
+                                              "15.4",
+                                              "5.1"
+                                            ],
+                                            "$ref": "#/components/schemas/InorganicFertiliserComponentTypeRegional"
+                                          },
+                                          "componentOrigin": {
+                                            "description": "Origin of inorganic fertiliser component",
+                                            "x-modules": [
+                                              "15.4"
+                                            ],
+                                            "$ref": "#/components/schemas/InorganicFertiliserComponentOrigin"
+                                          }
+                                        },
+                                        "required": [
+                                          "fractionOfFertiliser",
+                                          "componentType",
+                                          "componentOrigin"
+                                        ],
+                                        "additionalProperties": false,
+                                        "title": "With origin region"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "fractionOfFertiliser": {
+                                            "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                            "x-modules": [
+                                              "5.1",
+                                              "5.5",
+                                              "15.4"
+                                            ],
+                                            "type": "object",
+                                            "properties": {
+                                              "value": {
+                                                "$ref": "#/components/schemas/ProportionNumberInput"
+                                              },
+                                              "quality": {
+                                                "default": {},
+                                                "$ref": "#/components/schemas/QualityTable"
+                                              }
+                                            },
+                                            "required": [
+                                              "value"
+                                            ],
+                                            "additionalProperties": false,
+                                            "x-units": "0-1"
+                                          },
+                                          "componentType": {
+                                            "description": "Type of inorganic fertiliser component",
+                                            "x-modules": [
+                                              "5.1",
+                                              "15.4"
+                                            ],
+                                            "$ref": "#/components/schemas/InorganicFertiliserComponentTypeNonRegional"
+                                          }
+                                        },
+                                        "required": [
+                                          "fractionOfFertiliser",
+                                          "componentType"
+                                        ],
+                                        "additionalProperties": false,
+                                        "title": "Without origin region"
+                                      }
+                                    ],
+                                    "title": "Known component"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "fractionOfFertiliser": {
+                                        "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                        "x-modules": [
+                                          "5.1",
+                                          "5.5",
+                                          "15.4"
+                                        ],
+                                        "type": "object",
+                                        "properties": {
+                                          "value": {
+                                            "$ref": "#/components/schemas/ProportionNumberInput"
+                                          },
+                                          "quality": {
+                                            "default": {},
+                                            "$ref": "#/components/schemas/QualityTable"
+                                          }
+                                        },
+                                        "required": [
+                                          "value"
+                                        ],
+                                        "additionalProperties": false,
+                                        "x-units": "0-1"
+                                      },
+                                      "emissionFactor": {
+                                        "description": "Emission factor for inorganic fertiliser component (kilograms CO2e per kilogram inorganic fertiliser)",
+                                        "x-modules": [
+                                          "15.4"
+                                        ],
+                                        "type": "object",
+                                        "properties": {
+                                          "value": {
+                                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          },
+                                          "quality": {
+                                            "default": {},
+                                            "$ref": "#/components/schemas/QualityTable"
+                                          }
+                                        },
+                                        "required": [
+                                          "value"
+                                        ],
+                                        "additionalProperties": false,
+                                        "x-units": "kilograms CO2e per kilogram inorganic fertiliser"
+                                      }
+                                    },
+                                    "required": [
+                                      "fractionOfFertiliser",
+                                      "emissionFactor"
+                                    ],
+                                    "additionalProperties": false,
+                                    "title": "Unknown component (custom emission factor)"
+                                  }
+                                ]
+                              }
+                            },
+                            "calculationMethodScope3": {
+                              "type": "string",
+                              "const": "1",
+                              "description": "Choosing method 1 for calculating scope 3 emissions for this fertiliser"
+                            }
+                          },
+                          "required": [
+                            "massAppliedKilograms",
+                            "massPurchasedKilograms",
+                            "fertiliserType",
+                            "calculationMethodScope3"
+                          ],
+                          "additionalProperties": false,
+                          "title": "Scope 3 method 1"
+                        },
+                        {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "massAppliedKilograms": {
+                                  "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.4",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms inorganic fertiliser"
+                                },
+                                "massPurchasedKilograms": {
+                                  "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                  "x-modules": [
+                                    "15.4"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms inorganic fertiliser"
+                                },
+                                "scope3EmissionFactor": {
+                                  "description": "Custom scope 3 emission factor for this fertiliser (kilograms CO2e per kilogram inorganic fertiliser)",
+                                  "x-modules": [
+                                    "15.4"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms CO2e per kilogram inorganic fertiliser"
+                                },
+                                "calculationMethodScope3": {
+                                  "type": "string",
+                                  "const": "2",
+                                  "description": "Choosing method 2 for calculating scope 3 emissions for this fertiliser"
+                                },
+                                "fertiliserType": {
+                                  "description": "Type of inorganic fertiliser applied",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.4",
+                                    "5.5",
+                                    "15.4"
+                                  ],
+                                  "$ref": "#/components/schemas/InorganicFertiliserType"
+                                },
+                                "fractionNitrogen": {
+                                  "description": "Custom nitrogen fraction for the fertiliser (kilograms nitrogen per kilogram inorganic fertiliser)",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms nitrogen per kilogram inorganic fertiliser"
+                                }
+                              },
+                              "required": [
+                                "massAppliedKilograms",
+                                "massPurchasedKilograms",
+                                "scope3EmissionFactor",
+                                "calculationMethodScope3",
+                                "fertiliserType"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Scope 3 method 2 (known fertiliser type)"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "massAppliedKilograms": {
+                                  "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.4",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms inorganic fertiliser"
+                                },
+                                "massPurchasedKilograms": {
+                                  "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                  "x-modules": [
+                                    "15.4"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms inorganic fertiliser"
+                                },
+                                "scope3EmissionFactor": {
+                                  "description": "Custom scope 3 emission factor for this fertiliser (kilograms CO2e per kilogram inorganic fertiliser)",
+                                  "x-modules": [
+                                    "15.4"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms CO2e per kilogram inorganic fertiliser"
+                                },
+                                "calculationMethodScope3": {
+                                  "type": "string",
+                                  "const": "2",
+                                  "description": "Choosing method 2 for calculating scope 3 emissions for this fertiliser"
+                                },
+                                "fertiliserType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "Other Fertilisers"
+                                  ],
+                                  "description": "Type of inorganic fertiliser applied",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.4",
+                                    "5.5",
+                                    "15.4"
+                                  ]
+                                },
+                                "fractionNitrogen": {
+                                  "description": "Custom nitrogen fraction for the fertiliser (kilograms nitrogen per kilogram inorganic fertiliser)",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms nitrogen per kilogram inorganic fertiliser"
+                                },
+                                "fractionUrea": {
+                                  "description": "Custom urea fraction for the fertiliser (kilograms urea per kilogram inorganic fertiliser)",
+                                  "x-modules": [
+                                    "5.1"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms urea per kilogram inorganic fertiliser"
+                                }
+                              },
+                              "required": [
+                                "massAppliedKilograms",
+                                "massPurchasedKilograms",
+                                "scope3EmissionFactor",
+                                "calculationMethodScope3",
+                                "fertiliserType",
+                                "fractionNitrogen",
+                                "fractionUrea"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Scope 3 method 2 (other fertiliser type)"
+                            }
+                          ],
+                          "title": "Scope 3 method 2",
+                          "type": "object"
+                        }
+                      ],
+                      "type": "object"
+                    },
+                    "description": "Inorganic fertiliser applications"
+                  },
+                  "calculationMethodScope1": {
+                    "type": "string",
+                    "const": "1",
+                    "description": "Method of calculating fertiliser emissions"
+                  }
+                },
+                "required": [
+                  "applications",
+                  "calculationMethodScope1"
+                ],
+                "additionalProperties": false
+              },
+              "organic": {
+                "$ref": "#/components/schemas/OrganicFertilisersInput"
+              }
+            },
+            "required": [
+              "productionSystem",
+              "inorganic",
+              "organic"
+            ],
+            "additionalProperties": false,
+            "title": "Basic production system (scope 1 method 1)"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "productionSystem": {
+                "description": "Production system for specific crop types",
+                "x-modules": [
+                  "5.1",
+                  "5.4"
+                ],
+                "$ref": "#/components/schemas/InorganicFertiliserProductionSystem"
+              },
+              "inorganic": {
+                "type": "object",
+                "properties": {
+                  "applications": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "massAppliedKilograms": {
+                              "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                              "x-modules": [
+                                "5.1",
+                                "5.4",
+                                "5.5"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "kilograms inorganic fertiliser"
+                            },
+                            "massPurchasedKilograms": {
+                              "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                              "x-modules": [
+                                "15.4"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "kilograms inorganic fertiliser"
+                            },
+                            "fertiliserType": {
+                              "description": "Type of inorganic fertiliser applied",
+                              "x-modules": [
+                                "5.1",
+                                "5.4",
+                                "5.5",
+                                "15.4"
+                              ],
+                              "$ref": "#/components/schemas/InorganicFertiliserType"
+                            },
+                            "components": {
+                              "description": "Components of the inorganic fertiliser applied.\n    NOTE: 5.1.2.1 FNinorganic,f data source allows you to supply a custom nitrogen fraction for the fertiliser. This is currently\n   implemented via the components field. This means you must supply all components if you want this scenario. If you only supply\n   a custom nitrogen fraction, scope 3 emissions will be under calculated. Do not supply a partial list of components.",
+                              "type": "array",
+                              "items": {
+                                "oneOf": [
+                                  {
+                                    "oneOf": [
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "fractionOfFertiliser": {
+                                            "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                            "x-modules": [
+                                              "5.1",
+                                              "5.5",
+                                              "15.4"
+                                            ],
+                                            "type": "object",
+                                            "properties": {
+                                              "value": {
+                                                "$ref": "#/components/schemas/ProportionNumberInput"
+                                              },
+                                              "quality": {
+                                                "default": {},
+                                                "$ref": "#/components/schemas/QualityTable"
+                                              }
+                                            },
+                                            "required": [
+                                              "value"
+                                            ],
+                                            "additionalProperties": false,
+                                            "x-units": "0-1"
+                                          },
+                                          "componentType": {
+                                            "description": "Type of inorganic fertiliser component",
+                                            "x-modules": [
+                                              "15.4",
+                                              "5.1"
+                                            ],
+                                            "$ref": "#/components/schemas/InorganicFertiliserComponentTypeRegional"
+                                          },
+                                          "componentOrigin": {
+                                            "description": "Origin of inorganic fertiliser component",
+                                            "x-modules": [
+                                              "15.4"
+                                            ],
+                                            "$ref": "#/components/schemas/InorganicFertiliserComponentOrigin"
+                                          }
+                                        },
+                                        "required": [
+                                          "fractionOfFertiliser",
+                                          "componentType",
+                                          "componentOrigin"
+                                        ],
+                                        "additionalProperties": false,
+                                        "title": "With origin region"
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "fractionOfFertiliser": {
+                                            "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                            "x-modules": [
+                                              "5.1",
+                                              "5.5",
+                                              "15.4"
+                                            ],
+                                            "type": "object",
+                                            "properties": {
+                                              "value": {
+                                                "$ref": "#/components/schemas/ProportionNumberInput"
+                                              },
+                                              "quality": {
+                                                "default": {},
+                                                "$ref": "#/components/schemas/QualityTable"
+                                              }
+                                            },
+                                            "required": [
+                                              "value"
+                                            ],
+                                            "additionalProperties": false,
+                                            "x-units": "0-1"
+                                          },
+                                          "componentType": {
+                                            "description": "Type of inorganic fertiliser component",
+                                            "x-modules": [
+                                              "5.1",
+                                              "15.4"
+                                            ],
+                                            "$ref": "#/components/schemas/InorganicFertiliserComponentTypeNonRegional"
+                                          }
+                                        },
+                                        "required": [
+                                          "fractionOfFertiliser",
+                                          "componentType"
+                                        ],
+                                        "additionalProperties": false,
+                                        "title": "Without origin region"
+                                      }
+                                    ],
+                                    "title": "Known component"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "fractionOfFertiliser": {
+                                        "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                        "x-modules": [
+                                          "5.1",
+                                          "5.5",
+                                          "15.4"
+                                        ],
+                                        "type": "object",
+                                        "properties": {
+                                          "value": {
+                                            "$ref": "#/components/schemas/ProportionNumberInput"
+                                          },
+                                          "quality": {
+                                            "default": {},
+                                            "$ref": "#/components/schemas/QualityTable"
+                                          }
+                                        },
+                                        "required": [
+                                          "value"
+                                        ],
+                                        "additionalProperties": false,
+                                        "x-units": "0-1"
+                                      },
+                                      "emissionFactor": {
+                                        "description": "Emission factor for inorganic fertiliser component (kilograms CO2e per kilogram inorganic fertiliser)",
+                                        "x-modules": [
+                                          "15.4"
+                                        ],
+                                        "type": "object",
+                                        "properties": {
+                                          "value": {
+                                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                          },
+                                          "quality": {
+                                            "default": {},
+                                            "$ref": "#/components/schemas/QualityTable"
+                                          }
+                                        },
+                                        "required": [
+                                          "value"
+                                        ],
+                                        "additionalProperties": false,
+                                        "x-units": "kilograms CO2e per kilogram inorganic fertiliser"
+                                      }
+                                    },
+                                    "required": [
+                                      "fractionOfFertiliser",
+                                      "emissionFactor"
+                                    ],
+                                    "additionalProperties": false,
+                                    "title": "Unknown component (custom emission factor)"
+                                  }
+                                ]
+                              }
+                            },
+                            "calculationMethodScope3": {
+                              "type": "string",
+                              "const": "1",
+                              "description": "Choosing method 1 for calculating scope 3 emissions for this fertiliser"
+                            }
+                          },
+                          "required": [
+                            "massAppliedKilograms",
+                            "massPurchasedKilograms",
+                            "fertiliserType",
+                            "calculationMethodScope3"
+                          ],
+                          "additionalProperties": false,
+                          "title": "Scope 3 method 1"
+                        },
+                        {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "massAppliedKilograms": {
+                                  "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.4",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms inorganic fertiliser"
+                                },
+                                "massPurchasedKilograms": {
+                                  "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                  "x-modules": [
+                                    "15.4"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms inorganic fertiliser"
+                                },
+                                "scope3EmissionFactor": {
+                                  "description": "Custom scope 3 emission factor for this fertiliser (kilograms CO2e per kilogram inorganic fertiliser)",
+                                  "x-modules": [
+                                    "15.4"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms CO2e per kilogram inorganic fertiliser"
+                                },
+                                "calculationMethodScope3": {
+                                  "type": "string",
+                                  "const": "2",
+                                  "description": "Choosing method 2 for calculating scope 3 emissions for this fertiliser"
+                                },
+                                "fertiliserType": {
+                                  "description": "Type of inorganic fertiliser applied",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.4",
+                                    "5.5",
+                                    "15.4"
+                                  ],
+                                  "$ref": "#/components/schemas/InorganicFertiliserType"
+                                },
+                                "fractionNitrogen": {
+                                  "description": "Custom nitrogen fraction for the fertiliser (kilograms nitrogen per kilogram inorganic fertiliser)",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms nitrogen per kilogram inorganic fertiliser"
+                                }
+                              },
+                              "required": [
+                                "massAppliedKilograms",
+                                "massPurchasedKilograms",
+                                "scope3EmissionFactor",
+                                "calculationMethodScope3",
+                                "fertiliserType"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Scope 3 method 2 (known fertiliser type)"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "massAppliedKilograms": {
+                                  "description": "Mass of inorganic fertiliser applied. This value is distinct from the mass purchased (massPurchasedKilograms), and should only include the amount of this fertiliser type that was actually used. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.4",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms inorganic fertiliser"
+                                },
+                                "massPurchasedKilograms": {
+                                  "description": "Mass of inorganic fertiliser purchased. This value is distinct from the mass actually applied (massAppliedKilograms), and should include the exact amount of this fertiliser type that was purchased during the period covered by the calculation. If all fertiliser purchased during the calculation period was also applied in the calculation period, the values should be the same. (kilograms inorganic fertiliser)",
+                                  "x-modules": [
+                                    "15.4"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms inorganic fertiliser"
+                                },
+                                "scope3EmissionFactor": {
+                                  "description": "Custom scope 3 emission factor for this fertiliser (kilograms CO2e per kilogram inorganic fertiliser)",
+                                  "x-modules": [
+                                    "15.4"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms CO2e per kilogram inorganic fertiliser"
+                                },
+                                "calculationMethodScope3": {
+                                  "type": "string",
+                                  "const": "2",
+                                  "description": "Choosing method 2 for calculating scope 3 emissions for this fertiliser"
+                                },
+                                "fertiliserType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "Other Fertilisers"
+                                  ],
+                                  "description": "Type of inorganic fertiliser applied",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.4",
+                                    "5.5",
+                                    "15.4"
+                                  ]
+                                },
+                                "fractionNitrogen": {
+                                  "description": "Custom nitrogen fraction for the fertiliser (kilograms nitrogen per kilogram inorganic fertiliser)",
+                                  "x-modules": [
+                                    "5.1",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms nitrogen per kilogram inorganic fertiliser"
+                                },
+                                "fractionUrea": {
+                                  "description": "Custom urea fraction for the fertiliser (kilograms urea per kilogram inorganic fertiliser)",
+                                  "x-modules": [
+                                    "5.1"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/ProportionNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms urea per kilogram inorganic fertiliser"
+                                }
+                              },
+                              "required": [
+                                "massAppliedKilograms",
+                                "massPurchasedKilograms",
+                                "scope3EmissionFactor",
+                                "calculationMethodScope3",
+                                "fertiliserType",
+                                "fractionNitrogen",
+                                "fractionUrea"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Scope 3 method 2 (other fertiliser type)"
+                            }
+                          ],
+                          "title": "Scope 3 method 2",
+                          "type": "object"
+                        }
+                      ],
+                      "type": "object"
+                    },
+                    "description": "Inorganic fertiliser applications"
+                  },
+                  "calculationMethodScope1": {
+                    "type": "string",
+                    "const": "2",
+                    "description": "Method of calculating fertiliser emissions"
+                  },
+                  "areaAppliedHectares": {
+                    "description": "Method 2: The total area that inorganic fertilisers were applied to (hectares)",
+                    "x-modules": [
+                      "5.1"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "$ref": "#/components/schemas/PositiveNumberInput"
+                      },
+                      "quality": {
+                        "default": {},
+                        "$ref": "#/components/schemas/QualityTable"
+                      }
+                    },
+                    "required": [
+                      "value"
+                    ],
+                    "additionalProperties": false,
+                    "x-units": "hectares"
+                  }
+                },
+                "required": [
+                  "applications",
+                  "calculationMethodScope1",
+                  "areaAppliedHectares"
+                ],
+                "additionalProperties": false
+              },
+              "organic": {
+                "$ref": "#/components/schemas/OrganicFertilisersInput"
+              }
+            },
+            "required": [
+              "productionSystem",
+              "inorganic",
+              "organic"
+            ],
+            "additionalProperties": false,
+            "title": "Specific production system (scope 1 method 2)"
+          }
+        ]
+      },
+      "BasicCropProductionSystem": {
+        "type": "string",
+        "enum": [
+          "Rice (continuous flooding)",
+          "Rice (single and multiple drainage, or alternate wetting and drying)",
+          "Irrigated crop",
+          "Non-irrigated crop (low rainfall)",
+          "Non-irrigated crop (high rainfall)",
+          "Irrigated pasture",
+          "Non-irrigated pasture",
+          "Sugar",
+          "Cotton",
+          "Horticultural crops",
+          "Aquaculture",
+          "Forestry"
         ]
       },
       "InorganicFertiliserType": {
@@ -18962,6 +19584,14 @@
           "Pigs",
           "Sheep",
           "Horses/Mules"
+        ]
+      },
+      "InorganicFertiliserProductionSystem": {
+        "type": "string",
+        "enum": [
+          "Irrigated crop (maize)",
+          "Non-irrigated crop (high rainfall)",
+          "Cotton"
         ]
       },
       "GrainsScope1OutputPlusLULUCF": {

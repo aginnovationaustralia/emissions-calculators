@@ -37,7 +37,7 @@ This repository publishes two calculator packages to NPM. New integrations shoul
 | Implements | The Voluntary Emissions Estimation and Reporting Guidelines (VEERG)                                            | The Greenhouse Accounting Framework (GAF) tools (`3.x`), plus early VEERG previews (`4.x` betas) |
 | Status     | Actively developed, and the focus of all new features and Guidelines updates                                   | Maintained for existing users while they move to the Guidelines                                  |
 | Structure  | Each chapter of the Guidelines is a module, composed into industry calculators and an `all-modules` calculator | One calculator per GAF spreadsheet (`3.x`)                                                       |
-| Versioning | Starts at `1.0.0`, versioned against releases of the Guidelines                                                | Major and minor versions follow releases of the GAF spreadsheets                                 |
+| Versioning | Starts at `1.1.0`, versioned against releases of the Guidelines                                                | Major and minor versions follow releases of the GAF spreadsheets                                 |
 | REST API   | `/veerg/{version}`                                                                                             | `/calculator/{version}`                                                                          |
 
 The `4.x` beta releases of `emissions-calculators` were the first preview of the Guidelines implementation. That work now continues in `veerg-calculators`, so if you are using a `4.x` beta, switch to `veerg-calculators`. The calculators, inputs and outputs are the same, apart from the package name in your imports.
@@ -133,7 +133,7 @@ New versions of the package are published to the NPM registry via a [Github acti
 - Push the new tag with `git push --tags`
 - The automated publish will trigger when the new tag is detected
 
-The [veerg-calculators package](./packages/veerg-calculators/package.json) is versioned independently, and its tags include the package name, ie `veerg-calculators-v1.0.0-beta.1`. The same publish action handles these tags, publishing from `packages/veerg-calculators` instead.
+The [veerg-calculators package](./packages/veerg-calculators/package.json) is versioned independently, and its tags include the package name, ie `veerg-calculators-v1.1.0-beta.1`. The same publish action handles these tags, publishing from `packages/veerg-calculators` instead.
 
 The [research package](./packages/research/package.json) is versioned independently, and its tags include the package name, ie `emissions-calculator-research-v0.1.0`. It depends on the exact version of the calculators package it was published with, so release it after each calculators release.
 

@@ -1,8 +1,8 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "AIA Calculator API - horticulture",
-    "version": "1.0.0",
+    "title": "AIA Calculator API - rice",
+    "version": "1.1.0",
     "description": "Emissions Calculators for various farming activities",
     "contact": {
       "name": "AIA",
@@ -16,22 +16,22 @@
   },
   "servers": [
     {
-      "url": "https://emissionscalculator-mtls.production.aiaapi.com/veerg/1.0.0",
+      "url": "https://emissionscalculator-mtls.production.aiaapi.com/veerg/1.1.0",
       "description": "Production Server"
     }
   ],
   "tags": [
     {
       "name": "AIA emissions calculators",
-      "description": "AIA Calculator API - horticulture"
+      "description": "AIA Calculator API - rice"
     }
   ],
   "paths": {
-    "/horticulture": {
+    "/rice": {
       "post": {
-        "summary": "Perform horticulture calculation",
+        "summary": "Perform rice calculation",
         "description": "Retrieve a simple JSON response",
-        "operationId": "post-horticulture",
+        "operationId": "post-rice",
         "deprecated": false,
         "tags": [
           "emissions-calculators"
@@ -273,6 +273,55 @@
                             "required": [
                               "type",
                               "amountKilograms"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "refrigerants": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "refrigerant": {
+                                "description": "Refrigerant type",
+                                "x-modules": [
+                                  "9.1"
+                                ],
+                                "$ref": "#/components/schemas/RefrigerantType"
+                              },
+                              "chargeSizeKilograms": {
+                                "description": "Amount of refrigerant contained in the appliance (kilograms refrigerant)",
+                                "x-modules": [
+                                  "9.1"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "kilograms refrigerant"
+                              },
+                              "refrigerationType": {
+                                "description": "Type of refrigeration appliance",
+                                "x-modules": [
+                                  "9.1"
+                                ],
+                                "$ref": "#/components/schemas/RefrigerationType"
+                              }
+                            },
+                            "required": [
+                              "refrigerant",
+                              "chargeSizeKilograms",
+                              "refrigerationType"
                             ],
                             "additionalProperties": false
                           }
@@ -1627,304 +1676,261 @@
                           ]
                         },
                         "crop": {
-                          "oneOf": [
-                            {
+                          "type": "object",
+                          "properties": {
+                            "totalYieldKilograms": {
+                              "description": "Total yield of the crop, as dry matter (kilograms dry matter)",
+                              "x-modules": [
+                                "6.1",
+                                "6.3",
+                                "6.4"
+                              ],
                               "type": "object",
                               "properties": {
-                                "totalYieldKilograms": {
-                                  "description": "Total yield of the crop, as dry matter (kilograms dry matter)",
-                                  "x-modules": [
-                                    "6.1",
-                                    "6.3",
-                                    "6.4"
-                                  ],
-                                  "type": "object",
-                                  "properties": {
-                                    "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                    },
-                                    "quality": {
-                                      "default": {},
-                                      "$ref": "#/components/schemas/QualityTable"
-                                    }
-                                  },
-                                  "required": [
-                                    "value"
-                                  ],
-                                  "additionalProperties": false,
-                                  "x-units": "kilograms dry matter"
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
                                 },
-                                "residues": {
-                                  "oneOf": [
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "calculationMethod": {
-                                          "type": "string",
-                                          "const": "1"
-                                        }
-                                      },
-                                      "required": [
-                                        "calculationMethod"
-                                      ],
-                                      "additionalProperties": false,
-                                      "title": "Method 1"
-                                    },
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "calculationMethod": {
-                                          "type": "string",
-                                          "const": "2"
-                                        },
-                                        "massCropResidueRemovedKilograms": {
-                                          "description": "Mass of crop residue that is removed. (kilograms crop residue)",
-                                          "x-modules": [
-                                            "6.1"
-                                          ],
-                                          "type": "object",
-                                          "properties": {
-                                            "value": {
-                                              "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                            },
-                                            "quality": {
-                                              "default": {},
-                                              "$ref": "#/components/schemas/QualityTable"
-                                            }
-                                          },
-                                          "required": [
-                                            "value"
-                                          ],
-                                          "additionalProperties": false,
-                                          "x-units": "kilograms crop residue"
-                                        }
-                                      },
-                                      "required": [
-                                        "calculationMethod",
-                                        "massCropResidueRemovedKilograms"
-                                      ],
-                                      "additionalProperties": false,
-                                      "title": "Method 2 (by mass)"
-                                    },
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "calculationMethod": {
-                                          "type": "string",
-                                          "const": "2"
-                                        },
-                                        "fractionCropResidueRemoved": {
-                                          "description": "Fraction of crop residue that is removed, from 0 to 1. (0-1)",
-                                          "x-modules": [
-                                            "6.1"
-                                          ],
-                                          "type": "object",
-                                          "properties": {
-                                            "value": {
-                                              "$ref": "#/components/schemas/ProportionNumberInput"
-                                            },
-                                            "quality": {
-                                              "default": {},
-                                              "$ref": "#/components/schemas/QualityTable"
-                                            }
-                                          },
-                                          "required": [
-                                            "value"
-                                          ],
-                                          "additionalProperties": false,
-                                          "x-units": "0-1"
-                                        }
-                                      },
-                                      "required": [
-                                        "calculationMethod",
-                                        "fractionCropResidueRemoved"
-                                      ],
-                                      "additionalProperties": false,
-                                      "title": "Method 2 (by fraction)"
-                                    }
-                                  ]
-                                },
-                                "fractionOfAnnualCropBurnt": {
-                                  "description": "Fraction of annual production of crop that is burnt, from 0 to 1 (0-1)",
-                                  "x-modules": [
-                                    "6.1",
-                                    "6.3",
-                                    "6.4"
-                                  ],
-                                  "type": "object",
-                                  "properties": {
-                                    "value": {
-                                      "$ref": "#/components/schemas/ProportionNumberInput"
-                                    },
-                                    "quality": {
-                                      "default": {},
-                                      "$ref": "#/components/schemas/QualityTable"
-                                    }
-                                  },
-                                  "required": [
-                                    "value"
-                                  ],
-                                  "additionalProperties": false,
-                                  "x-units": "0-1"
-                                },
-                                "type": {
-                                  "description": "Type of horticulture crop grown in this activity",
-                                  "x-modules": [
-                                    "6.1",
-                                    "6.3",
-                                    "6.4"
-                                  ],
-                                  "$ref": "#/components/schemas/HorticultureBurnableCropType"
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
                                 }
                               },
                               "required": [
-                                "totalYieldKilograms",
-                                "residues",
-                                "fractionOfAnnualCropBurnt",
-                                "type"
+                                "value"
                               ],
                               "additionalProperties": false,
-                              "title": "Crop that can be burnt"
+                              "x-units": "kilograms dry matter"
                             },
-                            {
-                              "type": "object",
-                              "properties": {
-                                "totalYieldKilograms": {
-                                  "description": "Total yield of the crop, as dry matter (kilograms dry matter)",
-                                  "x-modules": [
-                                    "6.1",
-                                    "6.3",
-                                    "6.4"
-                                  ],
+                            "residues": {
+                              "oneOf": [
+                                {
                                   "type": "object",
                                   "properties": {
-                                    "value": {
-                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                    },
-                                    "quality": {
-                                      "default": {},
-                                      "$ref": "#/components/schemas/QualityTable"
+                                    "calculationMethod": {
+                                      "type": "string",
+                                      "const": "1"
                                     }
                                   },
                                   "required": [
-                                    "value"
+                                    "calculationMethod"
                                   ],
                                   "additionalProperties": false,
-                                  "x-units": "kilograms dry matter"
+                                  "title": "Method 1"
                                 },
-                                "residues": {
-                                  "oneOf": [
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "calculationMethod": {
-                                          "type": "string",
-                                          "const": "1"
-                                        }
-                                      },
-                                      "required": [
-                                        "calculationMethod"
-                                      ],
-                                      "additionalProperties": false,
-                                      "title": "Method 1"
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "calculationMethod": {
+                                      "type": "string",
+                                      "const": "2"
                                     },
-                                    {
+                                    "massCropResidueRemovedKilograms": {
+                                      "description": "Mass of crop residue that is removed. (kilograms crop residue)",
+                                      "x-modules": [
+                                        "6.1"
+                                      ],
                                       "type": "object",
                                       "properties": {
-                                        "calculationMethod": {
-                                          "type": "string",
-                                          "const": "2"
+                                        "value": {
+                                          "$ref": "#/components/schemas/NonNegativeNumberInput"
                                         },
-                                        "massCropResidueRemovedKilograms": {
-                                          "description": "Mass of crop residue that is removed. (kilograms crop residue)",
-                                          "x-modules": [
-                                            "6.1"
-                                          ],
-                                          "type": "object",
-                                          "properties": {
-                                            "value": {
-                                              "$ref": "#/components/schemas/NonNegativeNumberInput"
-                                            },
-                                            "quality": {
-                                              "default": {},
-                                              "$ref": "#/components/schemas/QualityTable"
-                                            }
-                                          },
-                                          "required": [
-                                            "value"
-                                          ],
-                                          "additionalProperties": false,
-                                          "x-units": "kilograms crop residue"
+                                        "quality": {
+                                          "default": {},
+                                          "$ref": "#/components/schemas/QualityTable"
                                         }
                                       },
                                       "required": [
-                                        "calculationMethod",
-                                        "massCropResidueRemovedKilograms"
+                                        "value"
                                       ],
                                       "additionalProperties": false,
-                                      "title": "Method 2 (by mass)"
-                                    },
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "calculationMethod": {
-                                          "type": "string",
-                                          "const": "2"
-                                        },
-                                        "fractionCropResidueRemoved": {
-                                          "description": "Fraction of crop residue that is removed, from 0 to 1. (0-1)",
-                                          "x-modules": [
-                                            "6.1"
-                                          ],
-                                          "type": "object",
-                                          "properties": {
-                                            "value": {
-                                              "$ref": "#/components/schemas/ProportionNumberInput"
-                                            },
-                                            "quality": {
-                                              "default": {},
-                                              "$ref": "#/components/schemas/QualityTable"
-                                            }
-                                          },
-                                          "required": [
-                                            "value"
-                                          ],
-                                          "additionalProperties": false,
-                                          "x-units": "0-1"
-                                        }
-                                      },
-                                      "required": [
-                                        "calculationMethod",
-                                        "fractionCropResidueRemoved"
-                                      ],
-                                      "additionalProperties": false,
-                                      "title": "Method 2 (by fraction)"
+                                      "x-units": "kilograms crop residue"
                                     }
-                                  ]
-                                },
-                                "type": {
-                                  "description": "Type of horticulture crop grown in this activity",
-                                  "x-modules": [
-                                    "6.1",
-                                    "6.3",
-                                    "6.4"
+                                  },
+                                  "required": [
+                                    "calculationMethod",
+                                    "massCropResidueRemovedKilograms"
                                   ],
-                                  "$ref": "#/components/schemas/HorticultureNonBurnableCropType"
+                                  "additionalProperties": false,
+                                  "title": "Method 2 (by mass)"
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "calculationMethod": {
+                                      "type": "string",
+                                      "const": "2"
+                                    },
+                                    "fractionCropResidueRemoved": {
+                                      "description": "Fraction of crop residue that is removed, from 0 to 1. (0-1)",
+                                      "x-modules": [
+                                        "6.1"
+                                      ],
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "$ref": "#/components/schemas/ProportionNumberInput"
+                                        },
+                                        "quality": {
+                                          "default": {},
+                                          "$ref": "#/components/schemas/QualityTable"
+                                        }
+                                      },
+                                      "required": [
+                                        "value"
+                                      ],
+                                      "additionalProperties": false,
+                                      "x-units": "0-1"
+                                    }
+                                  },
+                                  "required": [
+                                    "calculationMethod",
+                                    "fractionCropResidueRemoved"
+                                  ],
+                                  "additionalProperties": false,
+                                  "title": "Method 2 (by fraction)"
+                                }
+                              ]
+                            },
+                            "fractionOfAnnualCropBurnt": {
+                              "description": "Fraction of annual production of crop that is burnt, from 0 to 1 (0-1)",
+                              "x-modules": [
+                                "6.1",
+                                "6.3",
+                                "6.4"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/ProportionNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
                                 }
                               },
                               "required": [
-                                "totalYieldKilograms",
-                                "residues",
-                                "type"
+                                "value"
                               ],
                               "additionalProperties": false,
-                              "title": "Crop that cannot be burnt"
+                              "x-units": "0-1"
+                            },
+                            "areaSownHectares": {
+                              "description": "Annual area of rice cultivation under water regime during the growing season under the specified water regime and organic amendment conditions. (hectares)",
+                              "x-modules": [
+                                "7.1"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "hectares"
+                            },
+                            "preSeasonWaterRegimeType": {
+                              "description": "The type of pre-season water regime for this rice crop.",
+                              "type": "string",
+                              "enum": [
+                                "Non flooded pre-season <180 days",
+                                "Non flooded pre-season >180 days",
+                                "Non-flooded pre-season >365 days",
+                                "Flooded pre-season >30 days"
+                              ]
+                            },
+                            "waterRegimeType": {
+                              "description": "The type of water regime for this rice crop",
+                              "$ref": "#/components/schemas/RiceCultivationSeasonWaterRegimeType"
+                            },
+                            "organicAmendments": {
+                              "description": "Any organic amendments that were applied to this rice crop. This can be omitted if only inorganic fertilisers were applied to the crop.\n        Some amendments included here (like 'Farm yard manure') may overlap with chapter 5.2 Organic Fertiliser.\n        Make sure that fertilisers.organic.applications includes all organic fertilisers that were applied to the crop.",
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "description": "The type of organic amendment applied.",
+                                    "$ref": "#/components/schemas/RiceCultivationOrganicAmendmentType"
+                                  },
+                                  "rateOfApplicationTonnesPerHectare": {
+                                    "description": "The rate of application of this organic amendment. For straw, this should be measured in dry weight. Everything else should be given in terms of fresh weight. (tonnes organic amendment per hectare)",
+                                    "x-modules": [
+                                      "7.1"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "tonnes organic amendment per hectare"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "rateOfApplicationTonnesPerHectare"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "cultivationPeriodDays": {
+                              "description": "Duration this rice crop was under cultivation (days)",
+                              "x-modules": [
+                                "7.1"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/MinOneNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "days"
                             }
-                          ]
+                          },
+                          "required": [
+                            "totalYieldKilograms",
+                            "residues",
+                            "fractionOfAnnualCropBurnt",
+                            "areaSownHectares",
+                            "preSeasonWaterRegimeType",
+                            "waterRegimeType",
+                            "cultivationPeriodDays"
+                          ],
+                          "additionalProperties": false
                         },
                         "fertiliser": {
                           "type": "object",
                           "properties": {
+                            "productionSystem": {
+                              "description": "Production system of the rice crop",
+                              "x-modules": [
+                                "5.1"
+                              ],
+                              "$ref": "#/components/schemas/RiceProductionSystem"
+                            },
                             "inorganic": {
                               "type": "object",
                               "properties": {
@@ -2450,6 +2456,7 @@
                             }
                           },
                           "required": [
+                            "productionSystem",
                             "inorganic",
                             "organic"
                           ],
@@ -2459,6 +2466,7 @@
                       "required": [
                         "electricityAllocation",
                         "chemicals",
+                        "refrigerants",
                         "services",
                         "state",
                         "fuel",
@@ -2490,7 +2498,7 @@
                   "type": "object",
                   "properties": {
                     "scope1": {
-                      "$ref": "#/components/schemas/HorticultureScope1OutputPlusLULUCF"
+                      "$ref": "#/components/schemas/RiceScope1OutputPlusLULUCF"
                     },
                     "scope2": {
                       "$ref": "#/components/schemas/Scope2Output"
@@ -2505,485 +2513,10 @@
                         "properties": {
                           "id": {
                             "type": "string",
-                            "description": "Unique identifier for this Horticulture activity"
+                            "description": "Unique identifier for this Rice activity"
                           },
                           "scope1": {
-                            "type": "object",
-                            "properties": {
-                              "totalCO2": {
-                                "type": "object",
-                                "properties": {
-                                  "tonnesCO2e": {
-                                    "type": "number"
-                                  }
-                                },
-                                "required": [
-                                  "tonnesCO2e"
-                                ],
-                                "additionalProperties": false,
-                                "description": "Total CO2 scope 1 emissions, in tonnes-CO2e"
-                              },
-                              "totalCH4": {
-                                "type": "object",
-                                "properties": {
-                                  "tonnesCO2e": {
-                                    "type": "number"
-                                  }
-                                },
-                                "required": [
-                                  "tonnesCO2e"
-                                ],
-                                "additionalProperties": false,
-                                "description": "Total CH4 scope 1 emissions, in tonnes-CO2e"
-                              },
-                              "totalN2O": {
-                                "type": "object",
-                                "properties": {
-                                  "tonnesCO2e": {
-                                    "type": "number"
-                                  }
-                                },
-                                "required": [
-                                  "tonnesCO2e"
-                                ],
-                                "additionalProperties": false,
-                                "description": "Total N2O scope 1 emissions, in tonnes-CO2e"
-                              },
-                              "totalOtherGases": {
-                                "type": "object",
-                                "properties": {
-                                  "tonnesCO2e": {
-                                    "type": "number"
-                                  }
-                                },
-                                "required": [
-                                  "tonnesCO2e"
-                                ],
-                                "additionalProperties": false,
-                                "description": "Total scope 1 emissions from other greenhouse gases, in tonnes-CO2e"
-                              },
-                              "total": {
-                                "type": "object",
-                                "properties": {
-                                  "tonnesCO2e": {
-                                    "type": "number"
-                                  }
-                                },
-                                "required": [
-                                  "tonnesCO2e"
-                                ],
-                                "additionalProperties": false,
-                                "description": "Total scope 1 emissions, in tonnes-CO2e"
-                              },
-                              "fuelTransportCO2": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "CO2 emissions from fuel transport, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "fuelTransportCH4": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "CH4 emissions from fuel transport, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "fuelTransportN2O": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "N2O emissions from fuel transport, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "fuelStationaryCO2": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "CO2 emissions from fuel stationary, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "fuelStationaryCH4": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "CH4 emissions from fuel stationary, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "fuelStationaryN2O": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "N2O emissions from fuel stationary, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "limeCO2": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "CO2 emissions from lime, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "inorganicFertiliserN2O": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "N2O emissions from inorganic fertiliser, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "inorganicFertiliserCO2": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "CO2 emissions from inorganic fertiliser, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "organicFertiliserN2O": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "N2O emissions from organic fertiliser, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "inorganicFertiliserAtmosphericDepositionN2O": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "N2O emissions from atmospheric deposition, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "organicFertiliserAtmosphericDepositionN2O": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "N2O emissions from atmospheric deposition, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "fertiliserLeachingAndRunoffN2O": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "N2O emissions from leeching and runoff, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "residueLeachingAndRunoffN2O": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "N2O emissions from leeching and runoff, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "cropResidueN2O": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "N2O emissions from crop residue, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "fieldBurningN2O": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "N2O emissions from field burning, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "fieldBurningCH4": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "CH4 emissions from field burning, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "solidWasteCO2": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "CO2 emissions from solid waste, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "solidWasteCH4": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "CH4 emissions from solid waste, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              },
-                              "solidWasteN2O": {
-                                "oneOf": [
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod1"
-                                  },
-                                  {
-                                    "$ref": "#/components/schemas/OutputMethod2"
-                                  }
-                                ],
-                                "description": "N2O emissions from solid waste, in tonnes-CO2e",
-                                "type": "object",
-                                "discriminator": {
-                                  "propertyName": "method",
-                                  "mapping": {
-                                    "1": "#/components/schemas/OutputMethod1",
-                                    "2": "#/components/schemas/OutputMethod2"
-                                  }
-                                }
-                              }
-                            },
-                            "required": [
-                              "totalCO2",
-                              "totalCH4",
-                              "totalN2O",
-                              "totalOtherGases",
-                              "total",
-                              "fuelTransportCO2",
-                              "fuelTransportCH4",
-                              "fuelTransportN2O",
-                              "fuelStationaryCO2",
-                              "fuelStationaryCH4",
-                              "fuelStationaryN2O",
-                              "limeCO2",
-                              "inorganicFertiliserN2O",
-                              "inorganicFertiliserCO2",
-                              "organicFertiliserN2O",
-                              "inorganicFertiliserAtmosphericDepositionN2O",
-                              "organicFertiliserAtmosphericDepositionN2O",
-                              "fertiliserLeachingAndRunoffN2O",
-                              "residueLeachingAndRunoffN2O",
-                              "cropResidueN2O",
-                              "fieldBurningN2O",
-                              "fieldBurningCH4",
-                              "solidWasteCO2",
-                              "solidWasteCH4",
-                              "solidWasteN2O"
-                            ],
-                            "additionalProperties": false
+                            "$ref": "#/components/schemas/RiceScope1Output"
                           },
                           "scope2": {
                             "$ref": "#/components/schemas/Scope2Output"
@@ -3016,7 +2549,7 @@
                           "intensities": {
                             "type": "object",
                             "properties": {
-                              "cropHarvestedKilograms": {
+                              "riceHarvestedKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -3027,9 +2560,9 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Crop harvested in kg"
+                                "description": "Rice harvested in kg"
                               },
-                              "cropIntensity": {
+                              "riceIntensity": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -3040,12 +2573,12 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Horticulture emissions intensity for this activity, in kg-CO2e/kg crop"
+                                "description": "Rice emissions intensity for this activity, in kg-CO2e/kg rice"
                               }
                             },
                             "required": [
-                              "cropHarvestedKilograms",
-                              "cropIntensity"
+                              "riceHarvestedKilograms",
+                              "riceIntensity"
                             ],
                             "additionalProperties": false
                           }
@@ -3059,7 +2592,7 @@
                           "intensities"
                         ],
                         "additionalProperties": false,
-                        "description": "Intermediate emissions calculation output for the Horticulture calculator"
+                        "description": "Intermediate emissions calculation output for the Rice calculator"
                       }
                     },
                     "net": {
@@ -3087,7 +2620,7 @@
                     "intensities": {
                       "type": "object",
                       "properties": {
-                        "cropHarvestedKilograms": {
+                        "riceHarvestedKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -3098,9 +2631,9 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Crop harvested in kg"
+                          "description": "Rice harvested in kg"
                         },
-                        "cropExcludingLULUCF": {
+                        "riceExcludingLULUCF": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -3111,9 +2644,9 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Horticulture emissions intensity excluding LULUCF, in kg-CO2e/kg crop"
+                          "description": "Rice emissions intensity excluding LULUCF, in kg-CO2e/kg rice"
                         },
-                        "cropIncludingLULUCF": {
+                        "riceIncludingLULUCF": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -3124,13 +2657,13 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Horticulture emissions intensity including LULUCF, in kg-CO2e/kg crop"
+                          "description": "Rice emissions intensity including LULUCF, in kg-CO2e/kg rice"
                         }
                       },
                       "required": [
-                        "cropHarvestedKilograms",
-                        "cropExcludingLULUCF",
-                        "cropIncludingLULUCF"
+                        "riceHarvestedKilograms",
+                        "riceExcludingLULUCF",
+                        "riceIncludingLULUCF"
                       ],
                       "additionalProperties": false
                     }
@@ -3144,7 +2677,7 @@
                     "intensities"
                   ],
                   "additionalProperties": false,
-                  "description": "Emissions calculation output for the Horticulture calculator"
+                  "description": "Emissions calculation output for the Rice calculator"
                 }
               }
             }
@@ -5306,6 +4839,88 @@
           "Trifluralin"
         ]
       },
+      "RefrigerantType": {
+        "type": "string",
+        "enum": [
+          "R-400 50/50",
+          "R-400 60/40",
+          "R-400 80/20",
+          "HFC-23 (R-23)",
+          "HFC-32 (R-32)",
+          "HFC-41 (R-41)",
+          "HFC-43-10mee (R-4310mee)",
+          "HFC-125 (R-125)",
+          "HFC-134 (R-134)",
+          "HFC-134a (R-134a)",
+          "HFC-143 (R-143)",
+          "HFC-143a (R-143a)",
+          "HFC-152a (R-152a)",
+          "HFC-227ea (R-227ea)",
+          "HFC-236fa (R-236fa)",
+          "HFC-245ca (R-245ca)",
+          "HFC-245fa (R-245fa)",
+          "HFC-365mfc (R-365mfc)",
+          "HCFC-22 (R-22)",
+          "HCFC-123 (R-123)",
+          "HCFC-124 (R-124)",
+          "HCFC-141b (R-141b)",
+          "HCFC-142b (R-142b)",
+          "HCFC-225ca (R-225ca)",
+          "HCFC-225cb (R-225cb)",
+          "PFC-14 Perfluoromethane (tetrafluoromethane)",
+          "PFC-116 Perfluoroethane (hexafluoroethane)",
+          "PFC-218 Perfluoropropane",
+          "PFC-31-10 Perfluorobutane",
+          "PFC-318 Perfluorocyclobutane",
+          "PFC-41-12 Perfluoropentane",
+          "PFC-51-14 Perfluorohexane",
+          "PFC-91-18 Perflunafene",
+          "R-401A",
+          "R-401B",
+          "R-401C",
+          "R-404A",
+          "R-405A",
+          "R-407A",
+          "R-407B",
+          "R-407C",
+          "R-407D",
+          "R-407E",
+          "R-408A",
+          "R-409A",
+          "R-409B",
+          "R-410A",
+          "R-410B",
+          "R-412A",
+          "R-415A",
+          "R-415B",
+          "R-420A",
+          "R-421A",
+          "R-422A",
+          "R-422B",
+          "R-422C",
+          "R-500",
+          "R-501",
+          "R-502",
+          "R-503",
+          "R-504",
+          "R-507A",
+          "R-508A",
+          "R-508B",
+          "R-509A"
+        ]
+      },
+      "RefrigerationType": {
+        "type": "string",
+        "enum": [
+          "Domestic refrigerators",
+          "Transport refrigeration",
+          "Domestic A/C portable",
+          "Domestic A/C split",
+          "Domestic A/C packaged",
+          "Light vehicle A/C",
+          "Heavy vehicle A/C"
+        ]
+      },
       "ServicesFuelInput": {
         "type": "object",
         "properties": {
@@ -6677,18 +6292,38 @@
           "wet"
         ]
       },
-      "HorticultureBurnableCropType": {
+      "RiceCultivationSeasonWaterRegimeType": {
         "type": "string",
         "enum": [
-          "Peanuts",
-          "Pulses"
+          "Paddy rotation",
+          "Fallow without flooding in previous year",
+          "Continuously flooded",
+          "Single drainage period",
+          "Multiple drainage periods",
+          "Regular rainfed",
+          "Drought prone",
+          "Deep water"
         ]
       },
-      "HorticultureNonBurnableCropType": {
+      "RiceCultivationOrganicAmendmentType": {
         "type": "string",
         "enum": [
-          "Hops and grape vines",
-          "Tubers and Roots"
+          "Straw incorporated shortly (<30 days) before cultivation",
+          "Straw incorporated long (>30 days) before cultivation",
+          "Compost",
+          "Farm yard manure",
+          "Green manure"
+        ]
+      },
+      "MinOneNumberInput": {
+        "type": "number",
+        "minimum": 1
+      },
+      "RiceProductionSystem": {
+        "type": "string",
+        "enum": [
+          "Rice (continuous flooding)",
+          "Rice (single and multiple drainage, or alternate wetting and drying)"
         ]
       },
       "InorganicFertiliserType": {
@@ -19470,7 +19105,7 @@
           "Horses/Mules"
         ]
       },
-      "HorticultureScope1OutputPlusLULUCF": {
+      "RiceScope1OutputPlusLULUCF": {
         "type": "object",
         "properties": {
           "totalCO2": {
@@ -19918,6 +19553,25 @@
               }
             }
           },
+          "refrigerantHFCs": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "Emissions from refrigerant leakage, in tonnes-HFCs",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
           "woodyCarbonStocksCO2": {
             "oneOf": [
               {
@@ -20126,6 +19780,25 @@
                 "2": "#/components/schemas/OutputMethod2"
               }
             }
+          },
+          "riceCultivationCH4": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "CH4 emissions from rice cultivation, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
           }
         },
         "required": [
@@ -20154,6 +19827,7 @@
           "solidWasteCO2",
           "solidWasteCH4",
           "solidWasteN2O",
+          "refrigerantHFCs",
           "woodyCarbonStocksCO2",
           "biomassBurningCH4",
           "biomassBurningN2O",
@@ -20164,7 +19838,8 @@
           "savannaFireWoodyCarbonStocksCO2e",
           "savannaFireBiomassBurningCO2e",
           "perennialWoodyCropsRemovalsCO2",
-          "perennialWoodyCropsEmissionsCO2"
+          "perennialWoodyCropsEmissionsCO2",
+          "riceCultivationCH4"
         ],
         "additionalProperties": false,
         "description": "Scope 1 greenhouse gas emissions are the emissions released to the atmosphere as a direct result of an activity, in tonnes-CO2e (tonnes of carbon dioxide equivalent)"
@@ -20594,6 +20269,525 @@
         ],
         "additionalProperties": false,
         "description": "Scope 3 emissions are indirect greenhouse gas emissions other than scope 2 emissions that are generated in the wider economy, in tonnes-CO2e (tonnes of carbon dioxide equivalent)"
+      },
+      "RiceScope1Output": {
+        "type": "object",
+        "properties": {
+          "totalCO2": {
+            "type": "object",
+            "properties": {
+              "tonnesCO2e": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "tonnesCO2e"
+            ],
+            "additionalProperties": false,
+            "description": "Total CO2 scope 1 emissions, in tonnes-CO2e"
+          },
+          "totalCH4": {
+            "type": "object",
+            "properties": {
+              "tonnesCO2e": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "tonnesCO2e"
+            ],
+            "additionalProperties": false,
+            "description": "Total CH4 scope 1 emissions, in tonnes-CO2e"
+          },
+          "totalN2O": {
+            "type": "object",
+            "properties": {
+              "tonnesCO2e": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "tonnesCO2e"
+            ],
+            "additionalProperties": false,
+            "description": "Total N2O scope 1 emissions, in tonnes-CO2e"
+          },
+          "totalOtherGases": {
+            "type": "object",
+            "properties": {
+              "tonnesCO2e": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "tonnesCO2e"
+            ],
+            "additionalProperties": false,
+            "description": "Total scope 1 emissions from other greenhouse gases, in tonnes-CO2e"
+          },
+          "total": {
+            "type": "object",
+            "properties": {
+              "tonnesCO2e": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "tonnesCO2e"
+            ],
+            "additionalProperties": false,
+            "description": "Total scope 1 emissions, in tonnes-CO2e"
+          },
+          "fuelTransportCO2": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "CO2 emissions from fuel transport, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "fuelTransportCH4": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "CH4 emissions from fuel transport, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "fuelTransportN2O": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "N2O emissions from fuel transport, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "fuelStationaryCO2": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "CO2 emissions from fuel stationary, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "fuelStationaryCH4": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "CH4 emissions from fuel stationary, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "fuelStationaryN2O": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "N2O emissions from fuel stationary, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "limeCO2": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "CO2 emissions from lime, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "inorganicFertiliserN2O": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "N2O emissions from inorganic fertiliser, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "inorganicFertiliserCO2": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "CO2 emissions from inorganic fertiliser, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "organicFertiliserN2O": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "N2O emissions from organic fertiliser, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "inorganicFertiliserAtmosphericDepositionN2O": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "N2O emissions from atmospheric deposition, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "organicFertiliserAtmosphericDepositionN2O": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "N2O emissions from atmospheric deposition, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "fertiliserLeachingAndRunoffN2O": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "N2O emissions from leeching and runoff, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "residueLeachingAndRunoffN2O": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "N2O emissions from leeching and runoff, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "cropResidueN2O": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "N2O emissions from crop residue, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "fieldBurningN2O": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "N2O emissions from field burning, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "fieldBurningCH4": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "CH4 emissions from field burning, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "solidWasteCO2": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "CO2 emissions from solid waste, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "solidWasteCH4": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "CH4 emissions from solid waste, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "solidWasteN2O": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "N2O emissions from solid waste, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "refrigerantHFCs": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "Emissions from refrigerant leakage, in tonnes-HFCs",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          },
+          "riceCultivationCH4": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/OutputMethod1"
+              },
+              {
+                "$ref": "#/components/schemas/OutputMethod2"
+              }
+            ],
+            "description": "CH4 emissions from rice cultivation, in tonnes-CO2e",
+            "type": "object",
+            "discriminator": {
+              "propertyName": "method",
+              "mapping": {
+                "1": "#/components/schemas/OutputMethod1",
+                "2": "#/components/schemas/OutputMethod2"
+              }
+            }
+          }
+        },
+        "required": [
+          "totalCO2",
+          "totalCH4",
+          "totalN2O",
+          "totalOtherGases",
+          "total",
+          "fuelTransportCO2",
+          "fuelTransportCH4",
+          "fuelTransportN2O",
+          "fuelStationaryCO2",
+          "fuelStationaryCH4",
+          "fuelStationaryN2O",
+          "limeCO2",
+          "inorganicFertiliserN2O",
+          "inorganicFertiliserCO2",
+          "organicFertiliserN2O",
+          "inorganicFertiliserAtmosphericDepositionN2O",
+          "organicFertiliserAtmosphericDepositionN2O",
+          "fertiliserLeachingAndRunoffN2O",
+          "residueLeachingAndRunoffN2O",
+          "cropResidueN2O",
+          "fieldBurningN2O",
+          "fieldBurningCH4",
+          "solidWasteCO2",
+          "solidWasteCH4",
+          "solidWasteN2O",
+          "refrigerantHFCs",
+          "riceCultivationCH4"
+        ],
+        "additionalProperties": false,
+        "description": "Scope 1 greenhouse gas emissions are the emissions released to the atmosphere as a direct result of an activity, in tonnes-CO2e (tonnes of carbon dioxide equivalent)"
       }
     }
   }
