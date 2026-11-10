@@ -1,4 +1,4 @@
-import { tryCalculate } from '@/calculate';
+import { CalculateEmissionsResult, tryCalculate } from '@/calculate';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
 import { executeCalculator } from '../execution/execute';
@@ -22,7 +22,10 @@ function calculateRiceParsed(
   );
 }
 
-function calculateRice(input: RiceInput, options?: CalculatorOptions) {
+function calculateRice(
+  input: RiceInput,
+  options?: CalculatorOptions,
+): CalculateEmissionsResult<RiceOutput> {
   return tryCalculate(RiceInputSchema, input, calculateRiceParsed, options);
 }
 

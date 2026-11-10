@@ -1,4 +1,4 @@
-import { tryCalculate } from '@/calculate';
+import { CalculateEmissionsResult, tryCalculate } from '@/calculate';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
 import { executeCalculator } from '../execution/execute';
@@ -22,7 +22,10 @@ function calculateSugarParsed(
   );
 }
 
-function calculateSugar(input: SugarInput, options?: CalculatorOptions) {
+function calculateSugar(
+  input: SugarInput,
+  options?: CalculatorOptions,
+): CalculateEmissionsResult<SugarOutput> {
   return tryCalculate(SugarInputSchema, input, calculateSugarParsed, options);
 }
 

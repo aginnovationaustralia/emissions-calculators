@@ -1,4 +1,4 @@
-import { tryCalculate } from '@/calculate';
+import { CalculateEmissionsResult, tryCalculate } from '@/calculate';
 import { AllConstants } from '../../constants/types';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
@@ -23,7 +23,10 @@ function calculateForestryParsed(
   );
 }
 
-function calculateForestry(input: ForestryInput, options?: CalculatorOptions) {
+function calculateForestry(
+  input: ForestryInput,
+  options?: CalculatorOptions,
+): CalculateEmissionsResult<ForestryOutput> {
   return tryCalculate(
     ForestryInputSchema,
     input,

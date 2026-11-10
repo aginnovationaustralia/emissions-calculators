@@ -1,4 +1,4 @@
-import { tryCalculate } from '@/calculate';
+import { CalculateEmissionsResult, tryCalculate } from '@/calculate';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
 import { executeCalculator } from '../execution/execute';
@@ -25,7 +25,7 @@ function calculateOtherLivestockParsed(
 function calculateOtherLivestock(
   input: OtherLivestockInput,
   options?: CalculatorOptions,
-) {
+): CalculateEmissionsResult<OtherLivestockOutput> {
   return tryCalculate(
     OtherLivestockInputSchema,
     input,

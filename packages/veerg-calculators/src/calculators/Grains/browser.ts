@@ -1,4 +1,4 @@
-import { tryCalculate } from '@/calculate';
+import { CalculateEmissionsResult, tryCalculate } from '@/calculate';
 import { AllConstants } from '@/constants/types';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -23,7 +23,10 @@ function calculateGrainsParsed(
   );
 }
 
-function calculateGrains(input: GrainsInput, options?: CalculatorOptions) {
+function calculateGrains(
+  input: GrainsInput,
+  options?: CalculatorOptions,
+): CalculateEmissionsResult<GrainsOutput> {
   return tryCalculate(GrainsInputSchema, input, calculateGrainsParsed, options);
 }
 
