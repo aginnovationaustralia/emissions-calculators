@@ -1,4 +1,4 @@
-import { tryCalculate } from '@/calculate';
+import { CalculateEmissionsResult, tryCalculate } from '@/calculate';
 import { AllConstants } from '../../constants/types';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
@@ -23,7 +23,10 @@ function calculateSheepParsed(
   );
 }
 
-function calculateSheep(input: SheepInput, options?: CalculatorOptions) {
+function calculateSheep(
+  input: SheepInput,
+  options?: CalculatorOptions,
+): CalculateEmissionsResult<SheepOutput> {
   return tryCalculate(SheepInputSchema, input, calculateSheepParsed, options);
 }
 

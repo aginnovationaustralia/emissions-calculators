@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type -- the named schema interfaces below are deliberately empty, see the comment on them */
 import { object } from '@/types/schemas';
-import { z } from 'zod';
+import { core, z } from 'zod';
 import { BaseContainer, Metadata } from './containers';
 import { getDisplayUnit } from './display-units';
 import { enumSchema } from './enum-schemas';
@@ -197,15 +198,60 @@ const toInputContainer =
     });
   };
 
-type TransformedNumberInputSchemaFactory<U extends NumberUnit> = z.ZodPipe<
+// -------- Named input field types --------
+// Each input helper returns one of these interfaces rather than its inferred zod type. They
+// add nothing to the zod type they extend, but TypeScript writes an interface by name in
+// declaration files, where it would otherwise write out the whole zod type for every field
+// of every schema. Without them the package's declarations are tens of megabytes, which is
+// slow for every consumer's type checking and exhausts the memory of documentation tools.
+
+/** A required number input, from {@link numberInput} */
+export interface NumberInputField<U extends NumberUnit> extends z.ZodPipe<
   NumberInputObjectSchema,
   z.ZodTransform<InputContainer<U>, RatedValue>
->;
+> {}
 
-type NumberInputSchemaOptional<U extends NumberUnit> = z.ZodPipe<
+/** An optional number input, from {@link numberInputOptional} */
+export interface OptionalNumberInputField<
+  U extends NumberUnit,
+> extends z.ZodPipe<
   z.ZodOptional<NumberInputObjectSchema>,
   z.ZodTransform<InputContainer<U> | undefined, RatedValue | undefined>
+> {}
+
+type EnumValuesSchema<TEnum extends string> = z.ZodEnum<
+  core.util.ToEnum<TEnum>
 >;
+
+/** A required enum input, from {@link enumInput} */
+export interface EnumInputField<TEnum extends string> extends z.ZodPipe<
+  EnumValuesSchema<TEnum>,
+  z.ZodTransform<InputContainer<TEnum>, TEnum>
+> {}
+
+/** An optional enum input, from {@link enumInputOptional} */
+export interface OptionalEnumInputField<TEnum extends string> extends z.ZodPipe<
+  z.ZodOptional<EnumValuesSchema<TEnum>>,
+  z.ZodTransform<InputContainer<TEnum> | undefined, TEnum | undefined>
+> {}
+
+/** A single value input, from {@link literalInput} */
+export interface LiteralInputField<TValue extends string> extends z.ZodPipe<
+  EnumValuesSchema<TValue>,
+  z.ZodTransform<InputContainer<TValue>, TValue>
+> {}
+
+/** A required boolean input, from {@link booleanInput} */
+export interface BooleanInputField extends z.ZodPipe<
+  z.ZodBoolean,
+  z.ZodTransform<InputContainer<boolean>, boolean>
+> {}
+
+/** An optional boolean input, from {@link booleanInputOptional} */
+export interface OptionalBooleanInputField extends z.ZodPipe<
+  z.ZodOptional<z.ZodBoolean>,
+  z.ZodTransform<InputContainer<boolean> | undefined, boolean | undefined>
+> {}
 
 const appendUnits = (description: string, units: string) =>
   `${description} (${units})`;
@@ -223,7 +269,7 @@ export function numberInput<U extends NumberUnit>(
   unitFactory: (value: number) => U,
   options: TypedInputOptions,
   schemaTweaker?: NumberSchemaTweaker,
-): TransformedNumberInputSchemaFactory<U> {
+): NumberInputField<U> {
   const displayUnit = getDisplayUnit(unitFactory, schemaTweaker);
   return resolveNumberInputSchema(displayUnit, schemaTweaker)
     .transform(toInputContainer(unitFactory, options))
@@ -242,7 +288,7 @@ export function numberInputOptional<U extends NumberUnit>(
   unitFactory: (value: number) => U,
   options: TypedInputOptions,
   schemaTweaker?: NumberSchemaTweaker,
-): NumberInputSchemaOptional<U> {
+): OptionalNumberInputField<U> {
   const displayUnit = getDisplayUnit(unitFactory);
   return resolveNumberInputSchema(displayUnit, schemaTweaker)
     .optional()
@@ -267,7 +313,7 @@ export const isPercentage: NumberSchemaTweaker = (schema) =>
 export const enumInput = <TEnum extends string>(
   values: readonly TEnum[],
   options: TypedInputOptions,
-) => {
+): EnumInputField<TEnum> => {
   const { name, description, method = '1', modules } = options;
   return enumSchema(values)
     .meta(openapiTags(description, options.modules))
@@ -279,7 +325,7 @@ export const enumInput = <TEnum extends string>(
 export const enumInputOptional = <TEnum extends string>(
   values: readonly TEnum[],
   options: TypedInputOptions,
-) => {
+): OptionalEnumInputField<TEnum> => {
   const { name, description, method = '1', modules } = options;
   return enumSchema(values)
     .optional()
@@ -298,7 +344,7 @@ export const enumInputOptional = <TEnum extends string>(
 export const literalInput = <TValue extends string>(
   value: TValue,
   options: TypedInputOptions,
-) => {
+): LiteralInputField<TValue> => {
   const { name, description, method = '1', modules } = options;
   return z
     .enum([value])
@@ -314,7 +360,7 @@ export const booleanInput = (
   inputName: string,
   description: string,
   modules: NonEmptyArray<ModuleNames>,
-) =>
+): BooleanInputField =>
   z
     .boolean()
     .meta(openapiTags(description, modules))
@@ -326,7 +372,7 @@ export const booleanInputOptional = (
   inputName: string,
   description: string,
   modules: NonEmptyArray<ModuleNames>,
-) =>
+): OptionalBooleanInputField =>
   z
     .boolean()
     .optional()

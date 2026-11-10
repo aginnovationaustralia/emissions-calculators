@@ -1,4 +1,4 @@
-import { tryCalculate } from '@/calculate';
+import { CalculateEmissionsResult, tryCalculate } from '@/calculate';
 import { AllConstants } from '@/constants/types';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -23,7 +23,10 @@ function calculateCroppingParsed(
   );
 }
 
-function calculateCropping(input: CroppingInput, options?: CalculatorOptions) {
+function calculateCropping(
+  input: CroppingInput,
+  options?: CalculatorOptions,
+): CalculateEmissionsResult<CroppingOutput> {
   return tryCalculate(
     CroppingInputSchema,
     input,

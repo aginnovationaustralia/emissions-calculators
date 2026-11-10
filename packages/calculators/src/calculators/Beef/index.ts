@@ -1,4 +1,4 @@
-import { tryCalculate } from '@/calculate';
+import { CalculateEmissionsResult, tryCalculate } from '@/calculate';
 import { executeCalculator } from '../execution/execute';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
@@ -22,7 +22,10 @@ function calculateBeefParsed(
   );
 }
 
-function calculateBeef(input: BeefInput, options?: CalculatorOptions) {
+function calculateBeef(
+  input: BeefInput,
+  options?: CalculatorOptions,
+): CalculateEmissionsResult<BeefOutput> {
   return tryCalculate(BeefInputSchema, input, calculateBeefParsed, options);
 }
 

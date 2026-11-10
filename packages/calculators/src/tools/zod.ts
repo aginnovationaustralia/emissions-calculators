@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type -- the named schema interfaces below are deliberately empty, see the comment on them */
 import { core, object, z } from 'zod';
 import { QualityTableSchema } from './quality';
 
@@ -90,28 +91,50 @@ const outputMethod2 = object({
   }),
 }).meta({ id: 'OutputMethod2', title: 'Method 2' });
 
-export const outputKey = (description?: string) => {
-  return z
+// The output helpers return named interfaces rather than their inferred zod types, for the
+// same reason as the input helpers in ./inputs: TypeScript writes an interface by name in
+// declaration files, instead of writing out the whole zod type everywhere it is used.
+
+const makeOutputKey = (description?: string) =>
+  z
     .discriminatedUnion('method', [outputMethod1, outputMethod2])
     .meta({ description });
-};
 
-export const outputTonnesCO2e = (description?: string) => {
-  return z
+/** An emissions result for one gas, from {@link outputKey} */
+export interface OutputKeySchema extends ReturnType<typeof makeOutputKey> {}
+
+export const outputKey: (description?: string) => OutputKeySchema =
+  makeOutputKey;
+
+const makeOutputTonnesCO2e = (description?: string) =>
+  z
     .strictObject({
       tonnesCO2e: z.number(),
     })
     .meta({ description });
-};
 
-/** A unitless or derived value; the description must state its units */
-export const outputValue = (description: string) => {
-  return z
+/** A total in tonnes of CO2e, from {@link outputTonnesCO2e} */
+export interface OutputTonnesCO2eSchema extends ReturnType<
+  typeof makeOutputTonnesCO2e
+> {}
+
+export const outputTonnesCO2e: (
+  description?: string,
+) => OutputTonnesCO2eSchema = makeOutputTonnesCO2e;
+
+const makeOutputValue = (description: string) =>
+  z
     .strictObject({
       value: z.number(),
     })
     .meta({ description });
-};
+
+/** A unitless or derived value, from {@link outputValue} */
+export interface OutputValueSchema extends ReturnType<typeof makeOutputValue> {}
+
+/** A unitless or derived value; the description must state its units */
+export const outputValue: (description: string) => OutputValueSchema =
+  makeOutputValue;
 
 type ZodLooseShape = core.$ZodLooseShape;
 type DefaultLooseShape = Partial<Record<never, core.SomeType>>;

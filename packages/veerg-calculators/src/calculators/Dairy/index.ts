@@ -1,4 +1,4 @@
-import { tryCalculate } from '@/calculate';
+import { CalculateEmissionsResult, tryCalculate } from '@/calculate';
 import { NodeEnvironment } from '../execution/node/environment';
 import { CalculatorOptions } from '../execution/types';
 import { executeCalculator } from '../execution/execute';
@@ -22,7 +22,10 @@ function calculateDairyParsed(
   );
 }
 
-function calculateDairy(input: DairyInput, options?: CalculatorOptions) {
+function calculateDairy(
+  input: DairyInput,
+  options?: CalculatorOptions,
+): CalculateEmissionsResult<DairyOutput> {
   return tryCalculate(DairyInputSchema, input, calculateDairyParsed, options);
 }
 

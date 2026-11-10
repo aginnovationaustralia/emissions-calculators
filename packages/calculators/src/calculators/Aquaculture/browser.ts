@@ -1,4 +1,4 @@
-import { tryCalculate } from '@/calculate';
+import { CalculateEmissionsResult, tryCalculate } from '@/calculate';
 import { AllConstants } from '../../constants/types';
 import { BrowserEnvironment } from '../execution/browser/environment';
 import { executeCalculator } from '../execution/execute';
@@ -26,7 +26,7 @@ function calculateAquacultureParsed(
 function calculateAquaculture(
   input: AquacultureInput,
   options?: CalculatorOptions,
-) {
+): CalculateEmissionsResult<AquacultureOutput> {
   return tryCalculate(
     AquacultureInputSchema,
     input,
