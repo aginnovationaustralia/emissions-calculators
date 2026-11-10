@@ -222,8 +222,8 @@ const createOpenApiDocument = (
   titleSuffix?: string,
 ): OpenAPIObject => {
   const title = titleSuffix
-    ? `AIA Calculator API - ${titleSuffix}`
-    : 'AIA Calculator API';
+    ? `AIA VEERG Emissions Calculator API - ${titleSuffix}`
+    : 'AIA VEERG Emissions Calculator API';
 
   const outputComponents: SchemaComponents = {};
   const document = createDocument(
@@ -232,7 +232,8 @@ const createOpenApiDocument = (
       info: {
         title,
         version,
-        description: 'Emissions Calculators for various farming activities',
+        description:
+          'Emissions Calculators for various farming activities, implementing the VEERG guidance and methodology',
         contact: {
           name: 'AIA',
           url: 'https://aginnovationaustralia.com.au/contact-us/',
@@ -251,7 +252,7 @@ const createOpenApiDocument = (
       ],
       tags: [
         {
-          name: 'AIA emissions calculators',
+          name: 'AIA VEERG Emissions Calculators',
           description: title,
         },
       ],
