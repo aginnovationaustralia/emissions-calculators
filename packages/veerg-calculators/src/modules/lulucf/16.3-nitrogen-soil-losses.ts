@@ -1,6 +1,6 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { selectConstant } from '@/tools/constants';
-import { br, Container } from '@/tools/containers';
+import { br, Container, num } from '@/tools/containers';
 import { zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass, massPerMass } from '@/tools/units';
@@ -35,6 +35,7 @@ export const calculateMineralisedNitrogenFromClearingToCrops = (
     Or.multiply(activityAreaHectares).named('∆Si,j=1,y');
 
   return organicCarbonChange
+    .multiply(num(-1))
     .divide(R)
     .named('Ni,j=1,y')
     .reference('16.3.1.1 (2)');
@@ -90,8 +91,9 @@ export const calculateMineralisedNitrogenFromClearingToOpen = (
     region,
   );
 
-  const organicCarbonChange =
-    Or.multiply(activityAreaHectares).named('∆Si,j=2-3,y');
+  const organicCarbonChange = Or.multiply(num(-1))
+    .multiply(activityAreaHectares)
+    .named('∆Si,j=2-3,y');
 
   return organicCarbonChange.divide(R).named('Ni,j=2-3,y');
 };
