@@ -44,6 +44,12 @@ importers:
 
   examples/ts-client:
     dependencies:
+      '@aginnovationaustralia/calculator-units':
+        specifier: workspace:*
+        version: link:../../packages/calculator-units
+      '@aginnovationaustralia/calculator-units-globals':
+        specifier: workspace:*
+        version: link:../../packages/calculator-units-globals
       '@aginnovationaustralia/emissions-calculator-research':
         specifier: workspace:*
         version: link:../../packages/research
@@ -60,6 +66,95 @@ importers:
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@25.0.1)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/calculator-inputs:
+    devDependencies:
+      '@aginnovationaustralia/calculator-units':
+        specifier: workspace:*
+        version: link:../calculator-units
+      '@arethetypeswrong/cli':
+        specifier: ^0.18.5
+        version: 0.18.5
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
+      '@types/node':
+        specifier: ^25.9.7
+        version: 25.9.7
+      decimal.js-light:
+        specifier: ^2.5.1
+        version: 2.5.1
+      jest:
+        specifier: ^30.5.2
+        version: 30.5.2(@types/node@25.9.7)(ts-node@10.9.2(@types/node@25.9.7)(typescript@5.9.3))
+      publint:
+        specifier: ^0.3.24
+        version: 0.3.25
+      ts-jest:
+        specifier: ^29.4.12
+        version: 29.4.12(@babel/core@7.29.7)(@jest/transform@30.5.2)(@jest/types@30.5.1)(babel-jest@30.5.2(@babel/core@7.29.7))(jest-util@30.5.1)(jest@30.5.2(@types/node@25.9.7)(ts-node@10.9.2(@types/node@25.9.7)(typescript@5.9.3)))(typescript@5.9.3)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
+
+  packages/calculator-units:
+    dependencies:
+      decimal.js-light:
+        specifier: ^2.5.1
+        version: 2.5.1
+    devDependencies:
+      '@arethetypeswrong/cli':
+        specifier: ^0.18.5
+        version: 0.18.5
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
+      '@types/node':
+        specifier: ^25.9.7
+        version: 25.9.7
+      jest:
+        specifier: ^30.5.2
+        version: 30.5.2(@types/node@25.9.7)(ts-node@10.9.2(@types/node@25.9.7)(typescript@5.9.3))
+      publint:
+        specifier: ^0.3.24
+        version: 0.3.25
+      ts-jest:
+        specifier: ^29.4.12
+        version: 29.4.12(@babel/core@7.29.7)(@jest/transform@30.5.2)(@jest/types@30.5.1)(babel-jest@30.5.2(@babel/core@7.29.7))(jest-util@30.5.1)(jest@30.5.2(@types/node@25.9.7)(ts-node@10.9.2(@types/node@25.9.7)(typescript@5.9.3)))(typescript@5.9.3)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/calculator-units-globals:
+    dependencies:
+      decimal.js-light:
+        specifier: ^2.5.1
+        version: 2.5.1
+    devDependencies:
+      '@arethetypeswrong/cli':
+        specifier: ^0.18.5
+        version: 0.18.5
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
+      '@types/node':
+        specifier: ^25.9.7
+        version: 25.9.7
+      jest:
+        specifier: ^30.5.2
+        version: 30.5.2(@types/node@25.9.7)(ts-node@10.9.2(@types/node@25.9.7)(typescript@5.9.3))
+      publint:
+        specifier: ^0.3.24
+        version: 0.3.25
+      ts-jest:
+        specifier: ^29.4.12
+        version: 29.4.12(@babel/core@7.29.7)(@jest/transform@30.5.2)(@jest/types@30.5.1)(babel-jest@30.5.2(@babel/core@7.29.7))(jest-util@30.5.1)(jest@30.5.2(@types/node@25.9.7)(ts-node@10.9.2(@types/node@25.9.7)(typescript@5.9.3)))(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -303,6 +398,12 @@ importers:
 
   packages/veerg-calculators:
     dependencies:
+      '@aginnovationaustralia/calculator-inputs':
+        specifier: workspace:*
+        version: link:../calculator-inputs
+      '@aginnovationaustralia/calculator-units':
+        specifier: workspace:*
+        version: link:../calculator-units
       decimal.js-light:
         specifier: ^2.5.1
         version: 2.5.1
