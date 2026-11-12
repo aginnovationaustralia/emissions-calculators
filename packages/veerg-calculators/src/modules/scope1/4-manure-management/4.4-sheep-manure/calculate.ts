@@ -69,10 +69,11 @@ function calculateManureManagementCH4ForClassPeriod(
    * VSjk = (Ijk * (1 - DMDjk) + (0.04 * Ijk)) * ( 1 - A )
    */
 
-  const VSjk = Ijk.multiply(oneMinus(DMDjk))
-    .plus(Ijk.multiply(num(0.04)))
+  const VSjk = br(
+    Ijk.multiply(br(oneMinus(DMDjk))).plus(br(Ijk.multiply(num(0.04)))),
+  )
     .switchUnit((u) => realNumber(u.store))
-    .multiply(oneMinus(ashContentOfManureA))
+    .multiply(br(oneMinus(ashContentOfManureA)))
     .switchUnit((u) => massPerHeadPerDay('Volatile Solids', u.store))
     .named(`VSj=${periodName},k=${className}`)
     .reference('4.4.1.1 (3)');
