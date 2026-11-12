@@ -11,6 +11,14 @@ export type EnumSchema<TEnum extends string> = ReturnType<
   typeof makeEnumSchema<TEnum>
 >;
 
+/**
+ * Gives an inline schema for any list of values, emitted in place rather than as a shared
+ * component. Pass it as `enumSchema` when you don't want to name your enums.
+ */
+export const inlineEnumSchema = <TEnum extends string>(
+  values: readonly TEnum[],
+): EnumSchema<TEnum> => makeEnumSchema(values);
+
 export type EnumRegistryOptions = {
   /** Appended to the error for unregistered values, e.g. where to register them. */
   unregisteredHint?: string;

@@ -22,13 +22,24 @@ export type BaseInputOptions = {
 
 export type InputOptions<O> = BaseInputOptions & O;
 
+/*
+ * The consumer's extra fields beside `value`. zod types an object with no fields as
+ * `Record<string, never>`, which would make `value` never, so no fields adds nothing.
+ */
+type FieldsInput<F extends z.ZodRawShape> = [keyof F] extends [never]
+  ? unknown
+  : z.input<z.ZodObject<F>>;
+type FieldsOutput<F extends z.ZodRawShape> = [keyof F] extends [never]
+  ? unknown
+  : z.output<z.ZodObject<F>>;
+
 /** The wire form of a number input: `{ value }` plus the consumer's extra fields. */
-type NumberWireInput<F extends z.ZodRawShape> = { value: number } & z.input<
-  z.ZodObject<F>
->;
-type NumberWireOutput<F extends z.ZodRawShape> = { value: number } & z.output<
-  z.ZodObject<F>
->;
+type NumberWireInput<F extends z.ZodRawShape> = {
+  value: number;
+} & FieldsInput<F>;
+type NumberWireOutput<F extends z.ZodRawShape> = {
+  value: number;
+} & FieldsOutput<F>;
 export type NumberWireSchema<F extends z.ZodRawShape> = z.ZodType<
   NumberWireOutput<F>,
   NumberWireInput<F>
@@ -95,12 +106,14 @@ export type InputBuilderConfig<
 
   /**
    * Describes the unit a number input is measured in, e.g. 'kilograms'. It is added to the input's
-   * description and as `x-units` on its schema. Called with a factory for the unit, and the number
-   * validation if there is any.
+   * description and as `x-units` on its schema. Called with a factory for the unit, the number
+   * validation if there is any, and the input's options. Use the options when the unit a value is
+   * supplied in can't be worked out from the unit it is stored as, e.g. a mass supplied in tonnes.
    */
   displayUnit: (
     unitFactory: (value: number) => NumberUnit,
-    tweaker?: NumberSchemaTweaker,
+    tweaker: NumberSchemaTweaker | undefined,
+    options: InputOptions<O>,
   ) => string;
 
   /** Metadata to record on every input's container, from the consumer's options. */
@@ -195,7 +208,7 @@ export const createInputBuilders = <
     options: InputOptions<O>,
     tweaker?: NumberSchemaTweaker,
   ): NumberInputSchema<U, RS, F> => {
-    const units = displayUnit(unitFactory, tweaker);
+    const units = displayUnit(unitFactory, tweaker, options);
     return numberWireSchema(units, tweaker)
       .transform(toNumberContainer(unitFactory, options))
       .meta(
@@ -212,7 +225,7 @@ export const createInputBuilders = <
     options: InputOptions<O>,
     tweaker?: NumberSchemaTweaker,
   ): NumberInputSchemaOptional<U, RS, F> => {
-    const units = displayUnit(unitFactory);
+    const units = displayUnit(unitFactory, undefined, options);
     return numberWireSchema(units, tweaker)
       .optional()
       .transform(mapOptional(toNumberContainer(unitFactory, options)))

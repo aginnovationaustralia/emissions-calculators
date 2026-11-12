@@ -9,6 +9,7 @@ import { z } from 'zod';
 import {
   createEnumRegistry,
   createInputBuilders,
+  inlineEnumSchema,
   isNonNegative,
   isProportion,
   registerNumberSchema,
@@ -120,6 +121,34 @@ describe('numberInput', () => {
     expect(proportion.meta()?.description).toBe('Fuel used (0-1)');
   });
 
+  test('gives the display unit the input options', () => {
+    // A consumer whose inputs state the units they are supplied in, e.g. tonnes stored as kg
+    const stated = createInputBuilders({
+      system: defaultUnitSystem,
+      enumSchema,
+      displayUnit: (_factory, _tweaker, { units }) => units,
+      toMeta: (_options: { units: string }) => ({}),
+    });
+    const tonnes = stated.numberInput((t) => mass('CO2', t * 1000), {
+      name: 'Fuel used',
+      description: 'Fuel used',
+      units: 't',
+    });
+    expect(tonnes.meta()?.description).toBe('Fuel used (t)');
+    // With no extra fields, the wire form is just `{ value }`
+    expectType<Equal<z.input<typeof tonnes>, { value: number }>>(true);
+    expect(() => tonnes.parse({ value: 1, quality: {} })).toThrow();
+    expect(
+      stated
+        .numberInputOptional((t) => mass('CO2', t * 1000), {
+          name: 'Fuel used',
+          description: 'Fuel used',
+          units: 't',
+        })
+        .meta()?.description,
+    ).toBe('Fuel used (t)');
+  });
+
   test('requires the consumer options', () => {
     // @ts-expect-error modules is missing
     inputs.numberInput((v) => mass('CO2', v), { name: 'x', description: 'x' });
@@ -172,6 +201,22 @@ describe('enums', () => {
     expect(() => createEnumRegistry({ A: ['x'], B: ['x'] })).toThrow(
       'Enums A and B have the same values',
     );
+  });
+
+  test('inline enums accept any values, without a component id', () => {
+    const schema = inlineEnumSchema(['x', 'y'] as const);
+    expect(schema.parse('x')).toBe('x');
+    expect(schema.meta()?.id).toBeUndefined();
+    const inline = createInputBuilders({
+      system: defaultUnitSystem,
+      enumSchema: inlineEnumSchema,
+      displayUnit: () => 'kg',
+    });
+    const picked = inline
+      .enumInput(['x', 'y'] as const, { name: 'Pick', description: 'Pick' })
+      .parse('y');
+    expectType<Equal<typeof picked, C<'x' | 'y'>>>(true);
+    expect(picked.unit).toBe('y');
   });
 
   test('enumInput builds a string input container', () => {
