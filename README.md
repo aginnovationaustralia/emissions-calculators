@@ -83,7 +83,7 @@ The repo also includes [examples](./examples) to help you get started consuming 
 
 ## Research use
 
-The [`@aginnovationaustralia/emissions-calculator-research`](./packages/research/README.md) package runs the same calculators with custom values for any of the constants, for research and sensitivity analysis. Results produced with overridden constants are not aligned with any VEERG guidance.
+The [`@aginnovationaustralia/emissions-calculator-research`](./packages/research/README.md) package runs the calculators from `veerg-calculators` with custom values for any of the constants, for research and sensitivity analysis. Results produced with overridden constants are not aligned with any VEERG guidance.
 
 # Data and metrics collection
 
@@ -135,7 +135,7 @@ New versions of the package are published to the NPM registry via a [Github acti
 
 The [veerg-calculators package](./packages/veerg-calculators/package.json) is versioned independently, and its tags include the package name, ie `veerg-calculators-v1.1.0-beta.1`. The same publish action handles these tags, publishing from `packages/veerg-calculators` instead.
 
-The [research package](./packages/research/package.json) is versioned independently, and its tags include the package name, ie `emissions-calculator-research-v0.1.0`. It depends on the exact version of the calculators package it was published with, so release it after each calculators release.
+The [research package](./packages/research/package.json) is versioned independently, and its tags include the package name, ie `emissions-calculator-research-v0.1.0`. It depends on the exact version of the veerg-calculators package it was published with, so release it after each veerg-calculators release.
 
 # License
 

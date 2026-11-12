@@ -1,7 +1,7 @@
 import {
   CroppingInput,
   CroppingInputSchema,
-} from '@aginnovationaustralia/emissions-calculators';
+} from '@aginnovationaustralia/veerg-calculators';
 import { calculateCropping, executeCalculator } from '.';
 import { ResearchCalculatorOptions } from './environment';
 

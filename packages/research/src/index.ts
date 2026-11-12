@@ -18,10 +18,13 @@ export {
   calculateSugar,
   calculateViticulture,
   calculateWildCatchFisheries,
-} from '@aginnovationaustralia/emissions-calculators/internal';
+} from '@aginnovationaustralia/veerg-calculators/internal';
 export type {
   CalculatorNames,
   CalculatorOptions,
-} from '@aginnovationaustralia/emissions-calculators/internal';
-export type { ConstantOverrides } from './environment';
+} from '@aginnovationaustralia/veerg-calculators/internal';
+export type {
+  ConstantOverrides,
+  ResearchCalculatorOptions,
+} from './environment';
 export { executeCalculator } from './execute';

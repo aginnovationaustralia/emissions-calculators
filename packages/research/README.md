@@ -1,27 +1,27 @@
 # emissions-calculator-research
 
-Run the emissions calculators with custom values that override the constants defined in
-`@aginnovationaustralia/emissions-calculators`. This is intended for research use, and is the only way to run a calculator with overridden constants.
+Run the VEERG emissions calculators with custom values that override the constants defined in
+`@aginnovationaustralia/veerg-calculators`. This is intended for research use, and is the only way to run a calculator with overridden constants.
 
 Results produced with overridden constants are not aligned with any official guidance, and should only be used for research and sensitivity analysis.
 
 ## Installation
 
 ```bash
-npm install @aginnovationaustralia/emissions-calculators @aginnovationaustralia/emissions-calculator-research
+npm install @aginnovationaustralia/veerg-calculators @aginnovationaustralia/emissions-calculator-research
 ```
 
-The calculators package provides the input schemas, which are used to validate and transform inputs
+The `veerg-calculators` package provides the input schemas, which are used to validate and transform inputs
 before they are passed to a calculator.
 
 ## Usage
 
 ```ts
-import { CroppingInputSchema } from '@aginnovationaustralia/emissions-calculators';
+import { CroppingInputSchema } from '@aginnovationaustralia/veerg-calculators';
 import {
   calculateCropping,
   executeCalculator,
-  ResearchEnvironment,
+  ResearchCalculatorOptions,
 } from '@aginnovationaustralia/emissions-calculator-research';
 
 const input = CroppingInputSchema.parse(rawInput);
@@ -36,9 +36,9 @@ const options: ResearchCalculatorOptions = {
       },
     },
   },
-}
+};
 
-const result = executeCalculator(calculateCropping, input, 'cropping', options)
+const result = executeCalculator(calculateCropping, input, 'cropping', options);
 ```
 
 Override values are plain numbers, written directly into the constant's value store, so they must
@@ -53,10 +53,11 @@ A complete example is available in the [ts-client example](../../examples/ts-cli
 
 ## Versioning
 
-This package depends on the exact version of `@aginnovationaustralia/emissions-calculators` that it was
-published with, as it is built on internal APIs of that package.
+This package depends on the exact version of `@aginnovationaustralia/veerg-calculators` that it was
+published with, as it is built on internal APIs of that package. Install the matching version of
+`veerg-calculators` alongside it, so the input schemas match the calculators that run them.
 
 ## Data and metrics collection
 
-Calculator executions are tracked in the same way as the calculators package. Pass
+Calculator executions are tracked in the same way as the `veerg-calculators` package. Pass
 `{ disableMetrics: true }` as the options to `executeCalculator` to disable this for an execution.
