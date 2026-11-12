@@ -12,6 +12,7 @@ export {
 export * from './combinators.js';
 export * from './errors.js';
 export type { Metadata } from './metadata.js';
+export * from './patterns.js';
 export * from './rules.js';
 export * from './substances.js';
 export * from './system.js';

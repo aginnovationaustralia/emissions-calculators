@@ -232,7 +232,32 @@ const massPerDistanceTimesDistance =
   );
 ```
 
-A rule's type is an interface extending `RuleType`, whose `rule` is computed from `this['L']` and `this['R']`. It evaluates to `Rule<AcceptedRight, Result>` when it applies to the left unit, and to `never` otherwise. Reuse an inferred substance on the right to require matching substances.
+### Rules as patterns
+
+Most rules are a pattern: a left unit, a right unit and a result, where the same placeholder (`A`, `B`, `C`, or your own from `placeholder('X')`) means the same substance. Write them with `multiplication` and `division`, and both the rule's type and its runtime substance check come from the pattern:
+
+```ts
+import {
+  A,
+  B,
+  multiplication,
+  division,
+} from '@aginnovationaustralia/calculator-units';
+
+const myRules = {
+  multiply: [
+    multiplication(massPerDistance(A), distance(), mass(A)), // MassPerDistance<A> * Distance = Mass<A>
+    multiplication(mass(B), massPerMass(A, B), mass(A)), // placeholders can come from either side
+  ],
+  divide: [division(volume(A), mass(B), volumePerMass(A, B))],
+} as const;
+```
+
+Results of pattern rules display as their fields (`{ __unitType: 'Mass'; substance: 'CO2e'; store: ValueStore }`) rather than by name (`Mass<'CO2e'>`); they are the same type, and assign either way.
+
+### Rules with a rule type
+
+For anything a pattern can't express, give the rule's type and implementation yourself, as above. A rule's type is an interface extending `RuleType`, whose `rule` is computed from `this['L']` and `this['R']`. It evaluates to `Rule<AcceptedRight, Result>` when it applies to the left unit, and to `never` otherwise. Reuse an inferred substance on the right to require matching substances.
 
 A rule's value comes from `multiplyRule<Type>()(left, right, apply)` or `divideRule`. `apply` only builds the result's descriptor (its store is replaced with the calculated value), and its return type is checked against the rule type. Return `undefined` when the units don't line up at runtime; `whenSame(a, b, () => result)` helps.
 
