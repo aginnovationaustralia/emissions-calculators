@@ -83,7 +83,7 @@ FuelSchema.parse({
 | `literalInput(value, options)`                | exactly one string (inline, not registered) | a string container      |
 | `booleanInput(options)`                       | a boolean                                   | a boolean container     |
 
-Each has an `…Optional` variant (except `literalInput`) that also accepts `undefined`. Every input takes `name`, `description` and an optional `method` (`'1'` or `'2'`) as well as your options. A method 2 number input carries its value on the method 2 track.
+Each has an `…Optional` variant (except `literalInput`) that also accepts `undefined`. Every input takes `name`, `description` and an optional `method` (`'1'` to `'4'`) as well as your options. A number input for any method other than 1 also carries its value on the method 2 track. Inputs take the methods of the unit system you give: for fewer methods, narrow the system, e.g. `system: defaultUnitSystem.withMethods('1', '2')`, and inputs for any other method won't compile.
 
 ## Number validation
 

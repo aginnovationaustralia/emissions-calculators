@@ -5,6 +5,7 @@ export {
   type AnyContainer,
   type BinaryOperation,
   type Container,
+  type Method,
   type Origin,
   type RuleSet,
 } from './container.js';

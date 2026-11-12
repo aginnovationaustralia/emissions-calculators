@@ -5,15 +5,21 @@
 import Decimal from 'decimal.js-light';
 import {
   DefaultContainer,
+  DefaultRules,
   defaultUnitSystem,
   Mass,
   mass,
   massPerMass,
 } from './defaults/index.js';
 import {
+  AnyContainer,
   br,
   captureMethod1Or2Value,
   childrenOf,
+  Container,
+  ContainerOf,
+  Method,
+  MethodsOf,
   ifTrueElse,
   max,
   min,
@@ -51,6 +57,24 @@ describe('method 1 and 2 values', () => {
     expect(measured.origin).toEqual({ kind: 'input', method: '2' });
     expect(tracks(measured)).toEqual({ method1: 7, method2: 7, value: 7 });
     expect(measured.meta).toEqual({ name: 'measured' });
+  });
+
+  test('a method 3 or 4 input is recorded as such, on the method 2 track', () => {
+    for (const method of ['3', '4'] as const) {
+      const measured = input(mass('CO2', 7), { name: 'measured', method });
+      expect(measured.origin).toEqual({ kind: 'input', method });
+      expect(tracks(measured)).toEqual({ method1: 7, method2: 7, value: 7 });
+    }
+  });
+
+  test('a method 1 input has no method 2 track', () => {
+    const supplied = input(mass('CO2', 7), { name: 'supplied' });
+    expect(supplied.origin).toEqual({ kind: 'input', method: '1' });
+    expect(tracks(supplied)).toEqual({
+      method1: 7,
+      method2: undefined,
+      value: 7,
+    });
   });
 
   test('captureMethod1Or2Value keeps method 1 when there is no method 2', () => {
@@ -267,5 +291,85 @@ describe('consumer metadata', () => {
       modules: ['3.1'],
     });
     expect(area.named('renamed').meta.quality).toEqual({ Temporal: '2' });
+  });
+});
+
+describe('method width', () => {
+  const twoMethods = defaultUnitSystem.withMethods('1', '2');
+  type C2<U> = ContainerOf<typeof twoMethods, U>;
+
+  test('narrows the methods of a system, its inputs and its containers', () => {
+    expectType<Equal<MethodsOf<typeof twoMethods>, '1' | '2'>>(true);
+    expectType<Equal<MethodsOf<typeof defaultUnitSystem>, Method>>(true);
+    expect(twoMethods.methods).toEqual(['1', '2']);
+
+    const measured = twoMethods.input(mass('CO2', 7), {
+      name: 'measured',
+      method: '2',
+    });
+    expectType<Equal<typeof measured, C2<Mass<'CO2'>>>>(true);
+    if (measured.origin.kind === 'input') {
+      expectType<Equal<typeof measured.origin.method, '1' | '2'>>(true);
+    }
+  });
+
+  test('rejects an input for another method, at compile time and runtime', () => {
+    expect(() =>
+      twoMethods.input(mass('CO2', 7), {
+        name: 'measured',
+        // @ts-expect-error this system has no method 3
+        method: '3',
+      }),
+    ).toThrow(
+      'measured is for method 3, but this system only has methods 1, 2',
+    );
+  });
+
+  test('keeps the width through arithmetic, combinators and extend', () => {
+    const a = twoMethods.root(mass('CO2', 1));
+    const total = sum(
+      [a, a.multiply(twoMethods.num(2))],
+      twoMethods.root(mass('CO2', 0)),
+    );
+    expectType<Equal<typeof total, C2<Mass<'CO2'>>>>(true);
+    const chosen = ifTrueElse(twoMethods.root(true), a, br(a));
+    expectType<Equal<typeof chosen, C2<Mass<'CO2'>>>>(true);
+    expect(total.unit.store.toNumber()).toBe(3);
+    expect(chosen.unit.store.toNumber()).toBe(1);
+
+    const extended = twoMethods.extend({});
+    expectType<Equal<MethodsOf<typeof extended>, '1' | '2'>>(true);
+    expect(extended.methods).toEqual(['1', '2']);
+  });
+
+  test('walkers see the narrow method too', () => {
+    const measured = twoMethods.input(mass('CO2', 7), {
+      name: 'm',
+      method: '2',
+    });
+    const children: AnyContainer<'1' | '2'>[] = childrenOf(
+      measured.multiply(twoMethods.num(2)),
+    );
+    expect(children).toHaveLength(2);
+  });
+
+  test('narrow containers are still containers of every method', () => {
+    const narrow: C2<Mass<'CO2'>> = twoMethods.root(mass('CO2', 1));
+    const wide: Container<Mass<'CO2'>, DefaultRules> = narrow;
+    expect(wide.unit.substance).toBe('CO2');
+  });
+
+  test("doesn't mix containers of different methods", () => {
+    const narrow = twoMethods.root(mass('CO2', 1));
+    const wide = defaultUnitSystem.root(mass('CO2', 1));
+    // @ts-expect-error a system for methods 1 to 4 is not a system for methods 1 and 2
+    const widened: C2<Mass<'CO2'>> = wide;
+    expect(narrow.plus(widened).unit.store.toNumber()).toBe(2);
+  });
+
+  test("can't widen, or narrow to methods it doesn't have", () => {
+    // @ts-expect-error method 3 isn't one of this system's methods
+    expect(() => twoMethods.withMethods('3')).toThrow(UnitError);
+    expect(twoMethods.withMethods('1').methods).toEqual(['1']);
   });
 });

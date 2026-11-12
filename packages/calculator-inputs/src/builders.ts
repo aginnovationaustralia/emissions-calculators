@@ -1,6 +1,7 @@
 import type {
   Container,
   Metadata,
+  Method,
   NumberUnit,
   RuleSet,
   UnitSystem,
@@ -11,16 +12,20 @@ import { NumberSchemaTweaker, resolveNumberSchema } from './numbers.js';
 import { mapOptional } from './optional.js';
 
 /** Options every input takes. Consumers add their own with the `O` type parameter. */
-export type BaseInputOptions = {
+export type BaseInputOptions<M extends Method = Method> = {
   /** The input's name, recorded on its container. */
   name: string;
   /** Describes the input in the API documentation. */
   description: string;
-  /** Which calculation method the value is for. Defaults to method 1. */
-  method?: '1' | '2';
+  /**
+   * Which calculation method the value is for, '1' to '4'. Defaults to method 1. Narrow it in your
+   * own options type if your domain has fewer methods.
+   */
+  method?: M;
 };
 
-export type InputOptions<O> = BaseInputOptions & O;
+export type InputOptions<O, M extends Method = Method> = BaseInputOptions<M> &
+  O;
 
 /*
  * The consumer's extra fields beside `value`. zod types an object with no fields as
@@ -50,54 +55,68 @@ export type NumberInputSchema<
   U,
   RS extends RuleSet,
   F extends z.ZodRawShape,
+  M extends Method = Method,
 > = z.ZodPipe<
   NumberWireSchema<F>,
-  z.ZodTransform<Container<U, RS>, NumberWireOutput<F>>
+  z.ZodTransform<Container<U, RS, M>, NumberWireOutput<F>>
 >;
 
 export type NumberInputSchemaOptional<
   U,
   RS extends RuleSet,
   F extends z.ZodRawShape,
+  M extends Method = Method,
 > = z.ZodPipe<
   z.ZodOptional<NumberWireSchema<F>>,
-  z.ZodTransform<Container<U, RS> | undefined, NumberWireOutput<F> | undefined>
+  z.ZodTransform<
+    Container<U, RS, M> | undefined,
+    NumberWireOutput<F> | undefined
+  >
 >;
 
 /** An enum (or literal) input schema. */
-export type EnumInputSchema<T extends string, RS extends RuleSet> = z.ZodPipe<
+export type EnumInputSchema<
+  T extends string,
+  RS extends RuleSet,
+  M extends Method = Method,
+> = z.ZodPipe<
   EnumSchema<T>,
-  z.ZodTransform<Container<T, RS>, z.output<EnumSchema<T>>>
+  z.ZodTransform<Container<T, RS, M>, z.output<EnumSchema<T>>>
 >;
 
 export type EnumInputSchemaOptional<
   T extends string,
   RS extends RuleSet,
+  M extends Method = Method,
 > = z.ZodPipe<
   z.ZodOptional<EnumSchema<T>>,
   z.ZodTransform<
-    Container<T, RS> | undefined,
+    Container<T, RS, M> | undefined,
     z.output<EnumSchema<T>> | undefined
   >
 >;
 
-export type BooleanInputSchema<RS extends RuleSet> = z.ZodPipe<
-  z.ZodBoolean,
-  z.ZodTransform<Container<boolean, RS>, boolean>
->;
+export type BooleanInputSchema<
+  RS extends RuleSet,
+  M extends Method = Method,
+> = z.ZodPipe<z.ZodBoolean, z.ZodTransform<Container<boolean, RS, M>, boolean>>;
 
-export type BooleanInputSchemaOptional<RS extends RuleSet> = z.ZodPipe<
+export type BooleanInputSchemaOptional<
+  RS extends RuleSet,
+  M extends Method = Method,
+> = z.ZodPipe<
   z.ZodOptional<z.ZodBoolean>,
-  z.ZodTransform<Container<boolean, RS> | undefined, boolean | undefined>
+  z.ZodTransform<Container<boolean, RS, M> | undefined, boolean | undefined>
 >;
 
 export type InputBuilderConfig<
   RS extends RuleSet,
   O extends object,
   F extends z.ZodRawShape,
+  M extends Method = Method,
 > = {
   /** The unit system the input containers belong to. */
-  system: UnitSystem<RS>;
+  system: UnitSystem<RS, M>;
 
   /** Gives the shared schema for a list of enum values; see `createEnumRegistry`. */
   enumSchema: <TEnum extends string>(
@@ -113,7 +132,7 @@ export type InputBuilderConfig<
   displayUnit: (
     unitFactory: (value: number) => NumberUnit,
     tweaker: NumberSchemaTweaker | undefined,
-    options: InputOptions<O>,
+    options: InputOptions<O, M>,
   ) => string;
 
   /** Metadata to record on every input's container, from the consumer's options. */
@@ -146,10 +165,11 @@ export type InputBuilderConfig<
  */
 export const createInputBuilders = <
   RS extends RuleSet,
+  M extends Method,
   O extends object = object,
   F extends z.ZodRawShape = Record<never, never>,
 >(
-  config: InputBuilderConfig<RS, O, F>,
+  config: InputBuilderConfig<RS, O, F, M>,
 ) => {
   const {
     system,
@@ -162,7 +182,7 @@ export const createInputBuilders = <
   } = config;
 
   /** The `description` and consumer tags shared by every input schema. */
-  const openapiTags = (description: string, options: InputOptions<O>) => ({
+  const openapiTags = (description: string, options: InputOptions<O, M>) => ({
     description,
     ...toOpenApi(options),
   });
@@ -178,9 +198,9 @@ export const createInputBuilders = <
   const toNumberContainer =
     <U extends NumberUnit>(
       unitFactory: (value: number) => U,
-      options: InputOptions<O>,
+      options: InputOptions<O, M>,
     ) =>
-    (wire: NumberWireOutput<F>): Container<U, RS> => {
+    (wire: NumberWireOutput<F>): Container<U, RS, M> => {
       const { value, ...fields } = wire;
       return system.input(unitFactory(value), {
         ...toMeta(options),
@@ -191,8 +211,8 @@ export const createInputBuilders = <
     };
 
   const toContainer =
-    <T extends string | boolean>(options: InputOptions<O>) =>
-    (value: T): Container<T, RS> =>
+    <T extends string | boolean>(options: InputOptions<O, M>) =>
+    (value: T): Container<T, RS, M> =>
       system.input(value, {
         ...toMeta(options),
         name: options.name,
@@ -205,15 +225,15 @@ export const createInputBuilders = <
   /** Accepts `{ value, ...numberFields }` and returns an input container of the unit. */
   const numberInput = <U extends NumberUnit>(
     unitFactory: (value: number) => U,
-    options: InputOptions<O>,
+    options: InputOptions<O, M>,
     tweaker?: NumberSchemaTweaker,
-  ): NumberInputSchema<U, RS, F> => {
+  ): NumberInputSchema<U, RS, F, M> => {
     const units = displayUnit(unitFactory, tweaker, options);
     return numberWireSchema(units, tweaker)
       .transform(toNumberContainer(unitFactory, options))
       .meta(
         openapiTags(withUnits(options.description, units), options),
-      ) as NumberInputSchema<U, RS, F>;
+      ) as NumberInputSchema<U, RS, F, M>;
   };
 
   /**
@@ -222,40 +242,41 @@ export const createInputBuilders = <
    */
   const numberInputOptional = <U extends NumberUnit>(
     unitFactory: (value: number) => U,
-    options: InputOptions<O>,
+    options: InputOptions<O, M>,
     tweaker?: NumberSchemaTweaker,
-  ): NumberInputSchemaOptional<U, RS, F> => {
+  ): NumberInputSchemaOptional<U, RS, F, M> => {
     const units = displayUnit(unitFactory, undefined, options);
     return numberWireSchema(units, tweaker)
       .optional()
       .transform(mapOptional(toNumberContainer(unitFactory, options)))
       .meta(
         openapiTags(withUnits(options.description, units), options),
-      ) as NumberInputSchemaOptional<U, RS, F>;
+      ) as NumberInputSchemaOptional<U, RS, F, M>;
   };
 
   /** Accepts one of a registered list of strings. */
   const enumInput = <TEnum extends string>(
     values: readonly TEnum[],
-    options: InputOptions<O>,
-  ): EnumInputSchema<TEnum, RS> =>
+    options: InputOptions<O, M>,
+  ): EnumInputSchema<TEnum, RS, M> =>
     enumSchema(values)
       .meta(openapiTags(options.description, options))
       .transform(toContainer<TEnum>(options)) as unknown as EnumInputSchema<
       TEnum,
-      RS
+      RS,
+      M
     >;
 
   const enumInputOptional = <TEnum extends string>(
     values: readonly TEnum[],
-    options: InputOptions<O>,
-  ): EnumInputSchemaOptional<TEnum, RS> =>
+    options: InputOptions<O, M>,
+  ): EnumInputSchemaOptional<TEnum, RS, M> =>
     enumSchema(values)
       .optional()
       .meta(openapiTags(options.description, options))
       .transform(
         mapOptional(toContainer<TEnum>(options)),
-      ) as unknown as EnumInputSchemaOptional<TEnum, RS>;
+      ) as unknown as EnumInputSchemaOptional<TEnum, RS, M>;
 
   /**
    * Accepts exactly one string, typically to select a variant. It is emitted inline as a
@@ -263,25 +284,28 @@ export const createInputBuilders = <
    */
   const literalInput = <TValue extends string>(
     value: TValue,
-    options: InputOptions<O>,
-  ): EnumInputSchema<TValue, RS> =>
+    options: InputOptions<O, M>,
+  ): EnumInputSchema<TValue, RS, M> =>
     z
       .enum([value])
       .meta(openapiTags(options.description, options))
       .transform(toContainer<TValue>(options)) as unknown as EnumInputSchema<
       TValue,
-      RS
+      RS,
+      M
     >;
 
-  const booleanInput = (options: InputOptions<O>): BooleanInputSchema<RS> =>
+  const booleanInput = (
+    options: InputOptions<O, M>,
+  ): BooleanInputSchema<RS, M> =>
     z
       .boolean()
       .meta(openapiTags(options.description, options))
       .transform(toContainer<boolean>(options));
 
   const booleanInputOptional = (
-    options: InputOptions<O>,
-  ): BooleanInputSchemaOptional<RS> =>
+    options: InputOptions<O, M>,
+  ): BooleanInputSchemaOptional<RS, M> =>
     z
       .boolean()
       .optional()

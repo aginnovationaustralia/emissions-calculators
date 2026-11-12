@@ -149,6 +149,41 @@ describe('numberInput', () => {
     ).toBe('Fuel used (t)');
   });
 
+  test('takes methods 1 to 4, or the subset a consumer allows', () => {
+    const method4 = inputs.numberInput((v) => mass('CO2', v), {
+      ...options,
+      method: '4',
+    });
+    expect(method4.parse({ value: 7 }).origin).toEqual({
+      kind: 'input',
+      method: '4',
+    });
+
+    // A consumer with only methods 1 and 2 narrows its unit system; inputs follow it
+    const twoMethods = createInputBuilders({
+      system: defaultUnitSystem.withMethods('1', '2'),
+      enumSchema,
+      displayUnit: () => 'kg',
+    });
+    const method2 = twoMethods
+      .numberInput((v) => mass('CO2', v), {
+        name: 'x',
+        description: 'x',
+        method: '2',
+      })
+      .parse({ value: 1 });
+    expectType<
+      Equal<typeof method2, Container<Mass<'CO2'>, DefaultRules, '1' | '2'>>
+    >(true);
+    expect(method2.origin).toEqual({ kind: 'input', method: '2' });
+    twoMethods.numberInput((v) => mass('CO2', v), {
+      name: 'x',
+      description: 'x',
+      // @ts-expect-error this consumer has no method 3
+      method: '3',
+    });
+  });
+
   test('requires the consumer options', () => {
     // @ts-expect-error modules is missing
     inputs.numberInput((v) => mass('CO2', v), { name: 'x', description: 'x' });

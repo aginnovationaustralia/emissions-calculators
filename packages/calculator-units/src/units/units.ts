@@ -1,59 +1,17 @@
 /*
- * The default units, ported from the emissions calculators.
+ * The library of units, ported from the emissions calculators.
  *
  * Each unit holds its value in `store`. Rules only look at the other fields, which describe what
  * the number measures ("kg of CO2 per kg of Fuel"). Constructors take an optional initial value.
+ *
+ * Units are generic over their substances and declare none. Register substances with a substance
+ * pack (`/substances/...`) or your own `SubstanceRegistry` augmentation.
  *
  * Storage base units: kg, h, m, m2, L, J, kWh.
  */
 import type { Substance } from '../substances.js';
 import type { InitialValue } from '../units.js';
 import { values, ValueStore } from '../value-store.js';
-
-/*
- * The default substances. Declared here, in the file every default unit depends on, so they are in
- * scope exactly when the defaults are imported and never for a blank slate.
- */
-declare module '../substances.js' {
-  interface SubstanceRegistry {
-    Carbon: true;
-    Chemical: true;
-    'Inorganic Fertiliser': true;
-    'Organic Fertiliser': true;
-    CO2: true;
-    CH4: true;
-    N2O: true;
-    N: true;
-    'Volatilised N': true;
-    CO2e: true;
-    Refrigerant: true;
-    Fuel: true;
-    'Greasy Wool': true;
-    'Clean Wool': true;
-    FluidWaste: true;
-    Oxygen: true;
-    Urea: true;
-    DryMatter: true;
-    CrudeProtein: true;
-    CropResidue: true;
-    Yield: true;
-    Lime: true;
-    'Solid Waste': true;
-    Milk: true;
-    'Milk Solids': true;
-    Liveweight: true;
-    'Purchased Feed': true;
-    'Purchased Mineral Supplement': true;
-    'Volatile Solids': true;
-    COD: true;
-    Packaging: true;
-    'Organic Amendment': true;
-    Trees: true;
-    'Freight Goods': true;
-    Eggs: true;
-    Fish: true;
-  }
-}
 
 export type Energy = { __unitType: 'Energy'; store: ValueStore };
 export type Area = { __unitType: 'Area'; store: ValueStore };

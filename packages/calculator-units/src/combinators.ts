@@ -7,6 +7,7 @@ import {
   AnyContainer,
   Container,
   createNode,
+  Method,
   RuleSet,
 } from './container.js';
 import type { Metadata } from './metadata.js';
@@ -36,7 +37,9 @@ type NumberContainer = AnyContainer & { unit: NumberUnit };
 
 type UnitOf<C extends AnyContainer> = C['unit'];
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type RulesOf<C> = C extends Container<any, infer RS> ? RS : never;
+type RulesOf<C> = C extends Container<any, infer RS, any> ? RS : never;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type MethodsOf<C> = C extends Container<any, any, infer M> ? M : never;
 
 /**
  * Adds up containers of the same unit. `fallback` is the value of an empty sum and must be a zero
@@ -46,16 +49,16 @@ export function sum<C extends NumberContainer>(
   items: C[],
   fallback: true extends IsUnion<UnitOf<C>>
     ? MixedUnitsError
-    : Container<NoInfer<UnitOf<C>>, RulesOf<C>>,
+    : Container<NoInfer<UnitOf<C>>, RulesOf<C>, MethodsOf<C>>,
   meta?: Metadata,
-): Container<UnitOf<C>, RulesOf<C>>;
+): Container<UnitOf<C>, RulesOf<C>, MethodsOf<C>>;
 
 /** For callers generic over the unit, where the item unit can't be resolved. */
-export function sum<U extends NumberUnit, RS extends RuleSet>(
-  items: Container<U, RS>[],
-  fallback: Container<NoInfer<U>, NoInfer<RS>>,
+export function sum<U extends NumberUnit, RS extends RuleSet, M extends Method>(
+  items: Container<U, RS, M>[],
+  fallback: Container<NoInfer<U>, NoInfer<RS>, NoInfer<M>>,
   meta?: Metadata,
-): Container<U, RS>;
+): Container<U, RS, M>;
 
 export function sum(
   items: AnyContainer[],
@@ -87,9 +90,9 @@ export function sum(
 }
 
 /** Groups a value for display as `( inner )`. The value and unit are unchanged. */
-export const br = <U extends AnyUnit, RS extends RuleSet>(
-  inner: Container<U, RS>,
-): Container<U, RS> =>
+export const br = <U extends AnyUnit, RS extends RuleSet, M extends Method>(
+  inner: Container<U, RS, M>,
+): Container<U, RS, M> =>
   createNode(algebraOf(inner), inner.unit as AnyUnit, {
     kind: 'bracketed',
     inner,
@@ -103,11 +106,12 @@ export const translate = <
   TOut extends AnyUnit,
   TIn extends AnyUnit,
   RS extends RuleSet,
+  M extends Method,
 >(
   unit: TOut,
-  from: Container<TIn, RS>,
+  from: Container<TIn, RS, M>,
   meta?: Metadata,
-): Container<TOut, RS> =>
+): Container<TOut, RS, M> =>
   createNode(algebraOf(from), unit, { kind: 'translation', from }, meta);
 
 /**
@@ -121,23 +125,26 @@ export const translate = <
 export function captureMethod1Or2Value<
   U extends NumberUnit,
   RS extends RuleSet,
->(method1: VoidUnit, method2: Container<U, RS>): Container<U, RS>;
+  M extends Method,
+>(method1: VoidUnit, method2: Container<U, RS, M>): Container<U, RS, M>;
 export function captureMethod1Or2Value<
   U extends NumberUnit,
   RS extends RuleSet,
+  M extends Method,
 >(
-  method1: Container<U, RS>,
-  method2: Container<U, RS> | undefined,
-): Container<U, RS>;
+  method1: Container<U, RS, M>,
+  method2: Container<U, RS, M> | undefined,
+): Container<U, RS, M>;
 export function captureMethod1Or2Value<
   U extends NumberUnit,
   RS extends RuleSet,
+  M extends Method,
 >(
-  method1: Container<U, RS> | VoidUnit,
-  method2: Container<U, RS> | undefined,
-): Container<U, RS> {
+  method1: Container<U, RS, M> | VoidUnit,
+  method2: Container<U, RS, M> | undefined,
+): Container<U, RS, M> {
   if (method2 === undefined) {
-    return method1 as Container<U, RS>;
+    return method1 as Container<U, RS, M>;
   }
   if ('__unitType' in method1 && isVoid(method1)) {
     return createNode(
@@ -149,7 +156,7 @@ export function captureMethod1Or2Value<
       { kind: 'method2', method2 },
     );
   }
-  const m1 = method1 as Container<U, RS>;
+  const m1 = method1 as Container<U, RS, M>;
   return createNode(
     algebraOf(method2),
     {
@@ -165,11 +172,12 @@ export const selectSwitch = <
   S extends StringUnit,
   U extends NumberUnit,
   RS extends RuleSet,
+  M extends Method,
 >(
-  subject: Container<S, RS>,
-  cases: Record<S, Container<U, RS>>,
+  subject: Container<S, RS, M>,
+  cases: Record<S, Container<U, RS, M>>,
   meta?: Metadata,
-): Container<U, RS> => {
+): Container<U, RS, M> => {
   const selected = cases[subject.unit];
   return createNode(
     algebraOf(selected),
@@ -180,12 +188,16 @@ export const selectSwitch = <
 };
 
 /** Picks `whenTrue` or `whenFalse` by the value of a boolean container. */
-export const ifTrueElse = <U extends NumberUnit, RS extends RuleSet>(
-  condition: Container<BooleanUnit, RS>,
-  whenTrue: Container<U, RS>,
-  whenFalse: Container<U, RS>,
+export const ifTrueElse = <
+  U extends NumberUnit,
+  RS extends RuleSet,
+  M extends Method,
+>(
+  condition: Container<BooleanUnit, RS, M>,
+  whenTrue: Container<U, RS, M>,
+  whenFalse: Container<U, RS, M>,
   meta?: Metadata,
-): Container<U, RS> => {
+): Container<U, RS, M> => {
   const selected = condition.unit ? whenTrue : whenFalse;
   return createNode(
     algebraOf(selected),
@@ -196,30 +208,31 @@ export const ifTrueElse = <U extends NumberUnit, RS extends RuleSet>(
 };
 
 /** The smaller of two values. A thin wrapper around `Container.min` that reads better inline. */
-export const min = <U extends NumberUnit, RS extends RuleSet>(
-  value: Container<U, RS>,
-  limit: Container<U | RealNumber, RS>,
-): Container<U, RS> => value.min(limit as never);
+export const min = <U extends NumberUnit, RS extends RuleSet, M extends Method>(
+  value: Container<U, RS, M>,
+  limit: Container<U | RealNumber, RS, M>,
+): Container<U, RS, M> => value.min(limit as never);
 
 /** The larger of two values. A thin wrapper around `Container.max` that reads better inline. */
-export const max = <U extends NumberUnit, RS extends RuleSet>(
-  value: Container<U, RS>,
-  limit: Container<U | RealNumber, RS>,
-): Container<U, RS> => value.max(limit as never);
+export const max = <U extends NumberUnit, RS extends RuleSet, M extends Method>(
+  value: Container<U, RS, M>,
+  limit: Container<U | RealNumber, RS, M>,
+): Container<U, RS, M> => value.max(limit as never);
 
 /** Multiplies every container in an object by the same RealNumber factor. */
 export const multiplyAllValuesBy = <
-  T extends Record<string, Container<NumberUnit, RS>>,
+  T extends Record<string, Container<NumberUnit, RS, M>>,
   RS extends RuleSet,
+  M extends Method,
 >(
   object: T,
-  factor: Container<RealNumber, RS>,
+  factor: Container<RealNumber, RS, M>,
 ): { [K in keyof T]: T[K] } =>
   Object.fromEntries(
     Object.entries(object).map(([key, value]) => [
       key,
-      (value as unknown as AnyContainer as Container<NumberUnit, RS>).multiply(
-        factor as never,
-      ),
+      (
+        value as unknown as AnyContainer as Container<NumberUnit, RS, M>
+      ).multiply(factor as never),
     ]),
   ) as unknown as { [K in keyof T]: T[K] };

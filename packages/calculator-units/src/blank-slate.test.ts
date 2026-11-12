@@ -1,9 +1,10 @@
 /*
- * A unit system built from nothing, importing only the core entry point.
+ * A unit system built from nothing, importing only the core entry point and the substance-free
+ * `/units` library.
  *
  * This file is excluded from the main tsconfig and typechecked alone by tsconfig.blank-slate.json,
- * so none of the defaults (in particular the default substances) are in scope, just as for a
- * consumer that never imports `/defaults`.
+ * so no substance pack is in scope, just as for a consumer that never imports `/defaults` or a
+ * pack.
  */
 import {
   ContainerOf,
@@ -17,8 +18,15 @@ import {
   ValueStore,
 } from './index.js';
 import { Equal, expectType } from './test-helpers.js';
+import {
+  energyRules,
+  mass,
+  massPerEnergy,
+  materialRules,
+  energy,
+} from './units/index.js';
 
-// No substances are declared, so any string is accepted
+// No substances are declared, even with the units library imported, so any string is accepted
 expectType<Equal<Substance, string>>(true);
 
 type Litres<S extends string = string> = {
@@ -91,5 +99,19 @@ describe('blank slate', () => {
     const fuel = units.root(litres('Fuel', 1));
     // @ts-expect-error price of milk times a volume of fuel
     expect(() => milkPrice.multiply(fuel)).toThrow(UnitError);
+  });
+
+  test('a system built from library rule modules, with any substances', () => {
+    const units = createUnitSystem(materialRules).extend(energyRules);
+    const emissions = units
+      .root(massPerEnergy('Anything', 2))
+      .multiply(units.root(energy(3)));
+    expectType<
+      Equal<
+        typeof emissions,
+        ContainerOf<typeof units, ReturnType<typeof mass<'Anything'>>>
+      >
+    >(true);
+    expect(emissions.unit.store.value.toNumber()).toBe(6);
   });
 });

@@ -3,7 +3,8 @@
  *
  * Each rule is a pair: an interface describing it to the compiler, and a value implementing it.
  * The value is what gets passed to a unit system; its type carries the interface. Use them all
- * through `defaultMultiplyRules` / `defaultDivideRules`, or pick individual rules.
+ * through `defaultMultiplyRules` / `defaultDivideRules`, by module (`materialRules`, `energyRules`, ...),
+ * or pick individual rules.
  *
  * Shared type variables (B in "MassPerMass<A, B> * Mass<B>") become runtime substance checks.
  */
@@ -664,51 +665,119 @@ export const massPerEnergyDividedByMassPerMass =
       whenSame(l.substance, r.snum, () => massPerEnergy(r.sdenom)),
   );
 
-/** Every default multiplication rule. */
+// ---------------------------------------------------------------------------------------------
+// Rule modules. Each is a set of rules that belong together, to build a unit system from:
+//
+//   createUnitSystem(materialRules).extend(energyRules)
+//
+// A module's rules may use units from other modules (e.g. livestock rules use Days and
+// EnergyPerMass), but no two modules handle the same pair of units, so any combination can be used.
+
+/** Mass and volume of substances, and the ratios between them: MassPerMass, MassPerVolume, VolumePerMass. */
+export const materialRules = {
+  multiply: [
+    massPerMassTimesMass,
+    massTimesMassPerMass,
+    massPerVolumeTimesVolume,
+    massPerVolumeTimesMassPerMass,
+  ],
+  divide: [massDividedByMassPerMass, massDividedByMassPerVolume],
+} as const;
+
+/** Energy and electricity: energy content factors (per mass, per volume) and emission factors (per energy, per electricity). */
+export const energyRules = {
+  multiply: [
+    energyPerVolumeTimesVolume,
+    massPerEnergyTimesEnergyPerVolume,
+    massPerEnergyTimesEnergy,
+    energyPerMassTimesMass,
+    electricityTimesMassPerElectricity,
+    massPerEnergyTimesEnergyPerMass,
+  ],
+  divide: [massPerEnergyDividedByMassPerMass],
+} as const;
+
+/** Rates over time: MassPerTime, MassPerDay, MassPerYear. */
+export const timeRules = {
+  multiply: [
+    massPerTimeTimesTime,
+    massPerDayTimesDays,
+    massPerYearTimesMassPerMass,
+    massPerYearTimesYears,
+  ],
+  divide: [],
+} as const;
+
+/** Rates over an area: MassPerArea, MassPerAreaPerDay, MassPerAreaPerYear. */
+export const landRules = {
+  multiply: [
+    massPerAreaTimesArea,
+    massPerAreaPerDayTimesDays,
+    massPerAreaPerDayTimesArea,
+    massPerAreaPerYearTimesArea,
+    massPerAreaPerYearTimesYears,
+    massPerAreaPerYearTimesMassPerMass,
+  ],
+  divide: [massDividedByArea, massPerAreaDividedByYears],
+} as const;
+
+/** Rates per head of livestock: MassPerHead, MassPerHeadPerDay, MassPerHeadPerYear, EnergyPerHeadPerDay, VolumePerHeadPerDay. */
+export const livestockRules = {
+  multiply: [
+    massPerHeadTimesMassPerMass,
+    massPerHeadPerDayTimesMassPerMass,
+    massPerHeadPerDayTimesHead,
+    massPerHeadPerDayTimesDays,
+    headTimesMassPerHead,
+    headTimesMassPerHeadPerYear,
+    massPerHeadPerYearTimesYears,
+    massPerHeadPerDayTimesVolumePerMass,
+    volumePerHeadPerDayTimesMassPerVolume,
+    massPerHeadPerDayTimesEnergyPerMass,
+  ],
+  divide: [
+    energyPerHeadPerDayDividedByEnergyPerMass,
+    massPerHeadDividedByDays,
+    massPerHeadPerDayDividedByMassPerMass,
+  ],
+} as const;
+
+/** Freight: MassDistance and MassPerMassDistance. */
+export const transportRules = {
+  multiply: [
+    massTimesDistance,
+    massPerMassDistanceTimesDistance,
+    massPerMassDistanceTimesMassDistance,
+  ],
+  divide: [],
+} as const;
+
+/** Every rule module. */
+export const ruleModules = {
+  material: materialRules,
+  energy: energyRules,
+  time: timeRules,
+  land: landRules,
+  livestock: livestockRules,
+  transport: transportRules,
+} as const;
+
+/** Every default multiplication rule, from every module. */
 export const defaultMultiplyRules = [
-  massPerMassTimesMass,
-  massTimesMassPerMass,
-  energyPerVolumeTimesVolume,
-  massPerEnergyTimesEnergyPerVolume,
-  massPerEnergyTimesEnergy,
-  energyPerMassTimesMass,
-  massPerAreaTimesArea,
-  massPerTimeTimesTime,
-  massPerVolumeTimesVolume,
-  electricityTimesMassPerElectricity,
-  massPerHeadTimesMassPerMass,
-  massPerHeadPerDayTimesMassPerMass,
-  massPerHeadPerDayTimesHead,
-  massPerHeadPerDayTimesDays,
-  headTimesMassPerHead,
-  headTimesMassPerHeadPerYear,
-  massPerHeadPerYearTimesYears,
-  massPerEnergyTimesEnergyPerMass,
-  massPerDayTimesDays,
-  massPerHeadPerDayTimesVolumePerMass,
-  volumePerHeadPerDayTimesMassPerVolume,
-  massPerAreaPerDayTimesDays,
-  massPerAreaPerDayTimesArea,
-  massPerAreaPerYearTimesArea,
-  massPerAreaPerYearTimesYears,
-  massPerAreaPerYearTimesMassPerMass,
-  massPerYearTimesMassPerMass,
-  massPerYearTimesYears,
-  massTimesDistance,
-  massPerMassDistanceTimesDistance,
-  massPerMassDistanceTimesMassDistance,
-  massPerHeadPerDayTimesEnergyPerMass,
-  massPerVolumeTimesMassPerMass,
+  ...materialRules.multiply,
+  ...energyRules.multiply,
+  ...timeRules.multiply,
+  ...landRules.multiply,
+  ...livestockRules.multiply,
+  ...transportRules.multiply,
 ] as const;
 
-/** Every default division rule. */
+/** Every default division rule, from every module. */
 export const defaultDivideRules = [
-  massDividedByArea,
-  massDividedByMassPerMass,
-  massPerAreaDividedByYears,
-  energyPerHeadPerDayDividedByEnergyPerMass,
-  massPerHeadDividedByDays,
-  massPerHeadPerDayDividedByMassPerMass,
-  massDividedByMassPerVolume,
-  massPerEnergyDividedByMassPerMass,
+  ...materialRules.divide,
+  ...energyRules.divide,
+  ...timeRules.divide,
+  ...landRules.divide,
+  ...livestockRules.divide,
+  ...transportRules.divide,
 ] as const;

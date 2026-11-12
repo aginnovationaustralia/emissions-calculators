@@ -22,6 +22,13 @@ import {
 /** The type-level rules a unit system was built with. */
 export type RuleSet = { multiply: RuleType; divide: RuleType };
 
+/**
+ * The calculation method a user supplied value is for. Method 1 is the default calculation; methods
+ * 2 to 4 are alternatives, e.g. from more specific data. Consumers use the subset their domain has:
+ * the VEERG calculators use methods 1 and 2, NGERS uses 1 to 4.
+ */
+export type Method = '1' | '2' | '3' | '4';
+
 export type BinaryOperation =
   'add' | 'subtract' | 'multiply' | 'divide' | 'power' | 'min' | 'max';
 
@@ -29,48 +36,48 @@ export type BinaryOperation =
  * Any container, seen only as a record of how its value was calculated. Use this for code that
  * walks or reports on calculations (see `childrenOf`), which doesn't need to do arithmetic.
  */
-export interface AnyContainer {
+export interface AnyContainer<M extends Method = Method> {
   readonly unit: AnyUnit;
-  readonly origin: Origin;
+  readonly origin: Origin<M>;
   readonly meta: Metadata;
 }
 
 /** How a container's value was produced, and from which other containers. */
-export type Origin =
+export type Origin<M extends Method = Method> =
   /** A value given directly, e.g. a constant. */
   | { kind: 'root' }
-  /** A value supplied by the user, for method 1 or method 2. */
-  | { kind: 'input'; method: '1' | '2' }
+  /** A value supplied by the user, and the method it is for. */
+  | { kind: 'input'; method: M }
   | {
       kind: 'binary';
       operation: BinaryOperation;
-      left: AnyContainer;
-      right: AnyContainer;
+      left: AnyContainer<M>;
+      right: AnyContainer<M>;
     }
-  | { kind: 'sum'; from: AnyContainer[] }
+  | { kind: 'sum'; from: AnyContainer<M>[] }
   /** A value looked up from a table, by literal keys or by string containers. */
-  | { kind: 'selection'; selectors: (AnyContainer | string)[] }
+  | { kind: 'selection'; selectors: (AnyContainer<M> | string)[] }
   /** The same value, grouped for display as `( inner )`. */
-  | { kind: 'bracketed'; inner: AnyContainer }
+  | { kind: 'bracketed'; inner: AnyContainer<M> }
   /** A value in a different unit, derived from another, e.g. a mass relabelled to a new substance. */
-  | { kind: 'translation'; from: AnyContainer }
+  | { kind: 'translation'; from: AnyContainer<M> }
   /** A method 1 value, and the method 2 value that overrides it if one was supplied. */
   | {
       kind: 'method1and2';
-      method1: AnyContainer;
-      method2: AnyContainer | undefined;
+      method1: AnyContainer<M>;
+      method2: AnyContainer<M> | undefined;
     }
   /** A value only method 2 can calculate. */
-  | { kind: 'method2'; method2: AnyContainer }
+  | { kind: 'method2'; method2: AnyContainer<M> }
   /** One of several cases, chosen by a string value. */
-  | { kind: 'switch'; subject: AnyContainer; selected: AnyContainer }
+  | { kind: 'switch'; subject: AnyContainer<M>; selected: AnyContainer<M> }
   /** One of two values, chosen by a boolean. */
   | {
       kind: 'if_else';
-      condition: AnyContainer;
-      selected: AnyContainer;
-      whenTrue: AnyContainer;
-      whenFalse: AnyContainer;
+      condition: AnyContainer<M>;
+      selected: AnyContainer<M>;
+      whenTrue: AnyContainer<M>;
+      whenFalse: AnyContainer<M>;
     };
 
 /** Number-only operations accept `never` for non-number containers, so they can't be called. */
@@ -86,68 +93,71 @@ type IfNumber<U, T> = [U] extends [NumberUnit] ? T : never;
  * `Type '"Fuel"' is not assignable to type '"Refrigerant"'`.
  *
  * Calculation code normally uses an alias that fixes `RS`, such as `DefaultContainer<U>`.
+ *
+ * `M` is the calculation methods its inputs can be for (see `UnitSystem.withMethods`). Containers
+ * only combine with containers of the same methods.
  */
-export interface Container<U, RS extends RuleSet> {
+export interface Container<U, RS extends RuleSet, M extends Method = Method> {
   readonly unit: U;
-  readonly origin: Origin;
+  readonly origin: Origin<M>;
   readonly meta: Metadata;
 
   multiply<R extends RightOf<RS['multiply'], U, R>>(
-    right: Container<R, RS>,
+    right: Container<R, RS, M>,
     meta?: Metadata,
-  ): Container<ResultOf<RS['multiply'], U, R>, RS>;
+  ): Container<ResultOf<RS['multiply'], U, R>, RS, M>;
 
   divide<R extends RightOf<RS['divide'], U, R>>(
-    right: Container<R, RS>,
+    right: Container<R, RS, M>,
     meta?: Metadata,
-  ): Container<ResultOf<RS['divide'], U, R>, RS>;
+  ): Container<ResultOf<RS['divide'], U, R>, RS, M>;
 
   plus<R extends AdditiveRight<U>>(
-    right: Container<R, RS>,
+    right: Container<R, RS, M>,
     meta?: Metadata,
-  ): Container<AdditiveResult<U, R>, RS>;
+  ): Container<AdditiveResult<U, R>, RS, M>;
 
   minus<R extends AdditiveRight<U>>(
-    right: Container<R, RS>,
+    right: Container<R, RS, M>,
     meta?: Metadata,
-  ): Container<AdditiveResult<U, R>, RS>;
+  ): Container<AdditiveResult<U, R>, RS, M>;
 
   /** Raises this value to a power. The units of the result can't be tracked, so it is a RealNumber. */
   power(
-    right: IfNumber<U, Container<RealNumber, RS>>,
+    right: IfNumber<U, Container<RealNumber, RS, M>>,
     meta?: Metadata,
-  ): Container<RealNumber, RS>;
+  ): Container<RealNumber, RS, M>;
 
   /**
    * Squares this value. The unit is kept as it is (not squared), matching how squared terms are
    * used in the existing calculations; use `switchUnit` to give the result its real unit.
    */
   squared(
-    this: IfNumber<U, Container<U, RS>>,
+    this: IfNumber<U, Container<U, RS, M>>,
     meta?: Metadata,
-  ): Container<U, RS>;
+  ): Container<U, RS, M>;
 
   /** The smaller of this value and `limit`, on each method track. */
   min<R extends LimitRight<U>>(
-    limit: Container<R, RS>,
+    limit: Container<R, RS, M>,
     meta?: Metadata,
-  ): Container<U, RS>;
+  ): Container<U, RS, M>;
 
   /** The larger of this value and `limit`, on each method track. */
   max<R extends LimitRight<U>>(
-    limit: Container<R, RS>,
+    limit: Container<R, RS, M>,
     meta?: Metadata,
-  ): Container<U, RS>;
+  ): Container<U, RS, M>;
 
   /**
    * The same value and history in a different unit. An escape hatch for relationships no rule
    * describes, e.g. `x.squared().switchUnit((u) => massPerHead('Liveweight', u.store))`.
    */
-  switchUnit<V extends AnyUnit>(converter: (from: U) => V): Container<V, RS>;
+  switchUnit<V extends AnyUnit>(converter: (from: U) => V): Container<V, RS, M>;
 
-  named(name: string): Container<U, RS>;
-  reference(reference: string): Container<U, RS>;
-  attach(meta: Metadata): Container<U, RS>;
+  named(name: string): Container<U, RS, M>;
+  reference(reference: string): Container<U, RS, M>;
+  attach(meta: Metadata): Container<U, RS, M>;
 }
 
 /** Computes the unit of a binary operation, or throws a `UnitError`. Stores are not computed here. */
@@ -298,13 +308,17 @@ export class ContainerNode implements AnyContainer {
 }
 
 /** Creates a node with the given algebra. Internal: consumers create containers through a system. */
-export const createNode = <U, RS extends RuleSet>(
+export const createNode = <U, RS extends RuleSet, M extends Method = Method>(
   algebra: Algebra,
   unit: AnyUnit,
-  origin: Origin,
+  origin: Origin<M>,
   meta?: Metadata,
-): Container<U, RS> =>
-  new ContainerNode(algebra, unit, origin, meta) as unknown as Container<U, RS>;
+): Container<U, RS, M> =>
+  new ContainerNode(algebra, unit, origin, meta) as unknown as Container<
+    U,
+    RS,
+    M
+  >;
 
 /** The algebra of the system that created a container. Internal. */
 export const algebraOf = (container: AnyContainer): Algebra =>
@@ -314,7 +328,9 @@ export const algebraOf = (container: AnyContainer): Algebra =>
  * The containers a container was calculated from, in order. A method1and2 node returns both
  * branches; a selection node returns only its string-container selectors.
  */
-export const childrenOf = (container: AnyContainer): AnyContainer[] => {
+export const childrenOf = <M extends Method>(
+  container: AnyContainer<M>,
+): AnyContainer<M>[] => {
   const origin = container.origin;
   switch (origin.kind) {
     case 'root':
@@ -326,7 +342,7 @@ export const childrenOf = (container: AnyContainer): AnyContainer[] => {
       return origin.from;
     case 'selection':
       return origin.selectors.filter(
-        (s): s is AnyContainer => typeof s !== 'string',
+        (s): s is AnyContainer<M> => typeof s !== 'string',
       );
     case 'bracketed':
       return [origin.inner];

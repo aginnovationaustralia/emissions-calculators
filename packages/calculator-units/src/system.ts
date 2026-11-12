@@ -1,5 +1,11 @@
 import Decimal from 'decimal.js-light';
-import { Algebra, Container, createNode, RuleSet } from './container.js';
+import {
+  Algebra,
+  Container,
+  createNode,
+  Method,
+  RuleSet,
+} from './container.js';
 import { UnitError } from './errors.js';
 import type { Metadata } from './metadata.js';
 import type {
@@ -28,51 +34,70 @@ export type BuiltInRules = {
   divide: ScaleRight | SameUnit;
 };
 
-type Rules = {
+/**
+ * A set of rules that belong together, e.g. `energyRules` from `/units`, or a consumer's own. Build a
+ * system from modules with `createUnitSystem(module).extend(another)`. Declare your own with
+ * `as const` so the types of its rules are kept.
+ */
+export type RuleModule = {
   multiply?: readonly MultiplyRule[];
   divide?: readonly DivideRule[];
 };
 
+type Rules = RuleModule;
+
 /** Options for a user supplied value. Everything except `method` is stored as metadata. */
-export type InputOptions = Metadata & {
+export type InputOptions<M extends Method = Method> = Metadata & {
   name: string;
-  /** Which calculation method the value is for. Defaults to method 1. */
-  method?: '1' | '2';
+  /**
+   * Which calculation method the value is for, one of the system's methods. Defaults to method 1.
+   * A value for any other method is an alternative to the default calculation, so it is also
+   * carried on the method 2 track.
+   */
+  method?: M;
 };
 
 /** A key for `select`: a literal key, or a string container whose value is the key. */
-export type Selector<K extends string, RS extends RuleSet> =
-  K | Container<StringUnit<K>, RS>;
+export type Selector<
+  K extends string,
+  RS extends RuleSet,
+  M extends Method = Method,
+> = K | Container<StringUnit<K>, RS, M>;
 
 /**
  * A set of rules and the means to create containers that follow them. There is no global state:
  * a container can only do what the system that created it allows, at compile time and at runtime.
+ *
+ * `M` is the calculation methods inputs can be for, all four unless narrowed with `withMethods`.
  */
-export interface UnitSystem<RS extends RuleSet> {
+export interface UnitSystem<RS extends RuleSet, M extends Method = Method> {
   readonly multiplyRules: readonly MultiplyRule[];
   readonly divideRules: readonly DivideRule[];
 
   /** A container holding `unit` (and, for number units, the value in its store), with no history. */
-  root<U extends AnyUnit>(unit: U, meta?: Metadata): Container<U, RS>;
+  root<U extends AnyUnit>(unit: U, meta?: Metadata): Container<U, RS, M>;
 
   /** A dimensionless container. */
   num(
     value: number | Decimal | ValueStore,
     meta?: Metadata,
-  ): Container<RealNumber, RS>;
+  ): Container<RealNumber, RS, M>;
 
   /** A named root container, e.g. a published factor. */
   constant<U extends AnyUnit>(
     name: string,
     unit: U,
     meta?: Metadata,
-  ): Container<U, RS>;
+  ): Container<U, RS, M>;
 
   /**
    * A value supplied by the user. For a method 2 input, the store's method 1 value is moved to its
    * method 2 track, so derived values carry it as method 2.
    */
-  input<U extends AnyUnit>(unit: U, options: InputOptions): Container<U, RS>;
+  input<U extends AnyUnit>(
+    unit: U,
+    options: InputOptions<M>,
+  ): Container<U, RS, M>;
 
   /**
    * Looks up a unit in a nested table of units by up to five keys. Keys can be string containers,
@@ -84,17 +109,17 @@ export interface UnitSystem<RS extends RuleSet> {
     T extends Record<K1, NumberUnit> & { name?: string },
   >(
     table: T,
-    k1: Selector<K1, RS>,
-  ): Container<Extract<T[K1], NumberUnit>, RS>;
+    k1: Selector<K1, RS, M>,
+  ): Container<Extract<T[K1], NumberUnit>, RS, M>;
   select<
     K1 extends string,
     K2 extends string,
     T extends Record<K1, Record<K2, NumberUnit>> & { name?: string },
   >(
     table: T,
-    k1: Selector<K1, RS>,
-    k2: Selector<K2, RS>,
-  ): Container<Extract<T[K1][K2], NumberUnit>, RS>;
+    k1: Selector<K1, RS, M>,
+    k2: Selector<K2, RS, M>,
+  ): Container<Extract<T[K1][K2], NumberUnit>, RS, M>;
   select<
     K1 extends string,
     K2 extends string,
@@ -104,10 +129,10 @@ export interface UnitSystem<RS extends RuleSet> {
     },
   >(
     table: T,
-    k1: Selector<K1, RS>,
-    k2: Selector<K2, RS>,
-    k3: Selector<K3, RS>,
-  ): Container<Extract<T[K1][K2][K3], NumberUnit>, RS>;
+    k1: Selector<K1, RS, M>,
+    k2: Selector<K2, RS, M>,
+    k3: Selector<K3, RS, M>,
+  ): Container<Extract<T[K1][K2][K3], NumberUnit>, RS, M>;
   select<
     K1 extends string,
     K2 extends string,
@@ -118,11 +143,11 @@ export interface UnitSystem<RS extends RuleSet> {
     },
   >(
     table: T,
-    k1: Selector<K1, RS>,
-    k2: Selector<K2, RS>,
-    k3: Selector<K3, RS>,
-    k4: Selector<K4, RS>,
-  ): Container<Extract<T[K1][K2][K3][K4], NumberUnit>, RS>;
+    k1: Selector<K1, RS, M>,
+    k2: Selector<K2, RS, M>,
+    k3: Selector<K3, RS, M>,
+    k4: Selector<K4, RS, M>,
+  ): Container<Extract<T[K1][K2][K3][K4], NumberUnit>, RS, M>;
   select<
     K1 extends string,
     K2 extends string,
@@ -135,35 +160,55 @@ export interface UnitSystem<RS extends RuleSet> {
     > & { name?: string },
   >(
     table: T,
-    k1: Selector<K1, RS>,
-    k2: Selector<K2, RS>,
-    k3: Selector<K3, RS>,
-    k4: Selector<K4, RS>,
-    k5: Selector<K5, RS>,
-  ): Container<Extract<T[K1][K2][K3][K4][K5], NumberUnit>, RS>;
+    k1: Selector<K1, RS, M>,
+    k2: Selector<K2, RS, M>,
+    k3: Selector<K3, RS, M>,
+    k4: Selector<K4, RS, M>,
+    k5: Selector<K5, RS, M>,
+  ): Container<Extract<T[K1][K2][K3][K4][K5], NumberUnit>, RS, M>;
 
   /**
    * A new system with this system's rules plus the given ones. Throws if a new rule handles the
    * same pair of unit types as an existing one.
    */
   extend<
-    const M extends readonly MultiplyRule[] = [],
-    const D extends readonly DivideRule[] = [],
+    const MR extends readonly MultiplyRule[] = [],
+    const DR extends readonly DivideRule[] = [],
   >(rules: {
-    multiply?: M;
-    divide?: D;
-  }): UnitSystem<{
-    multiply: RS['multiply'] | RuleTypeOf<M[number]>;
-    divide: RS['divide'] | RuleTypeOf<D[number]>;
-  }>;
+    multiply?: MR;
+    divide?: DR;
+  }): UnitSystem<
+    {
+      multiply: RS['multiply'] | RuleTypeOf<MR[number]>;
+      divide: RS['divide'] | RuleTypeOf<DR[number]>;
+    },
+    M
+  >;
+
+  /** The methods inputs can be for, at runtime. */
+  readonly methods: readonly M[];
+
+  /**
+   * The same rules, with inputs limited to some of the calculation methods, e.g.
+   * `defaultUnitSystem.withMethods('1', '2')`. Its containers have the narrower `M`, so they can't
+   * be mixed with containers of other methods, and an input for any other method throws.
+   */
+  withMethods<N extends M>(...methods: [N, ...N[]]): UnitSystem<RS, N>;
 }
 
 /** The container type for a unit system: `ContainerOf<typeof units, Mass<'CO2e'>>`. */
 export type ContainerOf<Sys, U> =
-  Sys extends UnitSystem<infer RS> ? Container<U, RS> : never;
+  Sys extends UnitSystem<infer RS, infer M> ? Container<U, RS, M> : never;
 
 /** The type-level rules of a unit system, e.g. to give them a short name with an interface. */
-export type RuleSetOf<Sys> = Sys extends UnitSystem<infer RS> ? RS : never;
+export type RuleSetOf<Sys> =
+  Sys extends UnitSystem<infer RS, Method> ? RS : never;
+
+/** The calculation methods of a unit system's inputs. */
+export type MethodsOf<Sys> =
+  Sys extends UnitSystem<RuleSet, infer M> ? M : never;
+
+const ALL_METHODS: readonly Method[] = ['1', '2', '3', '4'];
 
 type RuntimeRule = MultiplyRule | DivideRule;
 
@@ -230,7 +275,10 @@ const createAlgebra = (rules: Required<Rules>): Algebra => {
 const keyOf = (selector: Selector<string, RuleSet>) =>
   typeof selector === 'string' ? selector : selector.unit;
 
-const buildSystem = (rules: Required<Rules>): UnitSystem<RuleSet> => {
+const buildSystem = (
+  rules: Required<Rules>,
+  methods: readonly Method[] = ALL_METHODS,
+): UnitSystem<RuleSet> => {
   const algebra = createAlgebra(rules);
   const root = <U extends AnyUnit>(unit: U, meta?: Metadata) =>
     createNode<U, RuleSet>(algebra, unit, { kind: 'root' }, meta);
@@ -238,11 +286,17 @@ const buildSystem = (rules: Required<Rules>): UnitSystem<RuleSet> => {
   return {
     multiplyRules: rules.multiply,
     divideRules: rules.divide,
+    methods,
     root,
     num: (value, meta) => root(realNumber(value), meta),
     constant: (name, unit, meta) => root(unit, { ...meta, name }),
     input: (unit, { method = '1', ...meta }) => {
-      if (method === '2' && typeof unit === 'object') {
+      if (!methods.includes(method)) {
+        throw new UnitError(
+          `${meta.name} is for method ${method}, but this system only has methods ${methods.join(', ')}`,
+        );
+      }
+      if (method !== '1' && typeof unit === 'object') {
         // Copy the store so the caller's unit isn't changed
         const store = new ValueStore(unit.store.seed);
         store.applyMethod2();
@@ -272,10 +326,22 @@ const buildSystem = (rules: Required<Rules>): UnitSystem<RuleSet> => {
       );
     }) as UnitSystem<RuleSet>['select'],
     extend: (more) =>
-      buildSystem({
-        multiply: [...rules.multiply, ...(more.multiply ?? [])],
-        divide: [...rules.divide, ...(more.divide ?? [])],
-      }) as never,
+      buildSystem(
+        {
+          multiply: [...rules.multiply, ...(more.multiply ?? [])],
+          divide: [...rules.divide, ...(more.divide ?? [])],
+        },
+        methods,
+      ) as never,
+    withMethods: (...narrowed) => {
+      const outside = narrowed.filter((m) => !methods.includes(m));
+      if (outside.length > 0) {
+        throw new UnitError(
+          `This system has no method ${outside.join(', ')} to narrow to`,
+        );
+      }
+      return buildSystem(rules, narrowed) as never;
+    },
   };
 };
 

@@ -16,12 +16,58 @@ Substances, units and the rules relating them are all extensible. Start from the
 
 ## Entry points
 
-| Import                                             | Contains                                                                                                                                                              |
-| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@aginnovationaustralia/calculator-units`          | The core: containers, unit systems, rule helpers, method 1/2 values, string and boolean units, `RealNumber`. No units, substances or rules beyond RealNumber scaling. |
-| `@aginnovationaustralia/calculator-units/defaults` | The default substances, units (`Mass`, `MassPerMass`, `Area`, …), rules, a ready-made `defaultUnitSystem`, and `relabelMass`.                                         |
+| Import                                                                | Contains                                                                                                                                                                     |
+| --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@aginnovationaustralia/calculator-units`                             | The core: containers, unit systems, rule helpers, method values, string and boolean units, `RealNumber`, `Decimal`. No units, substances or rules beyond RealNumber scaling. |
+| `@aginnovationaustralia/calculator-units/units`                       | The library of units (`Mass`, `MassPerMass`, `Area`, …), their rules grouped into modules, and `relabelMass`. Registers no substances.                                       |
+| `@aginnovationaustralia/calculator-units/substances/greenhouse-gases` | Substance pack: CO2, CH4, N2O and CO2e.                                                                                                                                      |
+| `@aginnovationaustralia/calculator-units/substances/agriculture`      | Substance pack: the substances the VEERG agricultural calculators use (Milk, Liveweight, Urea, …), plus the greenhouse gases.                                                |
+| `@aginnovationaustralia/calculator-units/defaults`                    | Everything the AIA emissions calculators use: `/units`, both substance packs, and a ready-made `defaultUnitSystem`.                                                          |
 
-The package has no side effects. Importing `/defaults` only adds the default substances to the `SubstanceRegistry` type.
+The package has no side effects. Substance packs, and `/defaults`, only add substances to the `SubstanceRegistry` type.
+
+## Mixing and matching
+
+Units, rules and substances are separate, so a project can take only what its domain needs:
+
+- **Units** are plain types and constructors, generic over their substances. Importing ones you don't use costs nothing.
+- **Rules** decide what a system's containers can do. They come in modules that never overlap, so any combination works:
+
+  | Module           | Relates                                                                                      |
+  | ---------------- | -------------------------------------------------------------------------------------------- |
+  | `materialRules`  | Mass, Volume, MassPerMass, MassPerVolume, VolumePerMass                                      |
+  | `energyRules`    | Energy, Electricity, EnergyPerMass, EnergyPerVolume, MassPerEnergy, MassPerElectricity       |
+  | `timeRules`      | MassPerTime, MassPerDay, MassPerYear                                                         |
+  | `landRules`      | MassPerArea, MassPerAreaPerDay, MassPerAreaPerYear                                           |
+  | `livestockRules` | MassPerHead, MassPerHeadPerDay, MassPerHeadPerYear, EnergyPerHeadPerDay, VolumePerHeadPerDay |
+  | `transportRules` | MassDistance, MassPerMassDistance                                                            |
+
+- **Substances** are registered by importing a substance pack, or with your own `SubstanceRegistry` augmentation. `SubstanceRegistry` is a TypeScript interface, so it is shared by everything compiled together: a program that imports `/defaults` anywhere has the agricultural substances everywhere.
+
+For example, a facility emissions calculator with only fuels, energy and waste:
+
+```ts
+import { createUnitSystem } from '@aginnovationaustralia/calculator-units';
+import {
+  energyRules,
+  materialRules,
+} from '@aginnovationaustralia/calculator-units/units';
+import '@aginnovationaustralia/calculator-units/substances/greenhouse-gases';
+
+declare module '@aginnovationaustralia/calculator-units' {
+  interface SubstanceRegistry {
+    'Liquid fuel': true;
+    Wastewater: true;
+  }
+}
+
+const units = createUnitSystem(materialRules)
+  .extend(energyRules)
+  .extend(myRules);
+// mass('Milk') doesn't compile: no pack registers it here
+```
+
+Your own rules form a module too: `{ multiply: [...], divide: [...] } as const`, typed `RuleModule`.
 
 ## Units and values
 
@@ -34,6 +80,19 @@ The store is a `ValueStore`, which tracks two values:
 
 Every operation combines both tracks, so a method 2 value supplied anywhere carries through to the results. `store.value` is the method 2 value where there is one, otherwise method 1.
 
+User supplied values say which calculation `Method` they are for, `'1'` to `'4'`, recorded as their `origin.method`. Domains use the subset they have: the VEERG calculators use 1 and 2, NGERS uses 1 to 4. A value for any method other than 1 is an alternative to the default calculation, so it is carried on the method 2 track.
+
+A system can be narrowed to the methods its domain has, and its containers carry that as their third type parameter:
+
+```ts
+export const units = defaultUnitSystem.withMethods('1', '2');
+export type Container<U> = BaseContainer<U, DefaultRules, '1' | '2'>;
+
+units.input(mass('CO2', 1), { name: 'x', method: '3' }); // compile error, and throws
+```
+
+Arithmetic and every combinator keep the width, `extend` keeps the methods, and `AnyContainer<M>` / `Origin<M>` let code that walks a calculation see it too. A narrow container can be used where any method is accepted, but not the other way round. `MethodsOf<typeof units>` gives a system's methods.
+
 String and boolean units are the values themselves: a `Container<'Urea' | 'Lime', RS>` holds `'Urea'`. They can be used to choose values (`selectSwitch`, `ifTrueElse`, `select`) but not in arithmetic, which the compiler rejects.
 
 ## Creating containers
@@ -45,7 +104,7 @@ Through a unit system (`defaultUnitSystem`, or one you build):
 | `root(unit, meta?)`                       | A value with no history.                                                                                                                              |
 | `num(value, meta?)`                       | A `RealNumber`.                                                                                                                                       |
 | `constant(name, unit, meta?)`             | A named root, e.g. a published factor.                                                                                                                |
-| `input(unit, { name, method?, ...meta })` | A user supplied value. A method 2 input carries its value on the method 2 track.                                                                      |
+| `input(unit, { name, method?, ...meta })` | A user supplied value, for method `'1'` (the default) to `'4'`. Any method above 1 carries its value on the method 2 track.                           |
 | `select(table, key1, …key5)`              | A unit looked up from a nested table. Keys can be literals or string containers. Named after the table's `name` and the keys, e.g. `COMMON[GWP.CH4]`. |
 
 ## Operations
@@ -103,8 +162,9 @@ A system's containers can only do what its rules allow, at compile time and at r
 
 - use `defaultUnitSystem` as it is, with `DefaultContainer<U>`;
 - extend it: `defaultUnitSystem.extend({ multiply: [myRule], divide: [...] })`, which throws if a new rule handles a pair of unit types that already has one;
-- pick individual default rules: `createUnitSystem({ multiply: [massPerMassTimesMass, ...] })`;
-- start blank: `createUnitSystem()`, without importing `/defaults`. While `SubstanceRegistry` is empty, `Substance` is `string`.
+- build from rule modules: `createUnitSystem(materialRules).extend(energyRules)`, see [Mixing and matching](#mixing-and-matching);
+- pick individual rules: `createUnitSystem({ multiply: [massPerMassTimesMass, ...] })`;
+- start blank: `createUnitSystem()`, without importing `/defaults` or a substance pack. While `SubstanceRegistry` is empty, `Substance` is `string`.
 
 For a project's own system, name its rule set so types and errors stay short:
 

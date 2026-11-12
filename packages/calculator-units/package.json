@@ -17,6 +17,18 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./units": {
+      "types": "./dist/units/index.d.ts",
+      "default": "./dist/units/index.js"
+    },
+    "./substances/greenhouse-gases": {
+      "types": "./dist/substances/greenhouse-gases.d.ts",
+      "default": "./dist/substances/greenhouse-gases.js"
+    },
+    "./substances/agriculture": {
+      "types": "./dist/substances/agriculture.d.ts",
+      "default": "./dist/substances/agriculture.js"
+    },
     "./defaults": {
       "types": "./dist/defaults/index.d.ts",
       "default": "./dist/defaults/index.js"
