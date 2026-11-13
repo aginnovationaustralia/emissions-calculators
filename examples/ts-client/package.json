@@ -10,14 +10,11 @@
     "lint": "eslint . && pnpm run check:types",
     "dev": "CALCULATOR_METRICS_ORGANISATION='ts-client example' ts-node src/index.ts",
     "units:generics": "ts-node src/units/calculator-units/index.ts",
-    "units:globals": "ts-node src/units/calculator-units-globals/index.ts",
     "units:generics:pitfall": "ts-node --transpile-only src/units/calculator-units/pitfall.ts",
-    "units:globals:pitfall": "ts-node --transpile-only src/units/calculator-units-globals/pitfall.ts",
     "clean": "rm -rf dist"
   },
   "dependencies": {
     "@aginnovationaustralia/calculator-units": "workspace:*",
-    "@aginnovationaustralia/calculator-units-globals": "workspace:*",
     "@aginnovationaustralia/emissions-calculator-research": "workspace:*",
     "@aginnovationaustralia/emissions-calculators": "workspace:*",
     "@aginnovationaustralia/veerg-calculators": "workspace:*"

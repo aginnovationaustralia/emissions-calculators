@@ -1,5 +1,5 @@
 import { ValueStore, values } from './value-store.js';
-import Decimal from 'decimal.js-light';
+import { Decimal } from './decimal.js';
 
 const d = (n: number) => new Decimal(n);
 

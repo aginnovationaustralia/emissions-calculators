@@ -42,7 +42,7 @@ describe('rule modules', () => {
       // Widened: each extend changes the system's type
       let system: UnitSystem<RuleSet> = createUnitSystem();
       for (const module of Object.values(ruleModules) as RuleModule[]) {
-        system = system.extend(module) as UnitSystem<RuleSet>;
+        system = system.extend(module);
       }
     }).not.toThrow();
   });

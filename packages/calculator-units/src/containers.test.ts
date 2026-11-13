@@ -2,7 +2,7 @@
  * The container features that don't depend on any particular units: method 1 and 2 values,
  * inputs, string and boolean containers, selection, sums and provenance.
  */
-import Decimal from 'decimal.js-light';
+import { Decimal } from './decimal.js';
 import {
   DefaultContainer,
   DefaultRules,
@@ -225,7 +225,7 @@ describe('sum', () => {
   });
 
   test('an empty sum is the fallback', () => {
-    const total = sum([] as C<Mass<'CO2e'>>[], zeroCO2e);
+    const total = sum([], zeroCO2e);
     expect(total.unit).toMatchObject({ __unitType: 'Mass', substance: 'CO2e' });
     expect(tracks(total).value).toBe(0);
   });

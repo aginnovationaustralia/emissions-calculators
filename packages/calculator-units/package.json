@@ -9,7 +9,7 @@
     "calculator",
     "emissions"
   ],
-  "type": "commonjs",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -44,12 +44,12 @@
   },
   "scripts": {
     "build": "pnpm run clean && tsc -p tsconfig.build.json && pnpm run check:package",
-    "check:package": "publint && attw --pack . --profile node16",
+    "check:package": "publint && attw --pack . --profile esm-only",
     "prepublishOnly": "pnpm run check:package",
     "clean": "rm -rf dist",
     "check:types": "tsc --noEmit && tsc --noEmit -p tsconfig.blank-slate.json",
     "lint": "eslint . && pnpm run check:types",
-    "test": "jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "repository": {
     "type": "git",

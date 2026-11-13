@@ -31,7 +31,6 @@ export {
   childrenOf,
   max,
   min,
-  multiplyAllValuesBy,
   translate,
   type Origin,
 } from '@aginnovationaustralia/calculator-units';

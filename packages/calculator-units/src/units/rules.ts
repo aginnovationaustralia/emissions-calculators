@@ -1,669 +1,334 @@
 /*
  * The default unit relationships, ported from the emissions calculators.
  *
- * Each rule is a pair: an interface describing it to the compiler, and a value implementing it.
- * The value is what gets passed to a unit system; its type carries the interface. Use them all
- * through `defaultMultiplyRules` / `defaultDivideRules`, by module (`materialRules`, `energyRules`, ...),
- * or pick individual rules.
+ * Each rule is a pattern: the left unit, the right unit and the result, with placeholders (A, B, C)
+ * where any substance can go. The same placeholder in several places means the same substance, and
+ * is checked at compile time and runtime. See ../patterns.ts.
  *
- * Shared type variables (B in "MassPerMass<A, B> * Mass<B>") become runtime substance checks.
+ * Use them all through `defaultMultiplyRules` / `defaultDivideRules`, by module (`materialRules`,
+ * `energyRules`, ...), or pick individual rules.
  */
+import { A, B, C, division, multiplication } from '../patterns.js';
+import { realNumber } from '../units.js';
 import {
-  divideRule,
-  multiplyRule,
-  Rule,
-  RuleType,
-  whenSame,
-} from '../rules.js';
-import type { Substance } from '../substances.js';
-import { RealNumber, realNumber } from '../units.js';
-import {
-  Area,
-  Days,
-  Distance,
-  Electricity,
-  Energy,
+  area,
+  days,
+  distance,
+  electricity,
   energy,
-  EnergyPerHeadPerDay,
   energyPerHeadPerDay,
-  EnergyPerMass,
-  EnergyPerVolume,
-  Head,
+  energyPerMass,
+  energyPerVolume,
+  head,
   mass,
-  Mass,
   massDistance,
-  MassDistance,
   massPerArea,
-  MassPerArea,
-  MassPerAreaPerDay,
-  MassPerAreaPerYear,
+  massPerAreaPerDay,
   massPerAreaPerYear,
   massPerDay,
-  MassPerDay,
-  MassPerElectricity,
-  MassPerEnergy,
+  massPerElectricity,
   massPerEnergy,
-  MassPerHead,
   massPerHead,
   massPerHeadPerDay,
-  MassPerHeadPerDay,
-  MassPerHeadPerYear,
-  MassPerMass,
+  massPerHeadPerYear,
   massPerMass,
-  MassPerMassDistance,
-  MassPerTime,
-  MassPerVolume,
+  massPerMassDistance,
+  massPerTime,
   massPerVolume,
-  MassPerYear,
   massPerYear,
-  Time,
-  Volume,
+  time,
   volume,
   volumePerHeadPerDay,
-  VolumePerHeadPerDay,
-  VolumePerMass,
-  Years,
+  volumePerMass,
+  years,
 } from './units.js';
 
+// -------- Multiplication --------
+
 /** MassPerMass<A, B> * Mass<B> = Mass<A> */
-export interface MassPerMassTimesMass extends RuleType {
-  rule: this['L'] extends MassPerMass<infer A, infer B>
-    ? Rule<Mass<B>, Mass<A>>
-    : never;
-}
-export const massPerMassTimesMass = multiplyRule<MassPerMassTimesMass>()(
-  'MassPerMass',
-  'Mass',
-  (l: MassPerMass, r: Mass) =>
-    whenSame(l.sdenom, r.substance, () => mass(l.snum)),
+export const massPerMassTimesMass = multiplication(
+  massPerMass(A, B),
+  mass(B),
+  mass(A),
 );
 
 /** Mass<B> * MassPerMass<A, B> = Mass<A> */
-export interface MassTimesMassPerMass extends RuleType {
-  rule: this['L'] extends Mass<infer B>
-    ? Rule<
-        MassPerMass<Substance, B>,
-        this['R'] extends MassPerMass<infer A, Substance> ? Mass<A> : never
-      >
-    : never;
-}
-export const massTimesMassPerMass = multiplyRule<MassTimesMassPerMass>()(
-  'Mass',
-  'MassPerMass',
-  (l: Mass, r: MassPerMass) =>
-    whenSame(l.substance, r.sdenom, () => mass(r.snum)),
+export const massTimesMassPerMass = multiplication(
+  mass(B),
+  massPerMass(A, B),
+  mass(A),
 );
 
-/** EnergyPerVolume<S> * Volume<S> = Energy */
-export interface EnergyPerVolumeTimesVolume extends RuleType {
-  rule: this['L'] extends EnergyPerVolume<infer S>
-    ? Rule<Volume<S>, Energy>
-    : never;
-}
-export const energyPerVolumeTimesVolume =
-  multiplyRule<EnergyPerVolumeTimesVolume>()(
-    'EnergyPerVolume',
-    'Volume',
-    (l: EnergyPerVolume, r: Volume) =>
-      whenSame(l.substance, r.substance, energy),
-  );
+/** EnergyPerVolume<A> * Volume<A> = Energy */
+export const energyPerVolumeTimesVolume = multiplication(
+  energyPerVolume(A),
+  volume(A),
+  energy(),
+);
 
 /** MassPerEnergy<A> * EnergyPerVolume<B> = MassPerVolume<A, B> */
-export interface MassPerEnergyTimesEnergyPerVolume extends RuleType {
-  rule: this['L'] extends MassPerEnergy<infer A>
-    ? Rule<
-        EnergyPerVolume,
-        this['R'] extends EnergyPerVolume<infer B> ? MassPerVolume<A, B> : never
-      >
-    : never;
-}
-export const massPerEnergyTimesEnergyPerVolume =
-  multiplyRule<MassPerEnergyTimesEnergyPerVolume>()(
-    'MassPerEnergy',
-    'EnergyPerVolume',
-    (l: MassPerEnergy, r: EnergyPerVolume) =>
-      massPerVolume(l.substance, r.substance),
-  );
-
-/** MassPerEnergy<S> * Energy = Mass<S> */
-export interface MassPerEnergyTimesEnergy extends RuleType {
-  rule: this['L'] extends MassPerEnergy<infer S>
-    ? Rule<Energy, Mass<S>>
-    : never;
-}
-export const massPerEnergyTimesEnergy =
-  multiplyRule<MassPerEnergyTimesEnergy>()(
-    'MassPerEnergy',
-    'Energy',
-    (l: MassPerEnergy, _r: Energy) => mass(l.substance),
-  );
-
-/** EnergyPerMass<S> * Mass<S> = Energy */
-export interface EnergyPerMassTimesMass extends RuleType {
-  rule: this['L'] extends EnergyPerMass<infer S>
-    ? Rule<Mass<S>, Energy>
-    : never;
-}
-export const energyPerMassTimesMass = multiplyRule<EnergyPerMassTimesMass>()(
-  'EnergyPerMass',
-  'Mass',
-  (l: EnergyPerMass, r: Mass) => whenSame(l.substance, r.substance, energy),
+export const massPerEnergyTimesEnergyPerVolume = multiplication(
+  massPerEnergy(A),
+  energyPerVolume(B),
+  massPerVolume(A, B),
 );
 
-/** MassPerArea<S> * Area = Mass<S> */
-export interface MassPerAreaTimesArea extends RuleType {
-  rule: this['L'] extends MassPerArea<infer S> ? Rule<Area, Mass<S>> : never;
-}
-export const massPerAreaTimesArea = multiplyRule<MassPerAreaTimesArea>()(
-  'MassPerArea',
-  'Area',
-  (l: MassPerArea, _r: Area) => mass(l.substance),
+/** MassPerEnergy<A> * Energy = Mass<A> */
+export const massPerEnergyTimesEnergy = multiplication(
+  massPerEnergy(A),
+  energy(),
+  mass(A),
 );
 
-/** MassPerTime<S> * Time = Mass<S> */
-export interface MassPerTimeTimesTime extends RuleType {
-  rule: this['L'] extends MassPerTime<infer S> ? Rule<Time, Mass<S>> : never;
-}
-export const massPerTimeTimesTime = multiplyRule<MassPerTimeTimesTime>()(
-  'MassPerTime',
-  'Time',
-  (l: MassPerTime, _r: Time) => mass(l.substance),
+/** EnergyPerMass<A> * Mass<A> = Energy */
+export const energyPerMassTimesMass = multiplication(
+  energyPerMass(A),
+  mass(A),
+  energy(),
+);
+
+/** MassPerArea<A> * Area = Mass<A> */
+export const massPerAreaTimesArea = multiplication(
+  massPerArea(A),
+  area(),
+  mass(A),
+);
+
+/** MassPerTime<A> * Time = Mass<A> */
+export const massPerTimeTimesTime = multiplication(
+  massPerTime(A),
+  time(),
+  mass(A),
 );
 
 /** MassPerVolume<A, B> * Volume<B> = Mass<A> */
-export interface MassPerVolumeTimesVolume extends RuleType {
-  rule: this['L'] extends MassPerVolume<infer A, infer B>
-    ? Rule<Volume<B>, Mass<A>>
-    : never;
-}
-export const massPerVolumeTimesVolume =
-  multiplyRule<MassPerVolumeTimesVolume>()(
-    'MassPerVolume',
-    'Volume',
-    (l: MassPerVolume, r: Volume) =>
-      whenSame(l.volume, r.substance, () => mass(l.mass)),
-  );
-
-/** Electricity * MassPerElectricity<S> = Mass<S> */
-export interface ElectricityTimesMassPerElectricity extends RuleType {
-  rule: this['L'] extends Electricity
-    ? Rule<
-        MassPerElectricity,
-        this['R'] extends MassPerElectricity<infer S> ? Mass<S> : never
-      >
-    : never;
-}
-export const electricityTimesMassPerElectricity =
-  multiplyRule<ElectricityTimesMassPerElectricity>()(
-    'Electricity',
-    'MassPerElectricity',
-    (_l: Electricity, r: MassPerElectricity) => mass(r.substance),
-  );
-
-/** MassPerHead<B> * MassPerMass<A, B> = MassPerHead<A> */
-export interface MassPerHeadTimesMassPerMass extends RuleType {
-  rule: this['L'] extends MassPerHead<infer B>
-    ? Rule<
-        MassPerMass<Substance, B>,
-        this['R'] extends MassPerMass<infer A, Substance>
-          ? MassPerHead<A>
-          : never
-      >
-    : never;
-}
-export const massPerHeadTimesMassPerMass =
-  multiplyRule<MassPerHeadTimesMassPerMass>()(
-    'MassPerHead',
-    'MassPerMass',
-    (l: MassPerHead, r: MassPerMass) =>
-      whenSame(l.substance, r.sdenom, () => massPerHead(r.snum)),
-  );
-
-/** MassPerHeadPerDay<B> * MassPerMass<A, B> = MassPerHeadPerDay<A> */
-export interface MassPerHeadPerDayTimesMassPerMass extends RuleType {
-  rule: this['L'] extends MassPerHeadPerDay<infer B>
-    ? Rule<
-        MassPerMass<Substance, B>,
-        this['R'] extends MassPerMass<infer A, Substance>
-          ? MassPerHeadPerDay<A>
-          : never
-      >
-    : never;
-}
-export const massPerHeadPerDayTimesMassPerMass =
-  multiplyRule<MassPerHeadPerDayTimesMassPerMass>()(
-    'MassPerHeadPerDay',
-    'MassPerMass',
-    (l: MassPerHeadPerDay, r: MassPerMass) =>
-      whenSame(l.substance, r.sdenom, () => massPerHeadPerDay(r.snum)),
-  );
-
-/** MassPerHeadPerDay<S> * Head = MassPerDay<S> */
-export interface MassPerHeadPerDayTimesHead extends RuleType {
-  rule: this['L'] extends MassPerHeadPerDay<infer S>
-    ? Rule<Head, MassPerDay<S>>
-    : never;
-}
-export const massPerHeadPerDayTimesHead =
-  multiplyRule<MassPerHeadPerDayTimesHead>()(
-    'MassPerHeadPerDay',
-    'Head',
-    (l: MassPerHeadPerDay, _r: Head) => massPerDay(l.substance),
-  );
-
-/** MassPerHeadPerDay<S> * Days = MassPerHead<S> */
-export interface MassPerHeadPerDayTimesDays extends RuleType {
-  rule: this['L'] extends MassPerHeadPerDay<infer S>
-    ? Rule<Days, MassPerHead<S>>
-    : never;
-}
-export const massPerHeadPerDayTimesDays =
-  multiplyRule<MassPerHeadPerDayTimesDays>()(
-    'MassPerHeadPerDay',
-    'Days',
-    (l: MassPerHeadPerDay, _r: Days) => massPerHead(l.substance),
-  );
-
-/** Head * MassPerHead<S> = Mass<S> */
-export interface HeadTimesMassPerHead extends RuleType {
-  rule: this['L'] extends Head
-    ? Rule<
-        MassPerHead,
-        this['R'] extends MassPerHead<infer S> ? Mass<S> : never
-      >
-    : never;
-}
-export const headTimesMassPerHead = multiplyRule<HeadTimesMassPerHead>()(
-  'Head',
-  'MassPerHead',
-  (_l: Head, r: MassPerHead) => mass(r.substance),
+export const massPerVolumeTimesVolume = multiplication(
+  massPerVolume(A, B),
+  volume(B),
+  mass(A),
 );
 
-/** Head * MassPerHeadPerYear<S> = MassPerYear<S> */
-export interface HeadTimesMassPerHeadPerYear extends RuleType {
-  rule: this['L'] extends Head
-    ? Rule<
-        MassPerHeadPerYear,
-        this['R'] extends MassPerHeadPerYear<infer S> ? MassPerYear<S> : never
-      >
-    : never;
-}
-export const headTimesMassPerHeadPerYear =
-  multiplyRule<HeadTimesMassPerHeadPerYear>()(
-    'Head',
-    'MassPerHeadPerYear',
-    (_l: Head, r: MassPerHeadPerYear) => massPerYear(r.substance),
-  );
+/** Electricity * MassPerElectricity<A> = Mass<A> */
+export const electricityTimesMassPerElectricity = multiplication(
+  electricity(),
+  massPerElectricity(A),
+  mass(A),
+);
 
-/** MassPerHeadPerYear<S> * Years = MassPerHead<S> */
-export interface MassPerHeadPerYearTimesYears extends RuleType {
-  rule: this['L'] extends MassPerHeadPerYear<infer S>
-    ? Rule<Years, MassPerHead<S>>
-    : never;
-}
-export const massPerHeadPerYearTimesYears =
-  multiplyRule<MassPerHeadPerYearTimesYears>()(
-    'MassPerHeadPerYear',
-    'Years',
-    (l: MassPerHeadPerYear, _r: Years) => massPerHead(l.substance),
-  );
+/** MassPerHead<B> * MassPerMass<A, B> = MassPerHead<A> */
+export const massPerHeadTimesMassPerMass = multiplication(
+  massPerHead(B),
+  massPerMass(A, B),
+  massPerHead(A),
+);
 
-/** MassPerEnergy<S> * EnergyPerMass<S> = RealNumber */
-export interface MassPerEnergyTimesEnergyPerMass extends RuleType {
-  rule: this['L'] extends MassPerEnergy<infer S>
-    ? Rule<EnergyPerMass<S>, RealNumber>
-    : never;
-}
-export const massPerEnergyTimesEnergyPerMass =
-  multiplyRule<MassPerEnergyTimesEnergyPerMass>()(
-    'MassPerEnergy',
-    'EnergyPerMass',
-    (l: MassPerEnergy, r: EnergyPerMass) =>
-      whenSame(l.substance, r.substance, realNumber),
-  );
+/** MassPerHeadPerDay<B> * MassPerMass<A, B> = MassPerHeadPerDay<A> */
+export const massPerHeadPerDayTimesMassPerMass = multiplication(
+  massPerHeadPerDay(B),
+  massPerMass(A, B),
+  massPerHeadPerDay(A),
+);
 
-/** MassPerDay<S> * Days = Mass<S> */
-export interface MassPerDayTimesDays extends RuleType {
-  rule: this['L'] extends MassPerDay<infer S> ? Rule<Days, Mass<S>> : never;
-}
-export const massPerDayTimesDays = multiplyRule<MassPerDayTimesDays>()(
-  'MassPerDay',
-  'Days',
-  (l: MassPerDay, _r: Days) => mass(l.substance),
+/** MassPerHeadPerDay<A> * Head = MassPerDay<A> */
+export const massPerHeadPerDayTimesHead = multiplication(
+  massPerHeadPerDay(A),
+  head(),
+  massPerDay(A),
+);
+
+/** MassPerHeadPerDay<A> * Days = MassPerHead<A> */
+export const massPerHeadPerDayTimesDays = multiplication(
+  massPerHeadPerDay(A),
+  days(),
+  massPerHead(A),
+);
+
+/** Head * MassPerHead<A> = Mass<A> */
+export const headTimesMassPerHead = multiplication(
+  head(),
+  massPerHead(A),
+  mass(A),
+);
+
+/** Head * MassPerHeadPerYear<A> = MassPerYear<A> */
+export const headTimesMassPerHeadPerYear = multiplication(
+  head(),
+  massPerHeadPerYear(A),
+  massPerYear(A),
+);
+
+/** MassPerHeadPerYear<A> * Years = MassPerHead<A> */
+export const massPerHeadPerYearTimesYears = multiplication(
+  massPerHeadPerYear(A),
+  years(),
+  massPerHead(A),
+);
+
+/** MassPerEnergy<A> * EnergyPerMass<A> = RealNumber */
+export const massPerEnergyTimesEnergyPerMass = multiplication(
+  massPerEnergy(A),
+  energyPerMass(A),
+  realNumber(),
+);
+
+/** MassPerDay<A> * Days = Mass<A> */
+export const massPerDayTimesDays = multiplication(
+  massPerDay(A),
+  days(),
+  mass(A),
 );
 
 /** MassPerHeadPerDay<B> * VolumePerMass<A, B> = VolumePerHeadPerDay<A> */
-export interface MassPerHeadPerDayTimesVolumePerMass extends RuleType {
-  rule: this['L'] extends MassPerHeadPerDay<infer B>
-    ? Rule<
-        VolumePerMass<Substance, B>,
-        this['R'] extends VolumePerMass<infer A, Substance>
-          ? VolumePerHeadPerDay<A>
-          : never
-      >
-    : never;
-}
-export const massPerHeadPerDayTimesVolumePerMass =
-  multiplyRule<MassPerHeadPerDayTimesVolumePerMass>()(
-    'MassPerHeadPerDay',
-    'VolumePerMass',
-    (l: MassPerHeadPerDay, r: VolumePerMass) =>
-      whenSame(l.substance, r.mass, () => volumePerHeadPerDay(r.volume)),
-  );
-
-/** VolumePerHeadPerDay<B> * MassPerVolume<A, B> = MassPerHeadPerDay<A> */
-export interface VolumePerHeadPerDayTimesMassPerVolume extends RuleType {
-  rule: this['L'] extends VolumePerHeadPerDay<infer B>
-    ? Rule<
-        MassPerVolume<Substance, B>,
-        this['R'] extends MassPerVolume<infer A, Substance>
-          ? MassPerHeadPerDay<A>
-          : never
-      >
-    : never;
-}
-export const volumePerHeadPerDayTimesMassPerVolume =
-  multiplyRule<VolumePerHeadPerDayTimesMassPerVolume>()(
-    'VolumePerHeadPerDay',
-    'MassPerVolume',
-    (l: VolumePerHeadPerDay, r: MassPerVolume) =>
-      whenSame(l.substance, r.volume, () => massPerHeadPerDay(r.mass)),
-  );
-
-/** MassPerAreaPerDay<S> * Days = MassPerArea<S> */
-export interface MassPerAreaPerDayTimesDays extends RuleType {
-  rule: this['L'] extends MassPerAreaPerDay<infer S>
-    ? Rule<Days, MassPerArea<S>>
-    : never;
-}
-export const massPerAreaPerDayTimesDays =
-  multiplyRule<MassPerAreaPerDayTimesDays>()(
-    'MassPerAreaPerDay',
-    'Days',
-    (l: MassPerAreaPerDay, _r: Days) => massPerArea(l.substance),
-  );
-
-/** MassPerAreaPerDay<S> * Area = MassPerDay<S> */
-export interface MassPerAreaPerDayTimesArea extends RuleType {
-  rule: this['L'] extends MassPerAreaPerDay<infer S>
-    ? Rule<Area, MassPerDay<S>>
-    : never;
-}
-export const massPerAreaPerDayTimesArea =
-  multiplyRule<MassPerAreaPerDayTimesArea>()(
-    'MassPerAreaPerDay',
-    'Area',
-    (l: MassPerAreaPerDay, _r: Area) => massPerDay(l.substance),
-  );
-
-/** MassPerAreaPerYear<S> * Area = MassPerYear<S> */
-export interface MassPerAreaPerYearTimesArea extends RuleType {
-  rule: this['L'] extends MassPerAreaPerYear<infer S>
-    ? Rule<Area, MassPerYear<S>>
-    : never;
-}
-export const massPerAreaPerYearTimesArea =
-  multiplyRule<MassPerAreaPerYearTimesArea>()(
-    'MassPerAreaPerYear',
-    'Area',
-    (l: MassPerAreaPerYear, _r: Area) => massPerYear(l.substance),
-  );
-
-/** MassPerAreaPerYear<S> * Years = MassPerArea<S> */
-export interface MassPerAreaPerYearTimesYears extends RuleType {
-  rule: this['L'] extends MassPerAreaPerYear<infer S>
-    ? Rule<Years, MassPerArea<S>>
-    : never;
-}
-export const massPerAreaPerYearTimesYears =
-  multiplyRule<MassPerAreaPerYearTimesYears>()(
-    'MassPerAreaPerYear',
-    'Years',
-    (l: MassPerAreaPerYear, _r: Years) => massPerArea(l.substance),
-  );
-
-/** MassPerAreaPerYear<B> * MassPerMass<A, B> = MassPerAreaPerYear<A> */
-export interface MassPerAreaPerYearTimesMassPerMass extends RuleType {
-  rule: this['L'] extends MassPerAreaPerYear<infer B>
-    ? Rule<
-        MassPerMass<Substance, B>,
-        this['R'] extends MassPerMass<infer A, Substance>
-          ? MassPerAreaPerYear<A>
-          : never
-      >
-    : never;
-}
-export const massPerAreaPerYearTimesMassPerMass =
-  multiplyRule<MassPerAreaPerYearTimesMassPerMass>()(
-    'MassPerAreaPerYear',
-    'MassPerMass',
-    (l: MassPerAreaPerYear, r: MassPerMass) =>
-      whenSame(l.substance, r.sdenom, () => massPerAreaPerYear(r.snum)),
-  );
-
-/** MassPerYear<B> * MassPerMass<A, B> = MassPerYear<A> */
-export interface MassPerYearTimesMassPerMass extends RuleType {
-  rule: this['L'] extends MassPerYear<infer B>
-    ? Rule<
-        MassPerMass<Substance, B>,
-        this['R'] extends MassPerMass<infer A, Substance>
-          ? MassPerYear<A>
-          : never
-      >
-    : never;
-}
-export const massPerYearTimesMassPerMass =
-  multiplyRule<MassPerYearTimesMassPerMass>()(
-    'MassPerYear',
-    'MassPerMass',
-    (l: MassPerYear, r: MassPerMass) =>
-      whenSame(l.substance, r.sdenom, () => massPerYear(r.snum)),
-  );
-
-/** MassPerYear<S> * Years = Mass<S> */
-export interface MassPerYearTimesYears extends RuleType {
-  rule: this['L'] extends MassPerYear<infer S> ? Rule<Years, Mass<S>> : never;
-}
-export const massPerYearTimesYears = multiplyRule<MassPerYearTimesYears>()(
-  'MassPerYear',
-  'Years',
-  (l: MassPerYear, _r: Years) => mass(l.substance),
+export const massPerHeadPerDayTimesVolumePerMass = multiplication(
+  massPerHeadPerDay(B),
+  volumePerMass(A, B),
+  volumePerHeadPerDay(A),
 );
 
-/** Mass<S> * Distance = MassDistance<S> */
-export interface MassTimesDistance extends RuleType {
-  rule: this['L'] extends Mass<infer S>
-    ? Rule<Distance, MassDistance<S>>
-    : never;
-}
-export const massTimesDistance = multiplyRule<MassTimesDistance>()(
-  'Mass',
-  'Distance',
-  (l: Mass, _r: Distance) => massDistance(l.substance),
+/** VolumePerHeadPerDay<B> * MassPerVolume<A, B> = MassPerHeadPerDay<A> */
+export const volumePerHeadPerDayTimesMassPerVolume = multiplication(
+  volumePerHeadPerDay(B),
+  massPerVolume(A, B),
+  massPerHeadPerDay(A),
+);
+
+/** MassPerAreaPerDay<A> * Days = MassPerArea<A> */
+export const massPerAreaPerDayTimesDays = multiplication(
+  massPerAreaPerDay(A),
+  days(),
+  massPerArea(A),
+);
+
+/** MassPerAreaPerDay<A> * Area = MassPerDay<A> */
+export const massPerAreaPerDayTimesArea = multiplication(
+  massPerAreaPerDay(A),
+  area(),
+  massPerDay(A),
+);
+
+/** MassPerAreaPerYear<A> * Area = MassPerYear<A> */
+export const massPerAreaPerYearTimesArea = multiplication(
+  massPerAreaPerYear(A),
+  area(),
+  massPerYear(A),
+);
+
+/** MassPerAreaPerYear<A> * Years = MassPerArea<A> */
+export const massPerAreaPerYearTimesYears = multiplication(
+  massPerAreaPerYear(A),
+  years(),
+  massPerArea(A),
+);
+
+/** MassPerAreaPerYear<B> * MassPerMass<A, B> = MassPerAreaPerYear<A> */
+export const massPerAreaPerYearTimesMassPerMass = multiplication(
+  massPerAreaPerYear(B),
+  massPerMass(A, B),
+  massPerAreaPerYear(A),
+);
+
+/** MassPerYear<B> * MassPerMass<A, B> = MassPerYear<A> */
+export const massPerYearTimesMassPerMass = multiplication(
+  massPerYear(B),
+  massPerMass(A, B),
+  massPerYear(A),
+);
+
+/** MassPerYear<A> * Years = Mass<A> */
+export const massPerYearTimesYears = multiplication(
+  massPerYear(A),
+  years(),
+  mass(A),
+);
+
+/** Mass<A> * Distance = MassDistance<A> */
+export const massTimesDistance = multiplication(
+  mass(A),
+  distance(),
+  massDistance(A),
 );
 
 /** MassPerMassDistance<A, B> * Distance = MassPerMass<A, B> */
-export interface MassPerMassDistanceTimesDistance extends RuleType {
-  rule: this['L'] extends MassPerMassDistance<infer A, infer B>
-    ? Rule<Distance, MassPerMass<A, B>>
-    : never;
-}
-export const massPerMassDistanceTimesDistance =
-  multiplyRule<MassPerMassDistanceTimesDistance>()(
-    'MassPerMassDistance',
-    'Distance',
-    (l: MassPerMassDistance, _r: Distance) => massPerMass(l.snum, l.sdenom),
-  );
+export const massPerMassDistanceTimesDistance = multiplication(
+  massPerMassDistance(A, B),
+  distance(),
+  massPerMass(A, B),
+);
 
 /** MassPerMassDistance<A, B> * MassDistance<B> = Mass<A> */
-export interface MassPerMassDistanceTimesMassDistance extends RuleType {
-  rule: this['L'] extends MassPerMassDistance<infer A, infer B>
-    ? Rule<MassDistance<B>, Mass<A>>
-    : never;
-}
-export const massPerMassDistanceTimesMassDistance =
-  multiplyRule<MassPerMassDistanceTimesMassDistance>()(
-    'MassPerMassDistance',
-    'MassDistance',
-    (l: MassPerMassDistance, r: MassDistance) =>
-      whenSame(l.sdenom, r.substance, () => mass(l.snum)),
-  );
-
-/** MassPerHeadPerDay<S> * EnergyPerMass<S> = EnergyPerHeadPerDay */
-export interface MassPerHeadPerDayTimesEnergyPerMass extends RuleType {
-  rule: this['L'] extends MassPerHeadPerDay<infer S>
-    ? Rule<EnergyPerMass<S>, EnergyPerHeadPerDay>
-    : never;
-}
-export const massPerHeadPerDayTimesEnergyPerMass =
-  multiplyRule<MassPerHeadPerDayTimesEnergyPerMass>()(
-    'MassPerHeadPerDay',
-    'EnergyPerMass',
-    (l: MassPerHeadPerDay, r: EnergyPerMass) =>
-      whenSame(l.substance, r.substance, energyPerHeadPerDay),
-  );
-
-/** MassPerVolume<B, V> * MassPerMass<A, B> = MassPerVolume<A, V> */
-export interface MassPerVolumeTimesMassPerMass extends RuleType {
-  rule: this['L'] extends MassPerVolume<infer B, infer V>
-    ? Rule<
-        MassPerMass<Substance, B>,
-        this['R'] extends MassPerMass<infer A, Substance>
-          ? MassPerVolume<A, V>
-          : never
-      >
-    : never;
-}
-export const massPerVolumeTimesMassPerMass =
-  multiplyRule<MassPerVolumeTimesMassPerMass>()(
-    'MassPerVolume',
-    'MassPerMass',
-    (l: MassPerVolume, r: MassPerMass) =>
-      whenSame(l.mass, r.sdenom, () => massPerVolume(r.snum, l.volume)),
-  );
-
-/** Mass<S> / Area = MassPerArea<S> */
-export interface MassDividedByArea extends RuleType {
-  rule: this['L'] extends Mass<infer S> ? Rule<Area, MassPerArea<S>> : never;
-}
-export const massDividedByArea = divideRule<MassDividedByArea>()(
-  'Mass',
-  'Area',
-  (l: Mass, _r: Area) => massPerArea(l.substance),
+export const massPerMassDistanceTimesMassDistance = multiplication(
+  massPerMassDistance(A, B),
+  massDistance(B),
+  mass(A),
 );
+
+/** MassPerHeadPerDay<A> * EnergyPerMass<A> = EnergyPerHeadPerDay */
+export const massPerHeadPerDayTimesEnergyPerMass = multiplication(
+  massPerHeadPerDay(A),
+  energyPerMass(A),
+  energyPerHeadPerDay(),
+);
+
+/** MassPerVolume<B, C> * MassPerMass<A, B> = MassPerVolume<A, C> */
+export const massPerVolumeTimesMassPerMass = multiplication(
+  massPerVolume(B, C),
+  massPerMass(A, B),
+  massPerVolume(A, C),
+);
+
+// -------- Division --------
+
+/** Mass<A> / Area = MassPerArea<A> */
+export const massDividedByArea = division(mass(A), area(), massPerArea(A));
 
 /** Mass<A> / MassPerMass<A, B> = Mass<B> */
-export interface MassDividedByMassPerMass extends RuleType {
-  rule: this['L'] extends Mass<infer A>
-    ? Rule<
-        MassPerMass<A, Substance>,
-        this['R'] extends MassPerMass<Substance, infer B> ? Mass<B> : never
-      >
-    : never;
-}
-export const massDividedByMassPerMass = divideRule<MassDividedByMassPerMass>()(
-  'Mass',
-  'MassPerMass',
-  (l: Mass, r: MassPerMass) =>
-    whenSame(l.substance, r.snum, () => mass(r.sdenom)),
+export const massDividedByMassPerMass = division(
+  mass(A),
+  massPerMass(A, B),
+  mass(B),
 );
 
-/** MassPerArea<S> / Years = MassPerAreaPerYear<S> */
-export interface MassPerAreaDividedByYears extends RuleType {
-  rule: this['L'] extends MassPerArea<infer S>
-    ? Rule<Years, MassPerAreaPerYear<S>>
-    : never;
-}
-export const massPerAreaDividedByYears =
-  divideRule<MassPerAreaDividedByYears>()(
-    'MassPerArea',
-    'Years',
-    (l: MassPerArea, _r: Years) => massPerAreaPerYear(l.substance),
-  );
+/** MassPerArea<A> / Years = MassPerAreaPerYear<A> */
+export const massPerAreaDividedByYears = division(
+  massPerArea(A),
+  years(),
+  massPerAreaPerYear(A),
+);
 
-/** EnergyPerHeadPerDay / EnergyPerMass<S> = MassPerHeadPerDay<S> */
-export interface EnergyPerHeadPerDayDividedByEnergyPerMass extends RuleType {
-  rule: this['L'] extends EnergyPerHeadPerDay
-    ? Rule<
-        EnergyPerMass,
-        this['R'] extends EnergyPerMass<infer S> ? MassPerHeadPerDay<S> : never
-      >
-    : never;
-}
-export const energyPerHeadPerDayDividedByEnergyPerMass =
-  divideRule<EnergyPerHeadPerDayDividedByEnergyPerMass>()(
-    'EnergyPerHeadPerDay',
-    'EnergyPerMass',
-    (_l: EnergyPerHeadPerDay, r: EnergyPerMass) =>
-      massPerHeadPerDay(r.substance),
-  );
+/** EnergyPerHeadPerDay / EnergyPerMass<A> = MassPerHeadPerDay<A> */
+export const energyPerHeadPerDayDividedByEnergyPerMass = division(
+  energyPerHeadPerDay(),
+  energyPerMass(A),
+  massPerHeadPerDay(A),
+);
 
-/** MassPerHead<S> / Days = MassPerHeadPerDay<S> */
-export interface MassPerHeadDividedByDays extends RuleType {
-  rule: this['L'] extends MassPerHead<infer S>
-    ? Rule<Days, MassPerHeadPerDay<S>>
-    : never;
-}
-export const massPerHeadDividedByDays = divideRule<MassPerHeadDividedByDays>()(
-  'MassPerHead',
-  'Days',
-  (l: MassPerHead, _r: Days) => massPerHeadPerDay(l.substance),
+/** MassPerHead<A> / Days = MassPerHeadPerDay<A> */
+export const massPerHeadDividedByDays = division(
+  massPerHead(A),
+  days(),
+  massPerHeadPerDay(A),
 );
 
 /** MassPerHeadPerDay<A> / MassPerMass<A, B> = MassPerHeadPerDay<B> */
-export interface MassPerHeadPerDayDividedByMassPerMass extends RuleType {
-  rule: this['L'] extends MassPerHeadPerDay<infer A>
-    ? Rule<
-        MassPerMass<A, Substance>,
-        this['R'] extends MassPerMass<Substance, infer B>
-          ? MassPerHeadPerDay<B>
-          : never
-      >
-    : never;
-}
-export const massPerHeadPerDayDividedByMassPerMass =
-  divideRule<MassPerHeadPerDayDividedByMassPerMass>()(
-    'MassPerHeadPerDay',
-    'MassPerMass',
-    (l: MassPerHeadPerDay, r: MassPerMass) =>
-      whenSame(l.substance, r.snum, () => massPerHeadPerDay(r.sdenom)),
-  );
+export const massPerHeadPerDayDividedByMassPerMass = division(
+  massPerHeadPerDay(A),
+  massPerMass(A, B),
+  massPerHeadPerDay(B),
+);
 
 /** Mass<A> / MassPerVolume<A, B> = Volume<B> */
-export interface MassDividedByMassPerVolume extends RuleType {
-  rule: this['L'] extends Mass<infer A>
-    ? Rule<
-        MassPerVolume<A, Substance>,
-        this['R'] extends MassPerVolume<Substance, infer B> ? Volume<B> : never
-      >
-    : never;
-}
-export const massDividedByMassPerVolume =
-  divideRule<MassDividedByMassPerVolume>()(
-    'Mass',
-    'MassPerVolume',
-    (l: Mass, r: MassPerVolume) =>
-      whenSame(l.substance, r.mass, () => volume(r.volume)),
-  );
+export const massDividedByMassPerVolume = division(
+  mass(A),
+  massPerVolume(A, B),
+  volume(B),
+);
 
 /** MassPerEnergy<A> / MassPerMass<A, B> = MassPerEnergy<B> */
-export interface MassPerEnergyDividedByMassPerMass extends RuleType {
-  rule: this['L'] extends MassPerEnergy<infer A>
-    ? Rule<
-        MassPerMass<A, Substance>,
-        this['R'] extends MassPerMass<Substance, infer B>
-          ? MassPerEnergy<B>
-          : never
-      >
-    : never;
-}
-export const massPerEnergyDividedByMassPerMass =
-  divideRule<MassPerEnergyDividedByMassPerMass>()(
-    'MassPerEnergy',
-    'MassPerMass',
-    (l: MassPerEnergy, r: MassPerMass) =>
-      whenSame(l.substance, r.snum, () => massPerEnergy(r.sdenom)),
-  );
+export const massPerEnergyDividedByMassPerMass = division(
+  massPerEnergy(A),
+  massPerMass(A, B),
+  massPerEnergy(B),
+);
 
 // ---------------------------------------------------------------------------------------------
 // Rule modules. Each is a set of rules that belong together, to build a unit system from:

@@ -177,7 +177,7 @@ export const createInputBuilders = <
     displayUnit,
     toMeta = () => ({}),
     toOpenApi = () => ({}),
-    numberFields = {} as F,
+    numberFields = {},
     numberFieldsToMeta = () => ({}),
   } = config;
 
@@ -231,9 +231,7 @@ export const createInputBuilders = <
     const units = displayUnit(unitFactory, tweaker, options);
     return numberWireSchema(units, tweaker)
       .transform(toNumberContainer(unitFactory, options))
-      .meta(
-        openapiTags(withUnits(options.description, units), options),
-      ) as NumberInputSchema<U, RS, F, M>;
+      .meta(openapiTags(withUnits(options.description, units), options));
   };
 
   /**
@@ -249,9 +247,7 @@ export const createInputBuilders = <
     return numberWireSchema(units, tweaker)
       .optional()
       .transform(mapOptional(toNumberContainer(unitFactory, options)))
-      .meta(
-        openapiTags(withUnits(options.description, units), options),
-      ) as NumberInputSchemaOptional<U, RS, F, M>;
+      .meta(openapiTags(withUnits(options.description, units), options));
   };
 
   /** Accepts one of a registered list of strings. */
@@ -261,11 +257,7 @@ export const createInputBuilders = <
   ): EnumInputSchema<TEnum, RS, M> =>
     enumSchema(values)
       .meta(openapiTags(options.description, options))
-      .transform(toContainer<TEnum>(options)) as unknown as EnumInputSchema<
-      TEnum,
-      RS,
-      M
-    >;
+      .transform(toContainer<TEnum>(options));
 
   const enumInputOptional = <TEnum extends string>(
     values: readonly TEnum[],
@@ -274,9 +266,7 @@ export const createInputBuilders = <
     enumSchema(values)
       .optional()
       .meta(openapiTags(options.description, options))
-      .transform(
-        mapOptional(toContainer<TEnum>(options)),
-      ) as unknown as EnumInputSchemaOptional<TEnum, RS, M>;
+      .transform(mapOptional(toContainer<TEnum>(options)));
 
   /**
    * Accepts exactly one string, typically to select a variant. It is emitted inline as a
@@ -289,11 +279,7 @@ export const createInputBuilders = <
     z
       .enum([value])
       .meta(openapiTags(options.description, options))
-      .transform(toContainer<TValue>(options)) as unknown as EnumInputSchema<
-      TValue,
-      RS,
-      M
-    >;
+      .transform(toContainer<TValue>(options));
 
   const booleanInput = (
     options: InputOptions<O, M>,

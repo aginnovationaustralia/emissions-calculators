@@ -1,7 +1,5 @@
 /*
- * A typical calculation. Apart from how values are given (here inside the unit, e.g.
- * `root(mass('CO2', 5))`), this matches ../calculator-units-globals/farm-emissions.ts: diff the two
- * folders to compare the setup.
+ * A typical calculation. Values are given inside the unit, e.g. `root(mass('CO2', 5))`.
  *
  * Every helper only names the units it expects. The return types are never written out: they are
  * inferred from the rules, e.g. `fuelEmissions` returns Container<Mass<'CO2e'>>.

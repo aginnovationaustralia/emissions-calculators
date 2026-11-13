@@ -1,4 +1,4 @@
-import Decimal from 'decimal.js-light';
+import { Decimal } from './decimal.js';
 import {
   Algebra,
   Container,
@@ -309,7 +309,7 @@ const buildSystem = (
       }
       return createNode(algebra, unit, { kind: 'input', method }, meta);
     },
-    select: ((
+    select: (
       table: Record<string, unknown> & { name?: string },
       ...selectors: Selector<string, RuleSet>[]
     ) => {
@@ -324,7 +324,7 @@ const buildSystem = (
         { kind: 'selection', selectors },
         { name: table.name ? `${table.name}[${path}]` : path },
       );
-    }) as UnitSystem<RuleSet>['select'],
+    },
     extend: (more) =>
       buildSystem(
         {
@@ -332,7 +332,7 @@ const buildSystem = (
           divide: [...rules.divide, ...(more.divide ?? [])],
         },
         methods,
-      ) as never,
+      ),
     withMethods: (...narrowed) => {
       const outside = narrowed.filter((m) => !methods.includes(m));
       if (outside.length > 0) {
@@ -361,4 +361,4 @@ export const createUnitSystem = <
   buildSystem({
     multiply: rules.multiply ?? [],
     divide: rules.divide ?? [],
-  }) as never;
+  });

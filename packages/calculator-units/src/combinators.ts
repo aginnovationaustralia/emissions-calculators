@@ -93,7 +93,7 @@ export function sum(
 export const br = <U extends AnyUnit, RS extends RuleSet, M extends Method>(
   inner: Container<U, RS, M>,
 ): Container<U, RS, M> =>
-  createNode(algebraOf(inner), inner.unit as AnyUnit, {
+  createNode(algebraOf(inner), inner.unit, {
     kind: 'bracketed',
     inner,
   });
@@ -156,7 +156,7 @@ export function captureMethod1Or2Value<
       { kind: 'method2', method2 },
     );
   }
-  const m1 = method1 as Container<U, RS, M>;
+  const m1 = method1;
   return createNode(
     algebraOf(method2),
     {
@@ -218,21 +218,3 @@ export const max = <U extends NumberUnit, RS extends RuleSet, M extends Method>(
   value: Container<U, RS, M>,
   limit: Container<U | RealNumber, RS, M>,
 ): Container<U, RS, M> => value.max(limit as never);
-
-/** Multiplies every container in an object by the same RealNumber factor. */
-export const multiplyAllValuesBy = <
-  T extends Record<string, Container<NumberUnit, RS, M>>,
-  RS extends RuleSet,
-  M extends Method,
->(
-  object: T,
-  factor: Container<RealNumber, RS, M>,
-): { [K in keyof T]: T[K] } =>
-  Object.fromEntries(
-    Object.entries(object).map(([key, value]) => [
-      key,
-      (
-        value as unknown as AnyContainer as Container<NumberUnit, RS, M>
-      ).multiply(factor as never),
-    ]),
-  ) as unknown as { [K in keyof T]: T[K] };

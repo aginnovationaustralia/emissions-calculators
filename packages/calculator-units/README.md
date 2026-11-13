@@ -131,7 +131,7 @@ And as functions, which take the unit system from the containers given:
 | `ifTrueElse(condition, whenTrue, whenFalse)` | Picks a value by a boolean container.                                                                                   |
 | `translate(unit, from)`                      | A value in a new unit, recorded as derived from `from`.                                                                 |
 | `br(inner)`                                  | The same value, grouped for display.                                                                                    |
-| `min`, `max`, `multiplyAllValuesBy`          | Conveniences.                                                                                                           |
+| `min`, `max`                                 | Conveniences.                                                                                                           |
 
 ## Provenance
 

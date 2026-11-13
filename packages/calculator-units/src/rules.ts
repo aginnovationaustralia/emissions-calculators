@@ -128,7 +128,7 @@ export const multiplyRule =
     operation: 'multiply',
     left,
     right,
-    apply: apply as unknown as RuntimeApply,
+    apply: apply as RuntimeApply,
   });
 
 /** The division counterpart of `multiplyRule`. */
@@ -142,7 +142,7 @@ export const divideRule =
     operation: 'divide',
     left,
     right,
-    apply: apply as unknown as RuntimeApply,
+    apply: apply as RuntimeApply,
   });
 
 /** Returns `result()` when the two substances match, otherwise undefined. */

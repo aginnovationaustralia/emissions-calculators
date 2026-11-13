@@ -1,7 +1,6 @@
 /*
- * The same scenario as ../calculator-units-globals/pitfall.ts. The MassPerDistance rule only
- * exists on the `units` system in ./units, so a container from a system without it can't use it,
- * and the compiler says so. Types and runtime agree whatever has been imported.
+ * The MassPerDistance rule only exists on the `units` system in ./units, so a container from a
+ * system without it can't use it, and the compiler says so. Types and runtime agree whatever has been imported.
  */
 import { UnitError, values } from '@aginnovationaustralia/calculator-units';
 import {

@@ -14,7 +14,7 @@ type NumberSchema = z.ZodType<number, number>;
 
 /** Fingerprint a number schema's JSON Schema constraints (ignoring $schema). */
 const numberConstraintKey = (schema: z.ZodNumber): string => {
-  const json = z.toJSONSchema(schema) as Record<string, unknown>;
+  const json = z.toJSONSchema(schema);
   const { $schema: _schema, ...rest } = json;
   return JSON.stringify(rest);
 };

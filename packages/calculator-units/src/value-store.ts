@@ -3,7 +3,7 @@
  * (e.g. calculated from more specific data supplied by the user). Arithmetic combines the tracks
  * so that both survive through a calculation.
  */
-import Decimal from 'decimal.js-light';
+import { Decimal } from './decimal.js';
 
 const applyBinary = (
   self: ValueStore,

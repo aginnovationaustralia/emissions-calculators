@@ -32,7 +32,7 @@ const PREFIX = '\u0000placeholder:';
 
 /** A placeholder for a rule pattern. `A`, `B` and `C` are ready made. */
 export const placeholder = <Id extends string>(id: Id): Placeholder<Id> =>
-  `${PREFIX}${id}` as unknown as Placeholder<Id>;
+  `${PREFIX}${id}` as Placeholder<Id>;
 
 export const A: Placeholder<'A'> = placeholder('A');
 export const B: Placeholder<'B'> = placeholder('B');
@@ -48,9 +48,20 @@ type IdOf<T> = T extends { readonly [placeholderId]: infer Id extends string }
   : never;
 type HasPlaceholder<T> = [IdOf<T>] extends [never] ? false : true;
 
-/** The pattern with each placeholder as any substance: the units it can match. */
-type Erase<P> = {
-  [K in keyof P]: HasPlaceholder<P[K]> extends true ? Substance : P[K];
+/**
+ * The fields of a pattern a unit must match exactly: its unit type and any concrete substances.
+ * Placeholder fields are left out rather than checked against `Substance`, so a unit whose
+ * substance is a type parameter (in a generic helper) still matches: TypeScript only resolves a
+ * conditional type early when the check holds without relying on type parameter constraints.
+ */
+type Fixed<P> = {
+  [
+    K in keyof P as K extends 'store'
+      ? never
+      : HasPlaceholder<P[K]> extends true
+        ? never
+        : K
+  ]: P[K];
 };
 
 /** The substance each placeholder in pattern `P` matched in unit `U`. */
@@ -74,7 +85,7 @@ type Fill<P, Bindings> = {
  * result from what both matched.
  */
 export interface PatternRule<Left, Right, Result> extends RuleType {
-  rule: this['L'] extends Erase<Left>
+  rule: this['L'] extends Fixed<Left>
     ? Rule<
         Fill<Right, Bind<Left, this['L']>>,
         Fill<Result, Bind<Left, this['L']> & Bind<Right, this['R']>>

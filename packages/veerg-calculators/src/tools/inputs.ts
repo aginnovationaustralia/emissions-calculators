@@ -178,11 +178,7 @@ export function numberInput<U extends NumberUnit>(
   options: TypedInputOptions,
   schemaTweaker?: NumberSchemaTweaker,
 ): NumberInputField<U> {
-  return builders.numberInput(
-    unitFactory,
-    options,
-    schemaTweaker,
-  ) as unknown as NumberInputField<U>;
+  return builders.numberInput(unitFactory, options, schemaTweaker);
 }
 
 /**
@@ -193,11 +189,7 @@ export function numberInputOptional<U extends NumberUnit>(
   options: TypedInputOptions,
   schemaTweaker?: NumberSchemaTweaker,
 ): OptionalNumberInputField<U> {
-  return builders.numberInputOptional(
-    unitFactory,
-    options,
-    schemaTweaker,
-  ) as unknown as OptionalNumberInputField<U>;
+  return builders.numberInputOptional(unitFactory, options, schemaTweaker);
 }
 
 // -------- Enums -----------------

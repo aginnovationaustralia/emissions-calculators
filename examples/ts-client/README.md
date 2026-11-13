@@ -199,26 +199,19 @@ npm run build
 
 This project is licensed under a [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) license.
 
-## Units and containers: comparing two designs
+## Units and containers
 
-`src/units/` runs the same farm emissions calculation against two packages, to compare their developer experience:
+`src/units/calculator-units/` runs a farm emissions calculation using `@aginnovationaustralia/calculator-units`, where rules are values collected into an explicit unit system.
 
-- `src/units/calculator-units/` uses `@aginnovationaustralia/calculator-units`, where rules are values collected into an explicit unit system.
-- `src/units/calculator-units-globals/` uses `@aginnovationaustralia/calculator-units-globals`, where units and rules are added to global registries.
-
-Each folder contains:
-
-| File                | Purpose                                                                                                                                                                                                     |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `units.ts`          | The project's unit setup: the defaults plus a `Diesel` substance, a `MassPerDistance` unit and a rule. This is the only real difference between the two.                                                    |
-| `farm-emissions.ts` | The calculation. The same in both folders, apart from how values are given: inside the unit for `calculator-units` (`root(mass('CO2', 5))`), alongside it for the globals package (`root(mass('CO2'), 5)`). |
-| `mistakes.ts`       | Typical mistakes, each annotated with the error TypeScript reports, for comparing error messages. Typechecked, never run.                                                                                   |
-| `pitfall.ts`        | Uses the extra rule without importing `units.ts`. The globals version typechecks and then throws at runtime; the other is rejected by the compiler.                                                         |
-| `index.ts`          | Runs the calculation and prints the results.                                                                                                                                                                |
+| File                | Purpose                                                                                                                         |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `units.ts`          | The project's unit setup: the defaults plus a `Diesel` substance, a `MassPerDistance` unit and a rule.                          |
+| `farm-emissions.ts` | The calculation. Values are given inside the unit, e.g. `root(mass('CO2', 5))`.                                                 |
+| `mistakes.ts`       | Typical mistakes, each annotated with the error TypeScript reports. Typechecked, never run.                                     |
+| `pitfall.ts`        | Tries to use the extra rule from a unit system that doesn't have it, which the compiler rejects.                                |
+| `index.ts`          | Runs the calculation and prints the results.                                                                                    |
 
 ```bash
-pnpm units:generics          # or units:globals
-pnpm units:generics:pitfall  # or units:globals:pitfall
+pnpm units:generics
+pnpm units:generics:pitfall
 ```
-
-The `pitfall` scripts use `ts-node --transpile-only`. Without it, ts-node only typechecks the files it loads, so the globals pitfall wouldn't see the augmentation in `units.ts` and would fail to compile, unlike `tsc` over the whole project.
