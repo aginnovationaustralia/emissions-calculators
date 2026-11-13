@@ -1,4 +1,5 @@
 {
-  "packages/calculators": "3.0.1",
-  "packages/research": "0.1.0"
+  "packages/calculators": "3.1.0",
+  "packages/research": "0.2.0",
+  "packages/veerg-calculators": "1.1.0-beta.1"
 }
