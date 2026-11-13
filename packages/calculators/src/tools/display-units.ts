@@ -213,7 +213,7 @@ const substanceDisplayNames: Record<Substance, string> = {
   Fish: 'fish',
 };
 
-const substanceDisplayName = (substance: Substance): string =>
+export const substanceDisplayName = (substance: Substance): string =>
   substanceDisplayNames[substance];
 
 /**
