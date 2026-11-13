@@ -48,7 +48,7 @@
     "node": ">=22.19.0"
   },
   "dependencies": {
-    "@aginnovationaustralia/emissions-calculators": "workspace:*"
+    "@aginnovationaustralia/veerg-calculators": "workspace:*"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",

@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@aginnovationaustralia/emissions-calculator-research": "workspace:*",
-    "@aginnovationaustralia/emissions-calculators": "workspace:*"
+    "@aginnovationaustralia/emissions-calculators": "workspace:*",
+    "@aginnovationaustralia/veerg-calculators": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^25.0.1",

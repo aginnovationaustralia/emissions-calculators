@@ -50,6 +50,9 @@ importers:
       '@aginnovationaustralia/emissions-calculators':
         specifier: workspace:*
         version: link:../../packages/calculators
+      '@aginnovationaustralia/veerg-calculators':
+        specifier: workspace:*
+        version: link:../../packages/veerg-calculators
     devDependencies:
       '@types/node':
         specifier: ^25.0.1
@@ -272,9 +275,9 @@ importers:
 
   packages/research:
     dependencies:
-      '@aginnovationaustralia/emissions-calculators':
+      '@aginnovationaustralia/veerg-calculators':
         specifier: workspace:*
-        version: link:../calculators
+        version: link:../veerg-calculators
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.18.5

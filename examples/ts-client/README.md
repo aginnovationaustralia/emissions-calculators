@@ -134,33 +134,29 @@ if (validatedInput.valid) {
 
 ### Research: Overriding constant values
 
-The `@aginnovationaustralia/emissions-calculator-research` package runs the same calculators with custom
+The `@aginnovationaustralia/emissions-calculator-research` package runs the calculators from `veerg-calculators` with custom
 values for any of the constants. See [`src/grains/research-overrides.ts`](./src/grains/research-overrides.ts):
 
 ```typescript
 import {
   calculateGrains,
   executeCalculator,
-  ResearchEnvironment,
 } from '@aginnovationaustralia/emissions-calculator-research';
-import { GrainsInputSchema } from '@aginnovationaustralia/emissions-calculators/grains';
+import { GrainsInputSchema } from '@aginnovationaustralia/veerg-calculators/grains';
 
 const input = GrainsInputSchema.parse(grainsInputData);
 
-const result = ResearchEnvironment.run(
-  {
-    overrides: {
-      COMMON: {
-        TRANSPORT_FUEL_FACTORS: {
-          'Cars and light commercial vehicles': {
-            Gasoline: { SCOPE1_EF: { CO2: 0.0000674 * 2 } },
-          },
+const result = executeCalculator(calculateGrains, input, 'grains', {
+  overrides: {
+    COMMON: {
+      TRANSPORT_FUEL_FACTORS: {
+        'Off-road Agriculture and forestry equipment': {
+          Diesel: { SCOPE1_EF: { CO2: 0.0000699 * 2 } },
         },
       },
     },
   },
-  () => executeCalculator(calculateGrains, input, 'grains'),
-);
+});
 ```
 
 ### Available Calculators
