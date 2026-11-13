@@ -104,9 +104,7 @@ export class ValueStore {
   }
 
   get valueMethod2(): Decimal | undefined {
-    return isValueSeedMethod2(this.seed)
-      ? this.seed.valueMethod2
-      : this.seed.valueMethod2;
+    return this.seed.valueMethod2;
   }
 
   get value(): Decimal {
@@ -156,42 +154,14 @@ export class ValueStore {
     return applyBinary(this, other, (a, b) => a.pow(b));
   }
 
-  min(limit: Decimal) {
-    if (isValueSeed1And2(this.seed)) {
-      return new ValueStore({
-        valueMethod1: this.seed.valueMethod1.gt(limit)
-          ? limit
-          : this.seed.valueMethod1,
-        valueMethod2: this.seed.valueMethod2?.gt(limit)
-          ? limit
-          : this.seed.valueMethod2,
-      });
-    } else {
-      return new ValueStore({
-        valueMethod2: this.seed.valueMethod2.gt(limit)
-          ? limit
-          : this.seed.valueMethod2,
-      });
-    }
+  /** The smaller of the two values, track by track: each track is limited by the same track of `limit`. */
+  min(limit: ValueStore) {
+    return applyBinary(this, limit, (a, b) => (a.gt(b) ? b : a));
   }
 
-  max(max: Decimal) {
-    if (isValueSeed1And2(this.seed)) {
-      return new ValueStore({
-        valueMethod1: this.seed.valueMethod1.lt(max)
-          ? max
-          : this.seed.valueMethod1,
-        valueMethod2: this.seed.valueMethod2?.lt(max)
-          ? max
-          : this.seed.valueMethod2,
-      });
-    } else {
-      return new ValueStore({
-        valueMethod2: this.seed.valueMethod2.lt(max)
-          ? max
-          : this.seed.valueMethod2,
-      });
-    }
+  /** The larger of the two values, track by track: each track is limited by the same track of `limit`. */
+  max(limit: ValueStore) {
+    return applyBinary(this, limit, (a, b) => (a.lt(b) ? b : a));
   }
 
   toNumber(): number {

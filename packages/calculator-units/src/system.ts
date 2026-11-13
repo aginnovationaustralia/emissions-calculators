@@ -18,6 +18,7 @@ import type {
 } from './rules.js';
 import {
   AnyUnit,
+  isNumberUnit,
   describeUnit,
   isRealNumber,
   NumberUnit,
@@ -313,11 +314,33 @@ const buildSystem = (
       table: Record<string, unknown> & { name?: string },
       ...selectors: Selector<string, RuleSet>[]
     ) => {
-      let current: unknown = table;
-      for (const selector of selectors) {
-        current = (current as Record<string, unknown>)[keyOf(selector)];
-      }
       const path = selectors.map(keyOf).join('.');
+      const tableName = table.name ?? 'table';
+      // The types only allow keys the table has, but a string container's value comes from user
+      // input at runtime. Fail here, naming the lookup, rather than at the first use of the result.
+      let current: unknown = table;
+      selectors.map(keyOf).forEach((key, index) => {
+        if (
+          typeof current !== 'object' ||
+          current === null ||
+          !Object.hasOwn(current, key)
+        ) {
+          const at = selectors.slice(0, index).map(keyOf).join('.');
+          throw new UnitError(
+            `Cannot select ${tableName}[${path}]: ${at ? `${tableName}[${at}]` : tableName} has no entry "${key}"`,
+          );
+        }
+        current = (current as Record<string, unknown>)[key];
+      });
+      if (
+        typeof current !== 'object' ||
+        current === null ||
+        !isNumberUnit(current as AnyUnit)
+      ) {
+        throw new UnitError(
+          `Cannot select ${tableName}[${path}]: it is not a unit`,
+        );
+      }
       return createNode(
         algebra,
         current as NumberUnit,

@@ -138,15 +138,35 @@ describe('ValueStore', () => {
 
   describe('min', () => {
     it('leaves values at or below the limit unchanged', () => {
-      expectStore(dualTrack(3, 4).min(d(5)), 3, 4);
+      expectStore(dualTrack(3, 4).min(dualTrack(5)), 3, 4);
     });
 
     it('clamps method 1 and method 2 independently', () => {
-      expectStore(dualTrack(10, 3).min(d(5)), 5, 3);
+      expectStore(dualTrack(10, 3).min(dualTrack(5)), 5, 3);
     });
 
     it('clamps method 1 when method 2 is absent', () => {
-      expectStore(dualTrack(10).min(d(5)), 5);
+      expectStore(dualTrack(10).min(dualTrack(5)), 5);
+    });
+
+    it('limits each track by the same track of the limit', () => {
+      // Method 1 is limited by the limit's method 1 (8), not its method 2 (3)
+      expectStore(dualTrack(10, 10).min(dualTrack(8, 3)), 8, 3);
+    });
+
+    it('limits a method 1 only value by both tracks of the limit', () => {
+      // The value has no method 2 track, so its method 1 value is limited by the limit's method 2
+      expectStore(dualTrack(10).min(dualTrack(8, 3)), 8, 3);
+    });
+  });
+
+  describe('max', () => {
+    it('raises each track to the same track of the limit', () => {
+      expectStore(dualTrack(1, 1).max(dualTrack(3, 5)), 3, 5);
+    });
+
+    it('leaves values at or above the limit unchanged', () => {
+      expectStore(dualTrack(6, 7).max(dualTrack(3, 5)), 6, 7);
     });
   });
 
@@ -209,11 +229,11 @@ describe('method 2 only ValueStore', () => {
 
   describe('min', () => {
     it('clamps the method 2 value', () => {
-      expectMethod2Only(method2Only(10).min(d(5)), 5);
+      expectMethod2Only(method2Only(10).min(dualTrack(5)), 5);
     });
 
     it('leaves a value below the limit unchanged', () => {
-      expectMethod2Only(method2Only(3).min(d(5)), 3);
+      expectMethod2Only(method2Only(3).min(dualTrack(5)), 3);
     });
   });
 

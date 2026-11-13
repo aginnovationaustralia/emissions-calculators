@@ -211,7 +211,12 @@ export class ContainerNode implements AnyContainer {
   ): ContainerNode {
     const l = numberUnit(this.unit, operation);
     const r = numberUnit(right.unit, operation);
-    if (isVoid(l) || isVoid(r)) {
+    // Anything multiplied or divided by void is void. For add and subtract, void is the identity:
+    // the result keeps the other side's unit (and the stores still combine, void's being 0).
+    if (
+      (isVoid(l) || isVoid(r)) &&
+      (operation === 'multiply' || operation === 'divide')
+    ) {
       return this.binary(operation, right, voidUnit(), meta);
     }
     const resolve =
@@ -219,7 +224,11 @@ export class ContainerNode implements AnyContainer {
         ? this.algebra.multiply
         : operation === 'divide'
           ? this.algebra.divide
-          : this.algebra.additive;
+          : isVoid(l)
+            ? () => r
+            : isVoid(r)
+              ? () => l
+              : this.algebra.additive;
     const store =
       operation === 'multiply'
         ? l.store.multiply(r.store)
@@ -277,13 +286,13 @@ export class ContainerNode implements AnyContainer {
 
   min(limit: ContainerNode, meta?: Metadata) {
     const unit = numberUnit(this.unit, 'min');
-    const store = unit.store.min(numberUnit(limit.unit, 'min').store.value);
+    const store = unit.store.min(numberUnit(limit.unit, 'min').store);
     return this.binary('min', limit, { ...unit, store }, meta);
   }
 
   max(limit: ContainerNode, meta?: Metadata) {
     const unit = numberUnit(this.unit, 'max');
-    const store = unit.store.max(numberUnit(limit.unit, 'max').store.value);
+    const store = unit.store.max(numberUnit(limit.unit, 'max').store);
     return this.binary('max', limit, { ...unit, store }, meta);
   }
 

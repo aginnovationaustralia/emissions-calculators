@@ -1,7 +1,6 @@
 /*
  * Typical mistakes, each annotated with the error TypeScript reports for it (as of TypeScript 5.9).
- * The same file exists in the other example folder, so the messages can be compared. Remove a
- * `@ts-expect-error` to see the error in the editor.
+ * Remove a `@ts-expect-error` to see the error in the editor.
  *
  * Never run: this module only exists to be typechecked.
  */

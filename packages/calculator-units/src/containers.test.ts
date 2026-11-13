@@ -29,6 +29,7 @@ import {
   translate,
   UnitError,
   ValueStore,
+  values,
   voidUnit,
 } from './index.js';
 import { Equal, expectType } from './test-helpers.js';
@@ -133,6 +134,58 @@ describe('method 1 and 2 values', () => {
   });
 });
 
+describe('void', () => {
+  // Void is not in any rule, so these bypass the types to check the runtime behaviour
+  const voidValue = root(voidUnit());
+  const co2 = root(mass('CO2', 3));
+
+  test("is the identity for plus and minus, keeping the other side's unit", () => {
+    const plusVoid = co2.plus(voidValue as never);
+    expect(plusVoid.unit).toMatchObject({
+      __unitType: 'Mass',
+      substance: 'CO2',
+    });
+    expect(tracks(plusVoid).value).toBe(3);
+
+    const voidPlus = voidValue.plus(co2 as never);
+    expect(voidPlus.unit).toMatchObject({
+      __unitType: 'Mass',
+      substance: 'CO2',
+    });
+    expect(tracks(voidPlus).value).toBe(3);
+
+    const minusVoid = co2.minus(voidValue as never);
+    expect(minusVoid.unit).toMatchObject({
+      __unitType: 'Mass',
+      substance: 'CO2',
+    });
+    expect(tracks(minusVoid).value).toBe(3);
+  });
+
+  test('makes a product or quotient void', () => {
+    expect(co2.multiply(voidValue as never).unit).toMatchObject({
+      __unitType: 'Void',
+    });
+    expect(voidValue.divide(co2 as never).unit).toMatchObject({
+      __unitType: 'Void',
+    });
+  });
+});
+
+describe('min and max', () => {
+  test('limit each method track by the same track of the limit', () => {
+    const value = root(mass('CO2', values(d(10), d(10))));
+    const limit = root(mass('CO2', values(d(8), d(3))));
+    expect(tracks(min(value, limit))).toMatchObject({ method1: 8, method2: 3 });
+    expect(
+      tracks(max(root(mass('CO2', values(d(1), d(1)))), limit)),
+    ).toMatchObject({
+      method1: 8,
+      method2: 3,
+    });
+  });
+});
+
 describe('string and boolean containers', () => {
   const fertiliser = input<'Urea' | 'Lime'>('Urea', { name: 'fertiliser' });
   const irrigated = input(true, { name: 'irrigated' });
@@ -208,9 +261,28 @@ describe('selection', () => {
     expect(childrenOf(gwp)).toEqual([gas]);
   });
 
-  test('rejects keys that are not in the table', () => {
+  test('rejects keys that are not in the table, at compile time and runtime', () => {
     // @ts-expect-error no CO2 entry
-    select(COMMON, 'GWP', 'CO2');
+    expect(() => select(COMMON, 'GWP', 'CO2')).toThrow(
+      'Cannot select COMMON[GWP.CO2]: COMMON[GWP] has no entry "CO2"',
+    );
+    // @ts-expect-error no Fuel table
+    expect(() => select(COMMON, 'Fuel', 'CO2')).toThrow(
+      'Cannot select COMMON[Fuel.CO2]: COMMON has no entry "Fuel"',
+    );
+  });
+
+  test('rejects a string container whose value is not in the table', () => {
+    // The type allows CO2, but the table has no entry for it, as with an unexpected input value
+    const gas = input<'CH4' | 'N2O'>('CO2' as 'CH4', { name: 'gas' });
+    expect(() => select(COMMON, 'GWP', gas)).toThrow(UnitError);
+  });
+
+  test('rejects a path that stops at a table, not a unit', () => {
+    // @ts-expect-error GWP is a table of units
+    expect(() => select(COMMON, 'GWP')).toThrow(
+      'Cannot select COMMON[GWP]: it is not a unit',
+    );
   });
 });
 
