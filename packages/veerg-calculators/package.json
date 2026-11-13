@@ -380,8 +380,8 @@
     "xlsx-populate": "^1.21.0"
   },
   "dependencies": {
-    "@aginnovationaustralia/calculator-inputs": "workspace:*",
-    "@aginnovationaustralia/calculator-units": "workspace:*",
+    "@aginnovationaustralia/calculator-inputs": "workspace:^",
+    "@aginnovationaustralia/calculator-units": "workspace:^",
     "decimal.js-light": "^2.5.1",
     "fflate": "^0.8.3",
     "mixpanel": "^0.24.0",

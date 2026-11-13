@@ -1,8 +1,15 @@
 # @aginnovationaustralia/calculator-inputs
 
-Zod schemas that validate user supplied values and turn them into input containers from [`@aginnovationaustralia/calculator-units`](../calculator-units), with clean OpenAPI output: common number constraints and named enums become shared components referenced by `$ref`.
+Zod schemas that validate user supplied values and turn them into input containers from [`@aginnovationaustralia/calculator-units`](https://www.npmjs.com/package/@aginnovationaustralia/calculator-units), with clean OpenAPI output: common number constraints and named enums become shared components referenced by `$ref`.
 
 You decide the shape of your inputs: the options each input takes, what of them is recorded on its container and emitted to OpenAPI, and what fields sit beside a number's `value`.
+
+## Requirements
+
+- **ESM only.** The package is published as ES modules. It works with `import`, with bundlers, and with `require()` on Node 22.12 or later (Node's built-in support for requiring ES modules).
+- **Node 22.19 or later**, as declared in `engines`.
+- **TypeScript:** use `moduleResolution` `nodenext`, `node16` or `bundler`, which read the `exports` map. The older `node` (`node10`) setting can't resolve the subpath entry points. CommonJS projects importing the package from TypeScript need TypeScript 5.8 or later with `module: nodenext`.
+- **Jest:** Jest in CommonJS mode can only `require()` ES modules on Node 24.9 or later. On earlier versions, run Jest in ESM mode, transform the package, or use Vitest.
 
 ## Peer dependencies
 

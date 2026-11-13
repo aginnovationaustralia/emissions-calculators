@@ -368,10 +368,10 @@ importers:
   packages/veerg-calculators:
     dependencies:
       '@aginnovationaustralia/calculator-inputs':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../calculator-inputs
       '@aginnovationaustralia/calculator-units':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../calculator-units
       decimal.js-light:
         specifier: ^2.5.1
