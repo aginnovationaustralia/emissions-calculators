@@ -1,4 +1,4 @@
-import { Container, isNamedOrigin } from './containers';
+import { AnyContainer, isNamedOrigin } from './containers';
 import { AnyUnit, isBooleanUnit, isStringUnit, isVoid } from './units';
 
 export function formatUnit(unit: AnyUnit): string {
@@ -80,7 +80,7 @@ export function formatUnit(unit: AnyUnit): string {
   }
 }
 
-export const formatExpression = (container: Container<AnyUnit>): string => {
+export const formatExpression = (container: AnyContainer): string => {
   //   const lhsUnit = container.unit;
   //   let lhs = '';
   //   if (isVoid(lhsUnit)) {
@@ -99,7 +99,7 @@ export const formatExpression = (container: Container<AnyUnit>): string => {
   return `${lhs} = ${rhs}`;
 };
 
-const formatUnitValue = (unit: AnyUnit): string => {
+const formatUnitValue = (unit: AnyContainer['unit']): string => {
   if (isVoid(unit)) {
     return 'void(0)';
   } else if (isStringUnit(unit)) {
@@ -126,61 +126,58 @@ const formatOperator = (
   return operatorMap[type];
 };
 
-const formatValueAndName = (container: Container<AnyUnit>): string => {
-  const core = container.core;
-  const name = core?.name ?? 'n';
+const formatValueAndName = (container: AnyContainer): string => {
+  const name = container.meta.name ?? 'n';
 
   return `${name}(${formatUnitValue(container.unit)})`;
 };
 
-const formatExpressionRecursive = (container: Container<AnyUnit>): string => {
-  switch (container.originType) {
+const formatExpressionRecursive = (container: AnyContainer): string => {
+  switch (container.origin.kind) {
     case 'binary':
-      if (container.type === 'min') {
-        return `${formatOperator(container.type)}(${formatExpressionRecursive(container.left)}, ${formatExpressionRecursive(container.right)})`;
+      if (container.origin.operation === 'min') {
+        return `${formatOperator(container.origin.operation)}(${formatExpressionRecursive(container.origin.left)}, ${formatExpressionRecursive(container.origin.right)})`;
       }
-      return `${formatExpressionRecursive(container.left)} ${formatOperator(container.type)} ${formatExpressionRecursive(container.right)}`;
+      return `${formatExpressionRecursive(container.origin.left)} ${formatOperator(container.origin.operation)} ${formatExpressionRecursive(container.origin.right)}`;
     case 'root':
       return formatValueAndName(container);
     case 'sum':
-      return container.from.map(formatExpressionRecursive).join(' + ');
-    case 'constant_selection':
+      return container.origin.from.map(formatExpressionRecursive).join(' + ');
+    case 'selection':
       return formatValueAndName(container);
     case 'bracketed':
-      return `(${formatExpressionRecursive(container.inner)})`;
+      return `(${formatExpressionRecursive(container.origin.inner)})`;
     case 'if_else':
-      return `if(${formatExpressionRecursive(container.condition)}, ${formatExpressionRecursive(container.whenTrue)}, ${formatExpressionRecursive(container.whenFalse)})`;
+      return `if(${formatExpressionRecursive(container.origin.condition)}, ${formatExpressionRecursive(container.origin.whenTrue)}, ${formatExpressionRecursive(container.origin.whenFalse)})`;
     default:
       return `Unknown ${container}`;
   }
 };
 
-export const formatIntermediates = (container: Container<AnyUnit>): string => {
+export const formatIntermediates = (container: AnyContainer): string => {
   const intermediates = formatIntermediatesRecursive(container);
 
   return [formatValueAndName(container)].concat(intermediates).join('\n');
 };
 
-const formatIntermediatesRecursive = (
-  container: Container<AnyUnit>,
-): string[] => {
-  switch (container.originType) {
+const formatIntermediatesRecursive = (container: AnyContainer): string[] => {
+  switch (container.origin.kind) {
     case 'binary':
-      return formatIntermediatesRecursive(container.left).concat(
-        formatIntermediatesRecursive(container.right),
+      return formatIntermediatesRecursive(container.origin.left).concat(
+        formatIntermediatesRecursive(container.origin.right),
       );
     case 'root':
       return [formatValueAndName(container)];
     case 'sum':
-      return container.from.flatMap(formatIntermediatesRecursive);
-    case 'constant_selection':
+      return container.origin.from.flatMap(formatIntermediatesRecursive);
+    case 'selection':
       return [formatValueAndName(container)];
     case 'bracketed':
-      return formatIntermediatesRecursive(container.inner);
+      return formatIntermediatesRecursive(container.origin.inner);
     case 'if_else':
-      return formatIntermediatesRecursive(container.condition)
-        .concat(formatIntermediatesRecursive(container.whenTrue))
-        .concat(formatIntermediatesRecursive(container.whenFalse));
+      return formatIntermediatesRecursive(container.origin.condition)
+        .concat(formatIntermediatesRecursive(container.origin.whenTrue))
+        .concat(formatIntermediatesRecursive(container.origin.whenFalse));
     default:
       return [`Unknown ${container}`];
   }
@@ -226,7 +223,7 @@ const collectExpressions = (
 };
 
 export const formatNamedValues = (
-  container: Container<AnyUnit>,
+  container: AnyContainer,
   formatOptions: FormatOptions = {},
 ): string => {
   const { focusOn, includeChildren = true, maxDepth = 2 } = formatOptions;
@@ -241,30 +238,30 @@ export const formatNamedValues = (
 };
 
 const formatNamedValuesRecursive = (
-  container: Container<AnyUnit>,
+  container: AnyContainer,
   depth: number,
   bracketWrap: boolean = false,
 ): NamedValuesNode[] => {
-  const isNamed = isNamedOrigin(container.core);
+  const isNamed = isNamedOrigin(container.meta);
   const lhs = formatValueAndName(container);
-  const name = container.core?.name;
+  const name = container.meta.name;
 
   const wrap = bracketWrap ? (s: string) => `(${s})` : (s: string) => s;
 
   if (isNamed) {
-    switch (container.originType) {
+    switch (container.origin.kind) {
       case 'binary': {
         // convert left and right to named values. Left and right may return a list of named containers that also require expansion
         const leftResults = formatNamedValuesRecursive(
-          container.left,
+          container.origin.left,
           depth + 1,
         );
         const rightResults = formatNamedValuesRecursive(
-          container.right,
+          container.origin.right,
           depth + 1,
         );
         const children = leftResults.concat(rightResults);
-        const op = formatOperator(container.type);
+        const op = formatOperator(container.origin.operation);
         return [
           {
             lhs,
@@ -276,7 +273,7 @@ const formatNamedValuesRecursive = (
         ];
       }
       case 'sum': {
-        const children = container.from.flatMap((c) =>
+        const children = container.origin.from.flatMap((c) =>
           formatNamedValuesRecursive(c, depth + 1),
         );
         return [
@@ -290,7 +287,7 @@ const formatNamedValuesRecursive = (
           },
         ];
       }
-      case 'constant_selection':
+      case 'selection':
         return [
           {
             lhs,
@@ -311,19 +308,19 @@ const formatNamedValuesRecursive = (
           },
         ];
       case 'bracketed': {
-        return formatNamedValuesRecursive(container.inner, depth, true);
+        return formatNamedValuesRecursive(container.origin.inner, depth, true);
       }
       case 'if_else': {
         const conditionResults = formatNamedValuesRecursive(
-          container.condition,
+          container.origin.condition,
           depth + 1,
         );
         const trueResults = formatNamedValuesRecursive(
-          container.whenTrue,
+          container.origin.whenTrue,
           depth + 1,
         );
         const falseResults = formatNamedValuesRecursive(
-          container.whenFalse,
+          container.origin.whenFalse,
           depth + 1,
         );
         const children = conditionResults
@@ -350,11 +347,17 @@ const formatNamedValuesRecursive = (
         ];
     }
   } else {
-    switch (container.originType) {
+    switch (container.origin.kind) {
       case 'binary': {
-        const op = formatOperator(container.type);
-        const leftResults = formatNamedValuesRecursive(container.left, depth);
-        const rightResults = formatNamedValuesRecursive(container.right, depth);
+        const op = formatOperator(container.origin.operation);
+        const leftResults = formatNamedValuesRecursive(
+          container.origin.left,
+          depth,
+        );
+        const rightResults = formatNamedValuesRecursive(
+          container.origin.right,
+          depth,
+        );
         const children = leftResults.concat(rightResults);
         return [
           {
@@ -367,7 +370,7 @@ const formatNamedValuesRecursive = (
         ];
       }
       case 'sum': {
-        const children = container.from.flatMap((c) =>
+        const children = container.origin.from.flatMap((c) =>
           formatNamedValuesRecursive(c, depth),
         );
         return [
@@ -383,19 +386,19 @@ const formatNamedValuesRecursive = (
         ];
       }
       case 'bracketed': {
-        return formatNamedValuesRecursive(container.inner, depth, true);
+        return formatNamedValuesRecursive(container.origin.inner, depth, true);
       }
       case 'if_else': {
         const conditionResults = formatNamedValuesRecursive(
-          container.condition,
+          container.origin.condition,
           depth,
         );
         const trueResults = formatNamedValuesRecursive(
-          container.whenTrue,
+          container.origin.whenTrue,
           depth,
         );
         const falseResults = formatNamedValuesRecursive(
-          container.whenFalse,
+          container.origin.whenFalse,
           depth,
         );
         const children = conditionResults

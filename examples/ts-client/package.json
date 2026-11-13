@@ -9,9 +9,12 @@
     "check:types": "tsc --noEmit",
     "lint": "eslint . && pnpm run check:types",
     "dev": "CALCULATOR_METRICS_ORGANISATION='ts-client example' ts-node src/index.ts",
+    "units:generics": "ts-node src/units/calculator-units/index.ts",
+    "units:generics:pitfall": "ts-node --transpile-only src/units/calculator-units/pitfall.ts",
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@aginnovationaustralia/calculator-units": "workspace:*",
     "@aginnovationaustralia/emissions-calculator-research": "workspace:*",
     "@aginnovationaustralia/emissions-calculators": "workspace:*",
     "@aginnovationaustralia/veerg-calculators": "workspace:*"

@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Under NodeNext, TypeScript emits ESM for the calculator-units and calculator-inputs source
+    // (their package.json says "type": "module"), which Jest can't run in CommonJS mode. With these
+    // settings ts-jest compiles every file to CommonJS.
+    "module": "es2022",
+    "moduleResolution": "bundler"
+  }
+}

@@ -198,3 +198,20 @@ npm run build
 [Creative Commons Attribution](./assets/by.png)
 
 This project is licensed under a [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) license.
+
+## Units and containers
+
+`src/units/calculator-units/` runs a farm emissions calculation using `@aginnovationaustralia/calculator-units`, where rules are values collected into an explicit unit system.
+
+| File                | Purpose                                                                                                                         |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `units.ts`          | The project's unit setup: the defaults plus a `Diesel` substance, a `MassPerDistance` unit and a rule.                          |
+| `farm-emissions.ts` | The calculation. Values are given inside the unit, e.g. `root(mass('CO2', 5))`.                                                 |
+| `mistakes.ts`       | Typical mistakes, each annotated with the error TypeScript reports. Typechecked, never run.                                     |
+| `pitfall.ts`        | Tries to use the extra rule from a unit system that doesn't have it, which the compiler rejects.                                |
+| `index.ts`          | Runs the calculation and prints the results.                                                                                    |
+
+```bash
+pnpm units:generics
+pnpm units:generics:pitfall
+```

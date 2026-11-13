@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
       - 'veerg-calculators-v*'
+      - 'calculator-units-v*'
+      - 'calculator-inputs-v*'
+      - 'emissions-calculator-research-v*'
 
 permissions:
   id-token: write # Required for OIDC
@@ -51,11 +54,16 @@ jobs:
           TAG=${GITHUB_REF#refs/tags/}
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
-          if [[ "$TAG" == veerg-calculators-v* ]]; then
-            echo "package_dir=packages/veerg-calculators" >> $GITHUB_OUTPUT
-          else
-            echo "package_dir=packages/calculators" >> $GITHUB_OUTPUT
-          fi
+          # Tags come from release-please: `<component>-v<version>`, or `v<version>` for calculators
+          case "$TAG" in
+            veerg-calculators-v*) PACKAGE_DIR=packages/veerg-calculators ;;
+            calculator-units-v*) PACKAGE_DIR=packages/calculator-units ;;
+            calculator-inputs-v*) PACKAGE_DIR=packages/calculator-inputs ;;
+            emissions-calculator-research-v*) PACKAGE_DIR=packages/research ;;
+            v*) PACKAGE_DIR=packages/calculators ;;
+            *) echo "No package is published for tag $TAG" >&2; exit 1 ;;
+          esac
+          echo "package_dir=$PACKAGE_DIR" >> $GITHUB_OUTPUT
 
           if [[ "$TAG" == *"-beta"* ]]; then
             echo "npm_tag=beta" >> $GITHUB_OUTPUT
@@ -72,8 +80,11 @@ jobs:
           fi
         shell: bash
 
+      # pnpm replaces `workspace:` dependency versions with real ones, which npm publish doesn't.
+      # pnpm 9 hands the packed tarball to the npm CLI, so trusted publishing (OIDC) still applies.
+      # --no-git-checks: the tag is checked out detached, not on a branch.
       - name: Publish
-        run: npm publish --tag ${{ steps.release-type.outputs.npm_tag }}
+        run: pnpm publish --tag ${{ steps.release-type.outputs.npm_tag }} --no-git-checks
         working-directory: ${{ steps.release-type.outputs.package_dir }}
         shell: bash
 

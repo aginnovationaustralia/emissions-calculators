@@ -2,11 +2,7 @@
 import { core, object, z } from 'zod';
 import { QualityTableSchema } from './quality';
 
-/** Curried helper for Zod `.optional().transform(...)` so `undefined` is never passed to unit wrappers. */
-export const mapOptional =
-  <T, U>(fn: (value: T) => U) =>
-  (value: T | undefined): U | undefined =>
-    value === undefined ? undefined : fn(value);
+export { mapOptional } from '@aginnovationaustralia/calculator-inputs';
 
 const outputKeyShape = {
   amountGasKg: z.number().meta({
