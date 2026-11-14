@@ -1410,6 +1410,8 @@ export const cropConstants: CropConstants = {
     'Potassium - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 0.909),
     'Sulfur - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 2.5),
     'Zinc - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 4.82),
+    // AusLCI emission factors browse
+    'Calcium nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.53),
   },
 
   /**

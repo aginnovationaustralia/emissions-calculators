@@ -138,6 +138,7 @@ const componentToEquivalentFertiliser: Record<
   'Calcium Ammonium Nitrate': 'Calcium Ammonium Nitrate (CAN)',
   'Sulphate of Ammonia': 'Sulphate of Ammonia (SOA)',
   'Single superphosphate': 'Single Super Phosphate',
+  'Calcium nitrate': 'Calcium Nitrate',
   Urea: 'Urea',
 };
 

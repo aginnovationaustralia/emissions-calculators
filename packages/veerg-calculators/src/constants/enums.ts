@@ -342,6 +342,7 @@ export const InorganicFertiliserComponentNonRegionalWithEquivalentTypes = [
   'Calcium Ammonium Nitrate',
   'Sulphate of Ammonia',
   'Single superphosphate',
+  'Calcium nitrate',
 ] as const;
 export type InorganicFertiliserComponentNonRegionalWithEquivalentType =
   (typeof InorganicFertiliserComponentNonRegionalWithEquivalentTypes)[number];
