@@ -536,6 +536,11 @@ export const FuelStationaryVolumeBasedLiquidTypes = [
   'Liquefied petroleum gas',
   'Naphtha',
   'Other petroleum products',
+  'Biodiesel',
+  'Ethanol',
+  'Other biofuels',
+  'Renewable aviation kerosene',
+  'Renewable diesel',
 ] as const;
 export type FuelStationaryVolumeBasedLiquidType =
   (typeof FuelStationaryVolumeBasedLiquidTypes)[number];
@@ -546,6 +551,14 @@ export const FuelStationaryLiquidTypes = [
 ] as const;
 export type FuelStationaryLiquidType =
   (typeof FuelStationaryLiquidTypes)[number];
+
+// 'Natural gas' is natural gas distributed in a pipeline (NGAF Table 5)
+export const FuelStationaryGaseousTypes = [
+  'Natural gas via pipeline',
+  'Town gas',
+] as const;
+export type FuelStationaryGaseousType =
+  (typeof FuelStationaryGaseousTypes)[number];
 
 export const AgrochemicalTypes = [
   // Guidelines appendix

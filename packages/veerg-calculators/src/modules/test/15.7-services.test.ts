@@ -100,7 +100,11 @@ const getCalculatorInputStationary = (
   const state = checkState(cell('D'));
   const units = cell('F');
   const amountObject =
-    units === 'GJ/kL' ? { amountKilolitres: amount } : { amountTonnes: amount };
+    units === 'GJ/kL'
+      ? { amountKilolitres: amount }
+      : units === 'GJ/m3'
+        ? { amountCubicMetres: amount }
+        : { amountTonnes: amount };
 
   const stationaryFuelRecord: StationaryFuelInput = {
     fuelClass,
@@ -199,8 +203,8 @@ describe('15.7.1.1 Services - for an industry calculator activity', () => {
     stationary: [
       {
         fuelClass: 'Gaseous fuels',
-        fuelType: 'Natural gas',
-        amountKilolitres: nv(100),
+        fuelType: 'Natural gas via pipeline',
+        amountCubicMetres: nv(100),
       },
     ],
   };

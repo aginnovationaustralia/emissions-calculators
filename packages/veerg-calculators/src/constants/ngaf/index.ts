@@ -10,7 +10,11 @@ import {
   massPerEnergy,
   percentage,
 } from '@/tools/units';
-import { FuelFactorByMass, FuelFactorByVolume } from '../types';
+import {
+  FuelFactorByMass,
+  FuelFactorByVolume,
+  GaseousFuelFactor,
+} from '../types';
 import * as ngaf from './2026.json';
 
 export const ngafTables = ngaf.tables;
@@ -18,6 +22,7 @@ export const ngafTables = ngaf.tables;
 export const ngafElectricityData = ngafTables['Table 1'].table;
 export const ngafTransportFuelData = ngafTables['Table 9'].table;
 export const ngafSolidFuelData = ngafTables['Table 4'].table;
+export const ngafGaseousFuelData = ngafTables['Table 5'].table;
 export const ngafLiquidFuelData = ngafTables['Table 8'].table;
 export const ngafRefrigerantLeakageData = ngafTables['Table 10'].table;
 
@@ -104,6 +109,25 @@ export const createStationaryFuelConstantsFromNGAFByMass = <
     CO2e: massPerEnergy('CO2e', perGjToPerJ(table[row].COMBINED)),
   },
   SCOPE3_EF: massPerEnergy('CO2e', perGjToPerJ(table[row].SCOPE_3)),
+});
+
+type GaseousFuelNGAFName = keyof typeof ngafGaseousFuelData;
+/**
+ * Gaseous fuel constants from NGAF Table 5. Energy content is in GJ/m3.
+ */
+export const createGaseousFuelConstantsFromNGAF = (
+  row: GaseousFuelNGAFName,
+): GaseousFuelFactor => ({
+  ENERGY_CONTENT_FACTOR: energyPerVolume(
+    'Fuel',
+    gjPerCubicMetreToJPerLitre(ngafGaseousFuelData[row].ENERGY_CONTENT),
+  ),
+  SCOPE1_EF: {
+    CO2: massPerEnergy('CO2e', perGjToPerJ(ngafGaseousFuelData[row].CO2)),
+    CH4: massPerEnergy('CO2e', perGjToPerJ(ngafGaseousFuelData[row].CH4)),
+    N2O: massPerEnergy('CO2e', perGjToPerJ(ngafGaseousFuelData[row].N2O)),
+    CO2e: massPerEnergy('CO2e', perGjToPerJ(ngafGaseousFuelData[row].COMBINED)),
+  },
 });
 
 type RefrigerantLeakageNGAFName = keyof typeof ngafRefrigerantLeakageData;

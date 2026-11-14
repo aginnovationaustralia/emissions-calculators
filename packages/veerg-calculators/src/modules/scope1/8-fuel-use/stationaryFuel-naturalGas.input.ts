@@ -1,6 +1,7 @@
-import { numberInput } from '@/tools/inputs';
+import { FuelStationaryGaseousTypes } from '@/constants/enums';
+import { enumInput, numberInput } from '@/tools/inputs';
 import { locateStationaryFuel } from '@/tools/modules';
-import { kilolitresToLitres } from '@/tools/unit-conversion';
+import { cubicMetresToLitres } from '@/tools/unit-conversion';
 import { volume } from '@/tools/units';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
@@ -9,19 +10,23 @@ export const stationaryFuelNaturalGasInputSchema = locateStationaryFuel(
   ({ modules }) =>
     object({
       fuelClass: z.literal('Gaseous fuels'),
-      fuelType: z.literal('Natural gas'),
-      amountKilolitres: numberInput(
-        (a) => volume('Fuel', kilolitresToLitres(a)),
+      fuelType: enumInput(FuelStationaryGaseousTypes, {
+        name: 'Stationary gaseous fuel type',
+        description:
+          'Type of gaseous fuel used in stationary equipment. Natural gas is natural gas distributed in a pipeline',
+        modules,
+      }),
+      amountCubicMetres: numberInput(
+        (a) => volume('Fuel', cubicMetresToLitres(a)),
         {
-          name: 'Qscq (kl)',
+          name: 'Qscq (m3)',
           method: '1',
-          description:
-            'Quantity of natural gas consumed by stationary equipment',
+          description: 'Volume of gas consumed by stationary equipment',
           modules,
         },
         (s) => s.min(0),
       ),
-    }).meta({ title: 'Gaseous fuels (natural gas)' }),
+    }).meta({ title: 'Gaseous fuels' }),
 );
 
 export type StationaryFuelNaturalGasInputTransformed = z.output<

@@ -98,6 +98,7 @@ import {
   State,
   StateOrRegion,
   TertiaryFeedlotMMSType,
+  FuelStationaryGaseousType,
   VesselFuelType,
   WastewaterCommodity,
   WastewaterFacilityType,
@@ -120,6 +121,9 @@ export type FuelFactorByVolume = {
   SCOPE1_EF: { [G in FuelEmissionsGasType]: MassPerEnergy<'CO2e'> };
   SCOPE3_EF: MassPerEnergy<'CO2e'>;
 };
+
+/** Gaseous fuels have no per-fuel scope 3 factor; it is state-based instead */
+export type GaseousFuelFactor = Omit<FuelFactorByVolume, 'SCOPE3_EF'>;
 
 export type FuelFactorByMass = {
   ENERGY_CONTENT_FACTOR: EnergyPerMass<'Fuel'>;
@@ -209,11 +213,8 @@ export type CommonConstants = NamedConstants & {
     >;
   };
 
-  NATURAL_GAS_FACTORS: {
-    ENERGY_CONTENT_FACTOR: EnergyPerVolume<'Fuel'>;
-    SCOPE1_EF: { [G in FuelEmissionsGasType]: MassPerEnergy<'CO2e'> };
-    SCOPE3_EF: Record<State, MassPerEnergy<'CO2e'>>;
-  };
+  NATURAL_GAS_FACTORS: Record<FuelStationaryGaseousType, GaseousFuelFactor>;
+  NATURAL_GAS_SCOPE3_EF: Record<State, MassPerEnergy<'CO2e'>>;
 
   FREIGHT_EMISSIONS: Record<
     FreightType,

@@ -39,6 +39,7 @@ import {
 } from '@/tools/units';
 import { MeanAnnualTemperature, State } from './enums';
 import {
+  createGaseousFuelConstantsFromNGAF,
   createStationaryFuelConstantsFromNGAFByMass,
   createStationaryFuelConstantsFromNGAFByVolume,
   createTransportFuelConstantsFromNGAF,
@@ -726,6 +727,27 @@ export const commonConstants: CommonConstants = {
         ngafLiquidFuelData,
         'Petroleum based products other than mentioned in the items above',
       ),
+      Biodiesel: createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Biodiesel',
+      ),
+      Ethanol: createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Ethanol for use as a fuel in an internal combustion engine',
+      ),
+      'Other biofuels': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Biofuels other than those mentioned in the items above and below',
+      ),
+      'Renewable aviation kerosene':
+        createStationaryFuelConstantsFromNGAFByVolume(
+          ngafLiquidFuelData,
+          'Renewable aviation kerosene',
+        ),
+      'Renewable diesel': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Renewable diesel',
+      ),
     },
   },
 
@@ -751,81 +773,59 @@ export const commonConstants: CommonConstants = {
   },
 
   /**
-   * @description Stationary fuel emission factors for natural gas by volume, in kg CO2-e/GJ
-   * @ngaf2026 Table 5 and Table 6 (Non-Metro values)
-   * @units Energy content is originally expressed in GJ/kL, other factors are originally expressed in kg CO2-e/GJ
+   * @description Stationary fuel emission factors for gaseous fuels by volume
+   * @ngaf2026 Table 5
+   * @units ENERGY_CONTENT_FACTOR is in J/L (from GJ/m^3), SCOPE1_EF values are in kg CO2-e/J
    */
   NATURAL_GAS_FACTORS: {
-    ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', gjPerKlToJPerLitre(25.3)),
-    SCOPE1_EF: {
-      CO2: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
-            .CO2,
-        ),
+    'Natural gas via pipeline': createGaseousFuelConstantsFromNGAF(
+      'Natural gas distributed in a pipeline',
+    ),
+    'Town gas': createGaseousFuelConstantsFromNGAF('Town gas'),
+  },
+
+  /**
+   * @description Scope 3 emission factors for gaseous fuels, shared by all gas types
+   * @ngaf2026 Table 6 (Non-Metro values)
+   * @units kg CO2-e/J
+   */
+  NATURAL_GAS_SCOPE3_EF: {
+    NSW: massPerEnergy(
+      'CO2e',
+      perGjToPerJ(
+        ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
       ),
-      CH4: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
-            .CH4,
-        ),
+    ),
+    ACT: massPerEnergy(
+      'CO2e',
+      perGjToPerJ(
+        ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
       ),
-      N2O: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
-            .N2O,
-        ),
-      ),
-      CO2e: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
-            .COMBINED,
-        ),
-      ),
-    },
-    // Uses NGAF Table 6 non-metro values
-    SCOPE3_EF: {
-      NSW: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
-        ),
-      ),
-      ACT: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
-        ),
-      ),
-      VIC: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
-      ),
-      QLD: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table.Queensland.NON_METRO),
-      ),
-      SA: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table['South Australia'].NON_METRO),
-      ),
-      WA: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].NON_METRO),
-      ),
-      TAS: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
-      ), // Based on victoria
-      NT: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].NON_METRO),
-      ), // based on WA (TODO: Why not QLD?)
-    },
+    ),
+    VIC: massPerEnergy(
+      'CO2e',
+      perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
+    ),
+    QLD: massPerEnergy(
+      'CO2e',
+      perGjToPerJ(ngafTables['Table 6'].table.Queensland.NON_METRO),
+    ),
+    SA: massPerEnergy(
+      'CO2e',
+      perGjToPerJ(ngafTables['Table 6'].table['South Australia'].NON_METRO),
+    ),
+    WA: massPerEnergy(
+      'CO2e',
+      perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].NON_METRO),
+    ),
+    TAS: massPerEnergy(
+      'CO2e',
+      perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
+    ), // Based on victoria
+    NT: massPerEnergy(
+      'CO2e',
+      perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].NON_METRO),
+    ), // based on WA (TODO: Why not QLD?)
   },
 
   SOLID_WASTE_TREATMENT: {

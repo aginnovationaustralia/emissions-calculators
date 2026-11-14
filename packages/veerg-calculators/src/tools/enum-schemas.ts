@@ -29,6 +29,7 @@ const namedEnums = {
   ElectricityRegion: E.ElectricityRegions,
   ExtendedRegion: E.ExtendedRegions,
   FreightType: E.FreightTypes,
+  FuelStationaryGaseousType: E.FuelStationaryGaseousTypes,
   FuelStationaryMassBasedLiquidType: E.FuelStationaryMassBasedLiquidTypes,
   FuelStationarySolidType: E.FuelStationarySolidTypes,
   FuelStationaryVolumeBasedLiquidType: E.FuelStationaryVolumeBasedLiquidTypes,
