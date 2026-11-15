@@ -1,5 +1,5 @@
 import { Container, isNamedOrigin } from './containers';
-import { substanceDisplayName } from './display-units';
+import { substanceDisplayName } from './display-substances';
 import { AnyUnit, isBooleanUnit, isStringUnit, isVoid } from './units';
 
 export function formatUnit(unit: AnyUnit): string {
