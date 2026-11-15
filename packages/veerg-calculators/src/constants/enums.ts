@@ -787,7 +787,11 @@ export const DairyMMSTypesWithPasture = [
 ] as const;
 export type DairyMMSTypeWithPasture = (typeof DairyMMSTypesWithPasture)[number];
 
-export const BeefPurchaseCategories = ['beefPrime', 'beefWeaned'] as const;
+export const BeefPurchaseCategories = [
+  'beefPrime',
+  'beefWeaned',
+  'beefManufacturing',
+] as const;
 export type BeefPurchaseCategory = (typeof BeefPurchaseCategories)[number];
 export const DairyPurchaseCategories = [
   'dairySpent',

@@ -2872,6 +2872,7 @@ export const livestockConstants: LivestockConstants = {
     // Dairy
     dairySpent: massPerMass('CO2e', 'Liveweight', 3.98),
     // Dairy and beef
+    beefManufacturing: massPerMass('CO2e', 'Liveweight', 11.0),
     beefPrime: massPerMass('CO2e', 'Liveweight', 12.4),
     beefWeaned: massPerMass('CO2e', 'Liveweight', 13.29),
     // Sheep
