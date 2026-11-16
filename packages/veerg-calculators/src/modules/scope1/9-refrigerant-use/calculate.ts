@@ -36,7 +36,10 @@ export const calculateScope1RefrigerantUse = (
     );
     const amountLeaked = chargeRa
       .multiply(leakageRatea)
-      .attach({ intermediate: true, name: `Er=${refrigerant.refrigerant}` });
+      .attach({
+        intermediate: true,
+        name: `Er=${refrigerant.refrigerant.unit}`,
+      });
 
     return gwp.multiply(amountLeaked);
   });
