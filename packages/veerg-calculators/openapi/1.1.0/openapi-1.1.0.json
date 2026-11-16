@@ -111863,6 +111863,7 @@
           "Calcium Ammonium Nitrate",
           "Sulphate of Ammonia",
           "Single superphosphate",
+          "Calcium nitrate",
           "Nitrogen - Generic",
           "Nitrogen - Nitrate",
           "Nitrogen - Ammonia",
@@ -111914,69 +111915,141 @@
                 "title": "Traced manure"
               },
               {
-                "type": "object",
-                "properties": {
-                  "origin": {
-                    "type": "string",
-                    "const": "Untraced"
-                  },
-                  "massAppliedKilograms": {
-                    "description": "Mass of organic fertiliser applied (kilograms organic fertiliser)",
-                    "x-modules": [
-                      "5.2"
-                    ],
+                "oneOf": [
+                  {
                     "type": "object",
                     "properties": {
-                      "value": {
-                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                      "origin": {
+                        "type": "string",
+                        "const": "Untraced"
                       },
-                      "quality": {
-                        "default": {},
-                        "$ref": "#/components/schemas/QualityTable"
+                      "massAppliedKilograms": {
+                        "description": "Mass of organic fertiliser applied (kilograms organic fertiliser)",
+                        "x-modules": [
+                          "5.2"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "kilograms organic fertiliser"
+                      },
+                      "organicFertiliserType": {
+                        "description": "Type of organic fertiliser",
+                        "x-modules": [
+                          "5.2"
+                        ],
+                        "$ref": "#/components/schemas/OrganicFertiliserType"
+                      },
+                      "fractionNitrogen": {
+                        "description": "Custom nitrogen fraction for the organic fertiliser. When omitted, the default fraction for the fertiliser type is used (kilograms nitrogen per kilogram organic fertiliser)",
+                        "x-modules": [
+                          "5.2"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/ProportionNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "kilograms nitrogen per kilogram organic fertiliser"
                       }
                     },
                     "required": [
-                      "value"
+                      "origin",
+                      "massAppliedKilograms",
+                      "organicFertiliserType"
                     ],
                     "additionalProperties": false,
-                    "x-units": "kilograms organic fertiliser"
+                    "title": "Untraced manure (known type)"
                   },
-                  "organicFertiliserType": {
-                    "description": "Type of organic fertiliser",
-                    "x-modules": [
-                      "5.2"
-                    ],
-                    "$ref": "#/components/schemas/OrganicFertiliserType"
-                  },
-                  "fractionNitrogen": {
-                    "description": "Custom nitrogen fraction for the organic fertiliser (kilograms nitrogen per kilogram organic fertiliser)",
-                    "x-modules": [
-                      "5.2"
-                    ],
+                  {
                     "type": "object",
                     "properties": {
-                      "value": {
-                        "$ref": "#/components/schemas/ProportionNumberInput"
+                      "origin": {
+                        "type": "string",
+                        "const": "Untraced"
                       },
-                      "quality": {
-                        "default": {},
-                        "$ref": "#/components/schemas/QualityTable"
+                      "massAppliedKilograms": {
+                        "description": "Mass of organic fertiliser applied (kilograms organic fertiliser)",
+                        "x-modules": [
+                          "5.2"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/NonNegativeNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "kilograms organic fertiliser"
+                      },
+                      "organicFertiliserType": {
+                        "description": "Type of organic fertiliser, for which no default nitrogen fraction is available",
+                        "x-modules": [
+                          "5.2"
+                        ],
+                        "$ref": "#/components/schemas/OrganicFertiliserTypeWithoutDefaults"
+                      },
+                      "fractionNitrogen": {
+                        "description": "Nitrogen fraction for the organic fertiliser. Required as there is no default for this fertiliser type (kilograms nitrogen per kilogram organic fertiliser)",
+                        "x-modules": [
+                          "5.2"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "$ref": "#/components/schemas/ProportionNumberInput"
+                          },
+                          "quality": {
+                            "default": {},
+                            "$ref": "#/components/schemas/QualityTable"
+                          }
+                        },
+                        "required": [
+                          "value"
+                        ],
+                        "additionalProperties": false,
+                        "x-units": "kilograms nitrogen per kilogram organic fertiliser"
                       }
                     },
                     "required": [
-                      "value"
+                      "origin",
+                      "massAppliedKilograms",
+                      "organicFertiliserType",
+                      "fractionNitrogen"
                     ],
                     "additionalProperties": false,
-                    "x-units": "kilograms nitrogen per kilogram organic fertiliser"
+                    "title": "Untraced manure (other type)"
                   }
-                },
-                "required": [
-                  "origin",
-                  "massAppliedKilograms",
-                  "organicFertiliserType"
                 ],
-                "additionalProperties": false,
-                "title": "Untraced manure"
+                "title": "Untraced manure",
+                "type": "object"
               }
             ],
             "type": "object"
@@ -124568,6 +124641,13 @@
           "Horses/Mules"
         ]
       },
+      "OrganicFertiliserTypeWithoutDefaults": {
+        "type": "string",
+        "enum": [
+          "Other livestock manure",
+          "Other organic fertiliser"
+        ]
+      },
       "InorganicFertiliserProductionSystem": {
         "type": "string",
         "enum": [
@@ -125192,11 +125272,15 @@
                       "const": "Gaseous fuels"
                     },
                     "fuelType": {
-                      "type": "string",
-                      "const": "Natural gas"
+                      "description": "Type of gaseous fuel used in stationary equipment. Natural gas is natural gas distributed in a pipeline",
+                      "x-modules": [
+                        "8.2",
+                        "15.10"
+                      ],
+                      "$ref": "#/components/schemas/FuelStationaryGaseousType"
                     },
-                    "amountKilolitres": {
-                      "description": "Quantity of natural gas consumed by stationary equipment (cubic metres fuel)",
+                    "amountCubicMetres": {
+                      "description": "Volume of gas consumed by stationary equipment (cubic metres fuel)",
                       "x-modules": [
                         "8.2",
                         "15.10"
@@ -125221,10 +125305,10 @@
                   "required": [
                     "fuelClass",
                     "fuelType",
-                    "amountKilolitres"
+                    "amountCubicMetres"
                   ],
                   "additionalProperties": false,
-                  "title": "Gaseous fuels (natural gas)"
+                  "title": "Gaseous fuels"
                 }
               ],
               "type": "object"
@@ -125344,7 +125428,12 @@
           "Solvents: mineral turpentine or white spirits",
           "Liquefied petroleum gas",
           "Naphtha",
-          "Other petroleum products"
+          "Other petroleum products",
+          "Biodiesel",
+          "Ethanol",
+          "Other biofuels",
+          "Renewable aviation kerosene",
+          "Renewable diesel"
         ]
       },
       "FuelStationaryMassBasedLiquidType": {
@@ -125355,6 +125444,13 @@
           "Petroleum coke",
           "Refinery gas and liquids",
           "Refinery coke"
+        ]
+      },
+      "FuelStationaryGaseousType": {
+        "type": "string",
+        "enum": [
+          "Natural gas via pipeline",
+          "Town gas"
         ]
       },
       "ServicesFuelInput": {
@@ -125879,11 +125975,14 @@
                       "const": "Gaseous fuels"
                     },
                     "fuelType": {
-                      "type": "string",
-                      "const": "Natural gas"
+                      "description": "Type of gaseous fuel used in stationary equipment. Natural gas is natural gas distributed in a pipeline",
+                      "x-modules": [
+                        "15.7"
+                      ],
+                      "$ref": "#/components/schemas/FuelStationaryGaseousType"
                     },
-                    "amountKilolitres": {
-                      "description": "Quantity of natural gas consumed by stationary equipment (cubic metres fuel)",
+                    "amountCubicMetres": {
+                      "description": "Volume of gas consumed by stationary equipment (cubic metres fuel)",
                       "x-modules": [
                         "15.7"
                       ],
@@ -125907,10 +126006,10 @@
                   "required": [
                     "fuelClass",
                     "fuelType",
-                    "amountKilolitres"
+                    "amountCubicMetres"
                   ],
                   "additionalProperties": false,
-                  "title": "Gaseous fuels (natural gas)"
+                  "title": "Gaseous fuels"
                 }
               ],
               "type": "object"
@@ -126106,7 +126205,8 @@
         "type": "string",
         "enum": [
           "beefPrime",
-          "beefWeaned"
+          "beefWeaned",
+          "beefManufacturing"
         ]
       },
       "ExtendedRegion": {
@@ -126157,7 +126257,8 @@
         "enum": [
           "dairySpent",
           "beefPrime",
-          "beefWeaned"
+          "beefWeaned",
+          "beefManufacturing"
         ]
       },
       "DairyClass": {
@@ -126229,7 +126330,7 @@
         "items": {
           "oneOf": [
             {
-              "oneOf": [
+              "anyOf": [
                 {
                   "oneOf": [
                     {
@@ -126564,7 +126665,8 @@
                                 "Cereal silage",
                                 "Lucerne hay",
                                 "Oaten hay",
-                                "Pasture hay"
+                                "Pasture hay",
+                                "Whole Sardines"
                               ]
                             },
                             "region": {
@@ -126783,8 +126885,7 @@
                   "title": "Aquaculture feed"
                 }
               ],
-              "title": "Method 1 (by feed type)",
-              "type": "object"
+              "title": "Method 1 (by feed type)"
             },
             {
               "type": "object",
@@ -127126,6 +127227,13 @@
             },
             "description": "Inputs used in this calculation"
           },
+          "intermediates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputIntermediate"
+            },
+            "description": "Significant values calculated part way through this calculation, such as the parts of a total"
+          },
           "method": {
             "type": "string",
             "const": "1",
@@ -127143,6 +127251,7 @@
           "references",
           "constants",
           "inputs",
+          "intermediates",
           "method",
           "amountGasKgMethod1"
         ],
@@ -127215,6 +127324,28 @@
         ],
         "additionalProperties": false
       },
+      "OutputIntermediate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the intermediate value"
+          },
+          "value": {
+            "description": "Value calculated during the calculation",
+            "type": [
+              "number",
+              "string",
+              "boolean"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "additionalProperties": false
+      },
       "OutputMethod2": {
         "type": "object",
         "properties": {
@@ -127257,6 +127388,13 @@
             },
             "description": "Inputs used in this calculation"
           },
+          "intermediates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputIntermediate"
+            },
+            "description": "Significant values calculated part way through this calculation, such as the parts of a total"
+          },
           "method": {
             "type": "string",
             "const": "2",
@@ -127278,6 +127416,7 @@
           "references",
           "constants",
           "inputs",
+          "intermediates",
           "method",
           "amountGasKgMethod2"
         ],

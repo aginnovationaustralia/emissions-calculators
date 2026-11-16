@@ -7480,11 +7480,15 @@
                       "const": "Gaseous fuels"
                     },
                     "fuelType": {
-                      "type": "string",
-                      "const": "Natural gas"
+                      "description": "Type of gaseous fuel used in stationary equipment. Natural gas is natural gas distributed in a pipeline",
+                      "x-modules": [
+                        "8.2",
+                        "15.10"
+                      ],
+                      "$ref": "#/components/schemas/FuelStationaryGaseousType"
                     },
-                    "amountKilolitres": {
-                      "description": "Quantity of natural gas consumed by stationary equipment (cubic metres fuel)",
+                    "amountCubicMetres": {
+                      "description": "Volume of gas consumed by stationary equipment (cubic metres fuel)",
                       "x-modules": [
                         "8.2",
                         "15.10"
@@ -7509,10 +7513,10 @@
                   "required": [
                     "fuelClass",
                     "fuelType",
-                    "amountKilolitres"
+                    "amountCubicMetres"
                   ],
                   "additionalProperties": false,
-                  "title": "Gaseous fuels (natural gas)"
+                  "title": "Gaseous fuels"
                 }
               ],
               "type": "object"
@@ -7632,7 +7636,12 @@
           "Solvents: mineral turpentine or white spirits",
           "Liquefied petroleum gas",
           "Naphtha",
-          "Other petroleum products"
+          "Other petroleum products",
+          "Biodiesel",
+          "Ethanol",
+          "Other biofuels",
+          "Renewable aviation kerosene",
+          "Renewable diesel"
         ]
       },
       "FuelStationaryMassBasedLiquidType": {
@@ -7643,6 +7652,13 @@
           "Petroleum coke",
           "Refinery gas and liquids",
           "Refinery coke"
+        ]
+      },
+      "FuelStationaryGaseousType": {
+        "type": "string",
+        "enum": [
+          "Natural gas via pipeline",
+          "Town gas"
         ]
       },
       "SolidWasteNonStreamType": {
@@ -7718,7 +7734,7 @@
         "items": {
           "oneOf": [
             {
-              "oneOf": [
+              "anyOf": [
                 {
                   "oneOf": [
                     {
@@ -8053,7 +8069,8 @@
                                 "Cereal silage",
                                 "Lucerne hay",
                                 "Oaten hay",
-                                "Pasture hay"
+                                "Pasture hay",
+                                "Whole Sardines"
                               ]
                             },
                             "region": {
@@ -8272,8 +8289,7 @@
                   "title": "Aquaculture feed"
                 }
               ],
-              "title": "Method 1 (by feed type)",
-              "type": "object"
+              "title": "Method 1 (by feed type)"
             },
             {
               "type": "object",
@@ -8872,11 +8888,14 @@
                       "const": "Gaseous fuels"
                     },
                     "fuelType": {
-                      "type": "string",
-                      "const": "Natural gas"
+                      "description": "Type of gaseous fuel used in stationary equipment. Natural gas is natural gas distributed in a pipeline",
+                      "x-modules": [
+                        "15.7"
+                      ],
+                      "$ref": "#/components/schemas/FuelStationaryGaseousType"
                     },
-                    "amountKilolitres": {
-                      "description": "Quantity of natural gas consumed by stationary equipment (cubic metres fuel)",
+                    "amountCubicMetres": {
+                      "description": "Volume of gas consumed by stationary equipment (cubic metres fuel)",
                       "x-modules": [
                         "15.7"
                       ],
@@ -8900,10 +8919,10 @@
                   "required": [
                     "fuelClass",
                     "fuelType",
-                    "amountKilolitres"
+                    "amountCubicMetres"
                   ],
                   "additionalProperties": false,
-                  "title": "Gaseous fuels (natural gas)"
+                  "title": "Gaseous fuels"
                 }
               ],
               "type": "object"
@@ -9518,6 +9537,13 @@
             },
             "description": "Inputs used in this calculation"
           },
+          "intermediates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputIntermediate"
+            },
+            "description": "Significant values calculated part way through this calculation, such as the parts of a total"
+          },
           "method": {
             "type": "string",
             "const": "1",
@@ -9535,6 +9561,7 @@
           "references",
           "constants",
           "inputs",
+          "intermediates",
           "method",
           "amountGasKgMethod1"
         ],
@@ -9607,6 +9634,28 @@
         ],
         "additionalProperties": false
       },
+      "OutputIntermediate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the intermediate value"
+          },
+          "value": {
+            "description": "Value calculated during the calculation",
+            "type": [
+              "number",
+              "string",
+              "boolean"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "additionalProperties": false
+      },
       "OutputMethod2": {
         "type": "object",
         "properties": {
@@ -9649,6 +9698,13 @@
             },
             "description": "Inputs used in this calculation"
           },
+          "intermediates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputIntermediate"
+            },
+            "description": "Significant values calculated part way through this calculation, such as the parts of a total"
+          },
           "method": {
             "type": "string",
             "const": "2",
@@ -9670,6 +9726,7 @@
           "references",
           "constants",
           "inputs",
+          "intermediates",
           "method",
           "amountGasKgMethod2"
         ],
