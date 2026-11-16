@@ -88,8 +88,9 @@ export const calculate52OrganicFertiliser = (
       organicFertiliser,
       constants,
     )
-      .named('MNSoiljf')
-      .reference('5.2.1.1 (2)');
+      .reference('5.2.1.1 (2)')
+      // Summed by name over the applications: the total mass of N in organic fertiliser (5.2.1.1 (2))
+      .attach({ intermediate: true, name: 'MNSoiljf' });
 
     return calculateDirectN2OFromOrganicFertiliserNitrogen(
       mnSoiljf,

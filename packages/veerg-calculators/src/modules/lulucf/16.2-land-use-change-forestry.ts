@@ -32,7 +32,7 @@ export const calculate_16_2_1_2_ChangesInWoodyCarbonStocks = (
 
   const CgCO2 = selectConstant(constants.COMMON, 'ELEMENTAL_TO_MOLECULAR_CO2');
 
-  const netChangeInActivities = activities.map((activity) => {
+  const netChangeInActivities = activities.map((activity, index) => {
     const {
       carbonMassInTreesCurrentYearTonnesPerHectare:
         carbonMassInTreesCurrentYear,
@@ -53,9 +53,12 @@ export const calculate_16_2_1_2_ChangesInWoodyCarbonStocks = (
       .minus(carbonMassInDebrisPreviousYear)
       .reference('16.2.1.1 (4)');
 
+    // Each activity's change is reported as an intermediate, numbered in input order (i=1, 2, ...), so a share of the
+    // total can be assigned per activity
     const netChange = br(changeInTrees.plus(changeInDebris))
       .multiply(activityAreaHectares)
-      .reference('16.2.1.2 (2)');
+      .reference('16.2.1.2 (2)')
+      .attach({ intermediate: true, name: `∆Ci,j,y (i=${index + 1})` });
 
     return netChange;
   });

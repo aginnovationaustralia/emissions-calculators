@@ -104,7 +104,8 @@ const calculateSolidWasteBiologicalTreatmentEmissions = (
   const bioSolidWasteCH4 = sum(
     bioTreatmentEmissions.map(({ bioSolidWasteCH4 }) => bioSolidWasteCH4),
     zeroCH4,
-  ).named(`ECH4 (t)`);
+    // Reported as an intermediate: the biological treatment part of solidWasteCH4 (10.1.1)
+  ).attach({ intermediate: true, name: 'ECH4 (t)' });
 
   const bioSolidWasteN2O = sum(
     bioTreatmentEmissions.map(({ bioSolidWasteN2O }) => bioSolidWasteN2O),
@@ -375,9 +376,12 @@ const calculateUnmanagedSolidWasteEmissions = (
   input: SolidWasteScope1InputTransformed,
   constants: HasCommonConstants,
 ): Container<Mass<'CH4'>> =>
-  solidWasteScope1InputSchemaIsMethod1(input)
+  // Reported as an intermediate: the unmanaged disposal part of solidWasteCH4 (10.1.7 / 10.1.8), marked on the
+  // value used for the run (method 2 wraps the method 1 value too, which must not be counted again)
+  (solidWasteScope1InputSchemaIsMethod1(input)
     ? calculateUnmanagedSolidWasteEmissionsMethod1(input, constants)
-    : calculateUnmanagedSolidWasteEmissionsMethod2(input, constants);
+    : calculateUnmanagedSolidWasteEmissionsMethod2(input, constants)
+  ).attach({ intermediate: true, name: 'ECH4 (u)' });
 
 /**
  * Calculate all emissions from onsite solid waste management.

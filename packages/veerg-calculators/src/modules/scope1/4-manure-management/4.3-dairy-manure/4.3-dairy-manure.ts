@@ -429,7 +429,11 @@ export const calculateManureManagementCH4ForClass = (
     /**
      * (Nj=3,5 * MPWmanure,j=3,5 * Dj=3,5)
      */
-    return methaneProduction.multiply(head).multiply(days);
+    // Reported with the class's weaned part under the same name (summed by name)
+    return methaneProduction
+      .multiply(head)
+      .multiply(days)
+      .attach({ intermediate: true, name: `ECH4 (j=${dairyClass.number})` });
   }
 
   const volatileSolids = calculateVolatileSolidsForClass(
@@ -483,11 +487,14 @@ export const calculateManureManagementCH4ForClass = (
       .reference('4.3.1.1 (2)');
   });
 
-  return sum(methaneProductionPerSystem, zeroMassPerHeadPerDayCH4)
-    .multiply(head)
-    .multiply(days)
-    .named(`ECH4 (j=${dairyClass.number})`)
-    .reference('4.3.1.1 (1)');
+  return (
+    sum(methaneProductionPerSystem, zeroMassPerHeadPerDayCH4)
+      .multiply(head)
+      .multiply(days)
+      .reference('4.3.1.1 (1)')
+      // Each class's part is reported as an intermediate (the milking cows are j=1)
+      .attach({ intermediate: true, name: `ECH4 (j=${dairyClass.number})` })
+  );
 };
 
 /**
@@ -530,7 +537,8 @@ export const calculateDirectN2OEmissionsForClass = (
 
   const fromMMS = sum(directN2OPerMMSRecords, zeroN2O, {
     name: `EN2O,dir (j=${dairyClass.number}, MMS; m=1-13)`,
-  }).attach({ intermediate: true });
+    intermediate: true,
+  });
 
   const EFprp = selectConstant(
     constants.LIVESTOCK,
@@ -544,9 +552,11 @@ export const calculateDirectN2OEmissionsForClass = (
   const fromPasture = nitrogenPerMMS.pastureRangeAndPaddock
     .multiply(EFprp)
     .multiply(CN2O)
-    .named(`EN2O,dir (j=${dairyClass.number}, PRP; m=14)`)
     .reference('4.3.1.3 (1)')
-    .attach({ intermediate: true });
+    .attach({
+      intermediate: true,
+      name: `EN2O,dir (j=${dairyClass.number}, PRP; m=14)`,
+    });
 
   return { fromMMS, fromPasture };
 };
@@ -621,9 +631,11 @@ export const calculateAtmosphericDepositionN2OEmissionsForClass = (
   const fromMMS = volatilisedNitrogen
     .multiply(EFN2O)
     .multiply(CN2O)
-    .named(`EN2O,ad (j=${dairyClass.number}, MMS; m=1-13)`)
     .reference('4.3.1.5 (1)')
-    .attach({ intermediate: true });
+    .attach({
+      intermediate: true,
+      name: `EN2O,ad (j=${dairyClass.number}, MMS; m=1-13)`,
+    });
 
   /**
    * EN2O,ad = Mvol,m=14 * EFN2O * CN2O * 10^-3
@@ -631,9 +643,11 @@ export const calculateAtmosphericDepositionN2OEmissionsForClass = (
   const fromPasture = volatilisedNitrogenFromPasture
     .multiply(EFN2O)
     .multiply(CN2O)
-    .named(`EN2O,ad (j=${dairyClass.number}, PRP; m=14)`)
     .reference('4.3.1.10 (1)')
-    .attach({ intermediate: true });
+    .attach({
+      intermediate: true,
+      name: `EN2O,ad (j=${dairyClass.number}, PRP; m=14)`,
+    });
 
   return { fromMMS, fromPasture };
 };
@@ -698,9 +712,11 @@ export const calculateLeachingAndRunoffN2OEmissionsForClass = (
   const fromMMS = nitrogenLostInSolidStorage
     .multiply(EFleach)
     .multiply(CN2O)
-    .named(`EN2O,leach (j=${dairyClass.number}, MMS; m=1-13)`)
     .reference('4.3.1.6 (1)')
-    .attach({ intermediate: true });
+    .attach({
+      intermediate: true,
+      name: `EN2O,leach (j=${dairyClass.number}, MMS; m=1-13)`,
+    });
 
   /**
    * EN2O,leach,m=14 = MNleachjm=14 * EFleach * CN2O * 10^-3
@@ -708,9 +724,11 @@ export const calculateLeachingAndRunoffN2OEmissionsForClass = (
   const fromPasture = nitrogenLostInPasture
     .multiply(EFleach)
     .multiply(CN2O)
-    .named(`EN2O,leach (j=${dairyClass.number}, PRP; m=14)`)
     .reference('4.3.1.12 (1)')
-    .attach({ intermediate: true });
+    .attach({
+      intermediate: true,
+      name: `EN2O,leach (j=${dairyClass.number}, PRP; m=14)`,
+    });
 
   return { fromMMS, fromPasture };
 };
