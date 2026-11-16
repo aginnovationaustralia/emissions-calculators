@@ -2589,6 +2589,7 @@ export const livestockConstants: LivestockConstants = {
         'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.106),
         'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.114),
         'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.313),
+        'Whole Sardines': massPerMass('CO2e', 'Purchased Feed', 0.376), // AusLCI V48
       },
       TAS: {
         'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.307),

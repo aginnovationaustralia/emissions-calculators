@@ -1,24 +1,24 @@
+import {
+  PurchasedFeedAquacultureType,
+  PurchasedFeedAquacultureTypes,
+} from '@/constants/enums';
 import { z } from 'zod';
+import {
+  PurchasedFeedAquacultureInputSchema,
+  PurchasedFeedAquacultureInputTransformed,
+} from './aquaculture-purchased-feed.input';
+import {
+  PurchasedFeedLivestockRegionalInputSchema,
+  PurchasedFeedLivestockRegionalInputTransformed,
+} from './livestock-regional-purchased-feed.input';
 import {
   PurchasedFeedLivestockRegionlessInputSchema,
   PurchasedFeedLivestockRegionlessInputTransformed,
 } from './livestock-regionless-purchased-feed.input';
 import {
-  PurchasedFeedAquacultureInputTransformed,
-  PurchasedFeedAquacultureInputSchema,
-} from './aquaculture-purchased-feed.input';
-import {
-  PurchasedFeedAquacultureType,
-  PurchasedFeedAquacultureTypes,
-} from '@/constants/enums';
-import {
   PurchasedFeedMethod2InputSchema,
   PurchasedFeedMethod2InputTransformed,
 } from './method2-purchased-feed.input';
-import {
-  PurchasedFeedLivestockRegionalInputSchema,
-  PurchasedFeedLivestockRegionalInputTransformed,
-} from './livestock-regional-purchased-feed.input';
 
 export const PurchasedFeedLivestockInputSchema = z
   .discriminatedUnion('type', [
@@ -34,8 +34,12 @@ export type PurchasedFeedLivestockInputTransformed = z.output<
   typeof PurchasedFeedLivestockInputSchema
 >;
 
+// A plain union rather than a discriminated union on `type`, because some feed
+// types (e.g. 'Whole Sardines') exist both as aquaculture feed and as regional
+// livestock feed. The strict object schemas keep this unambiguous: regional
+// feeds require `region`, aquaculture feeds don't allow it.
 export const PurchasedFeedMethod1InputSchema = z
-  .discriminatedUnion('type', [
+  .union([
     PurchasedFeedLivestockInputSchema,
     PurchasedFeedAquacultureInputSchema,
   ])
@@ -81,8 +85,11 @@ export const purchasedFeedIsRegional = (
 export const purchasedFeedIsAquaculture = (
   feed: PurchasedFeedMethod1InputTransformed,
 ): feed is PurchasedFeedAquacultureInputTransformed => {
-  return PurchasedFeedAquacultureTypes.includes(
-    feed.type.unit as PurchasedFeedAquacultureType,
+  return (
+    !('region' in feed) &&
+    PurchasedFeedAquacultureTypes.includes(
+      feed.type.unit as PurchasedFeedAquacultureType,
+    )
   );
 };
 

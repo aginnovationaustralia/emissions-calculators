@@ -93,6 +93,8 @@ export const OrganicFertiliserTypes = [
   'Pigs',
   'Sheep',
   'Horses/Mules',
+  // 'Other livestock manure',
+  // 'Other organic fertiliser',
 ] as const;
 export type OrganicFertiliserType = (typeof OrganicFertiliserTypes)[number];
 
@@ -664,6 +666,7 @@ export const PurchasedFeedLivestockTypesPerRegion = {
     'Lucerne hay',
     'Oaten hay',
     'Pasture hay',
+    'Whole Sardines',
   ] as const,
   TAS: [
     'Barley grain',
