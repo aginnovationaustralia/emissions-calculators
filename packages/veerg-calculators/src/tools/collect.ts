@@ -1,13 +1,26 @@
+import { isNumberUnit } from '@aginnovationaustralia/calculator-units';
 import { AnyContainer } from './containers';
 import { formatUnit } from './format';
 import { QualityTable } from './quality';
-import { isNumberUnit } from '@aginnovationaustralia/calculator-units';
 import { isBooleanUnit, isStringUnit, NumberUnit } from './units';
 
 export type ConstantDefinition = {
   name: string;
   value: number;
   units: string;
+};
+
+export type InputDefinition = {
+  name: string;
+  value: number | string | boolean;
+  method: '1' | '2';
+  modules: string[];
+  quality: QualityTable | undefined;
+};
+
+export type IntermediateDefinition = {
+  name: string;
+  value: number | string | boolean;
 };
 
 type CollectVisitor<T> = (container: AnyContainer | undefined) => T[];
@@ -78,14 +91,6 @@ export const collectConstants = <O extends AnyContainer>(
   return local.concat(traverseContainerChildren(origin, collectConstants));
 };
 
-export type InputDefinition = {
-  name: string;
-  value: number | string | boolean;
-  method: '1' | '2';
-  modules: string[];
-  quality: QualityTable | undefined;
-};
-
 export const collectInputs = <O extends AnyContainer>(
   origin: O | undefined,
 ): InputDefinition[] => {
@@ -109,4 +114,36 @@ export const collectInputs = <O extends AnyContainer>(
         ]
       : [];
   return local.concat(traverseContainerChildren(origin, collectInputs));
+};
+
+/**
+ * Collects the containers marked `intermediate` in a calculation tree. Each container is
+ * visited once, so a container reached by two paths is not reported twice (intermediates
+ * with the same name are summed into one value, see `sumByName`).
+ */
+export const collectIntermediates = <O extends AnyContainer>(
+  origin: O | undefined,
+): IntermediateDefinition[] => {
+  const seen = new Set<AnyContainer>();
+  const visit = (container: AnyContainer | undefined): IntermediateDefinition[] => {
+    if (container === undefined || seen.has(container)) {
+      return [];
+    }
+    seen.add(container);
+    const local: IntermediateDefinition[] =
+      container.meta.intermediate === true
+        ? [
+            {
+              name: container.meta.name ?? 'Unknown intermediate',
+              value: isStringUnit(container.unit)
+                ? container.unit
+                : isBooleanUnit(container.unit)
+                  ? container.unit
+                  : container.unit.store.toNumber(),
+            },
+          ]
+        : [];
+    return local.concat(traverseContainerChildren(container, visit));
+  };
+  return visit(origin);
 };

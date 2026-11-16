@@ -52,6 +52,21 @@ const outputKeyShape = {
       }).meta({ id: 'OutputInput' }),
     )
     .meta({ description: 'Inputs used in this calculation' }),
+  intermediates: z
+    .array(
+      object({
+        name: z
+          .string()
+          .meta({ description: 'Name of the intermediate value' }),
+        value: z
+          .union([z.number(), z.string(), z.boolean()])
+          .meta({ description: 'Value calculated during the calculation' }),
+      }).meta({ id: 'OutputIntermediate' }),
+    )
+    .meta({
+      description:
+        'Significant values calculated part way through this calculation, such as the parts of a total',
+    }),
 };
 
 const methodSchema = <M extends '1' | '2'>(method: M) =>

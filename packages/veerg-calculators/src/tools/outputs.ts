@@ -2,13 +2,15 @@ import Decimal from 'decimal.js-light';
 import {
   collectConstants,
   collectInputs,
+  collectIntermediates,
   collectReferences,
   ConstantDefinition,
   InputDefinition,
+  IntermediateDefinition,
 } from './collect';
 import { Container } from './containers';
-import { convertToCO2e } from './gwp';
 import { formatUnit } from './format';
+import { convertToCO2e } from './gwp';
 import { isMass, isVoid, mass, Mass, VoidUnit } from './units';
 import { isValueSeedMethod2 } from './value-store';
 
@@ -17,6 +19,24 @@ export const makeUnique = <T>(a: T[]): T[] => {
 };
 export const makeUniqueByName = <T extends { name: string }>(a: T[]): T[] => {
   return a.filter((v, i, s) => s.findIndex((t) => t.name === v.name) === i);
+};
+
+/**
+ * Combines intermediates that share a name by adding their values together, so the same
+ * part from several herds or activities (e.g. 'EN2O,dir m=14' from each dairy herd) is
+ * reported once as their total. Values that aren't numbers keep the first one found.
+ */
+export const sumByName = (a: IntermediateDefinition[]): IntermediateDefinition[] => {
+  const byName = new Map<string, IntermediateDefinition>();
+  for (const item of a) {
+    const found = byName.get(item.name);
+    if (found === undefined) {
+      byName.set(item.name, { ...item });
+    } else if (typeof found.value === 'number' && typeof item.value === 'number') {
+      found.value = new Decimal(found.value).plus(item.value).toNumber();
+    }
+  }
+  return [...byName.values()];
 };
 
 type HasDecimalValue = {
@@ -37,6 +57,7 @@ interface OutputCore<
   references: string[];
   constants: ConstantDefinition[];
   inputs: InputDefinition[];
+  intermediates: IntermediateDefinition[];
 }
 
 /** Only the method 1 track was calculated, so there is no method 2 value to report. */
@@ -143,6 +164,7 @@ export const output = <
     references: makeUnique(collectReferences(from)),
     constants: makeUniqueByName(collectConstants(from)),
     inputs: makeUniqueByName(collectInputs(from)),
+    intermediates: sumByName(collectIntermediates(from)),
   };
 };
 

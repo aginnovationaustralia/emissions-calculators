@@ -96,7 +96,16 @@ export function calculateDirectN2OEmissionsForDairyHerd(
     ),
   );
 
-  return sum(classEmissions, zeroN2O).named('EN2O,dir');
+  const fromMMS = sum(
+    classEmissions.map((c) => c.fromMMS),
+    zeroN2O,
+  ).attach({ intermediate: true, name: 'EN2O,dir m=1-13' });
+  const fromPasture = sum(
+    classEmissions.map((c) => c.fromPasture),
+    zeroN2O,
+  ).attach({ intermediate: true, name: 'EN2O,dir m=14' });
+
+  return fromMMS.plus(fromPasture).named('EN2O,dir');
 }
 
 /**
@@ -129,7 +138,16 @@ export function calculateAtmosphericDepositionN2OEmissionsForDairyHerd(
     ),
   );
 
-  return sum(classEmissions, zeroN2O).named('EN2O,ad');
+  const fromMMS = sum(
+    classEmissions.map((c) => c.fromMMS),
+    zeroN2O,
+  ).attach({ intermediate: true, name: 'EN2O,ad m=1-13' });
+  const fromPasture = sum(
+    classEmissions.map((c) => c.fromPasture),
+    zeroN2O,
+  ).attach({ intermediate: true, name: 'EN2O,ad m=14' });
+
+  return fromMMS.plus(fromPasture).named('EN2O,ad');
 }
 
 /**
@@ -162,7 +180,16 @@ export function calculateLeachingAndRunoffN2OEmissionsForDairyHerd(
     ),
   );
 
-  return sum(classEmissions, zeroN2O).named('EN2O,leach');
+  const fromMMS = sum(
+    classEmissions.map((c) => c.fromMMS),
+    zeroN2O,
+  ).attach({ intermediate: true, name: 'EN2O,leach m=1-13' });
+  const fromPasture = sum(
+    classEmissions.map((c) => c.fromPasture),
+    zeroN2O,
+  ).attach({ intermediate: true, name: 'EN2O,leach m=14' });
+
+  return fromMMS.plus(fromPasture).named('EN2O,leach');
 }
 
 /**

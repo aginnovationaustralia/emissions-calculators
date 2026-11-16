@@ -4,7 +4,11 @@ import {
   objectFromEntries,
 } from '@/calculators/common/tools/object';
 import Decimal from 'decimal.js-light';
-import { ConstantDefinition, InputDefinition } from './collect';
+import {
+  ConstantDefinition,
+  InputDefinition,
+  IntermediateDefinition,
+} from './collect';
 import { Output } from './outputs';
 import { kgToTonnes } from './unit-conversion';
 
@@ -39,6 +43,7 @@ export type KeysOnOutput = {
   references: string[];
   constants: ConstantDefinition[];
   inputs: InputDefinition[];
+  intermediates: IntermediateDefinition[];
 } & MethodAmounts;
 
 const exposeMethodAmounts = (
@@ -70,6 +75,7 @@ export const exposeKeysOnOutput = (
   references: internalResult.references,
   constants: internalResult.constants,
   inputs: internalResult.inputs,
+  intermediates: internalResult.intermediates,
 });
 
 export const addScope1Totals = <

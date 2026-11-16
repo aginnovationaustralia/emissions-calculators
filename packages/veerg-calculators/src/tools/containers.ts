@@ -7,15 +7,15 @@
  */
 import {
   AnyContainer as UnitsAnyContainer,
-  Metadata as UnitsMetadata,
   Container as UnitsContainer,
+  Metadata as UnitsMetadata,
 } from '@aginnovationaustralia/calculator-units';
 import {
   DefaultRules,
   defaultUnitSystem,
 } from '@aginnovationaustralia/calculator-units/defaults';
-import { BooleanUnit } from './units';
 import type { QualityTable } from './quality';
+import { BooleanUnit } from './units';
 
 declare module '@aginnovationaustralia/calculator-units' {
   interface Metadata {
@@ -23,6 +23,8 @@ declare module '@aginnovationaustralia/calculator-units' {
     quality?: QualityTable;
     /** Which module(s) (e.g. '3.1') consume an input. */
     modules?: string[];
+    /** Is this a significant intermediate value? Should it be attached ot the final output? */
+    intermediate?: boolean;
   }
 }
 
