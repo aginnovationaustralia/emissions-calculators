@@ -8,13 +8,6 @@
       "include-component-in-tag": false,
       "include-v-in-tag": true
     },
-    "packages/emissions-calculator-research": {
-      "changelog-path": "CHANGELOG.md",
-      "release-type": "node",
-      "component": "emissions-calculator-research",
-      "include-component-in-tag": true,
-      "include-v-in-tag": true
-    },
     "packages/veerg-calculators": {
       "changelog-path": "CHANGELOG.md",
       "release-type": "node",
@@ -25,6 +18,29 @@
       "versioning": "prerelease",
       "prerelease-type": "beta",
       "release-as": "1.1.0-beta.1"
+    },
+    "packages/research": {
+      "changelog-path": "CHANGELOG.md",
+      "release-type": "node",
+      "component": "emissions-calculator-research",
+      "include-component-in-tag": true,
+      "include-v-in-tag": true
+    },
+    "packages/calculator-units": {
+      "changelog-path": "CHANGELOG.md",
+      "release-type": "node",
+      "component": "calculator-units",
+      "include-component-in-tag": true,
+      "include-v-in-tag": true,
+      "release-as": "0.1.0"
+    },
+    "packages/calculator-inputs": {
+      "changelog-path": "CHANGELOG.md",
+      "release-type": "node",
+      "component": "calculator-inputs",
+      "include-component-in-tag": true,
+      "include-v-in-tag": true,
+      "release-as": "0.1.0"
     }
   },
   "pull-request-title-pattern": "chore(main): release ${version}"

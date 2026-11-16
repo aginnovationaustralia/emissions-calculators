@@ -2,7 +2,7 @@ import {
   Calculator,
   CalculatorNames,
   executeCalculator as executeCalculatorInternal,
-} from '@aginnovationaustralia/emissions-calculators/internal';
+} from '@aginnovationaustralia/veerg-calculators/internal';
 import {
   ResearchCalculatorOptions,
   ResearchNodeEnvironment,

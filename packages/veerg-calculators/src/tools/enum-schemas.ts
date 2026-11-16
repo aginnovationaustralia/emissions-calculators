@@ -1,5 +1,5 @@
 import * as E from '@/constants/enums';
-import { z } from 'zod';
+import { createEnumRegistry } from '@aginnovationaustralia/calculator-inputs';
 
 // -------- Enum OpenAPI components --------
 // Every enum used in an input schema must be registered here with a name. Each is tagged
@@ -87,37 +87,7 @@ const namedEnums = {
   WastewaterFacilityType: E.WastewaterFacilityTypes,
 } as const satisfies Record<string, readonly string[]>;
 
-/** Identifies a list of enum values regardless of their order. */
-const valuesKey = (values: readonly string[]) =>
-  JSON.stringify([...values].sort());
-
-const makeEnumSchema = <TEnum extends string>(values: readonly TEnum[]) =>
-  z.enum(values);
-
-const enumSchemasByValues = new Map<string, z.ZodEnum>();
-for (const [id, values] of Object.entries(namedEnums)) {
-  const key = valuesKey(values);
-  const existing = enumSchemasByValues.get(key);
-  if (existing) {
-    throw new Error(
-      `Enums ${existing.meta()?.id} and ${id} have the same values; register them once`,
-    );
-  }
-  enumSchemasByValues.set(key, makeEnumSchema(values).meta({ id }));
-}
-
-/**
- * The shared Zod schema for a registered enum, emitted as a reusable OpenAPI component.
- * The values may be in any order, but must exactly match an enum registered above.
- */
-export const enumSchema = <TEnum extends string>(
-  values: readonly TEnum[],
-): ReturnType<typeof makeEnumSchema<TEnum>> => {
-  const schema = enumSchemasByValues.get(valuesKey(values));
-  if (!schema) {
-    throw new Error(
-      `Enum values ${JSON.stringify(values)} are not registered. Add them with a name to namedEnums in src/tools/enum-schemas.ts`,
-    );
-  }
-  return schema as ReturnType<typeof makeEnumSchema<TEnum>>;
-};
+export const { enumSchema } = createEnumRegistry(namedEnums, {
+  unregisteredHint:
+    'Add them with a name to namedEnums in src/tools/enum-schemas.ts',
+});

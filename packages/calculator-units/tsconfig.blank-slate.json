@@ -1,0 +1,7 @@
+{
+  // Typechecks the blank slate test on its own. The main program includes src/defaults, whose
+  // substance augmentation would otherwise be visible to it.
+  "extends": "./tsconfig.json",
+  "include": ["src/blank-slate.test.ts"],
+  "exclude": []
+}

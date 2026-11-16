@@ -1,8 +1,3 @@
-import {
-  entriesFromObject,
-  ObjectEntry,
-  objectFromEntries,
-} from '@/calculators/common/tools';
 import Decimal from 'decimal.js-light';
 import { formatUnit } from './format';
 import { IfElseContainer } from './if-else';
@@ -1078,24 +1073,3 @@ export type ValuesAsAnyContainer<Input extends object> = {
       ? ValuesAsAnyContainer<Input[K]>
       : Input[K];
 };
-
-type MultiplyAllValuesByResult<
-  T extends { [K in keyof T]: Container<NumberUnit> },
-> = {
-  [K in keyof T]: T[K] extends Container<infer U extends NumberUnit>
-    ? BinaryContainer<U>
-    : never;
-};
-
-export function multiplyAllValuesBy<
-  T extends { [K in keyof T]: Container<NumberUnit> },
->(object: T, factor: Container<RealNumber>): MultiplyAllValuesByResult<T> {
-  return objectFromEntries(
-    entriesFromObject(object).map(
-      ([key, value]) =>
-        [key, value.multiply(factor)] as ObjectEntry<
-          MultiplyAllValuesByResult<T>
-        >,
-    ),
-  );
-}

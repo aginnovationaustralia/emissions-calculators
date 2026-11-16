@@ -134,33 +134,29 @@ if (validatedInput.valid) {
 
 ### Research: Overriding constant values
 
-The `@aginnovationaustralia/emissions-calculator-research` package runs the same calculators with custom
+The `@aginnovationaustralia/emissions-calculator-research` package runs the calculators from `veerg-calculators` with custom
 values for any of the constants. See [`src/grains/research-overrides.ts`](./src/grains/research-overrides.ts):
 
 ```typescript
 import {
   calculateGrains,
   executeCalculator,
-  ResearchEnvironment,
 } from '@aginnovationaustralia/emissions-calculator-research';
-import { GrainsInputSchema } from '@aginnovationaustralia/emissions-calculators/grains';
+import { GrainsInputSchema } from '@aginnovationaustralia/veerg-calculators/grains';
 
 const input = GrainsInputSchema.parse(grainsInputData);
 
-const result = ResearchEnvironment.run(
-  {
-    overrides: {
-      COMMON: {
-        TRANSPORT_FUEL_FACTORS: {
-          'Cars and light commercial vehicles': {
-            Gasoline: { SCOPE1_EF: { CO2: 0.0000674 * 2 } },
-          },
+const result = executeCalculator(calculateGrains, input, 'grains', {
+  overrides: {
+    COMMON: {
+      TRANSPORT_FUEL_FACTORS: {
+        'Off-road Agriculture and forestry equipment': {
+          Diesel: { SCOPE1_EF: { CO2: 0.0000699 * 2 } },
         },
       },
     },
   },
-  () => executeCalculator(calculateGrains, input, 'grains'),
-);
+});
 ```
 
 ### Available Calculators
@@ -202,3 +198,20 @@ npm run build
 [Creative Commons Attribution](./assets/by.png)
 
 This project is licensed under a [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) license.
+
+## Units and containers
+
+`src/units/calculator-units/` runs a farm emissions calculation using `@aginnovationaustralia/calculator-units`, where rules are values collected into an explicit unit system.
+
+| File                | Purpose                                                                                                                         |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `units.ts`          | The project's unit setup: the defaults plus a `Diesel` substance, a `MassPerDistance` unit and a rule.                          |
+| `farm-emissions.ts` | The calculation. Values are given inside the unit, e.g. `root(mass('CO2', 5))`.                                                 |
+| `mistakes.ts`       | Typical mistakes, each annotated with the error TypeScript reports. Typechecked, never run.                                     |
+| `pitfall.ts`        | Tries to use the extra rule from a unit system that doesn't have it, which the compiler rejects.                                |
+| `index.ts`          | Runs the calculation and prints the results.                                                                                    |
+
+```bash
+pnpm units:generics
+pnpm units:generics:pitfall
+```

@@ -5,7 +5,7 @@ import {
   ConstantOverrides,
   loadConstants,
   NodeEnvironment,
-} from '@aginnovationaustralia/emissions-calculators/internal';
+} from '@aginnovationaustralia/veerg-calculators/internal';
 
 export type { ConstantOverrides };
 

@@ -1,7 +1,8 @@
-import { Container } from './containers';
+import { AnyContainer } from './containers';
 import { formatUnit } from './format';
 import { QualityTable } from './quality';
-import { AnyUnit, isBooleanUnit, isStringUnit } from './units';
+import { isNumberUnit } from '@aginnovationaustralia/calculator-units';
+import { isBooleanUnit, isStringUnit, NumberUnit } from './units';
 
 export type ConstantDefinition = {
   name: string;
@@ -9,67 +10,68 @@ export type ConstantDefinition = {
   units: string;
 };
 
-type CollectVisitor<T> = (container: Container<AnyUnit> | undefined) => T[];
+type CollectVisitor<T> = (container: AnyContainer | undefined) => T[];
 
 /**
  * Walks the children of a container with a consistent shape for every
- * `originType`. Callers collect from the current node, then append
+ * `origin.kind`. Callers collect from the current node, then append
  * `traverseContainerChildren(container, collectFn)`.
  */
 const traverseContainerChildren = <T>(
-  container: Container<AnyUnit>,
+  container: AnyContainer,
   visit: CollectVisitor<T>,
 ): T[] => {
-  switch (container.originType) {
+  const origin = container.origin;
+  switch (origin.kind) {
     case 'binary':
-      return visit(container.left).concat(visit(container.right));
+      return visit(origin.left).concat(visit(origin.right));
     case 'bracketed':
-      return visit(container.inner);
-    case 'constant_selection':
-      return container.selectors
-        .filter((s) => typeof s !== 'string')
+      return visit(origin.inner);
+    case 'selection':
+      return origin.selectors
+        .filter((s): s is AnyContainer => typeof s !== 'string')
         .flatMap(visit);
     case 'input':
     case 'root':
       return [];
     case 'method1and2':
-      return visit(container.method2 ?? container.method1);
+      return visit(origin.method2 ?? origin.method1);
     case 'method2':
-      return visit(container.method2);
+      return visit(origin.method2);
     case 'sum':
-      return container.from.flatMap(visit);
+      return origin.from.flatMap(visit);
     case 'translation':
-      return visit(container.from);
+      return visit(origin.from);
     case 'switch':
-      return visit(container.subject).concat(visit(container.selected));
+      return visit(origin.subject).concat(visit(origin.selected));
     case 'if_else':
-      return visit(container.condition).concat(visit(container.selected));
+      return visit(origin.condition).concat(visit(origin.selected));
   }
 };
 
-export const collectReferences = <O extends Container<AnyUnit>>(
+export const collectReferences = <O extends AnyContainer>(
   container: O | undefined,
 ): string[] => {
   if (container === undefined) {
     return [];
   }
-  const local = container.core?.references ?? [];
+  const local = container.meta.references ?? [];
   return local.concat(traverseContainerChildren(container, collectReferences));
 };
 
-export const collectConstants = <O extends Container<AnyUnit>>(
+export const collectConstants = <O extends AnyContainer>(
   origin: O | undefined,
 ): ConstantDefinition[] => {
   if (origin === undefined) {
     return [];
   }
   const local: ConstantDefinition[] =
-    origin.originType === 'constant_selection'
+    origin.origin.kind === 'selection' && isNumberUnit(origin.unit)
       ? [
           {
-            name: origin.core.name,
+            name: origin.meta.name ?? 'Unknown constant',
             value: origin.unit.store.toNumber(),
-            units: formatUnit(origin.unit),
+            units: formatUnit(origin.unit as NumberUnit),
           },
         ]
       : [];
@@ -84,25 +86,25 @@ export type InputDefinition = {
   quality: QualityTable | undefined;
 };
 
-export const collectInputs = <O extends Container<AnyUnit>>(
+export const collectInputs = <O extends AnyContainer>(
   origin: O | undefined,
 ): InputDefinition[] => {
   if (origin === undefined) {
     return [];
   }
   const local: InputDefinition[] =
-    origin.originType === 'input'
+    origin.origin.kind === 'input'
       ? [
           {
-            name: origin.core?.name ?? 'Unknown input',
+            name: origin.meta.name ?? 'Unknown input',
             value: isStringUnit(origin.unit)
               ? origin.unit
               : isBooleanUnit(origin.unit)
                 ? origin.unit
                 : origin.unit.store.toNumber(),
-            method: origin.method,
-            modules: origin.modules,
-            quality: origin.core?.quality,
+            method: origin.origin.method,
+            modules: origin.meta.modules ?? [],
+            quality: origin.meta.quality,
           },
         ]
       : [];
