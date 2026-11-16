@@ -1,5 +1,4 @@
 import { Container, isNamedOrigin } from './containers';
-import { substanceDisplayName } from './display-units';
 import { AnyUnit, isBooleanUnit, isStringUnit, isVoid } from './units';
 
 export function formatUnit(unit: AnyUnit): string {
@@ -15,84 +14,73 @@ export function formatUnit(unit: AnyUnit): string {
 
   switch (unit.__unitType) {
     case 'MassPerMass':
-      return `kg ${substanceDisplayName(unit.snum)}/kg ${substanceDisplayName(unit.sdenom)}`;
+      return `Mass(${unit.snum}) / Mass(${unit.sdenom})`;
     case 'Mass':
-      return `kg ${substanceDisplayName(unit.substance)}`;
+      return `Mass(${unit.substance})`;
     case 'Volume':
-      return `L ${substanceDisplayName(unit.substance)}`;
+      return `Volume(${unit.substance})`;
     case 'Energy':
-      return 'J';
+      return 'energy';
     case 'RealNumber':
       return 'real number';
     case 'MassPerEnergy':
-      return `kg ${substanceDisplayName(unit.substance)}/J`;
+      return `Mass(${unit.substance}) / Energy`;
     case 'EnergyPerMass':
-      return `J/kg ${substanceDisplayName(unit.substance)}`;
+      return `Energy / Mass(${unit.substance})`;
     case 'EnergyPerVolume':
-      return `J/L ${substanceDisplayName(unit.substance)}`;
+      return `Energy / Volume(${unit.substance})`;
     case 'MassPerVolume':
-      return `kg ${substanceDisplayName(unit.mass)}/L ${substanceDisplayName(unit.volume)}`;
+      return `Mass(${unit.mass}) / Volume(${unit.volume})`;
     case 'MassPerArea':
-      return `kg ${substanceDisplayName(unit.substance)}/m^2 `;
+      return `Mass(${unit.substance}) / Area`;
     case 'MassPerAreaPerYear':
-      return `kg ${substanceDisplayName(unit.substance)}/m^2/year`;
+      return `Mass(${unit.substance}) / Area / Year`;
     case 'MassPerYear':
-      return `kg ${substanceDisplayName(unit.substance)}/year`;
+      return `Mass(${unit.substance}) / Year`;
     case 'MassPerTime':
-      return `kg ${substanceDisplayName(unit.substance)}/s`;
+      return `Mass(${unit.substance}) / Time`;
     case 'MassPerHeadPerDay':
-      return `kg ${substanceDisplayName(unit.substance)}/head/day`;
+      return `Mass(${unit.substance}) / Head / Day`;
     case 'MassPerHeadPerYear':
-      return `kg ${substanceDisplayName(unit.substance)}/head/year`;
+      return `Mass(${unit.substance}) / Head / Year`;
     case 'MassPerDay':
-      return `kg ${substanceDisplayName(unit.substance)}/day`;
+      return `Mass(${unit.substance}) / Day`;
     case 'VolumePerHeadPerDay':
-      return `L ${substanceDisplayName(unit.substance)}/head/day`;
+      return `Volume(${unit.substance}) / Head / Day`;
     case 'VolumePerMass':
-      return `L ${substanceDisplayName(unit.volume)}/kg ${substanceDisplayName(unit.mass)}`;
+      return `Volume(${unit.volume}) / Mass(${unit.mass})`;
     case 'MassPerHead':
-      return `kg ${substanceDisplayName(unit.substance)}/head`;
+      return `Mass(${unit.substance}) / Head`;
     case 'Days':
-      return 'days';
+      return 'Days';
     case 'Years':
-      return 'years';
+      return 'Years';
     case 'CountPerArea':
-      return 'm^-2';
+      return 'Count / Area';
     case 'Head':
-      return 'head';
+      return 'Head';
     case 'Area':
-      return 'm^2';
+      return 'Area';
     case 'Time':
-      return 's';
+      return 'Time';
     case 'Electricity':
-      return 'kWh';
+      return 'Electricity';
     case 'MassPerElectricity':
-      return `kg ${substanceDisplayName(unit.substance)}/kWh`;
+      return `Mass(${unit.substance}) / Electricity`;
     case 'MassPerAreaPerDay':
-      return `kg ${substanceDisplayName(unit.substance)} / m^2 / day`;
+      return `Mass(${unit.substance}) / Area / Day`;
     case 'Distance':
-      return 'm';
+      return 'Disance';
     case 'MassDistance':
-      return `kgm ${substanceDisplayName(unit.substance)}`;
+      return `Mass-Distance(${unit.substance})`;
     case 'MassPerMassDistance':
-      return `kg ${substanceDisplayName(unit.snum)}/kgm ${substanceDisplayName(unit.sdenom)}`;
+      return `Mass(${unit.snum}) / Mass-Distance(${unit.sdenom})`;
     case 'EnergyPerHeadPerDay':
-      return `J/head/day`;
+      return `Energy / Head / Day`;
   }
 }
 
 export const formatExpression = (container: Container<AnyUnit>): string => {
-  //   const lhsUnit = container.unit;
-  //   let lhs = '';
-  //   if (isVoid(lhsUnit)) {
-  //     lhs = 'void(0)';
-  //   } else if (isStringUnit(lhsUnit)) {
-  //     lhs = lhsUnit;
-  //   } else {
-  //     // console.log(container);
-  //     lhs = lhsUnit.value.toNumber().toString();
-  //   }
-
   const lhs = formatValueAndName(container);
 
   const rhs = formatExpressionRecursive(container);
