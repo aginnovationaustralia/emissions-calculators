@@ -222,7 +222,7 @@ export const commonConstants: CommonConstants = {
 
   /**
    * @description Density of methane
-   * @units kg/m3
+   * @units Originally expressed in kg/m^3 in VEERG
    * @reference National Greenhouse and Energy Reporting (Measurement) Determination 2008 [7]
    */
   DENSITY_OF_METHANE: massPerVolume(
@@ -349,7 +349,7 @@ export const commonConstants: CommonConstants = {
    * @description Transport fuel emission factors for each fuel type, in kg CO2-e/GJ
    * @ngaf2026 Table 9
    * @appendixA Table A.4.2.1 (Off-road equipment & vessels)
-   * @units ENERGY_CONTENT is in J/m^3, other values are in kg CO2-e/GJ
+   * @units ENERGY_CONTENT is originally expressed in J/m^3, other values are in kg CO2-e/GJ
    */
   TRANSPORT_FUEL_FACTORS: {
     /**
@@ -545,7 +545,7 @@ export const commonConstants: CommonConstants = {
   /**
    * @description Stationary fuel emission factors for each solid fuel type by mass, in kg CO2-e/GJ
    * @ngaf2026 Table 4 (solid fuels) & Table 8 (liquid fuels)
-   * @units ENERGY_CONTENT is in J/kg, other values are in kg CO2-e/GJ
+   * @units ENERGY_CONTENT is originally expressed in GJ/t, other values are in kg CO2-e/GJ
    */
   STATIONARY_FUEL_FACTORS_BY_MASS: {
     'Solid fuels': {
@@ -661,7 +661,7 @@ export const commonConstants: CommonConstants = {
   /**
    * @description Stationary fuel emission factors for each liquid fuel type by volume, in kg CO2-e/GJ
    * @ngaf2026 Table 8
-   * @units ENERGY_CONTENT is in J/m^3, other values are in kg CO2-e/GJ
+   * @units ENERGY_CONTENT is originally expressed in GJ/m^3 (GJ/kL), other values are in kg CO2-e/GJ
    */
   STATIONARY_FUEL_FACTORS_BY_VOLUME: {
     'Liquid fuels': {
@@ -753,7 +753,7 @@ export const commonConstants: CommonConstants = {
   /**
    * @description Stationary fuel emission factors for natural gas by volume, in kg CO2-e/GJ
    * @ngaf2026 Table 5 and Table 6 (Non-Metro values)
-   * @units kg CO2-e/GJ
+   * @units Energy content is originally expressed in GJ/kL, other factors are originally expressed in kg CO2-e/GJ
    */
   NATURAL_GAS_FACTORS: {
     ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', gjPerKlToJPerLitre(25.3)),
@@ -1097,7 +1097,7 @@ export const commonConstants: CommonConstants = {
      *
      * @description Factors for converting volumes of solid waste to mass
      * @ngaf2024 4.2, Table 15 & Table 16
-     * @units t/m^3
+     * @units Originally expressed in t/m^3
      */
     WASTE_TYPES_VOLUME_TO_MASS: {
       'Food waste': massPerVolume('Solid Waste', 'Solid Waste', 0.5),

@@ -1,13 +1,13 @@
 import { collectConstants, collectInputs, collectReferences } from './collect';
-import { br, num } from './containers';
 import { selectConstant } from './constants';
+import { br, num } from './containers';
 import { ifTrueElse } from './if-else';
 import { input } from './inputs';
 import { captureMethod1Or2Value } from './multi';
-import { selectSwitch } from './switch';
-import { sum } from './sum';
-import { mass, realNumber } from './units';
 import { zero } from './sentinels';
+import { sum } from './sum';
+import { selectSwitch } from './switch';
+import { mass, realNumber } from './units';
 
 // These tree-walkers back every calculator's `output()` provenance (references/constants/
 // inputs shown to end users), and they dispatch on `originType` with no default case. A branch
@@ -112,7 +112,7 @@ describe('collectConstants', () => {
   it('collects a constant_selection node with its name, value and formatted units', () => {
     const constant = selectConstant(testConstants, 'FACTOR');
     expect(collectConstants(constant)).toEqual([
-      { name: 'TestConstants[FACTOR]', value: 5, units: 'Mass(CO2)' },
+      { name: 'TestConstants[FACTOR]', value: 5, units: 'kg CO2' },
     ]);
   });
 
@@ -120,7 +120,7 @@ describe('collectConstants', () => {
     const constant = selectConstant(testConstants, 'FACTOR');
     const result = num(2).multiply(constant);
     expect(collectConstants(result)).toEqual([
-      { name: 'TestConstants[FACTOR]', value: 5, units: 'Mass(CO2)' },
+      { name: 'TestConstants[FACTOR]', value: 5, units: 'kg CO2' },
     ]);
   });
 });

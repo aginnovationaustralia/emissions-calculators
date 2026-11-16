@@ -81,17 +81,6 @@ export function formatUnit(unit: AnyUnit): string {
 }
 
 export const formatExpression = (container: Container<AnyUnit>): string => {
-  //   const lhsUnit = container.unit;
-  //   let lhs = '';
-  //   if (isVoid(lhsUnit)) {
-  //     lhs = 'void(0)';
-  //   } else if (isStringUnit(lhsUnit)) {
-  //     lhs = lhsUnit;
-  //   } else {
-  //     // console.log(container);
-  //     lhs = lhsUnit.value.toNumber().toString();
-  //   }
-
   const lhs = formatValueAndName(container);
 
   const rhs = formatExpressionRecursive(container);

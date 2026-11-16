@@ -1,3 +1,4 @@
+import { substanceDisplayName } from './display-substances';
 import { isProportion, NumberSchemaTweaker } from './inputs';
 import {
   CountPerArea,
@@ -173,48 +174,6 @@ export const getDisplayUnit = <U extends NumberUnit>(
   }
   return lookup;
 };
-
-const substanceDisplayNames: Record<Substance, string> = {
-  Carbon: 'carbon',
-  Chemical: 'chemical',
-  'Inorganic Fertiliser': 'inorganic fertiliser',
-  'Organic Fertiliser': 'organic fertiliser',
-  CO2: 'CO2',
-  CH4: 'CH4',
-  N2O: 'N2O',
-  N: 'nitrogen',
-  'Volatilised N': 'volatilised nitrogen',
-  CO2e: 'CO2e',
-  Refrigerant: 'refrigerant',
-  Fuel: 'fuel',
-  'Greasy Wool': 'greasy wool',
-  'Clean Wool': 'clean wool',
-  FluidWaste: 'fluid waste',
-  Oxygen: 'oxygen',
-  Urea: 'urea',
-  DryMatter: 'dry matter',
-  CrudeProtein: 'crude protein',
-  CropResidue: 'crop residue',
-  Yield: 'yield',
-  Lime: 'lime',
-  'Solid Waste': 'solid waste',
-  Milk: 'milk',
-  'Milk Solids': 'milk solids',
-  Liveweight: 'liveweight',
-  'Purchased Feed': 'purchased feed',
-  'Purchased Mineral Supplement': 'purchased mineral supplement',
-  'Volatile Solids': 'volatile solids',
-  COD: 'COD',
-  Packaging: 'packaging',
-  'Organic Amendment': 'organic amendment',
-  Trees: 'trees',
-  'Freight Goods': 'freight goods',
-  Eggs: 'eggs',
-  Fish: 'fish',
-};
-
-const substanceDisplayName = (substance: Substance): string =>
-  substanceDisplayNames[substance];
 
 /**
  * Builds a "<unitName> <substance> per <perUnitName>[ <perSubstance>]" display string.

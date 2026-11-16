@@ -102,12 +102,12 @@ describe('Cropping Calculator', () => {
         {
           name: 'COMMON[TRANSPORT_FUEL_FACTORS.Cars and light commercial vehicles.Diesel oil.SCOPE1_EF.CO2]',
           value: 0.0000699,
-          units: 'Mass(CO2e) / Energy',
+          units: 'kg CO2e/J',
         },
         {
           name: 'COMMON[TRANSPORT_FUEL_FACTORS.Cars and light commercial vehicles.Diesel oil.ENERGY_CONTENT_FACTOR]',
           value: 38600,
-          units: 'Energy / Volume(Fuel)',
+          units: 'J/L fuel',
         },
       ]);
     });
@@ -124,17 +124,17 @@ describe('Cropping Calculator', () => {
         {
           name: 'FNinorganic,f (Urea)',
           value: 0.46,
-          units: 'Mass(N) / Mass(Inorganic Fertiliser)',
+          units: 'kg nitrogen/kg inorganic fertiliser',
         },
         {
           name: 'CROP[EF_N2O_ATMOSPHERIC_DEPOSITION_PRODUCTION_SYSTEM.Non-irrigated pasture]',
-          units: 'Mass(N2O) / Mass(N)',
+          units: 'kg N2O/kg nitrogen',
           value: 0.0018,
         },
         {
           name: 'COMMON[ELEMENTAL_TO_MOLECULAR_N2O]',
           value: 1.57,
-          units: 'Mass(N2O) / Mass(N2O)',
+          units: 'kg N2O/kg N2O',
         },
       ]);
     });
