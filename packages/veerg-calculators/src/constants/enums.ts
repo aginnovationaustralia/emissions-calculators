@@ -86,17 +86,23 @@ export const InorganicFertiliserTypes = [
 ] as const;
 export type InorganicFertiliserType = (typeof InorganicFertiliserTypes)[number];
 
-export const OrganicFertiliserTypes = [
+export const OrganicFertiliserTypesWithDefaults = [
   'Dairy cattle',
   'Beef cattle',
   'Poultry',
   'Pigs',
   'Sheep',
   'Horses/Mules',
-  // 'Other livestock manure',
-  // 'Other organic fertiliser',
 ] as const;
-export type OrganicFertiliserType = (typeof OrganicFertiliserTypes)[number];
+export type OrganicFertiliserType =
+  (typeof OrganicFertiliserTypesWithDefaults)[number];
+
+export const OrganicFertiliserTypesWithoutDefaults = [
+  'Other livestock manure',
+  'Other organic fertiliser',
+] as const;
+export type OrganicFertiliserTypeWithoutDefaults =
+  (typeof OrganicFertiliserTypesWithoutDefaults)[number];
 
 export const PrimaryPigsMMSWithSolidSeparationTypes = [
   'anaerobicLagoon',

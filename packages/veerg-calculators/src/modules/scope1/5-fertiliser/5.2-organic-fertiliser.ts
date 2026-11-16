@@ -11,6 +11,7 @@ import { calculateMassOfNitrogenAppliedToSoils } from '../4-manure-management/ca
 import { ConstantsForManureManagement } from '../4-manure-management/constants';
 import { HasFertiliserInputTransformed } from './fertiliser.input';
 import { OrganicFertiliserInputTransformed } from './organic-fertiliser.input';
+import { isOrganicFertiliserUntracedWithoutDefaults } from './organic-fertiliser-untraced.input';
 
 /**
  * Raw implementation of equation for nitrous oxide emissions *EN2O* from the application
@@ -47,18 +48,23 @@ export const calculateMNSoilForOrganicFertiliser = (
   const origin = application.origin;
   if (origin.origin === 'Traced') {
     return calculateMassOfNitrogenAppliedToSoils(origin.details, constants);
-  } else {
-    const { fractionNitrogen: customNitrogenFraction } = origin;
-    const fnOrganicF = selectConstant(
-      constants.CROP,
-      'ORGANIC_FERTILISER_FRACTIONS',
-      origin.organicFertiliserType,
-      'N',
-    );
-    // NOTE: This is definitely method 1, even though it feels like a method 2 input
-    const nitrogenFraction = customNitrogenFraction ?? fnOrganicF;
-    return origin.massAppliedKilograms.multiply(nitrogenFraction);
   }
+
+  // NOTE: This is definitely method 1, even though it feels like a method 2 input
+  if (isOrganicFertiliserUntracedWithoutDefaults(origin)) {
+    // No default fraction exists for these types, so a custom fraction is mandatory
+    return origin.massAppliedKilograms.multiply(origin.fractionNitrogen);
+  }
+
+  // Narrowed to a type with a default nitrogen fraction, which can be overridden
+  const fnOrganicF = selectConstant(
+    constants.CROP,
+    'ORGANIC_FERTILISER_FRACTIONS',
+    origin.organicFertiliserType,
+    'N',
+  );
+  const nitrogenFraction = origin.fractionNitrogen ?? fnOrganicF;
+  return origin.massAppliedKilograms.multiply(nitrogenFraction);
 };
 
 export const calculate52OrganicFertiliser = (

@@ -53,7 +53,8 @@ const namedEnums = {
   NonBurnableCropType: E.NonBurnableCropTypes,
   OffRoadAgricultureAndForestryEquipmentFuelType:
     E.OffRoadAgricultureAndForestryEquipmentFuelTypes,
-  OrganicFertiliserType: E.OrganicFertiliserTypes,
+  OrganicFertiliserType: E.OrganicFertiliserTypesWithDefaults,
+  OrganicFertiliserTypeWithoutDefaults: E.OrganicFertiliserTypesWithoutDefaults,
   OtherLivestockType: E.OtherLivestockTypes,
   PastureOnlyProductionSystem: E.PastureOnlyProductionSystems,
   PastureType: E.PastureTypes,
