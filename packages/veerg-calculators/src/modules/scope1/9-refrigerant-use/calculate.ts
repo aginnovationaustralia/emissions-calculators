@@ -1,9 +1,9 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { HasCommonConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
+import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { RefrigerantsInputTransformed } from './refrigerants.input';
-import { zeroCO2e } from '@/tools/sentinels';
 
 export const calculateScope1RefrigerantUse = (
   input: RefrigerantsInputTransformed,
@@ -34,7 +34,11 @@ export const calculateScope1RefrigerantUse = (
       'REFRIGERANT_GWP',
       refrigerant.refrigerant,
     );
-    return gwp.multiply(chargeRa).multiply(leakageRatea);
+    const amountLeaked = chargeRa
+      .multiply(leakageRatea)
+      .attach({ intermediate: true, name: `Er=${refrigerant.refrigerant}` });
+
+    return gwp.multiply(amountLeaked);
   });
 
   return sum(emissionsRecords, zeroCO2e, {
