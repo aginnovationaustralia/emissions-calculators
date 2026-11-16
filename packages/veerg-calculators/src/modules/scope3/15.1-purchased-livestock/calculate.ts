@@ -191,6 +191,19 @@ function getLiveweight(
   }
 }
 
+/** A purchase's livestock type and, where it has one, its class, for naming its intermediate. */
+const purchaseLabel = (
+  purchase: PurchasedLivestockInputTransformed,
+): string => {
+  const livestockClass =
+    'class' in purchase && purchase.class !== undefined
+      ? purchase.class.unit
+      : undefined;
+  return typeof livestockClass === 'string'
+    ? `${purchase.type}, ${livestockClass}`
+    : purchase.type;
+};
+
 export const calculatePurchasedLivestockEmissions = (
   activity: HasPurchasedLivestockInputTransformed,
   context: ExecutionContext<ConstantsForPurchasedLivestock>,
@@ -209,9 +222,12 @@ export const calculatePurchasedLivestockEmissions = (
 
     const emissionsFactor = getEmissionFactor(p, constants).named('EFco');
 
+    // Each purchase's emissions are reported as an intermediate named by livestock type and class (e.g.
+    // 'E (Dairy, milkingCows)'), summed over the purchases of that class
     return emissionsFactor
       .multiply(p.headPurchased.multiply(liveweight))
-      .reference('15.1.1.1 (1)');
+      .reference('15.1.1.1 (1)')
+      .attach({ intermediate: true, name: `E (${purchaseLabel(p)})` });
   });
   return sum(purchaseEmissions, zeroCO2e).named('E');
 };
