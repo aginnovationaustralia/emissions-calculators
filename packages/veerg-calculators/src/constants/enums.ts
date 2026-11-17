@@ -970,6 +970,40 @@ export const PurchasedPackagingByMassTypes = [
 export type PurchasedPackagingByMassType =
   (typeof PurchasedPackagingByMassTypes)[number];
 
+export const OtherPurchasedSeedTypes = [
+  'Barley grain (for seed)',
+  'Maize grain (for seed)',
+  'Oat grain (for seed)',
+  'Sorghum grain (for seed)',
+  'Wheat grain (for seed)',
+] as const;
+export type OtherPurchasedSeedType = (typeof OtherPurchasedSeedTypes)[number];
+
+export const OtherPurchasedMiscellaneousTypes = [
+  'Animal ear tags (large)',
+  'Animal ear tags (small)',
+  'Nylon netting',
+] as const;
+export type OtherPurchasedMiscellaneousType =
+  (typeof OtherPurchasedMiscellaneousTypes)[number];
+
+export const OtherPurchasedCleaningChemicalTypes = [
+  'Alkaline cleaner',
+  'Bleach',
+  'Phosphoric acid',
+] as const;
+export type OtherPurchasedCleaningChemicalType =
+  (typeof OtherPurchasedCleaningChemicalTypes)[number];
+
+export const OtherPurchasedPharmacyChemicalTypes = [
+  'Parasite control for cattle (external), dipping',
+  'Parasite control for cattle (internal)',
+  'Parasite control for sheep (external)',
+  'Parasite control for sheep (internal)',
+] as const;
+export type OtherPurchasedPharmacyChemicalType =
+  (typeof OtherPurchasedPharmacyChemicalTypes)[number];
+
 export const FreightTypes = [
   'Air freight, domestic',
   'Air freight, general aviation',

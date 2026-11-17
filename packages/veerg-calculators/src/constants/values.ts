@@ -1267,6 +1267,53 @@ export const commonConstants: CommonConstants = {
     'Plastic film LDPE': massPerMass('CO2e', 'Packaging', 3.4411615),
     'Plastic sheet HDPE': massPerMass('CO2e', 'Packaging', 3.7225687),
   },
+
+  /**
+   * @description Emission factors for other purchased goods, in a variety of units. Values sourced from AusLCI V48 (March 2026)
+   */
+  OTHER_PURCHASED_FACTORS: {
+    /**
+     * @description Emission factors for seed purchased as other purchased goods, in kg CO2e per kg of seed. Values sourced from AusLCI V48 (March 2026)
+     */
+    SEED: {
+      'Barley grain (for seed)': massPerMass('CO2e', 'Seed', 0.239),
+      'Maize grain (for seed)': massPerMass('CO2e', 'Seed', 0.181),
+      'Oat grain (for seed)': massPerMass('CO2e', 'Seed', 0.27),
+      'Sorghum grain (for seed)': massPerMass('CO2e', 'Seed', 0.232),
+      'Wheat grain (for seed)': massPerMass('CO2e', 'Seed', 0.268),
+    },
+
+    /**
+     * @description Emission factors for miscellaneous other purchased goods, in kg CO2e per unit purchased: per tag for animal ear tags (Australian values), per kg for nylon netting (global value). Values sourced from AusLCI V48 (March 2026)
+     */
+    MISCELLANEOUS: {
+      'Animal ear tags (large)': mass('CO2e', 0.0424),
+      'Animal ear tags (small)': mass('CO2e', 0.0293),
+      'Nylon netting': mass('CO2e', 9.81),
+    },
+
+    /**
+     * @description Emission factors for cleaning chemicals, in kg CO2e per kg of chemical. Global values. Values sourced from AusLCI V48 (March 2026)
+     */
+    CLEANING_CHEMICAL: {
+      'Alkaline cleaner': massPerMass('CO2e', 'Chemical', 0.722),
+      Bleach: massPerMass('CO2e', 'Chemical', 0.804),
+      'Phosphoric acid': massPerMass('CO2e', 'Chemical', 0.907),
+    },
+
+    /**
+     * @description Emission factors for pharmacy chemicals, in kg CO2e per head treated. Global values. Values sourced from AusLCI V48 (March 2026)
+     */
+    PHARMACY_CHEMICAL: {
+      'Parasite control for cattle (external), dipping': massPerHead(
+        'CO2e',
+        0.0547,
+      ),
+      'Parasite control for cattle (internal)': massPerHead('CO2e', 0.0142),
+      'Parasite control for sheep (external)': massPerHead('CO2e', 0.0143),
+      'Parasite control for sheep (internal)': massPerHead('CO2e', 0.00426),
+    },
+  },
 };
 
 const cropResidueRemovedOtherCropTypes: Record<State, RealNumber> = {

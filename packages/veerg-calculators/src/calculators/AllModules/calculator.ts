@@ -463,7 +463,7 @@ const calculateScope3AllModules = (
   const otherPurchasedGoodsAndServices =
     calculateOtherPurchasedGoodsAndServicesEmissions({
       otherPurchasedGoodsAndServices: input.otherPurchasedGoodsAndServices,
-    });
+    }, context);
 
   // Upstream Emissions from Fuel 15.10
   const fuel = input.fuel

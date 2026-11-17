@@ -42,6 +42,7 @@ declare module '../substances.js' {
     'Freight Goods': true;
     Eggs: true;
     Fish: true;
+    Seed: true;
   }
 }
 
@@ -77,4 +78,5 @@ export type AgriculturalSubstance =
   | 'Trees'
   | 'Freight Goods'
   | 'Eggs'
-  | 'Fish';
+  | 'Fish'
+  | 'Seed';

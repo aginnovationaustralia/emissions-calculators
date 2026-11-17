@@ -58,6 +58,10 @@ import {
   LivestockPurchaseCategory,
   MatureDairyClass,
   MeanAnnualTemperature,
+  OtherPurchasedCleaningChemicalType,
+  OtherPurchasedMiscellaneousType,
+  OtherPurchasedPharmacyChemicalType,
+  OtherPurchasedSeedType,
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
   OtherLivestockType,
@@ -310,6 +314,20 @@ export type CommonConstants = NamedConstants & {
     PurchasedPackagingByMassType,
     MassPerMass<'CO2e', 'Packaging'>
   >;
+
+  OTHER_PURCHASED_FACTORS: {
+    SEED: Record<OtherPurchasedSeedType, MassPerMass<'CO2e', 'Seed'>>;
+    /** Per unit purchased: per tag for ear tags, per kg for nylon netting */
+    MISCELLANEOUS: Record<OtherPurchasedMiscellaneousType, Mass<'CO2e'>>;
+    CLEANING_CHEMICAL: Record<
+      OtherPurchasedCleaningChemicalType,
+      MassPerMass<'CO2e', 'Chemical'>
+    >;
+    PHARMACY_CHEMICAL: Record<
+      OtherPurchasedPharmacyChemicalType,
+      MassPerHead<'CO2e'>
+    >;
+  };
 };
 
 type CropResidueFactors = {
