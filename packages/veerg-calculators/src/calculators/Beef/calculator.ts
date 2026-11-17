@@ -31,6 +31,7 @@ import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { Container } from '@/tools/containers';
 import { exposeMassValue } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
+import { zeroMassLiveweight } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
@@ -41,7 +42,6 @@ import { BeefInputTransformed } from './types/input';
 import { BeefOutputSchema } from './types/output';
 import { BeefScope1Output } from './types/scope1.output';
 import { BeefScope3Output } from './types/scope3.output';
-import { zeroMassLiveweight } from '@/tools/sentinels';
 
 function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
