@@ -31,6 +31,7 @@ import {
   BasicCropProductionSystem,
   BeefBreed,
   BeefClass,
+  BeefPurchaseCategory,
   CarsLightCommercialFuelType,
   CarsLightCommercialPre2004FuelType,
   ClimateZoneType,
@@ -93,6 +94,7 @@ import {
   Season,
   SecondaryFeedlotMMSType,
   SheepClass,
+  SheepPurchaseCategory,
   SoilAmeliorant,
   SolidWasteManagedTreatmentType,
   SolidWasteNonStreamType,
@@ -671,6 +673,14 @@ export type LivestockConstants = NamedConstants & {
   PURCHASED_EF: Record<
     LivestockPurchaseCategory,
     MassPerMass<'CO2e', 'Liveweight'>
+  >;
+
+  PURCHASED_EF_BY_STATE: Record<
+    State,
+    Record<
+      BeefPurchaseCategory | SheepPurchaseCategory,
+      MassPerMass<'CO2e', 'Liveweight'>
+    >
   >;
 
   OTHER_LIVESTOCK_EF_PROPORTION: Record<OtherLivestockType, RealNumber>;

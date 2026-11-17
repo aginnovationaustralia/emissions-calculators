@@ -12,6 +12,7 @@ import {
   perTonneToPerKg,
   tonnesPerHectareToKgPerSquareMetres,
 } from '@/tools/unit-conversion';
+import type { MassPerMass } from '@/tools/units';
 import {
   countPerArea,
   days,
@@ -37,7 +38,12 @@ import {
   volumePerMass,
   years,
 } from '@/tools/units';
-import { MeanAnnualTemperature, State } from './enums';
+import {
+  BeefPurchaseCategory,
+  MeanAnnualTemperature,
+  SheepPurchaseCategory,
+  State,
+} from './enums';
 import {
   createGaseousFuelConstantsFromNGAF,
   createStationaryFuelConstantsFromNGAFByMass,
@@ -2548,6 +2554,17 @@ export const poultryConstants: PoultryConstants = {
   },
 };
 
+const purchasedLivestockEfNSW: Record<
+  BeefPurchaseCategory | SheepPurchaseCategory,
+  MassPerMass<'CO2e', 'Liveweight'>
+> = {
+  beefWeaned: massPerMass('CO2e', 'Liveweight', 12.7),
+  beefPrime: massPerMass('CO2e', 'Liveweight', 11.3),
+  beefManufacturing: massPerMass('CO2e', 'Liveweight', 8.21),
+  sheepMutton: massPerMass('CO2e', 'Liveweight', 2.26),
+  sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 8.29),
+};
+
 export const livestockConstants: LivestockConstants = {
   name: 'LIVESTOCK',
   /**
@@ -2936,6 +2953,58 @@ export const livestockConstants: LivestockConstants = {
     ),
     pigsDeepLitterRearing: massPerMass('CO2e', 'Liveweight', 1.66),
     pigsOutdoorRearing: massPerMass('CO2e', 'Liveweight', 2.06),
+  },
+
+  /**
+   * @description Scope 3 emission factors for purchased beef cattle and sheep, by state of origin. ACT uses the NSW values. NT has no published sheep values, so it uses the national sheep values.
+   * @reference AusLCI V48
+   */
+  PURCHASED_EF_BY_STATE: {
+    ACT: purchasedLivestockEfNSW,
+    NSW: purchasedLivestockEfNSW,
+    NT: {
+      beefWeaned: massPerMass('CO2e', 'Liveweight', 19.1),
+      beefPrime: massPerMass('CO2e', 'Liveweight', 18.9),
+      beefManufacturing: massPerMass('CO2e', 'Liveweight', 12.2),
+      // No NT sheep values are published; QLD values are used
+      sheepMutton: massPerMass('CO2e', 'Liveweight', 6.33),
+      sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 6.39),
+    },
+    QLD: {
+      beefWeaned: massPerMass('CO2e', 'Liveweight', 20.5),
+      beefPrime: massPerMass('CO2e', 'Liveweight', 13.9),
+      beefManufacturing: massPerMass('CO2e', 'Liveweight', 10.9),
+      sheepMutton: massPerMass('CO2e', 'Liveweight', 6.33),
+      sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 6.39),
+    },
+    SA: {
+      beefWeaned: massPerMass('CO2e', 'Liveweight', 10.8),
+      beefPrime: massPerMass('CO2e', 'Liveweight', 12.3),
+      beefManufacturing: massPerMass('CO2e', 'Liveweight', 7.63),
+      sheepMutton: massPerMass('CO2e', 'Liveweight', 6.18),
+      sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 6.87),
+    },
+    TAS: {
+      beefWeaned: massPerMass('CO2e', 'Liveweight', 13.42),
+      beefPrime: massPerMass('CO2e', 'Liveweight', 11.5),
+      beefManufacturing: massPerMass('CO2e', 'Liveweight', 8.75),
+      sheepMutton: massPerMass('CO2e', 'Liveweight', 7.5),
+      sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 8.66),
+    },
+    VIC: {
+      beefWeaned: massPerMass('CO2e', 'Liveweight', 12.02),
+      beefPrime: massPerMass('CO2e', 'Liveweight', 11.5),
+      beefManufacturing: massPerMass('CO2e', 'Liveweight', 8.17),
+      sheepMutton: massPerMass('CO2e', 'Liveweight', 8.08),
+      sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 10.0),
+    },
+    WA: {
+      beefWeaned: massPerMass('CO2e', 'Liveweight', 12.43),
+      beefPrime: massPerMass('CO2e', 'Liveweight', 20.8),
+      beefManufacturing: massPerMass('CO2e', 'Liveweight', 13.1),
+      sheepMutton: massPerMass('CO2e', 'Liveweight', 5.45),
+      sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 5.67),
+    },
   },
 
   /**

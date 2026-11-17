@@ -127,6 +127,22 @@ export const stateOrRegionToState = applyTranslation(
   },
 );
 
+export const extendedRegionToState = applyTranslation(
+  (region: ExtendedRegion): State => {
+    if (region === 'ACT/NSW') {
+      return 'NSW';
+    } else if (isNTRegion(region)) {
+      return 'NT';
+    } else if (isQLDRegion(region)) {
+      return 'QLD';
+    } else if (isState(region)) {
+      return region;
+    } else {
+      return 'WA';
+    }
+  },
+);
+
 const componentToEquivalentFertiliser: Record<
   InorganicFertiliserComponentWithEquivalentType,
   InorganicFertiliserType

@@ -13,6 +13,7 @@ import { DairyPurchasedLivestockInput } from '../scope3/15.1-purchased-livestock
 import { OtherPurchasedLivestockInput } from '../scope3/15.1-purchased-livestock/purchased-other.input';
 import { PigPurchasedLivestockInput } from '../scope3/15.1-purchased-livestock/purchased-pig.input';
 import { PoultryPurchasedLivestockInput } from '../scope3/15.1-purchased-livestock/purchased-poultry.input';
+import { SheepPurchasedLivestockInput } from '../scope3/15.1-purchased-livestock/purchased-sheep.input';
 import { checkDairyBreed } from './dairy-domain';
 import {
   checkBeefPurchaseCategory,
@@ -23,6 +24,8 @@ import {
   checkPigWeightClass,
   checkPoultryWeightClass,
   checkSeason,
+  checkSheepClass,
+  checkState,
   convertBeefClass,
   convertExtendedRegion,
 } from './livestock-domain';
@@ -150,6 +153,27 @@ const getOtherPurchase = (
   };
 };
 
+const getSheepPurchase = (
+  cellFn: (col: string) => string | undefined,
+  method: '1' | '2',
+): SheepPurchasedLivestockInput => {
+  const headPurchased = nv(Number(cellFn(columnHeadPurchased)));
+  if (method === '2') {
+    return {
+      type: 'Sheep',
+      headPurchased,
+      ...getMethod2Fields(cellFn),
+    };
+  }
+  return {
+    type: 'Sheep',
+    headPurchased,
+    class: checkSheepClass(cellFn(columnClass)),
+    state: checkState(cellFn(columnRegion)),
+    season: checkSeason(cellFn(columnSeason)?.toLowerCase()),
+  };
+};
+
 const getMethod2Fields = (cellFn: (col: string) => string | undefined) => {
   const liveweightMethod2 = nv(Number(cellFn('G')));
   const emissionFactorMethod2 = nv(Number(cellFn('I')));
@@ -185,6 +209,8 @@ const getCalculatorInput = (
     purchase = getPoultryPurchase(cell, method);
   } else if (livestockPurchaseType === 'Other') {
     purchase = getOtherPurchase(cell, method);
+  } else if (livestockPurchaseType === 'Sheep') {
+    purchase = getSheepPurchase(cell, method);
   }
 
   if (purchase === undefined) {
@@ -207,7 +233,9 @@ describe('15.1 Purchased Livestock', () => {
       '15.1',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1');
+    const inputsAndOutputs = extractInputsAndOutput(sheet, 11, '1', {
+      expectedTests: 49,
+    });
 
     compareInputsAndOutputs(
       inputsAndOutputs,

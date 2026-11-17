@@ -1,4 +1,5 @@
 import { ExecutionContext } from '@/calculators/executionContext';
+import { extendedRegionToState } from '@/constants/translations';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
@@ -59,6 +60,29 @@ function getEmissionsFactorForOtherLivestock(
   });
 }
 
+/**
+ * Beef has state-specific emission factors, looked up from the state of origin when the purchase
+ * supplies a region (method 1 liveweight). A purchase with a supplied liveweight has no origin, so it
+ * falls back to the national factor.
+ */
+function getEmissionsFactorForBeef(
+  purchase: Extract<
+    PurchasedLivestockInputTransformed,
+    { type: 'Beef'; category: unknown }
+  >,
+  constants: ConstantsForPurchasedLivestock,
+) {
+  if ('region' in purchase) {
+    return selectConstant(
+      constants.LIVESTOCK,
+      'PURCHASED_EF_BY_STATE',
+      extendedRegionToState(purchase.region),
+      purchase.category,
+    );
+  }
+  return selectConstant(constants.LIVESTOCK, 'PURCHASED_EF', purchase.category);
+}
+
 /** Prime lamb vs mutton, derived from `class` - see `purchased-sheep.input.ts`. */
 const sheepPurchaseCategoryFromClass = (
   purchase: Extract<
@@ -67,6 +91,29 @@ const sheepPurchaseCategoryFromClass = (
   >,
 ) =>
   purchase.class.unit === 'lambsHoggets' ? 'sheepPrimeLamb' : 'sheepMutton';
+
+/**
+ * Sheep, like beef, has state-specific emission factors, looked up from the origin state when the
+ * purchase supplies one (method 1 liveweight), and otherwise the national factor.
+ */
+function getEmissionsFactorForSheep(
+  purchase: Extract<
+    PurchasedLivestockInputTransformed,
+    { type: 'Sheep'; class: unknown }
+  >,
+  constants: ConstantsForPurchasedLivestock,
+) {
+  const category = sheepPurchaseCategoryFromClass(purchase);
+  if ('state' in purchase) {
+    return selectConstant(
+      constants.LIVESTOCK,
+      'PURCHASED_EF_BY_STATE',
+      purchase.state,
+      category,
+    );
+  }
+  return selectConstant(constants.LIVESTOCK, 'PURCHASED_EF', category);
+}
 
 /**
  * Every livestock type has its own independent method 1 / method 2 split for
@@ -86,6 +133,11 @@ function getEmissionFactor(
 
   switch (purchase.type) {
     case 'Beef':
+      return captureMethod1Or2Value(
+        getEmissionsFactorForBeef(purchase, constants),
+        undefined,
+      );
+
     case 'Dairy':
     case 'Pig':
       return captureMethod1Or2Value(
@@ -107,11 +159,7 @@ function getEmissionFactor(
 
     case 'Sheep':
       return captureMethod1Or2Value(
-        selectConstant(
-          constants.LIVESTOCK,
-          'PURCHASED_EF',
-          sheepPurchaseCategoryFromClass(purchase),
-        ),
+        getEmissionsFactorForSheep(purchase, constants),
         undefined,
       );
   }
