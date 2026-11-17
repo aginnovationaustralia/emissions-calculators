@@ -37,6 +37,7 @@ const substanceDisplayNames: Record<Substance, string> = {
   'Freight Goods': 'freight goods',
   Eggs: 'eggs',
   Fish: 'fish',
+  Seed: 'seed',
 };
 
 export const substanceDisplayName = (substance: Substance): string =>
