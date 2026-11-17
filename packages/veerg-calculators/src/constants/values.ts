@@ -281,7 +281,7 @@ export const commonConstants: CommonConstants = {
     '2,4-D': massPerMass('CO2e', 'Chemical', 5.2),
     Atrazine: massPerMass('CO2e', 'Chemical', 8.38),
     Diuron: massPerMass('CO2e', 'Chemical', 8.8),
-    // Glyphosate: massPerMass('CO2e', 'Chemical', 10.3),
+    Glyphosate: massPerMass('CO2e', 'Chemical', 10.3),
     Mancozeb: massPerMass('CO2e', 'Chemical', 4.55),
     MCPA: massPerMass('CO2e', 'Chemical', 5.6),
     Metolachlor: massPerMass('CO2e', 'Chemical', 8.06),
@@ -1370,7 +1370,7 @@ export const cropConstants: CropConstants = {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.46),
       Urea: massPerMass('Urea', 'Inorganic Fertiliser', 1),
       Volatilises: fracGasfUreaBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 1.5),
+      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.968),
     },
     'Sulphate of Ammonia (SOA)': {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.21),
@@ -2539,7 +2539,7 @@ export const poultryConstants: PoultryConstants = {
    * @description Emission factor for 'Chicken for slaughtering, conventional rearing system'
    * @reference AusLCI V48
    */
-  PURCHASED_LIVESTOCK_EF: massPerMass('CO2e', 'Liveweight', 1.03),
+  PURCHASED_LIVESTOCK_EF: massPerMass('CO2e', 'Liveweight', 1.36),
 
   /*
    * @description Poultry liveweights
@@ -2684,7 +2684,7 @@ export const livestockConstants: LivestockConstants = {
         'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.368),
       },
       Brazil: {
-        'Soybean meal': massPerMass('CO2e', 'Purchased Feed', 1.23),
+        'Soybean meal': massPerMass('CO2e', 'Purchased Feed', 0.426),
       },
     },
   },
@@ -2935,7 +2935,7 @@ export const livestockConstants: LivestockConstants = {
    */
   PURCHASED_EF: {
     // Dairy
-    dairySpent: massPerMass('CO2e', 'Liveweight', 3.98),
+    dairySpent: massPerMass('CO2e', 'Liveweight', 4.41),
     // Dairy and beef
     beefManufacturing: massPerMass('CO2e', 'Liveweight', 11.0),
     beefPrime: massPerMass('CO2e', 'Liveweight', 12.4),
@@ -2944,14 +2944,14 @@ export const livestockConstants: LivestockConstants = {
     sheepMutton: massPerMass('CO2e', 'Liveweight', 6.03),
     sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 6.08),
     // Pigs
-    pigsDefault: massPerMass('CO2e', 'Liveweight', 3.11),
-    pigsConventionalRearingCoveredPond: massPerMass('CO2e', 'Liveweight', 2.05),
+    pigsDefault: massPerMass('CO2e', 'Liveweight', 3.38),
+    pigsConventionalRearingCoveredPond: massPerMass('CO2e', 'Liveweight', 2.19),
     pigsConventionalRearingUncoveredEffluentPond: massPerMass(
       'CO2e',
       'Liveweight',
-      4.95,
+      5.34,
     ),
-    pigsDeepLitterRearing: massPerMass('CO2e', 'Liveweight', 1.66),
+    pigsDeepLitterRearing: massPerMass('CO2e', 'Liveweight', 1.92),
     pigsOutdoorRearing: massPerMass('CO2e', 'Liveweight', 2.06),
   },
 
