@@ -61,9 +61,8 @@ function getEmissionsFactorForOtherLivestock(
 }
 
 /**
- * Beef has state-specific emission factors, looked up from the state of origin when the purchase
- * supplies a region (method 1 liveweight). A purchase with a supplied liveweight has no origin, so it
- * falls back to the national factor.
+ * Beef emission factors are state-specific. The origin state comes from `region` when the purchase
+ * uses method 1 liveweight, and from `state` when it supplies its own liveweight.
  */
 function getEmissionsFactorForBeef(
   purchase: Extract<
@@ -72,15 +71,16 @@ function getEmissionsFactorForBeef(
   >,
   constants: ConstantsForPurchasedLivestock,
 ) {
-  if ('region' in purchase) {
-    return selectConstant(
-      constants.LIVESTOCK,
-      'PURCHASED_EF_BY_STATE',
-      extendedRegionToState(purchase.region),
-      purchase.category,
-    );
-  }
-  return selectConstant(constants.LIVESTOCK, 'PURCHASED_EF', purchase.category);
+  const state =
+    'region' in purchase
+      ? extendedRegionToState(purchase.region)
+      : purchase.state;
+  return selectConstant(
+    constants.LIVESTOCK,
+    'PURCHASED_EF_BY_STATE',
+    state,
+    purchase.category,
+  );
 }
 
 /** Prime lamb vs mutton, derived from `class` - see `purchased-sheep.input.ts`. */
@@ -92,10 +92,7 @@ const sheepPurchaseCategoryFromClass = (
 ) =>
   purchase.class.unit === 'lambsHoggets' ? 'sheepPrimeLamb' : 'sheepMutton';
 
-/**
- * Sheep, like beef, has state-specific emission factors, looked up from the origin state when the
- * purchase supplies one (method 1 liveweight), and otherwise the national factor.
- */
+/** Sheep emission factors are state-specific, looked up from the origin state. */
 function getEmissionsFactorForSheep(
   purchase: Extract<
     PurchasedLivestockInputTransformed,
@@ -103,16 +100,12 @@ function getEmissionsFactorForSheep(
   >,
   constants: ConstantsForPurchasedLivestock,
 ) {
-  const category = sheepPurchaseCategoryFromClass(purchase);
-  if ('state' in purchase) {
-    return selectConstant(
-      constants.LIVESTOCK,
-      'PURCHASED_EF_BY_STATE',
-      purchase.state,
-      category,
-    );
-  }
-  return selectConstant(constants.LIVESTOCK, 'PURCHASED_EF', category);
+  return selectConstant(
+    constants.LIVESTOCK,
+    'PURCHASED_EF_BY_STATE',
+    purchase.state,
+    sheepPurchaseCategoryFromClass(purchase),
+  );
 }
 
 /**

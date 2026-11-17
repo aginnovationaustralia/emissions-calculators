@@ -1,4 +1,5 @@
 import { getSheet } from '@/test/common/sheets';
+import { testContext } from '@/test/Grains/context';
 import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
 import { calculatePurchasedLivestockEmissions } from '../scope3/15.1-purchased-livestock';
@@ -257,5 +258,71 @@ describe('15.1 Purchased Livestock', () => {
       calculatePurchasedLivestockEmissions,
       '15.1',
     );
+  });
+});
+
+describe('15.1 Purchased Livestock, method 1 emission factor with method 2 liveweight', () => {
+  const calculate = (purchase: PurchasedLivestockInput) =>
+    calculatePurchasedLivestockEmissions(
+      HasPurchasedLivestockInputSchema.parse({
+        purchasedLivestock: [purchase],
+      }),
+      testContext(),
+    )
+      .unit.store.value.div(1000)
+      .toNumber();
+
+  it('uses the state emission factor for beef', () => {
+    // 10 head * 500 kg * 20.8 (WA beefPrime) / 1000
+    expect(
+      calculate({
+        type: 'Beef',
+        headPurchased: nv(10),
+        category: 'beefPrime',
+        state: 'WA',
+        method2LiveweightKilograms: nv(500),
+      }),
+    ).toBeCloseTo(104, 8);
+  });
+
+  it('uses the NSW emission factor for ACT beef', () => {
+    // 10 head * 500 kg * 11.3 (NSW beefPrime) / 1000
+    expect(
+      calculate({
+        type: 'Beef',
+        headPurchased: nv(10),
+        category: 'beefPrime',
+        state: 'ACT',
+        method2LiveweightKilograms: nv(500),
+      }),
+    ).toBeCloseTo(56.5, 8);
+  });
+
+  it('uses the state emission factor for sheep', () => {
+    // 100 head * 40 kg * 10.0 (VIC sheepPrimeLamb) / 1000
+    expect(
+      calculate({
+        type: 'Sheep',
+        headPurchased: nv(100),
+        class: 'lambsHoggets',
+        state: 'VIC',
+        method2LiveweightKilograms: nv(40),
+      }),
+    ).toBeCloseTo(40, 8);
+  });
+
+  it('requires a state', () => {
+    expect(() =>
+      HasPurchasedLivestockInputSchema.parse({
+        purchasedLivestock: [
+          {
+            type: 'Beef',
+            headPurchased: nv(10),
+            category: 'beefPrime',
+            method2LiveweightKilograms: nv(500),
+          },
+        ],
+      }),
+    ).toThrow();
   });
 });
