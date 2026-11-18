@@ -113,8 +113,8 @@ export const zeroFuel: FuelInput = {
   stationary: [
     {
       fuelClass: 'Gaseous fuels',
-      fuelType: 'Natural gas',
-      amountKilolitres: nv(0),
+      fuelType: 'Natural gas via pipeline',
+      amountCubicMetres: nv(0),
     },
   ],
 };

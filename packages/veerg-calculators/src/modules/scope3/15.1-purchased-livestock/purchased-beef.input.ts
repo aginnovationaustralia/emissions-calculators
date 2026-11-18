@@ -3,6 +3,7 @@ import {
   BeefPurchaseCategories,
   ExtendedRegions,
   Seasons,
+  States,
 } from '@/constants/enums';
 import { enumInput } from '@/tools/inputs';
 import { PURCH_LIVESTOCK_15_1 } from '@/tools/modules';
@@ -25,6 +26,17 @@ const beefEmissionFactorMethod1Fields = {
   category: enumInput(BeefPurchaseCategories, {
     name: 'Purchase category',
     description: 'The category of the purchased animals',
+    modules: [PURCH_LIVESTOCK_15_1],
+  }),
+};
+
+// Method 1 emission factors are state-based. With method 1 liveweight the state
+// is derived from `region`; with method 2 liveweight there is no region, so the
+// origin state is asked for directly.
+const beefEmissionFactorStateFields = {
+  state: enumInput(States, {
+    name: 'Origin state',
+    description: 'The origin state of the purchased livestock',
     modules: [PURCH_LIVESTOCK_15_1],
   }),
 };
@@ -76,6 +88,7 @@ const BeefPurchasedLivestockMethod1EFMethod1LWSchema = object({
 const BeefPurchasedLivestockMethod1EFMethod2LWSchema = object({
   ...beefBaseFields,
   ...beefEmissionFactorMethod1Fields,
+  ...beefEmissionFactorStateFields,
   ...beefLiveweightMethod2Fields,
 }).meta({ title: 'Method 1 emission factor, method 2 liveweight' });
 

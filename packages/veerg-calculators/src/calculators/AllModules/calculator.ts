@@ -461,9 +461,12 @@ const calculateScope3AllModules = (
   // Other Purchased Goods and Services 15.9
   // (this module already tolerates an undefined/empty list, returning zero itself)
   const otherPurchasedGoodsAndServices =
-    calculateOtherPurchasedGoodsAndServicesEmissions({
-      otherPurchasedGoodsAndServices: input.otherPurchasedGoodsAndServices,
-    });
+    calculateOtherPurchasedGoodsAndServicesEmissions(
+      {
+        otherPurchasedGoodsAndServices: input.otherPurchasedGoodsAndServices,
+      },
+      context,
+    );
 
   // Upstream Emissions from Fuel 15.10
   const fuel = input.fuel

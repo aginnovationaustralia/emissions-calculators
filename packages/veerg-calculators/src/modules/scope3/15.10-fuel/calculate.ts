@@ -40,6 +40,7 @@ export const calculateScope3EmissionsFromFuelTransport = (
   return sum(emissionsRecords, zeroCO2e, {
     name: 'EWTT,trans,q',
     references: ['15.10.1.1 (2)'],
+    intermediate: true,
   });
 };
 
@@ -116,10 +117,12 @@ const calculateScope3EmissionsFromFuelStationaryNaturalGas = (
   context: ExecutionContext,
 ) => {
   const { constants } = context;
-  const qTransQ = fuel.amountKilolitres;
+  const qTransQ = fuel.amountCubicMetres;
   const ecTransQ = selectConstant(
     constants.COMMON,
     'NATURAL_GAS_FACTORS',
+    'SCOPE1_EFS',
+    fuel.fuelType,
     'ENERGY_CONTENT_FACTOR',
   );
   const efTrans3Q = selectConstant(
@@ -151,6 +154,7 @@ export const calculateScope3EmissionsFromFuelStationary = (
   return sum(emissionsRecords, zeroCO2e, {
     name: 'EWTT,SC,q',
     references: ['15.10.1.1 (3)'],
+    intermediate: true,
   });
 };
 

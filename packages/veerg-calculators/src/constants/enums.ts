@@ -86,7 +86,7 @@ export const InorganicFertiliserTypes = [
 ] as const;
 export type InorganicFertiliserType = (typeof InorganicFertiliserTypes)[number];
 
-export const OrganicFertiliserTypes = [
+export const OrganicFertiliserTypesWithDefaults = [
   'Dairy cattle',
   'Beef cattle',
   'Poultry',
@@ -94,7 +94,15 @@ export const OrganicFertiliserTypes = [
   'Sheep',
   'Horses/Mules',
 ] as const;
-export type OrganicFertiliserType = (typeof OrganicFertiliserTypes)[number];
+export type OrganicFertiliserType =
+  (typeof OrganicFertiliserTypesWithDefaults)[number];
+
+export const OrganicFertiliserTypesWithoutDefaults = [
+  'Other livestock manure',
+  'Other organic fertiliser',
+] as const;
+export type OrganicFertiliserTypeWithoutDefaults =
+  (typeof OrganicFertiliserTypesWithoutDefaults)[number];
 
 export const PrimaryPigsMMSWithSolidSeparationTypes = [
   'anaerobicLagoon',
@@ -342,6 +350,7 @@ export const InorganicFertiliserComponentNonRegionalWithEquivalentTypes = [
   'Calcium Ammonium Nitrate',
   'Sulphate of Ammonia',
   'Single superphosphate',
+  'Calcium nitrate',
 ] as const;
 export type InorganicFertiliserComponentNonRegionalWithEquivalentType =
   (typeof InorganicFertiliserComponentNonRegionalWithEquivalentTypes)[number];
@@ -536,6 +545,11 @@ export const FuelStationaryVolumeBasedLiquidTypes = [
   'Liquefied petroleum gas',
   'Naphtha',
   'Other petroleum products',
+  'Biodiesel',
+  'Ethanol',
+  'Other biofuels',
+  'Renewable aviation kerosene',
+  'Renewable diesel',
 ] as const;
 export type FuelStationaryVolumeBasedLiquidType =
   (typeof FuelStationaryVolumeBasedLiquidTypes)[number];
@@ -546,6 +560,11 @@ export const FuelStationaryLiquidTypes = [
 ] as const;
 export type FuelStationaryLiquidType =
   (typeof FuelStationaryLiquidTypes)[number];
+
+// 'Natural gas' is natural gas distributed in a pipeline (NGAF Table 5)
+export const FuelStationaryGaseousTypes = ['Natural gas via pipeline'] as const;
+export type FuelStationaryGaseousType =
+  (typeof FuelStationaryGaseousTypes)[number];
 
 export const AgrochemicalTypes = [
   // Guidelines appendix
@@ -558,7 +577,7 @@ export const AgrochemicalTypes = [
   '2,4-D',
   'Atrazine',
   'Diuron',
-  // 'Glyphosate', AusLCI includes a value for glyphosate, but the guidelines already supplies a value for generic herbicides including glyphosate
+  'Glyphosate',
   'Mancozeb',
   'MCPA',
   'Metolachlor',
@@ -650,6 +669,7 @@ export const PurchasedFeedLivestockTypesPerRegion = {
     'Lucerne hay',
     'Oaten hay',
     'Pasture hay',
+    'Whole Sardines',
   ] as const,
   TAS: [
     'Barley grain',
@@ -773,7 +793,11 @@ export const DairyMMSTypesWithPasture = [
 ] as const;
 export type DairyMMSTypeWithPasture = (typeof DairyMMSTypesWithPasture)[number];
 
-export const BeefPurchaseCategories = ['beefPrime', 'beefWeaned'] as const;
+export const BeefPurchaseCategories = [
+  'beefPrime',
+  'beefWeaned',
+  'beefManufacturing',
+] as const;
 export type BeefPurchaseCategory = (typeof BeefPurchaseCategories)[number];
 export const DairyPurchaseCategories = [
   'dairySpent',
@@ -942,6 +966,40 @@ export const PurchasedPackagingByMassTypes = [
 ] as const;
 export type PurchasedPackagingByMassType =
   (typeof PurchasedPackagingByMassTypes)[number];
+
+export const OtherPurchasedSeedTypes = [
+  'Barley grain (for seed)',
+  'Maize grain (for seed)',
+  'Oat grain (for seed)',
+  'Sorghum grain (for seed)',
+  'Wheat grain (for seed)',
+] as const;
+export type OtherPurchasedSeedType = (typeof OtherPurchasedSeedTypes)[number];
+
+export const OtherPurchasedMiscellaneousTypes = [
+  'Animal ear tags (large)',
+  'Animal ear tags (small)',
+  'Nylon netting',
+] as const;
+export type OtherPurchasedMiscellaneousType =
+  (typeof OtherPurchasedMiscellaneousTypes)[number];
+
+export const OtherPurchasedCleaningChemicalTypes = [
+  'Alkaline cleaner',
+  'Bleach',
+  'Phosphoric acid',
+] as const;
+export type OtherPurchasedCleaningChemicalType =
+  (typeof OtherPurchasedCleaningChemicalTypes)[number];
+
+export const OtherPurchasedPharmacyChemicalTypes = [
+  'Parasite control for cattle (external), dipping',
+  'Parasite control for cattle (internal)',
+  'Parasite control for sheep (external)',
+  'Parasite control for sheep (internal)',
+] as const;
+export type OtherPurchasedPharmacyChemicalType =
+  (typeof OtherPurchasedPharmacyChemicalTypes)[number];
 
 export const FreightTypes = [
   'Air freight, domestic',

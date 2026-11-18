@@ -36,6 +36,7 @@ import {
   Seasons,
   SecondaryFeedlotMMSType,
   SecondaryFeedlotMMSTypes,
+  SheepClasses,
   State,
   StateOrRegion,
   StateOrRegions,
@@ -246,3 +247,5 @@ export const checkPoultryWeightClass = createValueCheck(
   PoultryWeightClasses,
   'Poultry weight class',
 );
+
+export const checkSheepClass = createValueCheck(SheepClasses, 'Sheep class');

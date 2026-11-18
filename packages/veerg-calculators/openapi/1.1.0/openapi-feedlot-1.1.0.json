@@ -1679,6 +1679,13 @@
                                     ],
                                     "$ref": "#/components/schemas/BeefPurchaseCategory"
                                   },
+                                  "state": {
+                                    "description": "The origin state of the purchased livestock",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
+                                    "$ref": "#/components/schemas/State"
+                                  },
                                   "method2LiveweightKilograms": {
                                     "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
                                     "x-modules": [
@@ -1705,6 +1712,7 @@
                                   "type",
                                   "headPurchased",
                                   "category",
+                                  "state",
                                   "method2LiveweightKilograms"
                                 ],
                                 "additionalProperties": false,
@@ -1988,59 +1996,208 @@
                           "additionalProperties": false
                         },
                         "otherPurchasedGoodsAndServices": {
-                          "description": "Data for any additional purchased goods or services that were used within the reporting period for this enterprise that can't be captured by other inputs.",
+                          "description": "Data for any additional purchased goods or services that were used within the reporting period for this enterprise that can't be captured by other inputs. Each item is either a known good (seed, miscellaneous, cleaning chemical or pharmacy chemical) with a built-in emissions factor, or any other item with a custom emissions factor.",
                           "type": "array",
                           "items": {
-                            "type": "object",
-                            "properties": {
-                              "quantity": {
-                                "description": "The quantity of the goods or services purchased, in any appropriate unit. Note that the unit MUST correspond with the unit of the provided emissions factor. (number)",
-                                "x-modules": [
-                                  "15.9"
-                                ],
+                            "oneOf": [
+                              {
                                 "type": "object",
                                 "properties": {
-                                  "value": {
-                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                  "seedType": {
+                                    "description": "The type of seed purchased.",
+                                    "$ref": "#/components/schemas/OtherPurchasedSeedType"
                                   },
-                                  "quality": {
-                                    "default": {},
-                                    "$ref": "#/components/schemas/QualityTable"
+                                  "quantityKilograms": {
+                                    "description": "The mass of seed purchased, in kilograms (kg). (kilograms seed)",
+                                    "x-modules": [
+                                      "15.9"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "kilograms seed"
                                   }
                                 },
                                 "required": [
-                                  "value"
+                                  "seedType",
+                                  "quantityKilograms"
                                 ],
                                 "additionalProperties": false,
-                                "x-units": "number"
+                                "title": "Seed"
                               },
-                              "emissionFactor": {
-                                "description": "The emissions factor for the purchased goods or services, per unit of good or service. (tonnes CO2e)",
-                                "x-modules": [
-                                  "15.9"
-                                ],
+                              {
                                 "type": "object",
                                 "properties": {
-                                  "value": {
-                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                  "miscellaneousType": {
+                                    "description": "The type of miscellaneous item purchased.",
+                                    "$ref": "#/components/schemas/OtherPurchasedMiscellaneousType"
                                   },
-                                  "quality": {
-                                    "default": {},
-                                    "$ref": "#/components/schemas/QualityTable"
+                                  "quantity": {
+                                    "description": "The quantity purchased: the number of tags for animal ear tags, or kilograms (kg) for nylon netting. (number)",
+                                    "x-modules": [
+                                      "15.9"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "number"
                                   }
                                 },
                                 "required": [
-                                  "value"
+                                  "miscellaneousType",
+                                  "quantity"
                                 ],
                                 "additionalProperties": false,
-                                "x-units": "tonnes CO2e"
+                                "title": "Miscellaneous"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "cleaningChemicalType": {
+                                    "description": "The type of cleaning chemical purchased.",
+                                    "$ref": "#/components/schemas/OtherPurchasedCleaningChemicalType"
+                                  },
+                                  "quantityKilograms": {
+                                    "description": "The mass of cleaning chemical purchased, in kilograms (kg). (kilograms chemical)",
+                                    "x-modules": [
+                                      "15.9"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "kilograms chemical"
+                                  }
+                                },
+                                "required": [
+                                  "cleaningChemicalType",
+                                  "quantityKilograms"
+                                ],
+                                "additionalProperties": false,
+                                "title": "Cleaning chemicals"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "pharmacyChemicalType": {
+                                    "description": "The type of pharmacy chemical treatment used.",
+                                    "$ref": "#/components/schemas/OtherPurchasedPharmacyChemicalType"
+                                  },
+                                  "headTreated": {
+                                    "description": "The number of animals treated with the pharmacy chemical. (head)",
+                                    "x-modules": [
+                                      "15.9"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "head"
+                                  }
+                                },
+                                "required": [
+                                  "pharmacyChemicalType",
+                                  "headTreated"
+                                ],
+                                "additionalProperties": false,
+                                "title": "Pharmacy chemicals"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "quantity": {
+                                    "description": "The quantity of the goods or services purchased, in any appropriate unit. Note that the unit MUST correspond with the unit of the provided emissions factor. (number)",
+                                    "x-modules": [
+                                      "15.9"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "number"
+                                  },
+                                  "emissionFactor": {
+                                    "description": "The emissions factor for the purchased goods or services, per unit of good or service. (tonnes CO2e)",
+                                    "x-modules": [
+                                      "15.9"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "tonnes CO2e"
+                                  }
+                                },
+                                "required": [
+                                  "quantity",
+                                  "emissionFactor"
+                                ],
+                                "additionalProperties": false,
+                                "title": "Custom emissions factor"
                               }
-                            },
-                            "required": [
-                              "quantity",
-                              "emissionFactor"
-                            ],
-                            "additionalProperties": false
+                            ]
                           }
                         },
                         "liveweightSoldKilograms": {
@@ -6307,11 +6464,15 @@
                       "const": "Gaseous fuels"
                     },
                     "fuelType": {
-                      "type": "string",
-                      "const": "Natural gas"
+                      "description": "Type of gaseous fuel used in stationary equipment. Natural gas is natural gas distributed in a pipeline",
+                      "x-modules": [
+                        "8.2",
+                        "15.10"
+                      ],
+                      "$ref": "#/components/schemas/FuelStationaryGaseousType"
                     },
-                    "amountKilolitres": {
-                      "description": "Quantity of natural gas consumed by stationary equipment (cubic metres fuel)",
+                    "amountCubicMetres": {
+                      "description": "Volume of gas consumed by stationary equipment (cubic metres fuel)",
                       "x-modules": [
                         "8.2",
                         "15.10"
@@ -6336,10 +6497,10 @@
                   "required": [
                     "fuelClass",
                     "fuelType",
-                    "amountKilolitres"
+                    "amountCubicMetres"
                   ],
                   "additionalProperties": false,
-                  "title": "Gaseous fuels (natural gas)"
+                  "title": "Gaseous fuels"
                 }
               ],
               "type": "object"
@@ -6459,7 +6620,12 @@
           "Solvents: mineral turpentine or white spirits",
           "Liquefied petroleum gas",
           "Naphtha",
-          "Other petroleum products"
+          "Other petroleum products",
+          "Biodiesel",
+          "Ethanol",
+          "Other biofuels",
+          "Renewable aviation kerosene",
+          "Renewable diesel"
         ]
       },
       "FuelStationaryMassBasedLiquidType": {
@@ -6470,6 +6636,13 @@
           "Petroleum coke",
           "Refinery gas and liquids",
           "Refinery coke"
+        ]
+      },
+      "FuelStationaryGaseousType": {
+        "type": "string",
+        "enum": [
+          "Natural gas via pipeline",
+          "Town gas"
         ]
       },
       "SolidWasteNonStreamType": {
@@ -6538,7 +6711,8 @@
         "type": "string",
         "enum": [
           "beefPrime",
-          "beefWeaned"
+          "beefWeaned",
+          "beefManufacturing"
         ]
       },
       "ExtendedRegion": {
@@ -6589,7 +6763,7 @@
         "items": {
           "oneOf": [
             {
-              "oneOf": [
+              "anyOf": [
                 {
                   "oneOf": [
                     {
@@ -6924,7 +7098,8 @@
                                 "Cereal silage",
                                 "Lucerne hay",
                                 "Oaten hay",
-                                "Pasture hay"
+                                "Pasture hay",
+                                "Whole Sardines"
                               ]
                             },
                             "region": {
@@ -7143,8 +7318,7 @@
                   "title": "Aquaculture feed"
                 }
               ],
-              "title": "Method 1 (by feed type)",
-              "type": "object"
+              "title": "Method 1 (by feed type)"
             },
             {
               "type": "object",
@@ -7751,11 +7925,14 @@
                       "const": "Gaseous fuels"
                     },
                     "fuelType": {
-                      "type": "string",
-                      "const": "Natural gas"
+                      "description": "Type of gaseous fuel used in stationary equipment. Natural gas is natural gas distributed in a pipeline",
+                      "x-modules": [
+                        "15.7"
+                      ],
+                      "$ref": "#/components/schemas/FuelStationaryGaseousType"
                     },
-                    "amountKilolitres": {
-                      "description": "Quantity of natural gas consumed by stationary equipment (cubic metres fuel)",
+                    "amountCubicMetres": {
+                      "description": "Volume of gas consumed by stationary equipment (cubic metres fuel)",
                       "x-modules": [
                         "15.7"
                       ],
@@ -7779,10 +7956,10 @@
                   "required": [
                     "fuelClass",
                     "fuelType",
-                    "amountKilolitres"
+                    "amountCubicMetres"
                   ],
                   "additionalProperties": false,
-                  "title": "Gaseous fuels (natural gas)"
+                  "title": "Gaseous fuels"
                 }
               ],
               "type": "object"
@@ -7795,6 +7972,41 @@
           "stationary"
         ],
         "additionalProperties": false
+      },
+      "OtherPurchasedSeedType": {
+        "type": "string",
+        "enum": [
+          "Barley grain (for seed)",
+          "Maize grain (for seed)",
+          "Oat grain (for seed)",
+          "Sorghum grain (for seed)",
+          "Wheat grain (for seed)"
+        ]
+      },
+      "OtherPurchasedMiscellaneousType": {
+        "type": "string",
+        "enum": [
+          "Animal ear tags (large)",
+          "Animal ear tags (small)",
+          "Nylon netting"
+        ]
+      },
+      "OtherPurchasedCleaningChemicalType": {
+        "type": "string",
+        "enum": [
+          "Alkaline cleaner",
+          "Bleach",
+          "Phosphoric acid"
+        ]
+      },
+      "OtherPurchasedPharmacyChemicalType": {
+        "type": "string",
+        "enum": [
+          "Parasite control for cattle (external), dipping",
+          "Parasite control for cattle (internal)",
+          "Parasite control for sheep (external)",
+          "Parasite control for sheep (internal)"
+        ]
       },
       "OutputMethod1": {
         "type": "object",
@@ -7838,6 +8050,13 @@
             },
             "description": "Inputs used in this calculation"
           },
+          "intermediates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputIntermediate"
+            },
+            "description": "Significant values calculated part way through this calculation, such as the parts of a total"
+          },
           "method": {
             "type": "string",
             "const": "1",
@@ -7855,6 +8074,7 @@
           "references",
           "constants",
           "inputs",
+          "intermediates",
           "method",
           "amountGasKgMethod1"
         ],
@@ -7927,6 +8147,28 @@
         ],
         "additionalProperties": false
       },
+      "OutputIntermediate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the intermediate value"
+          },
+          "value": {
+            "description": "Value calculated during the calculation",
+            "type": [
+              "number",
+              "string",
+              "boolean"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "additionalProperties": false
+      },
       "OutputMethod2": {
         "type": "object",
         "properties": {
@@ -7969,6 +8211,13 @@
             },
             "description": "Inputs used in this calculation"
           },
+          "intermediates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputIntermediate"
+            },
+            "description": "Significant values calculated part way through this calculation, such as the parts of a total"
+          },
           "method": {
             "type": "string",
             "const": "2",
@@ -7990,6 +8239,7 @@
           "references",
           "constants",
           "inputs",
+          "intermediates",
           "method",
           "amountGasKgMethod2"
         ],

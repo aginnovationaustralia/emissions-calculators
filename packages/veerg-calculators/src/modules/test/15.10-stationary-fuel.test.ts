@@ -37,7 +37,11 @@ const getCalculatorInput = (
   const state = checkState(cell('D'));
   const units = cell('F');
   const amountObject =
-    units === 'GJ/kL' ? { amountKilolitres: amount } : { amountTonnes: amount };
+    units === 'GJ/kL'
+      ? { amountKilolitres: amount }
+      : units === 'GJ/m3'
+        ? { amountCubicMetres: amount }
+        : { amountTonnes: amount };
 
   const stationaryFuelRecord: StationaryFuelInput = {
     fuelClass,

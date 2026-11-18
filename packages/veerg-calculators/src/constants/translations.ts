@@ -127,6 +127,22 @@ export const stateOrRegionToState = applyTranslation(
   },
 );
 
+export const extendedRegionToState = applyTranslation(
+  (region: ExtendedRegion): State => {
+    if (region === 'ACT/NSW') {
+      return 'NSW';
+    } else if (isNTRegion(region)) {
+      return 'NT';
+    } else if (isQLDRegion(region)) {
+      return 'QLD';
+    } else if (isState(region)) {
+      return region;
+    } else {
+      return 'WA';
+    }
+  },
+);
+
 const componentToEquivalentFertiliser: Record<
   InorganicFertiliserComponentWithEquivalentType,
   InorganicFertiliserType
@@ -138,6 +154,7 @@ const componentToEquivalentFertiliser: Record<
   'Calcium Ammonium Nitrate': 'Calcium Ammonium Nitrate (CAN)',
   'Sulphate of Ammonia': 'Sulphate of Ammonia (SOA)',
   'Single superphosphate': 'Single Super Phosphate',
+  'Calcium nitrate': 'Calcium Nitrate',
   Urea: 'Urea',
 };
 

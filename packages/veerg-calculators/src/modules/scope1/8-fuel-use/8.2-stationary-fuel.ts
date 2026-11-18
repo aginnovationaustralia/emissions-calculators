@@ -96,16 +96,20 @@ const emissionsOfGasForNaturalGas = (
   constants: ConstantsForFuel,
   gasType: FuelEmissionsGasType,
 ): BinaryContainer<Mass<'CO2e'>> => {
-  const qSCq = fuel.amountKilolitres;
+  const qSCq = fuel.amountCubicMetres;
   const efSC1qg = selectConstant(
     constants.COMMON,
     'NATURAL_GAS_FACTORS',
+    'SCOPE1_EFS',
+    fuel.fuelType,
     'SCOPE1_EF',
     gasType,
   );
   const ecSCq = selectConstant(
     constants.COMMON,
     'NATURAL_GAS_FACTORS',
+    'SCOPE1_EFS',
+    fuel.fuelType,
     'ENERGY_CONTENT_FACTOR',
   );
   const energyFromFuel = ecSCq.multiply(qSCq);

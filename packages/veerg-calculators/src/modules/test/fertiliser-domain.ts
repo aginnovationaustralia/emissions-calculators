@@ -11,7 +11,7 @@ import {
   InorganicFertiliserType,
   InorganicFertiliserTypes,
   OrganicFertiliserType,
-  OrganicFertiliserTypes,
+  OrganicFertiliserTypesWithDefaults,
   PastureOnlyProductionSystems,
   ProductionSystemsInorganicFertiliser,
   ProductionSystemsInorganicFertilisers,
@@ -94,7 +94,9 @@ export const checkProductionSystemsInorganicFertilisers = (
 export const checkLivestockManureType = (
   type: string | undefined,
 ): OrganicFertiliserType => {
-  if (!OrganicFertiliserTypes.includes(type as OrganicFertiliserType)) {
+  if (
+    !OrganicFertiliserTypesWithDefaults.includes(type as OrganicFertiliserType)
+  ) {
     throw new Error(`Invalid livestock manure type: ${type}`);
   }
   return type as OrganicFertiliserType;

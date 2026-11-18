@@ -49,7 +49,8 @@ describe('15.4.1 Purchased fertiliser with supplier emission factors', () => {
   it('keeps a method 1 value for a known fertiliser type reported via method 2', () => {
     const store = calculate([urea('2')]);
 
-    expect(store.valueMethod1?.toNumber()).toEqual(1500);
+    // 1000 kg * 0.968 (urea default EF) vs 1000 kg * 0.5 (supplier EF)
+    expect(store.valueMethod1?.toNumber()).toEqual(968);
     expect(store.valueMethod2?.toNumber()).toEqual(500);
   });
 
@@ -60,7 +61,8 @@ describe('15.4.1 Purchased fertiliser with supplier emission factors', () => {
     expect(mixed.valueMethod1?.toNumber()).toEqual(
       allMethod1.valueMethod1?.toNumber(),
     );
-    expect(mixed.valueMethod2?.toNumber()).toEqual(2000);
+    // 1000 kg * 0.968 (method 1 application) + 1000 kg * 0.5 (method 2 application)
+    expect(mixed.valueMethod2?.toNumber()).toEqual(1468);
   });
 
   it('has no method 1 value for Other Fertilisers, which have no default emission factor', () => {

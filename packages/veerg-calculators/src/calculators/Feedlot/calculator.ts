@@ -131,7 +131,7 @@ const calculateScope3FeedlotLot = (
 
   // Other Purchased Goods and Services 15.9
   const otherPurchasedGoodsAndServices =
-    calculateOtherPurchasedGoodsAndServicesEmissions(lot);
+    calculateOtherPurchasedGoodsAndServicesEmissions(lot, context);
 
   // Upstream Emissions from Fuel 15.10
   const fuel = calculateScope3EmissionsFromFuel(lot, context);

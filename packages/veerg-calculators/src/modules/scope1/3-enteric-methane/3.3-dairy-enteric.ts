@@ -39,10 +39,13 @@ const calculateEntericMethaneForClass = (
       'methaneProduction',
     ).named(`MPWenteric,j=${weanedName}`);
 
-    return MPWenteric.multiply(Nj)
-      .multiply(Dj)
-      .named(`Eenteric,j=${weanedName}`)
-      .reference('3.3.1.1 (1)');
+    return (
+      MPWenteric.multiply(Nj)
+        .multiply(Dj)
+        .reference('3.3.1.1 (1)')
+        // Each class's part is reported as an intermediate (e.g. the milking cows' Eenteric,j=milkingCows)
+        .attach({ intermediate: true, name: `Eenteric,j=${weanedName}` })
+    );
   }
 
   const MPj = calculateMilkProduction(milkProduction, constants).named(
@@ -68,10 +71,13 @@ const calculateEntericMethaneForClass = (
     .named(`Mj=${weanedName}`)
     .reference('3.3.1.1 (2)');
 
-  return Mj.multiply(Nj)
-    .multiply(Dj)
-    .named(`Eenteric,j=${weanedName}`)
-    .reference('3.3.1.1 (1)');
+  return (
+    Mj.multiply(Nj)
+      .multiply(Dj)
+      .reference('3.3.1.1 (1)')
+      // Each class's part is reported as an intermediate (e.g. the milking cows' Eenteric,j=milkingCows)
+      .attach({ intermediate: true, name: `Eenteric,j=${weanedName}` })
+  );
 };
 
 export const calculate33EntericMethaneForHerd = (

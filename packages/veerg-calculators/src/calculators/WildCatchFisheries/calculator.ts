@@ -101,7 +101,7 @@ function calculateScope3WildcatchFishery(
 
   // Other Purchased Goods and Services 15.9
   const otherPurchasedGoodsAndServices =
-    calculateOtherPurchasedGoodsAndServicesEmissions(fishery);
+    calculateOtherPurchasedGoodsAndServicesEmissions(fishery, context);
 
   // Upstream Emissions from Fuel 15.10
   const fuel = calculateScope3EmissionsFromFuel(fishery, context);

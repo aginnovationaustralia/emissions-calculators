@@ -12,6 +12,7 @@ import {
   perTonneToPerKg,
   tonnesPerHectareToKgPerSquareMetres,
 } from '@/tools/unit-conversion';
+import type { MassPerMass } from '@/tools/units';
 import {
   countPerArea,
   days,
@@ -37,8 +38,14 @@ import {
   volumePerMass,
   years,
 } from '@/tools/units';
-import { MeanAnnualTemperature, State } from './enums';
 import {
+  BeefPurchaseCategory,
+  MeanAnnualTemperature,
+  SheepPurchaseCategory,
+  State,
+} from './enums';
+import {
+  createGaseousFuelConstantsFromNGAF,
   createStationaryFuelConstantsFromNGAFByMass,
   createStationaryFuelConstantsFromNGAFByVolume,
   createTransportFuelConstantsFromNGAF,
@@ -274,7 +281,7 @@ export const commonConstants: CommonConstants = {
     '2,4-D': massPerMass('CO2e', 'Chemical', 5.2),
     Atrazine: massPerMass('CO2e', 'Chemical', 8.38),
     Diuron: massPerMass('CO2e', 'Chemical', 8.8),
-    // Glyphosate: massPerMass('CO2e', 'Chemical', 10.3),
+    Glyphosate: massPerMass('CO2e', 'Chemical', 10.3),
     Mancozeb: massPerMass('CO2e', 'Chemical', 4.55),
     MCPA: massPerMass('CO2e', 'Chemical', 5.6),
     Metolachlor: massPerMass('CO2e', 'Chemical', 8.06),
@@ -726,6 +733,27 @@ export const commonConstants: CommonConstants = {
         ngafLiquidFuelData,
         'Petroleum based products other than mentioned in the items above',
       ),
+      Biodiesel: createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Biodiesel',
+      ),
+      Ethanol: createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Ethanol for use as a fuel in an internal combustion engine',
+      ),
+      'Other biofuels': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Biofuels other than those mentioned in the items above and below',
+      ),
+      'Renewable aviation kerosene':
+        createStationaryFuelConstantsFromNGAFByVolume(
+          ngafLiquidFuelData,
+          'Renewable aviation kerosene',
+        ),
+      'Renewable diesel': createStationaryFuelConstantsFromNGAFByVolume(
+        ngafLiquidFuelData,
+        'Renewable diesel',
+      ),
     },
   },
 
@@ -751,43 +779,16 @@ export const commonConstants: CommonConstants = {
   },
 
   /**
-   * @description Stationary fuel emission factors for natural gas by volume, in kg CO2-e/GJ
-   * @ngaf2026 Table 5 and Table 6 (Non-Metro values)
-   * @units Energy content is originally expressed in GJ/kL, other factors are originally expressed in kg CO2-e/GJ
+   * @description Stationary fuel emission factors for natural gas fuels by volume
+   * @ngaf2026 Table 5, 6
+   * @units ENERGY_CONTENT_FACTOR is in J/L (from GJ/m^3), SCOPE1_EF values are in kg CO2-e/J
    */
   NATURAL_GAS_FACTORS: {
-    ENERGY_CONTENT_FACTOR: energyPerVolume('Fuel', gjPerKlToJPerLitre(25.3)),
-    SCOPE1_EF: {
-      CO2: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
-            .CO2,
-        ),
-      ),
-      CH4: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
-            .CH4,
-        ),
-      ),
-      N2O: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
-            .N2O,
-        ),
-      ),
-      CO2e: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 5'].table['Natural gas distributed in a pipeline']
-            .COMBINED,
-        ),
+    SCOPE1_EFS: {
+      'Natural gas via pipeline': createGaseousFuelConstantsFromNGAF(
+        'Natural gas distributed in a pipeline',
       ),
     },
-    // Uses NGAF Table 6 non-metro values
     SCOPE3_EF: {
       NSW: massPerEnergy(
         'CO2e',
@@ -1267,6 +1268,53 @@ export const commonConstants: CommonConstants = {
     'Plastic film LDPE': massPerMass('CO2e', 'Packaging', 3.4411615),
     'Plastic sheet HDPE': massPerMass('CO2e', 'Packaging', 3.7225687),
   },
+
+  /**
+   * @description Emission factors for other purchased goods, in a variety of units. Values sourced from AusLCI V48 (March 2026)
+   */
+  OTHER_PURCHASED_FACTORS: {
+    /**
+     * @description Emission factors for seed purchased as other purchased goods, in kg CO2e per kg of seed. Values sourced from AusLCI V48 (March 2026)
+     */
+    SEED: {
+      'Barley grain (for seed)': massPerMass('CO2e', 'Seed', 0.239),
+      'Maize grain (for seed)': massPerMass('CO2e', 'Seed', 0.181),
+      'Oat grain (for seed)': massPerMass('CO2e', 'Seed', 0.27),
+      'Sorghum grain (for seed)': massPerMass('CO2e', 'Seed', 0.232),
+      'Wheat grain (for seed)': massPerMass('CO2e', 'Seed', 0.268),
+    },
+
+    /**
+     * @description Emission factors for miscellaneous other purchased goods, in kg CO2e per unit purchased: per tag for animal ear tags (Australian values), per kg for nylon netting (global value). Values sourced from AusLCI V48 (March 2026)
+     */
+    MISCELLANEOUS: {
+      'Animal ear tags (large)': mass('CO2e', 0.0424),
+      'Animal ear tags (small)': mass('CO2e', 0.0293),
+      'Nylon netting': mass('CO2e', 9.81),
+    },
+
+    /**
+     * @description Emission factors for cleaning chemicals, in kg CO2e per kg of chemical. Global values. Values sourced from AusLCI V48 (March 2026)
+     */
+    CLEANING_CHEMICAL: {
+      'Alkaline cleaner': massPerMass('CO2e', 'Chemical', 0.722),
+      Bleach: massPerMass('CO2e', 'Chemical', 0.804),
+      'Phosphoric acid': massPerMass('CO2e', 'Chemical', 0.907),
+    },
+
+    /**
+     * @description Emission factors for pharmacy chemicals, in kg CO2e per head treated. Global values. Values sourced from AusLCI V48 (March 2026)
+     */
+    PHARMACY_CHEMICAL: {
+      'Parasite control for cattle (external), dipping': massPerHead(
+        'CO2e',
+        0.0547,
+      ),
+      'Parasite control for cattle (internal)': massPerHead('CO2e', 0.0142),
+      'Parasite control for sheep (external)': massPerHead('CO2e', 0.0143),
+      'Parasite control for sheep (internal)': massPerHead('CO2e', 0.00426),
+    },
+  },
 };
 
 const cropResidueRemovedOtherCropTypes: Record<State, RealNumber> = {
@@ -1317,7 +1365,7 @@ export const cropConstants: CropConstants = {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.46),
       Urea: massPerMass('Urea', 'Inorganic Fertiliser', 1),
       Volatilises: fracGasfUreaBased,
-      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 1.5),
+      Scope3EF: massPerMass('CO2e', 'Inorganic Fertiliser', 0.968),
     },
     'Sulphate of Ammonia (SOA)': {
       N: massPerMass('N', 'Inorganic Fertiliser', 0.21),
@@ -1410,6 +1458,8 @@ export const cropConstants: CropConstants = {
     'Potassium - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 0.909),
     'Sulfur - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 2.5),
     'Zinc - Generic': massPerMass('CO2e', 'Inorganic Fertiliser', 4.82),
+    // AusLCI emission factors browse
+    'Calcium nitrate': massPerMass('CO2e', 'Inorganic Fertiliser', 0.53),
   },
 
   /**
@@ -2484,7 +2534,7 @@ export const poultryConstants: PoultryConstants = {
    * @description Emission factor for 'Chicken for slaughtering, conventional rearing system'
    * @reference AusLCI V48
    */
-  PURCHASED_LIVESTOCK_EF: massPerMass('CO2e', 'Liveweight', 1.03),
+  PURCHASED_LIVESTOCK_EF: massPerMass('CO2e', 'Liveweight', 1.36),
 
   /*
    * @description Poultry liveweights
@@ -2497,6 +2547,17 @@ export const poultryConstants: PoultryConstants = {
     hensGte1: liveweight(2),
     pullets: liveweight(1.4),
   },
+};
+
+const purchasedLivestockEfNSW: Record<
+  BeefPurchaseCategory | SheepPurchaseCategory,
+  MassPerMass<'CO2e', 'Liveweight'>
+> = {
+  beefWeaned: massPerMass('CO2e', 'Liveweight', 12.7),
+  beefPrime: massPerMass('CO2e', 'Liveweight', 11.3),
+  beefManufacturing: massPerMass('CO2e', 'Liveweight', 8.21),
+  sheepMutton: massPerMass('CO2e', 'Liveweight', 2.26),
+  sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 8.29),
 };
 
 export const livestockConstants: LivestockConstants = {
@@ -2587,6 +2648,7 @@ export const livestockConstants: LivestockConstants = {
         'Lucerne hay': massPerMass('CO2e', 'Purchased Feed', 0.106),
         'Oaten hay': massPerMass('CO2e', 'Purchased Feed', 0.114),
         'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.313),
+        'Whole Sardines': massPerMass('CO2e', 'Purchased Feed', 0.376), // AusLCI V48
       },
       TAS: {
         'Barley grain': massPerMass('CO2e', 'Purchased Feed', 0.307),
@@ -2617,7 +2679,7 @@ export const livestockConstants: LivestockConstants = {
         'Pasture hay': massPerMass('CO2e', 'Purchased Feed', 0.368),
       },
       Brazil: {
-        'Soybean meal': massPerMass('CO2e', 'Purchased Feed', 1.23),
+        'Soybean meal': massPerMass('CO2e', 'Purchased Feed', 0.426),
       },
     },
   },
@@ -2868,23 +2930,76 @@ export const livestockConstants: LivestockConstants = {
    */
   PURCHASED_EF: {
     // Dairy
-    dairySpent: massPerMass('CO2e', 'Liveweight', 3.98),
+    dairySpent: massPerMass('CO2e', 'Liveweight', 4.41),
     // Dairy and beef
+    beefManufacturing: massPerMass('CO2e', 'Liveweight', 11.0),
     beefPrime: massPerMass('CO2e', 'Liveweight', 12.4),
     beefWeaned: massPerMass('CO2e', 'Liveweight', 13.29),
     // Sheep
     sheepMutton: massPerMass('CO2e', 'Liveweight', 6.03),
     sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 6.08),
     // Pigs
-    pigsDefault: massPerMass('CO2e', 'Liveweight', 3.11),
-    pigsConventionalRearingCoveredPond: massPerMass('CO2e', 'Liveweight', 2.05),
+    pigsDefault: massPerMass('CO2e', 'Liveweight', 3.38),
+    pigsConventionalRearingCoveredPond: massPerMass('CO2e', 'Liveweight', 2.19),
     pigsConventionalRearingUncoveredEffluentPond: massPerMass(
       'CO2e',
       'Liveweight',
-      4.95,
+      5.34,
     ),
-    pigsDeepLitterRearing: massPerMass('CO2e', 'Liveweight', 1.66),
+    pigsDeepLitterRearing: massPerMass('CO2e', 'Liveweight', 1.92),
     pigsOutdoorRearing: massPerMass('CO2e', 'Liveweight', 2.06),
+  },
+
+  /**
+   * @description Scope 3 emission factors for purchased beef cattle and sheep, by state of origin. ACT uses the NSW values. NT has no published sheep values, so it uses the national sheep values.
+   * @reference AusLCI V48
+   */
+  PURCHASED_EF_BY_STATE: {
+    ACT: purchasedLivestockEfNSW,
+    NSW: purchasedLivestockEfNSW,
+    NT: {
+      beefWeaned: massPerMass('CO2e', 'Liveweight', 19.1),
+      beefPrime: massPerMass('CO2e', 'Liveweight', 18.9),
+      beefManufacturing: massPerMass('CO2e', 'Liveweight', 12.2),
+      // No NT sheep values are published; QLD values are used
+      sheepMutton: massPerMass('CO2e', 'Liveweight', 6.33),
+      sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 6.39),
+    },
+    QLD: {
+      beefWeaned: massPerMass('CO2e', 'Liveweight', 20.5),
+      beefPrime: massPerMass('CO2e', 'Liveweight', 13.9),
+      beefManufacturing: massPerMass('CO2e', 'Liveweight', 10.9),
+      sheepMutton: massPerMass('CO2e', 'Liveweight', 6.33),
+      sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 6.39),
+    },
+    SA: {
+      beefWeaned: massPerMass('CO2e', 'Liveweight', 10.8),
+      beefPrime: massPerMass('CO2e', 'Liveweight', 12.3),
+      beefManufacturing: massPerMass('CO2e', 'Liveweight', 7.63),
+      sheepMutton: massPerMass('CO2e', 'Liveweight', 6.18),
+      sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 6.87),
+    },
+    TAS: {
+      beefWeaned: massPerMass('CO2e', 'Liveweight', 13.42),
+      beefPrime: massPerMass('CO2e', 'Liveweight', 11.5),
+      beefManufacturing: massPerMass('CO2e', 'Liveweight', 8.75),
+      sheepMutton: massPerMass('CO2e', 'Liveweight', 7.5),
+      sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 8.66),
+    },
+    VIC: {
+      beefWeaned: massPerMass('CO2e', 'Liveweight', 12.02),
+      beefPrime: massPerMass('CO2e', 'Liveweight', 11.5),
+      beefManufacturing: massPerMass('CO2e', 'Liveweight', 8.17),
+      sheepMutton: massPerMass('CO2e', 'Liveweight', 8.08),
+      sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 10.0),
+    },
+    WA: {
+      beefWeaned: massPerMass('CO2e', 'Liveweight', 12.43),
+      beefPrime: massPerMass('CO2e', 'Liveweight', 20.8),
+      beefManufacturing: massPerMass('CO2e', 'Liveweight', 13.1),
+      sheepMutton: massPerMass('CO2e', 'Liveweight', 5.45),
+      sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 5.67),
+    },
   },
 
   /**

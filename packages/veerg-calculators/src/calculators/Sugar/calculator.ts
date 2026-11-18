@@ -168,7 +168,7 @@ const calculateScope3Sugar = (
 
   // Other Purchased Goods and Services 15.9
   const otherPurchasedGoodsAndServices =
-    calculateOtherPurchasedGoodsAndServicesEmissions(crop);
+    calculateOtherPurchasedGoodsAndServicesEmissions(crop, context);
 
   // Upstream Emissions from Fuel 15.10
   const fuel = calculateScope3EmissionsFromFuel(crop, context);

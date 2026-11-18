@@ -1,4 +1,5 @@
 import { ExecutionContext } from '@/calculators/executionContext';
+import { extendedRegionToState } from '@/constants/translations';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
@@ -59,6 +60,29 @@ function getEmissionsFactorForOtherLivestock(
   });
 }
 
+/**
+ * Beef emission factors are state-specific. The origin state comes from `region` when the purchase
+ * uses method 1 liveweight, and from `state` when it supplies its own liveweight.
+ */
+function getEmissionsFactorForBeef(
+  purchase: Extract<
+    PurchasedLivestockInputTransformed,
+    { type: 'Beef'; category: unknown }
+  >,
+  constants: ConstantsForPurchasedLivestock,
+) {
+  const state =
+    'region' in purchase
+      ? extendedRegionToState(purchase.region)
+      : purchase.state;
+  return selectConstant(
+    constants.LIVESTOCK,
+    'PURCHASED_EF_BY_STATE',
+    state,
+    purchase.category,
+  );
+}
+
 /** Prime lamb vs mutton, derived from `class` - see `purchased-sheep.input.ts`. */
 const sheepPurchaseCategoryFromClass = (
   purchase: Extract<
@@ -67,6 +91,22 @@ const sheepPurchaseCategoryFromClass = (
   >,
 ) =>
   purchase.class.unit === 'lambsHoggets' ? 'sheepPrimeLamb' : 'sheepMutton';
+
+/** Sheep emission factors are state-specific, looked up from the origin state. */
+function getEmissionsFactorForSheep(
+  purchase: Extract<
+    PurchasedLivestockInputTransformed,
+    { type: 'Sheep'; class: unknown }
+  >,
+  constants: ConstantsForPurchasedLivestock,
+) {
+  return selectConstant(
+    constants.LIVESTOCK,
+    'PURCHASED_EF_BY_STATE',
+    purchase.state,
+    sheepPurchaseCategoryFromClass(purchase),
+  );
+}
 
 /**
  * Every livestock type has its own independent method 1 / method 2 split for
@@ -86,6 +126,11 @@ function getEmissionFactor(
 
   switch (purchase.type) {
     case 'Beef':
+      return captureMethod1Or2Value(
+        getEmissionsFactorForBeef(purchase, constants),
+        undefined,
+      );
+
     case 'Dairy':
     case 'Pig':
       return captureMethod1Or2Value(
@@ -107,11 +152,7 @@ function getEmissionFactor(
 
     case 'Sheep':
       return captureMethod1Or2Value(
-        selectConstant(
-          constants.LIVESTOCK,
-          'PURCHASED_EF',
-          sheepPurchaseCategoryFromClass(purchase),
-        ),
+        getEmissionsFactorForSheep(purchase, constants),
         undefined,
       );
   }
@@ -191,6 +232,19 @@ function getLiveweight(
   }
 }
 
+/** A purchase's livestock type and, where it has one, its class, for naming its intermediate. */
+const purchaseLabel = (
+  purchase: PurchasedLivestockInputTransformed,
+): string => {
+  const livestockClass =
+    'class' in purchase && purchase.class !== undefined
+      ? purchase.class.unit
+      : undefined;
+  return typeof livestockClass === 'string'
+    ? `${purchase.type}, ${livestockClass}`
+    : purchase.type;
+};
+
 export const calculatePurchasedLivestockEmissions = (
   activity: HasPurchasedLivestockInputTransformed,
   context: ExecutionContext<ConstantsForPurchasedLivestock>,
@@ -209,9 +263,12 @@ export const calculatePurchasedLivestockEmissions = (
 
     const emissionsFactor = getEmissionFactor(p, constants).named('EFco');
 
+    // Each purchase's emissions are reported as an intermediate named by livestock type and class (e.g.
+    // 'E (Dairy, milkingCows)'), summed over the purchases of that class
     return emissionsFactor
       .multiply(p.headPurchased.multiply(liveweight))
-      .reference('15.1.1.1 (1)');
+      .reference('15.1.1.1 (1)')
+      .attach({ intermediate: true, name: `E (${purchaseLabel(p)})` });
   });
   return sum(purchaseEmissions, zeroCO2e).named('E');
 };

@@ -31,6 +31,7 @@ import {
   BasicCropProductionSystem,
   BeefBreed,
   BeefClass,
+  BeefPurchaseCategory,
   CarsLightCommercialFuelType,
   CarsLightCommercialPre2004FuelType,
   ClimateZoneType,
@@ -44,6 +45,7 @@ import {
   ExtendedRegion,
   FeedlotDurationType,
   FreightType,
+  FuelStationaryGaseousType,
   FuelStationaryMassBasedLiquidType,
   FuelStationarySolidType,
   FuelStationaryVolumeBasedLiquidType,
@@ -61,6 +63,10 @@ import {
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
   OtherLivestockType,
+  OtherPurchasedCleaningChemicalType,
+  OtherPurchasedMiscellaneousType,
+  OtherPurchasedPharmacyChemicalType,
+  OtherPurchasedSeedType,
   PastureType,
   PerennialWoodyCropFull,
   PerennialWoodyCropPartial,
@@ -89,6 +95,7 @@ import {
   Season,
   SecondaryFeedlotMMSType,
   SheepClass,
+  SheepPurchaseCategory,
   SoilAmeliorant,
   SolidWasteManagedTreatmentType,
   SolidWasteNonStreamType,
@@ -120,6 +127,9 @@ export type FuelFactorByVolume = {
   SCOPE1_EF: { [G in FuelEmissionsGasType]: MassPerEnergy<'CO2e'> };
   SCOPE3_EF: MassPerEnergy<'CO2e'>;
 };
+
+/** Gaseous fuels have no per-fuel scope 3 factor; it is state-based instead */
+export type GaseousFuelFactor = Omit<FuelFactorByVolume, 'SCOPE3_EF'>;
 
 export type FuelFactorByMass = {
   ENERGY_CONTENT_FACTOR: EnergyPerMass<'Fuel'>;
@@ -210,8 +220,7 @@ export type CommonConstants = NamedConstants & {
   };
 
   NATURAL_GAS_FACTORS: {
-    ENERGY_CONTENT_FACTOR: EnergyPerVolume<'Fuel'>;
-    SCOPE1_EF: { [G in FuelEmissionsGasType]: MassPerEnergy<'CO2e'> };
+    SCOPE1_EFS: Record<FuelStationaryGaseousType, GaseousFuelFactor>;
     SCOPE3_EF: Record<State, MassPerEnergy<'CO2e'>>;
   };
 
@@ -309,6 +318,20 @@ export type CommonConstants = NamedConstants & {
     PurchasedPackagingByMassType,
     MassPerMass<'CO2e', 'Packaging'>
   >;
+
+  OTHER_PURCHASED_FACTORS: {
+    SEED: Record<OtherPurchasedSeedType, MassPerMass<'CO2e', 'Seed'>>;
+    /** Per unit purchased: per tag for ear tags, per kg for nylon netting */
+    MISCELLANEOUS: Record<OtherPurchasedMiscellaneousType, Mass<'CO2e'>>;
+    CLEANING_CHEMICAL: Record<
+      OtherPurchasedCleaningChemicalType,
+      MassPerMass<'CO2e', 'Chemical'>
+    >;
+    PHARMACY_CHEMICAL: Record<
+      OtherPurchasedPharmacyChemicalType,
+      MassPerHead<'CO2e'>
+    >;
+  };
 };
 
 type CropResidueFactors = {
@@ -652,6 +675,14 @@ export type LivestockConstants = NamedConstants & {
   PURCHASED_EF: Record<
     LivestockPurchaseCategory,
     MassPerMass<'CO2e', 'Liveweight'>
+  >;
+
+  PURCHASED_EF_BY_STATE: Record<
+    State,
+    Record<
+      BeefPurchaseCategory | SheepPurchaseCategory,
+      MassPerMass<'CO2e', 'Liveweight'>
+    >
   >;
 
   OTHER_LIVESTOCK_EF_PROPORTION: Record<OtherLivestockType, RealNumber>;
