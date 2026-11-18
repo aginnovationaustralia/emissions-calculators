@@ -88,7 +88,7 @@ const getCalculatorInputMethod2 = (
 
 const extractInputsAndOutputsMethod2 = createSheetExtractor(
   getCalculatorInputMethod2,
-  'H',
+  'K',
 );
 
 describe('15.13.1 Freight', () => {
