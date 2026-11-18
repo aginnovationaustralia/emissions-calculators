@@ -6527,7 +6527,7 @@
                               "additionalProperties": false
                             },
                             "method2PercentAverageNeutralDetergentFibre": {
-                              "description": "Method 2: Average neutral detergent fibre as a proportion of feed intake (percentage)",
+                              "description": "Method 2: Average neutral detergent fibre as a proportion of feed intake (number)",
                               "x-modules": [
                                 "3.1"
                               ],
@@ -6545,7 +6545,28 @@
                                 "value"
                               ],
                               "additionalProperties": false,
-                              "x-units": "percentage"
+                              "x-units": "number"
+                            },
+                            "method2PercentAverageEtherExtract": {
+                              "description": "Method 2: Average ether extract as a proportion of feed intake (number)",
+                              "x-modules": [
+                                "3.1"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/PercentageNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "number"
                             },
                             "method2FractionDryMatterDigestibility": {
                               "description": "Method 2: Dry matter digestibility of diet used within feedlot system for this cattle group (number)",
@@ -37851,7 +37872,7 @@
                                 "additionalProperties": false
                               },
                               "method2PercentAverageNeutralDetergentFibre": {
-                                "description": "Method 2: Average neutral detergent fibre as a proportion of feed intake (percentage)",
+                                "description": "Method 2: Average neutral detergent fibre as a proportion of feed intake (number)",
                                 "x-modules": [
                                   "3.1"
                                 ],
@@ -37869,7 +37890,28 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "x-units": "percentage"
+                                "x-units": "number"
+                              },
+                              "method2PercentAverageEtherExtract": {
+                                "description": "Method 2: Average ether extract as a proportion of feed intake (number)",
+                                "x-modules": [
+                                  "3.1"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/PercentageNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "number"
                               },
                               "method2FractionDryMatterDigestibility": {
                                 "description": "Method 2: Dry matter digestibility of diet used within feedlot system for this cattle group (number)",
@@ -128618,8 +128660,7 @@
       "FuelStationaryGaseousType": {
         "type": "string",
         "enum": [
-          "Natural gas via pipeline",
-          "Town gas"
+          "Natural gas via pipeline"
         ]
       },
       "ServicesFuelInput": {

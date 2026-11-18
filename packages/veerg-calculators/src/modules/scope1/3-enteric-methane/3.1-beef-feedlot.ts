@@ -1,14 +1,13 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { FeedlotGroupLivestockInputTransformed } from '@/calculators/Feedlot/types/feedlot-group.input';
 import { HasConstants } from '@/constants/types';
-import { selectConstant } from '@/tools/constants';
 import { br, num } from '@/tools/containers';
 import { tenToPowMinus3, zeroCH4 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { massPerHeadPerDay, realNumber } from '@/tools/units';
 import {
   getDryMatterIntake,
-  getGroupDuration,
+  getEtherExtractPercentage,
   getNeutralDetergentFibrePercentage,
 } from '../shared/feedlot/helpers';
 
@@ -24,16 +23,9 @@ function calculateDailyMethaneProductionForGroup(
     NDFj = neutral detergent fibre as a percentage of I j (per cent)
     */
 
-  const herdDurationType = getGroupDuration(group);
-
   const Ij = getDryMatterIntake(group, constants);
 
-  const EEj = selectConstant(
-    constants.FEEDLOT,
-    'FEED',
-    herdDurationType,
-    'etherExtractPercentage',
-  ).named('EEj default');
+  const EEj = getEtherExtractPercentage(group, constants);
   const NDFj = getNeutralDetergentFibrePercentage(group, constants);
 
   // Feed is converted from dry matter to methane production

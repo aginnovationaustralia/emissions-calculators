@@ -20,7 +20,6 @@ import {
   head,
   massPerHeadPerDay,
   massPerMass,
-  percentage,
   realNumber,
 } from '@/tools/units';
 import { object } from '@/types/schemas';
@@ -141,12 +140,23 @@ export const FeedlotGroupLivestockInputSchema = feedlotGroupSharedInputSchema(
   'livestock',
 ).extend({
   method2PercentAverageNeutralDetergentFibre: numberInputOptional(
-    (val) => percentage(val),
+    (val) => realNumber(val),
     {
       name: 'NDFj',
       method: '2',
       description:
         'Method 2: Average neutral detergent fibre as a proportion of feed intake',
+      modules: [ENTERIC_FEEDLOT_3_1],
+    },
+    isPercentage,
+  ),
+  method2PercentAverageEtherExtract: numberInputOptional(
+    (val) => realNumber(val),
+    {
+      name: 'EEj',
+      method: '2',
+      description:
+        'Method 2: Average ether extract as a proportion of feed intake',
       modules: [ENTERIC_FEEDLOT_3_1],
     },
     isPercentage,

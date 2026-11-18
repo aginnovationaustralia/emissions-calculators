@@ -2076,7 +2076,7 @@ export const feedlotConstants: FeedlotConstants = {
 
   // Table A5.5.3.1 National Inventory Report Volume 2 [4]
   /**
-   * @description Feedlot feed and diet properties
+   * @description Feedlot feed and diet properties. Note that the raw values for neutralDetergentFibrePercentage and etherExtractPercentage are used directly in calculations, they should not be divided by 100
    * @appendixA A.1.1.3
    * @nir2024Vol2 A5.5.3.1, A5.3.3.2
    */
@@ -2086,24 +2086,24 @@ export const feedlotConstants: FeedlotConstants = {
       dryMatterDigestibility: realNumber(0.81),
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.14),
       nitrogenRetentionRate: realNumber(0.204),
-      neutralDetergentFibrePercentage: percentage(22),
-      etherExtractPercentage: percentage(4.8),
+      neutralDetergentFibrePercentage: realNumber(22),
+      etherExtractPercentage: realNumber(4.8),
     },
     '81-200 days': {
       dryMatterIntake: massPerHeadPerDay('DryMatter', 10.8),
       dryMatterDigestibility: realNumber(0.81),
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.12),
       nitrogenRetentionRate: realNumber(0.127),
-      neutralDetergentFibrePercentage: percentage(22),
-      etherExtractPercentage: percentage(5),
+      neutralDetergentFibrePercentage: realNumber(22),
+      etherExtractPercentage: realNumber(5),
     },
     '201+ days': {
       dryMatterIntake: massPerHeadPerDay('DryMatter', 8.2),
       dryMatterDigestibility: realNumber(0.81),
       crudeProtein: massPerMass('CrudeProtein', 'DryMatter', 0.12),
       nitrogenRetentionRate: realNumber(0.07),
-      neutralDetergentFibrePercentage: percentage(24),
-      etherExtractPercentage: percentage(5.5),
+      neutralDetergentFibrePercentage: realNumber(24),
+      etherExtractPercentage: realNumber(5.5),
     },
   },
 };
