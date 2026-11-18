@@ -562,10 +562,7 @@ export type FuelStationaryLiquidType =
   (typeof FuelStationaryLiquidTypes)[number];
 
 // 'Natural gas' is natural gas distributed in a pipeline (NGAF Table 5)
-export const FuelStationaryGaseousTypes = [
-  'Natural gas via pipeline',
-  'Town gas',
-] as const;
+export const FuelStationaryGaseousTypes = ['Natural gas via pipeline'] as const;
 export type FuelStationaryGaseousType =
   (typeof FuelStationaryGaseousTypes)[number];
 
@@ -581,7 +578,6 @@ export const AgrochemicalTypes = [
   'Atrazine',
   'Diuron',
   'Glyphosate',
-  // 'Glyphosate', AusLCI includes a value for glyphosate, but the guidelines already supplies a value for generic herbicides including glyphosate
   'Mancozeb',
   'MCPA',
   'Metolachlor',

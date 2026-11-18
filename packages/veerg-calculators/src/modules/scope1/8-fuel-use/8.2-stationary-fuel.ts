@@ -100,6 +100,7 @@ const emissionsOfGasForNaturalGas = (
   const efSC1qg = selectConstant(
     constants.COMMON,
     'NATURAL_GAS_FACTORS',
+    'SCOPE1_EFS',
     fuel.fuelType,
     'SCOPE1_EF',
     gasType,
@@ -107,6 +108,7 @@ const emissionsOfGasForNaturalGas = (
   const ecSCq = selectConstant(
     constants.COMMON,
     'NATURAL_GAS_FACTORS',
+    'SCOPE1_EFS',
     fuel.fuelType,
     'ENERGY_CONTENT_FACTOR',
   );

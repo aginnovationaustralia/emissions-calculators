@@ -121,12 +121,14 @@ const calculateScope3EmissionsFromFuelStationaryNaturalGas = (
   const ecTransQ = selectConstant(
     constants.COMMON,
     'NATURAL_GAS_FACTORS',
+    'SCOPE1_EFS',
     fuel.fuelType,
     'ENERGY_CONTENT_FACTOR',
   );
   const efTrans3Q = selectConstant(
     constants.COMMON,
-    'NATURAL_GAS_SCOPE3_EF',
+    'NATURAL_GAS_FACTORS',
+    'SCOPE3_EF',
     input.state,
   );
   const energyFromFuel = ecTransQ.multiply(qTransQ);

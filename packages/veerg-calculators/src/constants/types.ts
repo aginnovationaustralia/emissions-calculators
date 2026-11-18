@@ -45,6 +45,7 @@ import {
   ExtendedRegion,
   FeedlotDurationType,
   FreightType,
+  FuelStationaryGaseousType,
   FuelStationaryMassBasedLiquidType,
   FuelStationarySolidType,
   FuelStationaryVolumeBasedLiquidType,
@@ -59,13 +60,13 @@ import {
   LivestockPurchaseCategory,
   MatureDairyClass,
   MeanAnnualTemperature,
+  OffRoadAgricultureAndForestryEquipmentFuelType,
+  OrganicFertiliserType,
+  OtherLivestockType,
   OtherPurchasedCleaningChemicalType,
   OtherPurchasedMiscellaneousType,
   OtherPurchasedPharmacyChemicalType,
   OtherPurchasedSeedType,
-  OffRoadAgricultureAndForestryEquipmentFuelType,
-  OrganicFertiliserType,
-  OtherLivestockType,
   PastureType,
   PerennialWoodyCropFull,
   PerennialWoodyCropPartial,
@@ -104,7 +105,6 @@ import {
   State,
   StateOrRegion,
   TertiaryFeedlotMMSType,
-  FuelStationaryGaseousType,
   VesselFuelType,
   WastewaterCommodity,
   WastewaterFacilityType,
@@ -219,8 +219,10 @@ export type CommonConstants = NamedConstants & {
     >;
   };
 
-  NATURAL_GAS_FACTORS: Record<FuelStationaryGaseousType, GaseousFuelFactor>;
-  NATURAL_GAS_SCOPE3_EF: Record<State, MassPerEnergy<'CO2e'>>;
+  NATURAL_GAS_FACTORS: {
+    SCOPE1_EFS: Record<FuelStationaryGaseousType, GaseousFuelFactor>;
+    SCOPE3_EF: Record<State, MassPerEnergy<'CO2e'>>;
+  };
 
   FREIGHT_EMISSIONS: Record<
     FreightType,
