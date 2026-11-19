@@ -48,12 +48,6 @@ export default defineConfig([
         exclude: ['**/*.test.ts', '**/test/**', '**/*.json'],
         tsconfig: './tsconfig.json',
         rootDir: 'src',
-        compilerOptions: {
-          baseUrl: '.',
-          paths: {
-            '@/*': ['src/*']
-          }
-        }
       }),
       nodeResolve({
         preferBuiltins: true,
