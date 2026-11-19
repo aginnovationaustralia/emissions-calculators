@@ -1,12 +1,25 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { ProductionSystemsInorganicFertiliser } from '@/constants';
-import { inorganicFertiliserComponentHasFertiliserEquivalent } from '@/constants/enums';
+import {
+  InorganicFertiliserComponentType,
+  inorganicFertiliserComponentHasFertiliserEquivalent,
+  inorganicFertiliserComponentHasNoFertiliserEquivalent,
+  inorganicFertiliserComponentHasOwnFractions,
+} from '@/constants/enums';
 import {
   componentToFertiliser,
   convertToBasicProductionSystem,
 } from '@/constants/translations';
 import { selectConstant } from '@/tools/constants';
-import { br, Container, max, min, num, root } from '@/tools/containers';
+import {
+  br,
+  Container,
+  ContainerOf,
+  max,
+  min,
+  num,
+  root,
+} from '@/tools/containers';
 import { InputContainer } from '@/tools/inputs';
 import { captureMethod1Or2Value } from '@/tools/multi';
 import {
@@ -35,6 +48,7 @@ import {
 } from './fertiliser.input';
 import {
   InorganicFertiliserComponentInputTransformed,
+  InorganicFertiliserKnownComponentInputTransformed,
   isInorganicFertiliserKnownComponent,
   isInorganicFertiliserNitrogenComponent,
 } from './inorganic-fertiliser-components.input';
@@ -47,25 +61,120 @@ import {
 const massPerFertiliser = <S extends Substance>(substance: S, value: number) =>
   root(massPerMass(substance, 'Inorganic Fertiliser', value));
 
+/**
+ * The component's type as a union of containers, so each type guard narrows in its false branch too, and a chain of
+ * guards can end in `unhandledComponentType` to be checked as exhaustive.
+ */
+const knownComponentType = (
+  component: InorganicFertiliserKnownComponentInputTransformed,
+) => component.componentType as ContainerOf<InorganicFertiliserComponentType>;
+
+/** Fails to compile if a component type isn't handled by the type guards before it. */
+const unhandledComponentType = (componentType: never): never => {
+  throw new Error(
+    `Unhandled inorganic fertiliser component type: ${(componentType as Container<string>).unit}`,
+  );
+};
+
 const getNitrogenFractionInComponent = (
   component: InorganicFertiliserComponentInputTransformed,
   constants: ConstantsForFertiliser,
 ): Container<MassPerMass<'N', 'Inorganic Fertiliser'>> => {
+  // An 'unknown component' means it contains no N or Urea. It only has a custom emission factor for scope 3 emissions
   if (!isInorganicFertiliserKnownComponent(component))
     return massPerFertiliser('N', 0);
-  if (isInorganicFertiliserNitrogenComponent(component))
+  const componentType = knownComponentType(component);
+
+  if (inorganicFertiliserComponentHasOwnFractions(componentType)) {
+    // The nitrogen fraction of the component type is defined as a specific constant
+    return selectConstant(
+      constants.CROP,
+      'INORGANIC_FERTILISER_COMPONENT_FRACTIONS',
+      componentType,
+      'N',
+    );
+  } else if (isInorganicFertiliserNitrogenComponent(componentType)) {
+    // The component literally defines an amount of Nitrogen
     return massPerFertiliser('N', 1);
-  const componentType = component.componentType;
-  if (inorganicFertiliserComponentHasFertiliserEquivalent(componentType)) {
-    const equivalentFertiliserType = componentToFertiliser(componentType);
+  } else if (
+    inorganicFertiliserComponentHasFertiliserEquivalent(componentType)
+  ) {
+    // The component is already specified as a fertiliser type, which has a defined nitrogen fraction
     return selectConstant(
       constants.CROP,
       'INORGANIC_FERTILISER_FRACTIONS',
-      equivalentFertiliserType,
+      componentToFertiliser(componentType),
       'N',
     );
+  } else if (
+    inorganicFertiliserComponentHasNoFertiliserEquivalent(componentType)
+  ) {
+    // The component contains no nitrogen
+    return massPerFertiliser('N', 0);
   }
-  return massPerFertiliser('N', 0);
+
+  return unhandledComponentType(componentType);
+};
+
+/**
+ * Fraction of the N in a component that volatilises *FracGASFf*, by the component's own fertiliser base
+ * (Table A.2.2.3 base, Table A.2.2.6). Undefined when the component has no base of its own ('Nitrogen - Generic',
+ * components with no N): the application's FracGASF applies.
+ */
+export const getVolatilisedFractionForComponent = (
+  component: InorganicFertiliserComponentInputTransformed,
+  constants: ConstantsForFertiliser,
+): Container<MassPerMass<'Volatilised N', 'N'>> | undefined => {
+  if (!isInorganicFertiliserKnownComponent(component)) return undefined;
+  const componentType = knownComponentType(component);
+
+  if (inorganicFertiliserComponentHasOwnFractions(componentType)) {
+    return selectConstant(
+      constants.CROP,
+      'INORGANIC_FERTILISER_COMPONENT_FRACTIONS',
+      componentType,
+      'Volatilises',
+    );
+  } else if (isInorganicFertiliserNitrogenComponent(componentType)) {
+    // 'Nitrogen - Generic' has no fertiliser base of its own
+    return undefined;
+  } else if (
+    inorganicFertiliserComponentHasFertiliserEquivalent(componentType)
+  ) {
+    return selectConstant(
+      constants.CROP,
+      'INORGANIC_FERTILISER_FRACTIONS',
+      componentToFertiliser(componentType),
+      'Volatilises',
+    );
+  } else if (
+    inorganicFertiliserComponentHasNoFertiliserEquivalent(componentType)
+  ) {
+    // No N to volatilise
+    return undefined;
+  }
+
+  return unhandledComponentType(componentType);
+};
+
+/**
+ * Mass of N in each component of an inorganic fertiliser application (TMjf x fraction x FN of the component), or
+ * undefined when the application isn't given by components.
+ */
+export const massNitrogenInComponents = (
+  inorganicFertiliser: InorganicFertiliserInputTransformed,
+  constants: ConstantsForFertiliser,
+) => {
+  if (!isInorganicFertiliserInputScope3Method1(inorganicFertiliser))
+    return undefined;
+  const components = inorganicFertiliser.components ?? [];
+  if (components.length === 0) return undefined;
+  return components.map((component) => ({
+    component,
+    massNitrogen: inorganicFertiliser.massAppliedKilograms
+      .multiply(getNitrogenFractionInComponent(component, constants))
+      .multiply(component.fractionOfFertiliser),
+  }));
 };
 
 /**
@@ -118,29 +227,48 @@ const getNitrogenFraction = (
   ).named(`FNinorganic,f (${inorganicFertiliser.fertiliserType.unit})`);
 };
 
+const getUreaFractionInComponent = (
+  component: InorganicFertiliserComponentInputTransformed,
+  constants: ConstantsForFertiliser,
+): Container<MassPerMass<'Urea', 'Inorganic Fertiliser'>> => {
+  // An 'unknown component' contains no N or Urea
+  if (!isInorganicFertiliserKnownComponent(component))
+    return massPerFertiliser('Urea', 0);
+  const componentType = knownComponentType(component);
+
+  if (inorganicFertiliserComponentHasOwnFractions(componentType)) {
+    // Ammonia and the N-only components contain no urea
+    return massPerFertiliser('Urea', 0);
+  } else if (isInorganicFertiliserNitrogenComponent(componentType)) {
+    return massPerFertiliser('Urea', 0);
+  } else if (
+    inorganicFertiliserComponentHasFertiliserEquivalent(componentType)
+  ) {
+    return selectConstant(
+      constants.CROP,
+      'INORGANIC_FERTILISER_FRACTIONS',
+      componentToFertiliser(componentType),
+      'Urea',
+    );
+  } else if (
+    inorganicFertiliserComponentHasNoFertiliserEquivalent(componentType)
+  ) {
+    return massPerFertiliser('Urea', 0);
+  }
+
+  return unhandledComponentType(componentType);
+};
+
 function getUreaFraction(
   inorganicFertiliser: InorganicFertiliserInputTransformed,
   constants: ConstantsForFertiliser,
 ) {
   if (isInorganicFertiliserInputScope3Method1(inorganicFertiliser)) {
     const ureaInComponents = (inorganicFertiliser.components ?? []).map(
-      (component) => {
-        if (!isInorganicFertiliserKnownComponent(component))
-          return massPerFertiliser('Urea', 0);
-        if (component.componentType.unit === 'Urea-Ammonium Nitrate') {
-          return selectConstant(
-            constants.CROP,
-            'INORGANIC_FERTILISER_FRACTIONS',
-            'Urea-Ammonium Nitrate (UAN)',
-            'Urea',
-          ).multiply(component.fractionOfFertiliser);
-        }
-        if (component.componentType.unit === 'Urea')
-          return component.fractionOfFertiliser.switchUnit((value) =>
-            massPerMass('Urea', 'Inorganic Fertiliser', value.store),
-          );
-        return massPerFertiliser('Urea', 0);
-      },
+      (component) =>
+        getUreaFractionInComponent(component, constants).multiply(
+          component.fractionOfFertiliser,
+        ),
     );
     /**
      * NOTE: We require that components be supplied completely, or not at all. We treat

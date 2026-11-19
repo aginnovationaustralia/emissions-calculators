@@ -1345,6 +1345,27 @@ export const cropConstants: CropConstants = {
   INORGANIC_FERTILISER_OTHER_VOLATILISES: fracGasfOtherFertilisers,
 
   /**
+   * @description Fraction of N and fertiliser base (for FracGASFf) of inorganic fertiliser components that have no
+   * equivalent fertiliser type in Table A.2.2.3. Ammonia (NH3) is 14/17 N by mass (0.8235) and ammonium-based; the
+   * N-only components are all N, with the base of their N form. These match GEETA's Fertiliser_ChemicalCompoundElements.
+   * @appendixA A.2.2.3, A.2.2.6
+   */
+  INORGANIC_FERTILISER_COMPONENT_FRACTIONS: {
+    Ammonia: {
+      N: massPerMass('N', 'Inorganic Fertiliser', 0.8235),
+      Volatilises: fracGasfAmmoniumBased,
+    },
+    'Nitrogen - Ammonia': {
+      N: massPerMass('N', 'Inorganic Fertiliser', 1),
+      Volatilises: fracGasfAmmoniumBased,
+    },
+    'Nitrogen - Nitrate': {
+      N: massPerMass('N', 'Inorganic Fertiliser', 1),
+      Volatilises: fracGasfNitrateBased,
+    },
+  },
+
+  /**
    * @description Fraction of N in inorganic fertiliser types. Appendix Tables A.2.2.3, A.2.2.4, A.2.2.6. Scope 3 values taken from AusLCI v46 May 2026
    * @appendixA A.2.2.3, A.2.2.4, A.2.2.6
    */

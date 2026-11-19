@@ -2,9 +2,11 @@ import {
   InorganicFertiliserComponentNitrogenType,
   InorganicFertiliserComponentNitrogenTypes,
   InorganicFertiliserComponentOrigins,
+  InorganicFertiliserComponentType,
   InorganicFertiliserComponentTypesNonRegional,
   InorganicFertiliserComponentTypesRegional,
 } from '@/constants/enums';
+import { Container } from '@/tools/containers';
 import { enumInput, isProportion, numberInput } from '@/tools/inputs';
 import {
   FERT_INORGANIC_5_1,
@@ -58,7 +60,8 @@ export const InorganicFertiliserKnownComponentNoOriginInputSchema = object({
   ),
   componentType: enumInput(InorganicFertiliserComponentTypesNonRegional, {
     name: 'Fertiliser component type',
-    description: 'Type of inorganic fertiliser component',
+    description:
+      "Type of inorganic fertiliser component. For a component like 'Nitrogen - Ammonia', it is the actual amount of Nitrogen (also called ammoniacal Nitrogen) in the component that is being applied, not the amount of Ammonia.",
     modules: [FERT_INORGANIC_5_1, PURCH_FERT_15_4],
   }),
 }).meta({ title: 'Without origin region' });
@@ -83,13 +86,10 @@ export const isInorganicFertiliserKnownComponent = (
 };
 
 export const isInorganicFertiliserNitrogenComponent = (
-  component: InorganicFertiliserComponentInputTransformed,
-): boolean => {
-  return (
-    isInorganicFertiliserKnownComponent(component) &&
-    InorganicFertiliserComponentNitrogenTypes.includes(
-      component.componentType.unit as InorganicFertiliserComponentNitrogenType,
-    )
+  component: Container<InorganicFertiliserComponentType>,
+): component is Container<InorganicFertiliserComponentNitrogenType> => {
+  return InorganicFertiliserComponentNitrogenTypes.includes(
+    component.unit as InorganicFertiliserComponentNitrogenType,
   );
 };
 
@@ -100,7 +100,7 @@ export const InorganicFertiliserUnknownComponentInputSchema = object({
       name: 'fractionOfFertiliser',
       method: '1',
       description:
-        'Fraction of this component of the inorganic fertiliser that is being applied, by weight',
+        'Fraction of this component of the inorganic fertiliser that is being applied, by weight. This input is only allowed if the component includes no Nitrogen or Urea. It will only count towards scope 3 emissions, via your custom emissions factor value',
       modules: [FERT_INORGANIC_5_1, LEACH_RUNOFF_5_5, PURCH_FERT_15_4],
     },
     isProportion,
@@ -112,7 +112,6 @@ export const InorganicFertiliserUnknownComponentInputSchema = object({
       method: '1',
       scope: '3',
       description: 'Emission factor for inorganic fertiliser component',
-      // Only calculateScope3FertiliserMethod1UnknownComponent (15.4) reads this.
       modules: [PURCH_FERT_15_4],
     },
     (s) => s.min(0),
@@ -134,3 +133,8 @@ export type InorganicFertiliserUnknownComponentInputTransformed = z.output<
 export type InorganicFertiliserKnownComponentInputTransformed = z.output<
   typeof InorganicFertiliserKnownComponentInputSchema
 >;
+
+// export const isInorganicFertiliserComponentRegional = (
+//   knownComponent: InorganicFertiliserKnownComponentInputTransformed,
+// ): knownComponent is InorganicFertiliserKnownComponentWithOriginInputTransformed =>
+//   'componentOrigin' in knownComponent;

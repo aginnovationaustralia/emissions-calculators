@@ -4,11 +4,15 @@ import { convertToBasicProductionSystem } from '@/constants/translations';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
-import { zeroN2O } from '@/tools/sentinels';
+import { zeroMassVolatilisedN, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { ConstantsForManureManagement } from '../4-manure-management/constants';
-import { massNitrogenFromInorganicFertiliserAppliedMNjf } from './5.1-inorganic-fertiliser';
+import {
+  getVolatilisedFractionForComponent,
+  massNitrogenFromInorganicFertiliserAppliedMNjf,
+  massNitrogenInComponents,
+} from './5.1-inorganic-fertiliser';
 import { calculateMNSoilForOrganicFertiliser } from './5.2-organic-fertiliser';
 import { ConstantsForFertiliser } from './constants';
 import {
@@ -79,10 +83,6 @@ export const calculateInorganicFertiliserAtmosphericDepositionN2O = (
   const { applications } = inorganic;
   const baseProductionSystem = convertToBasicProductionSystem(productionSystem);
   const emissionRecords = applications.map((inorganicFertiliser) => {
-    const mnjf = massNitrogenFromInorganicFertiliserAppliedMNjf(
-      inorganicFertiliser,
-      constants,
-    );
     const fracGASFf = isInorganicFertiliserTypeOther(inorganicFertiliser)
       ? selectConstant(constants.CROP, 'INORGANIC_FERTILISER_OTHER_VOLATILISES')
       : selectConstant(
@@ -91,7 +91,28 @@ export const calculateInorganicFertiliserAtmosphericDepositionN2O = (
           inorganicFertiliser.fertiliserType,
           'Volatilises',
         );
-    const mVolInorganic = mnjf.multiply(fracGASFf).reference('5.4.1.1 (2)');
+    /**
+     * When the fertiliser is given by its components, each component's N volatilises at the FracGASFf of its own
+     * fertiliser base (Table A.2.2.3 base column), as 5.4.1.1 (2) applies FracGASFf per fertiliser type. Components
+     * with no base of their own (e.g. 'Nitrogen - Generic') use the application's FracGASFf.
+     */
+    const components = massNitrogenInComponents(inorganicFertiliser, constants);
+    const mVolInorganic = (
+      components
+        ? sum(
+            components.map(({ component, massNitrogen }) =>
+              massNitrogen.multiply(
+                getVolatilisedFractionForComponent(component, constants) ??
+                  fracGASFf,
+              ),
+            ),
+            zeroMassVolatilisedN,
+          )
+        : massNitrogenFromInorganicFertiliserAppliedMNjf(
+            inorganicFertiliser,
+            constants,
+          ).multiply(fracGASFf)
+    ).reference('5.4.1.1 (2)');
     const efN2Oj = selectConstant(
       constants.CROP,
       'EF_N2O_ATMOSPHERIC_DEPOSITION_PRODUCTION_SYSTEM',

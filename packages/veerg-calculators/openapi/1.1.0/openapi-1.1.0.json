@@ -21906,7 +21906,7 @@
                                                               "x-units": "0-1"
                                                             },
                                                             "componentType": {
-                                                              "description": "Type of inorganic fertiliser component",
+                                                              "description": "Type of inorganic fertiliser component. For a component like 'Nitrogen - Ammonia', it is the actual amount of Nitrogen (also called ammoniacal Nitrogen) in the component that is being applied, not the amount of Ammonia.",
                                                               "x-modules": [
                                                                 "5.1",
                                                                 "15.4"
@@ -21928,7 +21928,7 @@
                                                       "type": "object",
                                                       "properties": {
                                                         "fractionOfFertiliser": {
-                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight. This input is only allowed if the component includes no Nitrogen or Urea. It will only count towards scope 3 emissions, via your custom emissions factor value (0-1)",
                                                           "x-modules": [
                                                             "5.1",
                                                             "5.5",
@@ -22440,7 +22440,7 @@
                                                               "x-units": "0-1"
                                                             },
                                                             "componentType": {
-                                                              "description": "Type of inorganic fertiliser component",
+                                                              "description": "Type of inorganic fertiliser component. For a component like 'Nitrogen - Ammonia', it is the actual amount of Nitrogen (also called ammoniacal Nitrogen) in the component that is being applied, not the amount of Ammonia.",
                                                               "x-modules": [
                                                                 "5.1",
                                                                 "15.4"
@@ -22462,7 +22462,7 @@
                                                       "type": "object",
                                                       "properties": {
                                                         "fractionOfFertiliser": {
-                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                                          "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight. This input is only allowed if the component includes no Nitrogen or Urea. It will only count towards scope 3 emissions, via your custom emissions factor value (0-1)",
                                                           "x-modules": [
                                                             "5.1",
                                                             "5.5",
@@ -48025,7 +48025,7 @@
                                                           "x-units": "0-1"
                                                         },
                                                         "componentType": {
-                                                          "description": "Type of inorganic fertiliser component",
+                                                          "description": "Type of inorganic fertiliser component. For a component like 'Nitrogen - Ammonia', it is the actual amount of Nitrogen (also called ammoniacal Nitrogen) in the component that is being applied, not the amount of Ammonia.",
                                                           "x-modules": [
                                                             "5.1",
                                                             "15.4"
@@ -48047,7 +48047,7 @@
                                                   "type": "object",
                                                   "properties": {
                                                     "fractionOfFertiliser": {
-                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight. This input is only allowed if the component includes no Nitrogen or Urea. It will only count towards scope 3 emissions, via your custom emissions factor value (0-1)",
                                                       "x-modules": [
                                                         "5.1",
                                                         "5.5",
@@ -67313,7 +67313,7 @@
                                                           "x-units": "0-1"
                                                         },
                                                         "componentType": {
-                                                          "description": "Type of inorganic fertiliser component",
+                                                          "description": "Type of inorganic fertiliser component. For a component like 'Nitrogen - Ammonia', it is the actual amount of Nitrogen (also called ammoniacal Nitrogen) in the component that is being applied, not the amount of Ammonia.",
                                                           "x-modules": [
                                                             "5.1",
                                                             "15.4"
@@ -67335,7 +67335,7 @@
                                                   "type": "object",
                                                   "properties": {
                                                     "fractionOfFertiliser": {
-                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight. This input is only allowed if the component includes no Nitrogen or Urea. It will only count towards scope 3 emissions, via your custom emissions factor value (0-1)",
                                                       "x-modules": [
                                                         "5.1",
                                                         "5.5",
@@ -74412,7 +74412,7 @@
                                                           "x-units": "0-1"
                                                         },
                                                         "componentType": {
-                                                          "description": "Type of inorganic fertiliser component",
+                                                          "description": "Type of inorganic fertiliser component. For a component like 'Nitrogen - Ammonia', it is the actual amount of Nitrogen (also called ammoniacal Nitrogen) in the component that is being applied, not the amount of Ammonia.",
                                                           "x-modules": [
                                                             "5.1",
                                                             "15.4"
@@ -74434,7 +74434,7 @@
                                                   "type": "object",
                                                   "properties": {
                                                     "fractionOfFertiliser": {
-                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight. This input is only allowed if the component includes no Nitrogen or Urea. It will only count towards scope 3 emissions, via your custom emissions factor value (0-1)",
                                                       "x-modules": [
                                                         "5.1",
                                                         "5.5",
@@ -77049,7 +77049,7 @@
                                                           "x-units": "0-1"
                                                         },
                                                         "componentType": {
-                                                          "description": "Type of inorganic fertiliser component",
+                                                          "description": "Type of inorganic fertiliser component. For a component like 'Nitrogen - Ammonia', it is the actual amount of Nitrogen (also called ammoniacal Nitrogen) in the component that is being applied, not the amount of Ammonia.",
                                                           "x-modules": [
                                                             "5.1",
                                                             "15.4"
@@ -77071,7 +77071,7 @@
                                                   "type": "object",
                                                   "properties": {
                                                     "fractionOfFertiliser": {
-                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                                      "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight. This input is only allowed if the component includes no Nitrogen or Urea. It will only count towards scope 3 emissions, via your custom emissions factor value (0-1)",
                                                       "x-modules": [
                                                         "5.1",
                                                         "5.5",
@@ -114065,7 +114065,7 @@
                                             "x-units": "0-1"
                                           },
                                           "componentType": {
-                                            "description": "Type of inorganic fertiliser component",
+                                            "description": "Type of inorganic fertiliser component. For a component like 'Nitrogen - Ammonia', it is the actual amount of Nitrogen (also called ammoniacal Nitrogen) in the component that is being applied, not the amount of Ammonia.",
                                             "x-modules": [
                                               "5.1",
                                               "15.4"
@@ -114087,7 +114087,7 @@
                                     "type": "object",
                                     "properties": {
                                       "fractionOfFertiliser": {
-                                        "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                        "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight. This input is only allowed if the component includes no Nitrogen or Urea. It will only count towards scope 3 emissions, via your custom emissions factor value (0-1)",
                                         "x-modules": [
                                           "5.1",
                                           "5.5",
@@ -114608,7 +114608,7 @@
                                             "x-units": "0-1"
                                           },
                                           "componentType": {
-                                            "description": "Type of inorganic fertiliser component",
+                                            "description": "Type of inorganic fertiliser component. For a component like 'Nitrogen - Ammonia', it is the actual amount of Nitrogen (also called ammoniacal Nitrogen) in the component that is being applied, not the amount of Ammonia.",
                                             "x-modules": [
                                               "5.1",
                                               "15.4"
@@ -114630,7 +114630,7 @@
                                     "type": "object",
                                     "properties": {
                                       "fractionOfFertiliser": {
-                                        "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight (0-1)",
+                                        "description": "Fraction of this component of the inorganic fertiliser that is being applied, by weight. This input is only allowed if the component includes no Nitrogen or Urea. It will only count towards scope 3 emissions, via your custom emissions factor value (0-1)",
                                         "x-modules": [
                                           "5.1",
                                           "5.5",

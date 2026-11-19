@@ -355,6 +355,23 @@ export const InorganicFertiliserComponentNonRegionalWithEquivalentTypes = [
 export type InorganicFertiliserComponentNonRegionalWithEquivalentType =
   (typeof InorganicFertiliserComponentNonRegionalWithEquivalentTypes)[number];
 
+// Components with their own N fraction and FracGASF basis (no equivalent fertiliser type in Table A.2.2.3).
+// 'Nitrogen - Generic' is not listed: it has N 1 but no basis of its own, so it takes the application's FracGASF.
+export const InorganicFertiliserComponentWithOwnFractionsTypes = [
+  'Ammonia',
+  'Nitrogen - Ammonia',
+  'Nitrogen - Nitrate',
+] as const;
+export type InorganicFertiliserComponentWithOwnFractionsType =
+  (typeof InorganicFertiliserComponentWithOwnFractionsTypes)[number];
+
+export const inorganicFertiliserComponentHasOwnFractions = (
+  component: InputContainer<InorganicFertiliserComponentType>,
+): component is InputContainer<InorganicFertiliserComponentWithOwnFractionsType> =>
+  InorganicFertiliserComponentWithOwnFractionsTypes.includes(
+    component.unit as InorganicFertiliserComponentWithOwnFractionsType,
+  );
+
 // Components that can be mapped back to a fertiliser type.
 export const InorganicFertiliserComponentWithEquivalentTypes = [
   ...InorganicFertiliserComponentNonRegionalWithEquivalentTypes,
@@ -363,9 +380,8 @@ export const InorganicFertiliserComponentWithEquivalentTypes = [
 export type InorganicFertiliserComponentWithEquivalentType =
   (typeof InorganicFertiliserComponentWithEquivalentTypes)[number];
 
-export const InorganicFertiliserComponentTypesNonRegional = [
-  ...InorganicFertiliserComponentNonRegionalWithEquivalentTypes,
-  ...InorganicFertiliserComponentNitrogenTypes,
+// Non-regional components with no equivalent fertiliser type and no N of their own.
+export const InorganicFertiliserComponentNonRegionalWithoutEquivalentTypes = [
   'Muriate of Potash',
   'Double Superphosphate',
   'Phosphorus - Generic',
@@ -373,6 +389,14 @@ export const InorganicFertiliserComponentTypesNonRegional = [
   'Sulfur - Generic',
   'Zinc - Generic',
   // 'Calcium - Generic lime as proxy', // not included in AusLCI April dataset
+] as const;
+export type InorganicFertiliserComponentNonRegionalWithoutEquivalentType =
+  (typeof InorganicFertiliserComponentNonRegionalWithoutEquivalentTypes)[number];
+
+export const InorganicFertiliserComponentTypesNonRegional = [
+  ...InorganicFertiliserComponentNonRegionalWithEquivalentTypes,
+  ...InorganicFertiliserComponentNitrogenTypes,
+  ...InorganicFertiliserComponentNonRegionalWithoutEquivalentTypes,
 ] as const;
 export type InorganicFertiliserComponentTypeNonRegional =
   (typeof InorganicFertiliserComponentTypesNonRegional)[number];
@@ -390,6 +414,13 @@ export const inorganicFertiliserComponentHasFertiliserEquivalent = (
 ): component is InputContainer<InorganicFertiliserComponentWithEquivalentType> =>
   InorganicFertiliserComponentWithEquivalentTypes.includes(
     component.unit as InorganicFertiliserComponentWithEquivalentType,
+  );
+
+export const inorganicFertiliserComponentHasNoFertiliserEquivalent = (
+  component: InputContainer<InorganicFertiliserComponentType>,
+): component is InputContainer<InorganicFertiliserComponentNonRegionalWithoutEquivalentType> =>
+  InorganicFertiliserComponentNonRegionalWithoutEquivalentTypes.includes(
+    component.unit as InorganicFertiliserComponentNonRegionalWithoutEquivalentType,
   );
 
 export const isInorganicFertiliserComponentTypeRegional = (
