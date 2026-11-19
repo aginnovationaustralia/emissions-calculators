@@ -133,3 +133,8 @@ export type InorganicFertiliserUnknownComponentInputTransformed = z.output<
 export type InorganicFertiliserKnownComponentInputTransformed = z.output<
   typeof InorganicFertiliserKnownComponentInputSchema
 >;
+
+// export const isInorganicFertiliserComponentRegional = (
+//   knownComponent: InorganicFertiliserKnownComponentInputTransformed,
+// ): knownComponent is InorganicFertiliserKnownComponentWithOriginInputTransformed =>
+//   'componentOrigin' in knownComponent;
