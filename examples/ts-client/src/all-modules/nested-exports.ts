@@ -3,8 +3,8 @@ import {
   AllModulesInputSchema,
   calculateAllModules,
   calculateAllModulesParsed,
-} from '@aginnovationaustralia/emissions-calculators/all-modules';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/all-modules';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import {
   allModulesInputDataMethod1,
   allModulesInputDataMethod2,

@@ -30,12 +30,12 @@ As users test the code, we anticipate making further updates in response to feed
 
 # Choosing a package
 
-This repository publishes two calculator packages to NPM. New integrations should use `veerg-calculators`.
+There are two calculator packages on NPM. New integrations should use `veerg-calculators`, which is developed in this repository. The source for `emissions-calculators` is no longer on `main`; see [GAF calculators](#gaf-calculators).
 
-|            | [`@aginnovationaustralia/veerg-calculators`](./packages/veerg-calculators/README.md)                           | [`@aginnovationaustralia/emissions-calculators`](./packages/calculators/README.md)               |
+|            | [`@aginnovationaustralia/veerg-calculators`](./packages/veerg-calculators/README.md)                           | [`@aginnovationaustralia/emissions-calculators`](#gaf-calculators)                                |
 | ---------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | Implements | The Voluntary Emissions Estimation and Reporting Guidelines (VEERG)                                            | The Greenhouse Accounting Framework (GAF) tools (`3.x`), plus early VEERG previews (`4.x` betas) |
-| Status     | Actively developed, and the focus of all new features and Guidelines updates                                   | Maintained for existing users while they move to the Guidelines                                  |
+| Status     | Actively developed, and the focus of all new features and Guidelines updates                                   | No longer developed on `main`                                                                    |
 | Structure  | Each chapter of the Guidelines is a module, composed into industry calculators and an `all-modules` calculator | One calculator per GAF spreadsheet (`3.x`)                                                       |
 | Versioning | Starts at `1.1.0`, versioned against releases of the Guidelines                                                | Major and minor versions follow releases of the GAF spreadsheets                                 |
 | REST API   | `/veerg/{version}`                                                                                             | `/calculator/{version}`                                                                          |
@@ -118,7 +118,7 @@ All community members are expected to understand and respect out [code of conduc
 
 # Versioning
 
-The project has very strict requirements on following the principles of [semantic versioning](https://semver.org) for each release. For `veerg-calculators`, the major and minor release numbers published to NPM stay in alignment with the corresponding releases of the Guidelines. Patch version numbers are available for issuing fixes and corrections to restore alignment with the Guidelines. The `emissions-calculators` package keeps its existing alignment with the GAF spreadsheets.
+The project has very strict requirements on following the principles of [semantic versioning](https://semver.org) for each release. For `veerg-calculators`, the major and minor release numbers published to NPM stay in alignment with the corresponding releases of the Guidelines. Patch version numbers are available for issuing fixes and corrections to restore alignment with the Guidelines.
 
 Each release of a package will trigger branching and tagging of the released commit.
 
@@ -126,14 +126,14 @@ Each release of a package will trigger branching and tagging of the released com
 
 New versions of the package are published to the NPM registry via a [Github action](./.github/workflows/publish.yml). The action will run when a new version tag is pushed to the repository. Only limited users have permission to push a tag for a new version.
 
-- When a version is ready to be released, update the version number of the calculators [package.json](./packages/calculators/package.json) to the new desired version
+Each package is versioned independently, and its tags include the package name, ie `veerg-calculators-v1.1.0-beta.1`. The publish action uses the tag to decide which package to publish.
+
+- When a version is ready to be released, update the version number in the [veerg-calculators package.json](./packages/veerg-calculators/package.json) to the new desired version
 - The most common release will be a patch version bump. You can run `pnpm run version:bump` to achieve this
 - Submit your changes using the regular PR approval workflow
-- Tag the latest commit with the new version ie `v1.5.17`
+- Tag the latest commit with the new version ie `veerg-calculators-v1.1.0`
 - Push the new tag with `git push --tags`
 - The automated publish will trigger when the new tag is detected
-
-The [veerg-calculators package](./packages/veerg-calculators/package.json) is versioned independently, and its tags include the package name, ie `veerg-calculators-v1.1.0-beta.1`. The same publish action handles these tags, publishing from `packages/veerg-calculators` instead.
 
 The [research package](./packages/research/package.json) is versioned independently, and its tags include the package name, ie `emissions-calculator-research-v0.1.0`. It depends on the exact version of the veerg-calculators package it was published with, so release it after each veerg-calculators release.
 
@@ -154,6 +154,10 @@ At a minimum, the acknowledgement must state:
 > “This product incorporates the EAP Calculator Engine open-source code developed and maintained by Agricultural Innovation Australia Ltd. Free access to AIA’s open-source code is supported by the Australian Government through funding from the Improving Consistency of On-Farm Emissions Estimates Program”
 
 Users may not imply or state endorsement by AIA, unless explicit written consent from AIA has been granted. Users must not imply or state endorsement by the Australian Government.
+
+# GAF calculators
+
+The old GAF calculators implementation (the `@aginnovationaustralia/emissions-calculators` package) has been removed from `main`. It is still available as an NPM package, and the implementation is available on the [`v3.0.2` branch](https://github.com/aginnovationaustralia/emissions-calculators/tree/v3.0.2).
 
 ---
 

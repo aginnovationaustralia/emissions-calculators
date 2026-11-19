@@ -3,8 +3,8 @@ import {
   DairyInputSchema,
   calculateDairy,
   calculateDairyParsed,
-} from '@aginnovationaustralia/emissions-calculators/dairy';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/dairy';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import { dairyInputDataMethod1, dairyInputDataMethod2 } from './input';
 
 const performValidationAndCalculate = (input: DairyInput) => {

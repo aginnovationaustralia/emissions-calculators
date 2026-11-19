@@ -1,9 +1,0 @@
-export const columnState = 'B';
-export const columnLambingRate = 'G';
-export const columnMarkingRate = 'H';
-export const columnCustomLiveweight = 'P';
-export const columnCustomAverageDurationDays = 'X';
-export const columnCustomDryMatterAvailability = 'K';
-export const columnCustomDryMatterDigestibility = 'M';
-export const columnHead = 'V';
-export const columnOutput = 'AA';

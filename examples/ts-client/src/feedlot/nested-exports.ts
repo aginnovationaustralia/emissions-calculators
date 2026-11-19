@@ -3,8 +3,8 @@ import {
   FeedlotInputSchema,
   calculateFeedlot,
   calculateFeedlotParsed,
-} from '@aginnovationaustralia/emissions-calculators/feedlot';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/feedlot';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import { feedlotInputDataMethod1, feedlotInputDataMethod2 } from './input';
 
 const performValidationAndCalculate = (input: FeedlotInput) => {

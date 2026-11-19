@@ -45,7 +45,7 @@ import {
   SolidWasteUnmanagedShallowMethod2Input,
   StationaryFuelInput,
   TransportFuelInput,
-} from '@aginnovationaustralia/emissions-calculators/forestry';
+} from '@aginnovationaustralia/veerg-calculators/forestry';
 
 // These examples build two ForestryInput objects with one entry in every array:
 //

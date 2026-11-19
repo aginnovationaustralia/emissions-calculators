@@ -3,8 +3,8 @@ import {
   ForestryInputSchema,
   calculateForestry,
   calculateForestryParsed,
-} from '@aginnovationaustralia/emissions-calculators/forestry';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/forestry';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import { forestryInputDataMethod1, forestryInputDataMethod2 } from './input';
 
 const performValidationAndCalculate = (input: ForestryInput) => {

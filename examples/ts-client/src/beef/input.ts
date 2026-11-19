@@ -64,7 +64,7 @@ import {
   SolidWasteUnmanagedShallowMethod2Input,
   StationaryFuelInput,
   TransportFuelInput,
-} from '@aginnovationaustralia/emissions-calculators/beef';
+} from '@aginnovationaustralia/veerg-calculators/beef';
 
 // These examples build two BeefInput objects with one entry in every array:
 //
@@ -218,8 +218,8 @@ const transportFuel: TransportFuelInput = {
 
 const stationaryFuel: StationaryFuelInput = {
   fuelClass: 'Gaseous fuels',
-  fuelType: 'Natural gas',
-  amountKilolitres: { value: 5 },
+  fuelType: 'Natural gas via pipeline',
+  amountCubicMetres: { value: 5000 },
 };
 
 const fuel: FuelInput = {

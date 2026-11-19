@@ -3,8 +3,8 @@ import {
   SheepInputSchema,
   calculateSheep,
   calculateSheepParsed,
-} from '@aginnovationaustralia/emissions-calculators/sheep';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/sheep';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import { sheepInputDataMethod1, sheepInputDataMethod2 } from './input';
 
 const performValidationAndCalculate = (input: SheepInput) => {

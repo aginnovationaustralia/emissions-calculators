@@ -3,7 +3,6 @@ name: Publish Package
 on:
   push:
     tags:
-      - 'v*'
       - 'veerg-calculators-v*'
       - 'calculator-units-v*'
       - 'calculator-inputs-v*'
@@ -54,13 +53,12 @@ jobs:
           TAG=${GITHUB_REF#refs/tags/}
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
-          # Tags come from release-please: `<component>-v<version>`, or `v<version>` for calculators
+          # Tags come from release-please: `<component>-v<version>`
           case "$TAG" in
             veerg-calculators-v*) PACKAGE_DIR=packages/veerg-calculators ;;
             calculator-units-v*) PACKAGE_DIR=packages/calculator-units ;;
             calculator-inputs-v*) PACKAGE_DIR=packages/calculator-inputs ;;
             emissions-calculator-research-v*) PACKAGE_DIR=packages/research ;;
-            v*) PACKAGE_DIR=packages/calculators ;;
             *) echo "No package is published for tag $TAG" >&2; exit 1 ;;
           esac
           echo "package_dir=$PACKAGE_DIR" >> $GITHUB_OUTPUT

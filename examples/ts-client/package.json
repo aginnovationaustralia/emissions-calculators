@@ -1,7 +1,7 @@
 {
   "name": "examples-ts-client",
   "version": "1.0.0",
-  "description": "TypeScript client example for @aginnovationaustralia/emissions-calculators",
+  "description": "TypeScript client example for @aginnovationaustralia/veerg-calculators",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -16,7 +16,6 @@
   "dependencies": {
     "@aginnovationaustralia/calculator-units": "workspace:*",
     "@aginnovationaustralia/emissions-calculator-research": "workspace:*",
-    "@aginnovationaustralia/emissions-calculators": "workspace:*",
     "@aginnovationaustralia/veerg-calculators": "workspace:*"
   },
   "devDependencies": {

@@ -51,7 +51,7 @@ import {
   SugarFertiliserInput,
   SugarInput,
   TransportFuelInput,
-} from '@aginnovationaustralia/emissions-calculators/sugar';
+} from '@aginnovationaustralia/veerg-calculators/sugar';
 
 // These examples build two SugarInput objects with one entry in every array:
 //

@@ -30,7 +30,7 @@ import {
   TransportFuelInput,
   WastewaterTreatmentMethod1Input,
   WastewaterTreatmentMethod2Input,
-} from '@aginnovationaustralia/emissions-calculators/post-production';
+} from '@aginnovationaustralia/veerg-calculators/post-production';
 
 // These examples build two PostProductionInput objects with one entry in every array:
 //
@@ -107,8 +107,8 @@ const transportFuel: TransportFuelInput = {
 
 const stationaryFuel: StationaryFuelInput = {
   fuelClass: 'Gaseous fuels',
-  fuelType: 'Natural gas',
-  amountKilolitres: { value: 20 },
+  fuelType: 'Natural gas via pipeline',
+  amountCubicMetres: { value: 5000 },
 };
 
 const fuel: FuelInput = {

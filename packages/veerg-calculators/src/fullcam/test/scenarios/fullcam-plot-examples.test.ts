@@ -17,7 +17,7 @@ import {
  *
  * To run these tests:
  * Set real values for the env vars FULLCAM_WORKFLOW_API_KEY and FULLCAM_BATCH_NOTIFICATION_EMAIL
- * Switch to the folder `packages/calculators`
+ * Switch to the folder `packages/veerg-calculators`
  * Run `pnpm install`
  * Run `pnpm test:fullcam` to kick the tests off
  * Notice that output files are generated in the local `out` folder, for success and failure scenarios, to help with debugging. All should be succeeding.

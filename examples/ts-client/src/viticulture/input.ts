@@ -50,7 +50,7 @@ import {
   ViticultureCropResidueInput,
   ViticultureFertiliserInput,
   ViticultureInput,
-} from '@aginnovationaustralia/emissions-calculators/viticulture';
+} from '@aginnovationaustralia/veerg-calculators/viticulture';
 
 // These examples build two ViticultureInput objects with one entry in every array:
 //

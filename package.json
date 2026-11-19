@@ -9,8 +9,8 @@
     "clean": "turbo clean",
     "prepare": "husky",
     "commitlint": "commitlint --edit",
-    "publish:dry": "pnpm build && pnpm -r publish --filter=@aginnovationaustralia/emissions-calculators --no-git-checks --access private --dry-run && pnpm -r publish --filter=@aginnovationaustralia/emissions-calculator-research --no-git-checks --access public --dry-run",
-    "publish:packages": "pnpm -r publish --filter=@aginnovationaustralia/emissions-calculators --no-git-checks --access private --force",
+    "publish:dry": "pnpm build && pnpm -r publish --filter=@aginnovationaustralia/emissions-calculator-research --no-git-checks --access public --dry-run",
+    "publish:packages": "pnpm -r publish --filter=@aginnovationaustralia/veerg-calculators --no-git-checks --access private --force",
     "version:bump": "pnpm -r version",
     "publish:research": "pnpm -r publish --filter=@aginnovationaustralia/emissions-calculator-research --no-git-checks --access public"
   },

@@ -3,8 +3,8 @@ import {
   AquacultureInputSchema,
   calculateAquaculture,
   calculateAquacultureParsed,
-} from '@aginnovationaustralia/emissions-calculators/aquaculture';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/aquaculture';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import {
   aquacultureInputDataMethod1,
   aquacultureInputDataMethod2,

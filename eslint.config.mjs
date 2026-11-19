@@ -97,8 +97,8 @@ export default [
   },
   {
     files: [
-      'packages/calculators/**/*.input.ts',
-      'packages/calculators/src/modules/lulucf/perennial-crops-input.ts',
+      'packages/veerg-calculators/**/*.input.ts',
+      'packages/veerg-calculators/src/modules/lulucf/perennial-crops-input.ts',
     ],
     plugins: { emissions },
     rules: {
@@ -110,9 +110,9 @@ export default [
   },
   {
     files: [
-      'packages/calculators/**/*.input.ts',
-      'packages/calculators/src/modules/lulucf/perennial-crops-input.ts',
-      'packages/calculators/src/modules/lulucf/land-use-change-activity-input.ts',
+      'packages/veerg-calculators/**/*.input.ts',
+      'packages/veerg-calculators/src/modules/lulucf/perennial-crops-input.ts',
+      'packages/veerg-calculators/src/modules/lulucf/land-use-change-activity-input.ts',
     ],
     rules: {
       'no-restricted-syntax': [
@@ -121,7 +121,7 @@ export default [
           selector:
             "CallExpression[callee.type='MemberExpression'][callee.object.type='Identifier'][callee.object.name='z'][callee.property.type='Identifier'][callee.property.name='enum']",
           message:
-            'Avoid `z.enum(...)`. Use `enumInput(...)` from `packages/calculators/src/types/schemas.ts` instead.',
+            'Avoid `z.enum(...)`. Use `enumInput(...)` from `packages/veerg-calculators/src/types/schemas.ts` instead.',
         },
       ],
     },

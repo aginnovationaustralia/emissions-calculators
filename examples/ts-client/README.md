@@ -72,8 +72,8 @@ ts-client/
 The simplest way to calculate emissions using the top-level `calculateEmissions` function:
 
 ```typescript
-import { calculateEmissions } from '@aginnovationaustralia/emissions-calculators';
-import type { BeefInput } from '@aginnovationaustralia/emissions-calculators/beef';
+import { calculateEmissions } from '@aginnovationaustralia/veerg-calculators';
+import type { BeefInput } from '@aginnovationaustralia/veerg-calculators/beef';
 
 const beefInputData: BeefInput = {
   state: 'nsw',
@@ -101,7 +101,7 @@ import {
   BeefInputSchema,
   calculateBeef,
   validateCalculatorInput,
-} from '@aginnovationaustralia/emissions-calculators';
+} from '@aginnovationaustralia/veerg-calculators';
 
 const validatedInput = validateCalculatorInput(BeefInputSchema, beefInputData);
 
@@ -121,8 +121,8 @@ Use nested import paths for smaller bundle sizes via tree shaking:
 import {
   BeefInputSchema,
   calculateBeef,
-} from '@aginnovationaustralia/emissions-calculators/beef';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/beef';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 
 const validatedInput = validateCalculatorInput(BeefInputSchema, beefInputData);
 

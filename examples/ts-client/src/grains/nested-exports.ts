@@ -3,8 +3,8 @@ import {
   calculateGrainsParsed,
   GrainsInput,
   GrainsInputSchema,
-} from '@aginnovationaustralia/emissions-calculators/grains';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/grains';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import { grainsInputDataMethod1, grainsInputDataMethod2 } from './input';
 
 const performValidationAndCalculate = (input: GrainsInput) => {

@@ -3,8 +3,8 @@ import {
   calculateCroppingParsed,
   CroppingInput,
   CroppingInputSchema,
-} from '@aginnovationaustralia/emissions-calculators/cropping';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/cropping';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import { croppingInputDataMethod1, croppingInputDataMethod2 } from './input';
 
 const performValidationAndCalculate = (input: CroppingInput) => {
