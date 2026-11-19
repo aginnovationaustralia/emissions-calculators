@@ -9,7 +9,11 @@
         "^build"
       ]
     },
-    "test": {},
+    "test": {
+      "dependsOn": [
+        "^build"
+      ]
+    },
     "lint": {
       "inputs": [
         "eslint.config.mjs",
@@ -33,11 +37,6 @@
     "data-entry#build": {
       "outputs": [
         "dist/**"
-      ]
-    },
-    "@aginnovationaustralia/emissions-calculator-research#test": {
-      "dependsOn": [
-        "^build"
       ]
     },
     "@aginnovationaustralia/emissions-calculator-research#check:types": {
