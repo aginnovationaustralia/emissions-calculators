@@ -47,7 +47,7 @@
   "author": "Agricultural Innovation Australia",
   "license": "CC-BY-4.0",
   "engines": {
-    "node": ">=22.19.0"
+    "node": ">=24.22.0"
   },
   "devDependencies": {
     "@aginnovationaustralia/calculator-units": "workspace:*",

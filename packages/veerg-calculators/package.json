@@ -337,8 +337,8 @@
     "clean": "rm -rf dist",
     "check:types": "tsc --noEmit",
     "lint": "eslint . && pnpm run check:types && pnpm run check:browser-deps",
-    "test": "jest",
-    "test:fullcam": "jest --config jest.config.fullcam.cjs",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:fullcam": "NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.fullcam.cjs",
     "version": "npm version --no-git-tag-version",
     "build:docs": "tsx scripts/build-docs/index.ts",
     "generate:exports": "tsx scripts/generate-exports.ts",
@@ -349,7 +349,7 @@
     "sync:ngaf": "tsx scripts/sync-ngaf/index.ts"
   },
   "engines": {
-    "node": ">=22.19.0"
+    "node": ">=24.22.0"
   },
   "devDependencies": {
     "@aginnovationaustralia/eslint-plugin-emissions-calculators": "workspace:*",
