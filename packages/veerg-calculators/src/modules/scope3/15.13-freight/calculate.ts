@@ -1,24 +1,14 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { HasCommonConstants } from '@/constants/types';
-import {
-  emissionsOfGasForFuel,
-  TransportFuelInputTransformed,
-} from '@/modules/scope1/8-fuel-use';
+import { emissionsOfGasForFuel } from '@/modules/scope1/8-fuel-use';
 import { selectConstant } from '@/tools/constants';
 import { captureMethod1Or2Value } from '@/tools/multi';
 import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { voidUnit } from '@/tools/units';
+import { calculateScope3EmissionsFromFuelTransport } from '../15.10-fuel';
 import { freightIsMethod1 } from './freight.input';
 import { FreightsInputTransformed } from './freights.input';
-
-const directEmissionsFromFuel = (
-  fuel: TransportFuelInputTransformed,
-  context: ExecutionContext<HasCommonConstants>,
-) => {
-  const { constants } = context;
-  return emissionsOfGasForFuel(fuel, constants, 'CO2e');
-};
 
 export const calculateFreightEmissions = (
   input: FreightsInputTransformed,
@@ -45,9 +35,24 @@ export const calculateFreightEmissions = (
       );
     }
 
+    /* 15.13.1.2
+     * If fuel use is known, use Chapter 8.1.1.1 and 15.8.1.1 to estimate direct and upstream
+     * emissions respectively associated with fuel consumption for freighting of goods.
+     * */
+
+    const directEmissions = emissionsOfGasForFuel(
+      freight.fuel,
+      constants,
+      'CO2e',
+    );
+    const upstreamEmissions = calculateScope3EmissionsFromFuelTransport(
+      { transport: [freight.fuel], stationary: [] },
+      context,
+    );
+
     return captureMethod1Or2Value(
       voidUnit(),
-      directEmissionsFromFuel(freight.fuel, context),
+      directEmissions.plus(upstreamEmissions).reference('15.13.1.2'),
     );
   });
   return sum(freightEmissions, zeroCO2e).named('E');

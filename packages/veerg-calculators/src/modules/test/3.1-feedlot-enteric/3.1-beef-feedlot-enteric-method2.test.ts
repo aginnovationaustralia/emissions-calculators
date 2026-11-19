@@ -51,5 +51,12 @@ describeMethod2Propagation({
           method2PercentAverageNeutralDetergentFibre: nv(30),
         }),
     },
+    {
+      name: 'method2PercentAverageEtherExtract',
+      apply: (base) =>
+        withGroupOverride(base, {
+          method2PercentAverageEtherExtract: nv(6),
+        }),
+    },
   ],
 });

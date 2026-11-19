@@ -97,3 +97,21 @@ export const getNeutralDetergentFibrePercentage = (
     ).named(`NDFj`),
     group.method2PercentAverageNeutralDetergentFibre,
   );
+
+/**
+ * Wrapper for getting percentage of feed intake that is ether extract *EEj*
+ * for a feedlot group.
+ */
+export const getEtherExtractPercentage = (
+  group: FeedlotGroupLivestockInputTransformed,
+  constants: HasConstants<'FEEDLOT'>,
+): Container<RealNumber> =>
+  captureMethod1Or2Value(
+    selectConstant(
+      constants.FEEDLOT,
+      'FEED',
+      getGroupDuration(group),
+      'etherExtractPercentage',
+    ).named(`EEj`),
+    group.method2PercentAverageEtherExtract,
+  );

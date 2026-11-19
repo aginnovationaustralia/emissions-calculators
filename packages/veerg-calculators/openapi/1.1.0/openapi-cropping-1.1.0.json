@@ -7057,8 +7057,7 @@
       "FuelStationaryGaseousType": {
         "type": "string",
         "enum": [
-          "Natural gas via pipeline",
-          "Town gas"
+          "Natural gas via pipeline"
         ]
       },
       "SolidWasteNonStreamType": {

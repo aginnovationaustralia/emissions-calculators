@@ -51,7 +51,7 @@ The parent's `Fertiliser` schema nests the child's `Shared('fertiliser')` schema
 | Nested schema                                        | Livestock-only keys                                                                                                                           |
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Dairy manure allocations (`DairyMMSAllocation*`)     | `solidsSeparatedPreTreatment` / `fractionSolidsSeparatedPreTreatment`                                                                         |
-| Feedlot group (`FeedlotGroup*`)                      | `method2AverageNeutralDetergentFibrePercentage`, `method2DryMatterDigestibility`                                                              |
+| Feedlot group (`FeedlotGroup*`)                      | `method2PercentAverageNeutralDetergentFibre`, `method2PercentAverageEtherExtract`, `method2FractionDryMatterDigestibility`                  |
 | Pigs class (`Pigs<Class>*`, `PigsHerdClasses*`)      | `method2AverageFeedIntake`, `method2VolatileSolidProductionRate`, and `fractionSolidsSeparatedPreTreatment` in the method 2 manure allocation |
 | Poultry class (`Poultry<Class>*`, `PoultryClasses*`) | `method2DryMatterDigestibility`                                                                                                               |
 
