@@ -17,6 +17,7 @@
       "jest"
     ],
     "noEmit": true,
+    "rootDir": ".",
     "module": "es2022",
     "moduleResolution": "bundler",
     "target": "es2017",
