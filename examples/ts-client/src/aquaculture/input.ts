@@ -29,7 +29,7 @@ import {
   TransportFuelInput,
   WastewaterTreatmentMethod1Input,
   WastewaterTreatmentMethod2Input,
-} from '@aginnovationaustralia/emissions-calculators/aquaculture';
+} from '@aginnovationaustralia/veerg-calculators/aquaculture';
 
 // These examples build two AquacultureInput objects with one entry in every array:
 //

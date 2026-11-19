@@ -3,8 +3,8 @@ import {
   PoultryInputSchema,
   calculatePoultry,
   calculatePoultryParsed,
-} from '@aginnovationaustralia/emissions-calculators/poultry';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/poultry';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import { poultryInputDataMethod1, poultryInputDataMethod2 } from './input';
 
 const performValidationAndCalculate = (input: PoultryInput) => {

@@ -122,7 +122,7 @@ import {
   TransportFuelInput,
   WastewaterTreatmentMethod1Input,
   WastewaterTreatmentMethod2Input,
-} from '@aginnovationaustralia/emissions-calculators/all-modules';
+} from '@aginnovationaustralia/veerg-calculators/all-modules';
 
 // These examples build two AllModulesInput objects with one entry in every array:
 //
@@ -1026,8 +1026,8 @@ const transportFuel: TransportFuelInput = {
 
 const stationaryFuel: StationaryFuelInput = {
   fuelClass: 'Gaseous fuels',
-  fuelType: 'Natural gas',
-  amountKilolitres: { value: 5 },
+  fuelType: 'Natural gas via pipeline',
+  amountCubicMetres: { value: 5000 },
 };
 
 const fuelUse: FuelInput = {

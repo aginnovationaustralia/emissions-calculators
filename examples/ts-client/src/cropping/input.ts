@@ -53,7 +53,7 @@ import {
   SolidWasteUnmanagedShallowMethod2Input,
   StationaryFuelInput,
   TransportFuelInput,
-} from '@aginnovationaustralia/emissions-calculators/cropping';
+} from '@aginnovationaustralia/veerg-calculators/cropping';
 
 // These examples build two CroppingInput objects with one entry in every array:
 //

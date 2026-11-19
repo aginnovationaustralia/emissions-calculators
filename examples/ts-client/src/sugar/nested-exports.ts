@@ -3,8 +3,8 @@ import {
   calculateSugarParsed,
   SugarInput,
   SugarInputSchema,
-} from '@aginnovationaustralia/emissions-calculators/sugar';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/sugar';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import { sugarInputDataMethod1, sugarInputDataMethod2 } from './input';
 
 const performValidationAndCalculate = (input: SugarInput) => {

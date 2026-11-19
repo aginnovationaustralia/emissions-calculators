@@ -3,8 +3,8 @@ import {
   calculateCottonParsed,
   CottonInput,
   CottonInputSchema,
-} from '@aginnovationaustralia/emissions-calculators/cotton';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/cotton';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import { cottonInputDataMethod1, cottonInputDataMethod2 } from './input';
 
 const performValidationAndCalculate = (input: CottonInput) => {

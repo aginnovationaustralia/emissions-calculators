@@ -28,7 +28,7 @@ import {
   WastewaterTreatmentMethod2Input,
   WildCatchFisheriesInput,
   WildCatchFisheryInput,
-} from '@aginnovationaustralia/emissions-calculators/wild-catch-fisheries';
+} from '@aginnovationaustralia/veerg-calculators/wild-catch-fisheries';
 
 // These examples build two WildCatchFisheriesInput objects with one entry in every array:
 //

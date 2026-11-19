@@ -1,7 +1,7 @@
 /**
  * Dump values (and optional formulas) from emissions-calculator test workbooks.
  *
- * Run from packages/calculators:
+ * Run from packages/veerg-calculators:
  *   npm run dump:sheet -- --workbook ./src/modules/test/.../file.xlsx --sheet 4.4.1.1 --row 11 --cells BC,BT
  */
 import { getSheet } from '../src/test/common/sheets';
@@ -98,7 +98,7 @@ const printHelp = (): void => {
   console.log(`Usage: npm run dump:sheet -- [options]
 
 Required:
-  -w, --workbook <path>   Path to .xlsx (relative to packages/calculators)
+  -w, --workbook <path>   Path to .xlsx (relative to packages/veerg-calculators)
   -s, --sheet <name>      Worksheet tab name
   -r, --row <n>           Row number (repeatable; optional if --range is set)
 

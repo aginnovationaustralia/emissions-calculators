@@ -3,8 +3,8 @@ import {
   BeefInputSchema,
   calculateBeef,
   calculateBeefParsed,
-} from '@aginnovationaustralia/emissions-calculators/beef';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/beef';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import { beefInputDataMethod1, beefInputDataMethod2 } from './input';
 
 const performValidationAndCalculate = (input: BeefInput) => {

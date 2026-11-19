@@ -3,8 +3,8 @@ import {
   WildCatchFisheriesInputSchema,
   calculateWildCatchFisheries,
   calculateWildCatchFisheriesParsed,
-} from '@aginnovationaustralia/emissions-calculators/wild-catch-fisheries';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/wild-catch-fisheries';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import {
   wildCatchFisheriesInputDataMethod1,
   wildCatchFisheriesInputDataMethod2,

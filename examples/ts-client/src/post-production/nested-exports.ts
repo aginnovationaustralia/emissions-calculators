@@ -3,8 +3,8 @@ import {
   PostProductionInputSchema,
   calculatePostProduction,
   calculatePostProductionParsed,
-} from '@aginnovationaustralia/emissions-calculators/post-production';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/post-production';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import {
   postProductionInputDataMethod1,
   postProductionInputDataMethod2,

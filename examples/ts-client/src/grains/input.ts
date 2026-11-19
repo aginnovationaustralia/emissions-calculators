@@ -53,7 +53,7 @@ import {
   SolidWasteUnmanagedShallowMethod2Input,
   StationaryFuelInput,
   TransportFuelInput,
-} from '@aginnovationaustralia/emissions-calculators/grains';
+} from '@aginnovationaustralia/veerg-calculators/grains';
 
 // These examples build two GrainsInput objects with one entry in every array:
 //

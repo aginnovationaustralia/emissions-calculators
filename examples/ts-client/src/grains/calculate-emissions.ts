@@ -3,7 +3,7 @@ import {
   CalculateEmissionsResult,
   GrainsOutput,
   isValidCalculatorName,
-} from '@aginnovationaustralia/emissions-calculators';
+} from '@aginnovationaustralia/veerg-calculators';
 import { grainsInputDataMethod1 } from './input';
 
 /**

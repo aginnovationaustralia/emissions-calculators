@@ -3,8 +3,8 @@ import {
   calculateViticultureParsed,
   ViticultureInput,
   ViticultureInputSchema,
-} from '@aginnovationaustralia/emissions-calculators/viticulture';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/viticulture';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import {
   viticultureInputDataMethod1,
   viticultureInputDataMethod2,

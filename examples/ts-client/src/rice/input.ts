@@ -52,7 +52,7 @@ import {
   SolidWasteUnmanagedShallowMethod2Input,
   StationaryFuelInput,
   TransportFuelInput,
-} from '@aginnovationaustralia/emissions-calculators/rice';
+} from '@aginnovationaustralia/veerg-calculators/rice';
 
 // These examples build two RiceInput objects with one entry in every array:
 //

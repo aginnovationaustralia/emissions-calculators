@@ -25,7 +25,6 @@
     },
     "examples-ts-client#build": {
       "dependsOn": [
-        "@aginnovationaustralia/emissions-calculators#build",
         "@aginnovationaustralia/veerg-calculators#build",
         "@aginnovationaustralia/emissions-calculator-research#build",
         "@aginnovationaustralia/calculator-units#build"

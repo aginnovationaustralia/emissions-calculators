@@ -1,13 +1,13 @@
 import {
   calculateGrainsParsed,
   validateCalculatorInput,
-} from '@aginnovationaustralia/emissions-calculators';
+} from '@aginnovationaustralia/veerg-calculators';
 import {
   GrainsInput,
   GrainsInputSchema,
   GrainsInputTransformed,
-} from '@aginnovationaustralia/emissions-calculators/grains';
-import { ValidationResult } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/grains';
+import { ValidationResult } from '@aginnovationaustralia/veerg-calculators/validate';
 import { grainsInputDataMethod1 } from './input';
 
 /**

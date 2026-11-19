@@ -3,8 +3,8 @@ import {
   calculateRiceParsed,
   RiceInput,
   RiceInputSchema,
-} from '@aginnovationaustralia/emissions-calculators/rice';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/rice';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import { riceInputDataMethod1, riceInputDataMethod2 } from './input';
 
 const performValidationAndCalculate = (input: RiceInput) => {

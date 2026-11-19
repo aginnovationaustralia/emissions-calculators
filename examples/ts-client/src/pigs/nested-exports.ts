@@ -3,8 +3,8 @@ import {
   PigsInputSchema,
   calculatePigs,
   calculatePigsParsed,
-} from '@aginnovationaustralia/emissions-calculators/pigs';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/pigs';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import { pigsInputDataMethod1, pigsInputDataMethod2 } from './input';
 
 const performValidationAndCalculate = (input: PigsInput) => {

@@ -3,8 +3,8 @@ import {
   OtherLivestockInputSchema,
   calculateOtherLivestock,
   calculateOtherLivestockParsed,
-} from '@aginnovationaustralia/emissions-calculators/other-livestock';
-import { validateCalculatorInput } from '@aginnovationaustralia/emissions-calculators/validate';
+} from '@aginnovationaustralia/veerg-calculators/other-livestock';
+import { validateCalculatorInput } from '@aginnovationaustralia/veerg-calculators/validate';
 import {
   otherLivestockInputDataMethod1,
   otherLivestockInputDataMethod2,

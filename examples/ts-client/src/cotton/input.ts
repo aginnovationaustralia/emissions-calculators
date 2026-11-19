@@ -53,7 +53,7 @@ import {
   SolidWasteUnmanagedShallowMethod2Input,
   StationaryFuelInput,
   TransportFuelInput,
-} from '@aginnovationaustralia/emissions-calculators/cotton';
+} from '@aginnovationaustralia/veerg-calculators/cotton';
 
 // These examples build two CottonInput objects with one entry in every array:
 //
