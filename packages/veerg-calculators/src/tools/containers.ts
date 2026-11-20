@@ -54,6 +54,13 @@ export const isNamedOrigin = (metadata: Metadata) => !!metadata?.name;
 /** A value in unit `U`, and how it was calculated. Its inputs are for method 1 or 2. */
 export type Container<U> = UnitsContainer<U, CalculatorRules, VeergMethod>;
 
+/**
+ * A union of containers, one for each member of `U`: `ContainerOf<'a' | 'b'>` is
+ * `Container<'a'> | Container<'b'>`. Unlike `Container<'a' | 'b'>`, type guards on it narrow in
+ * their false branch too, so a chain of guards can be checked as exhaustive.
+ */
+export type ContainerOf<U> = U extends unknown ? Container<U> : never;
+
 /** Any VEERG container, seen only as a record of how it was calculated. */
 export type AnyContainer = UnitsAnyContainer<VeergMethod>;
 

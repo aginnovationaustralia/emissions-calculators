@@ -54,6 +54,7 @@ import {
   InorganicFertiliserComponentOrigin,
   InorganicFertiliserComponentTypeNonRegional,
   InorganicFertiliserComponentTypeRegional,
+  InorganicFertiliserComponentWithOwnFractionsType,
   InorganicFertiliserType,
   LightDutyFuelType,
   LimitedRegion,
@@ -379,8 +380,17 @@ type OrganicFertiliserFractions = {
   N: MassPerMass<'N', 'Organic Fertiliser'>;
 };
 
+type InorganicFertiliserComponentFractions = {
+  N: MassPerMass<'N', 'Inorganic Fertiliser'>;
+  Volatilises: MassPerMass<'Volatilised N', 'N'>;
+};
+
 export type CropConstants = NamedConstants & {
   INORGANIC_FERTILISER_OTHER_VOLATILISES: MassPerMass<'Volatilised N', 'N'>;
+  INORGANIC_FERTILISER_COMPONENT_FRACTIONS: Record<
+    InorganicFertiliserComponentWithOwnFractionsType,
+    InorganicFertiliserComponentFractions
+  >;
   INORGANIC_FERTILISER_FRACTIONS: Record<
     InorganicFertiliserType,
     InorganicFertiliserFractions

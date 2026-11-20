@@ -4,9 +4,13 @@ import {
 } from '@/calculators/AllModules';
 import { InorganicFertiliserComponentType } from '@/constants/enums';
 import { getSheet } from '@/test/common/sheets';
+import { testContext } from '@/test/Grains/context';
 import { nv } from '@/tools/inputs';
 import XLSX from 'xlsx-populate';
-import { calculateInorganicFertiliserN2O } from '../../scope1/5-fertiliser/5.1-inorganic-fertiliser';
+import {
+  calculateInorganicFertiliserN2O,
+  massNitrogenFromInorganicFertiliserAppliedMNjf,
+} from '../../scope1/5-fertiliser/5.1-inorganic-fertiliser';
 import {
   FertiliserInput,
   FertiliserInputInorganicScope1Method1,
@@ -265,5 +269,73 @@ describe('5.1.1.2 Inorganic Fertiliser N2O - Method 2', () => {
       calculateInorganicFertiliserN2O,
       '5.1',
     );
+  });
+});
+
+/**
+ * Testing a scenario raised via GEETA comparison, where a custom blend including an Ammonia component was yielding 0 Nitrogen
+ */
+describe('5.1.1.1 Inorganic Fertiliser N2O - custom blend with an ammonia component', () => {
+  const blendInput = (
+    components: InorganicFertiliserComponentInput[],
+  ): HasFertiliserInputTransformed =>
+    HasFertiliserInputSchema.parse({
+      fertiliser: {
+        productionSystem: 'Irrigated crop',
+        inorganic: {
+          applications: [
+            {
+              calculationMethodScope3: '1',
+              // the blend's main N ingredient is ammonium-based
+              fertiliserType: 'Sulphate of Ammonia (SOA)',
+              massAppliedKilograms: nv(10000),
+              massPurchasedKilograms: nv(0),
+              components,
+            },
+          ],
+          calculationMethodScope1: '1',
+        },
+        organic: { applications: [] },
+      },
+    } satisfies HasFertiliserInput);
+
+  const ammoniaBlend = blendInput([
+    {
+      componentType: 'Ammonia',
+      componentOrigin: 'Unspecified',
+      fractionOfFertiliser: nv(0.5),
+    },
+  ]);
+
+  // The same N given as a pure ammoniacal N component, which aia already counts at 1 kg N/kg
+  const sameNitrogenAsAmmoniacalN = blendInput([
+    {
+      componentType: 'Nitrogen - Ammonia',
+      fractionOfFertiliser: nv(0.5 * 0.8235),
+    } as InorganicFertiliserComponentInput,
+  ]);
+
+  const tonnes = (container: {
+    unit: { store: { value: { div(n: number): { toNumber(): number } } } };
+  }) => container.unit.store.value.div(1000).toNumber();
+
+  it('counts the N in the ammonia component (4,117.5 kg N)', () => {
+    const application = ammoniaBlend.fertiliser.inorganic.applications[0];
+    const mnjf = massNitrogenFromInorganicFertiliserAppliedMNjf(
+      application,
+      testContext().constants,
+    );
+    expect(mnjf.unit.store.value.toNumber()).toBeCloseTo(4117.5, 6);
+  });
+
+  it('gives the same N2O as the equivalent ammoniacal N', () => {
+    const context = testContext();
+    const expected = tonnes(
+      calculateInorganicFertiliserN2O(sameNitrogenAsAmmoniacalN, context),
+    );
+    expect(expected).toBeGreaterThan(0);
+    expect(
+      tonnes(calculateInorganicFertiliserN2O(ammoniaBlend, context)),
+    ).toBeCloseTo(expected, 10);
   });
 });
