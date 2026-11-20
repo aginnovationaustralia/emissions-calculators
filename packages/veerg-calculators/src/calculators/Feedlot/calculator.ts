@@ -19,6 +19,7 @@ import { generateIntensity } from '@/tools/intensity';
 import { zeroMassLiveweight } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
+import { calculateFeedlotOutputs } from './outputs';
 import { createCalculator } from '../common/calculator';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForFeedlotCalculator } from './constants';
@@ -164,4 +165,5 @@ export const calculateFeedlot = createCalculator(
   calculateScope3FeedlotLot,
   getSingleIntensities,
   getTotalIntensities,
+  calculateFeedlotOutputs,
 );
