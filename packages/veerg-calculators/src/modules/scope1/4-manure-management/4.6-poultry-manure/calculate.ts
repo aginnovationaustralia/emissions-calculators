@@ -1,5 +1,8 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { PoultryFlockLivestockInputTransformed } from '@/modules/scope1/shared/poultry/input';
+import {
+  PoultryFlockFertiliserInputTransformed,
+  PoultryFlockLivestockInputTransformed,
+} from '@/modules/scope1/shared/poultry/input';
 import { zeroCH4, zeroN, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import {
@@ -94,6 +97,28 @@ export function calculateLeachingAndRunoffN2OEmissionsForPoultryFlock(
 }
 
 /**
+ * Calculate the mass of nitrogen in a poultry flock's manure that is *applicable* to soils
+ * (4.6.1.9 (1) before the fraction applied within the activity boundary, PF): the manure
+ * nitrogen that can be applied to soils locally, sold to another enterprise, or disposed of
+ * as waste.
+ */
+export function calculateMassOfNitrogenApplicableToSoilsForPoultryFlock(
+  flock: Omit<PoultryFlockFertiliserInputTransformed, 'fractionAppliedToSoils'>,
+  constants: ConstantsForPoultryManure,
+) {
+  return sum(
+    Object.values(flock.classes).map((poultryClass) =>
+      calculateMassOfNitrogenAppliedToSoilsForClass(
+        poultryClass,
+        flock.isInLeachingZone,
+        constants,
+      ),
+    ),
+    zeroN,
+  ).named('MNSoil applicable');
+}
+
+/**
  * Calculate the mass of nitrogen applied to soils *MNSoilscope1* produced by poultry
  * flocks (4.6.1.9).
  */
@@ -102,19 +127,12 @@ export function calculateMassOfNitrogenAppliedToSoilsForPoultry(
   constants: ConstantsForPoultryManure,
 ) {
   return sum(
-    manureInput.flocks.map((flock) => {
-      const { classes, isInLeachingZone, fractionAppliedToSoils } = flock;
-      return sum(
-        Object.values(classes).map((poultryClass) =>
-          calculateMassOfNitrogenAppliedToSoilsForClass(
-            poultryClass,
-            isInLeachingZone,
-            constants,
-          ),
-        ),
-        zeroN,
-      ).multiply(fractionAppliedToSoils);
-    }),
+    manureInput.flocks.map((flock) =>
+      calculateMassOfNitrogenApplicableToSoilsForPoultryFlock(
+        flock,
+        constants,
+      ).multiply(flock.fractionAppliedToSoils),
+    ),
     zeroN,
   )
     .named('MNSoilscope1')

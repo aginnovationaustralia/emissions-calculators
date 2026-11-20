@@ -103,15 +103,16 @@ export function calculate45PigsManureManagement(
 }
 
 /**
- * Calculate nitrogen applied to soils *MNSoilscope1* produced by a pig herd.
- * TODO: The section number is subject to change due to formatting issues in the draft
- * guidance.
+ * Calculate the mass of nitrogen in a pig herd's manure that is *applicable* to soils
+ * (MNSoilscope1 before the fraction applied within the activity boundary, PF): the manure
+ * nitrogen that can be applied to soils locally, sold to another enterprise, or disposed of
+ * as waste.
  */
-function calculateMassOfNitrogenAppliedToSoilsForPigsHerd(
-  herdInput: PigsHerdFertiliserInputTransformed,
+export function calculateMassOfNitrogenApplicableToSoilsForPigsHerd(
+  herdInput: Omit<PigsHerdFertiliserInputTransformed, 'fractionAppliedToSoils'>,
   constants: ConstantsForPigsManure,
 ) {
-  const nitrogenProducedByPigsHerd = sum(
+  return sum(
     Object.values(herdInput.classes).map((pigsClass) =>
       calculateMassOfNitrogenAppliedToSoilsForClass(
         pigsClass,
@@ -120,16 +121,26 @@ function calculateMassOfNitrogenAppliedToSoilsForPigsHerd(
       ),
     ),
     zeroN,
-  );
-  return nitrogenProducedByPigsHerd
+  ).named('MNSoil applicable');
+}
+
+/**
+ * Calculate nitrogen applied to soils *MNSoilscope1* produced by a pig herd.
+ */
+function calculateMassOfNitrogenAppliedToSoilsForPigsHerd(
+  herdInput: PigsHerdFertiliserInputTransformed,
+  constants: ConstantsForPigsManure,
+) {
+  return calculateMassOfNitrogenApplicableToSoilsForPigsHerd(
+    herdInput,
+    constants,
+  )
     .multiply(herdInput.fractionAppliedToSoils)
     .named('MNSoilscope1');
 }
 
 /**
  * Calculate nitrogen applied to soils *MNSoilscope1* produced by a pig herd.
- * TODO: The section number is subject to change due to formatting issues in the draft
- * guidance.
  */
 export function calculateMassOfNitrogenAppliedToSoilsForPigs(
   input: PigsManureInputTransformed,

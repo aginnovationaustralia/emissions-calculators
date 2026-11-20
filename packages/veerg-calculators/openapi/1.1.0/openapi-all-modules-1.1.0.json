@@ -13773,13 +13773,119 @@
                       ],
                       "additionalProperties": false,
                       "description": "Net emissions for the enterprise with LULUCF as well"
+                    },
+                    "outputs": {
+                      "type": "object",
+                      "properties": {
+                        "feedlot": {
+                          "type": "object",
+                          "properties": {
+                            "massOfNitrogenInManureApplicableToSoilsKilograms": {
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "description": "Mass of nitrogen in manure applicable to soils, in kg N: the nitrogen left in the manure after its management (the mass of nitrogen applied to soils, MNSoil, before the fraction applied within the activity boundary), which can be applied to soils locally in a mixed operation, sold to another enterprise, or disposed of as waste"
+                            }
+                          },
+                          "required": [
+                            "massOfNitrogenInManureApplicableToSoilsKilograms"
+                          ],
+                          "additionalProperties": false,
+                          "description": "Quantities produced by the calculation that are not emissions, such as the nitrogen in manure available for reuse"
+                        },
+                        "dairy": {
+                          "type": "object",
+                          "properties": {
+                            "massOfNitrogenInManureApplicableToSoilsKilograms": {
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "description": "Mass of nitrogen in manure applicable to soils, in kg N: the nitrogen left in the manure after its management (the mass of nitrogen applied to soils, MNSoil, before the fraction applied within the activity boundary), which can be applied to soils locally in a mixed operation, sold to another enterprise, or disposed of as waste"
+                            }
+                          },
+                          "required": [
+                            "massOfNitrogenInManureApplicableToSoilsKilograms"
+                          ],
+                          "additionalProperties": false,
+                          "description": "Quantities produced by the calculation that are not emissions, such as the nitrogen in manure available for reuse"
+                        },
+                        "pigs": {
+                          "type": "object",
+                          "properties": {
+                            "massOfNitrogenInManureApplicableToSoilsKilograms": {
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "description": "Mass of nitrogen in manure applicable to soils, in kg N: the nitrogen left in the manure after its management (the mass of nitrogen applied to soils, MNSoil, before the fraction applied within the activity boundary), which can be applied to soils locally in a mixed operation, sold to another enterprise, or disposed of as waste"
+                            }
+                          },
+                          "required": [
+                            "massOfNitrogenInManureApplicableToSoilsKilograms"
+                          ],
+                          "additionalProperties": false,
+                          "description": "Quantities produced by the calculation that are not emissions, such as the nitrogen in manure available for reuse"
+                        },
+                        "poultry": {
+                          "type": "object",
+                          "properties": {
+                            "massOfNitrogenInManureApplicableToSoilsKilograms": {
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "description": "Mass of nitrogen in manure applicable to soils, in kg N: the nitrogen left in the manure after its management (the mass of nitrogen applied to soils, MNSoil, before the fraction applied within the activity boundary), which can be applied to soils locally in a mixed operation, sold to another enterprise, or disposed of as waste"
+                            }
+                          },
+                          "required": [
+                            "massOfNitrogenInManureApplicableToSoilsKilograms"
+                          ],
+                          "additionalProperties": false,
+                          "description": "Quantities produced by the calculation that are not emissions, such as the nitrogen in manure available for reuse"
+                        }
+                      },
+                      "required": [
+                        "feedlot",
+                        "dairy",
+                        "pigs",
+                        "poultry"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Quantities produced by the calculation that are not emissions, for each livestock input whose manure can be reused (all 0 for one not given)"
                     }
                   },
                   "required": [
                     "scope1",
                     "scope2",
                     "scope3",
-                    "net"
+                    "net",
+                    "outputs"
                   ],
                   "additionalProperties": false,
                   "description": "Emissions calculation output for the AllModules calculator"

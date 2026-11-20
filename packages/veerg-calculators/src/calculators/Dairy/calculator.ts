@@ -44,6 +44,7 @@ import {
 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
+import { calculateDairyOutputs } from './outputs';
 import { createCalculator } from '../common/calculator';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForDairyCalculator } from './constants';
@@ -385,4 +386,5 @@ export const calculateDairy = createCalculator(
   calculateScope3DairyHerd,
   getSingleIntensities,
   getTotalIntensities,
+  calculateDairyOutputs,
 );

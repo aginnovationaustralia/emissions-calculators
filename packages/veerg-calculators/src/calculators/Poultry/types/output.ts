@@ -1,4 +1,5 @@
 import { EnterpriseNetOutputSchema } from '@/calculators/types/enterprise-net.output';
+import { ManureOutputsSchema } from '@/calculators/types/manure.output';
 import { Scope2OutputSchema } from '@/calculators/types/scope2.output';
 import { emissionsOutput } from '@/types/schemas';
 import { z } from 'zod';
@@ -14,6 +15,7 @@ export const PoultryOutputSchema = emissionsOutput('Poultry', {
   intermediate: z.array(PoultryIntermediateOutputSchema),
   net: EnterpriseNetOutputSchema,
   intensities: PoultryIntensitiesOutputSchema,
+  outputs: ManureOutputsSchema,
 });
 
 export type PoultryOutput = z.infer<typeof PoultryOutputSchema>;

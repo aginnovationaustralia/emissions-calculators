@@ -86,11 +86,14 @@ export const calculate41BeefFeedlotManureManagement = (
 };
 
 /**
- * Calculate mass of nitrogen applied to soil *MNSoil,scope1* produced by feedlot cattle
- * (4.1.1.9)
+ * Calculate the mass of nitrogen in feedlot manure that is *applicable* to soils: the sum
+ * over the secondary and tertiary MMS of MNjmT=2,3 x (1 - EFmT=2,3 - FracGASMmT=2,3) in
+ * 4.1.1.9 (1), before the fraction applied within the activity boundary (PF). It is the
+ * manure nitrogen that can be applied to soils locally, sold to another enterprise, or
+ * disposed of as waste.
  */
-export function calculateMassOfNitrogenAppliedToSoilsForFeedlot(
-  input: FeedlotLotFertiliserInputTransformed,
+export function calculateMassOfNitrogenApplicableToSoilsForFeedlot(
+  input: Omit<FeedlotLotFertiliserInputTransformed, 'fractionAppliedToSoils'>,
   constants: HasConstants<'FEEDLOT' | 'COMMON' | 'LIVESTOCK'>,
 ) {
   return sum(
@@ -98,7 +101,18 @@ export function calculateMassOfNitrogenAppliedToSoilsForFeedlot(
       calculateMassOfNitrogenAppliedToSoilsForGroup(group, constants),
     ),
     zeroN,
-  )
+  ).named('MNSoil applicable');
+}
+
+/**
+ * Calculate mass of nitrogen applied to soil *MNSoil,scope1* produced by feedlot cattle
+ * (4.1.1.9)
+ */
+export function calculateMassOfNitrogenAppliedToSoilsForFeedlot(
+  input: FeedlotLotFertiliserInputTransformed,
+  constants: HasConstants<'FEEDLOT' | 'COMMON' | 'LIVESTOCK'>,
+) {
+  return calculateMassOfNitrogenApplicableToSoilsForFeedlot(input, constants)
     .multiply(input.fractionAppliedToSoils)
     .named(`MNSoil`)
     .reference('4.1.1.9 (1)');

@@ -3229,6 +3229,29 @@
                               "liveweightIntensity"
                             ],
                             "additionalProperties": false
+                          },
+                          "outputs": {
+                            "type": "object",
+                            "properties": {
+                              "massOfNitrogenInManureApplicableToSoilsKilograms": {
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "type": "number"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "description": "Mass of nitrogen in manure applicable to soils, in kg N: the nitrogen left in the manure after its management (the mass of nitrogen applied to soils, MNSoil, before the fraction applied within the activity boundary), which can be applied to soils locally in a mixed operation, sold to another enterprise, or disposed of as waste"
+                              }
+                            },
+                            "required": [
+                              "massOfNitrogenInManureApplicableToSoilsKilograms"
+                            ],
+                            "additionalProperties": false,
+                            "description": "Quantities produced by the calculation that are not emissions, such as the nitrogen in manure available for reuse"
                           }
                         },
                         "required": [
@@ -3237,7 +3260,8 @@
                           "scope2",
                           "scope3",
                           "net",
-                          "intensities"
+                          "intensities",
+                          "outputs"
                         ],
                         "additionalProperties": false,
                         "description": "Intermediate emissions calculation output for the Pigs calculator"
@@ -3314,6 +3338,29 @@
                         "liveweightIntensityIncludingLULUCF"
                       ],
                       "additionalProperties": false
+                    },
+                    "outputs": {
+                      "type": "object",
+                      "properties": {
+                        "massOfNitrogenInManureApplicableToSoilsKilograms": {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "value"
+                          ],
+                          "additionalProperties": false,
+                          "description": "Mass of nitrogen in manure applicable to soils, in kg N: the nitrogen left in the manure after its management (the mass of nitrogen applied to soils, MNSoil, before the fraction applied within the activity boundary), which can be applied to soils locally in a mixed operation, sold to another enterprise, or disposed of as waste"
+                        }
+                      },
+                      "required": [
+                        "massOfNitrogenInManureApplicableToSoilsKilograms"
+                      ],
+                      "additionalProperties": false,
+                      "description": "Quantities produced by the calculation that are not emissions, such as the nitrogen in manure available for reuse"
                     }
                   },
                   "required": [
@@ -3322,7 +3369,8 @@
                     "scope3",
                     "intermediate",
                     "net",
-                    "intensities"
+                    "intensities",
+                    "outputs"
                   ],
                   "additionalProperties": false,
                   "description": "Emissions calculation output for the Pigs calculator"

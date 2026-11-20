@@ -1,4 +1,5 @@
 import { ActivityNetOutputSchema } from '@/calculators/types/activity-net.output';
+import { ManureOutputsSchema } from '@/calculators/types/manure.output';
 import { Scope2OutputSchema } from '@/calculators/types/scope2.output';
 import { intermediateEmissionsOutput } from '@/types/schemas';
 import { z } from 'zod';
@@ -14,6 +15,7 @@ export const FeedlotIntermediateOutputSchema = intermediateEmissionsOutput(
     scope3: FeedlotScope3OutputSchema,
     net: ActivityNetOutputSchema,
     intensities: FeedlotIntermediateIntensitiesOutputSchema,
+    outputs: ManureOutputsSchema,
   },
 );
 

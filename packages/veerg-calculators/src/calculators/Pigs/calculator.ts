@@ -18,6 +18,7 @@ import { generateIntensity } from '@/tools/intensity';
 import { zeroMassLiveweight } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
+import { calculatePigsOutputs } from './outputs';
 import { createCalculator } from '../common/calculator';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForPigsCalculator } from './constants';
@@ -158,4 +159,5 @@ export const calculatePigs = createCalculator(
   calculateScope3PigsHerd,
   getSingleIntensities,
   getTotalIntensities,
+  calculatePigsOutputs,
 );
