@@ -5,12 +5,7 @@ import {
 } from '@/modules/scope1/5-fertiliser/inorganic-fertilisers.input';
 import { OrganicFertilisersInputSchema } from '@/modules/scope1/5-fertiliser/organic-fertilisers.input';
 import { BaseCropResidueInputSchema } from '@/modules/scope1/6-residue-mgmt/crop-residue.input';
-import {
-  input,
-  InputContainer,
-  isProportion,
-  numberInput,
-} from '@/tools/inputs';
+import { input, InputContainer, numberInput } from '@/tools/inputs';
 import {
   FERT_INORGANIC_5_1,
   INTENSITIES,
@@ -18,7 +13,7 @@ import {
   RESIDUE_CROPS_6_1,
   RESIDUE_LEACH_6_3,
 } from '@/tools/modules';
-import { mass, realNumber } from '@/tools/units';
+import { mass } from '@/tools/units';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 
@@ -83,29 +78,30 @@ export const CottonCropResidueInputSchema = BaseCropResidueInputSchema.omit({
   totalYieldKilograms: true,
 })
   .safeExtend({
-    fractionSeedCottonLint: numberInput(
-      realNumber,
-      {
-        name: 'Fraction of harvested crop that is cotton lint (not cotton seed)',
-        description:
-          'Fraction of the harvested cotton crop that is lint, as opposed to cotton seed.',
-        modules: [INTENSITIES],
-      },
-      isProportion,
-    ),
-    totalYieldKilograms: numberInput(
+    totalLintYieldKilograms: numberInput(
       (val) => mass('DryMatter', val),
       {
         name: 'Pc',
         method: '1',
         description:
-          'Total yield of the cotton crop, as dry matter. This value must exclude the total mass of trash.',
+          'Total yield of cotton lint from the crop, as dry matter. This value must only include the mass of lint, and exclude the mass of cotton seed and trash.',
         modules: [
           RESIDUE_CROPS_6_1,
           RESIDUE_LEACH_6_3,
           RESIDUE_BURN_6_4,
           INTENSITIES,
         ],
+      },
+      (s) => s.min(0),
+    ),
+    totalSeedYieldKilograms: numberInput(
+      (val) => mass('DryMatter', val),
+      {
+        name: 'Total mass of seed',
+        method: '1',
+        description:
+          'Total yield of cotton seed from the crop. This value must only include the mass of seed, and exclude the mass of cotton lint and trash.',
+        modules: [INTENSITIES],
       },
       (s) => s.min(0),
     ),
@@ -116,6 +112,8 @@ export const CottonCropResidueInputSchema = BaseCropResidueInputSchema.omit({
       name: 'Cotton',
       modules: [RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3, RESIDUE_BURN_6_4],
     }),
+    // This helps to satisfy typescript constraints in calculators
+    totalYieldKilograms: val.totalLintYieldKilograms,
   }));
 
 export type CottonCropResidueInput = z.input<

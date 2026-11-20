@@ -101,8 +101,8 @@ const cropResiduesMethod2: CropResiduesInput = {
 };
 
 const cropMethod1: CottonCropResidueInput = {
-  totalYieldKilograms: { value: 3000000, quality },
-  fractionSeedCottonLint: { value: 0.4 },
+  totalLintYieldKilograms: { value: 3000000, quality },
+  totalSeedYieldKilograms: { value: 1200000, quality },
   residues: cropResiduesMethod1,
 };
 
