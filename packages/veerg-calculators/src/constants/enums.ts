@@ -355,7 +355,10 @@ export const InorganicFertiliserComponentNonRegionalWithEquivalentTypes = [
 export type InorganicFertiliserComponentNonRegionalWithEquivalentType =
   (typeof InorganicFertiliserComponentNonRegionalWithEquivalentTypes)[number];
 
-// Components with their own N fraction and FracGASF basis (no equivalent fertiliser type in Table A.2.2.3).
+// Components with their own N fraction and FracGASF basis, in INORGANIC_FERTILISER_COMPONENT_FRACTIONS. None of them
+// has an equivalent fertiliser type in Table A.2.2.3.
+// 'Nitrogen - Ammonia' and 'Nitrogen - Nitrate' are also nitrogen components (InorganicFertiliserComponentNitrogenTypes),
+// so check this list first: their N form gives them a FracGASF basis of their own.
 // 'Nitrogen - Generic' is not listed: it has N 1 but no basis of its own, so it takes the application's FracGASF.
 export const InorganicFertiliserComponentWithOwnFractionsTypes = [
   'Ammonia',
