@@ -37346,7 +37346,7 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Dairy milk emissions intensity for this activity, using energy based allocation, in kg-CO2e/kg milk"
+                                "description": "Dairy milk emissions intensity for this activity, using energy based allocation, in kg-CO2e/kg milk (fat and protein corrected)"
                               },
                               "milkIntensityMassAllocation": {
                                 "type": "object",
@@ -37359,7 +37359,7 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Dairy milk emissions intensity for this activity, using mass based allocation, in kg-CO2e/kg milk"
+                                "description": "Dairy milk emissions intensity for this activity, using mass based allocation, in kg-CO2e/kg milk (fat and protein corrected)"
                               }
                             },
                             "required": [
@@ -37499,7 +37499,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Dairy milk emissions intensity excluding LULUCF, using energy based allocation, in kg-CO2e/kg milk"
+                          "description": "Dairy milk emissions intensity excluding LULUCF, using energy based allocation, in kg-CO2e/kg milk (fat and protein corrected)"
                         },
                         "milkIntensityEnergyAllocationIncludingLULUCF": {
                           "type": "object",
@@ -37512,7 +37512,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Dairy milk emissions intensity including LULUCF, using energy based allocation, in kg-CO2e/kg milk"
+                          "description": "Dairy milk emissions intensity including LULUCF, using energy based allocation, in kg-CO2e/kg milk (fat and protein corrected)"
                         },
                         "milkIntensityMassAllocationExcludingLULUCF": {
                           "type": "object",
@@ -37525,7 +37525,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Dairy milk emissions intensity excluding LULUCF, using mass based allocation, in kg-CO2e/kg milk"
+                          "description": "Dairy milk emissions intensity excluding LULUCF, using mass based allocation, in kg-CO2e/kg milk (fat and protein corrected)"
                         },
                         "milkIntensityMassAllocationIncludingLULUCF": {
                           "type": "object",
@@ -37538,7 +37538,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Dairy milk emissions intensity including LULUCF, using mass based allocation, in kg-CO2e/kg milk"
+                          "description": "Dairy milk emissions intensity including LULUCF, using mass based allocation, in kg-CO2e/kg milk (fat and protein corrected)"
                         }
                       },
                       "required": [
