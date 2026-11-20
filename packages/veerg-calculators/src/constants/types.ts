@@ -25,7 +25,6 @@ import {
   Years,
 } from '@/tools/units';
 import {
-  InorganicFertiliserComponentWithOwnFractionsType,
   AgrochemicalType,
   AquacultureSystemLocation,
   AviationFuelType,
@@ -55,6 +54,7 @@ import {
   InorganicFertiliserComponentOrigin,
   InorganicFertiliserComponentTypeNonRegional,
   InorganicFertiliserComponentTypeRegional,
+  InorganicFertiliserComponentWithOwnFractionsType,
   InorganicFertiliserType,
   LightDutyFuelType,
   LimitedRegion,
