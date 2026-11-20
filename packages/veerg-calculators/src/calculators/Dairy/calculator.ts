@@ -249,7 +249,7 @@ function getMilkProducedKgForHerd(
  * which builds upon the work of [Ineichen et al. (2022)](https://www.sciencedirect.com/science/article/pii/S1871141322001342)
  * and [Nemecek and Thoma (2020)](https://ira.agroscope.ch/en-US/Page/Einzelpublikation/Download?einzelpublikationId=47637)
  */
-function getAllocationToMilkProduction(
+function getEnergyAllocationToMilkProduction(
   herds: DairyHerdInputTransformed[],
   context: ExecutionContext<ConstantsForDairyCalculator>,
 ) {
@@ -338,7 +338,10 @@ function getAllocations(
   milkProduced: Container<Mass<'Milk'>>,
   context: ExecutionContext<ConstantsForDairyCalculator>,
 ) {
-  const energyAllocationToMilk = getAllocationToMilkProduction(herds, context);
+  const energyAllocationToMilk = getEnergyAllocationToMilkProduction(
+    herds,
+    context,
+  );
   const massAllocationToMilk = getMassAllocationToMilkProduction(
     liveweightProduced,
     milkProduced,
