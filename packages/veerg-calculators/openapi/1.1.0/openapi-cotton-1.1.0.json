@@ -1939,7 +1939,7 @@
                               "x-units": "0-1"
                             },
                             "totalYieldKilograms": {
-                              "description": "Total yield of the cotton crop, as dry matter. This value must exclude the total mass of trash. (kilograms dry matter)",
+                              "description": "Total yield of cotton lint from the crop, as dry matter. This value must only include the mass of lint, and exclude the mass of cotton seed and trash. (kilograms dry matter)",
                               "x-modules": [
                                 "6.1",
                                 "6.3",
