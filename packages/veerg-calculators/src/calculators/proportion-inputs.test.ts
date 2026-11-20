@@ -25,10 +25,10 @@ const electricity = {
 type CottonCrop = CottonInput['crops'][number];
 
 const cottonInput = ({
-  fractionSeedCottonLint = 0.4,
+  ratioSeedToLint = 0.4,
   ureaFractionOfFertiliser = 1,
 }: {
-  fractionSeedCottonLint?: number;
+  ratioSeedToLint?: number;
   ureaFractionOfFertiliser?: number;
 }): CottonInput => {
   const crop: CottonCrop = {
@@ -37,8 +37,8 @@ const cottonInput = ({
     isInLeachingZone: false,
     electricityAllocation: nv(1),
     crop: {
-      totalYieldKilograms: nv(3_000_000),
-      fractionSeedCottonLint: nv(fractionSeedCottonLint),
+      totalLintYieldKilograms: nv(3_000_000 * (1 - ratioSeedToLint)),
+      totalSeedYieldKilograms: nv(4_500_000 * ratioSeedToLint),
       residues: { calculationMethod: '1' },
     },
     fertiliser: {
@@ -77,25 +77,6 @@ const issuePaths = (result: { status: string; issues?: { path: string }[] }) =>
   result.status === 'INVALID_INPUT'
     ? (result.issues ?? []).map((issue) => issue.path)
     : [];
-
-describe('Cotton fractionSeedCottonLint', () => {
-  test.each([0, 0.4, 1])('accepts %p', (value) => {
-    const result = calculateCotton(
-      cottonInput({ fractionSeedCottonLint: value }),
-    );
-    expect(result.status).toBe('OK');
-  });
-
-  test.each([1.5, -0.2])('rejects %p with INVALID_INPUT', (value) => {
-    const result = calculateCotton(
-      cottonInput({ fractionSeedCottonLint: value }),
-    );
-    expect(result.status).toBe('INVALID_INPUT');
-    expect(issuePaths(result)).toEqual([
-      'crops.0.crop.fractionSeedCottonLint.value',
-    ]);
-  });
-});
 
 describe('Inorganic fertiliser known component fractionOfFertiliser', () => {
   test('accepts a fraction', () => {

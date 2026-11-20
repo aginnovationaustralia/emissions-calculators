@@ -10,7 +10,6 @@ import {
   calculate61CropResidueN2O,
   calculate63ResidueLeachingAndRunoffN2O,
   calculate64FieldBurning,
-  getAmountProduced,
 } from '@/modules/scope1/6-residue-mgmt';
 import { ConstantsForResidueManagement } from '@/modules/scope1/6-residue-mgmt/constants';
 import {
@@ -30,7 +29,7 @@ import { selectConstant } from '@/tools/constants';
 import { Container, num } from '@/tools/containers';
 import { exposeMassValue, extractMassAsNumber } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
-import { oneMinus, zeroMassDryMatter } from '@/tools/sentinels';
+import { zeroMassDryMatter } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
 import { createCalculator } from '../common/calculator';
@@ -45,29 +44,18 @@ import {
 } from './types';
 import { CottonCropInputTransformed } from './types/crop.input';
 
-function getCottonHarvestedForCrop(
-  crop: CottonCropInputTransformed,
-  constants: ConstantsForResidueManagement,
-) {
-  return getAmountProduced(crop, constants);
-}
-
-function getCottonLintHarvestedForCrop(
-  crop: CottonCropInputTransformed,
-  constants: ConstantsForResidueManagement,
-) {
-  return getAmountProduced(crop, constants).multiply(
-    crop.crop.fractionSeedCottonLint,
+function getCottonHarvestedForCrop(crop: CottonCropInputTransformed) {
+  return crop.crop.totalLintYieldKilograms.plus(
+    crop.crop.totalSeedYieldKilograms,
   );
 }
 
-function getCottonSeedHarvestedForCrop(
-  crop: CottonCropInputTransformed,
-  constants: ConstantsForResidueManagement,
-) {
-  return getAmountProduced(crop, constants).multiply(
-    oneMinus(crop.crop.fractionSeedCottonLint),
-  );
+function getCottonLintHarvestedForCrop(crop: CottonCropInputTransformed) {
+  return crop.crop.totalLintYieldKilograms;
+}
+
+function getCottonSeedHarvestedForCrop(crop: CottonCropInputTransformed) {
+  return crop.crop.totalLintYieldKilograms;
 }
 
 function getSingleIntensities(
@@ -76,9 +64,9 @@ function getSingleIntensities(
   context: ExecutionContext<ConstantsForResidueManagement>,
 ): CottonIntermediateIntensitiesOutput {
   const { constants } = context;
-  const cottonHarvested = getCottonHarvestedForCrop(crop, constants);
-  const cottonLintHarvested = getCottonLintHarvestedForCrop(crop, constants);
-  const cottonSeedHarvested = getCottonSeedHarvestedForCrop(crop, constants);
+  const cottonHarvested = getCottonHarvestedForCrop(crop);
+  const cottonLintHarvested = getCottonLintHarvestedForCrop(crop);
+  const cottonSeedHarvested = getCottonSeedHarvestedForCrop(crop);
 
   const economicLintAllocation = selectConstant(
     constants.CROP,
@@ -137,15 +125,15 @@ function getTotalIntensities(
 ): CottonIntensitiesOutput {
   const { constants } = context;
   const cottonHarvested = sum(
-    crops.map((crop) => getCottonHarvestedForCrop(crop, constants)),
+    crops.map((crop) => getCottonHarvestedForCrop(crop)),
     zeroMassDryMatter,
   );
   const cottonLintHarvested = sum(
-    crops.map((crop) => getCottonLintHarvestedForCrop(crop, constants)),
+    crops.map((crop) => getCottonLintHarvestedForCrop(crop)),
     zeroMassDryMatter,
   );
   const cottonSeedHarvested = sum(
-    crops.map((crop) => getCottonSeedHarvestedForCrop(crop, constants)),
+    crops.map((crop) => getCottonSeedHarvestedForCrop(crop)),
     zeroMassDryMatter,
   );
 
