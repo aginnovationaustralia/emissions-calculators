@@ -1,6 +1,6 @@
 {
   "name": "@aginnovationaustralia/emissions-calculator-research",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Run the emissions calculators with custom overrides to the constant values, for research purposes",
   "keywords": [
     "emissions",
