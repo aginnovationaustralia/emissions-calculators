@@ -20,11 +20,11 @@
   },
   "devDependencies": {
     "@types/node": "^25.0.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "ts-node": "^10.9.2"
   },
   "engines": {
-    "node": ">=22.19.0"
+    "node": ">=24.22.0"
   },
   "author": "Agricultural Innovation Australia",
   "license": "CC-BY-4.0"

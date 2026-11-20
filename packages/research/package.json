@@ -31,7 +31,7 @@
     "clean": "rm -rf dist",
     "check:types": "tsc --noEmit",
     "lint": "eslint . && pnpm run check:types",
-    "test": "jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "repository": {
     "type": "git",
@@ -45,7 +45,7 @@
   "author": "Agricultural Innovation Australia",
   "license": "CC-BY-4.0",
   "engines": {
-    "node": ">=22.19.0"
+    "node": ">=24.22.0"
   },
   "dependencies": {
     "@aginnovationaustralia/veerg-calculators": "workspace:*"
@@ -57,6 +57,6 @@
     "jest": "^30.5.2",
     "publint": "^0.3.25",
     "ts-jest": "^29.4.12",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }
