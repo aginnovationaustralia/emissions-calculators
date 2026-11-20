@@ -860,14 +860,15 @@ export const calculateLeachingAndRunoffN2OEmissionsForClass = (
 };
 
 /**
- * Calculate the mass of nitrogen applied to soils *MNSoil* produced by a single pigs
- * class *j*.
+ * Calculate the mass of nitrogen applicable to soils produced by a single pigs class *j*.
+ * Nitrogen actually applied within the activity boundary (*MNSoilscope1*, after PF) is
+ * calculated in `calculateMassOfNitrogenAppliedToSoilsForPigsHerd`.
  *
  * TODO: This section is labelled as 4.5.1.5, due to other errors in the section
  * numbers this will probably change.
  * Status: waiting for final draft
  */
-export const calculateMassOfNitrogenAppliedToSoilsForClass = (
+export const calculateMassOfNitrogenApplicableToSoilsForClass = (
   pigsClass: PigsClassSharedInputTransformed,
   isInLeachingZone: Container<boolean>,
   constants: HasConstants<'PIGS' | 'COMMON' | 'CROP'>,

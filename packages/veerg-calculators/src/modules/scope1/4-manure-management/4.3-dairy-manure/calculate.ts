@@ -3,6 +3,7 @@ import { DairyMMSTypeWithPasture } from '@/constants/enums';
 import { Container, num } from '@/tools/containers';
 import { zeroCH4, zeroN, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
+import { DistributiveOmit } from '@/tools/types';
 import { RealNumber } from '@/tools/units';
 import { calculateMilkProduction } from '../../shared/dairy/calculate';
 import {
@@ -16,7 +17,7 @@ import {
   calculateLeachingAndRunoffN2OEmissionsForClass,
   calculateManureAllocations,
   calculateManureManagementCH4ForClass,
-  calculateMassOfNitrogenAppliedToSoilsForClass,
+  calculateMassOfNitrogenApplicableToSoilsForClass,
 } from './4.3-dairy-manure';
 import { ConstantsForDairyManure } from './constants';
 import { DairyManureInputTransformed } from './dairy-manure.input';
@@ -197,12 +198,10 @@ export function calculateLeachingAndRunoffN2OEmissionsForDairyHerd(
  * the activity boundary. The herd input is a union (one member for each time in locations
  * choice), so the key is left out of each member.
  */
-type DairyHerdManureNitrogenInput =
-  DairyHerdFertiliserInputTransformed extends infer H
-    ? H extends unknown
-      ? Omit<H, 'fractionAppliedToSoils'>
-      : never
-    : never;
+type DairyHerdManureNitrogenInput = DistributiveOmit<
+  DairyHerdFertiliserInputTransformed,
+  'fractionAppliedToSoils'
+>;
 
 /**
  * Calculate the mass of nitrogen in a dairy herd's manure that is *applicable* to soils
@@ -224,7 +223,7 @@ export function calculateMassOfNitrogenApplicableToSoilsForDairyHerd(
   );
   return sum(
     Object.values(herd.classes).map((dairyClass) =>
-      calculateMassOfNitrogenAppliedToSoilsForClass(
+      calculateMassOfNitrogenApplicableToSoilsForClass(
         dairyClass,
         milkProduction,
         herd.breed,

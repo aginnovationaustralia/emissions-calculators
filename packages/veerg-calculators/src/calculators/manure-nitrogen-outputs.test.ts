@@ -2,6 +2,10 @@ import { calculateEmissions } from '@/calculators';
 import { FeedlotGroupLivestockInput } from '@/calculators/Feedlot/types/feedlot-group.input';
 import { FeedlotLotInput } from '@/calculators/Feedlot/types/feedlot-lot.input';
 import {
+  calculateMassOfNitrogenAppliedToSoilsForDairy,
+  DairyManureInputSchema,
+} from '@/modules/scope1/4-manure-management/4.3-dairy-manure';
+import {
   calculateMassOfNitrogenAppliedToSoilsForPigs,
   PigsManureInputSchema,
 } from '@/modules/scope1/4-manure-management/4.5-pigs-manure';
@@ -122,19 +126,47 @@ describe('outputs.massOfNitrogenInManureApplicableToSoilsKilograms (AIA-76)', ()
     expect(perActivity).toEqual([]);
   });
 
-  it('dairy: is reported for each herd and scales with the herd', () => {
+  it('dairy: equals MNSoil,scope1 (4.3.1.8) with PF = 1, for each herd', () => {
     const herd = (head: number) =>
       createDairyHerdInput({
         milkProduction: { litresPerHeadPerDay: nv(20) },
         classes: { milkingCows: { head: nv(head) } },
       });
-    const { total, perActivity } = run('dairy', {
-      electricity,
-      herds: [herd(10), herd(20)],
-    });
-    expect(perActivity[0]).toBeGreaterThan(0);
-    expect(perActivity[1]).toBeCloseTo(perActivity[0] * 2, 6);
-    expect(total).toBeCloseTo(perActivity[0] * 3, 6);
+    const herds = [herd(10), herd(20)];
+    const { total, perActivity } = run('dairy', { electricity, herds });
+    // The same herd as a traced organic fertiliser input: only the keys the nitrogen
+    // calculation reads (solids separation affects volatile solids only, so is dropped)
+    const asTracedHerd = (h: (typeof herds)[number]) => {
+      const { milkingShedMMSAllocation, feedPadMMSAllocation } =
+        h.manureAllocations;
+      return {
+        classes: h.classes,
+        milkProduction: h.milkProduction,
+        breed: h.breed,
+        manureAllocations: { milkingShedMMSAllocation, feedPadMMSAllocation },
+        isInLeachingZone: h.isInLeachingZone,
+        ...('system' in h
+          ? { system: h.system }
+          : { method2TimeSpentInLocations: h.method2TimeSpentInLocations }),
+        fractionAppliedToSoils: nv(1),
+      };
+    };
+    const mnSoilAtPF1 = herds.map((h) =>
+      kg(
+        calculateMassOfNitrogenAppliedToSoilsForDairy(
+          DairyManureInputSchema.parse({
+            type: 'dairy',
+            herds: [asTracedHerd(h)],
+          }),
+          testContext().constants,
+        ),
+      ),
+    );
+    expect(mnSoilAtPF1[0]).toBeGreaterThan(0);
+    expect(perActivity).toHaveLength(2);
+    expect(perActivity[0]).toBeCloseTo(mnSoilAtPF1[0], 6);
+    expect(perActivity[1]).toBeCloseTo(mnSoilAtPF1[1], 6);
+    expect(total).toBeCloseTo(mnSoilAtPF1[0] + mnSoilAtPF1[1], 6);
   });
 
   it('pigs: equals MNSoil,scope1 with PF = 1', () => {

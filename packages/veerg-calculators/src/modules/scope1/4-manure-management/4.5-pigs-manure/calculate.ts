@@ -10,7 +10,7 @@ import {
   calculateDirectN2OEmissionsForClass,
   calculateLeachingAndRunoffN2OEmissionsForClass,
   calculateManureManagementCH4ForClass,
-  calculateMassOfNitrogenAppliedToSoilsForClass,
+  calculateMassOfNitrogenApplicableToSoilsForClass,
 } from './4.5-pigs-manure';
 import { ConstantsForPigsManure } from './constants';
 import { PigsManureInputTransformed } from './pigs-manure.input';
@@ -114,7 +114,7 @@ export function calculateMassOfNitrogenApplicableToSoilsForPigsHerd(
 ) {
   return sum(
     Object.values(herdInput.classes).map((pigsClass) =>
-      calculateMassOfNitrogenAppliedToSoilsForClass(
+      calculateMassOfNitrogenApplicableToSoilsForClass(
         pigsClass,
         herdInput.isInLeachingZone,
         constants,

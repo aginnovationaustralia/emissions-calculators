@@ -10,7 +10,7 @@ import {
   calculateDirectN2OEmissionsForClass,
   calculateLeachingAndRunoffN2OEmissionsForClass,
   calculateManureManagementCH4ForClass,
-  calculateMassOfNitrogenAppliedToSoilsForClass,
+  calculateMassOfNitrogenApplicableToSoilsForClass,
 } from './4.6-poultry-manure';
 import { ConstantsForPoultryManure } from './constants';
 import { PoultryManureInputTransformed } from './poultry-manure.input';
@@ -108,7 +108,7 @@ export function calculateMassOfNitrogenApplicableToSoilsForPoultryFlock(
 ) {
   return sum(
     Object.values(flock.classes).map((poultryClass) =>
-      calculateMassOfNitrogenAppliedToSoilsForClass(
+      calculateMassOfNitrogenApplicableToSoilsForClass(
         poultryClass,
         flock.isInLeachingZone,
         constants,

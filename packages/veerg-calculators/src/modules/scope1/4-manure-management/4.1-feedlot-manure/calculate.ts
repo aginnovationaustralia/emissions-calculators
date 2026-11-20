@@ -11,7 +11,7 @@ import {
   calculateAtmosphericDepositionN2OEmissionsForGroup,
   calculateDirectN2OEmissionsForGroup,
   calculateManureManagementCH4ForGroup,
-  calculateMassOfNitrogenAppliedToSoilsForGroup,
+  calculateMassOfNitrogenApplicableToSoilsForGroup,
 } from './feedlot-group';
 
 /**
@@ -98,7 +98,7 @@ export function calculateMassOfNitrogenApplicableToSoilsForFeedlot(
 ) {
   return sum(
     input.groups.map((group) =>
-      calculateMassOfNitrogenAppliedToSoilsForGroup(group, constants),
+      calculateMassOfNitrogenApplicableToSoilsForGroup(group, constants),
     ),
     zeroN,
   ).named('MNSoil applicable');

@@ -389,7 +389,7 @@ export const calculateAtmosphericDepositionN2OEmissionsForGroup = (
  * actually applied to soil within the activity boundary (*MNSoilscope1*) is calculated
  * in `calculateMassOfNitrogenAppliedToSoilsForFeedlot`.
  */
-export const calculateMassOfNitrogenAppliedToSoilsForGroup = (
+export const calculateMassOfNitrogenApplicableToSoilsForGroup = (
   group: FeedlotGroupSharedInputTransformed,
   constants: HasConstants<'FEEDLOT' | 'COMMON'>,
 ) => {

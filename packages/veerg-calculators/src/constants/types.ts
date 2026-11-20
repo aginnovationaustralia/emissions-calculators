@@ -25,7 +25,6 @@ import {
   Years,
 } from '@/tools/units';
 import {
-  InorganicFertiliserComponentWithOwnFractionsType,
   AgrochemicalType,
   AquacultureSystemLocation,
   AviationFuelType,
