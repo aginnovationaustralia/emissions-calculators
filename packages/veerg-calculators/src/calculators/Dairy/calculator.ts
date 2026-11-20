@@ -372,7 +372,7 @@ function getSingleIntensities(
   );
 
   return {
-    liveweightIntensity: generateIntensity(
+    liveweightIntensityEnergyAllocation: generateIntensity(
       netEmissions.multiply(energy.meat),
       liveweightProduced,
     ),
@@ -381,7 +381,7 @@ function getSingleIntensities(
       liveweightProduced,
     ),
     liveweightProducedKilograms: exposeMassValue(liveweightProduced),
-    milkIntensity: generateIntensity(
+    milkIntensityEnergyAllocation: generateIntensity(
       netEmissions.multiply(energy.milk),
       milkProduced,
     ),
@@ -417,11 +417,11 @@ function getTotalIntensities(
   const netEmissionsExcludingLulucf = netTotalEmissions.minus(netLulucf);
 
   return {
-    liveweightIntensityExcludingLULUCF: generateIntensity(
+    liveweightIntensityEnergyAllocationExcludingLULUCF: generateIntensity(
       netEmissionsExcludingLulucf.multiply(energy.meat),
       liveweightProduced,
     ),
-    liveweightIntensityIncludingLULUCF: generateIntensity(
+    liveweightIntensityEnergyAllocationIncludingLULUCF: generateIntensity(
       netTotalEmissions.multiply(energy.meat),
       liveweightProduced,
     ),
@@ -434,11 +434,11 @@ function getTotalIntensities(
       liveweightProduced,
     ),
     liveweightProducedKilograms: exposeMassValue(liveweightProduced),
-    milkIntensityExcludingLULUCF: generateIntensity(
+    milkIntensityEnergyAllocationExcludingLULUCF: generateIntensity(
       netEmissionsExcludingLulucf.multiply(energy.milk),
       milkProduced,
     ),
-    milkIntensityIncludingLULUCF: generateIntensity(
+    milkIntensityEnergyAllocationIncludingLULUCF: generateIntensity(
       netTotalEmissions.multiply(energy.milk),
       milkProduced,
     ),

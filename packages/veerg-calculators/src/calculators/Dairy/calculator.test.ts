@@ -71,7 +71,10 @@ describe('Dairy mass based allocation intensities', () => {
     ).toBeCloseTo(expected, 10);
     expect(
       intensities.milkIntensityMassAllocationIncludingLULUCF.value,
-    ).toBeCloseTo(intensities.milkIntensityIncludingLULUCF.value, 10);
+    ).toBeCloseTo(
+      intensities.milkIntensityEnergyAllocationIncludingLULUCF.value,
+      10,
+    );
     expect(
       intensities.liveweightIntensityMassAllocationIncludingLULUCF.value,
     ).toBe(0);
@@ -82,6 +85,9 @@ describe('Dairy mass based allocation intensities', () => {
 
     expect(
       intensities.milkIntensityMassAllocationIncludingLULUCF.value,
-    ).not.toBeCloseTo(intensities.milkIntensityIncludingLULUCF.value, 4);
+    ).not.toBeCloseTo(
+      intensities.milkIntensityEnergyAllocationIncludingLULUCF.value,
+      4,
+    );
   });
 });

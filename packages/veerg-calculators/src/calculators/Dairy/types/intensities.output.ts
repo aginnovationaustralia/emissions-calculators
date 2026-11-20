@@ -3,10 +3,10 @@ import { z } from 'zod';
 
 export const DairyIntensitiesOutputSchema = z.object({
   liveweightProducedKilograms: outputValue('Liveweight produced in kg'),
-  liveweightIntensityExcludingLULUCF: outputValue(
+  liveweightIntensityEnergyAllocationExcludingLULUCF: outputValue(
     'Dairy liveweight emissions intensity excluding LULUCF, using energy based allocation, in kg-CO2e/kg liveweight',
   ),
-  liveweightIntensityIncludingLULUCF: outputValue(
+  liveweightIntensityEnergyAllocationIncludingLULUCF: outputValue(
     'Dairy liveweight emissions intensity including LULUCF, using energy based allocation, in kg-CO2e/kg liveweight',
   ),
   liveweightIntensityMassAllocationExcludingLULUCF: outputValue(
@@ -16,10 +16,10 @@ export const DairyIntensitiesOutputSchema = z.object({
     'Dairy liveweight emissions intensity including LULUCF, using mass based allocation, in kg-CO2e/kg liveweight',
   ),
   milkProducedKilograms: outputValue('Milk produced in kg'),
-  milkIntensityExcludingLULUCF: outputValue(
+  milkIntensityEnergyAllocationExcludingLULUCF: outputValue(
     'Dairy milk emissions intensity excluding LULUCF, using energy based allocation, in kg-CO2e/kg milk',
   ),
-  milkIntensityIncludingLULUCF: outputValue(
+  milkIntensityEnergyAllocationIncludingLULUCF: outputValue(
     'Dairy milk emissions intensity including LULUCF, using energy based allocation, in kg-CO2e/kg milk',
   ),
   milkIntensityMassAllocationExcludingLULUCF: outputValue(

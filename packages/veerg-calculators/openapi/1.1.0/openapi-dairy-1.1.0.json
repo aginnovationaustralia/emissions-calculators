@@ -9890,7 +9890,7 @@
                                 "additionalProperties": false,
                                 "description": "Liveweight produced in kg"
                               },
-                              "liveweightIntensity": {
+                              "liveweightIntensityEnergyAllocation": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -9929,7 +9929,7 @@
                                 "additionalProperties": false,
                                 "description": "Milk produced in kg"
                               },
-                              "milkIntensity": {
+                              "milkIntensityEnergyAllocation": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -9958,10 +9958,10 @@
                             },
                             "required": [
                               "liveweightProducedKilograms",
-                              "liveweightIntensity",
+                              "liveweightIntensityEnergyAllocation",
                               "liveweightIntensityMassAllocation",
                               "milkProducedKilograms",
-                              "milkIntensity",
+                              "milkIntensityEnergyAllocation",
                               "milkIntensityMassAllocation"
                             ],
                             "additionalProperties": false
@@ -10017,7 +10017,7 @@
                           "additionalProperties": false,
                           "description": "Liveweight produced in kg"
                         },
-                        "liveweightIntensityExcludingLULUCF": {
+                        "liveweightIntensityEnergyAllocationExcludingLULUCF": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -10030,7 +10030,7 @@
                           "additionalProperties": false,
                           "description": "Dairy liveweight emissions intensity excluding LULUCF, using energy based allocation, in kg-CO2e/kg liveweight"
                         },
-                        "liveweightIntensityIncludingLULUCF": {
+                        "liveweightIntensityEnergyAllocationIncludingLULUCF": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -10082,7 +10082,7 @@
                           "additionalProperties": false,
                           "description": "Milk produced in kg"
                         },
-                        "milkIntensityExcludingLULUCF": {
+                        "milkIntensityEnergyAllocationExcludingLULUCF": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -10095,7 +10095,7 @@
                           "additionalProperties": false,
                           "description": "Dairy milk emissions intensity excluding LULUCF, using energy based allocation, in kg-CO2e/kg milk"
                         },
-                        "milkIntensityIncludingLULUCF": {
+                        "milkIntensityEnergyAllocationIncludingLULUCF": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -10137,13 +10137,13 @@
                       },
                       "required": [
                         "liveweightProducedKilograms",
-                        "liveweightIntensityExcludingLULUCF",
-                        "liveweightIntensityIncludingLULUCF",
+                        "liveweightIntensityEnergyAllocationExcludingLULUCF",
+                        "liveweightIntensityEnergyAllocationIncludingLULUCF",
                         "liveweightIntensityMassAllocationExcludingLULUCF",
                         "liveweightIntensityMassAllocationIncludingLULUCF",
                         "milkProducedKilograms",
-                        "milkIntensityExcludingLULUCF",
-                        "milkIntensityIncludingLULUCF",
+                        "milkIntensityEnergyAllocationExcludingLULUCF",
+                        "milkIntensityEnergyAllocationIncludingLULUCF",
                         "milkIntensityMassAllocationExcludingLULUCF",
                         "milkIntensityMassAllocationIncludingLULUCF"
                       ],
