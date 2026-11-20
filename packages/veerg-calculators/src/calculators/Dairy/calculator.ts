@@ -34,7 +34,7 @@ import { calculateScope3ServicesForActivity } from '@/modules/scope3/15.7-servic
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { selectConstant } from '@/tools/constants';
-import { Container, num } from '@/tools/containers';
+import { Container, num, relabelMass } from '@/tools/containers';
 import { exposeMassValue } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
 import {
@@ -241,7 +241,7 @@ function getMilkProducedKgForHerd(
 
 /**
  * Calculate the fraction of emissions that should be allocated to milk production.
- * This allocation is energy based. Surplus calves and culled cows are included as
+ * This allocation is energy based, and is the primary allocation used for dairy intensities. Surplus calves and culled cows are included as
  * "meat".
  *
  * The method for determining this allocation comes from the International Dairy
@@ -249,7 +249,7 @@ function getMilkProducedKgForHerd(
  * which builds upon the work of [Ineichen et al. (2022)](https://www.sciencedirect.com/science/article/pii/S1871141322001342)
  * and [Nemecek and Thoma (2020)](https://ira.agroscope.ch/en-US/Page/Einzelpublikation/Download?einzelpublikationId=47637)
  */
-function getAllocationToMilkProduction(
+function getEnergyAllocationToMilkProduction(
   herds: DairyHerdInputTransformed[],
   context: ExecutionContext<ConstantsForDairyCalculator>,
 ) {
@@ -311,6 +311,54 @@ function getAllocationToMilkProduction(
   );
 }
 
+/**
+ * Calculate the fraction of emissions that should be allocated to milk production, based on
+ * the mass of milk produced relative to the total mass of product (milk plus liveweight sold).
+ * A kg of milk and a kg of liveweight are treated as the same amount of product. This is an
+ * alternative to the energy based allocation, and is supported by GEETA.
+ *
+ * Both masses are non-negative, so a zero total only happens when liveweight is also zero, and
+ * 0 / 0 gives a meat allocation of 0.
+ */
+function getMassAllocationToMilkProduction(
+  liveweightProduced: Container<Mass<'Liveweight'>>,
+  milkProduced: Container<Mass<'Milk'>>,
+) {
+  const totalProduced = liveweightProduced.plus(
+    relabelMass(milkProduced, 'Liveweight'),
+  );
+  const allocationToMeat = liveweightProduced.divide(totalProduced);
+
+  return num(1).minus(allocationToMeat);
+}
+
+function getAllocations(
+  herds: DairyHerdInputTransformed[],
+  liveweightProduced: Container<Mass<'Liveweight'>>,
+  milkProduced: Container<Mass<'Milk'>>,
+  context: ExecutionContext<ConstantsForDairyCalculator>,
+) {
+  const energyAllocationToMilk = getEnergyAllocationToMilkProduction(
+    herds,
+    context,
+  );
+  const massAllocationToMilk = getMassAllocationToMilkProduction(
+    liveweightProduced,
+    milkProduced,
+  );
+
+  return {
+    energy: {
+      milk: energyAllocationToMilk,
+      meat: num(1).minus(energyAllocationToMilk),
+    },
+    mass: {
+      milk: massAllocationToMilk,
+      meat: num(1).minus(massAllocationToMilk),
+    },
+  };
+}
+
 function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
   herd: DairyHerdInputTransformed,
@@ -319,17 +367,29 @@ function getSingleIntensities(
   const liveweightProduced = getLiveweightProducedKgForHerd(herd, context);
   const milkProduced = getMilkProducedKgForHerd(herd, context);
 
-  const allocationToMilk = getAllocationToMilkProduction([herd], context);
-  const allocationToMeat = num(1).minus(allocationToMilk);
+  const { energy, mass } = getAllocations(
+    [herd],
+    liveweightProduced,
+    milkProduced,
+    context,
+  );
 
   return {
-    liveweightIntensity: generateIntensity(
-      netEmissions.multiply(allocationToMeat),
+    liveweightIntensityEnergyAllocation: generateIntensity(
+      netEmissions.multiply(energy.meat),
+      liveweightProduced,
+    ),
+    liveweightIntensityMassAllocation: generateIntensity(
+      netEmissions.multiply(mass.meat),
       liveweightProduced,
     ),
     liveweightProducedKilograms: exposeMassValue(liveweightProduced),
-    milkIntensity: generateIntensity(
-      netEmissions.multiply(allocationToMilk),
+    milkIntensityEnergyAllocation: generateIntensity(
+      netEmissions.multiply(energy.milk),
+      milkProduced,
+    ),
+    milkIntensityMassAllocation: generateIntensity(
+      netEmissions.multiply(mass.milk),
       milkProduced,
     ),
     milkProducedKilograms: exposeMassValue(milkProduced),
@@ -351,26 +411,46 @@ function getTotalIntensities(
     zeroMassMilk,
   );
 
-  const allocationToMilk = getAllocationToMilkProduction(herds, context);
-  const allocationToMeat = num(1).minus(allocationToMilk);
+  const { energy, mass } = getAllocations(
+    herds,
+    liveweightProduced,
+    milkProduced,
+    context,
+  );
   const netEmissionsExcludingLulucf = netTotalEmissions.minus(netLulucf);
 
   return {
-    liveweightIntensityExcludingLULUCF: generateIntensity(
-      netEmissionsExcludingLulucf.multiply(allocationToMeat),
+    liveweightIntensityEnergyAllocationExcludingLULUCF: generateIntensity(
+      netEmissionsExcludingLulucf.multiply(energy.meat),
       liveweightProduced,
     ),
-    liveweightIntensityIncludingLULUCF: generateIntensity(
-      netTotalEmissions.multiply(allocationToMeat),
+    liveweightIntensityEnergyAllocationIncludingLULUCF: generateIntensity(
+      netTotalEmissions.multiply(energy.meat),
+      liveweightProduced,
+    ),
+    liveweightIntensityMassAllocationExcludingLULUCF: generateIntensity(
+      netEmissionsExcludingLulucf.multiply(mass.meat),
+      liveweightProduced,
+    ),
+    liveweightIntensityMassAllocationIncludingLULUCF: generateIntensity(
+      netTotalEmissions.multiply(mass.meat),
       liveweightProduced,
     ),
     liveweightProducedKilograms: exposeMassValue(liveweightProduced),
-    milkIntensityExcludingLULUCF: generateIntensity(
-      netEmissionsExcludingLulucf.multiply(allocationToMilk),
+    milkIntensityEnergyAllocationExcludingLULUCF: generateIntensity(
+      netEmissionsExcludingLulucf.multiply(energy.milk),
       milkProduced,
     ),
-    milkIntensityIncludingLULUCF: generateIntensity(
-      netTotalEmissions.multiply(allocationToMilk),
+    milkIntensityEnergyAllocationIncludingLULUCF: generateIntensity(
+      netTotalEmissions.multiply(energy.milk),
+      milkProduced,
+    ),
+    milkIntensityMassAllocationExcludingLULUCF: generateIntensity(
+      netEmissionsExcludingLulucf.multiply(mass.milk),
+      milkProduced,
+    ),
+    milkIntensityMassAllocationIncludingLULUCF: generateIntensity(
+      netTotalEmissions.multiply(mass.milk),
       milkProduced,
     ),
     milkProducedKilograms: exposeMassValue(milkProduced),
