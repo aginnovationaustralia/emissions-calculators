@@ -21697,28 +21697,7 @@
                                 }
                               ]
                             },
-                            "fractionSeedCottonLint": {
-                              "description": "Fraction of the harvested cotton crop that is lint, as opposed to cotton seed. (0-1)",
-                              "x-modules": [
-                                "Intensities"
-                              ],
-                              "type": "object",
-                              "properties": {
-                                "value": {
-                                  "$ref": "#/components/schemas/ProportionNumberInput"
-                                },
-                                "quality": {
-                                  "default": {},
-                                  "$ref": "#/components/schemas/QualityTable"
-                                }
-                              },
-                              "required": [
-                                "value"
-                              ],
-                              "additionalProperties": false,
-                              "x-units": "0-1"
-                            },
-                            "totalYieldKilograms": {
+                            "totalLintYieldKilograms": {
                               "description": "Total yield of cotton lint from the crop, as dry matter. This value must only include the mass of lint, and exclude the mass of cotton seed and trash. (kilograms dry matter)",
                               "x-modules": [
                                 "6.1",
@@ -21741,12 +21720,33 @@
                               ],
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter"
+                            },
+                            "totalSeedYieldKilograms": {
+                              "description": "Total yield of cotton seed from the crop. This value must only include the mass of seed, and exclude the mass of cotton lint and trash. (kilograms dry matter)",
+                              "x-modules": [
+                                "Intensities"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "kilograms dry matter"
                             }
                           },
                           "required": [
                             "residues",
-                            "fractionSeedCottonLint",
-                            "totalYieldKilograms"
+                            "totalLintYieldKilograms",
+                            "totalSeedYieldKilograms"
                           ],
                           "additionalProperties": false
                         },
