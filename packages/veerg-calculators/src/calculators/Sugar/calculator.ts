@@ -43,12 +43,11 @@ function getSingleIntensities(
   crop: SugarCropInputTransformed,
   context: ExecutionContext<ConstantsForSugarCalculator>,
 ): SugarIntermediateIntensitiesOutput {
-  const { produced, sold } = getCropOutputs(crop, context.constants);
+  const totalCrop = getCropOutputs(crop, context.constants);
 
   return {
-    sugarCaneIntensity: generateIntensity(netEmissions, sold),
-    sugarCaneHarvestedKilograms: exposeMassValue(produced),
-    sugarCaneSoldKilograms: exposeMassValue(sold),
+    sugarCaneIntensity: generateIntensity(netEmissions, totalCrop),
+    totalSugarCaneKilograms: exposeMassValue(totalCrop),
   };
 }
 
@@ -58,24 +57,18 @@ function getTotalIntensities(
   crops: SugarCropInputTransformed[],
   context: ExecutionContext<ConstantsForSugarCalculator>,
 ) {
-  const outputs = crops.map((crop) => getCropOutputs(crop, context.constants));
-  const harvested = sum(
-    outputs.map(({ produced }) => produced),
-    zeroMassDryMatter,
-  );
-  const sold = sum(
-    outputs.map(({ sold }) => sold),
+  const totalCrop = sum(
+    crops.map((crop) => getCropOutputs(crop, context.constants)),
     zeroMassDryMatter,
   );
 
   return {
     sugarCaneExcludingLULUCF: generateIntensity(
       netTotalEmissions.minus(netLulucf),
-      sold,
+      totalCrop,
     ),
-    sugarCaneIncludingLULUCF: generateIntensity(netTotalEmissions, sold),
-    sugarCaneHarvestedKilograms: exposeMassValue(harvested),
-    sugarCaneSoldKilograms: exposeMassValue(sold),
+    sugarCaneIncludingLULUCF: generateIntensity(netTotalEmissions, totalCrop),
+    totalSugarCaneKilograms: exposeMassValue(totalCrop),
   };
 }
 

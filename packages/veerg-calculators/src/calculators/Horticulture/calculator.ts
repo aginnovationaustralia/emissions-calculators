@@ -42,12 +42,11 @@ function getSingleIntensities(
   crop: HorticultureCropInputTransformed,
   context: ExecutionContext<ConstantsForHorticultureCalculator>,
 ): HorticultureIntermediateIntensitiesOutput {
-  const { produced, sold } = getCropOutputs(crop, context.constants);
+  const totalCrop = getCropOutputs(crop, context.constants);
 
   return {
-    cropIntensity: generateIntensity(netEmissions, sold),
-    cropHarvestedKilograms: exposeMassValue(produced),
-    cropSoldKilograms: exposeMassValue(sold),
+    cropIntensity: generateIntensity(netEmissions, totalCrop),
+    totalCropKilograms: exposeMassValue(totalCrop),
   };
 }
 
@@ -57,24 +56,18 @@ function getTotalIntensities(
   crops: HorticultureCropInputTransformed[],
   context: ExecutionContext<ConstantsForHorticultureCalculator>,
 ) {
-  const outputs = crops.map((crop) => getCropOutputs(crop, context.constants));
-  const harvested = sum(
-    outputs.map(({ produced }) => produced),
-    zeroMassDryMatter,
-  );
-  const sold = sum(
-    outputs.map(({ sold }) => sold),
+  const totalCrop = sum(
+    crops.map((crop) => getCropOutputs(crop, context.constants)),
     zeroMassDryMatter,
   );
 
   return {
     cropExcludingLULUCF: generateIntensity(
       netTotalEmissions.minus(netLulucf),
-      sold,
+      totalCrop,
     ),
-    cropIncludingLULUCF: generateIntensity(netTotalEmissions, sold),
-    cropHarvestedKilograms: exposeMassValue(harvested),
-    cropSoldKilograms: exposeMassValue(sold),
+    cropIncludingLULUCF: generateIntensity(netTotalEmissions, totalCrop),
+    totalCropKilograms: exposeMassValue(totalCrop),
   };
 }
 

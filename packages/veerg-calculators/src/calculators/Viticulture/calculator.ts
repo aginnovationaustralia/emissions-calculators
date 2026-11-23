@@ -42,12 +42,11 @@ function getSingleIntensities(
   crop: ViticultureCropInputTransformed,
   context: ExecutionContext<ConstantsForViticultureCalculator>,
 ): ViticultureIntermediateIntensitiesOutput {
-  const { produced, sold } = getCropOutputs(crop, context.constants);
+  const totalCrop = getCropOutputs(crop, context.constants);
 
   return {
-    grapesIntensity: generateIntensity(netEmissions, sold),
-    grapesHarvestedKilograms: exposeMassValue(produced),
-    grapesSoldKilograms: exposeMassValue(sold),
+    grapesIntensity: generateIntensity(netEmissions, totalCrop),
+    totalGrapesKilograms: exposeMassValue(totalCrop),
   };
 }
 
@@ -57,24 +56,18 @@ function getTotalIntensities(
   crops: ViticultureCropInputTransformed[],
   context: ExecutionContext<ConstantsForViticultureCalculator>,
 ) {
-  const outputs = crops.map((crop) => getCropOutputs(crop, context.constants));
-  const harvested = sum(
-    outputs.map(({ produced }) => produced),
-    zeroMassDryMatter,
-  );
-  const sold = sum(
-    outputs.map(({ sold }) => sold),
+  const totalCrop = sum(
+    crops.map((crop) => getCropOutputs(crop, context.constants)),
     zeroMassDryMatter,
   );
 
   return {
     grapesExcludingLULUCF: generateIntensity(
       netTotalEmissions.minus(netLulucf),
-      sold,
+      totalCrop,
     ),
-    grapesIncludingLULUCF: generateIntensity(netTotalEmissions, sold),
-    grapesHarvestedKilograms: exposeMassValue(harvested),
-    grapesSoldKilograms: exposeMassValue(sold),
+    grapesIncludingLULUCF: generateIntensity(netTotalEmissions, totalCrop),
+    totalGrapesKilograms: exposeMassValue(totalCrop),
   };
 }
 

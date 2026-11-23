@@ -2,8 +2,9 @@ import { outputValue } from '@/tools/zod';
 import { z } from 'zod';
 
 export const ViticultureIntermediateIntensitiesOutputSchema = z.object({
-  grapesHarvestedKilograms: outputValue('Grapes harvested in kg.'),
-  grapesSoldKilograms: outputValue('Grapes sold in kg.'),
+  totalGrapesKilograms: outputValue(
+    'The amount of grapes used for intensities, in kg. It is either the total yield or amount sold, depending on the inputs that were supplied.',
+  ),
   grapesIntensity: outputValue(
     'Grapes emissions intensity for this activity, in kg-CO2e/kg grapes.',
   ),

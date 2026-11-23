@@ -1850,18 +1850,15 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter"
                             },
-                            "percentageCropSold": {
-                              "default": {
-                                "value": 100
-                              },
-                              "description": "Percentage of the total crop yield produced that was sold. Supply this value for more accurate emissions intensity calculations. (percentage)",
+                            "totalMassSoldKilograms": {
+                              "description": "Mass of the crop sold, as dry matter. Supply this value for more accurate emissions intensity calculations. This is the only place the value is used (kilograms dry matter)",
                               "x-modules": [
                                 "Intensities"
                               ],
                               "type": "object",
                               "properties": {
                                 "value": {
-                                  "$ref": "#/components/schemas/PercentageNumberInput"
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
                                 },
                                 "quality": {
                                   "default": {},
@@ -1872,7 +1869,7 @@
                                 "value"
                               ],
                               "additionalProperties": false,
-                              "x-units": "percentage"
+                              "x-units": "kilograms dry matter"
                             },
                             "residues": {
                               "oneOf": [
@@ -2095,7 +2092,7 @@
                           "intensities": {
                             "type": "object",
                             "properties": {
-                              "grainHarvestedKilograms": {
+                              "totalGrainKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -2106,20 +2103,7 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Grain harvested in kg"
-                              },
-                              "grainSoldKilograms": {
-                                "type": "object",
-                                "properties": {
-                                  "value": {
-                                    "type": "number"
-                                  }
-                                },
-                                "required": [
-                                  "value"
-                                ],
-                                "additionalProperties": false,
-                                "description": "Grain sold in kg"
+                                "description": "The amount of grain used for intensities, in kg. It is either the total yield or amount sold, depending on the inputs that were supplied."
                               },
                               "grainsIntensity": {
                                 "type": "object",
@@ -2136,8 +2120,7 @@
                               }
                             },
                             "required": [
-                              "grainHarvestedKilograms",
-                              "grainSoldKilograms",
+                              "totalGrainKilograms",
                               "grainsIntensity"
                             ],
                             "additionalProperties": false
@@ -2180,7 +2163,7 @@
                     "intensities": {
                       "type": "object",
                       "properties": {
-                        "grainHarvestedKilograms": {
+                        "totalGrainKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -2191,20 +2174,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Grain harvested in kg"
-                        },
-                        "grainSoldKilograms": {
-                          "type": "object",
-                          "properties": {
-                            "value": {
-                              "type": "number"
-                            }
-                          },
-                          "required": [
-                            "value"
-                          ],
-                          "additionalProperties": false,
-                          "description": "Grain sold in kg"
+                          "description": "The amount of grain used for intensities, in kg. It is either the total yield or amount sold, depending on the inputs that were supplied."
                         },
                         "grainsExcludingLULUCF": {
                           "type": "object",
@@ -2234,8 +2204,7 @@
                         }
                       },
                       "required": [
-                        "grainHarvestedKilograms",
-                        "grainSoldKilograms",
+                        "totalGrainKilograms",
                         "grainsExcludingLULUCF",
                         "grainsIncludingLULUCF"
                       ],
@@ -5919,11 +5888,6 @@
           "dry",
           "wet"
         ]
-      },
-      "PercentageNumberInput": {
-        "type": "number",
-        "minimum": 0,
-        "maximum": 100
       },
       "GrainsCropType": {
         "type": "string",
@@ -19878,6 +19842,11 @@
       "PositiveNumberInput": {
         "type": "number",
         "exclusiveMinimum": 0
+      },
+      "PercentageNumberInput": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100
       },
       "DairyCattleBreed": {
         "type": "string",

@@ -1803,18 +1803,15 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms dry matter"
                                 },
-                                "percentageCropSold": {
-                                  "default": {
-                                    "value": 100
-                                  },
-                                  "description": "Percentage of the total crop yield produced that was sold. Supply this value for more accurate emissions intensity calculations. (percentage)",
+                                "totalMassSoldKilograms": {
+                                  "description": "Mass of the crop sold, as dry matter. Supply this value for more accurate emissions intensity calculations. This is the only place the value is used (kilograms dry matter)",
                                   "x-modules": [
                                     "Intensities"
                                   ],
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PercentageNumberInput"
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -1825,7 +1822,7 @@
                                     "value"
                                   ],
                                   "additionalProperties": false,
-                                  "x-units": "percentage"
+                                  "x-units": "kilograms dry matter"
                                 },
                                 "residues": {
                                   "oneOf": [
@@ -1985,18 +1982,15 @@
                                   "additionalProperties": false,
                                   "x-units": "kilograms dry matter"
                                 },
-                                "percentageCropSold": {
-                                  "default": {
-                                    "value": 100
-                                  },
-                                  "description": "Percentage of the total crop yield produced that was sold. Supply this value for more accurate emissions intensity calculations. (percentage)",
+                                "totalMassSoldKilograms": {
+                                  "description": "Mass of the crop sold, as dry matter. Supply this value for more accurate emissions intensity calculations. This is the only place the value is used (kilograms dry matter)",
                                   "x-modules": [
                                     "Intensities"
                                   ],
                                   "type": "object",
                                   "properties": {
                                     "value": {
-                                      "$ref": "#/components/schemas/PercentageNumberInput"
+                                      "$ref": "#/components/schemas/NonNegativeNumberInput"
                                     },
                                     "quality": {
                                       "default": {},
@@ -2007,7 +2001,7 @@
                                     "value"
                                   ],
                                   "additionalProperties": false,
-                                  "x-units": "percentage"
+                                  "x-units": "kilograms dry matter"
                                 },
                                 "residues": {
                                   "oneOf": [
@@ -3213,7 +3207,7 @@
                           "intensities": {
                             "type": "object",
                             "properties": {
-                              "cropHarvestedKilograms": {
+                              "totalCropKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -3224,20 +3218,7 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Crop harvested in kg"
-                              },
-                              "cropSoldKilograms": {
-                                "type": "object",
-                                "properties": {
-                                  "value": {
-                                    "type": "number"
-                                  }
-                                },
-                                "required": [
-                                  "value"
-                                ],
-                                "additionalProperties": false,
-                                "description": "Crop sold in kg"
+                                "description": "The amount of crop used for intensities, in kg. It is either the total yield or amount sold, depending on the inputs that were supplied."
                               },
                               "cropIntensity": {
                                 "type": "object",
@@ -3254,8 +3235,7 @@
                               }
                             },
                             "required": [
-                              "cropHarvestedKilograms",
-                              "cropSoldKilograms",
+                              "totalCropKilograms",
                               "cropIntensity"
                             ],
                             "additionalProperties": false
@@ -3298,7 +3278,7 @@
                     "intensities": {
                       "type": "object",
                       "properties": {
-                        "cropHarvestedKilograms": {
+                        "totalCropKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -3309,20 +3289,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Crop harvested in kg"
-                        },
-                        "cropSoldKilograms": {
-                          "type": "object",
-                          "properties": {
-                            "value": {
-                              "type": "number"
-                            }
-                          },
-                          "required": [
-                            "value"
-                          ],
-                          "additionalProperties": false,
-                          "description": "Crop sold in kg"
+                          "description": "The amount of crop used for intensities, in kg. It is either the total yield or amount sold, depending on the inputs that were supplied."
                         },
                         "cropExcludingLULUCF": {
                           "type": "object",
@@ -3352,8 +3319,7 @@
                         }
                       },
                       "required": [
-                        "cropHarvestedKilograms",
-                        "cropSoldKilograms",
+                        "totalCropKilograms",
                         "cropExcludingLULUCF",
                         "cropIncludingLULUCF"
                       ],
@@ -6955,11 +6921,6 @@
           "dry",
           "wet"
         ]
-      },
-      "PercentageNumberInput": {
-        "type": "number",
-        "minimum": 0,
-        "maximum": 100
       },
       "HorticultureBurnableCropType": {
         "type": "string",
@@ -19786,6 +19747,11 @@
       "PositiveNumberInput": {
         "type": "number",
         "exclusiveMinimum": 0
+      },
+      "PercentageNumberInput": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100
       },
       "DairyCattleBreed": {
         "type": "string",
