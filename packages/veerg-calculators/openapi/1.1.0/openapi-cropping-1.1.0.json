@@ -1854,6 +1854,30 @@
                                       "additionalProperties": false,
                                       "x-units": "kilograms dry matter"
                                     },
+                                    "percentageCropSold": {
+                                      "default": {
+                                        "value": 100
+                                      },
+                                      "description": "Percentage of the total crop yield produced that was sold. Supply this value for more accurate emissions intensity calculations. (percentage)",
+                                      "x-modules": [
+                                        "Intensities"
+                                      ],
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "$ref": "#/components/schemas/PercentageNumberInput"
+                                        },
+                                        "quality": {
+                                          "default": {},
+                                          "$ref": "#/components/schemas/QualityTable"
+                                        }
+                                      },
+                                      "required": [
+                                        "value"
+                                      ],
+                                      "additionalProperties": false,
+                                      "x-units": "percentage"
+                                    },
                                     "residues": {
                                       "oneOf": [
                                         {
@@ -2011,6 +2035,30 @@
                                       ],
                                       "additionalProperties": false,
                                       "x-units": "kilograms dry matter"
+                                    },
+                                    "percentageCropSold": {
+                                      "default": {
+                                        "value": 100
+                                      },
+                                      "description": "Percentage of the total crop yield produced that was sold. Supply this value for more accurate emissions intensity calculations. (percentage)",
+                                      "x-modules": [
+                                        "Intensities"
+                                      ],
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "$ref": "#/components/schemas/PercentageNumberInput"
+                                        },
+                                        "quality": {
+                                          "default": {},
+                                          "$ref": "#/components/schemas/QualityTable"
+                                        }
+                                      },
+                                      "required": [
+                                        "value"
+                                      ],
+                                      "additionalProperties": false,
+                                      "x-units": "percentage"
                                     },
                                     "residues": {
                                       "oneOf": [
@@ -3884,6 +3932,30 @@
                                       "title": "Method 2"
                                     }
                                   ]
+                                },
+                                "percentageHarvestSold": {
+                                  "default": {
+                                    "value": 100
+                                  },
+                                  "description": "Percentage of the total pasture yield produced that was sold. Supply this value for more accurate emissions intensity calculations. (percentage)",
+                                  "x-modules": [
+                                    "Intensities"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/PercentageNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "percentage"
                                 }
                               },
                               "required": [
@@ -4000,6 +4072,19 @@
                                 "additionalProperties": false,
                                 "description": "Amount of crop harvested in kg"
                               },
+                              "cropSoldKilograms": {
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "type": "number"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "description": "Amount of crop sold in kg"
+                              },
                               "cropIntensity": {
                                 "type": "object",
                                 "properties": {
@@ -4011,11 +4096,12 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Cropping emissions intensity for this activity, in kg-CO2e/kg crop harvested"
+                                "description": "Cropping emissions intensity for this activity, in kg-CO2e/kg crop sold"
                               }
                             },
                             "required": [
                               "cropHarvestedKilograms",
+                              "cropSoldKilograms",
                               "cropIntensity"
                             ],
                             "additionalProperties": false
@@ -4071,6 +4157,19 @@
                           "additionalProperties": false,
                           "description": "Amount of crop harvested in kg"
                         },
+                        "cropSoldKilograms": {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "value"
+                          ],
+                          "additionalProperties": false,
+                          "description": "Amount of crop sold in kg"
+                        },
                         "cropIntensityExcludingLULUCF": {
                           "type": "object",
                           "properties": {
@@ -4082,7 +4181,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Cropping emissions intensity excluding LULUCF, in kg-CO2e/kg crop harvested"
+                          "description": "Cropping emissions intensity excluding LULUCF, in kg-CO2e/kg crop sold"
                         },
                         "cropIntensityIncludingLULUCF": {
                           "type": "object",
@@ -4095,11 +4194,12 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Cropping emissions intensity including LULUCF, in kg-CO2e/kg crop harvested"
+                          "description": "Cropping emissions intensity including LULUCF, in kg-CO2e/kg crop sold"
                         }
                       },
                       "required": [
                         "cropHarvestedKilograms",
+                        "cropSoldKilograms",
                         "cropIntensityExcludingLULUCF",
                         "cropIntensityIncludingLULUCF"
                       ],
@@ -7783,6 +7883,11 @@
           "dry",
           "wet"
         ]
+      },
+      "PercentageNumberInput": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100
       },
       "BurnableCropType": {
         "type": "string",
@@ -21752,11 +21857,6 @@
       "PositiveNumberInput": {
         "type": "number",
         "exclusiveMinimum": 0
-      },
-      "PercentageNumberInput": {
-        "type": "number",
-        "minimum": 0,
-        "maximum": 100
       },
       "DairyCattleBreed": {
         "type": "string",

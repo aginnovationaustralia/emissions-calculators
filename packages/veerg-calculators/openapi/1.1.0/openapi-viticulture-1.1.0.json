@@ -1801,6 +1801,30 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter"
                             },
+                            "percentageCropSold": {
+                              "default": {
+                                "value": 100
+                              },
+                              "description": "Percentage of the total crop yield produced that was sold. Supply this value for more accurate emissions intensity calculations. (percentage)",
+                              "x-modules": [
+                                "Intensities"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/PercentageNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "percentage"
+                            },
                             "residues": {
                               "oneOf": [
                                 {
@@ -3013,6 +3037,19 @@
                                 "additionalProperties": false,
                                 "description": "Grapes harvested in kg."
                               },
+                              "grapesSoldKilograms": {
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "type": "number"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "description": "Grapes sold in kg."
+                              },
                               "grapesIntensity": {
                                 "type": "object",
                                 "properties": {
@@ -3029,6 +3066,7 @@
                             },
                             "required": [
                               "grapesHarvestedKilograms",
+                              "grapesSoldKilograms",
                               "grapesIntensity"
                             ],
                             "additionalProperties": false
@@ -3084,6 +3122,19 @@
                           "additionalProperties": false,
                           "description": "Grapes harvested in kg."
                         },
+                        "grapesSoldKilograms": {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "value"
+                          ],
+                          "additionalProperties": false,
+                          "description": "Grapes sold in kg."
+                        },
                         "grapesExcludingLULUCF": {
                           "type": "object",
                           "properties": {
@@ -3113,6 +3164,7 @@
                       },
                       "required": [
                         "grapesHarvestedKilograms",
+                        "grapesSoldKilograms",
                         "grapesExcludingLULUCF",
                         "grapesIncludingLULUCF"
                       ],
@@ -6714,6 +6766,11 @@
           "dry",
           "wet"
         ]
+      },
+      "PercentageNumberInput": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100
       },
       "InorganicFertiliserType": {
         "type": "string",
@@ -19526,11 +19583,6 @@
       "PositiveNumberInput": {
         "type": "number",
         "exclusiveMinimum": 0
-      },
-      "PercentageNumberInput": {
-        "type": "number",
-        "minimum": 0,
-        "maximum": 100
       },
       "DairyCattleBreed": {
         "type": "string",

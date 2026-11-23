@@ -10,9 +10,8 @@ import {
   calculate61CropResidueN2O,
   calculate63ResidueLeachingAndRunoffN2O,
   calculate64FieldBurning,
-  getAmountProduced,
+  getCropOutputs,
 } from '@/modules/scope1/6-residue-mgmt';
-import { ConstantsForResidueManagement } from '@/modules/scope1/6-residue-mgmt/constants';
 import {
   calculate81TransportFuel,
   calculate82StationaryFuel,
@@ -42,13 +41,14 @@ import { SugarIntermediateIntensitiesOutput } from './types/intermediate-intensi
 function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
   crop: SugarCropInputTransformed,
-  context: ExecutionContext<ConstantsForResidueManagement>,
+  context: ExecutionContext<ConstantsForSugarCalculator>,
 ): SugarIntermediateIntensitiesOutput {
-  const harvested = getAmountProduced(crop, context.constants);
+  const { produced, sold } = getCropOutputs(crop, context.constants);
 
   return {
-    sugarCaneIntensity: generateIntensity(netEmissions, harvested),
-    sugarCaneHarvestedKilograms: exposeMassValue(harvested),
+    sugarCaneIntensity: generateIntensity(netEmissions, sold),
+    sugarCaneHarvestedKilograms: exposeMassValue(produced),
+    sugarCaneSoldKilograms: exposeMassValue(sold),
   };
 }
 
@@ -56,21 +56,26 @@ function getTotalIntensities(
   netTotalEmissions: Container<Mass<'CO2e'>>,
   netLulucf: Container<Mass<'CO2e'>>,
   crops: SugarCropInputTransformed[],
-  context: ExecutionContext<ConstantsForResidueManagement>,
+  context: ExecutionContext<ConstantsForSugarCalculator>,
 ) {
-  const { constants } = context;
+  const outputs = crops.map((crop) => getCropOutputs(crop, context.constants));
   const harvested = sum(
-    crops.map((crop) => getAmountProduced(crop, constants)),
+    outputs.map(({ produced }) => produced),
+    zeroMassDryMatter,
+  );
+  const sold = sum(
+    outputs.map(({ sold }) => sold),
     zeroMassDryMatter,
   );
 
   return {
     sugarCaneExcludingLULUCF: generateIntensity(
       netTotalEmissions.minus(netLulucf),
-      harvested,
+      sold,
     ),
-    sugarCaneIncludingLULUCF: generateIntensity(netTotalEmissions, harvested),
+    sugarCaneIncludingLULUCF: generateIntensity(netTotalEmissions, sold),
     sugarCaneHarvestedKilograms: exposeMassValue(harvested),
+    sugarCaneSoldKilograms: exposeMassValue(sold),
   };
 }
 

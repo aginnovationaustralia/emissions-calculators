@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 export const SugarIntensitiesOutputSchema = z.object({
   sugarCaneHarvestedKilograms: outputValue('Sugarcane harvested in kg'),
+  sugarCaneSoldKilograms: outputValue('Sugarcane sold in kg'),
   sugarCaneExcludingLULUCF: outputValue(
     'Sugar emissions intensity excluding LULUCF, in kg-CO2e/kg sugarcane',
   ),

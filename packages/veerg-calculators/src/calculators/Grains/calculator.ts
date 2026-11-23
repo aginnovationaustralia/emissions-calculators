@@ -10,9 +10,8 @@ import {
   calculate61CropResidueN2O,
   calculate63ResidueLeachingAndRunoffN2O,
   calculate64FieldBurning,
-  getAmountProduced,
+  getCropOutputs,
 } from '@/modules/scope1/6-residue-mgmt';
-import { ConstantsForResidueManagement } from '@/modules/scope1/6-residue-mgmt/constants';
 import {
   calculate81TransportFuel,
   calculate82StationaryFuel,
@@ -42,13 +41,14 @@ import { GrainsIntermediateIntensitiesOutput } from './types/intermediate-intens
 function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
   crop: GrainsCropInputTransformed,
-  context: ExecutionContext<ConstantsForResidueManagement>,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
 ): GrainsIntermediateIntensitiesOutput {
-  const harvested = getAmountProduced(crop, context.constants);
+  const { produced, sold } = getCropOutputs(crop, context.constants);
 
   return {
-    grainsIntensity: generateIntensity(netEmissions, harvested),
-    grainHarvestedKilograms: exposeMassValue(harvested),
+    grainsIntensity: generateIntensity(netEmissions, sold),
+    grainHarvestedKilograms: exposeMassValue(produced),
+    grainSoldKilograms: exposeMassValue(sold),
   };
 }
 
@@ -56,21 +56,26 @@ function getTotalIntensities(
   netTotalEmissions: Container<Mass<'CO2e'>>,
   netLulucf: Container<Mass<'CO2e'>>,
   crops: GrainsCropInputTransformed[],
-  context: ExecutionContext<ConstantsForResidueManagement>,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) {
-  const { constants } = context;
+  const outputs = crops.map((crop) => getCropOutputs(crop, context.constants));
   const harvested = sum(
-    crops.map((crop) => getAmountProduced(crop, constants)),
+    outputs.map(({ produced }) => produced),
+    zeroMassDryMatter,
+  );
+  const sold = sum(
+    outputs.map(({ sold }) => sold),
     zeroMassDryMatter,
   );
 
   return {
     grainsExcludingLULUCF: generateIntensity(
       netTotalEmissions.minus(netLulucf),
-      harvested,
+      sold,
     ),
-    grainsIncludingLULUCF: generateIntensity(netTotalEmissions, harvested),
+    grainsIncludingLULUCF: generateIntensity(netTotalEmissions, sold),
     grainHarvestedKilograms: exposeMassValue(harvested),
+    grainSoldKilograms: exposeMassValue(sold),
   };
 }
 

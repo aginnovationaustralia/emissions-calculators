@@ -12,9 +12,9 @@ import {
   CropResidueInputSchema,
   HasCropResidueInput,
   HasCropResidueInputTransformed,
-  HasPastureResidueInput,
-  HasPastureResidueInputTransformed,
-  PastureResidueInputSchema,
+  HasPastureWithPercentageSoldInput,
+  HasPastureWithPercentageSoldInputTransformed,
+  PastureWithPercentageSoldInputSchema,
 } from '@/modules/scope1/6-residue-mgmt/crop-residue.input';
 import { z } from 'zod';
 
@@ -36,17 +36,17 @@ const CropWithCropResidueSchema: z.ZodType<
 
 export type CropWithPastureResidueInput = BaseCroppingActivityInput &
   HasFertiliserInput &
-  HasPastureResidueInput;
+  HasPastureWithPercentageSoldInput;
 export type CropWithPastureResidueInputTransformed =
   BaseCroppingActivityInputTransformed &
     HasFertiliserInputTransformed &
-    HasPastureResidueInputTransformed;
+    HasPastureWithPercentageSoldInputTransformed;
 
 const CroppingCropWithPastureResidueSchema: z.ZodType<
   CropWithPastureResidueInputTransformed,
   CropWithPastureResidueInput
 > = BaseCroppingActivityInputSchema.safeExtend({
-  pasture: PastureResidueInputSchema,
+  pasture: PastureWithPercentageSoldInputSchema,
   ...HasFertiliserInputSchema.shape,
 }).meta({ title: 'Pasture' });
 

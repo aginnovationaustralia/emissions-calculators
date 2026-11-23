@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 export const GrainsIntensitiesOutputSchema = z.object({
   grainHarvestedKilograms: outputValue('Grain harvested in kg'),
+  grainSoldKilograms: outputValue('Grain sold in kg'),
   grainsExcludingLULUCF: outputValue(
     'Grains emissions intensity excluding LULUCF, in kg-CO2e/kg grain',
   ),

@@ -10,9 +10,8 @@ import {
   calculate61CropResidueN2O,
   calculate63ResidueLeachingAndRunoffN2O,
   calculate64FieldBurning,
-  getAmountProduced,
+  getCropOutputs,
 } from '@/modules/scope1/6-residue-mgmt';
-import { ConstantsForResidueManagement } from '@/modules/scope1/6-residue-mgmt/constants';
 import {
   calculate81TransportFuel,
   calculate82StationaryFuel,
@@ -41,13 +40,14 @@ import { ViticultureIntermediateIntensitiesOutput } from './types/intermediate-i
 function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
   crop: ViticultureCropInputTransformed,
-  context: ExecutionContext<ConstantsForResidueManagement>,
+  context: ExecutionContext<ConstantsForViticultureCalculator>,
 ): ViticultureIntermediateIntensitiesOutput {
-  const harvested = getAmountProduced(crop, context.constants);
+  const { produced, sold } = getCropOutputs(crop, context.constants);
 
   return {
-    grapesIntensity: generateIntensity(netEmissions, harvested),
-    grapesHarvestedKilograms: exposeMassValue(harvested),
+    grapesIntensity: generateIntensity(netEmissions, sold),
+    grapesHarvestedKilograms: exposeMassValue(produced),
+    grapesSoldKilograms: exposeMassValue(sold),
   };
 }
 
@@ -55,21 +55,26 @@ function getTotalIntensities(
   netTotalEmissions: Container<Mass<'CO2e'>>,
   netLulucf: Container<Mass<'CO2e'>>,
   crops: ViticultureCropInputTransformed[],
-  context: ExecutionContext<ConstantsForResidueManagement>,
+  context: ExecutionContext<ConstantsForViticultureCalculator>,
 ) {
-  const { constants } = context;
+  const outputs = crops.map((crop) => getCropOutputs(crop, context.constants));
   const harvested = sum(
-    crops.map((crop) => getAmountProduced(crop, constants)),
+    outputs.map(({ produced }) => produced),
+    zeroMassDryMatter,
+  );
+  const sold = sum(
+    outputs.map(({ sold }) => sold),
     zeroMassDryMatter,
   );
 
   return {
     grapesExcludingLULUCF: generateIntensity(
       netTotalEmissions.minus(netLulucf),
-      harvested,
+      sold,
     ),
-    grapesIncludingLULUCF: generateIntensity(netTotalEmissions, harvested),
+    grapesIncludingLULUCF: generateIntensity(netTotalEmissions, sold),
     grapesHarvestedKilograms: exposeMassValue(harvested),
+    grapesSoldKilograms: exposeMassValue(sold),
   };
 }
 

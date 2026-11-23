@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 export const HorticultureIntermediateIntensitiesOutputSchema = z.object({
   cropHarvestedKilograms: outputValue('Crop harvested in kg'),
+  cropSoldKilograms: outputValue('Crop sold in kg'),
   cropIntensity: outputValue(
     'Horticulture emissions intensity for this activity, in kg-CO2e/kg crop',
   ),
