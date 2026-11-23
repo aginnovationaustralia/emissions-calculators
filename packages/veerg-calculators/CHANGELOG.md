@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.0-beta.2] - 2026-11-19
+## [1.1.0-beta.2](https://github.com/aginnovationaustralia/emissions-calculators/compare/veerg-calculators-v1.1.0-beta.1...veerg-calculators-v1.1.0-beta.2) (2026-11-23)
 
 ### Added
 
@@ -23,6 +23,8 @@
 
 - incorrect scope 3 emissions factors
 - refrigerant intermediate output
+- make sure the nitrogen content of ammonia components on a fertiliser application is populated, instead of 0
+- incorporate changes to VEERG guidelines, to fix organic carbon loss change by reversing sign (emissions are now negative)
 
 ## [1.1.0-beta.1] - 2026-11-10
 
