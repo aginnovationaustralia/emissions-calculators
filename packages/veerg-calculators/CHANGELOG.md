@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.0-beta.2](https://github.com/aginnovationaustralia/emissions-calculators/compare/veerg-calculators-v1.1.0-beta.1...veerg-calculators-v1.1.0-beta.2) (2026-11-23)
+
+
+### Features
+
+* **calculators:** reverse sign on soil organic carbon loss changes ([#284](https://github.com/aginnovationaustralia/emissions-calculators/issues/284)) ([605ed6b](https://github.com/aginnovationaustralia/emissions-calculators/commit/605ed6b432785bab048109654aa98def566eec51))
+* **calculators:** tighten up nitrogen fractions from components ([#295](https://github.com/aginnovationaustralia/emissions-calculators/issues/295)) ([6b3a7eb](https://github.com/aginnovationaustralia/emissions-calculators/commit/6b3a7eb4fe9941fcb7e4d50e71bf8b438f3630db))
+* initial clone of calculators to veerg-calculators ([1f7d81a](https://github.com/aginnovationaustralia/emissions-calculators/commit/1f7d81a54080d4cdb5b932725ce238c05e5db18c))
+* switch to v1.1.0 for the first release ([c89fd35](https://github.com/aginnovationaustralia/emissions-calculators/commit/c89fd3567c55ad3efb83f4091cd7a13910d6c437))
+* updating root level files for new package ([989f9fd](https://github.com/aginnovationaustralia/emissions-calculators/commit/989f9fd48d630e240531a3a5957d67c25ea298d2))
+
+
+### Bug Fixes
+
+* Format units ([#289](https://github.com/aginnovationaustralia/emissions-calculators/issues/289)) ([b8eb5f3](https://github.com/aginnovationaustralia/emissions-calculators/commit/b8eb5f342c92adc96154f7e6d6baa39c39c6c602))
+
 ## [1.1.0-beta.2] - 2026-11-19
 
 ### Added
