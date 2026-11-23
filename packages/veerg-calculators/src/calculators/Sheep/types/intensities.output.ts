@@ -9,12 +9,12 @@ export const SheepIntensitiesOutputSchema = z.object({
   liveweightIntensityIncludingLULUCF: outputValue(
     'Sheep liveweight emissions intensity including LULUCF, in kg-CO2e/kg liveweight',
   ),
-  woolProducedKilograms: outputValue('Clean wool produced in kg'),
+  woolProducedKilograms: outputValue('Greasy wool produced in kg'),
   woolIntensityExcludingLULUCF: outputValue(
-    'Sheep wool emissions intensity excluding LULUCF, in kg-CO2e/kg clean wool',
+    'Sheep wool emissions intensity excluding LULUCF, in kg-CO2e/kg greasy wool',
   ),
   woolIntensityIncludingLULUCF: outputValue(
-    'Sheep wool emissions intensity including LULUCF, in kg-CO2e/kg clean wool',
+    'Sheep wool emissions intensity including LULUCF, in kg-CO2e/kg greasy wool',
   ),
 });
 

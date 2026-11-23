@@ -72145,7 +72145,7 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Clean wool produced in kg"
+                                "description": "Greasy wool produced in kg"
                               },
                               "woolIntensity": {
                                 "type": "object",
@@ -72158,7 +72158,7 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Sheep wool emissions intensity for this activity, in kg-CO2e/kg clean wool"
+                                "description": "Sheep wool emissions intensity for this activity, in kg-CO2e/kg greasy wool"
                               }
                             },
                             "required": [
@@ -72257,7 +72257,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Clean wool produced in kg"
+                          "description": "Greasy wool produced in kg"
                         },
                         "woolIntensityExcludingLULUCF": {
                           "type": "object",
@@ -72270,7 +72270,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Sheep wool emissions intensity excluding LULUCF, in kg-CO2e/kg clean wool"
+                          "description": "Sheep wool emissions intensity excluding LULUCF, in kg-CO2e/kg greasy wool"
                         },
                         "woolIntensityIncludingLULUCF": {
                           "type": "object",
@@ -72283,7 +72283,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Sheep wool emissions intensity including LULUCF, in kg-CO2e/kg clean wool"
+                          "description": "Sheep wool emissions intensity including LULUCF, in kg-CO2e/kg greasy wool"
                         }
                       },
                       "required": [

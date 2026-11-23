@@ -34,7 +34,8 @@ const allSeasons = (head: number) => ({
   winter: head,
 });
 
-// Clean wool: rams 10 head * 5kg * 0.6 = 30kg, wethers avg 30 head * 6kg * 0.7 = 126kg
+// Greasy wool: rams 10 head * 5kg = 50kg, wethers avg 30 head * 6kg = 180kg
+// Clean wool: rams 50kg * 0.6 = 30kg, wethers 180kg * 0.7 = 126kg
 const flockA = SheepFlockInputSchema.parse(
   createSheepFlockInput({
     liveweightSoldKilograms: nv(1000),
@@ -51,7 +52,8 @@ const flockA = SheepFlockInputSchema.parse(
   }),
 );
 
-// Clean wool: other ewes 100 head * 4kg * 0.5 = 200kg, wethers 50 head * 3kg * 0.5 = 75kg
+// Greasy wool: other ewes 100 head * 4kg = 400kg, wethers 50 head * 3kg = 150kg
+// Clean wool: other ewes 400kg * 0.5 = 200kg, wethers 150kg * 0.5 = 75kg
 const flockB = SheepFlockInputSchema.parse(
   createSheepFlockInput({
     liveweightSoldKilograms: nv(500),
@@ -75,17 +77,20 @@ describe('getTotalIntensities', () => {
     input,
   );
 
-  const expectedWoolKg = 30 + 126 + 200 + 75;
+  const expectedGreasyWoolKg = 50 + 180 + 400 + 150;
+  const expectedCleanWoolKg = 30 + 126 + 200 + 75;
   const expectedLiveweightKg = 1500;
 
-  // Protein mass allocation: 18% of liveweight, 84% of clean wool
+  // Protein mass allocation: 18% of liveweight, 84% of clean wool within the greasy wool
   const liveweightProteinKg = expectedLiveweightKg * 0.18;
-  const woolProteinKg = expectedWoolKg * 0.84;
+  const woolProteinKg = expectedCleanWoolKg * 0.84;
   const woolAllocation = woolProteinKg / (woolProteinKg + liveweightProteinKg);
   const meatAllocation = 1 - woolAllocation;
 
-  it('totals clean wool produced across all classes, periods and flocks', () => {
-    expect(result.woolProducedKilograms.value).toBeCloseTo(expectedWoolKg);
+  it('totals greasy wool produced across all classes, periods and flocks', () => {
+    expect(result.woolProducedKilograms.value).toBeCloseTo(
+      expectedGreasyWoolKg,
+    );
   });
 
   it('totals liveweight produced across all flocks', () => {
@@ -96,11 +101,11 @@ describe('getTotalIntensities', () => {
 
   it('allocates emissions to wool by protein mass', () => {
     expect(result.woolIntensityIncludingLULUCF.value).toBeCloseTo(
-      (netTotalEmissionsKgCO2e * woolAllocation) / expectedWoolKg,
+      (netTotalEmissionsKgCO2e * woolAllocation) / expectedGreasyWoolKg,
     );
     expect(result.woolIntensityExcludingLULUCF.value).toBeCloseTo(
       ((netTotalEmissionsKgCO2e - netLulucfKgCO2e) * woolAllocation) /
-        expectedWoolKg,
+        expectedGreasyWoolKg,
     );
   });
 
@@ -116,7 +121,7 @@ describe('getTotalIntensities', () => {
 });
 
 describe('getSingleIntensities', () => {
-  it('calculates clean wool produced for a single flock', () => {
+  it('calculates greasy wool produced for a single flock', () => {
     const result = getSingleIntensities(
       root(mass('CO2e', 100_000)),
       flockB,
@@ -124,11 +129,11 @@ describe('getSingleIntensities', () => {
       input,
     );
 
-    expect(result.woolProducedKilograms.value).toBeCloseTo(200 + 75);
+    expect(result.woolProducedKilograms.value).toBeCloseTo(400 + 150);
     expect(result.liveweightProducedKilograms.value).toBeCloseTo(500);
   });
 
-  it('calculates clean wool produced for a monthly flock', () => {
+  it('calculates greasy wool produced for a monthly flock', () => {
     const monthlyHead = { head: nv(12) };
     const rams: SheepClassMonthlyInput = {
       greasyWoolProductionKilograms: nv(5),
@@ -157,6 +162,6 @@ describe('getSingleIntensities', () => {
       input,
     );
 
-    expect(result.woolProducedKilograms.value).toBeCloseTo(12 * 5 * 0.6);
+    expect(result.woolProducedKilograms.value).toBeCloseTo(12 * 5);
   });
 });
