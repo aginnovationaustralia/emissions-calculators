@@ -10,21 +10,24 @@
       "include-v-in-tag": true,
       "prerelease": true,
       "versioning": "prerelease",
-      "prerelease-type": "beta"
+      "prerelease-type": "beta",
+      "last-release-sha": "a27a095d328ab19973d00a2942359de3951e5cca"
     },
     "packages/calculator-units": {
       "changelog-path": "CHANGELOG.md",
       "release-type": "node",
       "component": "calculator-units",
       "include-component-in-tag": true,
-      "include-v-in-tag": true
+      "include-v-in-tag": true,
+      "last-release-sha": "a9c0110c9d0871debe09f9e1dd811a1e7048b548"
     },
     "packages/calculator-inputs": {
       "changelog-path": "CHANGELOG.md",
       "release-type": "node",
       "component": "calculator-inputs",
       "include-component-in-tag": true,
-      "include-v-in-tag": true
+      "include-v-in-tag": true,
+      "last-release-sha": "a9c0110c9d0871debe09f9e1dd811a1e7048b548"
     }
   },
   "pull-request-title-pattern": "chore(main): release ${version}"
