@@ -1,6 +1,6 @@
 # emissions-calculators
 
-The [AIA Environmental Accounting Platform (EAP)](https://www.aiaeap.com/) is an on-farm GHG emissions calculation engine developed by [Agricultural Innovation Australia](https://aginnovationaustralia.com.au). Free access to AIA’s open-source code is supported by the Australian Government through funding from the _Improving Consistency of On-Farm Emissions Estimates Program_.
+The [AIA Environmental Accounting Platform (EAP)](https://www.aiaeap.com/) is an on-farm GHG emissions calculation engine developed by [Agricultural Innovation Australia](https://aginnovationaustralia.com.au). Free access to AIA’s open-source code is supported by the Australian Government through funding from the [_Improving Consistency of On-Farm Emissions Estimates Program_](https://www.agriculture.gov.au/agriculture-land/farm-food-drought/climatechange/greenhouse-gas-accounting/grant-program).
 
 The objectives of this program are to:
 
@@ -21,6 +21,8 @@ On 19 October 2026, AIA released a beta-version of the open-source code aligned 
 The beta period is designed to help users prepare for the new Guidelines. We encourage code users to get familiar with the Guidelines and review AIA's [Documentation Site](https://docs.aiaplatform.com.au) to view the new NPM-package implemented in practice and access support information. The Guidelines are available to anyone on request by emailing Ag.Land-EmissionsReduction@dcceew.gov.au. Under the grant program, AIA also provides free API access to the EAP calculation engine.
 
 As users test the code, we anticipate making further updates in response to feedback.
+
+Further information on the timing and release sequence for the Guidelines is available on the [Department of Climate Change, Energy, the Environment and Water's website](https://www.dcceew.gov.au/climate-change/emissions-reporting/voluntary-emissions-estimation-reporting-standards).
 
 <p align='center'>
   <a href='https://aginnovationaustralia.com.au'>
