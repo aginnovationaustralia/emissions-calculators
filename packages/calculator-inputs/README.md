@@ -6,10 +6,9 @@ You decide the shape of your inputs: the options each input takes, what of them 
 
 ## Requirements
 
-- **ESM only.** The package is published as ES modules. It works with `import`, with bundlers, and with `require()` on Node 22.12 or later (Node's built-in support for requiring ES modules).
+- **ES modules and CommonJS.** `import` loads the ES module build and `require()` loads the CommonJS build, so the package works with bundlers, Node and Jest in either mode. Load it the same way throughout a program, as `import` and `require()` each get their own copy of the package.
 - **Node 22.19 or later**, as declared in `engines`.
-- **TypeScript:** use `moduleResolution` `nodenext`, `node16` or `bundler`, which read the `exports` map. The older `node` (`node10`) setting can't resolve the subpath entry points. CommonJS projects importing the package from TypeScript need TypeScript 5.8 or later with `module: nodenext`.
-- **Jest:** Jest in CommonJS mode can only `require()` ES modules on Node 24.9 or later. On earlier versions, run Jest in ESM mode, transform the package, or use Vitest.
+- **TypeScript:** any `moduleResolution` setting works. `nodenext`, `node16` and `bundler` read the `exports` map, so they pick the ES module or CommonJS types to match how you load the package.
 
 ## Peer dependencies
 
