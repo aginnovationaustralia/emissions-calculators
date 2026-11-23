@@ -364,7 +364,7 @@
     "@types/node": "^25.9.7",
     "@types/semver": "^7.8.0",
     "@types/xlsx-populate": "github:JanLoebel/types-xlsx-populate",
-    "@typescript-eslint/parser": "^8.72.1",
+    "@typescript-eslint/parser": "^8.73.0",
     "dependency-cruiser": "^18.3.1",
     "eslint": "^10.10.0",
     "glob": "^14.0.6",
