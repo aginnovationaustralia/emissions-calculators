@@ -373,7 +373,7 @@
     "publint": "^0.3.25",
     "rollup": "^4.68.8",
     "rollup-plugin-copy": "^3.5.0",
-    "ts-jest": "^29.4.12",
+    "ts-jest": "^29.4.15",
     "tsc-alias": "^1.9.10",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",

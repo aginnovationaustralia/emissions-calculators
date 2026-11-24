@@ -65,7 +65,7 @@
     "decimal.js-light": "^2.5.1",
     "jest": "^30.5.2",
     "publint": "^0.3.24",
-    "ts-jest": "^29.4.12",
+    "ts-jest": "^29.4.15",
     "typescript": "^6.0.3",
     "zod": "^4.6.7"
   },
