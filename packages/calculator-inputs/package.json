@@ -61,7 +61,7 @@
     "@aginnovationaustralia/calculator-units": "workspace:*",
     "@arethetypeswrong/cli": "^0.18.5",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.9.7",
+    "@types/node": "^26.6.6",
     "decimal.js-light": "^2.5.1",
     "jest": "^30.5.2",
     "publint": "^0.3.24",
