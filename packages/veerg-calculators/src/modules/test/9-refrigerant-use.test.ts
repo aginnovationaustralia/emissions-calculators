@@ -1,5 +1,8 @@
 import { getSheet } from '@/test/common/sheets';
+import { testContext } from '@/test/Grains/context';
+import { collectIntermediates } from '@/tools/collect';
 import { nv } from '@/tools/inputs';
+import { sumByName } from '@/tools/outputs';
 import XLSX from 'xlsx-populate';
 import { calculateScope1RefrigerantUse } from '../scope1/9-refrigerant-use';
 import { RefrigerantInput } from '../scope1/9-refrigerant-use/refrigerant.input';
@@ -55,6 +58,40 @@ describe('9.1.1 Refrigerant use', () => {
       inputsAndOutputs,
       calculateScope1RefrigerantUse,
       '9.1',
+    );
+  });
+
+  it('reports the CO2e of each refrigerant as an intermediate', () => {
+    const input = RefrigerantsInputSchema.parse({
+      refrigerants: [
+        {
+          refrigerant: 'R-404A',
+          refrigerationType: 'Domestic refrigerators',
+          chargeSizeKilograms: nv(10),
+        },
+        {
+          refrigerant: 'HFC-134a (R-134a)',
+          refrigerationType: 'Transport refrigeration',
+          chargeSizeKilograms: nv(20),
+        },
+        {
+          refrigerant: 'R-404A',
+          refrigerationType: 'Transport refrigeration',
+          chargeSizeKilograms: nv(5),
+        },
+      ],
+    });
+
+    const result = calculateScope1RefrigerantUse(input, testContext());
+    const intermediates = sumByName(collectIntermediates(result));
+    const co2e = (name: string) =>
+      intermediates.find((i) => i.name === `ECO2e=${name}`)?.value as number;
+
+    expect(co2e('R-404A')).toBeGreaterThan(0);
+    expect(co2e('HFC-134a (R-134a)')).toBeGreaterThan(0);
+    expect(co2e('R-404A') + co2e('HFC-134a (R-134a)')).toBeCloseTo(
+      result.unit.store.value.toNumber(),
+      8,
     );
   });
 });

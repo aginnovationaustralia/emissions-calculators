@@ -41,7 +41,12 @@ export const calculateScope1RefrigerantUse = (
         name: `Er=${refrigerant.refrigerant.unit}`,
       });
 
-    return gwp.multiply(amountLeaked);
+    // The leaked gas in CO2e, tagged per refrigerant so callers can report
+    // each gas's share of the total (intermediates of the same name are summed)
+    return gwp.multiply(amountLeaked).attach({
+      intermediate: true,
+      name: `ECO2e=${refrigerant.refrigerant.unit}`,
+    });
   });
 
   return sum(emissionsRecords, zeroCO2e, {

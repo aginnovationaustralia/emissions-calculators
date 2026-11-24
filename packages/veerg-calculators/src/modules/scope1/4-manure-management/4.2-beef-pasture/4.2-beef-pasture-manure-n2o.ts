@@ -223,7 +223,7 @@ export const calculateManureManagementSoilDirectN2OForHerd = (
       isFebruaryInLeapYear: herd.isFebruaryInLeapYear,
       fallback: zeroN,
     },
-  );
+  ).attach({ intermediate: true, name: 'AE (herd)' });
 
   const wetOrDry = herd.climateZone;
   const EFPRP = selectConstant(
