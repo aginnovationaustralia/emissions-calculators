@@ -371,7 +371,7 @@
     "jest": "^30.5.2",
     "nanoclone": "^1.0.2",
     "publint": "^0.3.25",
-    "rollup": "^4.67.3",
+    "rollup": "^4.68.8",
     "rollup-plugin-copy": "^3.5.0",
     "ts-jest": "^29.4.12",
     "tsc-alias": "^1.9.10",
