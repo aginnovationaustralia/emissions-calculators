@@ -11,7 +11,7 @@
       "prerelease": true,
       "versioning": "prerelease",
       "prerelease-type": "beta",
-      "last-release-sha": "a27a095d328ab19973d00a2942359de3951e5cca"
+      "skip-github-release": true
     },
     "packages/calculator-units": {
       "changelog-path": "CHANGELOG.md",
