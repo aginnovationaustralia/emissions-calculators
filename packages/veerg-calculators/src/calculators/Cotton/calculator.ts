@@ -55,7 +55,7 @@ function getCottonLintHarvestedForCrop(crop: CottonCropInputTransformed) {
 }
 
 function getCottonSeedHarvestedForCrop(crop: CottonCropInputTransformed) {
-  return crop.crop.totalLintYieldKilograms;
+  return crop.crop.totalSeedYieldKilograms;
 }
 
 function getSingleIntensities(
