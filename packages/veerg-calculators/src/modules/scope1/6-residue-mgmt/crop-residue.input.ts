@@ -273,7 +273,7 @@ export type HasPastureResidueInputTransformed = z.output<
  * Only the cropping calculator accepts this, as it reports intensities per
  * unit of pasture sold. Livestock calculators use `PastureResidueInputSchema`.
  */
-export const PastureWithPercentageSoldInputSchema =
+export const PastureWithAmountSoldInputSchema =
   PastureResidueInputSchema.safeExtend({
     totalMassSoldKilograms: numberInputOptional(
       (val) => mass('DryMatter', val),
@@ -288,14 +288,14 @@ export const PastureWithPercentageSoldInputSchema =
   });
 
 export type PastureWithPercentageSoldInput = z.input<
-  typeof PastureWithPercentageSoldInputSchema
+  typeof PastureWithAmountSoldInputSchema
 >;
 export type PastureWithPercentageSoldInputTransformed = z.output<
-  typeof PastureWithPercentageSoldInputSchema
+  typeof PastureWithAmountSoldInputSchema
 >;
 
 export const HasPastureWithPercentageSoldInputSchema = object({
-  pasture: PastureWithPercentageSoldInputSchema,
+  pasture: PastureWithAmountSoldInputSchema,
 });
 export type HasPastureWithPercentageSoldInput = z.input<
   typeof HasPastureWithPercentageSoldInputSchema
