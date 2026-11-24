@@ -10,9 +10,8 @@ import {
   calculate61CropResidueN2O,
   calculate63ResidueLeachingAndRunoffN2O,
   calculate64FieldBurning,
-  getAmountProduced,
+  getCropOutputs,
 } from '@/modules/scope1/6-residue-mgmt';
-import { ConstantsForResidueManagement } from '@/modules/scope1/6-residue-mgmt/constants';
 import {
   calculate81TransportFuel,
   calculate82StationaryFuel,
@@ -42,13 +41,13 @@ import { SugarIntermediateIntensitiesOutput } from './types/intermediate-intensi
 function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
   crop: SugarCropInputTransformed,
-  context: ExecutionContext<ConstantsForResidueManagement>,
+  context: ExecutionContext<ConstantsForSugarCalculator>,
 ): SugarIntermediateIntensitiesOutput {
-  const harvested = getAmountProduced(crop, context.constants);
+  const totalCrop = getCropOutputs(crop, context.constants);
 
   return {
-    sugarCaneIntensity: generateIntensity(netEmissions, harvested),
-    sugarCaneHarvestedKilograms: exposeMassValue(harvested),
+    sugarCaneIntensity: generateIntensity(netEmissions, totalCrop),
+    totalSugarCaneKilograms: exposeMassValue(totalCrop),
   };
 }
 
@@ -56,21 +55,20 @@ function getTotalIntensities(
   netTotalEmissions: Container<Mass<'CO2e'>>,
   netLulucf: Container<Mass<'CO2e'>>,
   crops: SugarCropInputTransformed[],
-  context: ExecutionContext<ConstantsForResidueManagement>,
+  context: ExecutionContext<ConstantsForSugarCalculator>,
 ) {
-  const { constants } = context;
-  const harvested = sum(
-    crops.map((crop) => getAmountProduced(crop, constants)),
+  const totalCrop = sum(
+    crops.map((crop) => getCropOutputs(crop, context.constants)),
     zeroMassDryMatter,
   );
 
   return {
     sugarCaneExcludingLULUCF: generateIntensity(
       netTotalEmissions.minus(netLulucf),
-      harvested,
+      totalCrop,
     ),
-    sugarCaneIncludingLULUCF: generateIntensity(netTotalEmissions, harvested),
-    sugarCaneHarvestedKilograms: exposeMassValue(harvested),
+    sugarCaneIncludingLULUCF: generateIntensity(netTotalEmissions, totalCrop),
+    totalSugarCaneKilograms: exposeMassValue(totalCrop),
   };
 }
 

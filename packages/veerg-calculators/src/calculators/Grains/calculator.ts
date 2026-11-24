@@ -10,9 +10,8 @@ import {
   calculate61CropResidueN2O,
   calculate63ResidueLeachingAndRunoffN2O,
   calculate64FieldBurning,
-  getAmountProduced,
+  getCropOutputs,
 } from '@/modules/scope1/6-residue-mgmt';
-import { ConstantsForResidueManagement } from '@/modules/scope1/6-residue-mgmt/constants';
 import {
   calculate81TransportFuel,
   calculate82StationaryFuel,
@@ -42,13 +41,13 @@ import { GrainsIntermediateIntensitiesOutput } from './types/intermediate-intens
 function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
   crop: GrainsCropInputTransformed,
-  context: ExecutionContext<ConstantsForResidueManagement>,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
 ): GrainsIntermediateIntensitiesOutput {
-  const harvested = getAmountProduced(crop, context.constants);
+  const totalCrop = getCropOutputs(crop, context.constants);
 
   return {
-    grainsIntensity: generateIntensity(netEmissions, harvested),
-    grainHarvestedKilograms: exposeMassValue(harvested),
+    grainsIntensity: generateIntensity(netEmissions, totalCrop),
+    totalGrainKilograms: exposeMassValue(totalCrop),
   };
 }
 
@@ -56,21 +55,20 @@ function getTotalIntensities(
   netTotalEmissions: Container<Mass<'CO2e'>>,
   netLulucf: Container<Mass<'CO2e'>>,
   crops: GrainsCropInputTransformed[],
-  context: ExecutionContext<ConstantsForResidueManagement>,
+  context: ExecutionContext<ConstantsForGrainsCalculator>,
 ) {
-  const { constants } = context;
-  const harvested = sum(
-    crops.map((crop) => getAmountProduced(crop, constants)),
+  const totalCrop = sum(
+    crops.map((crop) => getCropOutputs(crop, context.constants)),
     zeroMassDryMatter,
   );
 
   return {
     grainsExcludingLULUCF: generateIntensity(
       netTotalEmissions.minus(netLulucf),
-      harvested,
+      totalCrop,
     ),
-    grainsIncludingLULUCF: generateIntensity(netTotalEmissions, harvested),
-    grainHarvestedKilograms: exposeMassValue(harvested),
+    grainsIncludingLULUCF: generateIntensity(netTotalEmissions, totalCrop),
+    totalGrainKilograms: exposeMassValue(totalCrop),
   };
 }
 

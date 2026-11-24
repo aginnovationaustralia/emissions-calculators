@@ -6847,6 +6847,27 @@
                                 "additionalProperties": false,
                                 "x-units": "kilograms dry matter"
                               },
+                              "totalMassSoldKilograms": {
+                                "description": "Mass of the crop sold, as dry matter. Supply this value for more accurate emissions intensity calculations. This is the only place the value is used (kilograms dry matter)",
+                                "x-modules": [
+                                  "Intensities"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "kilograms dry matter"
+                              },
                               "residues": {
                                 "oneOf": [
                                   {
@@ -6988,6 +7009,27 @@
                                   "6.1",
                                   "6.3",
                                   "6.4"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "kilograms dry matter"
+                              },
+                              "totalMassSoldKilograms": {
+                                "description": "Mass of the crop sold, as dry matter. Supply this value for more accurate emissions intensity calculations. This is the only place the value is used (kilograms dry matter)",
+                                "x-modules": [
+                                  "Intensities"
                                 ],
                                 "type": "object",
                                 "properties": {
@@ -7310,6 +7352,27 @@
                               "6.1",
                               "6.3",
                               "6.4"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/NonNegativeNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "kilograms dry matter"
+                          },
+                          "totalMassSoldKilograms": {
+                            "description": "Mass of the crop sold, as dry matter. Supply this value for more accurate emissions intensity calculations. This is the only place the value is used (kilograms dry matter)",
+                            "x-modules": [
+                              "Intensities"
                             ],
                             "type": "object",
                             "properties": {

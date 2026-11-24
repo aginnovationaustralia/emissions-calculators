@@ -1850,6 +1850,27 @@
                               "additionalProperties": false,
                               "x-units": "kilograms dry matter"
                             },
+                            "totalMassSoldKilograms": {
+                              "description": "Mass of the crop sold, as dry matter. Supply this value for more accurate emissions intensity calculations. This is the only place the value is used (kilograms dry matter)",
+                              "x-modules": [
+                                "Intensities"
+                              ],
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                },
+                                "quality": {
+                                  "default": {},
+                                  "$ref": "#/components/schemas/QualityTable"
+                                }
+                              },
+                              "required": [
+                                "value"
+                              ],
+                              "additionalProperties": false,
+                              "x-units": "kilograms dry matter"
+                            },
                             "residues": {
                               "oneOf": [
                                 {
@@ -2071,7 +2092,7 @@
                           "intensities": {
                             "type": "object",
                             "properties": {
-                              "grainHarvestedKilograms": {
+                              "totalGrainKilograms": {
                                 "type": "object",
                                 "properties": {
                                   "value": {
@@ -2082,7 +2103,7 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Grain harvested in kg"
+                                "description": "The amount of grain used for intensities, in kg. It is either the total yield or amount sold, depending on the inputs that were supplied."
                               },
                               "grainsIntensity": {
                                 "type": "object",
@@ -2099,7 +2120,7 @@
                               }
                             },
                             "required": [
-                              "grainHarvestedKilograms",
+                              "totalGrainKilograms",
                               "grainsIntensity"
                             ],
                             "additionalProperties": false
@@ -2142,7 +2163,7 @@
                     "intensities": {
                       "type": "object",
                       "properties": {
-                        "grainHarvestedKilograms": {
+                        "totalGrainKilograms": {
                           "type": "object",
                           "properties": {
                             "value": {
@@ -2153,7 +2174,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Grain harvested in kg"
+                          "description": "The amount of grain used for intensities, in kg. It is either the total yield or amount sold, depending on the inputs that were supplied."
                         },
                         "grainsExcludingLULUCF": {
                           "type": "object",
@@ -2183,7 +2204,7 @@
                         }
                       },
                       "required": [
-                        "grainHarvestedKilograms",
+                        "totalGrainKilograms",
                         "grainsExcludingLULUCF",
                         "grainsIncludingLULUCF"
                       ],

@@ -11,7 +11,7 @@ import {
   calculate62PastureResidueN2O,
   calculate63ResidueLeachingAndRunoffN2O,
   calculate64FieldBurning,
-  getAmountProduced,
+  getCropOutputs,
 } from '@/modules/scope1/6-residue-mgmt';
 import {
   calculate81TransportFuel,
@@ -45,11 +45,11 @@ function getSingleIntensities(
   crop: CroppingCropInputTransformed,
   context: ExecutionContext<ConstantsForCroppingCalculator>,
 ): CroppingIntermediateIntensitiesOutput {
-  const harvested = getAmountProduced(crop, context.constants);
+  const totalCrop = getCropOutputs(crop, context.constants);
 
   return {
-    cropIntensity: generateIntensity(netEmissions, harvested),
-    cropHarvestedKilograms: exposeMassValue(harvested),
+    cropIntensity: generateIntensity(netEmissions, totalCrop),
+    totalCropKilograms: exposeMassValue(totalCrop),
   };
 }
 
@@ -59,22 +59,18 @@ function getTotalIntensities(
   crops: CroppingCropInputTransformed[],
   context: ExecutionContext<ConstantsForCroppingCalculator>,
 ): CroppingIntensitiesOutput {
-  const { constants } = context;
-  const harvested = sum(
-    crops.map((crop) => getAmountProduced(crop, constants)),
+  const totalCrop = sum(
+    crops.map((crop) => getCropOutputs(crop, context.constants)),
     zeroMassDryMatter,
   );
 
   return {
     cropIntensityExcludingLULUCF: generateIntensity(
       netTotalEmissions.minus(netLulucf),
-      harvested,
+      totalCrop,
     ),
-    cropIntensityIncludingLULUCF: generateIntensity(
-      netTotalEmissions,
-      harvested,
-    ),
-    cropHarvestedKilograms: exposeMassValue(harvested),
+    cropIntensityIncludingLULUCF: generateIntensity(netTotalEmissions, totalCrop),
+    totalCropKilograms: exposeMassValue(totalCrop),
   };
 }
 

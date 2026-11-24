@@ -6,14 +6,15 @@ import {
   PastureTypes,
 } from '@/constants/enums';
 import { selectConstant } from '@/tools/constants';
-import { Container } from '@/tools/containers';
 import {
   enumInput,
   isProportion,
   numberInput,
+  numberInputOptional,
   TypedInputOptions,
 } from '@/tools/inputs';
 import {
+  INTENSITIES,
   RESIDUE_BURN_6_4,
   RESIDUE_CROPS_6_1,
   RESIDUE_LEACH_6_3,
@@ -24,7 +25,7 @@ import {
   hectaresToSquareMetres,
   tonnesPerHectareToKgPerSquareMetres,
 } from '@/tools/unit-conversion';
-import { area, mass, Mass, massPerArea, realNumber } from '@/tools/units';
+import { area, mass, massPerArea, realNumber } from '@/tools/units';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 import { HasCropConstants } from './constants';
@@ -73,6 +74,16 @@ export const BaseCropResidueInputSchema = object({
       method: '1',
       description: 'Total yield of the crop, as dry matter',
       modules: [RESIDUE_CROPS_6_1, RESIDUE_LEACH_6_3, RESIDUE_BURN_6_4],
+    },
+    (s) => s.min(0),
+  ),
+  totalMassSoldKilograms: numberInputOptional(
+    (val) => mass('DryMatter', val),
+    {
+      name: 'Mass sold',
+      description:
+        'Mass of the crop sold, as dry matter. Supply this value for more accurate emissions intensity calculations. This is the only place the value is used',
+      modules: [INTENSITIES],
     },
     (s) => s.min(0),
   ),
@@ -257,6 +268,42 @@ export type HasPastureResidueInputTransformed = z.output<
   typeof HasPastureResidueInputSchema
 >;
 
+/**
+ * Pasture residue inputs plus the share of the pasture harvest that was sold.
+ * Only the cropping calculator accepts this, as it reports intensities per
+ * unit of pasture sold. Livestock calculators use `PastureResidueInputSchema`.
+ */
+export const PastureWithAmountSoldInputSchema =
+  PastureResidueInputSchema.safeExtend({
+    totalMassSoldKilograms: numberInputOptional(
+      (val) => mass('DryMatter', val),
+      {
+        name: 'Mass sold',
+        description:
+          'Total mass of dry matter cut or harvested that was sold. Supply this value for more accurate emissions intensity calculations. This is the only place the value is used',
+        modules: [INTENSITIES],
+      },
+      (s) => s.min(0),
+    ),
+  });
+
+export type PastureWithPercentageSoldInput = z.input<
+  typeof PastureWithAmountSoldInputSchema
+>;
+export type PastureWithPercentageSoldInputTransformed = z.output<
+  typeof PastureWithAmountSoldInputSchema
+>;
+
+export const HasPastureWithPercentageSoldInputSchema = object({
+  pasture: PastureWithAmountSoldInputSchema,
+});
+export type HasPastureWithPercentageSoldInput = z.input<
+  typeof HasPastureWithPercentageSoldInputSchema
+>;
+export type HasPastureWithPercentageSoldInputTransformed = z.output<
+  typeof HasPastureWithPercentageSoldInputSchema
+>;
+
 export const HasCropOrPastureResidueInputSchema = z.xor([
   HasCropResidueInputSchema.meta({ title: 'Crop' }),
   HasPastureResidueInputSchema.meta({ title: 'Pasture' }),
@@ -301,14 +348,23 @@ export const getAverageYieldForPasture = (
   );
 };
 
-export const getAmountProduced = (
-  input: HasCropOrPastureResidueInputTransformed,
+/**
+ * The amount of crop used to calculate emissions intensities, for a crop or for
+ * pasture grown in a cropping activity. This is the mass sold when supplied,
+ * otherwise the total yield.
+ */
+export const getCropOutputs = (
+  input:
+    | HasCropResidueInputTransformed
+    | HasPastureWithPercentageSoldInputTransformed,
   constants: HasCropConstants,
-): Container<Mass<'DryMatter'>> => {
+) => {
   if (isCropResidueInput(input)) {
-    return input.crop.totalYieldKilograms;
+    return input.crop.totalMassSoldKilograms ?? input.crop.totalYieldKilograms;
   }
-  return getAverageYieldForPasture(input.pasture, constants).multiply(
+  const produced = getAverageYieldForPasture(input.pasture, constants).multiply(
     input.pasture.areaManagedHectares,
   );
+
+  return input.pasture.totalMassSoldKilograms ?? produced;
 };
