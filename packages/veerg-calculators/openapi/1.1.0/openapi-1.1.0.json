@@ -1139,6 +1139,48 @@
                                     ],
                                     "additionalProperties": false,
                                     "x-units": "litres milk per head per day"
+                                  },
+                                  "method2PercentFatContent": {
+                                    "description": "Fat content in fat and protein corrected milk (number)",
+                                    "x-modules": [
+                                      "Intensities"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/PercentageNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "number"
+                                  },
+                                  "method2PercentProteinContent": {
+                                    "description": "Protein content in fat and protein corrected milk (number)",
+                                    "x-modules": [
+                                      "Intensities"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/PercentageNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "number"
                                   }
                                 },
                                 "required": [
@@ -1175,6 +1217,7 @@
                                     "description": "Fat content in fat and protein corrected milk (number)",
                                     "x-modules": [
                                       "3.3",
+                                      "Intensities",
                                       "4.3"
                                     ],
                                     "type": "object",
@@ -1197,6 +1240,7 @@
                                     "description": "Protein content in fat and protein corrected milk (number)",
                                     "x-modules": [
                                       "3.3",
+                                      "Intensities",
                                       "4.3"
                                     ],
                                     "type": "object",
@@ -2747,6 +2791,48 @@
                                     ],
                                     "additionalProperties": false,
                                     "x-units": "litres milk per head per day"
+                                  },
+                                  "method2PercentFatContent": {
+                                    "description": "Fat content in fat and protein corrected milk (number)",
+                                    "x-modules": [
+                                      "Intensities"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/PercentageNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "number"
+                                  },
+                                  "method2PercentProteinContent": {
+                                    "description": "Protein content in fat and protein corrected milk (number)",
+                                    "x-modules": [
+                                      "Intensities"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/PercentageNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "number"
                                   }
                                 },
                                 "required": [
@@ -2783,6 +2869,7 @@
                                     "description": "Fat content in fat and protein corrected milk (number)",
                                     "x-modules": [
                                       "3.3",
+                                      "Intensities",
                                       "4.3"
                                     ],
                                     "type": "object",
@@ -2805,6 +2892,7 @@
                                     "description": "Protein content in fat and protein corrected milk (number)",
                                     "x-modules": [
                                       "3.3",
+                                      "Intensities",
                                       "4.3"
                                     ],
                                     "type": "object",
@@ -28641,6 +28729,48 @@
                                       ],
                                       "additionalProperties": false,
                                       "x-units": "litres milk per head per day"
+                                    },
+                                    "method2PercentFatContent": {
+                                      "description": "Fat content in fat and protein corrected milk (number)",
+                                      "x-modules": [
+                                        "Intensities"
+                                      ],
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "$ref": "#/components/schemas/PercentageNumberInput"
+                                        },
+                                        "quality": {
+                                          "default": {},
+                                          "$ref": "#/components/schemas/QualityTable"
+                                        }
+                                      },
+                                      "required": [
+                                        "value"
+                                      ],
+                                      "additionalProperties": false,
+                                      "x-units": "number"
+                                    },
+                                    "method2PercentProteinContent": {
+                                      "description": "Protein content in fat and protein corrected milk (number)",
+                                      "x-modules": [
+                                        "Intensities"
+                                      ],
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "$ref": "#/components/schemas/PercentageNumberInput"
+                                        },
+                                        "quality": {
+                                          "default": {},
+                                          "$ref": "#/components/schemas/QualityTable"
+                                        }
+                                      },
+                                      "required": [
+                                        "value"
+                                      ],
+                                      "additionalProperties": false,
+                                      "x-units": "number"
                                     }
                                   },
                                   "required": [
@@ -28677,6 +28807,7 @@
                                       "description": "Fat content in fat and protein corrected milk (number)",
                                       "x-modules": [
                                         "3.3",
+                                        "Intensities",
                                         "4.3"
                                       ],
                                       "type": "object",
@@ -28699,6 +28830,7 @@
                                       "description": "Protein content in fat and protein corrected milk (number)",
                                       "x-modules": [
                                         "3.3",
+                                        "Intensities",
                                         "4.3"
                                       ],
                                       "type": "object",
@@ -32507,6 +32639,48 @@
                                       ],
                                       "additionalProperties": false,
                                       "x-units": "litres milk per head per day"
+                                    },
+                                    "method2PercentFatContent": {
+                                      "description": "Fat content in fat and protein corrected milk (number)",
+                                      "x-modules": [
+                                        "Intensities"
+                                      ],
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "$ref": "#/components/schemas/PercentageNumberInput"
+                                        },
+                                        "quality": {
+                                          "default": {},
+                                          "$ref": "#/components/schemas/QualityTable"
+                                        }
+                                      },
+                                      "required": [
+                                        "value"
+                                      ],
+                                      "additionalProperties": false,
+                                      "x-units": "number"
+                                    },
+                                    "method2PercentProteinContent": {
+                                      "description": "Protein content in fat and protein corrected milk (number)",
+                                      "x-modules": [
+                                        "Intensities"
+                                      ],
+                                      "type": "object",
+                                      "properties": {
+                                        "value": {
+                                          "$ref": "#/components/schemas/PercentageNumberInput"
+                                        },
+                                        "quality": {
+                                          "default": {},
+                                          "$ref": "#/components/schemas/QualityTable"
+                                        }
+                                      },
+                                      "required": [
+                                        "value"
+                                      ],
+                                      "additionalProperties": false,
+                                      "x-units": "number"
                                     }
                                   },
                                   "required": [
@@ -32543,6 +32717,7 @@
                                       "description": "Fat content in fat and protein corrected milk (number)",
                                       "x-modules": [
                                         "3.3",
+                                        "Intensities",
                                         "4.3"
                                       ],
                                       "type": "object",
@@ -32565,6 +32740,7 @@
                                       "description": "Protein content in fat and protein corrected milk (number)",
                                       "x-modules": [
                                         "3.3",
+                                        "Intensities",
                                         "4.3"
                                       ],
                                       "type": "object",
@@ -37322,6 +37498,19 @@
                                 "additionalProperties": false,
                                 "description": "Milk produced in kg"
                               },
+                              "fatAndProteinCorrectedMilkProducedKilograms": {
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "type": "number"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "description": "Fat and protein corrected milk (FPCM) produced in kg"
+                              },
                               "milkIntensity": {
                                 "type": "object",
                                 "properties": {
@@ -37333,13 +37522,14 @@
                                   "value"
                                 ],
                                 "additionalProperties": false,
-                                "description": "Dairy milk emissions intensity for this activity, in kg-CO2e/kg milk"
+                                "description": "Dairy milk emissions intensity for this activity, in kg-CO2e/kg fat and protein corrected milk (FPCM)"
                               }
                             },
                             "required": [
                               "liveweightProducedKilograms",
                               "liveweightIntensity",
                               "milkProducedKilograms",
+                              "fatAndProteinCorrectedMilkProducedKilograms",
                               "milkIntensity"
                             ],
                             "additionalProperties": false
@@ -37434,6 +37624,19 @@
                           "additionalProperties": false,
                           "description": "Milk produced in kg"
                         },
+                        "fatAndProteinCorrectedMilkProducedKilograms": {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "value"
+                          ],
+                          "additionalProperties": false,
+                          "description": "Fat and protein corrected milk (FPCM) produced in kg"
+                        },
                         "milkIntensityExcludingLULUCF": {
                           "type": "object",
                           "properties": {
@@ -37445,7 +37648,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Dairy milk emissions intensity excluding LULUCF, in kg-CO2e/kg milk"
+                          "description": "Dairy milk emissions intensity excluding LULUCF, in kg-CO2e/kg fat and protein corrected milk (FPCM)"
                         },
                         "milkIntensityIncludingLULUCF": {
                           "type": "object",
@@ -37458,7 +37661,7 @@
                             "value"
                           ],
                           "additionalProperties": false,
-                          "description": "Dairy milk emissions intensity including LULUCF, in kg-CO2e/kg milk"
+                          "description": "Dairy milk emissions intensity including LULUCF, in kg-CO2e/kg fat and protein corrected milk (FPCM)"
                         }
                       },
                       "required": [
@@ -37466,6 +37669,7 @@
                         "liveweightIntensityExcludingLULUCF",
                         "liveweightIntensityIncludingLULUCF",
                         "milkProducedKilograms",
+                        "fatAndProteinCorrectedMilkProducedKilograms",
                         "milkIntensityExcludingLULUCF",
                         "milkIntensityIncludingLULUCF"
                       ],
@@ -123145,6 +123349,52 @@
                                   ],
                                   "additionalProperties": false,
                                   "x-units": "litres milk per head per day"
+                                },
+                                "method2PercentFatContent": {
+                                  "description": "Fat content in fat and protein corrected milk (number)",
+                                  "x-modules": [
+                                    "5.2",
+                                    "5.4",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/PercentageNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "number"
+                                },
+                                "method2PercentProteinContent": {
+                                  "description": "Protein content in fat and protein corrected milk (number)",
+                                  "x-modules": [
+                                    "5.2",
+                                    "5.4",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/PercentageNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "number"
                                 }
                               },
                               "required": [
@@ -124578,6 +124828,52 @@
                                   ],
                                   "additionalProperties": false,
                                   "x-units": "litres milk per head per day"
+                                },
+                                "method2PercentFatContent": {
+                                  "description": "Fat content in fat and protein corrected milk (number)",
+                                  "x-modules": [
+                                    "5.2",
+                                    "5.4",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/PercentageNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "number"
+                                },
+                                "method2PercentProteinContent": {
+                                  "description": "Protein content in fat and protein corrected milk (number)",
+                                  "x-modules": [
+                                    "5.2",
+                                    "5.4",
+                                    "5.5"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/PercentageNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "number"
                                 }
                               },
                               "required": [

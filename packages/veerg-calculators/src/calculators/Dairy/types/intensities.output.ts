@@ -10,11 +10,14 @@ export const DairyIntensitiesOutputSchema = z.object({
     'Dairy liveweight emissions intensity including LULUCF, in kg-CO2e/kg liveweight',
   ),
   milkProducedKilograms: outputValue('Milk produced in kg'),
+  fatAndProteinCorrectedMilkProducedKilograms: outputValue(
+    'Fat and protein corrected milk (FPCM) produced in kg',
+  ),
   milkIntensityExcludingLULUCF: outputValue(
-    'Dairy milk emissions intensity excluding LULUCF, in kg-CO2e/kg milk',
+    'Dairy milk emissions intensity excluding LULUCF, in kg-CO2e/kg fat and protein corrected milk (FPCM)',
   ),
   milkIntensityIncludingLULUCF: outputValue(
-    'Dairy milk emissions intensity including LULUCF, in kg-CO2e/kg milk',
+    'Dairy milk emissions intensity including LULUCF, in kg-CO2e/kg fat and protein corrected milk (FPCM)',
   ),
 });
 

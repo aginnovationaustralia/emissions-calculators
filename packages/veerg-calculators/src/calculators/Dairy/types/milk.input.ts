@@ -1,11 +1,17 @@
 import { dairyEntericAndManureModules } from '@/modules/scope1/shared/dairy/modules';
-import { isPercentage, numberInput, numberInputOptional } from '@/tools/inputs';
+import {
+  isPercentage,
+  NonEmptyArray,
+  numberInput,
+  numberInputOptional,
+} from '@/tools/inputs';
 import {
   ENTERIC_DAIRY_3_3,
   INTENSITIES,
   LivestockLocation,
   livestockOrFertiliserModules,
   MANURE_DAIRY_4_3,
+  ModuleNames,
 } from '@/tools/modules';
 import {
   massPerHeadPerDay,
@@ -15,8 +21,39 @@ import {
 import { object } from '@/types/schemas';
 import { z } from 'zod';
 
-export const dairyMilkVolumeInputSchema = (location: LivestockLocation) =>
+/**
+ * Method 2 fat *FCj* and protein *PCj* content of the milk. Both milk inputs take them:
+ * they give the fat and protein corrected milk for the intensities, and for milk solids
+ * also the conversion to litres (3.3.1.1 (5)).
+ */
+const method2MilkContentInputs = (modules: NonEmptyArray<ModuleNames>) =>
   object({
+    method2PercentFatContent: numberInputOptional(
+      (val) => realNumber(val),
+      {
+        name: 'FCj',
+        method: '2',
+        description: 'Fat content in fat and protein corrected milk',
+        modules,
+      },
+      isPercentage,
+    ),
+    method2PercentProteinContent: numberInputOptional(
+      (val) => realNumber(val),
+      {
+        name: 'PCj',
+        method: '2',
+        description: 'Protein content in fat and protein corrected milk',
+        modules,
+      },
+      isPercentage,
+    ),
+  });
+
+export const dairyMilkVolumeInputSchema = (location: LivestockLocation) =>
+  method2MilkContentInputs(
+    livestockOrFertiliserModules(location, [INTENSITIES]),
+  ).safeExtend({
     litresPerHeadPerDay: numberInput(
       (val) => volumePerHeadPerDay('Milk', val),
       {
@@ -34,7 +71,13 @@ export const dairyMilkVolumeInputSchema = (location: LivestockLocation) =>
   });
 
 export const dairyMilkSolidsInputSchema = (location: LivestockLocation) =>
-  object({
+  method2MilkContentInputs(
+    livestockOrFertiliserModules(location, [
+      ENTERIC_DAIRY_3_3,
+      INTENSITIES,
+      MANURE_DAIRY_4_3,
+    ]),
+  ).safeExtend({
     solidsKilogramsPerHeadPerDay: numberInput(
       (val) => massPerHeadPerDay('Milk Solids', val),
       {
@@ -44,26 +87,6 @@ export const dairyMilkSolidsInputSchema = (location: LivestockLocation) =>
         modules: dairyEntericAndManureModules(location),
       },
       (s) => s.gt(0),
-    ),
-    method2PercentFatContent: numberInputOptional(
-      (val) => realNumber(val),
-      {
-        name: 'FCj',
-        method: '2',
-        description: 'Fat content in fat and protein corrected milk',
-        modules: dairyEntericAndManureModules(location),
-      },
-      isPercentage,
-    ),
-    method2PercentProteinContent: numberInputOptional(
-      (val) => realNumber(val),
-      {
-        name: 'PCj',
-        method: '2',
-        description: 'Protein content in fat and protein corrected milk',
-        modules: dairyEntericAndManureModules(location),
-      },
-      isPercentage,
     ),
   });
 

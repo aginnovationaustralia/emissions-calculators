@@ -2198,7 +2198,7 @@ export const dairyConstants: DairyConstants = {
   },
 
   /**
-   * @description Constants relating ot milk production in dairy cattle
+   * @description Constants relating to milk production in dairy cattle
    * @appendixA A.1.3.9
    * @nir2024Vol1 3.A.1a_2
    * @reference Australian Dairy Carbon Calculator
@@ -2229,6 +2229,16 @@ export const dairyConstants: DairyConstants = {
     },
 
     DENSITY_OF_MILK: massPerVolume('Milk', 'Milk', 1.03),
+  },
+
+  /**
+   * @description IDF global Carbon Footprint standard for the dairy sector: fat and protein corrected milk, FPCM = M * (0.1226 * FC + 0.0776 * PC + 0.2534)
+   * @reference https://shop.fil-idf.org/collections/publications/products/the-idf-global-carbon-footprint-standard-for-the-dairy-sector
+   */
+  FPCM_COEFFICIENTS: {
+    FAT: realNumber(0.1226),
+    PROTEIN: realNumber(0.0776),
+    CONSTANT: realNumber(0.2534),
   },
 
   /**
