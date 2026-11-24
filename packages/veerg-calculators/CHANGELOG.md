@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0-beta.3](https://github.com/aginnovationaustralia/emissions-calculators/compare/veerg-calculators-v1.1.0-beta.2...veerg-calculators-v1.1.0-beta.3) (2026-11-24)
+
+
+### Bug Fixes
+
+* ship units and inputs packages as commonjs as well, roll back engine requirement to node 22 ([5ba8a1b](https://github.com/aginnovationaustralia/emissions-calculators/commit/5ba8a1b100e6b265b0b1955e198523b6a3a6a373))
+
 ## [1.1.0-beta.2](https://github.com/aginnovationaustralia/emissions-calculators/compare/veerg-calculators-v1.1.0-beta.1...veerg-calculators-v1.1.0-beta.2) (2026-11-23)
 
 ### Added

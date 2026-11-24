@@ -1,6 +1,6 @@
 {
   "name": "@aginnovationaustralia/calculator-inputs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Zod schemas that turn user supplied values into @aginnovationaustralia/calculator-units containers, with stable OpenAPI components",
   "keywords": [
     "units",

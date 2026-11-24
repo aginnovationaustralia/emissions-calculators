@@ -19,7 +19,8 @@
       "component": "calculator-units",
       "include-component-in-tag": true,
       "include-v-in-tag": true,
-      "last-release-sha": "a9c0110c9d0871debe09f9e1dd811a1e7048b548"
+      "last-release-sha": "a9c0110c9d0871debe09f9e1dd811a1e7048b548",
+      "skip-github-release": true
     },
     "packages/calculator-inputs": {
       "changelog-path": "CHANGELOG.md",
@@ -27,7 +28,8 @@
       "component": "calculator-inputs",
       "include-component-in-tag": true,
       "include-v-in-tag": true,
-      "last-release-sha": "a9c0110c9d0871debe09f9e1dd811a1e7048b548"
+      "last-release-sha": "a9c0110c9d0871debe09f9e1dd811a1e7048b548",
+      "skip-github-release": true
     }
   },
   "pull-request-title-pattern": "chore(main): release ${version}"
