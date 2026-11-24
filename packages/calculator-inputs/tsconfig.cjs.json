@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    // The CommonJS build for require() consumers, alongside the ESM build in dist/. The sources import
+    // siblings with `.js` extensions, which bundler resolution maps back to the .ts files.
+    "module": "CommonJS",
+    "moduleResolution": "bundler",
+    "outDir": "./dist/cjs"
+  }
+}

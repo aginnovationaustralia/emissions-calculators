@@ -10,28 +10,59 @@
     "emissions"
   ],
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
     },
     "./units": {
-      "types": "./dist/units/index.d.ts",
-      "default": "./dist/units/index.js"
+      "import": {
+        "types": "./dist/units/index.d.ts",
+        "default": "./dist/units/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/units/index.d.ts",
+        "default": "./dist/cjs/units/index.js"
+      }
     },
     "./substances/greenhouse-gases": {
-      "types": "./dist/substances/greenhouse-gases.d.ts",
-      "default": "./dist/substances/greenhouse-gases.js"
+      "import": {
+        "types": "./dist/substances/greenhouse-gases.d.ts",
+        "default": "./dist/substances/greenhouse-gases.js"
+      },
+      "require": {
+        "types": "./dist/cjs/substances/greenhouse-gases.d.ts",
+        "default": "./dist/cjs/substances/greenhouse-gases.js"
+      }
     },
     "./substances/agriculture": {
-      "types": "./dist/substances/agriculture.d.ts",
-      "default": "./dist/substances/agriculture.js"
+      "import": {
+        "types": "./dist/substances/agriculture.d.ts",
+        "default": "./dist/substances/agriculture.js"
+      },
+      "require": {
+        "types": "./dist/cjs/substances/agriculture.d.ts",
+        "default": "./dist/cjs/substances/agriculture.js"
+      }
     },
     "./defaults": {
-      "types": "./dist/defaults/index.d.ts",
-      "default": "./dist/defaults/index.js"
+      "import": {
+        "types": "./dist/defaults/index.d.ts",
+        "default": "./dist/defaults/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/defaults/index.d.ts",
+        "default": "./dist/cjs/defaults/index.js"
+      }
     }
   },
   "sideEffects": false,
@@ -43,8 +74,9 @@
     "access": "public"
   },
   "scripts": {
-    "build": "pnpm run clean && tsc -p tsconfig.build.json && pnpm run check:package",
-    "check:package": "publint && attw --pack . --profile esm-only",
+    "build": "pnpm run clean && tsc -p tsconfig.build.json && pnpm run build:cjs && pnpm run check:package",
+    "build:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
+    "check:package": "publint && attw --pack . --profile node16",
     "prepublishOnly": "pnpm run check:package",
     "clean": "rm -rf dist",
     "check:types": "tsc --noEmit && tsc --noEmit -p tsconfig.blank-slate.json",
@@ -63,7 +95,7 @@
   "author": "Agricultural Innovation Australia",
   "license": "CC-BY-4.0",
   "engines": {
-    "node": ">=24.22.0"
+    "node": ">=22.19.0"
   },
   "dependencies": {
     "decimal.js-light": "^2.5.1"

@@ -24,7 +24,7 @@
     "ts-node": "^10.9.2"
   },
   "engines": {
-    "node": ">=24.22.0"
+    "node": ">=22.19.0"
   },
   "author": "Agricultural Innovation Australia",
   "license": "CC-BY-4.0"

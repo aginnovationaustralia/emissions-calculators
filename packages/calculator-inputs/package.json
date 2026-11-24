@@ -10,12 +10,19 @@
     "calculator"
   ],
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
     }
   },
   "sideEffects": false,
@@ -27,8 +34,9 @@
     "access": "public"
   },
   "scripts": {
-    "build": "pnpm run clean && tsc -p tsconfig.build.json && pnpm run check:package",
-    "check:package": "publint && attw --pack . --profile esm-only",
+    "build": "pnpm run clean && tsc -p tsconfig.build.json && pnpm run build:cjs && pnpm run check:package",
+    "build:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
+    "check:package": "publint && attw --pack .",
     "prepublishOnly": "pnpm run check:package",
     "clean": "rm -rf dist",
     "check:types": "tsc --noEmit",
@@ -47,7 +55,7 @@
   "author": "Agricultural Innovation Australia",
   "license": "CC-BY-4.0",
   "engines": {
-    "node": ">=24.22.0"
+    "node": ">=22.19.0"
   },
   "devDependencies": {
     "@aginnovationaustralia/calculator-units": "workspace:*",
