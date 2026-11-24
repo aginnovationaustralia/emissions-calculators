@@ -388,7 +388,7 @@
     "mixpanel-browser": "^2.86.0",
     "openapi3-ts": "^4.6.2",
     "reflect-metadata": "^0.2.2",
-    "semver": "^7.8.5",
+    "semver": "^7.8.6",
     "ts-deepmerge": "^8.0.0",
     "tslib": "^2.9.1",
     "type-fest": "^5.9.0",
