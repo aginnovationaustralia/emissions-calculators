@@ -17,7 +17,10 @@ import {
   calculate82StationaryFuel,
 } from '@/modules/scope1/8-fuel-use';
 import { calculateScope1RefrigerantUse } from '@/modules/scope1/9-refrigerant-use';
-import { calculateMilkProduction } from '@/modules/scope1/shared/dairy/calculate';
+import {
+  calculateMilkProduction,
+  getMilkFatAndProteinContent,
+} from '@/modules/scope1/shared/dairy/calculate';
 import {
   getLengthOfStay,
   totalLiveweightFromSale,
@@ -34,7 +37,7 @@ import { calculateScope3ServicesForActivity } from '@/modules/scope3/15.7-servic
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { selectConstant } from '@/tools/constants';
-import { Container, num } from '@/tools/containers';
+import { br, Container, num } from '@/tools/containers';
 import { exposeMassValue } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
 import {
@@ -241,6 +244,34 @@ function getMilkProducedKgForHerd(
 }
 
 /**
+ * Milk produced by the herd as fat and protein corrected milk (FPCM), the milk mass
+ * used for the allocation to milk and the milk intensity in the IDF global Carbon
+ * Footprint standard for the dairy sector:
+ *
+ * FPCM = M * (0.1226 * FC + 0.0776 * PC + 0.2534)
+ */
+function getFatAndProteinCorrectedMilkKgForHerd(
+  herd: DairyHerdInputTransformed,
+  context: ExecutionContext<ConstantsForDairyCalculator>,
+) {
+  const { constants } = context;
+  const milkProduced = getMilkProducedKgForHerd(herd, context);
+  const { fatContent, proteinContent } = getMilkFatAndProteinContent(
+    herd.milkProduction,
+    constants,
+  );
+
+  const correction = br(
+    num(0.1226)
+      .multiply(fatContent)
+      .plus(num(0.0776).multiply(proteinContent))
+      .plus(num(0.2534)),
+  ).named('FPCM correction');
+
+  return milkProduced.multiply(correction).named('FPCM');
+}
+
+/**
  * Calculate the fraction of emissions that should be allocated to milk production.
  * This allocation is energy based. Surplus calves and culled cows are included as
  * "meat".
@@ -296,7 +327,7 @@ function getAllocationToMilkProduction(
   );
 
   const milkProduced = sum(
-    herds.map((herd) => getMilkProducedKgForHerd(herd, context)),
+    herds.map((herd) => getFatAndProteinCorrectedMilkKgForHerd(herd, context)),
     zeroMassMilk,
   );
 
@@ -306,6 +337,8 @@ function getAllocationToMilkProduction(
    * From the International Dairy Foundation:
    *
    * AFmilk = NEL * Mmilk / NEL * Mmilk + NEG * Mmeat
+   *
+   * where Mmilk is fat and protein corrected milk.
    */
   return energyForMilkProduction.divide(
     energyForMilkProduction.plus(energyForMeatProduction),
@@ -319,6 +352,7 @@ function getSingleIntensities(
 ): DairyIntermediateIntensitiesOutput {
   const liveweightProduced = getLiveweightProducedKgForHerd(herd, context);
   const milkProduced = getMilkProducedKgForHerd(herd, context);
+  const fpcmProduced = getFatAndProteinCorrectedMilkKgForHerd(herd, context);
 
   const allocationToMilk = getAllocationToMilkProduction([herd], context);
   const allocationToMeat = num(1).minus(allocationToMilk);
@@ -331,9 +365,10 @@ function getSingleIntensities(
     liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     milkIntensity: generateIntensity(
       netEmissions.multiply(allocationToMilk),
-      milkProduced,
+      fpcmProduced,
     ),
     milkProducedKilograms: exposeMassValue(milkProduced),
+    fatAndProteinCorrectedMilkProducedKilograms: exposeMassValue(fpcmProduced),
   };
 }
 
@@ -349,6 +384,10 @@ function getTotalIntensities(
   );
   const milkProduced = sum(
     herds.map((herd) => getMilkProducedKgForHerd(herd, context)),
+    zeroMassMilk,
+  );
+  const fpcmProduced = sum(
+    herds.map((herd) => getFatAndProteinCorrectedMilkKgForHerd(herd, context)),
     zeroMassMilk,
   );
 
@@ -368,13 +407,14 @@ function getTotalIntensities(
     liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     milkIntensityExcludingLULUCF: generateIntensity(
       netEmissionsExcludingLulucf.multiply(allocationToMilk),
-      milkProduced,
+      fpcmProduced,
     ),
     milkIntensityIncludingLULUCF: generateIntensity(
       netTotalEmissions.multiply(allocationToMilk),
-      milkProduced,
+      fpcmProduced,
     ),
     milkProducedKilograms: exposeMassValue(milkProduced),
+    fatAndProteinCorrectedMilkProducedKilograms: exposeMassValue(fpcmProduced),
   };
 }
 

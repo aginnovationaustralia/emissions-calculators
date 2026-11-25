@@ -562,6 +562,7 @@ export type DairyConstants = NamedConstants & {
       others: RealNumber;
     };
   };
+
   MMS: Record<DairyMMSTypeWithPasture, DairyMMSFactors>;
   DEFAULT_SOLID_SEPARATION_RATE: RealNumber;
   LIVEWEIGHTS_BY_BREED: Record<DairyCattleBreed, BreedWeights>;

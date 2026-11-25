@@ -2198,7 +2198,7 @@ export const dairyConstants: DairyConstants = {
   },
 
   /**
-   * @description Constants relating ot milk production in dairy cattle
+   * @description Constants relating to milk production in dairy cattle
    * @appendixA A.1.3.9
    * @nir2024Vol1 3.A.1a_2
    * @reference Australian Dairy Carbon Calculator

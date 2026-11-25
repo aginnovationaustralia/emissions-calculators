@@ -30,6 +30,27 @@ import {
 } from './helpers';
 
 /**
+ * Fat *FCj* and protein *PCj* content of the milk, in per cent: the method 2 values
+ * when given, otherwise the method 1 defaults.
+ */
+export const getMilkFatAndProteinContent = (
+  input: DairyMilkProductionInputTransformed,
+  constants: HasConstants<'DAIRY'>,
+): {
+  fatContent: Container<RealNumber>;
+  proteinContent: Container<RealNumber>;
+} => ({
+  fatContent: captureMethod1Or2Value(
+    selectConstant(constants.DAIRY, 'MILK_CONSTANTS', 'FAT_CONTENT'),
+    input.method2PercentFatContent,
+  ),
+  proteinContent: captureMethod1Or2Value(
+    selectConstant(constants.DAIRY, 'MILK_CONSTANTS', 'PROTEIN_CONTENT'),
+    input.method2PercentProteinContent,
+  ),
+});
+
+/**
  * Calculates or returns milk production *MPj* in litres per head per day, depending
  * on how the input was given.
  */
@@ -41,13 +62,9 @@ export const calculateMilkProduction = (
     return input.litresPerHeadPerDay;
   }
 
-  const fatContent = captureMethod1Or2Value(
-    selectConstant(constants.DAIRY, 'MILK_CONSTANTS', 'FAT_CONTENT'),
-    input.method2PercentFatContent,
-  );
-  const proteinContent = captureMethod1Or2Value(
-    selectConstant(constants.DAIRY, 'MILK_CONSTANTS', 'PROTEIN_CONTENT'),
-    input.method2PercentProteinContent,
+  const { fatContent, proteinContent } = getMilkFatAndProteinContent(
+    input,
+    constants,
   );
 
   /**
