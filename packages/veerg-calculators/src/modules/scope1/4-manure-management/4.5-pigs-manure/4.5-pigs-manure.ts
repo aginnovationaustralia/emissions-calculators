@@ -7,7 +7,6 @@ import {
   MeanAnnualTemperature,
   PrimaryPigsMMSType,
   PrimaryPigsMMSTypes,
-  PrimaryPigsMMSTypesWithoutPasture,
   PrimaryPigsMMSWithSolidSeparationType,
   PrimaryPigsMMSWithSolidSeparationTypes,
   SecondaryPigsMMSType,
@@ -194,7 +193,7 @@ const calculateFractionVolatileSolidsInPrimarySystems = (
     deepLitter: pigsClass.manureAllocations.deepLitter.manureAllocated.named(
       `FVSj=${pigsClass.number}m=8T=1`,
     ),
-    outdoorAndFreeRange: pigsClass.manureAllocations.outdoorAndFreeRange.named(
+    outdoorAndFreeRange: pigsClass.manureAllocations.outdoorAndFreeRange.manureAllocated.named(
       `FVSj=${pigsClass.number}m=5T=1`,
     ),
     anaerobicLagoon: pigsClass.manureAllocations.anaerobicLagoon.manureAllocated
@@ -249,13 +248,14 @@ export const calculateFractionVolatileSolidsInSecondarySystems = (
     pitStorage: fracSolidsLeaving('pitStorage'),
     solidStorage: fracSolidsLeaving('solidStorage'),
     deepLitter: fracSolidsLeaving('deepLitter'),
+    outdoorAndFreeRange: fracSolidsLeaving('outdoorAndFreeRange'),
   };
 
   const fractionSolidsEnteringSecondarySystem = (
     secondaryMMS: SecondaryPigsMMSType,
   ) =>
     sum(
-      PrimaryPigsMMSTypesWithoutPasture.map((primaryMMS) => {
+      PrimaryPigsMMSTypes.map((primaryMMS) => {
         const fracLeaving = fractionSolidsLeavingPrimarySystems[primaryMMS];
 
         /**
@@ -266,8 +266,9 @@ export const calculateFractionVolatileSolidsInSecondarySystems = (
          * This does mean we have to perform a lot of checks here to keep typescript happy
          */
         switch (primaryMMS) {
-          // Deep litter is a stage 1 MMS only.
+          // Deep litter and outdoor/free range are stage 1 MMS only.
           case 'deepLitter':
+          case 'outdoorAndFreeRange':
             return fracLeaving.multiply(
               pigsClass.manureAllocations[primaryMMS]
                 .treatmentStage2Allocations[secondaryMMS],
@@ -356,7 +357,7 @@ const calculateFractionNitrogenInPrimarySystems = (
     deepLitter: pigsClass.manureAllocations.deepLitter.manureAllocated.named(
       `FNj=${pigsClass.number}m=8T=1`,
     ),
-    outdoorAndFreeRange: pigsClass.manureAllocations.outdoorAndFreeRange.named(
+    outdoorAndFreeRange: pigsClass.manureAllocations.outdoorAndFreeRange.manureAllocated.named(
       `FNj=${pigsClass.number}m=5T=1`,
     ),
     anaerobicLagoon: pigsClass.manureAllocations.anaerobicLagoon.manureAllocated
@@ -452,13 +453,14 @@ const calculateNitrogenPerStage2MMSForClass = (
     pitStorage: fractionNitrogenLeaving('pitStorage'),
     solidStorage: fractionNitrogenLeaving('solidStorage'),
     deepLitter: fractionNitrogenLeaving('deepLitter'),
+    outdoorAndFreeRange: fractionNitrogenLeaving('outdoorAndFreeRange'),
   };
 
   const nitrogenEnteringSecondarySystem = (
     secondaryMMS: SecondaryPigsMMSType,
   ) =>
     sum(
-      PrimaryPigsMMSTypesWithoutPasture.map((primaryMMS) => {
+      PrimaryPigsMMSTypes.map((primaryMMS) => {
         const nitrogenLeaving = nitrogenExitingPrimarySystems[primaryMMS];
 
         /**
@@ -469,8 +471,9 @@ const calculateNitrogenPerStage2MMSForClass = (
          * This does mean we have to perform a lot of checks here to keep typescript happy
          */
         switch (primaryMMS) {
-          // Deep litter is a stage 1 MMS only.
+          // Deep litter and outdoor/free range are stage 1 MMS only.
           case 'deepLitter':
+          case 'outdoorAndFreeRange':
             return nitrogenLeaving.multiply(
               pigsClass.manureAllocations[primaryMMS]
                 .treatmentStage2Allocations[secondaryMMS],

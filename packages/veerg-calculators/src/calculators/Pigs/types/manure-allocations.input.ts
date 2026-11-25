@@ -134,6 +134,48 @@ const createSolidStorageAllocationSchema = (location: LivestockLocation) =>
     }
   });
 
+const createOutdoorAndFreeRangeAllocationSchema = (
+  location: LivestockLocation,
+) =>
+  object({
+    manureAllocated: numberInput(
+      (val) => realNumber(val),
+      {
+        name: `MMSjm=5T=1`,
+        description:
+          'Fraction of manure (excluding solids separated in pre-treatment, if solid separation occurred) that was deposited outdoors (e.g. free range, pasture, paddock). This is treated as a dry lot treatment system',
+        modules: pigsManureModules(location),
+      },
+      isProportion,
+    ),
+    treatmentStage2Allocations: createSecondaryManureAllocationSchema(
+      'dry lot',
+      location,
+    ),
+  }).superRefine(({ manureAllocated, treatmentStage2Allocations }, ctx) => {
+    if (manureAllocated.unit.store.value.eq(0)) return;
+
+    const {
+      anaerobicLagoon,
+      digester,
+      pitStorage,
+      directApplication,
+      solidStorage,
+    } = treatmentStage2Allocations;
+
+    const total = anaerobicLagoon
+      .plus(solidStorage)
+      .plus(digester)
+      .plus(pitStorage)
+      .plus(directApplication);
+
+    if (!total.unit.store.value.eq(1)) {
+      ctx.addIssue(
+        `A non-zero fraction of manure was allocated to outdoor and free range (manureAllocations.outdoorAndFreeRange.manureAllocated), so the values of manureAllocations.outdoorAndFreeRange.treatmentStage2Allocations need to sum exactly to 1.`,
+      );
+    }
+  });
+
 const createAnaerobicLagoonAllocationBaseSchema = (
   location: LivestockLocation,
 ) =>
@@ -289,16 +331,7 @@ const createPigsClassManureAllocationSchema = <E extends z.ZodRawShape>(
     // NOTE: This is called drylot at points in the guidelines because the constants
     // associated with drylot better represent emissions from free-range systems than
     // the constants associated with pasture range/paddock (m=14).
-    outdoorAndFreeRange: numberInput(
-      (val) => realNumber(val),
-      {
-        name: `MMSjm=5T=1`,
-        description:
-          'Fraction of manure (excluding solids separated in pre-treatment, if solid separation occurred) that was directly deposited outdoors.',
-        modules: pigsManureModules(location),
-      },
-      isProportion,
-    ),
+    outdoorAndFreeRange: createOutdoorAndFreeRangeAllocationSchema(location),
     solidStorage: createSolidStorageAllocationSchema(location),
     deepLitter: createDeepLitterAllocationSchema(location),
   });
@@ -359,7 +392,7 @@ export const pigsClassManureAllocationSharedInputSchema = (
     ) => {
       const total = anaerobicLagoon.manureAllocated
         .plus(solidStorage.manureAllocated)
-        .plus(outdoorAndFreeRange)
+        .plus(outdoorAndFreeRange.manureAllocated)
         .plus(deepLitter.manureAllocated)
         .plus(digester.manureAllocated)
         .plus(pitStorage.manureAllocated);
@@ -406,14 +439,14 @@ export const PigsClassManureAllocationLivestockInputSchema =
     ) => {
       const total = anaerobicLagoon.manureAllocated
         .plus(solidStorage.manureAllocated)
-        .plus(outdoorAndFreeRange)
+        .plus(outdoorAndFreeRange.manureAllocated)
         .plus(deepLitter.manureAllocated)
         .plus(digester.manureAllocated)
         .plus(pitStorage.manureAllocated);
 
       if (!total.unit.store.value.eq(1)) {
         ctx.addIssue(
-          `Allocations to each primary manure system must sum exactly to 1. Make sure the following inputs add to 1: anaerobicLagoon.manureAllocated, solidStorage.manureAllocated, digester.manureAllocated, pitStorage.manureAllocated, deepLitter.manureAllocated, outdoorAndFreeRange`,
+          `Allocations to each primary manure system must sum exactly to 1. Make sure the following inputs add to 1: anaerobicLagoon.manureAllocated, solidStorage.manureAllocated, digester.manureAllocated, pitStorage.manureAllocated, deepLitter.manureAllocated, outdoorAndFreeRange.manureAllocated`,
         );
       }
     },

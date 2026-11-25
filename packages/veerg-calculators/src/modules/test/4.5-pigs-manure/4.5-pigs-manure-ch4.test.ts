@@ -6,7 +6,7 @@ import {
 } from '../sheet-comparison';
 import { getSimpleCalculatorInput as getCalculatorInput } from './common';
 
-const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'DA', {
+const extractInputsAndOutput = createSheetExtractor(getCalculatorInput, 'DH', {
   rowInterval: 4,
 });
 
