@@ -260,24 +260,11 @@ function getFatAndProteinCorrectedMilkKgForHerd(
     constants,
   );
 
-  const FC = selectConstant(constants.DAIRY, 'FPCM_COEFFICIENTS', 'FAT').named(
-    'FC',
-  );
-
-  const PC = selectConstant(
-    constants.DAIRY,
-    'FPCM_COEFFICIENTS',
-    'PROTEIN',
-  ).named('PC');
-
-  const C = selectConstant(
-    constants.DAIRY,
-    'FPCM_COEFFICIENTS',
-    'CONSTANT',
-  ).named('FPCM constant');
-
   const correction = br(
-    FC.multiply(fatContent).plus(PC.multiply(proteinContent)).plus(C),
+    num(0.1226)
+      .multiply(fatContent)
+      .plus(num(0.0776).multiply(proteinContent))
+      .plus(num(0.2534)),
   ).named('FPCM correction');
 
   return milkProduced.multiply(correction).named('FPCM');

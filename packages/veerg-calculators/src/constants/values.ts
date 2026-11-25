@@ -2232,16 +2232,6 @@ export const dairyConstants: DairyConstants = {
   },
 
   /**
-   * @description IDF global Carbon Footprint standard for the dairy sector: fat and protein corrected milk, FPCM = M * (0.1226 * FC + 0.0776 * PC + 0.2534)
-   * @reference https://shop.fil-idf.org/collections/publications/products/the-idf-global-carbon-footprint-standard-for-the-dairy-sector
-   */
-  FPCM_COEFFICIENTS: {
-    FAT: realNumber(0.1226),
-    PROTEIN: realNumber(0.0776),
-    CONSTANT: realNumber(0.2534),
-  },
-
-  /**
    * @description Dairy liveweights by class and breed
    * @appendixA A.1.3.1
    */

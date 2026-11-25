@@ -563,17 +563,6 @@ export type DairyConstants = NamedConstants & {
     };
   };
 
-  /**
-   * Coefficients for converting milk to fat and protein corrected milk (FPCM), used
-   * only for the intensity allocation and the milk intensity:
-   * FPCM = M * (FAT * FC + PROTEIN * PC + CONSTANT), with FC and PC in per cent.
-   */
-  FPCM_COEFFICIENTS: {
-    FAT: RealNumber;
-    PROTEIN: RealNumber;
-    CONSTANT: RealNumber;
-  };
-
   MMS: Record<DairyMMSTypeWithPasture, DairyMMSFactors>;
   DEFAULT_SOLID_SEPARATION_RATE: RealNumber;
   LIVEWEIGHTS_BY_BREED: Record<DairyCattleBreed, BreedWeights>;
