@@ -37,7 +37,7 @@ import { calculateScope3ServicesForActivity } from '@/modules/scope3/15.7-servic
 import { calculateOtherPurchasedGoodsAndServicesEmissions } from '@/modules/scope3/15.9-other-purchases';
 import { IntermediateScope1, IntermediateScope23 } from '@/tools/calculators';
 import { selectConstant } from '@/tools/constants';
-import { br, Container, num } from '@/tools/containers';
+import { br, Container, num, relabelMass } from '@/tools/containers';
 import { exposeMassValue } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
 import {
@@ -52,8 +52,14 @@ import { createCalculator } from '../common/calculator';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForDairyCalculator } from './constants';
 import { DairyHerdInputTransformed } from './types/herd.input';
-import { DairyIntensitiesOutput } from './types/intensities.output';
-import { DairyIntermediateIntensitiesOutput } from './types/intermediate-intensities.output';
+import {
+  DairyAllocatedIntensitiesOutput,
+  DairyIntensitiesOutput,
+} from './types/intensities.output';
+import {
+  DairyIntermediateAllocatedIntensitiesOutput,
+  DairyIntermediateIntensitiesOutput,
+} from './types/intermediate-intensities.output';
 import { DairyOutputSchema } from './types/output';
 import { isDairySaleMature } from './types/sale.input';
 import { DairyScope1Output } from './types/scope1.output';
@@ -273,7 +279,7 @@ function getFatAndProteinCorrectedMilkKgForHerd(
 
 /**
  * Calculate the fraction of emissions that should be allocated to milk production.
- * This allocation is energy based. Surplus calves and culled cows are included as
+ * This allocation is energy based, and is the primary allocation used for dairy intensities. Surplus calves and culled cows are included as
  * "meat".
  *
  * The method for determining this allocation comes from the International Dairy
@@ -281,7 +287,7 @@ function getFatAndProteinCorrectedMilkKgForHerd(
  * which builds upon the work of [Ineichen et al. (2022)](https://www.sciencedirect.com/science/article/pii/S1871141322001342)
  * and [Nemecek and Thoma (2020)](https://ira.agroscope.ch/en-US/Page/Einzelpublikation/Download?einzelpublikationId=47637)
  */
-function getAllocationToMilkProduction(
+function getEnergyAllocationToMilkProduction(
   herds: DairyHerdInputTransformed[],
   context: ExecutionContext<ConstantsForDairyCalculator>,
 ) {
@@ -345,6 +351,57 @@ function getAllocationToMilkProduction(
   );
 }
 
+/**
+ * Calculate the fraction of emissions that should be allocated to milk production, based on
+ * the mass of fat and protein corrected milk (FPCM) produced relative to the total mass of
+ * product (FPCM plus liveweight sold). A kg of FPCM and a kg of liveweight are treated as the
+ * same amount of product. This is an
+ * alternative to the energy based allocation, and is supported by GEETA.
+ *
+ * Both masses are non-negative, so a zero total only happens when liveweight is also zero, and
+ * 0 / 0 gives a meat allocation of 0.
+ */
+function getMassAllocationToMilkProduction(
+  liveweightProduced: Container<Mass<'Liveweight'>>,
+  fpcmProduced: Container<Mass<'Milk'>>,
+) {
+  const totalProduced = liveweightProduced.plus(
+    relabelMass(fpcmProduced, 'Liveweight'),
+  );
+  const allocationToMeat = liveweightProduced.divide(totalProduced);
+
+  return num(1).minus(allocationToMeat);
+}
+
+function getAllocations(
+  herds: DairyHerdInputTransformed[],
+  liveweightProduced: Container<Mass<'Liveweight'>>,
+  fpcmProduced: Container<Mass<'Milk'>>,
+  context: ExecutionContext<ConstantsForDairyCalculator>,
+) {
+  const energyAllocationToMilk = getEnergyAllocationToMilkProduction(
+    herds,
+    context,
+  );
+  const massAllocationToMilk = getMassAllocationToMilkProduction(
+    liveweightProduced,
+    fpcmProduced,
+  );
+
+  return {
+    energy: {
+      milk: energyAllocationToMilk,
+      meat: num(1).minus(energyAllocationToMilk),
+    },
+    mass: {
+      milk: massAllocationToMilk,
+      meat: num(1).minus(massAllocationToMilk),
+    },
+  };
+}
+
+type Allocation = ReturnType<typeof getAllocations>['energy'];
+
 function getSingleIntensities(
   netEmissions: Container<Mass<'CO2e'>>,
   herd: DairyHerdInputTransformed,
@@ -354,21 +411,32 @@ function getSingleIntensities(
   const milkProduced = getMilkProducedKgForHerd(herd, context);
   const fpcmProduced = getFatAndProteinCorrectedMilkKgForHerd(herd, context);
 
-  const allocationToMilk = getAllocationToMilkProduction([herd], context);
-  const allocationToMeat = num(1).minus(allocationToMilk);
+  const { energy, mass } = getAllocations(
+    [herd],
+    liveweightProduced,
+    fpcmProduced,
+    context,
+  );
 
-  return {
+  const allocatedIntensities = (
+    allocation: Allocation,
+  ): DairyIntermediateAllocatedIntensitiesOutput => ({
     liveweightIntensity: generateIntensity(
-      netEmissions.multiply(allocationToMeat),
+      netEmissions.multiply(allocation.meat),
       liveweightProduced,
     ),
-    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     milkIntensity: generateIntensity(
-      netEmissions.multiply(allocationToMilk),
+      netEmissions.multiply(allocation.milk),
       fpcmProduced,
     ),
+  });
+
+  return {
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     milkProducedKilograms: exposeMassValue(milkProduced),
     fatAndProteinCorrectedMilkProducedKilograms: exposeMassValue(fpcmProduced),
+    energyIntensities: allocatedIntensities(energy),
+    massIntensities: allocatedIntensities(mass),
   };
 }
 
@@ -391,30 +459,41 @@ function getTotalIntensities(
     zeroMassMilk,
   );
 
-  const allocationToMilk = getAllocationToMilkProduction(herds, context);
-  const allocationToMeat = num(1).minus(allocationToMilk);
+  const { energy, mass } = getAllocations(
+    herds,
+    liveweightProduced,
+    fpcmProduced,
+    context,
+  );
   const netEmissionsExcludingLulucf = netTotalEmissions.minus(netLulucf);
 
-  return {
+  const allocatedIntensities = (
+    allocation: Allocation,
+  ): DairyAllocatedIntensitiesOutput => ({
     liveweightIntensityExcludingLULUCF: generateIntensity(
-      netEmissionsExcludingLulucf.multiply(allocationToMeat),
+      netEmissionsExcludingLulucf.multiply(allocation.meat),
       liveweightProduced,
     ),
     liveweightIntensityIncludingLULUCF: generateIntensity(
-      netTotalEmissions.multiply(allocationToMeat),
+      netTotalEmissions.multiply(allocation.meat),
       liveweightProduced,
     ),
-    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     milkIntensityExcludingLULUCF: generateIntensity(
-      netEmissionsExcludingLulucf.multiply(allocationToMilk),
+      netEmissionsExcludingLulucf.multiply(allocation.milk),
       fpcmProduced,
     ),
     milkIntensityIncludingLULUCF: generateIntensity(
-      netTotalEmissions.multiply(allocationToMilk),
+      netTotalEmissions.multiply(allocation.milk),
       fpcmProduced,
     ),
+  });
+
+  return {
+    liveweightProducedKilograms: exposeMassValue(liveweightProduced),
     milkProducedKilograms: exposeMassValue(milkProduced),
     fatAndProteinCorrectedMilkProducedKilograms: exposeMassValue(fpcmProduced),
+    energyIntensities: allocatedIntensities(energy),
+    massIntensities: allocatedIntensities(mass),
   };
 }
 
