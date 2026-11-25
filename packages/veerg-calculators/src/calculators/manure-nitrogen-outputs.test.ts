@@ -183,7 +183,14 @@ describe('outputs.massOfNitrogenInManureApplicableToSoilsKilograms (AIA-76)', ()
               solidStorage: nv(1),
             },
           },
-          outdoorAndFreeRange: nv(0),
+          outdoorAndFreeRange: {
+            manureAllocated: nv(0),
+            treatmentStage2Allocations: {
+              ...zeroPigsManureAllocation.outdoorAndFreeRange
+                .treatmentStage2Allocations,
+              directApplication: nv(0),
+            },
+          },
         },
       },
     };
