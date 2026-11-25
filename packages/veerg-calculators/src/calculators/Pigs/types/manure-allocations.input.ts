@@ -371,11 +371,7 @@ const createPigsClassManureAllocationSchema = <E extends z.ZodRawShape>(
   ]);
 };
 
-/**
- * Manure allocation keys read by both pigs manure management (4.5) and the chapter 5
- * nitrogen calculation.
- */
-export const pigsClassManureAllocationSharedInputSchema = (
+const createPigsClassManureAllocationSharedInputSchema = (
   location: LivestockLocation,
 ) =>
   createPigsClassManureAllocationSchema(location, () => ({})).superRefine(
@@ -406,6 +402,29 @@ export const pigsClassManureAllocationSharedInputSchema = (
   );
 
 /**
+ * Manure allocation keys read by both pigs manure management (4.5) and the chapter 5
+ * nitrogen calculation, for each location.
+ *
+ * Every pigs class has identical manure allocations, so each schema carries a
+ * `.meta({ id })` to be emitted once as an OpenAPI component. Zod rejects different
+ * schema instances sharing an id, so these are built once here rather than per class.
+ */
+const pigsClassManureAllocationSharedInputSchemas = {
+  livestock: createPigsClassManureAllocationSharedInputSchema('livestock').meta(
+    {
+      id: 'PigsClassManureAllocationsSharedInput',
+    },
+  ),
+  fertiliser: createPigsClassManureAllocationSharedInputSchema(
+    'fertiliser',
+  ).meta({ id: 'PigsClassManureAllocationsFertiliserInput' }),
+} satisfies Record<LivestockLocation, unknown>;
+
+export const pigsClassManureAllocationSharedInputSchema = (
+  location: LivestockLocation,
+) => pigsClassManureAllocationSharedInputSchemas[location];
+
+/**
  * Manure allocations as read by pigs manure management (4.5). Solids separation only
  * affects volatile solids, so its method 2 fraction is only read by pigs manure methane.
  */
@@ -425,32 +444,34 @@ export const PigsClassManureAllocationLivestockInputSchema =
         isProportion,
       ),
     }),
-  ).superRefine(
-    (
-      {
-        anaerobicLagoon,
-        solidStorage,
-        outdoorAndFreeRange,
-        digester,
-        deepLitter,
-        pitStorage,
-      },
-      ctx,
-    ) => {
-      const total = anaerobicLagoon.manureAllocated
-        .plus(solidStorage.manureAllocated)
-        .plus(outdoorAndFreeRange.manureAllocated)
-        .plus(deepLitter.manureAllocated)
-        .plus(digester.manureAllocated)
-        .plus(pitStorage.manureAllocated);
+  )
+    .superRefine(
+      (
+        {
+          anaerobicLagoon,
+          solidStorage,
+          outdoorAndFreeRange,
+          digester,
+          deepLitter,
+          pitStorage,
+        },
+        ctx,
+      ) => {
+        const total = anaerobicLagoon.manureAllocated
+          .plus(solidStorage.manureAllocated)
+          .plus(outdoorAndFreeRange.manureAllocated)
+          .plus(deepLitter.manureAllocated)
+          .plus(digester.manureAllocated)
+          .plus(pitStorage.manureAllocated);
 
-      if (!total.unit.store.value.eq(1)) {
-        ctx.addIssue(
-          `Allocations to each primary manure system must sum exactly to 1. Make sure the following inputs add to 1: anaerobicLagoon.manureAllocated, solidStorage.manureAllocated, digester.manureAllocated, pitStorage.manureAllocated, deepLitter.manureAllocated, outdoorAndFreeRange.manureAllocated`,
-        );
-      }
-    },
-  );
+        if (!total.unit.store.value.eq(1)) {
+          ctx.addIssue(
+            `Allocations to each primary manure system must sum exactly to 1. Make sure the following inputs add to 1: anaerobicLagoon.manureAllocated, solidStorage.manureAllocated, digester.manureAllocated, pitStorage.manureAllocated, deepLitter.manureAllocated, outdoorAndFreeRange.manureAllocated`,
+          );
+        }
+      },
+    )
+    .meta({ id: 'PigsClassManureAllocationsInput' });
 
 export type PigsClassManureAllocationLivestockInput = z.input<
   typeof PigsClassManureAllocationLivestockInputSchema
