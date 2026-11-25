@@ -147,6 +147,15 @@ const getOtherPurchase = (
     };
   }
   const cls = checkOtherLivestockClass(cellFn(columnClass));
+  if (cls === 'Goats') {
+    // The spreadsheet has no productivity column; its goat liveweight (50 kg) is the high productivity value
+    return {
+      type: 'Other',
+      headPurchased,
+      livestockType: cls,
+      productivitySystem: 'High',
+    };
+  }
   return {
     type: 'Other',
     headPurchased,
@@ -258,6 +267,40 @@ describe('15.1 Purchased Livestock', () => {
       calculatePurchasedLivestockEmissions,
       '15.1',
     );
+  });
+});
+
+describe('15.1 Purchased Livestock, goats', () => {
+  const calculate = (purchase: PurchasedLivestockInput) =>
+    calculatePurchasedLivestockEmissions(
+      HasPurchasedLivestockInputSchema.parse({
+        purchasedLivestock: [purchase],
+      }),
+      testContext(),
+    )
+      .unit.store.value.div(1000)
+      .toNumber();
+
+  it('uses the low productivity liveweight', () => {
+    // 10 head * 28 kg * 3.3768 (56% of sheepMutton EF) / 1000
+    expect(
+      calculate({
+        type: 'Other',
+        headPurchased: nv(10),
+        livestockType: 'Goats',
+        productivitySystem: 'Low',
+      }),
+    ).toBeCloseTo(0.945504, 8);
+  });
+
+  it('rejects goats without a productivity system', () => {
+    expect(() =>
+      HasPurchasedLivestockInputSchema.parse({
+        purchasedLivestock: [
+          { type: 'Other', headPurchased: nv(10), livestockType: 'Goats' },
+        ],
+      }),
+    ).toThrow();
   });
 });
 

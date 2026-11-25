@@ -197,11 +197,17 @@ function getLiveweight(
 
     case 'Other':
       return captureMethod1Or2Value(
-        selectConstant(
-          constants.LIVESTOCK,
-          'OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS',
-          purchase.livestockType,
-        ),
+        'productivitySystem' in purchase
+          ? selectConstant(
+              constants.LIVESTOCK,
+              'AVERAGE_LIVEWEIGHT_GOATS',
+              purchase.productivitySystem,
+            )
+          : selectConstant(
+              constants.LIVESTOCK,
+              'OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS',
+              purchase.livestockType,
+            ),
         undefined,
       );
 

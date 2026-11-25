@@ -9966,7 +9966,7 @@
                                   "x-modules": [
                                     "15.1"
                                   ],
-                                  "$ref": "#/components/schemas/OtherLivestockType"
+                                  "$ref": "#/components/schemas/OtherLivestockTypeWithoutGoats"
                                 }
                               },
                               "required": [
@@ -10006,11 +10006,66 @@
                                   "x-units": "head"
                                 },
                                 "livestockType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "Goats"
+                                  ],
+                                  "description": "The specific type of \"Other\" livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ]
+                                },
+                                "productivitySystem": {
+                                  "description": "The productivity system of the goats",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
+                                  "$ref": "#/components/schemas/GoatProductivitySystem"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "headPurchased",
+                                "livestockType",
+                                "productivitySystem"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Goats, method 1 emission factor, method 1 liveweight"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "Other"
+                                },
+                                "headPurchased": {
+                                  "description": "Number of animals purchased (head)",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "head"
+                                },
+                                "livestockType": {
                                   "description": "The specific type of \"Other\" livestock",
                                   "x-modules": [
                                     "15.1"
                                   ],
-                                  "$ref": "#/components/schemas/OtherLivestockType"
+                                  "$ref": "#/components/schemas/OtherLivestockTypeWithoutGoats"
                                 },
                                 "method2LiveweightKilograms": {
                                   "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
@@ -10071,6 +10126,83 @@
                                   "additionalProperties": false,
                                   "x-units": "head"
                                 },
+                                "livestockType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "Goats"
+                                  ],
+                                  "description": "The specific type of \"Other\" livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ]
+                                },
+                                "productivitySystem": {
+                                  "description": "The productivity system of the goats",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
+                                  "$ref": "#/components/schemas/GoatProductivitySystem"
+                                },
+                                "method2LiveweightKilograms": {
+                                  "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms liveweight per head"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "headPurchased",
+                                "livestockType",
+                                "productivitySystem",
+                                "method2LiveweightKilograms"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Goats, method 1 emission factor, method 2 liveweight"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "Other"
+                                },
+                                "headPurchased": {
+                                  "description": "Number of animals purchased (head)",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "head"
+                                },
                                 "method2EmissionFactor": {
                                   "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                   "x-modules": [
@@ -10097,7 +10229,7 @@
                                   "x-modules": [
                                     "15.1"
                                   ],
-                                  "$ref": "#/components/schemas/OtherLivestockType"
+                                  "$ref": "#/components/schemas/OtherLivestockTypeWithoutGoats"
                                 }
                               },
                               "required": [
@@ -10108,6 +10240,83 @@
                               ],
                               "additionalProperties": false,
                               "title": "Method 2 emission factor, method 1 liveweight"
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "Other"
+                                },
+                                "headPurchased": {
+                                  "description": "Number of animals purchased (head)",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "head"
+                                },
+                                "method2EmissionFactor": {
+                                  "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
+                                  "type": "object",
+                                  "properties": {
+                                    "value": {
+                                      "$ref": "#/components/schemas/PositiveNumberInput"
+                                    },
+                                    "quality": {
+                                      "default": {},
+                                      "$ref": "#/components/schemas/QualityTable"
+                                    }
+                                  },
+                                  "required": [
+                                    "value"
+                                  ],
+                                  "additionalProperties": false,
+                                  "x-units": "kilograms CO2e per kilogram liveweight"
+                                },
+                                "livestockType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "Goats"
+                                  ],
+                                  "description": "The specific type of \"Other\" livestock",
+                                  "x-modules": [
+                                    "15.1"
+                                  ]
+                                },
+                                "productivitySystem": {
+                                  "description": "The productivity system of the goats",
+                                  "x-modules": [
+                                    "15.1"
+                                  ],
+                                  "$ref": "#/components/schemas/GoatProductivitySystem"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "headPurchased",
+                                "method2EmissionFactor",
+                                "livestockType",
+                                "productivitySystem"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Goats, method 2 emission factor, method 1 liveweight"
                             },
                             {
                               "type": "object",
@@ -50425,7 +50634,7 @@
                                     "x-modules": [
                                       "15.1"
                                     ],
-                                    "$ref": "#/components/schemas/OtherLivestockType"
+                                    "$ref": "#/components/schemas/OtherLivestockTypeWithoutGoats"
                                   }
                                 },
                                 "required": [
@@ -50465,11 +50674,66 @@
                                     "x-units": "head"
                                   },
                                   "livestockType": {
+                                    "type": "string",
+                                    "enum": [
+                                      "Goats"
+                                    ],
+                                    "description": "The specific type of \"Other\" livestock",
+                                    "x-modules": [
+                                      "15.1"
+                                    ]
+                                  },
+                                  "productivitySystem": {
+                                    "description": "The productivity system of the goats",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
+                                    "$ref": "#/components/schemas/GoatProductivitySystem"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "headPurchased",
+                                  "livestockType",
+                                  "productivitySystem"
+                                ],
+                                "additionalProperties": false,
+                                "title": "Goats, method 1 emission factor, method 1 liveweight"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "const": "Other"
+                                  },
+                                  "headPurchased": {
+                                    "description": "Number of animals purchased (head)",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/PositiveNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "head"
+                                  },
+                                  "livestockType": {
                                     "description": "The specific type of \"Other\" livestock",
                                     "x-modules": [
                                       "15.1"
                                     ],
-                                    "$ref": "#/components/schemas/OtherLivestockType"
+                                    "$ref": "#/components/schemas/OtherLivestockTypeWithoutGoats"
                                   },
                                   "method2LiveweightKilograms": {
                                     "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
@@ -50530,6 +50794,83 @@
                                     "additionalProperties": false,
                                     "x-units": "head"
                                   },
+                                  "livestockType": {
+                                    "type": "string",
+                                    "enum": [
+                                      "Goats"
+                                    ],
+                                    "description": "The specific type of \"Other\" livestock",
+                                    "x-modules": [
+                                      "15.1"
+                                    ]
+                                  },
+                                  "productivitySystem": {
+                                    "description": "The productivity system of the goats",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
+                                    "$ref": "#/components/schemas/GoatProductivitySystem"
+                                  },
+                                  "method2LiveweightKilograms": {
+                                    "description": "Liveweight of purchased livestock (kilograms liveweight per head)",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/PositiveNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "kilograms liveweight per head"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "headPurchased",
+                                  "livestockType",
+                                  "productivitySystem",
+                                  "method2LiveweightKilograms"
+                                ],
+                                "additionalProperties": false,
+                                "title": "Goats, method 1 emission factor, method 2 liveweight"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "const": "Other"
+                                  },
+                                  "headPurchased": {
+                                    "description": "Number of animals purchased (head)",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/PositiveNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "head"
+                                  },
                                   "method2EmissionFactor": {
                                     "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
                                     "x-modules": [
@@ -50556,7 +50897,7 @@
                                     "x-modules": [
                                       "15.1"
                                     ],
-                                    "$ref": "#/components/schemas/OtherLivestockType"
+                                    "$ref": "#/components/schemas/OtherLivestockTypeWithoutGoats"
                                   }
                                 },
                                 "required": [
@@ -50567,6 +50908,83 @@
                                 ],
                                 "additionalProperties": false,
                                 "title": "Method 2 emission factor, method 1 liveweight"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "const": "Other"
+                                  },
+                                  "headPurchased": {
+                                    "description": "Number of animals purchased (head)",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/PositiveNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "head"
+                                  },
+                                  "method2EmissionFactor": {
+                                    "description": "Emission factor for purchased livestock (kilograms CO2e per kilogram liveweight)",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "$ref": "#/components/schemas/PositiveNumberInput"
+                                      },
+                                      "quality": {
+                                        "default": {},
+                                        "$ref": "#/components/schemas/QualityTable"
+                                      }
+                                    },
+                                    "required": [
+                                      "value"
+                                    ],
+                                    "additionalProperties": false,
+                                    "x-units": "kilograms CO2e per kilogram liveweight"
+                                  },
+                                  "livestockType": {
+                                    "type": "string",
+                                    "enum": [
+                                      "Goats"
+                                    ],
+                                    "description": "The specific type of \"Other\" livestock",
+                                    "x-modules": [
+                                      "15.1"
+                                    ]
+                                  },
+                                  "productivitySystem": {
+                                    "description": "The productivity system of the goats",
+                                    "x-modules": [
+                                      "15.1"
+                                    ],
+                                    "$ref": "#/components/schemas/GoatProductivitySystem"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "headPurchased",
+                                  "method2EmissionFactor",
+                                  "livestockType",
+                                  "productivitySystem"
+                                ],
+                                "additionalProperties": false,
+                                "title": "Goats, method 2 emission factor, method 1 liveweight"
                               },
                               {
                                 "type": "object",
@@ -121581,17 +121999,23 @@
           "heifersLt1"
         ]
       },
-      "OtherLivestockType": {
+      "OtherLivestockTypeWithoutGoats": {
         "type": "string",
         "enum": [
           "Buffalo",
-          "Goats",
           "Deer",
           "Camels",
           "Alpacas",
           "Horses",
           "Mules/asses",
           "Emus/ostriches"
+        ]
+      },
+      "GoatProductivitySystem": {
+        "type": "string",
+        "enum": [
+          "High",
+          "Low"
         ]
       },
       "PigPurchaseCategory": {

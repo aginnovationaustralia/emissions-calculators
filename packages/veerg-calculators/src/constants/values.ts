@@ -2878,35 +2878,23 @@ export const livestockConstants: LivestockConstants = {
   },
 
   /**
-   * Values are taken from the AusLCI draft national averages for sheep and beef,
-   * depending on which of the two the guidelines advises is the most similar
-   * for each livestock type.
-   * @description Emissions factors for purchased "Other livestock" types, taken from AusLCI
-   */
-  OTHER_PURCHASED_LIVESTOCK_FACTORS: {
-    Buffalo: massPerMass('CO2e', 'Liveweight', 12.4),
-    Goats: massPerMass('CO2e', 'Liveweight', 5.44),
-    Deer: massPerMass('CO2e', 'Liveweight', 5.44),
-    Camels: massPerMass('CO2e', 'Liveweight', 12.4),
-    Alpacas: massPerMass('CO2e', 'Liveweight', 5.44),
-    Horses: massPerMass('CO2e', 'Liveweight', 12.4),
-    'Mules/asses': massPerMass('CO2e', 'Liveweight', 5.44),
-    'Emus/ostriches': massPerMass('CO2e', 'Liveweight', 5.44),
-  },
-  /**
    * @description Other livestock average liveweights
    * @appendixA A.1.5.4
    * @reference IPCC Chapter 10 Table 10.10 & Table 10A.5 (for Buffalo)
    */
   OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS: {
     Buffalo: liveweight(336),
-    Goats: liveweight(50),
     Deer: liveweight(120),
     Camels: liveweight(570),
     Alpacas: liveweight(65),
     Horses: liveweight(550),
     'Mules/asses': liveweight(245),
     'Emus/ostriches': liveweight(120),
+  },
+
+  AVERAGE_LIVEWEIGHT_GOATS: {
+    High: liveweight(50),
+    Low: liveweight(28),
   },
 
   /**

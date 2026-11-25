@@ -1474,13 +1474,22 @@ export const isOtherLivestockClasslessType = (
   );
 };
 
-export const OtherLivestockTypes = [
+export const OtherLivestockTypesWithoutGoats = [
   'Buffalo',
-  'Goats',
   'Deer',
   ...OtherLivestockClasslessTypes,
 ] as const;
+export type OtherLivestockTypeWithoutGoats =
+  (typeof OtherLivestockTypesWithoutGoats)[number];
+
+export const OtherLivestockTypes = [
+  'Goats',
+  ...OtherLivestockTypesWithoutGoats,
+] as const;
 export type OtherLivestockType = (typeof OtherLivestockTypes)[number];
+
+export const GoatProductivitySystems = ['High', 'Low'] as const;
+export type GoatProductivitySystem = (typeof GoatProductivitySystems)[number];
 
 export const MeanAnnualTemperatures = [
   '10 or below',
