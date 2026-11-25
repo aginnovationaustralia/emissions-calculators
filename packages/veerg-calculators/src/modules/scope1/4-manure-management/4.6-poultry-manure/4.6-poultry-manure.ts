@@ -770,7 +770,7 @@ export const calculateLeachingAndRunoffN2OEmissionsForClass = (
  * Nitrogen actually applied within the activity boundary is calculated in
  * `calculateMassOfNitrogenAppliedToSoilsForPoultry` (4.6.1.9)
  */
-export const calculateMassOfNitrogenAppliedToSoilsForClass = (
+export const calculateMassOfNitrogenApplicableToSoilsForClass = (
   poultryClass: PoultryClassSharedInputTransformed,
   isInLeachingZone: Container<boolean>,
   constants: HasConstants<'COMMON' | 'POULTRY' | 'CROP'>,

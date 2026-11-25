@@ -738,7 +738,7 @@ export const calculateLeachingAndRunoffN2OEmissionsForClass = (
  * actually applied to soil is calculated in
  * `calculateMassOfNitrogenAppliedToSoilsForDairyHerd` (4.3.1.8)
  */
-export const calculateMassOfNitrogenAppliedToSoilsForClass = (
+export const calculateMassOfNitrogenApplicableToSoilsForClass = (
   dairyClass: DairyClassInputTransformed,
   milkProduction: Container<VolumePerHeadPerDay<'Milk'>>,
   breed: Container<DairyCattleBreed>,

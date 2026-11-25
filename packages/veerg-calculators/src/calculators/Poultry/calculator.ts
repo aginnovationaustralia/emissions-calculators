@@ -17,6 +17,7 @@ import { generateIntensity } from '@/tools/intensity';
 import { zeroMassEggs, zeroMassLiveweight } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { Mass } from '@/tools/units';
+import { calculatePoultryOutputs } from './outputs';
 import { createCalculator } from '../common/calculator';
 import { ExecutionContext } from '../executionContext';
 import { ConstantsForPoultryCalculator } from './constants';
@@ -203,4 +204,5 @@ export const calculatePoultry = createCalculator(
   calculateScope3PoultryFlock,
   getSingleIntensities,
   getTotalIntensities,
+  calculatePoultryOutputs,
 );

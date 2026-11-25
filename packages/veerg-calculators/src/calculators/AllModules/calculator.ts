@@ -64,7 +64,12 @@ import {
 } from '@/tools/ledger';
 import { zeroCH4, zeroCO2, zeroCO2e, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
+import { serialiseOutputs } from '../common/calculator';
+import { calculateDairyOutputs } from '../Dairy/outputs';
 import { ExecutionContext } from '../executionContext';
+import { calculateFeedlotOutputs } from '../Feedlot/outputs';
+import { calculatePigsOutputs } from '../Pigs/outputs';
+import { calculatePoultryOutputs } from '../Poultry/outputs';
 import { Scope2Output } from '../types/scope2.output';
 import { AllModulesInputTransformed } from './types/input';
 import { AllModulesScope1Output } from './types/scope1.output';
@@ -523,6 +528,16 @@ export const calculateAllModules = (
     net: {
       ...serialised.net,
       lulucf: exposeTonnesCO2e(sumCO2e(Object.values(lulucf))),
+    },
+    outputs: {
+      feedlot: serialiseOutputs(
+        calculateFeedlotOutputs(input.feedlot, context),
+      ),
+      dairy: serialiseOutputs(calculateDairyOutputs(input.dairy, context)),
+      pigs: serialiseOutputs(calculatePigsOutputs(input.pigs, context)),
+      poultry: serialiseOutputs(
+        calculatePoultryOutputs(input.poultry, context),
+      ),
     },
   };
 };

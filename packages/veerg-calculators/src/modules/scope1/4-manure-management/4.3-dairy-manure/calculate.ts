@@ -3,6 +3,7 @@ import { DairyMMSTypeWithPasture } from '@/constants/enums';
 import { Container, num } from '@/tools/containers';
 import { zeroCH4, zeroN, zeroN2O } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
+import { DistributiveOmit } from '@/tools/types';
 import { RealNumber } from '@/tools/units';
 import { calculateMilkProduction } from '../../shared/dairy/calculate';
 import {
@@ -16,7 +17,7 @@ import {
   calculateLeachingAndRunoffN2OEmissionsForClass,
   calculateManureAllocations,
   calculateManureManagementCH4ForClass,
-  calculateMassOfNitrogenAppliedToSoilsForClass,
+  calculateMassOfNitrogenApplicableToSoilsForClass,
 } from './4.3-dairy-manure';
 import { ConstantsForDairyManure } from './constants';
 import { DairyManureInputTransformed } from './dairy-manure.input';
@@ -193,10 +194,23 @@ export function calculateLeachingAndRunoffN2OEmissionsForDairyHerd(
 }
 
 /**
- * Calculate nitrogen applied to soil *MNSoilscope1* produced by a dairy herd (4.3.1.8).
+ * A dairy herd as read for the nitrogen in its manure, without the fraction applied within
+ * the activity boundary. The herd input is a union (one member for each time in locations
+ * choice), so the key is left out of each member.
  */
-export function calculateMassOfNitrogenAppliedToSoilsForDairyHerd(
-  herd: DairyHerdFertiliserInputTransformed,
+type DairyHerdManureNitrogenInput = DistributiveOmit<
+  DairyHerdFertiliserInputTransformed,
+  'fractionAppliedToSoils'
+>;
+
+/**
+ * Calculate the mass of nitrogen in a dairy herd's manure that is *applicable* to soils
+ * (4.3.1.8 (1) before the fraction applied within the activity boundary, PF): the manure
+ * nitrogen that can be applied to soils locally, sold to another enterprise, or disposed of
+ * as waste.
+ */
+export function calculateMassOfNitrogenApplicableToSoilsForDairyHerd(
+  herd: DairyHerdManureNitrogenInput,
   constants: ConstantsForDairyManure,
 ) {
   const milkingCowManureAllocations = calculateManureAllocations(
@@ -209,7 +223,7 @@ export function calculateMassOfNitrogenAppliedToSoilsForDairyHerd(
   );
   return sum(
     Object.values(herd.classes).map((dairyClass) =>
-      calculateMassOfNitrogenAppliedToSoilsForClass(
+      calculateMassOfNitrogenApplicableToSoilsForClass(
         dairyClass,
         milkProduction,
         herd.breed,
@@ -221,7 +235,17 @@ export function calculateMassOfNitrogenAppliedToSoilsForDairyHerd(
       ),
     ),
     zeroN,
-  )
+  ).named('MNSoil applicable');
+}
+
+/**
+ * Calculate nitrogen applied to soil *MNSoilscope1* produced by a dairy herd (4.3.1.8).
+ */
+export function calculateMassOfNitrogenAppliedToSoilsForDairyHerd(
+  herd: DairyHerdFertiliserInputTransformed,
+  constants: ConstantsForDairyManure,
+) {
+  return calculateMassOfNitrogenApplicableToSoilsForDairyHerd(herd, constants)
     .multiply(herd.fractionAppliedToSoils)
     .reference('4.3.1.8 (1)');
 }
