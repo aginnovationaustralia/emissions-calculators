@@ -684,7 +684,7 @@ export type LivestockConstants = NamedConstants & {
   NITROGEN_TO_MILK_PROTEIN: MassPerMass<'Milk', 'N'>;
 
   PURCHASED_EF: Record<
-    LivestockPurchaseCategory,
+    LivestockPurchaseCategory | 'beefAverage' | 'sheepAverage',
     MassPerMass<'CO2e', 'Liveweight'>
   >;
 

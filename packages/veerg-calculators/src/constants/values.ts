@@ -38,6 +38,7 @@ import {
   volumePerMass,
   years,
 } from '@/tools/units';
+import Decimal from 'decimal.js-light';
 import {
   BeefPurchaseCategory,
   MeanAnnualTemperature,
@@ -2938,9 +2939,19 @@ export const livestockConstants: LivestockConstants = {
     beefManufacturing: massPerMass('CO2e', 'Liveweight', 11.0),
     beefPrime: massPerMass('CO2e', 'Liveweight', 12.4),
     beefWeaned: massPerMass('CO2e', 'Liveweight', 13.29),
+    beefAverage: massPerMass(
+      'CO2e',
+      'Liveweight',
+      new Decimal(11.0 + 12.4 + 13.29).div(3),
+    ),
     // Sheep
     sheepMutton: massPerMass('CO2e', 'Liveweight', 6.03),
     sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 6.08),
+    sheepAverage: massPerMass(
+      'CO2e',
+      'Liveweight',
+      new Decimal(6.03 + 6.08).div(2),
+    ),
     // Pigs
     pigsDefault: massPerMass('CO2e', 'Liveweight', 3.38),
     pigsConventionalRearingCoveredPond: massPerMass('CO2e', 'Liveweight', 2.19),

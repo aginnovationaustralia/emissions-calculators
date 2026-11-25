@@ -34,13 +34,13 @@ function getEmissionsFactorForOtherLivestock(
   const averageBeefEF = selectConstant(
     constants.LIVESTOCK,
     'PURCHASED_EF',
-    'beefPrime',
+    'beefAverage',
   );
 
   const averageSheepEF = selectConstant(
     constants.LIVESTOCK,
     'PURCHASED_EF',
-    'sheepMutton',
+    'sheepAverage',
   );
   const scalingFactor = selectConstant(
     constants.LIVESTOCK,

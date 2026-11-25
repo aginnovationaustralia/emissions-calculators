@@ -282,7 +282,7 @@ describe('15.1 Purchased Livestock, goats', () => {
       .toNumber();
 
   it('uses the low productivity liveweight', () => {
-    // 10 head * 28 kg * 3.3768 (56% of sheepMutton EF) / 1000
+    // 10 head * 28 kg * 3.3908 (56% of sheepAverage EF) / 1000
     expect(
       calculate({
         type: 'Other',
@@ -290,7 +290,7 @@ describe('15.1 Purchased Livestock, goats', () => {
         livestockType: 'Goats',
         productivitySystem: 'Low',
       }),
-    ).toBeCloseTo(0.945504, 8);
+    ).toBeCloseTo(0.949424, 8);
   });
 
   it('rejects goats without a productivity system', () => {
