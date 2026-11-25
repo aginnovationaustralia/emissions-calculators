@@ -7786,6 +7786,18 @@
                     "type": "string",
                     "const": "monthly"
                   },
+                  "calvingSeasonStartMonths": {
+                    "description": "The months in which the herd's calving seasons start. When given, each calving season is the 3 months from its start month and the season after calving is the 3 months after that (Chapter 3, 3.2.2.1 LCjk=4,5, Method 2 herd flow). The cow classes then give fractionCowsCalvingThisMonth and the calf classes fractionCalvesBornThisMonth for every month, and LCjk=4,5 and the calves' shares for the season of calving and the season after it are derived from them. Give an empty list for a herd that does not calve. When not given, every month of the cow and calf classes gives the season fractions directly (fractionCowsThisSeasonInCalf, fractionCowsPreviousSeasonInCalf, fractionCalvesBornThisSeason, fractionCalvesBornPreviousSeason).",
+                    "type": "array",
+                    "items": {
+                      "description": "A month in which a calving season starts.",
+                      "x-modules": [
+                        "3.2",
+                        "4.2"
+                      ],
+                      "$ref": "#/components/schemas/Month"
+                    }
+                  },
                   "bullsLt1": {
                     "type": "object",
                     "properties": {
@@ -7943,8 +7955,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during january that were born in this month (january), or the immediate prior 2 months (december or november). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in january. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -7963,10 +7975,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during january that were born in the calving season that january is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if january is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during january that were born in the \"previous season\", which means the previous october, september or august. (0-1)",
+                            "description": "Proportion of calves in this class during january that were born in the calving season before it, i.e. january is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if january is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -7985,13 +8019,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -8149,8 +8181,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during february that were born in this month (february), or the immediate prior 2 months (january or december). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in february. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -8169,10 +8201,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during february that were born in the calving season that february is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if february is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during february that were born in the \"previous season\", which means the previous november, october or september. (0-1)",
+                            "description": "Proportion of calves in this class during february that were born in the calving season before it, i.e. february is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if february is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -8191,13 +8245,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -8355,8 +8407,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during march that were born in this month (march), or the immediate prior 2 months (february or january). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in march. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -8375,10 +8427,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during march that were born in the calving season that march is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if march is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during march that were born in the \"previous season\", which means the previous december, november or october. (0-1)",
+                            "description": "Proportion of calves in this class during march that were born in the calving season before it, i.e. march is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if march is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -8397,13 +8471,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -8561,8 +8633,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during april that were born in this month (april), or the immediate prior 2 months (march or february). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in april. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -8581,10 +8653,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during april that were born in the calving season that april is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if april is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during april that were born in the \"previous season\", which means the previous january, december or november. (0-1)",
+                            "description": "Proportion of calves in this class during april that were born in the calving season before it, i.e. april is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if april is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -8603,13 +8697,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -8767,8 +8859,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during may that were born in this month (may), or the immediate prior 2 months (april or march). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in may. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -8787,10 +8879,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during may that were born in the calving season that may is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if may is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during may that were born in the \"previous season\", which means the previous february, january or december. (0-1)",
+                            "description": "Proportion of calves in this class during may that were born in the calving season before it, i.e. may is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if may is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -8809,13 +8923,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -8973,8 +9085,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during june that were born in this month (june), or the immediate prior 2 months (may or april). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in june. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -8993,10 +9105,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during june that were born in the calving season that june is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if june is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during june that were born in the \"previous season\", which means the previous march, february or january. (0-1)",
+                            "description": "Proportion of calves in this class during june that were born in the calving season before it, i.e. june is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if june is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -9015,13 +9149,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -9179,8 +9311,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during july that were born in this month (july), or the immediate prior 2 months (june or may). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in july. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -9199,10 +9331,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during july that were born in the calving season that july is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if july is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during july that were born in the \"previous season\", which means the previous april, march or february. (0-1)",
+                            "description": "Proportion of calves in this class during july that were born in the calving season before it, i.e. july is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if july is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -9221,13 +9375,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -9385,8 +9537,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during august that were born in this month (august), or the immediate prior 2 months (july or june). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in august. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -9405,10 +9557,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during august that were born in the calving season that august is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if august is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during august that were born in the \"previous season\", which means the previous may, april or march. (0-1)",
+                            "description": "Proportion of calves in this class during august that were born in the calving season before it, i.e. august is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if august is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -9427,13 +9601,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -9591,8 +9763,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during september that were born in this month (september), or the immediate prior 2 months (august or july). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in september. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -9611,10 +9783,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during september that were born in the calving season that september is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if september is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during september that were born in the \"previous season\", which means the previous june, may or april. (0-1)",
+                            "description": "Proportion of calves in this class during september that were born in the calving season before it, i.e. september is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if september is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -9633,13 +9827,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -9797,8 +9989,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during october that were born in this month (october), or the immediate prior 2 months (september or august). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in october. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -9817,10 +10009,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during october that were born in the calving season that october is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if october is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during october that were born in the \"previous season\", which means the previous july, june or may. (0-1)",
+                            "description": "Proportion of calves in this class during october that were born in the calving season before it, i.e. october is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if october is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -9839,13 +10053,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -10003,8 +10215,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during november that were born in this month (november), or the immediate prior 2 months (october or september). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in november. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -10023,10 +10235,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during november that were born in the calving season that november is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if november is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during november that were born in the \"previous season\", which means the previous august, july or june. (0-1)",
+                            "description": "Proportion of calves in this class during november that were born in the calving season before it, i.e. november is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if november is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -10045,13 +10279,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -10209,8 +10441,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during december that were born in this month (december), or the immediate prior 2 months (november or october). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in december. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -10229,10 +10461,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during december that were born in the calving season that december is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if december is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during december that were born in the \"previous season\", which means the previous september, august or july. (0-1)",
+                            "description": "Proportion of calves in this class during december that were born in the calving season before it, i.e. december is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if december is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -10251,13 +10505,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       }
@@ -10438,8 +10690,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during january that were born in this month (january), or the immediate prior 2 months (december or november). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in january. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -10458,10 +10710,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during january that were born in the calving season that january is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if january is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during january that were born in the \"previous season\", which means the previous october, september or august. (0-1)",
+                            "description": "Proportion of calves in this class during january that were born in the calving season before it, i.e. january is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if january is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -10480,13 +10754,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -10644,8 +10916,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during february that were born in this month (february), or the immediate prior 2 months (january or december). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in february. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -10664,10 +10936,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during february that were born in the calving season that february is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if february is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during february that were born in the \"previous season\", which means the previous november, october or september. (0-1)",
+                            "description": "Proportion of calves in this class during february that were born in the calving season before it, i.e. february is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if february is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -10686,13 +10980,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -10850,8 +11142,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during march that were born in this month (march), or the immediate prior 2 months (february or january). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in march. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -10870,10 +11162,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during march that were born in the calving season that march is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if march is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during march that were born in the \"previous season\", which means the previous december, november or october. (0-1)",
+                            "description": "Proportion of calves in this class during march that were born in the calving season before it, i.e. march is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if march is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -10892,13 +11206,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -11056,8 +11368,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during april that were born in this month (april), or the immediate prior 2 months (march or february). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in april. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -11076,10 +11388,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during april that were born in the calving season that april is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if april is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during april that were born in the \"previous season\", which means the previous january, december or november. (0-1)",
+                            "description": "Proportion of calves in this class during april that were born in the calving season before it, i.e. april is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if april is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -11098,13 +11432,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -11262,8 +11594,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during may that were born in this month (may), or the immediate prior 2 months (april or march). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in may. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -11282,10 +11614,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during may that were born in the calving season that may is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if may is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during may that were born in the \"previous season\", which means the previous february, january or december. (0-1)",
+                            "description": "Proportion of calves in this class during may that were born in the calving season before it, i.e. may is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if may is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -11304,13 +11658,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -11468,8 +11820,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during june that were born in this month (june), or the immediate prior 2 months (may or april). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in june. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -11488,10 +11840,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during june that were born in the calving season that june is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if june is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during june that were born in the \"previous season\", which means the previous march, february or january. (0-1)",
+                            "description": "Proportion of calves in this class during june that were born in the calving season before it, i.e. june is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if june is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -11510,13 +11884,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -11674,8 +12046,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during july that were born in this month (july), or the immediate prior 2 months (june or may). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in july. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -11694,10 +12066,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during july that were born in the calving season that july is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if july is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during july that were born in the \"previous season\", which means the previous april, march or february. (0-1)",
+                            "description": "Proportion of calves in this class during july that were born in the calving season before it, i.e. july is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if july is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -11716,13 +12110,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -11880,8 +12272,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during august that were born in this month (august), or the immediate prior 2 months (july or june). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in august. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -11900,10 +12292,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during august that were born in the calving season that august is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if august is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during august that were born in the \"previous season\", which means the previous may, april or march. (0-1)",
+                            "description": "Proportion of calves in this class during august that were born in the calving season before it, i.e. august is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if august is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -11922,13 +12336,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -12086,8 +12498,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during september that were born in this month (september), or the immediate prior 2 months (august or july). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in september. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -12106,10 +12518,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during september that were born in the calving season that september is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if september is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during september that were born in the \"previous season\", which means the previous june, may or april. (0-1)",
+                            "description": "Proportion of calves in this class during september that were born in the calving season before it, i.e. september is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if september is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -12128,13 +12562,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -12292,8 +12724,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during october that were born in this month (october), or the immediate prior 2 months (september or august). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in october. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -12312,10 +12744,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during october that were born in the calving season that october is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if october is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during october that were born in the \"previous season\", which means the previous july, june or may. (0-1)",
+                            "description": "Proportion of calves in this class during october that were born in the calving season before it, i.e. october is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if october is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -12334,13 +12788,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -12498,8 +12950,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during november that were born in this month (november), or the immediate prior 2 months (october or september). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in november. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -12518,10 +12970,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during november that were born in the calving season that november is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if november is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during november that were born in the \"previous season\", which means the previous august, july or june. (0-1)",
+                            "description": "Proportion of calves in this class during november that were born in the calving season before it, i.e. november is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if november is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -12540,13 +13014,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -12704,8 +13176,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during december that were born in this month (december), or the immediate prior 2 months (november or october). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in december. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -12724,10 +13196,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during december that were born in the calving season that december is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if december is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during december that were born in the \"previous season\", which means the previous september, august or july. (0-1)",
+                            "description": "Proportion of calves in this class during december that were born in the calving season before it, i.e. december is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if december is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -12746,13 +13240,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       }
@@ -12939,8 +13431,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during january that were born in this month (january), or the immediate prior 2 months (december or november). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in january. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -12959,10 +13451,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during january that were born in the calving season that january is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if january is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during january that were born in the \"previous season\", which means the previous october, september or august. (0-1)",
+                            "description": "Proportion of calves in this class during january that were born in the calving season before it, i.e. january is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if january is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -12981,13 +13495,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -13145,8 +13657,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during february that were born in this month (february), or the immediate prior 2 months (january or december). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in february. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -13165,10 +13677,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during february that were born in the calving season that february is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if february is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during february that were born in the \"previous season\", which means the previous november, october or september. (0-1)",
+                            "description": "Proportion of calves in this class during february that were born in the calving season before it, i.e. february is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if february is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -13187,13 +13721,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -13351,8 +13883,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during march that were born in this month (march), or the immediate prior 2 months (february or january). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in march. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -13371,10 +13903,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during march that were born in the calving season that march is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if march is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during march that were born in the \"previous season\", which means the previous december, november or october. (0-1)",
+                            "description": "Proportion of calves in this class during march that were born in the calving season before it, i.e. march is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if march is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -13393,13 +13947,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -13557,8 +14109,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during april that were born in this month (april), or the immediate prior 2 months (march or february). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in april. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -13577,10 +14129,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during april that were born in the calving season that april is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if april is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during april that were born in the \"previous season\", which means the previous january, december or november. (0-1)",
+                            "description": "Proportion of calves in this class during april that were born in the calving season before it, i.e. april is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if april is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -13599,13 +14173,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -13763,8 +14335,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during may that were born in this month (may), or the immediate prior 2 months (april or march). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in may. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -13783,10 +14355,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during may that were born in the calving season that may is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if may is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during may that were born in the \"previous season\", which means the previous february, january or december. (0-1)",
+                            "description": "Proportion of calves in this class during may that were born in the calving season before it, i.e. may is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if may is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -13805,13 +14399,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -13969,8 +14561,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during june that were born in this month (june), or the immediate prior 2 months (may or april). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in june. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -13989,10 +14581,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during june that were born in the calving season that june is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if june is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during june that were born in the \"previous season\", which means the previous march, february or january. (0-1)",
+                            "description": "Proportion of calves in this class during june that were born in the calving season before it, i.e. june is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if june is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -14011,13 +14625,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -14175,8 +14787,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during july that were born in this month (july), or the immediate prior 2 months (june or may). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in july. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -14195,10 +14807,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during july that were born in the calving season that july is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if july is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during july that were born in the \"previous season\", which means the previous april, march or february. (0-1)",
+                            "description": "Proportion of calves in this class during july that were born in the calving season before it, i.e. july is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if july is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -14217,13 +14851,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -14381,8 +15013,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during august that were born in this month (august), or the immediate prior 2 months (july or june). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in august. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -14401,10 +15033,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during august that were born in the calving season that august is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if august is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during august that were born in the \"previous season\", which means the previous may, april or march. (0-1)",
+                            "description": "Proportion of calves in this class during august that were born in the calving season before it, i.e. august is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if august is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -14423,13 +15077,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -14587,8 +15239,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during september that were born in this month (september), or the immediate prior 2 months (august or july). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in september. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -14607,10 +15259,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during september that were born in the calving season that september is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if september is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during september that were born in the \"previous season\", which means the previous june, may or april. (0-1)",
+                            "description": "Proportion of calves in this class during september that were born in the calving season before it, i.e. september is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if september is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -14629,13 +15303,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -14793,8 +15465,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during october that were born in this month (october), or the immediate prior 2 months (september or august). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in october. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -14813,10 +15485,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during october that were born in the calving season that october is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if october is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during october that were born in the \"previous season\", which means the previous july, june or may. (0-1)",
+                            "description": "Proportion of calves in this class during october that were born in the calving season before it, i.e. october is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if october is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -14835,13 +15529,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -14999,8 +15691,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during november that were born in this month (november), or the immediate prior 2 months (october or september). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in november. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -15019,10 +15711,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during november that were born in the calving season that november is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if november is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during november that were born in the \"previous season\", which means the previous august, july or june. (0-1)",
+                            "description": "Proportion of calves in this class during november that were born in the calving season before it, i.e. november is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if november is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -15041,13 +15755,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       },
@@ -15205,8 +15917,8 @@
                             "additionalProperties": false,
                             "x-units": "kilograms crude protein per kilogram dry matter"
                           },
-                          "fractionCalvesBornThisSeason": {
-                            "description": "Proportion of calves in this class during december that were born in this month (december), or the immediate prior 2 months (november or october). (0-1)",
+                          "fractionCalvesBornThisMonth": {
+                            "description": "Proportion of calves in this class that were born in december. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6). (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -15225,10 +15937,32 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
+                          },
+                          "fractionCalvesBornThisSeason": {
+                            "description": "Proportion of calves in this class during december that were born in the calving season that december is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if december is in no calving season. (number)",
+                            "x-modules": [
+                              "3.2",
+                              "4.2"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/ProportionNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "number"
                           },
                           "fractionCalvesBornPreviousSeason": {
-                            "description": "Proportion of calves in this class during december that were born in the \"previous season\", which means the previous september, august or july. (0-1)",
+                            "description": "Proportion of calves in this class during december that were born in the calving season before it, i.e. december is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if december is in no season after calving. (number)",
                             "x-modules": [
                               "3.2",
                               "4.2"
@@ -15247,13 +15981,11 @@
                               "value"
                             ],
                             "additionalProperties": false,
-                            "x-units": "0-1"
+                            "x-units": "number"
                           }
                         },
                         "required": [
-                          "head",
-                          "fractionCalvesBornThisSeason",
-                          "fractionCalvesBornPreviousSeason"
+                          "head"
                         ],
                         "additionalProperties": false
                       }
@@ -16316,6 +17048,23 @@
         ],
         "additionalProperties": false
       },
+      "Month": {
+        "type": "string",
+        "enum": [
+          "january",
+          "february",
+          "march",
+          "april",
+          "may",
+          "june",
+          "july",
+          "august",
+          "september",
+          "october",
+          "november",
+          "december"
+        ]
+      },
       "BeefClassMonthlyInput": {
         "type": "object",
         "properties": {
@@ -16529,8 +17278,8 @@
                 "additionalProperties": false,
                 "x-units": "kilograms crude protein per kilogram dry matter"
               },
-              "fractionCowsThisSeasonInCalf": {
-                "description": "Proportion of cows in this class during january that calved in that month of january, or the immediate prior 2 months (december or november). (0-1)",
+              "fractionCowsCalvingThisMonth": {
+                "description": "Proportion of cows in this class that calved in january. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1). (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -16549,10 +17298,32 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
+              },
+              "fractionCowsThisSeasonInCalf": {
+                "description": "Proportion of cows in this class during january that calved in the calving season that january is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if january is in no calving season. (number)",
+                "x-modules": [
+                  "3.2",
+                  "4.2"
+                ],
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/components/schemas/ProportionNumberInput"
+                  },
+                  "quality": {
+                    "default": {},
+                    "$ref": "#/components/schemas/QualityTable"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "additionalProperties": false,
+                "x-units": "number"
               },
               "fractionCowsPreviousSeasonInCalf": {
-                "description": "Proportion of cows in this class during january that calved in the \"previous season\", which means the previous october, september or august. (0-1)",
+                "description": "Proportion of cows in this class during january that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if january is in no season after calving. (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -16571,13 +17342,11 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
               }
             },
             "required": [
-              "head",
-              "fractionCowsThisSeasonInCalf",
-              "fractionCowsPreviousSeasonInCalf"
+              "head"
             ],
             "additionalProperties": false
           },
@@ -16735,8 +17504,8 @@
                 "additionalProperties": false,
                 "x-units": "kilograms crude protein per kilogram dry matter"
               },
-              "fractionCowsThisSeasonInCalf": {
-                "description": "Proportion of cows in this class during february that calved in that month of february, or the immediate prior 2 months (january or december). (0-1)",
+              "fractionCowsCalvingThisMonth": {
+                "description": "Proportion of cows in this class that calved in february. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1). (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -16755,10 +17524,32 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
+              },
+              "fractionCowsThisSeasonInCalf": {
+                "description": "Proportion of cows in this class during february that calved in the calving season that february is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if february is in no calving season. (number)",
+                "x-modules": [
+                  "3.2",
+                  "4.2"
+                ],
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/components/schemas/ProportionNumberInput"
+                  },
+                  "quality": {
+                    "default": {},
+                    "$ref": "#/components/schemas/QualityTable"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "additionalProperties": false,
+                "x-units": "number"
               },
               "fractionCowsPreviousSeasonInCalf": {
-                "description": "Proportion of cows in this class during february that calved in the \"previous season\", which means the previous november, october or september. (0-1)",
+                "description": "Proportion of cows in this class during february that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if february is in no season after calving. (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -16777,13 +17568,11 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
               }
             },
             "required": [
-              "head",
-              "fractionCowsThisSeasonInCalf",
-              "fractionCowsPreviousSeasonInCalf"
+              "head"
             ],
             "additionalProperties": false
           },
@@ -16941,8 +17730,8 @@
                 "additionalProperties": false,
                 "x-units": "kilograms crude protein per kilogram dry matter"
               },
-              "fractionCowsThisSeasonInCalf": {
-                "description": "Proportion of cows in this class during march that calved in that month of march, or the immediate prior 2 months (february or january). (0-1)",
+              "fractionCowsCalvingThisMonth": {
+                "description": "Proportion of cows in this class that calved in march. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1). (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -16961,10 +17750,32 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
+              },
+              "fractionCowsThisSeasonInCalf": {
+                "description": "Proportion of cows in this class during march that calved in the calving season that march is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if march is in no calving season. (number)",
+                "x-modules": [
+                  "3.2",
+                  "4.2"
+                ],
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/components/schemas/ProportionNumberInput"
+                  },
+                  "quality": {
+                    "default": {},
+                    "$ref": "#/components/schemas/QualityTable"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "additionalProperties": false,
+                "x-units": "number"
               },
               "fractionCowsPreviousSeasonInCalf": {
-                "description": "Proportion of cows in this class during march that calved in the \"previous season\", which means the previous december, november or october. (0-1)",
+                "description": "Proportion of cows in this class during march that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if march is in no season after calving. (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -16983,13 +17794,11 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
               }
             },
             "required": [
-              "head",
-              "fractionCowsThisSeasonInCalf",
-              "fractionCowsPreviousSeasonInCalf"
+              "head"
             ],
             "additionalProperties": false
           },
@@ -17147,8 +17956,8 @@
                 "additionalProperties": false,
                 "x-units": "kilograms crude protein per kilogram dry matter"
               },
-              "fractionCowsThisSeasonInCalf": {
-                "description": "Proportion of cows in this class during april that calved in that month of april, or the immediate prior 2 months (march or february). (0-1)",
+              "fractionCowsCalvingThisMonth": {
+                "description": "Proportion of cows in this class that calved in april. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1). (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -17167,10 +17976,32 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
+              },
+              "fractionCowsThisSeasonInCalf": {
+                "description": "Proportion of cows in this class during april that calved in the calving season that april is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if april is in no calving season. (number)",
+                "x-modules": [
+                  "3.2",
+                  "4.2"
+                ],
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/components/schemas/ProportionNumberInput"
+                  },
+                  "quality": {
+                    "default": {},
+                    "$ref": "#/components/schemas/QualityTable"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "additionalProperties": false,
+                "x-units": "number"
               },
               "fractionCowsPreviousSeasonInCalf": {
-                "description": "Proportion of cows in this class during april that calved in the \"previous season\", which means the previous january, december or november. (0-1)",
+                "description": "Proportion of cows in this class during april that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if april is in no season after calving. (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -17189,13 +18020,11 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
               }
             },
             "required": [
-              "head",
-              "fractionCowsThisSeasonInCalf",
-              "fractionCowsPreviousSeasonInCalf"
+              "head"
             ],
             "additionalProperties": false
           },
@@ -17353,8 +18182,8 @@
                 "additionalProperties": false,
                 "x-units": "kilograms crude protein per kilogram dry matter"
               },
-              "fractionCowsThisSeasonInCalf": {
-                "description": "Proportion of cows in this class during may that calved in that month of may, or the immediate prior 2 months (april or march). (0-1)",
+              "fractionCowsCalvingThisMonth": {
+                "description": "Proportion of cows in this class that calved in may. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1). (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -17373,10 +18202,32 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
+              },
+              "fractionCowsThisSeasonInCalf": {
+                "description": "Proportion of cows in this class during may that calved in the calving season that may is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if may is in no calving season. (number)",
+                "x-modules": [
+                  "3.2",
+                  "4.2"
+                ],
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/components/schemas/ProportionNumberInput"
+                  },
+                  "quality": {
+                    "default": {},
+                    "$ref": "#/components/schemas/QualityTable"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "additionalProperties": false,
+                "x-units": "number"
               },
               "fractionCowsPreviousSeasonInCalf": {
-                "description": "Proportion of cows in this class during may that calved in the \"previous season\", which means the previous february, january or december. (0-1)",
+                "description": "Proportion of cows in this class during may that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if may is in no season after calving. (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -17395,13 +18246,11 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
               }
             },
             "required": [
-              "head",
-              "fractionCowsThisSeasonInCalf",
-              "fractionCowsPreviousSeasonInCalf"
+              "head"
             ],
             "additionalProperties": false
           },
@@ -17559,8 +18408,8 @@
                 "additionalProperties": false,
                 "x-units": "kilograms crude protein per kilogram dry matter"
               },
-              "fractionCowsThisSeasonInCalf": {
-                "description": "Proportion of cows in this class during june that calved in that month of june, or the immediate prior 2 months (may or april). (0-1)",
+              "fractionCowsCalvingThisMonth": {
+                "description": "Proportion of cows in this class that calved in june. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1). (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -17579,10 +18428,32 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
+              },
+              "fractionCowsThisSeasonInCalf": {
+                "description": "Proportion of cows in this class during june that calved in the calving season that june is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if june is in no calving season. (number)",
+                "x-modules": [
+                  "3.2",
+                  "4.2"
+                ],
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/components/schemas/ProportionNumberInput"
+                  },
+                  "quality": {
+                    "default": {},
+                    "$ref": "#/components/schemas/QualityTable"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "additionalProperties": false,
+                "x-units": "number"
               },
               "fractionCowsPreviousSeasonInCalf": {
-                "description": "Proportion of cows in this class during june that calved in the \"previous season\", which means the previous march, february or january. (0-1)",
+                "description": "Proportion of cows in this class during june that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if june is in no season after calving. (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -17601,13 +18472,11 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
               }
             },
             "required": [
-              "head",
-              "fractionCowsThisSeasonInCalf",
-              "fractionCowsPreviousSeasonInCalf"
+              "head"
             ],
             "additionalProperties": false
           },
@@ -17765,8 +18634,8 @@
                 "additionalProperties": false,
                 "x-units": "kilograms crude protein per kilogram dry matter"
               },
-              "fractionCowsThisSeasonInCalf": {
-                "description": "Proportion of cows in this class during july that calved in that month of july, or the immediate prior 2 months (june or may). (0-1)",
+              "fractionCowsCalvingThisMonth": {
+                "description": "Proportion of cows in this class that calved in july. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1). (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -17785,10 +18654,32 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
+              },
+              "fractionCowsThisSeasonInCalf": {
+                "description": "Proportion of cows in this class during july that calved in the calving season that july is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if july is in no calving season. (number)",
+                "x-modules": [
+                  "3.2",
+                  "4.2"
+                ],
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/components/schemas/ProportionNumberInput"
+                  },
+                  "quality": {
+                    "default": {},
+                    "$ref": "#/components/schemas/QualityTable"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "additionalProperties": false,
+                "x-units": "number"
               },
               "fractionCowsPreviousSeasonInCalf": {
-                "description": "Proportion of cows in this class during july that calved in the \"previous season\", which means the previous april, march or february. (0-1)",
+                "description": "Proportion of cows in this class during july that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if july is in no season after calving. (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -17807,13 +18698,11 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
               }
             },
             "required": [
-              "head",
-              "fractionCowsThisSeasonInCalf",
-              "fractionCowsPreviousSeasonInCalf"
+              "head"
             ],
             "additionalProperties": false
           },
@@ -17971,8 +18860,8 @@
                 "additionalProperties": false,
                 "x-units": "kilograms crude protein per kilogram dry matter"
               },
-              "fractionCowsThisSeasonInCalf": {
-                "description": "Proportion of cows in this class during august that calved in that month of august, or the immediate prior 2 months (july or june). (0-1)",
+              "fractionCowsCalvingThisMonth": {
+                "description": "Proportion of cows in this class that calved in august. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1). (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -17991,10 +18880,32 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
+              },
+              "fractionCowsThisSeasonInCalf": {
+                "description": "Proportion of cows in this class during august that calved in the calving season that august is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if august is in no calving season. (number)",
+                "x-modules": [
+                  "3.2",
+                  "4.2"
+                ],
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/components/schemas/ProportionNumberInput"
+                  },
+                  "quality": {
+                    "default": {},
+                    "$ref": "#/components/schemas/QualityTable"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "additionalProperties": false,
+                "x-units": "number"
               },
               "fractionCowsPreviousSeasonInCalf": {
-                "description": "Proportion of cows in this class during august that calved in the \"previous season\", which means the previous may, april or march. (0-1)",
+                "description": "Proportion of cows in this class during august that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if august is in no season after calving. (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -18013,13 +18924,11 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
               }
             },
             "required": [
-              "head",
-              "fractionCowsThisSeasonInCalf",
-              "fractionCowsPreviousSeasonInCalf"
+              "head"
             ],
             "additionalProperties": false
           },
@@ -18177,8 +19086,8 @@
                 "additionalProperties": false,
                 "x-units": "kilograms crude protein per kilogram dry matter"
               },
-              "fractionCowsThisSeasonInCalf": {
-                "description": "Proportion of cows in this class during september that calved in that month of september, or the immediate prior 2 months (august or july). (0-1)",
+              "fractionCowsCalvingThisMonth": {
+                "description": "Proportion of cows in this class that calved in september. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1). (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -18197,10 +19106,32 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
+              },
+              "fractionCowsThisSeasonInCalf": {
+                "description": "Proportion of cows in this class during september that calved in the calving season that september is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if september is in no calving season. (number)",
+                "x-modules": [
+                  "3.2",
+                  "4.2"
+                ],
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/components/schemas/ProportionNumberInput"
+                  },
+                  "quality": {
+                    "default": {},
+                    "$ref": "#/components/schemas/QualityTable"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "additionalProperties": false,
+                "x-units": "number"
               },
               "fractionCowsPreviousSeasonInCalf": {
-                "description": "Proportion of cows in this class during september that calved in the \"previous season\", which means the previous june, may or april. (0-1)",
+                "description": "Proportion of cows in this class during september that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if september is in no season after calving. (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -18219,13 +19150,11 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
               }
             },
             "required": [
-              "head",
-              "fractionCowsThisSeasonInCalf",
-              "fractionCowsPreviousSeasonInCalf"
+              "head"
             ],
             "additionalProperties": false
           },
@@ -18383,8 +19312,8 @@
                 "additionalProperties": false,
                 "x-units": "kilograms crude protein per kilogram dry matter"
               },
-              "fractionCowsThisSeasonInCalf": {
-                "description": "Proportion of cows in this class during october that calved in that month of october, or the immediate prior 2 months (september or august). (0-1)",
+              "fractionCowsCalvingThisMonth": {
+                "description": "Proportion of cows in this class that calved in october. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1). (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -18403,10 +19332,32 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
+              },
+              "fractionCowsThisSeasonInCalf": {
+                "description": "Proportion of cows in this class during october that calved in the calving season that october is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if october is in no calving season. (number)",
+                "x-modules": [
+                  "3.2",
+                  "4.2"
+                ],
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/components/schemas/ProportionNumberInput"
+                  },
+                  "quality": {
+                    "default": {},
+                    "$ref": "#/components/schemas/QualityTable"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "additionalProperties": false,
+                "x-units": "number"
               },
               "fractionCowsPreviousSeasonInCalf": {
-                "description": "Proportion of cows in this class during october that calved in the \"previous season\", which means the previous july, june or may. (0-1)",
+                "description": "Proportion of cows in this class during october that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if october is in no season after calving. (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -18425,13 +19376,11 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
               }
             },
             "required": [
-              "head",
-              "fractionCowsThisSeasonInCalf",
-              "fractionCowsPreviousSeasonInCalf"
+              "head"
             ],
             "additionalProperties": false
           },
@@ -18589,8 +19538,8 @@
                 "additionalProperties": false,
                 "x-units": "kilograms crude protein per kilogram dry matter"
               },
-              "fractionCowsThisSeasonInCalf": {
-                "description": "Proportion of cows in this class during november that calved in that month of november, or the immediate prior 2 months (october or september). (0-1)",
+              "fractionCowsCalvingThisMonth": {
+                "description": "Proportion of cows in this class that calved in november. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1). (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -18609,10 +19558,32 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
+              },
+              "fractionCowsThisSeasonInCalf": {
+                "description": "Proportion of cows in this class during november that calved in the calving season that november is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if november is in no calving season. (number)",
+                "x-modules": [
+                  "3.2",
+                  "4.2"
+                ],
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/components/schemas/ProportionNumberInput"
+                  },
+                  "quality": {
+                    "default": {},
+                    "$ref": "#/components/schemas/QualityTable"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "additionalProperties": false,
+                "x-units": "number"
               },
               "fractionCowsPreviousSeasonInCalf": {
-                "description": "Proportion of cows in this class during november that calved in the \"previous season\", which means the previous august, july or june. (0-1)",
+                "description": "Proportion of cows in this class during november that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if november is in no season after calving. (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -18631,13 +19602,11 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
               }
             },
             "required": [
-              "head",
-              "fractionCowsThisSeasonInCalf",
-              "fractionCowsPreviousSeasonInCalf"
+              "head"
             ],
             "additionalProperties": false
           },
@@ -18795,8 +19764,8 @@
                 "additionalProperties": false,
                 "x-units": "kilograms crude protein per kilogram dry matter"
               },
-              "fractionCowsThisSeasonInCalf": {
-                "description": "Proportion of cows in this class during december that calved in that month of december, or the immediate prior 2 months (november or october). (0-1)",
+              "fractionCowsCalvingThisMonth": {
+                "description": "Proportion of cows in this class that calved in december. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1). (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -18815,10 +19784,32 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
+              },
+              "fractionCowsThisSeasonInCalf": {
+                "description": "Proportion of cows in this class during december that calved in the calving season that december is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if december is in no calving season. (number)",
+                "x-modules": [
+                  "3.2",
+                  "4.2"
+                ],
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/components/schemas/ProportionNumberInput"
+                  },
+                  "quality": {
+                    "default": {},
+                    "$ref": "#/components/schemas/QualityTable"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "additionalProperties": false,
+                "x-units": "number"
               },
               "fractionCowsPreviousSeasonInCalf": {
-                "description": "Proportion of cows in this class during december that calved in the \"previous season\", which means the previous september, august or july. (0-1)",
+                "description": "Proportion of cows in this class during december that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if december is in no season after calving. (number)",
                 "x-modules": [
                   "3.2",
                   "4.2"
@@ -18837,13 +19828,11 @@
                   "value"
                 ],
                 "additionalProperties": false,
-                "x-units": "0-1"
+                "x-units": "number"
               }
             },
             "required": [
-              "head",
-              "fractionCowsThisSeasonInCalf",
-              "fractionCowsPreviousSeasonInCalf"
+              "head"
             ],
             "additionalProperties": false
           }

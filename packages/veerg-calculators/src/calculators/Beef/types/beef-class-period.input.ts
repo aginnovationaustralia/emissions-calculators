@@ -1,9 +1,4 @@
-import {
-  getPreviousMonth,
-  getPreviousSeason,
-  Month,
-  Season,
-} from '@/constants/enums';
+import { getPreviousSeason, Month, Season } from '@/constants/enums';
 import { isProportion, numberInput, numberInputOptional } from '@/tools/inputs';
 import { ENTERIC_BEEF_3_2, MANURE_BEEF_4_2 } from '@/tools/modules';
 import {
@@ -139,34 +134,51 @@ export const createBeefClassSeasonalPeriodWithCalvesInputSchema = (
 export const createBeefClassMonthlyPeriodWithCalvesInputSchema = (
   thisMonth: Month,
 ) => {
-  const previousMonth1 = getPreviousMonth(thisMonth, 1);
-  const previousMonth2 = getPreviousMonth(thisMonth, 2);
-  const previousMonth3 = getPreviousMonth(thisMonth, 3);
-  const previousMonth4 = getPreviousMonth(thisMonth, 4);
-  const previousMonth5 = getPreviousMonth(thisMonth, 5);
-
+  // A monthly herd gives its calving one of two ways (checked across the whole herd in
+  // beef-classes-monthly.input.ts):
+  // - with `calvingSeasonStartMonths` on the classes: `fractionCowsCalvingThisMonth` for
+  //   every month, and the calculation derives LC for the fixed 3-month calving seasons
+  //   (Chapter 3, 3.2.2.1 LCjk=4,5), see shared/beef/calving.ts
+  // - without: `fractionCowsThisSeasonInCalf` and `fractionCowsPreviousSeasonInCalf`
+  //   for every month, the LC values for that month as already worked out by the caller
   return BeefClassPeriodInputSchema.extend({
-    fractionCowsThisSeasonInCalf: numberInput(
+    fractionCowsCalvingThisMonth: numberInputOptional(
       (val) => realNumber(val),
       {
-        name: 'Cows calving this season',
-        method: '1',
-        description: `Proportion of cows in this class during ${thisMonth} that calved in that month of ${thisMonth}, or the immediate prior 2 months (${previousMonth1} or ${previousMonth2}).`,
+        name: 'Cows calving this month',
+        method: '2',
+        description: `Proportion of cows in this class that calved in ${thisMonth}. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and LCjk=4,5 for each month of it is the sum of these proportions over the season (Chapter 3, 3.2.2.1).`,
         modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
       },
       isProportion,
     ),
-    fractionCowsPreviousSeasonInCalf: numberInput(
+    fractionCowsThisSeasonInCalf: numberInputOptional(
+      (val) => realNumber(val),
+      {
+        name: 'Cows calving this season',
+        method: '1',
+        description: `Proportion of cows in this class during ${thisMonth} that calved in the calving season that ${thisMonth} is part of (LCjk=4,5 for the season of calving). Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if ${thisMonth} is in no calving season.`,
+        modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
+      },
+      isProportion,
+    ),
+    fractionCowsPreviousSeasonInCalf: numberInputOptional(
       (val) => realNumber(val),
       {
         name: 'Cows calving previous season',
         method: '1',
-        description: `Proportion of cows in this class during ${thisMonth} that calved in the "previous season", which means the previous ${previousMonth3}, ${previousMonth4} or ${previousMonth5}.`,
+        description: `Proportion of cows in this class during ${thisMonth} that calved in the calving season before it, i.e. the season after calving is the 3 months after a calving season (LCjk=4,5 for the season after calving; Chapter 3, 3.2.2.1). Not used when calvingSeasonStartMonths is given. 0 if ${thisMonth} is in no season after calving.`,
         modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
       },
       isProportion,
     ),
   }).superRefine((val, ctx) => {
+    if (
+      val.fractionCowsThisSeasonInCalf === undefined ||
+      val.fractionCowsPreviousSeasonInCalf === undefined
+    ) {
+      return;
+    }
     const totalCalving = val.fractionCowsThisSeasonInCalf.plus(
       val.fractionCowsPreviousSeasonInCalf,
     ).unit.store.value;
@@ -177,6 +189,12 @@ export const createBeefClassMonthlyPeriodWithCalvesInputSchema = (
     }
   });
 };
+
+type BeefClassMonthlyPeriodWithCalvesInputSchemaType = ReturnType<
+  typeof createBeefClassMonthlyPeriodWithCalvesInputSchema
+>;
+export type BeefClassMonthlyPeriodWithCalvesInputTransformed =
+  z.output<BeefClassMonthlyPeriodWithCalvesInputSchemaType>;
 
 type BeefClassWithCalvesPeriodInputSchemaType = ReturnType<
   typeof createBeefClassSeasonalPeriodWithCalvesInputSchema
@@ -225,34 +243,47 @@ export const createBeefCalfClassSeasonalPeriodWithInputSchema = (
 export const createBeefCalfClassMonthlyPeriodInputSchema = (
   thisMonth: Month,
 ) => {
-  const previousMonth1 = getPreviousMonth(thisMonth, 1);
-  const previousMonth2 = getPreviousMonth(thisMonth, 2);
-  const previousMonth3 = getPreviousMonth(thisMonth, 3);
-  const previousMonth4 = getPreviousMonth(thisMonth, 4);
-  const previousMonth5 = getPreviousMonth(thisMonth, 5);
-
+  // As for cows (createBeefClassMonthlyPeriodWithCalvesInputSchema): either
+  // `fractionCalvesBornThisMonth` with the classes' `calvingSeasonStartMonths`, or the
+  // season fractions for the month as already worked out by the caller.
   return BeefClassPeriodInputSchema.extend({
-    fractionCalvesBornThisSeason: numberInput(
+    fractionCalvesBornThisMonth: numberInputOptional(
       (val) => realNumber(val),
       {
-        name: 'fractionCalvesBornThisSeason',
-        method: '1',
-        description: `Proportion of calves in this class during ${thisMonth} that were born in this month (${thisMonth}), or the immediate prior 2 months (${previousMonth1} or ${previousMonth2}).`,
+        name: 'Calves born this month',
+        method: '2',
+        description: `Proportion of calves in this class that were born in ${thisMonth}. Used with calvingSeasonStartMonths: the calving season is the 3 months from a start month, and the proportion born in the season for each month of it is the sum of these proportions over the season (4.2.1.3 (3), milk intake MCjk=1,3,6).`,
         modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
       },
       isProportion,
     ),
-    fractionCalvesBornPreviousSeason: numberInput(
+    fractionCalvesBornThisSeason: numberInputOptional(
+      (val) => realNumber(val),
+      {
+        name: 'fractionCalvesBornThisSeason',
+        method: '1',
+        description: `Proportion of calves in this class during ${thisMonth} that were born in the calving season that ${thisMonth} is part of. Not used when calvingSeasonStartMonths is given. Under Method 2 herd flow the calving season is the 3 months from the calving month (Chapter 3, 3.2.2.1); 0 if ${thisMonth} is in no calving season.`,
+        modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
+      },
+      isProportion,
+    ),
+    fractionCalvesBornPreviousSeason: numberInputOptional(
       (val) => realNumber(val),
       {
         name: 'fractionCalvesBornPreviousSeason',
         method: '1',
-        description: `Proportion of calves in this class during ${thisMonth} that were born in the "previous season", which means the previous ${previousMonth3}, ${previousMonth4} or ${previousMonth5}.`,
+        description: `Proportion of calves in this class during ${thisMonth} that were born in the calving season before it, i.e. ${thisMonth} is in the 3 months after a calving season. Not used when calvingSeasonStartMonths is given. 0 if ${thisMonth} is in no season after calving.`,
         modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
       },
       isProportion,
     ),
   }).superRefine((val, ctx) => {
+    if (
+      val.fractionCalvesBornThisSeason === undefined ||
+      val.fractionCalvesBornPreviousSeason === undefined
+    ) {
+      return;
+    }
     const totalCalving = val.fractionCalvesBornThisSeason.plus(
       val.fractionCalvesBornPreviousSeason,
     ).unit.store.value;
@@ -272,19 +303,42 @@ export type BeefCalfClassPeriodInput =
 export type BeefCalfClassPeriodInputTransformed =
   z.output<BeefCalfClassPeriodInputSchemaType>;
 
+type BeefCalfClassMonthlyPeriodInputSchemaType = ReturnType<
+  typeof createBeefCalfClassMonthlyPeriodInputSchema
+>;
+export type BeefCalfClassMonthlyPeriodInputTransformed =
+  z.output<BeefCalfClassMonthlyPeriodInputSchemaType>;
+
 export type BeefClassPeriodExtendedInputTransformed =
   | BeefClassPeriodInputTransformed
   | BeefClassPeriodWithCalvesInputTransformed
-  | BeefCalfClassPeriodInputTransformed;
+  | BeefClassMonthlyPeriodWithCalvesInputTransformed
+  | BeefCalfClassPeriodInputTransformed
+  | BeefCalfClassMonthlyPeriodInputTransformed;
 
+const hasDefined = (period: object, key: string) =>
+  key in period && (period as Record<string, unknown>)[key] !== undefined;
+
+/** A cow class period (k=4,5), seasonal or monthly, in either form of calving input. */
 export const isBeefClassPeriodInputWithCalves = (
   period: BeefClassPeriodExtendedInputTransformed,
-): period is BeefClassPeriodWithCalvesInputTransformed => {
-  return 'fractionCowsThisSeasonInCalf' in period;
+): period is
+  | BeefClassPeriodWithCalvesInputTransformed
+  | BeefClassMonthlyPeriodWithCalvesInputTransformed => {
+  return (
+    hasDefined(period, 'fractionCowsThisSeasonInCalf') ||
+    hasDefined(period, 'fractionCowsCalvingThisMonth')
+  );
 };
 
+/** A calf class period (k=1,3,6), seasonal or monthly, in either form of calving input. */
 export const isBeefCalfClassPeriodInput = (
   period: BeefClassPeriodExtendedInputTransformed,
-): period is BeefCalfClassPeriodInputTransformed => {
-  return 'fractionCalvesBornThisSeason' in period;
+): period is
+  | BeefCalfClassPeriodInputTransformed
+  | BeefCalfClassMonthlyPeriodInputTransformed => {
+  return (
+    hasDefined(period, 'fractionCalvesBornThisSeason') ||
+    hasDefined(period, 'fractionCalvesBornThisMonth')
+  );
 };

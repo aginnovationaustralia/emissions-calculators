@@ -67,7 +67,13 @@ export function calculateForAllClassPeriods<N extends NumberUnit>(
   },
 ): SummedContainer<N> {
   const { herd } = herdProps;
-  const { period: _period, ...classes } = herd.classes;
+  const {
+    period: _period,
+    calvingSeasonStartMonths: _calvingSeasonStartMonths,
+    ...classes
+  } = herd.classes as typeof herd.classes & {
+    calvingSeasonStartMonths?: unknown;
+  };
   const classInputs = entriesFromObject(classes);
 
   const classResults = classInputs
