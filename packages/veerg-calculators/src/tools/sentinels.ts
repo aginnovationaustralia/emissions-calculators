@@ -72,10 +72,11 @@ const zeroMassPerYear = <S extends Substance>(substance: S) =>
   });
 
 export const zeroMassCarbon = zeroMass('Carbon');
-export const zeroMassCleanWool = zeroMass('Clean Wool');
+export const zeroMassCrudeProtein = zeroMass('CrudeProtein');
 export const zeroMassDryMatter = zeroMass('DryMatter');
 export const zeroMassEggs = zeroMass('Eggs');
 export const zeroMassFish = zeroMass('Fish');
+export const zeroMassGreasyWool = zeroMass('Greasy Wool');
 export const zeroMassLime = zeroMass('Lime');
 export const zeroMassLiveweight = zeroMass('Liveweight');
 export const zeroMassMilk = zeroMass('Milk');

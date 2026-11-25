@@ -6,9 +6,9 @@ export const SheepIntermediateIntensitiesOutputSchema = z.object({
   liveweightIntensity: outputValue(
     'Sheep liveweight emissions intensity for this activity, in kg-CO2e/kg liveweight',
   ),
-  woolProducedKilograms: outputValue('Clean wool produced in kg'),
+  woolProducedKilograms: outputValue('Greasy wool produced in kg'),
   woolIntensity: outputValue(
-    'Sheep wool emissions intensity for this activity, in kg-CO2e/kg clean wool',
+    'Sheep wool emissions intensity for this activity, in kg-CO2e/kg greasy wool',
   ),
 });
 

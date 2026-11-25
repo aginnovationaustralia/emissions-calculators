@@ -38,7 +38,8 @@ import { exposeMassValue, extractMassAsNumber } from '@/tools/extract';
 import { generateIntensity } from '@/tools/intensity';
 import {
   daysInYear,
-  zeroMassCleanWool,
+  zeroMassCrudeProtein,
+  zeroMassGreasyWool,
   zeroMassLiveweight,
 } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
@@ -56,45 +57,88 @@ import { SheepScope3Output } from './types/scope3.output';
 import { SheepFlockInputTransformed } from './types/sheep-flock.input';
 
 /**
- * Clean wool produced by sheep in class *k* in period *j*. Greasy wool production is an
+ * Greasy wool produced by sheep in class *k* in period *j*. Greasy wool production is an
  * annual amount per head, so it is spread across the year and scaled by the head and
  * duration of each period, matching how 4.4.1.3 (8) treats wool production.
+ *
+ * Greasy wool is the unit used for all sheep wool intensities, as the Common
+ * Requirements Framework specifies kg greasy wool as the functional unit for wool.
  */
-function calculateCleanWoolProducedInPeriod(
+function calculateGreasyWoolProducedInPeriod(
   periodProps: SheepPeriodProps,
-): NumberContainer<Mass<'Clean Wool'>> {
+): NumberContainer<Mass<'Greasy Wool'>> {
   const { flock, className, periodInput } = periodProps;
   const classInput = flock.classes[className];
   if (!classInput) {
-    return zeroMassCleanWool;
+    return zeroMassGreasyWool;
   }
-  const {
-    greasyWoolProductionKilograms: greasyWoolProduction,
-    fractionOfYieldCleanWool: cleanWoolYieldProportion,
-  } = classInput;
-
-  const cleanWoolPerHeadPerDay = greasyWoolProduction
-    .multiply(cleanWoolYieldProportion)
-    .divide(daysInYear);
+  const greasyWoolPerHeadPerDay =
+    classInput.greasyWoolProductionKilograms.divide(daysInYear);
 
   return periodInput.head.multiply(
-    cleanWoolPerHeadPerDay.multiply(getDurationDays(periodProps)),
+    greasyWoolPerHeadPerDay.multiply(getDurationDays(periodProps)),
   );
 }
 
-function getCleanWoolProducedForFlock(
+/**
+ * Protein in the greasy wool produced by sheep in class *k* in period *j*.
+ *
+ * From [Wiedemann et al. (2015)](https://link.springer.com/content/pdf/10.1007/s11367-015-0849-z.pdf):
+ * > The protein content of greasy wool was estimated from the protein content of clean
+ * > wool on a dry matter basis (i.e. 100 %) adjusted for the dry matter content of
+ * > clean wool (84 %) and ratio of clean wool to greasy wool.
+ *
+ * So the protein content of greasy wool for class *k* is `Yk * 0.84`, where `Yk` is the
+ * clean wool yield of the greasy wool.
+ */
+function calculateGreasyWoolProteinInPeriod(
+  periodProps: SheepPeriodProps,
+): NumberContainer<Mass<'CrudeProtein'>> {
+  const { flock, className, context } = periodProps;
+  const classInput = flock.classes[className];
+  if (!classInput) {
+    return zeroMassCrudeProtein;
+  }
+  const proteinInCleanWool = selectConstant(
+    context.constants.SHEEP,
+    'WOOL_PROTEIN',
+  );
+
+  return calculateGreasyWoolProducedInPeriod(periodProps)
+    .multiply(classInput.fractionOfYieldCleanWool)
+    .multiply(proteinInCleanWool);
+}
+
+function getGreasyWoolProducedForFlock(
   flock: SheepFlockInputTransformed,
   context: ExecutionContext<ConstantsForSheepCalculator>,
   isFebruaryInLeapYear: SheepInputTransformed['isFebruaryInLeapYear'],
 ) {
   return calculateForAllClassPeriods(
     { flock, context },
-    calculateCleanWoolProducedInPeriod,
+    calculateGreasyWoolProducedInPeriod,
     {
-      classResultName: (className) => `cleanWoolProduced=${className}`,
-      flockResultName: 'cleanWoolProduced',
+      classResultName: (className) => `greasyWoolProduced=${className}`,
+      flockResultName: 'greasyWoolProduced',
       isFebruaryInLeapYear,
-      fallback: zeroMassCleanWool,
+      fallback: zeroMassGreasyWool,
+    },
+  );
+}
+
+function getGreasyWoolProteinForFlock(
+  flock: SheepFlockInputTransformed,
+  context: ExecutionContext<ConstantsForSheepCalculator>,
+  isFebruaryInLeapYear: SheepInputTransformed['isFebruaryInLeapYear'],
+) {
+  return calculateForAllClassPeriods(
+    { flock, context },
+    calculateGreasyWoolProteinInPeriod,
+    {
+      classResultName: (className) => `greasyWoolProtein=${className}`,
+      flockResultName: 'greasyWoolProtein',
+      isFebruaryInLeapYear,
+      fallback: zeroMassCrudeProtein,
     },
   );
 }
@@ -107,17 +151,13 @@ function getCleanWoolProducedForFlock(
  * > protein.
  *
  * From [Wiedemann et al. (2015)](https://link.springer.com/content/pdf/10.1007/s11367-015-0849-z.pdf):
- * > The protein content of greasy wool was estimated from the protein content of clean
- * > wool on a dry matter basis (i.e. 100 %) adjusted for the dry matter content of
- * > clean wool (84 %) and ratio of clean wool to greasy wool. The protein content of
- * > live weight was assumed to be 18 % based on Sanson et al.
+ * > The protein content of live weight was assumed to be 18 % based on Sanson et al.
  *
- * The NIR 2024 volume 1 also defines 84% as the value for dry matter content, which
- * equation 4.4.1.3 (6) also uses
+ * Wool protein is derived from greasy wool, see `calculateGreasyWoolProteinInPeriod`.
  */
 function getMeatWoolAllocation(
   liveweightProduced: Container<Mass<'Liveweight'>>,
-  cleanWoolProduced: Container<Mass<'Clean Wool'>>,
+  greasyWoolProtein: Container<Mass<'CrudeProtein'>>,
   constants: ConstantsForSheepCalculator,
 ) {
   const proteinInLiveweight = selectConstant(
@@ -128,10 +168,7 @@ function getMeatWoolAllocation(
     liveweightProduced.multiply(proteinInLiveweight),
   );
 
-  const proteinInCleanWool = selectConstant(constants.SHEEP, 'WOOL_PROTEIN');
-  const woolProteinKg = extractMassAsNumber(
-    cleanWoolProduced.multiply(proteinInCleanWool),
-  );
+  const woolProteinKg = extractMassAsNumber(greasyWoolProtein);
 
   const woolAllocation = divideBySafeFromZero(
     woolProteinKg,
@@ -150,7 +187,12 @@ export function getSingleIntensities(
 ): SheepIntermediateIntensitiesOutput {
   const { constants } = context;
   const liveweightProduced = flock.liveweightSoldKilograms;
-  const cleanWoolProduced = getCleanWoolProducedForFlock(
+  const greasyWoolProduced = getGreasyWoolProducedForFlock(
+    flock,
+    context,
+    input.isFebruaryInLeapYear,
+  );
+  const greasyWoolProtein = getGreasyWoolProteinForFlock(
     flock,
     context,
     input.isFebruaryInLeapYear,
@@ -158,7 +200,7 @@ export function getSingleIntensities(
 
   const { meatAllocation, woolAllocation } = getMeatWoolAllocation(
     liveweightProduced,
-    cleanWoolProduced,
+    greasyWoolProtein,
     constants,
   );
 
@@ -168,10 +210,10 @@ export function getSingleIntensities(
       netEmissions.multiply(num(meatAllocation)),
       liveweightProduced,
     ),
-    woolProducedKilograms: exposeMassValue(cleanWoolProduced),
+    woolProducedKilograms: exposeMassValue(greasyWoolProduced),
     woolIntensity: generateIntensity(
       netEmissions.multiply(num(woolAllocation)),
-      cleanWoolProduced,
+      greasyWoolProduced,
     ),
   };
 }
@@ -188,16 +230,22 @@ export function getTotalIntensities(
     flocks.map((flock) => flock.liveweightSoldKilograms),
     zeroMassLiveweight,
   );
-  const cleanWoolProduced = sum(
+  const greasyWoolProduced = sum(
     flocks.map((flock) =>
-      getCleanWoolProducedForFlock(flock, context, input.isFebruaryInLeapYear),
+      getGreasyWoolProducedForFlock(flock, context, input.isFebruaryInLeapYear),
     ),
-    zeroMassCleanWool,
+    zeroMassGreasyWool,
+  );
+  const greasyWoolProtein = sum(
+    flocks.map((flock) =>
+      getGreasyWoolProteinForFlock(flock, context, input.isFebruaryInLeapYear),
+    ),
+    zeroMassCrudeProtein,
   );
 
   const { meatAllocation, woolAllocation } = getMeatWoolAllocation(
     liveweightProduced,
-    cleanWoolProduced,
+    greasyWoolProtein,
     constants,
   );
   const meat = num(meatAllocation);
@@ -214,14 +262,14 @@ export function getTotalIntensities(
       netTotalEmissions.multiply(meat),
       liveweightProduced,
     ),
-    woolProducedKilograms: exposeMassValue(cleanWoolProduced),
+    woolProducedKilograms: exposeMassValue(greasyWoolProduced),
     woolIntensityExcludingLULUCF: generateIntensity(
       netEmissionsExcludingLulucf.multiply(wool),
-      cleanWoolProduced,
+      greasyWoolProduced,
     ),
     woolIntensityIncludingLULUCF: generateIntensity(
       netTotalEmissions.multiply(wool),
-      cleanWoolProduced,
+      greasyWoolProduced,
     ),
   };
 }
