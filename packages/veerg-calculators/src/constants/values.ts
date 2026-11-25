@@ -791,42 +791,86 @@ export const commonConstants: CommonConstants = {
       ),
     },
     SCOPE3_EF: {
-      NSW: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
+      METRO: {
+        NSW: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(
+            ngafTables['Table 6'].table['New South Wales and ACT'].METRO,
+          ),
         ),
-      ),
-      ACT: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
+        ACT: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(
+            ngafTables['Table 6'].table['New South Wales and ACT'].METRO,
+          ),
         ),
-      ),
-      VIC: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
-      ),
-      QLD: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table.Queensland.NON_METRO),
-      ),
-      SA: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table['South Australia'].NON_METRO),
-      ),
-      WA: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].NON_METRO),
-      ),
-      TAS: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
-      ), // Based on victoria
-      NT: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].NON_METRO),
-      ), // based on WA (TODO: Why not QLD?)
+        VIC: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(ngafTables['Table 6'].table.Victoria.METRO),
+        ),
+        QLD: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(ngafTables['Table 6'].table.Queensland.METRO),
+        ),
+        SA: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(ngafTables['Table 6'].table['South Australia'].METRO),
+        ),
+        WA: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].METRO),
+        ),
+        TAS: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(ngafTables['Table 6'].table.Victoria.METRO),
+        ), // Based on victoria
+        NT: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].METRO),
+        ), // based on WA (TODO: Why not QLD?)
+      },
+      NON_METRO: {
+        NSW: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(
+            ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
+          ),
+        ),
+        ACT: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(
+            ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
+          ),
+        ),
+        VIC: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
+        ),
+        QLD: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(ngafTables['Table 6'].table.Queensland.NON_METRO),
+        ),
+        SA: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(ngafTables['Table 6'].table['South Australia'].NON_METRO),
+        ),
+        WA: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(
+            ngafTables['Table 6'].table['Western Australia'].NON_METRO,
+          ),
+        ),
+        TAS: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
+        ), // Based on victoria
+        NT: massPerEnergy(
+          'CO2e',
+          perGjToPerJ(
+            ngafTables['Table 6'].table['Western Australia'].NON_METRO,
+          ),
+        ), // based on WA (TODO: Why not QLD?)
+      },
     },
   },
 

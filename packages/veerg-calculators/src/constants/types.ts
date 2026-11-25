@@ -224,7 +224,10 @@ export type CommonConstants = NamedConstants & {
 
   NATURAL_GAS_FACTORS: {
     SCOPE1_EFS: Record<FuelStationaryGaseousType, GaseousFuelFactor>;
-    SCOPE3_EF: Record<State, MassPerEnergy<'CO2e'>>;
+    SCOPE3_EF: Record<
+      'METRO' | 'NON_METRO',
+      Record<State, MassPerEnergy<'CO2e'>>
+    >;
   };
 
   FREIGHT_EMISSIONS: Record<

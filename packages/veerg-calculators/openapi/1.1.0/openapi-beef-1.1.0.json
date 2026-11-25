@@ -19508,6 +19508,15 @@
               "type": "object"
             },
             "description": "A list of fuels used in stationary applications"
+          },
+          "isInMetroRegion": {
+            "default": false,
+            "type": "boolean",
+            "description": "For more accurate scope 3 emission factors for natural gas consumption, is the location in a Metro region? Metro is defined as located on or east of the dividing range in NSW, including Canberra and Queanbeyan, Melbourne, Brisbane, Adelaide or Perth",
+            "x-modules": [
+              "8.2",
+              "15.10"
+            ]
           }
         },
         "required": [
@@ -20960,6 +20969,14 @@
               "type": "object"
             },
             "description": "A list of fuels used in stationary applications"
+          },
+          "isInMetroRegion": {
+            "default": false,
+            "type": "boolean",
+            "description": "For more accurate scope 3 emission factors for natural gas consumption, is the location in a Metro region? Metro is defined as located on or east of the dividing range in NSW, including Canberra and Queanbeyan, Melbourne, Brisbane, Adelaide or Perth",
+            "x-modules": [
+              "15.7"
+            ]
           }
         },
         "required": [

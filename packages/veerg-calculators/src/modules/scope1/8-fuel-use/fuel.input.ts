@@ -1,4 +1,5 @@
-import { locateFuel } from '@/tools/modules';
+import { booleanInput } from '@/tools/inputs';
+import { locateFuel, locateStationaryFuel } from '@/tools/modules';
 import { DESCRIPTIONS } from '@/types/descriptions.schema';
 import { object } from '@/types/schemas';
 import { z } from 'zod';
@@ -11,7 +12,7 @@ const fuelInputIds = {
   freight: 'FreightFuelInput',
 } as const;
 
-export const fuelInputSchema = locateFuel(({ location }) =>
+export const fuelInputSchema = locateStationaryFuel(({ modules, location }) =>
   object({
     transport: z
       .array(transportFuelInputSchema(location))
@@ -19,6 +20,11 @@ export const fuelInputSchema = locateFuel(({ location }) =>
     stationary: z
       .array(stationaryFuelInputSchema(location))
       .meta({ description: DESCRIPTIONS.FUEL_STATIONARY }),
+    isInMetroRegion: booleanInput(
+      'Is in metro?',
+      'For more accurate scope 3 emission factors for natural gas consumption, is the location in a Metro region? Metro is defined as located on or east of the dividing range in NSW, including Canberra and Queanbeyan, Melbourne, Brisbane, Adelaide or Perth',
+      modules,
+    ).prefault(false),
   }).meta({ id: fuelInputIds[location] }),
 );
 

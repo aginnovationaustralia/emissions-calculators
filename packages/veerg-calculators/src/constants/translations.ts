@@ -57,6 +57,15 @@ export const isInLeachingZoneToFracWET = (from: Container<boolean>) =>
  * Translating the region into a 1 or 0 factor keeps the region input in the
  * calculation graph, rather than discarding it in a branch.
  */
+/**
+ * Natural gas scope 3 EFs are split by metro and non-metro regions. Translating
+ * the boolean input keeps it in the calculation graph.
+ */
+export const isInMetroRegionToNaturalGasRegion = applyTranslation(
+  (isInMetroRegion: boolean): 'METRO' | 'NON_METRO' =>
+    isInMetroRegion ? 'METRO' : 'NON_METRO',
+);
+
 export const electricityRegionToJRPPFactor = (
   from: Container<ElectricityRegion>,
 ) =>
