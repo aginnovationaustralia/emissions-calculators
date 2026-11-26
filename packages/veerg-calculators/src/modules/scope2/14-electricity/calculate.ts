@@ -8,7 +8,10 @@ import {
   isMarketBasedElectricity,
 } from './electricity.input';
 import { LocationBasedElectricityInputsTransformed } from './location-based.input';
-import { MarketBasedElectricityInputsTransformed } from './market-based.input';
+import {
+  MarketBasedElectricityInputsTransformed,
+  suppliedJurisdictionalRenewablePowerPercentage,
+} from './market-based.input';
 
 const calculateMarketBasedElectricityScope2 = (
   electricity: MarketBasedElectricityInputsTransformed,
@@ -49,7 +52,7 @@ const calculateMarketBasedElectricityScope2 = (
     'JRPP factor',
   );
   const jrpp = (
-    electricity.jurisdictionalRenewablePowerPercentage ??
+    suppliedJurisdictionalRenewablePowerPercentage(electricity) ??
     selectConstant(
       constants.COMMON,
       'JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE',

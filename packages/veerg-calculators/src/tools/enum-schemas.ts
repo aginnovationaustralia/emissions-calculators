@@ -27,6 +27,7 @@ const namedEnums = {
   DairyPurchaseCategory: E.DairyPurchaseCategories,
   DairySystem: E.DairySystems,
   ElectricityRegion: E.ElectricityRegions,
+  ElectricityRegionExcludingACT: E.ElectricityRegionsExcludingACT,
   ExtendedRegion: E.ExtendedRegions,
   FreightType: E.FreightTypes,
   FuelStationaryGaseousType: E.FuelStationaryGaseousTypes,

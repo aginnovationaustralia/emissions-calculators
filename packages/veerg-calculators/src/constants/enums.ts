@@ -1252,7 +1252,8 @@ export const isState = (state: string): state is State => {
   return States.includes(state as State);
 };
 
-export const ElectricityRegions = [
+/** Electricity regions other than the ACT, where no jurisdictional renewable power percentage applies */
+export const ElectricityRegionsExcludingACT = [
   'NSW',
   'VIC',
   'QLD',
@@ -1261,8 +1262,14 @@ export const ElectricityRegions = [
   'WA_SW',
   'TAS',
   'NT',
-  'ACT',
   'National',
+] as const;
+export type ElectricityRegionExcludingACT =
+  (typeof ElectricityRegionsExcludingACT)[number];
+
+export const ElectricityRegions = [
+  'ACT',
+  ...ElectricityRegionsExcludingACT,
 ] as const;
 export type ElectricityRegion = (typeof ElectricityRegions)[number];
 
