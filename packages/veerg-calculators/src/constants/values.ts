@@ -2543,6 +2543,13 @@ const purchasedLivestockEfNSW: Record<
   sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 8.29),
 };
 
+const purchasedEfBeefManufacturing = 11.0;
+const purchasedEfBeefPrime = 14.5;
+const purchasedEfBeefWeaned = 15.5;
+
+const purchasedEfSheepMutton = 6.81;
+const purchasedEfSheepPrimeLamb = 7.15;
+
 export const livestockConstants: LivestockConstants = {
   name: 'LIVESTOCK',
   /**
@@ -2900,21 +2907,33 @@ export const livestockConstants: LivestockConstants = {
     // Dairy
     dairySpent: massPerMass('CO2e', 'Liveweight', 4.41),
     // Dairy and beef
-    beefManufacturing: massPerMass('CO2e', 'Liveweight', 11.0),
-    beefPrime: massPerMass('CO2e', 'Liveweight', 12.4),
-    beefWeaned: massPerMass('CO2e', 'Liveweight', 13.29),
+    beefManufacturing: massPerMass(
+      'CO2e',
+      'Liveweight',
+      purchasedEfBeefManufacturing,
+    ),
+    beefPrime: massPerMass('CO2e', 'Liveweight', purchasedEfBeefPrime),
+    beefWeaned: massPerMass('CO2e', 'Liveweight', purchasedEfBeefWeaned),
     beefAverage: massPerMass(
       'CO2e',
       'Liveweight',
-      new Decimal(11.0 + 12.4 + 13.29).div(3),
+      new Decimal(
+        purchasedEfBeefManufacturing +
+          purchasedEfBeefPrime +
+          purchasedEfBeefWeaned,
+      ).div(3),
     ),
     // Sheep
-    sheepMutton: massPerMass('CO2e', 'Liveweight', 6.03),
-    sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 6.08),
+    sheepMutton: massPerMass('CO2e', 'Liveweight', purchasedEfSheepMutton),
+    sheepPrimeLamb: massPerMass(
+      'CO2e',
+      'Liveweight',
+      purchasedEfSheepPrimeLamb,
+    ),
     sheepAverage: massPerMass(
       'CO2e',
       'Liveweight',
-      new Decimal(6.03 + 6.08).div(2),
+      new Decimal(purchasedEfSheepMutton + purchasedEfSheepPrimeLamb).div(2),
     ),
     // Pigs
     pigsDefault: massPerMass('CO2e', 'Liveweight', 3.38),
