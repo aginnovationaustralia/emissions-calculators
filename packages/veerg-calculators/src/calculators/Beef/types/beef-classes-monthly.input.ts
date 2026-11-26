@@ -120,6 +120,8 @@ export const BeefClassesMonthlyInputSchema = object({
       calvingSeasons: classes.calvingSeasonStartMonths.map((m) => m.unit),
       getSeasonOfCalving: getMonthsForSeasonOfCalving,
       getSeasonAfterCalving: getMonthsForSeasonAfterCalving,
+      howToCover: (month) =>
+        `Add a month to calvingSeasonStartMonths that starts a calving season covering ${month} (${month} or one of the 2 months before it)`,
     }),
   )
   .meta({

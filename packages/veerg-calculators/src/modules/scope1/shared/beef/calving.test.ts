@@ -5,9 +5,6 @@ import {
 import { BeefClassesSeasonalInputSchema } from '@/calculators/Beef/types/beef-classes-seasonal.input';
 import { HasIsFebruaryInLeapYearInputSchemaForBeef } from '@/calculators/types/has-is-february-in-leap-year.input';
 import { Month, Season } from '@/constants/enums';
-import { calculate32BeefPastureEntericMethaneForHerd } from '@/modules/scope1/3-enteric-methane/3.2-beef-pasture';
-import { calculate42BeefPastureManureCH4ForHerd } from '@/modules/scope1/4-manure-management/4.2-beef-pasture/4.2-beef-pasture-manure-methane';
-import { calculateManureManagementSoilDirectN2OForHerd } from '@/modules/scope1/4-manure-management/4.2-beef-pasture/4.2-beef-pasture-manure-n2o';
 import { daysInMonth, monthSeasonMap } from '@/modules/shared';
 import { testContext } from '@/test/Grains/context';
 import { root } from '@/tools/containers';
@@ -54,7 +51,6 @@ const herdDetails = {
  * A monthly (Method 2) herd with two calving seasons, starting in June and in September.
  *
  * Cows > 3 years (100 head), proportion of the class calving in each month:
- *   March 0.05 (outside any calving season, so not counted)
  *   June 0.10, July 0.05, August 0.05            -> June season total 0.20
  *   September 0.30, October 0.10                 -> September season total 0.40
  *
@@ -68,7 +64,7 @@ const monthlyClasses: BeefClassesMonthlyInput = {
   cowsGt3Years: {
     january: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
     february: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
-    march: { head: { value: 100 }, fractionCowsCalving: { value: 0.05 } },
+    march: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
     april: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
     may: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
     june: { head: { value: 100 }, fractionCowsCalving: { value: 0.1 } },
@@ -104,10 +100,10 @@ const monthlyHerd: BeefManureAndEntericHerdInput = {
  * A seasonal (Method 1) herd that calves in winter and spring.
  *
  * Cows > 3 years (100 head), proportion of the class calving in each season:
- *   spring 0.6, summer 0.1 (summer is not a calving season, so not counted), winter 0.2
+ *   spring 0.6, winter 0.2
  *
  * Bull calves < 1 year, head and calves born in each season:
- *   spring 50 head, 40 born; summer 80 head, 5 born (not counted); autumn 80 head;
+ *   spring 50 head, 40 born; summer 80 head; autumn 80 head;
  *   winter 40 head, 10 born
  */
 const seasonalHerd: BeefManureAndEntericHerdInput = {
@@ -117,13 +113,13 @@ const seasonalHerd: BeefManureAndEntericHerdInput = {
     calvingSeasons: ['winter', 'spring'],
     cowsGt3Years: {
       spring: { head: { value: 100 }, fractionCowsCalving: { value: 0.6 } },
-      summer: { head: { value: 100 }, fractionCowsCalving: { value: 0.1 } },
+      summer: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
       autumn: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
       winter: { head: { value: 100 }, fractionCowsCalving: { value: 0.2 } },
     },
     bullsLt1: {
       spring: { head: { value: 50 }, calvesBorn: { value: 40 } },
-      summer: { head: { value: 80 }, calvesBorn: { value: 5 } },
+      summer: { head: { value: 80 }, calvesBorn: { value: 0 } },
       autumn: { head: { value: 80 }, calvesBorn: { value: 0 } },
       winter: { head: { value: 40 }, calvesBorn: { value: 10 } },
     },
@@ -169,7 +165,7 @@ describe('Beef monthly (Method 2) calving seasons from calvingSeasonStartMonths'
       // month, LC (season of calving), LC (season after calving)
       ['january', 0, 0.4],
       ['february', 0, 0.4],
-      ['march', 0, 0], // 0.05 calved in March, outside any calving season
+      ['march', 0, 0],
       ['april', 0, 0],
       ['may', 0, 0],
       ['june', 0.2, 0],
@@ -241,74 +237,43 @@ describe('Beef monthly (Method 2) calving seasons from calvingSeasonStartMonths'
     });
   });
 
-  test('calving in a month outside every calving season does not change the emissions', () => {
-    // The same herd, with the 0.05 calving in March taken out
-    const withoutMarchCalving: BeefManureAndEntericHerdInput = {
-      ...monthlyHerd,
+  test('an empty list of start months is a herd that does not calve: every share is 0', () => {
+    const herd: BeefManureAndEntericHerdInput = {
+      ...herdDetails,
       classes: {
-        ...monthlyClasses,
+        period: 'monthly',
+        calvingSeasonStartMonths: [],
         cowsGt3Years: {
           january: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
           february: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
           march: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
           april: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
           may: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
-          june: { head: { value: 100 }, fractionCowsCalving: { value: 0.1 } },
-          july: { head: { value: 100 }, fractionCowsCalving: { value: 0.05 } },
-          august: {
-            head: { value: 100 },
-            fractionCowsCalving: { value: 0.05 },
-          },
+          june: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
+          july: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
+          august: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
           september: {
             head: { value: 100 },
-            fractionCowsCalving: { value: 0.3 },
+            fractionCowsCalving: { value: 0 },
           },
-          october: {
-            head: { value: 100 },
-            fractionCowsCalving: { value: 0.1 },
-          },
+          october: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
           november: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
           december: { head: { value: 100 }, fractionCowsCalving: { value: 0 } },
         },
       },
     };
-    const withMarch = parseHerd(monthlyHerd);
-    const withoutMarch = parseHerd(withoutMarchCalving);
-
-    const enteric = calculate32BeefPastureEntericMethaneForHerd;
-    const manureCH4 = calculate42BeefPastureManureCH4ForHerd;
-    const directN2O = calculateManureManagementSoilDirectN2OForHerd;
-
-    expect(value(enteric(withMarch, context))).toBeGreaterThan(0);
-    expect(value(enteric(withMarch, context))).toBeCloseTo(
-      value(enteric(withoutMarch, context)),
-      12,
-    );
-    expect(value(manureCH4(withMarch, context))).toBeCloseTo(
-      value(manureCH4(withoutMarch, context)),
-      12,
-    );
-    expect(value(directN2O(withMarch, context))).toBeCloseTo(
-      value(directN2O(withoutMarch, context)),
-      12,
-    );
-  });
-
-  test('an empty list of start months is a herd that does not calve: every share is 0', () => {
-    const herd: BeefManureAndEntericHerdInput = {
-      ...monthlyHerd,
-      classes: { ...monthlyClasses, calvingSeasonStartMonths: [] },
-    };
     const cows = getCowCalvingShares(
       periodProps(herd, 'cowsGt3Years', 'september'),
     );
-    const calves = getCalfBirthShares(
-      periodProps(herd, 'bullsLt1', 'september'),
-    );
     expect(value(cows!.calvingSeason)).toBe(0);
     expect(value(cows!.seasonAfterCalving)).toBe(0);
-    expect(value(calves!.calvingSeason)).toBe(0);
-    expect(value(calves!.seasonAfterCalving)).toBe(0);
+    expect(
+      value(
+        calculateAdditionalIntakeForMilkProduction(
+          periodProps(herd, 'cowsGt3Years', 'september'),
+        ),
+      ),
+    ).toBe(1);
   });
 });
 
@@ -317,7 +282,7 @@ describe('Beef seasonal (Method 1) calving seasons from calvingSeasons', () => {
     test.each([
       // season, LC (season of calving), LC (season after calving), MA
       ['spring', 0.6, 0.2, 1.2], // 0.6 x 1.3 + 0.2 x 1.1 + 0.2
-      ['summer', 0, 0.6, 1.06], // summer's 0.1 is not counted; 0.6 x 1.1 + 0.4
+      ['summer', 0, 0.6, 1.06], // 0.6 x 1.1 + 0.4
       ['autumn', 0, 0, 1], // summer is not a calving season
       ['winter', 0.2, 0, 1.06], // 0.2 x 1.3 + 0.8
     ] as const)(
@@ -341,7 +306,7 @@ describe('Beef seasonal (Method 1) calving seasons from calvingSeasons', () => {
     test.each([
       // season, born in the season of calving / head, born in the season before / head
       ['spring', 0.8, 0.2], // 40 / 50, 10 / 50 (winter)
-      ['summer', 0, 0.5], // summer's 5 are not counted; 40 / 80 (spring)
+      ['summer', 0, 0.5], // 40 / 80 (spring)
       ['autumn', 0, 0],
       ['winter', 0.25, 0], // 10 / 40
     ] as const)('%s', (season, calvingSeason, seasonAfterCalving) => {
@@ -453,6 +418,40 @@ describe('Beef calving input validation', () => {
     };
     const result = BeefClassesSeasonalInputSchema.safeParse(classes);
     expect(result.success).toBe(false);
+  });
+
+  test('monthly: cows calving in a month outside every calving season are rejected', () => {
+    // The calving seasons run June to August and September to November: March is in neither
+    const classes = editableClasses(monthlyHerd);
+    classes.cowsGt3Years.march.fractionCowsCalving = { value: 0.05 };
+    expect(monthlyIssues(classes)).toEqual([
+      'cowsGt3Years.march.fractionCowsCalving: 0.05 of the cows calve in march, which is in no calving season. Add a month to calvingSeasonStartMonths that starts a calving season covering march (march or one of the 2 months before it), or set fractionCowsCalving to 0.',
+    ]);
+  });
+
+  test('monthly: calves born in a month outside every calving season are rejected', () => {
+    const classes = editableClasses(monthlyHerd);
+    classes.bullsLt1.december.calvesBorn = { value: 4 };
+    expect(monthlyIssues(classes)).toEqual([
+      'bullsLt1.december.calvesBorn: 4 calves are born in december, which is in no calving season. Add a month to calvingSeasonStartMonths that starts a calving season covering december (december or one of the 2 months before it), or set calvesBorn to 0.',
+    ]);
+  });
+
+  test('monthly: a herd with no calving seasons cannot have calving', () => {
+    const classes = editableClasses(monthlyHerd);
+    classes.calvingSeasonStartMonths = [];
+    // every month with calving or calves born in the example herd
+    expect(monthlyIssues(classes)).toHaveLength(5 + 6);
+  });
+
+  test('seasonal: calving in a season that is not a calving season is rejected', () => {
+    const classes = editableClasses(seasonalHerd);
+    classes.cowsGt3Years.summer.fractionCowsCalving = { value: 0.1 };
+    classes.bullsLt1.summer.calvesBorn = { value: 5 };
+    expect(seasonalIssues(classes)).toEqual([
+      'cowsGt3Years.summer.fractionCowsCalving: 0.1 of the cows calve in summer, which is in no calving season. Add summer to calvingSeasons, or set fractionCowsCalving to 0.',
+      'bullsLt1.summer.calvesBorn: 5 calves are born in summer, which is in no calving season. Add summer to calvingSeasons, or set calvesBorn to 0.',
+    ]);
   });
 
   test('a start month listed twice is rejected', () => {

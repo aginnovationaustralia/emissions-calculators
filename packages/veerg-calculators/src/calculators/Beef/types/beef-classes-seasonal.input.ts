@@ -119,6 +119,7 @@ export const BeefClassesSeasonalInputSchema = object({
       calvingSeasons: classes.calvingSeasons.map((s) => s.unit),
       getSeasonOfCalving: getSeasonsForSeasonOfCalving,
       getSeasonAfterCalving: getSeasonsForSeasonAfterCalving,
+      howToCover: (season) => `Add ${season} to calvingSeasons`,
     }),
   )
   .meta({

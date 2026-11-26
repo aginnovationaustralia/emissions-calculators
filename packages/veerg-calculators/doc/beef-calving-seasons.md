@@ -63,8 +63,8 @@ September 0.30, October 0.10):
 | November | 0.40 | 0.20 | 0.40 | 0.20 |
 | December | 0.10 | 0.40 | 0 | 0.40 |
 
-The March calving is outside both calving seasons: the fixed reading doesn't count it, as the guidance says and as
-GEETA does.
+The March calving is outside both calving seasons. The fixed reading has no place for it: GEETA leaves it out, and aia
+now rejects it (see Validation).
 
 ## The inputs
 
@@ -93,7 +93,7 @@ On each period (season or month) of a class:
   doesn't cover overlaps). Its share for the season of calving is the calving summed over that season's 3 months. Its
   share for the season after calving is the same sum for the month 3 months earlier. The year wraps: a season starting
   in November covers November, December and January.
-- Calving recorded in a period outside every calving season is not counted.
+- Calving recorded in a period outside every calving season would not be counted, so the input check rejects it.
 
 `src/modules/scope1/shared/beef/calving.ts` applies them:
 
@@ -118,6 +118,18 @@ the period inputs below them.
 - no calving season or start month is listed twice
 - for every period of every cow class, the share for the season of calving and the share for the season after calving
   add up to no more than 1
+- no cow class calves (`fractionCowsCalving` > 0), and no calf class has calves born (`calvesBorn` > 0), in a period that
+  is in no calving season. The message names the class and period and says how to fix it: add the season to
+  `calvingSeasons`, or a start month covering the month to `calvingSeasonStartMonths` (the month or one of the 2 before
+  it), or set the value to 0
+
+Rejecting calving outside the calving seasons follows the guidance. Its calving seasons come from when the herd calves:
+LC<sub>jk=4,5</sub> is the proportion in calf "in the season of calving" (3.2.1.1 (4)), and under Method 2 "the calving
+season should be considered 3 months from the calving month" (3.2.2.1). A period in which cows calve is a season of
+calving, so calving in a period the herd doesn't list as one contradicts the herd's calving seasons. "LC = 0 for all
+other seasons" covers periods without calving. The check changes no result for consistent input. GEETA is more lenient:
+it leaves such calving out. Its NIRAlignment_09 scenario ("no calving") keeps calf calving rates with no calving season,
+which aia rejects (the geeta-comparison adapter leaves them out, as GEETA does).
 
 The calves' shares are not limited to 1. Under Method 2 the first month of a season divides the whole season's births by
 that month's head, as GEETA does, which can be more than 1 when most calves are born later in the season.
@@ -132,9 +144,9 @@ The herd's `classes` field is a union (empty, seasonal or monthly), so a herd th
   seasonal herds, no seasons.
 - `src/modules/scope1/shared/beef/calving.test.ts`: a monthly herd and a seasonal herd written out period by period,
   with LC, MA and the calves' shares for every period worked out by hand (for example September:
-  0.4 × 1.3 + 0.2 × 1.1 + 0.4 = 1.14; December calves: 30 born in the September season / 50 head = 0.6), calving
-  outside the calving seasons not changing the emissions, a herd with no calving seasons, a calf class with no animals,
-  and each validation rule.
+  0.4 × 1.3 + 0.2 × 1.1 + 0.4 = 1.14; December calves: 30 born in the September season / 50 head = 0.6), a herd with
+  no calving seasons, a calf class with no animals, and each validation rule, including calving and calves born outside
+  the calving seasons.
 - The spreadsheet tests (`src/modules/test/3.2-beef-enteric/3.2-beef-enteric.xlsx`,
   `src/modules/test/4.2-beef-pasture/4.2-beef.xlsx`) take the same inputs:
   - each scenario has a calving table in columns C:D below its first row: "Calving season?" Yes/No per season, or
@@ -145,12 +157,10 @@ The herd's `classes` field is a union (empty, seasonal or monthly), so a herd th
     rules above, so the sheet works out the shares independently of the code
   - the old per-period shares were converted: a period is a calving season when any class calved in it; each class's
     calving is its old "this season" share; calves born are the old "this season" share × head. The monthly scenarios
-    start their calving seasons in September and December, and their calves born were chosen by hand, as their rolling
-    shares don't convert to births.
+    start their calving seasons in September and December; calving in other months (0.05 of cows > 3 years in August)
+    was set to 0, and their calves born were chosen by hand, as their rolling shares don't convert to births.
 
 ## Open points
 
 - **Sheep.** Lambing (findings sections 18 and 24) has the same rolling against fixed season pattern. The same inputs
   (when the flock lambs, plus lambs born per period) would fit the sheep inputs.
-- **Calving outside the calving seasons** is silently not counted, as in GEETA. A warning could help users who forget a
-  season.
