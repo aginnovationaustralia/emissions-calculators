@@ -158,6 +158,31 @@ function getEmissionFactor(
   }
 }
 
+/**
+ * Goats are the only "Other" type whose method 1 liveweight depends on
+ * productivity, so they have their own input variant with `productivitySystem`.
+ */
+function getLiveweightForOtherLivestock(
+  purchase: Exclude<
+    Extract<PurchasedLivestockInputTransformed, { type: 'Other' }>,
+    { method2LiveweightKilograms: unknown }
+  >,
+  constants: ConstantsForPurchasedLivestock,
+): Container<Liveweight> {
+  if ('productivitySystem' in purchase) {
+    return selectConstant(
+      constants.LIVESTOCK,
+      'AVERAGE_LIVEWEIGHT_GOATS',
+      purchase.productivitySystem,
+    );
+  }
+  return selectConstant(
+    constants.LIVESTOCK,
+    'OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS',
+    purchase.livestockType,
+  );
+}
+
 /** See `getEmissionFactor` - same "check the method 2 guard once, then switch" shape. */
 function getLiveweight(
   purchase: PurchasedLivestockInputTransformed,
@@ -197,17 +222,7 @@ function getLiveweight(
 
     case 'Other':
       return captureMethod1Or2Value(
-        'productivitySystem' in purchase
-          ? selectConstant(
-              constants.LIVESTOCK,
-              'AVERAGE_LIVEWEIGHT_GOATS',
-              purchase.productivitySystem,
-            )
-          : selectConstant(
-              constants.LIVESTOCK,
-              'OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS',
-              purchase.livestockType,
-            ),
+        getLiveweightForOtherLivestock(purchase, constants),
         undefined,
       );
 

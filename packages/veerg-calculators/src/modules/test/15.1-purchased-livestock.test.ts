@@ -293,6 +293,33 @@ describe('15.1 Purchased Livestock, goats', () => {
     ).toBeCloseTo(0.949424, 8);
   });
 
+  it('accepts goats with a method 2 liveweight and no productivity system', () => {
+    // 10 head * 40 kg * 3.3908 (56% of sheepAverage EF) / 1000
+    expect(
+      calculate({
+        type: 'Other',
+        headPurchased: nv(10),
+        livestockType: 'Goats',
+        method2LiveweightKilograms: nv(40),
+      }),
+    ).toBeCloseTo(1.35632, 8);
+  });
+
+  it('rejects a productivity system for livestock other than goats', () => {
+    expect(() =>
+      HasPurchasedLivestockInputSchema.parse({
+        purchasedLivestock: [
+          {
+            type: 'Other',
+            headPurchased: nv(10),
+            livestockType: 'Deer',
+            productivitySystem: 'High',
+          },
+        ],
+      }),
+    ).toThrow();
+  });
+
   it('rejects goats without a productivity system', () => {
     expect(() =>
       HasPurchasedLivestockInputSchema.parse({

@@ -1,5 +1,6 @@
 import {
   GoatProductivitySystems,
+  OtherLivestockTypes,
   OtherLivestockTypesWithoutGoats,
 } from '@/constants/enums';
 import { enumInput, literalInput } from '@/tools/inputs';
@@ -12,101 +13,89 @@ import {
   PurchasedLivestockLiveweightMethod2Schema,
 } from './base.input';
 
-const otherBaseFields = {
-  type: z.literal('Other'),
-  ...HeadPurchasedSchema.shape,
+const livestockTypeOptions: Parameters<typeof enumInput>[1] = {
+  name: 'Livestock type',
+  description: 'The specific type of "Other" livestock',
+  modules: [PURCH_LIVESTOCK_15_1],
 };
+
+const OtherPurchasedLivestockBaseSchema = HeadPurchasedSchema.safeExtend({
+  type: z.literal('Other'),
+});
 
 // `livestockType` drives both method 1 emission factor (a scaling factor off
-// the beef/sheep average) and method 1 liveweight (an average per type), so
-// it's shared between the two method 1 field groups below. Goats additionally
-// need `productivitySystem`, which selects their method 1 liveweight, so goats
-// and every other type are separate field groups (and so separate variants
-// below), each a plain shape that can be spread into a complete schema.
-const otherLivestockTypeFields = {
-  livestockType: enumInput(OtherLivestockTypesWithoutGoats, {
-    name: 'Livestock type',
-    description: 'The specific type of "Other" livestock',
-    modules: [PURCH_LIVESTOCK_15_1],
-  }),
-};
+// the beef/sheep average) and method 1 liveweight (an average per type).
+// When only the emission factor is method 1, any type is accepted.
+const AnyLivestockTypeSchema = object({
+  livestockType: enumInput(OtherLivestockTypes, livestockTypeOptions),
+});
 
-const goatLivestockTypeFields = {
-  livestockType: literalInput('Goats', {
-    name: 'Livestock type',
-    description: 'The specific type of "Other" livestock',
-    modules: [PURCH_LIVESTOCK_15_1],
-  }),
+// Method 1 liveweight is an average per type, except for goats, where it
+// depends on `productivitySystem`. Goats and every other type are separate
+// schemas, discriminated on `livestockType`.
+const NonGoatLivestockTypeSchema = object({
+  livestockType: enumInput(
+    OtherLivestockTypesWithoutGoats,
+    livestockTypeOptions,
+  ),
+});
+
+const GoatLivestockTypeSchema = object({
+  livestockType: literalInput('Goats', livestockTypeOptions),
   productivitySystem: enumInput(GoatProductivitySystems, {
     name: 'Goat productivity',
     description: 'The productivity system of the goats',
     modules: [PURCH_LIVESTOCK_15_1],
   }),
-};
+});
 
-// Emission factor method 2 (`method2EmissionFactor`, supplied directly) and
-// liveweight method 2 (`method2LiveweightKilograms`, supplied directly). Method 1
-// of either is the livestock type field group above.
-const otherEmissionFactorMethod2Fields =
-  PurchasedLivestockEmissionFactorMethod2Schema.shape;
-
-const otherLiveweightMethod2Fields =
-  PurchasedLivestockLiveweightMethod2Schema.shape;
+/**
+ * Method 1 liveweight on top of `base`: a goat variant requiring
+ * `productivitySystem`, and a variant for every other type without it.
+ */
+const withLiveweightMethod1 = <
+  T extends typeof OtherPurchasedLivestockBaseSchema,
+>(
+  base: T,
+) =>
+  z.discriminatedUnion('livestockType', [
+    base
+      .safeExtend(NonGoatLivestockTypeSchema.shape)
+      .meta({ title: 'Other livestock' }),
+    base.safeExtend(GoatLivestockTypeSchema.shape).meta({ title: 'Goats' }),
+  ]);
 
 // Emission factor method and liveweight method are each independently
 // method 1 xor method 2 - any combination of the two is valid. See
-// `purchased-beef.input.ts` for why this is spelled out as complete schemas
-// rather than composed from smaller pieces with `.and()`. Every combination
-// that uses method 1 for either needs a livestock type, so has a goat and a
-// non-goat variant; method 2 for both needs neither.
-const OtherPurchasedLivestockMethod1EFMethod1LWSchema = object({
-  ...otherBaseFields,
-  ...otherLivestockTypeFields,
-}).meta({ title: 'Method 1 emission factor, method 1 liveweight' });
+// `purchased-beef.input.ts` for why these are complete schemas rather than
+// composed from partial schemas with `.and()`.
+const OtherPurchasedLivestockMethod1EFMethod1LWSchema = withLiveweightMethod1(
+  OtherPurchasedLivestockBaseSchema,
+).meta({ title: 'Method 1 emission factor, method 1 liveweight' });
 
-const GoatPurchasedLivestockMethod1EFMethod1LWSchema = object({
-  ...otherBaseFields,
-  ...goatLivestockTypeFields,
-}).meta({ title: 'Goats, method 1 emission factor, method 1 liveweight' });
+const OtherPurchasedLivestockMethod1EFMethod2LWSchema =
+  OtherPurchasedLivestockBaseSchema.safeExtend({
+    ...AnyLivestockTypeSchema.shape,
+    ...PurchasedLivestockLiveweightMethod2Schema.shape,
+  }).meta({ title: 'Method 1 emission factor, method 2 liveweight' });
 
-const OtherPurchasedLivestockMethod1EFMethod2LWSchema = object({
-  ...otherBaseFields,
-  ...otherLivestockTypeFields,
-  ...otherLiveweightMethod2Fields,
-}).meta({ title: 'Method 1 emission factor, method 2 liveweight' });
+const OtherPurchasedLivestockMethod2EFMethod1LWSchema = withLiveweightMethod1(
+  OtherPurchasedLivestockBaseSchema.safeExtend(
+    PurchasedLivestockEmissionFactorMethod2Schema.shape,
+  ),
+).meta({ title: 'Method 2 emission factor, method 1 liveweight' });
 
-const GoatPurchasedLivestockMethod1EFMethod2LWSchema = object({
-  ...otherBaseFields,
-  ...goatLivestockTypeFields,
-  ...otherLiveweightMethod2Fields,
-}).meta({ title: 'Goats, method 1 emission factor, method 2 liveweight' });
-
-const OtherPurchasedLivestockMethod2EFMethod1LWSchema = object({
-  ...otherBaseFields,
-  ...otherEmissionFactorMethod2Fields,
-  ...otherLivestockTypeFields,
-}).meta({ title: 'Method 2 emission factor, method 1 liveweight' });
-
-const GoatPurchasedLivestockMethod2EFMethod1LWSchema = object({
-  ...otherBaseFields,
-  ...otherEmissionFactorMethod2Fields,
-  ...goatLivestockTypeFields,
-}).meta({ title: 'Goats, method 2 emission factor, method 1 liveweight' });
-
-const OtherPurchasedLivestockMethod2EFMethod2LWSchema = object({
-  ...otherBaseFields,
-  ...otherEmissionFactorMethod2Fields,
-  ...otherLiveweightMethod2Fields,
-}).meta({ title: 'Method 2 emission factor, method 2 liveweight' });
+const OtherPurchasedLivestockMethod2EFMethod2LWSchema =
+  OtherPurchasedLivestockBaseSchema.safeExtend({
+    ...PurchasedLivestockEmissionFactorMethod2Schema.shape,
+    ...PurchasedLivestockLiveweightMethod2Schema.shape,
+  }).meta({ title: 'Method 2 emission factor, method 2 liveweight' });
 
 export const OtherPurchasedLivestockSchema = z
   .xor([
     OtherPurchasedLivestockMethod1EFMethod1LWSchema,
-    GoatPurchasedLivestockMethod1EFMethod1LWSchema,
     OtherPurchasedLivestockMethod1EFMethod2LWSchema,
-    GoatPurchasedLivestockMethod1EFMethod2LWSchema,
     OtherPurchasedLivestockMethod2EFMethod1LWSchema,
-    GoatPurchasedLivestockMethod2EFMethod1LWSchema,
     OtherPurchasedLivestockMethod2EFMethod2LWSchema,
   ])
   .meta({ title: 'Other' });
