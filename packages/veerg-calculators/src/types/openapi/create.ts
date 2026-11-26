@@ -52,13 +52,16 @@ import { WildCatchFisheriesOutputSchema } from '@/calculators/WildCatchFisheries
 import { FullCAMInputsSchema } from '@/fullcam/input';
 import { LULUCFInputSchema } from '@/modules';
 
-import { OpenAPIObject } from 'openapi3-ts/oas31';
 import * as z from 'zod';
 import {
   createDocument,
   createSchema,
+  type oas32,
   ZodOpenApiPathsObject,
 } from 'zod-openapi';
+
+// zod-openapi v6 bundles its own OpenAPI types. We generate OpenAPI 3.1 documents.
+type OpenAPIObject = oas32.OpenAPIObject;
 
 type Endpoint = {
   inputSchema: z.ZodType;
@@ -228,7 +231,7 @@ const createOpenApiDocument = (
   const outputComponents: SchemaComponents = {};
   const document = createDocument(
     {
-      openapi: '3.1.0',
+      openapi: '3.2.0',
       info: {
         title,
         version,
