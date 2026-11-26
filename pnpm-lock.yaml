@@ -259,8 +259,8 @@ importers:
         specifier: ^0.8.3
         version: 0.8.3
       mixpanel:
-        specifier: ^0.24.0
-        version: 0.24.0
+        specifier: ^0.25.0
+        version: 0.25.0
       mixpanel-browser:
         specifier: ^2.86.0
         version: 2.86.0
@@ -3428,8 +3428,8 @@ packages:
   mixpanel-browser@2.86.0:
     resolution: {integrity: sha512-zv6xeLIr5celiLoQJNkZA+nl+Bq7k5+Ofumi7DxNAiJ3ZvFliFxcJm3asIGqnDt+8DsTj8NtLeGjB6JEpldT/A==}
 
-  mixpanel@0.24.0:
-    resolution: {integrity: sha512-R3auZjj9ldYfAH35A+7GMPJaUWcQ4eIjPDprv023fDH1M7OZuA6RZRGE2vj0MRyOWueH/PkjuHdVmDfvtVniLA==}
+  mixpanel@0.25.0:
+    resolution: {integrity: sha512-3sZaoGLwiSNc7S8/HjFivbjjR35dHLj1iPAJYDndVbo9rfqKMPhYaiJqi4sNQLLcTC3dCee5JCYPfgj1WrJJZA==}
     engines: {node: '>=10.0'}
 
   mri@1.2.0:
@@ -7682,7 +7682,7 @@ snapshots:
       '@types/json-logic-js': 2.0.5
       json-logic-js: 2.0.5
 
-  mixpanel@0.24.0:
+  mixpanel@0.25.0:
     dependencies:
       https-proxy-agent: 7.0.6
       json-logic-js: 2.0.5
