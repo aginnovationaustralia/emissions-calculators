@@ -384,7 +384,7 @@
     "@aginnovationaustralia/calculator-units": "workspace:^",
     "decimal.js-light": "^2.5.1",
     "fflate": "^0.8.3",
-    "mixpanel": "^0.24.0",
+    "mixpanel": "^0.25.0",
     "mixpanel-browser": "^2.86.0",
     "openapi3-ts": "^4.6.2",
     "reflect-metadata": "^0.2.2",
