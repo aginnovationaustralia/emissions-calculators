@@ -71,16 +71,19 @@ export const calculateElectricityScope3MarketBased = (
    * equation in NGAF 2024). However, we have already converted these quantities to kWh,
    * so we can omit this conversion here.
    */
-  const RPP = selectConstant(
-    constants.COMMON,
-    'RENEWABLE_POWER_PERCENTAGE',
+  const RPP = (
+    electricity.renewablePowerPercentage ??
+    selectConstant(constants.COMMON, 'RENEWABLE_POWER_PERCENTAGE')
   ).named(`RPP`);
   const jrppFactor = electricityRegionToJRPPFactor(electricity.region).named(
     'JRPP factor',
   );
-  const JRPP = selectConstant(
-    constants.COMMON,
-    'JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE',
+  const JRPP = (
+    electricity.jurisdictionalRenewablePowerPercentage ??
+    selectConstant(
+      constants.COMMON,
+      'JURISDICTIONAL_RENEWABLE_POWER_PERCENTAGE',
+    )
   ).multiply(jrppFactor, {
     name: 'JRPP',
   });

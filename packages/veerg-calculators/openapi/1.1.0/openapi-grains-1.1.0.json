@@ -174,6 +174,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -4355,6 +4399,11 @@
           "ACT",
           "National"
         ]
+      },
+      "PercentageNumberInput": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100
       },
       "ProportionNumberInput": {
         "type": "number",
@@ -15433,11 +15482,6 @@
       "PositiveNumberInput": {
         "type": "number",
         "exclusiveMinimum": 0
-      },
-      "PercentageNumberInput": {
-        "type": "number",
-        "minimum": 0,
-        "maximum": 100
       },
       "DairyCattleBreed": {
         "type": "string",

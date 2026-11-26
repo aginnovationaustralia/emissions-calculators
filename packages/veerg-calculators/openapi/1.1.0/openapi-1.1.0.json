@@ -9318,6 +9318,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -10018,7 +10062,7 @@
                                       ]
                                     },
                                     "productivitySystem": {
-                                      "description": "The productivity system of the goats",
+                                      "description": "The productivity system that best describes the source these goats were purchased from.",
                                       "x-modules": [
                                         "15.1"
                                       ],
@@ -10232,7 +10276,7 @@
                                       ]
                                     },
                                     "productivitySystem": {
-                                      "description": "The productivity system of the goats",
+                                      "description": "The productivity system that best describes the source these goats were purchased from.",
                                       "x-modules": [
                                         "15.1"
                                       ],
@@ -14338,6 +14382,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -17306,6 +17394,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -20355,6 +20487,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -23903,6 +24079,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -28065,6 +28285,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -38412,6 +38676,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -43623,6 +43931,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -44615,6 +44967,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -46819,6 +47215,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -50138,6 +50578,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -50621,7 +51105,7 @@
                                         ]
                                       },
                                       "productivitySystem": {
-                                        "description": "The productivity system of the goats",
+                                        "description": "The productivity system that best describes the source these goats were purchased from.",
                                         "x-modules": [
                                           "15.1"
                                         ],
@@ -50835,7 +51319,7 @@
                                         ]
                                       },
                                       "productivitySystem": {
-                                        "description": "The productivity system of the goats",
+                                        "description": "The productivity system that best describes the source these goats were purchased from.",
                                         "x-modules": [
                                           "15.1"
                                         ],
@@ -54941,6 +55425,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -58295,6 +58823,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -61475,6 +62047,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -66383,6 +66999,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -69214,6 +69874,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -73609,6 +74313,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -76333,6 +77081,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
@@ -79463,6 +80255,50 @@
                               "15.11"
                             ],
                             "$ref": "#/components/schemas/ElectricityRegion"
+                          },
+                          "renewablePowerPercentage": {
+                            "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
+                          },
+                          "jurisdictionalRenewablePowerPercentage": {
+                            "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. Only applies to electricity purchased in the ACT, and is ignored for other regions. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                            "x-modules": [
+                              "14.1",
+                              "15.11"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "$ref": "#/components/schemas/PercentageNumberInput"
+                              },
+                              "quality": {
+                                "default": {},
+                                "$ref": "#/components/schemas/QualityTable"
+                              }
+                            },
+                            "required": [
+                              "value"
+                            ],
+                            "additionalProperties": false,
+                            "x-units": "percentage"
                           }
                         },
                         "required": [
