@@ -1,5 +1,8 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { extendedRegionToState } from '@/constants/translations';
+import {
+  convertGoatProductionSystem,
+  extendedRegionToState,
+} from '@/constants/translations';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
@@ -172,8 +175,8 @@ function getLiveweightForOtherLivestock(
   if ('productivitySystem' in purchase) {
     return selectConstant(
       constants.LIVESTOCK,
-      'AVERAGE_LIVEWEIGHT_GOATS',
-      purchase.productivitySystem,
+      'OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS',
+      convertGoatProductionSystem(purchase.productivitySystem),
     );
   }
   return selectConstant(

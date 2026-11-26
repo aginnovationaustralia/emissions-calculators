@@ -61,6 +61,10 @@ export const isInMetroRegionToNaturalGasRegion = applyTranslation(
     isInMetroRegion ? 'METRO' : 'NON_METRO',
 );
 
+export const convertGoatProductionSystem = applyTranslation((level) =>
+  level === 'High' ? 'Goat - High' : 'Goat - Low',
+);
+
 /**
  * The jurisdictional renewable power percentage (JRPP) only applies to the ACT.
  * Translating the region into a 1 or 0 factor keeps the region input in the

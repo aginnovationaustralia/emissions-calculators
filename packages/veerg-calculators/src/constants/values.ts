@@ -12,7 +12,7 @@ import {
   perTonneToPerKg,
   tonnesPerHectareToKgPerSquareMetres,
 } from '@/tools/unit-conversion';
-import type { MassPerEnergy, MassPerMass } from '@/tools/units';
+import type { MassPerMass } from '@/tools/units';
 import {
   countPerArea,
   days,
@@ -52,6 +52,7 @@ import {
   createTransportFuelConstantsFromNGAF,
   getElectricityFactorsFromNGAF,
   getRefrigerantLeakageRateFromNGAF,
+  naturalGasScope3EfByState,
   ngafLiquidFuelData,
   ngafSolidFuelData,
   ngafTables,
@@ -84,36 +85,6 @@ const allStatesWithValue = (rawValue: number): Record<State, RealNumber> => {
     WA: value,
   };
 };
-
-type NaturalGasTable6Row = keyof (typeof ngafTables)['Table 6']['table'];
-
-/**
- * The NGA Table 6 row used for each state's scope 3 natural gas EF.
- * TAS is based on Victoria, and NT on WA (TODO: Why not QLD?).
- */
-const naturalGasTable6RowByState: Record<State, NaturalGasTable6Row> = {
-  NSW: 'New South Wales and ACT',
-  ACT: 'New South Wales and ACT',
-  VIC: 'Victoria',
-  QLD: 'Queensland',
-  SA: 'South Australia',
-  WA: 'Western Australia',
-  TAS: 'Victoria',
-  NT: 'Western Australia',
-};
-
-const naturalGasScope3EfByState = (
-  region: 'METRO' | 'NON_METRO',
-): Record<State, MassPerEnergy<'CO2e'>> =>
-  Object.fromEntries(
-    Object.entries(naturalGasTable6RowByState).map(([state, row]) => [
-      state,
-      massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table[row][region]),
-      ),
-    ]),
-  ) as Record<State, MassPerEnergy<'CO2e'>>;
 
 const freightEmissions = (kgCO2ePerTonneKm: number) =>
   massPerMassDistance(
@@ -2887,11 +2858,8 @@ export const livestockConstants: LivestockConstants = {
     Horses: liveweight(550),
     'Mules/asses': liveweight(245),
     'Emus/ostriches': liveweight(120),
-  },
-
-  AVERAGE_LIVEWEIGHT_GOATS: {
-    High: liveweight(50),
-    Low: liveweight(28),
+    'Goat - High': liveweight(50),
+    'Goat - Low': liveweight(28),
   },
 
   /**

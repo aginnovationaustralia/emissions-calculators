@@ -49,7 +49,6 @@ import {
   FuelStationaryMassBasedLiquidType,
   FuelStationarySolidType,
   FuelStationaryVolumeBasedLiquidType,
-  GoatProductivitySystem,
   HeavyDutyFuelType,
   IBRA7Region,
   InorganicFertiliserComponentOrigin,
@@ -646,11 +645,9 @@ export type LivestockConstants = NamedConstants & {
   };
 
   OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS: Record<
-    OtherLivestockTypeWithoutGoats,
+    OtherLivestockTypeWithoutGoats | 'Goat - High' | 'Goat - Low',
     Liveweight
   >;
-
-  AVERAGE_LIVEWEIGHT_GOATS: Record<GoatProductivitySystem, Liveweight>;
 
   MANURE_MANAGEMENT_METHANE_CONVERSION_FACTORS: {
     manureWithLitter: Record<MeanAnnualTemperature, RealNumber>;

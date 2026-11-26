@@ -44,7 +44,8 @@ const GoatLivestockTypeSchema = object({
   livestockType: literalInput('Goats', livestockTypeOptions),
   productivitySystem: enumInput(GoatProductivitySystems, {
     name: 'Goat productivity',
-    description: 'The productivity system of the goats',
+    description:
+      'The productivity system that best describes the source these goats were purchased from.',
     modules: [PURCH_LIVESTOCK_15_1],
   }),
 });
