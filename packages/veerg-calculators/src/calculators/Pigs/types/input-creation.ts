@@ -21,6 +21,14 @@ export type PigsDeepLitterTreatmentStage2AllocationsInput = Prop<
   PigsDeepLitterAllocationInput,
   'treatmentStage2Allocations'
 >;
+export type PigsOutdoorAndFreeRangeAllocationInput = Prop<
+  PigsClassManureAllocationLivestockInput,
+  'outdoorAndFreeRange'
+>;
+export type PigsOutdoorAndFreeRangeTreatmentStage2AllocationsInput = Prop<
+  PigsOutdoorAndFreeRangeAllocationInput,
+  'treatmentStage2Allocations'
+>;
 export type PigsAnaerobicLagoonAllocationInput = Prop<
   PigsClassManureAllocationLivestockInput,
   'anaerobicLagoon'

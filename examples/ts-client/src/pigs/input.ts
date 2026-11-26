@@ -25,6 +25,8 @@ import {
   PigsHerdClassesLivestockInput,
   PigsHerdInput,
   PigsInput,
+  PigsOutdoorAndFreeRangeAllocationInput,
+  PigsOutdoorAndFreeRangeTreatmentStage2AllocationsInput,
   PigsPitStorageAllocationInput,
   PigsPitStorageTreatmentStage2AllocationsInput,
   PigsSolidStorageAllocationInput,
@@ -115,6 +117,20 @@ const deepLitterAllocation: PigsDeepLitterAllocationInput = {
   treatmentStage2Allocations: deepLitterTreatmentStage2Allocations,
 };
 
+const outdoorAndFreeRangeTreatmentStage2Allocations: PigsOutdoorAndFreeRangeTreatmentStage2AllocationsInput =
+  {
+    directApplication: { value: 1 },
+    anaerobicLagoon: { value: 0 },
+    digester: { value: 0 },
+    pitStorage: { value: 0 },
+    solidStorage: { value: 0 },
+  };
+
+const outdoorAndFreeRangeAllocation: PigsOutdoorAndFreeRangeAllocationInput = {
+  manureAllocated: { value: 0.1 },
+  treatmentStage2Allocations: outdoorAndFreeRangeTreatmentStage2Allocations,
+};
+
 const anaerobicLagoonTreatmentStage2Allocations: PigsAnaerobicLagoonTreatmentStage2AllocationsInput =
   {
     directApplication: { value: 0 },
@@ -179,7 +195,7 @@ const pitStorageAllocationMethod2: PigsPitStorageAllocationInput = {
 };
 
 const manureAllocationsMethod1: PigsClassManureAllocationLivestockInput = {
-  outdoorAndFreeRange: { value: 0.1 },
+  outdoorAndFreeRange: outdoorAndFreeRangeAllocation,
   solidStorage: solidStorageAllocation,
   deepLitter: deepLitterAllocation,
   anaerobicLagoon: anaerobicLagoonAllocationMethod1,
@@ -188,7 +204,7 @@ const manureAllocationsMethod1: PigsClassManureAllocationLivestockInput = {
 };
 
 const manureAllocationsMethod2: PigsClassManureAllocationLivestockInput = {
-  outdoorAndFreeRange: { value: 0.1 },
+  outdoorAndFreeRange: outdoorAndFreeRangeAllocation,
   solidStorage: solidStorageAllocation,
   deepLitter: deepLitterAllocation,
   anaerobicLagoon: anaerobicLagoonAllocationMethod2,
