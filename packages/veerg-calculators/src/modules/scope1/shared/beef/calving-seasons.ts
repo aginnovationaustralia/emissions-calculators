@@ -1,7 +1,20 @@
-import { getPreviousMonth, Month, Months } from '@/constants/enums';
+import {
+  getPreviousMonth,
+  getPreviousSeason,
+  Month,
+  Months,
+  Season,
+} from '@/constants/enums';
 
 /**
- * Fixed calving seasons for monthly (Method 2 herd flow) beef herds.
+ * Fixed calving seasons for beef herds: which periods' calving make up LCjk=4,5 in a period.
+ *
+ * Seasonal herds (Methodological Guidance Chapter 3 v1.1, 3.2.1.1 (4)): LCjk=4,5 is "applied
+ * to calving season and the season immediately after calving ... for all other seasons
+ * LCjk=4,5 = 0". The herd says which seasons are calving seasons. A season's share is its own calving if it is a calving
+ * season, and its share after calving is the previous season's calving if that one is.
+ *
+ * Monthly (Method 2 herd flow) herds:
  *
  * Methodological Guidance Chapter 3 v1.1, 3.2.2.1 (LCjk=4,5):
  *
@@ -78,3 +91,22 @@ export const getMonthsForSeasonAfterCalving = (
     getPreviousMonth(month, CALVING_SEASON_LENGTH_MONTHS),
     startMonths,
   );
+
+/**
+ * The seasons whose calving is summed for the *season of calving* share in `season`: the
+ * season itself when it is a calving season, otherwise none.
+ */
+export const getSeasonsForSeasonOfCalving = (
+  season: Season,
+  calvingSeasons: readonly Season[],
+): Season[] => (calvingSeasons.includes(season) ? [season] : []);
+
+/**
+ * The seasons whose calving is summed for the *season after calving* share in `season`: the
+ * previous season when it is a calving season, otherwise none.
+ */
+export const getSeasonsForSeasonAfterCalving = (
+  season: Season,
+  calvingSeasons: readonly Season[],
+): Season[] =>
+  getSeasonsForSeasonOfCalving(getPreviousSeason(season), calvingSeasons);

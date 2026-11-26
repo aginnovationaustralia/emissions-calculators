@@ -69,9 +69,11 @@ export function calculateForAllClassPeriods<N extends NumberUnit>(
   const { herd } = herdProps;
   const {
     period: _period,
+    calvingSeasons: _calvingSeasons,
     calvingSeasonStartMonths: _calvingSeasonStartMonths,
     ...classes
   } = herd.classes as typeof herd.classes & {
+    calvingSeasons?: unknown;
     calvingSeasonStartMonths?: unknown;
   };
   const classInputs = entriesFromObject(classes);

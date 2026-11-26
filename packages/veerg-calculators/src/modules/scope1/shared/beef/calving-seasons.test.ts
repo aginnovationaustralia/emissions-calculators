@@ -2,6 +2,8 @@ import {
   getCalvingSeasonStart,
   getMonthsForSeasonAfterCalving,
   getMonthsForSeasonOfCalving,
+  getSeasonsForSeasonAfterCalving,
+  getSeasonsForSeasonOfCalving,
 } from './calving-seasons';
 
 /**
@@ -129,5 +131,29 @@ describe('Beef calving seasons (Method 2, monthly)', () => {
   test('no start months: no month is in a calving season or a season after calving', () => {
     expect(getMonthsForSeasonOfCalving('june', [])).toEqual([]);
     expect(getMonthsForSeasonAfterCalving('september', [])).toEqual([]);
+  });
+
+  describe('seasonal herd calving in winter and spring', () => {
+    const calvingSeasons = ['winter', 'spring'] as const;
+
+    test.each([
+      // season, seasons summed for the season of calving, for the season after calving
+      ['spring', ['spring'], ['winter']],
+      ['summer', [], ['spring']],
+      ['autumn', [], []],
+      ['winter', ['winter'], []],
+    ] as const)('%s', (season, seasonOfCalving, seasonAfterCalving) => {
+      expect(getSeasonsForSeasonOfCalving(season, calvingSeasons)).toEqual(
+        seasonOfCalving,
+      );
+      expect(getSeasonsForSeasonAfterCalving(season, calvingSeasons)).toEqual(
+        seasonAfterCalving,
+      );
+    });
+  });
+
+  test('seasonal herd with no calving seasons: no season has calving shares', () => {
+    expect(getSeasonsForSeasonOfCalving('spring', [])).toEqual([]);
+    expect(getSeasonsForSeasonAfterCalving('summer', [])).toEqual([]);
   });
 });

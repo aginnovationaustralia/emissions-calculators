@@ -1,146 +1,151 @@
 import {
-  BeefClassPeriodExtendedInputTransformed,
+  BeefCalfClassPeriodInputTransformed,
+  BeefClassPeriodWithCalvesInputTransformed,
   isBeefCalfClassPeriodInput,
   isBeefClassPeriodInputWithCalves,
 } from '@/calculators/Beef/types/beef-class-period.input';
-import { Month, Months } from '@/constants/enums';
-import { Container } from '@/tools/containers';
+import { Month, Months, Season, Seasons } from '@/constants/enums';
+import { Container, root } from '@/tools/containers';
 import { zero } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
-import { RealNumber } from '@/tools/units';
+import { head, RealNumber } from '@/tools/units';
+
+const zeroHead = root(head(0), { name: 'zero head' });
 import {
   getMonthsForSeasonAfterCalving,
   getMonthsForSeasonOfCalving,
+  getSeasonsForSeasonAfterCalving,
+  getSeasonsForSeasonOfCalving,
 } from './calving-seasons';
 import { BeefPeriodProps } from './helpers';
 
 /** The shares of a class in calf (or born) in the season of calving and the season after it. */
 export type CalvingShares = {
-  /** LCjk=4,5 (calving), or the calves born in the season of calving */
+  /** LCjk=4,5 (calving), or the share of the calves born in the season of calving */
   calvingSeason: Container<RealNumber>;
-  /** LCjk=4,5 (after calving), or the calves born in the previous (calving) season */
+  /** LCjk=4,5 (after calving), or the share of the calves born in the season before */
   seasonAfterCalving: Container<RealNumber>;
+};
+
+type CalvingPeriods = {
+  /** The periods whose calving makes up the share for the season of calving */
+  seasonOfCalving: string[];
+  /** The periods whose calving makes up the share for the season after calving */
+  seasonAfterCalving: string[];
 };
 
 const isMonth = (name: string): name is Month =>
   (Months as readonly string[]).includes(name);
+const isSeason = (name: string): name is Season =>
+  (Seasons as readonly string[]).includes(name);
 
-/** The herd's calving season start months, when its monthly classes give them. */
-export const getCalvingSeasonStartMonths = ({
+/**
+ * The periods whose calving makes up each share in the current period, from the herd's
+ * calving seasons (seasonal herds) or calving season start months (monthly herds). See
+ * calving-seasons.ts for the rules.
+ */
+export const getCalvingPeriods = ({
   herd,
-}: BeefPeriodProps): Month[] | undefined => {
+  periodName,
+}: BeefPeriodProps): CalvingPeriods => {
   const { classes } = herd;
-  if (!('calvingSeasonStartMonths' in classes)) {
-    return undefined;
+  if ('calvingSeasonStartMonths' in classes && isMonth(periodName)) {
+    const startMonths = classes.calvingSeasonStartMonths.map((m) => m.unit);
+    return {
+      seasonOfCalving: getMonthsForSeasonOfCalving(periodName, startMonths),
+      seasonAfterCalving: getMonthsForSeasonAfterCalving(
+        periodName,
+        startMonths,
+      ),
+    };
   }
-  return classes.calvingSeasonStartMonths?.map((m) => m.unit);
-};
-
-/**
- * Sums a per-month input over the given months of the class. The months are those of a
- * fixed calving season (see calving-seasons.ts), so the total is the season's share.
- */
-const sumOverMonths = (
-  periodProps: BeefPeriodProps,
-  months: Month[],
-  key: 'fractionCowsCalvingThisMonth' | 'fractionCalvesBornThisMonth',
-  name: string,
-): Container<RealNumber> => {
-  const classPeriods = periodProps.classInput as unknown as Record<
-    Month,
-    BeefClassPeriodExtendedInputTransformed &
-      Partial<Record<typeof key, Container<RealNumber>>>
-  >;
-  const values = months.map(
-    (month) => classPeriods[month][key] ?? zero.named(`${key} (${month})`),
+  if ('calvingSeasons' in classes && isSeason(periodName)) {
+    const calvingSeasons = classes.calvingSeasons.map((s) => s.unit);
+    return {
+      seasonOfCalving: getSeasonsForSeasonOfCalving(periodName, calvingSeasons),
+      seasonAfterCalving: getSeasonsForSeasonAfterCalving(
+        periodName,
+        calvingSeasons,
+      ),
+    };
+  }
+  // The input schemas rule this out: every herd's classes give their calving seasons
+  throw new Error(
+    `Beef period ${periodName}: the herd's classes give no calving seasons for it`,
   );
-  return sum(values, zero, { name });
 };
 
-/**
- * The shares for a period in the derived form: the herd gives its calving season start
- * months and the class gives the calving in each month. Returns `undefined` when the
- * herd gives the season shares directly, or the period is not monthly.
- */
-const deriveFromStartMonths = (
-  periodProps: BeefPeriodProps,
-  key: 'fractionCowsCalvingThisMonth' | 'fractionCalvesBornThisMonth',
-  label: string,
-  reference: string,
-): CalvingShares | undefined => {
-  const startMonths = getCalvingSeasonStartMonths(periodProps);
-  const { periodName } = periodProps;
-  if (startMonths === undefined || !isMonth(periodName)) {
-    return undefined;
-  }
-  const number = periodProps.classInput.number;
+type ClassPeriods<T> = Record<string, T>;
 
-  return {
-    calvingSeason: sumOverMonths(
-      periodProps,
-      getMonthsForSeasonOfCalving(periodName, startMonths),
-      key,
-      `${label}jk=${number} (season of calving, j=${periodName})`,
-    ).reference(reference),
-    seasonAfterCalving: sumOverMonths(
-      periodProps,
-      getMonthsForSeasonAfterCalving(periodName, startMonths),
-      key,
-      `${label}jk=${number} (season after calving, j=${periodName})`,
-    ).reference(reference),
-  };
+/** Sums the class's `fractionCowsCalving` over the given periods (those of a calving season). */
+const sumCowsCalving = (
+  periodProps: BeefPeriodProps,
+  periods: string[],
+  name: string,
+) => {
+  const classPeriods =
+    periodProps.classInput as unknown as ClassPeriods<BeefClassPeriodWithCalvesInputTransformed>;
+  return sum(
+    periods.map((period) => classPeriods[period].fractionCowsCalving),
+    zero,
+    { name },
+  );
+};
+
+/** Sums the class's `calvesBorn` over the given periods (those of a calving season). */
+const sumCalvesBorn = (
+  periodProps: BeefPeriodProps,
+  periods: string[],
+  name: string,
+) => {
+  const classPeriods =
+    periodProps.classInput as unknown as ClassPeriods<BeefCalfClassPeriodInputTransformed>;
+  return sum(
+    periods.map((period) => classPeriods[period].calvesBorn),
+    zeroHead,
+    { name },
+  );
 };
 
 /**
  * LCjk=4,5 for a cow class in a period: the proportion of cows in calf in the season of
- * calving, applied to the season of calving and to the season after it (3.2.1.1 (4),
- * 4.2.1.3 (5)). Returns `undefined` for classes that are not cows > 1 year.
- *
- * For a monthly herd with calving season start months, the shares come from the fixed
- * 3-month calving seasons (Chapter 3, 3.2.2.1): each month of a calving season gets the
- * season's total calving, each month of the season after it gets that total too, and all
- * other months get 0. Otherwise they are the period's own inputs.
+ * calving, applied to the season of calving and to the season after it, and 0 for all other
+ * periods (Chapter 3, 3.2.1.1 (4); 3.2.2.1 for Method 2 herd flow). Each share is the class's
+ * `fractionCowsCalving` summed over the periods of that calving season. Returns `undefined`
+ * for classes that are not cows > 1 year.
  */
 export const getCowCalvingShares = (
   periodProps: BeefPeriodProps,
 ): CalvingShares | undefined => {
-  const { currentPeriod } = periodProps;
-  if (!isBeefClassPeriodInputWithCalves(currentPeriod)) {
+  if (!isBeefClassPeriodInputWithCalves(periodProps.currentPeriod)) {
     return undefined;
   }
+  const { seasonOfCalving, seasonAfterCalving } =
+    getCalvingPeriods(periodProps);
+  const { periodName } = periodProps;
+  const number = periodProps.classInput.number;
+  const reference = 'Chapter 3, 3.2.1.1 (4), 3.2.2.1 (LCjk=4,5)';
 
-  const derived = deriveFromStartMonths(
-    periodProps,
-    'fractionCowsCalvingThisMonth',
-    'LC',
-    'Chapter 3, 3.2.2.1 (LCjk=4,5)',
-  );
-  if (derived) {
-    return derived;
-  }
-
-  const { fractionCowsThisSeasonInCalf, fractionCowsPreviousSeasonInCalf } =
-    currentPeriod;
-  if (
-    fractionCowsThisSeasonInCalf === undefined ||
-    fractionCowsPreviousSeasonInCalf === undefined
-  ) {
-    // The input schema rules this out: without start months both are required
-    throw new Error(
-      `Beef ${periodProps.className} ${periodProps.periodName}: no calving season shares`,
-    );
-  }
   return {
-    calvingSeason: fractionCowsThisSeasonInCalf,
-    seasonAfterCalving: fractionCowsPreviousSeasonInCalf,
+    calvingSeason: sumCowsCalving(
+      periodProps,
+      seasonOfCalving,
+      `LCjk=${number} (season of calving, j=${periodName})`,
+    ).reference(reference),
+    seasonAfterCalving: sumCowsCalving(
+      periodProps,
+      seasonAfterCalving,
+      `LCjk=${number} (season after calving, j=${periodName})`,
+    ).reference(reference),
   };
 };
 
 /**
- * The share of a calf class born in the season of calving and in the season before it,
- * for its milk intake MCjk=1,3,6 (4.2.1.3 (3)). Returns `undefined` for classes that are
- * not calves. Derived from the fixed calving seasons as for the cows
- * (`getCowCalvingShares`) when the herd gives its calving season start months.
+ * The share of a calf class born in the season of calving and in the season before it, for
+ * its milk intake MCjk=1,3,6 (4.2.1.3 (3)): the calves born in that calving season
+ * (`calvesBorn` summed over its periods, CRjk) divided by the number of animals in the class
+ * in the current period (Njk), as GEETA does (CRcalv / Njkl). 0 when the class has no animals
+ * in the period. Returns `undefined` for classes that are not calves.
  */
 export const getCalfBirthShares = (
   periodProps: BeefPeriodProps,
@@ -149,30 +154,29 @@ export const getCalfBirthShares = (
   if (!isBeefCalfClassPeriodInput(currentPeriod)) {
     return undefined;
   }
+  const { seasonOfCalving, seasonAfterCalving } =
+    getCalvingPeriods(periodProps);
+  const { periodName } = periodProps;
+  const number = periodProps.classInput.number;
+  const reference = '4.2.1.3 (3)';
+  const animals = currentPeriod.head;
+  const noAnimals = animals.unit.store.value.isZero();
 
-  const derived = deriveFromStartMonths(
-    periodProps,
-    'fractionCalvesBornThisMonth',
-    'CR',
-    'Chapter 3, 3.2.2.1 (calving season); 4.2.1.3 (3)',
-  );
-  if (derived) {
-    return derived;
-  }
-
-  const { fractionCalvesBornThisSeason, fractionCalvesBornPreviousSeason } =
-    currentPeriod;
-  if (
-    fractionCalvesBornThisSeason === undefined ||
-    fractionCalvesBornPreviousSeason === undefined
-  ) {
-    // The input schema rules this out: without start months both are required
-    throw new Error(
-      `Beef ${periodProps.className} ${periodProps.periodName}: no calf birth shares`,
+  const share = (periods: string[], season: string) => {
+    const born = sumCalvesBorn(
+      periodProps,
+      periods,
+      `CRjk=${number} (${season}, j=${periodName})`,
     );
-  }
+    const name = `CRjk=${number} / Njk (${season}, j=${periodName})`;
+    if (noAnimals) {
+      return zero.named(name);
+    }
+    return born.divide(animals).named(name).reference(reference);
+  };
+
   return {
-    calvingSeason: fractionCalvesBornThisSeason,
-    seasonAfterCalving: fractionCalvesBornPreviousSeason,
+    calvingSeason: share(seasonOfCalving, 'season of calving'),
+    seasonAfterCalving: share(seasonAfterCalving, 'season before'),
   };
 };

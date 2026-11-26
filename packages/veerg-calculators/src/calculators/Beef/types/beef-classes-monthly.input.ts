@@ -1,13 +1,13 @@
-import { Month, Months } from '@/constants/enums';
+import { Months } from '@/constants/enums';
 import {
   getMonthsForSeasonAfterCalving,
   getMonthsForSeasonOfCalving,
 } from '@/modules/scope1/shared/beef/calving-seasons';
-import { enumInput, InputContainer } from '@/tools/inputs';
+import { enumInput } from '@/tools/inputs';
 import { ENTERIC_BEEF_3_2, MANURE_BEEF_4_2 } from '@/tools/modules';
-import { RealNumber } from '@/tools/units';
 import { object } from '@/types/schemas';
 import z from 'zod';
+import { checkHerdCalving } from './beef-calving-validation';
 import {
   BeefCalfClassMonthlyInputSchema,
   BeefClassMonthlyInputSchema,
@@ -86,24 +86,20 @@ const BeefSteersGt3YearsMonthlyInputSchema =
     number: '7c' as const,
   }));
 
-const COW_CLASSES = ['cows1To2Years', 'cows2To3Years', 'cowsGt3Years'] as const;
-const CALF_CLASSES = ['bullsLt1', 'cowsLt1', 'steersLt1'] as const;
-
 export const BeefClassesMonthlyInputSchema = object({
   period: z.literal('monthly'),
   calvingSeasonStartMonths: z
     .array(
       enumInput(Months, {
-        name: 'Calving season start month',
+        name: 'Calving start month',
         method: '2',
         description: 'A month in which a calving season starts.',
         modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
       }),
     )
-    .optional()
     .meta({
       description:
-        "The months in which the herd's calving seasons start. When given, each calving season is the 3 months from its start month and the season after calving is the 3 months after that (Chapter 3, 3.2.2.1 LCjk=4,5, Method 2 herd flow). The cow classes then give fractionCowsCalvingThisMonth and the calf classes fractionCalvesBornThisMonth for every month, and LCjk=4,5 and the calves' shares for the season of calving and the season after it are derived from them. Give an empty list for a herd that does not calve. When not given, every month of the cow and calf classes gives the season fractions directly (fractionCowsThisSeasonInCalf, fractionCowsPreviousSeasonInCalf, fractionCalvesBornThisSeason, fractionCalvesBornPreviousSeason).",
+        "The months in which the herd's calving seasons start. Each calving season is the 3 months from its start month, and the season after calving is the 3 months after that (Chapter 3, 3.2.2.1, Method 2 herd flow). When seasons overlap, a month belongs to the season with the nearest start. LCjk=4,5 for each month of a calving season is the class's fractionCowsCalving summed over the season, the same total applies to each month of the season after calving, and it is 0 in all other months. The calves' shares are worked out the same way from calvesBorn. Give an empty list for a herd that does not calve.",
     }),
   bullsLt1: BeefBullsLt1MonthlyInputSchema.optional(),
   bullsGt1: BeefBullsGt1MonthlyInputSchema.optional(),
@@ -116,101 +112,16 @@ export const BeefClassesMonthlyInputSchema = object({
   steers2To3Years: BeefSteers2To3YearsMonthlyInputSchema.optional(),
   steersGt3Years: BeefSteersGt3YearsMonthlyInputSchema.optional(),
 })
-  .superRefine((classes, ctx) => {
-    const startMonths = classes.calvingSeasonStartMonths?.map((m) => m.unit);
-    const checks = [
-      ...COW_CLASSES.map((className) => ({
-        className,
-        perMonth: 'fractionCowsCalvingThisMonth',
-        perSeason: [
-          'fractionCowsThisSeasonInCalf',
-          'fractionCowsPreviousSeasonInCalf',
-        ],
-      })),
-      ...CALF_CLASSES.map((className) => ({
-        className,
-        perMonth: 'fractionCalvesBornThisMonth',
-        perSeason: [
-          'fractionCalvesBornThisSeason',
-          'fractionCalvesBornPreviousSeason',
-        ],
-      })),
-    ];
-
-    if (startMonths !== undefined) {
-      const repeated = startMonths.filter(
-        (m, i) => startMonths.indexOf(m) !== i,
-      );
-      if (repeated.length > 0) {
-        ctx.addIssue(
-          `calvingSeasonStartMonths lists ${repeated.join(', ')} more than once.`,
-        );
-      }
-    }
-
-    for (const { className, perMonth, perSeason } of checks) {
-      const cls = classes[className] as unknown as
-        | Record<Month, Record<string, InputContainer<RealNumber> | undefined>>
-        | undefined;
-      if (!cls) {
-        continue;
-      }
-      const valueOf = (month: Month, key: string) =>
-        cls[month][key]?.unit.store.value.toNumber();
-
-      for (const month of Months) {
-        if (startMonths !== undefined) {
-          if (valueOf(month, perMonth) === undefined) {
-            ctx.addIssue(
-              `${className}.${month}.${perMonth} is required when calvingSeasonStartMonths is given.`,
-            );
-          }
-          for (const key of perSeason) {
-            if (valueOf(month, key) !== undefined) {
-              ctx.addIssue(
-                `${className}.${month}.${key} can't be given with calvingSeasonStartMonths: it is derived from ${perMonth} and the calving season start months.`,
-              );
-            }
-          }
-        } else {
-          for (const key of perSeason) {
-            if (valueOf(month, key) === undefined) {
-              ctx.addIssue(
-                `${className}.${month}.${key} is required when calvingSeasonStartMonths is not given.`,
-              );
-            }
-          }
-          if (valueOf(month, perMonth) !== undefined) {
-            ctx.addIssue(
-              `${className}.${month}.${perMonth} is only used with calvingSeasonStartMonths. Give calvingSeasonStartMonths, or ${perSeason.join(' and ')} instead.`,
-            );
-          }
-        }
-      }
-
-      if (startMonths === undefined) {
-        continue;
-      }
-      // The derived shares for the season of calving and the season after it must not
-      // exceed 1 together, as for the directly given shares
-      const seasonTotal = (months: Month[]) =>
-        months.reduce((total, m) => total + (valueOf(m, perMonth) ?? 0), 0);
-      for (const month of Months) {
-        const calving = seasonTotal(
-          getMonthsForSeasonOfCalving(month, startMonths),
-        );
-        const afterCalving = seasonTotal(
-          getMonthsForSeasonAfterCalving(month, startMonths),
-        );
-        if (calving + afterCalving > 1 + 1e-9) {
-          const show = (n: number) => Number(n.toPrecision(12));
-          ctx.addIssue(
-            `${className}.${month}: the calving in its season of calving (${show(calving)}) and in its season after calving (${show(afterCalving)}) add up to more than 1. Check ${perMonth} and calvingSeasonStartMonths.`,
-          );
-        }
-      }
-    }
-  })
+  .superRefine((classes, ctx) =>
+    checkHerdCalving(ctx, {
+      classes,
+      periods: Months,
+      calvingSeasonsKey: 'calvingSeasonStartMonths',
+      calvingSeasons: classes.calvingSeasonStartMonths.map((m) => m.unit),
+      getSeasonOfCalving: getMonthsForSeasonOfCalving,
+      getSeasonAfterCalving: getMonthsForSeasonAfterCalving,
+    }),
+  )
   .meta({
     title: 'Beef classes with monthly input',
   });

@@ -1,5 +1,13 @@
+import { Seasons } from '@/constants/enums';
+import {
+  getSeasonsForSeasonAfterCalving,
+  getSeasonsForSeasonOfCalving,
+} from '@/modules/scope1/shared/beef/calving-seasons';
+import { enumInput } from '@/tools/inputs';
+import { ENTERIC_BEEF_3_2, MANURE_BEEF_4_2 } from '@/tools/modules';
 import { object } from '@/types/schemas';
 import z from 'zod';
+import { checkHerdCalving } from './beef-calving-validation';
 import {
   BeefCalfClassSeasonalInputSchema,
   BeefClassSeasonalInputSchema,
@@ -79,6 +87,19 @@ const BeefSteersGt3YearsSeasonalInputSchema =
 
 export const BeefClassesSeasonalInputSchema = object({
   period: z.literal('seasonal'),
+  calvingSeasons: z
+    .array(
+      enumInput(Seasons, {
+        name: 'Calving season',
+        method: '1',
+        description: 'A season in which the herd calves.',
+        modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
+      }),
+    )
+    .meta({
+      description:
+        "The seasons in which the herd calves. LCjk=4,5 is applied to the calving season and the season immediately after it, and is 0 for all other seasons (Chapter 3, 3.2.1.1 (4)): in a calving season it is the class's fractionCowsCalving for that season, and in the season after it the fractionCowsCalving of the calving season. The calves' shares are worked out the same way from calvesBorn. Give an empty list for a herd that does not calve.",
+    }),
   bullsLt1: BeefBullsLt1SeasonalInputSchema.optional(),
   bullsGt1: BeefBullsGt1SeasonalInputSchema.optional(),
   cowsLt1: BeefCowsLt1SeasonalInputSchema.optional(),
@@ -89,9 +110,20 @@ export const BeefClassesSeasonalInputSchema = object({
   steers1To2Years: BeefSteers1To2YearsSeasonalInputSchema.optional(),
   steers2To3Years: BeefSteers2To3YearsSeasonalInputSchema.optional(),
   steersGt3Years: BeefSteersGt3YearsSeasonalInputSchema.optional(),
-}).meta({
-  title: 'Beef classes with seasonal input',
-});
+})
+  .superRefine((classes, ctx) =>
+    checkHerdCalving(ctx, {
+      classes,
+      periods: Seasons,
+      calvingSeasonsKey: 'calvingSeasons',
+      calvingSeasons: classes.calvingSeasons.map((s) => s.unit),
+      getSeasonOfCalving: getSeasonsForSeasonOfCalving,
+      getSeasonAfterCalving: getSeasonsForSeasonAfterCalving,
+    }),
+  )
+  .meta({
+    title: 'Beef classes with seasonal input',
+  });
 
 export type BeefClassesSeasonalInput = z.input<
   typeof BeefClassesSeasonalInputSchema
