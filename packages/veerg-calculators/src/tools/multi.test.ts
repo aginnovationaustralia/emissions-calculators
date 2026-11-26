@@ -78,6 +78,7 @@ describe('Multi method integration', () => {
     ...herdBase,
     classes: {
       period: 'seasonal',
+      calvingSeasons: [],
       bullsGt1: seasons({ head: nv(5) }),
     },
   });
@@ -109,6 +110,7 @@ describe('Multi method integration', () => {
       ...herdBase,
       classes: {
         period: 'seasonal',
+        calvingSeasons: [],
         bullsGt1: seasons({
           head: nv(5),
           method2LiveweightKilograms: nvo(method2Liveweight),
@@ -130,6 +132,7 @@ describe('Multi method integration', () => {
       ...herdBase,
       classes: {
         period: 'seasonal',
+        calvingSeasons: [],
         bullsGt1: seasons({
           head: nv(5),
           method2LiveweightKilograms: nvo(method2Liveweight),
@@ -156,6 +159,7 @@ describe('Multi method integration', () => {
       ...herdBase,
       classes: {
         period: 'seasonal',
+        calvingSeasons: [],
         bullsGt1: seasons({
           head: nv(5),
           method2DailyDryMatterIntakeKilograms: nvo(method2DryMatterIntake),
@@ -166,6 +170,7 @@ describe('Multi method integration', () => {
       ...herdBase,
       classes: {
         period: 'seasonal',
+        calvingSeasons: [],
         bullsGt1: seasons({
           head: nv(5),
           method2LiveweightKilograms: nvo(method2Liveweight),
@@ -194,6 +199,7 @@ describe('Multi method integration', () => {
       ...herdBase,
       classes: {
         period: 'seasonal',
+        calvingSeasons: [],
         bullsGt1: {
           spring: {
             head: nv(5),

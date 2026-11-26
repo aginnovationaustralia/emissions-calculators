@@ -23,9 +23,9 @@ import {
   columnCustomLiveweightW,
   columnExpectedOutput,
   columnHeadN,
-  columnProportionCowsPreviousSeasonInCalf,
-  columnProportionCowsThisSeasonInCalf,
+  columnProportionCowsCalving,
   columnStateOrRegion,
+  readCalvingSeasonStartMonths,
 } from './common';
 
 const getExpectedOutput = (sheet: XLSX.Sheet, row: number): number => {
@@ -134,8 +134,7 @@ const readBeefCalfClassFn =
             : undefined,
         ),
         // Milk intake has no bearing on this module
-        fractionCalvesBornThisSeason: nv(0),
-        fractionCalvesBornPreviousSeason: nv(0),
+        calvesBorn: nv(0),
       };
     };
 
@@ -176,11 +175,8 @@ const readBeefClassWithCalvesFn =
       );
       return {
         head: nv(Number(cell(columnHeadN, rowOffset))),
-        fractionCowsThisSeasonInCalf: nv(
-          Number(cell(columnProportionCowsThisSeasonInCalf, rowOffset)),
-        ),
-        fractionCowsPreviousSeasonInCalf: nv(
-          Number(cell(columnProportionCowsPreviousSeasonInCalf, rowOffset)),
+        fractionCowsCalving: nv(
+          Number(cell(columnProportionCowsCalving, rowOffset)),
         ),
         method2LiveweightKilograms: nvo(
           method === '2' && customLiveweight
@@ -248,6 +244,7 @@ const getCalculatorInput = (
     region,
     classes: {
       period: 'monthly',
+      calvingSeasonStartMonths: readCalvingSeasonStartMonths(cell),
       bullsLt1: readBeefCalfClass(0),
       bullsGt1: readBeefClass(1),
       cows1To2Years: readBeefClassWithCalves(2),

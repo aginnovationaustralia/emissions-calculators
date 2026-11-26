@@ -1,5 +1,14 @@
+import { Months } from '@/constants/enums';
+import {
+  CALVING_SEASON_LENGTH_MONTHS,
+  getMonthsForSeasonAfterCalving,
+  getMonthsForSeasonOfCalving,
+} from '@/modules/scope1/shared/beef/calving-seasons';
+import { enumInput } from '@/tools/inputs';
+import { ENTERIC_BEEF_3_2, MANURE_BEEF_4_2 } from '@/tools/modules';
 import { object } from '@/types/schemas';
 import z from 'zod';
+import { checkHerdCalving } from './beef-calving-validation';
 import {
   BeefCalfClassMonthlyInputSchema,
   BeefClassMonthlyInputSchema,
@@ -80,6 +89,19 @@ const BeefSteersGt3YearsMonthlyInputSchema =
 
 export const BeefClassesMonthlyInputSchema = object({
   period: z.literal('monthly'),
+  calvingSeasonStartMonths: z
+    .array(
+      enumInput(Months, {
+        name: 'Calving start month',
+        method: '2',
+        description: 'A month in which a calving season starts.',
+        modules: [ENTERIC_BEEF_3_2, MANURE_BEEF_4_2],
+      }),
+    )
+    .meta({
+      description:
+        "The months in which the herd's calving seasons start. Each calving season is the 3 months from its start month, and the season after calving is the 3 months after that (Chapter 3, 3.2.2.1, Method 2 herd flow). Start months must be at least 3 months apart, so the seasons don't overlap. LCjk=4,5 for each month of a calving season is the class's fractionCowsCalving summed over the season, the same total applies to each month of the season after calving, and it is 0 in all other months. The calves' shares are worked out the same way from calvesBorn. Give an empty list for a herd that does not calve.",
+    }),
   bullsLt1: BeefBullsLt1MonthlyInputSchema.optional(),
   bullsGt1: BeefBullsGt1MonthlyInputSchema.optional(),
   cowsLt1: BeefCowsLt1MonthlyInputSchema.optional(),
@@ -90,9 +112,23 @@ export const BeefClassesMonthlyInputSchema = object({
   steers1To2Years: BeefSteers1To2YearsMonthlyInputSchema.optional(),
   steers2To3Years: BeefSteers2To3YearsMonthlyInputSchema.optional(),
   steersGt3Years: BeefSteersGt3YearsMonthlyInputSchema.optional(),
-}).meta({
-  title: 'Beef classes with monthly input',
-});
+})
+  .superRefine((classes, ctx) =>
+    checkHerdCalving(ctx, {
+      classes,
+      periods: Months,
+      calvingSeasonsKey: 'calvingSeasonStartMonths',
+      calvingSeasons: classes.calvingSeasonStartMonths.map((m) => m.unit),
+      seasonLength: CALVING_SEASON_LENGTH_MONTHS,
+      getSeasonOfCalving: getMonthsForSeasonOfCalving,
+      getSeasonAfterCalving: getMonthsForSeasonAfterCalving,
+      howToCover: (month) =>
+        `Add a month to calvingSeasonStartMonths that starts a calving season covering ${month} (${month} or one of the 2 months before it)`,
+    }),
+  )
+  .meta({
+    title: 'Beef classes with monthly input',
+  });
 
 export type BeefClassesMonthlyInput = z.input<
   typeof BeefClassesMonthlyInputSchema

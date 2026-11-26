@@ -30,25 +30,29 @@ export const columnCustomLiveweightW = 'L';
 const columnEffectiveLiveweightW = 'M';
 export const columnCustomLiveweightGainLWG = 'N';
 const columnEffectiveLiveweightGainLWG = 'O';
-export const columnProportionCowsInCalfLC = 'S';
-export const columnProportionCowsPreviousSeasonInCalfLC = 'T';
-export const columnProportionCalvesBorn = 'U';
-export const columnProportionCalvesBornPrevious = 'V';
-export const columnCrudeProteinContent = 'AB';
-export const columnCustomDmd = 'AD';
-const columnCustomMeanAnnualTemperature = 'AJ';
-export const columnRowECH4 = 'AQ';
-const columnClimateZone = 'AX';
-export const columnIsInLeachingZone = 'BC';
-const columnGrazingSystem = 'BG';
+// The herd's calving table: "Calving season?" (seasonal) or "Calving start month?" (monthly),
+// Yes/No for each season or month, from 2 rows below the scenario's first row
+const columnCalvingPeriod = 'D';
+const calvingTableFirstRowOffset = 2;
+// Calving inputs. The columns after them (LC for the season of calving and the season after
+// it, and the calves' shares) are the sheet's own calculation from these.
+export const columnProportionCowsCalving = 'S';
+export const columnCalvesBorn = 'V';
+export const columnCrudeProteinContent = 'AD';
+export const columnCustomDmd = 'AF';
+const columnCustomMeanAnnualTemperature = 'AL';
+export const columnRowECH4 = 'AS';
+const columnClimateZone = 'AZ';
+export const columnIsInLeachingZone = 'BE';
+const columnGrazingSystem = 'BI';
 export const beefPastureRowsPerClass = 4;
 export const beefPastureMonthlyRowsPerClass = 12;
 export const beefPastureClassCount = 10;
 
-export const columnTotalECH4 = 'AR';
-export const columnExpectedEN2ODir = 'BJ';
-export const columnExpectedEN2OAd = 'BK';
-export const columnExpectedEN2OLeach = 'BL';
+export const columnTotalECH4 = 'AT';
+export const columnExpectedEN2ODir = 'BL';
+export const columnExpectedEN2OAd = 'BM';
+export const columnExpectedEN2OLeach = 'BN';
 
 export type CellFn = (column: string, offset?: number) => string | undefined;
 
@@ -66,6 +70,22 @@ const MONTHLY_PERIOD_KEYS = [
   'november',
   'december',
 ] as const;
+
+const SEASONAL_PERIOD_KEYS = ['spring', 'summer', 'autumn', 'winter'] as const;
+
+/** The seasons marked "Yes" in the herd's "Calving season?" table */
+export const readCalvingSeasons = (cell: CellFn) =>
+  SEASONAL_PERIOD_KEYS.filter(
+    (_, index) =>
+      cell(columnCalvingPeriod, calvingTableFirstRowOffset + index) === 'Yes',
+  );
+
+/** The months marked "Yes" in the herd's "Calving start month?" table */
+export const readCalvingSeasonStartMonths = (cell: CellFn) =>
+  MONTHLY_PERIOD_KEYS.filter(
+    (_, index) =>
+      cell(columnCalvingPeriod, calvingTableFirstRowOffset + index) === 'Yes',
+  );
 
 export const readBeefClassFn =
   (cell: CellFn, method: '1' | '2') =>
@@ -146,32 +166,20 @@ export const readBeefClassWithCalvesFn =
       return undefined;
     }
     const springHead = Number(springHeadRaw);
-    const springProportionCowsInCalf = Number(
-      cell(columnProportionCowsInCalfLC, offsetRows),
-    );
-    const springproportionCowsPreviousSeasonInCalf = Number(
-      cell(columnProportionCowsPreviousSeasonInCalfLC, offsetRows),
+    const springProportionCowsCalving = Number(
+      cell(columnProportionCowsCalving, offsetRows),
     );
     const summerHead = Number(cell(columnHeadN, offsetRows + 1));
-    const summerProportionCowsInCalf = Number(
-      cell(columnProportionCowsInCalfLC, offsetRows + 1),
-    );
-    const summerProportionCowsPreviousSeasonInCalf = Number(
-      cell(columnProportionCowsPreviousSeasonInCalfLC, offsetRows + 1),
+    const summerProportionCowsCalving = Number(
+      cell(columnProportionCowsCalving, offsetRows + 1),
     );
     const autumnHead = Number(cell(columnHeadN, offsetRows + 2));
-    const autumnProportionCowsInCalf = Number(
-      cell(columnProportionCowsInCalfLC, offsetRows + 2),
-    );
-    const autumnproportionCowsPreviousSeasonInCalf = Number(
-      cell(columnProportionCowsPreviousSeasonInCalfLC, offsetRows + 2),
+    const autumnProportionCowsCalving = Number(
+      cell(columnProportionCowsCalving, offsetRows + 2),
     );
     const winterHead = Number(cell(columnHeadN, offsetRows + 3));
-    const winterProportionCowsInCalf = Number(
-      cell(columnProportionCowsInCalfLC, offsetRows + 3),
-    );
-    const winterproportionCowsPreviousSeasonInCalf = Number(
-      cell(columnProportionCowsPreviousSeasonInCalfLC, offsetRows + 3),
+    const winterProportionCowsCalving = Number(
+      cell(columnProportionCowsCalving, offsetRows + 3),
     );
 
     const springLiveweight =
@@ -211,37 +219,25 @@ export const readBeefClassWithCalvesFn =
     return {
       spring: {
         head: nv(springHead),
-        fractionCowsThisSeasonInCalf: nv(springProportionCowsInCalf),
-        fractionCowsPreviousSeasonInCalf: nv(
-          springproportionCowsPreviousSeasonInCalf,
-        ),
+        fractionCowsCalving: nv(springProportionCowsCalving),
         method2LiveweightKilograms: nvo(springLiveweight),
         method2DailyLiveweightGainKilograms: nvo(springLiveweightGain),
       },
       summer: {
         head: nv(summerHead),
-        fractionCowsThisSeasonInCalf: nv(summerProportionCowsInCalf),
-        fractionCowsPreviousSeasonInCalf: nv(
-          summerProportionCowsPreviousSeasonInCalf,
-        ),
+        fractionCowsCalving: nv(summerProportionCowsCalving),
         method2LiveweightKilograms: nvo(summerLiveweight),
         method2DailyLiveweightGainKilograms: nvo(summerLiveweightGain),
       },
       autumn: {
         head: nv(autumnHead),
-        fractionCowsThisSeasonInCalf: nv(autumnProportionCowsInCalf),
-        fractionCowsPreviousSeasonInCalf: nv(
-          autumnproportionCowsPreviousSeasonInCalf,
-        ),
+        fractionCowsCalving: nv(autumnProportionCowsCalving),
         method2LiveweightKilograms: nvo(autumnLiveweight),
         method2DailyLiveweightGainKilograms: nvo(autumnLiveweightGain),
       },
       winter: {
         head: nv(winterHead),
-        fractionCowsThisSeasonInCalf: nv(winterProportionCowsInCalf),
-        fractionCowsPreviousSeasonInCalf: nv(
-          winterproportionCowsPreviousSeasonInCalf,
-        ),
+        fractionCowsCalving: nv(winterProportionCowsCalving),
         method2LiveweightKilograms: nvo(winterLiveweight),
         method2DailyLiveweightGainKilograms: nvo(winterLiveweightGain),
       },
@@ -257,33 +253,13 @@ export const readBeefCalfClassFn =
       return undefined;
     }
     const springHead = Number(springHeadRaw);
-    const springProportionBorn = Number(
-      cell(columnProportionCalvesBorn, offsetRows),
-    );
-    const springProportionBornPrevious = Number(
-      cell(columnProportionCalvesBornPrevious, offsetRows),
-    );
+    const springCalvesBorn = Number(cell(columnCalvesBorn, offsetRows));
     const summerHead = Number(cell(columnHeadN, offsetRows + 1));
-    const summerProportionBorn = Number(
-      cell(columnProportionCalvesBorn, offsetRows + 1),
-    );
-    const summerProportionBornPrevious = Number(
-      cell(columnProportionCalvesBornPrevious, offsetRows + 1),
-    );
+    const summerCalvesBorn = Number(cell(columnCalvesBorn, offsetRows + 1));
     const autumnHead = Number(cell(columnHeadN, offsetRows + 2));
-    const autumnProportionBorn = Number(
-      cell(columnProportionCalvesBorn, offsetRows + 2),
-    );
-    const autumnProportionBornPrevious = Number(
-      cell(columnProportionCalvesBornPrevious, offsetRows + 2),
-    );
+    const autumnCalvesBorn = Number(cell(columnCalvesBorn, offsetRows + 2));
     const winterHead = Number(cell(columnHeadN, offsetRows + 3));
-    const winterProportionBorn = Number(
-      cell(columnProportionCalvesBorn, offsetRows + 3),
-    );
-    const winterProportionBornPrevious = Number(
-      cell(columnProportionCalvesBornPrevious, offsetRows + 3),
-    );
+    const winterCalvesBorn = Number(cell(columnCalvesBorn, offsetRows + 3));
 
     const springLiveweight =
       method === '1'
@@ -322,29 +298,25 @@ export const readBeefCalfClassFn =
     return {
       spring: {
         head: nv(springHead),
-        fractionCalvesBornThisSeason: nv(springProportionBorn),
-        fractionCalvesBornPreviousSeason: nv(springProportionBornPrevious),
+        calvesBorn: nv(springCalvesBorn),
         method2LiveweightKilograms: nvo(springLiveweight),
         method2DailyLiveweightGainKilograms: nvo(springLiveweightGain),
       },
       summer: {
         head: nv(summerHead),
-        fractionCalvesBornThisSeason: nv(summerProportionBorn),
-        fractionCalvesBornPreviousSeason: nv(summerProportionBornPrevious),
+        calvesBorn: nv(summerCalvesBorn),
         method2LiveweightKilograms: nvo(summerLiveweight),
         method2DailyLiveweightGainKilograms: nvo(summerLiveweightGain),
       },
       autumn: {
         head: nv(autumnHead),
-        fractionCalvesBornThisSeason: nv(autumnProportionBorn),
-        fractionCalvesBornPreviousSeason: nv(autumnProportionBornPrevious),
+        calvesBorn: nv(autumnCalvesBorn),
         method2LiveweightKilograms: nvo(autumnLiveweight),
         method2DailyLiveweightGainKilograms: nvo(autumnLiveweightGain),
       },
       winter: {
         head: nv(winterHead),
-        fractionCalvesBornThisSeason: nv(winterProportionBorn),
-        fractionCalvesBornPreviousSeason: nv(winterProportionBornPrevious),
+        calvesBorn: nv(winterCalvesBorn),
         method2LiveweightKilograms: nvo(winterLiveweight),
         method2DailyLiveweightGainKilograms: nvo(winterLiveweightGain),
       },
@@ -460,11 +432,8 @@ export const readMonthlyBeefClassWithCalvesFn =
             : undefined;
       return {
         head: nv(Number(cell(columnHeadN, rowOffset))),
-        fractionCowsThisSeasonInCalf: nv(
-          Number(cell(columnProportionCowsInCalfLC, rowOffset)),
-        ),
-        fractionCowsPreviousSeasonInCalf: nv(
-          Number(cell(columnProportionCowsPreviousSeasonInCalfLC, rowOffset)),
+        fractionCowsCalving: nv(
+          Number(cell(columnProportionCowsCalving, rowOffset)),
         ),
         method2LiveweightKilograms: nvo(liveweight),
         method2DailyLiveweightGainKilograms: nvo(liveweightGain),
@@ -520,12 +489,7 @@ export const readMonthlyBeefCalfClassFn =
         rowOffset,
       );
 
-      const proportionBorn = Number(
-        cell(columnProportionCalvesBorn, rowOffset),
-      );
-      const proportionBornPrevious = Number(
-        cell(columnProportionCalvesBornPrevious, rowOffset),
-      );
+      const calvesBorn = Number(cell(columnCalvesBorn, rowOffset));
       const method2CrudeProteinContent =
         method === '2' && customCrudeProteinContent
           ? Number(customCrudeProteinContent)
@@ -556,8 +520,7 @@ export const readMonthlyBeefCalfClassFn =
         ),
         method2FractionDryMatterDigestibility: nvo(method2Dmd),
         method2FractionCrudeProteinContent: nvo(method2CrudeProteinContent),
-        fractionCalvesBornThisSeason: nv(proportionBorn),
-        fractionCalvesBornPreviousSeason: nv(proportionBornPrevious),
+        calvesBorn: nv(calvesBorn),
       };
     };
 
@@ -608,6 +571,7 @@ export const getCalculatorInput = (
     excludedFromNaturalWater,
     classes: {
       period: 'seasonal',
+      calvingSeasons: readCalvingSeasons(cell),
       bullsLt1: readBeefCalfClass(0),
       bullsGt1: readBeefClass(1),
       cows1To2Years: readBeefClassWithCalves(2),
@@ -678,6 +642,7 @@ export const getMonthlyCalculatorInput = (
       grazingSystem,
       classes: {
         period: 'monthly',
+        calvingSeasonStartMonths: readCalvingSeasonStartMonths(cell),
         bullsLt1: readBeefCalfClass(0),
         bullsGt1: readBeefClass(1),
         cows1To2Years: readBeefClassWithCalves(2),

@@ -1,4 +1,3 @@
-import { isBeefClassPeriodInputWithCalves } from '@/calculators/Beef/types/beef-class-period.input';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { br, Container, num, root } from '@/tools/containers';
@@ -13,6 +12,7 @@ import {
   RealNumber,
   realNumber,
 } from '@/tools/units';
+import { getCowCalvingShares } from './calving';
 import { BeefPeriodProps, getLiveweight, getLiveweightGain } from './helpers';
 
 /**
@@ -127,7 +127,7 @@ export const calculateNitrogenRetentionForCattle = (
 export const calculateAdditionalIntakeForMilkProduction = (
   periodProps: BeefPeriodProps,
 ) => {
-  const { classInput, periodName, currentPeriod, context } = periodProps;
+  const { classInput, periodName, context } = periodProps;
   const { constants } = context;
 
   /**
@@ -139,7 +139,9 @@ export const calculateAdditionalIntakeForMilkProduction = (
    * + (LC (calving previous season) * FA (calving previous season))
    * + (1 - LC (calving current season) - LC (calving previous season))
    */
-  if (isBeefClassPeriodInputWithCalves(currentPeriod)) {
+  const calvingShares = getCowCalvingShares(periodProps);
+  if (calvingShares) {
+    const { calvingSeason, seasonAfterCalving } = calvingShares;
     const calvingFeedAdjustment = selectConstant(
       constants.BEEF_PASTURE,
       'MILK_FACTORS',
@@ -155,21 +157,15 @@ export const calculateAdditionalIntakeForMilkProduction = (
     ).named(`FAjk=${classInput.number} (previously calving)`);
 
     const calvingCowAdjustment = br(
-      currentPeriod.fractionCowsThisSeasonInCalf.multiply(
-        calvingFeedAdjustment,
-      ),
+      calvingSeason.multiply(calvingFeedAdjustment),
     );
 
     const postCalvingCowAdjustment = br(
-      currentPeriod.fractionCowsPreviousSeasonInCalf.multiply(
-        postCalvingFeedAdjustment,
-      ),
+      seasonAfterCalving.multiply(postCalvingFeedAdjustment),
     );
 
     const nonCalvingCowAdjustment = br(
-      oneMinus(currentPeriod.fractionCowsThisSeasonInCalf).minus(
-        currentPeriod.fractionCowsPreviousSeasonInCalf,
-      ),
+      oneMinus(calvingSeason).minus(seasonAfterCalving),
     );
 
     return calvingCowAdjustment

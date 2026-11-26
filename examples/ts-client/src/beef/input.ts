@@ -118,8 +118,7 @@ const classPeriodMethod2: BeefClassPeriodInput = {
 
 const calfClassPeriodMethod1: BeefCalfClassPeriodInput = {
   ...classPeriodMethod1,
-  fractionCalvesBornThisSeason: { value: 0.6 },
-  fractionCalvesBornPreviousSeason: { value: 0.4 },
+  calvesBorn: { value: 20 },
 };
 
 const calfClassPeriodMethod2: BeefCalfClassPeriodInput = {
@@ -129,8 +128,7 @@ const calfClassPeriodMethod2: BeefCalfClassPeriodInput = {
 
 const classWithCalvesPeriodMethod1: BeefClassPeriodWithCalvesInput = {
   ...classPeriodMethod1,
-  fractionCowsThisSeasonInCalf: { value: 0.3 },
-  fractionCowsPreviousSeasonInCalf: { value: 0.2 },
+  fractionCowsCalving: { value: 0.3 },
 };
 
 const classWithCalvesPeriodMethod2: BeefClassPeriodWithCalvesInput = {
@@ -182,6 +180,7 @@ const classWithCalvesMethod2: BeefClassWithCalvesSeasonalInput = {
 
 const classesMethod1: BeefClassesSeasonalInput = {
   period: 'seasonal',
+  calvingSeasons: ['spring', 'summer', 'autumn', 'winter'],
   bullsLt1: calfClassMethod1,
   bullsGt1: classMethod1,
   cowsLt1: calfClassMethod1,
@@ -196,6 +195,7 @@ const classesMethod1: BeefClassesSeasonalInput = {
 
 const classesMethod2: BeefClassesSeasonalInput = {
   period: 'seasonal',
+  calvingSeasons: ['spring', 'summer', 'autumn', 'winter'],
   bullsLt1: calfClassMethod2,
   bullsGt1: classMethod2,
   cowsLt1: calfClassMethod2,

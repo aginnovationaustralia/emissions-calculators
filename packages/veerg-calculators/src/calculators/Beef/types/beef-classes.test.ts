@@ -38,6 +38,7 @@ describe('Beef period inputs', () => {
         createBeefHerdInput({
           classes: {
             period: 'seasonal',
+            calvingSeasons: [],
             bullsGt1: seasonalClass,
             steersGt3Years: seasonalClass,
           },
@@ -52,6 +53,7 @@ describe('Beef period inputs', () => {
         createBeefHerdInput({
           classes: {
             period: 'monthly',
+            calvingSeasonStartMonths: [],
             bullsGt1: monthlyClass,
             steersGt3Years: monthlyClass,
           },

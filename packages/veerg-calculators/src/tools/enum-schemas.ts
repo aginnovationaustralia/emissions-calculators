@@ -51,6 +51,7 @@ const namedEnums = {
   LimeAmeliorant: E.LimeAmeliorants,
   MatureDairyClass: E.MatureDairyClasses,
   MeanAnnualTemperature: E.MeanAnnualTemperatures,
+  Month: E.Months,
   NonBurnableCropType: E.NonBurnableCropTypes,
   OffRoadAgricultureAndForestryEquipmentFuelType:
     E.OffRoadAgricultureAndForestryEquipmentFuelTypes,

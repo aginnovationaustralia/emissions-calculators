@@ -1,7 +1,3 @@
-import {
-  isBeefCalfClassPeriodInput,
-  isBeefClassPeriodInputWithCalves,
-} from '@/calculators/Beef/types/beef-class-period.input';
 import { ExecutionContext } from '@/calculators/executionContext';
 import { HasIsFebruaryInLeapYearInputTransformed } from '@/calculators/types/has-is-february-in-leap-year.input';
 import { selectConstant } from '@/tools/constants';
@@ -19,6 +15,10 @@ import {
   calculateRelativeIntakeForBeef,
 } from '../../shared/beef/calculate';
 import {
+  getCalfBirthShares,
+  getCowCalvingShares,
+} from '../../shared/beef/calving';
+import {
   BeefPeriodProps,
   calculateForAllClassPeriods,
   getCrudeProtein,
@@ -34,13 +34,13 @@ import { ConstantsForBeefManure } from './constants';
  * Calculate milk production *MPjk* for a beef class *k* in period *j* (4.2.1.3 (5))
  */
 const calculateMilkProduction = (periodProps: BeefPeriodProps) => {
-  const { context, className, seasonName, currentPeriod, herd, classInput } =
-    periodProps;
+  const { context, className, seasonName, herd, classInput } = periodProps;
   const { constants } = context;
   const { breed } = herd;
 
-  if (isBeefClassPeriodInputWithCalves(currentPeriod)) {
-    const LCCalving = currentPeriod.fractionCowsThisSeasonInCalf;
+  const calvingShares = getCowCalvingShares(periodProps);
+  if (calvingShares) {
+    const LCCalving = calvingShares.calvingSeason;
     const DMPCalving = selectConstant(
       constants.BEEF_PASTURE,
       'MILK_FACTORS',
@@ -51,7 +51,7 @@ const calculateMilkProduction = (periodProps: BeefPeriodProps) => {
 
     const milkProductionFromCalvingCows = br(LCCalving.multiply(DMPCalving));
 
-    const LCAfterCalving = currentPeriod.fractionCowsPreviousSeasonInCalf;
+    const LCAfterCalving = calvingShares.seasonAfterCalving;
     const DMPAfterCalving = selectConstant(
       constants.BEEF_PASTURE,
       'MILK_FACTORS',
@@ -78,10 +78,11 @@ const calculateMilkProduction = (periodProps: BeefPeriodProps) => {
  * Calculates *MCjk* for a beef cattle class *k* in period *j*.
  */
 const calculateMilkIntake = (periodProps: BeefPeriodProps) => {
-  const { classInput, herd, seasonName, context, currentPeriod } = periodProps;
+  const { classInput, herd, seasonName, context } = periodProps;
   const { breed } = herd;
   const { constants } = context;
-  if (!isBeefCalfClassPeriodInput(currentPeriod)) {
+  const birthShares = getCalfBirthShares(periodProps);
+  if (!birthShares) {
     return zeroMassPerHeadPerDayMilk.named(
       `MCjk=${classInput.number} (non-calf class)`,
     );
@@ -95,7 +96,7 @@ const calculateMilkIntake = (periodProps: BeefPeriodProps) => {
     'calving',
   );
   const milkIntakeForCalvesBornThisSeason = br(
-    milkProductionCalving.multiply(currentPeriod.fractionCalvesBornThisSeason),
+    milkProductionCalving.multiply(birthShares.calvingSeason),
   );
 
   const milkProductionPostCalving = selectConstant(
@@ -106,9 +107,7 @@ const calculateMilkIntake = (periodProps: BeefPeriodProps) => {
     'postCalving',
   );
   const milkIntakeForCalvesBornPreviousSeason = br(
-    milkProductionPostCalving.multiply(
-      currentPeriod.fractionCalvesBornPreviousSeason,
-    ),
+    milkProductionPostCalving.multiply(birthShares.seasonAfterCalving),
   );
 
   return milkIntakeForCalvesBornThisSeason
