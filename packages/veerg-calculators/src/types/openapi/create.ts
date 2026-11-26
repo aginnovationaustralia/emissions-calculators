@@ -56,12 +56,12 @@ import * as z from 'zod';
 import {
   createDocument,
   createSchema,
-  type oas31,
+  type oas32,
   ZodOpenApiPathsObject,
 } from 'zod-openapi';
 
 // zod-openapi v6 bundles its own OpenAPI types. We generate OpenAPI 3.1 documents.
-type OpenAPIObject = oas31.OpenAPIObject;
+type OpenAPIObject = oas32.OpenAPIObject;
 
 type Endpoint = {
   inputSchema: z.ZodType;
@@ -231,7 +231,7 @@ const createOpenApiDocument = (
   const outputComponents: SchemaComponents = {};
   const document = createDocument(
     {
-      openapi: '3.1.0',
+      openapi: '3.2.0',
       info: {
         title,
         version,
@@ -273,43 +273,7 @@ const createOpenApiDocument = (
     };
   }
 
-  return asOpenApi31(document);
-};
-
-/** createDocument is typed as the OpenAPI 3.2 superset regardless of the requested version.
- * The document is rendered as 3.1 (driven by the `openapi` field), so narrow the type,
- * guarding against 3.2-only output sneaking in. */
-const asOpenApi31 = (
-  document: ReturnType<typeof createDocument>,
-): OpenAPIObject => {
-  if (!document.openapi.startsWith('3.1.')) {
-    throw new Error(
-      `Expected an OpenAPI 3.1 document, received ${document.openapi}`,
-    );
-  }
-  const usesQuerystring = Object.values(document.paths ?? {}).some(
-    (pathItem) =>
-      [pathItem, ...Object.values(pathItem)].some(
-        (item) =>
-          typeof item === 'object' &&
-          item !== null &&
-          'parameters' in item &&
-          Array.isArray(item.parameters) &&
-          item.parameters.some(
-            (p: unknown) =>
-              typeof p === 'object' &&
-              p !== null &&
-              'in' in p &&
-              p.in === 'querystring',
-          ),
-      ),
-  );
-  if (usesQuerystring) {
-    throw new Error(
-      "OpenAPI 3.1 does not support 'querystring' parameters (3.2 only)",
-    );
-  }
-  return document as OpenAPIObject;
+  return document;
 };
 
 export type OpenApiSchemaBundle = {
