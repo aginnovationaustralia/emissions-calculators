@@ -46,7 +46,7 @@ export const calculateFreightEmissions = (
       'CO2e',
     );
     const upstreamEmissions = calculateScope3EmissionsFromFuelTransport(
-      { transport: [freight.fuel], stationary: [] },
+      { transport: [freight.fuel] },
       context,
     );
 

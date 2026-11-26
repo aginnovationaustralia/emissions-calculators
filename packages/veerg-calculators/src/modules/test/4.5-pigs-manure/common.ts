@@ -33,7 +33,17 @@ export const readPigsClass = (
   const head = nv(numOrZero('F'));
   const days = nv(numOrZero('G'));
 
-  const outdoorAndFreeRange = nv(numOrZero('M'));
+  const outdoorAllocated = numOrZero('M');
+  const outdoorAndFreeRange = {
+    manureAllocated: nv(outdoorAllocated),
+    treatmentStage2Allocations: {
+      anaerobicLagoon: nv(numOrZero('AJ')),
+      solidStorage: nv(numOrZero('AK')),
+      digester: nv(numOrZero('AL')),
+      pitStorage: nv(numOrZero('AM')),
+      directApplication: nv(numOrZero('AN')),
+    },
+  };
 
   const anaerobicLagoon = {
     manureAllocated: nv(numOrZero('K')),
@@ -57,31 +67,31 @@ export const readPigsClass = (
   const digester = {
     manureAllocated: nv(numOrZero('N')),
     treatmentStage2Allocations: {
-      anaerobicLagoon: nv(numOrZero('AJ')),
-      solidStorage: nv(numOrZero('AK')),
-      pitStorage: nv(numOrZero('AM')),
-      directApplication: nv(numOrZero('AN')),
+      anaerobicLagoon: nv(numOrZero('AO')),
+      solidStorage: nv(numOrZero('AP')),
+      pitStorage: nv(numOrZero('AR')),
+      directApplication: nv(numOrZero('AS')),
     },
   };
 
   const deepLitter = {
     manureAllocated: nv(numOrZero('O')),
     treatmentStage2Allocations: {
-      anaerobicLagoon: nv(numOrZero('AO')),
-      solidStorage: nv(numOrZero('AP')),
-      digester: nv(numOrZero('AQ')),
-      pitStorage: nv(numOrZero('AR')),
-      directApplication: nv(numOrZero('AS')),
+      anaerobicLagoon: nv(numOrZero('AT')),
+      solidStorage: nv(numOrZero('AU')),
+      digester: nv(numOrZero('AV')),
+      pitStorage: nv(numOrZero('AW')),
+      directApplication: nv(numOrZero('AX')),
     },
   };
 
   const pitStorage = {
     manureAllocated: nv(numOrZero('P')),
     treatmentStage2Allocations: {
-      anaerobicLagoon: nv(numOrZero('AT')),
-      solidStorage: nv(numOrZero('AU')),
-      digester: nv(numOrZero('AV')),
-      directApplication: nv(numOrZero('AX')),
+      anaerobicLagoon: nv(numOrZero('AY')),
+      solidStorage: nv(numOrZero('AZ')),
+      digester: nv(numOrZero('BA')),
+      directApplication: nv(numOrZero('BC')),
     },
   };
 

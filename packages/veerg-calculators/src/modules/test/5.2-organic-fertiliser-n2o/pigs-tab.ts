@@ -1,6 +1,6 @@
 /** Column letters for sheet `5.2.1.1 (pigs)` */
 export const columnClimate = 'C';
 export const columnIsInLeachingZone = 'D';
-export const columnFractionAppliedToSoils = 'CQ';
+export const columnFractionAppliedToSoils = 'CW';
 
-export const columnExpectedResult = 'CW';
+export const columnExpectedResult = 'DC';

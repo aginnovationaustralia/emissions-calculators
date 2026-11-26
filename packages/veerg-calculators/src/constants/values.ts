@@ -38,6 +38,7 @@ import {
   volumePerMass,
   years,
 } from '@/tools/units';
+import Decimal from 'decimal.js-light';
 import {
   BeefPurchaseCategory,
   MeanAnnualTemperature,
@@ -51,6 +52,7 @@ import {
   createTransportFuelConstantsFromNGAF,
   getElectricityFactorsFromNGAF,
   getRefrigerantLeakageRateFromNGAF,
+  naturalGasScope3EfByState,
   ngafLiquidFuelData,
   ngafSolidFuelData,
   ngafTables,
@@ -790,42 +792,8 @@ export const commonConstants: CommonConstants = {
       ),
     },
     SCOPE3_EF: {
-      NSW: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
-        ),
-      ),
-      ACT: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(
-          ngafTables['Table 6'].table['New South Wales and ACT'].NON_METRO,
-        ),
-      ),
-      VIC: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
-      ),
-      QLD: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table.Queensland.NON_METRO),
-      ),
-      SA: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table['South Australia'].NON_METRO),
-      ),
-      WA: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].NON_METRO),
-      ),
-      TAS: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table.Victoria.NON_METRO),
-      ), // Based on victoria
-      NT: massPerEnergy(
-        'CO2e',
-        perGjToPerJ(ngafTables['Table 6'].table['Western Australia'].NON_METRO),
-      ), // based on WA (TODO: Why not QLD?)
+      METRO: naturalGasScope3EfByState('METRO'),
+      NON_METRO: naturalGasScope3EfByState('NON_METRO'),
     },
   },
 
@@ -2878,35 +2846,20 @@ export const livestockConstants: LivestockConstants = {
   },
 
   /**
-   * Values are taken from the AusLCI draft national averages for sheep and beef,
-   * depending on which of the two the guidelines advises is the most similar
-   * for each livestock type.
-   * @description Emissions factors for purchased "Other livestock" types, taken from AusLCI
-   */
-  OTHER_PURCHASED_LIVESTOCK_FACTORS: {
-    Buffalo: massPerMass('CO2e', 'Liveweight', 12.4),
-    Goats: massPerMass('CO2e', 'Liveweight', 5.44),
-    Deer: massPerMass('CO2e', 'Liveweight', 5.44),
-    Camels: massPerMass('CO2e', 'Liveweight', 12.4),
-    Alpacas: massPerMass('CO2e', 'Liveweight', 5.44),
-    Horses: massPerMass('CO2e', 'Liveweight', 12.4),
-    'Mules/asses': massPerMass('CO2e', 'Liveweight', 5.44),
-    'Emus/ostriches': massPerMass('CO2e', 'Liveweight', 5.44),
-  },
-  /**
    * @description Other livestock average liveweights
    * @appendixA A.1.5.4
    * @reference IPCC Chapter 10 Table 10.10 & Table 10A.5 (for Buffalo)
    */
   OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS: {
     Buffalo: liveweight(336),
-    Goats: liveweight(50),
     Deer: liveweight(120),
     Camels: liveweight(570),
     Alpacas: liveweight(65),
     Horses: liveweight(550),
     'Mules/asses': liveweight(245),
     'Emus/ostriches': liveweight(120),
+    'Goat - High': liveweight(50),
+    'Goat - Low': liveweight(28),
   },
 
   /**
@@ -2950,9 +2903,19 @@ export const livestockConstants: LivestockConstants = {
     beefManufacturing: massPerMass('CO2e', 'Liveweight', 11.0),
     beefPrime: massPerMass('CO2e', 'Liveweight', 12.4),
     beefWeaned: massPerMass('CO2e', 'Liveweight', 13.29),
+    beefAverage: massPerMass(
+      'CO2e',
+      'Liveweight',
+      new Decimal(11.0 + 12.4 + 13.29).div(3),
+    ),
     // Sheep
     sheepMutton: massPerMass('CO2e', 'Liveweight', 6.03),
     sheepPrimeLamb: massPerMass('CO2e', 'Liveweight', 6.08),
+    sheepAverage: massPerMass(
+      'CO2e',
+      'Liveweight',
+      new Decimal(6.03 + 6.08).div(2),
+    ),
     // Pigs
     pigsDefault: massPerMass('CO2e', 'Liveweight', 3.38),
     pigsConventionalRearingCoveredPond: massPerMass('CO2e', 'Liveweight', 2.19),

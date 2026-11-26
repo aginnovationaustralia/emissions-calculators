@@ -174,6 +174,7 @@ const purchasedLivestockMethod1: OtherPurchasedLivestockInput = {
   type: 'Other',
   headPurchased: { value: 50 },
   livestockType: 'Goats',
+  productivitySystem: 'High',
 };
 
 const purchasedLivestockMethod2: OtherPurchasedLivestockInput = {

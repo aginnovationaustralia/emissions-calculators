@@ -91,7 +91,16 @@ export const zeroPigsManureAllocation: PigsClassManureAllocationLivestockInput =
       },
       solidsSeparatedPreTreatment: false,
     },
-    outdoorAndFreeRange: nv(1),
+    outdoorAndFreeRange: {
+      manureAllocated: nv(1),
+      treatmentStage2Allocations: {
+        directApplication: nv(1),
+        anaerobicLagoon: nv(0),
+        digester: nv(0),
+        pitStorage: nv(0),
+        solidStorage: nv(0),
+      },
+    },
   };
 
 export const zeroPoultryMMS2Allocation: PoultryMMS2AllocationInput = {

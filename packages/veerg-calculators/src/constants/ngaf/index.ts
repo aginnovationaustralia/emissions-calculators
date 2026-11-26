@@ -7,9 +7,11 @@ import {
   energyPerMass,
   energyPerVolume,
   massPerElectricity,
+  MassPerEnergy,
   massPerEnergy,
   percentage,
 } from '@/tools/units';
+import { State } from '../enums';
 import {
   FuelFactorByMass,
   FuelFactorByVolume,
@@ -134,3 +136,33 @@ type RefrigerantLeakageNGAFName = keyof typeof ngafRefrigerantLeakageData;
 export const getRefrigerantLeakageRateFromNGAF = (
   row: RefrigerantLeakageNGAFName,
 ) => percentage(ngafRefrigerantLeakageData[row]['Annual leakage rate (%)']);
+
+type NaturalGasTable6Row = keyof (typeof ngafTables)['Table 6']['table'];
+
+/**
+ * The NGA Table 6 row used for each state's scope 3 natural gas EF.
+ * TAS is based on Victoria, and NT on WA.
+ */
+const naturalGasTable6RowByState: Record<State, NaturalGasTable6Row> = {
+  NSW: 'New South Wales and ACT',
+  ACT: 'New South Wales and ACT',
+  VIC: 'Victoria',
+  QLD: 'Queensland',
+  SA: 'South Australia',
+  WA: 'Western Australia',
+  TAS: 'Victoria',
+  NT: 'Western Australia',
+};
+
+export const naturalGasScope3EfByState = (
+  region: 'METRO' | 'NON_METRO',
+): Record<State, MassPerEnergy<'CO2e'>> =>
+  Object.fromEntries(
+    Object.entries(naturalGasTable6RowByState).map(([state, row]) => [
+      state,
+      massPerEnergy(
+        'CO2e',
+        perGjToPerJ(ngafTables['Table 6'].table[row][region]),
+      ),
+    ]),
+  ) as Record<State, MassPerEnergy<'CO2e'>>;

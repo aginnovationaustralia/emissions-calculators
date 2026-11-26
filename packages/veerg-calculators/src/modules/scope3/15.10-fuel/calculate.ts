@@ -1,5 +1,6 @@
 import { ExecutionContext } from '@/calculators/executionContext';
 import { HasStateInputTransformed } from '@/calculators/types/has-state.input';
+import { isInMetroRegionToNaturalGasRegion } from '@/constants/translations';
 import {
   FuelInputTransformed,
   HasFuelInputTransformed,
@@ -19,7 +20,7 @@ import { zeroCO2e } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 
 export const calculateScope3EmissionsFromFuelTransport = (
-  fuel: FuelInputTransformed,
+  fuel: Pick<FuelInputTransformed, 'transport'>,
   context: ExecutionContext,
 ) => {
   const { constants } = context;
@@ -113,7 +114,7 @@ const calculateScope3EmissionsFromFuelStationaryLiquid = (
 
 const calculateScope3EmissionsFromFuelStationaryNaturalGas = (
   fuel: StationaryFuelNaturalGasInputTransformed,
-  input: HasStateInputTransformed,
+  input: HasFuelInputTransformed & HasStateInputTransformed,
   context: ExecutionContext,
 ) => {
   const { constants } = context;
@@ -129,6 +130,7 @@ const calculateScope3EmissionsFromFuelStationaryNaturalGas = (
     constants.COMMON,
     'NATURAL_GAS_FACTORS',
     'SCOPE3_EF',
+    isInMetroRegionToNaturalGasRegion(input.fuel.isInMetroRegion),
     input.state,
   );
   const energyFromFuel = ecTransQ.multiply(qTransQ);

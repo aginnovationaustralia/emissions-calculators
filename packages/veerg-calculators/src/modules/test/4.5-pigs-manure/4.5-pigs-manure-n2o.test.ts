@@ -22,7 +22,7 @@ describe('4.5.1.3 & 4.5.1.4 Pigs Manure Management Direct N2O', () => {
       '4.5',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput('EX')(sheet, 11, '1');
+    const inputsAndOutputs = extractInputsAndOutput('FF')(sheet, 11, '1');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
@@ -37,7 +37,7 @@ describe('4.5.1.3 & 4.5.1.4 Pigs Manure Management Direct N2O', () => {
       '4.5',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput('EX')(sheet, 38, '2');
+    const inputsAndOutputs = extractInputsAndOutput('FF')(sheet, 38, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
@@ -54,7 +54,7 @@ describe('4.5 Pigs Manure Management Atmospheric Deposition N2O', () => {
       '4.5',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput('FM')(sheet, 11, '1');
+    const inputsAndOutputs = extractInputsAndOutput('FU')(sheet, 11, '1');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
@@ -68,7 +68,7 @@ describe('4.5 Pigs Manure Management Atmospheric Deposition N2O', () => {
       '4.5',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput('FM')(sheet, 38, '2');
+    const inputsAndOutputs = extractInputsAndOutput('FU')(sheet, 38, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
@@ -85,7 +85,7 @@ describe('4.5 Pigs Manure Management Leaching and Runoff N2O', () => {
       '4.5',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput('FS')(sheet, 11, '1');
+    const inputsAndOutputs = extractInputsAndOutput('GA')(sheet, 11, '1');
 
     compareInputsAndOutputs(
       inputsAndOutputs,
@@ -99,7 +99,7 @@ describe('4.5 Pigs Manure Management Leaching and Runoff N2O', () => {
       '4.5',
     );
 
-    const inputsAndOutputs = extractInputsAndOutput('FS')(sheet, 38, '2');
+    const inputsAndOutputs = extractInputsAndOutput('GA')(sheet, 38, '2');
 
     compareInputsAndOutputs(
       inputsAndOutputs,

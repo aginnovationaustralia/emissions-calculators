@@ -1,5 +1,8 @@
 import { ExecutionContext } from '@/calculators/executionContext';
-import { extendedRegionToState } from '@/constants/translations';
+import {
+  convertGoatProductionSystem,
+  extendedRegionToState,
+} from '@/constants/translations';
 import { HasConstants } from '@/constants/types';
 import { selectConstant } from '@/tools/constants';
 import { Container } from '@/tools/containers';
@@ -34,13 +37,13 @@ function getEmissionsFactorForOtherLivestock(
   const averageBeefEF = selectConstant(
     constants.LIVESTOCK,
     'PURCHASED_EF',
-    'beefPrime',
+    'beefAverage',
   );
 
   const averageSheepEF = selectConstant(
     constants.LIVESTOCK,
     'PURCHASED_EF',
-    'sheepMutton',
+    'sheepAverage',
   );
   const scalingFactor = selectConstant(
     constants.LIVESTOCK,
@@ -158,6 +161,31 @@ function getEmissionFactor(
   }
 }
 
+/**
+ * Goats are the only "Other" type whose method 1 liveweight depends on
+ * productivity, so they have their own input variant with `productivitySystem`.
+ */
+function getLiveweightForOtherLivestock(
+  purchase: Exclude<
+    Extract<PurchasedLivestockInputTransformed, { type: 'Other' }>,
+    { method2LiveweightKilograms: unknown }
+  >,
+  constants: ConstantsForPurchasedLivestock,
+): Container<Liveweight> {
+  if ('productivitySystem' in purchase) {
+    return selectConstant(
+      constants.LIVESTOCK,
+      'OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS',
+      convertGoatProductionSystem(purchase.productivitySystem),
+    );
+  }
+  return selectConstant(
+    constants.LIVESTOCK,
+    'OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS',
+    purchase.livestockType,
+  );
+}
+
 /** See `getEmissionFactor` - same "check the method 2 guard once, then switch" shape. */
 function getLiveweight(
   purchase: PurchasedLivestockInputTransformed,
@@ -197,11 +225,7 @@ function getLiveweight(
 
     case 'Other':
       return captureMethod1Or2Value(
-        selectConstant(
-          constants.LIVESTOCK,
-          'OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS',
-          purchase.livestockType,
-        ),
+        getLiveweightForOtherLivestock(purchase, constants),
         undefined,
       );
 

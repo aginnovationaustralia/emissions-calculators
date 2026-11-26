@@ -64,6 +64,7 @@ import {
   OffRoadAgricultureAndForestryEquipmentFuelType,
   OrganicFertiliserType,
   OtherLivestockType,
+  OtherLivestockTypeWithoutGoats,
   OtherPurchasedCleaningChemicalType,
   OtherPurchasedMiscellaneousType,
   OtherPurchasedPharmacyChemicalType,
@@ -222,7 +223,10 @@ export type CommonConstants = NamedConstants & {
 
   NATURAL_GAS_FACTORS: {
     SCOPE1_EFS: Record<FuelStationaryGaseousType, GaseousFuelFactor>;
-    SCOPE3_EF: Record<State, MassPerEnergy<'CO2e'>>;
+    SCOPE3_EF: Record<
+      'METRO' | 'NON_METRO',
+      Record<State, MassPerEnergy<'CO2e'>>
+    >;
   };
 
   FREIGHT_EMISSIONS: Record<
@@ -640,12 +644,8 @@ export type LivestockConstants = NamedConstants & {
     anaerobicLagoon: OtherLivestockMMSFactors;
   };
 
-  OTHER_PURCHASED_LIVESTOCK_FACTORS: Record<
-    OtherLivestockType,
-    MassPerMass<'CO2e', 'Liveweight'>
-  >;
   OTHER_PURCHASED_LIVESTOCK_AVERAGE_LIVEWEIGHTS: Record<
-    OtherLivestockType,
+    OtherLivestockTypeWithoutGoats | 'Goat - High' | 'Goat - Low',
     Liveweight
   >;
 
@@ -684,7 +684,7 @@ export type LivestockConstants = NamedConstants & {
   NITROGEN_TO_MILK_PROTEIN: MassPerMass<'Milk', 'N'>;
 
   PURCHASED_EF: Record<
-    LivestockPurchaseCategory,
+    LivestockPurchaseCategory | 'beefAverage' | 'sheepAverage',
     MassPerMass<'CO2e', 'Liveweight'>
   >;
 
