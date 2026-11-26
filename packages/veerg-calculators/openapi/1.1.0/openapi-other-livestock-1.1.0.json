@@ -95,96 +95,263 @@
                         "title": "Location based"
                       },
                       {
-                        "type": "object",
-                        "properties": {
-                          "method": {
-                            "type": "string",
-                            "const": "market"
-                          },
-                          "electricityPurchasedKilowattHours": {
-                            "description": "Electricity use (kilowatt-hours)",
-                            "x-modules": [
-                              "14.1",
-                              "15.11"
-                            ],
+                        "oneOf": [
+                          {
                             "type": "object",
                             "properties": {
-                              "value": {
-                                "$ref": "#/components/schemas/NonNegativeNumberInput"
+                              "method": {
+                                "type": "string",
+                                "const": "market"
                               },
-                              "quality": {
-                                "default": {},
-                                "$ref": "#/components/schemas/QualityTable"
+                              "electricityPurchasedKilowattHours": {
+                                "description": "Electricity use (kilowatt-hours)",
+                                "x-modules": [
+                                  "14.1",
+                                  "15.11"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "kilowatt-hours"
+                              },
+                              "recsSurrenderedMegawattHours": {
+                                "description": "Number of eligible Renewable Energy Certificates voluntarily surrendered in the reporting year (megawatt-hours)",
+                                "x-modules": [
+                                  "14.1",
+                                  "15.11"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "megawatt-hours"
+                              },
+                              "recsOnsiteMegawattHours": {
+                                "description": "Number eligible Renewable Energy Certificates that have been or will be issued for electricity produced on-site during the year and consumed by the entity (megawatt-hours)",
+                                "x-modules": [
+                                  "14.1",
+                                  "15.11"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "megawatt-hours"
+                              },
+                              "renewablePowerPercentage": {
+                                "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                                "x-modules": [
+                                  "14.1",
+                                  "15.11"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/PercentageNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "percentage"
+                              },
+                              "region": {
+                                "type": "string",
+                                "enum": [
+                                  "ACT"
+                                ],
+                                "description": "The state, territory or electricity grid the electricity is purchased in",
+                                "x-modules": [
+                                  "14.1",
+                                  "15.11"
+                                ]
+                              },
+                              "jurisdictionalRenewablePowerPercentage": {
+                                "description": "Jurisdictional Renewable Power Percentage (JRPP) for the reporting year, from 0 to 100. If not supplied, the built-in value for 2026 (76.13%) is used. (percentage)",
+                                "x-modules": [
+                                  "14.1",
+                                  "15.11"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/PercentageNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "percentage"
                               }
                             },
                             "required": [
-                              "value"
+                              "method",
+                              "electricityPurchasedKilowattHours",
+                              "recsSurrenderedMegawattHours",
+                              "recsOnsiteMegawattHours",
+                              "region"
                             ],
                             "additionalProperties": false,
-                            "x-units": "kilowatt-hours"
+                            "title": "Market based (ACT)"
                           },
-                          "recsSurrenderedMegawattHours": {
-                            "description": "Number of eligible Renewable Energy Certificates voluntarily surrendered in the reporting year (megawatt-hours)",
-                            "x-modules": [
-                              "14.1",
-                              "15.11"
-                            ],
+                          {
                             "type": "object",
                             "properties": {
-                              "value": {
-                                "$ref": "#/components/schemas/NonNegativeNumberInput"
+                              "method": {
+                                "type": "string",
+                                "const": "market"
                               },
-                              "quality": {
-                                "default": {},
-                                "$ref": "#/components/schemas/QualityTable"
+                              "electricityPurchasedKilowattHours": {
+                                "description": "Electricity use (kilowatt-hours)",
+                                "x-modules": [
+                                  "14.1",
+                                  "15.11"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "kilowatt-hours"
+                              },
+                              "recsSurrenderedMegawattHours": {
+                                "description": "Number of eligible Renewable Energy Certificates voluntarily surrendered in the reporting year (megawatt-hours)",
+                                "x-modules": [
+                                  "14.1",
+                                  "15.11"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "megawatt-hours"
+                              },
+                              "recsOnsiteMegawattHours": {
+                                "description": "Number eligible Renewable Energy Certificates that have been or will be issued for electricity produced on-site during the year and consumed by the entity (megawatt-hours)",
+                                "x-modules": [
+                                  "14.1",
+                                  "15.11"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/NonNegativeNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "megawatt-hours"
+                              },
+                              "renewablePowerPercentage": {
+                                "description": "Renewable Power Percentage (RPP) under the Large-scale Renewable Energy Target for the reporting year, from 0 to 100, as published annually by the Clean Energy Regulator. If not supplied, the built-in value for 2026 (16.67%) is used. (percentage)",
+                                "x-modules": [
+                                  "14.1",
+                                  "15.11"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "$ref": "#/components/schemas/PercentageNumberInput"
+                                  },
+                                  "quality": {
+                                    "default": {},
+                                    "$ref": "#/components/schemas/QualityTable"
+                                  }
+                                },
+                                "required": [
+                                  "value"
+                                ],
+                                "additionalProperties": false,
+                                "x-units": "percentage"
+                              },
+                              "region": {
+                                "description": "The state, territory or electricity grid the electricity is purchased in",
+                                "x-modules": [
+                                  "14.1",
+                                  "15.11"
+                                ],
+                                "$ref": "#/components/schemas/ElectricityRegionExcludingACT"
                               }
                             },
                             "required": [
-                              "value"
+                              "method",
+                              "electricityPurchasedKilowattHours",
+                              "recsSurrenderedMegawattHours",
+                              "recsOnsiteMegawattHours",
+                              "region"
                             ],
                             "additionalProperties": false,
-                            "x-units": "megawatt-hours"
-                          },
-                          "recsOnsiteMegawattHours": {
-                            "description": "Number eligible Renewable Energy Certificates that have been or will be issued for electricity produced on-site during the year and consumed by the entity (megawatt-hours)",
-                            "x-modules": [
-                              "14.1",
-                              "15.11"
-                            ],
-                            "type": "object",
-                            "properties": {
-                              "value": {
-                                "$ref": "#/components/schemas/NonNegativeNumberInput"
-                              },
-                              "quality": {
-                                "default": {},
-                                "$ref": "#/components/schemas/QualityTable"
-                              }
-                            },
-                            "required": [
-                              "value"
-                            ],
-                            "additionalProperties": false,
-                            "x-units": "megawatt-hours"
-                          },
-                          "region": {
-                            "description": "The state, territory or electricity grid the electricity is purchased in",
-                            "x-modules": [
-                              "14.1",
-                              "15.11"
-                            ],
-                            "$ref": "#/components/schemas/ElectricityRegion"
+                            "title": "Market based (outside the ACT)"
                           }
-                        },
-                        "required": [
-                          "method",
-                          "electricityPurchasedKilowattHours",
-                          "recsSurrenderedMegawattHours",
-                          "recsOnsiteMegawattHours",
-                          "region"
                         ],
-                        "additionalProperties": false,
-                        "title": "Market based"
+                        "title": "Market based",
+                        "type": "object"
                       }
                     ],
                     "type": "object"
@@ -657,7 +824,7 @@
                                         ]
                                       },
                                       "productivitySystem": {
-                                        "description": "The productivity system of the goats",
+                                        "description": "The productivity system that best describes the source these goats were purchased from.",
                                         "x-modules": [
                                           "15.1"
                                         ],
@@ -871,7 +1038,7 @@
                                         ]
                                       },
                                       "productivitySystem": {
-                                        "description": "The productivity system of the goats",
+                                        "description": "The productivity system that best describes the source these goats were purchased from.",
                                         "x-modules": [
                                           "15.1"
                                         ],
@@ -6952,6 +7119,25 @@
           "TAS",
           "NT",
           "ACT",
+          "National"
+        ]
+      },
+      "PercentageNumberInput": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "ElectricityRegionExcludingACT": {
+        "type": "string",
+        "enum": [
+          "NSW",
+          "VIC",
+          "QLD",
+          "SA",
+          "WA_NW",
+          "WA_SW",
+          "TAS",
+          "NT",
           "National"
         ]
       },
@@ -18658,11 +18844,6 @@
             "title": "Method 2 (measured fractions)"
           }
         ]
-      },
-      "PercentageNumberInput": {
-        "type": "number",
-        "minimum": 0,
-        "maximum": 100
       },
       "DairyCattleBreed": {
         "type": "string",
