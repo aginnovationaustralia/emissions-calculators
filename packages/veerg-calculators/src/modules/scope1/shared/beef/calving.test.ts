@@ -322,20 +322,21 @@ describe('Beef seasonal (Method 1) calving seasons from calvingSeasons', () => {
   });
 
   test('a calf class with no animals in a season has no share born', () => {
+    // Calves are born in spring and leave the class by autumn
     const herd: BeefManureAndEntericHerdInput = {
       ...seasonalHerd,
       classes: {
         period: 'seasonal',
         calvingSeasons: ['spring'],
         bullsLt1: {
-          spring: { head: { value: 0 }, calvesBorn: { value: 10 } },
-          summer: { head: { value: 0 }, calvesBorn: { value: 0 } },
+          spring: { head: { value: 20 }, calvesBorn: { value: 10 } },
+          summer: { head: { value: 20 }, calvesBorn: { value: 0 } },
           autumn: { head: { value: 0 }, calvesBorn: { value: 0 } },
           winter: { head: { value: 0 }, calvesBorn: { value: 0 } },
         },
       },
     };
-    const shares = getCalfBirthShares(periodProps(herd, 'bullsLt1', 'spring'));
+    const shares = getCalfBirthShares(periodProps(herd, 'bullsLt1', 'autumn'));
     expect(value(shares!.calvingSeason)).toBe(0);
     expect(value(shares!.seasonAfterCalving)).toBe(0);
   });
@@ -452,6 +453,66 @@ describe('Beef calving input validation', () => {
       'cowsGt3Years.summer.fractionCowsCalving: 0.1 of the cows calve in summer, which is in no calving season. Add summer to calvingSeasons, or set fractionCowsCalving to 0.',
       'bullsLt1.summer.calvesBorn: 5 calves are born in summer, which is in no calving season. Add summer to calvingSeasons, or set calvesBorn to 0.',
     ]);
+  });
+
+  test('each issue has the path of the input it is about', () => {
+    const classes = editableClasses(monthlyHerd);
+    classes.cowsGt3Years.march.fractionCowsCalving = { value: 0.05 };
+    const result = BeefClassesMonthlyInputSchema.safeParse(classes);
+    expect(result.error?.issues.map((i) => i.path)).toEqual([
+      ['cowsGt3Years', 'march', 'fractionCowsCalving'],
+    ]);
+  });
+
+  test('monthly: start months less than 3 months apart are rejected, as their seasons would overlap', () => {
+    // June to August and August to October would share August
+    const classes = editableClasses(monthlyHerd);
+    classes.calvingSeasonStartMonths = ['june', 'august'];
+    classes.cowsGt3Years.september.fractionCowsCalving = { value: 0 };
+    classes.cowsGt3Years.october.fractionCowsCalving = { value: 0 };
+    classes.bullsLt1.september.calvesBorn = { value: 0 };
+    classes.bullsLt1.october.calvesBorn = { value: 0 };
+    classes.bullsLt1.november.calvesBorn = { value: 0 };
+    expect(monthlyIssues(classes)).toEqual([
+      'calvingSeasonStartMonths: june and august are less than 3 months apart, so their calving seasons overlap. Each calving season is the 3 months from its start month: list only the first month of each season.',
+    ]);
+  });
+
+  test('monthly: start months less than 3 months apart across the new year are rejected', () => {
+    const classes = editableClasses(monthlyHerd);
+    classes.calvingSeasonStartMonths = ['june', 'september', 'november'];
+    expect(monthlyIssues(classes)).toEqual([
+      'calvingSeasonStartMonths: september and november are less than 3 months apart, so their calving seasons overlap. Each calving season is the 3 months from its start month: list only the first month of each season.',
+    ]);
+  });
+
+  test('monthly: calves born in the season of calving and the season before cannot be more than the head in the month', () => {
+    // September to November: 30 born in the September season and 24 in the June season
+    // before it, 54 calves, against 60 head. Dropping October to 50 head is too few.
+    const classes = editableClasses(monthlyHerd);
+    classes.bullsLt1.october.head = { value: 50 };
+    expect(monthlyIssues(classes)).toEqual([
+      'bullsLt1.october: 30 calves born in its season of calving and 24 in the season before are more than the 50 head in the class in october. Check calvesBorn, head and calvingSeasonStartMonths.',
+    ]);
+  });
+
+  test('seasonal: calves born in the season of calving and the season before cannot be more than the head in the season', () => {
+    // Spring: 40 born in spring and 10 in winter, 50 calves, against 50 head
+    const classes = editableClasses(seasonalHerd);
+    classes.bullsLt1.spring.head = { value: 45 };
+    expect(seasonalIssues(classes)).toEqual([
+      'bullsLt1.spring: 40 calves born in its season of calving and 10 in the season before are more than the 45 head in the class in spring. Check calvesBorn, head and calvingSeasons.',
+    ]);
+  });
+
+  test('a calf class with no animals in a period is not checked against its births', () => {
+    // A class that is never in the herd, with calving rates filled in anyway
+    const classes = editableClasses(seasonalHerd);
+    classes.bullsLt1.spring.head = { value: 0 };
+    classes.bullsLt1.summer.head = { value: 0 };
+    classes.bullsLt1.autumn.head = { value: 0 };
+    classes.bullsLt1.winter.head = { value: 0 };
+    expect(seasonalIssues(classes)).toEqual([]);
   });
 
   test('a start month listed twice is rejected', () => {

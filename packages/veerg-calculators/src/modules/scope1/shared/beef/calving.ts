@@ -9,8 +9,6 @@ import { Container, root } from '@/tools/containers';
 import { zero } from '@/tools/sentinels';
 import { sum } from '@/tools/sum';
 import { head, RealNumber } from '@/tools/units';
-
-const zeroHead = root(head(0), { name: 'zero head' });
 import {
   getMonthsForSeasonAfterCalving,
   getMonthsForSeasonOfCalving,
@@ -18,6 +16,8 @@ import {
   getSeasonsForSeasonOfCalving,
 } from './calving-seasons';
 import { BeefPeriodProps } from './helpers';
+
+const zeroHead = root(head(0), { name: 'zero head' });
 
 /** The shares of a class in calf (or born) in the season of calving and the season after it. */
 export type CalvingShares = {
@@ -144,7 +144,7 @@ export const getCowCalvingShares = (
  * The share of a calf class born in the season of calving and in the season before it, for
  * its milk intake MCjk=1,3,6 (4.2.1.3 (3)): the calves born in that calving season
  * (`calvesBorn` summed over its periods, CRjk) divided by the number of animals in the class
- * in the current period (Njk), as GEETA does (CRcalv / Njkl). 0 when the class has no animals
+ * in the current period (Njk). 0 when the class has no animals
  * in the period. Returns `undefined` for classes that are not calves.
  */
 export const getCalfBirthShares = (

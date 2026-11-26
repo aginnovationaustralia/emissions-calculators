@@ -7,10 +7,14 @@ import {
   BeefSpecificClassInputTransformed,
   BeefSpecificClassWithCalvesInputTransformed,
 } from '@/calculators/Beef/types/beef-classes.input';
-import { entriesFromObject } from '@/calculators/common/tools';
 import { ExecutionContext } from '@/calculators/executionContext';
-import { isDefined } from '@/common/filters';
-import { BeefClass, Months, Season, Seasons } from '@/constants/enums';
+import {
+  BeefClass,
+  BeefClasses,
+  Months,
+  Season,
+  Seasons,
+} from '@/constants/enums';
 import {
   stateOrRegionToExtendedRegion,
   stateOrRegionToLimitedRegion,
@@ -55,6 +59,23 @@ export type BeefPeriodProps<
   seasonName: Season;
 };
 
+/**
+ * The classes the herd gives, in the order of `BeefClasses`. The herd's other keys (its
+ * period and calving seasons) are not classes.
+ */
+const getClassInputs = (
+  classes: BeefManureAndEntericHerdInputTransformed['classes'],
+): [BeefClass, BeefSpecificClassInputTransformed][] => {
+  if (!('period' in classes)) {
+    // A herd with no classes
+    return [];
+  }
+  return BeefClasses.flatMap((className) => {
+    const classInput = classes[className];
+    return classInput ? [[className, classInput]] : [];
+  });
+};
+
 export function calculateForAllClassPeriods<N extends NumberUnit>(
   herdProps: BeefHerdProps,
   calculatePeriod: (periodProps: BeefPeriodProps) => Container<N>,
@@ -66,24 +87,8 @@ export function calculateForAllClassPeriods<N extends NumberUnit>(
     fallback: Container<N>;
   },
 ): SummedContainer<N> {
-  const { herd } = herdProps;
-  const {
-    period: _period,
-    calvingSeasons: _calvingSeasons,
-    calvingSeasonStartMonths: _calvingSeasonStartMonths,
-    ...classes
-  } = herd.classes as typeof herd.classes & {
-    calvingSeasons?: unknown;
-    calvingSeasonStartMonths?: unknown;
-  };
-  const classInputs = entriesFromObject(classes);
-
-  const classResults = classInputs
-    .map(([className, classInput]) => {
-      if (!classInput) {
-        return undefined;
-      }
-
+  const classResults = getClassInputs(herdProps.herd.classes).map(
+    ([className, classInput]) => {
       if (isBeefClassSeasonal(classInput)) {
         const seasonalResults = Seasons.map((seasonName) => {
           const currentPeriod = classInput[seasonName];
@@ -119,8 +124,8 @@ export function calculateForAllClassPeriods<N extends NumberUnit>(
       return sum(monthlyResults, options.fallback, {
         name: options.classResultName(className),
       });
-    })
-    .filter(isDefined);
+    },
+  );
 
   return sum(classResults, options.fallback, { name: options.herdResultName });
 }

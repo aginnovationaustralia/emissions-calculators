@@ -223,7 +223,7 @@ const beefClassWithCalvesMethod2: BeefClassWithCalvesSeasonalInput = {
 
 const beefClassesMethod1: BeefClassesSeasonalInput = {
   period: 'seasonal',
-  calvingSeasons: ['spring'],
+  calvingSeasons: ['spring', 'summer', 'autumn', 'winter'],
   bullsLt1: beefCalfClassMethod1,
   bullsGt1: beefClassMethod1,
   cowsLt1: beefCalfClassMethod1,
@@ -238,7 +238,7 @@ const beefClassesMethod1: BeefClassesSeasonalInput = {
 
 const beefClassesMethod2: BeefClassesSeasonalInput = {
   period: 'seasonal',
-  calvingSeasons: ['spring'],
+  calvingSeasons: ['spring', 'summer', 'autumn', 'winter'],
   bullsLt1: beefCalfClassMethod2,
   bullsGt1: beefClassMethod2,
   cowsLt1: beefCalfClassMethod2,

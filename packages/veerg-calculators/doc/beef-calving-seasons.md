@@ -89,8 +89,8 @@ On each period (season or month) of a class:
   0. Its share for the season after calving is the previous season's calving when that one is a calving season,
   otherwise 0.
 - Monthly herds: a month belongs to the calving season whose start month is the month itself, the month before, or the
-  month 2 before, checked in that order (so when seasons overlap, the nearest start wins: GEETA's rule; the guidance
-  doesn't cover overlaps). Its share for the season of calving is the calving summed over that season's 3 months. Its
+  month 2 before. Start months are at least 3 months apart (see Validation), so seasons don't overlap and a month
+  belongs to at most one. Its share for the season of calving is the calving summed over that season's 3 months. Its
   share for the season after calving is the same sum for the month 3 months earlier. The year wraps: a season starting
   in November covers November, December and January.
 - Calving recorded in a period outside every calving season would not be counted, so the input check rejects it.
@@ -115,13 +115,18 @@ the period inputs below them.
 `BeefClassesSeasonalInputSchema` and `BeefClassesMonthlyInputSchema` check the whole herd
 (`calculators/Beef/types/beef-calving-validation.ts`):
 
-- no calving season or start month is listed twice
+- no calving season or start month is listed twice, and start months are at least 3 months apart, so calving seasons
+  don't overlap ("the calving season should be considered 3 months from the calving month", 3.2.2.1). Overlapping
+  seasons would count the calving of the shared months in both
 - for every period of every cow class, the share for the season of calving and the share for the season after calving
   add up to no more than 1
 - no cow class calves (`fractionCowsCalving` > 0), and no calf class has calves born (`calvesBorn` > 0), in a period that
   is in no calving season. The message names the class and period and says how to fix it: add the season to
   `calvingSeasons`, or a start month covering the month to `calvingSeasonStartMonths` (the month or one of the 2 before
   it), or set the value to 0
+- for every period in which a calf class has animals, the calves born in its season of calving and in the season before
+  are no more than the class's head in the period, as the calves' milk intake takes them as shares of the class. A
+  period with no animals has no milk intake, so it isn't checked (its shares are 0)
 
 Rejecting calving outside the calving seasons follows the guidance. Its calving seasons come from when the herd calves:
 LC<sub>jk=4,5</sub> is the proportion in calf "in the season of calving" (3.2.1.1 (4)), and under Method 2 "the calving
@@ -131,17 +136,20 @@ other seasons" covers periods without calving. The check changes no result for c
 it leaves such calving out. Its NIRAlignment_09 scenario ("no calving") keeps calf calving rates with no calving season,
 which aia rejects (the geeta-comparison adapter leaves them out, as GEETA does).
 
-The calves' shares are not limited to 1. Under Method 2 the first month of a season divides the whole season's births by
-that month's head, as GEETA does, which can be more than 1 when most calves are born later in the season.
+The calves' limit means the calves' shares add up to no more than 1. Under Method 2 it is strict early in a season: the
+first month of a season counts the whole season's births against that month's head, so a herd whose calves are mostly
+born later in the season needs that month's head to include them. Without the limit the milk intake would be
+overstated (a share of 3 counts each calf's milk 3 times).
 
-The herd's `classes` field is a union (empty, seasonal or monthly), so a herd that fails these checks is reported as
-"Invalid input" at the herd level. That is existing behaviour.
+Each issue has the path of the input it is about (for example `cowsGt3Years.march.fractionCowsCalving`), below the herd's
+`classes`. The `classes` field is a union (empty, seasonal or monthly), so the herd-level error is "Invalid input", with
+these issues inside it.
 
 ## Tests
 
 - `src/modules/scope1/shared/beef/calving-seasons.test.ts`: the rules, with the expected periods for every month or
-  season: one monthly season, two back-to-back seasons, a season that wraps into the new year, overlapping seasons,
-  seasonal herds, no seasons.
+  season: one monthly season, two back-to-back seasons, a season that wraps into the new year, seasonal herds, no
+  seasons.
 - `src/modules/scope1/shared/beef/calving.test.ts`: a monthly herd and a seasonal herd written out period by period,
   with LC, MA and the calves' shares for every period worked out by hand (for example September:
   0.4 × 1.3 + 0.2 × 1.1 + 0.4 = 1.14; December calves: 30 born in the September season / 50 head = 0.6), a herd with
@@ -152,7 +160,8 @@ The herd's `classes` field is a union (empty, seasonal or monthly), so a herd th
   - each scenario has a calving table in columns C:D below its first row: "Calving season?" Yes/No per season, or
     "Calving start month?" Yes/No per month
   - "Cows calving" (3.2: column J; 4.2: column S) is the proportion of each cow class calving in the period, and
-    "CR<sub>jk</sub> (calves born)" (4.2: column V) the calves born, head
+    "CR<sub>jk</sub> (calves born)" (4.2: column V) the calves born, head (taken from the old sheet's `=<born>/<head>`
+    formulas; some of those divided by the row above's head)
   - the LC columns (3.2: K, L; 4.2: T, U) and the calves' share columns (4.2: W, X) are formulas implementing the
     rules above, so the sheet works out the shares independently of the code
   - the old per-period shares were converted: a period is a calving season when any class calved in it; each class's

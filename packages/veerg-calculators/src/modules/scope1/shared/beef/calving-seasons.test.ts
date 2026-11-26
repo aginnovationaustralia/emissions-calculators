@@ -1,5 +1,4 @@
 import {
-  getCalvingSeasonStart,
   getMonthsForSeasonAfterCalving,
   getMonthsForSeasonOfCalving,
   getSeasonsForSeasonAfterCalving,
@@ -97,34 +96,6 @@ describe('Beef calving seasons (Method 2, monthly)', () => {
       expect(getMonthsForSeasonAfterCalving(month, startMonths)).toEqual(
         seasonAfterCalving,
       );
-    });
-  });
-
-  describe('overlapping seasons starting in January and February: the nearest start wins', () => {
-    const startMonths = ['january', 'february'] as const;
-
-    test.each([
-      // month, start of its calving season
-      ['january', 'january'],
-      ['february', 'february'],
-      ['march', 'february'],
-      ['april', 'february'],
-      ['may', undefined],
-    ] as const)('%s', (month, start) => {
-      expect(getCalvingSeasonStart(month, startMonths)).toBe(start);
-    });
-
-    test('April sums the February season, and its season after calving is the January season', () => {
-      expect(getMonthsForSeasonOfCalving('april', startMonths)).toEqual([
-        'february',
-        'march',
-        'april',
-      ]);
-      expect(getMonthsForSeasonAfterCalving('april', startMonths)).toEqual([
-        'january',
-        'february',
-        'march',
-      ]);
     });
   });
 

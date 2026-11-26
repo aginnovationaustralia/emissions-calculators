@@ -23,15 +23,8 @@ import {
  * > used (see Chapter 1 Section 1.9) and that for all other time periods Ljk=4,5 = 0.
  *
  * So a calving season is a fixed block of 3 months starting at a calving (start) month,
- * and the season after calving is the next fixed block of 3 months. GEETA implements the
- * same rule (`InputFunctions_PastureBeef.CalculateProportionCowsCalvingForSeason`,
- * and the "Calving season" / "Season after calving" columns of the Method 2 calving
- * tables): every month of a calving season gets that season's total calving, every month
- * of the season after gets the same total as its previous-season share, and all other
- * months get 0.
- *
- * The year is treated as circular (a season starting in November covers November,
- * December and January), as GEETA's offsets wrap within the 12 reporting months.
+ * and the season after calving is the next fixed block of 3 months. The year is treated
+ * as circular (a season starting in November covers November, December and January).
  */
 
 export const CALVING_SEASON_LENGTH_MONTHS = 3;
@@ -42,9 +35,9 @@ export const getMonthAfter = (month: Month, count: number): Month =>
 
 /**
  * The start month of the calving season that `month` falls in, or `undefined` when it is
- * in no calving season. When seasons overlap (start months less than 3 months apart) the
- * nearest start wins: the month itself, then 1 month before, then 2 months before, the
- * order GEETA's `CalculateProportionCowsCalvingForSeason` checks them in.
+ * in no calving season: the month itself, 1 month before or 2 months before is a start
+ * month, checked in that order. Monthly herds' start months are at least 3 months apart
+ * (beef-calving-validation.ts), so at most one of them matches.
  */
 export const getCalvingSeasonStart = (
   month: Month,

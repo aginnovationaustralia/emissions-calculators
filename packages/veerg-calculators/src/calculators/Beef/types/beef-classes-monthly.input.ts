@@ -1,5 +1,6 @@
 import { Months } from '@/constants/enums';
 import {
+  CALVING_SEASON_LENGTH_MONTHS,
   getMonthsForSeasonAfterCalving,
   getMonthsForSeasonOfCalving,
 } from '@/modules/scope1/shared/beef/calving-seasons';
@@ -99,7 +100,7 @@ export const BeefClassesMonthlyInputSchema = object({
     )
     .meta({
       description:
-        "The months in which the herd's calving seasons start. Each calving season is the 3 months from its start month, and the season after calving is the 3 months after that (Chapter 3, 3.2.2.1, Method 2 herd flow). When seasons overlap, a month belongs to the season with the nearest start. LCjk=4,5 for each month of a calving season is the class's fractionCowsCalving summed over the season, the same total applies to each month of the season after calving, and it is 0 in all other months. The calves' shares are worked out the same way from calvesBorn. Give an empty list for a herd that does not calve.",
+        "The months in which the herd's calving seasons start. Each calving season is the 3 months from its start month, and the season after calving is the 3 months after that (Chapter 3, 3.2.2.1, Method 2 herd flow). Start months must be at least 3 months apart, so the seasons don't overlap. LCjk=4,5 for each month of a calving season is the class's fractionCowsCalving summed over the season, the same total applies to each month of the season after calving, and it is 0 in all other months. The calves' shares are worked out the same way from calvesBorn. Give an empty list for a herd that does not calve.",
     }),
   bullsLt1: BeefBullsLt1MonthlyInputSchema.optional(),
   bullsGt1: BeefBullsGt1MonthlyInputSchema.optional(),
@@ -118,6 +119,7 @@ export const BeefClassesMonthlyInputSchema = object({
       periods: Months,
       calvingSeasonsKey: 'calvingSeasonStartMonths',
       calvingSeasons: classes.calvingSeasonStartMonths.map((m) => m.unit),
+      seasonLength: CALVING_SEASON_LENGTH_MONTHS,
       getSeasonOfCalving: getMonthsForSeasonOfCalving,
       getSeasonAfterCalving: getMonthsForSeasonAfterCalving,
       howToCover: (month) =>

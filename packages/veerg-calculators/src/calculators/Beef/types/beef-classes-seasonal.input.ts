@@ -117,6 +117,7 @@ export const BeefClassesSeasonalInputSchema = object({
       periods: Seasons,
       calvingSeasonsKey: 'calvingSeasons',
       calvingSeasons: classes.calvingSeasons.map((s) => s.unit),
+      seasonLength: 1,
       getSeasonOfCalving: getSeasonsForSeasonOfCalving,
       getSeasonAfterCalving: getSeasonsForSeasonAfterCalving,
       howToCover: (season) => `Add ${season} to calvingSeasons`,
