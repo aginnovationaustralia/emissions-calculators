@@ -6702,6 +6702,7 @@
       "ElectricityRegion": {
         "type": "string",
         "enum": [
+          "ACT",
           "NSW",
           "VIC",
           "QLD",
@@ -6710,7 +6711,6 @@
           "WA_SW",
           "TAS",
           "NT",
-          "ACT",
           "National"
         ]
       },
