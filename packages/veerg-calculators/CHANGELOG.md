@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.1.0-beta.4](https://github.com/aginnovationaustralia/emissions-calculators/compare/veerg-calculators-v1.1.0-beta.3...veerg-calculators-v1.1.0-beta.4) (2026-11-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* removing Ammonium Sulfate as a duplicate inorganic fertiliser input ([#285](https://github.com/aginnovationaustralia/emissions-calculators/issues/285))
+* the flat dairy intensity keys `liveweightIntensity*` and `milkIntensity*` move under `energyIntensities`, with mass based equivalents under `massIntensities`.
+
+### Features
+
+* **calculators:** accept optional RPP and JRPP inputs for market-based electricity ([#329](https://github.com/aginnovationaustralia/emissions-calculators/issues/329)) ([9cb6914](https://github.com/aginnovationaustralia/emissions-calculators/commit/9cb69140c4c4116dbfb4de3254dfad0e112b67c7))
+* **calculators:** expose mass of N in manure applicable to soils (AIA-76) ([#298](https://github.com/aginnovationaustralia/emissions-calculators/issues/298)) ([279c75c](https://github.com/aginnovationaustralia/emissions-calculators/commit/279c75c4bc841560e24be71f68ce5a04749a350e))
+* expose mass based allocation for dairy intensities ([#297](https://github.com/aginnovationaustralia/emissions-calculators/issues/297)) ([d6d2191](https://github.com/aginnovationaustralia/emissions-calculators/commit/d6d2191671c4f6a8e8bab703fb96b417af31ae56))
+* removing Ammonium Sulfate as a duplicate inorganic fertiliser input ([#285](https://github.com/aginnovationaustralia/emissions-calculators/issues/285)) ([16e61b6](https://github.com/aginnovationaustralia/emissions-calculators/commit/16e61b6da8a00f8c2cd69f453f74e15842e36201))
+* **sheep:** use greasy wool for wool intensities (AIA-88) ([#313](https://github.com/aginnovationaustralia/emissions-calculators/issues/313)) ([36552ff](https://github.com/aginnovationaustralia/emissions-calculators/commit/36552ff50e3c6891c60a9fbf5adcb8ac4d3087f0))
+
+
+### Bug Fixes
+
+* **calculators:** switch to correct auslci livestock EFs, aligns with GEETA ([#330](https://github.com/aginnovationaustralia/emissions-calculators/issues/330)) ([10818e2](https://github.com/aginnovationaustralia/emissions-calculators/commit/10818e29f47d512aa25154638d1d546c9540dcdd))
+* cotton intensity is using lint value for seed ([#315](https://github.com/aginnovationaustralia/emissions-calculators/issues/315)) ([6c53515](https://github.com/aginnovationaustralia/emissions-calculators/commit/6c53515416a12d820ec5b1b3c4c4c1fde4de3cf2))
+* Volatile solid production for sheep manure ([#286](https://github.com/aginnovationaustralia/emissions-calculators/issues/286)) ([6b762bf](https://github.com/aginnovationaustralia/emissions-calculators/commit/6b762bfdf2f5257af5ada4695d2f9893a81a35da))
+
 ## [1.1.0-beta.3](https://github.com/aginnovationaustralia/emissions-calculators/compare/veerg-calculators-v1.1.0-beta.2...veerg-calculators-v1.1.0-beta.3) (2026-11-24)
 
 
