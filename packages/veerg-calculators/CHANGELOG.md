@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.0.0-beta.3](https://github.com/aginnovationaustralia/emissions-calculators/compare/veerg-calculators-v1.1.0-beta.3...veerg-calculators-v2.0.0-beta.3) (2026-11-26)
+## [1.1.0-beta.4](https://github.com/aginnovationaustralia/emissions-calculators/compare/veerg-calculators-v1.1.0-beta.3...veerg-calculators-v1.1.0-beta.4) (2026-11-26)
 
 
 ### ⚠ BREAKING CHANGES
