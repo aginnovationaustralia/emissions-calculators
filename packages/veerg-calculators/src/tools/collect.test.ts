@@ -7,6 +7,7 @@ import { captureMethod1Or2Value } from './multi';
 import { zero } from './sentinels';
 import { sum } from './sum';
 import { selectSwitch } from './switch';
+import { tonnesToKg } from './unit-conversion';
 import { mass, realNumber } from './units';
 
 // These tree-walkers back every calculator's `output()` provenance (references/constants/
@@ -140,6 +141,22 @@ describe('collectInputs', () => {
       {
         name: 'my number',
         value: 5,
+        units: 'kg CO2',
+        method: '1',
+        modules: [],
+      },
+    ]);
+  });
+
+  it('displays the internal units when an input has a scaled value', () => {
+    const container = input(mass('CO2', tonnesToKg(5)), {
+      name: 'my number',
+      modules: [],
+    });
+    expect(collectInputs(container)).toEqual([
+      {
+        name: 'my number',
+        value: 5000,
         units: 'kg CO2',
         method: '1',
         modules: [],
