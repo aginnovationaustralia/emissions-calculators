@@ -3,6 +3,7 @@ import type {
   Metadata,
   Method,
   NumberUnit,
+  NumberUnitsOf,
   RuleSet,
   UnitSystem,
 } from '@aginnovationaustralia/calculator-units';
@@ -196,7 +197,7 @@ export const createInputBuilders = <
       .meta({ 'x-units': units }) as unknown as NumberWireSchema<F>;
 
   const toNumberContainer =
-    <U extends NumberUnit>(
+    <U extends NumberUnitsOf<RS>>(
       unitFactory: (value: number) => U,
       options: InputOptions<O, M>,
     ) =>
@@ -223,7 +224,7 @@ export const createInputBuilders = <
     `${description} (${units})`;
 
   /** Accepts `{ value, ...numberFields }` and returns an input container of the unit. */
-  const numberInput = <U extends NumberUnit>(
+  const numberInput = <U extends NumberUnitsOf<RS>>(
     unitFactory: (value: number) => U,
     options: InputOptions<O, M>,
     tweaker?: NumberSchemaTweaker,
@@ -238,7 +239,7 @@ export const createInputBuilders = <
    * Like `numberInput`, but also accepts `undefined`. The display unit is worked out without the
    * number validation, which matches how the emissions calculators have always described these.
    */
-  const numberInputOptional = <U extends NumberUnit>(
+  const numberInputOptional = <U extends NumberUnitsOf<RS>>(
     unitFactory: (value: number) => U,
     options: InputOptions<O, M>,
     tweaker?: NumberSchemaTweaker,

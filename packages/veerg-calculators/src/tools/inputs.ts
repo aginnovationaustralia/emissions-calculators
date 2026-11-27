@@ -12,7 +12,7 @@ import {
   NumberSchemaTweaker,
 } from '@aginnovationaustralia/calculator-inputs';
 import { core, z } from 'zod';
-import { Container, units } from './containers';
+import { Container, units, VeergUnit } from './containers';
 import { getDisplayUnit } from './display-units';
 import { enumSchema } from './enum-schemas';
 import { ModuleNames } from './modules';
@@ -33,7 +33,7 @@ const X_MODULES = 'x-modules';
  * A value supplied by the user, recorded with an `origin.kind` of `input` and the method it is for.
  * Its name, quality and modules are in `meta`.
  */
-export type InputContainer<U> = Container<U>;
+export type InputContainer<U extends VeergUnit> = Container<U>;
 
 export type NonEmptyArray<T> = [T, ...T[]];
 

@@ -4,7 +4,9 @@ import {
   Container,
   createNode,
   Method,
+  NumberUnitsOf,
   RuleSet,
+  UnitsOf,
 } from './container.js';
 import { UnitError } from './errors.js';
 import type { Metadata } from './metadata.js';
@@ -76,7 +78,7 @@ export interface UnitSystem<RS extends RuleSet, M extends Method = Method> {
   readonly divideRules: readonly DivideRule[];
 
   /** A container holding `unit` (and, for number units, the value in its store), with no history. */
-  root<U extends AnyUnit>(unit: U, meta?: Metadata): Container<U, RS, M>;
+  root<U extends UnitsOf<RS>>(unit: U, meta?: Metadata): Container<U, RS, M>;
 
   /** A dimensionless container. */
   num(
@@ -85,7 +87,7 @@ export interface UnitSystem<RS extends RuleSet, M extends Method = Method> {
   ): Container<RealNumber, RS, M>;
 
   /** A named root container, e.g. a published factor. */
-  constant<U extends AnyUnit>(
+  constant<U extends UnitsOf<RS>>(
     name: string,
     unit: U,
     meta?: Metadata,
@@ -95,7 +97,7 @@ export interface UnitSystem<RS extends RuleSet, M extends Method = Method> {
    * A value supplied by the user. For a method 2 input, the store's method 1 value is moved to its
    * method 2 track, so derived values carry it as method 2.
    */
-  input<U extends AnyUnit>(
+  input<U extends UnitsOf<RS>>(
     unit: U,
     options: InputOptions<M>,
   ): Container<U, RS, M>;
@@ -182,7 +184,7 @@ export interface UnitSystem<RS extends RuleSet, M extends Method = Method> {
     {
       multiply: RS['multiply'] | RuleTypeOf<MR[number]>;
       divide: RS['divide'] | RuleTypeOf<DR[number]>;
-    },
+    } & KeepNumberUnits<RS>,
     M
   >;
 
@@ -195,7 +197,25 @@ export interface UnitSystem<RS extends RuleSet, M extends Method = Method> {
    * be mixed with containers of other methods, and an input for any other method throws.
    */
   withMethods<N extends M>(...methods: [N, ...N[]]): UnitSystem<RS, N>;
+
+  /**
+   * The same system, with its containers limited to the number units `V` (and strings and
+   * booleans), e.g. `defaultUnitSystem.withNumberUnits<KnownPackageNumberUnit>()`. Roots, constants
+   * and inputs then only take those units, and the containers in a calculation's history
+   * (`origin`) are typed as holding them, so code walking a calculation handles exactly those.
+   *
+   * Types only: it trusts the rules (and `translate` and `select`) to produce only units in `V`.
+   */
+  withNumberUnits<V extends NumberUnitsOf<RS>>(): UnitSystem<
+    RS & { numberUnits: V },
+    M
+  >;
 }
+
+/** The `numberUnits` of a rule set, kept when the rules are extended. */
+type KeepNumberUnits<RS extends RuleSet> = RS extends { numberUnits: infer V }
+  ? { numberUnits: V }
+  : unknown;
 
 /** The container type for a unit system: `ContainerOf<typeof units, Mass<'CO2e'>>`. */
 export type ContainerOf<Sys, U> =
@@ -365,6 +385,7 @@ const buildSystem = (
       }
       return buildSystem(rules, narrowed) as never;
     },
+    withNumberUnits: () => buildSystem(rules, methods),
   };
 };
 

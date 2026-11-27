@@ -7,6 +7,7 @@ import { captureMethod1Or2Value } from './multi';
 import { zero } from './sentinels';
 import { sum } from './sum';
 import { selectSwitch } from './switch';
+import { tonnesToKg } from './unit-conversion';
 import { mass, realNumber } from './units';
 
 // These tree-walkers back every calculator's `output()` provenance (references/constants/
@@ -137,7 +138,29 @@ describe('collectInputs', () => {
   it('collects a numeric input, resolving the value via the store', () => {
     const container = input(mass('CO2', 5), { name: 'my number', modules: [] });
     expect(collectInputs(container)).toEqual([
-      { name: 'my number', value: 5, method: '1', modules: [] },
+      {
+        name: 'my number',
+        value: 5,
+        units: 'kg CO2',
+        method: '1',
+        modules: [],
+      },
+    ]);
+  });
+
+  it('displays the internal units when an input has a scaled value', () => {
+    const container = input(mass('CO2', tonnesToKg(5)), {
+      name: 'my number',
+      modules: [],
+    });
+    expect(collectInputs(container)).toEqual([
+      {
+        name: 'my number',
+        value: 5000,
+        units: 'kg CO2',
+        method: '1',
+        modules: [],
+      },
     ]);
   });
 
@@ -148,14 +171,26 @@ describe('collectInputs', () => {
       modules: [],
     });
     expect(collectInputs(container)).toEqual([
-      { name: 'my string', value: 'A', method: '2', modules: [] },
+      {
+        name: 'my string',
+        value: 'A',
+        units: 'string: (A)',
+        method: '2',
+        modules: [],
+      },
     ]);
   });
 
   it('collects a boolean input, using the raw boolean value', () => {
     const container = input(true, { name: 'my flag', modules: [] });
     expect(collectInputs(container)).toEqual([
-      { name: 'my flag', value: true, method: '1', modules: [] },
+      {
+        name: 'my flag',
+        value: true,
+        units: 'boolean',
+        method: '1',
+        modules: [],
+      },
     ]);
   });
 
@@ -163,8 +198,8 @@ describe('collectInputs', () => {
     const a = input(mass('CO2', 2), { name: 'A', modules: [] });
     const b = input(realNumber(3), { name: 'B', modules: [] });
     expect(collectInputs(a.multiply(b))).toEqual([
-      { name: 'A', value: 2, method: '1', modules: [] },
-      { name: 'B', value: 3, method: '1', modules: [] },
+      { name: 'A', value: 2, units: 'kg CO2', method: '1', modules: [] },
+      { name: 'B', value: 3, units: 'real number', method: '1', modules: [] },
     ]);
   });
 });

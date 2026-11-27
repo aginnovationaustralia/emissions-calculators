@@ -17,6 +17,7 @@ import type * as Units from './units.js';
 import { Mass } from './units.js';
 
 export * from './rules.js';
+export * from './format.js';
 export * from './units.js';
 
 /** Any of the library's number units. */

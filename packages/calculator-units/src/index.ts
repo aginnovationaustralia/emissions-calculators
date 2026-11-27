@@ -6,6 +6,8 @@ export {
   type Method,
   type Origin,
   type RuleSet,
+  type NumberUnitsOf,
+  type UnitsOf,
 } from './container.js';
 export * from './combinators.js';
 export * from './errors.js';

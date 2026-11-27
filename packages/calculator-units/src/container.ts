@@ -10,17 +10,36 @@ import type {
 import { UnitError } from './errors.js';
 import {
   AnyUnit,
+  BooleanUnit,
   describeUnit,
   isNumberUnit,
   isVoid,
   NumberUnit,
   RealNumber,
   realNumber,
+  StringUnit,
   voidUnit,
 } from './units.js';
 
-/** The type-level rules a unit system was built with. */
+/**
+ * The type-level rules a unit system was built with. It can also name the number units its
+ * containers hold, with `numberUnits` (see `UnitSystem.withNumberUnits`).
+ */
 export type RuleSet = { multiply: RuleType; divide: RuleType };
+
+/** The number units a rule set's containers can hold: its `numberUnits`, or any number unit. */
+export type NumberUnitsOf<RS extends RuleSet> = RS extends {
+  numberUnits: infer V extends NumberUnit;
+}
+  ? V
+  : NumberUnit;
+
+/**
+ * The units a rule set's containers can hold: its number units, and any string or boolean.
+ * Containers in the history of a calculation (see `Origin`) hold these units too.
+ */
+export type UnitsOf<RS extends RuleSet> =
+  NumberUnitsOf<RS> | StringUnit | BooleanUnit;
 
 /**
  * The calculation method a user supplied value is for. Method 1 is the default calculation; methods
@@ -35,15 +54,20 @@ export type BinaryOperation =
 /**
  * Any container, seen only as a record of how its value was calculated. Use this for code that
  * walks or reports on calculations (see `childrenOf`), which doesn't need to do arithmetic.
+ *
+ * `V` is the units it and the containers in its history can hold, e.g. `UnitsOf<MyRules>`.
  */
-export interface AnyContainer<M extends Method = Method> {
-  readonly unit: AnyUnit;
-  readonly origin: Origin<M>;
+export interface AnyContainer<
+  M extends Method = Method,
+  V extends AnyUnit = AnyUnit,
+> {
+  readonly unit: V;
+  readonly origin: Origin<M, V>;
   readonly meta: Metadata;
 }
 
 /** How a container's value was produced, and from which other containers. */
-export type Origin<M extends Method = Method> =
+export type Origin<M extends Method = Method, V extends AnyUnit = AnyUnit> =
   /** A value given directly, e.g. a constant. */
   | { kind: 'root' }
   /** A value supplied by the user, and the method it is for. */
@@ -51,33 +75,37 @@ export type Origin<M extends Method = Method> =
   | {
       kind: 'binary';
       operation: BinaryOperation;
-      left: AnyContainer<M>;
-      right: AnyContainer<M>;
+      left: AnyContainer<M, V>;
+      right: AnyContainer<M, V>;
     }
-  | { kind: 'sum'; from: AnyContainer<M>[] }
+  | { kind: 'sum'; from: AnyContainer<M, V>[] }
   /** A value looked up from a table, by literal keys or by string containers. */
-  | { kind: 'selection'; selectors: (AnyContainer<M> | string)[] }
+  | { kind: 'selection'; selectors: (AnyContainer<M, V> | string)[] }
   /** The same value, grouped for display as `( inner )`. */
-  | { kind: 'bracketed'; inner: AnyContainer<M> }
+  | { kind: 'bracketed'; inner: AnyContainer<M, V> }
   /** A value in a different unit, derived from another, e.g. a mass relabelled to a new substance. */
-  | { kind: 'translation'; from: AnyContainer<M> }
+  | { kind: 'translation'; from: AnyContainer<M, V> }
   /** A method 1 value, and the method 2 value that overrides it if one was supplied. */
   | {
       kind: 'method1and2';
-      method1: AnyContainer<M>;
-      method2: AnyContainer<M> | undefined;
+      method1: AnyContainer<M, V>;
+      method2: AnyContainer<M, V> | undefined;
     }
   /** A value only method 2 can calculate. */
-  | { kind: 'method2'; method2: AnyContainer<M> }
+  | { kind: 'method2'; method2: AnyContainer<M, V> }
   /** One of several cases, chosen by a string value. */
-  | { kind: 'switch'; subject: AnyContainer<M>; selected: AnyContainer<M> }
+  | {
+      kind: 'switch';
+      subject: AnyContainer<M, V>;
+      selected: AnyContainer<M, V>;
+    }
   /** One of two values, chosen by a boolean. */
   | {
       kind: 'if_else';
-      condition: AnyContainer<M>;
-      selected: AnyContainer<M>;
-      whenTrue: AnyContainer<M>;
-      whenFalse: AnyContainer<M>;
+      condition: AnyContainer<M, V>;
+      selected: AnyContainer<M, V>;
+      whenTrue: AnyContainer<M, V>;
+      whenFalse: AnyContainer<M, V>;
     };
 
 /** Number-only operations accept `never` for non-number containers, so they can't be called. */
@@ -99,7 +127,7 @@ type IfNumber<U, T> = [U] extends [NumberUnit] ? T : never;
  */
 export interface Container<U, RS extends RuleSet, M extends Method = Method> {
   readonly unit: U;
-  readonly origin: Origin<M>;
+  readonly origin: Origin<M, UnitsOf<RS>>;
   readonly meta: Metadata;
 
   multiply<R extends RightOf<RS['multiply'], U, R>>(
@@ -153,7 +181,9 @@ export interface Container<U, RS extends RuleSet, M extends Method = Method> {
    * The same value and history in a different unit. An escape hatch for relationships no rule
    * describes, e.g. `x.squared().switchUnit((u) => massPerHead('Liveweight', u.store))`.
    */
-  switchUnit<V extends AnyUnit>(converter: (from: U) => V): Container<V, RS, M>;
+  switchUnit<V extends UnitsOf<RS>>(
+    converter: (from: U) => V,
+  ): Container<V, RS, M>;
 
   named(name: string): Container<U, RS, M>;
   reference(reference: string): Container<U, RS, M>;
@@ -337,9 +367,9 @@ export const algebraOf = (container: AnyContainer): Algebra =>
  * The containers a container was calculated from, in order. A method1and2 node returns both
  * branches; a selection node returns only its string-container selectors.
  */
-export const childrenOf = <M extends Method>(
-  container: AnyContainer<M>,
-): AnyContainer<M>[] => {
+export const childrenOf = <M extends Method, V extends AnyUnit>(
+  container: AnyContainer<M, V>,
+): AnyContainer<M, V>[] => {
   const origin = container.origin;
   switch (origin.kind) {
     case 'root':
@@ -351,7 +381,7 @@ export const childrenOf = <M extends Method>(
       return origin.from;
     case 'selection':
       return origin.selectors.filter(
-        (s): s is AnyContainer<M> => typeof s !== 'string',
+        (s): s is AnyContainer<M, V> => typeof s !== 'string',
       );
     case 'bracketed':
       return [origin.inner];

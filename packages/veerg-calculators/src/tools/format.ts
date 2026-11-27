@@ -1,85 +1,11 @@
+import { formatUnit as formatPackageUnit } from '@aginnovationaustralia/calculator-units/defaults';
 import { AnyContainer, isNamedOrigin } from './containers';
 import { substanceDisplayName } from './display-substances';
-import { AnyUnit, isBooleanUnit, isStringUnit, isVoid } from './units';
+import { isBooleanUnit, isStringUnit, isVoid } from './units';
 
-export function formatUnit(unit: AnyUnit): string {
-  if (isVoid(unit)) {
-    return 'Void';
-  }
-  if (isStringUnit(unit)) {
-    return `string: (${unit})`;
-  }
-  if (isBooleanUnit(unit)) {
-    return 'boolean';
-  }
-
-  switch (unit.__unitType) {
-    case 'MassPerMass':
-      return `kg ${substanceDisplayName(unit.snum)}/kg ${substanceDisplayName(unit.sdenom)}`;
-    case 'Mass':
-      return `kg ${substanceDisplayName(unit.substance)}`;
-    case 'Volume':
-      return `L ${substanceDisplayName(unit.substance)}`;
-    case 'Energy':
-      return 'J';
-    case 'RealNumber':
-      return 'real number';
-    case 'MassPerEnergy':
-      return `kg ${substanceDisplayName(unit.substance)}/J`;
-    case 'EnergyPerMass':
-      return `J/kg ${substanceDisplayName(unit.substance)}`;
-    case 'EnergyPerVolume':
-      return `J/L ${substanceDisplayName(unit.substance)}`;
-    case 'MassPerVolume':
-      return `kg ${substanceDisplayName(unit.mass)}/L ${substanceDisplayName(unit.volume)}`;
-    case 'MassPerArea':
-      return `kg ${substanceDisplayName(unit.substance)}/m^2 `;
-    case 'MassPerAreaPerYear':
-      return `kg ${substanceDisplayName(unit.substance)}/m^2/year`;
-    case 'MassPerYear':
-      return `kg ${substanceDisplayName(unit.substance)}/year`;
-    case 'MassPerTime':
-      return `kg ${substanceDisplayName(unit.substance)}/s`;
-    case 'MassPerHeadPerDay':
-      return `kg ${substanceDisplayName(unit.substance)}/head/day`;
-    case 'MassPerHeadPerYear':
-      return `kg ${substanceDisplayName(unit.substance)}/head/year`;
-    case 'MassPerDay':
-      return `kg ${substanceDisplayName(unit.substance)}/day`;
-    case 'VolumePerHeadPerDay':
-      return `L ${substanceDisplayName(unit.substance)}/head/day`;
-    case 'VolumePerMass':
-      return `L ${substanceDisplayName(unit.volume)}/kg ${substanceDisplayName(unit.mass)}`;
-    case 'MassPerHead':
-      return `kg ${substanceDisplayName(unit.substance)}/head`;
-    case 'Days':
-      return 'days';
-    case 'Years':
-      return 'years';
-    case 'CountPerArea':
-      return 'm^-2';
-    case 'Head':
-      return 'head';
-    case 'Area':
-      return 'm^2';
-    case 'Time':
-      return 's';
-    case 'Electricity':
-      return 'kWh';
-    case 'MassPerElectricity':
-      return `kg ${substanceDisplayName(unit.substance)}/kWh`;
-    case 'MassPerAreaPerDay':
-      return `kg ${substanceDisplayName(unit.substance)} / m^2 / day`;
-    case 'Distance':
-      return 'm';
-    case 'MassDistance':
-      return `kgm ${substanceDisplayName(unit.substance)}`;
-    case 'MassPerMassDistance':
-      return `kg ${substanceDisplayName(unit.snum)}/kgm ${substanceDisplayName(unit.sdenom)}`;
-    case 'EnergyPerHeadPerDay':
-      return `J/head/day`;
-  }
-}
+/** Formats any unit a container can hold, naming substances the way the calculators do. */
+export const formatUnit = (unit: AnyContainer['unit']): string =>
+  formatPackageUnit(unit, { substanceName: substanceDisplayName });
 
 export const formatExpression = (container: AnyContainer): string => {
   const lhs = formatValueAndName(container);

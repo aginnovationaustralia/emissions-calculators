@@ -2,7 +2,7 @@ import { isNumberUnit } from '@aginnovationaustralia/calculator-units';
 import { AnyContainer } from './containers';
 import { formatUnit } from './format';
 import { QualityTable } from './quality';
-import { isBooleanUnit, isStringUnit, NumberUnit } from './units';
+import { isBooleanUnit, isStringUnit } from './units';
 
 export type ConstantDefinition = {
   name: string;
@@ -15,12 +15,14 @@ export type InputDefinition = {
   value: number | string | boolean;
   method: '1' | '2';
   modules: string[];
+  units: string;
   quality: QualityTable | undefined;
 };
 
 export type IntermediateDefinition = {
   name: string;
   value: number | string | boolean;
+  units: string;
 };
 
 type CollectVisitor<T> = (container: AnyContainer | undefined) => T[];
@@ -84,7 +86,7 @@ export const collectConstants = <O extends AnyContainer>(
           {
             name: origin.meta.name ?? 'Unknown constant',
             value: origin.unit.store.toNumber(),
-            units: formatUnit(origin.unit as NumberUnit),
+            units: formatUnit(origin.unit),
           },
         ]
       : [];
@@ -107,6 +109,7 @@ export const collectInputs = <O extends AnyContainer>(
               : isBooleanUnit(origin.unit)
                 ? origin.unit
                 : origin.unit.store.toNumber(),
+            units: formatUnit(origin.unit),
             method: origin.origin.method,
             modules: origin.meta.modules ?? [],
             quality: origin.meta.quality,
@@ -125,7 +128,9 @@ export const collectIntermediates = <O extends AnyContainer>(
   origin: O | undefined,
 ): IntermediateDefinition[] => {
   const seen = new Set<AnyContainer>();
-  const visit = (container: AnyContainer | undefined): IntermediateDefinition[] => {
+  const visit = (
+    container: AnyContainer | undefined,
+  ): IntermediateDefinition[] => {
     if (container === undefined || seen.has(container)) {
       return [];
     }
@@ -140,6 +145,7 @@ export const collectIntermediates = <O extends AnyContainer>(
                 : isBooleanUnit(container.unit)
                   ? container.unit
                   : container.unit.store.toNumber(),
+              units: formatUnit(container.unit),
             },
           ]
         : [];
